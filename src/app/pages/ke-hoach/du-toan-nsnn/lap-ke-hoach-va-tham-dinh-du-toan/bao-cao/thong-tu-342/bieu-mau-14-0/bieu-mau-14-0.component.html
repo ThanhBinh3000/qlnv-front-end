@@ -26,54 +26,54 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="2" nzWidth="50px" nzLeft>
+								<th scope="col" rowspan="2" nzWidth="50px" nzLeft>
 									STT
 								</th>
-								<th rowspan="2" nzWidth="350px" nzLeft>
+								<th scope="col" rowspan="2" nzWidth="350px" nzLeft>
 									Nội dung
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Thực hiện năm {{namBcao - 2}}
 								</th>
-								<th colspan="2">
+								<th scope="colgroup" colspan="2">
 									Năm {{namBcao -1 }}
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Dự toán năm {{namBcao}}
 								</th>
-								<th *ngIf="status.viewAppVal" rowspan="2">
+								<th scope="col" *ngIf="status.viewAppVal" rowspan="2">
 									Giá trị thẩm định
 								</th>
-								<th *ngIf="status.viewAppVal" rowspan="2">
+								<th scope="col" *ngIf="status.viewAppVal" rowspan="2">
 									Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD
 								</th>
-								<th rowspan="2" class="text-col">
+								<th scope="col" rowspan="2" class="text-col">
 									Ghi chú
 								</th>
-								<th *ngIf="status.viewAppVal" rowspan="2" class="text-col">
+								<th scope="col" *ngIf="status.viewAppVal" rowspan="2" class="text-col">
 									Ý kiến của đơn vị cấp trên
 								</th>
-								<th rowspan="2" style="width: 60px;" *ngIf="status.general || status.editAppVal"
-									nzRight></th>
-								<th rowspan="2" style="width: 50px;" *ngIf="status.general" nzRight></th>
+								<th scope="col" rowspan="2" style="width: 60px;"
+									*ngIf="status.general || status.editAppVal" nzRight></th>
+								<th scope="col" rowspan="2" style="width: 50px;" *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
-								<th>Dự toán</th>
-								<th>Ước thực hiện</th>
+								<th scope="col">Dự toán</th>
+								<th scope="col">Ước thực hiện</th>
 							</tr>
 							<tr>
-								<th nzLeft>A</th>
-								<th nzLeft>B</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
-								<th>4</th>
-								<th *ngIf="status.viewAppVal">4A</th>
-								<th *ngIf="status.viewAppVal">5=4A-4</th>
-								<th>6</th>
-								<th *ngIf="status.viewAppVal">7</th>
-								<th *ngIf="status.general || status.editAppVal" nzRight></th>
-								<th *ngIf="status.general" nzRight></th>
+								<th scope="col" nzLeft>A</th>
+								<th scope="col" nzLeft>B</th>
+								<th scope="col">1</th>
+								<th scope="col">2</th>
+								<th scope="col">3</th>
+								<th scope="col">4</th>
+								<th scope="col" *ngIf="status.viewAppVal">4A</th>
+								<th scope="col" *ngIf="status.viewAppVal">5=4A-4</th>
+								<th scope="col">6</th>
+								<th scope="col" *ngIf="status.viewAppVal">7</th>
+								<th scope="col" *ngIf="status.general || status.editAppVal" nzRight></th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -226,9 +226,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>

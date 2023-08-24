@@ -52,16 +52,16 @@
                 <nz-table class="nowrap mt-16 table-chi-tiet">
                     <thead>
                         <tr>
-                            <th>Mã cấp ứng</th>
-                            <th>Năm</th>
-                            <th>Đợt</th>
-                            <th>Quyết định</th>
-                            <th>Căn cứ về giá</th>
-                            <th>Loại đề nghị</th>
-                            <th>Ngày tạo</th>
-                            <th>Ngày trình duyệt</th>
-                            <th>Ngày duyệt</th>
-                            <th>Ngày phê duyệt</th>
+                            <th scope="col">Mã cấp ứng</th>
+                            <th scope="col">Năm</th>
+                            <th scope="col">Đợt</th>
+                            <th scope="col">Quyết định</th>
+                            <th scope="col">Căn cứ về giá</th>
+                            <th scope="col">Loại đề nghị</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Ngày trình duyệt</th>
+                            <th scope="col">Ngày duyệt</th>
+                            <th scope="col">Ngày phê duyệt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -124,82 +124,82 @@
                 <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
                     <thead>
                         <tr>
-                            <th rowspan="2" nzWidth="50px" nzLeft>
+                            <th scope="col" rowspan="2" nzWidth="50px" nzLeft>
                                 STT
                             </th>
-                            <th rowspan="2" nzWidth="300px" nzLeft>
+                            <th scope="col" rowspan="2" nzWidth="300px" nzLeft>
                                 Đơn vị
                             </th>
-                            <th rowspan="2">
+                            <th scope="col" rowspan="2">
                                 Số lượng
                             </th>
-                            <th rowspan="2">
+                            <th scope="col" rowspan="2">
                                 Đơn giá (theo quyết định)
                             </th>
-                            <th rowspan="2">
+                            <th scope="col" rowspan="2">
                                 Giá trị theo kế hoạch
                             </th>
-                            <th colspan="3">
+                            <th scope="colgroup" colspan="3">
                                 Số thanh toán lũy kế (Bao gồm số thanh toán lần này)
                             </th>
-                            <th rowspan="2">
+                            <th scope="col" rowspan="2">
                                 Số còn được thanh toán
                             </th>
-                            <th rowspan="2">
+                            <th scope="col" rowspan="2">
                                 Số duyệt thanh toán lần này
                             </th>
-                            <th colspan="5">
+                            <th scope="colgroup" colspan="5">
                                 Ủy nhiệm chi (Số thanh toán đợt {{baoCao.dot}})
                             </th>
-                            <th rowspan="2" class="text-col">
+                            <th scope="col" rowspan="2" class="text-col">
                                 Ghi chú
                             </th>
-                            <th *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
+                            <th scope="col" *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
                         </tr>
                         <tr>
-                            <th>
+                            <th scope="col">
                                 Cấp ứng
                             </th>
-                            <th>
+                            <th scope="col">
                                 Cấp vốn
                             </th>
-                            <th>
+                            <th scope="col">
                                 Cộng
                             </th>
-                            <th>
+                            <th scope="col">
                                 Ngày
                             </th>
-                            <th>
+                            <th scope="col">
                                 Niên độ NS
                             </th>
-                            <th>
+                            <th scope="col">
                                 Cấp ứng
                             </th>
-                            <th>
+                            <th scope="col">
                                 Cấp vốn
                             </th>
-                            <th>
+                            <th scope="col">
                                 Cộng
                             </th>
                         </tr>
                         <tr>
-                            <th nzLeft>A</th>
-                            <th nzLeft>B</th>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3=1x2</th>
-                            <th>4</th>
-                            <th>5</th>
-                            <th>6=4+5</th>
-                            <th>7=3-6</th>
-                            <th>8</th>
-                            <th>9</th>
-                            <th>10</th>
-                            <th>11</th>
-                            <th>12</th>
-                            <th>13=11+12</th>
-                            <th>C</th>
-                            <th *ngIf="status.save" nzRight></th>
+                            <th scope="col" nzLeft>A</th>
+                            <th scope="col" nzLeft>B</th>
+                            <th scope="col">1</th>
+                            <th scope="col">2</th>
+                            <th scope="col">3=1x2</th>
+                            <th scope="col">4</th>
+                            <th scope="col">5</th>
+                            <th scope="col">6=4+5</th>
+                            <th scope="col">7=3-6</th>
+                            <th scope="col">8</th>
+                            <th scope="col">9</th>
+                            <th scope="col">10</th>
+                            <th scope="col">11</th>
+                            <th scope="col">12</th>
+                            <th scope="col">13=11+12</th>
+                            <th scope="col">C</th>
+                            <th scope="col" *ngIf="status.save" nzRight></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -348,9 +348,9 @@
                                 <nz-table nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th nzWidth="7%">STT</th>
-                                            <th>Tên file</th>
-                                            <th nzWidth="15%"></th>
+                                            <th scope="col" nzWidth="7%">STT</th>
+                                            <th scope="col">Tên file</th>
+                                            <th scope="col" nzWidth="15%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>

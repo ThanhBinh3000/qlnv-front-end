@@ -33,93 +33,93 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowSpan="2" nzWidth="50px" nzLeft>
+								<th scope="col" rowSpan="2" nzWidth="50px" nzLeft>
 									STT
 								</th>
-								<th rowSpan="2" nzWidth="300px" nzLeft>
+								<th scope="col" rowSpan="2" nzWidth="300px" nzLeft>
 									Mặt hàng
 								</th>
-								<th rowSpan="2">
+								<th scope="col" rowSpan="2">
 									Đơn vị tính
 								</th>
-								<th colSpan="2">
+								<th scope="colgroup" colSpan="2">
 									Kế hoạch năm {{namBcao-1}} (năm hiện hành)
 								</th>
-								<th colSpan="2">
+								<th scope="colgroup" colSpan="2">
 									Năm {{namBcao-1}} (năm hiện hành)
 								</th>
-								<th rowSpan="2">
+								<th scope="col" rowSpan="2">
 									Tồn kho đến 31/12 năm {{namBcao-1}} (năm hiện hành)
 								</th>
-								<th rowSpan="2">
+								<th scope="col" rowSpan="2">
 									Tổng mức dự trữ theo quyết định của cấp có thẩm quyền
 								</th>
-								<th colSpan="2">
+								<th scope="colgroup" colSpan="2">
 									Kế hoạch năm {{namBcao}}
 								</th>
-								<th colSpan="2" *ngIf="status.viewAppVal">
+								<th scope="colgroup" colSpan="2" *ngIf="status.viewAppVal">
 									Kế hoạch năm {{namBcao}} (Thẩm định)
 								</th>
-								<th rowspan="2" *ngIf="status.viewAppVal">
+								<th scope="col" rowspan="2" *ngIf="status.viewAppVal">
 									Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD
 								</th>
-								<th rowspan="2" class="text-col">
+								<th scope="col" rowspan="2" class="text-col">
 									Ghi chú
 								</th>
-								<th *ngIf="status.viewAppVal" rowspan="2" class="text-col">
+								<th scope="col" *ngIf="status.viewAppVal" rowspan="2" class="text-col">
 									Ý kiến của DVCT
 								</th>
-								<th rowspan="2" style="width: 50px;" *ngIf="status.general" nzRight></th>
-								<th rowspan="2" style="width: 60px;" *ngIf="status.general || status.editAppVal"
-									nzRight></th>
-								<th rowspan="2" style="width: 50px;" *ngIf="status.general" nzRight></th>
+								<th scope="col" rowspan="2" style="width: 50px;" *ngIf="status.general" nzRight></th>
+								<th scope="col" rowspan="2" style="width: 60px;"
+									*ngIf="status.general || status.editAppVal" nzRight></th>
+								<th scope="col" rowspan="2" style="width: 50px;" *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
-								<th>
+								<th scope="col">
 									Số lượng
 								</th>
-								<th>
+								<th scope="col">
 									Thành tiền
 								</th>
-								<th>
+								<th scope="col">
 									Số lượng
 								</th>
-								<th>
+								<th scope="col">
 									Thành tiền
 								</th>
-								<th>
+								<th scope="col">
 									Số lượng
 								</th>
-								<th>
+								<th scope="col">
 									Thành tiền
 								</th>
-								<th *ngIf="status.viewAppVal">
+								<th scope="col" *ngIf="status.viewAppVal">
 									Số lượng
 								</th>
-								<th *ngIf="status.viewAppVal">
+								<th scope="col" *ngIf="status.viewAppVal">
 									Thành tiền
 								</th>
 							</tr>
 							<tr>
-								<th nzLeft>A</th>
-								<th nzLeft>B</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
-								<th>4</th>
-								<th>5</th>
-								<th>6</th>
-								<th>7</th>
-								<th>8</th>
-								<th>9</th>
-								<th *ngIf="status.viewAppVal">8A</th>
-								<th *ngIf="status.viewAppVal">9A</th>
-								<th *ngIf="status.viewAppVal">10 = 9A - 9 </th>
-								<th>11</th>
-								<th *ngIf="status.viewAppVal">12</th>
-								<th *ngIf="status.general" nzRight></th>
-								<th *ngIf="status.general || status.editAppVal" nzRight></th>
-								<th *ngIf="status.general" nzRight></th>
+								<th scope="col" nzLeft>A</th>
+								<th scope="col" nzLeft>B</th>
+								<th scope="col">1</th>
+								<th scope="col">2</th>
+								<th scope="col">3</th>
+								<th scope="col">4</th>
+								<th scope="col">5</th>
+								<th scope="col">6</th>
+								<th scope="col">7</th>
+								<th scope="col">8</th>
+								<th scope="col">9</th>
+								<th scope="col" *ngIf="status.viewAppVal">8A</th>
+								<th scope="col" *ngIf="status.viewAppVal">9A</th>
+								<th scope="col" *ngIf="status.viewAppVal">10 = 9A - 9 </th>
+								<th scope="col">11</th>
+								<th scope="col" *ngIf="status.viewAppVal">12</th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
+								<th scope="col" *ngIf="status.general || status.editAppVal" nzRight></th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -129,33 +129,21 @@
 									Tổng cộng
 								</td>
 								<td></td>
-								<td>
-									<!-- {{ Op.fmtNum(total.khSluong) }} -->
-								</td>
+								<td> </td>
 								<td>
 									{{ Op.fmtVal(total.khTtien) }}
 								</td>
-								<td>
-									<!-- {{ Op.fmtNum(total.uocThSluong) }} -->
-								</td>
+								<td> </td>
 								<td>
 									{{ Op.fmtVal(total.uocThTtien) }}
 								</td>
-								<td>
-									<!-- {{ Op.fmtNum(total.tonKho) }} -->
-								</td>
-								<td>
-									<!-- {{ Op.fmtNum(total.tongMucDtru) }} -->
-								</td>
-								<td>
-									<!-- {{ Op.fmtNum(total.namKhSluong) }} -->
-								</td>
+								<td> </td>
+								<td> </td>
+								<td> </td>
 								<td>
 									{{ Op.fmtVal(total.namKhTtien) }}
 								</td>
-								<td *ngIf="status.viewAppVal">
-									<!-- {{ Op.fmtNum(total.tdinhSluong) }} -->
-								</td>
+								<td *ngIf="status.viewAppVal"> </td>
 								<td *ngIf="status.viewAppVal">
 									{{ Op.fmtVal(total.tdinhTtien) }}
 								</td>
@@ -381,9 +369,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>

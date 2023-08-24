@@ -32,144 +32,143 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{ x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="4" nzWidth="50px" nzLeft>STT</th>
-                                <th rowspan="4" nzWidth="300px" nzLeft>Đơn vị - nội dung</th>
-                                <th colspan="6">Kinh phí được sử dụng năm {{namBcao}} </th>
-                                <th colspan="6">
+                                <th scope="col" rowspan="4" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" rowspan="4" nzWidth="300px" nzLeft>Đơn vị - nội dung</th>
+                                <th scope="colgroup" colspan="6">Kinh phí được sử dụng năm {{namBcao}} </th>
+                                <th scope="colgroup" colspan="6">
                                     Nguồn kinh phí năm trước được chuyển sang năm {{namBcao}} sử dụng
                                 </th>
-                                <th colspan="6">
+                                <th scope="colgroup" colspan="6">
                                     Dự toán giao, phê duyệt sử dụng nguồn kinh phí năm {{namBcao}}
                                 </th>
-                                <th colspan="12">Giải ngân tháng báo cáo</th>
-                                <th colspan="12">
+                                <th scope="colgroup" colspan="12">Giải ngân tháng báo cáo</th>
+                                <th scope="colgroup" colspan="12">
                                     Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo tháng(đến hết thời
                                     gian
                                     chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với báo cáo năm)
                                 </th>
-                                <th style="width: 50px;" rowspan="4" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 50px;" rowspan="4" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
                             </tr>
                             <tr>
-                                <th rowspan="3">Tổng cộng</th>
-                                <th colspan="5">Trong đó</th>
-                                <th rowspan="3">Tổng cộng</th>
-                                <th colspan="5">Trong đó</th>
-                                <th rowspan="3">Tổng cộng</th>
-                                <th colspan="5">Trong đó</th>
+                                <th scope="col" rowspan="3">Tổng cộng</th>
+                                <th scope="colgroup" colspan="5">Trong đó</th>
+                                <th scope="col" rowspan="3">Tổng cộng</th>
+                                <th scope="colgroup" colspan="5">Trong đó</th>
+                                <th scope="col" rowspan="3">Tổng cộng</th>
+                                <th scope="colgroup" colspan="5">Trong đó</th>
 
-                                <th rowspan="2" colspan="2">Tổng cộng</th>
-                                <th colspan="10">Trong đó</th>
-                                <th rowspan="2" colspan="2">Tổng cộng</th>
-                                <th colspan="10">Trong đó</th>
+                                <th scope="colgroup" rowspan="2" colspan="2">Tổng cộng</th>
+                                <th scope="colgroup" colspan="10">Trong đó</th>
+                                <th scope="colgroup" rowspan="2" colspan="2">Tổng cộng</th>
+                                <th scope="colgroup" colspan="10">Trong đó</th>
                             </tr>
                             <tr>
-                                <th rowspan="2">Dự toán NSNN</th>
-                                <th rowspan="2">Nguồn khác</th>
-                                <th rowspan="2">Nguồn quỹ</th>
-                                <th rowspan="2">Vốn NSTT</th>
-                                <th rowspan="2">Vốn CK</th>
-                                <th rowspan="2">Dự toán NSNN</th>
-                                <th rowspan="2">Nguồn khác</th>
-                                <th rowspan="2">Nguồn quỹ</th>
-                                <th rowspan="2">Vốn NSTT</th>
-                                <th rowspan="2">Vốn CK</th>
-                                <th rowspan="2">Dự toán NSNN</th>
-                                <th rowspan="2">Nguồn khác</th>
-                                <th rowspan="2">Nguồn quỹ</th>
-                                <th rowspan="2">Vốn NSTT</th>
-                                <th rowspan="2">Vốn CK</th>
+                                <th scope="col" rowspan="2">Dự toán NSNN</th>
+                                <th scope="col" rowspan="2">Nguồn khác</th>
+                                <th scope="col" rowspan="2">Nguồn quỹ</th>
+                                <th scope="col" rowspan="2">Vốn NSTT</th>
+                                <th scope="col" rowspan="2">Vốn CK</th>
+                                <th scope="col" rowspan="2">Dự toán NSNN</th>
+                                <th scope="col" rowspan="2">Nguồn khác</th>
+                                <th scope="col" rowspan="2">Nguồn quỹ</th>
+                                <th scope="col" rowspan="2">Vốn NSTT</th>
+                                <th scope="col" rowspan="2">Vốn CK</th>
+                                <th scope="col" rowspan="2">Dự toán NSNN</th>
+                                <th scope="col" rowspan="2">Nguồn khác</th>
+                                <th scope="col" rowspan="2">Nguồn quỹ</th>
+                                <th scope="col" rowspan="2">Vốn NSTT</th>
+                                <th scope="col" rowspan="2">Vốn CK</th>
 
-                                <th colspan="2">Dự toán NSNN</th>
-                                <th colspan="2">Nguồn khác</th>
-                                <th colspan="2">Nguồn quỹ</th>
-                                <th colspan="2">Vốn NSTT</th>
-                                <th colspan="2">Vốn CK</th>
-                                <th colspan="2">Dự toán NSNN</th>
-                                <th colspan="2">Nguồn khác</th>
-                                <th colspan="2">Nguồn quỹ</th>
-                                <th colspan="2">Vốn NSTT</th>
-                                <th colspan="2">Vốn CK</th>
+                                <th scope="colgroup" colspan="2">Dự toán NSNN</th>
+                                <th scope="colgroup" colspan="2">Nguồn khác</th>
+                                <th scope="colgroup" colspan="2">Nguồn quỹ</th>
+                                <th scope="colgroup" colspan="2">Vốn NSTT</th>
+                                <th scope="colgroup" colspan="2">Vốn CK</th>
+                                <th scope="colgroup" colspan="2">Dự toán NSNN</th>
+                                <th scope="colgroup" colspan="2">Nguồn khác</th>
+                                <th scope="colgroup" colspan="2">Nguồn quỹ</th>
+                                <th scope="colgroup" colspan="2">Vốn NSTT</th>
+                                <th scope="colgroup" colspan="2">Vốn CK</th>
                             </tr>
                             <tr>
-                                <th>Cộng</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Cộng</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
-                                <th>Số tiền</th>
-                                <th>Tỷ lệ(%)</th>
+                                <th scope="col">Cộng</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Cộng</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
+                                <th scope="col">Số tiền</th>
+                                <th scope="col">Tỷ lệ(%)</th>
                             </tr>
                             <tr>
-                                <th nzLeft>A</th>
-                                <th nzLeft>B</th>
-                                <th>1=2+...+6</th>
-                                <th>2=8+14</th>
-                                <th>3=9+15</th>
-                                <th>4=10+16</th>
-                                <th>5=11+17</th>
-                                <th>6=12+18</th>
-                                <th>7=8+...+12</th>
-                                <th>8</th>
-                                <th>9</th>
-                                <th>10</th>
-                                <th>11</th>
-                                <th>12</th>
-                                <th>13=14+...+18</th>
-                                <th>14</th>
-                                <th>15</th>
-                                <th>16</th>
-                                <th>17</th>
-                                <th>18</th>
-                                <th>19=21+23+...+29</th>
-                                <th>20 =19/1</th>
-                                <th>21</th>
-                                <th>22=21/2</th>
-                                <th>23</th>
-                                <th>24=23/3</th>
-                                <th>25</th>
-                                <th>26=25/4</th>
-                                <th>27</th>
-                                <th>28=27/5</th>
-                                <th>29</th>
-                                <th>30=29/6</th>
-                                <th>31=33+35+...+41</th>
-                                <th>32=31/1</th>
-                                <th>33</th>
-                                <th>34=33/2</th>
-                                <th>35</th>
-                                <th>36=35/3</th>
-                                <th>37</th>
-                                <th>38=37/4</th>
-                                <th>39</th>
-                                <th>40=39/5</th>
-                                <th>41</th>
-                                <th>42=41/6 </th>
-                                <th *ngIf="status.save" nzRight></th>
-                                <th *ngIf="status.save" nzRight></th>
-                                <th *ngIf="status.save" nzRight></th>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col">1=2+...+6</th>
+                                <th scope="col">2=8+14</th>
+                                <th scope="col">3=9+15</th>
+                                <th scope="col">4=10+16</th>
+                                <th scope="col">5=11+17</th>
+                                <th scope="col">6=12+18</th>
+                                <th scope="col">7=8+...+12</th>
+                                <th scope="col">8</th>
+                                <th scope="col">9</th>
+                                <th scope="col">10</th>
+                                <th scope="col">11</th>
+                                <th scope="col">12</th>
+                                <th scope="col">13=14+...+18</th>
+                                <th scope="col">14</th>
+                                <th scope="col">15</th>
+                                <th scope="col">16</th>
+                                <th scope="col">17</th>
+                                <th scope="col">18</th>
+                                <th scope="col">19=21+23+...+29</th>
+                                <th scope="col">20 =19/1</th>
+                                <th scope="col">21</th>
+                                <th scope="col">22=21/2</th>
+                                <th scope="col">23</th>
+                                <th scope="col">24=23/3</th>
+                                <th scope="col">25</th>
+                                <th scope="col">26=25/4</th>
+                                <th scope="col">27</th>
+                                <th scope="col">28=27/5</th>
+                                <th scope="col">29</th>
+                                <th scope="col">30=29/6</th>
+                                <th scope="col">31=33+35+...+41</th>
+                                <th scope="col">32=31/1</th>
+                                <th scope="col">33</th>
+                                <th scope="col">34=33/2</th>
+                                <th scope="col">35</th>
+                                <th scope="col">36=35/3</th>
+                                <th scope="col">37</th>
+                                <th scope="col">38=37/4</th>
+                                <th scope="col">39</th>
+                                <th scope="col">40=39/5</th>
+                                <th scope="col">41</th>
+                                <th scope="col">42=41/6 </th>
+                                <th scope="col" *ngIf="status.save" nzRight></th>
+                                <th scope="col" *ngIf="status.save" nzRight></th>
+                                <th scope="col" *ngIf="status.save" nzRight></th>
                             </tr>
                         </thead>
                         <tbody>
-
                             <tr>
                                 <td nzLeft></td>
                                 <td nzLeft>TỔNG SỐ</td>
@@ -525,9 +524,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

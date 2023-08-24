@@ -36,30 +36,30 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" nzWidth="50px" nzLeft>
+                                <th scope="col" rowspan="2" nzWidth="50px" nzLeft>
                                     STT
                                 </th>
-                                <th rowspan="2" nzWidth="300px" nzLeft>
+                                <th scope="col" rowspan="2" nzWidth="300px" nzLeft>
                                     Nội dung chi
                                 </th>
-                                <th colspan="{{1 + lstCol.length}}">
+                                <th scope="colgroup" colspan="{{1 + lstCol.length}}">
                                     Chi tiết theo từng mặt hàng trong đợt
                                 </th>
-                                <th colspan="{{1 + lstCol.length}}">
+                                <th scope="colgroup" colspan="{{1 + lstCol.length}}">
                                     Chi tiết theo từng mặt hàng lũy kế từ đầu năm
                                 </th>
-                                <th rowspan="2" class="text-col">
+                                <th scope="col" rowspan="2" class="text-col">
                                     Ghi chú
                                 </th>
-                                <th style="width: 50px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 50px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
                             </tr>
                             <tr>
-                                <th>
+                                <th scope="col">
                                     Tổng Cộng
                                 </th>
-                                <th *ngFor="let col of lstCol">
+                                <th scope="col" *ngFor="let col of lstCol">
                                     <ng-container *ngIf="!status.save || statusDeleteCol(col.maVtu); else xoa">
                                         {{col.tenVtu}}
                                     </ng-container>
@@ -69,10 +69,10 @@
                                         </a>
                                     </ng-template>
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tổng Cộng
                                 </th>
-                                <th *ngFor="let col of lstCol">
+                                <th scope="col" *ngFor="let col of lstCol">
                                     <ng-container *ngIf="statusDeleteCol(col.maVtu) || !status.save; else xoa">
                                         {{col.tenVtu}}
                                     </ng-container>
@@ -187,9 +187,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

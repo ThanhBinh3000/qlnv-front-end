@@ -52,17 +52,17 @@
                 <nz-table class="nowrap mt-16 table-chi-tiet">
                     <thead>
                         <tr>
-                            <th>Mã đề nghị</th>
-                            <th>Năm</th>
-                            <th>Số lần</th>
-                            <th>Căn cứ về giá</th>
-                            <th>Loại đề nghị</th>
-                            <th>Ngày tạo</th>
-                            <th>Số công văn</th>
-                            <th>Ngày công văn</th>
-                            <th>Ngày trình duyệt</th>
-                            <th>Ngày duyệt</th>
-                            <th>Ngày phê duyệt</th>
+                            <th scope="col">Mã đề nghị</th>
+                            <th scope="col">Năm</th>
+                            <th scope="col">Số lần</th>
+                            <th scope="col">Căn cứ về giá</th>
+                            <th scope="col">Loại đề nghị</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Số công văn</th>
+                            <th scope="col">Ngày công văn</th>
+                            <th scope="col">Ngày trình duyệt</th>
+                            <th scope="col">Ngày duyệt</th>
+                            <th scope="col">Ngày phê duyệt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -136,70 +136,73 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollHD}">
                             <thead>
                                 <tr>
-                                    <th *ngIf="baoCao.loaiDnghi != Cvnc.VTU" rowspan="2" nzLeft nzWidth="200px">
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi != Cvnc.VTU" rowspan="2" nzLeft
+                                        nzWidth="200px">
                                         Đơn vị
                                     </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2" nzLeft nzWidth="200px">
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2" nzLeft
+                                        nzWidth="200px">
                                         Tên khách hàng
                                     </th>
-                                    <th rowspan="2" nzWidth="300px" nzLeft>
+                                    <th scope="col" rowspan="2" nzWidth="300px" nzLeft>
                                         Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng
                                     </th>
-                                    <th colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 3 : 2}}">
+                                    <th scope="colgroup" colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 3 : 2}}">
                                         Số lượng
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Đơn giá (đồng /kg)
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Giá trị hợp đồng (đã bao gồm VAT)
                                     </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2">
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2">
                                         Giá trị thực hiện
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Vi phạm hợp đồng
                                     </th>
-                                    <th colspan="2">
+                                    <th scope="colgroup" colspan="2">
                                         Thanh lý hợp đồng
                                     </th>
-                                    <th rowspan="2" class="text-col">
+                                    <th scope="col" rowspan="2" class="text-col">
                                         Công văn
                                     </th>
-                                    <th *ngIf="status.save && !isSynth" rowSpan="2" style="width: 60px;" nzRight></th>
+                                    <th scope="col" *ngIf="status.save && !isSynth" rowSpan="2" style="width: 60px;"
+                                        nzRight></th>
                                 </tr>
                                 <tr>
-                                    <th>
+                                    <th scope="col">
                                         Kế hoạch
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Hợp đồng
                                     </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
                                         Thực hiện
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Số lượng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Thành tiền
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th *ngIf="baoCao.loaiDnghi != Cvnc.VTU" nzLeft> A </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" nzLeft> B </th>
-                                    <th nzLeft> C </th>
-                                    <th> 1 </th>
-                                    <th> 2 </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 3 </th>
-                                    <th> 4 </th>
-                                    <th> 5=2x4 </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 6=3x4 </th>
-                                    <th> 7 </th>
-                                    <th> 8 </th>
-                                    <th> 9 </th>
-                                    <th> 10 </th>
-                                    <th *ngIf="status.save && !isSynth" nzRight></th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi != Cvnc.VTU" nzLeft> A </th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU" nzLeft> B </th>
+                                    <th scope="col" nzLeft> C </th>
+                                    <th scope="col"> 1 </th>
+                                    <th scope="col"> 2 </th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 3 </th>
+                                    <th scope="col"> 4 </th>
+                                    <th scope="col"> 5=2x4 </th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 6=3x4 </th>
+                                    <th scope="col"> 7 </th>
+                                    <th scope="col"> 8 </th>
+                                    <th scope="col"> 9 </th>
+                                    <th scope="col"> 10 </th>
+                                    <th scope="col" *ngIf="status.save && !isSynth" nzRight></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -315,120 +318,120 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollCV}">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" nzWidth="300px" nzLeft>
+                                    <th scope="col" rowspan="2" nzWidth="300px" nzLeft>
                                         Đơn vị
                                     </th>
-                                    <th colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 3 : 2}}">
+                                    <th scope="colgroup" colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 3 : 2}}">
                                         Số lượng
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Giá trị hợp đồng (đã bao gồm VAT) (đồng)
                                     </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2">
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU" rowspan="2">
                                         Giá trị thực hiện
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Vi phạm hợp đồng
                                     </th>
-                                    <th colspan="2">
+                                    <th scope="colgroup" colspan="2">
                                         Thanh lý hợp đồng
                                     </th>
-                                    <th colspan="3">
+                                    <th scope="colgroup" colspan="3">
                                         Lũy kế cấp vốn đến thời điểm báo cáo
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Dự toán đã giao
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Tổng vốn và Dự toán đã cấp đến trước thời điểm báo cáo
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Vốn đề nghị cấp lần này
                                     </th>
-                                    <th colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 5 : 3}}">
+                                    <th scope="colgroup" colspan="{{baoCao.loaiDnghi == Cvnc.VTU ? 5 : 3}}">
                                         Vốn duyệt cấp lần này
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Tổng tiền
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Số còn được cấp
                                     </th>
-                                    <th rowspan="2" class="text-col">
+                                    <th scope="col" rowspan="2" class="text-col">
                                         Ghi chú
                                     </th>
-                                    <th *ngIf="isSynth" rowspan="2">
+                                    <th scope="col" *ngIf="isSynth" rowspan="2">
                                         Lần
                                     </th>
-                                    <th *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
+                                    <th scope="col" *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
                                 </tr>
                                 <tr>
-                                    <th>
+                                    <th scope="col">
                                         Kế hoạch
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Hợp đồng
                                     </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
                                         Thực hiện
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Số lượng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Thành tiền
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Vốn ứng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Vốn cấp
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Cộng
                                     </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
                                         Ngày
                                     </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
                                         Niên độ NS
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Vốn ứng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Vốn cấp
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Cộng
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th nzLeft> A </th>
-                                    <th> 1 </th>
-                                    <th> 2 </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 3 </th>
-                                    <th> 4 </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 5 </th>
-                                    <th> 6 </th>
-                                    <th> 7 </th>
-                                    <th> 8 </th>
-                                    <th> 9 </th>
-                                    <th> 10 </th>
-                                    <th> 11=9+10 </th>
-                                    <th> 12 </th>
-                                    <th> 13=11+12 </th>
-                                    <th> {{ baoCao.loaiDnghi == Cvnc.VTU ? "14=5-6-13" : "14=4-6-13"}} </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 15 </th>
-                                    <th *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 16 </th>
-                                    <th> 17 </th>
-                                    <th> 18 </th>
-                                    <th> 19=17+18 </th>
-                                    <th> 20=13+19 </th>
-                                    <th> {{ baoCao.loaiDnghi == Cvnc.VTU ? "21=5-6-20" : "14=4-6-20"}} </th>
-                                    <th> D </th>
-                                    <th *ngIf="isSynth"> </th>
-                                    <th *ngIf="status.save" nzRight></th>
+                                    <th scope="col" nzLeft> A </th>
+                                    <th scope="col"> 1 </th>
+                                    <th scope="col"> 2 </th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 3 </th>
+                                    <th scope="col"> 4 </th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 5 </th>
+                                    <th scope="col"> 6 </th>
+                                    <th scope="col"> 7 </th>
+                                    <th scope="col"> 8 </th>
+                                    <th scope="col"> 9 </th>
+                                    <th scope="col"> 10 </th>
+                                    <th scope="col"> 11=9+10 </th>
+                                    <th scope="col"> 12 </th>
+                                    <th scope="col"> 13=11+12 </th>
+                                    <th scope="col"> {{ baoCao.loaiDnghi == Cvnc.VTU ? "14=5-6-13" : "14=4-6-13"}} </th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 15 </th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 16 </th>
+                                    <th scope="col"> 17 </th>
+                                    <th scope="col"> 18 </th>
+                                    <th scope="col"> 19=17+18 </th>
+                                    <th scope="col"> 20=13+19 </th>
+                                    <th scope="col"> {{ baoCao.loaiDnghi == Cvnc.VTU ? "21=5-6-20" : "14=4-6-20"}} </th>
+                                    <th scope="col"> D </th>
+                                    <th scope="col" *ngIf="isSynth"> </th>
+                                    <th scope="col" *ngIf="status.save" nzRight></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -608,9 +611,9 @@
                                 <nz-table nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th nzWidth="7%">STT</th>
-                                            <th>Tên file</th>
-                                            <th nzWidth="15%"></th>
+                                            <th scope="col" nzWidth="7%">STT</th>
+                                            <th scope="col">Tên file</th>
+                                            <th scope="col" nzWidth="15%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>

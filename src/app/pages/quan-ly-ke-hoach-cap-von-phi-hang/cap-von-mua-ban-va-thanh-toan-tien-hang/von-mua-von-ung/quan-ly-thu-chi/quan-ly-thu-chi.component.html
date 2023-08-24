@@ -18,53 +18,53 @@
         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
             <thead>
                 <tr>
-                    <th rowspan="3" nzWidth="50px" nzLeft>STT</th>
-                    <th rowspan="3" nzWidth="150px" nzLeft>Hàng DTQG</th>
-                    <th colspan="3" rowspan="2">Nhận</th>
-                    <th colspan="{{userService.isChiCuc() ? 6 : 9}}">Chi</th>
-                    <th rowspan="3" class="text-col">Ghi chú</th>
+                    <th scope="col" rowspan="3" nzWidth="50px" nzLeft>STT</th>
+                    <th scope="col" rowspan="3" nzWidth="150px" nzLeft>Hàng DTQG</th>
+                    <th scope="colgroup" colspan="3" rowspan="2">Nhận</th>
+                    <th scope="colgroup" colspan="{{userService.isChiCuc() ? 6 : 9}}">Chi</th>
+                    <th scope="col" rowspan="3" class="text-col">Ghi chú</th>
                 </tr>
                 <tr>
-                    <th *ngIf="!userService.isChiCuc()" colspan="3">
+                    <th scope="colgroup" *ngIf="!userService.isChiCuc()" colspan="3">
                         Giao cho đơn vị cấp dưới
                     </th>
-                    <th colspan="3">
+                    <th scope="colgroup" colspan="3">
                         Tổng thanh toán cho khách hàng
                     </th>
-                    <th colspan="3">
+                    <th scope="colgroup" colspan="3">
                         Số dư
                     </th>
                 </tr>
                 <tr>
-                    <th>Tổng vốn ứng</th>
-                    <th>Tổng vốn cấp</th>
-                    <th>Tổng vốn</th>
-                    <th *ngIf="!userService.isChiCuc()">Tổng cấp ứng</th>
-                    <th *ngIf="!userService.isChiCuc()">Tổng cấp vốn</th>
-                    <th *ngIf="!userService.isChiCuc()">Tổng cấp</th>
-                    <th>Tổng vốn ứng</th>
-                    <th>Tổng vốn cấp</th>
-                    <th>Tổng vốn</th>
-                    <th>Tổng vốn ứng</th>
-                    <th>Tổng vốn cấp</th>
-                    <th>Tổng vốn</th>
+                    <th scope="col">Tổng vốn ứng</th>
+                    <th scope="col">Tổng vốn cấp</th>
+                    <th scope="col">Tổng vốn</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp ứng</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp vốn</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp</th>
+                    <th scope="col">Tổng vốn ứng</th>
+                    <th scope="col">Tổng vốn cấp</th>
+                    <th scope="col">Tổng vốn</th>
+                    <th scope="col">Tổng vốn ứng</th>
+                    <th scope="col">Tổng vốn cấp</th>
+                    <th scope="col">Tổng vốn</th>
                 </tr>
                 <tr>
-                    <th nzLeft>A</th>
-                    <th nzLeft>B</th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3=1+2</th>
-                    <th *ngIf="!userService.isChiCuc()">4</th>
-                    <th *ngIf="!userService.isChiCuc()">5</th>
-                    <th *ngIf="!userService.isChiCuc()">6=4+5</th>
-                    <th>7</th>
-                    <th>8</th>
-                    <th>9=7+8</th>
-                    <th>10=1-4-7</th>
-                    <th>11=2-5-8</th>
-                    <th>12=10+11</th>
-                    <th>C</th>
+                    <th scope="col" nzLeft>A</th>
+                    <th scope="col" nzLeft>B</th>
+                    <th scope="col">1</th>
+                    <th scope="col">2</th>
+                    <th scope="col">3=1+2</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">4</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">5</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">6=4+5</th>
+                    <th scope="col">7</th>
+                    <th scope="col">8</th>
+                    <th scope="col">9=7+8</th>
+                    <th scope="col">10=1-4-7</th>
+                    <th scope="col">11=2-5-8</th>
+                    <th scope="col">12=10+11</th>
+                    <th scope="col">C</th>
                 </tr>
             </thead>
             <tbody>
