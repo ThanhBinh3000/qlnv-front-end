@@ -13,7 +13,6 @@ import { Dcdt } from '../dieu-chinh-du-toan.constant';
 @Component({
     selector: 'app-danh-sach-bao-cao-dieu-chinh',
     templateUrl: './danh-sach-bao-cao-dieu-chinh.component.html',
-    styleUrls: ['./danh-sach-bao-cao-dieu-chinh.component.scss']
 })
 export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
     @Output() dataChange = new EventEmitter();

@@ -32,7 +32,6 @@ export const TRANG_THAI_TIM_KIEM = [
 @Component({
     selector: 'app-phe-duyet-tong-hop',
     templateUrl: './phe-duyet-tong-hop.component.html',
-    styleUrls: ['./phe-duyet-tong-hop.component.css']
 })
 export class PheDuyetTongHopComponent implements OnInit {
     @Input() data

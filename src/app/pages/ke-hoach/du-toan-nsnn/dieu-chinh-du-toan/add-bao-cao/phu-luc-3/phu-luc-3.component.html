@@ -26,51 +26,53 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowSpan="2" nzWidth="50px" nzLeft>STT</th>
-								<th rowSpan="2" nzWidth="300px" nzLeft>Nội dung</th>
-								<th rowSpan="2">Loại Khoản</th>
-								<th rowSpan="2">Nhu cầu dự toán kinh phí năm {{namBcao}}</th>
-								<th colSpan="3">Dự toán kinh phí được sử dụng trong năm</th>
-								<th rowSpan="2">Kinh phí ước thực hiện cả năm</th>
-								<th rowSpan="2">Dự toán điều chỉnh Tăng(+)/Giảm(-) </th>
-								<th rowSpan="2" *ngIf="status.viewAppVal">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)
+								<th scope="col" rowSpan="2" nzWidth="50px" nzLeft>STT</th>
+								<th scope="col" rowSpan="2" nzWidth="300px" nzLeft>Nội dung</th>
+								<th scope="col" rowSpan="2">Loại Khoản</th>
+								<th scope="col" rowSpan="2">Nhu cầu dự toán kinh phí năm {{namBcao}}</th>
+								<th scope="colgroup" colSpan="3">Dự toán kinh phí được sử dụng trong năm</th>
+								<th scope="col" rowSpan="2">Kinh phí ước thực hiện cả năm</th>
+								<th scope="col" rowSpan="2">Dự toán điều chỉnh Tăng(+)/Giảm(-) </th>
+								<th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Dự toán Vụ TVQT đề nghị (+ tăng)
+									(- giảm)
 								</th>
-								<th rowSpan="2">Ghi chú
+								<th scope="col" rowSpan="2">Ghi chú
 								</th>
-								<th rowSpan="2" *ngIf="status.viewAppVal">Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và
+								<th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Dự toán chênh lệch giữa Vụ TVQT
+									điều chỉnh và
 									đơn vị đề nghị (+ tăng) (- giảm)
 								</th>
-								<th rowSpan="2" *ngIf="status.viewAppVal">Ý kiến của đơn vị cấp trên
+								<th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Ý kiến của đơn vị cấp trên
 								</th>
-								<th rowSpan="2" *ngIf="status.general || status.editAppVal">
+								<th scope="col" rowSpan="2" *ngIf="status.general || status.editAppVal">
 								</th>
 							</tr>
 							<tr>
-								<th>Năm trước chuyển sang</th>
-								<th>Dự toán đã giao trong năm</th>
-								<th>Cộng</th>
+								<th scope="col">Năm trước chuyển sang</th>
+								<th scope="col">Dự toán đã giao trong năm</th>
+								<th scope="col">Cộng</th>
 							</tr>
 							<tr>
-								<th nzLeft>A</th>
-								<th nzLeft>B</th>
-								<th>C</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
-								<th>4 = 2 + 3</th>
-								<th>5</th>
-								<th>6 = 1 - 4</th>
-								<th *ngIf="status.viewAppVal">
+								<th scope="col" nzLeft>A</th>
+								<th scope="col" nzLeft>B</th>
+								<th scope="col">C</th>
+								<th scope="col">1</th>
+								<th scope="col">2</th>
+								<th scope="col">3</th>
+								<th scope="col">4 = 2 + 3</th>
+								<th scope="col">5</th>
+								<th scope="col">6 = 1 - 4</th>
+								<th scope="col" *ngIf="status.viewAppVal">
 									7
 								</th>
-								<th>
+								<th scope="col">
 									8
 								</th>
-								<th *ngIf="status.viewAppVal">9 = 7 - 6
+								<th scope="col" *ngIf="status.viewAppVal">9 = 7 - 6
 								</th>
-								<th *ngIf="status.viewAppVal">10
+								<th scope="col" *ngIf="status.viewAppVal">10
 								</th>
-								<th *ngIf="status.general || status.editAppVal"></th>
+								<th scope="col" *ngIf="status.general || status.editAppVal"></th>
 							</tr>
 						</thead>
 						<tbody>

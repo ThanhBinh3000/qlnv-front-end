@@ -57,7 +57,6 @@ export const TRANG_THAI_TIM_KIEM = [
 @Component({
     selector: 'app-phan-bo-du-toan',
     templateUrl: './phan-bo-du-toan.component.html',
-    styleUrls: ['./phan-bo-du-toan.component.scss']
 })
 export class PhanBoDuToanComponent implements OnInit {
     @Output() dataChange = new EventEmitter();

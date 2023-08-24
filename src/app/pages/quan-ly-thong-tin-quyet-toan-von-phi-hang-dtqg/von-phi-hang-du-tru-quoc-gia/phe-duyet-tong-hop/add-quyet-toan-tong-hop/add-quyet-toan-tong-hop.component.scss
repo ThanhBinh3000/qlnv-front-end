@@ -54,6 +54,7 @@
 
         .tab__container {
             margin-top: 12px;
+            position: relative;
         }
 
         .ghi-chu {
@@ -75,10 +76,6 @@
 
         tr.table__header-vat-tu.ant-table-row>td {
             background: #f1f1f1;
-        }
-
-        .tab__container {
-            position: relative;
         }
 
         .action {

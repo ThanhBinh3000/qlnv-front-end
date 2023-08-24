@@ -21,7 +21,6 @@ export class ItemCongVan {
 @Component({
     selector: 'app-dialog-them-thong-tin-quyet-toan',
     templateUrl: './dialog-them-thong-tin-quyet-toan.component.html',
-    styleUrls: ['./dialog-them-thong-tin-quyet-toan.component.scss']
 })
 export class DialogThemThongTinQuyetToanComponent implements OnInit {
     @Input() tab: string;
