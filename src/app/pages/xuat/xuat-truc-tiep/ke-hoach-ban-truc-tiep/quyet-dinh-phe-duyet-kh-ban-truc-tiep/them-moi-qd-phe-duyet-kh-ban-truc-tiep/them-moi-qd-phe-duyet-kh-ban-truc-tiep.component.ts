@@ -141,15 +141,20 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   async bindingDataTongHop(dataTongHop?) {
     if (dataTongHop) {
-      this.formData.patchValue({
-        cloaiVthh: dataTongHop.cloaiVthh,
-        tenCloaiVthh: dataTongHop.tenCloaiVthh,
-        loaiVthh: dataTongHop.loaiVthh,
-        tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
-        phanLoai: 'TH',
-      })
-      await this.selectMaTongHop(this.formData.value.idThHdr);
+      if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD) {
+        this.formData.patchValue({
+          cloaiVthh: dataTongHop.cloaiVthh,
+          tenCloaiVthh: dataTongHop.tenCloaiVthh,
+          loaiVthh: dataTongHop.loaiVthh,
+          tenLoaiVthh: dataTongHop.tenLoaiVthh,
+          idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
+          phanLoai: 'TH',
+        })
+        await this.selectMaTongHop(this.formData.value.idThHdr);
+      } else {
+        await this.loadChiTiet(dataTongHop.idSoQdPd);
+        dataTongHop.trangThai == STATUS.DA_BAN_HANH_QD ? this.isView = true : this.isView = false;
+      }
     }
   }
 
