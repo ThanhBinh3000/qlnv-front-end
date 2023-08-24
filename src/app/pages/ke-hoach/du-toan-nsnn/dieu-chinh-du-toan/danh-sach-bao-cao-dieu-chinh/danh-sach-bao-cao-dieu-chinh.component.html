@@ -69,10 +69,10 @@
             [nzShowPagination]="false" nzBordered>
             <thead>
                 <tr>
-                    <th scope="col" width="45px">
+                    <th scope="col" nzWidth="45px">
                         <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
                     </th>
-                    <th scope="col" width="60px" class="text-center">STT</th>
+                    <th scope="col" nzWidth="60px" class="text-center">STT</th>
                     <th scope="col">Mã báo cáo</th>
                     <th scope="col">Ngày tạo</th>
                     <th scope="col">Năm báo cáo</th>
@@ -82,12 +82,12 @@
                     <th scope="col">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
                     <th scope="col">Ngày cấp trên trả kết quả</th>
                     <th scope="col" class="text-center">Trạng thái</th>
-                    <th scope="col" width="90px">Hành động</th>
+                    <th scope="col" nzWidth="90px">Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
-                    <td width="45px">
+                    <td nzWidth="45px">
                         <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                             [nzDisabled]="!data.isDelete"></label>
                     </td>

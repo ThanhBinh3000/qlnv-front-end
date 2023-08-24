@@ -99,7 +99,6 @@ export const amount1 = {
 @Component({
     selector: 'app-phu-luc-tong-hop',
     templateUrl: './phu-luc-tong-hop.component.html',
-    styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLucTongHopComponent implements OnInit {
     @Input() dataInfo;
