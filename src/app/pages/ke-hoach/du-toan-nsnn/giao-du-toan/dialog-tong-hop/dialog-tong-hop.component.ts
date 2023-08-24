@@ -12,7 +12,6 @@ import * as uuid from "uuid";
 @Component({
     selector: 'app-dialog-tong-hop',
     templateUrl: './dialog-tong-hop.component.html',
-    styleUrls: ['./dialog-tong-hop.component.scss']
 })
 
 export class DialogTongHopComponent implements OnInit {

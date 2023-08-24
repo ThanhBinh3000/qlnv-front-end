@@ -27,124 +27,131 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowSpan="4" nzWidth="50px" nzLeft>STT</th>
-                                <th rowSpan="4" nzWidth="300px" nzLeft>Tên đơn vị(Biên chế thực tế có mặt)</th>
-                                <th rowSpan="4">Biên chế {{namBcao}} <br> được giao</th>
-                                <th rowSpan="4">Biên chế có mặt</th>
-                                <th rowSpan="4">Biên chế chưa <br> tuyển</th>
-                                <th colSpan="12">Hệ số lương và các loại phụ cấp cho biên chế công chức có mặt năm
+                                <th scope="col" rowSpan="4" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" rowSpan="4" nzWidth="300px" nzLeft>Tên đơn vị(Biên chế thực tế có mặt)
+                                </th>
+                                <th scope="col" rowSpan="4">Biên chế {{namBcao}} <br> được giao</th>
+                                <th scope="col" rowSpan="4">Biên chế có mặt</th>
+                                <th scope="col" rowSpan="4">Biên chế chưa <br> tuyển</th>
+                                <th scope="colgroup" colSpan="12">Hệ số lương và các loại phụ cấp cho biên chế công chức
+                                    có mặt năm
                                     {{namBcao}}
                                 </th>
-                                <th colSpan="12">Tổng quỹ lương và các loại phụ cấp cho biên chế <br> công chức có mặt
+                                <th scope="colgroup" colSpan="12">Tổng quỹ lương và các loại phụ cấp cho biên chế <br>
+                                    công chức có mặt
                                     năm
                                     {{namBcao}}
                                     (tính đến
                                     31/12/{{namBcao}} (không tính HĐ 68)) </th>
-                                <th rowSpan="4">Tổng nhu cầu <br> tiền lương năm <br> {{namBcao - 1}} <br> (năm kế
+                                <th scope="col" rowSpan="4">Tổng nhu cầu <br> tiền lương năm <br> {{namBcao - 1}}
+                                    <br> (năm kế
                                     hoạchh)</th>
-                                <th colSpan="4">Bao gồm</th>
-                                <th colSpan="3">Dự toán, kinh phí <br> được sử dụng trong năm</th>
-                                <th rowSpan="4">Dự toán điều <br> chỉnh <br> (+ tăng) (- giảm)</th>
-                                <th rowSpan="4" *ngIf="status.viewAppVal">Dự toán Vụ TVQT <br> đề nghị <br> (+ tăng)
+                                <th scope="colgroup" colSpan="4">Bao gồm</th>
+                                <th scope="colgroup" colSpan="3">Dự toán, kinh phí <br> được sử dụng trong năm</th>
+                                <th scope="col" rowSpan="4">Dự toán điều <br> chỉnh <br> (+ tăng) (- giảm)</th>
+                                <th scope="col" rowSpan="4" *ngIf="status.viewAppVal">Dự toán Vụ TVQT <br> đề nghị <br>
+                                    (+ tăng)
                                     (- giảm)
                                 </th>
-                                <th rowSpan="4">Ghi chú
+                                <th scope="col" rowSpan="4">Ghi chú
                                 </th>
-                                <th rowSpan="4" *ngIf="status.viewAppVal">
+                                <th scope="col" rowSpan="4" *ngIf="status.viewAppVal">
                                     Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng)(-
                                     giảm)
                                 </th>
-                                <th rowSpan="4" *ngIf="status.viewAppVal">Ý kiến của đơn vị cấp trên
+                                <th scope="col" rowSpan="4" *ngIf="status.viewAppVal">Ý kiến của đơn vị cấp trên
                                 </th>
-                                <th rowSpan="4" *ngIf="status.general || status.editAppVal"></th>
+                                <th scope="col" rowSpan="4" *ngIf="status.general || status.editAppVal"></th>
                             </tr>
                             <tr>
-                                <th rowSpan="3">Tổng số</th>
-                                <th colSpan="11">Bao gồm</th>
-                                <th rowSpan="3">Tổng số</th>
-                                <th colSpan="11">Bao gồm</th>
-                                <th rowSpan="3">Tiền lương <br> biên chế <br> thực tế có mặt</th>
-                                <th rowSpan="3">Các khoản <br> đóng góp theo <br> lương của <br> biên chế thực tế</th>
-                                <th rowSpan="3">Lương CBCC <br> chưa tuyển dụng</th>
-                                <th rowSpan="3">Các khoản lương <br> khác theo chế độ</th>
-                                <th rowSpan="3">Dự toán năm trước <br> chuyển sang được <br> phép sử dụng cho
+                                <th scope="col" rowSpan="3">Tổng số</th>
+                                <th scope="colgroup" colSpan="11">Bao gồm</th>
+                                <th scope="col" rowSpan="3">Tổng số</th>
+                                <th scope="colgroup" colSpan="11">Bao gồm</th>
+                                <th scope="col" rowSpan="3">Tiền lương <br> biên chế <br> thực tế có mặt</th>
+                                <th scope="col" rowSpan="3">Các khoản <br> đóng góp theo <br> lương của <br> biên chế
+                                    thực tế</th>
+                                <th scope="col" rowSpan="3">Lương CBCC <br> chưa tuyển dụng</th>
+                                <th scope="col" rowSpan="3">Các khoản lương <br> khác theo chế độ</th>
+                                <th scope="col" rowSpan="3">Dự toán năm trước <br> chuyển sang được <br> phép sử
+                                    dụng cho
                                     <br> năm nay
                                 </th>
-                                <th rowSpan="3">Dự toán, kinh phí <br> đã giao <br> trong năm</th>
-                                <th rowSpan="3">Cộng</th>
+                                <th scope="col" rowSpan="3">Dự toán, kinh phí <br> đã giao <br> trong năm</th>
+                                <th scope="col" rowSpan="3">Cộng</th>
                             </tr>
                             <tr>
-                                <th rowSpan="2">Hệ số lương</th>
-                                <th colSpan="10">Hệ số các loại phụ cấp</th>
-                                <th rowSpan="2">Tiền lương</th>
-                                <th colSpan="10">Tiền phụ cấp lương</th>
+                                <th scope="col" rowSpan="2">Hệ số lương</th>
+                                <th scope="colgroup" colSpan="10">Hệ số các loại phụ cấp</th>
+                                <th scope="col" rowSpan="2">Tiền lương</th>
+                                <th scope="colgroup" colSpan="10">Tiền phụ cấp lương</th>
                             </tr>
                             <tr>
-                                <th>Tổng</th>
-                                <th>PC chức vụ</th>
-                                <th>PC trách nhiệm</th>
-                                <th>PC thâm niên <br> vượt khung</th>
-                                <th>HSBL</th>
-                                <th>Phụ cấp công vụ </th>
-                                <th>Phụ cấp <br> thâm niên</th>
-                                <th>Phụ cấp <br> ưu đãi nghề</th>
-                                <th>PC khu vực</th>
-                                <th>PC khác</th>
-                                <th>Tổng</th>
-                                <th>PC chức vụ</th>
-                                <th>PC trách nhiệm</th>
-                                <th>PC thâm niên <br> vượt khung</th>
-                                <th>HSBL</th>
-                                <th>Phụ cấp công vụ </th>
-                                <th>Phụ cấp <br> thâm niên</th>
-                                <th>Phụ cấp <br> ưu đãi nghề</th>
-                                <th>PC khu vực</th>
-                                <th>PC khác</th>
+                                <th scope="col">Tổng</th>
+                                <th scope="col">PC chức vụ</th>
+                                <th scope="col">PC trách nhiệm</th>
+                                <th scope="col">PC thâm niên <br> vượt khung</th>
+                                <th scope="col">HSBL</th>
+                                <th scope="col">Phụ cấp công vụ </th>
+                                <th scope="col">Phụ cấp <br> thâm niên</th>
+                                <th scope="col">Phụ cấp <br> ưu đãi nghề</th>
+                                <th scope="col">PC khu vực</th>
+                                <th scope="col">PC khác</th>
+                                <th scope="col">Tổng</th>
+                                <th scope="col">PC chức vụ</th>
+                                <th scope="col">PC trách nhiệm</th>
+                                <th scope="col">PC thâm niên <br> vượt khung</th>
+                                <th scope="col">HSBL</th>
+                                <th scope="col">Phụ cấp công vụ </th>
+                                <th scope="col">Phụ cấp <br> thâm niên</th>
+                                <th scope="col">Phụ cấp <br> ưu đãi nghề</th>
+                                <th scope="col">PC khu vực</th>
+                                <th scope="col">PC khác</th>
                             </tr>
                             <tr>
-                                <th nzLeft>A</th>
-                                <th nzLeft>B</th>
-                                <th>1 = 2 + 3</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4 = 5 + 6</th>
-                                <th>5</th>
-                                <th>6 = 7 + ... + 15</th>
-                                <th>7</th>
-                                <th>8</th>
-                                <th>9</th>
-                                <th>10</th>
-                                <th>11</th>
-                                <th>12</th>
-                                <th>13</th>
-                                <th>14</th>
-                                <th>15</th>
-                                <th>16 = 17 + 18</th>
-                                <th>17 </th>
-                                <th>18 = 19 + ... + 27</th>
-                                <th>19</th>
-                                <th>20</th>
-                                <th>21</th>
-                                <th>22</th>
-                                <th>23</th>
-                                <th>24</th>
-                                <th>25</th>
-                                <th>26</th>
-                                <th>27</th>
-                                <th>28 = 29 + 30 + 31 + 32</th>
-                                <th>29</th>
-                                <th>30</th>
-                                <th>31</th>
-                                <th>32</th>
-                                <th>33</th>
-                                <th>34</th>
-                                <th>35 = 34 + 33</th>
-                                <th>36 = 28 - 35</th>
-                                <th *ngIf="status.viewAppVal">37</th>
-                                <th>38</th>
-                                <th *ngIf="status.viewAppVal">39 = 37 - 36</th>
-                                <th *ngIf="status.viewAppVal">40</th>
-                                <th *ngIf="status.general || status.editAppVal"></th>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col">1 = 2 + 3</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4 = 5 + 6</th>
+                                <th scope="col">5</th>
+                                <th scope="col">6 = 7 + ... + 15</th>
+                                <th scope="col">7</th>
+                                <th scope="col">8</th>
+                                <th scope="col">9</th>
+                                <th scope="col">10</th>
+                                <th scope="col">11</th>
+                                <th scope="col">12</th>
+                                <th scope="col">13</th>
+                                <th scope="col">14</th>
+                                <th scope="col">15</th>
+                                <th scope="col">16 = 17 + 18</th>
+                                <th scope="col">17 </th>
+                                <th scope="col">18 = 19 + ... + 27</th>
+                                <th scope="col">19</th>
+                                <th scope="col">20</th>
+                                <th scope="col">21</th>
+                                <th scope="col">22</th>
+                                <th scope="col">23</th>
+                                <th scope="col">24</th>
+                                <th scope="col">25</th>
+                                <th scope="col">26</th>
+                                <th scope="col">27</th>
+                                <th scope="col">28 = 29 + 30 + 31 + 32</th>
+                                <th scope="col">29</th>
+                                <th scope="col">30</th>
+                                <th scope="col">31</th>
+                                <th scope="col">32</th>
+                                <th scope="col">33</th>
+                                <th scope="col">34</th>
+                                <th scope="col">35 = 34 + 33</th>
+                                <th scope="col">36 = 28 - 35</th>
+                                <th scope="col" *ngIf="status.viewAppVal">37</th>
+                                <th scope="col">38</th>
+                                <th scope="col" *ngIf="status.viewAppVal">39 = 37 - 36</th>
+                                <th scope="col" *ngIf="status.viewAppVal">40</th>
+                                <th scope="col" *ngIf="status.general || status.editAppVal"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -634,9 +641,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

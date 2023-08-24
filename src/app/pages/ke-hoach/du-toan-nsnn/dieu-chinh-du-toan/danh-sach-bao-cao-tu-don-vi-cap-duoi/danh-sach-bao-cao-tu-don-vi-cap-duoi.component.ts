@@ -15,7 +15,6 @@ import * as fileSaver from 'file-saver';
 @Component({
     selector: 'app-danh-sach-bao-cao-tu-don-vi-cap-duoi',
     templateUrl: './danh-sach-bao-cao-tu-don-vi-cap-duoi.component.html',
-    styleUrls: ['./danh-sach-bao-cao-tu-don-vi-cap-duoi.component.scss']
 })
 export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     @Output() dataChange = new EventEmitter();

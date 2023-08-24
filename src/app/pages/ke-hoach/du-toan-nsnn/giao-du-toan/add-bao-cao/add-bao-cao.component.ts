@@ -940,22 +940,16 @@ export class AddBaoCaoComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
                 return;
             }
-            if (!this.baoCao.lstCtiets.every(e => e.trangThai == '5')) {
+            if (!this.baoCao.lstCtiets.every(e => e.trangThai == Status.COMPLETE)) {
                 this.notification.warning(MESSAGE.ERROR, MESSAGE.FINISH_FORM);
                 return;
             }
         } else {
-            let check = true;
             if (mcn == Status.TT_04 || mcn == Status.TT_07 || mcn == Status.TT_09) {
-                this.baoCao.lstCtiets.forEach(item => {
-                    if (item.trangThai == '2') {
-                        check = false;
-                    }
-                })
-            }
-            if (!check) {
-                this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
-                return;
+                if (this.baoCao.lstCtiets.some(e => e.trangThai == Status.NOT_RATE)) {
+                    this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
+                    return;
+                }
             }
         }
         const requestGroupButtons = {
@@ -972,12 +966,11 @@ export class AddBaoCaoComponent implements OnInit {
                 this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
-                if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
+                if (Status.check('reject', mcn)) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-                // this.tabs = [];
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }

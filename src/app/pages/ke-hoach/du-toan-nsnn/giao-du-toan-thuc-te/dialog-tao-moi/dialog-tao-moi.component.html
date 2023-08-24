@@ -1,11 +1,5 @@
 <div class="modal__content">
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
-        <!-- <div nz-col nzSpan="6">
-      <label class="search__label">Năm phương án</label>
-      <input class="search__input" nz-input [(ngModel)]="response.namPa"
-        [class]="response.namPa && (response.namPa > 999 && response.namPa < 3000) ? '' : 'input-error-validate'" />
-    </div> -->
-
         <div nz-col nzSpan="6">
             <label class="search__label">Năm phương án</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm quyết định" [(ngModel)]="response.namPa"

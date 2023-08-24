@@ -17,10 +17,6 @@
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Gửi đơn vị cấp trên</span>
             </button>
-            <!-- <button class="btn btn-main" (click)="tongHop()" [hidden]="statusBtnTongHop">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Tổng hợp</span>
-      </button> -->
             <button class="btn btn-main" (click)="action('nonpass')" [hidden]="statusBtnTBP">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
@@ -53,14 +49,6 @@
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Tiếp nhận</span>
             </button>
-            <!-- <button class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
-                <i nz-icon nzType="copy" nzTheme="outline"></i>
-                <span>Copy</span>
-            </button>
-            <button class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
-                <i nz-icon nzType="printer" nzTheme="outline"></i>
-                <span>In</span>
-            </button> -->
         </div>
     </nz-affix>
     <div class="bg-trang">
@@ -76,7 +64,7 @@
                     <nz-table class="nowrap mt-16 table-chi-tiet">
                         <thead>
                             <tr>
-                                <th>
+                                <th scope="col">
                                     <ng-container *ngIf="statusDeleteCv(); else view">
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa quyết định công văn?"
                                             style="color:black" (nzOnConfirm)="deleteQdCv()">Số QĐ/CV
@@ -86,19 +74,18 @@
                                         Số QĐ/CV
                                     </ng-template>
                                 </th>
-                                <th width="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định BTC giao)</th>
-                                <th width="175px">Mã phương án</th>
-                                <th width="175px">Năm phương án</th>
-                                <th width="175px">Ngày tạo</th>
-                                <!-- <th width="175px">Nơi tạo</th>
-                <th width="175px">Trạng thái</th> -->
+                                <th scope="col" nzWidth="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định
+                                    BTC
+                                    giao)</th>
+                                <th scope="col" nzWidth="175px">Mã phương án</th>
+                                <th scope="col" nzWidth="175px">Năm phương án</th>
+                                <th scope="col" nzWidth="175px">Ngày tạo</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
                                     <div class="tep_sqd" (click)="downloadFileCv()">
-                                        <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
                                         <span>{{soQd?.fileName}}</span>
                                     </div>
                                 </td>
@@ -110,8 +97,6 @@
                                 <td>{{maPa}}</td>
                                 <td>{{namPa}}</td>
                                 <td>{{ngayTao}}</td>
-                                <!-- <td>{{getUnitName()}}</td>
-                <td>{{getStatusName()}}</td> -->
                             </tr>
                         </tbody>
                     </nz-table>
@@ -143,15 +128,15 @@
                     <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
-                                <th rowspan="2" nzWidth="350px" nzLeft>Nhóm</th>
-                                <th rowspan="2">Số tiền giao từ cấp trên</th>
-                                <th rowspan="2">Tổng số</th>
-                                <th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
-                                <th rowspan="2" style="width: 60px" *ngIf="!status" nzRight></th>
+                                <th scope="col" rowspan="2" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" rowspan="2" nzWidth="350px" nzLeft>Nhóm</th>
+                                <th scope="col" rowspan="2">Số tiền giao từ cấp trên</th>
+                                <th scope="col" rowspan="2">Tổng số</th>
+                                <th scope="col" colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
+                                <th scope="col" rowspan="2" style="width: 60px" *ngIf="!status" nzRight></th>
                             </tr>
                             <tr>
-                                <th *ngFor="let item of lstDvi">
+                                <th scope="col" *ngFor="let item of lstDvi">
                                     {{(item.tenDvi)}}
                                 </th>
                             </tr>
@@ -257,16 +242,18 @@
                                 <nz-table [nzData]="lstDviTrucThuoc" nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th nzWidth="50px">STT</th>
-                                            <th nzWidth="200px">Đơn vị lập</th>
-                                            <th nzWidth="150px">Mã báo cáo</th>
-                                            <th nzWidth="150px">Năm báo cáo</th>
-                                            <th nzWidth="150px">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới gửi
+                                            <th scope="col" nzWidth="50px">STT</th>
+                                            <th scope="col" nzWidth="200px">Đơn vị lập</th>
+                                            <th scope="col" nzWidth="150px">Mã báo cáo</th>
+                                            <th scope="col" nzWidth="150px">Năm báo cáo</th>
+                                            <th scope="col" nzWidth="150px">Ngày trình duyệt <br /> (Ngày đơn vị cấp
+                                                dưới gửi
                                                 báo cáo)</th>
-                                            <th nzWidth="150px">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
+                                            <th scope="col" nzWidth="150px">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt
+                                                báo
                                                 cáo)
                                             </th>
-                                            <th nzWidth="150px">Trạng thái</th>
+                                            <th scope="col" nzWidth="150px">Trạng thái</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -317,10 +304,10 @@
                             <nz-table nzBordered class="table__body">
                                 <thead>
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Tên file</th>
-                                        <th></th>
-                                        <th class="th" *ngIf="!status"></th>
+                                        <th scope="col">STT</th>
+                                        <th scope="col">Tên file</th>
+                                        <th scope="col"></th>
+                                        <th scope="col" class="th" *ngIf="!status"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -349,10 +336,6 @@
                         [hidden]="statusGiaoToanBo || !isDvi">
                         <span>Giao toàn bộ</span>
                     </button>
-                    <!-- <button type="button" class="btn btn-sub" *ngIf="!status">
-                        <i class="icon htvbdh_tcdt_import"></i>
-                        <span>Import</span>
-                    </button> -->
                 </div>
             </ng-template>
         </div>

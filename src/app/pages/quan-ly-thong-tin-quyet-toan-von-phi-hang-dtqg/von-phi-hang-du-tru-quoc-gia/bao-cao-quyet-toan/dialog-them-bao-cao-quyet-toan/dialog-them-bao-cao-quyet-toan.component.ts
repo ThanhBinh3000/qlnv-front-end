@@ -8,7 +8,6 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 @Component({
     selector: 'app-dialog-them-bao-cao-quyet-toan',
     templateUrl: './dialog-them-bao-cao-quyet-toan.component.html',
-    styleUrls: ['./dialog-them-bao-cao-quyet-toan.component.scss']
 })
 
 export class DialogThemBaoCaoQuyetToanComponent implements OnInit {

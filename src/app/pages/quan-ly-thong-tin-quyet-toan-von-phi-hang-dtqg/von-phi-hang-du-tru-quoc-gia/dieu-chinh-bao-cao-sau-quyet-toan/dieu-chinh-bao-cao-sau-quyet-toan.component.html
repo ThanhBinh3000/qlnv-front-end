@@ -67,23 +67,23 @@
                 [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
                 <thead>
                     <tr>
-                        <th width="45px">
+                        <th scope="col" nzWidth="45px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
                         </th>
-                        <th width="60px" class="text-center">STT</th>
-                        <th>Mã báo cáo</th>
-                        <th>Quyết toán năm</th>
-                        <th>Ngày lập</th>
-                        <th>Ngày trình duyệt</th>
-                        <th>Ngày trưởng bộ phận duyệt</th>
-                        <th>Ngày lãnh đạo phê duyệt</th>
-                        <th>Trạng thái</th>
-                        <th width="90px">Hành động</th>
+                        <th scope="col" nzWidth="60px" class="text-center">STT</th>
+                        <th scope="col">Mã báo cáo</th>
+                        <th scope="col">Quyết toán năm</th>
+                        <th scope="col">Ngày lập</th>
+                        <th scope="col">Ngày trình duyệt</th>
+                        <th scope="col">Ngày trưởng bộ phận duyệt</th>
+                        <th scope="col">Ngày lãnh đạo phê duyệt</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col" nzWidth="90px">Hành động</th>
                     </tr>
                     <tr class="search-table">
-                        <th></th>
-                        <th></th>
-                        <th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.maBcao"
                                     (input)="filterInTable('maBcao',tableFilter.maBcao, false)" size="small" />
@@ -92,7 +92,7 @@
                                 <i nz-icon nzType="search"></i>
                             </ng-template>
                         </th>
-                        <th>
+                        <th scope="col">
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.namQtoan"
                                     (input)="filterInTable('namQtoan',tableFilter.namQtoan, false)" size="small" />
@@ -101,27 +101,27 @@
                                 <i nz-icon nzType="search"></i>
                             </ng-template>
                         </th>
-                        <th>
+                        <th scope="col">
                             <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayTao"
                                 (ngModelChange)="filterInTable('ngayTao',tableFilter.ngayTao, true)">
                             </nz-date-picker>
                         </th>
-                        <th>
+                        <th scope="col">
                             <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayTrinh"
                                 (ngModelChange)="filterInTable('ngayTrinh',tableFilter.ngayTrinh, true)">
                             </nz-date-picker>
                         </th>
-                        <th>
+                        <th scope="col">
                             <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayDuyet"
                                 (ngModelChange)="filterInTable('ngayDuyet',tableFilter.ngayDuyet, true)">
                             </nz-date-picker>
                         </th>
-                        <th>
+                        <th scope="col">
                             <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayPheDuyet"
                                 (ngModelChange)="filterInTable('ngayPheDuyet',tableFilter.ngayPheDuyet, true)">
                             </nz-date-picker>
                         </th>
-                        <th nzWidth="50px">
+                        <th scope="col" nzWidth="50px">
                             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
                                 [(ngModel)]="tableFilter.trangThai"
                                 (ngModelChange)="filterInTable('trangThai',tableFilter.trangThai, false)">
@@ -129,12 +129,12 @@
                                 </nz-option>
                             </nz-select>
                         </th>
-                        <th></th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of basicTable?.data; let i = index">
-                        <td width="45px">
+                        <td nzWidth="45px">
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                                 [nzDisabled]="!data.isDelete"></label>
                         </td>
@@ -204,9 +204,6 @@
 </ng-container>
 <ng-template #templateThemmoi>
     <div class="bg-trang">
-        <!-- <app-them-bao-cao-dieu-chinh-sau-quyet-toan [data]="dataThemMoi" [isStatus]="isStatus" [idInput]="idSelected"
-      (close)="onClose()">
-    </app-them-bao-cao-dieu-chinh-sau-quyet-toan> -->
         <app-add-dieu-chinh-quyet-toan [data]="dataThemMoi" [isStatus]="isStatus" [idInput]="idSelected"
             (close)="onClose()">
         </app-add-dieu-chinh-quyet-toan>
