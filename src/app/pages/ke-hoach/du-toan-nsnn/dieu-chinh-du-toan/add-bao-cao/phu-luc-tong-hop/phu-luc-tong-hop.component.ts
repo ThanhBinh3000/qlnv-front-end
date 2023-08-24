@@ -508,7 +508,7 @@ export class PhuLucTongHopComponent implements OnInit {
 
     async save(trangThai: string, lyDoTuChoi: string) {
         if (this.dataInfo.trangThai == Status.TT_07) {
-            if (this.dataInfo.isLink == false) {
+            if (this.dataInfo.isLinkDuLieu == false) {
                 this.notification.warning(MESSAGE.WARNING, "Vui lòng đánh giá các biểu mẫu khác !");
                 return;
             }

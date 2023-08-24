@@ -5,7 +5,6 @@ import { Dcdt } from './dieu-chinh-du-toan.constant';
 @Component({
     selector: 'app-dieu-chinh-du-toan',
     templateUrl: './dieu-chinh-du-toan.component.html',
-    styleUrls: ['./dieu-chinh-du-toan.component.scss']
 })
 export class DieuChinhDuToanComponent implements OnInit {
     Dctd = Dcdt;

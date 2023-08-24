@@ -34,30 +34,32 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th class="text-center" nzWidth="50px">STT</th>
-                                <th nzWidth="300px">Tên công trình (ghi chính xác theo <br> danh mục kế hoạch năm
+                                <th scope="col" class="text-center" nzWidth="50px">STT</th>
+                                <th scope="col" nzWidth="300px">Tên công trình (ghi chính xác theo <br> danh mục kế
+                                    hoạch năm
                                     ...)
                                 </th>
-                                <th>Kế hoạch vốn</th>
-                                <th>Dự toán đã giao lũy kế đến thời điểm báo cáo</th>
-                                <th>Giá trị công trình (ghi giá trị dự toán hoặc tổng mức đầu <br> tư nếu
+                                <th scope="col">Kế hoạch vốn</th>
+                                <th scope="col">Dự toán đã giao lũy kế đến thời điểm báo cáo</th>
+                                <th scope="col">Giá trị công trình (ghi giá trị dự toán hoặc tổng mức đầu
+                                    <br> tư nếu
                                     chưa phê duyệt quyết toán)</th>
-                                <th>Kế hoạch điều chỉnh<br> (+ tăng) (- giảm)
+                                <th scope="col">Kế hoạch điều chỉnh<br> (+ tăng) (- giảm)
                                 </th>
-                                <th>Dự toán năm {{namBcao}} sau điều chỉnh </th>
-                                <th *ngIf="status.general"></th>
-                                <th *ngIf="status.general"></th>
+                                <th scope="col">Dự toán năm {{namBcao}} sau điều chỉnh </th>
+                                <th scope="col" *ngIf="status.general"></th>
+                                <th scope="col" *ngIf="status.general"></th>
                             </tr>
                             <tr>
-                                <th>A</th>
-                                <th>B</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5= 1 + 4</th>
-                                <th *ngIf="status.general"></th>
-                                <th *ngIf="status.general"></th>
+                                <th scope="col">A</th>
+                                <th scope="col">B</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5= 1 + 4</th>
+                                <th scope="col" *ngIf="status.general"></th>
+                                <th scope="col" *ngIf="status.general"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -165,9 +167,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

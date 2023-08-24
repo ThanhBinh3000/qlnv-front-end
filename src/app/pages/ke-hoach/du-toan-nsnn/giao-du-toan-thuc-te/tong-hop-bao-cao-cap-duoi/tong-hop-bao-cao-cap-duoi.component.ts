@@ -39,7 +39,6 @@ export const TRANG_THAI_TIM_KIEM_GIAO = [
 @Component({
     selector: 'app-tong-hop-bao-cao-cap-duoi',
     templateUrl: './tong-hop-bao-cao-cap-duoi.component.html',
-    styleUrls: ['./tong-hop-bao-cao-cap-duoi.component.scss']
 })
 export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     @Output() dataChange = new EventEmitter();

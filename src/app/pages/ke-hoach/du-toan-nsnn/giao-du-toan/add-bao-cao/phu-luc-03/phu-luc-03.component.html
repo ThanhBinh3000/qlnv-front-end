@@ -36,34 +36,34 @@
                     <nz-table nzBordered class="table__body">
                         <thead>
                             <tr>
-                                <th rowspan="3" class="text-center" nzWidth="100px">STT</th>
-                                <th rowspan="3" nzWidth="300px">DANH MỤC</th>
-                                <th rowspan="3" nzWidth="150px">Đơn vị tính</th>
-                                <th colspan="6" nzWidth="150px">Năm dự toán</th>
-                                <th rowspan="4" *ngIf="status.general"></th>
-                                <th rowspan="4" *ngIf="status.general"></th>
+                                <th scope="col" rowspan="3" class="text-center" nzWidth="100px">STT</th>
+                                <th scope="col" rowspan="3" nzWidth="300px">DANH MỤC</th>
+                                <th scope="col" rowspan="3" nzWidth="150px">Đơn vị tính</th>
+                                <th scope="colgroup" colspan="6" nzWidth="150px">Năm dự toán</th>
+                                <th scope="col" rowspan="4" *ngIf="status.general"></th>
+                                <th scope="col" rowspan="4" *ngIf="status.general"></th>
                             </tr>
                             <tr>
-                                <th nzWidth="100px" colspan="3">Chi phí tại cửa kho</th>
-                                <th colspan="2">Chi phí ngoài cửa kho</th>
-                                <th rowspan="2">Tổng cộng</th>
+                                <th scope="colgroup" nzWidth="100px" colspan="3">Chi phí tại cửa kho</th>
+                                <th scope="colgroup" colspan="2">Chi phí ngoài cửa kho</th>
+                                <th scope="col" rowspan="2">Tổng cộng</th>
                             </tr>
                             <tr>
-                                <th>Số lượng</th>
-                                <th>Định mức</th>
-                                <th>Thành tiền</th>
-                                <th>Bình quân (đồng/tấn)</th>
-                                <th>Thành tiền (đồng)</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Định mức</th>
+                                <th scope="col">Thành tiền</th>
+                                <th scope="col">Bình quân (đồng/tấn)</th>
+                                <th scope="col">Thành tiền (đồng)</th>
                             </tr>
                             <tr>
-                                <th>A</th>
-                                <th>B</th>
-                                <th>C</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3=2x1</th>
-                                <th>4</th>
-                                <th>
+                                <th scope="col">A</th>
+                                <th scope="col">B</th>
+                                <th scope="col">C</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3=2x1</th>
+                                <th scope="col">4</th>
+                                <th scope="col">
                                     <ng-container *ngIf="dataInfo?.isSynthetic; else showVal">
                                         <span>5</span>
                                     </ng-container>
@@ -71,20 +71,20 @@
                                         <span>5=4x1</span>
                                     </ng-template>
                                 </th>
-                                <th>6=5+3</th>
+                                <th scope="col">6=5+3</th>
                             </tr>
                             <tr>
-                                <th></th>
-                                <th>Tổng cộng</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th>{{Op.fmtVal(total.namDtCphiTaiCkhoTt)}}</th>
-                                <th></th>
-                                <th>{{Op.fmtVal(total.namDtCphiNgoaiCkhoTt)}}</th>
-                                <th>{{Op.fmtVal(total.namDtTcong)}}</th>
-                                <th *ngIf="status.general"></th>
-                                <th *ngIf="status.general"></th>
+                                <th scope="col"></th>
+                                <th scope="col">Tổng cộng</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col">{{Op.fmtVal(total.namDtCphiTaiCkhoTt)}}</th>
+                                <th scope="col"></th>
+                                <th scope="col">{{Op.fmtVal(total.namDtCphiNgoaiCkhoTt)}}</th>
+                                <th scope="col">{{Op.fmtVal(total.namDtTcong)}}</th>
+                                <th scope="col" *ngIf="status.general"></th>
+                                <th scope="col" *ngIf="status.general"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -143,23 +143,12 @@
                                     <td>
                                         {{Op.fmtVal(editCache[data.id].data.namDtCphiTaiCkhoTt)}}
                                     </td>
-
-                                    <!-- <ng-container *ngIf="dataInfo?.isSynthetic; else showVal1"> -->
                                     <td>
                                         <input class="money-input" currencyMask
                                             [(ngModel)]="editCache[data.id].data.namDtCphiNgoaiCkhoBq"
                                             (ngModelChange)="editCache[data.id].data.changeModel()"
                                             [options]="Op.amount" />
                                     </td>
-                                    <!-- </ng-container> -->
-                                    <!-- <ng-template #showVal1>
-                                        <td>
-                                            <input class="money-input" currencyMask
-                                                [(ngModel)]="editCache[data.id].data.namDtCphiNgoaiCkhoBq"
-                                                (ngModelChange)="editCache[data.id].data.changeModel()"
-                                                [options]="Op.amount" />
-                                        </td>
-                                    </ng-template> -->
                                     <td>
                                         {{Op.fmtVal(editCache[data.id].data.namDtCphiNgoaiCkhoTt)}}
                                     </td>
@@ -208,9 +197,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -58,7 +58,7 @@
             <nz-table class="nowrap mt-16 table-chi-tiet">
                 <thead>
                     <tr>
-                        <th width="250px">
+                        <th scope="col" nzWidth="250px">
                             <ng-container *ngIf="statusDeleteCv(); else view">
                                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa quyết định công văn?"
                                     style="color:black" (nzOnConfirm)="deleteQdCv()">Số QĐ/CV
@@ -68,16 +68,15 @@
                                 Số QĐ/CV
                             </ng-template>
                         </th>
-                        <th width="175px">Mã báo cáo</th>
-                        <!-- <th width="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định BTC giao)</th> -->
-                        <th width="175px">Mã phương án giao từ cấp trên</th>
-                        <th width="175px">Năm báo cáo</th>
-                        <th width="175px">Người tạo</th>
-                        <th width="175px">Ngày tạo</th>
-                        <th width="175px">Ngày trình</th>
-                        <th width="175px">Ngày duyệt</th>
-                        <th width="175px">Ngày phê duyệt</th>
-                        <th width="175px">Ngày trả kết quả</th>
+                        <th scope="col" nzWidth="175px">Mã báo cáo</th>
+                        <th scope="col" nzWidth="175px">Mã phương án giao từ cấp trên</th>
+                        <th scope="col" nzWidth="175px">Năm báo cáo</th>
+                        <th scope="col" nzWidth="175px">Người tạo</th>
+                        <th scope="col" nzWidth="175px">Ngày tạo</th>
+                        <th scope="col" nzWidth="175px">Ngày trình</th>
+                        <th scope="col" nzWidth="175px">Ngày duyệt</th>
+                        <th scope="col" nzWidth="175px">Ngày phê duyệt</th>
+                        <th scope="col" nzWidth="175px">Ngày trả kết quả</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -94,11 +93,6 @@
                             </div>
                         </td>
                         <td>{{baoCao.maBcao}}</td>
-                        <!-- <td>
-              <a (click)="xemCtietPaBTC()" style="color: #1890ff;">
-                {{baoCao.maPa}}
-              </a>
-            </td> -->
                         <td>{{baoCao.maPa}}</td>
                         <td>{{baoCao.namBcao}}</td>
                         <td>{{baoCao.nguoiTao}}</td>
@@ -122,12 +116,12 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="5%">STT</th>
-                                    <th nzWidth="15%">Phụ lục</th>
-                                    <th nzWidth="40%">Tên phụ lục</th>
-                                    <th nzWidth="15%">Trạng thái</th>
-                                    <th nzWidth="15%">Giao cho</th>
-                                    <th nzWidth="10%">Hành động</th>
+                                    <th scope="col" nzWidth="5%">STT</th>
+                                    <th scope="col" nzWidth="15%">Phụ lục</th>
+                                    <th scope="col" nzWidth="40%">Tên phụ lục</th>
+                                    <th scope="col" nzWidth="15%">Trạng thái</th>
+                                    <th scope="col" nzWidth="15%">Giao cho</th>
+                                    <th scope="col" nzWidth="10%">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -160,7 +154,7 @@
                                         </td>
 
                                         <td>
-                                            <ng-container *ngIf="baoCao.id">
+                                            <ng-container *ngIf="baoCao.id && data.id?.length == 36">
                                                 <a *ngIf="status.general && (userInfo?.sub == data.nguoiBcao)">
                                                     <i class="fa fa-pencil" (click)="viewAppendix(data.id)"></i>
                                                 </a>
@@ -209,9 +203,9 @@
                             <nz-table nzBordered class="table__body">
                                 <thead>
                                     <tr>
-                                        <th nzWidth="7%">STT</th>
-                                        <th>Tên file</th>
-                                        <th nzWidth="10%"></th>
+                                        <th scope="col" nzWidth="7%">STT</th>
+                                        <th scope="col">Tên file</th>
+                                        <th scope="col" nzWidth="10%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -237,16 +231,16 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th>Mã báo cáo</th>
-                                    <th>Lần</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Ngày trình duyệt</th>
-                                    <th>Ngày duyệt</th>
-                                    <th>Ngày phê duyệt</th>
-                                    <th>Ngày cấp trên trả kết quả</th>
-                                    <th>Trạng thái</th>
-                                    <th>Lý do từ chối</th>
-                                    <th *ngIf="status.general">Hành động</th>
+                                    <th scope="col">Mã báo cáo</th>
+                                    <th scope="col">Lần</th>
+                                    <th scope="col">Ngày tạo</th>
+                                    <th scope="col">Ngày trình duyệt</th>
+                                    <th scope="col">Ngày duyệt</th>
+                                    <th scope="col">Ngày phê duyệt</th>
+                                    <th scope="col">Ngày cấp trên trả kết quả</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Lý do từ chối</th>
+                                    <th scope="col" *ngIf="status.general">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -275,17 +269,17 @@
                     <nz-table #basicTable class="nowrap">
                         <thead>
                             <tr>
-                                <th nzWidth="5%">STT</th>
-                                <th nzWidth="30%">Đơn vị lập</th>
-                                <th nzWidth="12%">Mã báo cáo</th>
-                                <th nzWidth="12%">Năm báo cáo</th>
-                                <th nzWidth="12%">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới
+                                <th scope="col" nzWidth="5%">STT</th>
+                                <th scope="col" nzWidth="30%">Đơn vị lập</th>
+                                <th scope="col" nzWidth="12%">Mã báo cáo</th>
+                                <th scope="col" nzWidth="12%">Năm báo cáo</th>
+                                <th scope="col" nzWidth="12%">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới
                                     gửi báo cáo)</th>
-                                <th nzWidth="12%">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
+                                <th scope="col" nzWidth="12%">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
                                     cáo)
                                 </th>
-                                <th nzWidth="12%">Trạng thái</th>
-                                <th nzWidth="5%"></th>
+                                <th scope="col" nzWidth="12%">Trạng thái</th>
+                                <th scope="col" nzWidth="5%"></th>
                             </tr>
                         </thead>
                         <tbody>

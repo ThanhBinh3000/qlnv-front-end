@@ -8,7 +8,6 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 @Component({
     selector: 'app-dialog-tong-hop',
     templateUrl: './dialog-tong-hop.component.html',
-    styleUrls: ['./dialog-tong-hop.component.css']
 })
 
 export class DialogTongHopComponent implements OnInit {
