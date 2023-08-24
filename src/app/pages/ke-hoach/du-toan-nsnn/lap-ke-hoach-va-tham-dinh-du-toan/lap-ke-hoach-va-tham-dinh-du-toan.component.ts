@@ -5,7 +5,7 @@ import { Ltd } from './lap-ke-hoach-va-tham-dinh-du-toan.constant';
 @Component({
     selector: 'app-lap-ke-hoach-va-tham-dinh-du-toan',
     templateUrl: './lap-ke-hoach-va-tham-dinh-du-toan.component.html',
-    styleUrls: ['./lap-ke-hoach-va-tham-dinh-du-toan.component.scss']
+    // styleUrls: ['./lap-ke-hoach-va-tham-dinh-du-toan.component.scss']
 })
 export class LapKeHoachVaThamDinhDuToanComponent implements OnInit {
     Ltd = Ltd;

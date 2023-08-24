@@ -139,35 +139,6 @@
                                     </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <!-- <td>
-                                        <input nz-input [(ngModel)]="editCache[data.id].data.soQd" />
-                                    </td>
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.khSoLuong"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td>
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.khGiaMuaTd"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td>
-                                    <td>
-                                        {{ Op.fmtVal(editCache[data.id].data.khTtien) }}
-                                    </td>
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.thSoLuong"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td>
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.thGiaMuaTd"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td>
-                                    <td>
-                                        {{ Op.fmtVal(editCache[data.id].data.thTtien) }}
-                                    </td> -->
                                     <ng-container *ngIf="data.level == 1; else child">
                                         <td>
                                             <input nz-input [(ngModel)]="editCache[data.id].data.soQd" />
@@ -309,10 +280,6 @@
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
                 </button>
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="gen.doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
-                </button> -->
                 <button type="button" class="btn btn-sub" (click)="save('5')" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>

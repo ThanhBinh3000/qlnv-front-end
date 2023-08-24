@@ -31,10 +31,6 @@
                                 <i class="icon htvbdh_dau-cong"></i>
                                 <span>Thêm hàng</span>
                             </button>
-                            <!-- <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
-                                <i class="fa fa-trash-o"></i>
-                                <span>Xóa</span>
-                            </button> -->
                         </div>
                     </div>
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
@@ -58,10 +54,6 @@
                                 <th style="width: 50px;" rowspan="2" *ngIf="status.save" nzRight></th>
                                 <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
                                 <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <!-- <th style="width: 40px;" rowspan="2" *ngIf="status.save" nzRight>
-                                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
-                                    </label>
-                                </th> -->
                             </tr>
                             <tr>
                                 <th>
@@ -130,12 +122,6 @@
                                     <td *ngIf="status.save" nzRight>
                                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <ng-container *ngIf="checkDelete(data)">
-                                            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                (ngModelChange)="updateChecked(data.id)"></label>
-                                        </ng-container>
-                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td>
@@ -170,12 +156,6 @@
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <ng-container *ngIf="checkDelete(data)">
-                                            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                (ngModelChange)="updateChecked(data.id)"></label>
-                                        </ng-container>
-                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>
@@ -239,10 +219,6 @@
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
                 </button>
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="gen.doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
-                </button> -->
                 <button type="button" class="btn btn-sub" (click)="save('5')" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>

@@ -23,10 +23,6 @@
                             </div>
                         </div>
                         <div class="canphai">
-                            <!-- <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
-                                <i class="fa fa-trash-o"></i>
-                                <span>Xóa</span>
-                            </button> -->
                             <button *ngIf="status.save" type="button" class="btn btn-sub" (click)="addLine()">
                                 <i class="icon htvbdh_dau-cong"></i>
                                 <span>Thêm</span>
@@ -63,10 +59,6 @@
                                 <th style="width: 50px;" rowspan="4" *ngIf="status.save" nzRight></th>
                                 <th style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
                                 <th style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
-                                <!-- <th style="width: 40px;" rowspan="4" *ngIf="status.save" nzRight>
-                                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
-                                    </label>
-                                </th> -->
                             </tr>
                             <tr class="text-title">
                                 <th rowspan="3" class="text-col">
@@ -123,7 +115,6 @@
                                     năm
                                 </th>
                             </tr>
-                            <!-- dong3 -->
                             <tr>
                                 <th rowspan="2">
                                     Tổng số
@@ -143,7 +134,6 @@
                                 <th rowspan="2">
                                     Vốn SCL
                                 </th>
-                                <!--  -->
                                 <th rowspan="2">
                                     Tổng số
                                 </th>
@@ -156,9 +146,6 @@
                                 <th colspan="2">
                                     Trong đó
                                 </th>
-                                <!--  -->
-
-                                <!--  -->
                                 <th rowspan="2">
                                     Vốn ĐTPT nguồn NSNN
                                 </th>
@@ -177,7 +164,6 @@
                                 <th rowspan="2">
                                     Riêng tháng báo cáo
                                 </th>
-                                <!--  -->
                                 <th>
                                     Vốn NSNN
                                 </th>
@@ -202,7 +188,6 @@
                                 <th>
                                     Vốn SCL
                                 </th>
-                                <!--  -->
                                 <th>
                                     Vốn NSNN
                                 </th>
@@ -227,7 +212,6 @@
                                 <th>
                                     Vốn SCL
                                 </th>
-                                <!--  -->
                             </tr>
                             <tr>
                                 <th rowspan="1">
@@ -352,7 +336,6 @@
                                 <td *ngIf="status.save" nzRight></td>
                                 <td *ngIf="status.save" nzRight></td>
                                 <td *ngIf="status.save" nzRight></td>
-                                <!-- <td *ngIf="status.save" nzRight></td> -->
                             </tr>
                             <tr>
                                 <td nzLeft></td>
@@ -406,7 +389,6 @@
                                 <td *ngIf="status.save" nzRight></td>
                                 <td *ngIf="status.save" nzRight></td>
                                 <td *ngIf="status.save" nzRight></td>
-                                <!-- <td *ngIf="status.save" nzRight></td> -->
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
@@ -482,12 +464,6 @@
                                     <td *ngIf="status.save" nzRight>
                                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <ng-container *ngIf="!getDeleteStatus(data)">
-                                            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                (ngModelChange)="updateChecked(data.id)"></label>
-                                        </ng-container>
-                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td nzLeft>
@@ -702,12 +678,6 @@
                                             Hủy
                                         </a>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <ng-container *ngIf="!getDeleteStatus(data)">
-                                            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                (ngModelChange)="updateChecked(data.id)"></label>
-                                        </ng-container>
-                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>
@@ -771,10 +741,6 @@
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
                 </button>
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="gen.doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
-                </button> -->
                 <button type="button" class="btn btn-sub" (click)="save('5')" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>
