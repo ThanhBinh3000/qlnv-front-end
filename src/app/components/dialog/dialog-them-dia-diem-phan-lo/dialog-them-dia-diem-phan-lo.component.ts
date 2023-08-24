@@ -199,7 +199,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongtinPhanLo = new DanhSachPhanLo();
     }
-    if (this.dataEdit){
+    if (this.dataEdit) {
       await this.getdonGiaDuocDuyet();
     }
     this.calcTinh();
@@ -237,11 +237,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
       if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
         this.dataDonGiaDuocDuyet.forEach(item => {
-          if (this.dataEdit){
-            this.listOfData.forEach(s =>{
+          if (this.dataEdit) {
+            this.listOfData.forEach(s => {
               s.donGiaDuocDuyet = item.giaQdTcdt
             })
-          }else {
+          } else {
             this.thongtinPhanLo.donGiaDuocDuyet = item.giaQdTcdt
           }
         })
@@ -252,11 +252,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       let donGiaDuocDuyet = this.dataDonGiaDuocDuyet?.filter(item => item.maChiCuc == this.formData.value.maDvi);
       if (donGiaDuocDuyet && donGiaDuocDuyet.length > 0) {
         donGiaDuocDuyet.forEach(item => {
-          if (this.dataEdit){
-            this.listOfData.forEach(s =>{
+          if (this.dataEdit) {
+            this.listOfData.forEach(s => {
               s.donGiaDuocDuyet = item.giaQdTcdt
             })
-          }else {
+          } else {
             this.thongtinPhanLo.donGiaDuocDuyet = item.giaQdTcdt
           }
         })
@@ -327,7 +327,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       let nganKho = this.listNganKho.filter(item => item.maDvi == this.thongtinPhanLo.maNganKho)[0];
       this.listLoKho = nganKho.children;
       if (this.listLoKho && this.listLoKho.length == 0) {
-        this.tonKho(nganKho)
+        await this.tonKho(nganKho)
       }
       this.thongtinPhanLo.tenNganKho = nganKho.tenDvi;
       this.thongtinPhanLo.maLoKho = null;
@@ -341,10 +341,10 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         this.editCache[index].data.tenLoKho = loKho[0].text;
         this.editCache[index].data.maLoKho = loKho[0].value
       }
-      this.tonKho(loKho, index)
+      await this.tonKho(loKho, index)
     } else {
       let loKho = this.listLoKho.filter(item => item.maDvi == this.thongtinPhanLo.maLoKho)[0];
-      this.tonKho(loKho)
+      await this.tonKho(loKho)
       this.thongtinPhanLo.tenLoKho = loKho.tenDvi;
     }
   }
@@ -365,9 +365,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           } else {
             this.thongtinPhanLo.tonKho = cloneDeep(val)
           }
+        } else {
+          this.thongtinPhanLo.tonKho = 0
         }
       } else {
-        this.thongtinPhanLo.tonKho = null
+        this.thongtinPhanLo.tonKho = 0
       }
     });
   }

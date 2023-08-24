@@ -786,6 +786,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   doPrint() {
-
+    window.print();
   }
 }

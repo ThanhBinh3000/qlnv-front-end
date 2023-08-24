@@ -170,17 +170,16 @@
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th nzWidth="50px" class="text-center wrap"> STT</th>
-            <th nzWidth="250px" class="text-left wrap"> Cục DTNN KV</th>
-            <th nzWidth="200px" class="text-left wrap"> Số Công văn/đề xuất</th>
-            <th nzWidth="200px" class="text-left wrap"> Ngày ký</th>
-            <th nzWidth="250px" class="text-left wrap"> Trích yếu</th>
-            <th nzWidth="150px" class="text-center wrap"> SL đơn vị tài sản</th>
-            <th nzWidth="170px" class="text-center wrap"> Tổng SL xuất bán đề xuất (Kg)</th>
-            <th nzWidth="170px" class="text-center wrap"> Đơn giá Cục đề xuất (đ/kg)</th>
-            <th nzWidth="170px" class="text-center wrap"> Thành tiền Cục đề xuất (đ)</th>
-            <th nzWidth="100px" class="text-center wrap"> Trạng thái</th>
-            <th class="text-center wrap"> Hành động</th>
+            <th nzWidth="50px" class="text-center"> STT</th>
+            <th nzWidth="250px" class="text-left"> Cục DTNN KV</th>
+            <th nzWidth="200px" class="text-left"> Số Công văn/đề xuất</th>
+            <th nzWidth="200px" class="text-left"> Ngày ký</th>
+            <th nzWidth="250px" class="text-left"> Trích yếu</th>
+            <th nzWidth="150px" class="text-center"> SL đơn vị tài sản</th>
+            <th nzWidth="170px" class="text-right"> Tổng SL xuất bán đề xuất (Kg)</th>
+            <th nzWidth="170px" class="text-right"> Thành tiền Cục đề xuất (đ)</th>
+            <th nzWidth="100px" class="text-center"> Trạng thái</th>
+            <!--            <th class="text-center wrap"> Hành động</th>-->
           </tr>
           </thead>
           <tbody>
@@ -188,20 +187,19 @@
               [ngClass]="{'bg-selected': i == 0 && this.selected}"
               (click)="showDetail($event,data.idDxHdr)">
             <td class="text-center">{{i + 1}} </td>
-            <td>{{ data.tenDvi }}</td>
-            <td>{{ data.soDxuat }}</td>
-            <td>{{ data.ngayPduyet|date:'dd/MM/YYYY'}}</td>
-            <td>{{ data.trichYeu}}</td>
-            <td>{{ data.slDviTsan}}</td>
-            <td>{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
-            <td>{{ data.donGia|number:globals.numberFormat:globals.locale }}</td>
-            <td>{{ data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
-            <td>{{ data.tenTrangThai}}</td>
-            <td>
-              <a>
-                <i class="icon htvbdh_tcdt_print"></i>
-              </a>
-            </td>
+            <td class="text-left">{{ data.tenDvi }}</td>
+            <td class="text-left">{{ data.soDxuat }}</td>
+            <td class="text-left">{{ data.ngayPduyet|date:'dd/MM/YYYY'}}</td>
+            <td class="text-left">{{ data.trichYeu}}</td>
+            <td class="text-center">{{ data.slDviTsan}}</td>
+            <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-center">{{ data.tenTrangThai}}</td>
+            <!--            <td>-->
+            <!--              <a>-->
+            <!--                <i class="icon htvbdh_tcdt_print"></i>-->
+            <!--              </a>-->
+            <!--            </td>-->
           </tr>
           </tbody>
         </nz-table>

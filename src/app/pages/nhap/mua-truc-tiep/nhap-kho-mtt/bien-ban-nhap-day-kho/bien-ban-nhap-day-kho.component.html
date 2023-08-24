@@ -143,7 +143,7 @@
                                              (click)="redirectToChiTiet(false, dataPhieu.id)">
                                             <i class="fa fa-pencil" title="Sửa"></i>
                                           </a>
-                                          <a *ngIf="(dataPhieu.trangThai == STATUS.CHO_DUYET_KTVBQ || dataPhieu.trangThai == STATUS.CHO_DUYET_LDCC) && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_DUYET') "
+                                          <a *ngIf="(dataPhieu.trangThai == STATUS.CHO_DUYET_KTVBQ && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_DUYET_KTVBQ') || dataPhieu.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_DUYET_LDCCUC') || dataPhieu.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_DUYET_KETOAN'))"
                                              (click)="redirectToChiTiet(true, dataPhieu.id)">
                                             <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
                                           </a>

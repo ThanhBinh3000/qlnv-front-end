@@ -374,7 +374,12 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
         mess = ' Bạn có muốn gửi duyệt ? '
         break;
       }
-      case STATUS.DA_DUYET_KTVBQ: {
+      case STATUS.CHO_DUYET_KTVBQ: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        mess = ' Bạn có muốn gửi duyệt ? '
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         mess = ' Bạn có muốn gửi duyệt ? '
         break;

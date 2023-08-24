@@ -1,21 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Globals } from "../../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { NgxSpinnerService } from 'ngx-spinner';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
-import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
-
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Globals} from "../../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import {
+  DeXuatKhBanTrucTiepService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {HelperService} from "../../../../../../../services/helper.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {
+  DialogThemMoiXuatBanTrucTiepComponent
+} from "../../../../../../../components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component";
 
 @Component({
-  selector: 'app-thongtin-qd-dieuchinh-khbtt',
-  templateUrl: './thongtin-qd-dieuchinh-khbtt.component.html',
-  styleUrls: ['./thongtin-qd-dieuchinh-khbtt.component.scss']
+  selector: 'app-thong-tin-chi-tiet-dieu-chinh',
+  templateUrl: './thong-tin-chi-tiet-dieu-chinh.component.html',
+  styleUrls: ['./thong-tin-chi-tiet-dieu-chinh.component.scss']
 })
-export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
+export class ThongTinChiTietDieuChinhComponent implements OnInit {
   @Input() title;
   @Input() dataInput;
   @Output() soLuongChange = new EventEmitter<number>();

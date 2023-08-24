@@ -362,9 +362,11 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
           } else {
             this.thongTinXuatBanTrucTiep.tonKho = cloneDeep(val)
           }
+        } else {
+          this.thongTinXuatBanTrucTiep.tonKho = 0
         }
       } else {
-        this.thongTinXuatBanTrucTiep.tonKho = null
+        this.thongTinXuatBanTrucTiep.tonKho = 0
       }
     });
   }

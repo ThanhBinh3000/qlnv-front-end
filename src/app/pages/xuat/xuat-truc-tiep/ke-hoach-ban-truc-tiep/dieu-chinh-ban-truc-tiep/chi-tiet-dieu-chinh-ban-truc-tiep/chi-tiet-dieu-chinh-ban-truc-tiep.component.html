@@ -244,16 +244,16 @@
     <div nz-row [nzGutter]="24">
       <div nz-col [nzSpan]="12">
         <nz-card class="mg-t-10 flex-card p-lr16 ">
-          <app-thongtin-qd-dieuchinh-khbtt [title]="'Nội dung quyết định gốc'" [dataInput]="dataInputCache"
-                                           [isView]="true" [isCache]="true">
-          </app-thongtin-qd-dieuchinh-khbtt>
+          <app-thong-tin-chi-tiet-dieu-chinh [title]="'Nội dung quyết định gốc'" [dataInput]="dataInputCache"
+                                             [isView]="true" [isCache]="true">
+          </app-thong-tin-chi-tiet-dieu-chinh>
         </nz-card>
       </div>
       <div nz-col [nzSpan]="12">
         <nz-card class="mg-t-10 flex-card p-lr16 ">
-          <app-thongtin-qd-dieuchinh-khbtt [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
-                                           [isView]="formData.value.trangThai == STATUS.DU_THAO">
-          </app-thongtin-qd-dieuchinh-khbtt>
+          <app-thong-tin-chi-tiet-dieu-chinh [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
+                                             [isView]="formData.value.trangThai == STATUS.DU_THAO">
+          </app-thong-tin-chi-tiet-dieu-chinh>
         </nz-card>
       </div>
     </div>
