@@ -60,16 +60,16 @@
                 <nz-table class="nowrap mt-16 table-chi-tiet">
                     <thead>
                         <tr>
-                            <th>Mã cấp ứng</th>
-                            <th>Năm</th>
-                            <th>Đợt</th>
-                            <th>Căn cứ về giá</th>
-                            <th>Loại đề nghị</th>
-                            <th>Ngày tạo</th>
-                            <th>Ngày trình duyệt</th>
-                            <th>Ngày duyệt</th>
-                            <th>Ngày phê duyệt</th>
-                            <th>Ngày tiếp nhận</th>
+                            <th scope="col">Mã cấp ứng</th>
+                            <th scope="col">Năm</th>
+                            <th scope="col">Đợt</th>
+                            <th scope="col">Căn cứ về giá</th>
+                            <th scope="col">Loại đề nghị</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Ngày trình duyệt</th>
+                            <th scope="col">Ngày duyệt</th>
+                            <th scope="col">Ngày phê duyệt</th>
+                            <th scope="col">Ngày tiếp nhận</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,71 +134,72 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollHD}">
                             <thead>
                                 <tr>
-                                    <th *ngIf="capDvi == 1" rowspan="2" nzLeft nzWidth="200px">
+                                    <th scope="col" *ngIf="capDvi == 1" rowspan="2" nzLeft nzWidth="200px">
                                         Đơn vị
                                     </th>
-                                    <th rowspan="2" nzWidth="200px" nzLeft>
+                                    <th scope="col" rowspan="2" nzWidth="200px" nzLeft>
                                         Tên khách hàng
                                     </th>
-                                    <th rowspan="2" nzWidth="300px" nzLeft>
+                                    <th scope="col" rowspan="2" nzWidth="300px" nzLeft>
                                         Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng
                                     </th>
-                                    <th colspan="3">
+                                    <th scope="colgroup" colspan="3">
                                         Số lượng
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Đơn giá (đồng /kg)
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Giá trị hợp đồng (đã bao gồm VAT)
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Giá trị thực hiện (lũy kế)
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Vi phạm hợp đồng
                                     </th>
-                                    <th colspan="2">
+                                    <th scope="colgroup" colspan="2">
                                         Thanh lý hợp đồng
                                     </th>
-                                    <th rowspan="2" class="text-col">
+                                    <th scope="col" rowspan="2" class="text-col">
                                         Công văn
                                     </th>
-                                    <th *ngIf="status.save && capDvi != 1" rowSpan="2" style="width: 60px;" nzRight>
+                                    <th scope="col" *ngIf="status.save && capDvi != 1" rowSpan="2" style="width: 60px;"
+                                        nzRight>
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>
+                                    <th scope="col">
                                         Kế hoạch
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Hợp đồng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Thực hiện (lũy kế đến thời điểm này)
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Số lượng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Thành tiền
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th *ngIf="capDvi == 1" nzLeft></th>
-                                    <th nzLeft>A</th>
-                                    <th nzLeft>B</th>
-                                    <th>1</th>
-                                    <th>2</th>
-                                    <th>3</th>
-                                    <th>4</th>
-                                    <th>5=2x4</th>
-                                    <th>6=3x4</th>
-                                    <th>7</th>
-                                    <th>8</th>
-                                    <th>9</th>
-                                    <th>10</th>
-                                    <th *ngIf="status.save && capDvi != 1" nzRight></th>
+                                    <th scope="col" *ngIf="capDvi == 1" nzLeft></th>
+                                    <th scope="col" nzLeft>A</th>
+                                    <th scope="col" nzLeft>B</th>
+                                    <th scope="col">1</th>
+                                    <th scope="col">2</th>
+                                    <th scope="col">3</th>
+                                    <th scope="col">4</th>
+                                    <th scope="col">5=2x4</th>
+                                    <th scope="col">6=3x4</th>
+                                    <th scope="col">7</th>
+                                    <th scope="col">8</th>
+                                    <th scope="col">9</th>
+                                    <th scope="col">10</th>
+                                    <th scope="col" *ngIf="status.save && capDvi != 1" nzRight></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -315,104 +316,104 @@
                         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollVB}">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" nzWidth="300px" nzLeft>
+                                    <th scope="col" rowspan="2" nzWidth="300px" nzLeft>
                                         Đơn vị
                                     </th>
-                                    <th colspan="3">
+                                    <th scope="colgroup" colspan="3">
                                         Số lượng
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Giá trị hợp đồng (đã bao gồm VAT) (đồng)
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Giá trị thực hiện (lũy kế)
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Vi phạm hợp đồng
                                     </th>
-                                    <th colspan="2">
+                                    <th scope="colgroup" colspan="2">
                                         Thanh lý hợp đồng
                                     </th>
-                                    <th colspan="3">
+                                    <th scope="colgroup" colspan="3">
                                         Số đã nộp lên đơn vị cấp trên (lũy kế)
                                     </th>
-                                    <th colspan="{{capDvi == 1 ? 4 : 3}}">
+                                    <th scope="colgroup" colspan="{{capDvi == 1 ? 4 : 3}}">
                                         Số nộp lần này
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Lũy kế sau lần nộp này
                                     </th>
-                                    <th rowspan="2">
+                                    <th scope="col" rowspan="2">
                                         Số còn phải nộp
                                     </th>
-                                    <th rowspan="2" class="text-col">
+                                    <th scope="col" rowspan="2" class="text-col">
                                         Ghi chú
                                     </th>
-                                    <th rowspan="2" *ngIf="capDvi == 1">
+                                    <th scope="col" rowspan="2" *ngIf="capDvi == 1">
                                         Đợt
                                     </th>
-                                    <th *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
+                                    <th scope="col" *ngIf="status.save" rowSpan="2" style="width: 60px;" nzRight></th>
                                 </tr>
                                 <tr>
-                                    <th>
+                                    <th scope="col">
                                         Kế hoạch
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Hợp đồng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Thực hiện (lũy kế đến thời điểm này)
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Số lượng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Thành tiền
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Vốn ứng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Vốn cấp
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Tổng vốn
                                     </th>
-                                    <th *ngIf="capDvi == 1">
+                                    <th scope="col" *ngIf="capDvi == 1">
                                         Ủy nhiệm chi ngày
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Vốn ứng
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Vốn cấp
                                     </th>
-                                    <th>
+                                    <th scope="col">
                                         Tổng vốn
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th nzLeft> A </th>
-                                    <th>1</th>
-                                    <th>2</th>
-                                    <th>3</th>
-                                    <th>4</th>
-                                    <th>5</th>
-                                    <th>6</th>
-                                    <th>7</th>
-                                    <th>8</th>
-                                    <th>9</th>
-                                    <th>10</th>
-                                    <th>11=9+10</th>
-                                    <th *ngIf="capDvi == 1"> </th>
-                                    <th>12</th>
-                                    <th>13</th>
-                                    <th>14=12+13</th>
-                                    <th>15=11+14</th>
-                                    <th>16=5-6-12</th>
-                                    <th>E</th>
-                                    <th *ngIf="capDvi == 1"> </th>
-                                    <th *ngIf="status.save" nzRight> </th>
+                                    <th scope="col" nzLeft> A </th>
+                                    <th scope="col">1</th>
+                                    <th scope="col">2</th>
+                                    <th scope="col">3</th>
+                                    <th scope="col">4</th>
+                                    <th scope="col">5</th>
+                                    <th scope="col">6</th>
+                                    <th scope="col">7</th>
+                                    <th scope="col">8</th>
+                                    <th scope="col">9</th>
+                                    <th scope="col">10</th>
+                                    <th scope="col">11=9+10</th>
+                                    <th scope="col" *ngIf="capDvi == 1"> </th>
+                                    <th scope="col">12</th>
+                                    <th scope="col">13</th>
+                                    <th scope="col">14=12+13</th>
+                                    <th scope="col">15=11+14</th>
+                                    <th scope="col">16=5-6-12</th>
+                                    <th scope="col">E</th>
+                                    <th scope="col" *ngIf="capDvi == 1"> </th>
+                                    <th scope="col" *ngIf="status.save" nzRight> </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -593,9 +594,9 @@
                                 <nz-table nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th nzWidth="7%">STT</th>
-                                            <th>Tên file</th>
-                                            <th nzWidth="15%"></th>
+                                            <th scope="col" nzWidth="7%">STT</th>
+                                            <th scope="col">Tên file</th>
+                                            <th scope="col" nzWidth="15%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>

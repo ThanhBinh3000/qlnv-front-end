@@ -153,12 +153,12 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
             if (this.lstCtiets.length > 1) {
                 this.sum('0.1')
             }
+            this.updateEditCache();
         }
         this.capDvi = parseInt(this.userInfo.CAP_DVI, 10);
         if (this.userInfo.MA_DVI == this.baoCao.maDviCha) {
             this.capDvi += 1;
         }
-        this.updateEditCache();
         this.getStatusButton();
     }
 
@@ -372,6 +372,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
 
     startEdit(id: string): void {
         this.editCache[id].edit = true;
+        console.log(this.editCache[id].data);
     }
 
     // huy thay doi

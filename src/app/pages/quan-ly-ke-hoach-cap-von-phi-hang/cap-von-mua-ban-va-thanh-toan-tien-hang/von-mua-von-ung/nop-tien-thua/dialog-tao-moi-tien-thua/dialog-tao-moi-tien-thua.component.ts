@@ -57,12 +57,13 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
                         lstBcao.sort((a, b) => b.dot - a.dot);
-                        if ([Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThai)) {
+                        if ([Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThai) ||
+                            (!this.userService.isTongCuc() && lstBcao[0].trangThai == Status.TT_07 && [Status.TT_01, Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThaiDvct))) {
                             this.notification.warning(MESSAGE.WARNING, 'Trạng thái của đợt trước không cho phép tạo mới!')
                             this.response.loaiDnghi = null;
                             return;
                         } else {
-                            const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
+                            const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai) || !Status.check('reject', e.trangThaiDvct));
                             if (index != -1) {
                                 this.initReport(lstBcao?.length + 1, lstBcao[index].id)
                             } else {

@@ -42,55 +42,46 @@
                                 </ng-template>
                             </div>
                         </div>
-                        <!-- <div class="canphai">
-                            <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
-                                <i class="fa fa-trash-o"></i>
-                                <span>Xóa</span>
-                            </button>
-                        </div> -->
                     </div>
                     <nz-table nzBordered class="table__body" [nzScroll]="{ x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
-                                <th rowspan="2" nzWidth="300px" nzLeft>Tên vật tư, hàng hóa</th>
-                                <th rowspan="2">DVT</th>
-                                <th rowspan="2">Số lượng theo kế hoạch</th>
-                                <th rowspan="2">Số lượng thực tế thực hiện</th>
-                                <th colspan="3">Đơn giá</th>
-                                <th colspan="2">Thành tiền</th>
-                                <th rowspan="2">Chênh lệch giữa giá bán thực tế và giá hạch toán</th>
-                                <th rowspan="2" class="text-col">Ghi chú</th>
-                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <!-- <th style="width: 40px;" rowspan="2" *ngIf="status" nzRight> -->
-                                <!-- </th> -->
+                                <th scope="col" rowspan="2" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" rowspan="2" nzWidth="300px" nzLeft>Tên vật tư, hàng hóa</th>
+                                <th scope="col" rowspan="2">DVT</th>
+                                <th scope="col" rowspan="2">Số lượng theo kế hoạch</th>
+                                <th scope="col" rowspan="2">Số lượng thực tế thực hiện</th>
+                                <th scope="colgroup" colspan="3">Đơn giá</th>
+                                <th scope="colgroup" colspan="2">Thành tiền</th>
+                                <th scope="col" rowspan="2">Chênh lệch giữa giá bán thực tế và giá hạch toán</th>
+                                <th scope="col" rowspan="2" class="text-col">Ghi chú</th>
+                                <th scope="col" style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
                             </tr>
                             <tr>
-                                <th>Giá hạch toán</th>
-                                <th>Giá bán tối thiểu tổng cục</th>
-                                <th>Giá bán thực tế</th>
-                                <th>Giá hạch toán</th>
-                                <th>Giá bán thực tế</th>
+                                <th scope="col">Giá hạch toán</th>
+                                <th scope="col">Giá bán tối thiểu tổng cục</th>
+                                <th scope="col">Giá bán thực tế</th>
+                                <th scope="col">Giá hạch toán</th>
+                                <th scope="col">Giá bán thực tế</th>
                             </tr>
                             <tr>
-                                <th nzLeft>A</th>
-                                <th nzLeft>B</th>
-                                <th>C</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6=2*3</th>
-                                <th>7=2*5</th>
-                                <th>8=7-6</th>
-                                <th>D</th>
-                                <th *ngIf="status.save" nzRight></th>
-                                <th *ngIf="status.save" nzRight></th>
-                                <th *ngIf="status.save" nzRight></th>
-                                <!-- <th *ngIf="status" nzRight></th> -->
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col">C</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5</th>
+                                <th scope="col">6=2*3</th>
+                                <th scope="col">7=2*5</th>
+                                <th scope="col">8=7-6</th>
+                                <th scope="col">D</th>
+                                <th scope="col" *ngIf="status.save" nzRight></th>
+                                <th scope="col" *ngIf="status.save" nzRight></th>
+                                <th scope="col" *ngIf="status.save" nzRight></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -178,25 +169,6 @@
                                                 (ngModelChange)="editCache[data.id].data.changeModel()" />
                                         </td>
                                     </ng-template>
-                                    <!-- <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.soLuongKhoach" />
-                                    </td>
-                                    
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.dgGiaKhoach"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td>
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.dgGiaBanTthieu" />
-                                    </td>
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.dgGiaBanTte"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td> -->
                                     <td>
                                         {{ Op.fmtVal(editCache[data.id].data.ttGiaHtoan) }}
                                     </td>
@@ -222,10 +194,6 @@
                                             Hủy
                                         </a>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <label *ngIf="data.level > 0" nz-checkbox [nzValue]="data.id"
-                                            [(ngModel)]="data.checked" (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>
@@ -257,9 +225,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -289,10 +257,6 @@
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
                 </button>
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="gen.doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
-                </button> -->
                 <button type="button" class="btn btn-sub" (click)="save('5')" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>

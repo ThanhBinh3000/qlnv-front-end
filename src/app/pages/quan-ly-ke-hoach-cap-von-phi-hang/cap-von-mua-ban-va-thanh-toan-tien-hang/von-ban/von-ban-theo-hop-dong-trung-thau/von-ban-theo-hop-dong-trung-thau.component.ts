@@ -151,13 +151,13 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             this.lstCtiets = this.baoCao.lstCtiets;
             this.lstCtiets = Table.sortByIndex(this.lstCtiets)
             this.setLevel()
-            this.sum('0.1')
+            this.sum('0.1');
+            this.updateEditCache();
         }
         this.capDvi = parseInt(this.userInfo.CAP_DVI, 10);
         if (this.userInfo.MA_DVI == this.baoCao.maDviCha) {
             this.capDvi += 1;
         }
-        this.updateEditCache();
         this.getStatusButton();
     }
 

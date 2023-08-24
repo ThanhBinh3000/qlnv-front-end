@@ -16,7 +16,7 @@ import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.componen
 @Component({
     selector: 'app-tong-hop-bao-cao',
     templateUrl: './tong-hop-bao-cao.component.html',
-    styleUrls: ['./tong-hop-bao-cao.component.scss'],
+    // styleUrls: ['./tong-hop-bao-cao.component.scss'],
 })
 export class TongHopBaoCaoComponent implements OnInit {
     @Output() dataChange = new EventEmitter();

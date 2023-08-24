@@ -24,137 +24,141 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="4" nzWidth="50px" nzLeft>STT</th>
-								<th rowspan="4" nzWidth="350px" nzLeft>Danh mục dự án</th>
-								<th rowspan="4" class="text-col">Mã dự án</th>
-								<th rowspan="4" class="text-col">Nhóm dự án</th>
-								<th rowspan="4" class="text-col">Địa điểm XD</th>
-								<th rowspan="4" class="text-col">Năng lực thiết kế</th>
-								<th rowspan="4" class="text-col">Thời gian KC-HT</th>
-								<th colspan="3">Quyết định đầu tư</th>
-								<th colspan="6">Năm {{namBcao -1}}</th>
-								<th colspan="2">Đã bố trí vốn đến hết KH năm {{namBcao -1}}</th>
-								<th colspan="8">KH đầu tư trung hạn vốn NSTW giai đoạn {{namBcao -2}}-{{namBcao + 2}}
+								<th scope="col" rowspan="4" nzWidth="50px" nzLeft>STT</th>
+								<th scope="col" rowspan="4" nzWidth="350px" nzLeft>Danh mục dự án</th>
+								<th scope="col" rowspan="4" class="text-col">Mã dự án</th>
+								<th scope="col" rowspan="4" class="text-col">Nhóm dự án</th>
+								<th scope="col" rowspan="4" class="text-col">Địa điểm XD</th>
+								<th scope="col" rowspan="4" class="text-col">Năng lực thiết kế</th>
+								<th scope="col" rowspan="4" class="text-col">Thời gian KC-HT</th>
+								<th scope="colgroup" colspan="3">Quyết định đầu tư</th>
+								<th scope="colgroup" colspan="6">Năm {{namBcao -1}}</th>
+								<th scope="colgroup" colspan="2">Đã bố trí vốn đến hết KH năm {{namBcao -1}}</th>
+								<th scope="colgroup" colspan="8">KH đầu tư trung hạn vốn NSTW giai đoạn {{namBcao
+									-2}}-{{namBcao + 2}}
 								</th>
-								<th colspan="5">Nhu cầu kế hoạch {{namBcao}}</th>
-								<th rowspan="4" class="text-col">Ghi chú</th>
-								<th rowspan="4" style="width: 60px;" *ngIf="status.general" nzRight></th>
-								<th rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
+								<th scope="colgroup" colspan="5">Nhu cầu kế hoạch {{namBcao}}</th>
+								<th scope="col" rowspan="4" class="text-col">Ghi chú</th>
+								<th scope="col" rowspan="4" style="width: 60px;" *ngIf="status.general" nzRight></th>
+								<th scope="col" rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
-								<th rowspan="3">Số quyết định ngày, tháng, năm ban hành</th>
-								<th colspan="2">TMĐT</th>
-								<th colspan="2">Kế hoạch</th>
-								<th colspan="2">Ước giải ngân từ 1/1/{{namBcao-1}} đến 30/9/{{namBcao - 1}}</th>
-								<th colspan="2">Ước giải ngân từ 1/1/{{namBcao-1}} đến 31/12/{{namBcao - 1}}</th>
-								<th rowspan="3">Tổng số (tất cả các nguồn vốn)</th>
-								<th rowspan="3">Trong đó: NSTW</th>
-								<th colspan="4">Giai đoạn {{namBcao-2}}-{{namBcao+2}}</th>
-								<th colspan="4">Trong đó: đã giao kế hoạch các năm {{namBcao-2}}, {{namBcao-1}}</th>
-								<th rowspan="3">Tổng số (tất cả các nguồn vốn)</th>
-								<th colspan="4">Trong đó: NSTW</th>
+								<th scope="col" rowspan="3">Số quyết định ngày, tháng, năm ban hành</th>
+								<th scope="colgroup" colspan="2">TMĐT</th>
+								<th scope="colgroup" colspan="2">Kế hoạch</th>
+								<th scope="colgroup" colspan="2">Ước giải ngân từ 1/1/{{namBcao-1}} đến 30/9/{{namBcao -
+									1}}</th>
+								<th scope="colgroup" colspan="2">Ước giải ngân từ 1/1/{{namBcao-1}} đến 31/12/{{namBcao
+									- 1}}</th>
+								<th scope="col" rowspan="3">Tổng số (tất cả các nguồn vốn)</th>
+								<th scope="col" rowspan="3">Trong đó: NSTW</th>
+								<th scope="colgroup" colspan="4">Giai đoạn {{namBcao-2}}-{{namBcao+2}}</th>
+								<th scope="colgroup" colspan="4">Trong đó: đã giao kế hoạch các năm {{namBcao-2}},
+									{{namBcao-1}}</th>
+								<th scope="col" rowspan="3">Tổng số (tất cả các nguồn vốn)</th>
+								<th scope="colgroup" colspan="4">Trong đó: NSTW</th>
 							</tr>
 							<tr>
-								<th rowspan="2">Tổng số (tất cả các nguồn vốn)</th>
-								<th rowspan="2">Trong đó: NSTW</th>
-								<th rowspan="2">Tổng số (tất cả các nguồn vốn)</th>
-								<th rowspan="2">Trong đó: NSTW</th>
-								<th rowspan="2">Tổng số (tất cả các nguồn vốn)</th>
-								<th rowspan="2">Trong đó: NSTW</th>
-								<th rowspan="2">Tổng số (tất cả các nguồn vốn)</th>
-								<th rowspan="2">Trong đó: NSTW</th>
-								<th rowspan="2">Tổng số</th>
-								<th colspan="3"> Trong đó:</th>
-								<th rowspan="2">Tổng số</th>
-								<th colspan="3"> Trong đó:</th>
-								<th rowspan="2">Tổng số</th>
-								<th colspan="3"> Trong đó:</th>
+								<th scope="col" rowspan="2">Tổng số (tất cả các nguồn vốn)</th>
+								<th scope="col" rowspan="2">Trong đó: NSTW</th>
+								<th scope="col" rowspan="2">Tổng số (tất cả các nguồn vốn)</th>
+								<th scope="col" rowspan="2">Trong đó: NSTW</th>
+								<th scope="col" rowspan="2">Tổng số (tất cả các nguồn vốn)</th>
+								<th scope="col" rowspan="2">Trong đó: NSTW</th>
+								<th scope="col" rowspan="2">Tổng số (tất cả các nguồn vốn)</th>
+								<th scope="col" rowspan="2">Trong đó: NSTW</th>
+								<th scope="col" rowspan="2">Tổng số</th>
+								<th scope="colgroup" colspan="3"> Trong đó:</th>
+								<th scope="col" rowspan="2">Tổng số</th>
+								<th scope="colgroup" colspan="3"> Trong đó:</th>
+								<th scope="col" rowspan="2">Tổng số</th>
+								<th scope="colgroup" colspan="3"> Trong đó:</th>
 							</tr>
 							<tr>
-								<th>Thu hồi các khoản vốn ứng trước</th>
-								<th>Thanh toán nợ XDCB</th>
-								<th>Chuẩn bị đầu tư</th>
-								<th>Thu hồi các khoản vốn ứng trước</th>
-								<th>Thanh toán nợ XDCB</th>
-								<th>Chuẩn bị đầu tư</th>
-								<th>Thu hồi các khoản vốn ứng trước</th>
-								<th>Thanh toán nợ XDCB</th>
-								<th>Chuẩn bị đầu tư</th>
+								<th scope="col">Thu hồi các khoản vốn ứng trước</th>
+								<th scope="col">Thanh toán nợ XDCB</th>
+								<th scope="col">Chuẩn bị đầu tư</th>
+								<th scope="col">Thu hồi các khoản vốn ứng trước</th>
+								<th scope="col">Thanh toán nợ XDCB</th>
+								<th scope="col">Chuẩn bị đầu tư</th>
+								<th scope="col">Thu hồi các khoản vốn ứng trước</th>
+								<th scope="col">Thanh toán nợ XDCB</th>
+								<th scope="col">Chuẩn bị đầu tư</th>
 							</tr>
 							<tr>
-								<th nzLeft>1</th>
-								<th nzLeft>2</th>
-								<th></th>
-								<th>3</th>
-								<th>4</th>
-								<th>5</th>
-								<th>6</th>
-								<th>7</th>
-								<th>8</th>
-								<th>9</th>
-								<th>10</th>
-								<th>11</th>
-								<th>12</th>
-								<th>13</th>
-								<th>14</th>
-								<th>15</th>
-								<th>16</th>
-								<th>17</th>
-								<th>18</th>
-								<th>19</th>
-								<th>20</th>
-								<th>21</th>
-								<th>22</th>
-								<th>23</th>
-								<th>24</th>
-								<th>25</th>
-								<th>26</th>
-								<th>27</th>
-								<th>28</th>
-								<th>29</th>
-								<th>30</th>
-								<th>31</th>
-								<th *ngIf="status.general" nzRight></th>
-								<th *ngIf="status.general" nzRight></th>
-							</tr>
-							<tr>
-								<th nzLeft></th>
-								<th nzLeft>TỔNG SỐ</th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th>{{Op.fmtVal(total.tmdtTongSo)}}</th>
-								<th>{{Op.fmtVal(total.tmdtNstw)}}</th>
-								<th>{{Op.fmtVal(total.keHoachTongSo)}}</th>
-								<th>{{Op.fmtVal(total.keHoachNstw)}}</th>
-								<th>{{Op.fmtVal(total.uocGiaiNganDauNamTong)}}</th>
-								<th>{{Op.fmtVal(total.uocGiaiNganDauNamNstw)}}</th>
-								<th>{{Op.fmtVal(total.uocGiaiNganCaNamTong)}}</th>
-								<th>{{Op.fmtVal(total.uocGiaiNganCaNamNstw)}}</th>
-								<th>{{Op.fmtVal(total.daBoTriVonTongSo)}}</th>
-								<th>{{Op.fmtVal(total.daBoTriVonNstw)}}</th>
-								<th>{{Op.fmtVal(total.trungHanVonN2N2TongSo)}}</th>
-								<th>{{Op.fmtVal(total.trungHanVonN2N2ThuHoi)}}</th>
-								<th>{{Op.fmtVal(total.trungHanVonN2N2Xdcb)}}</th>
-								<th>{{Op.fmtVal(total.trungHanVonN2N2Cbi)}}</th>
-								<th>{{Op.fmtVal(total.trungHanVonN2N1TongSo)}}</th>
-								<th>{{Op.fmtVal(total.trungHanVonN2N1ThuHoi)}}</th>
-								<th>{{Op.fmtVal(total.trungHanVonN2N1Xdcb)}}</th>
-								<th>{{Op.fmtVal(total.trungHanVonN2N1Cbi)}}</th>
-								<th>{{Op.fmtVal(total.khTongSoNamN)}}</th>
-								<th>{{Op.fmtVal(total.khNstwTongSoNamN)}}</th>
-								<th>{{Op.fmtVal(total.khNstwThuHoiNamN)}}</th>
-								<th>{{Op.fmtVal(total.khNstwThanhToanNamN)}}</th>
-								<th>{{Op.fmtVal(total.khNstwChuanBiNamN)}}</th>
-								<th></th>
-								<th *ngIf="status.general" nzRight></th>
-								<th *ngIf="status.general" nzRight></th>
+								<th scope="col" nzLeft>1</th>
+								<th scope="col" nzLeft>2</th>
+								<th scope="col"></th>
+								<th scope="col">3</th>
+								<th scope="col">4</th>
+								<th scope="col">5</th>
+								<th scope="col">6</th>
+								<th scope="col">7</th>
+								<th scope="col">8</th>
+								<th scope="col">9</th>
+								<th scope="col">10</th>
+								<th scope="col">11</th>
+								<th scope="col">12</th>
+								<th scope="col">13</th>
+								<th scope="col">14</th>
+								<th scope="col">15</th>
+								<th scope="col">16</th>
+								<th scope="col">17</th>
+								<th scope="col">18</th>
+								<th scope="col">19</th>
+								<th scope="col">20</th>
+								<th scope="col">21</th>
+								<th scope="col">22</th>
+								<th scope="col">23</th>
+								<th scope="col">24</th>
+								<th scope="col">25</th>
+								<th scope="col">26</th>
+								<th scope="col">27</th>
+								<th scope="col">28</th>
+								<th scope="col">29</th>
+								<th scope="col">30</th>
+								<th scope="col">31</th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
+							<tr>
+								<td nzLeft></td>
+								<td nzLeft>TỔNG SỐ</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>{{Op.fmtVal(total.tmdtTongSo)}}</td>
+								<td>{{Op.fmtVal(total.tmdtNstw)}}</td>
+								<td>{{Op.fmtVal(total.keHoachTongSo)}}</td>
+								<td>{{Op.fmtVal(total.keHoachNstw)}}</td>
+								<td>{{Op.fmtVal(total.uocGiaiNganDauNamTong)}}</td>
+								<td>{{Op.fmtVal(total.uocGiaiNganDauNamNstw)}}</td>
+								<td>{{Op.fmtVal(total.uocGiaiNganCaNamTong)}}</td>
+								<td>{{Op.fmtVal(total.uocGiaiNganCaNamNstw)}}</td>
+								<td>{{Op.fmtVal(total.daBoTriVonTongSo)}}</td>
+								<td>{{Op.fmtVal(total.daBoTriVonNstw)}}</td>
+								<td>{{Op.fmtVal(total.trungHanVonN2N2TongSo)}}</td>
+								<td>{{Op.fmtVal(total.trungHanVonN2N2ThuHoi)}}</td>
+								<td>{{Op.fmtVal(total.trungHanVonN2N2Xdcb)}}</td>
+								<td>{{Op.fmtVal(total.trungHanVonN2N2Cbi)}}</td>
+								<td>{{Op.fmtVal(total.trungHanVonN2N1TongSo)}}</td>
+								<td>{{Op.fmtVal(total.trungHanVonN2N1ThuHoi)}}</td>
+								<td>{{Op.fmtVal(total.trungHanVonN2N1Xdcb)}}</td>
+								<td>{{Op.fmtVal(total.trungHanVonN2N1Cbi)}}</td>
+								<td>{{Op.fmtVal(total.khTongSoNamN)}}</td>
+								<td>{{Op.fmtVal(total.khNstwTongSoNamN)}}</td>
+								<td>{{Op.fmtVal(total.khNstwThuHoiNamN)}}</td>
+								<td>{{Op.fmtVal(total.khNstwThanhToanNamN)}}</td>
+								<td>{{Op.fmtVal(total.khNstwChuanBiNamN)}}</td>
+								<td></td>
+								<td *ngIf="status.general" nzRight></td>
+								<td *ngIf="status.general" nzRight></td>
+							</tr>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
 									<td nzLeft>
@@ -400,9 +404,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -432,10 +436,6 @@
 					<span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
 					<span>Xuất</span>
 				</button>
-				<!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
-				</button> -->
 				<button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
 					<i nz-icon nzType="check" nzTheme="outline"></i>
 					<span>Hoàn tất nhập liệu</span>

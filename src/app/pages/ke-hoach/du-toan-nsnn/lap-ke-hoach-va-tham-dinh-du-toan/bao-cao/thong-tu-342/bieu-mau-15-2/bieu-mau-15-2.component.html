@@ -26,258 +26,258 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="4" nzWidth="50px" nzLeft>
+								<th scope="col" rowspan="4" nzWidth="50px" nzLeft>
 									STT
 								</th>
-								<th rowspan="4" nzWidth="300px" nzLeft>
+								<th scope="col" rowspan="4" nzWidth="300px" nzLeft>
 									Tên đơn vị
 								</th>
-								<th colspan="11">
+								<th scope="colgroup" colspan="11">
 									Dự toán năm {{namBcao}}
 								</th>
-								<th colspan="13">
+								<th scope="colgroup" colspan="13">
 									Ước thực hiện năm {{namBcao}}
 								</th>
-								<th colspan="11">
+								<th scope="colgroup" colspan="11">
 									Dự toán năm {{namBcao + 1}}
 								</th>
-								<th rowspan="4" class="text-col">
+								<th scope="col" rowspan="4" class="text-col">
 									Ghi chú
 								</th>
-								<th rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
-								<th rowspan="4" style="width: 60px;" *ngIf="status.general" nzRight></th>
-								<th rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
+								<th scope="col" rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
+								<th scope="col" rowspan="4" style="width: 60px;" *ngIf="status.general" nzRight></th>
+								<th scope="col" rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
-								<th rowspan="3">
+								<th scope="col" rowspan="3">
 									Tổng số người làm việc được cấp có thẩm quyền giao (Người)
 								</th>
-								<th rowspan="3">
+								<th scope="col" rowspan="3">
 									Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương
 								</th>
-								<th colspan="5">
+								<th scope="colgroup" colspan="5">
 									Trong đó
 								</th>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Nguồn kinh phí bảo đảm
 								</th>
-								<th rowspan="3">
+								<th scope="col" rowspan="3">
 									Tổng số người làm việc được cấp có thẩm quyền giao (Người)
 								</th>
-								<th rowspan="3">
+								<th scope="col" rowspan="3">
 									Tổng số người làm việc được cấp có thẩm quyền giao có mặt tại thời điểm 31/12
 									(Người)
 								</th>
-								<th rowspan="3">
+								<th scope="col" rowspan="3">
 									Trong đó: Tổng số viên chức, công chức (Người)
 								</th>
-								<th rowspan="3">
+								<th scope="col" rowspan="3">
 									Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương theo số người làm việc có
 									mặt tại thời điểm 31/12
 								</th>
-								<th colspan="5">
+								<th scope="colgroup" colspan="5">
 									Trong đó
 								</th>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Nguồn kinh phí bảo đảm
 								</th>
-								<th rowspan="3">
+								<th scope="col" rowspan="3">
 									Tổng số người làm việc được cấp có thẩm quyền giao (Người)
 								</th>
-								<th rowspan="3">
+								<th scope="col" rowspan="3">
 									Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương
 								</th>
-								<th colspan="5">
+								<th scope="colgroup" colspan="5">
 									Trong đó
 								</th>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Nguồn kinh phí bảo đảm
 								</th>
 							</tr>
 							<tr>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế được giao
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn NSNN
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn thu sự nghiệp, dịch vụ
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn phí được để lại
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn thu hợp pháp khác
 								</th>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của số biên chế thực có mặt thời
 									điểm 31/12
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động có mặt tại
 									thời điểm 31/12
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn NSNN
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn thu sự nghiệp, dịch vụ
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn phí được để lại
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn thu hợp pháp khác
 								</th>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương của Hợp đồng lao động
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn NSNN
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn thu sự nghiệp, dịch vụ
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn phí được để lại
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn thu hợp pháp khác
 								</th>
 							</tr>
 							<tr>
-								<th>
+								<th scope="col">
 									Tổng số
 								</th>
-								<th>
+								<th scope="col">
 									Lương theo ngạch, bậc
 								</th>
-								<th>
+								<th scope="col">
 									Phụ cấp theo lương
 								</th>
-								<th>
+								<th scope="col">
 									Các khoản đóng góp theo lương
 								</th>
-								<th>
+								<th scope="col">
 									Tổng số
 								</th>
-								<th>
+								<th scope="col">
 									Lương theo ngạch, bậc
 								</th>
-								<th>
+								<th scope="col">
 									Phụ cấp theo lương
 								</th>
-								<th>
+								<th scope="col">
 									Các khoản đóng góp theo lương
 								</th>
-								<th>
+								<th scope="col">
 									Tổng số
 								</th>
-								<th>
+								<th scope="col">
 									Lương theo ngạch, bậc
 								</th>
-								<th>
+								<th scope="col">
 									Phụ cấp theo lương
 								</th>
-								<th>
+								<th scope="col">
 									Các khoản đóng góp theo lương
 								</th>
 							</tr>
 							<tr>
-								<th nzLeft>A</th>
-								<th nzLeft>B</th>
-								<th>1</th>
-								<th>2=3+7</th>
-								<th>3=4+5+6</th>
-								<th>4</th>
-								<th>5</th>
-								<th>6</th>
-								<th>7</th>
-								<th>8</th>
-								<th>9</th>
-								<th>10</th>
-								<th>11</th>
-								<th>12</th>
-								<th>13</th>
-								<th>14</th>
-								<th>15=16+20</th>
-								<th>16=17+18+19</th>
-								<th>17</th>
-								<th>18</th>
-								<th>19</th>
-								<th>20</th>
-								<th>21</th>
-								<th>22</th>
-								<th>23</th>
-								<th>24</th>
-								<th>25</th>
-								<th>26=27+31</th>
-								<th>27=28+29+30</th>
-								<th>28</th>
-								<th>29</th>
-								<th>30</th>
-								<th>31</th>
-								<th>32</th>
-								<th>33</th>
-								<th>34</th>
-								<th>35</th>
-								<th></th>
-								<th *ngIf="status.general" nzRight></th>
-								<th *ngIf="status.general" nzRight></th>
-								<th *ngIf="status.general" nzRight></th>
-							</tr>
-							<tr>
-								<th nzLeft></th>
-								<th nzLeft>Tổng Cộng</th>
-								<th>{{Op.fmtNum(total.dtTsoNguoiLv)}}</th>
-								<th>{{Op.fmtVal(total.dtTongQlPcap)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapTso)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapLuongBac)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapPcapLuong)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapDgopLuong)}}</th>
-								<th>{{Op.fmtVal(total.dtQlPcapHdLd)}}</th>
-								<th>{{Op.fmtVal(total.dtKphiNsnn)}}</th>
-								<th>{{Op.fmtVal(total.dtKphiSnDvu)}}</th>
-								<th>{{Op.fmtVal(total.dtKphiPhiDlai)}}</th>
-								<th>{{Op.fmtVal(total.dtKphiHphap)}}</th>
-								<th>{{Op.fmtNum(total.uocThTsoNguoiLv)}}</th>
-								<th>{{Op.fmtNum(total.uocThTsoBcTdiem)}}</th>
-								<th>{{Op.fmtNum(total.uocThTsoVcCc)}}</th>
-								<th>{{Op.fmtVal(total.uocThTongQlPcap)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapTso)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapLuongBac)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapPcapLuong)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapDgopLuong)}}</th>
-								<th>{{Op.fmtVal(total.uocThQlPcapHdLd)}}</th>
-								<th>{{Op.fmtVal(total.uocThKphiNsnn)}}</th>
-								<th>{{Op.fmtVal(total.uocThKphiSnDvu)}}</th>
-								<th>{{Op.fmtVal(total.uocThKphiPhiDlai)}}</th>
-								<th>{{Op.fmtVal(total.uocThKphiHphap)}}</th>
-								<th>{{Op.fmtNum(total.namKhTsoNguoiLv)}}</th>
-								<th>{{Op.fmtVal(total.namKhTongQlPcap)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapTso)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapLuongBac)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapPcapLuong)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapDgopLuong)}}</th>
-								<th>{{Op.fmtVal(total.namKhQlPcapHdLd)}}</th>
-								<th>{{Op.fmtVal(total.namKhKphiNsnn)}}</th>
-								<th>{{Op.fmtVal(total.namKhKphiSnDvu)}}</th>
-								<th>{{Op.fmtVal(total.namKhKphiPhiDlai)}}</th>
-								<th>{{Op.fmtVal(total.namKhKphiHphap)}}</th>
-								<th></th>
-								<th *ngIf="status.general" nzRight></th>
-								<th *ngIf="status.general" nzRight></th>
-								<th *ngIf="status.general" nzRight></th>
+								<th scope="col" nzLeft>A</th>
+								<th scope="col" nzLeft>B</th>
+								<th scope="col">1</th>
+								<th scope="col">2=3+7</th>
+								<th scope="col">3=4+5+6</th>
+								<th scope="col">4</th>
+								<th scope="col">5</th>
+								<th scope="col">6</th>
+								<th scope="col">7</th>
+								<th scope="col">8</th>
+								<th scope="col">9</th>
+								<th scope="col">10</th>
+								<th scope="col">11</th>
+								<th scope="col">12</th>
+								<th scope="col">13</th>
+								<th scope="col">14</th>
+								<th scope="col">15=16+20</th>
+								<th scope="col">16=17+18+19</th>
+								<th scope="col">17</th>
+								<th scope="col">18</th>
+								<th scope="col">19</th>
+								<th scope="col">20</th>
+								<th scope="col">21</th>
+								<th scope="col">22</th>
+								<th scope="col">23</th>
+								<th scope="col">24</th>
+								<th scope="col">25</th>
+								<th scope="col">26=27+31</th>
+								<th scope="col">27=28+29+30</th>
+								<th scope="col">28</th>
+								<th scope="col">29</th>
+								<th scope="col">30</th>
+								<th scope="col">31</th>
+								<th scope="col">32</th>
+								<th scope="col">33</th>
+								<th scope="col">34</th>
+								<th scope="col">35</th>
+								<th scope="col"></th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
+							<tr>
+								<td nzLeft></td>
+								<td nzLeft>Tổng Cộng</td>
+								<td>{{Op.fmtNum(total.dtTsoNguoiLv)}}</td>
+								<td>{{Op.fmtVal(total.dtTongQlPcap)}}</td>
+								<td>{{Op.fmtVal(total.dtQlPcapTso)}}</td>
+								<td>{{Op.fmtVal(total.dtQlPcapLuongBac)}}</td>
+								<td>{{Op.fmtVal(total.dtQlPcapPcapLuong)}}</td>
+								<td>{{Op.fmtVal(total.dtQlPcapDgopLuong)}}</td>
+								<td>{{Op.fmtVal(total.dtQlPcapHdLd)}}</td>
+								<td>{{Op.fmtVal(total.dtKphiNsnn)}}</td>
+								<td>{{Op.fmtVal(total.dtKphiSnDvu)}}</td>
+								<td>{{Op.fmtVal(total.dtKphiPhiDlai)}}</td>
+								<td>{{Op.fmtVal(total.dtKphiHphap)}}</td>
+								<td>{{Op.fmtNum(total.uocThTsoNguoiLv)}}</td>
+								<td>{{Op.fmtNum(total.uocThTsoBcTdiem)}}</td>
+								<td>{{Op.fmtNum(total.uocThTsoVcCc)}}</td>
+								<td>{{Op.fmtVal(total.uocThTongQlPcap)}}</td>
+								<td>{{Op.fmtVal(total.uocThQlPcapTso)}}</td>
+								<td>{{Op.fmtVal(total.uocThQlPcapLuongBac)}}</td>
+								<td>{{Op.fmtVal(total.uocThQlPcapPcapLuong)}}</td>
+								<td>{{Op.fmtVal(total.uocThQlPcapDgopLuong)}}</td>
+								<td>{{Op.fmtVal(total.uocThQlPcapHdLd)}}</td>
+								<td>{{Op.fmtVal(total.uocThKphiNsnn)}}</td>
+								<td>{{Op.fmtVal(total.uocThKphiSnDvu)}}</td>
+								<td>{{Op.fmtVal(total.uocThKphiPhiDlai)}}</td>
+								<td>{{Op.fmtVal(total.uocThKphiHphap)}}</td>
+								<td>{{Op.fmtNum(total.namKhTsoNguoiLv)}}</td>
+								<td>{{Op.fmtVal(total.namKhTongQlPcap)}}</td>
+								<td>{{Op.fmtVal(total.namKhQlPcapTso)}}</td>
+								<td>{{Op.fmtVal(total.namKhQlPcapLuongBac)}}</td>
+								<td>{{Op.fmtVal(total.namKhQlPcapPcapLuong)}}</td>
+								<td>{{Op.fmtVal(total.namKhQlPcapDgopLuong)}}</td>
+								<td>{{Op.fmtVal(total.namKhQlPcapHdLd)}}</td>
+								<td>{{Op.fmtVal(total.namKhKphiNsnn)}}</td>
+								<td>{{Op.fmtVal(total.namKhKphiSnDvu)}}</td>
+								<td>{{Op.fmtVal(total.namKhKphiPhiDlai)}}</td>
+								<td>{{Op.fmtVal(total.namKhKphiHphap)}}</td>
+								<td></td>
+								<td *ngIf="status.general" nzRight></td>
+								<td *ngIf="status.general" nzRight></td>
+								<td *ngIf="status.general" nzRight></td>
+							</tr>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
 									<td class="text-center" nzLeft>
@@ -578,9 +578,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -610,10 +610,6 @@
 					<span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
 					<span>Xuất</span>
 				</button>
-				<!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
-				</button> -->
 				<button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
 					<i nz-icon nzType="check" nzTheme="outline"></i>
 					<span>Hoàn tất nhập liệu</span>

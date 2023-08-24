@@ -31,43 +31,35 @@
                                 <i class="icon htvbdh_dau-cong"></i>
                                 <span>Thêm hàng</span>
                             </button>
-                            <!-- <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
-                                <i class="fa fa-trash-o"></i>
-                                <span>Xóa</span>
-                            </button> -->
                         </div>
                     </div>
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" nzWidth="50px" nzLeft>
+                                <th scope="col" rowspan="2" nzWidth="50px" nzLeft>
                                     STT
                                 </th>
-                                <th rowspan="2" nzWidth="300px" nzLeft>
+                                <th scope="col" rowspan="2" nzWidth="300px" nzLeft>
                                     Nội dung chi
                                 </th>
-                                <th colspan="{{1 + lstCol.length}}">
+                                <th scope="colgroup" colspan="{{1 + lstCol.length}}">
                                     Chi tiết theo từng mặt hàng trong đợt
                                 </th>
-                                <th colspan="{{1 + lstCol.length}}">
+                                <th scope="colgroup" colspan="{{1 + lstCol.length}}">
                                     Chi tiết theo từng mặt hàng lũy kế từ đầu năm
                                 </th>
-                                <th rowspan="2" class="text-col">
+                                <th scope="col" rowspan="2" class="text-col">
                                     Ghi chú
                                 </th>
-                                <th style="width: 50px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <!-- <th style="width: 40px;" rowspan="2" *ngIf="status.save" nzRight>
-                                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
-                                    </label>
-                                </th> -->
+                                <th scope="col" style="width: 50px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
                             </tr>
                             <tr>
-                                <th>
+                                <th scope="col">
                                     Tổng Cộng
                                 </th>
-                                <th *ngFor="let col of lstCol">
+                                <th scope="col" *ngFor="let col of lstCol">
                                     <ng-container *ngIf="!status.save || statusDeleteCol(col.maVtu); else xoa">
                                         {{col.tenVtu}}
                                     </ng-container>
@@ -77,10 +69,10 @@
                                         </a>
                                     </ng-template>
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tổng Cộng
                                 </th>
-                                <th *ngFor="let col of lstCol">
+                                <th scope="col" *ngFor="let col of lstCol">
                                     <ng-container *ngIf="statusDeleteCol(col.maVtu) || !status.save; else xoa">
                                         {{col.tenVtu}}
                                     </ng-container>
@@ -130,12 +122,6 @@
                                     <td *ngIf="status.save" nzRight>
                                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <ng-container *ngIf="checkDelete(data)">
-                                            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                (ngModelChange)="updateChecked(data.id)"></label>
-                                        </ng-container>
-                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td>
@@ -170,12 +156,6 @@
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <ng-container *ngIf="checkDelete(data)">
-                                            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                (ngModelChange)="updateChecked(data.id)"></label>
-                                        </ng-container>
-                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>
@@ -207,9 +187,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -239,10 +219,6 @@
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
                 </button>
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="gen.doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
-                </button> -->
                 <button type="button" class="btn btn-sub" (click)="save('5')" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>

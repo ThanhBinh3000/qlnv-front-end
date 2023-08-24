@@ -418,7 +418,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         this.editCache[id].data.vonDnCapLanNay = Operator.sum([gt, -this.editCache[id].data.phatViPham, -this.editCache[id].data.tongVonVaDtoanDaCap]);
         this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.ung, this.editCache[id].data.cap]);
         this.editCache[id].data.tongTien = Operator.sum([this.editCache[id].data.tongVonVaDtoanDaCap, this.editCache[id].data.cong]);
-        this.editCache[id].data.soConDuocCap = Operator.sum([gt, -this.editCache[id].data.tongTien]);
+        this.editCache[id].data.soConDuocCap = Operator.sum([gt, -this.editCache[id].data.phatViPham, -this.editCache[id].data.tongTien]);
     }
     // cộng từ mức con lên mức cha
     sum(stt: string) {
