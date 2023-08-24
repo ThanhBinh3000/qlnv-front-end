@@ -95,7 +95,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       // loaiHdong: ['', [Validators.required]],
       // nguonVon: ['', [Validators.required]],
       ghiChu: ['',],
-      trangThai: [''],
+      trangThai: [null],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
       tchuanCluong: [''],
@@ -107,7 +107,6 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   }
 
   async ngOnInit() {
-    console.log("isView: ", this.isView)
     await this.spinner.show();
     try {
       await Promise.all([
@@ -115,7 +114,6 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         this.loadChiTiet(),
         this.convertTenVthh()
       ]);
-      console.log(this.isViewOnModal)
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -126,7 +124,6 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
 
   convertTenVthh(){
     let data = convertIdToTenLoaiVthh(this.loaiVthh);
-    console.log(data)
     this.formTraCuu.get('tenLoaiVthh').setValue(data)
     this.formTraCuu.get('loaiVthh').setValue(this.loaiVthh)
   }
@@ -197,7 +194,6 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
     try {
-      debugger
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
         await this.spinner.hide();
@@ -215,6 +211,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         })
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
         this.isTongHop = true;
+        this.showFirstRow(event, this.dataTableDanhSachDX[0].idDxHdr);
       } else {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu để tổng hợp.");
         this.isTongHop = false;

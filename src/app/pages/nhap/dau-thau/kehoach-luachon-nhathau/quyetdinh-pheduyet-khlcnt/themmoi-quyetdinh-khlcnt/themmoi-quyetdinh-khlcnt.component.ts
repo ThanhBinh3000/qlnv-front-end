@@ -243,7 +243,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         this.loadDataComboBox(),
         this.bindingDataTongHop(this.dataTongHop),
       ]);
-      await this.getDataChiTieu()
+      // await this.getDataChiTieu()
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -506,10 +506,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
-  openDialogTh() {
+  async openDialogTh() {
     if (this.formData.get('phanLoai').value != 'TH') {
       return;
     }
+    await this.listDsTongHopToTrinh();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách tổng hợp đề xuất kế hoạch lựa chọn nhà thầu',
       nzContent: DialogTableSelectionComponent,
@@ -685,6 +686,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = this.danhsachDxCache[index];
       this.index = index;
+      await this.getDataChiTieu()
       await this.spinner.hide();
     } else {
       this.selected = true
@@ -693,6 +695,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
       this.maDviSelected = this.danhsachDx[0].maDvi
+      await this.getDataChiTieu()
       await this.spinner.hide();
     }
   }
