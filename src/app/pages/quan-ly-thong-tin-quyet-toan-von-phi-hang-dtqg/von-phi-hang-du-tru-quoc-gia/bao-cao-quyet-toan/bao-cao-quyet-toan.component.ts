@@ -20,7 +20,6 @@ import { Roles } from './../../../../Utility/utils';
 @Component({
     selector: 'app-bao-cao-quyet-toan',
     templateUrl: './bao-cao-quyet-toan.component.html',
-    styleUrls: ['./bao-cao-quyet-toan.component.scss']
 })
 export class BaoCaoQuyetToanComponent implements OnInit {
     @Input() data

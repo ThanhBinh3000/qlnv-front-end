@@ -178,13 +178,9 @@
                                             (ngModelChange)="editCache[data.id].data.changeModel()" />
                                     </td>
                                     <td>
-                                        <!-- <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]=""
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" /> -->
                                         {{Op.fmtVal(editCache[data.id].data.sluongCong)}}
                                     </td>
                                     <td>
-                                        <!-- {{ Op.fmtVal(editCache[data.id].data.sluongDmuc) }} -->
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.sluongDmuc"
                                             (ngModelChange)="editCache[data.id].data.changeModel()" />
@@ -196,7 +192,6 @@
                                             [class]="statusCanhBao == true ? '' : 'input-error-validate'" />
                                     </td>
                                     <td>
-                                        <!-- {{ Op.fmtVal(editCache[data.id].data.mucGia) }} -->
                                         <input class="money-input" currencyMask [options]="Op.amount"
                                             [(ngModel)]="editCache[data.id].data.mucGia"
                                             (ngModelChange)="editCache[data.id].data.changeModel()" />
