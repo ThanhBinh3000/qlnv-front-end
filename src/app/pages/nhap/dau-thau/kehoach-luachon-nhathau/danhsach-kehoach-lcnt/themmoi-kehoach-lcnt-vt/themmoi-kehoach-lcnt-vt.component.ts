@@ -10,10 +10,6 @@ import {
   DanhSachDauThauService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service";
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import { DanhMucTieuChuanService } from "../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
-import {
-  QuyetDinhGiaTCDTNNService
-} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import { Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
 import { MESSAGE } from "../../../../../../constants/message";
@@ -98,8 +94,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     private danhMucService: DanhMucService,
     private dauThauService: DanhSachDauThauService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
-    private dmTieuChuanService: DanhMucTieuChuanService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dauThauService);
     this.formData = this.fb.group({
@@ -133,7 +127,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       gtriDthau: [null],
       gtriHdong: [null],
       donGiaVat: [],
-      vat: ["5"],
+      vat: ["8"],
       tongMucDt: [null],
       tongMucDtDx: [null],
       nguonVon: ["NGV01"],
