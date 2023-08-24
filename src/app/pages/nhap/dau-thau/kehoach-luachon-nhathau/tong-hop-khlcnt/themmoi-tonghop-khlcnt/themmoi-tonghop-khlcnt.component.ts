@@ -20,6 +20,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
 import { saveAs } from "file-saver";
 import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
   templateUrl: './themmoi-tonghop-khlcnt.component.html',
@@ -56,6 +58,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   };
   showDlgPreview = false;
   pdfSrc: any;
+  printSrc: any;
   wordSrc: any;
   constructor(
     httpClient: HttpClient,
@@ -314,6 +317,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     body.reportTemplateRequest = this.reportTemplate;
     await this.tongHopDeXuatKHLCNTService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
@@ -328,6 +332,9 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
 
   closeDlg() {
     this.showDlgPreview = false;
+  }
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
 
