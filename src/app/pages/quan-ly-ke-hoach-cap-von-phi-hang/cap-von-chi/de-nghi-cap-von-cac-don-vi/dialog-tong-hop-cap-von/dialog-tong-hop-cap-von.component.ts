@@ -117,7 +117,7 @@ export class DialogTongHopCapVonComponent implements OnInit {
         if (this.response.canCuVeGia == Cvnc.DON_GIA) {
             this.getSoQdChiTieu();
         }
-        this.callSynthetic();
+        await this.callSynthetic();
         if (id) {
             await this.capVonNguonChiService.ctietDeNghi(id).toPromise().then(
                 async (data) => {

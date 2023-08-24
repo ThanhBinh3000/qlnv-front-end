@@ -113,7 +113,7 @@ export class DialogTongHopComponent implements OnInit {
         this.response.trangThai = Status.TT_01;
         this.response.nguoiTao = this.userInfo.sub;
         await this.getMaDnghi();
-        this.callSynthetic();
+        await this.callSynthetic();
         if (id) {
             await this.capVonMuaBanTtthService.ctietVonMuaBan(id).toPromise().then(
                 async (data) => {
