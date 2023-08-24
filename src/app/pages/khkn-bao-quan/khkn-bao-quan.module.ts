@@ -10,7 +10,6 @@ import { QuanLyQuyChuanKyThuatQuocGiaComponent } from './quan-ly-quy-chuan-ky-th
 import { ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent } from './quan-ly-quy-chuan-ky-thuat-quoc-gia/thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia/thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia.component';
 import { TieuChuanKyThuatComponent } from './quan-ly-quy-chuan-ky-thuat-quoc-gia/thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia/tieu-chuan-ky-thuat/tieu-chuan-ky-thuat.component';
 import { TimKiemVanBanComponent } from './quan-ly-quy-chuan-ky-thuat-quoc-gia/thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia/tim-kiem-van-ban/tim-kiem-van-ban.component';
-import {NgxExtendedPdfViewerModule} from "ngx-extended-pdf-viewer";
 
 
 @NgModule({
@@ -22,6 +21,6 @@ import {NgxExtendedPdfViewerModule} from "ngx-extended-pdf-viewer";
         TieuChuanKyThuatComponent,
         TimKiemVanBanComponent,
     ],
-  imports: [CommonModule, KhknBaoQuanRoutingModule, ComponentsModule, MainModule, ThongTinQuanLyCongTrinhNghienCuuModule, NgxExtendedPdfViewerModule],
+  imports: [CommonModule, KhknBaoQuanRoutingModule, ComponentsModule, MainModule, ThongTinQuanLyCongTrinhNghienCuuModule],
 })
 export class KhknBaoQuanModule { }
