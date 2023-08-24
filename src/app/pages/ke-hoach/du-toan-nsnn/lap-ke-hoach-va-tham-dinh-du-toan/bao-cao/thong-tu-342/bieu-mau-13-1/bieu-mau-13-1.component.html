@@ -26,94 +26,94 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="2" nzWidth="50px" nzLeft>
+								<th scope="col" rowspan="2" nzWidth="50px" nzLeft>
 									STT
 								</th>
-								<th rowspan="2" nzWidth="300px" nzLeft>
+								<th scope="col" rowspan="2" nzWidth="300px" nzLeft>
 									Chỉ tiêu
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Đơn vị tính
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Số thực hiện năm {{namBcao - 2}} (năm trước)
 								</th>
-								<th colspan="2">
+								<th scope="colgroup" colspan="2">
 									Năm {{namBcao-1}} (năm hiện hành)
 								</th>
-								<th colspan="{{status.viewAppVal ? 2 : 1}}">
+								<th scope="colgroup" colspan="{{status.viewAppVal ? 2 : 1}}">
 									Năm kế hoạch {{namBcao}}
 								</th>
-								<th *ngIf="status.viewAppVal" rowSpan="2">
+								<th scope="col" *ngIf="status.viewAppVal" rowSpan="2">
 									Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD
 								</th>
-								<th rowspan="2" class="text-col">
+								<th scope="col" rowspan="2" class="text-col">
 									Ghi chú
 								</th>
-								<th rowspan="2" class="text-col" *ngIf="status.viewAppVal">
+								<th scope="col" rowspan="2" class="text-col" *ngIf="status.viewAppVal">
 									Ý kiến của DVCT
 								</th>
-								<th rowspan="2" style="width: 60px;" *ngIf="status.general || status.editAppVal"
-									nzRight></th>
+								<th scope="col" rowspan="2" style="width: 60px;"
+									*ngIf="status.general || status.editAppVal" nzRight></th>
 							</tr>
 							<tr>
-								<th>
+								<th scope="col">
 									Dự toán
 								</th>
-								<th>
+								<th scope="col">
 									Ước thực hiện
 								</th>
-								<th>
+								<th scope="col">
 									Dự kiến
 								</th>
-								<th *ngIf="status.viewAppVal">
+								<th scope="col" *ngIf="status.viewAppVal">
 									Giá trị thẩm định
 								</th>
 							</tr>
 							<tr>
-								<th nzLeft>A</th>
-								<th nzLeft>B</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
-								<th>4</th>
-								<th>5</th>
-								<th *ngIf="status.viewAppVal">6</th>
-								<th *ngIf="status.viewAppVal">7=6-5</th>
-								<th>8</th>
-								<th *ngIf="status.viewAppVal">9</th>
-								<th *ngIf="status.general || status.editAppVal" nzRight></th>
-							</tr>
-							<tr>
-								<th nzLeft></th>
-								<th nzLeft>
-									Tổng số
-								</th>
-								<th></th>
-								<th>
-									{{ Op.fmtVal(total.thienNtruoc) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.namDtoan) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.namUocThien) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.namKh) }}
-								</th>
-								<th *ngIf="status.viewAppVal">
-									{{ Op.fmtVal(total.giaTriThamDinh) }}
-								</th>
-								<th *ngIf="status.viewAppVal">
-									{{ Op.fmtVal(total.chenhLech) }}
-								</th>
-								<th></th>
-								<th *ngIf="status.viewAppVal"></th>
-								<th *ngIf="status.general || status.editAppVal" nzRight></th>
+								<th scope="col" nzLeft>A</th>
+								<th scope="col" nzLeft>B</th>
+								<th scope="col">1</th>
+								<th scope="col">2</th>
+								<th scope="col">3</th>
+								<th scope="col">4</th>
+								<th scope="col">5</th>
+								<th scope="col" *ngIf="status.viewAppVal">6</th>
+								<th scope="col" *ngIf="status.viewAppVal">7=6-5</th>
+								<th scope="col">8</th>
+								<th scope="col" *ngIf="status.viewAppVal">9</th>
+								<th scope="col" *ngIf="status.general || status.editAppVal" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
+							<tr>
+								<td nzLeft></td>
+								<td nzLeft>
+									Tổng số
+								</td>
+								<td></td>
+								<td>
+									{{ Op.fmtVal(total.thienNtruoc) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.namDtoan) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.namUocThien) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.namKh) }}
+								</td>
+								<td *ngIf="status.viewAppVal">
+									{{ Op.fmtVal(total.giaTriThamDinh) }}
+								</td>
+								<td *ngIf="status.viewAppVal">
+									{{ Op.fmtVal(total.chenhLech) }}
+								</td>
+								<td></td>
+								<td *ngIf="status.viewAppVal"></td>
+								<td *ngIf="status.general || status.editAppVal" nzRight></td>
+							</tr>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
 								<td nzLeft>
 									{{ data.index() }}
@@ -248,9 +248,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>

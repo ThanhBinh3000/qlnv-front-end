@@ -24,46 +24,46 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th nzWidth="50px" nzLeft>STT</th>
-                                <th nzWidth="150px" nzLeft>Tên cục DTNNKV,<br> chi cục DTNN </th>
-                                <th nzWidth="150px" nzLeft>Tên địa điểm, địa chỉ </th>
-                                <th nzWidth="150px" nzLeft>Tên nhà kho </th>
-                                <th>Khối tích (m3)</th>
-                                <th>Tên hàng DTQG</th>
-                                <th>Số lượng</th>
-                                <th>Giá trị (VND)</th>
-                                <th style="width: 50px;" *ngIf="status.general" nzRight></th>
-                                <th style="width: 60px;" *ngIf="status.general" nzRight></th>
-                                <th style="width: 50px;" *ngIf="status.general" nzRight></th>
+                                <th scope="col" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" nzWidth="150px" nzLeft>Tên cục DTNNKV,<br> chi cục DTNN </th>
+                                <th scope="col" nzWidth="150px" nzLeft>Tên địa điểm, địa chỉ </th>
+                                <th scope="col" nzWidth="150px" nzLeft>Tên nhà kho </th>
+                                <th scope="col">Khối tích (m3)</th>
+                                <th scope="col">Tên hàng DTQG</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Giá trị (VND)</th>
+                                <th scope="col" style="width: 50px;" *ngIf="status.general" nzRight></th>
+                                <th scope="col" style="width: 60px;" *ngIf="status.general" nzRight></th>
+                                <th scope="col" style="width: 50px;" *ngIf="status.general" nzRight></th>
                             </tr>
                             <tr>
-                                <th nzLeft>A</th>
-                                <th nzLeft>B</th>
-                                <th nzLeft>C</th>
-                                <th nzLeft>D</th>
-                                <th>E</th>
-                                <th>F</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th *ngIf="status.general" nzRight></th>
-                                <th *ngIf="status.general" nzRight></th>
-                                <th *ngIf="status.general" nzRight></th>
-                            </tr>
-                            <tr>
-                                <th nzLeft></th>
-                                <th nzLeft>Tổng cộng</th>
-                                <th nzLeft></th>
-                                <th nzLeft></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th>{{Op.fmtNum(total.giaTri)}}</th>
-                                <th *ngIf="status.general" nzRight></th>
-                                <th *ngIf="status.general" nzRight></th>
-                                <th *ngIf="status.general" nzRight></th>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col" nzLeft>C</th>
+                                <th scope="col" nzLeft>D</th>
+                                <th scope="col">E</th>
+                                <th scope="col">F</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col" *ngIf="status.general" nzRight></th>
+                                <th scope="col" *ngIf="status.general" nzRight></th>
+                                <th scope="col" *ngIf="status.general" nzRight></th>
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td nzLeft></td>
+                                <td nzLeft>Tổng cộng</td>
+                                <td nzLeft></td>
+                                <td nzLeft></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{Op.fmtNum(total.giaTri)}}</td>
+                                <td *ngIf="status.general" nzRight></td>
+                                <td *ngIf="status.general" nzRight></td>
+                                <td *ngIf="status.general" nzRight></td>
+                            </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                     <td [attr.rowspan]="data.unitSpan" [hidden]="!data.unitSpan" nzLeft>
@@ -180,9 +180,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

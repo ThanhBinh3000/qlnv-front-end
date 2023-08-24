@@ -24,110 +24,110 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr *ngIf="childUnit.length != 0">
-                                <th nzWidth="50px" nzLeft></th>
-                                <th nzWidth="400px" nzLeft></th>
-                                <th colspan="11"></th>
-                                <th *ngFor="let item of childUnit" colspan="10">{{item.tenDvi}}</th>
+                                <th scope="col" nzWidth="50px" nzLeft></th>
+                                <th scope="col" nzWidth="400px" nzLeft></th>
+                                <th scope="colgroup" colspan="11"></th>
+                                <th scope="colgroup" *ngFor="let item of childUnit" colspan="10">{{item.tenDvi}}</th>
                             </tr>
                             <tr>
-                                <th rowspan="3" nzWidth="50px" nzLeft>STT</th>
-                                <th rowspan="3" nzWidth="400px" nzLeft>Danh mục hàng DTQG</th>
-                                <th rowspan="3">Đơn vị tính</th>
-                                <th colspan="3">Số lượng</th>
-                                <th colspan="7">Giá trị bảo hiểm (VNĐ)</th>
+                                <th scope="col" rowspan="3" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" rowspan="3" nzWidth="400px" nzLeft>Danh mục hàng DTQG</th>
+                                <th scope="col" rowspan="3">Đơn vị tính</th>
+                                <th scope="colgroup" colspan="3">Số lượng</th>
+                                <th scope="colgroup" colspan="7">Giá trị bảo hiểm (VNĐ)</th>
                                 <ng-container *ngFor="let item of childUnit">
-                                    <th colspan="3">Số lượng</th>
-                                    <th colspan="7">Giá trị bảo hiểm (VNĐ)</th>
+                                    <th scope="colgroup" colspan="3">Số lượng</th>
+                                    <th scope="colgroup" colspan="7">Giá trị bảo hiểm (VNĐ)</th>
                                 </ng-container>
                             </tr>
                             <tr>
-                                <th rowspan="2">Kho từ {{khoiTich}} m3 trở lên</th>
-                                <th rowspan="2">Kho dưới {{khoiTich}} m3</th>
-                                <th rowspan="2">Tổng SL</th>
-                                <th colspan="3">Kho từ {{khoiTich}} m3 trở lên</th>
-                                <th colspan="3">Kho dưới {{khoiTich}} m3</th>
-                                <th rowspan="2">Tổng GT</th>
+                                <th scope="col" rowspan="2">Kho từ {{khoiTich}} m3 trở lên</th>
+                                <th scope="col" rowspan="2">Kho dưới {{khoiTich}} m3</th>
+                                <th scope="col" rowspan="2">Tổng SL</th>
+                                <th scope="colgroup" colspan="3">Kho từ {{khoiTich}} m3 trở lên</th>
+                                <th scope="colgroup" colspan="3">Kho dưới {{khoiTich}} m3</th>
+                                <th scope="col" rowspan="2">Tổng GT</th>
                                 <ng-container *ngFor="let item of childUnit">
-                                    <th rowspan="2"> Kho từ {{khoiTich}} m3 trở lên</th>
-                                    <th rowspan="2"> Kho dưới {{khoiTich}} m3</th>
-                                    <th rowspan="2"> Tổng SL</th>
-                                    <th colspan="3"> Kho từ {{khoiTich}} m3 trở lên</th>
-                                    <th colspan="3"> Kho dưới {{khoiTich}} m3</th>
-                                    <th rowspan="2"> Tổng GT</th>
+                                    <th scope="col" rowspan="2"> Kho từ {{khoiTich}} m3 trở lên</th>
+                                    <th scope="col" rowspan="2"> Kho dưới {{khoiTich}} m3</th>
+                                    <th scope="col" rowspan="2"> Tổng SL</th>
+                                    <th scope="colgroup" colspan="3"> Kho từ {{khoiTich}} m3 trở lên</th>
+                                    <th scope="colgroup" colspan="3"> Kho dưới {{khoiTich}} m3</th>
+                                    <th scope="col" rowspan="2"> Tổng GT</th>
                                 </ng-container>
                             </tr>
                             <tr>
-                                <th>Giá trị</th>
-                                <th>Tỷ lệ phí bảo hiểm</th>
-                                <th>Giá trị bảo hiểm</th>
-                                <th>Giá trị</th>
-                                <th>Tỷ lệ phí bảo hiểm</th>
-                                <th>Giá trị bảo hiểm</th>
+                                <th scope="col">Giá trị</th>
+                                <th scope="col">Tỷ lệ phí bảo hiểm</th>
+                                <th scope="col">Giá trị bảo hiểm</th>
+                                <th scope="col">Giá trị</th>
+                                <th scope="col">Tỷ lệ phí bảo hiểm</th>
+                                <th scope="col">Giá trị bảo hiểm</th>
                                 <ng-container *ngFor="let item of childUnit">
-                                    <th>Giá trị</th>
-                                    <th>Tỷ lệ phí bảo hiểm</th>
-                                    <th>Giá trị bảo hiểm</th>
-                                    <th>Giá trị</th>
-                                    <th>Tỷ lệ phí bảo hiểm</th>
-                                    <th>Giá trị bảo hiểm</th>
+                                    <th scope="col">Giá trị</th>
+                                    <th scope="col">Tỷ lệ phí bảo hiểm</th>
+                                    <th scope="col">Giá trị bảo hiểm</th>
+                                    <th scope="col">Giá trị</th>
+                                    <th scope="col">Tỷ lệ phí bảo hiểm</th>
+                                    <th scope="col">Giá trị bảo hiểm</th>
                                 </ng-container>
                             </tr>
                             <tr>
-                                <th nzLeft>A</th>
-                                <th nzLeft>B</th>
-                                <th>C</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6=4*5</th>
-                                <th>7</th>
-                                <th>8</th>
-                                <th>9=7*8</th>
-                                <th>10=6+9</th>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col">C</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5</th>
+                                <th scope="col">6=4*5</th>
+                                <th scope="col">7</th>
+                                <th scope="col">8</th>
+                                <th scope="col">9=7*8</th>
+                                <th scope="col">10=6+9</th>
                                 <ng-container *ngFor="let item of childUnit">
-                                    <th>(1)</th>
-                                    <th>(2)</th>
-                                    <th>(3)</th>
-                                    <th>(4)</th>
-                                    <th>(5)</th>
-                                    <th>(6)</th>
-                                    <th>(7)</th>
-                                    <th>(8)</th>
-                                    <th>(9)</th>
-                                    <th>(10)</th>
-                                </ng-container>
-                            </tr>
-                            <tr>
-                                <th nzLeft></th>
-                                <th nzLeft>Tổng cộng</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th>{{Op.fmtVal(total.gtTrenGt)}}</th>
-                                <th></th>
-                                <th>{{Op.fmtVal(total.gtTrenGtBh)}}</th>
-                                <th>{{Op.fmtVal(total.gtDuoiGt)}}</th>
-                                <th></th>
-                                <th>{{Op.fmtVal(total.gtDuoiGtBh)}}</th>
-                                <th>{{Op.fmtVal(total.tong)}}</th>
-                                <ng-container *ngFor="let item of total.lstDviCapDuoi">
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th>{{Op.fmtVal(item.gtTrenGt)}}</th>
-                                    <th></th>
-                                    <th>{{Op.fmtVal(item.gtTrenGtBh)}}</th>
-                                    <th>{{Op.fmtVal(item.gtDuoiGt)}}</th>
-                                    <th></th>
-                                    <th>{{Op.fmtVal(item.gtDuoiGtBh)}}</th>
-                                    <th>{{Op.fmtVal(item.tong)}}</th>
+                                    <th scope="col">(1)</th>
+                                    <th scope="col">(2)</th>
+                                    <th scope="col">(3)</th>
+                                    <th scope="col">(4)</th>
+                                    <th scope="col">(5)</th>
+                                    <th scope="col">(6)</th>
+                                    <th scope="col">(7)</th>
+                                    <th scope="col">(8)</th>
+                                    <th scope="col">(9)</th>
+                                    <th scope="col">(10)</th>
                                 </ng-container>
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td nzLeft></td>
+                                <td nzLeft>Tổng cộng</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{Op.fmtVal(total.gtTrenGt)}}</td>
+                                <td></td>
+                                <td>{{Op.fmtVal(total.gtTrenGtBh)}}</td>
+                                <td>{{Op.fmtVal(total.gtDuoiGt)}}</td>
+                                <td></td>
+                                <td>{{Op.fmtVal(total.gtDuoiGtBh)}}</td>
+                                <td>{{Op.fmtVal(total.tong)}}</td>
+                                <ng-container *ngFor="let item of total.lstDviCapDuoi">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{Op.fmtVal(item.gtTrenGt)}}</td>
+                                    <td></td>
+                                    <td>{{Op.fmtVal(item.gtTrenGtBh)}}</td>
+                                    <td>{{Op.fmtVal(item.gtDuoiGt)}}</td>
+                                    <td></td>
+                                    <td>{{Op.fmtVal(item.gtDuoiGtBh)}}</td>
+                                    <td>{{Op.fmtVal(item.tong)}}</td>
+                                </ng-container>
+                            </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <td nzLeft>
                                     {{getChiMuc(data.stt)}}
@@ -230,9 +230,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

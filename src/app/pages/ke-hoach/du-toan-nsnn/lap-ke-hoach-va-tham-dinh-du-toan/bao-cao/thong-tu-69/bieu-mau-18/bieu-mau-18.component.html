@@ -26,110 +26,110 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="4" nzWidth="50px" nzLeft>
+                                <th scope="col" rowspan="4" nzWidth="50px" nzLeft>
                                     STT
                                 </th>
-                                <th rowspan="4" nzWidth="300px" nzLeft>
+                                <th scope="col" rowspan="4" nzWidth="300px" nzLeft>
                                     Lĩnh vực chi
                                 </th>
-                                <th rowspan="4" class="text-col">
+                                <th scope="col" rowspan="4" class="text-col">
                                     Mục tiêu nhiệm vụ
                                 </th>
-                                <th rowspan="4" class="text-col">
+                                <th scope="col" rowspan="4" class="text-col">
                                     Cơ sở pháp lý/thực tiễn
                                 </th>
-                                <th rowspan="4" class="text-col">
+                                <th scope="col" rowspan="4" class="text-col">
                                     Hoạt động chủ yếu
                                 </th>
-                                <th rowspan="4" class="text-col">
+                                <th scope="col" rowspan="4" class="text-col">
                                     Nguồn kinh phí
                                 </th>
-                                <th colspan="12">
+                                <th scope="colgroup" colspan="12">
                                     Nhu cầu chi
                                 </th>
-                                <th rowspan="4" class="text-col">
+                                <th scope="col" rowspan="4" class="text-col">
                                     Ghi chú
                                 </th>
-                                <th rowspan="4" style="width: 60px;" *ngIf="status.general" nzRight></th>
+                                <th scope="col" rowspan="4" style="width: 60px;" *ngIf="status.general" nzRight></th>
                             </tr>
                             <tr>
-                                <th rowspan="3">
+                                <th scope="col" rowspan="3">
                                     Tổng số
                                 </th>
-                                <th colspan="2">
+                                <th scope="colgroup" colspan="2">
                                     Trong đó
                                 </th>
-                                <th colspan="9">
+                                <th scope="colgroup" colspan="9">
                                     Chia ra
                                 </th>
                             </tr>
                             <tr>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Chi cơ sở
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Chi mới
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Đầu tư phát triển
                                 </th>
-                                <th colspan="2">
+                                <th scope="colgroup" colspan="2">
                                     Trong đó
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Chi thường xuyên
                                 </th>
-                                <th colspan="2">
+                                <th scope="colgroup" colspan="2">
                                     Trong đó
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Chi DTQG
                                 </th>
-                                <th colspan="2">
+                                <th scope="colgroup" colspan="2">
                                     Trong đó
                                 </th>
                             </tr>
                             <tr>
-                                <th>
+                                <th scope="col">
                                     Chi cơ sở
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Chi mới
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Chi cơ sở
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Chi mới
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Chi cơ sở
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Chi mới
                                 </th>
                             </tr>
                             <tr>
-                                <th nzLeft>1</th>
-                                <th nzLeft>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6</th>
-                                <th>7=8+9</th>
-                                <th>8=11+14</th>
-                                <th>9=12+15</th>
-                                <th>10=11+12</th>
-                                <th>11</th>
-                                <th>12</th>
-                                <th>13=14+15</th>
-                                <th>14</th>
-                                <th>15</th>
-                                <th>16=17+18</th>
-                                <th>17</th>
-                                <th>18</th>
-                                <th>19</th>
-                                <th *ngIf="status.general" nzRight></th>
+                                <th scope="col" nzLeft>1</th>
+                                <th scope="col" nzLeft>2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5</th>
+                                <th scope="col">6</th>
+                                <th scope="col">7=8+9</th>
+                                <th scope="col">8=11+14</th>
+                                <th scope="col">9=12+15</th>
+                                <th scope="col">10=11+12</th>
+                                <th scope="col">11</th>
+                                <th scope="col">12</th>
+                                <th scope="col">13=14+15</th>
+                                <th scope="col">14</th>
+                                <th scope="col">15</th>
+                                <th scope="col">16=17+18</th>
+                                <th scope="col">17</th>
+                                <th scope="col">18</th>
+                                <th scope="col">19</th>
+                                <th scope="col" *ngIf="status.general" nzRight></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -327,9 +327,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
