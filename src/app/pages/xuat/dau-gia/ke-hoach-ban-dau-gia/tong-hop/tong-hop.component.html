@@ -168,18 +168,13 @@
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XEM')&&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP'))"
-               (click)="redirectDetail(data.id,true)">
+            <a
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XEM')"
+              (click)="redirectDetail(data.id,true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')"
-              (click)="redirectDetail(data.id,false)">
-              <i class="fa fa-pencil" title="Sửa"></i>
-            </a>
-            <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD)  && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')"
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')"
               (click)="taoQdinh(data)">
               <i class="icon htvbdh_soanthao"></i>
             </a>
@@ -218,12 +213,12 @@
   </app-them-moi-tong-hop-ke-hoach-ban-dau-gia>
 </div>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-them-quyet-dinh-ban-dau-gia [dataTongHop]="dataTongHop" (showListEvent)="showTongHop()">
+  <app-them-quyet-dinh-ban-dau-gia [dataTongHop]="dataTongHop" [loaiVthh]="loaiVthh" (showListEvent)="showTongHop()">
   </app-them-quyet-dinh-ban-dau-gia>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [isView]="true" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
     </app-them-quyet-dinh-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>

@@ -172,15 +172,20 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   async bindingDataTongHop(dataTongHop?) {
     if (dataTongHop) {
-      this.formData.patchValue({
-        cloaiVthh: dataTongHop.cloaiVthh,
-        tenCloaiVthh: dataTongHop.tenCloaiVthh,
-        loaiVthh: dataTongHop.loaiVthh,
-        tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
-        phanLoai: 'TH',
-      })
-      await this.selectMaTongHop(this.formData.value.idThHdr);
+      if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD) {
+        this.formData.patchValue({
+          cloaiVthh: dataTongHop.cloaiVthh,
+          tenCloaiVthh: dataTongHop.tenCloaiVthh,
+          loaiVthh: dataTongHop.loaiVthh,
+          tenLoaiVthh: dataTongHop.tenLoaiVthh,
+          idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
+          phanLoai: 'TH',
+        })
+        await this.selectMaTongHop(this.formData.value.idThHdr);
+      } else {
+        await this.loadChiTiet(dataTongHop.idQdPd);
+        dataTongHop.trangThai == STATUS.DA_BAN_HANH_QD ? this.isView = true : this.isView = false;
+      }
     }
   }
 
@@ -235,9 +240,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         })
         this.canCuPhapLy = data.canCuPhapLy;
         this.fileDinhKem = data.fileDinhKem;
-      }
-      if (this.userService.isCuc()) {
-        this.maDviCuc = this.userInfo.MA_DVI
       }
       this.danhsachDx = data.children;
       await this.calculatorTable();

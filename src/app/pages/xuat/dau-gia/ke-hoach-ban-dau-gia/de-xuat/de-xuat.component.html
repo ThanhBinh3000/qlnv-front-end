@@ -290,7 +290,7 @@
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [isView]="true" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
     </app-them-quyet-dinh-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>
