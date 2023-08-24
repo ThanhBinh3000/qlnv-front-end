@@ -119,33 +119,17 @@
                                 <th nzLeft>
                                     Tổng Cộng
                                 </th>
-                                <th>
-                                    <!-- {{ Op.fmtNum(total.sluongTsanTdiemBcao) }} -->
-                                </th>
-                                <th>
-                                    <!-- {{ Op.fmtNum(total.sluongTsanDaNhan) }} -->
-                                </th>
-                                <th>
-                                    <!-- {{ Op.fmtNum(total.sluongTsanPduyet) }} -->
-                                </th>
-                                <th>
-                                    <!-- {{ Op.fmtNum(total.sluongTsanTcong) }} -->
-                                </th>
-                                <th>
-                                    <!-- {{ Op.fmtVal(total.tchuanDmucTda) }} -->
-                                </th>
-                                <th>
-                                    <!-- {{ Op.fmtNum(total.dtoanDnghiSluong) }} -->
-                                </th>
-                                <th>
-                                    <!-- {{ Op.fmtVal(total.dtoanDnghiMgia) }} -->
-                                </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
                                 <th>
                                     {{ Op.fmtVal(total.thanhTien) }}
                                 </th>
-                                <th *ngIf="status.viewAppVal">
-                                    <!-- {{ Op.fmtNum(total.tdinhSluong) }} -->
-                                </th>
+                                <th *ngIf="status.viewAppVal"> </th>
                                 <th *ngIf="status.viewAppVal">
                                     {{ Op.fmtVal(total.tdinhTtien) }}
                                 </th>
@@ -394,10 +378,6 @@
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
                 </button>
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
-                </button> -->
                 <button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>

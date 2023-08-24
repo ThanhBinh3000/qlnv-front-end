@@ -42,12 +42,6 @@
                                 </ng-template>
                             </div>
                         </div>
-                        <!-- <div class="canphai">
-                            <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
-                                <i class="fa fa-trash-o"></i>
-                                <span>Xóa</span>
-                            </button>
-                        </div> -->
                     </div>
                     <nz-table nzBordered class="table__body" [nzScroll]="{ x: scrollX}">
                         <thead>
@@ -64,8 +58,6 @@
                                 <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
                                 <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
                                 <th style="width: 60px;" rowspan="2" *ngIf="status.save" nzRight></th>
-                                <!-- <th style="width: 40px;" rowspan="2" *ngIf="status" nzRight> -->
-                                <!-- </th> -->
                             </tr>
                             <tr>
                                 <th>Giá hạch toán</th>
@@ -178,25 +170,6 @@
                                                 (ngModelChange)="editCache[data.id].data.changeModel()" />
                                         </td>
                                     </ng-template>
-                                    <!-- <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.soLuongKhoach" />
-                                    </td>
-                                    
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.dgGiaKhoach"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td>
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.dgGiaBanTthieu" />
-                                    </td>
-                                    <td>
-                                        <input class="money-input" currencyMask [options]="Op.amount"
-                                            [(ngModel)]="editCache[data.id].data.dgGiaBanTte"
-                                            (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                    </td> -->
                                     <td>
                                         {{ Op.fmtVal(editCache[data.id].data.ttGiaHtoan) }}
                                     </td>
@@ -222,10 +195,6 @@
                                             Hủy
                                         </a>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <label *ngIf="data.level > 0" nz-checkbox [nzValue]="data.id"
-                                            [(ngModel)]="data.checked" (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>
@@ -289,10 +258,6 @@
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
                 </button>
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="gen.doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
-                </button> -->
                 <button type="button" class="btn btn-sub" (click)="save('5')" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>

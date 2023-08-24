@@ -1,5 +1,4 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
-    <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
         <ng-container *ngFor="let data of tabList">
             <li *ngIf="data.status" [nzSelected]="data.isSelected" nz-menu-item (click)="selectTab(data.code)">
@@ -34,21 +33,5 @@
             <app-von-ban-theo-don-gia-mua [dataInfo]="data" (dataChange)="changeTab($event)">
             </app-von-ban-theo-don-gia-mua>
         </ng-container>
-        <!-- <ng-container *ngIf="tabSelected == 'nop'">
-            <app-danh-sach-von-ban [dataInfo]="data" (dataChange)="changeTab($event)">
-            </app-danh-sach-von-ban>
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 'gn'">
-            <app-danh-sach-von-ban [dataInfo]="data" (dataChange)="changeTab($event)">
-            </app-danh-sach-von-ban>
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 'hopdong'">
-            <app-von-ban-theo-hop-dong [dataInfo]="data" (dataChange)="changeTab($event)">
-            </app-von-ban-theo-hop-dong>
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 'dongia'">
-            <app-von-ban-theo-don-gia [dataInfo]="data" (dataChange)="changeTab($event)">
-            </app-von-ban-theo-don-gia>
-        </ng-container> -->
     </div>
 </div>

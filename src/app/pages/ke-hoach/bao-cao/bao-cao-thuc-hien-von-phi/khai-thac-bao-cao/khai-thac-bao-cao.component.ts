@@ -13,7 +13,7 @@ import { Search, Vp } from '../bao-cao-thuc-hien-von-phi.constant';
 @Component({
     selector: 'app-khai-thac-bao-cao',
     templateUrl: './khai-thac-bao-cao.component.html',
-    styleUrls: ['./khai-thac-bao-cao.component.scss'],
+    // styleUrls: ['./khai-thac-bao-cao.component.scss'],
 })
 export class KhaiThacBaoCaoComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
