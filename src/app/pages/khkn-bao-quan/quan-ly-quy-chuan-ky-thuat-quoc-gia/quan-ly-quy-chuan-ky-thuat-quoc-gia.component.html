@@ -111,7 +111,7 @@
       <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
           <tr>
-            <th width="45px">
+            <th nzWidth="45px">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
@@ -125,8 +125,8 @@
             <th>Ngày hiệu lực</th>
             <th>Ngày hết hiệu lực</th>
             <th>Trạng thái nhập dữ liệu</th>
-            <th>Tình trạng</th>
-            <th>Hành động</th>
+            <th nzWidth="120px">Tình trạng</th>
+            <th nzWidth="120px">Hành động</th>
           </tr>
           <tr>
             <th></th>

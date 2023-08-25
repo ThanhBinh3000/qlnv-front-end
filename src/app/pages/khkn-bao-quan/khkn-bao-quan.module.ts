@@ -21,6 +21,6 @@ import { TimKiemVanBanComponent } from './quan-ly-quy-chuan-ky-thuat-quoc-gia/th
         TieuChuanKyThuatComponent,
         TimKiemVanBanComponent,
     ],
-    imports: [CommonModule, KhknBaoQuanRoutingModule, ComponentsModule, MainModule, ThongTinQuanLyCongTrinhNghienCuuModule],
+  imports: [CommonModule, KhknBaoQuanRoutingModule, ComponentsModule, MainModule, ThongTinQuanLyCongTrinhNghienCuuModule],
 })
 export class KhknBaoQuanModule { }
