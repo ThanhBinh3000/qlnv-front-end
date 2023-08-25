@@ -109,9 +109,14 @@
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="data.trangThai ==STATUS.DU_THAO"
+              *ngIf="data.trangThai ==STATUS.DU_THAO||data.trangThai ==STATUS.TU_CHOI_LDV||  data.trangThai== STATUS.TU_CHOI_LDTC"
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a
+              *ngIf="data.trangThai== STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDTC"
+              (click)="redirectDetail(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a *ngIf="data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
