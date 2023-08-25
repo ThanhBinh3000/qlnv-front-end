@@ -19,4 +19,9 @@ export class HopdongPhulucHopdongService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  dsHDongByListId(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/multi`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }
