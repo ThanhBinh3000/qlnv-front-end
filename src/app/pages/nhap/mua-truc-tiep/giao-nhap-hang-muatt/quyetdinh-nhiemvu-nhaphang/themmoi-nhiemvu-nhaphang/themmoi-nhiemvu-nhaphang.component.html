@@ -133,16 +133,22 @@
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="4" *ngIf=" radioValue == '01'">
-                    <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzRequired>
-                            Chọn 1 hợp đồng đã ký cấp Cục
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogHopDong()">
-                                <input [readonly]="true" nz-input formControlName="soHd" readonly="true" />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
+<!--                    <nz-form-item class="form-item">-->
+<!--                        <nz-form-label [nzNoColon]="true" nzRequired>-->
+<!--                            Chọn 1 hợp đồng đã ký cấp Cục-->
+<!--                        </nz-form-label>-->
+<!--                        <nz-form-control [nzErrorTip]="error">-->
+<!--                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogHopDong()">-->
+<!--                                <input [readonly]="true" nz-input formControlName="soHd" readonly="true" />-->
+<!--                            </nz-input-group>-->
+<!--                        </nz-form-control>-->
+<!--                    </nz-form-item>-->
+                  <nz-form-label [nzNoColon]="true" nzRequired>
+                    Chọn các hợp đồng đã ký cấp Cục
+                  </nz-form-label>
+                  <nz-select [nzDisabled]="formData.value.id != null" [(ngModel)]="dsHongDong" [ngModelOptions]="{standalone: true}" [nzSize]="size" nzMode="tags" (ngModelChange)="handleTagValueChange()" nzPlaceHolder="Please select">
+                    <nz-option *ngFor="let option of listHopDong" [nzLabel]="option.soHd" [nzValue]="option.id"></nz-option>
+                  </nz-select>
                 </div>
                 <div nz-col [nzSpan]="4" *ngIf=" radioValue == '02'">
                     <nz-form-item class="form-item">

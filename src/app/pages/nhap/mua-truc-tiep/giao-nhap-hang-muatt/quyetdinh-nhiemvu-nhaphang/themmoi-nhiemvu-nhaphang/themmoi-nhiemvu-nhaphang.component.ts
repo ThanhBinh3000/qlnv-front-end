@@ -32,6 +32,7 @@ import { FormArray } from '@angular/forms';
 import {FILETYPE} from "../../../../../../constants/fileType";
 import {QuyetDinhPheDuyetKeHoachMTTService} from "../../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
 import {ChaogiaUyquyenMualeService} from "../../../../../../services/chaogia-uyquyen-muale.service";
+import {NzSelectSizeType} from "ng-zorro-antd/select";
 @Component({
   selector: 'app-themmoi-nhiemvu-nhaphang',
   templateUrl: './themmoi-nhiemvu-nhaphang.component.html',
@@ -96,6 +97,12 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   listNganKhoEdit: any[] = [];
   listNganLoEdit: any[] = [];
 
+  listOfOption: Array<{ label: string; value: string }> = [];
+  size: NzSelectSizeType = 'default';
+  singleValue = 'a10';
+  multipleValue = ['a10', 'c12'];
+  dsHongDong = [];
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -114,7 +121,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     private helperService: HelperService,
   ) {
     this.formData = this.fb.group({
-      id: [''],
+      id: [null],
       soQd: [''],
       ngayQd: [''],
       tenHd: [''],
@@ -182,8 +189,10 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   }
 
   saveEdit (i, y){
-    this.dataTable[i].children[y] = cloneDeep(this.rowItemEdit);
-    this.dataTable[i].children[y].edit = false;
+      this.dataTable[i].children[y] = cloneDeep(this.rowItemEdit);
+    if(this.validatorDdiemNhap(i,true)){
+      this.dataTable[i].children[y].edit = false;
+    }
   }
 
   cancelEdit (i, y){
@@ -205,7 +214,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     }
     let res = await this.hopdongPhulucHopdongService.dsTaoQd(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listHopDong = res.data.content;
+      this.listHopDong = res.data.content.filter(x => x.maDvi.includes(this.userInfo.MA_DVI));
+      console.log(this.listHopDong, "lisst hd")
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -230,6 +240,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
         this.spinner.show();
         let res = await this.hopdongPhulucHopdongService.getDetail(data.id);
         if (res.msg == MESSAGE.SUCCESS) {
+          console.log(res.data)
           this.dataTable = [];
           const data = res.data;
           this.formData.patchValue({
@@ -441,6 +452,9 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.setValidator(isGuiDuyet)
+    if(this.checkListHopDong()){
+      return;
+    }
     this.helperService.markFormGroupTouched(this.formData);
     await this.spinner.show();
     let body = this.formData.value;
@@ -502,6 +516,13 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     }
   }
 
+  checkListHopDong(){
+    if(this.listHopDong.length > this.dsHongDong.length){
+      this.notification.error(MESSAGE.ERROR, 'Phải chọn tất cả các hợp đồng của cục trước khi tạo QĐ');
+      return true;
+    }
+  }
+
 
   redirectQdNhapXuat() {
     this.showListEvent.emit();
@@ -533,18 +554,19 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             tenTrangThai: data.tenTrangThai,
             lyDoTuChoi: data.ldoTuchoi,
             idHd: data.idHd,
-            soLuong: data.soLuong,
+            soLuong: data.hhQdGiaoNvNhangDtlList.find(x => x.maDvi.includes(this.userInfo.MA_DVI)).soLuong,
             donViTinh: data.donViTinh,
             soHd: data.soHd,
             tenHd: data.tenHd,
             tgianNkho: data.tgianNkho,
           });
-          console.log(this.isViewDetail);
+          this.dsHongDong = data.soHd.split(",")
+          console.log(this.dsHongDong);
           this.radioValue = data.loaiQd
           if (this.userService.isCuc()) {
             this.dataTable = data.hhQdGiaoNvNhangDtlList
           } else {
-            this.dataTable = data.hhQdGiaoNvNhangDtlList.filter(x => x.maDvi == this.userInfo.MA_DVI);
+            this.dataTable = data.hhQdGiaoNvNhangDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI));
           }
           if (data.fileDinhKems.length > 0) {
             data.fileDinhKems.forEach(item => {
@@ -711,8 +733,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   }
 
   themDiaDiemNhap(indexTable?) {
-    console.log(this.validatorDdiemNhap(indexTable), 1);
-    console.log(this.validateButtonThem('ddiemNhap'), 2);
+    debugger
     if (this.validatorDdiemNhap(indexTable) && this.validateButtonThem('ddiemNhap')) {
       this.dataTable[indexTable].children = [...this.dataTable[indexTable].children, this.rowItem]
       this.rowItem = new ThongTinDiaDiemNhap();
@@ -724,15 +745,22 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     this.rowItem = new ThongTinDiaDiemNhap();
   }
 
-  validatorDdiemNhap(indexTable): boolean {
+  validatorDdiemNhap(indexTable, isEdit?): boolean {
     let soLuong = 0;
-
-    soLuong += this.rowItem.soLuong
+    debugger
+    const sum = this.dataTable[indexTable].children.reduce((prev, cur) => {
+      prev += cur.soLuong;
+      return prev;
+    }, 0);
+    if(isEdit){
+      soLuong += sum
+    }else{
+      soLuong += this.rowItem.soLuong + sum
+    }
     if (soLuong > +this.formData.value.soLuong) {
       this.notification.error(MESSAGE.ERROR, "Số lượng thêm mới không được vượt quá số lượng của chi cục")
       return false;
     }
-
     return true
   }
 
@@ -820,8 +848,9 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
           if (element && element.capDvi == '3' && element.children) {
             this.listDiemKho = [
               ...this.listDiemKho,
-              ...element.children
+              ...element.children.filter(x => x.type == 'MLK')
             ]
+            console.log(this.listDiemKho, "diem kho")
           }
           if (element && element.capDvi == '2' && element.children) {
             this.listChiCuc = [
@@ -990,6 +1019,47 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
           fileDinhKemQd.idVirtual = new Date().getTime();
           this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
         });
+    }
+  }
+
+  async handleTagValueChange() {
+    console.log('Tag value changed:', this.dsHongDong);
+    let body = {
+      ids: this.dsHongDong
+    }
+    let res = await this.hopdongPhulucHopdongService.dsHDongByListId(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data)
+      let soHd = ''
+      let tenHd = ''
+      let idHd = ''
+      let soLuong: number = 0;
+      res.data.forEach(item =>{
+        this.dataTable = [];
+        soHd = soHd + item.soHd + ","
+        tenHd = tenHd + item.tenHd + ","
+        idHd = idHd + item.id + ","
+        this.formData.patchValue({
+          soHd: soHd.substring(0, soHd.length - 1),
+          tenHd: tenHd.substring(0, tenHd.length - 1),
+          idHd: idHd.substring(0, tenHd.length - 1),
+          loaiVthh: item.loaiVthh,
+          cloaiVthh: item.cloaiVthh,
+          tenLoaiVthh: item.tenLoaiVthh,
+          tenCloaiVthh: item.tenCloaiVthh,
+          donViTinh: item.dviTinh,
+          idQdPdKq: item.idQdKq,
+          soQdPdKq: item.soQd,
+          soLuong: soLuong += item.soLuong,
+          tgianNkho: item.tgianKthuc,
+          ngayKyHd: item.ngayKy,
+          trichYeu: item.trichYeu
+        })
+        this.dataTable = item.children
+      })
+      console.log(this.formData.value)
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg)
     }
   }
 }
