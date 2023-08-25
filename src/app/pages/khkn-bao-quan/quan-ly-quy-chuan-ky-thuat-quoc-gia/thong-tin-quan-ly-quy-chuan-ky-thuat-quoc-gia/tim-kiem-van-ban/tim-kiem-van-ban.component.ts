@@ -71,7 +71,7 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       await this.loadLoaiHangHoa();
-      await this.timKiem();
+      // await this.timKiem();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -85,7 +85,26 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
     if (!this.formData.valid) {
       return;
     }
-    this.search();
+    try {
+      let body = this.formData.value
+      body.paggingReq = {
+        limit: 1000,
+        page: this.page - 1
+      }
+      let res = await this.khCnQuyChuanKyThuat.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content.filter(item => item.trangThaiHl == '01');
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   async clearSearch() {
@@ -138,12 +157,14 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
       }
     }
   }
-
+  changeLoaiVthh() {
+    this.timKiem();
+  }
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.detail.maDvi = this.userInfo.MA_DVI;
     this.detail.tenDvi = this.userInfo.TEN_DVI;
-    await this.search();
+    await this.timKiem();
   }
 
   handleOk() {
