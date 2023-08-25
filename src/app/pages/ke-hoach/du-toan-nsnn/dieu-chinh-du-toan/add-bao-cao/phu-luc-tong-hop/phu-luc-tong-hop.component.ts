@@ -660,14 +660,6 @@ export class PhuLucTongHopComponent implements OnInit {
             { t: 0, b: 1, l: 2, r: 2, val: 'Tổng điều chỉnh giảm' },
             { t: 0, b: 1, l: 3, r: 3, val: 'Tổng điều chỉnh tăng' },
         ]
-
-        // this.lstDvi.forEach((item, index) => {
-        //     const left = 1 + index ;
-        //     header.push({ t: 4, b: 4, l: left + 1, r: left + 10, val: item.tenDvi })
-        //     header.push({ t: 5, b: 5, l: left + 1, r: left + 3, val: 'Tổng điều chỉnh giảm' })
-        //     header.push({ t: 6, b: 7, l: left + 1, r: left + 1, val: 'Tổng điều chỉnh tăng' })
-        // })
-
         const fieldOrder = [
             "maNoiDung",
             "tongCong",

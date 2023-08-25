@@ -142,6 +142,8 @@ export class PhuLuc7Component implements OnInit {
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
     total: ItemData = new ItemData({});
+    tongDcTang: ItemData = new ItemData({});
+    tongDcGiam: ItemData = new ItemData({});
     maDviTien: string = '1';
     namBcao: number;
     //danh muc
@@ -365,6 +367,7 @@ export class PhuLuc7Component implements OnInit {
         // this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.tinhTong();
         this.getTotal();
+        this.getInTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -601,6 +604,7 @@ export class PhuLuc7Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.updateEditCache();
         this.sum(this.lstCtietBcao[index].stt);
+        this.getInTotal();
         this.tinhTong();
         this.getTotal();
     };
@@ -887,6 +891,23 @@ export class PhuLuc7Component implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.quanLyVonPhiService.downFile(file, doc);
+    };
+
+    getInTotal() {
+        this.tongDcTang.clear()
+        this.tongDcGiam.clear()
+        this.lstCtietBcao.forEach(item => {
+            const str = item.stt
+            if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
+                if (item.dtoanDnghiDchinh < 0) {
+                    this.tongDcGiam.sum(item);
+                }
+                else {
+                    this.tongDcTang.sum(item);
+                }
+            }
+        })
+
     }
 
     exportToExcel() {
@@ -973,7 +994,58 @@ export class PhuLuc7Component implements OnInit {
             for (let i = 0; i < level; i++) {
                 item.stt = '   ' + item.stt;
             }
+        });
+
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'tenHang') {
+                row[field] = 'Phát sinh điều chỉnh giảm'
+            } else {
+                if (![
+                    'sluongKhGiao',
+                    'sluongThienTte',
+                    'sluongThienUocThien',
+                    'sluongThienCong',
+                    'sluongThienDmuc',
+                    'sluongThienTtien',
+                    'dtoanGiaoLke',
+                ].includes(field)) {
+                    row[field] = (!this.tongDcGiam[field] && this.tongDcGiam[field] !== 0) ? '' : this.tongDcGiam[field];
+                } else {
+                    row[field] = '';
+                }
+            }
         })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'tenHang') {
+                row[field] = 'Phát sinh điều chỉnh tăng'
+            } else {
+                if (![
+                    'sluongKhGiao',
+                    'sluongThienTte',
+                    'sluongThienUocThien',
+                    'sluongThienCong',
+                    'sluongThienDmuc',
+                    'sluongThienTtien',
+                    'dtoanGiaoLke',
+                ].includes(field)) {
+                    row[field] = (!this.tongDcTang[field] && this.tongDcTang[field] !== 0) ? '' : this.tongDcTang[field];
+                } else {
+                    row[field] = '';
+                }
+            }
+        })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenHang' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
