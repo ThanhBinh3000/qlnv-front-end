@@ -149,13 +149,17 @@
                                   <td>{{bbNghiemThuBq.kinhPhiTcPd}}</td>
                                   <td>{{bbNghiemThuBq.tenTrangThai}}</td>
                                   <td>
-                                    <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XEM')"
+                                    <a *ngIf="hienThiXem(bbNghiemThuBq)"
                                        (click)="redirectToChiTiet(true, bbNghiemThuBq.id)">
                                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                                     </a>
-                                    <a *ngIf="(bbNghiemThuBq.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM') || bbNghiemThuBq.trangThai == STATUS.TU_CHOI_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM') || bbNghiemThuBq.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_TK') || bbNghiemThuBq.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_KT') || bbNghiemThuBq.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_LDCC'))"
+                                    <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM')"
                                        (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
                                       <i class="fa fa-pencil" title="Sửa"></i>
+                                    </a>
+                                    <a *ngIf="(bbNghiemThuBq.trangThai == STATUS.TU_CHOI_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM') || bbNghiemThuBq.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_TK') || bbNghiemThuBq.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_KT') || bbNghiemThuBq.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_LDCC'))"
+                                       (click)="redirectToChiTiet(true, bbNghiemThuBq.id)">
+                                      <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
                                     </a>
                                     <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XOA')"
                                        (click)="xoaItem(bbNghiemThuBq)">

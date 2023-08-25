@@ -243,7 +243,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
 
   bindingDataDdNhap(data, isDetail?: boolean) {
     if (!isDetail) {
-      this.dataTable = data.listPhieuKtraCl;
+      this.dataTable = data.listPhieuKtraCl.filter(x => x.trangThai == STATUS.DA_DUYET_LDCC);
       this.dataTable.forEach(item => {
         item.soPhieuKtraCl = item.soPhieu;
         item.soPhieuNhapKho = item.phieuNhapKhoHdr.soPhieuNhapKho;

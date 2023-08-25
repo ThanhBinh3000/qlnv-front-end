@@ -215,13 +215,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
     this.formData.value.soQuyetDinh = this.formData.value.soQuyetDinh + this.maQd;
     if (this.formData.value.loai == "XUAT_MAU") {
       if (this.formData.value.loaiCanCu == "TONG_HOP") {
-        if (this.dataTh && this.dataThEdit) {
-          this.dataTh.forEach(item => {
-            item.maDviTsan = this.dataThEdit[item.id]?.maDviTsan ? this.dataThEdit[item.id].maDviTsan : null;
-            item.slLayMau = this.dataThEdit[item.id]?.slLayMau ? this.dataThEdit[item.id]?.slLayMau : 0;
-          })
-        }
-        this.formData.value.qdGiaonvXhDtl = this.dataTh;
+        this.formData.value.qdGiaonvXhDtl = this.conVertTreeToList(this.dataThTree);
       } else if (this.formData.value.loaiCanCu == "PHIEU_KDCL") {
         let body = this.formData.value;
         if (body.soCanCu && isArray(body.soCanCu)) {

@@ -573,7 +573,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
             }
             ppLayMauOptions.push(option);
             if(this.formData.value.ppLayMau != null){
-              ppLayMauOptions.find(x => x.value == this.formData.value.ppLayMau).checked = true;
+              ppLayMauOptions.find(x => x.value == this.formData.value.ppLayMau) ? ppLayMauOptions.find(x => x.value == this.formData.value.ppLayMau).checked = true : ppLayMauOptions;
             }
             console.log(ppLayMauOptions)
             this.formData.patchValue({

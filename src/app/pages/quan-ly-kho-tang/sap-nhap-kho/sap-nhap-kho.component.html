@@ -1,0 +1,14 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Quyết định điều chuyển, sáp nhập kho
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-quyet-dinh-dieu-chuyen-sap-nhap-kho></app-quyet-dinh-dieu-chuyen-sap-nhap-kho>
+    </ng-container>
+  </div>
+</div>
