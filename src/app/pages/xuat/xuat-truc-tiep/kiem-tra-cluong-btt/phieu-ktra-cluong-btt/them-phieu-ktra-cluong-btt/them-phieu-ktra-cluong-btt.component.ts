@@ -374,7 +374,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       this.formData.controls["namKh"].setValidators([Validators.required]);
       this.formData.controls["maDvi"].setValidators([Validators.required]);
       this.formData.controls["tenDvi"].setValidators([Validators.required]);
-      this.formData.controls["maQhns"].setValidators([Validators.required]);
+      // this.formData.controls["maQhns"].setValidators([Validators.required]);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soPhieu"].setValidators([Validators.required]);
       this.formData.controls["loaiVthh"].setValidators([Validators.required]);
@@ -389,7 +389,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       this.formData.controls["namKh"].clearValidators();
       this.formData.controls["maDvi"].clearValidators();
       this.formData.controls["tenDvi"].clearValidators();
-      this.formData.controls["maQhns"].clearValidators();
+      // this.formData.controls["maQhns"].clearValidators();
       this.formData.controls["soQdNv"].clearValidators();
       this.formData.controls["soPhieu"].clearValidators();
       this.formData.controls["loaiVthh"].clearValidators();

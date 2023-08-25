@@ -155,16 +155,16 @@
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a
-                        *ngIf="lv2.trangThai ==STATUS.TU_CHOI_LDCC||  lv2.trangThai== STATUS.TU_CHOI_KTVBQ|| lv2.trangThai ==STATUS.DU_THAO"
+                        *ngIf="lv2.trangThai ==STATUS.TU_CHOI_LDCC||  lv2.trangThai== STATUS.TU_CHOI_KTVBQ|| lv2.trangThai ==STATUS.DU_THAO || lv2.trangThai == STATUS.TU_CHOI_KT"
                         (click)="redirectDetail(lv2.id, false)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a
-                        *ngIf="lv2.trangThai== STATUS.CHO_DUYET_LDCC || lv2.trangThai == STATUS.CHO_DUYET_KTVBQ"
+                        *ngIf="lv2.trangThai== STATUS.CHO_DUYET_LDCC || lv2.trangThai == STATUS.CHO_DUYET_KTVBQ|| lv2.trangThai == STATUS.CHO_DUYET_KT"
                         (click)="redirectDetail(lv2.id, true)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                       </a>
-                      <a *ngIf="lv2.trangThai == STATUS.DU_THAO || lv2.trangThai == STATUS.TU_CHOI_KTVBQ"
+                      <a *ngIf="lv2.trangThai == STATUS.DU_THAO "
                          (click)="delete(lv2)">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>

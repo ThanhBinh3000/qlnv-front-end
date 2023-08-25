@@ -18,18 +18,18 @@ import {saveAs} from 'file-saver';
   styleUrls: ['./thong-tin-dau-gia.component.scss']
 })
 export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
-
-  @Input()
-  loaiVthh: string;
-
+  @Input() loaiVthh: string;
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
-
   idDxBdg: number = 0;
   isViewDxBdg: boolean = false;
-
   idKqBdg: number = 0;
   isViewKqBdg: boolean = false;
+  listTrangThai: any[] = [
+    {ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật'},
+    {ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật'},
+    {ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật'},
+  ];
 
   constructor(
     httpClient: HttpClient,
@@ -48,48 +48,46 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       ngayKyQdPdKqBdgTu: null,
       ngayKyQdPdKqBdgDen: null,
       loaiVthh: null,
-      lastest: 1,
-      maDvi: null
-
     })
     this.filterTable = {
-      namKh: '',
+      nam: '',
       soQdPd: '',
-      ngayKyQd: '',
-      trichYeu: '',
-      soTrHdr: '',
-      idThHdr: '',
-      tenLoaiVthh: '',
+      soQdDcBdg: '',
+      soQdPdKqBdg: '',
+      soDxuat: '',
+      ngayKyQdPdKqBdg: '',
+      slDviTsan: '',
+      soDviTsanThanhCong: '',
+      soDviTsanKhongThanh: '',
       tenCloaiVthh: '',
-      soDviTsan: '',
-      slHdDaKy: '',
       tenTrangThai: '',
+      ketQuaDauGia: '',
     };
   }
 
   async ngOnInit() {
+    await this.spinner.show();
     try {
-      this.timKiem()
+      await this.timKiem()
       await this.searchDtl();
+      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      lastest: 1,
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem()
-    this.searchDtl();
+    await this.timKiem()
+    await this.search();
   }
 
   async searchDtl() {
