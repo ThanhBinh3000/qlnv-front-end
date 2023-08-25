@@ -57,8 +57,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
+            nzClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
@@ -284,7 +283,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
                 if (Status.check('reject', mcn)) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
                 }
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);

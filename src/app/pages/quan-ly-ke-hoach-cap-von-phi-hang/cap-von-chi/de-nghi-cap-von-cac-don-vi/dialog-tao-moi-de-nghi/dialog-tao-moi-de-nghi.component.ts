@@ -154,9 +154,9 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
                                 })
                                 temp.tongVonVaDtoanDaCap = Operator.sum([temp.lkCong, temp.dtoanDaGiao]);
                                 if (this.response.loaiDnghi == Cvnc.THOC || this.response.loaiDnghi == Cvnc.VTU) {
-                                    temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien, -temp.tongVonVaDtoanDaCap]);
+                                    temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien, -temp.phatViPham, -temp.tongVonVaDtoanDaCap]);
                                 } else {
-                                    temp.vonDnCapLanNay = Operator.sum([temp.gtHopDong, -temp.tongVonVaDtoanDaCap]);
+                                    temp.vonDnCapLanNay = Operator.sum([temp.gtHopDong, -temp.phatViPham, -temp.tongVonVaDtoanDaCap]);
                                 }
                                 this.response.lstCtiets.push(temp);
                             } else {
