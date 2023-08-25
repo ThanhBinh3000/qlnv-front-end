@@ -538,4 +538,18 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
     }
     return endValue.getTime() <= this.tuNgayKetThuc.getTime();
   };
+
+  hienThiXem(data){
+    if (this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XEM')) {
+      if(this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TK || data.trangThai == STATUS.TU_CHOI_KT || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+        return false;
+      } else if ((this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_TK') && data.trangThai == STATUS.CHO_DUYET_TK)
+        || (this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_KT') && data.trangThai == STATUS.CHO_DUYET_KT)
+        || (this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_LDCC') && data.trangThai == STATUS.CHO_DUYET_LDCC) ) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
 }

@@ -34,7 +34,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
 
   searchFilter = {
     soQuyetDinhNhap: '',
-    namKh: dayjs().get('year'),
+    namKh: '',
     soBbNhapDayKho: '',
     ngayBdauNhap: '',
     ngayKthucNhap: '',
@@ -62,6 +62,8 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
   allChecked = false;
   indeterminate = false;
   listNam: any[] = [];
+  tuNgayTao: Date | null = null;
+  denNgayTao: Date | null = null;
 
   filterTable = {
     soQuyetDinhNhap: '',
@@ -210,7 +212,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
 
   clearFilter() {
     this.searchFilter = {
-      namKh: dayjs().get('year'),
+      namKh: '',
       soQuyetDinhNhap: '',
       soBbNhapDayKho: '',
       ngayBdauNhap: '',
@@ -482,4 +484,18 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
       this.expandSet2.delete(id);
     }
   }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayTao) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayTao.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayTao) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayTao.getTime();
+  };
 }
