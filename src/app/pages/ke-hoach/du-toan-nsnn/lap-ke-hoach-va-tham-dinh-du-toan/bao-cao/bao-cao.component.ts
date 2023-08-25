@@ -82,8 +82,7 @@ export class BaoCaoComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
+            nzClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
@@ -355,7 +354,7 @@ export class BaoCaoComponent implements OnInit {
                 if (Status.check('reject', mcn)) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
                 }
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -420,7 +419,7 @@ export class BaoCaoComponent implements OnInit {
             } else {
                 baoCaoTemp.congVan = {
                     ...await this.quanLyVonPhiService.upFile(file, this.path),
-                    fileName: this.baoCao.congVan.fileName,
+                    fileName: this.baoCao.congVan?.fileName,
                 }
             }
         }
@@ -589,6 +588,8 @@ export class BaoCaoComponent implements OnInit {
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.nguoiBcao);
+        dataInfo.status.finish = dataInfo.status.finish && (this.userInfo?.sub == bieuMau.nguoiBcao);
+        dataInfo.status.ok = dataInfo.status.ok && (this.userInfo?.sub == bieuMau.nguoiBcao);
 
         let nzContent: ComponentType<any>;
         switch (bieuMau.maBieuMau) {
