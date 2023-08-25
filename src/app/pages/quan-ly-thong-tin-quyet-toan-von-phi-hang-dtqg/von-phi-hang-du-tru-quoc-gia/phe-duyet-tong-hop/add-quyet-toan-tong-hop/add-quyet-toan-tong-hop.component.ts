@@ -798,9 +798,15 @@ export class AddQuyetToanTongHopComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
                 return;
             } else {
-                lstCtietBcaoTemp.congVan = {
-                    ...await this.quanLyVonPhiService.upFile(file, this.path),
-                    fileName: this.congVan.fileName,
+                if (this.congVan) {
+                    lstCtietBcaoTemp.congVan = {
+                        ...await this.quanLyVonPhiService.upFile(file, this.path),
+                        fileName: this.congVan.fileName,
+                    }
+                }
+                else {
+                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+                    return;
                 }
             }
             this.fileDetail = null;
@@ -808,7 +814,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
             lstCtietBcaoTemp.congVan = this.congVan;
         }
 
-        if (!lstCtietBcaoTemp.congVan) {
+        if (!lstCtietBcaoTemp?.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }

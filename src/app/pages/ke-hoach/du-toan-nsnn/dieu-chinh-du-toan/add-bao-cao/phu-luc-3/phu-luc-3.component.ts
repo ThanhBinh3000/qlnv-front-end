@@ -35,6 +35,35 @@ export class ItemData {
     chenhLech: number;
     ykienDviCtren: string;
     ghiChu: string;
+
+    constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+        Object.assign(this, data);
+    }
+
+
+    clear() {
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number' && key != 'level') {
+                this[key] = null;
+            }
+        })
+    }
+
+    sum(data: ItemData) {
+        Object.keys(data).forEach(key => {
+            if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+                this[key] = Operator.sum([this[key], data[key]]);
+            }
+        })
+    }
+
+    request() {
+        const temp = Object.assign({}, this);
+        if (this.id?.length == 38) {
+            temp.id = null;
+        }
+        return temp;
+    }
 }
 
 export const amount1 = {
@@ -78,7 +107,9 @@ export class PhuLuc3Component implements OnInit {
         "dtoanDchinh",
         "dtoanVuTvqtDnghi",
     ];
-    total: ItemData = new ItemData();
+    total: ItemData = new ItemData({});
+    tongDcTang: ItemData = new ItemData({});
+    tongDcGiam: ItemData = new ItemData({});
     scrollX: string;
     editMoneyUnit = false;
     isDataAvailable = false;
@@ -146,14 +177,13 @@ export class PhuLuc3Component implements OnInit {
         }
 
         if (this.lstCtietBcao.length == 0) {
-            this.lstCtietBcao.push({
-                ...new ItemData(),
+            this.lstCtietBcao.push(new ItemData({
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
                 maNoiDung: this.userInfo.MA_DVI,
                 noiDung: this.userInfo.TEN_DVI,
                 loaiKhoan: "340-341"
-            })
+            }))
         } else if (!this.lstCtietBcao[0]?.stt) {
             let sttItem = 1
             this.lstCtietBcao.forEach(item => {
@@ -164,6 +194,7 @@ export class PhuLuc3Component implements OnInit {
         }
         this.getTotal();
         this.tinhTong();
+        this.getInTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -189,22 +220,22 @@ export class PhuLuc3Component implements OnInit {
         )
     }
 
-    updateAllChecked(): void {
-        if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-            this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-                ...item,
-                checked: true
-            }));
-        } else {
-            this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-                ...item,
-                checked: false
-            }));
-        }
-    }
+    // updateAllChecked(): void {
+    //     if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
+    //         this.lstCtietBcao = this.lstCtietBcao.map(item => ({
+    //             ...item,
+    //             checked: true
+    //         }));
+    //     } else {
+    //         this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+    //             ...item,
+    //             checked: false
+    //         }));
+    //     }
+    // }
 
     getTotal() {
-        this.total = new ItemData();
+        this.total = new ItemData({});
         this.lstCtietBcao.forEach(item => {
             item.chenhLech = Operator.sum([item.dtoanVuTvqtDnghi, - item.dtoanDchinh])
             if (item.level == 0) {
@@ -234,10 +265,7 @@ export class PhuLuc3Component implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            lstCtietBcaoTemp.push({
-                ...item,
-                id: item.id?.length == 38 ? null : item.id,
-            })
+            lstCtietBcaoTemp.push(item.request())
         })
 
         if (this.status.general) {
@@ -325,6 +353,7 @@ export class PhuLuc3Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.tinhTong();
         this.getTotal();
+        this.getInTotal();
         this.updateEditCache();
     };
 
@@ -332,7 +361,7 @@ export class PhuLuc3Component implements OnInit {
         this.lstCtietBcao.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
-                data: { ...item }
+                data: new ItemData(item)
             };
         });
     };
@@ -342,7 +371,7 @@ export class PhuLuc3Component implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.lstCtietBcao[index] },
+            data: new ItemData(this.lstCtietBcao[index]),
             edit: false
         };
         this.tinhTong();
@@ -409,6 +438,23 @@ export class PhuLuc3Component implements OnInit {
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.quanLyVonPhiService.downFile(file, doc);
     };
+
+    getInTotal() {
+        this.tongDcTang.clear()
+        this.tongDcGiam.clear()
+        this.lstCtietBcao.forEach(item => {
+            const str = item.stt
+            if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
+                if (item.dtoanDchinh < 0) {
+                    this.tongDcGiam.sum(item);
+                }
+                else {
+                    this.tongDcTang.sum(item);
+                }
+            }
+        })
+
+    }
 
     exportToExcel() {
         if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
@@ -482,7 +528,54 @@ export class PhuLuc3Component implements OnInit {
             for (let i = 0; i < level; i++) {
                 item.stt = '   ' + item.stt;
             }
+        });
+
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'noiDung') {
+                row[field] = 'Phát sinh điều chỉnh giảm'
+            } else {
+                if (![
+                    "ncauKphi",
+                    "dtoanKphiNtruoc",
+                    "dtoanKphiDaGiao",
+                    "dtoanKphiCong",
+                    "kphiUocThien",
+                ].includes(field)) {
+                    row[field] = (!this.tongDcGiam[field] && this.tongDcGiam[field] !== 0) ? '' : this.tongDcGiam[field];
+                } else {
+                    row[field] = '';
+                }
+            }
         })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'noiDung') {
+                row[field] = 'Phát sinh điều chỉnh tăng'
+            } else {
+                if (![
+                    "ncauKphi",
+                    "dtoanKphiNtruoc",
+                    "dtoanKphiDaGiao",
+                    "dtoanKphiCong",
+                    "kphiUocThien",
+                ].includes(field)) {
+                    row[field] = (!this.tongDcTang[field] && this.tongDcTang[field] !== 0) ? '' : this.tongDcTang[field];
+                } else {
+                    row[field] = '';
+                }
+            }
+        })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'noiDung' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

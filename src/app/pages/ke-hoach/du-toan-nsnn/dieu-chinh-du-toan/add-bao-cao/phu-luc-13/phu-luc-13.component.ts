@@ -59,26 +59,6 @@ export class ItemData {
             default:
                 return null;
         }
-
-        // if (n == 0) {
-        //     xau = chiSo[n];
-        // }
-        // if (n == 1) {
-        //     xau = "-";
-        // }
-        // if (n == 2) {
-        //     xau = chiSo[n];
-        // }
-        // if (n == 3) {
-        //     xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        // }
-        // if (n == 4) {
-        //     xau = String.fromCharCode(k + 96);
-        // }
-        // if (n == 5) {
-        //     xau = "-";
-        // }
-        // return xau;
     }
 
     clear() {
@@ -132,6 +112,8 @@ export class PhuLuc13Component implements OnInit {
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
     total: ItemData = new ItemData({});
+    tongDcTang: ItemData = new ItemData({});
+    tongDcGiam: ItemData = new ItemData({});
     maDviTien: string = '1';
     namBcao: number;
     tongDieuChinhTang: number;
@@ -236,6 +218,7 @@ export class PhuLuc13Component implements OnInit {
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.tinhTong();
         this.getTotal();
+        this.getInTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -512,6 +495,7 @@ export class PhuLuc13Component implements OnInit {
         this.sum(this.lstCtietBcao[index].stt);
         this.getTotal();
         this.tinhTong();
+        this.getInTotal();
         this.updateEditCache();
     };
 
@@ -639,6 +623,24 @@ export class PhuLuc13Component implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.quanLyVonPhiService.downFile(file, doc);
+    };
+
+
+    getInTotal() {
+        this.tongDcTang.clear()
+        this.tongDcGiam.clear()
+        this.lstCtietBcao.forEach(item => {
+            const str = item.stt
+            if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
+                if (item.dtoanDnghiDchinh < 0) {
+                    this.tongDcGiam.sum(item);
+                }
+                else {
+                    this.tongDcTang.sum(item);
+                }
+            }
+        })
+
     }
 
     exportToExcel() {
@@ -703,7 +705,53 @@ export class PhuLuc13Component implements OnInit {
                 row[field] = field == 'stt' ? item.index() : item[field]
             })
             return row;
+        });
+
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'tenNoiDung') {
+                row[field] = 'Phát sinh điều chỉnh giảm'
+            } else {
+                if (![
+                    'dtoanNamTruoc',
+                    'dtoanDaGiao',
+                    'dtoanTongSo',
+                    'tongNCDtoanKp',
+
+                ].includes(field)) {
+                    row[field] = (!this.tongDcGiam[field] && this.tongDcGiam[field] !== 0) ? '' : this.tongDcGiam[field];
+                } else {
+                    row[field] = '';
+                }
+            }
         })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'tenNoiDung') {
+                row[field] = 'Phát sinh điều chỉnh tăng'
+            } else {
+                if (![
+                    'dtoanNamTruoc',
+                    'dtoanDaGiao',
+                    'dtoanTongSo',
+                    'tongNCDtoanKp',
+                ].includes(field)) {
+                    row[field] = (!this.tongDcTang[field] && this.tongDcTang[field] !== 0) ? '' : this.tongDcTang[field];
+                } else {
+                    row[field] = '';
+                }
+            }
+        })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenNoiDung' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
