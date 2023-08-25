@@ -645,11 +645,6 @@ export class PhuLucPhanBoComponent implements OnInit {
             { t: 0, b: 1, l: 1, r: 1, val: 'Nội dung' },
             { t: 0, b: 1, l: 2, r: 2, val: 'Số tiền' },
         ]
-        // this.lstDvi.forEach((item, index) => {
-        //     const left = 1 + index * 2;
-        //     header.push({ t: 4, b: 4, l: left + 1, r: left + 10, val: item.tenDvi })
-        //     header.push({ t: 5, b: 5, l: left + 1, r: left + 3, val: 'Số tiền' })
-        // })
         const fieldOrder = [
             "maNdung",
             "tongCong",

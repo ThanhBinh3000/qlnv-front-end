@@ -1047,15 +1047,20 @@ export class AddBaoCaoComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
                 return;
             } else {
-                baoCaoTemp.soQd = {
-                    ...await this.quanLyVonPhiService.upFile(file, this.path),
-                    fileName: this.baoCao.soQd.fileName,
+                if (this.baoCao?.soQd) {
+                    baoCaoTemp.congVan = {
+                        ...await this.quanLyVonPhiService.upFile(file, this.path),
+                        fileName: this.baoCao?.soQd?.fileName,
+                    }
+                } else {
+                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+                    return;
                 }
             }
             this.fileDetail = null;
         }
 
-        if (!baoCaoTemp.soQd.fileUrl) {
+        if (!baoCaoTemp.soQd || !baoCaoTemp.soQd?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
