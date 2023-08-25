@@ -18,6 +18,7 @@ import { Base2Component } from './../../../../components/base2/base2.component';
 import { TimKiemVanBanComponent } from './tim-kiem-van-ban/tim-kiem-van-ban.component';
 import {PREVIEW} from "../../../../constants/fileType";
 import { saveAs } from 'file-saver';
+import printJS from "print-js";
 
 
 @Component({
@@ -71,6 +72,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   showDlgPreview = false;
   pdfSrc: any;
   wordSrc: any;
+  printSrc: any;
 
 
   constructor(
@@ -763,6 +765,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       await this.khCnQuyChuanKyThuat.preview(body).then(async s => {
         this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
         this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.printSrc = s.data.pdfSrc;
         this.showDlgPreview = true;
         this
       });
@@ -786,5 +789,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   doPrint() {
+      printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
