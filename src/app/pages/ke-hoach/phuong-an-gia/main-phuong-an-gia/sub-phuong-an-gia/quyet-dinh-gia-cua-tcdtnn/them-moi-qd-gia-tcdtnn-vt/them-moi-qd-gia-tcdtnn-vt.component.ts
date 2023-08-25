@@ -178,7 +178,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     }
     if (this.arrThongTinGia && this.arrThongTinGia.length > 0) {
       if (this.formData.value.loaiGia == 'LG03') {
-        this.dataTable.forEach(item => {
+        this.arrThongTinGia.forEach(item => {
           if (item.vat) {
             item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
           }

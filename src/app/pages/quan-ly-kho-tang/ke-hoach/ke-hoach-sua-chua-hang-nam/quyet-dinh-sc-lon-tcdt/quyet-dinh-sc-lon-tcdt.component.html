@@ -165,8 +165,10 @@
           <td>{{ data.tgTongHop | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.noiDung }}</td>
           <td>{{ data.loaiTmdt == 'TREN5TY' ? '> 5 tỷ' :  data.loaiTmdt == 'DUOI5TY' ? '<= 5 tỷ' : 'Tất cả'  }}</td>
-          <td>{{ data.soQdBtc }}</td>
-          <td>{{ data.soQdTcdt }}</td>
+          <td><a nz-button nzType="link" (click)="openModalQdDc(data.soQdBtc, '00')">{{
+            data.soQdBtc }}</a></td>
+          <td><a nz-button nzType="link" (click)="openModalQdDc(data.soQdTcdt, '01')">{{
+            data.soQdTcdt }}</a></td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.DA_DUYET_LDTC) && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_XEM')">
@@ -208,3 +210,20 @@
   <app-them-moi-sc-tcdt  [idInput]="selectedId" (showListEvent)="showList()" [isViewQd]="false"
                          [isViewDetail]="isViewDetail"></app-them-moi-sc-tcdt>
 </ng-container>
+
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          [(nzVisible)]="isViewModal" (nzOnCancel)="closeModal()">
+  <ng-container *nzModalContent>
+    <app-them-moi-qd-sc-btc  [idInput]="idQd" *ngIf="typeModal == '00'"
+                             [isViewDetail]="true"></app-them-moi-qd-sc-btc>
+    <app-them-moi-thong-bao-sc-lon *ngIf="typeModal == '01'"
+      [idInput]="idQd" [isViewDetail]="true"
+    ></app-them-moi-thong-bao-sc-lon>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

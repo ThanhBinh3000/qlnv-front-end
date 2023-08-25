@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 import {
   TongHopDxScLonService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
-import { Router } from "@angular/router";
+import {Router} from "@angular/router";
+import {
+  KtKhSuaChuaBtcService
+} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 
 @Component({
   selector: 'app-quyet-dinh-sc-lon-tcdt',
@@ -24,13 +27,16 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
   isDetail: boolean = false;
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
-    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối LĐ-Vụ' },
-    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục' },
-    { ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
+    {ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục'},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối LĐ-Vụ'},
+    {ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục'},
+    {ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục'},
   ];
+  isViewModal: boolean;
+  idQd: number;
+  typeModal: string;
 
   constructor(
     httpClient: HttpClient,
@@ -38,8 +44,9 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private tongHopDxScLon : TongHopDxScLonService,
-    private router : Router,
+    private tongHopDxScLon: TongHopDxScLonService,
+    private qdScBtcService: KtKhSuaChuaBtcService,
+    private router: Router,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDxScLon)
     super.ngOnInit()
@@ -55,6 +62,7 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     });
     this.filterTable = {};
   }
+
   async ngOnInit() {
     if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH')) {
       this.router.navigateByUrl('/error/401')
@@ -78,8 +86,8 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
 
   async filter() {
     this.formData.patchValue({
-      maDvi :this.userInfo.MA_DVI ,
-      capDvi :this.userInfo.CAP_DVI
+      maDvi: this.userInfo.MA_DVI,
+      capDvi: this.userInfo.CAP_DVI
     })
     await this.search();
   }
@@ -87,8 +95,8 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi :this.userInfo.MA_DVI ,
-      capDvi :this.userInfo.CAP_DVI
+      maDvi: this.userInfo.MA_DVI,
+      capDvi: this.userInfo.CAP_DVI
     })
     await this.search();
   }
@@ -124,4 +132,31 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     }
   }
 
+  closeModal() {
+    this.idQd = null;
+    this.typeModal = null;
+    this.isViewModal = false;
+  }
+
+  async openModalQdDc(soQd, type: string) {
+    this.typeModal = type;
+    let body = {
+      type: type,
+      paggingReq: {
+        limit: 888,
+        page: 0,
+      }
+    }
+    let res = await this.qdScBtcService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data.content;
+      if (data && data.length > 0) {
+        let qd = data.find(item => item.soQuyetDinh == soQd);
+        if (qd) {
+          this.idQd = qd.id;
+          this.isViewModal = true
+        }
+      }
+    }
+  };
 }
