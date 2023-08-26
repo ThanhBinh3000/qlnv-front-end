@@ -25,6 +25,7 @@ import {
 } from "../../../../../../components/dialog/dialog-thong-bao-thong-tin-dau-thau/dialog-thong-bao-thong-tin-dau-thau.component";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import { saveAs } from "file-saver";
+import printJS from "print-js";
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
   templateUrl: './themmoi-thongtin-dauthau.component.html',
@@ -47,6 +48,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   showDlgPreview = false;
   pdfSrc: any;
   wordSrc: any;
+  printSrc: any;
   fileDinhKems: any[] = [];
   itemRowQd: any[] = [];
 
@@ -702,6 +704,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     }
     await this.thongTinDauThauService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
@@ -717,7 +720,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   closeDlg() {
     this.showDlgPreview = false;
   }
-
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  }
   calcTongSl() {
     if (this.listOfData) {
       let sum = 0

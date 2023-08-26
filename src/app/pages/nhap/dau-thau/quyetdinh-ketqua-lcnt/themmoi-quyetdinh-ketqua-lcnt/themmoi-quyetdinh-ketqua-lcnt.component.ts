@@ -70,9 +70,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     tenBaoCao: "",
     trangThai: ""
   };
-  showDlgPreview = false;
-  pdfSrc: any;
-  wordSrc: any;
+  previewName: string;
   constructor(
     modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -405,24 +403,19 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   }
 
   async preview() {
+    if(this.loaiVthh.startsWith('02')) {
+      this.previewName = "qd_pd_kqlcnt_vt.docx";
+    } else {
+      this.previewName = "qd_pd_kqlcnt_lt.docx"
+    }
+    this.reportTemplate.fileName = this.previewName;
     let body = this.formData.value;
     body.reportTemplateRequest = this.reportTemplate;
     await this.quyetDinhPheDuyetKetQuaLCNTService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, "qd_pd_kqlcnt_vt.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "qd_pd_kqlcnt_vt.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 }
