@@ -620,6 +620,7 @@ export class MangLuoiKhoComponent implements OnInit {
         };
         body.loaiHangHoa = this.setLoaiHangHoa();
         body.kieuHang = this.loaiHangHoa.type;
+        body.isKhoiTao = false;
         let dviReq = {
           "diaChi": this.detailDonVi.value.diaChi,
           "fax": this.nodeDetail.fax,
