@@ -52,15 +52,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   listOfData: any[] = [];
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "de_xuat_kh_lcnt_vat_tu.docx",
-    tenBaoCao: "",
-    trangThai: ""
-  };
-  showDlgPreview = false;
-  pdfSrc: any;
-  wordSrc: any;
   addModelBaoGia: any = {
     moTa: "",
     tenTlieu: "",
@@ -85,6 +76,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     max: 1000000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
+  previewName: string = "de_xuat_kh_lcnt_vat_tu.docx";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -351,15 +343,12 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   }
 
   async preview() {
-    let pipe = new DatePipe("en-US");
+    this.reportTemplate.fileName = this.previewName;
     let body = this.formData.value;
     body.reportTemplateRequest = this.reportTemplate;
-    // body.fileDinhKemReq = this.fileDinhKem;
-    // body.tongMucDtBangChu = convertTienTobangChu(this.formData.get("tongMucDt").value);
-    // body.tgianDthau = pipe.transform(body.tgianDthau, "yyyy-MM-dd HH:mm");
-    // body.tgianMthau = pipe.transform(body.tgianMthau, "yyyy-MM-dd HH:mm");
     await this.dauThauService.previewVt(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
@@ -601,18 +590,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     }
     this.notification.error(MESSAGE.ERROR, "Bạn không có quyền truy cập chức năng này !");
     return false;
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, "de_xuat_kh_lcnt_vat_tu.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "de_xuat_kh_lcnt_vat_tu.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 
   onChangeLhNx($event) {

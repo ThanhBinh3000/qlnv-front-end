@@ -11,6 +11,8 @@ import {
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
 import {MESSAGE} from "../../../../../constants/message";
 import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {DauGiaComponent} from "../../dau-gia.component";
+import {CHUC_NANG} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-danh-sach-quyet-dinh-phe-duyet-ket-qua',
@@ -18,12 +20,13 @@ import {LOAI_HANG_DTQG} from "../../../../../constants/config";
   styleUrls: ['./danh-sach-quyet-dinh-phe-duyet-ket-qua.component.scss']
 })
 export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component implements OnInit {
-  @Input()
-  loaiVthh: string;
-  @Input()
-  typeLoaiVthh: any[] = [];
+  @Input() loaiVthh: string;
+  @Input() typeLoaiVthh: any[] = [];
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: DauGiaComponent;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
+  isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   idThongTin: number = 0;
@@ -45,10 +48,11 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private dauGiaComponent: DauGiaComponent,
     private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
-    super.ngOnInit();
+    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
       nam: [null],
       loaiVthh: [null],
@@ -67,8 +71,8 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
       ngayKy: '',
       soQdPd: '',
       maThongBao: '',
-      hinhThucDauGia: '',
-      pthucDauGia: '',
+      tenHinhThucDauGia: '',
+      tenPthucDauGia: '',
       soTbKhongThanh: '',
       soBienBan: '',
       tenTrangThai: '',
@@ -76,31 +80,38 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
   }
 
   async ngOnInit() {
+    await this.spinner.show();
     try {
-      this.thimKiem();
       await Promise.all([
+        this.timKiem(),
         this.search(),
         this.onChangeCLoaiVthh(),
       ])
+      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
-  thimKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-    })
 
+    })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.thimKiem();
-    this.search();
+    await this.timKiem()
+    await this.search();
+  }
+
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
   }
 
   async onChangeCLoaiVthh() {
@@ -159,6 +170,4 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
     this.idThongTin = null;
     this.isViewThongTin = false;
   }
-
-
 }
