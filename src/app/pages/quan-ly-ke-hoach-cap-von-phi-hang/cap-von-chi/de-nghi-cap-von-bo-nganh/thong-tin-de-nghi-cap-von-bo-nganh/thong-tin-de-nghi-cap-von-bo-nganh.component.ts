@@ -82,8 +82,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   maxYeuCauCapThem: number = 2;
   hopDongList: any[] = [];
   chiTietList: any[] = [];
-  preFixSoDn: string = "KH";
-  titleSoDeNghi: string;
   hangHoaAll: any[];
   detailHopDong: DetailHopDong;
   listHopDong: any[] = [];
@@ -279,10 +277,9 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     this.rowItem.tenVatTuCha = null;
     this.rowItem.maVatTuCha = null;
     let bnObject = this.dsBoNganh.find(item => item.code == this.formData.value.boNganh);
-    this.titleSoDeNghi = this.preFixSoDn;
-    if (bnObject) {
-      this.titleSoDeNghi = "/" + bnObject.code + "-" + this.preFixSoDn;
-    }
+    // if (bnObject) {
+    //   this.titleSoDeNghi = "/" + bnObject.code + "-" + this.preFixSoDn;
+    // }
     let hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
       "maDvi": bnObject.maDvi
     }).toPromise();
