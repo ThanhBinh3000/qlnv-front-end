@@ -125,17 +125,18 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         if (!this.isView) {
           let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
           this.formData.patchValue({
-            maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
-            idQdPdDtl: this.dataDetail.idQdPdDtl,
+            idQdPd: this.dataDetail.idQdPd,
             soQdPd: this.dataDetail.soQdPd,
+            idQdPdDtl: this.dataDetail.idQdPdDtl,
+            lanDauGia: this.soLanDauGia + 1,
+            maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
             soBienBan: idThongBao + "/" + this.formData.value.nam + "/BB-ĐG",
-            lanDauGia: this.soLanDauGia + 1
           });
           await this.onChangeQdKhBdgDtl(this.formData.value.idQdPdDtl);
         }
       }
       if (this.idInput > 0 && this.idInput) {
-        this.getDetail(this.idInput)
+       await this.getDetail(this.idInput)
       }
       await this.loadDataComboBox();
     } catch (e) {
