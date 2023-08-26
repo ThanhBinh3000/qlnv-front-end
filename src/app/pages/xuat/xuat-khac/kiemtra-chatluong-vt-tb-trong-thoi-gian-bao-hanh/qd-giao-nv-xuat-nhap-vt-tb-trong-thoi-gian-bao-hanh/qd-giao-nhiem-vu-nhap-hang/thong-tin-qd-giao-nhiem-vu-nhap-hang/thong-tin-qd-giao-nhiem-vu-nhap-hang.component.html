@@ -53,8 +53,8 @@
             <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control>
               <nz-radio-group formControlName="loai" [nzDisabled]="isViewDetail" nzName="radiogroup">
-                <label nz-radio nzValue="NHAP_SAU_BH"> Nhập sau bảo hành</label>
                 <label nz-radio nzValue="NHAP_MAU"> Nhập mẫu không bị hủy vào kho</label>
+                <label nz-radio nzValue="NHAP_SAU_BH"> Nhập sau bảo hành</label>
               </nz-radio-group>
             </nz-form-control>
           </nz-form-item>
@@ -112,7 +112,7 @@
                 Căn cứ trên phiếu KTCL sau bảo hành
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPhieuKdcl()">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPhieuKtcl()">
                   <input class="search__input" [readonly]="isViewDetail" nz-input formControlName="soCanCu"
                          readonly/>
                 </nz-input-group>

@@ -33,7 +33,7 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span [ngClass]="statusClass()">{{getStatusName(isStatus)}}</span>
+                        <span [ngClass]="Status.statusClass(isStatus)">{{getStatusName(isStatus)}}</span>
                         <span>Nhập quyết định giao dự toán chi NSNN từ BTC</span>
                     </div>
                 </div>
@@ -132,13 +132,13 @@
                                     <td>
                                         <div *ngFor="let item of noiDungs">
                                             <div *ngIf="item.ma ==data.maNdung">
-                                                {{item.tenDm}}
+                                                {{item.giaTri}}
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{displayValue(data.tongCong)}}</td>
-                                    <td>{{displayValue(data.nguonNsnn)}}</td>
-                                    <td>{{displayValue(data.nguonKhac)}}</td>
+                                    <td>{{Op.fmtVal(data.tongCong)}}</td>
+                                    <td>{{Op.fmtVal(data.nguonNsnn)}}</td>
+                                    <td>{{Op.fmtVal(data.nguonKhac)}}</td>
                                     <td [hidden]="status">
                                         <ng-container *ngIf="!getLowStatus(data.stt)">
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -159,26 +159,22 @@
                                     <td>
                                         <div *ngFor="let item of noiDungs;">
                                             <div *ngIf="item.ma ==data.maNdung">
-                                                {{item.tenDm}}
+                                                {{item.giaTri}}
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        {{displayValue(editCache[data.id].data.tongCong)}}
+                                        {{Op.fmtVal(editCache[data.id].data.tongCong)}}
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask
                                             [(ngModel)]="editCache[data.id].data.nguonNsnn"
-                                            (ngModelChange)="changeModel(data.id)"
-                                            [class]="(editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0) &&  editCache[data.id].data.nguonNsnn >= 0?'' : 'input-error-validate'"
-                                            [options]="amount" />
+                                            (ngModelChange)="changeModel(data.id)" [options]="amount" />
                                     </td>
                                     <td>
                                         <input class="money-input" currencyMask
                                             [(ngModel)]="editCache[data.id].data.nguonKhac"
-                                            (ngModelChange)="changeModel(data.id)"
-                                            [class]="(editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0) &&  editCache[data.id].data.nguonKhac >= 0?'' : 'input-error-validate'"
-                                            [options]="amount" />
+                                            (ngModelChange)="changeModel(data.id)" [options]="amount" />
                                     </td>
                                     <!-- <td [hidden]="status">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
@@ -216,7 +212,8 @@
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                     <div nz-col class="gutter-row" [nzSpan]="3">
                         Danh sách văn bản đính kèm
-                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                            [hidden]="status">
                             <button nz-button>
                                 <i nz-icon nzType="upload"></i>
                                 Select File

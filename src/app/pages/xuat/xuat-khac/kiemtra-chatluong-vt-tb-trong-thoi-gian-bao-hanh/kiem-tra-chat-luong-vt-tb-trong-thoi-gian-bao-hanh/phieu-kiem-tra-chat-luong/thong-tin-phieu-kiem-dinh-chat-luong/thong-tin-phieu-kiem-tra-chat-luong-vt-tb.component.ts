@@ -184,7 +184,7 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let id = await this.userService.getId('XH_XK_VT_BH_PHIEU_KDCL_HDR_SEQ')
+      let id = await this.userService.getId('XH_XK_VT_BH_PHIEU_KTCL_HDR_SEQ')
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
@@ -451,6 +451,7 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
 
   saveEdit(index: number): void {
     this.dataTableChiTieu[index].edit = false;
+    console.log(this.dataTableChiTieu[index],"123")
   }
 
   deleteRow(data: any) {

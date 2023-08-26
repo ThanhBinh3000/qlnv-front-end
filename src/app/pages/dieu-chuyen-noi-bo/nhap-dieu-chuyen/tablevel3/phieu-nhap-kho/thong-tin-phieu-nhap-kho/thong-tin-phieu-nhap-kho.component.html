@@ -156,6 +156,27 @@
             </nz-form-item>
           </div>
 
+          <div nz-col [nzSpan]="4" *ngIf="isVatTu">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Số BB chuẩn bị kho</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBCBK()">
+                  <input [readonly]="true" nz-input formControlName="soBbCbKho" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="4" *ngIf="isVatTu">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Ngày lập BB chuẩn bị kho</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-date-picker [nzDisabled]="true" formControlName="ngayBbCbKho" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
           <div nz-col nzSpan="8">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Lô/Ngăn kho
@@ -197,7 +218,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="4" *ngIf="isKTCL&& !isVatTu">
+          <div nz-col [nzSpan]="4" *ngIf="formData.value.thayDoiThuKho && !isVatTu">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Số phiếu kiểm tra chất lượng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -227,6 +248,8 @@
               </nz-form-control>
             </nz-form-item>
           </div>
+
+
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>

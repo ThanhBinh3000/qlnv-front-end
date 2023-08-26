@@ -4,7 +4,7 @@ export const XUAT_MAIN_ROUTE = 'xuat';
 export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_vien_tro',
-    title: 'Xuất cứu trợ, viện trợ - xuất cấp',
+    title: 'Xuất cấp, cứu trợ, viện trợ',
     url: `/cuu-tro-vien-tro`,
     dropdown: '/cuu-tro-vien-tro',
     idHover: 'cuu-tro-vien-tro',

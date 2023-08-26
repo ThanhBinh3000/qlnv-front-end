@@ -283,7 +283,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -517,7 +517,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       let res = await this.quyetDinhPheDuyetKeHoachNhapKhacService.getDetail(id);
       this.listDanhSachTongHop = [];
       const data = res.data;
-      if (data.fileDinhKems.length > 0) {
+      if (data?.fileDinhKems?.length > 0) {
         data.fileDinhKems.forEach(item => {
           if (item.fileType == FILETYPE.FILE_DINH_KEM) {
             this.listFileDinhKem.push(item)

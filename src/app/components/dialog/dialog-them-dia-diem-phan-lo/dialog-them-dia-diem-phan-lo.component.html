@@ -114,7 +114,7 @@
       <th>
         <input nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" class="w-150"/>
       </th>
-      <th>{{thongtinPhanLo.tonKho|number:globals.numberFormat:globals.locale}}</th>
+      <th>{{thongtinPhanLo.tonKho == 0 ? null : thongtinPhanLo.tonKho|number:globals.numberFormat:globals.locale}}</th>
       <th>
         <nz-input-number placeholder="(1)" class="text-right" nz-input
                          [(ngModel)]="thongtinPhanLo.soLuongDeXuat" (ngModelChange)="onChangeTinh()" [nzMin]="0"
@@ -152,7 +152,7 @@
         <td>{{ data.tenLoKho }}</td>
         <td>{{ data.tenCloaiVthh }}</td>
         <td>{{ data.maDviTsan }}</td>
-        <td>{{ data.tonKho|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ data.tonKho == 0 ? null : data.tonKho|number:globals.numberFormat:globals.locale }}</td>
         <td>{{ data.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
         <td>{{ data.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
         <td>{{ data.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
@@ -196,7 +196,7 @@
         <td>
           <input nz-input [(ngModel)]="editCache[idx].data.maDviTsan" class="w-150"/>
         </td>
-        <td>{{editCache[idx].data.tonKho|number:globals.numberFormat:globals.locale}}</td>
+        <td>{{editCache[idx].data.tonKho == 0 ? null : editCache[idx].data.tonKho|number:globals.numberFormat:globals.locale}}</td>
         <td>
           <nz-input-number class="text-right" nz-input [(ngModel)]="editCache[idx].data.soLuongDeXuat"
                            (ngModelChange)="onChangeTinhEdit(idx)"

@@ -142,7 +142,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
       await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(id)
         .then(async (res) => {
           const dataDtl = res.data;
-          console.log(dataDtl)
+          console.log(dataDtl, 123)
           // this.danhSachCtiet = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2
           this.formData.patchValue({
             idQdDtl: id,
@@ -167,8 +167,8 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
             tenPthucMuaTrucTiep: dataDtl.tenPthucMuaTrucTiep,
             pthucMuaTrucTiep: dataDtl.pthucMuaTrucTiep,
             tchuanCluong: dataDtl.hhQdPheduyetKhMttHdr.tchuanCluong,
-            donGia: dataDtl.children[0].donGia,
-            donGiaVat: dataDtl.children[0].donGia + (dataDtl.children[0].donGia * 5 / 100),
+            donGia: dataDtl.children.length > 0 ? dataDtl.children[0]?.donGia : dataDtl.children2[0]?.donGia,
+            donGiaVat: dataDtl.children.length > 0 ? Math.round(dataDtl.children[0]?.donGia + (dataDtl.children[0]?.donGia * 5 / 100)) : Math.round(dataDtl.children2[0]?.donGia + (dataDtl.children2[0]?.donGia * 5 / 100)),
             tgianMkho: dataDtl.tgianMkho,
             tgianKthuc: dataDtl.tgianKthuc,
             thueGtgt: dataDtl.thueGtgt,
@@ -196,10 +196,14 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
     return convertTienTobangChu(data);
   }
   redirectHopDong(){
+    let elem = document.getElementById('muatt');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[1];
+    setActive.classList.add('ant-menu-item-selected');
     this.isHopDong = true
     this.idSelected = this.formData.value.id
   }
-
   async themMoiBangKeMuaLe($event, data?: null, index?: number) {
     let res = await this.quyetDinhGiaoNvNhapHangService.getDetail(this.idQdGnvu);
     console.log(res.data, 5555);

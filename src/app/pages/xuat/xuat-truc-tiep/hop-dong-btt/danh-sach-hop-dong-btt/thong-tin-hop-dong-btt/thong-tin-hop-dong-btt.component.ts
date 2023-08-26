@@ -20,14 +20,14 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import {STATUS} from 'src/app/constants/status';
 import {chain, cloneDeep} from 'lodash';
-import {
-  QuyetDinhPdKhBanTrucTiepService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import {Validators} from '@angular/forms';
 import {
   QuyetDinhNvXuatBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import {DonviService} from 'src/app/services/donvi.service';
+import {
+  ChaoGiaMuaLeUyQuyenService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -72,9 +72,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     modal: NzModalService,
     private hopDongBttService: HopDongBttService,
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
-    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private danhMucService: DanhMucService,
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
+    private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
     private donViService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopDongBttService);
@@ -310,7 +310,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const dadataQdKq = res.data
-            let resThongTin = await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(dadataQdKq.idPdKhDtl);
+            let resThongTin = await this.chaoGiaMuaLeUyQuyenService.getDetail(dadataQdKq.idChaoGia);
             if (resThongTin.msg == MESSAGE.SUCCESS) {
               const dataThongTin = resThongTin.data;
               await this.loadDsHd(dadataQdKq.soQdKq)
@@ -320,7 +320,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
                 soQdKq: dadataQdKq.soQdKq,
                 ngayKyQdKq: dadataQdKq.ngayKy,
                 thoiHanXuatKho: dadataQdKq.ngayMkho,
-                idQdPd: dataThongTin.xhQdPdKhBttHdr.id,
+                idQdPd: dataThongTin.idHdr,
                 soQdPd: dadataQdKq.soQdPd,
                 loaiHinhNx: dadataQdKq.loaiHinhNx,
                 kieuNx: dadataQdKq.kieuNx,
@@ -587,7 +587,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   async onChangeQdKhBtt(id) {
     await this.spinner.show();
     if (id > 0) {
-      await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
+      await this.chaoGiaMuaLeUyQuyenService.getDetail(id)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const dataQdDtl = res.data
@@ -604,8 +604,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
                 soQdNv: dataQdNv.soQdNv,
                 ngayKyQdPd: dataQdDtl.xhQdPdKhBttHdr.ngayKyQd,
                 thoiHanXuatKho: dataQdDtl.ngayMkho,
-                loaiHinhNx: dataQdDtl.xhQdPdKhBttHdr.loaiHinhNx,
-                kieuNx: dataQdDtl.xhQdPdKhBttHdr.kieuNx,
+                loaiHinhNx: dataQdDtl.loaiHinhNx,
+                kieuNx: dataQdDtl.kieuNx,
                 loaiVthh: dataQdNv.loaiVthh,
                 tenLoaiVthh: dataQdNv.tenLoaiVthh,
                 cloaiVthh: dataQdNv.cloaiVthh,

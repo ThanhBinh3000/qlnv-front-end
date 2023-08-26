@@ -301,7 +301,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       const data = res.data.content;
       if (data && data.length > 0) {
         this.dsThongTinChaoGia = data;
-        this.dsThongTinChaoGia = this.dsThongTinChaoGia.filter(item => item.maDvi == this.userInfo.MA_DVI);
+      //   this.dsThongTinChaoGia = this.dsThongTinChaoGia.filter(item => item.maDvi == this.userInfo.MA_DVI);
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -330,28 +330,28 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
   async onChangeQdPdKh(id) {
     await this.spinner.show();
     if (id > 0) {
-      await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
+      await this.chaoGiaMuaLeUyQuyenService.getDetail(id)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data;
             await this.setListDviTsan(data.children);
             this.formData.patchValue({
-              idQdPd: data.xhQdPdKhBttHdr.id,
-              soQdPd: data.xhQdPdKhBttHdr.soQdPd,
-              loaiVthh: data.xhQdPdKhBttHdr.loaiVthh,
-              tenLoaiVthh: data.xhQdPdKhBttHdr.tenLoaiVthh,
-              cloaiVthh: data.xhQdPdKhBttHdr.cloaiVthh,
-              tenCloaiVthh: data.xhQdPdKhBttHdr.tenCloaiVthh,
-              moTaHangHoa: data.xhQdPdKhBttHdr.moTaHangHoa,
-              loaiHinhNx: data.xhQdPdKhBttHdr.loaiHinhNx,
-              kieuNx: data.xhQdPdKhBttHdr.kieuNx,
+              idQdPd: data.idHdr,
+              soQdPd: data.soQdPd,
+              loaiVthh: data.loaiVthh,
+              tenLoaiVthh: data.tenLoaiVthh,
+              cloaiVthh: data.cloaiVthh,
+              tenCloaiVthh: data.tenCloaiVthh,
+              moTaHangHoa: data.moTaHangHoa,
+              loaiHinhNx: data.loaiHinhNx,
+              kieuNx: data.kieuNx,
               pthucBanTrucTiep: data.pthucBanTrucTiep,
               phanLoai: 'UQBL',
               tgianGnhan: data.thoiHanBan,
               idQdPdDtl: data.id
             });
             this.formData.patchValue({
-              donViTinh: this.listHangHoaAll.find(s => s.ma == data.xhQdPdKhBttHdr.loaiVthh,)?.maDviTinh
+              donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh,)?.maDviTinh
             })
           }
         }).catch((e) => {

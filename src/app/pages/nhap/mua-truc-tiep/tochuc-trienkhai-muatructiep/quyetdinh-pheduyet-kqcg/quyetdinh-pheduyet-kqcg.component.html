@@ -136,10 +136,10 @@
           <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThai == STATUS.DA_DUYET_LDC" (click)="goDetail(data.id)">
+            <a *ngIf="data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC || data.trangThai == STATUS.DA_DUYET_LDC" (click)="goDetail(data.id)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="data.trangThai != STATUS.DA_DUYET_LDC" (click)="goDetail(data.id)">
+            <a *ngIf="userService.isCuc() && (data.trangThai == STATUS.DU_THAO || (userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP) || (userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_LDC') && data.trangThai == STATUS.CHO_DUYET_LDC))" (click)="goDetail(data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">

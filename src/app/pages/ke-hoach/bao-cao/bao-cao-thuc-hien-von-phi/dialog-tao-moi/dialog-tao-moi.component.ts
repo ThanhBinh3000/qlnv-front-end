@@ -1,11 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
+import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Status } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { BAO_CAO_DOT, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, Utils } from 'src/app/Utility/utils';
-import * as dayjs from 'dayjs';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import * as uuid from 'uuid';
+import { Form, Report, Vp } from '../bao-cao-thuc-hien-von-phi.constant';
 
 @Component({
     selector: 'dialog-tao-moi',
@@ -14,44 +17,48 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 })
 
 export class DialogTaoMoiComponent implements OnInit {
-    @Input() obj: any;
-
-    nam: number;
+    @Input() isSynth: boolean;
+    Vp = Vp;
     userInfo: any;
-    response: any = {
-        namBcao: null,
-        dotBcao: null,
-        maLoaiBcao: null,
-    };
-    baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
+    response: Report = new Report();
     lstNam: number[] = [];
+    isOffice: boolean = false;
 
     constructor(
         private _modalRef: NzModalRef,
         private notification: NzNotificationService,
         private baoCaoThucHienVonPhiService: BaoCaoThucHienVonPhiService,
+        private userService: UserService,
     ) { }
 
     async ngOnInit() {
+        this.userInfo = this.userService.getUserLogin();
+        this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
         const thisYear = dayjs().get('year');
-        for (let i = -10; i < 40; i++) {
+        for (let i = -5; i < 10; i++) {
             this.lstNam.push(thisYear + i);
         }
     }
 
-    async handleOk() {
+    changeModel() {
+        if (this.response.maLoaiBcao == Vp.BC_NAM) {
+            this.response.dotBcao = null;
+            this.checkReport();
+        }
+    }
+
+    async checkReport() {
         if (!this.response.namBcao || !this.response.maLoaiBcao ||
-            (!this.response.dotBcao && this.response.maLoaiBcao == BAO_CAO_DOT)) {
+            (!this.response.dotBcao && this.response.maLoaiBcao == Vp.BC_DOT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        let check = false;
         const request = {
             maPhanBcao: '1',
-            trangThais: [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_4, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_9],
-            maLoaiBcao: this.response.maLoaiBcao,
             namBcao: this.response.namBcao,
             dotBcao: this.response.dotBcao,
+            maLoaiBcao: this.response.maLoaiBcao,
+            trangThais: [Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_07, Status.TT_08, Status.TT_09],
             paggingReq: {
                 limit: 10,
                 page: 1
@@ -61,21 +68,136 @@ export class DialogTaoMoiComponent implements OnInit {
         }
         await this.baoCaoThucHienVonPhiService.timBaoCao(request).toPromise().then(res => {
             if (res.statusCode == 0) {
-                check = !res.data?.empty;
+                if (res.data.empty) {
+                    this.initReport();
+                } else {
+                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_REPORT);
+                    this.clear();
+                }
             } else {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                this.clear();
             }
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            this.clear();
         })
+    }
 
-        if (check) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_REPORT);
+    async initReport() {
+        this.response.maDvi = this.userInfo?.MA_DVI;
+        this.response.nguoiTao = this.userInfo.sub;
+        this.response.ngayTao = new Date();
+        this.response.trangThai = Status.TT_01;
+        this.response.lstBcaos = [];
+        // this.response.lstBcaoDviTrucThuocs = [];
+        // this.response.lstFiles = [];
+        // this.response.listIdDeleteFiles = [];
+        await this.getMaBcao();
+        if (this.isSynth || this.isOffice) {
+            this.callSynthtic();
+        } else {
+            Vp.PHU_LUC.forEach(item => {
+                this.response.lstBcaos.push({
+                    ...new Form(),
+                    id: uuid.v4() + 'FE',
+                    maLoai: item.id,
+                    tenPhuLuc: item.tenPl,
+                    tieuDe: Vp.appendixName(item.id, this.response.maLoaiBcao, this.response.namBcao, this.response.dotBcao),
+                    nguoiBcao: this.userInfo?.sub,
+                    trangThai: Status.NEW,
+                    maDviTien: '1',
+                    lstCtietBcaos: [],
+                })
+            })
+        }
+    }
+
+    getMaBcao() {
+        this.baoCaoThucHienVonPhiService.taoMaBaoCao().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.response.maBcao = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.clear()
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                this.clear();
+            }
+        );
+    }
+
+    async callSynthtic() {
+        const request = {
+            maLoaiBcao: this.response.maLoaiBcao,
+            namBcao: this.response.namBcao,
+            thangBcao: null,
+            dotBcao: this.response.dotBcao,
+            maPhanBcao: '1',
+        }
+        if (this.isOffice) {
+            await this.baoCaoThucHienVonPhiService.tongHopVanPhong(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.response.lstBcaos = data.data.lstBcaos;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                        this.clear();
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.clear();
+                }
+            );
+        } else {
+            await this.baoCaoThucHienVonPhiService.tongHopBaoCaoKetQua(request).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.response.lstBcaos = data.data.lstBcaos;
+                        this.response.lstBcaoDviTrucThuocs = data.data.lstBcaoDviTrucThuocs;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                        this.clear();
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.clear();
+                }
+            );
+        }
+        this.response.lstBcaos.forEach(e => {
+            const appendix = Vp.PHU_LUC.find(item => item.id == e.maLoai);
+            e.tenPhuLuc = appendix.tenPl;
+            e.tieuDe = Vp.appendixName(e.maLoai, this.response.maLoaiBcao, this.response.namBcao, this.response.dotBcao);
+            e.trangThai = Status.NEW;
+            e.id = uuid.v4() + 'FE';
+            e.nguoiBcao = this.userInfo?.sub;
+            e.maDviTien = '1';
+        })
+    }
+
+    clear() {
+        this.response.namBcao = null;
+        this.response.maLoaiBcao = null;
+        this.response.dotBcao = null;
+    }
+
+    async handleOk() {
+        if (!this.response.namBcao || !this.response.maLoaiBcao ||
+            (!this.response.dotBcao && this.response.maLoaiBcao == Vp.BC_DOT)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        if (this.response.maLoaiBcao != BAO_CAO_DOT) {
-            this.response.dotBcao = 0;
-        }
+        // this.checkReport();
+        // if (!this.response.namBcao) {
+        //     this.clear();
+        //     return;
+        // }
         this._modalRef.close(this.response);
     }
 

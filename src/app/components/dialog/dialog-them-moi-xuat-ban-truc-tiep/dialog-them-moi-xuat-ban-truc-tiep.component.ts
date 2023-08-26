@@ -30,6 +30,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   cloaiVthh: any;
   tenCloaiVthh: string;
   dataChiTieu: any;
+  dataDonGiaDuocDuyet: any;
   donViTinh: string;
   dataEdit: any;
   listOfData: any[] = [];
@@ -195,6 +196,9 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     }
+    if (this.dataEdit) {
+      await this.getdonGiaDuocDuyet();
+    }
     this.calcTinh();
   }
 
@@ -221,23 +225,45 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       let diemKho = this.listDiemKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maDiemKho)[0];
       this.listNhaKho = diemKho.children;
       this.thongTinXuatBanTrucTiep.tenDiemKho = diemKho.tenDvi;
-      await this.formDataPatchValue();
+      this.formDataPatchValue();
       await this.getdonGiaDuocDuyet();
     }
   }
 
   async getdonGiaDuocDuyet() {
-    if (this.cloaiVthh && this.namKh) {
-      let res = await this.deXuatKhBanTrucTiepService.getDonGiaDuocDuyet(this.cloaiVthh, this.formData.value.maDvi, this.namKh);
-      if (res.msg === MESSAGE.SUCCESS) {
-        this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = res.data
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+        this.dataDonGiaDuocDuyet.forEach(item => {
+          if (this.dataEdit) {
+            this.listOfData.forEach(s => {
+              s.donGiaDuocDuyet = item.giaQdTcdt
+            })
+          } else {
+            this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = item.giaQdTcdt
+          }
+        })
+      } else {
+        this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = null;
+      }
+    } else {
+      let donGiaDuocDuyet = this.dataDonGiaDuocDuyet?.filter(item => item.maChiCuc == this.formData.value.maDvi);
+      if (donGiaDuocDuyet && donGiaDuocDuyet.length > 0) {
+        donGiaDuocDuyet.forEach(item => {
+          if (this.dataEdit) {
+            this.listOfData.forEach(s => {
+              s.donGiaDuocDuyet = item.giaQdTcdt
+            })
+          } else {
+            this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = item.giaQdTcdt
+          }
+        })
       } else {
         this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = null;
       }
     }
   }
 
-  async formDataPatchValue() {
+  formDataPatchValue() {
     this.thongTinXuatBanTrucTiep.loaiVthh = this.loaiVthh;
     this.thongTinXuatBanTrucTiep.cloaiVthh = this.cloaiVthh;
     this.thongTinXuatBanTrucTiep.tenCloaiVthh = this.tenCloaiVthh;
@@ -336,9 +362,11 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
           } else {
             this.thongTinXuatBanTrucTiep.tonKho = cloneDeep(val)
           }
+        } else {
+          this.thongTinXuatBanTrucTiep.tonKho = 0
         }
       } else {
-        this.thongTinXuatBanTrucTiep.tonKho = null
+        this.thongTinXuatBanTrucTiep.tonKho = 0
       }
     });
   }

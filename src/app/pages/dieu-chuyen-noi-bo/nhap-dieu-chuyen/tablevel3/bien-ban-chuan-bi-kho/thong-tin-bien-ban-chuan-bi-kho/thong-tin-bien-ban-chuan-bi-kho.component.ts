@@ -84,9 +84,14 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       qdDcCucId: [],
       soLuongQdDcCuc: [],
       ktvBaoQuan: [],
+      tenKyThuatVien: [],
+      tenThuKho: [],
       thuKho: [],
+      tenKeToan: [],
       keToan: [],
       thuTruong: [],
+      tenLanhDao: [],
+      tenLoNganKho: [],
       tenLoKho: [],
       maLoKho: [],
       tenNganKho: [],
@@ -101,7 +106,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       tenLoaiVthh: [],
       cloaiVthh: [],
       tenCloaiVthh: [],
+      tichLuong: [],
       tichLuongKhaDung: [],
+      donViTinh: [],
       tenDonViTinh: [],
       dsPhieuNhapKho: [],
       slThucNhapDc: [],
@@ -143,6 +150,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
       ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+      tenKyThuatVien: this.userInfo.TEN_DAY_DU,
       soBban: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
@@ -159,6 +167,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         soQdDcCuc: this.data.soQdinh,
         ngayQdDcCuc: this.data.thoiHanDieuChuyen,
         qdDcCucId: this.data.qdinhDccId,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -172,6 +181,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
+        tichLuong: this.data.tichLuongKd,
+        donViTinh: this.data.tenDonViTinh,
         tenDonViTinh: this.data.tenDonViTinh,
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
@@ -199,7 +210,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      this.formData.patchValue(data);
+      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
       this.dsHangTH = data.children.filter(item => item.type === "TH")
       this.dsHangPD = data.children.filter(item => item.type === "PD")
       this.fileDinhKemReq = data.fileDinhKems;
@@ -440,6 +451,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           soQdDcCuc: data.soQdinh,
           ngayQdDcCuc: data.ngayKyQdinh,
           qdDcCucId: data.id,
+          tenLoNganKho: "",
           tenLoKho: "",
           maLoKho: "",
           tenNganKho: "",
@@ -453,7 +465,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           tenLoaiVthh: "",
           cloaiVthh: "",
           tenCloaiVthh: "",
+          tichLuong: "",
           tichLuongKhaDung: "",
+          donViTinh: "",
           tenDonViTinh: "",
         });
         this.listPhuongThucBaoQuan = []
@@ -484,6 +498,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
@@ -497,7 +512,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
+          tichLuong: data.tichLuongKd,
           tichLuongKhaDung: data.tichLuongKd,
+          donViTinh: data.tenDonViTinh,
           tenDonViTinh: data.tenDonViTinh,
         });
         await this.loadDataBaoQuan(data.cloaiVthh)

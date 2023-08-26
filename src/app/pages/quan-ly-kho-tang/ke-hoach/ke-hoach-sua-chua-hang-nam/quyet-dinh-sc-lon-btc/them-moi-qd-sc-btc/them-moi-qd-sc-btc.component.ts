@@ -1,30 +1,30 @@
-import { cloneDeep } from "lodash";
-import { Component, Input, OnInit } from "@angular/core";
-import { Validators } from "@angular/forms";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { MESSAGE } from "../../../../../../constants/message";
+import {chain, cloneDeep} from "lodash";
+import {Component, Input, OnInit} from "@angular/core";
+import {Validators} from "@angular/forms";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {MESSAGE} from "../../../../../../constants/message";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 import dayjs from "dayjs";
-import { DialogQdScBtcComponent } from "./dialog-qd-sc-btc/dialog-qd-sc-btc.component";
-import { STATUS } from "../../../../../../constants/status";
+import {DialogQdScBtcComponent} from "./dialog-qd-sc-btc/dialog-qd-sc-btc.component";
+import {STATUS} from "../../../../../../constants/status";
 import {
   DeXuatScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 import {
   TongHopDxScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
+
 @Component({
   selector: "app-them-moi-qd-sc-btc",
   templateUrl: "./them-moi-qd-sc-btc.component.html",

@@ -16,6 +16,7 @@ import {OldResponseData} from "../../../../../interfaces/response";
 import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.service";
 import {chain, cloneDeep} from "lodash";
 import {STATUS} from "../../../../../constants/status";
+import {LOAI_HINH_NHAP_XUAT} from "../../../../../constants/config";
 import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
@@ -48,7 +49,7 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   fileDinhKems: any[] = [];
   canCuPhapLy: any[] = [];
   loKho: any = {};
-
+  loaiHinhNhapXuat = LOAI_HINH_NHAP_XUAT;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -119,6 +120,12 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
           this.formData.patchValue({
             soDxuat: dataDetail.hdr.soDxuat?.split('/')[0]
           })
+          if (this.userService.isTongCuc() && dataDetail.hdr?.maDviDxuat.length == 6) {
+            dataDetail.dtl.forEach(item => {
+              item.maCuc = dataDetail.hdr?.maDviDxuat
+              item.tenCuc = dataDetail.hdr?.tenDvi
+            })
+          }
           this.changeHangHoa(dataDetail.hdr.loaiVthh);
           if (dataDetail) {
             this.fileDinhKems = dataDetail.hdr.fileDinhKems;
@@ -139,12 +146,14 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     if (this.userService.isTongCuc()) {
       this.formData.patchValue({
         tenDvi: this.userInfo.TEN_PHONG_BAN,
-        maDviDxuat: this.userInfo.MA_PHONG_BAN
+        maDviDxuat: this.userInfo.MA_PHONG_BAN,
+        trangThai: this.STATUS.DU_THAO
       });
     } else {
       this.formData.patchValue({
         tenDvi: this.userInfo.TEN_DVI,
-        maDviDxuat: this.userInfo.MA_DVI
+        maDviDxuat: this.userInfo.MA_DVI,
+        trangThai: this.STATUS.DU_THAO
       });
     }
   }
@@ -189,7 +198,7 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
 
   changeHangHoa(event) {
     if (event) {
-      this.formData.get("dvt").setValue(this.listLoaiVthh.find((x) => x.ma == event).maDviTinh);
+      this.formData.get("dvt").setValue(this.listLoaiVthh.find((x) => x.ma == event)?.maDviTinh);
     } else {
       this.formData.get("dvt").setValue(null);
     }
@@ -399,39 +408,61 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async hoanThanh() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn hoàn thành bản dự thảo?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        await this.spinner.show();
-        try {
-          let body = {
-            id: this.idInput,
-            trangThai: STATUS.DA_TAO_CBV,
-          };
-          let res = await this.dxKhNhapKhacService.approve(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(
-              MESSAGE.SUCCESS,
-              MESSAGE.DUYET_SUCCESS,
-            );
-            this.quayLai();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+    let body: any = {};
+    if (this.formData.get('soDxuat').value) {
+      this.formData.get('soDxuat').setValue(this.formData.get('soDxuat').value + this.maTrinh);
+    }
+    body = this.formData.value;
+    body.details = this.listOfData;
+    body.fileDinhKems = this.fileDinhKems;
+    body.canCuPhapLy = this.canCuPhapLy;
+    let res = null;
+    if (this.formData.get('id').value) {
+      res = await this.dxKhNhapKhacService.update(body);
+    } else {
+      res = await this.dxKhNhapKhacService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn hoàn thành bản dự thảo?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          await this.spinner.show();
+          try {
+            let body = {
+              id: this.idInput,
+              trangThai: STATUS.DA_TAO_CBV,
+            };
+            let res = await this.dxKhNhapKhacService.approve(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DUYET_SUCCESS,
+              );
+              this.quayLai();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            await this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            await this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
-          await this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          await this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
+        },
+      });
+      this.formData.patchValue({
+        soDxuat: this.formData.get("soDxuat").value.split('/')[0]
+      })
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   deleteRow(ma: string, data: any) {
@@ -486,31 +517,21 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     }
   }
 
+  calcTongSlTonKhoThucTe() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        sum += item.slTonKhoThucTe;
+      })
+      return sum;
+    }
+  }
+
   calcTongSlHaoDoi() {
     if (this.listOfData) {
       let sum = 0
       this.listOfData.forEach(item => {
         sum += item.slHaoDoiDinhMuc;
-      })
-      return sum;
-    }
-  }
-
-  calcTongSlDoiThua() {
-    if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        sum += item.slDoiThua;
-      })
-      return sum;
-    }
-  }
-
-  calcTongThanhTien() {
-    if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        sum += item.slDoiThua * item.donGia;
       })
       return sum;
     }
@@ -762,8 +783,16 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     let tongSl = 0;
     let tongThanhTien = 0;
     this.listOfData.forEach(i => {
-      tongSl += i.slDoiThua;
-      tongThanhTien += i.slDoiThua * i.donGia;
+      if (this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.DOI_THUA) {
+        tongSl += i.slDoiThua;
+        tongThanhTien += i.slDoiThua * i.donGia;
+      } else if (this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK) {
+        tongSl += (i.slTonKhoThucTe - i.slTonKho);
+        tongThanhTien += (i.slTonKhoThucTe - i.slTonKho) * i.donGia;
+      } else {
+        tongSl += i.slNhap;
+        tongThanhTien += i.slNhap * i.donGia;
+      }
     })
     this.formData.get("tongSlNhap").setValue(tongSl);
     this.formData.get("tongThanhTien").setValue(tongThanhTien);

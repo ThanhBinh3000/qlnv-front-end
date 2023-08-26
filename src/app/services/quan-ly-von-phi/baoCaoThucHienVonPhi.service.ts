@@ -13,7 +13,6 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
-    urlTest = 'http://localhost:9159';
     urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
 
     //search list bao cao
@@ -73,6 +72,12 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
         );
     }
 
+    ctietBieuMau(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/chi-tiet/bieu-mau/' + id,
+        );
+    }
+
     //tong hop bao cao ket qua thuc hien von phi hang DTQG
     tongHopBaoCaoKetQua(request: any): Observable<any> {
         return this.httpClient.post(
@@ -81,11 +86,11 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
     }
 
     //tao bao cao tai van phong
-    addOfficeReport(request: any): Observable<any> {
-        return this.httpClient.post(
-            this.urlDefault + '/bao-cao/tong-hop-vp',
-            request);
-    }
+    // addOfficeReport(request: any): Observable<any> {
+    //     return this.httpClient.post(
+    //         this.urlDefault + '/bao-cao/tong-hop-vp',
+    //         request);
+    // }
 
     // call api chức năng duyet bieu mau
     approveBieuMau(request: any): Observable<any> {
@@ -117,5 +122,17 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
             this.urlDefault + '/bao-cao/them-moi-vp',
             request,
         )
+    }
+
+    addHistory(id: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/tao-moi-lich-su/' + id,
+        );
+    }
+
+    restoreReport(cId: string, rId: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/bao-cao/khoi-phuc/currentId=' + cId + '/recoverId=' + rId,
+        );
     }
 }

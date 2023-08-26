@@ -148,79 +148,28 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="3">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Ngày kết thúc NT kê lót, BQLĐ</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayKetThucNt" nzFormat="dd/MM/yyyy">
-                </nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
 
 
 
 
 
 
-          <div nz-col [nzSpan]="3">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                KTV bảo quản
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="ktvBaoQuan" [readonly]="true" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Thủ kho
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="thuKho" [readonly]="true" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Kế toán đơn vị
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="keToan" [readonly]="true" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
 
 
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Thủ trưởng đơn vị
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="thuTruong" [readonly]="true" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
 
           <div nz-col nzSpan="3">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Lô kho(Nhập điều chuyển)
+              <nz-form-label nzRequired [nzNoColon]="true">Lô/Ngăn kho (Nhập điều chuyển)
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <!-- <input nz-input formControlName="tenLoKho" [readonly]="true" /> -->
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKhoNhap()">
-                  <input [readonly]="true" nz-input formControlName="tenLoKho" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="tenLoNganKho" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="3">
+          <!-- <div nz-col nzSpan="3">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngăn kho
               </nz-form-label>
@@ -229,7 +178,7 @@
 
               </nz-form-control>
             </nz-form-item>
-          </div>
+          </div> -->
           <div nz-col nzSpan="6">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Nhà kho
@@ -284,10 +233,22 @@
               <nz-form-control nz-col [nzErrorTip]="error">
                 <!-- <span class="text-blue">{{formData.value.tichLuongKhaDung|number: '1.0-1':
                   'vi_VN'}} {{formData.value.tenDonViTinh}}</span> -->
-                <input nz-input formControlName="tichLuongKhaDung" [readonly]="true" />
+                <input nz-input formControlName="tichLuong" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
+
+          <div nz-col [nzSpan]="3">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Ngày kết thúc NT kê lót, BQLĐ</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-date-picker [nzDisabled]="isView" formControlName="ngayKetThucNt" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+
           <div nz-col nzSpan="3">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">Số phiếu nhập kho
@@ -346,6 +307,51 @@
               </nz-form-label>
               <nz-form-control>
                 <input nz-input formControlName="dinhMucTT" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="6">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                KTV bảo quản
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="tenKyThuatVien" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="6">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Thủ kho
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="tenThuKho" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="6">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Kế toán đơn vị
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="tenKeToan" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+
+          <div nz-col [nzSpan]="6">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Thủ trưởng đơn vị
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="tenLanhDao" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>

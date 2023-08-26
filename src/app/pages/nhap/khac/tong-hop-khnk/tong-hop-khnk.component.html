@@ -12,14 +12,14 @@
           <label class="search__label">Mã tổng hợp</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.maTh" />
         </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Trạng thái</label>
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
-                     [(ngModel)]="searchFilter.trangThai">
-            <nz-option *ngFor="let item of listTrangThai" [nzValue]="item.id" [nzLabel]="item.tenDm">
-            </nz-option>
-          </nz-select>
-        </div>
+<!--        <div nz-col nzSpan="4">-->
+<!--          <label class="search__label">Trạng thái</label>-->
+<!--          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"-->
+<!--                     [(ngModel)]="searchFilter.trangThai">-->
+<!--            <nz-option *ngFor="let item of listTrangThai" [nzValue]="item.id" [nzLabel]="item.tenDm">-->
+<!--            </nz-option>-->
+<!--          </nz-select>-->
+<!--        </div>-->
         <div nz-col nzSpan="4">
           <label class="search__label">Ngày tổng hợp</label>
           <div nz-row [nzGutter]="24">

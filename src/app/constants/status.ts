@@ -145,6 +145,9 @@ export enum CHUC_NANG {
   DUYET_KTVBQ = 'DUYET_KTVBQ',
   DUYET_KT = 'DUYET_KT',
   TAO_QD = 'TAO_QD',
+  BAN_HANH = 'BAN_HANH',
+  CHUA_TAO_QD = 'CHUA_TAO_QD',
+  DA_DU_THAO_QD = 'DA_DU_THAO_QD'
 }
 
 
@@ -157,6 +160,7 @@ export enum HSKT_LOAI_DOI_TUONG {
   HO_SO = "HS",
   NGUOI_LIEN_QUAN = "NLQ"
 }
+
 export enum LOAI_DOI_TUONG {
   HO_SO = "HS",
   NGUOI_LIEN_QUAN = "NLQ",

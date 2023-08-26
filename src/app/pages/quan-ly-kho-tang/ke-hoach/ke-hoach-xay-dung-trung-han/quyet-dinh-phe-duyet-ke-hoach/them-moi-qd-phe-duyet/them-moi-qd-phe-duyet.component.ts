@@ -337,7 +337,8 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
                 return {
                   idVirtual: uuidv4(),
                   tenKhoi: k,
-                  dataChild: v
+                  dataChild: v,
+                  khoi : v && v[0] && v[0].khoi ? v[0].khoi : null
                 };
               }
             ).value();

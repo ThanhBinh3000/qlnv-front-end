@@ -85,8 +85,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   preFixSoDn: string = "KH";
   titleSoDeNghi: string;
   hangHoaAll: any[];
+  detailHopDong: DetailHopDong;
   listHopDong: any[] = [];
   itemHopDongSelected: any;
+  isVisibleModal = false;
   amount = AMOUNT_NO_DECIMAL;
   rowItem: IDeNghiCapVon = {
     maHopDong: null,
@@ -214,9 +216,27 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
           this.tinhTong();
         }
       }
-    }else{
+    } else {
       this.itemDnCapVonBn.tenTrangThai = 'Đang nhập dữ liệu';
     }
+  }
+
+
+  handleCancel() {
+    this.showModal(null, false);
+  }
+
+  async showModal(maHopDong: string, isVisibleModal: boolean) {
+    if (maHopDong) {
+      let res = await this.deNghiCapVonBoNganhService.detailHopDong(maHopDong);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.detailHopDong = res.data;
+          console.log(res.data, 'res.datares.datares.data')
+        }
+      }
+    }
+    this.isVisibleModal = isVisibleModal;
   }
 
   async getListBoNganh() {
@@ -347,8 +367,13 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     if (this.rowItemDetailHhh.slDeNghiCapVon && this.rowItemDetailHhh.donGia) {
       let thanhTien = this.rowItemDetailHhh.slDeNghiCapVon * this.rowItemDetailHhh.donGia;
       this.maxYeuCauCapThem = thanhTien;
-      this.rowItemDetailHhh.thanhTien = thanhTien;
-      this.rowItemDetailHhh.thanhTienNt = thanhTien;
+      if (this.itemHopDongSelected.loaiTien == '01') {
+        this.rowItemDetailHhh.thanhTien = thanhTien;
+        this.rowItemDetailHhh.thanhTienNt = null;
+      } else {
+        this.rowItemDetailHhh.thanhTienNt = thanhTien;
+        this.rowItemDetailHhh.thanhTien = thanhTien * this.itemHopDongSelected.tyGia;
+      }
     }
   }
 
@@ -502,6 +527,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         }
       })
     }
+    this.tinhTong();
   }
 
   showEditItemHangHoa(idx: number, type: string) {
@@ -822,4 +848,19 @@ export class ItemDetailHh {
   thanhTienNt: number;
   slDeNghiCapVon: number;
   donViTinh: number;
+}
+
+export class DetailHopDong {
+  soHopDong: string;
+  maHopDong: string;
+  loaiTien: string;
+  dvCungCapHang: string;
+  soTaiKhoan: string;
+  nganHang: string;
+  tenLoaiTien: string;
+  tongTienNt: number;
+  tyGia: number;
+  tongTien: number;
+  duToanDuocGiao: number;
+  listHopDongTheoDeNghi: any
 }

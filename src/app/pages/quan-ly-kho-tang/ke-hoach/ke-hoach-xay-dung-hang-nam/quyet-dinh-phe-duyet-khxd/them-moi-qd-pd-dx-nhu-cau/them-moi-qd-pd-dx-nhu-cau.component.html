@@ -194,7 +194,7 @@
                 <tbody>
                 <ng-container *ngFor="let data of dataTable , let idx = index">
                   <tr>
-                    <td [nzExpand]="expandSet.has(data.idVirtual)"
+                    <td class="text-center" [nzExpand]="expandSet.has(data.idVirtual)"
                         (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
                     <td class="font-weight-bold">{{data.tenChiCuc}}</td>
                     <td></td>
@@ -217,7 +217,7 @@
                       <tr>
                         <td></td>
                         <td></td>
-                        <td [nzExpand]="expandSet.has(item.idVirtual)"
+                        <td class="text-center" [nzExpand]="expandSet.has(item.idVirtual)"
                             (nzExpandChange)="onExpandChange(item.idVirtual, $event)"></td>
                         <td class="ont-weight-bold">{{item.tenKhoi}}</td>
                         <td></td>
@@ -243,7 +243,7 @@
                           <tr>
                             <td></td>
                             <td></td>
-                            <td class="text-right font-weight-bold">{{y + 1}}</td>
+                            <td class="text-center font-weight-bold">{{y + 1}}</td>
                             <td></td>
                             <td>{{children.tenDuAn}}</td>
                             <td>{{children.diaDiem}}</td>

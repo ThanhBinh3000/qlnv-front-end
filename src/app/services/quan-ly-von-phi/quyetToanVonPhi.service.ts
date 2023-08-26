@@ -179,5 +179,17 @@ export class QuyetToanVonPhiService extends BaseService {
     );
   }
 
+  restoreReport(cId: string, rId: string): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/quyet-toan/phuc-hoi/currentId=' + cId + '/recoverId=' + rId,
+    );
+  };
+
+  addHistory(id: string): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/quyet-toan/sao-chep/' + id,
+    );
+  };
+
 }
 

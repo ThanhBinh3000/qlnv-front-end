@@ -24,12 +24,16 @@ import {
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import * as dayjs from "dayjs";
 import {MESSAGE} from "../../../../../constants/message";
-import {FILETYPE} from "../../../../../constants/fileType";
+import {FILETYPE, PREVIEW} from "../../../../../constants/fileType";
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { STATUS } from "../../../../../constants/status";
 import { isEmpty } from 'lodash'
+import {
+  ThemmoiThongtinDauthauComponent
+} from "../../trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau/themmoi-thongtin-dauthau.component";
+import { saveAs } from "file-saver";
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
   templateUrl: './themmoi-quyetdinh-ketqua-lcnt.component.html',
@@ -46,6 +50,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
 
   @Input() isView: boolean;
   @ViewChild('thongtindtvt') thongTinDauThauVt: ThemmoiThongtinDauthauVtComponent;
+  @ViewChild('thongtindt') thongTinDauThau: ThemmoiThongtinDauthauComponent;
 
   formData: FormGroup;
 
@@ -59,6 +64,15 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   listFile: any[] = []
   userInfo: UserLogin;
   STATUS = STATUS
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "qd_pd_kqlcnt_vt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
   constructor(
     modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -199,6 +213,18 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         })
       }
       body.fileDinhKems = this.listFile;
+      let detail = [];
+      this.thongTinDauThau.listOfData.forEach(item => {
+        let dtl = {
+          idGoiThau: item.id,
+          idNhaThau: item.kqlcntDtl?.idNhaThau,
+          donGiaVat: item.kqlcntDtl?.donGiaVat,
+          trangThai: item.kqlcntDtl?.trangThai,
+          tenNhaThau: item.kqlcntDtl?.tenNhaThau
+        }
+        detail.push(dtl)
+      })
+      body.detailList = detail;
     }
 
     let res;
@@ -378,5 +404,25 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     }
   }
 
+  async preview() {
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.quyetDinhPheDuyetKetQuaLCNTService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
 
+  downloadPdf() {
+    saveAs(this.pdfSrc, "qd_pd_kqlcnt_vt.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "qd_pd_kqlcnt_vt.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }

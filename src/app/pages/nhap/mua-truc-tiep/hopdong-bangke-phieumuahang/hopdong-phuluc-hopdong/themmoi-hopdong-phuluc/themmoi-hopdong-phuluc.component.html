@@ -533,7 +533,7 @@
                   <nz-form-label [nzNoColon]="true"> Tổng SL nhập TT theo QĐ phê duyệt KH mua trực tiếp đã ký HĐ
                   </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
-                    <span class="text-red">{{formData.value.tongSoLuongQdKhChuakyHd | number : '1.0-1'
+                    <span class="text-red">{{formData.value.tongSoLuongQdKhDakyHd | number : '1.0-1'
                       :
                       'vi_VN'
                       }} (tấn)</span>
@@ -550,7 +550,7 @@
                     <span class="text-red">{{formData.value.tongSoLuongQdKhChuakyHd | number : '1.0-1'
                       :
                       'vi_VN'
-                      }}</span>
+                      }} (tấn)</span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -648,33 +648,33 @@
                   <td></td>
                   <td></td>
                   <td>{{children.tenDiemKho}}</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>{{children.tenNhaKho}}</td>
+                  <td>{{children.tenNganKho}}</td>
+                  <td>{{children.tenLoKho}}</td>
+                  <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                   <td></td>
                   <td></td>
                   <td></td>
                 </tr>
-                <ng-container *ngFor="let diaDiem of item.children, let k = index">
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>{{diaDiem.tenNhaKho}}</td>
-                    <td>{{diaDiem.tenNganKho}}</td>
-                    <td>{{diaDiem.tenLoKho}}</td>
-                    <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </ng-container>
+<!--                <ng-container *ngFor="let diaDiem of item.children, let k = index">-->
+<!--                  <tr>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td>{{diaDiem.tenNhaKho}}</td>-->
+<!--                    <td>{{diaDiem.tenNganKho}}</td>-->
+<!--                    <td>{{diaDiem.tenLoKho}}</td>-->
+<!--                    <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                    <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}-->
+<!--                    </td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                  </tr>-->
+<!--                </ng-container>-->
               </ng-container>
             </ng-container>
             </tbody>
