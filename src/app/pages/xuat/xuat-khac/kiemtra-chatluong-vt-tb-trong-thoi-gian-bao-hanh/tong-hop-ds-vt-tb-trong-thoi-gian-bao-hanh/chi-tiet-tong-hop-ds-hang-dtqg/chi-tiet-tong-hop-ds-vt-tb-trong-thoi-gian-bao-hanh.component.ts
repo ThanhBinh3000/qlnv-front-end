@@ -94,8 +94,6 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
   async ngOnInit(): Promise<void> {
     try {
       await this.spinner.show();
-      console.log(this.showDetail, 666)
-      console.log(this.selectedItem, 77)
       await this.loadDetail(this.idInput);
     } catch (e) {
       console.log('error: ', e)

@@ -204,7 +204,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
         break;
       }
       case STATUS.CHO_DUYET_LDV: {
-        trangThai = STATUS.DA_DUYET_LDTC;
+        trangThai = STATUS.CHO_DUYET_LDTC;
         mess = 'Bạn có chắc chắn muốn gửi duyệt ?'
         break;
       }

@@ -22,13 +22,13 @@
           <span>Lưu và gửi duyệt</span>
 
         </button>
-        <button type="button" class="btn btn-sub do  ml-2" *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ||
+        <button type="button" class="btn btn-sub do  ml-2" *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ||formData.value.trangThai == STATUS.CHO_DUYET_KT||
 formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
                 (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat  ml-2" *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ||
+        <button class="btn btn-sub xanh-nhat  ml-2" *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ||formData.value.trangThai == STATUS.CHO_DUYET_KT||
 formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
                 (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet "></i>
