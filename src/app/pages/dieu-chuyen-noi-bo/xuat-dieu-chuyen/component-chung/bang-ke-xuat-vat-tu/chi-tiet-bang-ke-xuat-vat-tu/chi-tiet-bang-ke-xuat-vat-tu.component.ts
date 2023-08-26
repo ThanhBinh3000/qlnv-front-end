@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { PhieuXuatKhoDieuChuyenService } from '../../services/dcnb-xuat-kho.service';
 import { BangKeCanHangDieuChuyenService } from '../../services/dcnb-bang-ke-can-hang.service';
 import { QuyetDinhDieuChuyenCucService } from '../../../../../../services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
@@ -29,6 +30,7 @@ import {
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PassDataXuatBangKeXuatVatTu } from '../bang-ke-xuat-vat-tu.component';
 import { BangKeXuatVatTuDieuChuyenService } from '../../services/dcnb-bang-ke-xuat-vat-tu.service';
+import { PREVIEW } from 'src/app/constants/fileType';
 
 
 @Component({
@@ -100,6 +102,17 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         [this.STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
     }
     maBb: string;
+    reportTemplate: any = {
+        typeFile: "",
+        fileName: "",
+        tenBaoCao: "",
+        trangThai: ""
+    };
+    showDlgPreview: boolean;
+    pdfSrc: string;
+    wordSrc: string;
+    excelSrc: string;
+    isPrint: boolean;
     constructor(
         httpClient: HttpClient,
         storageService: StorageService,
@@ -712,5 +725,47 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 dcnbBangKeXuatVTDtl: this.formData.value.dcnbBangKeXuatVTDtl
             })
         }
+    }
+    async preview() {
+        this.reportTemplate.fileName = "bang_ke_xuat_vat_tu.docx";
+        let body = {
+            reportTemplateRequest: this.reportTemplate,
+            ...this.formData.value
+        }
+        await this.bangKeXuatVatTuDieuChuyenService.preview(body).then(async s => {
+            this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+            this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+            this.showDlgPreview = true;
+        });
+    }
+    downloadPdf() {
+        saveAs(this.pdfSrc, "bang_ke_xuat_vat_tu.pdf");
+    }
+
+    downloadWord() {
+        saveAs(this.wordSrc, "bang_ke_xuat_vat_tu.docx");
+    }
+    downloadExcel() {
+        saveAs(this.excelSrc, "bang_ke_xuat_vat_tu.xlsx");
+    }
+    doPrint() {
+        const WindowPrt = window.open(
+            '',
+            '',
+            'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+        );
+        let printContent = '';
+        printContent = printContent + '<div>';
+        printContent =
+            printContent + document.getElementById('modal').innerHTML;
+        printContent = printContent + '</div>';
+        WindowPrt.document.write(printContent);
+        WindowPrt.document.close();
+        WindowPrt.focus();
+        WindowPrt.print();
+        WindowPrt.close();
+    }
+    closeDlg() {
+        this.showDlgPreview = false;
     }
 }

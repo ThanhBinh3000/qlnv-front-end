@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -22,6 +23,7 @@ import { BienBanTinhKhoDieuChuyenService } from '../../services/dcnb-bien-ban-ti
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { PhieuXuatKhoDieuChuyenService } from '../../services/dcnb-xuat-kho.service';
 import { PassDataBienBanTinhKho } from '../bien-ban-tinh-kho.component';
+import { PREVIEW } from 'src/app/constants/fileType';
 
 export const LIST_TRANG_THAI_BBTK = {
   [STATUS.DU_THAO]: "Dự thảo",
@@ -64,6 +66,17 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   fileBbTinhKhoDaKy: FileDinhKem[] = [];
 
   LIST_TRANG_THAI = LIST_TRANG_THAI_BBTK;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview: boolean;
+  pdfSrc: string;
+  wordSrc: string;
+  excelSrc: string;
+  isPrint: boolean;
 
   constructor(
     httpClient: HttpClient,
@@ -540,5 +553,48 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     this.idPhieuXuatKho = null;
     this.isViewModalBKCH = false;
     this.idBKCH = null;
+  }
+  //Preview
+  async preview() {
+    this.reportTemplate.fileName = "bien_ban_hao_doi.docx";
+    let body = {
+      reportTemplateRequest: this.reportTemplate,
+      ...this.formData.value
+    }
+    await this.bienBanTinhKhoDieuChuyenService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "bien_ban_hao_doi.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "bien_ban_hao_doi.docx");
+  }
+  downloadExcel() {
+    saveAs(this.excelSrc, "bien_ban_hao_doi.xlsx");
+  }
+  doPrint() {
+    const WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('modal').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }

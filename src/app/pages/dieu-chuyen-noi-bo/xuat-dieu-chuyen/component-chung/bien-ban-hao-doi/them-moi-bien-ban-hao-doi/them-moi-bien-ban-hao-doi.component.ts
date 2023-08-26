@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { BienBanHaoDoiDieuChuyenService } from './../../services/dcnb-bien-ban-hao-doi.service';
 import { BienBanTinhKhoDieuChuyenService } from './../../services/dcnb-bien-ban-tinh-kho.service';
@@ -31,6 +32,7 @@ import {
   BienBanTinhKhoService
 } from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanTinhKho.service";
 import { PassDataBienBanHaoDoi } from '../bien-ban-hao-doi.component';
+import { PREVIEW } from 'src/app/constants/fileType';
 
 export const LIST_TRANG_THAI_BBHD = {
   [STATUS.DU_THAO]: "Dự thảo",
@@ -74,6 +76,17 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   //   soQdinhDcc: '', qdinhDccId: null, soBbTinhKho: '', bbtinhKhoId: null, maDiemKho: '', tenDiemKho: '', maNhaKho: '', tenNhaKho: '',
   //   maNganKho: '', tenNganKho: '', maLoKho: '', tenLoKho: '', loaiVthh: '', cloaiVthh: '', tenLoaiVthh: '', tenCloaiVthh: '',
   // }
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview: boolean;
+  pdfSrc: string;
+  wordSrc: string;
+  excelSrc: string;
+  isPrint: boolean;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -568,5 +581,48 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     return tree.flatMap((item) => {
       return item.childData ? this.flattenTree(item.childData) : item;
     });
+  }
+  //Preview
+  async preview() {
+    this.reportTemplate.fileName = "bien_ban_hao_doi.docx";
+    let body = {
+      reportTemplateRequest: this.reportTemplate,
+      ...this.formData.value
+    }
+    await this.bienBanHaoDoiDieuChuyenService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "bien_ban_hao_doi.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "bien_ban_hao_doi.docx");
+  }
+  downloadExcel() {
+    saveAs(this.excelSrc, "bien_ban_hao_doi.xlsx");
+  }
+  doPrint() {
+    const WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('modal').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }

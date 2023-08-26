@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { BienBanLayMauDieuChuyenService } from './../../services/dcnb-bien-ban-lay-mau.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,6 +41,7 @@ import { PhieuKiemNghiemChatLuongDieuChuyenService } from '../../services/dcnb-p
 import { PassDataPKNCL } from '../quan-ly-phieu-kiem-nghiem-chat-luong.component';
 import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
+import { PREVIEW } from 'src/app/constants/fileType';
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
   templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
@@ -108,7 +110,18 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     { value: 0, label: "Không đạt" },
     { value: 1, label: "Đạt" }
   ]
-  maBb: string
+  maBb: string;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview: boolean;
+  pdfSrc: string;
+  wordSrc: string;
+  excelSrc: string;
+  isPrint: boolean;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -768,5 +781,47 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       this.formData.controls['danhGiaCamQuan'].clearValidators();
       this.formData.controls['nhanXetKetLuan'].clearValidators();
     }
+  }
+  async preview() {
+    this.reportTemplate.fileName = "phieu_kiem_nghiem_chat_luong_hang_du_tru_quoc_gia.docx";
+    let body = {
+      reportTemplateRequest: this.reportTemplate,
+      ...this.formData.value
+    }
+    await this.phieuKiemNghiemChatLuongDieuChuyenService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "phieu_kiem_nghiem_chat_luong_hang_du_tru_quoc_gia.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "phieu_kiem_nghiem_chat_luong_hang_du_tru_quoc_gia.docx");
+  }
+  downloadExcel() {
+    saveAs(this.excelSrc, "phieu_kiem_nghiem_chat_luong_hang_du_tru_quoc_gia.xlsx");
+  }
+  doPrint() {
+    const WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('modal').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }
