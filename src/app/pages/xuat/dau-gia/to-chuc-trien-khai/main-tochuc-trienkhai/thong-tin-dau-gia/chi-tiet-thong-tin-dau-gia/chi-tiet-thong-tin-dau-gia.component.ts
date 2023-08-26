@@ -43,6 +43,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       {
         id: [],
         nam: [],
+        idQdPd: [],
         soQdPd: [''],
         idQdPdDtl: [],
         soQdPdKqBdg: [''],
@@ -96,6 +97,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
               const dataHdr = dataQd.data;
               this.formData.patchValue({
                 nam: dataDtl.nam,
+                idQdPd: dataDtl.idQdHdr,
                 soQdPd: dataDtl.soQdPd,
                 idQdPdDtl: dataDtl.id,
                 soQdPdKqBdg: dataDtl.soQdPdKqBdg,
@@ -168,7 +170,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
           let res = await this.quyetDinhPdKhBdgService.approveDtl(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-            await this.loadDetail(this.idInput);
+            this.goBack();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }

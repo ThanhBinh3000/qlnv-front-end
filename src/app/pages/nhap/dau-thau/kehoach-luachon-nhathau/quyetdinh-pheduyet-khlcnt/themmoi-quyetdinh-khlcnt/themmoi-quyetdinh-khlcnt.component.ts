@@ -37,6 +37,7 @@ import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHo
 import { saveAs } from "file-saver";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {ThongtinDexuatComponent} from "./thongtin-dexuat/thongtin-dexuat.component";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khlcnt',
@@ -107,6 +108,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   showDlgPreview = false;
   pdfSrc: any;
   wordSrc: any;
+  printSrc: any;
   constructor(
     private router: Router,
     private modal: NzModalService,
@@ -810,6 +812,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     body.reportTemplateRequest = this.reportTemplate;
     await this.quyetDinhPheDuyetKeHoachLCNTService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
@@ -824,5 +827,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   closeDlg() {
     this.showDlgPreview = false;
+  }
+
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
