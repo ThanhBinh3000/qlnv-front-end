@@ -1,0 +1,213 @@
+<div class="bg-trang">
+    <div nz-row [nzGutter]="[24]">
+        <div nz-col [nzSpan]="10">
+            <div class="group-button">
+                <h3>Lịch sử chốt {{ isChotDieuChinhGia ? 'điều chỉnh giá' : 'nhập xuất' }}</h3>
+                <div class="buttons">
+                    <button type="button" class="btn btn-main" (click)="themMoi()">
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <span>Thêm</span>
+                    </button>
+                </div>
+            </div>
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
+                    nzBordered>
+                    <thead>
+                        <tr>
+                            <th nzWidth="35px">STT</th>
+                            <th nzWidth="80px">Ngày chốt</th>
+                            <th nzWidth="80px">Ngày hiệu lực</th>
+                            <th nzWidth="80px">Tài khoản chốt</th>
+                            <th nzWidth="70px">Ngày hủy bó</th>
+                        </tr>
+                        <tr class="search-table">
+                            <th></th>
+                            <th>
+                                <nz-input-group>
+                                    <nz-date-picker (ngModelChange)="searchPage()" nzFormat="dd/MM/yyyy"
+                                        [(ngModel)]="formData.value.ngayChotSr">
+                                    </nz-date-picker>
+                                </nz-input-group>
+                            </th>
+                            <th>
+                                <nz-input-group>
+                                    <nz-date-picker (ngModelChange)="searchPage()" nzFormat="dd/MM/yyyy"
+                                        [(ngModel)]="formData.value.ngayHlucSr">
+                                    </nz-date-picker>
+                                </nz-input-group>
+                            </th>
+                            <th>
+                                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                                    <input (input)="searchPage()" type="text" nz-input placeholder="Tìm kiếm"
+                                        [(ngModel)]="formData.value.taiKhoanSr" />
+                                </nz-input-group>
+                            </th>
+                            <th>
+                                <nz-input-group>
+                                    <nz-date-picker (ngModelChange)="searchPage()" nzFormat="dd/MM/yyyy"
+                                        [(ngModel)]="formData.value.ngayHuySr">
+                                    </nz-date-picker>
+                                </nz-input-group>
+                            </th>
+                            <ng-template #suffixTemplateInfo>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of dataTable; let idx = index" (click)="showDetail($event,data.id)">
+                            <td class="text-center">{{idx + 1}}</td>
+                            <td>{{data.ngayChot | date: 'dd/MM/YYYY'}}</td>
+                            <td>{{data.ngayHluc | date: 'dd/MM/YYYY'}}</td>
+                            <td>{{data.tenNguoiTao}}</td>
+                            <td>{{data.ngayHuy | date: 'dd/MM/YYYY'}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+                <div class="tab-content tab-menu paging-phan-quyen">
+                    <div class="tab-pane fade show active justify-content-between">
+                        <div class="trai"></div>
+                        <div class="canphai">
+                            <!-- begin phân trang  -->
+                            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                                nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                                (nzPageIndexChange)="changePageIndex($event)"
+                                (nzPageSizeChange)="changePageSize($event)">
+                                <ng-template #rangeTemplate let-range="range" let-total>
+                                    {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                                </ng-template>
+                            </nz-pagination>
+                            <!-- end phân trang  -->
+                        </div>
+                    </div>
+                </div>
+            </nz-card>
+        </div>
+        <div nz-col [nzSpan]="14">
+            <div class="group-button">
+                <h3>{{ isChotDieuChinhGia ? 'Chốt điều chỉnh giá' : 'Chốt nhập xuất' }}</h3>
+                <div class="buttons">
+                    <button *ngIf="isCapNhat" type="button" class="btn btn-do" (click)="huyBo()">
+                        <i class="fa fa-trash-o do" title="Hủy bản ghi"></i>
+                        <span>Hủy bỏ</span>
+                    </button>
+                    <button *ngIf="isCapNhat" type="button" class="btn btn-main" (click)="save()">
+                        <i class="fa fa-save"></i>
+                        <span>Cập nhật</span>
+                    </button>
+                    <button *ngIf="!id" type="button" class="btn btn-main" (click)="save()">
+                        <i class="fa fa-save"></i>
+                        <span>Chốt</span>
+                    </button>
+                </div>
+            </div>
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                Đơn vị áp dụng
+                <nz-radio-group [(ngModel)]="checkAll" (ngModelChange)="onChangeCheck()">
+                    <label nz-radio nzValue="1">Tất cả</label>
+                    <label nz-radio nzValue="0">Cục DTNN KV</label>
+                </nz-radio-group>
+            </nz-card>
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                <nz-checkbox-wrapper (nzOnChange)="log($event)">
+                    <div nz-row>
+                        <ng-container *ngFor="let item of listDonVi">
+                            <div nz-col nzSpan="6"><label nz-checkbox nzValue="{{item.value}}"
+                                    [ngModel]="item.checked">{{item.label}}</label></div>
+                        </ng-container>
+                    </div>
+                </nz-checkbox-wrapper>
+            </nz-card>
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                <form nz-form [formGroup]="formData">
+                    <div nz-row [nzGutter]="18">
+                        <div nz-col [nzSpan]="6">
+                            <nz-form-control [nzErrorTip]="error">
+                                <nz-form-label nzRequired>Ngày chốt</nz-form-label>
+                                <nz-form-item>
+                                    <nz-date-picker [nzDisabledDate]="disabledTuNow" nzFormat="dd/MM/yyyy"
+                                        formControlName="ngayChot" [nzDisabled]="id != null">
+                                    </nz-date-picker>
+                                </nz-form-item>
+                            </nz-form-control>
+                        </div>
+                        <div nz-col [nzSpan]="6">
+                            <nz-form-control [nzErrorTip]="error">
+                                <nz-form-label nzRequired>Ngày hiệu lực</nz-form-label>
+                                <nz-form-item>
+                                    <nz-date-picker [nzDisabledDate]="disabledTuNow" nzFormat="dd/MM/yyyy"
+                                        formControlName="ngayHluc" [nzDisabled]="disabled()">
+                                    </nz-date-picker>
+                                </nz-form-item>
+                            </nz-form-control>
+                        </div>
+                    </div>
+                </form>
+            </nz-card>
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                <h3>DANH SÁCH CÁC QĐ PHÊ DUYỆT KH LCNT, QĐ PD KH MUA, BÁN TRỰC TIẾP ĐANG THỰC HIỆN</h3>
+                <nz-table class="nowrap" [nzData]="dataTableAll" [nzFrontPagination]="false" [nzShowPagination]="false"
+                    nzBordered>
+                    <thead>
+                        <tr>
+                            <th nzWidth="35px">STT</th>
+                            <th nzWidth="80px">Ngày chốt</th>
+                            <th nzWidth="80px">Ngày hiệu lực</th>
+                            <th nzWidth="160px">Tài khoản chốt</th>
+                            <th nzWidth="70px">Ngày hủy bó</th>
+                        </tr>
+                        <!-- <tr class="search-table">
+                            <th></th>
+                            <th>
+                                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                                    <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                                        [(ngModel)]="formData.value.name" />
+                                </nz-input-group>
+                            </th>
+                            <th>
+                                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                                    <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                                        [(ngModel)]="formData.value.status" />
+                                </nz-input-group>
+                            </th>
+                            <th>
+                                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                                    <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                                        [(ngModel)]="formData.value.ghiChu" />
+                                </nz-input-group>
+                            </th>
+                            <th [nzRight]="true"></th>
+                            <ng-template #suffixTemplateInfo>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </tr> -->
+                    </thead>
+                    <tbody>
+                        <!-- <tr *ngFor="let data of rowSelectionTable.data; let idx = index"
+                            (click)="showDetail($event,data.id)">
+                            <td class="text-center">{{idx + 1}}</td>
+                            <td>{{data.name}}</td>
+                            <td>{{data.tenTrangThai}}</td>
+                            <td>{{data.ghiChu}}</td>
+                            <td>
+                                <a (click)="themNhomQuyen(data)">
+                                    <i class="fa fa-eye" title="Xem chi tiết"></i>
+                                </a>
+                                <a (click)="themNhomQuyen(data)">
+                                    <i class="fa fa-pencil" title="Sửa"></i>
+                                </a>
+                                <a (click)="xoaNhomQuyen(data)">
+                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                </a>
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </nz-table>
+            </nz-card>
+        </div>
+    </div>
+</div>
+<ng-template #error let-control>
+    <app-template-error #error [control]="control"></app-template-error>
+</ng-template>
