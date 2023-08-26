@@ -19,6 +19,8 @@ import { saveAs } from 'file-saver';
 import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { endOfMonth } from 'date-fns';
+import printJS from "print-js";
+import {PREVIEW} from "../../constants/fileType";
 
 @Component({
   selector: 'app-base2',
@@ -64,7 +66,16 @@ export class Base2Component implements OnInit {
   uploadFileService: UploadFileService
   service: BaseService;
   ranges = { 'Hôm nay': [new Date(), new Date()], 'Tháng hiện tại': [new Date(), endOfMonth(new Date())] };
-
+  showDlgPreview = false;
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -641,4 +652,29 @@ export class Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayDen.getTime();
   };
+  async preview(fileName: string) {
+    let body = this.formData.value;
+    this.reportTemplate.fileName = fileName;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.service.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf(fileName: string) {
+    saveAs(this.pdfSrc, fileName);
+  }
+
+  downloadWord(fileName: string) {
+    saveAs(this.wordSrc, fileName);
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  }
 }
