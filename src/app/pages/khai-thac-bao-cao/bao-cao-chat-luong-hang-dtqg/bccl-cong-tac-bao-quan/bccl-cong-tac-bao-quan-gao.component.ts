@@ -14,11 +14,10 @@ import {Base2Component} from "../../../../components/base2/base2.component";
 import {saveAs} from "file-saver";
 import {BcCLuongHangDTQGService} from 'src/app/services/bao-cao/BcCLuongHangDTQG.service';
 import {DanhMucService} from "../../../../services/danhmuc.service";
-import {cloneDeep} from 'lodash';
 import {NumberToRoman} from "../../../../shared/commonFunction";
 
 @Component({
-  selector: 'app-bccl-cong-tac-bao-quan-gao',
+  selector: 'app-bccl-cong-tac-bao-quan',
   templateUrl: './bccl-cong-tac-bao-quan-gao.component.html',
   styleUrls: ['./bccl-cong-tac-bao-quan-gao.component.scss']
 })
@@ -53,14 +52,13 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        loaiKyBc: null,
-        kyBc: null,
+        loaiKyBc: [null, [Validators.required]],
+        kyBc: [null],
         maCuc: null,
         maChiCuc: null,
-        loaiVthh: null,
-        cloaiVthh: null,
-        loaiBc: null
-
+        loaiVthh: [null, [Validators.required]],
+        cloaiVthh: [null, [Validators.required]],
+        loaiBc: [null, [Validators.required]],
       }
     );
   }
@@ -69,7 +67,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     await this.spinner.show();
     try {
       this.loadDsDonVi();
-      this.loadDsHangHoa();
+      this.loadDsVthh();
       this.loadDsLoaiBc();
       this.loadDsKyBc();
     } catch (e) {
@@ -111,12 +109,19 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
   }
 
   async preView() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      return;
+    }
     try {
       this.spinner.show();
       let body = this.formData.value;
+      body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
+      body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
-      body.fileName = "bccl_cong_tac_bao_quan_gao.jrxml";
-      body.tenBaoCao = "Báo cáo chất lượng công tác quản lý gạo DTQG";
+      body.fileName = "bccl_cong_tac_bao_quan_tong_hop.jrxml";
+      body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản hàng DTQG - Tổng hợp";
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
         this.pdfBlob = s;
@@ -148,18 +153,24 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     }
   }
 
-  async loadDsHangHoa() {
-    let res = await this.danhMucSv.getAllVthhByCap("2");
+  async loadDsVthh() {
+    this.listVthh = [];
+    let res = await this.danhMucSv.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listVthh = res.data
-      }
+      this.listVthh = res.data;
     }
   }
 
-  async changHangHoa(event) {
+  async changeLoaiVthh(event) {
     if (event) {
-      this.listCloaiVthh = cloneDeep(this.listVthh).find(x => x.ma == event).children
+      let res = await this.danhMucSv.loadDanhMucHangHoaTheoMaCha({str: event});
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listCloaiVthh = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -181,7 +192,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
   async clearFilter() {
     this.formData.reset();
     this.formData.patchValue({
-      nam : dayjs().get('year')
+      nam: dayjs().get('year')
     })
   }
 
@@ -190,20 +201,20 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       this.listKyBc = [];
       switch (event) {
         case '01': {
-          for (let i = 1; i <=12; i++ ) {
+          for (let i = 1; i <= 12; i++) {
             let item = {
-              ma: i,
-              giaTri : 'Tháng '+ i
+              ma: 'Tháng ' + i,
+              giaTri: 'Tháng ' + i
             }
             this.listKyBc = [...this.listKyBc, item].flat();
           }
           break;
         }
         case '02': {
-          for (let i = 1; i <=4; i++ ) {
+          for (let i = 1; i <= 4; i++) {
             let item = {
-              ma: i,
-              giaTri : 'Quý '+ NumberToRoman(i)
+              ma: 'Quý ' + NumberToRoman(i),
+              giaTri: 'Quý ' + NumberToRoman(i)
             }
             this.listKyBc = [...this.listKyBc, item].flat();
           }
