@@ -39,13 +39,13 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-  STATUS: STATUS;
+  STATUS = STATUS;
   isDetail: boolean = false;
   listNam: any[] = [];
   listBoNganh: any[] = [];
   listTrangThai: any[] = [
     {ma: STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: STATUS.BAN_HANH, giaTri: 'Ban hành'},
+    {ma: STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
   ];
 
   yearNow: number = 0;
@@ -253,6 +253,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     this.searchFilter.ngayDeNghiTuNgay = "";
     this.searchFilter.ngayDeNghiDenNgay = "";
     this.searchFilter.tenBoNganh = "";
+    this.searchFilter.nam = "";
 
     this.filterTable = {
       "soDeNghi": '',

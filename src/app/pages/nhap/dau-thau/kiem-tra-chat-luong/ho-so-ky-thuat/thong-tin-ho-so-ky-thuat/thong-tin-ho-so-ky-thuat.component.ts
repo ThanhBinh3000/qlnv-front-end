@@ -43,6 +43,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
   @Input() loai: string;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
+  @Input() previewName: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 

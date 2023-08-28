@@ -167,3 +167,8 @@ export enum LOAI_DOI_TUONG {
   PHUONG_PHAP_LAY_MAU = "PPLM",
   KET_QUA_PHAN_TICH = "KKPT"
 }
+
+export enum LOAI_CHOT {
+  CHOT_GIA = "CHOT_GIA",
+  CHOT_NHAP_XUAT = "CHOT_NHAP_XUAT",
+}
