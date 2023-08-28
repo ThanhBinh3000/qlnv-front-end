@@ -12,12 +12,15 @@ export class DanhMucDuyetKhoService extends BaseService {
     GATEWAY = '/qlnv-kho';
 
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'qly-kho-tang/dieu-chuyen-sap-nhap/danh-muc-duyet-kho', '');
+        super(httpClient, 'qly-kho-tang/dieu-chuyen-sap-nhap/duyet-danh-muc-kho', '');
     }
 
     search(body) {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
-
+    getDetailTuQD(body) {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-tu-quyet-dinh?quyetDinhId=${body.id}&maDvi=${body.maDvi}`;
+        return this._httpClient.get<OldResponseData>(url).toPromise();
+    }
 }

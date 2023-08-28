@@ -65,7 +65,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label>Trạng thái sáp nhập</nz-form-label>
-              <nz-select formControlName="trangThaiSn">
+              <nz-select formControlName="trangThaiSn" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listTrangThaiSn" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -87,7 +87,8 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [isCanCuPL]="true" [disabled]="isView" [data]="listCcPhapLy"></file-list>
+              <file-list [isCanCuPL]="true" [isViewDetail]="isView" [disabled]="isView"
+                [data]="listCcPhapLy"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -97,7 +98,7 @@
               File đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="listFileDinhKem" [disabled]="isView"></file-list>
+              <file-list [data]="listFileDinhKem" [isViewDetail]="isView" [disabled]="isView"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -133,7 +134,7 @@
             <th [colspan]="formData.value.loai==='SN_DIEM_KHO'? 3: 2" style="width: 30%;" class="text-center">Đơn vị
               chuyển đến</th>
             <th rowspan="2" style="width: 30%;" class="text-center">Ghi chú</th>
-            <th rowspan="2" style="width: 7%;" class="text-center">Hành động</th>
+            <th *ngIf="!isView" rowspan="2" style="width: 7%;" class="text-center">Hành động</th>
 
           </tr>
           <tr>
@@ -146,7 +147,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr *ngIf="!isView">
             <td></td>
             <td>
               <nz-input-group>

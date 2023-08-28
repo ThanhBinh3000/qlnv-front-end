@@ -230,7 +230,7 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   }
   goToDanhMucDuyetKho() {
     const obj = {
-      qddcId: this.formData.value.id
+      quyetDinhId: this.formData.value.id
     };
     this.dataService.changeData(obj);
     this.selectTab.emit(1)

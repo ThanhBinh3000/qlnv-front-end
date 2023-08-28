@@ -86,10 +86,11 @@
                 [nzShowPagination]="false">
                 <tbody>
                     <tr class="header-row">
-                        <th width="40px">
+                        <!-- <th width="40px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                 [nzIndeterminate]="indeterminate"></label>
-                        </th>
+                        </th> -->
+                        <th></th>
                         <th class="text-left">STT</th>
                         <th class="text-left">Số quyết định</th>
                         <th class="text-left">Trích yếu</th>
@@ -140,10 +141,11 @@
                         <th></th>
                     </tr>
                     <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-                        <td>
+                        <!-- <td>
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                                 [nzDisabled]="data.trangThai != STATUS.CHODUYET_BTC"></label>
-                        </td>
+                        </td> -->
+                        <th></th>
                         <td>{{(page - 1) * pageSize + idx +
                             1}}</td>
                         <td> {{ data.soQuyetDinh }} </td>
@@ -152,14 +154,11 @@
                         <td>{{ ObTrangThaiSn[data.trangThaiSn] }}</td>
                         <td>{{ ObTrangThai[data.trangThai]}}</td>
                         <td class="text-left">
-                            <a *ngIf="data.trangThai ==STATUS.DADUYET_CB_CUC" (click)="redirectDetail(data.id, true)">
+                            <a *ngIf="['02', '03'].includes(data.trangThai)" (click)="redirectDetail(data.id, true)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.TUCHOI_CB_CUC" (click)="redirectDetail(data.id, false)">
-                                <i class="icon htvbdh_tcdt_pheduyet" title="Sửa"></i>
-                            </a>
-                            <a *ngIf="data.trangThai ==STATUS.CHODUYET_BTC" (click)="delete(data)">
-                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                            <a *ngIf="data.trangThai == '78'" (click)="redirectDetail(data.id, false)">
+                                <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                             </a>
                         </td>
                     </tr>
@@ -186,6 +185,7 @@
     </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-danh-muc-duyet-kho [isView]="isView" (showListEvent)="showList()" [idInput]="selectedId">
+    <app-thong-tin-danh-muc-duyet-kho [isView]="isView" (showListEvent)="showList()" [idInput]="selectedId"
+        [quyetDinhId]="quyetDinhId">
     </app-thong-tin-danh-muc-duyet-kho>
 </div>

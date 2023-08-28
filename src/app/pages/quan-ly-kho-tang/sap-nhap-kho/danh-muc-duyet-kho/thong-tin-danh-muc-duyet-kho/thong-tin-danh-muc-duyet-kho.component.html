@@ -16,13 +16,13 @@
                     <span>Quay lại</span>
                 </button>
                 <ng-container>
-                    <button *ngIf="formData.value.trangThai === STATUS.CHODUYET_BTC" type="button"
-                        class="btn btn-main ml-2" (click)="pheDuyet(false)">
+                    <button *ngIf="formData.value.trangThai === '78'" type="button" class="btn btn-sub xanh-nhat ml-2"
+                        (click)="tuChoi()">
                         <i class="icon htvbdh_tcdt_tuchoi do"></i>
                         <span>Từ chối</span>
                     </button>
-                    <button *ngIf="formData.value.trangThai != STATUS.DADUYET_CB_CUC" type="button"
-                        class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet(true)">
+                    <button *ngIf="formData.value.trangThai === '78'" type="button" class="btn btn-sub xanh-nhat ml-2"
+                        (click)="pheDuyet()">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>
                     </button>

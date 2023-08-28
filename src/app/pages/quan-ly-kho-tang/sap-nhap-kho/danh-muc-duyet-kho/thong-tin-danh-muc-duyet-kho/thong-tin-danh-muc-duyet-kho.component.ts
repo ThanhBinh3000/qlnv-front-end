@@ -17,6 +17,7 @@ import { FILETYPE } from "../../../../../constants/fileType";
 import {
     DanhMucDuyetKhoService
 } from "../../../../../services/qlnv-kho/dieu-chuyen-sap-nhap-kho/danh-muc-duyet-kho.service";
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
     selector: 'app-thong-tin-danh-muc-duyet-kho',
@@ -28,6 +29,7 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
     @Output()
     showListEvent = new EventEmitter<any>();
     @Input() idInput: number;
+    @Input() quyetDinhId: number;
     listCcPhapLy: any[] = [];
     listFileDinhKem: any[] = [];
     listFile: any[] = [];
@@ -38,8 +40,9 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
         { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },
     ];
     ObTrangThai: { [key: string]: string } = {
-        [this.STATUS.DANG_NHAP_DU_LIEU]: "Đang nhập dữ liệu",
-        [this.STATUS.BAN_HANH]: "Ban hành"
+        "78": "Chờ duyệt - CB Cục",
+        "03": "Từ chối - CB Cục",
+        "02": "Đã duyệt - CB Cục"
     }
     dsCuc: any;
     dsCucDi: any;
@@ -85,7 +88,10 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
         await this.spinner.show();
         try {
             if (this.idInput) {
-                await this.getDetail(this.idInput);
+                await this.getDetail(this.idInput)
+            }
+            else if (this.quyetDinhId) {
+                await this.getDetailTuQuyetDinh(this.quyetDinhId);
             }
         } catch (e) {
             console.log('error: ', e);
@@ -96,11 +102,11 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
         }
     }
 
-    pheDuyet(isDuyet: boolean) {
+    pheDuyet() {
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
-            nzContent: `Bạn có muốn ${isDuyet ? 'duyệt' : 'từ chối'} bản ghi này?.`,
+            nzContent: `Bạn có muốn duyệt bản ghi này?.`,
             nzCancelText: 'Không',
             nzOkDanger: true,
             nzWidth: 310,
@@ -109,7 +115,7 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
                 try {
                     let body = {
                         id: this.formData.value.id,
-                        trangThai: isDuyet ? STATUS.DADUYET_CB_CUC : STATUS.TUCHOI_CB_CUC
+                        trangThai: '02'
                     };
                     let res =
                         await this.danhMucDuyetKhoService.approve(
@@ -131,7 +137,46 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
             },
         });
     };
+    async tuChoi(): Promise<void> {
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Từ chối',
+            nzContent: DialogTuChoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {},
+        });
+        modalTuChoi.afterClose.subscribe(async (text) => {
+            if (text) {
+                await this.spinner.show();
+                try {
+                    let body = {
+                        id: this.formData.value.id,
+                        lyDoTuChoi: text,
+                        trangThai: '03',
+                    };
+                    let res =
+                        await this.danhMucDuyetKhoService.approve(
+                            body,
+                        );
+                    if (res.msg == MESSAGE.SUCCESS) {
+                        this.notification.success(MESSAGE.SUCCESS, res.msg);
+                        this.back();
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, res.msg);
+                    }
+                } catch (e) {
+                    console.log('error: ', e);
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                }
+                finally {
+                    await this.spinner.hide();
 
+                }
+            }
+        });
+    }
     back() {
         this.showListEvent.emit();
     }
@@ -143,18 +188,34 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
     // }
 
 
+    async getDetailTuQuyetDinh(id: number) {
+        await this.danhMucDuyetKhoService
+            .getDetailTuQD({ id, maDvi: this.userInfo.MA_DVI })
+            .then((res) => {
+                if (res.msg == MESSAGE.SUCCESS) {
+                    const dataDetail = res.data;
+                    if (dataDetail) {
+                        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+                        this.dataTable = dataDetail.duyetDanhMucKhoDtl
+                            ;
+                    }
+                }
+            })
+            .catch((e) => {
+                console.log('error: ', e);
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            });
+    }
     async getDetail(id: number) {
         await this.danhMucDuyetKhoService
             .getDetail(id)
             .then((res) => {
                 if (res.msg == MESSAGE.SUCCESS) {
                     const dataDetail = res.data;
-                    this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
                     if (dataDetail) {
-                        this.formData.patchValue({
-                            soQuyetDinh: dataDetail.soQuyetDinh,
-                        })
-                        this.dataTable = dataDetail.quyetDinhPdDtl;
+                        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+                        this.dataTable = dataDetail.duyetDanhMucKhoDtl
+                            ;
                     }
                 }
             })

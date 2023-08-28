@@ -49,6 +49,7 @@ export class DanhMucDuyetKhoComponent extends Base2Component implements OnInit {
     userInfo: UserLogin;
     userdetail: any = {};
     selectedId: number = 0;
+    quyetDinhId: number = 0;
     soQdGiaoNvXhSelected: string;
     isVatTu: boolean = false;
     isView = false;
@@ -66,14 +67,14 @@ export class DanhMucDuyetKhoComponent extends Base2Component implements OnInit {
         [this.STATUS.DA_HOAN_THANH]: "Đã hoàn thành",
     }
     listTrangThai: any[] = [
-        { ma: this.STATUS.CHODUYET_BTC, giaTri: "Chờ duyệt - CB Cục" },
-        { ma: this.STATUS.TUCHOI_CB_CUC, giaTri: "Từ chối - CB Cục" },
-        { ma: this.STATUS.DADUYET_CB_CUC, giaTri: "Đã duyệt - CB Cục" },
+        { ma: "78", giaTri: "Chờ duyệt - CB Cục" },
+        { ma: "03", giaTri: "Từ chối - CB Cục" },
+        { ma: "02", giaTri: "Đã duyệt - CB Cục" },
     ];
     ObTrangThai: { [key: string]: string } = {
-        [this.STATUS.CHODUYET_BTC]: "Chờ duyệt - CB Cục",
-        [this.STATUS.TUCHOI_CB_CUC]: "Từ chối - CB Cục",
-        [this.STATUS.DADUYET_CB_CUC]: "Đã duyệt - CB Cục"
+        "78": "Chờ duyệt - CB Cục",
+        "03": "Từ chối - CB Cục",
+        "02": "Đã duyệt - CB Cục"
     }
     disabledStartNgayKy = (startValue: Date): boolean => {
         if (startValue && this.formData.value.ngayKyDen) {
@@ -92,8 +93,9 @@ export class DanhMucDuyetKhoComponent extends Base2Component implements OnInit {
     async ngOnInit(): Promise<void> {
         try {
             this.dataService.currentData.subscribe(async (data) => {
-                if (data.qddcId) {
-                    this.selectedId = data.qddcId;
+                if (data && data.quyetDinhId) {
+                    this.selectedId = null;
+                    this.quyetDinhId = data.quyetDinhId
                     this.isDetail = true;
                     this.isView = true;
                 } else {
@@ -141,6 +143,7 @@ export class DanhMucDuyetKhoComponent extends Base2Component implements OnInit {
 
     async showList() {
         this.isDetail = false;
+        this.quyetDinhId = null;
         await this.search();
     }
 
