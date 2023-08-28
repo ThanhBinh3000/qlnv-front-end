@@ -8,7 +8,7 @@
         </li>-->
         <li nz-submenu nzOpen="true" nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo chất lượng hàng DTQG">
           <ul>
-            <li nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+            <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
               <span>BCCL công tác bảo quản gạo DTQG</span>
             </li>
@@ -28,7 +28,7 @@
               <span nz-icon nzType="fund"></span>
               <span>Tổng hợp BC số lượng, chất lượng công cụ dụng cụ</span>
             </li>
-            <li nz-menu-item nzSelected (click)="selectTab(5)"
+            <li nz-menu-item  (click)="selectTab(5)"
               *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
               <span>Tổng hợp BC số lượng, số lượng máy móc thiết bị chuyên dùng</span>
@@ -39,6 +39,18 @@
     </div>
     <div nz-col nzSpan="19">
       <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 0">
+          <app-bccl-cong-tac-bao-quan-gao></app-bccl-cong-tac-bao-quan-gao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 1">
+          <app-bccl-hang-dtqg-xuat-kho></app-bccl-hang-dtqg-xuat-kho>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 2">
+          <app-bccl-hang-dtqg-nhap-kho></app-bccl-hang-dtqg-nhap-kho>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 3">
+          <app-bao-cao-hao-hut-hang-dtqg></app-bao-cao-hao-hut-hang-dtqg>
+        </ng-container>
         <ng-container *ngIf="tabSelected == 4">
           <app-th-bc-so-luong-cl-ccdc></app-th-bc-so-luong-cl-ccdc>
         </ng-container>

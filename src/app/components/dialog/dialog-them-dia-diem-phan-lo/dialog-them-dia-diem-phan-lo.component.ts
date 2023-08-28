@@ -234,8 +234,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   async getdonGiaDuocDuyet() {
-    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
         this.dataDonGiaDuocDuyet.forEach(item => {
           if (this.dataEdit) {
             this.listOfData.forEach(s => {
@@ -246,22 +246,20 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           }
         })
       } else {
-        this.thongtinPhanLo.donGiaDuocDuyet = null;
-      }
-    } else {
-      let donGiaDuocDuyet = this.dataDonGiaDuocDuyet?.filter(item => item.maChiCuc == this.formData.value.maDvi);
-      if (donGiaDuocDuyet && donGiaDuocDuyet.length > 0) {
-        donGiaDuocDuyet.forEach(item => {
-          if (this.dataEdit) {
-            this.listOfData.forEach(s => {
-              s.donGiaDuocDuyet = item.giaQdTcdt
-            })
-          } else {
-            this.thongtinPhanLo.donGiaDuocDuyet = item.giaQdTcdt
-          }
-        })
-      } else {
-        this.thongtinPhanLo.donGiaDuocDuyet = null;
+        let donGiaDuocDuyet = this.dataDonGiaDuocDuyet?.filter(item => item.maChiCuc == this.formData.value.maDvi);
+        if (donGiaDuocDuyet && donGiaDuocDuyet.length > 0) {
+          donGiaDuocDuyet.forEach(item => {
+            if (this.dataEdit) {
+              this.listOfData.forEach(s => {
+                s.donGiaDuocDuyet = item.giaQdTcdt
+              })
+            } else {
+              this.thongtinPhanLo.donGiaDuocDuyet = item.giaQdTcdt
+            }
+          })
+        } else {
+          this.thongtinPhanLo.donGiaDuocDuyet = null;
+        }
       }
     }
   }

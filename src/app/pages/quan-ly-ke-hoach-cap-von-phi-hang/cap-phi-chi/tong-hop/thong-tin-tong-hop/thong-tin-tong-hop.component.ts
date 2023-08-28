@@ -3,30 +3,30 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import {cloneDeep} from 'lodash';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import {
-  PAGE_SIZE_DEFAULT
+  PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {DeNghiCapPhiBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
-import {TongHopDeNghiCapPhiService} from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {Ct1sTonghop} from './../../../../../models/TongHopDeNghiCapVon';
-import {STATUS} from "../../../../../constants/status";
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
+import { TongHopDeNghiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { Ct1sTonghop } from './../../../../../models/TongHopDeNghiCapVon';
+import { STATUS } from '../../../../../constants/status';
 
 @Component({
   selector: 'app-thong-tin-tong-hop',
@@ -46,7 +46,7 @@ export class ThongTinTongHopComponent implements OnInit {
   date: any = new Date();
   userLogin: UserLogin;
   listNam: any[] = [];
-  noiDung: string = "";
+  noiDung: string = '';
   khDnCapVonIds: any[] = [];
   listMaTongHop: any[] = [];
   listNguonTongHop: any[] = [];
@@ -57,15 +57,17 @@ export class ThongTinTongHopComponent implements OnInit {
   cts: any[] = [];
   ct1s: any[] = [];
 
-  isTonghop: boolean = false
+  isTonghop: boolean = false;
   dayNow: string;
   yearNow: number;
+  itemSelectedInfo: any = {};
+  itemSelectedEdit: any = {};
   filePhuongAn: any = {};
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
 
-  filePA: any
-  nameFilePhuongAn: string = "";
+  filePA: any;
+  nameFilePhuongAn: string = '';
   selectedId: number = 0;
   isDetail: boolean = false;
 
@@ -98,7 +100,7 @@ export class ThongTinTongHopComponent implements OnInit {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.detail.trangThai = this.globals.prop.NHAP_DU_THAO;
-    this.detail.tenTrangThai = "Dự Thảo";
+    this.detail.tenTrangThai = 'Dự Thảo';
     this.dayNow = dayjs().format('DD/MM/YYYY');
     this.yearNow = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
@@ -118,19 +120,19 @@ export class ThongTinTongHopComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      "nam": [null, [Validators.required]],
-      "maTongHop": [null],
-      "ngayTongHop": [null],
-      "maToTrinh": [null],
-      "noiDung": [null],
-      "nameFilePhuongAn": [null],
+      'nam': [null, [Validators.required]],
+      'maTongHop': [null],
+      'ngayTongHop': [null],
+      'maToTrinh': [null],
+      'noiDung': [null],
+      'nameFilePhuongAn': [null],
     });
     this.formData.patchValue({
       id: this.idInput,
       maDonVi: this.userInfo.MA_DVI,
       capDvi: this.userInfo.CAP_DVI,
       nam: this.yearNow,
-    })
+    });
   }
 
   async loaiVTHHGetAll() {
@@ -138,14 +140,14 @@ export class ThongTinTongHopComponent implements OnInit {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           hangHoa.data.forEach((item) => {
-            if (item.cap === "1" && item.ma != '01') {
+            if (item.cap === '1' && item.ma != '01') {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
             } else {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
             }
-          })
+          });
         }
-      })
+      });
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -164,23 +166,25 @@ export class ThongTinTongHopComponent implements OnInit {
     if (id > 0) {
       let res = await this.tongHopDeNghiCapVonService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
-        this.isTonghop = true
-        let data = res.data
+        this.isTonghop = true;
+        let data = res.data;
         if (data) {
           this.detail = res.data;
           this.filePhuongAn = res.data.fileDinhKem;
           this.formData.patchValue({
-            "nam": res.data.nam,
-            "nguonTongHop": data.nguonTongHop,
-            "maTongHop": data.maTongHop,
-            "ngayTongHop": data.ngayTongHop,
-            "maToTrinh": data.maToTrinh,
-            "noiDung": data.noiDung,
-            nameFilePhuongAn: data.fileDinhKem.fileName
+            'nam': res.data.nam,
+            'nguonTongHop': data.nguonTongHop,
+            'maTongHop': data.maTongHop,
+            'ngayTongHop': data.ngayTongHop,
+            'maToTrinh': data.maToTrinh,
+            'noiDung': data.noiDung,
+            nameFilePhuongAn: data.fileDinhKem.fileName,
           });
           this.cts = [...data.cts];
           this.ct1s = [...data.ct1s];
           this.sortTableId('ct1s');
+          this.selectRow(this.cts[0], 'rowDisplay');
+          this.selectRow(this.ct1s[0], 'rowEdit');
         }
       }
     }
@@ -406,13 +410,13 @@ export class ThongTinTongHopComponent implements OnInit {
 
   clearFilter() {
     this.formData = this.fb.group({
-      "nam": [this.yearNow, [Validators.required]],
-      "maTongHop": [null],
-      "ngayTongHop": [null],
-      "maToTrinh": [null],
-      "noiDung": [null],
-      "nameFilePhuongAn": [null],
-    })
+      'nam': [this.yearNow, [Validators.required]],
+      'maTongHop': [null],
+      'ngayTongHop': [null],
+      'maToTrinh': [null],
+      'noiDung': [null],
+      'nameFilePhuongAn': [null],
+    });
     this.isTonghop = false;
     this.cts = [];
     this.ct1s = [];
@@ -508,7 +512,7 @@ export class ThongTinTongHopComponent implements OnInit {
     this.rowEdit.ct2s = [
       ...this.rowEdit.ct2s,
       item,
-    ]
+    ];
     this.clearItemRow();
   }
 
@@ -530,8 +534,8 @@ export class ThongTinTongHopComponent implements OnInit {
           const fileDinhKem = new FileDinhKem();
           fileDinhKem.fileName = resUpload.filename;
           this.formData.patchValue({
-            nameFilePhuongAn: resUpload.filename
-          })
+            nameFilePhuongAn: resUpload.filename,
+          });
           fileDinhKem.fileSize = resUpload.size;
           fileDinhKem.fileUrl = resUpload.url;
           this.filePhuongAn = fileDinhKem;
@@ -563,28 +567,30 @@ export class ThongTinTongHopComponent implements OnInit {
             if (chiTiet && chiTiet.ct1List && chiTiet.ct1List.length > 0) {
               chiTiet.ct1List.forEach((elementCt) => {
                 let item = {
-                  "maBoNganh": chiTiet.maBoNganh,
-                  "tenBoNganh": chiTiet.tenBoNganh,
-                  "tenDvCungCap": elementCt.tenDvCungCap ?? null,
-                  "soTaiKhoan": elementCt.soTaiKhoan ?? null,
-                  "nganHang": elementCt.nganHang ?? null,
-                  "ycCapThemPhi": elementCt.ycCapThemPhi ?? 0,
-                  "maVatTuCha": elementCt.maVatTuCha ?? null,
-                  "maVatTu": elementCt.maVatTu ?? null,
-                  "tenVatTuCha": elementCt.tenVatTuCha ?? null,
-                  "tenVatTu": elementCt.tenVatTu ?? null,
-                  "tenHangHoa": elementCt.tenHangHoa ?? null,
-                  "ct2s": elementCt.ct2List ?? [],
-                  "idDeNghi": data[i].id,
-                  "stt": index + 1
-                }
+                  'maBoNganh': chiTiet.maBoNganh,
+                  'tenBoNganh': chiTiet.tenBoNganh,
+                  'tenDvCungCap': elementCt.tenDvCungCap ?? null,
+                  'soTaiKhoan': elementCt.soTaiKhoan ?? null,
+                  'nganHang': elementCt.nganHang ?? null,
+                  'ycCapThemPhi': elementCt.ycCapThemPhi ?? 0,
+                  'maVatTuCha': elementCt.maVatTuCha ?? null,
+                  'maVatTu': elementCt.maVatTu ?? null,
+                  'tenVatTuCha': elementCt.tenVatTuCha ?? null,
+                  'tenVatTu': elementCt.tenVatTu ?? null,
+                  'tenHangHoa': elementCt.tenHangHoa ?? null,
+                  'ct2s': elementCt.ct2List ?? [],
+                  'idDeNghi': data[i].id,
+                  'stt': index + 1,
+                };
                 listItem.push(item);
               });
             }
           }
         }
         this.cts = listItem;
+        this.selectRow(this.cts[0], 'rowDisplay');
         this.ct1s = cloneDeep(this.cts);
+        this.selectRow(this.ct1s[0], 'rowEdit');
         this.sortTableId('ct1s');
       }
     } else {
@@ -607,14 +613,17 @@ export class ThongTinTongHopComponent implements OnInit {
   selectRow(row, rowSet) {
     if (row) {
       if (rowSet === 'rowDisplay') {
-        this.rowDisplay = cloneDeep(row);
-        this.rowDisplay.isView = true;
-      } else if (rowSet === 'rowEdit') {
-        this.rowEdit = cloneDeep(row);
-        this.rowEdit.isView = true;
-        this.ct1s.forEach(element => {
-          element.edit = false;
+        this.cts.forEach(item => {
+          item.selected = false;
         });
+        row.selected = true;
+        this.itemSelectedInfo = cloneDeep(row);
+      } else if (rowSet === 'rowEdit') {
+        this.ct1s.forEach(element => {
+          element.selected = false;
+        });
+        this.rowEdit = cloneDeep(row);
+        row.selected = true;
         this.sortTableId('ct2s');
       }
     }
@@ -625,7 +634,7 @@ export class ThongTinTongHopComponent implements OnInit {
       let sum = data.map((item) => item.ycCapThemPhi).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 
@@ -634,7 +643,7 @@ export class ThongTinTongHopComponent implements OnInit {
       let sum = data.ct2s.map((item) => item.tongTien).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 
@@ -643,7 +652,7 @@ export class ThongTinTongHopComponent implements OnInit {
       let sum = data.ct2s.map((item) => item.kinhPhiDaCap).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 
@@ -652,7 +661,7 @@ export class ThongTinTongHopComponent implements OnInit {
       let sum = data.ct2s.map((item) => item.yeuCauCapThem).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 }

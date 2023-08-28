@@ -417,12 +417,14 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.dataTable.forEach((item) => {
       item.thanhTienCuc = 0;
       item.children.forEach((child) => {
-        if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-          this.dataDonGiaDuocDuyet?.forEach(s => {
-            child.donGiaDuocDuyet = s.giaQdTcdt
-          })
-        } else {
-          child.donGiaDuocDuyet = this.dataDonGiaDuocDuyet?.find(s => s.maChiCuc === item.maDvi).giaQdTcdt;
+        if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+          if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+            this.dataDonGiaDuocDuyet?.forEach(s => {
+              child.donGiaDuocDuyet = s.giaQdTcdt
+            })
+          } else {
+            child.donGiaDuocDuyet = this.dataDonGiaDuocDuyet?.find(s => s.maChiCuc === item.maDvi).giaQdTcdt;
+          }
         }
         child.thanhTienDuocDuyet = child.donGiaDuocDuyet * child.soLuongDeXuat
         item.thanhTienCuc += child.thanhTienDeXuat

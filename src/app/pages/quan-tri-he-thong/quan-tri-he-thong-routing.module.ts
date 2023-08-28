@@ -7,6 +7,8 @@ import { QuanTriHeThongNewComponent } from './quan-tri-he-thong.component';
 import { QuanTriThamSoComponent } from "./quan-tri-tham-so/quan-tri-tham-so.component";
 import { ThongKeTruyCapComponent } from "./thong-ke-truy-cap/thong-ke-truy-cap.component";
 import { QuanLyChungThuSoComponent } from './quan-ly-thong-tin/quan-ly-chung-thu-so/quan-ly-chung-thu-so.component';
+import { ChotDieuChinhComponent } from './chot-du-lieu/chot-dieu-chinh/chot-dieu-chinh.component';
+import { KetChuyenComponent } from './chot-du-lieu/ket-chuyen/ket-chuyen.component';
 
 const routes: Routes = [
   {
@@ -49,6 +51,18 @@ const routes: Routes = [
       {
         path: 'quan-ly-thong-tin/quan-ly-chung-thu-so',
         component: QuanLyChungThuSoComponent,
+      },
+      {
+        path: 'chot-du-lieu/chot-dieu-chinh',
+        component: ChotDieuChinhComponent,
+      },
+      {
+        path: 'chot-du-lieu/chot-nhap-xuat',
+        component: ChotDieuChinhComponent,
+      },
+      {
+        path: 'chot-du-lieu/ket-chuyen',
+        component: KetChuyenComponent,
       },
     ],
   },
