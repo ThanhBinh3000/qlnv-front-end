@@ -65,10 +65,11 @@ export class BaoCaoComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
+                soCv: this.baoCao.congVan?.fileName,
+                ngayCv: this.baoCao.ngayCongVan,
             },
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
@@ -78,9 +79,9 @@ export class BaoCaoComponent implements OnInit {
                     ...new Doc(),
                     fileName: res.soCongVan,
                 };
+                this.fileDetail = file;
             }
         });
-        this.fileDetail = file;
         return false;
     };
 
