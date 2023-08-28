@@ -12,7 +12,7 @@ import {
 import { BaoCaoChatLuongHangDtqgComponent } from "./bao-cao-chat-luong-hang-dtqg.component";
 import { ThBcSoLuongClCcdcComponent } from "./th-bc-so-luong-cl-ccdc/th-bc-so-luong-cl-ccdc.component";
 import { BaoCaoHaoHutHangDtqgComponent } from './bao-cao-hao-hut-hang-dtqg/bao-cao-hao-hut-hang-dtqg.component';
-import { BcclCongTacBaoQuanGaoComponent } from './bccl-cong-tac-bao-quan-gao/bccl-cong-tac-bao-quan-gao.component';
+import { BcclCongTacBaoQuanGaoComponent } from './bccl-cong-tac-bao-quan/bccl-cong-tac-bao-quan-gao.component';
 import { BcclHangDtqgXuatKhoComponent } from './bccl-hang-dtqg-xuat-kho/bccl-hang-dtqg-xuat-kho.component';
 import { BcclHangDtqgNhapKhoComponent } from './bccl-hang-dtqg-nhap-kho/bccl-hang-dtqg-nhap-kho.component';
 
