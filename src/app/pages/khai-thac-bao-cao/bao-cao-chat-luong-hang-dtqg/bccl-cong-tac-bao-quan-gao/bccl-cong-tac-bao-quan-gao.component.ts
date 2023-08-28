@@ -15,6 +15,7 @@ import {saveAs} from "file-saver";
 import {BcCLuongHangDTQGService} from 'src/app/services/bao-cao/BcCLuongHangDTQG.service';
 import {DanhMucService} from "../../../../services/danhmuc.service";
 import {cloneDeep} from 'lodash';
+import {NumberToRoman} from "../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-bccl-cong-tac-bao-quan-gao',
@@ -34,6 +35,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   listLoaiBc: any[] = [];
+  listLoaiKyBc: any[] = [];
   listKyBc: any[] = [];
   rows: any[] = [];
 
@@ -51,12 +53,13 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        ky: null,
+        loaiKyBc: null,
+        kyBc: null,
         maCuc: null,
         maChiCuc: null,
         loaiVthh: null,
         cloaiVthh: null,
-        loai: null
+        loaiBc: null
 
       }
     );
@@ -78,7 +81,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_so_luong_chat_luong_ccdc.pdf");
+    saveAs(this.pdfBlob, "bccl_cong_tac_bao_quan_gao.pdf");
   }
 
   async downloadExcel() {
@@ -92,7 +95,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bc_so_luong_chat_luong_ccdc.xlsx");
+        saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -112,10 +115,10 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "th_bc_sl_cl_ccdc.jrxml";
-      body.tenBaoCao = "Báo cáo số lượng chất lượng Công cụ dụng cụ";
+      body.fileName = "bccl_cong_tac_bao_quan_gao.jrxml";
+      body.tenBaoCao = "Báo cáo chất lượng công tác quản lý gạo DTQG";
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
+      await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -170,14 +173,49 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
   async loadDsKyBc() {
     let res = await this.danhMucSv.danhMucChungGetAll("KY_BAO_CAO");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listKyBc = res.data;
+      this.listLoaiKyBc = res.data;
     }
   }
 
 
   async clearFilter() {
-    this.formData.get('maCuc').setValue(null);
-    this.formData.get('maChiCuc').setValue(null);
-    this.formData.get('maDvi').setValue(null);
+    this.formData.reset();
+    this.formData.patchValue({
+      nam : dayjs().get('year')
+    })
+  }
+
+  changLoaiKyBc(event: any) {
+    if (event) {
+      this.listKyBc = [];
+      switch (event) {
+        case '01': {
+          for (let i = 1; i <=12; i++ ) {
+            let item = {
+              ma: i,
+              giaTri : 'Tháng '+ i
+            }
+            this.listKyBc = [...this.listKyBc, item].flat();
+          }
+          break;
+        }
+        case '02': {
+          for (let i = 1; i <=4; i++ ) {
+            let item = {
+              ma: i,
+              giaTri : 'Quý '+ NumberToRoman(i)
+            }
+            this.listKyBc = [...this.listKyBc, item].flat();
+          }
+          break;
+        }
+        case '03': {
+          break;
+        }
+        case '04': {
+          break;
+        }
+      }
+    }
   }
 }
