@@ -212,6 +212,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
             }
           }
           this.tinhTong();
+          this.loadListHopDong(null, this.itemDnCapVonBn.maBoNganh);
         }
       }
     } else {
@@ -230,7 +231,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detailHopDong = res.data;
-          console.log(res.data, 'res.datares.datares.data');
         }
       }
     }
@@ -277,9 +277,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     this.rowItem.tenVatTuCha = null;
     this.rowItem.maVatTuCha = null;
     let bnObject = this.dsBoNganh.find(item => item.code == this.formData.value.boNganh);
-    // if (bnObject) {
-    //   this.titleSoDeNghi = "/" + bnObject.code + "-" + this.preFixSoDn;
-    // }
     let hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
       'maDvi': bnObject.maDvi,
     }).toPromise();
@@ -755,10 +752,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     return this.listLoaiTien.find(item => item.ma == loaiTien).giaTri;
   }
 
-  async loadListHopDong(objBoNganh) {
+  async loadListHopDong(objBoNganh, code?) {
     this.listHopDong = [];
     let res = await this.deNghiCapVonBoNganhService.dsHopDongTheoBoNganh({
-      'maBoNganh': objBoNganh.code,
+      'maBoNganh': code ? code : objBoNganh.code,
     });
     if (res) {
       if (res.msg == MESSAGE.SUCCESS) {
