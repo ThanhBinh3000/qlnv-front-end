@@ -227,7 +227,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     if (dataChiCuc.length > 0) {
       console.log(dataChiCuc[0].children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI)))
       this.listDiaDiemNhap = dataChiCuc[0].children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI));

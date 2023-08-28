@@ -222,7 +222,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       soHdong: data.soHd,
       ngayKiHdong: data.ngayKyHd,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
