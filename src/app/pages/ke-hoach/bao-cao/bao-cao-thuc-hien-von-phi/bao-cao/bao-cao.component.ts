@@ -536,7 +536,6 @@ export class BaoCaoComponent implements OnInit {
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.save = dataInfo.status.save && (this.userInfo?.sub == bieuMau.nguoiBcao);
         dataInfo.status.finish = dataInfo.status.finish && (this.userInfo?.sub == bieuMau.nguoiBcao);
-        dataInfo.status.ok = dataInfo.status.ok && (this.userInfo?.sub == bieuMau.nguoiBcao);
 
         let nzContent: ComponentType<any>;
         switch (bieuMau.maLoai) {
