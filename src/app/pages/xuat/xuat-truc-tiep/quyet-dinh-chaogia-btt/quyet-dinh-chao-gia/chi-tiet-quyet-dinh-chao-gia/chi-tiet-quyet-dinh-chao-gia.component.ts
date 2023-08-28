@@ -1,37 +1,36 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import * as dayjs from "dayjs";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {STATUS} from 'src/app/constants/status';
-import {MESSAGE} from 'src/app/constants/message';
-import {
-  DialogTableSelectionComponent
-} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {StorageService} from 'src/app/services/storage.service';
-import {
-  QdPdKetQuaBttService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import {
-  ChaoGiaMuaLeUyQuyenService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetDinhPdKhBanTrucTiepService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
+import {
+  QdPdKetQuaBttService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service";
+import {
+  ChaoGiaMuaLeUyQuyenService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
+import {ChiTietThongTinBanTrucTiepChaoGia, FileDinhKem} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
+import {MESSAGE} from "../../../../../../constants/message";
+import {STATUS} from "../../../../../../constants/status";
+import * as dayjs from "dayjs";
+import {
+  DialogTableSelectionComponent
+} from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {Validators} from "@angular/forms";
 import {saveAs} from 'file-saver';
-import {ChiTietThongTinBanTrucTiepChaoGia, FileDinhKem} from 'src/app/models/DeXuatKeHoachBanTrucTiep';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {Validators} from '@angular/forms';
 
 @Component({
-  selector: 'app-them-qd-pd-ket-qua-btt',
-  templateUrl: './them-qd-pd-ket-qua-btt.component.html',
-  styleUrls: ['./them-qd-pd-ket-qua-btt.component.scss']
+  selector: 'app-chi-tiet-quyet-dinh-chao-gia',
+  templateUrl: './chi-tiet-quyet-dinh-chao-gia.component.html',
+  styleUrls: ['./chi-tiet-quyet-dinh-chao-gia.component.scss']
 })
-
-export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit {
+export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() isView: boolean;
   @Input() idInput: number;
@@ -330,7 +329,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
 
   setValidForm() {
     this.formData.controls["namKh"].setValidators([Validators.required]);
-    this.formData.controls["maDvi"].setValidators([Validators.required]);
+    // this.formData.controls["maDvi"].setValidators([Validators.required]);
     this.formData.controls["tenDvi"].setValidators([Validators.required]);
     this.formData.controls["soQdKq"].setValidators([Validators.required]);
     this.formData.controls["ngayKy"].setValidators([Validators.required]);

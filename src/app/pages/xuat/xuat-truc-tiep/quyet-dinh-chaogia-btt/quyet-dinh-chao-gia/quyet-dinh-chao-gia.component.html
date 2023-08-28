@@ -197,14 +197,15 @@
   </nz-card>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-them-qd-pd-ket-qua-btt [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                              (showListEvent)="showList()">
-  </app-them-qd-pd-ket-qua-btt>
+  <app-chi-tiet-quyet-dinh-chao-gia [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
+                                    (showListEvent)="showList()">
+  </app-chi-tiet-quyet-dinh-chao-gia>
 </div>
 <!--xem -->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModalQdPdKh()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                                [isView]="true">
     </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>

@@ -1,24 +1,24 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 import {HttpClient} from "@angular/common/http";
+import {DonviService} from "../../../../../services/donvi.service";
+import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {MESSAGE} from 'src/app/constants/message';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {StorageService} from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBttService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import {DonviService} from 'src/app/services/donvi.service';
+} from "../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service";
+import {MESSAGE} from "../../../../../constants/message";
 import {CHUC_NANG} from "../../../../../constants/status";
-import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 
 @Component({
-  selector: 'app-qd-pd-ket-qua-btt',
-  templateUrl: './qd-pd-ket-qua-btt.component.html',
-  styleUrls: ['./qd-pd-ket-qua-btt.component.scss']
+  selector: 'app-quyet-dinh-chao-gia',
+  templateUrl: './quyet-dinh-chao-gia.component.html',
+  styleUrls: ['./quyet-dinh-chao-gia.component.scss']
 })
-export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
+export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: XuatTrucTiepComponent
