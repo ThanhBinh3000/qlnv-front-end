@@ -120,8 +120,8 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
       body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
-      body.fileName = "bccl_cong_tac_bao_quan_gao.jrxml";
-      body.tenBaoCao = "Báo cáo chất lượng công tác quản lý gạo DTQG";
+      body.fileName = "bccl_cong_tac_bao_quan_tong_hop.jrxml";
+      body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản hàng DTQG - Tổng hợp";
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
         this.pdfBlob = s;
