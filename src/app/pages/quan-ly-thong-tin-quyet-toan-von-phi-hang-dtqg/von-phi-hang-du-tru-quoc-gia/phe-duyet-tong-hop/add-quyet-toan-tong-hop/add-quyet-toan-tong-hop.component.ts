@@ -21,6 +21,7 @@ import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.
 import { TEN_HANG } from './add-quyet-toan-tong-hop.constant';
 import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 import { Doc } from '../../von-phi-hang-du-tru-quoc-gia.constant';
+import * as XLSX from "xlsx";
 export class ItemData {
     id!: any;
     stt!: string;
@@ -1793,6 +1794,71 @@ export class AddQuyetToanTongHopComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
         );
+    }
+
+    exportToExcel() {
+        if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+        const header = [
+            { t: 0, b: 5, l: 0, r: 17, val: null },
+
+            { t: 0, b: 0, l: 0, r: 1, val: 'Báo cáo quyết toán vốn phí hàng DTQG' },
+            { t: 2, b: 1, l: 0, r: 8, val: this.congVan },
+
+            { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 4, l: 1, r: 1, val: 'Tên hàng dự trữ quốc gia' },
+            { t: 4, b: 4, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 4, b: 4, l: 3, r: 3, val: 'Số lượng' },
+            { t: 4, b: 4, l: 4, r: 4, val: 'Đơn giá' },
+            { t: 4, b: 4, l: 5, r: 5, val: 'Thành tiền' },
+
+            { t: 5, b: 5, l: 0, r: 0, val: 'A' },
+            { t: 5, b: 5, l: 1, r: 1, val: 'B' },
+            { t: 5, b: 5, l: 2, r: 2, val: 'C' },
+            { t: 5, b: 5, l: 3, r: 3, val: '1' },
+            { t: 5, b: 5, l: 4, r: 4, val: '2' },
+            { t: 5, b: 5, l: 5, r: 5, val: '3 = 1 x 2' },
+
+        ]
+        const fieldOrder = [
+            "stt",
+            "tenHang",
+            "maDviTinh",
+            "soLuong",
+            "donGiaMua",
+            "thanhTien",
+        ]
+        const filterData = this.lstCtietBcao.map(item => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                row[field] = item[field]
+            })
+            return row;
+        })
+        filterData.forEach(item => {
+            const level = item.stt.split('.').length - 2;
+            item.stt = this.getChiMuc(item.stt);
+            for (let i = 0; i < level; i++) {
+                item.stt = '   ' + item.stt;
+            }
+        })
+
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenHang' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        let excelName = "TH_BC_QTVP_DTQG";
+        excelName = excelName + '_BCQTVP_DTQG.xlsx'
+        XLSX.writeFile(workbook, excelName);
     }
 
 };
