@@ -21,7 +21,6 @@ import {CHUC_NANG} from "../../../../../constants/status";
 })
 export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  @Input() typeLoaiVthh: any[] = [];
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: DauGiaComponent;
   listVthh: any[] = [];
@@ -85,7 +84,7 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
       await Promise.all([
         this.timKiem(),
         this.search(),
-        this.onChangeCLoaiVthh(),
+        this.loadDsVthh(),
       ])
       await this.spinner.hide();
     } catch (e) {
@@ -114,27 +113,41 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
     this.isView = isView;
   }
 
-  async onChangeCLoaiVthh() {
-    if (this.loaiVthh && this.typeLoaiVthh) {
-      this.listVthh = [];
-      let body = {
-        "str": this.loaiVthh
-      };
-      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-        this.listVthh = this.typeLoaiVthh.filter(s => s.ma === LOAI_HANG_DTQG.VAT_TU)
-      } else {
-        this.listVthh = this.typeLoaiVthh;
+  async loadDsVthh() {
+    let res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+        res.data.forEach((item) => {
+          const data = item.children.filter(s => s.ma == this.loaiVthh)
+          data.forEach(child => {
+            this.listCloaiVthh = child.children
+          })
+        })
       }
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
-      this.listCloaiVthh = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.listCloaiVthh = res.data.filter(s => s.ten != null && s.ma != null);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
+        const data = res.data.filter(s => s.ma === this.loaiVthh);
+        data.forEach((item) => {
+          this.listCloaiVthh = item.children
+        })
+      }
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+        const data = res.data.filter(s => s.ma === this.loaiVthh)
+        data.forEach((item) => {
+          this.listVthh = item.children
+        })
       }
     }
+  }
+
+  async onChangeCloaiVthh(event) {
+    this.formData.patchValue({
+      cloaiVthh: null,
+      tenCloaiVthh: null,
+    })
+    const data = this.listVthh.filter(s => s.ma ===event)
+    data.forEach((item) =>{
+      this.listCloaiVthh = item.children
+    })
   }
 
   disabledNgayKyTu = (startValue: Date): boolean => {
