@@ -433,6 +433,23 @@ export class AddQuyetToanTongHopComponent implements OnInit {
             this.sortByIndex();
             this.updateEditCache()
             this.getStatusButton();
+            const rqKho = {
+                maDvi: this.maDviTao,
+                nam: Number(this?.namQtoan),
+                quyQtoan: this?.quyQtoan,
+            }
+
+
+            await this.quyetToanVonPhiService.getHangHoaKho(rqKho).toPromise().then(
+                async (data) => {
+                    this.lstDsHangTrongKho = data.data;
+                    this.PS_ARR = data.data.filter(e => e.maLoai == "PS")
+                    this.LK_ARR = data.data.filter(e => e.maLoai == "LK")
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
             return
         } else if (this.lstCtietBcao.length == 0) {
             this.isStatus = '1';

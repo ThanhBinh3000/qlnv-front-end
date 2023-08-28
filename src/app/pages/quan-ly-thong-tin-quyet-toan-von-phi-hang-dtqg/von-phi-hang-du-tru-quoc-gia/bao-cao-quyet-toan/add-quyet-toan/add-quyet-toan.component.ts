@@ -340,6 +340,23 @@ export class AddQuyetToanComponent implements OnInit {
 
 		if (this.idInput) {
 			await this.getDetailReport();
+			const rqKho = {
+				maDvi: this.maDviTao,
+				nam: Number(this?.namQtoan),
+				quyQtoan: this?.quyQtoan,
+			}
+
+
+			await this.quyetToanVonPhiService.getHangHoaKho(rqKho).toPromise().then(
+				async (data) => {
+					this.lstDsHangTrongKho = data.data;
+					this.PS_ARR = data.data.filter(e => e.maLoai == "PS")
+					this.LK_ARR = data.data.filter(e => e.maLoai == "LK")
+				},
+				(err) => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				},
+			);
 		} else {
 			this.isStatus = '1';
 			this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
