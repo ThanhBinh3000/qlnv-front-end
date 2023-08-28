@@ -694,51 +694,105 @@ export class PhuLuc1Component implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        const header = [
-            { t: 0, b: 7, l: 0, r: 10, val: null },
-            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-            { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
-            { t: 4, b: 5, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-            { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán trong năm' },
-            { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh(+ tăng)(- giảm)' },
-            { t: 4, b: 6, l: 7, r: 7, val: 'Dự toán Vụ TVQT đề nghị(+ tăng)(- giảm)' },
-            { t: 4, b: 6, l: 8, r: 8, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị(+ tăng)(- giảm)' },
-            { t: 4, b: 6, l: 9, r: 9, val: 'Ý kiến của đơn vị cấp trên' },
-            { t: 4, b: 6, l: 10, r: 10, val: 'Ghi chú' },
+        let header = [];
+        let fieldOrder = [];
 
-            { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang < br > được cho phép sử dụng cho năm nay' },
-            { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán, kinh phí đã giao trong năm' },
-            { t: 6, b: 6, l: 4, r: 4, val: 'Cộng' },
+        if (this.status.viewAppVal) {
+            header = [
+                { t: 0, b: 7, l: 0, r: 10, val: null },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-            { t: 7, b: 7, l: 0, r: 0, val: 'A' },
-            { t: 7, b: 7, l: 1, r: 1, val: 'B' },
-            { t: 7, b: 7, l: 2, r: 2, val: '1' },
-            { t: 7, b: 7, l: 3, r: 3, val: '2' },
-            { t: 7, b: 7, l: 4, r: 4, val: '3 = 2 + 1' },
-            { t: 7, b: 7, l: 5, r: 5, val: '4' },
-            { t: 7, b: 7, l: 6, r: 6, val: '5 = 4 - 3' },
-            { t: 7, b: 7, l: 7, r: 7, val: '6' },
-            { t: 7, b: 7, l: 8, r: 8, val: '7 = 6 - 5' },
-            { t: 7, b: 7, l: 9, r: 9, val: '8' },
-            { t: 7, b: 7, l: 10, r: 10, val: '9' },
-        ]
-        const fieldOrder = [
-            'stt',
-            'noiDung',
-            'dtoanKphiNamTruoc',
-            'dtoanKphiNamNay',
-            'tong',
-            'tongDtoanTrongNam',
-            'dtoanDnghiDchinh',
-            'dtoanVuTvqtDnghi',
-            'chenhLech',
-            'ykienDviCtren',
-            'ghiChu',
-        ]
+                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 5, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán trong năm' },
+                { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh(+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 7, r: 7, val: 'Dự toán Vụ TVQT đề nghị(+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 8, r: 8, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị(+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 9, r: 9, val: 'Ý kiến của đơn vị cấp trên' },
+                { t: 4, b: 6, l: 10, r: 10, val: 'Ghi chú' },
+
+                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang < br > được cho phép sử dụng cho năm nay' },
+                { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán, kinh phí đã giao trong năm' },
+                { t: 6, b: 6, l: 4, r: 4, val: 'Cộng' },
+
+                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
+                { t: 7, b: 7, l: 1, r: 1, val: 'B' },
+                { t: 7, b: 7, l: 2, r: 2, val: '1' },
+                { t: 7, b: 7, l: 3, r: 3, val: '2' },
+                { t: 7, b: 7, l: 4, r: 4, val: '3 = 2 + 1' },
+                { t: 7, b: 7, l: 5, r: 5, val: '4' },
+                { t: 7, b: 7, l: 6, r: 6, val: '5 = 4 - 3' },
+                { t: 7, b: 7, l: 7, r: 7, val: '6' },
+                { t: 7, b: 7, l: 8, r: 8, val: '7 = 6 - 5' },
+                { t: 7, b: 7, l: 9, r: 9, val: '8' },
+                { t: 7, b: 7, l: 10, r: 10, val: '9' },
+            ]
+            fieldOrder = [
+                'stt',
+                'noiDung',
+                'dtoanKphiNamTruoc',
+                'dtoanKphiNamNay',
+                'tong',
+                'tongDtoanTrongNam',
+                'dtoanDnghiDchinh',
+                'dtoanVuTvqtDnghi',
+                'chenhLech',
+                'ykienDviCtren',
+                'ghiChu',
+            ]
+        } else {
+            header = [
+                { t: 0, b: 7, l: 0, r: 10, val: null },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 5, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán trong năm' },
+                { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh(+ tăng)(- giảm)' },
+                // { t: 4, b: 6, l: 7, r: 7, val: 'Dự toán Vụ TVQT đề nghị(+ tăng)(- giảm)' },
+                // { t: 4, b: 6, l: 8, r: 8, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị(+ tăng)(- giảm)' },
+                // { t: 4, b: 6, l: 9, r: 9, val: 'Ý kiến của đơn vị cấp trên' },
+                // { t: 4, b: 6, l: 10, r: 10, val: 'Ghi chú' },
+
+                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang < br > được cho phép sử dụng cho năm nay' },
+                { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán, kinh phí đã giao trong năm' },
+                { t: 6, b: 6, l: 4, r: 4, val: 'Cộng' },
+
+                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
+                { t: 7, b: 7, l: 1, r: 1, val: 'B' },
+                { t: 7, b: 7, l: 2, r: 2, val: '1' },
+                { t: 7, b: 7, l: 3, r: 3, val: '2' },
+                { t: 7, b: 7, l: 4, r: 4, val: '3 = 2 + 1' },
+                { t: 7, b: 7, l: 5, r: 5, val: '4' },
+                { t: 7, b: 7, l: 6, r: 6, val: '5 = 4 - 3' },
+                // { t: 7, b: 7, l: 7, r: 7, val: '6' },
+                // { t: 7, b: 7, l: 8, r: 8, val: '7 = 6 - 5' },
+                // { t: 7, b: 7, l: 9, r: 9, val: '8' },
+                // { t: 7, b: 7, l: 10, r: 10, val: '9' },
+            ]
+            fieldOrder = [
+                'stt',
+                'noiDung',
+                'dtoanKphiNamTruoc',
+                'dtoanKphiNamNay',
+                'tong',
+                'tongDtoanTrongNam',
+                'dtoanDnghiDchinh',
+                // 'dtoanVuTvqtDnghi',
+                // 'chenhLech',
+                // 'ykienDviCtren',
+                // 'ghiChu',
+            ]
+        }
+
+
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {

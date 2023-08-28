@@ -494,7 +494,7 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 5, l: 0, r: 5, val: null },
+            { t: 0, b: 6, l: 0, r: 5, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -506,6 +506,14 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
             { t: 4, b: 5, l: 3, r: 3, val: 'Thời gian thực hiện' },
             { t: 4, b: 5, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
             { t: 4, b: 5, l: 5, r: 5, val: 'Tổng nhu cầu dự toán' },
+
+            { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+            { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+            { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+            { t: 6, b: 6, l: 3, r: 3, val: 'D' },
+            { t: 6, b: 6, l: 4, r: 4, val: 'E' },
+            { t: 6, b: 6, l: 5, r: 5, val: '1' },
+
         ]
         const fieldOrder = [
             "stt",
@@ -524,12 +532,12 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
             return row;
         })
 
-      let row: any = {};
-      row = {}
-      fieldOrder.forEach(field => {
-        row[field] = field == 'tenTaiSan' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
-      })
-      filterData.unshift(row)
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenTaiSan' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

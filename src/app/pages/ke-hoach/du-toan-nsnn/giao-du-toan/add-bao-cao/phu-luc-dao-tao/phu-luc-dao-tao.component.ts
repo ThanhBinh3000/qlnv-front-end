@@ -1,20 +1,20 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NzUploadFile} from 'ng-zorro-antd/upload';
-import {CurrencyMaskInputMode} from 'ngx-currency';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {Operator, Status, Table, Utils} from 'src/app/Utility/utils';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {MESSAGEVALIDATE} from 'src/app/constants/messageValidate';
-import {GiaoDuToanChiService} from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import {QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service';
-import {UserService} from 'src/app/services/user.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { CurrencyMaskInputMode } from 'ngx-currency';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
-import {BtnStatus, Doc, Form} from '../../giao-du-toan.constant';
-import {DANH_MUC} from './phu-luc-dao-tao.constant';
+import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
+import { DANH_MUC } from './phu-luc-dao-tao.constant';
 
 export class ItemData {
   level: any;
@@ -456,23 +456,35 @@ export class PhuLucDaoTaoComponent implements OnInit {
       return;
     }
     const header = [
-      {t: 0, b: 5, l: 0, r: 8, val: null},
+      { t: 0, b: 6, l: 0, r: 8, val: null },
 
-      {t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl},
-      {t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe},
-      {t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan},
+      { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+      { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+      { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-      {t: 4, b: 5, l: 0, r: 0, val: 'STT'},
-      {t: 4, b: 5, l: 1, r: 1, val: 'Nội dung đào tạo, bồi dưỡng'},
-      {t: 4, b: 5, l: 2, r: 2, val: 'Đối tượng'},
-      {t: 4, b: 5, l: 3, r: 3, val: 'Thời gian học'},
-      {t: 4, b: 4, l: 4, r: 6, val: 'Số lượng'},
-      {t: 4, b: 5, l: 7, r: 7, val: 'Kinh phí hỗ trợ(đồng/người)'},
-      {t: 4, b: 5, l: 8, r: 8, val: 'Tổng nhu cầu dự toán, kinh phí'},
+      { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+      { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung đào tạo, bồi dưỡng' },
+      { t: 4, b: 5, l: 2, r: 2, val: 'Đối tượng' },
+      { t: 4, b: 5, l: 3, r: 3, val: 'Thời gian học' },
+      { t: 4, b: 4, l: 4, r: 6, val: 'Số lượng' },
+      { t: 4, b: 5, l: 7, r: 7, val: 'Kinh phí hỗ trợ(đồng/người)' },
+      { t: 4, b: 5, l: 8, r: 8, val: 'Tổng nhu cầu dự toán, kinh phí' },
 
-      {t: 5, b: 5, l: 4, r: 4, val: 'Số lượng'},
-      {t: 5, b: 5, l: 5, r: 5, val: 'Định mức'},
-      {t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền'},
+      { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng' },
+      { t: 5, b: 5, l: 5, r: 5, val: 'Định mức' },
+      { t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
+
+
+      { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+      { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+      { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+      { t: 6, b: 6, l: 3, r: 3, val: 'D' },
+      { t: 6, b: 6, l: 4, r: 4, val: '1' },
+      { t: 6, b: 6, l: 5, r: 5, val: '2' },
+      { t: 6, b: 6, l: 6, r: 6, val: '3 = 1 + 2' },
+      { t: 6, b: 6, l: 7, r: 7, val: '4' },
+      { t: 6, b: 6, l: 8, r: 8, val: '5 = 3 x 4' },
+
 
     ]
     const fieldOrder = [
