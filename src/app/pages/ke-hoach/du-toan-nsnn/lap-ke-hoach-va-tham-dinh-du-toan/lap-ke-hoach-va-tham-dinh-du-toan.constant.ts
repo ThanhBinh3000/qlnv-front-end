@@ -256,7 +256,7 @@ export class Report {
     ngayDuyet: any;
     ngayPheDuyet: any;
     ngayTraKq: any;
-    congVan: Doc;
+    congVan: Doc = new Doc();
     lyDoTuChoi: string;
     // giaoSoTranChiId: string;
     thuyetMinh: string;
