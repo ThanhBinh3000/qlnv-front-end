@@ -531,6 +531,13 @@ export class BaoCao02Component implements OnInit {
             }
         })
         filterData.push(row);
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', 'B', 'C', '1', '2', '3', '4=2*3', '5', '6', '7=5*6', 'D'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

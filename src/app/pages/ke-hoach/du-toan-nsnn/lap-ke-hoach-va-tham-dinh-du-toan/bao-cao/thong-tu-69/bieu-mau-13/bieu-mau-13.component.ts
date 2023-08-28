@@ -377,7 +377,7 @@ export class BieuMau13Component implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 6, l: 0, r: 14, val: null },
+            { t: 0, b: 5, l: 0, r: 14, val: null },
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
@@ -400,19 +400,6 @@ export class BieuMau13Component implements OnInit {
             { t: 5, b: 5, l: 12, r: 12, val: 'Nhu cầu chi của đơn vị' },
             { t: 5, b: 5, l: 13, r: 13, val: 'Chênh lệch trần chi - nhu cầu' },
             { t: 4, b: 5, l: 14, r: 14, val: 'Ghi chú' },
-            { t: 6, b: 6, l: 2, r: 2, val: '1' },
-            { t: 6, b: 6, l: 3, r: 3, val: '2' },
-            { t: 6, b: 6, l: 4, r: 4, val: '3' },
-            { t: 6, b: 6, l: 5, r: 5, val: '4' },
-            { t: 6, b: 6, l: 6, r: 6, val: '5=3-4' },
-            { t: 6, b: 6, l: 7, r: 7, val: '6=4/2' },
-            { t: 6, b: 6, l: 8, r: 8, val: '7' },
-            { t: 6, b: 6, l: 9, r: 9, val: '8' },
-            { t: 6, b: 6, l: 10, r: 10, val: '9=7-8' },
-            { t: 6, b: 6, l: 11, r: 11, val: '10' },
-            { t: 6, b: 6, l: 12, r: 12, val: '11' },
-            { t: 6, b: 6, l: 13, r: 13, val: '12=10-11' },
-            { t: 6, b: 6, l: 14, r: 14, val: '13' },
         ]
         const fieldOrder = ['stt', 'tenNdung', 'namHienHanhDtoan', 'namHienHanhUocThien', 'tranChiN', 'ncauChiN', 'clechTranChiVsNcauChiN', 'ssanhNcauNVoiN1', 'tranChiN1', 'ncauChiN1',
             'clechTranChiVsNcauChiN1', 'tranChiN2', 'ncauChiN2', 'clechTranChiVsNcauChiN2', 'ghiChu']
@@ -423,6 +410,13 @@ export class BieuMau13Component implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['', '', '1', '2', '3', '4', '5=3-4', '6=4/2', '7', '8', '9=7-8', '10', '11', '12=10-11', '13'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

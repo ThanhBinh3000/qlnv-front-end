@@ -382,6 +382,8 @@ export class NopTienThuaComponent implements OnInit {
         }
         let header = [];
         let filterData = [];
+        let fieldOrder = [];
+        let calHeader = [];
         if (this.capDvi != 3) {
             header = [
                 { t: 0, b: 6, l: 0, r: 23, val: null },
@@ -419,25 +421,10 @@ export class NopTienThuaComponent implements OnInit {
                 { t: 5, b: 6, l: 22, r: 22, val: 'Số còn phải nộp' },
                 { t: 4, b: 6, l: 23, r: 23, val: 'Ghi chú' },
             ]
-            const fieldOrder = ['stt', 'tenHangDtqg', 'nhanVonUng', 'nhanVonCap', 'nhanTong', 'giaoCapUng', 'giaoCapVon', 'giaoTong', 'ttVonUng', 'ttVonCap', 'ttTong',
+            fieldOrder = ['stt', 'tenHangDtqg', 'nhanVonUng', 'nhanVonCap', 'nhanTong', 'giaoCapUng', 'giaoCapVon', 'giaoTong', 'ttVonUng', 'ttVonCap', 'ttTong',
                 'duVonUng', 'duVonCap', 'duTong', 'daNopVonUng', 'daNopVonCap', 'daNopTong', 'nopUncNgay', 'nopVonUng', 'nopVonCap', 'nopTong', 'lkSauLanNay', 'soConPhaiNop', 'ghiChu'];
-            filterData = this.lstCtiets.map((item, index) => {
-                const row: any = {};
-                fieldOrder.forEach(field => {
-                    switch (field) {
-                        case 'stt':
-                            row[field] = index;
-                            break;
-                        case 'nopUncNgay':
-                            row[field] = Utils.fmtDate(item[field]);
-                            break;
-                        default:
-                            row[field] = item[field];
-                            break;
-                    }
-                })
-                return row;
-            })
+            calHeader = ['A', 'B', '1', '2', '3=1+2', '4', '5', '6=4+6', '7', '8', '9=7+8', '10=1-4-7', '11=2-5-8', '12=10+11', '13', '14', '15', '16',
+                '17', '18', '19', '20=15+19', '21=12-20', 'C'];
         } else {
             header = [
                 { t: 0, b: 6, l: 0, r: 23, val: null },
@@ -471,27 +458,34 @@ export class NopTienThuaComponent implements OnInit {
                 { t: 5, b: 6, l: 19, r: 19, val: 'Số còn phải nộp' },
                 { t: 4, b: 6, l: 20, r: 20, val: 'Ghi chú' },
             ]
-            const fieldOrder = ['stt', 'tenHangDtqg', 'nhanVonUng', 'nhanVonCap', 'nhanTong', 'ttVonUng', 'ttVonCap', 'ttTong', 'duVonUng', 'duVonCap', 'duTong',
+            fieldOrder = ['stt', 'tenHangDtqg', 'nhanVonUng', 'nhanVonCap', 'nhanTong', 'ttVonUng', 'ttVonCap', 'ttTong', 'duVonUng', 'duVonCap', 'duTong',
                 'daNopVonUng', 'daNopVonCap', 'daNopTong', 'nopUncNgay', 'nopVonUng', 'nopVonCap', 'nopTong', 'lkSauLanNay', 'soConPhaiNop', 'ghiChu'];
-            filterData = this.lstCtiets.map((item, index) => {
-                const row: any = {};
-                fieldOrder.forEach(field => {
-                    switch (field) {
-                        case 'stt':
-                            row[field] = index;
-                            break;
-                        case 'nopUncNgay':
-                            row[field] = Utils.fmtDate(item[field]);
-                            break;
-                        default:
-                            row[field] = item[field];
-                            break;
-                    }
-                })
-                return row;
-            })
+            calHeader = ['A', 'B', '1', '2', '3=1+2', '7', '8', '9=7+8', '10=1-7', '11=2-8', '12=10+11', '13', '14', '15', '16',
+                '17', '18', '19', '20=15+19', '21=12-20', 'C'];
         }
-
+        filterData = this.lstCtiets.map((item, index) => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                switch (field) {
+                    case 'stt':
+                        row[field] = index + 1;
+                        break;
+                    case 'nopUncNgay':
+                        row[field] = Utils.fmtDate(item[field]);
+                        break;
+                    default:
+                        row[field] = item[field];
+                        break;
+                }
+            })
+            return row;
+        })
+        // thêm công thức tính cho biểu mẫu
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
