@@ -484,7 +484,7 @@ export class HangComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 7, val: null },
+            { t: 0, b: 6 + this.lstCtietBcao.length, l: 0, r: 7, val: null },
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
@@ -496,10 +496,18 @@ export class HangComponent implements OnInit {
             { t: 4, b: 4, l: 5, r: 5, val: 'Tên hàng DTQG' },
             { t: 4, b: 4, l: 6, r: 6, val: 'Số lượng' },
             { t: 4, b: 4, l: 7, r: 7, val: 'Giá trị' },
-            { t: 5, b: 5, l: 1, r: 1, val: 'Tổng cộng' },
-            { t: 5, b: 5, l: 7, r: 7, val: this.total?.giaTri },
+            { t: 5, b: 5, l: 0, r: 0, val: 'A' },
+            { t: 5, b: 5, l: 1, r: 1, val: 'B' },
+            { t: 5, b: 5, l: 2, r: 2, val: 'C' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'D' },
+            { t: 5, b: 5, l: 4, r: 4, val: 'E' },
+            { t: 5, b: 5, l: 5, r: 5, val: 'F' },
+            { t: 5, b: 5, l: 6, r: 6, val: '1' },
+            { t: 5, b: 5, l: 7, r: 7, val: '2' },
+            { t: 6, b: 6, l: 1, r: 1, val: 'Tổng cộng' },
+            { t: 6, b: 6, l: 7, r: 7, val: this.total?.giaTri },
         ]
-        const headerBot = 6;
+        const headerBot = 7;
         this.lstCtietBcao.forEach((item, index) => {
             if (item.unitSpan) {
                 header.push({ t: headerBot + index, b: headerBot + index + item.unitSpan - 1, l: 0, r: 0, val: this.getIndex(item.stt) })

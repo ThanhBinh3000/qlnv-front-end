@@ -422,7 +422,13 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
             })
             return row;
         })
-
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', 'B', '1', '2', '3', '4', '5=2*4', '6=3*4', '7', '8', '9', '10', '11', '12=10+11', '13=6-7-12', '14', '15', '16', '17', '18', '19=17+18', 'C'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
