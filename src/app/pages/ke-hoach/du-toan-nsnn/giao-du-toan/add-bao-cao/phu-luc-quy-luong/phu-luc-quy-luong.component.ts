@@ -180,7 +180,7 @@ export class PhuLucQuyLuongComponent implements OnInit {
                 sttItem++
             })
         }
-        // 
+        //
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
         this.getTotal();
         this.updateEditCache();
@@ -410,6 +410,13 @@ export class PhuLucQuyLuongComponent implements OnInit {
             })
             return row;
         })
+
+      let row: any = {};
+      row = {}
+      fieldOrder.forEach(field => {
+        row[field] = field == 'tenDvi' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+      })
+      filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

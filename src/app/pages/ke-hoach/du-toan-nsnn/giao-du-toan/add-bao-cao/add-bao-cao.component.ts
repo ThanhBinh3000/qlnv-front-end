@@ -141,15 +141,16 @@ export class AddBaoCaoComponent implements OnInit {
     };
 
     // before uploaf file
+    // before uploaf file
     beforeUploadCV = (file: NzUploadFile): boolean => {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
+                soCv: this.baoCao.soQd?.fileName,
+                ngayCv: this.baoCao.ngayCongVan,
             },
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
@@ -159,9 +160,9 @@ export class AddBaoCaoComponent implements OnInit {
                     ...new Doc(),
                     fileName: res.soCongVan,
                 };
+                this.fileDetail = file;
             }
         });
-        this.fileDetail = file;
         return false;
     };
 
@@ -969,7 +970,7 @@ export class AddBaoCaoComponent implements OnInit {
                 if (Status.check('reject', mcn)) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
                 }
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);

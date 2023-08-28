@@ -163,6 +163,7 @@ export class PhuLuc12Component implements OnInit {
 		Object.assign(this.status, this.dataInfo.status);
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
+
 		if (this.status.general) {
 			// const category = await this.danhMucService.danhMucChungGetAll('LTD_PL2');
 			// if (category) {
@@ -225,7 +226,9 @@ export class PhuLuc12Component implements OnInit {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
-					this.lstCtietBcao = this.formDetail.lstCtietDchinh;
+					this.formDetail.lstCtietDchinh.forEach(item => {
+						this.lstCtietBcao.push(new ItemData(item))
+					})
 					this.listFile = [];
 					this.formDetail.listIdDeleteFiles = [];
 					this.getStatusButton();

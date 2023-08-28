@@ -235,7 +235,9 @@ export class PhuLuc11Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
-                    this.lstCtietBcao = this.formDetail.lstCtietDchinh;
+                    this.formDetail.lstCtietDchinh.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item))
+                    })
                     this.listFile = [];
                     this.formDetail.listIdDeleteFiles = [];
                     this.getStatusButton();
