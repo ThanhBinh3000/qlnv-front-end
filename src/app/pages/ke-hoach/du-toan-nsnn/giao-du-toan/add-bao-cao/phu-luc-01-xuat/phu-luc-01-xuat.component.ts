@@ -545,7 +545,7 @@ export class PhuLuc01XuatComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 6, l: 0, r: 5, val: null },
+            { t: 0, b: 7, l: 0, r: 5, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -559,6 +559,13 @@ export class PhuLuc01XuatComponent implements OnInit {
             { t: 6, b: 6, l: 3, r: 3, val: 'Số lượng' },
             { t: 6, b: 6, l: 4, r: 4, val: 'Định mức' },
             { t: 6, b: 6, l: 5, r: 5, val: 'Thành tiền' },
+
+            { t: 7, b: 7, l: 0, r: 0, val: 'A' },
+            { t: 7, b: 7, l: 1, r: 1, val: 'B' },
+            { t: 7, b: 7, l: 2, r: 2, val: 'C' },
+            { t: 7, b: 7, l: 3, r: 3, val: '1' },
+            { t: 7, b: 7, l: 4, r: 4, val: '2' },
+            { t: 7, b: 7, l: 5, r: 5, val: '3 = 1 x 2' },
         ]
         const fieldOrder = [
             "stt",
@@ -578,19 +585,19 @@ export class PhuLuc01XuatComponent implements OnInit {
         })
 
 
-      let row: any = {};
-      fieldOrder.forEach(field => {
-        if (field == 'tenDanhMuc') {
-          row[field] = 'Tổng cộng'
-        } else {
-          if (!['namDtSluong', 'namDtDmuc'].includes(field)) {
-            row[field] = (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
-          } else {
-            row[field] = '';
-          }
-        }
-      })
-      filterData.unshift(row)
+        let row: any = {};
+        fieldOrder.forEach(field => {
+            if (field == 'tenDanhMuc') {
+                row[field] = 'Tổng cộng'
+            } else {
+                if (!['namDtSluong', 'namDtDmuc'].includes(field)) {
+                    row[field] = (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+                } else {
+                    row[field] = '';
+                }
+            }
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

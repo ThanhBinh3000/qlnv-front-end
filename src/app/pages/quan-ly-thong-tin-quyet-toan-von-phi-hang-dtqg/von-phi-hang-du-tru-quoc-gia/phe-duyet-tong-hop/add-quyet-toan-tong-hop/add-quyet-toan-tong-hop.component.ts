@@ -1800,7 +1800,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 5, l: 0, r: 17, val: null },
+            { t: 0, b: 5, l: 0, r: 8, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: 'Báo cáo quyết toán vốn phí hàng DTQG' },
             { t: 2, b: 1, l: 0, r: 8, val: this.congVan },

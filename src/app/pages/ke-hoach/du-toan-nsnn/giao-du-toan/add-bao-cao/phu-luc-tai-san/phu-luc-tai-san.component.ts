@@ -497,7 +497,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 			return;
 		}
 		const header = [
-			{ t: 0, b: 1, l: 0, r: 10, val: null },
+			{ t: 0, b: 6, l: 0, r: 10, val: null },
 
 			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
 			{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -511,13 +511,25 @@ export class PhuLucTaiSanComponent implements OnInit {
 
 			{ t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
 			{ t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
-			{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm (N -1)' },
+			{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm' + + (this.namBcao - 2).toString() },
 			{ t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
 
 			{ t: 5, b: 5, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
 			{ t: 5, b: 5, l: 8, r: 8, val: 'Số lượng ' },
 			{ t: 5, b: 5, l: 9, r: 9, val: 'Mức giá' },
 			{ t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
+
+			{ t: 6, b: 6, l: 0, r: 0, val: 'A' },
+			{ t: 6, b: 6, l: 1, r: 1, val: 'B' },
+			{ t: 6, b: 6, l: 2, r: 2, val: 'C' },
+			{ t: 6, b: 6, l: 3, r: 3, val: '1' },
+			{ t: 6, b: 6, l: 4, r: 4, val: '2' },
+			{ t: 6, b: 6, l: 5, r: 5, val: '3' },
+			{ t: 6, b: 6, l: 6, r: 6, val: '4 = 1 + 2 + 3 ' },
+			{ t: 6, b: 6, l: 7, r: 7, val: '5' },
+			{ t: 6, b: 6, l: 8, r: 8, val: '6' },
+			{ t: 6, b: 6, l: 9, r: 9, val: '7' },
+			{ t: 6, b: 6, l: 10, r: 10, val: '8 = 6 x 7' },
 		]
 		const fieldOrder = [
 			'tenDanhMuc',
@@ -541,12 +553,12 @@ export class PhuLucTaiSanComponent implements OnInit {
 			return row;
 		})
 
-    let row: any = {};
-    row = {}
-    fieldOrder.forEach(field => {
-      row[field] = field == 'tenDanhMuc' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
-    })
-    filterData.unshift(row)
+		let row: any = {};
+		row = {}
+		fieldOrder.forEach(field => {
+			row[field] = field == 'tenDanhMuc' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+		})
+		filterData.unshift(row)
 
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
