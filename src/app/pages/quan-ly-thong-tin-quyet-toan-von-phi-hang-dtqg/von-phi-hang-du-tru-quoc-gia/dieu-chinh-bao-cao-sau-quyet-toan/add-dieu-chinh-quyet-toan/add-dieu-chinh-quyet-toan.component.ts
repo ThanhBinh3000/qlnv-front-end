@@ -170,7 +170,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
             nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
+            nzClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
