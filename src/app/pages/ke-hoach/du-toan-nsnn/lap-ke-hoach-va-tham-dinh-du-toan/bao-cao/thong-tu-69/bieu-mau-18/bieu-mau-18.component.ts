@@ -429,6 +429,13 @@ export class BieuMau18Component implements OnInit {
 			row[field] = field == 'tenLvuc' ? 'Tổng cộng' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
 		})
 		filterData.push(row)
+		// thêm công thức tính cho biểu mẫu
+		const calHeader = ['1', '2', '3', '4', '5', '6', '7=8+9', '8=11+14', '9=12+15', '10=11+12', '11', '12', '13=14+15', '14', '15', '16=17+18', '17', '18', '19'];
+		let cal = {};
+		fieldOrder.forEach((field, index) => {
+			cal[field] = calHeader[index];
+		})
+		filterData.unshift(cal);
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

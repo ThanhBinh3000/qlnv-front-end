@@ -410,6 +410,13 @@ export class BieuMau13Component implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['', '', '1', '2', '3', '4', '5=3-4', '6=4/2', '7', '8', '9=7-8', '10', '11', '12=10-11', '13'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

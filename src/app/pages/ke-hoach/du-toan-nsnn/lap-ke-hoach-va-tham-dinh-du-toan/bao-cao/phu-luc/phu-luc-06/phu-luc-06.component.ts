@@ -391,32 +391,62 @@ export class PhuLuc06Component implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        const header = [
-            { t: 0, b: 5, l: 0, r: 14, val: null },
-            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
-            { t: 4, b: 4, l: 2, r: 5, val: 'Số lượng tài sản; MM, thiết bị hiện có' },
-            { t: 5, b: 5, l: 2, r: 2, val: 'Đến thời điểm báo cáo (trên phần mềm QLTS) ' },
-            { t: 5, b: 5, l: 3, r: 3, val: 'Đã nhận chưa có QĐ điều chuyển' },
-            { t: 5, b: 5, l: 4, r: 4, val: 'Được phê duyệt mua sắm năm ' + (this.namBcao - 1).toString() },
-            { t: 5, b: 5, l: 5, r: 5, val: 'Tổng cộng' },
-            { t: 4, b: 5, l: 6, r: 6, val: 'Tiêu chuẩn định mức tối đa được trang bị' },
-            { t: 4, b: 4, l: 7, r: 8, val: 'Dự toán đề nghị trang bị năm ' + this.namBcao.toString() },
-            { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
-            { t: 5, b: 5, l: 8, r: 8, val: 'Mức giá' },
-            { t: 4, b: 5, l: 9, r: 9, val: 'Thành tiền' },
-            { t: 4, b: 4, l: 10, r: 11, val: 'Thẩm định' },
-            { t: 5, b: 5, l: 10, r: 10, val: 'Số lượng' },
-            { t: 5, b: 5, l: 11, r: 11, val: 'Thành tiền' },
-            { t: 4, b: 5, l: 12, r: 12, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-            { t: 4, b: 5, l: 13, r: 13, val: 'Thuyết minh' },
-            { t: 4, b: 5, l: 14, r: 14, val: 'Ý kiến của đơn vị cấp trên' },
-        ]
-        const fieldOrder = ['stt', 'tenTaiSan', 'sluongTsanTdiemBcao', 'sluongTsanDaNhan', 'sluongTsanPduyet', 'sluongTsanTcong', 'tchuanDmucTda', 'dtoanDnghiSluong',
-            'dtoanDnghiMgia', 'thanhTien', 'tdinhSluong', 'tdinhTtien', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+        let header = [];
+        let fieldOrder = [];
+        let calHeader = [];
+        if (this.status.viewAppVal) {
+            header = [
+                { t: 0, b: 5, l: 0, r: 14, val: null },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
+                { t: 4, b: 4, l: 2, r: 5, val: 'Số lượng tài sản; MM, thiết bị hiện có' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Đến thời điểm báo cáo (trên phần mềm QLTS) ' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Đã nhận chưa có QĐ điều chuyển' },
+                { t: 5, b: 5, l: 4, r: 4, val: 'Được phê duyệt mua sắm năm ' + (this.namBcao - 1).toString() },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Tổng cộng' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Tiêu chuẩn định mức tối đa được trang bị' },
+                { t: 4, b: 4, l: 7, r: 8, val: 'Dự toán đề nghị trang bị năm ' + this.namBcao.toString() },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Mức giá' },
+                { t: 4, b: 5, l: 9, r: 9, val: 'Thành tiền' },
+                { t: 4, b: 4, l: 10, r: 11, val: 'Thẩm định' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Số lượng' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Thành tiền' },
+                { t: 4, b: 5, l: 12, r: 12, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
+                { t: 4, b: 5, l: 13, r: 13, val: 'Thuyết minh' },
+                { t: 4, b: 5, l: 14, r: 14, val: 'Ý kiến của đơn vị cấp trên' },
+            ]
+            fieldOrder = ['stt', 'tenTaiSan', 'sluongTsanTdiemBcao', 'sluongTsanDaNhan', 'sluongTsanPduyet', 'sluongTsanTcong', 'tchuanDmucTda', 'dtoanDnghiSluong',
+                'dtoanDnghiMgia', 'thanhTien', 'tdinhSluong', 'tdinhTtien', 'chenhLech', 'ghiChu', 'ykienDviCtren'];
+            calHeader = ['A', 'B', '1', '2', '3', '4=1+2+3', '5', '6', '7', '8=6*7', '6A', '8A=6A*7', '9=8A-8', '10', '11'];
+        } else {
+            header = [
+                { t: 0, b: 5, l: 0, r: 10, val: null },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
+                { t: 4, b: 4, l: 2, r: 5, val: 'Số lượng tài sản; MM, thiết bị hiện có' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Đến thời điểm báo cáo (trên phần mềm QLTS) ' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Đã nhận chưa có QĐ điều chuyển' },
+                { t: 5, b: 5, l: 4, r: 4, val: 'Được phê duyệt mua sắm năm ' + (this.namBcao - 1).toString() },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Tổng cộng' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Tiêu chuẩn định mức tối đa được trang bị' },
+                { t: 4, b: 4, l: 7, r: 8, val: 'Dự toán đề nghị trang bị năm ' + this.namBcao.toString() },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Mức giá' },
+                { t: 4, b: 5, l: 9, r: 9, val: 'Thành tiền' },
+                { t: 4, b: 5, l: 10, r: 10, val: 'Thuyết minh' },
+            ]
+            fieldOrder = ['stt', 'tenTaiSan', 'sluongTsanTdiemBcao', 'sluongTsanDaNhan', 'sluongTsanPduyet', 'sluongTsanTcong', 'tchuanDmucTda', 'dtoanDnghiSluong',
+                'dtoanDnghiMgia', 'thanhTien', 'ghiChu'];
+            calHeader = ['A', 'B', '1', '2', '3', '4=1+2+3', '5', '6', '7', '8=6*7', '9'];
+        }
+
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
@@ -442,6 +472,12 @@ export class PhuLuc06Component implements OnInit {
             }
         })
         filterData.unshift(row);
+        // thêm công thức tính cho biểu mẫu
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

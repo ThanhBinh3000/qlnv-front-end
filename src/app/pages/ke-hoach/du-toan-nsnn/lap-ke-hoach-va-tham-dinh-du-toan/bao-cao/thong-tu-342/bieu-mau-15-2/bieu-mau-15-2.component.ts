@@ -516,7 +516,15 @@ export class BieuMau152Component implements OnInit {
 		fieldOrder.forEach(field => {
 			row[field] = field == 'tenDmuc' ? 'Tổng cộng' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
 		})
-		filterData.unshift(row)
+		filterData.unshift(row);
+		// thêm công thức tính cho biểu mẫu
+		const calHeader = ['A', 'B', '1', '2=3+7', '3=4+5+6', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15=16+20', '16=17+18+19', '17', '18',
+			'19', '20', '21', '22', '23', '24', '25', '26=27+31', '27=28+29+30', '28', '29', '30', '31', '32', '33', '34', '35', ''];
+		let cal = {};
+		fieldOrder.forEach((field, index) => {
+			cal[field] = calHeader[index];
+		})
+		filterData.unshift(cal);
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
