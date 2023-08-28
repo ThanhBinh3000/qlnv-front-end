@@ -613,13 +613,14 @@
         <nz-form-item>
           <nz-form-label nzRequired [nzNoColon]='true'> Tổng tiền(Ngoại tệ)</nz-form-label>
           <input nz-input class='money-input' currencyMask [options]='amount'
-                 [value]='detailHopDong.loaiTien != "01" ? "" :  detailHopDong.tongTienNt' [readonly]='true' />
+                 [value]='detailHopDong.loaiTien == "01" ? null :  detailHopDong.tongTienNt' [readonly]='true' />
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]='6'>
         <nz-form-item>
           <nz-form-label nzRequired [nzNoColon]='true'> Tỷ giá</nz-form-label>
-          <input nz-input class='money-input' currencyMask [options]='amount' [value]='detailHopDong.loaiTien != "01" ? "" :  detailHopDong.tyGia'
+          <input nz-input class='money-input' currencyMask [options]='amount'
+                 [value]='detailHopDong.loaiTien == "01" ? null:  detailHopDong.tyGia'
                  [readonly]='true' />
         </nz-form-item>
       </div>
@@ -665,11 +666,11 @@
         <td>{{idx + 1}}</td>
         <td>{{item.soDeNghi}}</td>
         <td>{{item.ngayDeNghi | date: 'dd/MM/YYYY'}}</td>
-        <td>{{item.kinhPhiDaCapNt ? item.kinhPhiDaCapNt : '' |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{(detailHopDong.loaiTien != "01" ? item.kinhPhiDaCapNt : null) |number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.kinhPhiDaCap |number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{item.kinhPhiChuaCapNt |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{(detailHopDong.loaiTien != "01" ? item.kinhPhiChuaCapNt : null) |number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.kinhPhiChuaCap |number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{item.ycCapThemNt | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{(detailHopDong.loaiTien != "01" ? item.ycCapThemNt : null) | number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.ycCapThem | number : '1.0-1' : 'vi_VN'}}</td>
       </tr>
       </tbody>

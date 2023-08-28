@@ -44,7 +44,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   @Input() id: number;
   formData: FormGroup;
-  cacheData: any[] = [];
   fileDinhKem: Array<FileDinhKem> = [];
   userLogin: UserLogin;
   STATUS = STATUS;
@@ -76,7 +75,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   itemDnCapVonBn: any = {};
   diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
   listChungLoaiHangHoa: any[] = [];
-  maKeHoach: string;
   listLoaiHopDong: any[] = [];
   dsBoNganh: any[] = [];
   maxYeuCauCapThem: number = 2;
@@ -133,12 +131,12 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     donViTinh: null,
   };
 
-  showEdit: boolean = false;
-
   tongCong: any = {
-    tongThanhTien: 0,
     tongKinhPhiDaCap: 0,
-    tongYeuCauCapThem: 0,
+    tongTien: 0,
+    tongDuToanDuocGiao: 0,
+    tongKinhPhiChuaCap: 0,
+    tongYcCapThem: 0,
   };
 
   tongCongHangHoa: any = {
@@ -574,12 +572,13 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       tongYcCapThem: 0,
     };
     this.chiTietList.forEach((item) => {
-      this.tongCong.tongTien += item.tongTien;
-      this.tongCong.tongDuToanDuocGiao += item.duToanDuocGiao;
-      this.tongCong.tongKinhPhiChuaCap += item.kinhPhiChuaCap;
-      this.tongCong.tongKinhPhiDaCap += item.tongKinhPhiDaCap;
-      this.tongCong.tongYcCapThem += item.ycCapThem;
+      this.tongCong.tongTien += item.tongTien ? item.tongTien : 0;
+      this.tongCong.tongDuToanDuocGiao += item.duToanDuocGiao ? item.duToanDuocGiao : 0;
+      this.tongCong.tongKinhPhiChuaCap += item.kinhPhiChuaCap ? item.kinhPhiChuaCap : 0;
+      this.tongCong.tongKinhPhiDaCap += item.kinhPhiDaCap ? item.kinhPhiDaCap : 0;
+      this.tongCong.tongYcCapThem += item.ycCapThem ? item.ycCapThem : 0;
     });
+    console.log(this.tongCong, 'this.tongCongthis.tongCong');
   }
 
   tinhTongChiTietHangHoa() {
