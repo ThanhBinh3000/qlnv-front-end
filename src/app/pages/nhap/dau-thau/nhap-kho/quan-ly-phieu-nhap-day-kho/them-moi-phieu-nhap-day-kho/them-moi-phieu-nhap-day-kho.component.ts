@@ -284,7 +284,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
-      soLuongNhapKho: this.loaiVthh == '02' ? data.soLuong : data.soLuong * 1000,
+      soLuongNhapKho: this.loaiVthh == '02' ? data.soLuong : data.soLuong,
       soLuong: data.soLuong,
       bienBanChuanBiKho: data.bienBanChuanBiKho?.soBienBan,
       bienBanLayMau: data.bienBanLayMau?.soBienBan

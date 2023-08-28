@@ -18,6 +18,9 @@ import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from "file-saver";
 
 
 @Component({
@@ -40,6 +43,16 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
 
   taiLieuDinhKemList: any[] = [];
   dataTable: any[] = [];
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "phieu_nhap_kho_dau_thau_lt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
 
   constructor(
     httpClient: HttpClient,
@@ -470,6 +483,31 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
 
   clearItemRow(i) {
     this.dataTable[i] = {};
+  }
+
+  async preview() {
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.quanLyPhieuNhapKhoService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "phieu_nhap_kho.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "phieu_nhap_kho.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
 }
