@@ -522,10 +522,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         if (map.includes('BTC')) {
           map.push('Bộ Tài chính');
         }
-        console.log(this.dsBoNganhFix, 'this.dsBoNganhFix');
         this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.code));
-
-        console.log(map, 'map');
       }
     }
   }
