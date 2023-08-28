@@ -3,10 +3,9 @@
     <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
-        <span
-          [ngClass]="formData.value.trangThai == STATUS.BAN_HANH  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-          {{ formData.value.tenTrangThai }}
-        </span>
+          <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+            {{ ObTrangThai[formData.value.trangThai] }}
+          </span>
           <span class="text-uppercase">Quyết định điều chuyển - Sáp nhập đơn vị quản lý kho</span>
         </div>
       </div>
@@ -17,7 +16,7 @@
         </button>
         <ng-container>
           <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView" type="button"
-                  class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+            class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Ban hành</span>
           </button>
@@ -25,300 +24,298 @@
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
+          <button *ngIf="formData.value.trangThai === STATUS.BAN_HANH && userService.isCuc()" type="button"
+            class="btn btn-sub xanh-nhat ml-2" (click)="goToDanhMucDuyetKho()">
+            <i class="icon htvbdh_da-xu-ly"></i>
+            <span>Duyệt danh mục kho</span>
+          </button>
         </ng-container>
       </div>
     </div>
   </nz-affix>
 </div>
 
-
-<nz-card class="mt16 flex-card p-lr16">
-  <form nz-form nzLayout="vertical" [formGroup]="formData">
-    <div nz-row [nzGutter]="24">
-      <div nz-col nzSpan="4">
-        <nz-form-item>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số quyết định
+<div class="bg-trang">
+  <nz-card class="mt-16 flex-card p-lr16 ant-card-bordered">
+    <form nz-form nzLayout="vertical" [formGroup]="formData">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số quyết định
+              </nz-form-label>
+              <nz-input-group [nzAddOnAfter]="maQd">
+                <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                  [nzSize]="'small'" [nzDisabled]="isView">
+                </nz-input-number>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu
+              </nz-form-label>
+              <input nz-input formControlName="trichYeu" [readonly]="isView" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label>Trạng thái sáp nhập</nz-form-label>
+              <nz-select formControlName="trangThaiSn">
+                <nz-option *ngFor="let p of listTrangThaiSn" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký</nz-form-label>
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
+                nzPlaceHolder="Ngày ký QĐ xuất hàng" formControlName="ngayKy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Căn cứ pháp lý
             </nz-form-label>
-            <nz-input-group [nzAddOnAfter]="maQd">
-              <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                               [nzSize]="'small'"
-                               [nzDisabled]="isView">
-              </nz-input-number>
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-      <div nz-col nzSpan="12">
-        <nz-form-item>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu
+            <div class="list-file">
+              <file-list [isCanCuPL]="true" [disabled]="isView" [data]="listCcPhapLy"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm
             </nz-form-label>
-            <input nz-input formControlName="trichYeu" [readonly]="isView"/>
-          </nz-form-control>
-        </nz-form-item>
+            <div class="list-file">
+              <file-list [data]="listFileDinhKem" [disabled]="isView"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24" class="mt-16">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-radio-group formControlName="loai" [nzDisabled]="isView" nzName="radiogroup"
+                (ngModelChange)="handleChangeLoaiSapNhap($event)">
+                <label nz-radio nzValue="SN_DIEM_KHO"> Điều chuyển - sáp nhập điểm kho</label>
+                <label nz-radio nzValue="SN_CHI_CUC">Điều chuyển - sáp nhập chi cục</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
-      <div nz-col nzSpan="4">
-        <nz-form-item>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-form-label>Trạng thái sáp nhập</nz-form-label>
-            <nz-select formControlName="trangThaiSn">
-              <nz-option *ngFor="let p of listTrangThaiSn" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-      <div nz-col nzSpan="4">
-        <nz-form-item>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ xuất hàng</nz-form-label>
-            <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
-                            nzPlaceHolder="Ngày ký QĐ xuất hàng"
-                            formControlName="ngayKy">
-            </nz-date-picker>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-      <div nz-col [nzSpan]="24">
-        <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
-            Căn cứ pháp lý
-          </nz-form-label>
-          <div class="list-file">
-            <file-list [isCanCuPL]="true" [isViewDetail]="isView" [data]="listCcPhapLy"></file-list>
-          </div>
-        </nz-form-item>
-      </div>
-      <div nz-col nzSpan="24">
-        <nz-form-item>
-          <nz-form-label [nzNoColon]="true">
-            File đính kèm
-          </nz-form-label>
-          <div class="list-file">
-            <file-list [data]="listFileDinhKem" [isViewDetail]="isView"></file-list>
-          </div>
-        </nz-form-item>
-      </div>
-      <div nz-col [nzSpan]="24">
-        <nz-form-item>
-          <nz-form-control>
-            <nz-radio-group formControlName="loai" [nzDisabled]="isView" nzName="radiogroup">
-              <label nz-radio nzValue="SN_DIEM_KHO"> Điều chuyển - sáp nhập điểm kho</label>
-              <label nz-radio nzValue="SN_CHI_CUC">Điều chuyển - sáp nhập chi cục</label>
-            </nz-radio-group>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </div>
-  </form>
-</nz-card>
+    </form>
+  </nz-card>
 
-<nz-card class="mg-t-16">
-  <div class="mt16 flex-card p-lr16">
+  <div class="mt-16 flex-card p-lr16">
     <div class="title-card">
       <div class="title-chi-tieu">
         <span></span>
         <span>Danh sách đơn vị điều chuyển sáo nhập</span>
       </div>
     </div>
-    <nz-table #tblData [nzData]="this.dataTable" class="nowrap table-chi-tiet" nzBordered>
-      <thead>
-      <tr>
-        <th rowspan="2" style="width: 3%;">STT</th>
-        <th colspan="3" style="width: 30%;">Đơn vị chuyển đi</th>
-        <th colspan="3" style="width: 30%;">Đơn vị chuyển đến</th>
-        <th rowspan="2" style="width: 30%;">Ghi chú</th>
-        <th rowspan="2" style="width: 7%;">Hành động</th>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #tblData [nzData]="this.dataTable" class="nowrap table-chi-tiet" nzBordered>
+        <thead>
+          <tr>
+            <th rowspan="2" style="width: 3%;" class="text-center">STT</th>
+            <th [colspan]="formData.value.loai==='SN_DIEM_KHO'? 3: 2" style="width: 30%;" class="text-center">Đơn vị
+              chuyển đi</th>
+            <th [colspan]="formData.value.loai==='SN_DIEM_KHO'? 3: 2" style="width: 30%;" class="text-center">Đơn vị
+              chuyển đến</th>
+            <th rowspan="2" style="width: 30%;" class="text-center">Ghi chú</th>
+            <th rowspan="2" style="width: 7%;" class="text-center">Hành động</th>
 
-      </tr>
-      <tr>
-        <th nzWidth="20%">Cục</th>
-        <th>Chi cục</th>
-        <th>Điểm kho</th>
-        <th>Cục</th>
-        <th>Chi cục</th>
-        <th>Điểm kho</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td></td>
-        <td>
-          <nz-input-group>
-            <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maCucDi'
-                       (ngModelChange)='changeCucDi($event)'
-                       [ngModelOptions]='{standalone: true}'>
-              <nz-option *ngFor='let option of dsCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </td>
-        <td>
-          <nz-input-group>
-            <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maChiCucDi'
-                       (ngModelChange)='loadDsDiemKhoDi($event)'
-                       [ngModelOptions]='{standalone: true}'>
-              <nz-option *ngFor='let option of dsChiCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </td>
-        <td>
-          <nz-input-group>
-            <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maDiemKhoDi'
-                       [ngModelOptions]='{standalone: true}'>
-              <nz-option *ngFor='let option of dsKhoDi' [nzLabel]='option.title' [nzValue]='option.key'>
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </td>
-        <td>
-          <nz-input-group>
-            <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maCucDen'
-                       (ngModelChange)='changeCucDen($event)'
-                       [ngModelOptions]='{standalone: true}'>
-              <nz-option *ngFor='let option of dsCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </td>
-        <td>
-          <nz-input-group>
-            <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maChiCucDen'
-                       (ngModelChange)='loadDsDiemKhoDen($event)'
-                       [ngModelOptions]='{standalone: true}'>
-              <nz-option *ngFor='let option of dsChiCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </td>
-        <td>
-          <nz-input-group>
-            <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maDiemKhoDen'
-                       [ngModelOptions]='{standalone: true}'>
-              <nz-option *ngFor='let option of dsKhoDen' [nzLabel]='option.title' [nzValue]='option.key'>
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </td>
-        <td>
-          <nz-input-group>
-            <input nz-input [(ngModel)]='rowItem.ghiChu' [ngModelOptions]='{standalone: true}'/>
-          </nz-input-group>
-        </td>
-        <td *ngIf='formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV'>
-          <a [ngClass]="{'disabled': isView}" (click)='themMoiItem()'>
-            <i class='fa fa-plus'></i>
-          </a>
-          <a [ngClass]="{'disabled': isView}" (click)='clearData()'>
-            <i class='fa fa-refresh'></i>
-          </a>
-        </td>
-      </tr>
-      <tr *ngFor="let data of dataTable; let idx = index">
-        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
-          <td>{{ idx + 1 }}</td>
-          <td>{{ data.tenCucDi }}</td>
-          <td>{{ data.tenChiCucDi }}</td>
-          <td>{{ data.tenDiemKhoDi }}</td>
-          <td>{{ data.tenCucDen }}</td>
-          <td>{{ data.tenChiCucDen }}</td>
-          <td>{{ data.tenDiemKhoDen }}</td>
-          <td>{{ data.ghiChu }}</td>
-          <td *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">
-            <a (click)="editItem(idx)">
-              <i class="fa fa-pencil" title="Sửa"></i>
-            </a>
-            <a (click)="xoaItem(idx)">
-              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-            </a>
-          </td>
-        </ng-container>
-        <ng-template #editTemplate>
-          <td></td>
-          <td>
-            <nz-input-group>
-              <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maCucDi'
-                         (ngModelChange)='changeCucDi($event)'
-                         [ngModelOptions]='{standalone: true}'>
-                <nz-option *ngFor='let option of dsCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maChiCucDi'
-                         (ngModelChange)='loadDsDiemKhoDi($event)'
-                         [ngModelOptions]='{standalone: true}'>
-                <nz-option *ngFor='let option of dsChiCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maDiemKhoDi'
-                         [ngModelOptions]='{standalone: true}'>
-                <nz-option *ngFor='let option of dsKhoDi' [nzLabel]='option.title' [nzValue]='option.key'>
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maCucDen'
-                         (ngModelChange)='changeCucDen($event)'
-                         [ngModelOptions]='{standalone: true}'>
-                <nz-option *ngFor='let option of dsCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maChiCucDen'
-                         (ngModelChange)='loadDsDiemKhoDen($event)'
-                         [ngModelOptions]='{standalone: true}'>
-                <nz-option *ngFor='let option of dsChiCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maDiemKhoDen'
-                         [ngModelOptions]='{standalone: true}'>
-                <nz-option *ngFor='let option of dsKhoDen' [nzLabel]='option.title' [nzValue]='option.key'>
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <input nz-input [(ngModel)]='dataEdit[idx].data.ghiChu'
-                     [ngModelOptions]='{standalone: true}'/>
-            </nz-input-group>
-          </td>
-          <td class="text-center">
-            <a (click)="luuEdit(idx)" class="save">
-              <i class="fa fa-save"></i>
-            </a>
-            <a (click)="huyEdit(idx)">
-              <i class="fa fa-ban do"></i> </a>
-          </td>
-        </ng-template>
-      </tr>
-      </tbody>
-    </nz-table>
+          </tr>
+          <tr>
+            <th nzWidth="20%" class="text-center">Cục</th>
+            <th class="text-center">Chi cục</th>
+            <th *ngIf="formData.value.loai==='SN_DIEM_KHO'" class="text-center">Điểm kho</th>
+            <th class="text-center">Cục</th>
+            <th class="text-center">Chi cục</th>
+            <th *ngIf="formData.value.loai==='SN_DIEM_KHO'" class="text-center">Điểm kho</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td>
+              <nz-input-group>
+                <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maCucDi' (ngModelChange)='changeCucDi($event)'
+                  [ngModelOptions]='{standalone: true}' [nzDisabled]="isDisabledThemMoi">
+                  <nz-option *ngFor='let option of dsCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maChiCucDi'
+                  (ngModelChange)='changeChiCucDi($event)' [ngModelOptions]='{standalone: true}'
+                  [nzDisabled]="isDisabledThemMoi">
+                  <nz-option *ngFor='let option of dsChiCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </td>
+            <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">
+              <nz-input-group>
+                <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maDiemKhoDi'
+                  [ngModelOptions]='{standalone: true}' [nzDisabled]="isDisabledThemMoi">
+                  <nz-option *ngFor='let option of dsKhoDi' [nzLabel]='option.title' [nzValue]='option.key'>
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maCucDen'
+                  (ngModelChange)='changeCucDen($event)' [ngModelOptions]='{standalone: true}'
+                  [nzDisabled]="isDisabledThemMoi">
+                  <nz-option *ngFor='let option of dsCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maChiCucDen'
+                  (ngModelChange)='changeChiCucDen($event)' [ngModelOptions]='{standalone: true}'
+                  [nzDisabled]="isDisabledThemMoi">
+                  <nz-option *ngFor='let option of dsChiCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </td>
+            <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">
+              <nz-input-group>
+                <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maDiemKhoDen'
+                  [ngModelOptions]='{standalone: true}' [nzDisabled]="isDisabledThemMoi">
+                  <nz-option *ngFor='let option of dsKhoDen' [nzLabel]='option.title' [nzValue]='option.key'>
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <input nz-input [(ngModel)]='rowItem.ghiChu' [ngModelOptions]='{standalone: true}'
+                  [readonly]="isDisabledThemMoi" />
+              </nz-input-group>
+            </td>
+            <td *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isDisabledThemMoi'>
+              <a [ngClass]="{'disabled': isView}" (click)='themMoiItem()'>
+                <i class='fa fa-plus' title="Thêm"></i>
+              </a>
+              <a [ngClass]="{'disabled': isView}" (click)='clearData()'>
+                <i class='fa fa-refresh' title="Làm mới"></i>
+              </a>
+            </td>
+          </tr>
+          <tr *ngFor="let data of dataTable; let idx = index">
+            <ng-container *ngIf="!dataEdit[idx]?.edit; else editTemplate">
+              <td>{{ idx + 1 }}</td>
+              <td>{{ data.tenCucDi }}</td>
+              <td>{{ data.tenChiCucDi }}</td>
+              <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">{{ data.tenDiemKhoDi }}</td>
+              <td>{{ data.tenCucDen }}</td>
+              <td>{{ data.tenChiCucDen }}</td>
+              <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">{{ data.tenDiemKhoDen }}</td>
+              <td>{{ data.ghiChu }}</td>
+              <td *ngIf="formData.value.trangThai != STATUS.BAN_HANH">
+                <a (click)="editItem(idx)">
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a (click)="xoaItem(idx)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </ng-container>
+            <ng-template #editTemplate>
+              <td></td>
+              <td>
+                <nz-input-group>
+                  <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maCucDi'
+                    (ngModelChange)='changeCucDi($event)' [ngModelOptions]='{standalone: true}'>
+                    <nz-option *ngFor='let option of dsCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maChiCucDi'
+                    (ngModelChange)='changeChiCucDi($event)' [ngModelOptions]='{standalone: true}'>
+                    <nz-option *ngFor='let option of dsChiCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </td>
+              <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">
+                <nz-input-group>
+                  <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maDiemKhoDi'
+                    [ngModelOptions]='{standalone: true}'>
+                    <nz-option *ngFor='let option of dsKhoDi' [nzLabel]='option.title' [nzValue]='option.key'>
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maCucDen'
+                    (ngModelChange)='changeCucDen($event)' [ngModelOptions]='{standalone: true}'>
+                    <nz-option *ngFor='let option of dsCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maChiCucDen'
+                    (ngModelChange)='changeChiCucDen($event)' [ngModelOptions]='{standalone: true}'>
+                    <nz-option *ngFor='let option of dsChiCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </td>
+              <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">
+                <nz-input-group>
+                  <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maDiemKhoDen'
+                    [ngModelOptions]='{standalone: true}'>
+                    <nz-option *ngFor='let option of dsKhoDen' [nzLabel]='option.title' [nzValue]='option.key'>
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]='dataEdit[idx].data.ghiChu' [ngModelOptions]='{standalone: true}' />
+                </nz-input-group>
+              </td>
+              <td class="text-center">
+                <a (click)="luuEdit(idx)" class="save">
+                  <i class="fa fa-save"></i>
+                </a>
+                <a (click)="huyEdit(idx)">
+                  <i class="fa fa-ban do"></i> </a>
+              </td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
   </div>
-</nz-card>
-
+</div>
 
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
-
-
-

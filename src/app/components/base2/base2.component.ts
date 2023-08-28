@@ -362,9 +362,7 @@ export class Base2Component implements OnInit {
   }
 
   // Save
-  async createUpdate(body, roles?: any) {
-    console.log(body, 'body')
-    console.log(this.service, 'service')
+  async createUpdate(body, roles?: any, isHideMessage?: boolean) {
     if (!this.checkPermission(roles)) {
       return
     }
@@ -382,11 +380,11 @@ export class Base2Component implements OnInit {
       }
       if (res.msg == MESSAGE.SUCCESS) {
         if (body.id && body.id > 0) {
-          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
+          !isHideMessage && this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
           return res.data;
         } else {
           this.formData.patchValue({ id: res.data.id });
-          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
+          !isHideMessage && this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
           return res.data;
         }
       } else {

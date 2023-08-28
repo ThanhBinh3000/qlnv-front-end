@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import dayjs from "dayjs";
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {StorageService} from "../../../../services/storage.service";
-import {CHUC_NANG, STATUS} from "../../../../constants/status";
-import {UserLogin} from "../../../../models/userlogin";
-import {MESSAGE} from "../../../../constants/message";
+import { Base2Component } from "../../../../components/base2/base2.component";
+import { StorageService } from "../../../../services/storage.service";
+import { CHUC_NANG, STATUS } from "../../../../constants/status";
+import { UserLogin } from "../../../../models/userlogin";
+import { MESSAGE } from "../../../../constants/message";
 import {
   QuyetDinhDieuChuyenService
-} from "../../../../services/qlnv-kho/dieu-chuyen-sap-nhap-kho/QuyetDinhDieuChuyen.service";
+} from "../../../../services/qlnv-kho/dieu-chuyen-sap-nhap-kho/quyet-dinh-dieu-chuyen.service";
 
 
 @Component({
@@ -20,7 +20,7 @@ import {
   styleUrls: ['./quyet-dinh-dieu-chuyen-sap-nhap-kho.component.scss']
 })
 export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component implements OnInit {
-
+  @Output("selectTabChange") selectTabChange = new EventEmitter<any>();
   CHUC_NANG = CHUC_NANG;
   STATUS = STATUS;
 
@@ -56,14 +56,23 @@ export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component imple
   idPhieuKnCl: number = 0;
   openPhieuKnCl = false;
   listTrangThaiSn: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: "Chưa hoàn thành"},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: "Đang hoàn thành"},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành"},
+    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: "Chưa thực hiện" },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: "Đang thực hiện" },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },
   ];
+  ObTrangThaiSn: { [key: string]: string } = {
+    [this.STATUS.CHUA_THUC_HIEN]: "Chưa thực hiện",
+    [this.STATUS.DANG_THUC_HIEN]: "Đang thực hiện",
+    [this.STATUS.DA_HOAN_THANH]: "Đã hoàn thành",
+  }
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
-    {ma: this.STATUS.BAN_HANH, giaTri: "Ban hành"},
+    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: "Đang nhập dữ liệu" },
+    { ma: this.STATUS.BAN_HANH, giaTri: "Ban hành" },
   ];
+  ObTrangThai: { [key: string]: string } = {
+    [this.STATUS.DANG_NHAP_DU_LIEU]: "Đang nhập dữ liệu",
+    [this.STATUS.BAN_HANH]: "Ban hành"
+  }
   disabledStartNgayKy = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKyDen) {
       return startValue.getTime() >= this.formData.value.ngayKyDen.getTime();
@@ -123,6 +132,9 @@ export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component imple
   async showList() {
     this.isDetail = false;
     await this.search();
+  }
+  async selectTab(value: number) {
+    this.selectTabChange.emit(value)
   }
 
 }
