@@ -445,10 +445,10 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                         }
                     );
-                    if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
+                    if (Status.check('reject', mcn)) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                     } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                        this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

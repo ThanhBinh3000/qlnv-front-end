@@ -1010,10 +1010,10 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.trangThaiBanGhi = mcn;
                     this.getStatusButton();
-                    if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+                    if (Status.check('reject', mcn)) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                     } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                        this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
