@@ -5,36 +5,36 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import {v4 as uuidv4} from "uuid";
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { v4 as uuidv4 } from 'uuid';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {
   DiaDiemGiaoNhan,
   KeHoachBanDauGia,
   PhanLoTaiSan,
 } from 'src/app/models/KeHoachBanDauGia';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {DeNghiCapVonBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
-import {UserService} from 'src/app/services/user.service';
-import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
-import {STATUS} from "../../../../../constants/status";
-import {AMOUNT, AMOUNT_NO_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../../Utility/utils";
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
+import { UserService } from 'src/app/services/user.service';
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { STATUS } from '../../../../../constants/status';
+import { AMOUNT, AMOUNT_NO_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-thong-tin-de-nghi-cap-von-bo-nganh',
   templateUrl: './thong-tin-de-nghi-cap-von-bo-nganh.component.html',
-  styleUrls: ['./thong-tin-de-nghi-cap-von-bo-nganh.component.scss']
+  styleUrls: ['./thong-tin-de-nghi-cap-von-bo-nganh.component.scss'],
 })
 export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   @Input() loaiVthhInput: string;
@@ -44,7 +44,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   @Input() id: number;
   formData: FormGroup;
-  cacheData: any[] = [];
   fileDinhKem: Array<FileDinhKem> = [];
   userLogin: UserLogin;
   STATUS = STATUS;
@@ -76,7 +75,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   itemDnCapVonBn: any = {};
   diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
   listChungLoaiHangHoa: any[] = [];
-  maKeHoach: string;
   listLoaiHopDong: any[] = [];
   dsBoNganh: any[] = [];
   maxYeuCauCapThem: number = 2;
@@ -117,8 +115,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     // thêm theo thiết kế mới
     ycCapThemNt: null,
     edit: false,
-    idVirtual: null
-  }
+    idVirtual: null,
+  };
 
   rowItemDetailHhh: ItemDetailHh = {
     loaiVthh: null,
@@ -131,20 +129,20 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     thanhTienNt: null,
     slDeNghiCapVon: null,
     donViTinh: null,
-  }
-
-  showEdit: boolean = false;
+  };
 
   tongCong: any = {
-    tongThanhTien: 0,
     tongKinhPhiDaCap: 0,
-    tongYeuCauCapThem: 0,
-  }
+    tongTien: 0,
+    tongDuToanDuocGiao: 0,
+    tongKinhPhiChuaCap: 0,
+    tongYcCapThem: 0,
+  };
 
   tongCongHangHoa: any = {
     thanhTienNt: 0,
     thanhTien: 0,
-  }
+  };
 
   constructor(
     private modal: NzModalService,
@@ -189,8 +187,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
           this.itemDnCapVonBn = res.data;
           // this.initForm();
           this.formData = this.fb.group({
-            nam: [this.itemDnCapVonBn ? this.itemDnCapVonBn.nam : null, [Validators.required],],
-            boNganh: [this.itemDnCapVonBn ? this.itemDnCapVonBn.maBoNganh : null, [Validators.required],],
+            nam: [this.itemDnCapVonBn ? this.itemDnCapVonBn.nam : null, [Validators.required]],
+            boNganh: [this.itemDnCapVonBn ? this.itemDnCapVonBn.maBoNganh : null, [Validators.required]],
             soDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.soDeNghi : null],
             ngayDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ngayDeNghi : null],
             ghiChu: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ghiChu : null],
@@ -207,11 +205,12 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
                 if (item.chiTietHang) {
                   item.chiTiet = JSON.parse(item.chiTietHang);
                 }
-              })
+              });
               this.selectRow(this.chiTietList[0]);
             }
           }
           this.tinhTong();
+          this.loadListHopDong(null, this.itemDnCapVonBn.maBoNganh);
         }
       }
     } else {
@@ -230,7 +229,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detailHopDong = res.data;
-          console.log(res.data, 'res.datares.datares.data')
         }
       }
     }
@@ -242,14 +240,14 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       // không lấy bộ tài chính
-      this.dsBoNganh = res.data.filter(item => item.maDvi !== '01')
+      this.dsBoNganh = res.data.filter(item => item.maDvi !== '01');
     }
   }
 
   initForm() {
     this.formData = this.fb.group({
-      nam: [this.itemDnCapVonBn ? this.itemDnCapVonBn.nam : null, [Validators.required],],
-      boNganh: [this.itemDnCapVonBn ? this.itemDnCapVonBn.maBoNganh : null, [Validators.required],],
+      nam: [this.itemDnCapVonBn ? this.itemDnCapVonBn.nam : null, [Validators.required]],
+      boNganh: [this.itemDnCapVonBn ? this.itemDnCapVonBn.maBoNganh : null, [Validators.required]],
       soDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.soDeNghi : null],
       ngayDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ngayDeNghi : null],
       ghiChu: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ghiChu : null],
@@ -277,16 +275,13 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     this.rowItem.tenVatTuCha = null;
     this.rowItem.maVatTuCha = null;
     let bnObject = this.dsBoNganh.find(item => item.code == this.formData.value.boNganh);
-    // if (bnObject) {
-    //   this.titleSoDeNghi = "/" + bnObject.code + "-" + this.preFixSoDn;
-    // }
     let hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-      "maDvi": bnObject.maDvi
+      'maDvi': bnObject.maDvi,
     }).toPromise();
     if (hangHoa) {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
         this.hangHoaAll = hangHoa.data;
-        this.listLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length == 4)
+        this.listLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length == 4);
       }
     }
     this.loadListHopDong(bnObject);
@@ -302,11 +297,11 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       let bnObject = this.dsBoNganh.find(item => item.code == this.formData.value.boNganh);
       if (bnObject) {
         await this.danhMucService.getDanhMucHangHoaDvql({
-          "maDvi": bnObject.maDvi
+          'maDvi': bnObject.maDvi,
         }).subscribe((hangHoa) => {
           if (hangHoa.msg == MESSAGE.SUCCESS) {
             this.hangHoaAll = hangHoa.data;
-            this.listLoaiHangHoa = this.hangHoaAll.filter(item => item.maHangHoa.length == 4)
+            this.listLoaiHangHoa = this.hangHoaAll.filter(item => item.maHangHoa.length == 4);
             // hangHoa.data.forEach((item) => {
             // if (item.cap === "1" && item.ma != '01') {
             //   this.listLoaiHangHoa = [
@@ -331,7 +326,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
 
   async changeLoaiHangHoa() {
     this.listChungLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length > 4 &&
-      element.maHangHoa.substring(0, 4) == this.rowItemDetailHhh.loaiVthh)
+      element.maHangHoa.substring(0, 4) == this.rowItemDetailHhh.loaiVthh);
     let hangHoa = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItemDetailHhh.loaiVthh);
     if (hangHoa) {
       this.rowItemDetailHhh.tenLoaiVthh = hangHoa.tenHangHoa;
@@ -340,7 +335,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   }
 
   changeChungLoaiHangHoa() {
-    let item = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItemDetailHhh.cloaiVthh)
+    let item = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItemDetailHhh.cloaiVthh);
     if (item) {
       this.rowItemDetailHhh.tenCloaiVthh = item.tenHangHoa;
       this.rowItemDetailHhh.donViTinh = item.maDviTinh;
@@ -357,6 +352,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       this.rowItem.nganHang = hopDong.nganHang;
       this.rowItem.tongTienNt = hopDong.tongTienNt;
       this.rowItem.tongTien = hopDong.tongTien;
+      this.rowItem.duToanDuocGiao = hopDong.duToanDuocGiao;
     }
   }
 
@@ -382,21 +378,32 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     }
   }
 
-  calCulateKinhPhiChuaCap() {
-    this.rowItem.kinhPhiChuaCap = this.rowItem.tongTien ? (this.rowItem.kinhPhiDaCap ? this.rowItem.tongTien - this.rowItem.kinhPhiDaCap : this.rowItem.tongTien) : this.rowItem.tongTien;
-    this.rowItem.kinhPhiChuaCapNt = this.rowItem.tongTienNt ? (this.rowItem.kinhPhiDaCapNt ? this.rowItem.tongTienNt - this.rowItem.kinhPhiDaCapNt : this.rowItem.tongTienNt) : this.rowItem.tongTienNt;
+  calCulateKinhPhiChuaCap(data?) {
+    if (data) {
+      data.kinhPhiChuaCap = data.tongTien ? (data.kinhPhiDaCap ? data.tongTien - data.kinhPhiDaCap : data.tongTien) : data.tongTien;
+      data.kinhPhiChuaCapNt = data.tongTienNt ? (data.kinhPhiDaCapNt ? data.tongTienNt - data.kinhPhiDaCapNt : data.tongTienNt) : data.tongTienNt;
+    } else {
+      this.rowItem.kinhPhiChuaCap = this.rowItem.tongTien ? (this.rowItem.kinhPhiDaCap ? this.rowItem.tongTien - this.rowItem.kinhPhiDaCap : this.rowItem.tongTien) : this.rowItem.tongTien;
+      this.rowItem.kinhPhiChuaCapNt = this.rowItem.tongTienNt ? (this.rowItem.kinhPhiDaCapNt ? this.rowItem.tongTienNt - this.rowItem.kinhPhiDaCapNt : this.rowItem.tongTienNt) : this.rowItem.tongTienNt;
+    }
   }
 
   changeThanhTienEdit(id) {
     if (this.itemHopDongSelected.chiTiet[id].slDeNghiCapVon && this.itemHopDongSelected.chiTiet[id].donGia) {
       let thanhTien = this.itemHopDongSelected.chiTiet[id].slDeNghiCapVon * this.itemHopDongSelected.chiTiet[id].donGia;
-      this.itemHopDongSelected.chiTiet[id].thanhTien = thanhTien;
+      if (this.itemHopDongSelected && this.itemHopDongSelected.loaiTien != '01') {
+        this.itemHopDongSelected.chiTiet[id].thanhTienNt = thanhTien;
+        this.itemHopDongSelected.chiTiet[id].thanhTien = thanhTien * this.itemHopDongSelected.tyGia;
+      } else {
+        this.itemHopDongSelected.chiTiet[id].thanhTien = thanhTien;
+      }
+
     }
   }
 
   themHopDong() {
-    if (!this.formData.get("boNganh").value) {
-      this.notification.warning(MESSAGE.WARNING, "Cần chọn bộ ngành đề nghị trước.");
+    if (!this.formData.get('boNganh').value) {
+      this.notification.warning(MESSAGE.WARNING, 'Cần chọn bộ ngành đề nghị trước.');
       this.clearHopDong();
       return;
     }
@@ -409,12 +416,12 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     }
     if (this.rowItem.tongTien && this.rowItem.duToanDuocGiao) {
       if (this.rowItem.tongTien > this.rowItem.duToanDuocGiao) {
-        this.notification.warning(MESSAGE.WARNING, "Tổng tiền hợp đồng lớn hơn dự toán được giao, vui lòng kiểm tra lại.");
+        this.notification.warning(MESSAGE.WARNING, 'Tổng tiền hợp đồng lớn hơn dự toán được giao, vui lòng kiểm tra lại.');
         return;
       }
     }
     if (this.rowItem.ycCapThem > this.rowItem.kinhPhiChuaCap) {
-      this.notification.warning(MESSAGE.WARNING, "Tổng tiền yêu cầu cấp thêm lớn hơn kinh phí chưa cấp, vui lòng kiểm tra lại.");
+      this.notification.warning(MESSAGE.WARNING, 'Tổng tiền yêu cầu cấp thêm lớn hơn kinh phí chưa cấp, vui lòng kiểm tra lại.');
       return;
     }
     if (isValid) {
@@ -439,9 +446,9 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     let totalTienHang = this.rowItemDetailHhh.thanhTien;
     this.itemHopDongSelected.chiTiet.forEach((item) => {
       totalTienHang += item.thanhTien;
-    })
+    });
     if (totalTienHang > this.itemHopDongSelected.ycCapThem) {
-      this.notification.warning(MESSAGE.WARNING, "Tổng tiền các loại hàng trong lần đề nghị này lớn hơn số tiền yêu cầu cấp thêm.");
+      this.notification.warning(MESSAGE.WARNING, 'Tổng tiền các loại hàng trong lần đề nghị này lớn hơn số tiền yêu cầu cấp thêm.');
       return;
     }
     if (isValid) {
@@ -484,14 +491,14 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       // thêm theo thiết kế mới
       ycCapThemNt: null,
       edit: false,
-      idVirtual: null
-    }
+      idVirtual: null,
+    };
   }
 
   async selectRow(data) {
     this.chiTietList.forEach(item => {
       item.selected = false;
-    })
+    });
     data.selected = true;
     this.itemHopDongSelected = data;
     this.tinhTongChiTietHangHoa();
@@ -509,7 +516,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       thanhTienNt: null,
       slDeNghiCapVon: null,
       donViTinh: null,
-    }
+    };
   }
 
   showEditItem(idx: number, type: string) {
@@ -522,7 +529,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
             item.edit = false;
           }
         }
-      })
+      });
     }
     this.tinhTong();
   }
@@ -537,7 +544,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
             item.edit = false;
           }
         }
-      })
+      });
     }
     this.tinhTongChiTietHangHoa();
   }
@@ -561,25 +568,28 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       tongTien: 0,
       tongDuToanDuocGiao: 0,
       tongKinhPhiChuaCap: 0,
+      tongKinhPhiDaCap: 0,
       tongYcCapThem: 0,
-    }
+    };
     this.chiTietList.forEach((item) => {
-      this.tongCong.tongTien += item.tongTien;
-      this.tongCong.tongDuToanDuocGiao += item.duToanDuocGiao;
-      this.tongCong.tongKinhPhiChuaCap += item.kinhPhiChuaCap;
-      this.tongCong.tongYcCapThem += item.ycCapThem;
-    })
+      this.tongCong.tongTien += item.tongTien ? item.tongTien : 0;
+      this.tongCong.tongDuToanDuocGiao += item.duToanDuocGiao ? item.duToanDuocGiao : 0;
+      this.tongCong.tongKinhPhiChuaCap += item.kinhPhiChuaCap ? item.kinhPhiChuaCap : 0;
+      this.tongCong.tongKinhPhiDaCap += item.kinhPhiDaCap ? item.kinhPhiDaCap : 0;
+      this.tongCong.tongYcCapThem += item.ycCapThem ? item.ycCapThem : 0;
+    });
+    console.log(this.tongCong, 'this.tongCongthis.tongCong');
   }
 
   tinhTongChiTietHangHoa() {
     this.tongCongHangHoa = {
       thanhTienNt: 0,
       thanhTien: 0,
-    }
+    };
     this.itemHopDongSelected.chiTiet.forEach((item) => {
       this.tongCongHangHoa.thanhTienNt += item.thanhTienNt;
       this.tongCongHangHoa.thanhTien += item.thanhTien;
-    })
+    });
   }
 
   quayLai() {
@@ -601,18 +611,18 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       if (this.chiTietList && this.chiTietList.length > 0) {
         this.chiTietList.forEach(item => {
           item.chiTietHang = item.chiTiet && item.chiTiet.length > 0 ? JSON.stringify(item.chiTiet) : JSON.stringify([]);
-        })
+        });
       }
       let body = {
-        "chiTietList": this.chiTietList,
-        "fileDinhKemReqs": this.listFileDinhKem,
-        "ghiChu": this.formData.value.ghiChu,
-        "maBoNganh": this.formData.value.boNganh,
-        "nam": this.formData.value.nam,
-        "ngayDeNghi": this.formData.value.ngayDeNghi ? dayjs(this.formData.value.ngayDeNghi).format("YYYY-MM-DD") : null,
-        "soDeNghi": this.formData.value.soDeNghi,
-        "id": this.idInput,
-      }
+        'chiTietList': this.chiTietList,
+        'fileDinhKemReqs': this.listFileDinhKem,
+        'ghiChu': this.formData.value.ghiChu,
+        'maBoNganh': this.formData.value.boNganh,
+        'nam': this.formData.value.nam,
+        'ngayDeNghi': this.formData.value.ngayDeNghi ? dayjs(this.formData.value.ngayDeNghi).format('YYYY-MM-DD') : null,
+        'soDeNghi': this.formData.value.soDeNghi,
+        'id': this.idInput,
+      };
       // return;
       if (this.idInput > 0) {
         let res = await this.deNghiCapVonBoNganhService.sua(body);
@@ -620,7 +630,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
           if (isHoanThanh) {
             this.guiDuyet(this.idInput);
           } else
-            this.notification.success(MESSAGE.SUCCESS, "Cập nhật thành công");
+            this.notification.success(MESSAGE.SUCCESS, 'Cập nhật thành công');
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -631,7 +641,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
           if (isHoanThanh) {
             this.guiDuyet(this.idInput);
           } else
-            this.notification.success(MESSAGE.SUCCESS, "Lưu dữ liệu thành công");
+            this.notification.success(MESSAGE.SUCCESS, 'Lưu dữ liệu thành công');
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -741,10 +751,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     return this.listLoaiTien.find(item => item.ma == loaiTien).giaTri;
   }
 
-  async loadListHopDong(objBoNganh) {
+  async loadListHopDong(objBoNganh, code?) {
     this.listHopDong = [];
     let res = await this.deNghiCapVonBoNganhService.dsHopDongTheoBoNganh({
-      "maBoNganh": objBoNganh.code
+      'maBoNganh': code ? code : objBoNganh.code,
     });
     if (res) {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -859,5 +869,5 @@ export class DetailHopDong {
   tyGia: number;
   tongTien: number;
   duToanDuocGiao: number;
-  listHopDongTheoDeNghi: any
+  listHopDongTheoDeNghi: any;
 }

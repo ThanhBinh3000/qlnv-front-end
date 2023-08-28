@@ -9,9 +9,9 @@
           </nz-select>
         </div>
         <div nz-col [nzSpan]="3" *ngIf="loaiVthh.startsWith('02')">
-          <label class="search__label">Loại hành hóa</label>
-          <nz-select formControlName="loaiVthh">
-            <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+          <label class="search__label">Loại hàng hóa</label>
+          <nz-select formControlName="loaiVthh" (ngModelChange)="onChangeCloaiVthh($event)">
+            <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
           </nz-select>
         </div>
         <div nz-col [nzSpan]="loaiVthh.startsWith('02') ? 3 : 4">

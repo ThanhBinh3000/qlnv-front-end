@@ -1,17 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
-import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
+import {chain, cloneDeep, isEmpty} from "lodash";
+import {v4 as uuidv4} from "uuid";
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { TongHopTheoDoiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { STATUS } from '../../../../constants/status';
 
 @Component({
   selector: 'app-tong-hop-theo-doi-cap-von',
@@ -67,10 +69,11 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   selectedId: number = 0;
 
   isVatTu: boolean = false;
-
+  STATUS = STATUS;
   allChecked = false;
   indeterminate = false;
-
+  expandSetString = new Set<string>();
+  dataTableTree: any[] = [];
   isView = false;
   constructor(
     private spinner: NgxSpinnerService,
@@ -168,6 +171,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
+      this.buildTableView(this.dataTableAll);
       this.totalRecord = data.totalElements;
     } else {
       this.dataTable = [];
@@ -372,4 +376,31 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
+  onExpandStringChange(id: string, checked: boolean) {
+    if (checked) {
+      this.expandSetString.add(id);
+    } else {
+      this.expandSetString.delete(id);
+    }
+  }
+
+  async buildTableView(data?: any) {
+    console.log(data,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    this.dataTableTree = chain(data)
+      .groupBy("tenDviThongTri")
+      .map((v, k) => {
+          let rowItem = v.find(s => s.tenDviThongTri === k);
+          let idVirtual = uuidv4();
+          this.expandSetString.add(idVirtual);
+          return {
+            idVirtual: idVirtual,
+            tenDviThongTri: k,
+            nam: rowItem?.nam,
+            childData: v
+          }
+        }
+      ).value();
+  }
+
 }

@@ -26,12 +26,12 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại kỳ báo cáo
               </nz-form-label>
-              <nz-select formControlName="nam">
-                <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              <nz-select formControlName="loaiKyBc" (ngModelChange)="changLoaiKyBc($event)">
+                <nz-option *ngFor="let p of listLoaiKyBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="4" *ngIf="(formData.value.loaiKyBc && ((formData.value.loaiKyBc == '01') || (formData.value.loaiKyBc == '02'))) ">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Kỳ báo cáo
               </nz-form-label>
@@ -40,7 +40,7 @@
               </nz-select>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="7" *ngIf="userService.isTongCuc()">
+          <div nz-col [nzSpan]="formData.value.loaiKyBc == '03' ? 9 : 7" *ngIf="userService.isTongCuc()">
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
@@ -50,7 +50,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="7" *ngIf="!userService.isChiCuc()">
+          <div nz-col [nzSpan]="formData.value.loaiKyBc == '03' ? 9 : 7" *ngIf="!userService.isChiCuc()">
             <nz-form-item>
               <nz-form-label>Chi Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
@@ -83,7 +83,7 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
               </nz-form-label>
               <nz-select nzAllowClear formControlName="nam">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-item>
           </div>
