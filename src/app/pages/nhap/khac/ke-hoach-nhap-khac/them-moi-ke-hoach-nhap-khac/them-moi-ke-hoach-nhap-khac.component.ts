@@ -120,12 +120,6 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
           this.formData.patchValue({
             soDxuat: dataDetail.hdr.soDxuat?.split('/')[0]
           })
-          if (this.userService.isTongCuc() && dataDetail.hdr?.maDviDxuat.length == 6) {
-            dataDetail.dtl.forEach(item => {
-              item.maCuc = dataDetail.hdr?.maDviDxuat
-              item.tenCuc = dataDetail.hdr?.tenDvi
-            })
-          }
           this.changeHangHoa(dataDetail.hdr.loaiVthh);
           if (dataDetail) {
             this.fileDinhKems = dataDetail.hdr.fileDinhKems;
@@ -249,6 +243,11 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
       this.formData.get('soDxuat').setValue(this.formData.get('soDxuat').value + this.maTrinh);
     }
     body = this.formData.value;
+    if (this.userService.isCuc()) {
+      this.listOfData.forEach(item => {
+        item.maCuc = this.formData.value.maDviDxuat
+      })
+    }
     body.details = this.listOfData;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLy = this.canCuPhapLy;
@@ -728,16 +727,16 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
               children: value
             }))
             .value();
-          chiCuc.children.forEach(diemKho => {
-            diemKho.children.forEach(nganLo => {
-              if (nganLo.maLoKho != null) {
-                nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.LO_KHO].find(i => i.maDvi == nganLo.maLoKho).tenDvi + " - "
-                  + this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
-              } else {
-                nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
-              }
-            });
-          });
+          // chiCuc.children.forEach(diemKho => {
+          //   diemKho.children.forEach(nganLo => {
+          //     if (nganLo.maLoKho != null) {
+          //       nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.LO_KHO].find(i => i.maDvi == nganLo.maLoKho).tenDvi + " - "
+          //         + this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+          //     } else {
+          //       nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+          //     }
+          //   });
+          // });
         });
       });
     } else {

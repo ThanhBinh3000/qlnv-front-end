@@ -43,17 +43,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
 
   taiLieuDinhKemList: any[] = [];
   dataTable: any[] = [];
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "phieu_nhap_kho_dau_thau_lt.docx",
-    tenBaoCao: "",
-    trangThai: ""
-  };
-  showDlgPreview = false;
-  pdfSrc: any;
-  printSrc: any;
-  wordSrc: any;
-
+  previewName: string;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -486,6 +476,11 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   }
 
   async preview() {
+    if (this.loaiVthh.startsWith('02')) {
+      this.previewName = 'phieu_nhap_kho_dau_thau_lt';
+    } else {
+      this.previewName = 'phieu_nhap_kho';
+    }
     let body = this.formData.value;
     body.reportTemplateRequest = this.reportTemplate;
     await this.quanLyPhieuNhapKhoService.preview(body).then(async s => {
@@ -494,20 +489,6 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
-  }
-  downloadPdf() {
-    saveAs(this.pdfSrc, "phieu_nhap_kho.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "phieu_nhap_kho.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
 }
