@@ -577,6 +577,21 @@ export class PhuLuc01XuatComponent implements OnInit {
             return row;
         })
 
+
+      let row: any = {};
+      fieldOrder.forEach(field => {
+        if (field == 'tenDanhMuc') {
+          row[field] = 'Tổng cộng'
+        } else {
+          if (!['namDtSluong', 'namDtDmuc'].includes(field)) {
+            row[field] = (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+          } else {
+            row[field] = '';
+          }
+        }
+      })
+      filterData.unshift(row)
+
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
