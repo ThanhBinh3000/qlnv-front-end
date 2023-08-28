@@ -90,7 +90,6 @@
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                 [nzIndeterminate]="indeterminate"></label>
                         </th> -->
-                        <th></th>
                         <th class="text-left">STT</th>
                         <th class="text-left">Số quyết định</th>
                         <th class="text-left">Trích yếu</th>
@@ -100,7 +99,6 @@
                         <th class="text-left">Hành động</th>
                     </tr>
                     <tr class="header-row search">
-                        <th></th>
                         <th></th>
                         <th>
                             <nz-input-group>
@@ -145,7 +143,6 @@
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                                 [nzDisabled]="data.trangThai != STATUS.CHODUYET_BTC"></label>
                         </td> -->
-                        <th></th>
                         <td>{{(page - 1) * pageSize + idx +
                             1}}</td>
                         <td> {{ data.soQuyetDinh }} </td>
