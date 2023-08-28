@@ -167,8 +167,8 @@
             data.pthucBanTrucTiep == '03' ? 'Bán lẻ' : null }}</td>
           <td>{{ data.ngayNhanCgia | date: 'dd/MM/YYYY' }}</td>
           <td>
-            <a *ngIf="data.soQdKq && data.idSoQdKq" nz-button nzType="link"
-               (click)="openModalQdPdKq(data.idSoQdKq)">
+            <a *ngIf="data.soQdKq && data.idQdKq" nz-button nzType="link"
+               (click)="openModalQdPdKq(data.idQdKq)">
               {{ data.soQdKq }}</a>
           </td>
           <td>{{ data.tenLoaiVthh }}</td>
@@ -217,7 +217,8 @@
 <!--xem -->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModalQdPdKh()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                                [isView]="true">
     </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
@@ -229,8 +230,8 @@
 </nz-modal>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKq" (nzOnCancel)="closeModalQdPdKq()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-qd-pd-ket-qua-btt [idInput]="idQdPdKq" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
-    </app-them-qd-pd-ket-qua-btt>
+    <app-chi-tiet-quyet-dinh-chao-gia [idInput]="idQdPdKq" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    </app-chi-tiet-quyet-dinh-chao-gia>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModalQdPdKq()" class="modal__button--cancel">
