@@ -383,14 +383,9 @@ export class AddBaoCaoComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
                 return;
             } else {
-                if (this.baoCao?.congVan) {
-                    baoCaoTemp.congVan = {
-                        ...await this.quanLyVonPhiService.upFile(file, this.path),
-                        fileName: this.baoCao?.congVan?.fileName,
-                    }
-                } else {
-                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-                    return;
+                baoCaoTemp.congVan = {
+                    ...await this.quanLyVonPhiService.upFile(file, this.path),
+                    fileName: this.baoCao?.congVan?.fileName,
                 }
             }
             this.fileDetail = null;
