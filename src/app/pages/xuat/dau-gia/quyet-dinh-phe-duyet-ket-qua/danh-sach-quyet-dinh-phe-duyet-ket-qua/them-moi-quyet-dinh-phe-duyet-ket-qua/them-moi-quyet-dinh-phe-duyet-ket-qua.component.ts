@@ -23,7 +23,8 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {cloneDeep} from 'lodash';
-
+import {PREVIEW} from "../../../../../../constants/fileType";
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-them-moi-quyet-dinh-phe-duyet-ket-qua',
@@ -40,7 +41,12 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   loadDsQuyetDinhKq: any[] = [];
   dataMaThongBao: any[] = [];
   maTrinh: String;
-
+  templateName = "quyet_dinh_phe_duyet_ket_qua";
+  templateNameVt = "quyet_dinh_phe_duyet_ket_qua_vat_tu";
+  showDlgPreview = false;
+  pdfBlob: any;
+  pdfSrc: any;
+  wordSrc: any;
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -383,5 +389,35 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       this.formData.controls["tgianGnhan"].clearValidators();
     }
   }
+  async preview(id) {
+    let tenBaoCao;
+    if (this.loaiVthh=="02"){
+       tenBaoCao= this.templateNameVt
+    }else {
+       tenBaoCao= this.templateName
+    }
+    await this.qdPdKetQuaBanDauGiaService.preview({
+      tenBaoCao: tenBaoCao,
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + ".pdf");
+  }
 
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + ".docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }
