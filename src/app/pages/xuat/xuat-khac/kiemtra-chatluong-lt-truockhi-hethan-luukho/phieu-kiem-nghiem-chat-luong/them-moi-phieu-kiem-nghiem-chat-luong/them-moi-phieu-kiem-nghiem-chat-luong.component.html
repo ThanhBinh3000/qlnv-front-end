@@ -4,6 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button *ngIf='idInput' type='button' class='btn btn-sub' (click)='preview(idInput)'>
+      <i class='icon htvbdh_totrinh'></i>
+      <span> In/Xem trước </span>
+    </button>
     <button class="btn btn-sub xanh-nhat" type="button"
             *ngIf=" this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
             (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_TP,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
@@ -213,8 +217,8 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select formControlName="hinhThucBq" [nzDisabled]="isView">
-                    <nz-option *ngFor="let item of listHinhThucBaoQuan" [nzValue]="item.maHthuc"
-                               [nzLabel]="item.tenHthuc">
+                    <nz-option *ngFor="let item of listHinhThucBaoQuan" [nzValue]="item.ma"
+                               [nzLabel]="item.giaTri">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>

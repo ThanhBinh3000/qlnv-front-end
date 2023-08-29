@@ -25,7 +25,7 @@ import {MESSAGE} from "../../../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {FILETYPE} from "../../../../../../../../constants/fileType";
+import { FILETYPE, PREVIEW } from '../../../../../../../../constants/fileType';
 import {
   PhieuKdclVtKtclService
 } from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service";
@@ -67,6 +67,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   listFiles: any = [];
   listBbLayMau: any = [];
   dataTableChiTieu: any[] = [];
+  templateName = "xuat-khac-phieu_khiem_nghiem_cl.docx";
 
   constructor(
     httpClient: HttpClient,
@@ -178,7 +179,6 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
               });
             }
             this.dataTableChiTieu = data.xhXkVtPhieuKdclDtl;
-            console.log(this.dataTableChiTieu, 'this.dataTableChiTieuthis.dataTableChiTieu')
             this.fileDinhKems = data.fileDinhKems;
           }
         })
@@ -493,4 +493,6 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
       }
     }
   }
+
+
 }
