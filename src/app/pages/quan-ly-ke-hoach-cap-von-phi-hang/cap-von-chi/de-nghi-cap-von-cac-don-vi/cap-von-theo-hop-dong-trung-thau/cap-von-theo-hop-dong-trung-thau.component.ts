@@ -180,7 +180,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
         // this.status.export = this.baoCao.trangThai == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
-        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild && !(!this.baoCao.id);
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVNC.EDIT_CV);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVNC.SUBMIT_CV);
@@ -492,7 +492,8 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         // export sheet hợp đồng
         let headerHD = [];
-        let fieldHD = []
+        let fieldHD = [];
+        let calHeaderHd = [];
         if (this.baoCao.loaiDnghi == Cvnc.VTU) {
             headerHD = [
                 { t: 0, b: 5, l: 0, r: 11, val: null },
@@ -515,6 +516,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             ]
             fieldHD = ['tenKhachHang', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'slThucHien', 'donGia', 'gtHopDong', 'gtThucHien', 'phatViPham',
                 'tlSoluong', 'tlThanhTien', 'congVan'];
+            calHeaderHd = ['B', 'C', '1', '2', '3', '4', '5=2x4', '6=3x4', '7', '8', '9', '10'];
         } else {
             headerHD = [
                 { t: 0, b: 5, l: 0, r: 9, val: null },
@@ -535,6 +537,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             ]
             fieldHD = ['tenDvi', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'donGia', 'gtHopDong', 'phatViPham',
                 'tlSoluong', 'tlThanhTien', 'congVan'];
+            calHeaderHd = ['A', 'C', '1', '2', '4', '5=2x4', '7', '8', '9', '10'];
         }
         const filterDataHD = this.lstCtiets.filter(e => e.level > (this.isSynth ? 1 : 0)).map(item => {
             const row: any = {};
@@ -543,12 +546,19 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHd = {};
+        fieldHD.forEach((field, index) => {
+            calHd[field] = calHeaderHd[index];
+        })
+        filterDataHD.unshift(calHd);
         const worksheetHD = Table.initExcel(headerHD);
         XLSX.utils.sheet_add_json(worksheetHD, filterDataHD, { skipHeader: true, origin: Table.coo(headerHD[0].l, headerHD[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Hợp đồng');
         // export sheet cap von
         let header = [];
         let fieldOrder = [];
+        let calHeader = [];
         if (this.baoCao.loaiDnghi == Cvnc.VTU) {
             header = [
                 { t: 0, b: 5, l: 0, r: 22, val: null },
@@ -584,6 +594,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             ]
             fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'slThucHien', 'gtHopDong', 'gtThucHien', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'lkUng', 'lkCap', 'lkCong',
                 'dtoanDaGiao', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay', 'uncNgay', 'uncNienDo', 'ung', 'cap', 'cong', 'tongTien', 'soConDuocCap', 'ghiChu'];
+            calHeader = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11=9+10', '12', '13=11+12', '14=5-6-13', '15', '16', '17', '18', '19=17+18', '20=13+19', '21=5-6-20', 'D'];
         } else {
             header = [
                 { t: 0, b: 5, l: 0, r: 18, val: null },
@@ -615,6 +626,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             ]
             fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'gtHopDong', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'lkUng', 'lkCap', 'lkCong',
                 'dtoanDaGiao', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay', 'ung', 'cap', 'cong', 'tongTien', 'soConDuocCap', 'ghiChu'];
+            calHeader = ['A', '1', '2', '4', '6', '7', '8', '9', '10', '11=9+10', '12', '13=11+12', '14=4-6-13', '17', '18', '19=17+18', '20=13+19', '21=4-6-20', 'D'];
         }
         const filterData = this.lstCtiets.filter(e => e.level < (this.isSynth ? 2 : 1)).map(item => {
             const row: any = {};
@@ -623,6 +635,12 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Cấp vốn');

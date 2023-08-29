@@ -191,7 +191,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.status.approve = this.status.approve && isChild && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN);
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_DN);
         // this.status.export = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && isChild && this.userService.isTongCuc());
-        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent) && !(!this.baoCao.id);
         this.scrollX = Table.tableWidth(350, 10, 0, 0);
     }
 
@@ -424,6 +424,13 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', 'B', '1', '2', '3', '4=2x3', '5', '6', '7', '8=6+7', '9=5+8', '10=4-9'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const worksheetHD = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheetHD, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Đề nghị cấp vốn');

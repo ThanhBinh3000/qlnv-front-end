@@ -147,7 +147,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
         // this.status.export = this.baoCao.trangThai == Status.TT_07 && isChild;
-        this.status.export = isChild;
+        this.status.export = isChild && !(!this.baoCao.id);
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_TTKH);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_TTKH);
