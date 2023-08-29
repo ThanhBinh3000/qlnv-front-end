@@ -261,7 +261,9 @@ export class PhuLuc2Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
-                    this.lstCtietBcao = this.formDetail.lstCtietDchinh;
+                    this.formDetail.lstCtietDchinh.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item))
+                    })
                     this.listFile = [];
                     this.formDetail.listIdDeleteFiles = [];
                     this.getStatusButton();
@@ -583,57 +585,168 @@ export class PhuLuc2Component implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        const header = [
-            { t: 0, b: 5, l: 0, r: 17, val: null },
 
-            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+        let header = [];
+        let fieldOrder = [];
 
-            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
-            { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 4, b: 4, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
-            { t: 4, b: 4, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao - 1).toString() },
-            { t: 4, b: 4, l: 11, r: 13, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-            { t: 4, b: 5, l: 14, r: 14, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
-            { t: 4, b: 5, l: 15, r: 15, val: 'Dự toán vụ TVQT đề nghị (+ tăng)(- giảm)' },
-            { t: 4, b: 5, l: 16, r: 16, val: 'Thuyết minh' },
-            { t: 4, b: 5, l: 17, r: 17, val: 'Ghi chú' },
+        if (this.status.viewAppVal) {
+            header = [
+                { t: 0, b: 6, l: 0, r: 19, val: null },
 
-            { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
-            { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
-            { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm ' + (this.namBcao - 1).toString() },
-            { t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
-            { t: 5, b: 5, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
-            { t: 5, b: 5, l: 8, r: 8, val: 'Số lượng' },
-            { t: 5, b: 5, l: 9, r: 9, val: 'Mức giá' },
-            { t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
-            { t: 5, b: 5, l: 11, r: 11, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
-            { t: 5, b: 5, l: 12, r: 12, val: 'Dự toán, kinh phí đã giao' },
-            { t: 5, b: 5, l: 13, r: 13, val: 'Cộng' },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-        ]
-        const fieldOrder = [
-            'stt',
-            'tenTaiSan',
-            'dvTinh',
-            'sluongTsDenTd',
-            'sluongTsDaNhan',
-            'sluongTsDaPd',
-            'sluongTsCong',
-            'sluongTsTcDinhMuc',
-            'dtoanDnghiSl',
-            'dtoanDnghiMucGia',
-            'dtoanDnghiThanhTien',
-            'dtoanKpNamTruoc',
-            'dtoanKpDaGiao',
-            'dtoanKpCong',
-            'dtoanKpDieuChinh',
-            'dtoanVuDnghi',
-            'thuyetMinh',
-            'ghiChu'
-        ]
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
+                { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
+                { t: 4, b: 4, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
+                { t: 4, b: 4, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao - 1).toString() },
+                { t: 4, b: 4, l: 11, r: 13, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+
+                { t: 4, b: 5, l: 14, r: 14, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 15, r: 15, val: 'Dự toán vụ TVQT đề nghị (+ tăng)(- giảm)' },
+                { t: 4, b: 5, l: 16, r: 16, val: 'Thuyết minh' },
+                { t: 4, b: 5, l: 17, r: 17, val: 'Ghi chú' },
+                { t: 4, b: 5, l: 18, r: 18, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 19, r: 19, val: 'Ý kiến của đơn vị cấp trên' },
+
+                { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm ' + (this.namBcao - 1).toString() },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Số lượng' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Mức giá' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Dự toán, kinh phí đã giao' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Cộng' },
+
+                { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+                { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+                { t: 6, b: 6, l: 3, r: 3, val: '1' },
+                { t: 6, b: 6, l: 4, r: 4, val: '2' },
+                { t: 6, b: 6, l: 5, r: 5, val: '3' },
+                { t: 6, b: 6, l: 6, r: 6, val: '4 = 1 + 2 + 3' },
+                { t: 6, b: 6, l: 7, r: 7, val: '5' },
+                { t: 6, b: 6, l: 8, r: 8, val: '6' },
+                { t: 6, b: 6, l: 9, r: 9, val: '7' },
+                { t: 6, b: 6, l: 10, r: 10, val: '8 = 6 x 7 ' },
+                { t: 6, b: 6, l: 11, r: 11, val: '9' },
+                { t: 6, b: 6, l: 12, r: 12, val: '10' },
+                { t: 6, b: 6, l: 13, r: 13, val: '11 = 9 + 10' },
+                { t: 6, b: 6, l: 14, r: 14, val: '12 = 8 - 11' },
+                { t: 6, b: 6, l: 15, r: 15, val: '13' },
+                { t: 6, b: 6, l: 16, r: 16, val: '14' },
+                { t: 6, b: 6, l: 17, r: 17, val: '15' },
+                { t: 6, b: 6, l: 18, r: 18, val: '16 = 13 - 12' },
+                { t: 6, b: 6, l: 19, r: 19, val: '17' },
+            ]
+            fieldOrder = [
+                'stt',
+                'tenTaiSan',
+                'dvTinh',
+                'sluongTsDenTd',
+                'sluongTsDaNhan',
+                'sluongTsDaPd',
+                'sluongTsCong',
+                'sluongTsTcDinhMuc',
+                'dtoanDnghiSl',
+                'dtoanDnghiMucGia',
+                'dtoanDnghiThanhTien',
+                'dtoanKpNamTruoc',
+                'dtoanKpDaGiao',
+                'dtoanKpCong',
+                'dtoanKpDieuChinh',
+                'dtoanVuDnghi',
+                'thuyetMinh',
+                'ghiChu',
+                'chenhLech',
+                'ykienDviCtren',
+            ]
+        } else {
+            header = [
+                { t: 0, b: 6, l: 0, r: 16, val: null },
+
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
+                { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
+                { t: 4, b: 4, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
+                { t: 4, b: 4, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao - 1).toString() },
+                { t: 4, b: 4, l: 11, r: 13, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+
+                { t: 4, b: 5, l: 14, r: 14, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
+                // { t: 4, b: 5, l: 15, r: 15, val: 'Dự toán vụ TVQT đề nghị (+ tăng)(- giảm)' },
+                { t: 4, b: 5, l: 15, r: 15, val: 'Thuyết minh' },
+                { t: 4, b: 5, l: 16, r: 16, val: 'Ghi chú' },
+                // { t: 4, b: 5, l: 18, r: 18, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
+                // { t: 4, b: 5, l: 19, r: 19, val: 'Ý kiến của đơn vị cấp trên' },
+
+                { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm ' + (this.namBcao - 1).toString() },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Số lượng' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Mức giá' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Dự toán, kinh phí đã giao' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Cộng' },
+
+                { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+                { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+                { t: 6, b: 6, l: 3, r: 3, val: '1' },
+                { t: 6, b: 6, l: 4, r: 4, val: '2' },
+                { t: 6, b: 6, l: 5, r: 5, val: '3' },
+                { t: 6, b: 6, l: 6, r: 6, val: '4 = 1 + 2 + 3' },
+                { t: 6, b: 6, l: 7, r: 7, val: '5' },
+                { t: 6, b: 6, l: 8, r: 8, val: '6' },
+                { t: 6, b: 6, l: 9, r: 9, val: '7' },
+                { t: 6, b: 6, l: 10, r: 10, val: '8 = 6 x 7 ' },
+                { t: 6, b: 6, l: 11, r: 11, val: '9' },
+                { t: 6, b: 6, l: 12, r: 12, val: '10' },
+                { t: 6, b: 6, l: 13, r: 13, val: '11 = 9 + 10' },
+                { t: 6, b: 6, l: 14, r: 14, val: '12 = 8 - 11' },
+                // { t: 6, b: 6, l: 15, r: 15, val: '13' },
+                { t: 6, b: 6, l: 15, r: 15, val: '13' },
+                { t: 6, b: 6, l: 16, r: 16, val: '14' },
+                // { t: 6, b: 6, l: 18, r: 18, val: '16 = 13 - 12' },
+                // { t: 6, b: 6, l: 19, r: 19, val: '17' },
+            ]
+            fieldOrder = [
+                'stt',
+                'tenTaiSan',
+                'dvTinh',
+                'sluongTsDenTd',
+                'sluongTsDaNhan',
+                'sluongTsDaPd',
+                'sluongTsCong',
+                'sluongTsTcDinhMuc',
+                'dtoanDnghiSl',
+                'dtoanDnghiMucGia',
+                'dtoanDnghiThanhTien',
+                'dtoanKpNamTruoc',
+                'dtoanKpDaGiao',
+                'dtoanKpCong',
+                'dtoanKpDieuChinh',
+                // 'dtoanVuDnghi',
+                'thuyetMinh',
+                'ghiChu',
+                // 'chenhLech',
+                // 'ykienDviCtren',
+            ]
+        }
+
+
+
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {

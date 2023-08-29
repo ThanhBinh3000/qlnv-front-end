@@ -340,6 +340,23 @@ export class AddQuyetToanComponent implements OnInit {
 
 		if (this.idInput) {
 			await this.getDetailReport();
+			const rqKho = {
+				maDvi: this.maDviTao,
+				nam: Number(this?.namQtoan),
+				quyQtoan: this?.quyQtoan,
+			}
+
+
+			await this.quyetToanVonPhiService.getHangHoaKho(rqKho).toPromise().then(
+				async (data) => {
+					this.lstDsHangTrongKho = data.data;
+					this.PS_ARR = data.data.filter(e => e.maLoai == "PS")
+					this.LK_ARR = data.data.filter(e => e.maLoai == "LK")
+				},
+				(err) => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				},
+			);
 		} else {
 			this.isStatus = '1';
 			this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -489,10 +506,10 @@ export class AddQuyetToanComponent implements OnInit {
 							this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 						}
 					);
-					if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
+					if (Status.check('reject', mcn)) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
 					} else {
-						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+						this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
 					}
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -1655,7 +1672,7 @@ export class AddQuyetToanComponent implements OnInit {
 			return;
 		}
 		const header = [
-			{ t: 0, b: 5, l: 0, r: 17, val: null },
+			{ t: 0, b: 5, l: 0, r: 8, val: null },
 
 			{ t: 0, b: 0, l: 0, r: 1, val: 'Báo cáo quyết toán vốn phí hàng DTQG' },
 			{ t: 2, b: 1, l: 0, r: 8, val: this.congVan },

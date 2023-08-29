@@ -216,7 +216,9 @@ export class PhuLuc4Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
-                    this.lstCtietBcao = this.formDetail.lstCtietDchinh;
+                    this.formDetail.lstCtietDchinh.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item))
+                    })
                     this.listFile = [];
                     this.formDetail.listIdDeleteFiles = [];
                     this.getStatusButton();
@@ -653,40 +655,106 @@ export class PhuLuc4Component implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        const header = [
-            { t: 0, b: 5, l: 0, r: 11, val: null },
+        let header = [];
+        let fieldOrder = []
+        if (this.status.viewAppVal) {
+            header = [
+                { t: 0, b: 6, l: 0, r: 11, val: null },
 
-            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
-            { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn năm  ' + (this.namBcao - 1).toString() },
-            { t: 4, b: 5, l: 3, r: 3, val: 'Dự toán đã giao lũy kế (đến 31/05/ ' + (this.namBcao - 1).toString() + ')' },
-            { t: 4, b: 5, l: 4, r: 4, val: 'Quyết toán, giá trị dự toán hoặc tổng mức đầu tư' },
-            { t: 4, b: 5, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ tăng) (- giảm)' },
-            { t: 4, b: 5, l: 6, r: 6, val: 'Kế hoạch năm' + (this.namBcao + 1) + 'sau điều chỉnh' },
-            { t: 4, b: 5, l: 7, r: 7, val: 'Dự toán đề nghị điều chỉnh lần này' },
-            { t: 4, b: 5, l: 8, r: 8, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
-            { t: 4, b: 5, l: 9, r: 9, val: 'Ghi chú (Đã duyệt quyết toán/ chưa duyệt quyết toán)' },
-            { t: 4, b: 5, l: 10, r: 10, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
-            { t: 4, b: 5, l: 11, r: 11, val: 'Ý kiến của đơn vị cấp trên' },
-        ]
-        const fieldOrder = [
-            "stt",
-            "noiDung",
-            "keHoachVon",
-            "dtoanDaGiaoLke",
-            "qtoanGtriDtoan",
-            "dtoanDchinhDnghi",
-            "khoachSauDchinh",
-            "dtoanDchinhDnghiLanNay",
-            "dtoanVuTvqtDnghi",
-            "ghiChu",
-            "chenhLech",
-            "ykienDviCtren",
-        ]
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn năm  ' + (this.namBcao - 1).toString() },
+                { t: 4, b: 5, l: 3, r: 3, val: 'Dự toán đã giao lũy kế (đến 31/05/ ' + (this.namBcao - 1).toString() + ')' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Quyết toán, giá trị dự toán hoặc tổng mức đầu tư' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Kế hoạch năm' + (this.namBcao + 1) + 'sau điều chỉnh' },
+                { t: 4, b: 5, l: 7, r: 7, val: 'Dự toán đề nghị điều chỉnh lần này' },
+                { t: 4, b: 5, l: 8, r: 8, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 9, r: 9, val: 'Ghi chú (Đã duyệt quyết toán/ chưa duyệt quyết toán)' },
+                { t: 4, b: 5, l: 10, r: 10, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 11, r: 11, val: 'Ý kiến của đơn vị cấp trên' },
+
+                { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+                { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+                { t: 6, b: 6, l: 2, r: 2, val: '1' },
+                { t: 6, b: 6, l: 3, r: 3, val: '2' },
+                { t: 6, b: 6, l: 4, r: 4, val: '3' },
+                { t: 6, b: 6, l: 5, r: 5, val: '4' },
+                { t: 6, b: 6, l: 6, r: 6, val: '5 = 1 + 4' },
+                { t: 6, b: 6, l: 7, r: 7, val: '6 = 5 - 2' },
+                { t: 6, b: 6, l: 8, r: 8, val: '7' },
+                { t: 6, b: 6, l: 9, r: 9, val: '8' },
+                { t: 6, b: 6, l: 10, r: 10, val: '9 = 7 - 6' },
+                { t: 6, b: 6, l: 11, r: 11, val: '10' },
+            ]
+            fieldOrder = [
+                "stt",
+                "noiDung",
+                "keHoachVon",
+                "dtoanDaGiaoLke",
+                "qtoanGtriDtoan",
+                "dtoanDchinhDnghi",
+                "khoachSauDchinh",
+                "dtoanDchinhDnghiLanNay",
+                "dtoanVuTvqtDnghi",
+                "ghiChu",
+                "chenhLech",
+                "ykienDviCtren",
+            ]
+        } else {
+            header = [
+                { t: 0, b: 6, l: 0, r: 8, val: null },
+
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn năm  ' + (this.namBcao - 1).toString() },
+                { t: 4, b: 5, l: 3, r: 3, val: 'Dự toán đã giao lũy kế (đến 31/05/ ' + (this.namBcao - 1).toString() + ')' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Quyết toán, giá trị dự toán hoặc tổng mức đầu tư' },
+                { t: 4, b: 5, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Kế hoạch năm' + (this.namBcao + 1) + 'sau điều chỉnh' },
+                { t: 4, b: 5, l: 7, r: 7, val: 'Dự toán đề nghị điều chỉnh lần này' },
+                // { t: 4, b: 5, l: 8, r: 8, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 8, r: 8, val: 'Ghi chú (Đã duyệt quyết toán/ chưa duyệt quyết toán)' },
+                // { t: 4, b: 5, l: 10, r: 10, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
+                // { t: 4, b: 5, l: 11, r: 11, val: 'Ý kiến của đơn vị cấp trên' },
+
+                { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+                { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+                { t: 6, b: 6, l: 2, r: 2, val: '1' },
+                { t: 6, b: 6, l: 3, r: 3, val: '2' },
+                { t: 6, b: 6, l: 4, r: 4, val: '3' },
+                { t: 6, b: 6, l: 5, r: 5, val: '4' },
+                { t: 6, b: 6, l: 6, r: 6, val: '5 = 1 + 4' },
+                { t: 6, b: 6, l: 7, r: 7, val: '6 = 5 - 2' },
+                // { t: 6, b: 6, l: 8, r: 8, val: '7' },
+                { t: 6, b: 6, l: 8, r: 8, val: '7' },
+                // { t: 6, b: 6, l: 10, r: 10, val: '9 = 7 - 6' },
+                // { t: 6, b: 6, l: 11, r: 11, val: '10' },
+            ]
+            fieldOrder = [
+                "stt",
+                "noiDung",
+                "keHoachVon",
+                "dtoanDaGiaoLke",
+                "qtoanGtriDtoan",
+                "dtoanDchinhDnghi",
+                "khoachSauDchinh",
+                "dtoanDchinhDnghiLanNay",
+                // "dtoanVuTvqtDnghi",
+                "ghiChu",
+                // "chenhLech",
+                // "ykienDviCtren",
+            ]
+        }
+
 
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
