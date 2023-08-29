@@ -351,11 +351,23 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
     });
   }
   downloadPdf() {
-    saveAs(this.pdfSrc, this.templateName + ".pdf");
+    let tenBaoCao;
+    if (this.loaiVthh=="02"){
+      tenBaoCao= this.templateNameVt
+    }else {
+      tenBaoCao= this.templateName
+    }
+    saveAs(this.pdfSrc, tenBaoCao + ".pdf");
   }
 
   downloadWord() {
-    saveAs(this.wordSrc, this.templateName + ".docx");
+    let tenBaoCao;
+    if (this.loaiVthh=="02"){
+      tenBaoCao= this.templateNameVt
+    }else {
+      tenBaoCao= this.templateName
+    }
+    saveAs(this.wordSrc, tenBaoCao + ".docx");
   }
 
   closeDlg() {
