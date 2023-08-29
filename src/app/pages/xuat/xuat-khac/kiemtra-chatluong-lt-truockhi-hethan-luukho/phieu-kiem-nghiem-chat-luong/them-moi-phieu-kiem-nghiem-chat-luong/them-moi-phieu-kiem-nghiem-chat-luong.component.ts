@@ -28,7 +28,7 @@ import {
   PhieuKiemNgiemClLuongThucHangDTQGService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/PhieuKiemNgiemClLuongThucHangDTQG.service';
 import { PREVIEW } from '../../../../../../constants/fileType';
-
+import {saveAs} from 'file-saver';
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
   templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
@@ -56,7 +56,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   listDsTongHop: any[] = [];
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
   dsDanhGia: any[] = [];
-  templateName = 'xuat-khac-phieu_khiem_nghiem_cl.docx';
+  templateName = 'xuat-khac-phieu_khiem_nghiem_cl';
 
   constructor(
     httpClient: HttpClient,
@@ -475,6 +475,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
       }
     });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + ".pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + ".docx");
   }
 
 }
