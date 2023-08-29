@@ -4,6 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button *ngIf="idInput" type="button" class="btn btn-sub" (click)="preview(idInput)">
+      <i class="icon htvbdh_totrinh"></i>
+      <span> Xem trước </span>
+    </button>
     <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_LDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC):
         userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_LDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
             type="button" class="btn btn-sub do"
