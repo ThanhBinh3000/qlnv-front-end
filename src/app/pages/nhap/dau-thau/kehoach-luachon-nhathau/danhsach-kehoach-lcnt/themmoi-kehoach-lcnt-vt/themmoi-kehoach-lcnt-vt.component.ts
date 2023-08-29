@@ -76,7 +76,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     max: 1000000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
-  previewName: string = "de_xuat_kh_lcnt_vat_tu.docx";
+  previewName: string = "de_xuat_kh_lcnt_vat_tu";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

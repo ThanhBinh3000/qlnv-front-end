@@ -57,6 +57,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
   tenNganLoKho: any;
   ppLayMau: any;
   checked: boolean = false;
+  previewName: string = 'ntt_bien_ban_lay_mau';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

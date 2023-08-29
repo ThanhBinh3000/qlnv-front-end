@@ -58,6 +58,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
   bbNghiemThuBaoQuans: any[] = [];
+  previewName: string = 'bien_ban_ket_thuc_nhap_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -307,7 +308,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   async save(isGuiDuyet?: boolean) {
-    if (this.validateSave()) {
+    // if (this.validateSave()) {
       this.spinner.show();
       try {
         this.helperService.markFormGroupTouched(this.formData);
@@ -350,7 +351,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       } finally {
         this.spinner.hide();
       };
-    }
+    // }
 
   }
 

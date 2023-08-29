@@ -55,7 +55,8 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   listDiaDiemNhap: any[] = [];
   listFileDinhKem: FileDinhKem[] = [];
   listFileDinhKemKTCL: FileDinhKem[] = [];
-  listFile: any[] = []
+  listFile: any[] = [];
+  previewName: string = 'ntt_phieu_kiem_tra_chat_luong';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
