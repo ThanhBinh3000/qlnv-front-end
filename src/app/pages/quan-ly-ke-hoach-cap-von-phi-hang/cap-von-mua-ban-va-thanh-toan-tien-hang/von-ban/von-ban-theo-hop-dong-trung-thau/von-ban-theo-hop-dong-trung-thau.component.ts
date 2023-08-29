@@ -177,7 +177,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_VB);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB);
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB);
-        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent);
+        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent) && !(!this.baoCao.id);
         this.isReceive = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.isParent);
         if (this.capDvi == 1) {
             this.scrollHD = Table.tableWidth(700, 9, 1, 0);
@@ -490,6 +490,13 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHeaderHd = ['', 'A', 'B', '1', '2', '3', '4', '5=2x4', '6=2x4', '7', '8', '9', '10'];
+        let calHd = {};
+        fieldHD.forEach((field, index) => {
+            calHd[field] = calHeaderHd[index];
+        })
+        filterHD.unshift(calHd);
         const workbook = XLSX.utils.book_new();
         const worksheetHD = Table.initExcel(head);
         XLSX.utils.sheet_add_json(worksheetHD, filterHD, { skipHeader: true, origin: Table.coo(head[0].l, head[0].b + 1) })
@@ -534,6 +541,13 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11=9+10', '', '12', '13', '14=12+13', '15=11+14', '16=5-6-12', 'E'];
+            let cal = {};
+            fieldOrder.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterData.unshift(cal);
         } else {
             header = [
                 { t: 0, b: 5, l: 0, r: 17, val: null },
@@ -570,6 +584,13 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11=9+10', '12', '13', '14=12+13', '15=11+14', '16=5-6-12', 'E'];
+            let cal = {};
+            fieldOrder.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterData.unshift(cal);
         }
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

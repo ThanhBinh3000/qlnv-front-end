@@ -188,7 +188,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.PASS_CV);
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_CV);
         // this.status.export = this.baoCao.trangThai == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
-        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild && !(!this.baoCao.id);
         this.scrollDN = Table.tableWidth(350, 11, 0, 0);
         this.scrollCV = this.status.save ? Table.tableWidth(300, 15, 1, 60) : Table.tableWidth(300, 15, 1, 0);
     }
@@ -509,6 +509,13 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', 'B', '1', '2', '3', '4=2x3', '5', '6', '7', '8=6+7', '9=5+8', '10=4-9'];
+            let cal = {};
+            fieldHD.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterHD.unshift(cal);
             const worksheetHD = Table.initExcel(head);
             XLSX.utils.sheet_add_json(worksheetHD, filterHD, { skipHeader: true, origin: Table.coo(head[0].l, head[0].b + 1) })
             XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Đề nghị cấp vốn từ DVCD');
@@ -548,6 +555,13 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', '1', '2', '3', '4=2x3', '5', '6', '7', '8=6+7', '9=5+8', '10=4-9', '11', '12', '13=11+12', '14=9+13', '15=4-14', 'C'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Cấp vốn');

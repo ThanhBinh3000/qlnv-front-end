@@ -157,13 +157,13 @@ export class NopTienThuaComponent implements OnInit {
             this.status.submit = Status.check('submit', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT_GN);
             this.status.pass = Status.check('pass', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.PASS_NTT_GN);
             this.status.approve = Status.check('approve', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_NTT_GN);
-            this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_NTT_GN);
+            this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_NTT_GN) && !(!this.baoCao.id);
         } else {
             this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_NTT);
             this.status.submit = Status.check('submit', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT) && !(!this.baoCao.id);
             this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.PASS_NTT);
             this.status.approve = Status.check('approve', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_NTT);
-            this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_NTT);
+            this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_NTT) && !(!this.baoCao.id);
         }
         this.scrollX = this.status.save ? Table.tableWidth(200, 21, 1, 60) : Table.tableWidth(200, 21, 1, 0);
     }

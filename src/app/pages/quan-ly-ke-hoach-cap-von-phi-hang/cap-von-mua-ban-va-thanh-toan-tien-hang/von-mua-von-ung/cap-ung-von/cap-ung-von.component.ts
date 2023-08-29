@@ -163,14 +163,14 @@ export class CapUngVonComponent implements OnInit {
             this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_CV);
             this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_CV);
             this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_CV);
-            this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_CV);
+            this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_CV) && !(!this.baoCao.id);
             this.scrollX = this.status.save ? Table.tableWidth(350, 6, 6, 60) : Table.tableWidth(350, 6, 6, 0);
         } else {
             this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_GNV);
             this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_GNV);
             this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_GNV);
             this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_GNV);
-            this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_GNV);
+            this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_GNV) && !(!this.baoCao.id);
             this.scrollX = Table.tableWidth(350, 6, 6, 0);
         }
     }

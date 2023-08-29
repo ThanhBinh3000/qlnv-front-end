@@ -184,7 +184,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_VB);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB);
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB);
-        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent);
+        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent) && !(!this.baoCao.id);
 
         this.isReceive = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.isParent);
         this.scrollX = this.status.save ? Table.tableWidth(350, 13, 1, 60) : Table.tableWidth(350, 13, 1, 0);
@@ -503,6 +503,13 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', 'B', '1', '2', '3', '4=1x3', '5=2x3', '6', '7', '8=6+7', '', '9', '10', '11=9+10', '12=8+11', '13=5-12', 'C'];
+            let cal = {};
+            fieldOrder.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterData.unshift(cal);
         } else {
             header = [
                 { t: 0, b: 5, l: 0, r: 15, val: null },
@@ -536,6 +543,13 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', 'B', '1', '2', '3', '4=1x3', '5=2x3', '6', '7', '8=6+7', '9', '10', '11=9+10', '12=8+11', '13=5-12', 'C'];
+            let cal = {};
+            fieldOrder.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterData.unshift(cal);
         }
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
