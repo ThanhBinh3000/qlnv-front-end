@@ -44,7 +44,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   listDiaDiemNhap: any[] = [];
   listSoPhieuNhapKho: any[] = [];
   rowItem: any = {};
-
+  previewName: string = 'ntt_bang_ke_can_hang';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
