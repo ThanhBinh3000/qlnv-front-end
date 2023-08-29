@@ -222,7 +222,7 @@ export class PhuLuc06Component implements OnInit {
             lstCtietBcaoTemp.forEach(item => {
                 item.tdinhSluong = item.dtoanDnghiSluong;
                 item.tdinhTtien = item.thanhTien;
-                item.chenhLech = 0;
+                item.chenhLech = Operator.sum([item.tdinhTtien, -item.thanhTien]);
             })
         }
 

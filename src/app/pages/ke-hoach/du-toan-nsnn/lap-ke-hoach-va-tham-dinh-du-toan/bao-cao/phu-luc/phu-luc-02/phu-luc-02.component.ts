@@ -305,7 +305,7 @@ export class PhuLuc02Component implements OnInit {
 				item.tdinhKhoSluong = item.sluongTaiKho;
 				item.tdinhKhoTtien = item.ttienTaiKho;
 				item.tdinhTcong = item.tongCong;
-				item.chenhLech = 0;
+				item.chenhLech = Operator.sum([item.tdinhTcong, -item.tongCong]);
 			})
 		}
 

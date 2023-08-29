@@ -278,8 +278,8 @@ export class PhuLuc04Component implements OnInit {
                 item.tongMucDuToanTd = item.tongMucDuToan;
                 item.duToanKhNamNCbDauTuTd = item.duToanKhNamNCbDauTu;
                 item.duToanKhNamNThDauTuTd = item.duToanKhNamNThDauTu;
-                item.chenhLechCbDautu = 0;
-                item.chenhLechThDauTu = 0;
+                item.chenhLechCbDautu = Operator.sum([item.duToanKhNamNCbDauTuTd, -item.duToanKhNamNCbDauTu]);
+                item.chenhLechThDauTu = Operator.sum([item.duToanKhNamNThDauTuTd, -item.duToanKhNamNThDauTu]);
             })
         }
 
