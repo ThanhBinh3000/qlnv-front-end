@@ -17,6 +17,9 @@ import { Validators } from '@angular/forms';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { KetQuaKiemNghiemChatLuongHang, PhieuKiemNghiemChatLuongHang } from 'src/app/models/PhieuKiemNghiemChatLuongThoc';
 import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
+import {PREVIEW} from "../../../../../../../constants/fileType";
+import {cloneDeep} from 'lodash';;
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-them-moi-phieu-kn-cl',
@@ -42,12 +45,8 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
   checked: boolean = false;
   listFileDinhKem: any = [];
   maVthh: string;
-  phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
-    new PhieuKiemNghiemChatLuongHang();
-  viewChiTiet: boolean = false;
-  ketQuaKiemNghiemHangCreate: KetQuaKiemNghiemChatLuongHang =
-    new KetQuaKiemNghiemChatLuongHang();
-  dsKetQuaKiemNghiemHangClone: Array<KetQuaKiemNghiemChatLuongHang> = [];
+
+  templateName = "phieu_kiem_nghiem_chat_luong";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -393,6 +392,32 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
 
   editRow(index: number) {
     this.dataTableChiTieu[index].edit = true;
+  }
+
+  async preview(id) {
+    await this.phieuKiemNghiemChatLuongService.preview({
+      tenBaoCao: this.templateName,
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + ".pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + ".docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 
 }

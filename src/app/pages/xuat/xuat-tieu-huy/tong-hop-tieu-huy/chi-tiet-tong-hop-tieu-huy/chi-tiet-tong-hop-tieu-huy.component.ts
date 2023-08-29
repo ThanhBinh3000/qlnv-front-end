@@ -19,6 +19,7 @@ import {XuatTieuHuyComponent} from "../../xuat-tieu-huy.component";
 import {
   DanhSachTieuHuyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
+import {FileDinhKem} from "../../../../../models/FileDinhKem";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-tieu-huy',
@@ -87,7 +88,8 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
       tenTrangThai: [],
       tenDvi: [],
       tenCuc: [],
-      tongHopDtl: [new Array()]
+      tongHopDtl: [new Array()],
+      fileDinhKems: [new Array<FileDinhKem>()],
     })
     this.userInfo = this.userService.getUserLogin();
     this.maHauTo = '/HTL-' + this.userInfo.DON_VI.tenVietTat;

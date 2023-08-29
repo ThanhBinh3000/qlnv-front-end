@@ -80,9 +80,15 @@ export class XuatTieuHuyComponent implements OnInit {
       actionTmp = actionTmp + "_NO";
     }
     if (data) {
-      return mapQuyen[actionTmp].includes(data.trangThai)
+      return mapQuyen[actionTmp].includes(data.trangThai)&&mapQuyen[actionTmp].includes(data.trangThaiTc);
     } else {
       return false;
+    }
+  }
+
+  receivedTab(tab) {
+    if (tab >= 0) {
+      this.tabSelected = tab;
     }
   }
 }

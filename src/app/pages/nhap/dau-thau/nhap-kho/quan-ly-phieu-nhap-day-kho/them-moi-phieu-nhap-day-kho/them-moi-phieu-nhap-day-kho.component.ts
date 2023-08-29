@@ -58,6 +58,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
   bbNghiemThuBaoQuans: any[] = [];
+  previewName: string = 'bien_ban_ket_thuc_nhap_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -284,7 +285,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
-      soLuongNhapKho: this.loaiVthh == '02' ? data.soLuong : data.soLuong * 1000,
+      soLuongNhapKho: this.loaiVthh == '02' ? data.soLuong : data.soLuong,
       soLuong: data.soLuong,
       bienBanChuanBiKho: data.bienBanChuanBiKho?.soBienBan,
       bienBanLayMau: data.bienBanLayMau?.soBienBan
@@ -307,7 +308,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   async save(isGuiDuyet?: boolean) {
-    if (this.validateSave()) {
+    // if (this.validateSave()) {
       this.spinner.show();
       try {
         this.helperService.markFormGroupTouched(this.formData);
@@ -350,7 +351,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       } finally {
         this.spinner.hide();
       };
-    }
+    // }
 
   }
 

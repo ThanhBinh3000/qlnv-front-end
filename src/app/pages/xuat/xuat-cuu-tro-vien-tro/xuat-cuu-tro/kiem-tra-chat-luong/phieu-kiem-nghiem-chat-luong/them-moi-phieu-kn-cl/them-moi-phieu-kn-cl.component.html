@@ -4,6 +4,10 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
+      <button *ngIf="idInput" type="button" class="btn btn-sub" (click)="preview(idInput)">
+        <i class="icon htvbdh_totrinh"></i>
+        <span> In/Xem trước </span>
+      </button>
         <button class="btn btn-sub xanh-nhat" type="button"
             *ngIf=" this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
             (click)="save(true)">

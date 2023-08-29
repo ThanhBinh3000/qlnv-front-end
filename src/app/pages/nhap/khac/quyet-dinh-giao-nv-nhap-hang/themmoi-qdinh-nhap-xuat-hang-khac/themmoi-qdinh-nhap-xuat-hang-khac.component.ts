@@ -312,17 +312,17 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
             children: value
           }))
           .value();
-        chiCuc.children.forEach(diemKho => {
-          diemKho.children.forEach(nganLo => {
-            if (nganLo.maLoKho != null) {
-              nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.LO_KHO].find(i => i.maDvi == nganLo.maLoKho).tenDvi + " - "
-                + this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
-              this.sumSlNhap = slNhap += nganLo.slDoiThua;
-            } else {
-              nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
-            }
-          });
-        });
+        // chiCuc.children.forEach(diemKho => {
+        //   diemKho.children.forEach(nganLo => {
+        //     if (nganLo.maLoKho != null) {
+        //       nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.LO_KHO].find(i => i.maDvi == nganLo.maLoKho).tenDvi + " - "
+        //         + this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+        //       this.sumSlNhap = slNhap += nganLo.slDoiThua;
+        //     } else {
+        //       nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+        //     }
+        //   });
+        // });
       });
     });
     this.formData.get('tongSlNhap').setValue(this.sumSlNhap);
