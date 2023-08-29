@@ -120,9 +120,28 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
       body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
-      body.fileName = "bccl_cong_tac_bao_quan_tong_hop.jrxml";
-      body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản hàng DTQG - Tổng hợp";
       body.trangThai = "01";
+      if (body.loaiBc == '01') {
+        body.fileName = "bccl_cong_tac_bao_quan_gao_tong_hop.jrxml";
+        body.tenBaoCao = "BBáo cáo chất lượng công tác bảo quản gạo (tổng hợp)";
+      } else {
+        if (body.loaiVthh.startsWith("0101")) {
+          body.fileName = "bccl_cong_tac_bao_quan_thoc_chi_tiet.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản thóc (chi tiết)";
+        }
+        if (body.loaiVthh.startsWith("0102")) {
+          body.fileName = "bccl_cong_tac_bao_quan_gao_chi_tiet.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo (chi tiết)";
+        }
+        if (body.loaiVthh.startsWith("02")) {
+          body.fileName = "bccl_cong_tac_bao_quan_vattu_chi_tiet.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản vật tư (chi tiết)";
+        }
+        if (body.loaiVthh.startsWith("04")) {
+          body.fileName = "bccl_cong_tac_bao_quan_muoi_chi_tiet.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản muối (chi tiết)";
+        }
+      }
       await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
