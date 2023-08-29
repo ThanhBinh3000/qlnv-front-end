@@ -150,6 +150,14 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Lý do chi</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <input nz-input formControlName="lyDoChi" [readonly]="isView"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
       <ng-template #error let-control>
         <app-template-error #error [control]="control"></app-template-error>

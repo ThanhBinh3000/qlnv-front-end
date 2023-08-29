@@ -150,13 +150,13 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         },
         [Validators.required],
       ],
-      // lyDoChi: [
-      //   {
-      //     value: this.itemThongTri ? this.itemThongTri.lyDoChi : null,
-      //     disabled: this.isView ? true : false,
-      //   },
-      //   [Validators.required],
-      // ],
+      lyDoChi: [
+        {
+          value: this.itemThongTri ? this.itemThongTri.lyDoChi : null,
+          disabled: this.isView ? true : false,
+        },
+        [Validators.required],
+      ],
       soDnCapPhi: [
         {
           value: this.itemThongTri ? this.itemThongTri.soDnCapPhi : null,
@@ -230,7 +230,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   isDisableField() {
-    // console.log(this.formData)
     if (this.itemThongTri && (this.itemThongTri.trangThai == STATUS.CHO_DUYET_LDV || this.itemThongTri.trangThai == STATUS.DA_DUYET_LDV || this.itemThongTri.trangThai == STATUS.DA_DUYET_LDTC)) {
       return true;
     }
