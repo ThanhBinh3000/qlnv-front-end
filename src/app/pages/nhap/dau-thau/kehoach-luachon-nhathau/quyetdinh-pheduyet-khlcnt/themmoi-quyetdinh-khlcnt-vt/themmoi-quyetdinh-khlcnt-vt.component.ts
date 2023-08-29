@@ -85,7 +85,7 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
     moTa: "",
     taiLieu: []
   };
-  previewName: string = "qd_pd_kh_lcnt_vat_tu.docx";
+  previewName: string = "qd_pd_kh_lcnt_vat_tu";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

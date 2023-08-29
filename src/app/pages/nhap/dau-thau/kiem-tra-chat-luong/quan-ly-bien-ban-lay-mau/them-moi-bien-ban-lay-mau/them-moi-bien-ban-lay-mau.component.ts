@@ -65,7 +65,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   listNam: any[] = [];
   capCuc: string = '2';
   capChiCuc: string = '3';
-  previewName: string = 'bien_ban_lay_mau.docx';
+  previewName: string = 'bien_ban_lay_mau';
   showDlgPreview = false;
   pdfSrc: any;
   printSrc: any;
