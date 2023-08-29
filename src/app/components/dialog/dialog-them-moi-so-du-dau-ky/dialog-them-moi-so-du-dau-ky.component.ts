@@ -54,7 +54,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       slTon: ['', Validators.required],
       dviTinh: [''],
       thanhTien: [0],
-      isKhoiTao: [false]
+      isKhoiTao: [true]
     })
   }
 

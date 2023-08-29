@@ -25,6 +25,7 @@ import {
 } from "../../../../../../components/dialog/dialog-thong-bao-thong-tin-dau-thau/dialog-thong-bao-thong-tin-dau-thau.component";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import { saveAs } from "file-saver";
+import printJS from "print-js";
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
   templateUrl: './themmoi-thongtin-dauthau.component.html',
@@ -47,6 +48,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   showDlgPreview = false;
   pdfSrc: any;
   wordSrc: any;
+  printSrc: any;
   fileDinhKems: any[] = [];
   itemRowQd: any[] = [];
 
@@ -200,7 +202,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -245,36 +247,36 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         }
       })
       this.formData.patchValue({
-        namKhoach: data.hhQdKhlcntHdr.namKhoach,
-        soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
+        namKhoach: data.hhQdKhlcntHdr?.namKhoach,
+        soQdPdKhlcnt: data.hhQdKhlcntHdr?.soQd,
         soQdPdKqLcnt: data.soQdPdKqLcnt,
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
         tongMucDt: tongMucDt,
         tongMucDtGoiTrung: tongMucDtTrung,
-        tenNguonVon: data.dxuatKhLcntHdr.tenNguonVon,
-        tenHthucLcnt: data.dxuatKhLcntHdr.tenHthucLcnt,
-        tenPthucLcnt: data.dxuatKhLcntHdr.tenPthucLcnt,
-        tenLoaiHdong: data.dxuatKhLcntHdr.tenLoaiHdong,
-        hthucLcnt: data.dxuatKhLcntHdr.hthucLcnt,
-        pthucLcnt: data.dxuatKhLcntHdr.pthucLcnt,
-        loaiHdong: data.dxuatKhLcntHdr.loaiHdong,
-        gtriDthau: data.dxuatKhLcntHdr.gtriDthau,
-        gtriHdong: data.dxuatKhLcntHdr.gtriHdong,
-        donGiaVat: data.dxuatKhLcntHdr.donGiaVat,
+        tenNguonVon: data.dxuatKhLcntHdr?.tenNguonVon,
+        tenHthucLcnt: data.dxuatKhLcntHdr?.tenHthucLcnt,
+        tenPthucLcnt: data.dxuatKhLcntHdr?.tenPthucLcnt,
+        tenLoaiHdong: data.dxuatKhLcntHdr?.tenLoaiHdong,
+        hthucLcnt: data.dxuatKhLcntHdr?.hthucLcnt,
+        pthucLcnt: data.dxuatKhLcntHdr?.pthucLcnt,
+        loaiHdong: data.dxuatKhLcntHdr?.loaiHdong,
+        gtriDthau: data.dxuatKhLcntHdr?.gtriDthau,
+        gtriHdong: data.dxuatKhLcntHdr?.gtriHdong,
+        donGiaVat: data.dxuatKhLcntHdr?.donGiaVat,
         soLuong: data.soLuong,
         soGthau: data.soGthau,
         soGthauTrung: slGthauTrung,
-        loaiVthh: data.hhQdKhlcntHdr.loaiVthh,
-        tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
-        cloaiVthh: data.hhQdKhlcntHdr.cloaiVthh,
-        tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
+        loaiVthh: data.hhQdKhlcntHdr?.loaiVthh,
+        tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
+        cloaiVthh: data.hhQdKhlcntHdr?.cloaiVthh,
+        tenCloaiVthh: data.hhQdKhlcntHdr?.tenCloaiVthh,
         tgianBdauTchuc: formatDate(data.tgianBdauTchuc, "dd/MM/yyyy", 'en-US'),
         tgianDthau: formatDate(data.tgianDthau, "HH:mm dd/MM/yyyy", 'en-US'),
         tgianMthau: formatDate(data.tgianMthau, "HH:mm dd/MM/yyyy", 'en-US'),
         tgianNhang: formatDate(data.tgianNhang, "dd/MM/yyyy", 'en-US'),
-        tenLoaiHinhNx: data.dxuatKhLcntHdr.tenLoaiHinhNx,
-        tenKieuNx: data.dxuatKhLcntHdr.tenKieuNx,
+        tenLoaiHinhNx: data.dxuatKhLcntHdr?.tenLoaiHinhNx,
+        tenKieuNx: data.dxuatKhLcntHdr?.tenKieuNx,
       });
       this.formData.patchValue({
         trangThai: data.trangThai,
@@ -702,6 +704,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     }
     await this.thongTinDauThauService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
@@ -717,7 +720,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   closeDlg() {
     this.showDlgPreview = false;
   }
-
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  }
   calcTongSl() {
     if (this.listOfData) {
       let sum = 0

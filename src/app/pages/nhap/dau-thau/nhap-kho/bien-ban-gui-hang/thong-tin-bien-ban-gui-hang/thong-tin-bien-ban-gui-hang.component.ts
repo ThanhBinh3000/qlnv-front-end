@@ -59,6 +59,7 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
   listFileDinhKem: any[] = [];
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
+  previewName: string = 'bien_ban_gui_hang';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

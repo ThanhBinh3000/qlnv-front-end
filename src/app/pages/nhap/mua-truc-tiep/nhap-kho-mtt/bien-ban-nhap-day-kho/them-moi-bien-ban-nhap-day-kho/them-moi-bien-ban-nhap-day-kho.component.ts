@@ -62,6 +62,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
   bbNghiemThuBaoQuans: any[] = [];
+  previewName: string = 'ntt_bien_ban_nhap_day_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -110,7 +111,8 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       tenTrangThai: [],
       lyDoTuChoi: [],
       nguoiPduyet: [''],
-      donGiaHd: [10000],
+      donGiaHd: [''],
+      soLuong: [''],
       soPhieuNhapKho: [''],
       tenNganLoKho: [''],
       soBangKeCanHang: [''],
@@ -206,9 +208,13 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       idQdGiaoNvNh: data.id,
       soQuyetDinhNhap: data.soQd,
       soHdong: data.soHd,
-      ngayKiHdong: data.ngayKyHd,
+      ngayKiHdong: data.hopDongMttHdrs[0]?.ngayPduyet,
+      soLuong: data.hopDongMttHdrs[0]?.soLuong,
+      donGiaHd: data.hopDongMttHdrs[0]?.donGiaGomThue,
+      thanhTien: data.hopDongMttHdrs[0]?.soLuong * data.hopDongMttHdrs[0]?.donGiaGomThue,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    console.log(dataRes, 123)
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
@@ -238,7 +244,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
 
   bindingDataDdNhap(data, isDetail?: boolean) {
     if (!isDetail) {
-      this.dataTable = data.listPhieuKtraCl;
+      this.dataTable = data.listPhieuKtraCl.filter(x => x.trangThai == STATUS.DA_DUYET_LDCC);
       this.dataTable.forEach(item => {
         item.soPhieuKtraCl = item.soPhieu;
         item.soPhieuNhapKho = item.phieuNhapKhoHdr.soPhieuNhapKho;
@@ -257,7 +263,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           soPhieuNhapKho: item.phieuNhapKhoHdr.soPhieuNhapKho,
           soBangKeCanHang: item.bcanKeHangHdr.soBangKeCanHang,
           ngayNkho: item.phieuNhapKhoHdr.ngayTao,
-          tenNganLoKho: item.tenLoKho ? `${item.tenLoKho} - ${item.tenNganKho}` : item.tenNganKho,
+          tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         })
       })
       let dataFirst = new Date();
@@ -282,6 +288,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
+      tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
     });
   }
 
@@ -364,6 +371,16 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
     switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_KTVBQ;
+        mess = ' Bạn có muốn gửi duyệt ? '
+        break;
+      }
+      case STATUS.CHO_DUYET_KTVBQ: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        mess = ' Bạn có muốn gửi duyệt ? '
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         mess = ' Bạn có muốn gửi duyệt ? '
         break;

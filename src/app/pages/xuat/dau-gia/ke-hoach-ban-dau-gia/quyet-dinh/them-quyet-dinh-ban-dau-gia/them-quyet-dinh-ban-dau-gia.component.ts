@@ -26,6 +26,7 @@ import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoac
 import {PREVIEW} from "src/app/constants/fileType";
 import {saveAs} from 'file-saver';
 import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
@@ -171,15 +172,20 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   async bindingDataTongHop(dataTongHop?) {
     if (dataTongHop) {
-      this.formData.patchValue({
-        cloaiVthh: dataTongHop.cloaiVthh,
-        tenCloaiVthh: dataTongHop.tenCloaiVthh,
-        loaiVthh: dataTongHop.loaiVthh,
-        tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
-        phanLoai: 'TH',
-      })
-      await this.selectMaTongHop(this.formData.value.idThHdr);
+      if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD) {
+        this.formData.patchValue({
+          cloaiVthh: dataTongHop.cloaiVthh,
+          tenCloaiVthh: dataTongHop.tenCloaiVthh,
+          loaiVthh: dataTongHop.loaiVthh,
+          tenLoaiVthh: dataTongHop.tenLoaiVthh,
+          idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
+          phanLoai: 'TH',
+        })
+        await this.selectMaTongHop(this.formData.value.idThHdr);
+      } else {
+        await this.loadChiTiet(dataTongHop.idQdPd);
+        dataTongHop.trangThai == STATUS.DA_BAN_HANH_QD ? this.isView = true : this.isView = false;
+      }
     }
   }
 
@@ -235,16 +241,43 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         this.canCuPhapLy = data.canCuPhapLy;
         this.fileDinhKem = data.fileDinhKem;
       }
-      if (this.userService.isCuc()) {
-        this.maDviCuc = this.userInfo.MA_DVI
-      }
-      // if (this.maDviCuc) {
-      //   this.danhsachDx = data.children.filter(s => s.maDvi == this.maDviCuc)
-      // } else {
       this.danhsachDx = data.children;
-
+      await this.calculatorTable();
       if (this.danhsachDx && this.danhsachDx.length > 0) {
         await this.showFirstRow(event, this.danhsachDx[0]);
+      }
+    }
+  }
+
+  async calculatorTable() {
+    for (const item of this.danhsachDx) {
+      for (const child of item.children) {
+        for (const s of child.children) {
+          let bodyPag = {
+            namKeHoach: this.formData.get('namKh').value,
+            loaiVthh: this.formData.get('loaiVthh').value,
+            cloaiVthh: this.formData.get('cloaiVthh').value,
+            trangThai: STATUS.BAN_HANH,
+            maDvi: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : child.maDvi,
+            loaiGia: 'LG04'
+          }
+          let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+          if (pag.msg == MESSAGE.SUCCESS) {
+            if (pag.data) {
+              pag.data.forEach(a => {
+                s.donGiaDuocDuyet = a.giaQdTcdt;
+              })
+            } else {
+              s.donGiaDuocDuyet = null;
+            }
+          }
+          s.giaKhoiDiemDd = s.soLuongDeXuat * s.donGiaDuocDuyet;
+          s.soTienDtruocDd = s.soLuongDeXuat * s.donGiaDuocDuyet * item.khoanTienDatTruoc / 100;
+          child.tongGiaKdiemDd += s.giaKhoiDiemDd;
+          child.tongTienDtruocDd += s.soTienDtruocDd;
+          item.tongTienGiaKdTheoDgiaDd += child.tongGiaKdiemDd;
+          item.tongKhoanTienDtTheoDgiaDd += child.tongTienDtruocDd;
+        }
       }
     }
   }

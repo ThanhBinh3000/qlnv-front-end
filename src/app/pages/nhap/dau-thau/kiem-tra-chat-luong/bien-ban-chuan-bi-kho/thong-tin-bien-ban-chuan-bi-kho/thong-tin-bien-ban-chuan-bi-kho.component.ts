@@ -75,7 +75,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   dsHangPD = []
   typeData: string;
   typeAction: string;
-
+  previewName: string = 'bien_ban_chuan_bi_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -105,16 +105,16 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         idDdiemGiaoNvNh: [, [Validators.required]],
         soLuongDdiemGiaoNvNh: [''],
         maDiemKho: ['', [Validators.required]],
-        tenDiemKho: ['', [Validators.required]],
+        tenDiemKho: [''],
         maNhaKho: ['', [Validators.required]],
-        tenNhaKho: ['', [Validators.required]],
+        tenNhaKho: [''],
         maNganKho: ['', [Validators.required]],
-        tenNganKho: ['', [Validators.required]],
+        tenNganKho: [''],
         maLoKho: [''],
         tenLoKho: [''],
 
         loaiVthh: ['', [Validators.required]],
-        tenLoaiVthh: ['', [Validators.required]],
+        tenLoaiVthh: [''],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
 

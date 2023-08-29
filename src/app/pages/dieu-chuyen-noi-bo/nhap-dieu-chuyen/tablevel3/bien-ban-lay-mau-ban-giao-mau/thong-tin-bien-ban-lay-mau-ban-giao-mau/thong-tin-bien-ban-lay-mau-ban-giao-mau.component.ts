@@ -104,6 +104,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       pplayMau: [],
       chiTieuKiemTra: [],
       ketQuaNiemPhong: [],
+      ghiChu: [],
       type: ["01"],
       loaiDc: [this.loaiDc],
       isVatTu: [this.isVatTu],
@@ -189,6 +190,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       this.listDaiDienChiCuc = dsDaiDien.filter(item => item.loaiDaiDien === "01")
       this.formData.patchValue({
         ...data,
+        tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
       });
       await this.loadPhuongPhapLayMau(data.cloaiVthh)
       const body = {

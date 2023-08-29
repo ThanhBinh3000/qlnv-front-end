@@ -37,15 +37,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   itemRowUpdate: any = {};
   idGoiThau: number = 0;
   isDieuChinh: boolean = false;
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "thong_tin_dau_thau_vt.docx",
-    tenBaoCao: "",
-    trangThai: ""
-  };
-  showDlgPreview = false;
-  pdfSrc: any;
-  wordSrc: any;
+  previewName: string = "thong_tin_dau_thau_vt";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -372,6 +364,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   }
 
   async preview() {
+    this.reportTemplate.fileName = this.previewName;
     let body = {
       id : this.idInput,
       reportTemplateRequest : this.reportTemplate,
@@ -379,19 +372,9 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     }
     await this.thongTinDauThauService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
-  }
-  downloadPdf() {
-    saveAs(this.pdfSrc, "thong_tin_dau_thau_vt.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "thong_tin_dau_thau_vt.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 }

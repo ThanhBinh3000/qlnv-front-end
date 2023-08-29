@@ -151,7 +151,7 @@ export class MangLuoiKhoComponent implements OnInit {
       ngayNhapDay: [""],
       sdt: [""],
       idParent: [""],
-      isKhoiTao: [null],
+      isKhoiTao: [false],
       dviReq: [null],
       loaiHangHoa: [],
       kieuHang: [""]
@@ -620,6 +620,7 @@ export class MangLuoiKhoComponent implements OnInit {
         };
         body.loaiHangHoa = this.setLoaiHangHoa();
         body.kieuHang = this.loaiHangHoa.type;
+        body.isKhoiTao = false;
         let dviReq = {
           "diaChi": this.detailDonVi.value.diaChi,
           "fax": this.nodeDetail.fax,
@@ -649,12 +650,10 @@ export class MangLuoiKhoComponent implements OnInit {
           type = "nha-kho";
         }
         if (this.levelNode == 6) {
-          body.isKhoiTao = this.detailDonVi.value.coLoKho == true ? false : true;
           body.slTon = body.slTon ? body.slTon : 0;
           type = "ngan-kho";
         }
         if (this.levelNode == 7) {
-          body.isKhoiTao = true;
           type = "ngan-lo";
         }
         this.mangLuoiKhoService.updateKho(type, body).then((res: OldResponseData) => {

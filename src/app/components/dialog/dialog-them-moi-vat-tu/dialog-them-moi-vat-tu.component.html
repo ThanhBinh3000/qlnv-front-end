@@ -174,6 +174,7 @@
             </td>
           </tr>
           <tr *ngFor="let itemChild of dataChiCuc.children , let y = index">
+            <ng-container *ngIf="!itemChild.edit; else editTemplate">
             <td></td>
             <td></td>
             <td>{{itemChild.tenDvi}}</td>
@@ -184,10 +185,35 @@
             <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ itemChild.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
             <td [nzRight]="true">
+              <a (click)="editRow(i, y)">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
               <a (click)="deleteRow(i,y)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
+            </ng-container>
+            <ng-template #editTemplate>
+              <td></td>
+              <td></td>
+              <td>{{itemChild.tenDvi}}</td>
+              <td>{{itemChild.diaDiemNhap}}</td>
+              <td></td>
+              <td></td>
+              <td>
+                <input nz-input class="w-400" [(ngModel)]="listOfData[i].children[y].soLuongEdit" />
+              </td>
+              <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ itemChild.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+              <td [nzRight]="true">
+                <a (click)="saveEdit(i, y)">
+                <i class="fa fa-save"></i>
+                </a>
+                <a>
+                  <i (click)="cancelEdit(i, y)" class="fa fa-times do"></i>
+                </a>
+              </td>
+            </ng-template>
           </tr>
         </ng-container>
       </ng-container>

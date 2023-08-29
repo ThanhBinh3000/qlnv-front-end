@@ -23,6 +23,9 @@ import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { HelperService } from 'src/app/services/helper.service';
 import { isEmpty } from 'lodash';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
@@ -62,7 +65,17 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   listNam: any[] = [];
   capCuc: string = '2';
   capChiCuc: string = '3';
-
+  previewName: string = 'bien_ban_lay_mau';
+  showDlgPreview = false;
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
   listHangHoa: any[] = [];
   listDaiDien: any[] = [
     {
@@ -516,6 +529,32 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     //   this.formTaiLieuClone.file = this.nameFile;
     //   this.isSave = !isEqual(this.formTaiLieuClone, this.formTaiLieu);
     // }
+  }
+
+  async preview(fileName: string) {
+    let body = this.formData.value;
+    this.reportTemplate.fileName = fileName;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.bienBanLayMauService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf(fileName: string) {
+    saveAs(this.pdfSrc, fileName);
+  }
+
+  downloadWord(fileName: string) {
+    saveAs(this.wordSrc, fileName);
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
 }

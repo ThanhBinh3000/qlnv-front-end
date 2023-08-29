@@ -18,6 +18,9 @@ import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from "file-saver";
 
 
 @Component({
@@ -40,7 +43,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
 
   taiLieuDinhKemList: any[] = [];
   dataTable: any[] = [];
-
+  previewName: string;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -470,6 +473,22 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
 
   clearItemRow(i) {
     this.dataTable[i] = {};
+  }
+
+  async preview() {
+    if (this.loaiVthh.startsWith('02')) {
+      this.previewName = 'phieu_nhap_kho_dau_thau_lt';
+    } else {
+      this.previewName = 'phieu_nhap_kho';
+    }
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.quanLyPhieuNhapKhoService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
   }
 
 }

@@ -11,6 +11,8 @@ import {
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
 import {MESSAGE} from "../../../../../constants/message";
 import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {DauGiaComponent} from "../../dau-gia.component";
+import {CHUC_NANG} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-danh-sach-quyet-dinh-phe-duyet-ket-qua',
@@ -18,12 +20,12 @@ import {LOAI_HANG_DTQG} from "../../../../../constants/config";
   styleUrls: ['./danh-sach-quyet-dinh-phe-duyet-ket-qua.component.scss']
 })
 export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component implements OnInit {
-  @Input()
-  loaiVthh: string;
-  @Input()
-  typeLoaiVthh: any[] = [];
+  @Input() loaiVthh: string;
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: DauGiaComponent;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
+  isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   idThongTin: number = 0;
@@ -45,10 +47,11 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private dauGiaComponent: DauGiaComponent,
     private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
-    super.ngOnInit();
+    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
       nam: [null],
       loaiVthh: [null],
@@ -67,8 +70,8 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
       ngayKy: '',
       soQdPd: '',
       maThongBao: '',
-      hinhThucDauGia: '',
-      pthucDauGia: '',
+      tenHinhThucDauGia: '',
+      tenPthucDauGia: '',
       soTbKhongThanh: '',
       soBienBan: '',
       tenTrangThai: '',
@@ -76,54 +79,75 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
   }
 
   async ngOnInit() {
+    await this.spinner.show();
     try {
-      this.thimKiem();
       await Promise.all([
+        this.timKiem(),
         this.search(),
-        this.onChangeCLoaiVthh(),
+        this.loadDsVthh(),
       ])
+      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
-  thimKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+
     })
-
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.thimKiem();
-    this.search();
+    await this.timKiem()
+    await this.search();
   }
 
-  async onChangeCLoaiVthh() {
-    if (this.loaiVthh && this.typeLoaiVthh) {
-      this.listVthh = [];
-      let body = {
-        "str": this.loaiVthh
-      };
-      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-        this.listVthh = this.typeLoaiVthh.filter(s => s.ma === LOAI_HANG_DTQG.VAT_TU)
-      } else {
-        this.listVthh = this.typeLoaiVthh;
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  async loadDsVthh() {
+    let res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+        res.data.forEach((item) => {
+          const data = item.children.filter(s => s.ma == this.loaiVthh)
+          data.forEach(child => {
+            this.listCloaiVthh = child.children
+          })
+        })
       }
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
-      this.listCloaiVthh = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.listCloaiVthh = res.data.filter(s => s.ten != null && s.ma != null);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
+        const data = res.data.filter(s => s.ma === this.loaiVthh);
+        data.forEach((item) => {
+          this.listCloaiVthh = item.children
+        })
+      }
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+        const data = res.data.filter(s => s.ma === this.loaiVthh)
+        data.forEach((item) => {
+          this.listVthh = item.children
+        })
       }
     }
+  }
+
+  async onChangeCloaiVthh(event) {
+    this.formData.patchValue({
+      cloaiVthh: null,
+      tenCloaiVthh: null,
+    })
+    const data = this.listVthh.filter(s => s.ma ===event)
+    data.forEach((item) =>{
+      this.listCloaiVthh = item.children
+    })
   }
 
   disabledNgayKyTu = (startValue: Date): boolean => {
@@ -159,6 +183,4 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
     this.idThongTin = null;
     this.isViewThongTin = false;
   }
-
-
 }

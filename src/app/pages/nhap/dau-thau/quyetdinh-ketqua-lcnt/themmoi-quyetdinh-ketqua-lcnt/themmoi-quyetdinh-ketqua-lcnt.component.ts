@@ -24,7 +24,7 @@ import {
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import * as dayjs from "dayjs";
 import {MESSAGE} from "../../../../../constants/message";
-import {FILETYPE} from "../../../../../constants/fileType";
+import {FILETYPE, PREVIEW} from "../../../../../constants/fileType";
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -33,6 +33,7 @@ import { isEmpty } from 'lodash'
 import {
   ThemmoiThongtinDauthauComponent
 } from "../../trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau/themmoi-thongtin-dauthau.component";
+import { saveAs } from "file-saver";
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
   templateUrl: './themmoi-quyetdinh-ketqua-lcnt.component.html',
@@ -63,6 +64,13 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   listFile: any[] = []
   userInfo: UserLogin;
   STATUS = STATUS
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "qd_pd_kqlcnt_vt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  previewName: string;
   constructor(
     modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -394,5 +402,20 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     }
   }
 
-
+  async preview() {
+    if(this.loaiVthh.startsWith('02')) {
+      this.previewName = "qd_pd_kqlcnt_vt.docx";
+    } else {
+      this.previewName = "qd_pd_kqlcnt_lt.docx"
+    }
+    this.reportTemplate.fileName = this.previewName;
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.quyetDinhPheDuyetKetQuaLCNTService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
 }

@@ -50,6 +50,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   isBienBan: boolean = false;
   idBienBan: number;
   loaiBienBan: string;
+  previewNameBienBan: string;
 
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
@@ -86,6 +87,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_NGOAI_QUAN,
+      previewName: 'bien_ban_kiem_tra_ngoai_quan.docx'
     },
     {
       id: null,
@@ -93,7 +95,8 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       trangThai: "00",
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
-      loai: LOAI_BIEN_BAN.BB_KTRA_VAN_HANH
+      loai: LOAI_BIEN_BAN.BB_KTRA_VAN_HANH,
+      previewName: 'bien_ban_kiem_tra_van_hanh.docx'
     },
     {
       id: null,
@@ -101,10 +104,11 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       trangThai: "00",
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
-      loai: LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT
+      loai: LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT,
+      previewName: 'bien_ban_kiem_tra_hskt.docx'
     }
   ];
-
+  previewName: string = 'ho_so_ky_thuat';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -366,6 +370,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     this.idBienBan = data.id;
     this.loaiBienBan = data.loai;
     this.isBienBan = true;
+    this.previewNameBienBan = data.previewName;
   }
 
   async backMain() {

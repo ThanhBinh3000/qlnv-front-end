@@ -141,7 +141,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         tongSlTheoQd: this.data.soLuongDc,
         donViTinh: this.data.tenDonViTinh,
       });
-      await this.getDanhSachTT(this.data.qdDcCucId)
+      await this.getDanhSachTT(this.data.qdDcCucId, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
     }
 
@@ -169,7 +169,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         this.danhSach = data.dcnbBBKetThucNKDtl
         this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
         this.fileDinhKemReq = data.fileDinhKems
-        await this.getDanhSachTT(data.qdinhDccId)
+        await this.getDanhSachTT(data.qdinhDccId, data.maLoKho, data.maNganKho)
       }
 
     }
@@ -191,9 +191,12 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   //   }
   // }
 
-  async getDanhSachTT(qdinhDccId) {
+  async getDanhSachTT(qdinhDccId, maLoKho, maNganKho) {
     const body = {
-      qdinhDccId
+      qdinhDccId,
+      maLoKho,
+      maNganKho,
+      isVatTu: true
     }
     const children = this.danhSach
     let res = await this.phieuNhapKhoService.getDanhSachTT(body);
@@ -318,7 +321,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           tichLuongKhaDung: "",
           donViTinh: "",
         });
-        await this.getDanhSachTT(data.id)
+
         await this.loadChiTietQdinh(data.id);
       }
     });
@@ -371,6 +374,8 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           idKeHoachDtl: data.id,
           tongSlTheoQd: data.soLuongDc,
         });
+
+        await this.getDanhSachTT(this.formData.value.qdinhDccId, data.maLoKhoNhan, data.maNganKhoNhan)
       }
     });
   }

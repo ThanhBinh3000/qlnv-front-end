@@ -502,10 +502,11 @@
             <tr>
               <th width="30px">STT</th>
               <th>Tên nhà thầu <span style="color: red">*</span> </th>
+              <th>Giá dự thầu</th>
               <th>Mã số thuế</th>
               <th>Địa chỉ</th>
               <th>Số điện thoại</th>
-              <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT" width="30px">Hành động
+              <th *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView" width="30px">Hành động
               </th>
             </tr>
             </thead>
@@ -513,10 +514,11 @@
             <tr *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT">
               <td></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tenNhaThau"/></td>
+              <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.donGia"/></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.mst"/></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
-              <td *ngIf="!isShowFromKq">
+              <td *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
                 <a (click)="addRow()">
                   <i class="fa fa-plus" title="Thêm bản ghi"></i>
                 </a>
@@ -529,6 +531,7 @@
               <ng-container *ngIf="!data.edit; else editTemplate">
                 <td class="text-center">{{i + 1}}</td>
                 <td>{{ data.tenNhaThau }}</td>
+                <td>{{ data.donGia }}</td>
                 <td>{{ data.mst }}</td>
                 <td>{{ data.diaChi }}</td>
                 <td>{{ data.sdt }}</td>
@@ -545,17 +548,16 @@
               <ng-template #editTemplate>
                 <td class="text-center">{{i + 1}}</td>
                 <td><input type="text" nz-input [(ngModel)]="itemRowUpdate.tenNhaThau"/></td>
+                <td><input nz-input [(ngModel)]="itemRowUpdate.donGia"/></td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.mst"/></td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.diaChi"/></td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.sdt"/></td>
-                <td class="text-center">
+                <td class="text-center" *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
                   <a
-                    *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView"
                     (click)="saveEdit(itemRowUpdate,i)" class="save">
                     <i class="icon htvbdh_tcdt_save"></i>
                   </a>
                   <a
-                    *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView"
                     (click)="cancelEdit(i)">
                     <i class="fa fa-ban do"></i>
                   </a>
@@ -623,6 +625,11 @@
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
     <button nz-button (click)="downloadPdf()"
             class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
