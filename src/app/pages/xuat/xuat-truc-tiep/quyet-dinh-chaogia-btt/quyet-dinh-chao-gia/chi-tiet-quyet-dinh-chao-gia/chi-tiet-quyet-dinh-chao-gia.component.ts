@@ -79,6 +79,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       ghiChu: [''],
       slHdDaKy: [],
       slHdChuaKy: [],
+      tongSoLuong: [],
       trangThai: [''],
       tenTrangThai: [''],
       lyDoTuChoi: [''],
@@ -243,6 +244,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
               tenLoaiHinhNx: dataQdKh.tenLoaiHinhNx,
               kieuNx: dataQdKh.kieuNx,
               tenKieuNx: dataQdKh.tenKieuNx,
+              tongSoLuong: dataQdKh.tongSoLuong,
             })
             this.dataTable = dataQdKh.children;
             if (this.dataTable && this.dataTable.length > 0) {

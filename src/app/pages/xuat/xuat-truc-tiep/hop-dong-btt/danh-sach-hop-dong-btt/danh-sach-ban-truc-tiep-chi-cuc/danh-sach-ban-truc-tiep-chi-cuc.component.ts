@@ -10,6 +10,7 @@ import {STATUS} from 'src/app/constants/status';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-danh-sach-ban-truc-tiep-chi-cuc',
@@ -75,16 +76,6 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
     }
   }
 
-  goDetail(id: number, roles?: any, isQuanLy?: boolean) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
-    this.idSelected = id;
-    this.isDetail = true;
-    this.isQuanLy = isQuanLy;
-    this.isAddNew = !isQuanLy;
-  }
-
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
@@ -97,6 +88,33 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
     this.formData.reset();
     this.timKiem();
     this.search();
+  }
+
+  goDetail(id: number, boolean?: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isQuanLy = boolean;
+    this.isAddNew = !boolean;
+  }
+
+  exportDataHdong(fileName?: string) {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.chaoGiaMuaLeUyQuyenService
+          .exportHopDong(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, fileName ? fileName : 'data.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   disabledNgayPduyetTu = (startValue: Date): boolean => {
