@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "src/app/services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -41,7 +41,8 @@ export class TongHopTieuHuyComponent extends Base2Component implements OnInit {
   selectedItem: any;
   modalWidth: any;
   step: any = 1;
-
+  DanhSach: boolean = false;
+  @Output() tabFocus = new EventEmitter<number>();
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -283,5 +284,13 @@ export class TongHopTieuHuyComponent extends Base2Component implements OnInit {
         }
       },
     });
+  }
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
+  danhSach() {
+    this.DanhSach = true;
+    this.emitTab(0)
   }
 }

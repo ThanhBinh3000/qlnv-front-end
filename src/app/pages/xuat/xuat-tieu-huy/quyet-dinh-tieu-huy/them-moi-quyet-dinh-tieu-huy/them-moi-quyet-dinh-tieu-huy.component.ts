@@ -171,7 +171,7 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base2Component implements 
 
   async loadDsHoSo() {
     this.hoSoTieuHuyService.search({
-      trangThai: STATUS.DADUYET_BTC,
+      trangThaiTc: STATUS.DADUYET_BTC,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: this.page - 1,

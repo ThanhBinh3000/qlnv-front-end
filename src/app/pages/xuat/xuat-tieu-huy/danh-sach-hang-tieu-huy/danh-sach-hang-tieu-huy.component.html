@@ -4,7 +4,7 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="6">
-            <label>Đơn vị đề xuất</label>
+            <label>Cục DTNN KV</label>
             <nz-select formControlName="maDvi" nzShowSearch nzAllowClear>
               <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
             </nz-select>
@@ -57,7 +57,7 @@
       </form>
       <div nz-col class="cangiua group-button-search pt-16">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -69,7 +69,14 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách phương án xuất cứu trợ, viện trợ</h3>
+      <h3 class="text-uppercase">Danh sách hàng cần tiêu hủy</h3>
+      <div class="buttons">
+        <button type="button" class="btn btn-main"
+                *ngIf="userService.isCuc()" (click)="openTongHop()">
+          <i class="icon htvbdh_tcdt_tao-qd"></i>
+          <span>Tổng hợp DS hàng cần tiêu hủy</span>
+        </button>
+      </div>
     </div>
 
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">

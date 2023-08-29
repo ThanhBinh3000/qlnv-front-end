@@ -17,6 +17,7 @@ import {NumberToRoman} from 'src/app/shared/commonFunction';
 import {Validators} from "@angular/forms";
 import {HoSoTieuHuyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/HoSoTieuHuy.service";
 import {TongHopTieuHuyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/TongHopTieuHuy.service";
+import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 export class XhTlHoSoDtl {
   id: number = 0;
@@ -92,6 +93,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
       thoiGianTlTu: [],
       thoiGianTlDen: [],
       trangThai: [STATUS.DU_THAO],
+      trangThaiTc: [],
       ngayDuyetLan1: [],
       ngayDuyetLan2: [],
       ngayDuyetLan3: [],
@@ -106,6 +108,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
       nguoiPduyetId: [],
       lyDoTuChoi: [],
       tenTrangThai: ['Dự thảo'],
+      tenTrangThaiTc: [],
       tenDvi: [],
       maDvql: [],
       tenDvql: [],
