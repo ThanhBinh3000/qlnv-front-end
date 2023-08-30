@@ -51,10 +51,7 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
       ngayDuyetTu: null,
       ngayDuyetDen: null,
       loaiVthh: null,
-      trangThai: null,
-      maDviChiCuc: null,
       pthucBanTrucTiep: null,
-      lastest: 1
     });
 
     this.filterTable = {
@@ -77,7 +74,7 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
 
   async ngOnInit() {
     try {
-      this.thimKiem();
+      await this.timKiem();
       await this.search();
     } catch (e) {
       console.log('error: ', e);
@@ -86,19 +83,16 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
     }
   }
 
-  thimKiem() {
+  async timKiem() {
     this.formData.patchValue({
-      maDviChiCuc: this.userInfo.MA_DVI,
       loaiVthh: this.loaiVthh,
-      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
       pthucBanTrucTiep: ['02', '03'],
-      lastest: 1
     })
   }
 
-  clearFilter() {
-    this.formData.reset();
-    this.thimKiem();
+  async clearFilter() {
+    await this.formData.reset();
+    await this.timKiem();
     this.search();
   }
 

@@ -114,7 +114,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       this.spinner.show();
       try {
         this.qdPdKetQuaBanDauGiaService
-          .export(this.formData.value)
+          .exportQdPd(this.formData.value)
           .subscribe((blob) =>
             saveAs(blob, fileName ? fileName : 'data.xlsx'),
           );

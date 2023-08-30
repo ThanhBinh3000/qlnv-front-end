@@ -167,8 +167,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     } else {
       this.selected = true;
     }
-    this.rowItem.donGia = data.donGiaVat
-    this.donGiaRow = data.donGiaVat
+    console.log(data, 123)
+    this.rowItem.donGia = data.donGia
+    this.donGiaRow = data.donGia
     if(this.listChiCuc.length > 0){
       this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
     }
@@ -254,7 +255,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             await this.spinner.hide();
             await this.loadDetail(this.idInput);
-            this.goBack()
+            // this.goBack()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             await this.spinner.hide();
