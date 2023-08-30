@@ -13,6 +13,7 @@ import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-t
 import {STATUS} from 'src/app/constants/status';
 import {DonviService} from 'src/app/services/donvi.service';
 import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 
 @Component({
   selector: 'app-phu-luc-btt',
@@ -20,10 +21,10 @@ import {MESSAGE} from 'src/app/constants/message';
   styleUrls: ['./phu-luc-btt.component.scss']
 })
 export class PhuLucBttComponent extends Base2Component implements OnInit {
+  @Input() loaiVthh: String;
   @Input() idPhuLuc: number;
   @Input() detailHopDong: any = {};
   @Input() isViewPhuLuc: boolean;
-  @Input() loaiVthh: String;
   @Input() objHopDongHdr: any = {}
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -46,12 +47,11 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         id: [],
         idHd: [],
         maDvi: [],
-        tenDvi: [],
         namHd: [dayjs().get('year')],
-        soHd: [''],
+        soHdong: [''],
         tenHd: [''],
         ngayHluc: [null,],
-        soPhuLuc: [''],
+        soPhuLuc: ['', [Validators.required]],
         ngayHlucPhuLuc: [null,],
         noiDungPhuLuc: [''],
         thoiGianDuKien: [null],
@@ -66,7 +66,8 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         ghiChuPhuLuc: [],
         trangThai: [STATUS.DU_THAO],
         tenTrangThai: ['Dự thảo'],
-        kieuNx: [],
+        tenDvi: [],
+        filePhuLuc: [new Array<FileDinhKem>()],
       }
     );
   }
@@ -108,12 +109,16 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
     })
     this.dataTable = data.children;
     if (this.objHopDongHdr) {
+      this.formData.patchValue({
+        soHdong: this.objHopDongHdr.soHd ?? null,
+        thoiGianDuKienSauDc: (data.ngayHlucSauDcTu && data.ngayHlucSauDcDen) ? [data.ngayHlucSauDcTu, data.ngayHlucSauDcDen] : null,
+        thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
+      })
       this.dataTable.forEach(s => {
         s.donGia = this.objHopDongHdr.donGiaBanTrucTiep ?? null;
         s.thanhTien = this.objHopDongHdr.thanhTien ?? null;
       })
     }
-    this.fileDinhKem = data.fileDinhKems;
   }
 
   async loadDsDonVi() {
@@ -140,7 +145,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
     if (this.objHopDongHdr) {
       this.formData.patchValue({
         idHd: this.objHopDongHdr.id ?? null,
-        soHd: this.objHopDongHdr.soHd ?? null,
+        soHdong: this.objHopDongHdr.soHd ?? null,
         tenHd: this.objHopDongHdr.tenHd ?? null,
         ngayHluc: this.objHopDongHdr.ngayHluc ?? null,
         thoiGianDuKien: (this.objHopDongHdr.tgianGnhanTu && this.objHopDongHdr.tgianGnhanDen) ? [this.objHopDongHdr.tgianGnhanTu, this.objHopDongHdr.tgianGnhanDen] : null,
@@ -160,14 +165,12 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
     }
   }
 
-  async save(isOther?) {
-    this.setValidator(isOther);
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.spinner.hide();
-      return;
+  async save() {
+    await this.helperService.ignoreRequiredForm(this.formData);
+    let body = {
+      ...this.formData.value,
+      soPhuLuc: this.formData.value.soPhuLuc ? this.formData.value.soPhuLuc + this.maHopDongSuffix : null
     }
-    let body = this.formData.value;
     if (this.formData.get('thoiGianDuKien').value) {
       body.tgianGnhanTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
       body.tgianGnhanDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
@@ -176,100 +179,42 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
       body.ngayHlucSauDcTu = dayjs(this.formData.get('thoiGianDuKienSauDc').value[0]).format('YYYY-MM-DD');
       body.ngayHlucSauDcDen = dayjs(this.formData.get('thoiGianDuKienSauDc').value[1]).format('YYYY-MM-DD')
     }
-    body.soPhuLuc = this.formData.value.soPhuLuc + this.maHopDongSuffix;
     body.phuLucDtl = this.dataTable;
-    body.fileDinhKems = this.fileDinhKem;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isOther) {
-        this.formData.patchValue({
-          id: data.id,
-          trangThai: data.trangThai
-        })
-        this.pheDuyet();
-      } else {
-        if (this.idPhuLuc > 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        }
-        this.goBack();
-      }
-    }
+    await this.createUpdate(body);
+    await this.helperService.restoreRequiredForm(this.formData);
   }
 
-  pheDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn Ký?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.formData.get('id').value,
-            trangThai: STATUS.DA_KY
-          };
-          let res = await this.hopDongBttService.approve(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(
-              MESSAGE.SUCCESS,
-              MESSAGE.THAO_TAC_SUCCESS,
-            );
-            this.goBack();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
-  isDisabled() {
-    if (this.formData.value.trangThai == STATUS.DU_THAO) {
-      return false;
-    } else {
-      return true;
+  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    this.setValidForm();
+    let body = {
+      ...this.formData.value,
+      soPhuLuc: this.formData.value.soPhuLuc ? this.formData.value.soPhuLuc + this.maHopDongSuffix : null
     }
+    if (this.formData.get('thoiGianDuKien').value) {
+      body.tgianGnhanTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
+      body.tgianGnhanDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.get('thoiGianDuKienSauDc').value) {
+      body.ngayHlucSauDcTu = dayjs(this.formData.get('thoiGianDuKienSauDc').value[0]).format('YYYY-MM-DD');
+      body.ngayHlucSauDcDen = dayjs(this.formData.get('thoiGianDuKienSauDc').value[1]).format('YYYY-MM-DD')
+    }
+    body.phuLucDtl = this.dataTable;
+    await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
   }
 
-  setValidator(isOther) {
-    if (isOther) {
-      this.formData.controls["soHd"].setValidators([Validators.required]);
-      this.formData.controls["tenHd"].setValidators([Validators.required]);
-      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-      this.formData.controls["soPhuLuc"].setValidators([Validators.required]);
-      this.formData.controls["ngayHlucPhuLuc"].setValidators([Validators.required]);
-      this.formData.controls["noiDungPhuLuc"].setValidators([Validators.required]);
-      this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
-      this.formData.controls["thoiGianDuKienSauDc"].setValidators([Validators.required]);
-      this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
-      this.formData.controls["tgianThienHdSauDc"].setValidators([Validators.required]);
-    } else {
-      this.formData.controls["soHd"].clearValidators();
-      this.formData.controls["tenHd"].clearValidators();
-      this.formData.controls["ngayHluc"].clearValidators();
-      this.formData.controls["soPhuLuc"].clearValidators();
-      this.formData.controls["ngayHlucPhuLuc"].clearValidators();
-      this.formData.controls["noiDungPhuLuc"].clearValidators();
-      this.formData.controls["thoiGianDuKien"].clearValidators();
-      this.formData.controls["thoiGianDuKienSauDc"].clearValidators();
-      this.formData.controls["tgianThienHd"].clearValidators();
-      this.formData.controls["tgianThienHdSauDc"].clearValidators();
-    }
+  setValidForm() {
+    this.formData.controls["tenHd"].setValidators([Validators.required]);
+    this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+    this.formData.controls["ngayHlucPhuLuc"].setValidators([Validators.required]);
+    this.formData.controls["noiDungPhuLuc"].setValidators([Validators.required]);
+    this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
+    this.formData.controls["thoiGianDuKienSauDc"].setValidators([Validators.required]);
+    this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
+    this.formData.controls["tgianThienHdSauDc"].setValidators([Validators.required]);
   }
 }
 
