@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {STATUS} from "../../../../../../constants/status";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -9,22 +8,22 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetDinhPheDuyetHsmtService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetHsmt.service";
+import {
+  QuyetDinhPheDuyetKeHoachLCNTService
+} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
 import * as dayjs from "dayjs";
 import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
 import {MESSAGE} from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {
-  QuyetDinhPheDuyetKeHoachLCNTService
-} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
-
 @Component({
-  selector: 'app-them-moi-qd-pd-hs-mt-vt',
-  templateUrl: './them-moi-qd-pd-hs-mt-vt.component.html',
-  styleUrls: ['./them-moi-qd-pd-hs-mt-vt.component.scss']
+  selector: 'app-them-moi-qd-pd-hs-mt',
+  templateUrl: './them-moi-qd-pd-hs-mt.component.html',
+  styleUrls: ['./them-moi-qd-pd-hs-mt.component.scss']
 })
-export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit {
+export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
   @Output() showListEvent = new EventEmitter<any>();
   @Input() isView: boolean;
   @Input() idInput: number = 0;
@@ -34,7 +33,6 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
   listCcPhapLy: any[] = [];
   listQuy: any[] = [];
   listOfData: any[] = [];
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -96,7 +94,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
       trangThai: STATUS.BAN_HANH,
       loaiVthh: this.loaiVthh,
       namKhoach: this.formData.get('namKhoach').value,
-      lastest: 0
+      lastest: 1
     };
     let resToTrinh = await this.quyetDinhPheDuyetKeHoachLCNTService.getAll(bodyToTrinh);
     let listQdPdKhlcnt = [];
@@ -126,7 +124,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
           tenLoaiVthh: data.tenLoaiVthh,
           loaiVthh: data.loaiVthh,
           tchuanCluong: data.dxKhlcntHdr?.tchuanCluong,
-          quy: data.dxKhlcntHdr.quy,
+          quy: data.dxKhlcntHdr?.quy,
           tgianBdauTchuc: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc,
         })
         this.listOfData = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
@@ -249,7 +247,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
         tenLoaiVthh: data.qdKhlcntHdr.tenLoaiVthh,
         loaiVthh: data.qdKhlcntHdr.loaiVthh,
         tchuanCluong: data.qdKhlcntHdr.dxKhlcntHdr.tchuanCluong,
-        quy: data.qdKhlcntHdr.dxKhlcntHdr?.quy,
+        quy: data.qdKhlcntHdr.dxKhlcntHdr.quy,
         tgianBdauTchuc: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tgianBdauTchuc : data.qdKhlcntHdr.tgianBdauTchuc,
       });
       this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
@@ -261,31 +259,4 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
     this.initListQuy();
   }
 
-  calcTongSl() {
-    if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong;
-          return prev;
-        }, 0);
-        sum += sumChild;
-      })
-      return sum;
-    }
-  }
-
-  calcTongThanhTien() {
-    if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaVat;
-          return prev;
-        }, 0);
-        sum += sumChild;
-      })
-      return sum;
-    }
-  }
 }

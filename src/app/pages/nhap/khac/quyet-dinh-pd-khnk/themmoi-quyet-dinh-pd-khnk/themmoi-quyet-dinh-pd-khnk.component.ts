@@ -169,12 +169,10 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     }
     if (this.formData.get('phanLoai').value == 'TH') {
       this.formData.controls["idTh"].setValidators([Validators.required]);
-      this.formData.controls["idDx"].clearValidators();
       this.formData.controls["soDxuat"].clearValidators();
     }
     if (this.formData.get('phanLoai').value == 'TTr') {
       this.formData.controls["idTh"].clearValidators();
-      this.formData.controls["idDx"].setValidators([Validators.required]);
       this.formData.controls["soDxuat"].setValidators([Validators.required]);
     }
   }
