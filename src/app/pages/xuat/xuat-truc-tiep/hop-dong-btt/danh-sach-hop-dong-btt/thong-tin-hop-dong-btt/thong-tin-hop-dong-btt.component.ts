@@ -81,7 +81,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         thoiHanXuatKho: [''],
         idQdPd: [],
         soQdPd: [''],
-        ngayKyQdPd: [''],
+        NgayKyUyQuyen: [''],
         tenDviMua: [''],
         maDviTsan: [''],
         loaiHinhNx: [''],
@@ -208,12 +208,10 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         soHd: data?.soHd?.split('/')[0],
         tgianGnhanHang: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
       })
-      if (this.userService.isCuc()) {
-        this.maDviTsanCuc(data.tenDviMua);
-      }
       if (!this.userService.isChiCuc()) {
         this.dataTable = cloneDeep(data.children);
       } else {
+        this.maDviTsanCuc(data.tenDviMua);
         this.dataTable = cloneDeep(data.xhHopDongBttDviList)
       }
       this.dataTablePhuLuc = data?.phuLuc || [];
@@ -541,7 +539,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       let data = res.data.content;
       if (data && data.length > 0) {
         this.listSoQdPdKh = data;
-        this.listSoQdPdKh = this.listSoQdPdKh.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -581,7 +578,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               soQdPd: data.soQdPd,
               idQdNv: data.idQdNv,
               soQdNv: data.soQdNv,
-              ngayKyQdPd: data.ngayNhanCgia,
+              NgayKyUyQuyen: data.ngayNhanCgia,
               thoiHanXuatKho: data.ngayMkho,
               loaiHinhNx: data.loaiHinhNx,
               tenLoaiHinhNx: data.tenLoaiHinhNx,
@@ -731,8 +728,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
   setValidForm() {
     this.formData.controls["namHd"].setValidators([Validators.required]);
-    this.formData.controls["soQdKq"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyQdKq"].setValidators([Validators.required]);
     this.formData.controls["thoiHanXuatKho"].setValidators([Validators.required]);
     this.formData.controls["soQdPd"].setValidators([Validators.required]);
     this.formData.controls["tenDviMua"].setValidators([Validators.required]);
@@ -771,6 +766,14 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
     this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
     this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    if (this.userService.isCuc()){
+      this.formData.controls["soQdKq"].setValidators([Validators.required]);
+      this.formData.controls["ngayKyQdKq"].setValidators([Validators.required]);
+    }
+    if (this.userService.isChiCuc()){
+      this.formData.controls["soQdNv"].setValidators([Validators.required]);
+      this.formData.controls["NgayKyUyQuyen"].setValidators([Validators.required]);
+    }
   }
 }
 
