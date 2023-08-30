@@ -7,11 +7,11 @@
                     <label class="search__label">Mã tổng hợp</label>
                     <input nz-input type="text" formControlName="maTongHop" id="math">
                   </div>
-                  <div nz-col nzSpan="3">
-                    <label class="search__label">Năm</label>
-                    <nz-select formControlName="nam" id="nam">
-                      <nz-option *ngFor="let item of listNam" nzValue="{{item.value}}"
-                                 nzLabel="{{item.text}}">
+                  <div nz-col nzSpan='3'>
+                    <label class='search__label'>Năm</label>
+                    <nz-select formControlName='nam' id='nam'>
+                      <nz-option *ngFor='let item of listNam' nzValue='{{item.value}}'
+                                 nzLabel='{{item.text}}'>
                       </nz-option>
                     </nz-select>
                   </div>

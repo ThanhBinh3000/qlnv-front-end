@@ -6,7 +6,7 @@
         </button>
         <ng-container *ngIf="userService.isCuc()">
             <button type="button" class="btn btn-sub xanh-nhat"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
+                *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
                 (click)="save(true)">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Lưu và gửi duyệt</span>
@@ -29,7 +29,7 @@
 <!--                <span>Ban hành</span>-->
 <!--            </button>-->
             <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
+                *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
                 type="
             button" class="btn btn-main" (click)="save()">
                 <i class="icon htvbdh_tcdt_save"></i>
@@ -146,7 +146,7 @@
                   <nz-form-label [nzNoColon]="true" nzRequired>
                     Chọn các hợp đồng đã ký cấp Cục
                   </nz-form-label>
-                  <nz-select [nzDisabled]="formData.value.id != null" [(ngModel)]="dsHongDong" [ngModelOptions]="{standalone: true}" [nzSize]="size" nzMode="tags" (ngModelChange)="handleTagValueChange()" nzPlaceHolder="Please select">
+                  <nz-select [nzDisabled]="formData.value.id != null" [(ngModel)]="dsHongDong" [ngModelOptions]="{standalone: true}" [nzSize]="size" nzMode="tags" (ngModelChange)="handleTagValueChange()">
                     <nz-option *ngFor="let option of listHopDong" [nzLabel]="option.soHd" [nzValue]="option.id"></nz-option>
                   </nz-select>
                 </div>
