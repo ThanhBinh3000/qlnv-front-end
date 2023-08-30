@@ -157,10 +157,11 @@ export class QuanLyHopDongMttComponent implements OnInit {
             tongSoLuong: res.data.soLuong,
             tenLoaiVthh: res.data.tenLoaiVthh,
             tenCloaiVthh: res.data.tenCloaiVthh,
-            trangThaiHd: res.data.trangThaiHd,
-            tenTrangThaiHd: res.data.tenTrangThaiHd
+            trangThaiHd: res.data.hhQdPheduyetKhMttHdr?.trangThaiHd,
+            tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr?.tenTrangThaiHd
 
           })
+        console.log(this.formData.value)
         this.idQdKh = res.data.idQdPdKh
         this.idQdGnvu = res.data.id
         this.dataTable.push(...res.data.hopDongMttHdrs)

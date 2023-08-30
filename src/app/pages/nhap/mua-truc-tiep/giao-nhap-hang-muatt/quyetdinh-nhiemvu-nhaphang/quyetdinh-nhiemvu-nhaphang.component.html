@@ -160,7 +160,7 @@
                     <tr *ngFor="let data of basicTable.data; let i = index">
                         <th width="45px">
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                                [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                                [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
                         </th>
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                         <td>{{data.soQd}}</td>
@@ -178,14 +178,14 @@
                                 <span class="icon htvbdh_eye"></span>
                             </a>
                             <a (click)="redirectToThongTin(data.id, false)"
-                                *ngIf="!userService.isTongCuc() && ( ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_THEM')) ) ">
+                                *ngIf="!userService.isTongCuc() && ( ((data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_THEM')) ) ">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a (click)="redirectToThongTin(data.id, false)"
                                *ngIf="!userService.isTongCuc() && ( (data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_TP')) || (data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_LDC')) ) ">
                               <i class="icon htvbdh_tcdt_pheduyet" title="phê duyệt"></i>
                             </a>
-                            <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_XOA')">
+                            <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_XOA')">
                                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
