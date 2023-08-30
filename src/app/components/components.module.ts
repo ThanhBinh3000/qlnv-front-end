@@ -411,7 +411,7 @@ import { DialogCongVanComponent } from './dialog/dialog-cong-van/dialog-cong-van
     DialogSuaXuatGiamComponent,
     DialogPhanBoHdVtComponent,
     DialogThemMoiDmNhomHangComponent,
-    DialogCongVanComponent
+    DialogCongVanComponent,
   ],
   imports: [
     CommonModule,
@@ -550,7 +550,7 @@ import { DialogCongVanComponent } from './dialog/dialog-cong-van/dialog-cong-van
     DialogDanhSachVatTuHangHoaComponent,
     DialogChonDanhMucComponent,
     Base2Component,
-    Base3Component
+    Base3Component,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

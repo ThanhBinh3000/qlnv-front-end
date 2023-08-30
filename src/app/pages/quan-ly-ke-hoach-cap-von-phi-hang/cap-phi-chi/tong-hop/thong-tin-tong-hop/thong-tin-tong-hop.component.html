@@ -198,7 +198,7 @@
             </thead>
             <tbody>
             <tr *ngFor='let data of basicTable2.data; let i = index'>
-              <td>{{data.loaiChiPhi}}</td>
+              <td>{{data.tenLoaiChiPhi}}</td>
               <td>{{data.namPhatSinh}}</td>
               <td>{{data.tongTien | number: '1.0-1'}}</td>
               <td>{{data.kinhPhiDaCap | number: '1.0-1'}}</td>
@@ -325,8 +325,10 @@
             <tbody>
             <tr>
               <td>
-                <input nz-input type='text' [(ngModel)]='create.loaiChiPhi'
-                       [readonly]='rowEdit.isView' />
+                <nz-select [(ngModel)]='create.loaiChiPhi' [nzDisabled]='rowEdit.isView'>
+                  <nz-option *ngFor='let item of listLoaiChiPhi' [nzValue]='item.ma' [nzLabel]='item.giaTri'>
+                  </nz-option>
+                </nz-select>
               </td>
               <td>
                 <nz-select [(ngModel)]='create.namPhatSinh' [nzDisabled]='rowEdit.isView'>
@@ -362,7 +364,7 @@
             </tr>
             <tr *ngFor='let data of basicTable3.data; let i = index'>
               <ng-container *ngIf='!data.edit; else editItemTemplate'>
-                <td>{{data.loaiChiPhi}}</td>
+                <td>{{data.tenLoaiChiPhi}}</td>
                 <td>{{data.namPhatSinh}}</td>
                 <td>{{data.tongTien | number: '1.0-1'}}</td>
                 <td>{{data.kinhPhiDaCap | number: '1.0-1'}}</td>
@@ -378,7 +380,10 @@
               </ng-container>
               <ng-template #editItemTemplate>
                 <td>
-                  <input nz-input type='text' [(ngModel)]='data.loaiChiPhi' />
+                  <nz-select [(ngModel)]='data.loaiChiPhi'>
+                    <nz-option *ngFor='let item of listLoaiChiPhi' [nzValue]='item.ma' [nzLabel]='item.giaTri'>
+                    </nz-option>
+                  </nz-select>
                 </td>
                 <td>
                   <nz-select [(ngModel)]='data.namPhatSinh'>
