@@ -337,7 +337,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Mở lại </nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Mở tại </nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input placeholder="" nz-input formControlName="moLai" [readonly]="isDisabled()" />
                   </nz-form-control>
@@ -570,6 +570,7 @@
                 <th nzWidth="100px" class="text-center wrap">Địa điểm nhập kho</th>
                 <th nzWidth="100px" class="text-center wrap">Điểm kho</th>
                 <th nzWidth="100px" class="text-center wrap">SL nhập trực tiếp</th>
+                <th nzWidth="100px" class="text-center wrap">SL ký hợp đồng</th>
                 <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
               </tr>
             </thead>
@@ -594,7 +595,9 @@
                     <td>{{children.diaDiemNhap}}</td>
                     <td>{{children.tenDiemKho}}</td>
                     <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{children.soLuong * children.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}
+                    <td *ngIf="isDisabled()">{{children.soLuongHd | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td *ngIf="!isDisabled()"><input nz-input placeholder="Số lượng HĐ" [(ngModel)]="children.soLuongHd" /></td>
+                    <td>{{children.soLuongHd * children.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}
                     </td>
                   </tr>
                 </ng-container>

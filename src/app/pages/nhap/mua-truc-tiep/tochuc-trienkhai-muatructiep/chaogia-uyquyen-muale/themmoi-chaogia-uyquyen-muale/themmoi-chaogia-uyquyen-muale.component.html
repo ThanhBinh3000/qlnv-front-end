@@ -231,8 +231,8 @@
                 <td></td>
                 <td></td>
                 <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{diemKho.donGiaVat ? diemKho.donGiaVat : diemKho.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{(diemKho.donGiaVat ? diemKho.donGiaVat : diemKho.donGia) * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{diemKho.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{diemKho.donGia * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>
                   <a *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && userService.isCuc()" (click)="startEditDk(i, y)"
                      class="text-center">
