@@ -31,7 +31,18 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
-            <nz-form-label>Thời gian đề xuất thanh lý</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzSpan="24">
+              File đính kèm biên bản lấy mẫu/bàn giao đã ký
+            </nz-form-label>
+          </nz-form-item>
+          <nz-form-item>
+            <div class="list-file" nz-col nzSpan="24">
+              <file-list [data]="this.formData.value.fileDinhKems" [isViewDetail]="isView">
+              </file-list>
+            </div>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>Thời gian đề xuất tiêu hủy</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianTl"
                                [nzFormat]="globals.dateFormat"
@@ -71,14 +82,14 @@
           <th>Ngăn/lô kho</th>
           <th>Ngày nhập kho</th>
           <th>SL tồn</th>
-          <th>SL cần thanh lý</th>
-          <th>SL cần thanh lý đã duyệt</th>
-          <th>SL còn lại cần thanh lý</th>
+          <th>SL cần tiêu hủy</th>
+          <th>SL cần tiêu hủy đã duyệt</th>
+          <th>SL còn lại cần tiêu hủy</th>
           <th>ĐVT</th>
           <th>Ngày tổng hợp</th>
-          <th>Lý do cần thanh lý</th>
-          <th>Thời gian đề xuất thanh lý</th>
-          <th>Trạng thái thanh lý</th>
+          <th>Lý do cần tiêu hủy</th>
+          <th>Thời gian đề xuất tiêu hủy</th>
+          <th>Trạng thái tiêu hủy</th>
         </tr>
         </thead>
         <tbody>

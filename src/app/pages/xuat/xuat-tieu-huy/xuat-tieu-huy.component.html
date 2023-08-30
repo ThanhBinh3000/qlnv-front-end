@@ -1,9 +1,9 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
       Toàn bộ DS hàng DTQG cần tiêu hủy
     </li>
-    <li nz-menu-item (click)="selectTab(1)">
+    <li nz-menu-item [nzSelected]="tabSelected==1" (click)="selectTab(1)">
       Tổng hợp DS hàng DTQG cần tiêu hủy
     </li>
     <li nz-menu-item (click)="selectTab(2)">
@@ -29,10 +29,10 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
-      <app-danh-sach-hang-tieu-huy></app-danh-sach-hang-tieu-huy>
+      <app-danh-sach-hang-tieu-huy (tabFocus)="receivedTab($event)"></app-danh-sach-hang-tieu-huy>
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
-      <app-tong-hop-tieu-huy></app-tong-hop-tieu-huy>
+      <app-tong-hop-tieu-huy (tabFocus)="receivedTab($event)"></app-tong-hop-tieu-huy>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
       <app-ho-so-tieu-huy></app-ho-so-tieu-huy>

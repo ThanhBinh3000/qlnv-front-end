@@ -78,7 +78,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   dsHangPD = []
   typeData: string;
   typeAction: string;
-
+  previewName: string = 'ntt_bien_ban_ntbq_lan_dau';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

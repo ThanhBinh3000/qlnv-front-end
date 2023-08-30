@@ -74,6 +74,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   isChiTiet: boolean = false;
   listTieuChuan: any[] = [];
   isValid = false;
+  previewName: string = 'ntt_phieu_kiem_nghiem_chat_luong';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

@@ -108,7 +108,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       previewName: 'bien_ban_kiem_tra_hskt.docx'
     }
   ];
-  previewName: string = 'ho_so_ky_thuat.docx';
+  previewName: string = 'ho_so_ky_thuat';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

@@ -208,7 +208,6 @@ export class LapBienBanChuanBiKhoComponent extends Base2Component implements OnI
 
   async loadSoQuyetDinh() {
     let body = {
-      denNgayQd: null,
       maDvi: this.userInfo.MA_DVI,
       loaiVthh: this.typeVthh,
       paggingReq: {
@@ -217,7 +216,7 @@ export class LapBienBanChuanBiKhoComponent extends Base2Component implements OnI
       },
       trangThai: this.globals.prop.NHAP_BAN_HANH,
     }
-    let res = await this.quyetDinhGiaoNhapHangKhacService.search(body);
+    let res = await this.bbNghiemThuBaoQuanService.dsQdNvuDuocLapBbNtBqLd(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;

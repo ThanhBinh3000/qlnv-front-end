@@ -4,11 +4,11 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button
-          type="button" class="btn btn-sub do" (click)="preview()">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Xem trước</span>
-        </button>
+      <button
+        type="button" class="btn btn-sub do" (click)="preview()">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Xem trước</span>
+      </button>
         <button class="btn btn-sub xanh-nhat" type="button"
             *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
             (click)="save(true)">
@@ -523,12 +523,12 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf()"
+    <button nz-button (click)="downloadPdf(previewName)"
             class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord()"
+    <button nz-button (click)="downloadWord(previewName)"
             class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx

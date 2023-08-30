@@ -39,7 +39,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
 
   fileDinhKems: any[] = [];
   dataTable: any[] = [];
-
+  previewName: string = 'ntt_phieu_nhap_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

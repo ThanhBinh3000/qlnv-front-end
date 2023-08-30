@@ -62,6 +62,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
   bbNghiemThuBaoQuans: any[] = [];
+  previewName: string = 'ntt_bien_ban_nhap_day_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
