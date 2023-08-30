@@ -153,7 +153,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
 
   async loadDetail(idInput: number) {
-    console.log(idInput, 'idInput');
     if (idInput > 0) {
       await this.phieuKiemNgiemClLuongThucHangDTQGService.getDetail(idInput)
         .then((res) => {
@@ -463,6 +462,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async preview(id) {
+    this.spinner.show();
     await this.phieuKiemNgiemClLuongThucHangDTQGService.preview({
       tenBaoCao: this.templateName,
       id: id,
@@ -475,6 +475,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
       }
     });
+    this.spinner.hide();
   }
 
   downloadPdf() {
