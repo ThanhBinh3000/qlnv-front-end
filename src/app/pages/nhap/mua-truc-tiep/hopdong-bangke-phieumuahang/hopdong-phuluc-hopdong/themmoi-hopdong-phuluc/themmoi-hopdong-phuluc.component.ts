@@ -221,6 +221,10 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
+    if(this.validateSlKyHd()){
+      this.notification.error(MESSAGE.ERROR, 'Số lượng ký hợp đồng phải bằng số lượng nhập trực tiếp');
+      return;
+    }
     if(this.loaiHd == '02'){
       let dataQd = await this.quyetDinhGiaoNvNhapHangService.getDetail(this.formData.value.idQdGiaoNvNh)
       if(dataQd.data.trangThai != STATUS.BAN_HANH){
@@ -247,6 +251,23 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       } else {
         // this.goBack()
       }
+    }
+  }
+
+  validateSlKyHd(){
+    console.log(this.dataTable, "this.dataTable")
+    let sumSlKyHd = 0;
+    let sumSlNhapTt = 0;
+    this.dataTable.forEach(item =>{
+      item.children.forEach(x =>{
+        sumSlKyHd += Number.parseInt(x.soLuongHd)
+        sumSlNhapTt += x.soLuong
+      })
+    })
+    console.log(sumSlKyHd, "1")
+    console.log(sumSlNhapTt, "2")
+    if(sumSlKyHd > sumSlNhapTt || sumSlKyHd < sumSlNhapTt){
+      return true;
     }
   }
 
