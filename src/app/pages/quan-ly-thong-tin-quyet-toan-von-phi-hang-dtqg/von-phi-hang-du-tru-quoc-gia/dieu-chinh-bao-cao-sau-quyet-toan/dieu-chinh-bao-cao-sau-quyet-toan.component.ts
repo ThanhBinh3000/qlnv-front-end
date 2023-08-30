@@ -246,6 +246,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
                     maPhanBcao: res.maPhanBcao,
                     namQtoan: res.namQtoan,
                     thangBcao: res.thangBcao,
+                    preTab: 'danhsachDieuChinh'
                 }
                 this.isAddNew = true;
                 this.dataThemMoi = request;
@@ -255,9 +256,13 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     };
 
     viewDetail(data: any) {
+        const request = {
+            preTab: 'danhsachqt'
+        }
         this.isAddNew = true;
         this.idSelected = data?.id;
         this.isStatus = data?.trangThai;
+        this.dataThemMoi = request;
     };
 
     getStatusName(trangThai: string) {

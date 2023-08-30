@@ -246,6 +246,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
                     maPhanBcao: res.maPhanBcao,
                     namQtoan: res.namQtoan,
                     quyQtoan: res.quyQtoan,
+                    preTab: 'danhsachqt'
                 }
                 await this.quyetToanVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(
                     (data) => {
@@ -266,9 +267,13 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     };
 
     viewDetail(data: any) {
+        const request = {
+            preTab: 'danhsachqt'
+        }
         this.isAddNew = true;
         this.idSelected = data?.id;
         this.isStatus = data?.trangThai;
+        this.dataThemMoi = request;
     };
 
     getStatusName(trangThai: string) {
