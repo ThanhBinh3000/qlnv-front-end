@@ -145,6 +145,8 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
               tenCloaiVthh: data.tenCloaiVthh,
               tenLoaiHinhNx: data.tenLoaiHinhNx,
               tenKieuNx: data.tenKieuNx,
+              tongSlDaKyHdong: data.tongSlDaKyHdong,
+              tongSlChuaKyHdong: data.tongSlChuaKyHdong,
               vat: '5 %',
               trangThaiHd: data.trangThaiHd,
               tenTrangThaiHd: data.tenTrangThaiHd,

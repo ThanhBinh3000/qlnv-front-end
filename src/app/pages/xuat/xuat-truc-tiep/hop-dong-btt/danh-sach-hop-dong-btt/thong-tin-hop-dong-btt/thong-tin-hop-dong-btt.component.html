@@ -707,7 +707,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Ngày ký ủy quyền</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
-                    <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyQdPd" nzDisabled>
+                    <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="NgayKyUyQuyen" nzDisabled>
                     </nz-date-picker>
                   </nz-form-control>
                 </nz-form-item>
@@ -1233,7 +1233,7 @@
       <nz-collapse nzAccordion>
         <nz-collapse-panel [nzHeader]="'PHỤ LỤC HỢP ĐỒNG'" [nzActive]="true" [nzExtra]="extraTpl">
           <ng-template #extraTpl>
-            <div class="buttons" *ngIf="formData.value.id != null && !userService.isTongCuc() && !isQuanLy">
+            <div class="buttons" *ngIf="formData.value.id != null && !userService.isTongCuc() && !isQuanLy && !isViewOnModal">
               <button style="background: #353a64;" type="button" class="btn btn-main"
                       (click)="redirectPhuLuc(0, false)">
                 <i class="icon htvbdh_dau-cong"></i>
