@@ -15,7 +15,7 @@ import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang
 import { DanhSachMuaTrucTiep } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { cloneDeep } from 'lodash';
-import {AMOUNT_TWO_DECIMAL} from "../../../Utility/utils";
+import {AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../Utility/utils";
 
 
 @Component({
@@ -43,6 +43,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   listChiCuc: any[] = [];
 
   listDiemKho: any[] = [];
+  amount = AMOUNT_ONE_DECIMAL;
   customPrecisionFn(value: string | number, precision?: number): number {
     return +Number(value).toFixed(precision! + 1);
   }

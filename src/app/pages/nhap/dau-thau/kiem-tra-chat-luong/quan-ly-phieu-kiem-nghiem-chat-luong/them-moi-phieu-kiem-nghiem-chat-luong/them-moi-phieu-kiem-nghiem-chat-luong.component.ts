@@ -34,6 +34,9 @@ import { HelperService } from 'src/app/services/helper.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from "file-saver";
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -65,7 +68,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   listSoQuyetDinh = [];
   listBbBanGiaoMau = [];
   dataTableChiTieu: any[] = [];
-
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "phieu_khiem_nghiem_cl.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
 
   phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
     new PhieuKiemNghiemChatLuongHang();
@@ -143,7 +151,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     try {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        this.loadDanhMucPhuongThucBaoQuan(),
+        // this.loadDanhMucPhuongThucBaoQuan(),
+        this.loadBbLayMau(),
         this.loadTieuChuan(),
       ]);
       if (this.id > 0) {
@@ -365,7 +374,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   openDialogBbLayMau() {
-    this.loadBbLayMau();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách biên bản lấy mẫu',
       nzContent: DialogTableSelectionComponent,
@@ -547,5 +555,30 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
   editRow(index: number) {
     this.dataTableChiTieu[index].edit = true;
+  }
+
+  async preview() {
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.phieuKiemNghiemChatLuongHangService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "phieu_khiem_nghiem_cl.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "phieu_khiem_nghiem_cl.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
