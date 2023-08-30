@@ -294,6 +294,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
                     this.listCcPhapLy = detail.listCcPhapLy;
                     this.dataTable = detail.details;
                     this.dataPl = detail.hhPhuLucHdongList;
+                    this.onChangeHluc();
                   if (this.dataBinding) {
                     await this.bindingDataKqLcnt(this.dataBinding.id);
                   }
@@ -496,6 +497,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
         soNgayThien: data.hhQdKhlcntHdr?.tgianThien,
         soNgayThienHd: data.hhQdKhlcntHdr?.dxKhlcntHdr?.tgianThienHd
       })
+      this.onChangeHluc();
       if (this.id > 0 && idGthau > 0) {
         this.dataGthau = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr ? data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.find(item => item.id = idGthau) :
           data.hhQdKhlcntHdr.dsGthau.find(item => item.id = idGthau);
@@ -521,6 +523,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
           soNgayThien: dataDtl.dxuatKhLcntHdr?.tgianThien,
           soNgayThienHd: dataDtl.dxuatKhLcntHdr?.tgianThienHd,
         })
+      this.onChangeHluc();
     }
 
     openDialogGoiThau() {
@@ -830,18 +833,24 @@ export class ThongTinComponent implements OnInit, OnChanges {
   onChangeHluc() {
     if (this.formData.get('ngayHlucHd').value != null) {
       let ngayKy = dayjs(this.formData.get('ngayHlucHd').value).toDate();
-      let ngayThienHd = addDays(ngayKy, this.formData.get('soNgayThienHd').value)
-      let tgianGiaoDuHang = addDays(ngayKy, this.formData.get('soNgayThien').value)
-      this.formData.patchValue({
-        ngayThienHd: ngayThienHd,
-        tgianGiaoDuHang: tgianGiaoDuHang,
-      })
-      if(this.formData.get('tgianGiaoThucTe').value != null) {
-        let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
-        let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianGiaoDuHang)
+      if(this.formData.get('soNgayThienHd').value != null) {
+        let ngayThienHd = addDays(ngayKy, this.formData.get('soNgayThienHd').value)
         this.formData.patchValue({
-          tgianBdauTinhPhat: tgianBdauTinhPhat,
+          ngayThienHd: ngayThienHd,
         })
+      }
+      if(this.formData.get('soNgayThien').value != null) {
+        let tgianGiaoDuHang = addDays(ngayKy, this.formData.get('soNgayThien').value)
+        this.formData.patchValue({
+          tgianGiaoDuHang: tgianGiaoDuHang,
+        })
+        if(this.formData.get('tgianGiaoThucTe').value != null) {
+          let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
+          let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianGiaoDuHang)
+          this.formData.patchValue({
+            tgianBdauTinhPhat: tgianBdauTinhPhat,
+          })
+        }
       }
     }
   }
