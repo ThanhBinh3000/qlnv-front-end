@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
@@ -26,7 +26,8 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
   dsCloaiVthh: any[] = [];
   dataTableView: any = [];
   expandSetString = new Set<string>();
-
+  tongHop = false;
+  @Output() tabFocus = new EventEmitter<object>();
   public vldTrangThai: XuatTieuHuyComponent;
 
   constructor(httpClient: HttpClient,
@@ -121,20 +122,20 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
   };
 
   async timKiem() {
-    /*    if (this.formData.value.ngayDx) {
-          this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-        }
-        if (this.formData.value.ngayKetThuc) {
-          this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-        }*/
     await this.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
       this.expandSetString.add(s.idVirtual);
     });
     this.buildTableView();
+  }
+
+  async xoaDieuKien(currentSearch?: any) {
+    this.formData.reset();
+    if (currentSearch) {
+      this.formData.patchValue(currentSearch)
+    }
+    this.timKiem();
   }
 
   async loadDsDonVi() {
@@ -203,5 +204,12 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
     } else {
       this.expandSetString.delete(id);
     }
+  }
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+  openTongHop() {
+    this.tongHop = !this.tongHop;
+    this.emitTab(1);
   }
 }
