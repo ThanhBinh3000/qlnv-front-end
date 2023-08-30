@@ -109,7 +109,7 @@
               <th>Thời gian đề xuất <br> xuất hàng</th>
               <th>Trạng thái</th>
               <th>Mã danh sách</th>
-              <th>Hành động</th>
+<!--              <th>Hành động</th>-->
             </tr>
             </thead>
             <tbody>
@@ -151,11 +151,11 @@
                     <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
                     <td>{{lv1.tenTrangThai}}</td>
                     <td>{{lv1.maTongHop}}</td>
-                    <td><a *ngIf="lv1.id" nzType="link"
-                           (click)="openDsModal(lv1.id)">
-                      <i class="fa fa-eye"></i>
-                    </a>
-                    </td>
+<!--                    <td><a *ngIf="lv1.id" nzType="link"-->
+<!--                           (click)="openDsModal(lv1.id)">-->
+<!--                      <i class="fa fa-eye"></i>-->
+<!--                    </a>-->
+<!--                    </td>-->
                   </tr>
                 </ng-container>
               </ng-container>
