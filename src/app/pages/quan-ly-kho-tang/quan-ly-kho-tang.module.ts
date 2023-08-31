@@ -301,6 +301,10 @@ import { DanhMucDuyetKhoComponent } from "./sap-nhap-kho/danh-muc-duyet-kho/danh
 import { DieuChuyenKhoSapNhapComponent } from './sap-nhap-kho/dieu-chuyen-kho/dieu-chuyen-kho-sap-nhap.component';
 import { ThongTinDanhMucDuyetKhoComponent } from './sap-nhap-kho/danh-muc-duyet-kho/thong-tin-danh-muc-duyet-kho/thong-tin-danh-muc-duyet-kho.component';
 import { ThongTinDieuChuyenKhoSapNhapComponent } from './sap-nhap-kho/dieu-chuyen-kho/thong-tin-dieu-chuyen-kho-sap-nhap/thong-tin-dieu-chuyen-kho-sap-nhap.component';
+import { PhieuXuatHangHoaHutComponent } from './sap-nhap-kho/phieu-xuat-hang-hao-hut/phieu-xuat-hang-hao-hut.component';
+import { ThongTinPhieuXuatHangHaoHutComponent } from './sap-nhap-kho/phieu-xuat-hang-hao-hut/thong-tin-phieu-xuat-hang-hao-hut/thong-tin-phieu-xuat-hang-hao-hut.component';
+import { BienBanSapNhapKhoComponent } from './sap-nhap-kho/bien-ban-sap-nhap-kho/bien-ban-sap-nhap-kho.component';
+import { ThongTinBienBanSapNhapKhoComponent } from './sap-nhap-kho/bien-ban-sap-nhap-kho/thong-tin-bien-ban-sap-nhap-kho/thong-tin-bien-ban-sap-nhap-kho.component';
 @NgModule({
   declarations: [
     QuanLyKhoTangComponent,
@@ -418,7 +422,11 @@ import { ThongTinDieuChuyenKhoSapNhapComponent } from './sap-nhap-kho/dieu-chuye
     DanhMucDuyetKhoComponent,
     ThongTinDanhMucDuyetKhoComponent,
     DieuChuyenKhoSapNhapComponent,
-    ThongTinDieuChuyenKhoSapNhapComponent
+    ThongTinDieuChuyenKhoSapNhapComponent,
+    PhieuXuatHangHoaHutComponent,
+    ThongTinPhieuXuatHangHaoHutComponent,
+    BienBanSapNhapKhoComponent,
+    ThongTinBienBanSapNhapKhoComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, KiemtraChatluongVtTbTrongThbhComponentModule],
 })

@@ -179,7 +179,11 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
             this.expandSetString.add(s.idVirtual);
         });
         if (this.formData.value.id) {
-            await Promise.all(this.dataViewHang.map(f => this.loadDsDiemKho(f.maDiemKhoDen)))
+            if (this.formData.value.loai === "SN_DIEM_KHO") {
+                await Promise.all(this.dataViewHang.map(f => this.loadDsDiemKho(f.maDiemKhoDen)));
+            } else if (this.formData.value.loai === "SN_CHI_CUC") {
+                await Promise.all(this.dataViewHang.map(f => this.loadDsDiemKho(f.maChiCucDen)));
+            }
         }
     }
     async expandAllChiCuc() {
@@ -304,12 +308,12 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                     if (dataDetail) {
                         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
                         this.dataTableHang = Array.isArray(dataDetail.dieuChuyenKhoHangDtl) ? dataDetail.dieuChuyenKhoHangDtl.map(f => ({
-                            ...f, keyValue: f.maLoKhoDen ? f.maLoKhoDen : f.maNganKhoDen, groupBy: f.loai === 'SN_DIEM_KHO' ? `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}` :
+                            ...f, keyValue: f.maLoKhoDen ? f.maLoKhoDen : f.maNganKhoDen, groupBy: this.formData.value.loai === 'SN_DIEM_KHO' ? `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}` :
                                 `${f.maChiCucDi}-${f.maChiCucDen}`
                         })) : [];
                         this.buildHang();
                         if (dataDetail.loai === "SN_CHI_CUC") {
-                            this.dataTableChiCuc = Array.isArray(dataDetail.dieuChuyenKhoVpDtl) ? dataDetail.dieuChuyenKhoVpDtl.map(f => ({ ...f, keyValue: f.maLoKhoDen ? f.maLoKhoDen : f.maNganKhoDen, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
+                            this.dataTableChiCuc = Array.isArray(dataDetail.dieuChuyenKhoCcDtl) ? dataDetail.dieuChuyenKhoCcDtl.map(f => ({ ...f, keyValue: f.maLoKhoDen ? f.maLoKhoDen : f.maNganKhoDen, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
                             this.buildChiCuc();
                             this.dataTableVp = Array.isArray(dataDetail.dieuChuyenKhoVpDtl) ? dataDetail.dieuChuyenKhoVpDtl : []
                         };
@@ -371,7 +375,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
             nzFooter: null,
             nzComponentParams: {
                 dataTable: dataQdDc,
-                dataHeader: ['Số quyết định', 'Tên loại', 'Ngày ký quyết định'],
+                dataHeader: ['Số quyết định', 'Loại sáp nhập', 'Ngày ký quyết định'],
                 dataColumn: ['soQuyetDinh', 'tenLoai', 'ngayKy'],
             },
         })

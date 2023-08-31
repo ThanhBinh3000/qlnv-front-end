@@ -138,7 +138,7 @@
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
             <td>
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
             </td>
             <td>{{(page - 1) * pageSize + idx +
               1}}</td>

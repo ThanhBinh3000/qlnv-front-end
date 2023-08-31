@@ -31,4 +31,8 @@ export class DieuChuyenKhoService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-ccdc?maChiCucDi=${body.maChiCucDi}&maChiCucDen=${body.maChiCucDen}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
+  danhSach(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

@@ -232,7 +232,7 @@
                                                     </nz-option>
                                                 </nz-select> -->
                                                 <nz-tree-select #treeSelectComPonent
-                                                    [nzNodes]="listDs[lv2.maChiCucDen] || []"
+                                                    [nzNodes]="listDs[lv2.maChiCucDen] || []" [(ngModel)]="lv2.keyValue"
                                                     (nzOpenChange)="loadDsDiemKho(lv2.maChiCucDen)" nzShowSearch
                                                     nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
                                                     (nzTreeClick)="handleClickTree($event, lv2, 'SN_CHI_CUC')"
@@ -302,7 +302,7 @@
                                         <td>{{lv2.donViTinh}}</td>
                                         <td>
                                             <nz-input-group>
-                                                <input nz-input [(ngModel)]='lv2.soLuongDieuChuyen'
+                                                <input nz-input [(ngModel)]='lv2.slDieuChuyen'
                                                     [ngModelOptions]='{standalone: true}' [readonly]="isView" />
                                             </nz-input-group>
                                         </td>
