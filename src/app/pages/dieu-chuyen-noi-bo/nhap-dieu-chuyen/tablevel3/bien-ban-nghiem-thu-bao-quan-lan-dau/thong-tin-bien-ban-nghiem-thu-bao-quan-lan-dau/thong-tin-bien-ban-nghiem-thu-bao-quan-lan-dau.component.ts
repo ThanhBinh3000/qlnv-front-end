@@ -21,6 +21,7 @@ import * as uuidv4 from "uuid";
 import { ThongTinHangDtqgComponent } from "../thong-tin-hang-dtqg/thong-tin-hang-dtqg.component";
 import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
+import { PhieuNhapKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-nhap-kho";
 
 
 @Component({
@@ -41,6 +42,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   listDanhSachQuyetDinh: any[] = [];
   listPhuongThucBaoQuan: any[] = [];
   listHinhThucBaoQuan: any[] = [];
+  listLoaiHinhBaoQuan: any[] = [];
 
   dsKeHoach: any[] = []
 
@@ -58,6 +60,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     modal: NzModalService,
     private cdr: ChangeDetectorRef,
     private danhMucService: DanhMucService,
+    private phieuNhapKhoService: PhieuNhapKhoService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
     private mangLuoiKhoService: MangLuoiKhoService,
@@ -101,6 +104,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       dsPhieuNhapKho: [],
       slThucNhapDc: [],
       hinhThucBaoQuan: [],
+      loaiHinhBaoQuan: [],
       phuongThucBaoQuan: [],
       dinhMucDuocGiao: [],
       dinhMucTT: [],
@@ -210,13 +214,29 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      await this.loadDataBaoQuan(data.cloaiVthh)
       this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
       this.dsHangTH = data.dcnbBBNTBQDtl.filter(item => item.type === "TH")
       this.dsHangPD = data.dcnbBBNTBQDtl.filter(item => item.type === "PD")
       this.fileDinhKemReq = data.fileDinhKems
+      await this.loadDataBaoQuan(data.cloaiVthh)
+      await this.dsPhieuNhapKho(data)
     }
     await this.spinner.hide();
+  }
+
+  async dsPhieuNhapKho(data) {
+    const body = {
+      trangThai: STATUS.DA_DUYET_LDCC,
+      qdDcCucId: data.qdDcCucId,
+      soQdDcCuc: data.soQdDcCuc,
+      maLoKho: data.maLoKho,
+      maNganKho: data.maNganKho,
+      isVatTu: false
+    }
+    let res = await this.phieuNhapKhoService.getDanhSach(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log('phieuNhapKhoService', res)
+    }
   }
 
   async loadDataBaoQuan(cloaiVthh) {
@@ -227,6 +247,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq
+        this.listLoaiHinhBaoQuan = res.data?.loaiHinhBq
       }
     }
   }

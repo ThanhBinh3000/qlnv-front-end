@@ -61,6 +61,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private dmService: DanhMucDungChungService,
     private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
+    private bienBanNghiemThuBaoQuanLanDauService: BienBanNghiemThuBaoQuanLanDauService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
   ) {
@@ -222,10 +223,34 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`, });
         await this.loadChiTietQdinh(data.qdDcId);
         await this.getDataKho(data.maLoKho || data.maNganKho)
+        await this.dsBBNTBQLD(data.qdDcId, data.soQdinhDc, data.maLoKho, data.maNganKho)
       }
 
     }
     await this.spinner.hide();
+  }
+
+  async dsBBNTBQLD(qdDcId, soQdinhDc, maLoKho, maNganKho) {
+    const body = {
+      trangThai: STATUS.DA_DUYET_LDCC,
+      qdDcId,
+      soQdinhDc,
+      maLoKho,
+      maNganKho,
+      isVatTu: false
+    }
+    let bbNTBQ = ''
+    let res = await this.bienBanNghiemThuBaoQuanLanDauService.getDanhSach(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data
+      data.forEach(element => {
+        bbNTBQ = bbNTBQ.concat(`${element.soBban}, `)
+      });
+      this.formData.patchValue({
+        dsBienBan: bbNTBQ
+      })
+      console.log('phieuNhapKhoService', res)
+    }
   }
 
   async getPPKTCL() {
@@ -403,7 +428,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         }
 
         await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)
-
+        await this.dsBBNTBQLD(this.formData.value.qdDcId, this.formData.value.soQdinhDc, data.maLoKhoNhan, data.maNganKhoNhan)
       }
     });
   }

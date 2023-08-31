@@ -15,6 +15,10 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { QuanLyChungThuSoComponent } from './quan-ly-thong-tin/quan-ly-chung-thu-so/quan-ly-chung-thu-so.component';
 import { ChotDieuChinhComponent } from './chot-du-lieu/chot-dieu-chinh/chot-dieu-chinh.component';
 import { KetChuyenComponent } from './chot-du-lieu/ket-chuyen/ket-chuyen.component';
+import { ThemChungThuSoComponent } from './quan-ly-thong-tin/quan-ly-chung-thu-so/them-chung-thu-so/them-chung-thu-so.component';
+import { QuanLyThongTinTienIchComponent } from './quan-ly-thong-tin/quan-ly-thong-tin-tien-ich/quan-ly-thong-tin-tien-ich.component';
+import { ThemThongTinTienIchComponent } from './quan-ly-thong-tin/quan-ly-thong-tin-tien-ich/them-thong-tin-tien-ich/them-thong-tin-tien-ich.component';
+import { CauHinhDangNhapComponent } from './cau-hinh-dang-nhap/cau-hinh-dang-nhap.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +31,11 @@ import { KetChuyenComponent } from './chot-du-lieu/ket-chuyen/ket-chuyen.compone
     ThongKeTruyCapComponent,
     QuanLyChungThuSoComponent,
     ChotDieuChinhComponent,
-    KetChuyenComponent
+    KetChuyenComponent,
+    ThemChungThuSoComponent,
+    QuanLyThongTinTienIchComponent,
+    ThemThongTinTienIchComponent,
+    CauHinhDangNhapComponent
   ],
   imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule],
 
