@@ -41,8 +41,10 @@ export class ItemData {
 	}
 
 	changeModel() {
-		this.ttienNamDtoan = Operator.mul(this.dmucNamDtoan, this.sluongNamDtoan);
-		this.ttienNamN1Td = Operator.mul(this.dmucNamDtoan, this.sluongNamN1Td);
+		if (this.dmucNamDtoan) {
+			this.ttienNamDtoan = Operator.mul(this.dmucNamDtoan, this.sluongNamDtoan);
+			this.ttienNamN1Td = Operator.mul(this.dmucNamDtoan, this.sluongNamN1Td);
+		}
 		this.chenhLech = Operator.sum([this.ttienNamN1Td, -this.ttienNamDtoan]);
 	}
 
