@@ -447,7 +447,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                     );
                     if (mcn == Status.TT_02) {
                         this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
-                    } else if (mcn == Status.TT_07) {
+                    } else if (mcn == Status.TT_06) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
                     }
                 } else {
@@ -594,15 +594,9 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
                 return;
             } else {
-                if (this.congVan) {
-                    lstCtietBcaoTemp.congVan = {
-                        ...await this.quanLyVonPhiService.upFile(file, this.path),
-                        fileName: this.congVan.fileName,
-                    }
-                }
-                else {
-                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-                    return;
+                lstCtietBcaoTemp.congVan = {
+                    ...await this.quanLyVonPhiService.upFile(file, this.path),
+                    fileName: this.congVan.fileName,
                 }
             }
             this.fileDetail = null;
@@ -610,7 +604,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             lstCtietBcaoTemp.congVan = this.congVan;
         }
 
-        if (!lstCtietBcaoTemp?.congVan) {
+        if (!lstCtietBcaoTemp?.congVan || !this.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
