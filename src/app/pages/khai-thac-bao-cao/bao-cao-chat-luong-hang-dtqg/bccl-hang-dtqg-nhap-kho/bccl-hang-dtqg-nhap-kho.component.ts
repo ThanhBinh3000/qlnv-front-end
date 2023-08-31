@@ -127,15 +127,19 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       if (body.loaiBc == '01') {
         body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
         body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
+        // } else {
+        //   if (body.loaiVthh.startsWith("0101")) {
+        //     body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
+        //     body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
+        //   }
+        //   if (body.loaiVthh.startsWith("0102")) {
+        //     body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
+        //     body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
+        //   }
+        // }
       } else {
-        if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
-        }
-        if (body.loaiVthh.startsWith("0102")) {
-          body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
-        }
+        body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
+        body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
       }
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclNhapHangDtqg(body).then(async s => {

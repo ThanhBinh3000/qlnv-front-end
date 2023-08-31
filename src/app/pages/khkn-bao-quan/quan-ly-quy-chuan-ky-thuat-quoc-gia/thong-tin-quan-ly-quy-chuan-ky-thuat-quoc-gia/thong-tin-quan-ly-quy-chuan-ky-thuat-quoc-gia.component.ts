@@ -1,23 +1,23 @@
-import { cloneDeep, includes } from 'lodash';
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
+import {cloneDeep, includes} from 'lodash';
+import {Component, EventEmitter, Input, OnInit, Output, OnChanges, ViewChild, SimpleChanges} from '@angular/core';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { Validators } from '@angular/forms';
-import { KhCnQuyChuanKyThuat } from './../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { STATUS, TRANG_THAI_QUY_CHUAN_TIEU_CHUAN } from 'src/app/constants/status';
-import { QuyChunKyThuatQuocGia } from 'src/app/models/KhoaHocCongNgheBaoQuan';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { Base2Component } from './../../../../components/base2/base2.component';
-import { TimKiemVanBanComponent } from './tim-kiem-van-ban/tim-kiem-van-ban.component';
-import { PREVIEW } from '../../../../constants/fileType';
-import { saveAs } from 'file-saver';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {Validators} from '@angular/forms';
+import {KhCnQuyChuanKyThuat} from './../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {STATUS, TRANG_THAI_QUY_CHUAN_TIEU_CHUAN} from 'src/app/constants/status';
+import {QuyChunKyThuatQuocGia} from 'src/app/models/KhoaHocCongNgheBaoQuan';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {Base2Component} from './../../../../components/base2/base2.component';
+import {TimKiemVanBanComponent} from './tim-kiem-van-ban/tim-kiem-van-ban.component';
+import {PREVIEW} from '../../../../constants/fileType';
+import {saveAs} from 'file-saver';
 import printJS from 'print-js';
 
 
@@ -35,9 +35,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   @Output()
   showListEvent = new EventEmitter<any>();
   hasError: boolean = false;
-  formThongTinChung: any = {};
   tabSelected: number = 0;
-  dataTableKyThuat: any[] = [];
   dataTable: any[] = [];
   dataTableView: any[] = [];
   listCapDt: any[] = [];
@@ -58,9 +56,10 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   listVanBanId: any = [];
   dsBoNganh: any[] = [];
   listAll: any[] = [];
+  listChiTieu: any[] = [];
   listMaSo: any[] = [
-    { maVb: '/' + dayjs().get('year') + '/TT-BTC' },
-    { maVb: '/' + dayjs().get('year') + '/QĐ-BTC' },
+    {maVb: '/' + dayjs().get('year') + '/TT-BTC'},
+    {maVb: '/' + dayjs().get('year') + '/QĐ-BTC'},
   ];
 
   reportTemplate: any = {
@@ -126,14 +125,11 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   async ngOnInit() {
     this.spinner.show();
     try {
-      await Promise.all([
-        this.userInfo = this.userService.getUserLogin(),
-        this.loadDsNam(),
-        this.loadLoaiHangHoa(),
-        this.getListBoNganh(),
-        this.getListCapDt(),
-        this.getListVanBan(),
-      ]);
+      this.loadDsNam();
+      this.loadLoaiHangHoa();
+      this.getListBoNganh();
+      this.getListCapDt();
+      this.getListVanBan();
       await this.initForm();
       await this.getDetail(this.id),
         this.spinner.hide();
@@ -156,7 +152,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   async getDetail(id) {
     if (id > 0) {
-      console.log(this.listVanBan, 'aaaaaaaaaaaaaaaaaaaaaaaa');
       let res = await this.khCnQuyChuanKyThuat.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
@@ -521,6 +516,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
     }
     if (this.listOfTagOptions.length > 0) {
+      await this.getDsChiTieu(this.listOfTagOptions)
       for (let item of this.listOfTagOptions) {
         let body = {
           'str': item,
@@ -548,16 +544,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   onChangeLoaiVthh() {
   }
 
-  onChangeChiTieuCha() {
-    if (this.rowItem.chiTieuCha) {
-      this.rowItem.chiTieuCha = true;
-
-    } else {
-      this.rowItem.chiTieuCha = false;
-
-    }
-  }
-
   clearData() {
     this.rowItem = new QuyChunKyThuatQuocGia();
   }
@@ -566,7 +552,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.tenChiTieu == item.tenChiTieu) {
+        if (it.maChiTieu == item.maChiTieu) {
           rs = true;
           return;
         }
@@ -634,7 +620,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.dataTableView.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
@@ -643,14 +629,20 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   huyEdit(idx: number): void {
     const index = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[idx].tenChiTieu);
     this.dataEdit[idx] = {
-      data: { ...this.dataTable[index] },
+      data: {...this.dataTable[index]},
       edit: false,
     };
   }
 
   luuEdit(index: number): void {
     this.hasError = (false);
-    const idx = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[index].tenChiTieu);
+    const idx = this.dataTable.findIndex(item => item.maChiTieu == this.dataTableView[index].maChiTieu);
+    if (this.formData.value.apDungCloaiVthh == true) {
+      if (this.checkExitsData(this.dataEdit[index].data, this.dataTable)) {
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng tên chỉ tiêu');
+        return;
+      }
+    }
     Object.assign(this.dataTable[idx], this.dataEdit[index].data);
     this.dataTableView = cloneDeep(this.dataTable);
     this.dataEdit[index].edit = false;
@@ -708,8 +700,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.dataTable = itemVanBanSuaDoi.tieuChuanKyThuat;
       this.dataTableView = cloneDeep(this.dataTable);
       this.updateEditCache();
+      await this.getDsChiTieu(this.listOfTagOptions)
     }
-
   }
 
   openDialogDsVanBanQuyChuanKyThuat() {
@@ -742,6 +734,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           this.dataTable = [...this.dataTable, ...dt.tieuChuanKyThuat];
         });
         this.dataTableView = cloneDeep(this.dataTable);
+        this.getDsChiTieu(this.listOfTagOptions)
         this.updateEditCache();
       }
     });
@@ -764,6 +757,25 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.dataTableView = cloneDeep(this.dataTable);
     }
     this.updateEditCache();
+  }
+
+  async getDsChiTieu(loaiVthh : any[]) {
+    let res = await this.danhMucService.danhMucChungGetAll("CHI_TIEU_CL");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listChiTieu = res.data.filter(item => loaiVthh.includes(item.phanLoai));
+    }
+    console.log(this.listChiTieu,11111)
+  }
+
+  changChiTieu(event: any, type?) {
+    if (event) {
+      let list = this.listChiTieu.filter(item => item.ma == event)
+      if (type) {
+        type.tenChiTieu = list && list.length > 0 ? list[0].giaTri : ''
+      } else {
+        this.rowItem.tenChiTieu = list && list.length > 0 ? list[0].giaTri : ''
+      }
+    }
   }
 
   async preview() {
@@ -805,6 +817,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   doPrint() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+    printJS({printable: this.printSrc, type: 'pdf', base64: true});
   }
 }
