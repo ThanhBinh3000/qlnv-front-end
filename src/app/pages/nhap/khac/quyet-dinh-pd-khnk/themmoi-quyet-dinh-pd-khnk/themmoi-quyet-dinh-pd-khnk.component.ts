@@ -219,8 +219,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      console.log(this.isViewOnModal)
-      console.log(this.isQuyetDinh)
       this.userInfo = this.userService.getUserLogin();
       this.maQd = this.userInfo.MA_QD;
       for (let i = -3; i < 23; i++) {
@@ -373,6 +371,11 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
           this.formData.get('id').setValue(res.data.id);
+          if (this.formData.get('phanLoai').value == 'TH') {
+            this.formData.get('idTh').setValue(res.data.idTh);
+          } else {
+            this.formData.get('idDx').setValue(res.data.idDx);
+          }
           this.idInput = res.data.id;
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
