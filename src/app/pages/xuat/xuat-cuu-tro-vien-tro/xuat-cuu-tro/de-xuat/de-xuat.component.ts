@@ -79,7 +79,7 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     })
     this.filterTable = {
       nam: '',
-      tenLoaiHinhNhapXuat: '',
+      tenLoaiNhapXuat: '',
       soDx: '',
       tenDonVi: '',
       ngayDx: '',
