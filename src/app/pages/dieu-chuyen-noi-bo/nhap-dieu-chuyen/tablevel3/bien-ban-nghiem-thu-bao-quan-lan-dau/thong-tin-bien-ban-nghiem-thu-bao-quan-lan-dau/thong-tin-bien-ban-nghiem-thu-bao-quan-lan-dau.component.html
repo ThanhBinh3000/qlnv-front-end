@@ -319,6 +319,18 @@
                 </div>
                 <div nz-col nzSpan="6">
                   <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">Loại hình bảo quản
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzErrorTip]="error">
+                      <nz-select [nzDisabled]="isView" formControlName="loaiHinhBaoQuan" nzAllowClear>
+                        <nz-option *ngFor="let p of listLoaiHinhBaoQuan" [nzValue]="p.ma"
+                          [nzLabel]="p.giaTri"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                  <nz-form-item>
                     <nz-form-label [nzNoColon]="true">Phương thức bảo quản
                     </nz-form-label>
                     <nz-form-control nz-col [nzErrorTip]="error">

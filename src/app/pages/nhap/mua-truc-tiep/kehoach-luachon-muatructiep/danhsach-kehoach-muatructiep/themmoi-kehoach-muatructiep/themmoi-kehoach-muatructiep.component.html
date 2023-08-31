@@ -441,15 +441,16 @@
                         <tr>
                             <th class="text-center">STT</th>
                             <th class="text-center wrap">Chi cục</th>
-                            <th class="text-center wrap">Điểm kho</th>
+<!--                            <th class="text-center wrap">Điểm kho</th>-->
                             <th class="text-center wrap">Điểm kho nhập kho</th>
-                            <th class="text-center wrap">Chỉ tiêu kế hoạch được giao (tấn)</th>
-                            <th class="text-center wrap">Số đã thực hiện (tấn)</th>
-                            <th class="text-center wrap">Số đề xuất mua trực tiếp (tấn)</th>
+                            <th class="text-center wrap">Chỉ tiêu KH được giao (Tấn)</th>
+                            <th class="text-center wrap">Số đã thực hiện (Tấn)</th>
+                            <th class="text-center wrap">SL trình phê duyệt (Tấn)</th>
                             <th class="text-center wrap">Đơn giá đề xuất có VAT (đ/kg)</th>
-                            <th class="text-center wrap">Thành tiền tạm tính theo giá đề xuất (đ)</th>
-                            <th class="text-center wrap">Đơn giá được duyệt có VAT (đ/kg)</th>
-                            <th class="text-center wrap">Thành tiền theo đơn giá được duyệt có VAT (đ)</th>
+                            <th class="text-center wrap">Thành tiền trình phê duyệt (đ)</th>
+                            <th class="text-center wrap">Đơn giá có VAT đã duyệt (đ/kg)</th>
+                            <th class="text-center wrap">Thành tiền theo đơn giá có VAT đã đuyệt (đ)</th>
+                            <th class="text-center wrap">Số còn lại chưa thực hiện (Tấn)</th>
                             <th *ngIf="!isDisable()">Hành động</th>
                         </tr>
                     </thead>
@@ -457,29 +458,31 @@
                         <ng-container *ngFor="let item of dataTable , let i = index">
                             <tr>
                                 <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                                <td colspan="3">{{item.tenDvi}}</td>
-                                <td class="text-red">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td class="text-red">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td class="text-black">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td class="text-black"></td>
-                                <td class="text-black">{{item.tongThanhTien | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td colspan="2">{{item.tenDvi}}</td>
+                                <td class="text-right text-red">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td class="text-right text-red">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td class="text-right text-black">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td class="text-right text-black"></td>
+                                <td class="text-right text-black">{{item.tongThanhTien | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td></td>
-                                <td>{{item.tongThanhTienVat | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td class="text-black" *ngIf="userService.isCuc() "></td>
+                                <td class="text-right">{{item.tongThanhTienVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td class="text-right text-red">{{item.soLuongChiTieu - item.tongSoLuong - item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td></td>
                             </tr>
                             <ng-container>
                                 <tr *ngFor="let children of item.children, let y = index">
                                     <td></td>
                                     <td></td>
-                                    <td>{{children.tenDiemKho}}</td>
-                                    <td>{{children.diaDiemNhap}}</td>
+<!--                                    <td>{{children.tenDiemKho}}</td>-->
+                                    <td class="text-left">{{children.diaDiemNhap}}</td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{children.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
-                                    <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                                    <td>{{children.soLuong * children.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td class="text-right">{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td class="text-right">{{children.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td class="text-right">{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                                    <td class="text-right">{{children.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+                                    <td class="text-right">{{children.soLuong * children.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td></td>
                                     <td>
                                         <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                                             <i class="fa fa-pencil" title="Sửa"></i>
@@ -494,14 +497,14 @@
                     </tbody>
                     <tfoot>
                         <tr *ngIf="dataTable.length > 0">
-                            <th colspan="4" class="text-blue">Tổng</th>
+                            <th colspan="3" class="text-blue">Tổng</th>
                             <th></th>
                             <th></th>
-                            <th class="text-blue">{{calcTongSoLuong()|number: '1.0-1'}}</th>
+                            <th class="text-blue text-right">{{calcTongSoLuong()|number: '1.0-1'}}</th>
                             <th></th>
-                            <th class="text-blue">{{calcTongThanhTienDeXuat()|number: '1.0-1'}}</th>
+                            <th class="text-blue text-right">{{calcTongThanhTienDeXuat()|number: '1.0-1'}}</th>
                             <th></th>
-                            <th class="text-blue">{{calcTongThanhTien()|number: '1.0-1'}}</th>
+                            <th class="text-blue text-right">{{calcTongThanhTien()|number: '1.0-1'}}</th>
                             <th></th>
                         </tr>
                     </tfoot>
