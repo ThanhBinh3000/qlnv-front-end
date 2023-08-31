@@ -20,6 +20,7 @@ import {STATUS} from 'src/app/constants/status';
 import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
 import {PREVIEW} from "src/app/constants/fileType";
 import {saveAs} from 'file-saver';
+import printJS from "print-js";
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -324,6 +325,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }).then(async res => {
       if (res.data) {
         this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
         this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
         this.showDlgPreview = true;
       } else {
@@ -342,6 +344,10 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   closeDlg() {
     this.showDlgPreview = false;
+  }
+
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
 
