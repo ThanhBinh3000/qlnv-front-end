@@ -391,7 +391,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRANG_THAI_TIEP_NHAN);
                     await this.getDetailReport();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

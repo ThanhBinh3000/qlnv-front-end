@@ -62,6 +62,7 @@
                         </th>
                         <th scope="col" nzWidth="60px" class="text-center">STT</th>
                         <th scope="col">Mã báo cáo</th>
+                        <th scope="col">Quý quyết toán</th>
                         <th scope="col">Quyết toán năm</th>
                         <th scope="col">Ngày lập</th>
                         <th scope="col">Ngày trình duyệt</th>
@@ -69,57 +70,6 @@
                         <th scope="col">Ngày lãnh đạo phê duyệt</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col" nzWidth="90px">Hành động</th>
-                    </tr>
-                    <tr class="search-table">
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                        <th scope="col">
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.maBcao"
-                                    (input)="filterInTable('maBcao',tableFilter.maBcao, false)" size="small" />
-                            </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
-                        </th>
-                        <th scope="col">
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.namQtoan"
-                                    (input)="filterInTable('namQtoan',tableFilter.namQtoan, false)" size="small" />
-                            </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
-                        </th>
-                        <th scope="col">
-                            <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayTao"
-                                (ngModelChange)="filterInTable('ngayTao',tableFilter.ngayTao, true)">
-                            </nz-date-picker>
-                        </th>
-                        <th scope="col">
-                            <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayTrinh"
-                                (ngModelChange)="filterInTable('ngayTrinh',tableFilter.ngayTrinh, true)">
-                            </nz-date-picker>
-                        </th>
-                        <th scope="col">
-                            <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayDuyet"
-                                (ngModelChange)="filterInTable('ngayDuyet',tableFilter.ngayDuyet, true)">
-                            </nz-date-picker>
-                        </th>
-                        <th scope="col">
-                            <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayPheDuyet"
-                                (ngModelChange)="filterInTable('ngayPheDuyet',tableFilter.ngayPheDuyet, true)">
-                            </nz-date-picker>
-                        </th>
-                        <th scope="col">
-                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
-                                [(ngModel)]="tableFilter.trangThai"
-                                (ngModelChange)="filterInTable('trangThai',tableFilter.trangThai, false)">
-                                <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                                </nz-option>
-                            </nz-select>
-                        </th>
-                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -133,6 +83,9 @@
                         </td>
                         <td>
                             {{data.maBcao}}
+                        </td>
+                        <td>
+                            {{data.quyQtoan}}
                         </td>
                         <td>
                             {{data.namQtoan}}

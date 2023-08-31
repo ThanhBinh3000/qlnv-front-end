@@ -261,6 +261,7 @@ export class PheDuyetTongHopComponent implements OnInit {
                     namQtoan: res.namQtoan,
                     quyQtoan: res.quyQtoan,
                     isSythen: true,
+                    preTab: 'danhsachTH'
                 }
                 await this.quyetToanVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(
                     (data) => {
@@ -281,9 +282,13 @@ export class PheDuyetTongHopComponent implements OnInit {
     };
 
     viewDetail(data: any) {
+        const request = {
+            preTab: 'danhsachqt'
+        }
         this.isAddNew = true;
         this.idSelected = data?.id;
         this.isStatus = data?.trangThai;
+        this.dataThemMoi = request;
     };
 
     getStatusName(trangThai: string) {

@@ -445,10 +445,10 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                         }
                     );
-                    if (Status.check('reject', mcn)) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                    } else {
+                    if (mcn == Status.TT_02) {
                         this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
+                    } else if (mcn == Status.TT_06) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -594,15 +594,9 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
                 return;
             } else {
-                if (this.congVan) {
-                    lstCtietBcaoTemp.congVan = {
-                        ...await this.quanLyVonPhiService.upFile(file, this.path),
-                        fileName: this.congVan.fileName,
-                    }
-                }
-                else {
-                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-                    return;
+                lstCtietBcaoTemp.congVan = {
+                    ...await this.quanLyVonPhiService.upFile(file, this.path),
+                    fileName: this.congVan.fileName,
                 }
             }
             this.fileDetail = null;
@@ -610,7 +604,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             lstCtietBcaoTemp.congVan = this.congVan;
         }
 
-        if (!lstCtietBcaoTemp?.congVan) {
+        if (!lstCtietBcaoTemp?.congVan || !this.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -763,7 +757,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         this.approveStatus = this.getBtnStatus([Status.TT_04], Roles.QTVP.PHE_DUYET_QUYET_TOAN_REPORT, checkChirld);
         this.copyStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.COPY_REPORT, checkChirld);
         this.printStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.PRINT_REPORT, checkChirld);
-        this.newStatus = Status.check('reject', this.isStatus) && this.userService.isAccessPermisson(Roles.QTVP.ADD_REPORT) && checkChirld;
+        this.newStatus = Status.check('reject', this.isStatus) && this.userService.isAccessPermisson(Roles.QTVP.ADD_REPORT) && checkChirld && this.data.preTab == 'danhsachDieuChinh';
         // const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
 
         // const checkSave = this.userService.isAccessPermisson(Roles.QTVP.EDIT_REPORT);
@@ -1711,6 +1705,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         this.idInput = id
         await this.getDetailReport();
         this.sortByIndex();
+        this.data.preTab = "addQtInfo"
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -1744,11 +1739,14 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
+        const date = new Date()
+        const dateExcel = this.datePipe.transform(date, Utils.FORMAT_DATE_STR)
+
         const header = [
             { t: 0, b: 5, l: 0, r: 8, val: null },
 
-            { t: 0, b: 0, l: 0, r: 1, val: 'Báo cáo quyết toán vốn phí hàng DTQG' },
-            { t: 2, b: 1, l: 0, r: 8, val: this.congVan },
+            { t: 0, b: 0, l: 0, r: 1, val: `Báo cáo điều chỉnh quyết toán vốn phí hàng DTQG quý ${this.quyQtoan}, năm ${this.namQtoan}` },
+            { t: 1, b: 1, l: 0, r: 1, val: `Kèm theo công văn số ${this.congVan.fileName}/TCDT, ngày ${dateExcel} của ${this.userInfo.TEN_DVI} ` },
 
             { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 4, l: 1, r: 1, val: 'Tên hàng dự trữ quốc gia' },
