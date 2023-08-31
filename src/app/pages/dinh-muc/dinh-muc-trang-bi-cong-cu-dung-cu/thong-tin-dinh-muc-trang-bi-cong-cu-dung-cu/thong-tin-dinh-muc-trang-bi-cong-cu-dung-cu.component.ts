@@ -1,23 +1,23 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {DonviService} from "../../../../services/donvi.service";
-import {StorageService} from "../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import * as uuid from "uuid";
-import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
-import {DanhMucDinhMucService} from "../../../../services/danh-muc-dinh-muc.service";
-import {DanhMucService} from "../../../../services/danhmuc.service";
-import {FormGroup, Validators} from "@angular/forms";
-import {MESSAGE} from "../../../../constants/message";
-import {DanhMucCongCuDungCuService} from "../../../../services/danh-muc-cong-cu-dung-cu.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from '../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { DonviService } from '../../../../services/donvi.service';
+import { StorageService } from '../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import * as uuid from 'uuid';
+import { QlDinhMucPhiService } from '../../../../services/qlnv-kho/QlDinhMucPhi.service';
+import { DanhMucDinhMucService } from '../../../../services/danh-muc-dinh-muc.service';
+import { DanhMucService } from '../../../../services/danhmuc.service';
+import { FormGroup, Validators } from '@angular/forms';
+import { MESSAGE } from '../../../../constants/message';
+import { DanhMucCongCuDungCuService } from '../../../../services/danh-muc-cong-cu-dung-cu.service';
 
 @Component({
   selector: 'app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu',
   templateUrl: './thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu.component.html',
-  styleUrls: ['./thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu.component.scss']
+  styleUrls: ['./thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu.component.scss'],
 })
 export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component implements OnInit {
   @Input('isViewDetail') isViewDetail: boolean;
@@ -26,7 +26,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
   formDataDetail: FormGroup;
   listCcdc: any = [];
   listDonVi: any = [];
-  listHangHoaLT: any = [{ma: '01', ten: 'Thóc tẻ'}, {ma: '02', ten: 'Gạo tẻ'}];
+  listHangHoaLT: any = [{ ma: '01', ten: 'Thóc tẻ' }, { ma: '02', ten: 'Gạo tẻ' }];
   listHangHoaVT: any = [];
   listHangHoa: any = [];
   listHtBaoQuan: any = [];
@@ -46,8 +46,8 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     private danhMucDinhMucCcdcService: DanhMucCongCuDungCuService,
     private danhMucService: DanhMucService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
-    super.ngOnInit()
+    super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService);
+    super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],
       soQd: ['', [Validators.required]],
@@ -60,7 +60,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
       trichYeu: ['', [Validators.required]],
       listQlDinhMucPhis: [null],
       listQlDinhMucTbCcdcDtl: [null],
-      fileDinhKems: [null]
+      fileDinhKems: [null],
     });
     this.filterTable = {};
   }
@@ -131,7 +131,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
       paggingReq: {
         limit: 10000,
         page: 0,
-      }
+      },
     };
     let res = await this.danhMucDinhMucCcdcService.searchDsChuaSuDung(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -155,7 +155,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
 
   async getListHinhThucBq() {
     this.listHtBaoQuan = [];
-    let res = await this.danhMucService.danhMucChungGetAll('HINH_THUC_BAO_QUAN');
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
     if (res.msg == MESSAGE.SUCCESS) {
       this.listHtBaoQuan = res.data;
     }
@@ -172,10 +172,10 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
 
   save() {
     if (this.dataTableDetail.length <= 0) {
-      this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết định mức phí công cụ dụng cụ.");
+      this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết định mức phí công cụ dụng cụ.');
       return;
     }
-    this.helperService.markFormGroupTouched(this.formData)
+    this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
     }
@@ -188,7 +188,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
       item.dmBaoQuan = item.dmBaoQuan ? item.dmBaoQuan.toString() : null;
     });
     this.formData.value.listQlDinhMucPhiCcdc = this.dataTableDetail;
-    this.createUpdate(this.formData.value)
+    this.createUpdate(this.formData.value);
     this.goBack();
   }
 
@@ -203,13 +203,18 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
 
 
   handleOk(): void {
-    this.helperService.markFormGroupTouched(this.formDataDetail)
+    this.helperService.markFormGroupTouched(this.formDataDetail);
     if (this.formDataDetail.invalid) {
       return;
     }
     this.formDataDetail.value.idVirtual = this.formDataDetail.value.idVirtual ? this.formDataDetail.value.idVirtual : uuid.v4();
     let index = this.dataTableDetail.findIndex(s => s.idVirtual === this.formDataDetail.value.idVirtual);
     let table = this.dataTableDetail;
+    if (this.formDataDetail.value.apDungTai && this.formDataDetail.value.apDungTai.length > 0) {
+      this.formDataDetail.value.apDungTaiStr = this.getStrTenDonVi(this.formDataDetail.value.apDungTai.join(','));
+    } else {
+      this.formDataDetail.value.apDungTaiStr = 'Tất cả';
+    }
     if (index != -1) {
       table.splice(index, 1, this.formDataDetail.value);
     } else {
@@ -228,10 +233,9 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
         tenCcdc: item.tenCcdc,
         tenNhomCcdc: item.tenNhomCcdc,
         donViTinh: item.donViTinh,
-        ycKyThuat: item.yeuCauKt
-      })
+        ycKyThuat: item.yeuCauKt,
+      });
     }
-    // this.validAddDetailDm();
   }
 
   async loadDsVatTu() {
@@ -267,7 +271,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
           this.dataTableDetail.forEach(s => s.idVirtual = uuid.v4());
           this.dataTableDetail.forEach(item => {
             item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
-          })
+          });
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -287,16 +291,16 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     if (data.id) {
       dataDetailItem = this.dataTableDetail.find(s => s.id == data.id);
     } else if (data.idVirtual) {
-      dataDetailItem = this.dataTableDetail.find(s => s.idVirtual == data.idVirtual)
+      dataDetailItem = this.dataTableDetail.find(s => s.idVirtual == data.idVirtual);
     }
-    if (dataDetailItem.loaiHhBq && dataDetailItem.loaiHhBq.includes(",")) {
-      dataDetailItem.loaiHhBq = dataDetailItem.loaiHhBq.split(",");
+    if (dataDetailItem.loaiHhBq && dataDetailItem.loaiHhBq.includes(',')) {
+      dataDetailItem.loaiHhBq = dataDetailItem.loaiHhBq.split(',');
     }
-    if (dataDetailItem.apDungTai && dataDetailItem.apDungTai.includes(",")) {
-      dataDetailItem.apDungTai = dataDetailItem.apDungTai.split(",");
+    if (dataDetailItem.apDungTai && dataDetailItem.apDungTai.includes(',')) {
+      dataDetailItem.apDungTai = dataDetailItem.apDungTai.split(',');
     }
-    if (dataDetailItem.dmBaoQuan && dataDetailItem.dmBaoQuan.includes(",")) {
-      dataDetailItem.dmBaoQuan = dataDetailItem.dmBaoQuan.split(",");
+    if (dataDetailItem.dmBaoQuan && dataDetailItem.dmBaoQuan.includes(',')) {
+      dataDetailItem.dmBaoQuan = dataDetailItem.dmBaoQuan.split(',');
     }
     if (dataDetailItem) {
       this.formDataDetail.patchValue(dataDetailItem);
@@ -305,20 +309,20 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
         dmVpCuc: dataDetailItem.dmVpCuc,
       });
     } else {
-      this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu");
+      this.notification.error(MESSAGE.ERROR, 'Không tìm thấy dữ liệu');
     }
     await this.changeCanCu();
     this.isVisible = true;
   }
 
   getStrTenDonVi(strMaDonVi) {
-    let str = "";
+    let str = '';
     if (strMaDonVi) {
-      let arrMaDvi = strMaDonVi.split(",");
+      let arrMaDvi = strMaDonVi.split(',');
       arrMaDvi.forEach((item) => {
         this.listDonVi.forEach(donvi => {
           if (item == donvi.maDvi) {
-            str = str + donvi.tenDvi + ",";
+            str = str + donvi.tenDvi + ',';
           }
         });
       });
