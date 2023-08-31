@@ -51,7 +51,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   isTongHop: boolean
   dataChiTieu: any;
   idSoQdCc: any;
-
+  previewName: string = "mtt_qd_pd_kh";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

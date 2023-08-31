@@ -195,6 +195,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
               soTienTinhPhat: [],
               tgianBdamThienHd: [],
               slGiaoCham: [],
+              namKhoach: [],
             }
         );
         this.formData.controls['donGiaVat'].valueChanges.subscribe(value => {
@@ -495,7 +496,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
         loaiVthh: data.hhQdKhlcntHdr?.loaiVthh,
         tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
         soNgayThien: data.hhQdKhlcntHdr?.tgianThien,
-        soNgayThienHd: data.hhQdKhlcntHdr?.dxKhlcntHdr?.tgianThienHd
+        soNgayThienHd: data.hhQdKhlcntHdr?.dxKhlcntHdr?.tgianThienHd,
+        namKhoach: data.namKhoach,
       })
       this.onChangeHluc();
       if (this.id > 0 && idGthau > 0) {
@@ -522,6 +524,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
             tgianNkho: dataDtl.dxuatKhLcntHdr?.tgianNhang,
           soNgayThien: dataDtl.dxuatKhLcntHdr?.tgianThien,
           soNgayThienHd: dataDtl.dxuatKhLcntHdr?.tgianThienHd,
+          namKhoach: data.namKhoach,
         })
       this.onChangeHluc();
     }
