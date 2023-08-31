@@ -1,27 +1,24 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
-import { QLChungTuService } from 'src/app/services/quantri-nguoidung/quan-ly-thong-tin/quan-ly-chung-tu';
 import { StorageService } from 'src/app/services/storage.service';
 import { cloneDeep } from 'lodash';
-import { ThemChungThuSoComponent } from './them-chung-thu-so/them-chung-thu-so.component';
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import moment from 'moment';
+import { ThemThongTinTienIchComponent } from './them-thong-tin-tien-ich/them-thong-tin-tien-ich.component';
+import { QLThongTinTienIchService } from 'src/app/services/quantri-nguoidung/quan-ly-thong-tin/quan-ly-thong-tin-tien-ich';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 
 @Component({
-  selector: 'app-quan-ly-chung-thu-so',
-  templateUrl: './quan-ly-chung-thu-so.component.html',
-  styleUrls: ['./quan-ly-chung-thu-so.component.scss']
+  selector: 'app-quan-ly-thong-tin-tien-ich',
+  templateUrl: './quan-ly-thong-tin-tien-ich.component.html',
+  styleUrls: ['./quan-ly-thong-tin-tien-ich.component.scss']
 })
-export class QuanLyChungThuSoComponent extends Base2Component implements OnInit {
+export class QuanLyThongTinTienIchComponent extends Base2Component implements OnInit {
 
   selectedId: number = 0;
   isView = false;
@@ -36,24 +33,27 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qlChungTuService: QLChungTuService,
+    private qlThongTinTienIchService: QLThongTinTienIchService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qlChungTuService);
+    super(httpClient, storageService, notification, spinner, modal, qlThongTinTienIchService);
     this.formData = this.fb.group({
-      certificateNumber: null,
+      title: null,
+      classify: null,
       status: null,
+      dateCreated: null,
       startDate: null,
       endDate: null,
     })
     this.filterTable = {
-      certificateNumber: '',
-      startDate: '',
-      endDate: '',
-      description: '',
-      note: '',
+      title: '',
+      content: '',
+      classify: '',
+      dateCreated: '',
+      link: '',
       status: '',
     };
   }
+
 
   async ngOnInit() {
 
@@ -110,7 +110,7 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
         limit: this.pageSize,
         page: this.page - 1
       }
-      let res = await this.qlChungTuService.danhSach(body);
+      let res = await this.qlThongTinTienIchService.danhSach(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
@@ -157,7 +157,7 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.qlChungTuService.deleteMuti(dataDelete);
+            let res = await this.qlThongTinTienIchService.deleteMuti(dataDelete);
             if (res.statusCode == 0) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
               await this.search();
@@ -184,10 +184,10 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
       try {
 
         let body = this.formData.value;
-        this.qlChungTuService
+        this.qlThongTinTienIchService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-chung-thu-so.xlsx'),
+            saveAs(blob, 'danh-sach-thong-tin-va-phan-mem-tien-ich.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -223,14 +223,13 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
     await this.spinner.show();
 
     await this.spinner.hide();
-    const curent = this.dataTable
-    console.log('curent', curent)
+
     const modalQD = this.modal.create({
-      nzTitle: row ? 'CẬP NHẬT CHỨNG THƯ SỐ' : 'THÊM MỚI CHỨNG THƯ SỐ',
-      nzContent: ThemChungThuSoComponent,
+      nzTitle: !row ? 'THÊM MỚI THÔNG TIN VÀ PHẦN MỀM TIỆN ÍCH' : 'CẬP NHẬT THÔNG TIN VÀ PHẦN MỀM TIỆN ÍCH',
+      nzContent: ThemThongTinTienIchComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '800px',
+      nzWidth: '1000px',
       nzFooter: null,
       nzComponentParams: {
         data: row
@@ -238,14 +237,13 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (!data) return
-      if (data.startDate) data.startDate = dayjs(data.startDate).format('DD/MM/YYYY')
-      if (data.endDate) data.endDate = dayjs(data.endDate).format('DD/MM/YYYY')
-      let res = data.isUpdate ? await this.qlChungTuService.capNhat({ ...data, id: row.id }) : await this.qlChungTuService.themMoi(data);
+      if (data.dateCreated) data.dateCreated = dayjs(data.dateCreated).format('DD/MM/YYYY')
+
+      let res = data.isUpdate ? await this.qlThongTinTienIchService.capNhat({ ...data, id: row.id }) : await this.qlThongTinTienIchService.themMoi(data)
       if (res.statusCode == 0) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
         this.timKiem()
       }
-
     });
   }
 
@@ -264,7 +262,7 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.qlChungTuService.delete(item.id).then(async (res) => {
+          this.qlThongTinTienIchService.delete(item.id).then(async (res) => {
             if (res.statusCode == 0) this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             console.log(res)
             await this.timKiem();
@@ -279,6 +277,18 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
     });
   }
 
+  downloadFile(item: FileDinhKem) {
+    this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+      saveAs(blob, item.fileName);
+    });
+  }
+
+  redirectDetail(id, b: boolean) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = b;
+  }
+
 
   quayLai() {
     this.showListEvent.emit();
@@ -289,3 +299,4 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
 
 
 }
+
