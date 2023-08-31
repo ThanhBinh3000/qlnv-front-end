@@ -207,7 +207,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
 
 
   async loadDetail(id: number) {
-    if (id) {
+    if (id>0) {
       await this.tongHopPhuongAnCuuTroService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -334,7 +334,6 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   }
 
   async selectRow(item: any) {
-    console.log(item, 'itemitemitemitemitem')
     if (!item.selected) {
       this.phuongAnHdrView.forEach(i => i.selected = false);
       item.selected = true;
@@ -433,9 +432,9 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
       .map((value, key) => {
         let row = value.find(s => s.soDx === key);
         let rs = chain(value)
-          .groupBy("noiDung")
+          .groupBy("noiDungDx")
           .map((v, k) => {
-            let row = v.find(s => s.noiDung === k);
+            let row = v.find(s => s.noiDungDx === k);
             let rs = chain(v)
               .groupBy("loaiVthh")
               .map((v1, k1) => {
@@ -450,7 +449,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
               }).value();
             return {
               idVirtual: uuidv4(),
-              noiDung: k,
+              noiDungDx: k,
               soLuong: 0,
               soLuongDx: 0,
               childData: rs

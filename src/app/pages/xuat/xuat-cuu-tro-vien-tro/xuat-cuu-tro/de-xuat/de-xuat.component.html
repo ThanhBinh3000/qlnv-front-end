@@ -122,8 +122,8 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiHinhNhapXuat"
-                     (input)="filterInTable('tenLoaiHinhNhapXuat',filterTable.tenLoaiHinhNhapXuat)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiNhapXuat"
+                     (input)="filterInTable('tenLoaiNhapXuat',filterTable.tenLoaiNhapXuat)" size="small"/>
             </nz-input-group>
 
           </th>
@@ -226,14 +226,14 @@
           <td>{{ data.loaiNhapXuat }}</td>
           <td>{{ data.soDx}}</td>
           <td>{{ data.tenDviDx }}</td>
-          <td>{{ data.ngayDx | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.ngayPduyet| date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayDx | date: globals.dateFormat }}</td>
+          <td>{{ data.ngayPduyet| date: globals.dateFormat }}</td>
           <td>{{ data.tenLoaiVthh }}</td>
-          <td>{{ data.tongSoLuong|number: '1.0-1' }}</td>
+          <td>{{ data.tongSoLuong| number: globals.numberFormat:globals.locale}}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiTh }}</td>
-          <td>{{ data.maTongHop }}</td>
+          <td>{{ data.idThop }}</td>
           <td>{{ data.tenTrangThaiQd }}</td>
           <td>{{ data.soQdPd }}</td>
           <td class="text-left" *ngIf="this.userService.isTongCuc()">
