@@ -25,11 +25,9 @@ import {MESSAGE} from 'src/app/constants/message';
   styleUrls: ['./dialog-them-moi-bang-ke-ban-le.component.scss']
 })
 export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements OnInit {
-  idInput: any;
-  loaiVthh: String;
-  maTrinh: string = '';
-  @Input()
-  id: number;
+  @Input() loaiVthh: String;
+  @Input() idInput: number;
+  @Input() isView: boolean;
   loadBangKeBanLe: any[] = [];
   listNhiemVuXh: any[] = [];
 
@@ -46,66 +44,78 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
     super(httpClient, storageService, notification, spinner, modal, bangKeBttService);
     this.formData = this.fb.group(
       {
-        id: [null],
+        id: [],
         namKh: [dayjs().get('year')],
+        maDvi: [''],
         soBangKe: [''],
-        maDvi: ['', [Validators.required]],
-        tenDvi: ['', [Validators.required]],
         idQdNv: [],
-        soQdNv: ['', [Validators.required]],
+        soQdNv: [''],
         soLuongBanTrucTiep: [],
         soLuongConLai: [],
-        nguoiPhuTrach: ['', [Validators.required]],
-        diaChi: ['', [Validators.required]],
-        ngayBanHang: ['', [Validators.required]],
+        nguoiPhuTrach: [''],
+        diaChi: [''],
+        ngayBanHang: [''],
         loaiVthh: [''],
-        tenLoaiVthh: [''],
         cloaiVthh: [''],
-        tenCloaiVthh: [''],
-        soLuongBanLe: [, [Validators.required]],
+        soLuongBanLe: [],
         donGia: [],
         thanhTien: [],
-        tenNguoiMua: ['', [Validators.required]],
-        diaChiNguoiMua: ['', [Validators.required]],
-        cmt: ['', [Validators.required]],
+        tenNguoiMua: [''],
+        diaChiNguoiMua: [''],
+        cmt: [''],
         ghiChu: [''],
+        tenDvi: [''],
+        tenLoaiVthh: [''],
+        tenCloaiVthh: [''],
       });
   }
 
   async ngOnInit() {
+    await this.spinner.show();
     try {
-      await this.spinner.show();
       if (this.idInput) {
         await this.loadChiTiet(this.idInput);
       } else {
-        this.initForm();
-        await this.loadBangKeBanHang()
+        await this.initForm();
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
+      console.log('error: ', e);
       await this.spinner.hide();
-    } finally {
-      await this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    await this.spinner.hide();
   }
 
   async initForm() {
     let id = await this.userService.getId('XH_BANG_KE_BTT_SEQ')
     this.formData.patchValue({
       tenDvi: this.userInfo.TEN_DVI,
-      maDvi: this.userInfo.MA_DVI,
-      soBangKe: `${id}/${dayjs().get('year')}/BK-CCDT KVVP`,
+      soBangKe: `${id}/${this.formData.value.namKh}/BK-CCDT KVVP`,
     });
+    await this.loadBangKeBanHang()
+  }
+
+  async loadBangKeBanHang() {
+    let body = {
+      namKh: this.formData.value.namKh,
+      loaiVthh: this.loaiVthh,
+    }
+    let res = await this.bangKeBttService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data
+      if (data && data.content && data.content.length > 0) {
+        this.loadBangKeBanLe = data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async loadChiTiet(id) {
-    let data = await this.detail(id);
-    this.formData.patchValue({
-      soBangKe: data.soBangKe,
-    })
+    await this.detail(id);
   }
 
-  async openDialogNvXh() {
+  async openDialogNhiemVu() {
     await this.spinner.show();
     let body = {
       loaiVthh: this.loaiVthh,
@@ -142,27 +152,10 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.onChangeQdBanLe(data.id);
+        await this.onChangeQdBanLe(data.id);
       }
     });
     await this.spinner.hide();
-  }
-
-  async loadBangKeBanHang() {
-    let body = {
-      maDvi: this.userInfo.MA_DVI,
-      namKh: this.formData.value.namKh,
-      loaiVthh: this.loaiVthh,
-    }
-    let res = await this.bangKeBttService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data
-      if (data && data.content && data.content.length > 0) {
-        this.loadBangKeBanLe = data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
   }
 
   async onChangeQdBanLe(id) {
@@ -182,9 +175,11 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
               tenCloaiVthh: data.tenCloaiVthh,
             });
             data.children.forEach((item) => {
-              this.formData.patchValue({
-                donGia: item.children[0].donGiaDuocDuyet
-              });
+              item.children.find((child) => {
+                this.formData.patchValue({
+                  donGia: child?.donGiaDuocDuyet
+                });
+              })
             })
           }
         }).catch((e) => {
@@ -196,28 +191,38 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
     await this.spinner.hide();
   }
 
+  async changeSoLuong(event) {
+    this.formData.patchValue({
+      soLuongConLai: this.formData.value.soLuongBanTrucTiep - event,
+      thanhTien: this.formData.value.donGia * event
+    });
+  }
+
   async save() {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.spinner.hide();
-      return;
-    }
+    await this.helperService.ignoreRequiredForm(this.formData);
+    this.setValidator();
     let body = this.formData.value;
-    let data = await this.createUpdate(body);
-    if (data) {
-      this.onCancel()
-    }
+    await this.createUpdate(body);
+    await this.helperService.restoreRequiredForm(this.formData);
   }
 
   onCancel() {
     this._modalRef.destroy();
   }
 
-  isDisable(): boolean {
-    if (this.idInput > 0) {
-      return true
-    } else {
-      return false;
-    }
+  setValidator() {
+    this.formData.controls["soBangKe"].setValidators([Validators.required]);
+    this.formData.controls["tenDvi"].setValidators([Validators.required]);
+    this.formData.controls["soQdNv"].setValidators([Validators.required]);
+    this.formData.controls["namKh"].setValidators([Validators.required]);
+    this.formData.controls["nguoiPhuTrach"].setValidators([Validators.required]);
+    this.formData.controls["diaChi"].setValidators([Validators.required]);
+    this.formData.controls["ngayBanHang"].setValidators([Validators.required]);
+    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["soLuongBanLe"].setValidators([Validators.required]);
+    this.formData.controls["tenNguoiMua"].setValidators([Validators.required]);
+    this.formData.controls["diaChiNguoiMua"].setValidators([Validators.required]);
+    this.formData.controls["cmt"].setValidators([Validators.required]);
   }
 }

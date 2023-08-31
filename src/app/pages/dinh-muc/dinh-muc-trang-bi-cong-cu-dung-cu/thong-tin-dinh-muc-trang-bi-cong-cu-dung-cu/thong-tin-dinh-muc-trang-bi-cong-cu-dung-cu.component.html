@@ -165,7 +165,7 @@
   </nz-card>
 </div>
 <nz-modal [nzWidth]="'75%'" [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()"
-          (nzOnOk)="handleOk()" nzTitle="NHẬP ĐỊNH MỨC TRANG BỊ CÔNG CỤ, DỤNG CỤ">
+          (nzOnOk)="handleOk()" nzTitle="NHẬP ĐỊNH MỨC TRANG BỊ CÔNG CỤ, DỤNG CỤ 111">
   <ng-container *nzModalContent>
     <form nz-form nzLayout="vertical" [formGroup]="formDataDetail">
 
@@ -267,7 +267,7 @@
           <div nz-col nzSpan="4" *ngIf="formDataDetail.value.ccRaDm  && formDataDetail.value.ccRaDm == 'DK'">
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
-                <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Hình thức bảo quản
+                <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại hình bảo quản
                 </nz-form-label>
                 <nz-select
                   nzAllowClear
