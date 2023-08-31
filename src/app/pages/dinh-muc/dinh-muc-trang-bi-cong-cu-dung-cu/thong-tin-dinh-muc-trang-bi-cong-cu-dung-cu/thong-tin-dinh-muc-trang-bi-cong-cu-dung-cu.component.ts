@@ -304,9 +304,13 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     }
     if (dataDetailItem) {
       this.formDataDetail.patchValue(dataDetailItem);
+      let loaiHhBq = typeof dataDetailItem.loaiHhBq == 'string' ? dataDetailItem.loaiHhBq.split(',') : dataDetailItem.loaiHhBq;
+      let dmBaoQuan = typeof dataDetailItem.dmBaoQuan == 'string' ? dataDetailItem.dmBaoQuan.split(',') : dataDetailItem.dmBaoQuan;
       this.formDataDetail.patchValue({
         dmVpChiCuc: dataDetailItem.dmVpChiCuc,
         dmVpCuc: dataDetailItem.dmVpCuc,
+        loaiHhBq: loaiHhBq,
+        dmBaoQuan: dmBaoQuan,
       });
     } else {
       this.notification.error(MESSAGE.ERROR, 'Không tìm thấy dữ liệu');
