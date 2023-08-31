@@ -67,10 +67,10 @@
         <div class="group-button">
             <h3 class="text-uppercase">Danh sách quyết định điều chuyển - Sáp nhận đơn vị quản lý kho</h3>
             <div class="buttons" *ngIf="userService.isTongCuc">
-                <button type="button" class="btn btn-do" (click)="deleteMulti()">
+                <!-- <button type="button" class="btn btn-do" (click)="deleteMulti()">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
-                </button>
+                </button> -->
                 <button type="button" class="btn btn-sub" (click)="exportData()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
@@ -86,20 +86,19 @@
                 [nzShowPagination]="false">
                 <tbody>
                     <tr class="header-row">
-                        <th width="40px">
+                        <!-- <th width="40px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                 [nzIndeterminate]="indeterminate"></label>
-                        </th>
-                        <th class="text-left">STT</th>
-                        <th class="text-left">Số quyết định</th>
+                        </th> -->
+                        <th class="text-left" width="40px">STT</th>
+                        <th class="text-left" width="15%">Số quyết định</th>
                         <th class="text-left">Trích yếu</th>
-                        <th class="text-left">Ngày ký QĐ</th>
-                        <th class="text-left">Trạng thái sáp nhập</th>
-                        <th class="text-left">Trạng thái phê duyệt</th>
-                        <th class="text-left">Hành động</th>
+                        <th class="text-left" width="15%">Ngày ký QĐ</th>
+                        <th class="text-left" width="15%">Trạng thái sáp nhập</th>
+                        <th class="text-left" width="10%">Hành động</th>
                     </tr>
                     <tr class="header-row search">
-                        <th></th>
+                        <!-- <th></th> -->
                         <th></th>
                         <th>
                             <nz-input-group>
@@ -128,38 +127,27 @@
                                 </nz-select>
                             </nz-input-group>
                         </th>
-                        <th>
-                            <nz-input-group>
-                                <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
-                                    (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
-                                    <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma"
-                                        [nzLabel]="p.giaTri"></nz-option>
-                                </nz-select>
-                            </nz-input-group>
-                        </th>
                         <th></th>
                     </tr>
                     <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-                        <td>
+                        <!-- <td>
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                                 [nzDisabled]="data.trangThai != STATUS.CHO_DUYET_LDC"></label>
-                        </td>
+                        </td> -->
                         <td>{{(page - 1) * pageSize + idx +
                             1}}</td>
                         <td> {{ data.soQuyetDinh }} </td>
                         <td>{{ data.trichYeu }}</td>
                         <td>{{ data.ngayKy | date:globals.dateFormat }}</td>
                         <td>{{ ObTrangThaiSn[data.trangThaiSn] }}</td>
-                        <td>{{ ObTrangThai[data.trangThai]}}</td>
                         <td class="text-left">
-                            <a *ngIf="data.trangThai == STATUS.DA_DUYET_LDC" (click)="redirectDetail(data.id, true)">
+                            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                                (click)="redirectDetail(data.id, true)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.CHO_DUYET_LDC" (click)="redirectDetail(data.id, false)">
+                            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                                (click)="redirectDetail(data.id, false)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
-                            </a>
-                            <a *ngIf="data.trangThai ==STATUS.TU_CHOI_LDC" (click)="delete(data)">
-                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
                     </tr>
@@ -186,6 +174,6 @@
     </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-quyet-dinh-dieu-chuyen [isView]="isView" (showListEvent)="showList()" [idInput]="selectedId">
-    </app-thong-tin-quyet-dinh-dieu-chuyen>
+    <app-thong-tin-dieu-chuyen-kho-sap-nhap [isView]="isView" (showListEvent)="showList()" [idInput]="selectedId">
+    </app-thong-tin-dieu-chuyen-kho-sap-nhap>
 </div>

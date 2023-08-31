@@ -292,29 +292,43 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
     this.dsCucDen = cloneDeep(this.dsCuc);
   }
 
-  async changeCucDi(event) {
+  async changeCucDi(event, node) {
     await this.loadDsChiCuc();
     this.dsChiCucDi = this.dsChiCuc.filter(item => item.maDvi.startsWith(event));
+    if (node) {
+      node.maChiCucDi = null;
+      node.maDiemKhoDi = null;
+    }
   }
 
-  async changeCucDen(event) {
+  async changeCucDen(event, node) {
     await this.loadDsChiCuc();
-    this.dsChiCucDen = this.dsChiCuc.filter(item => item.maDvi.startsWith(event))
+    this.dsChiCucDen = this.dsChiCuc.filter(item => item.maDvi.startsWith(event));
+    if (node) {
+      node.maChiCucDen = null;
+      node.diemKhoDen = null;
+    }
 
   }
   async loadDsChiCuc() {
     const dsTong = await this.donviService.layTatCaDonViByLevel(3);
     this.dsChiCuc = dsTong && Array.isArray(dsTong.data) ? dsTong.data.filter(item => item.type != "PB") : [];
   }
-  async changeChiCucDi(event) {
+  async changeChiCucDi(event, node) {
     if (this.formData.value.loai !== 'SN_DIEM_KHO') return;
     await this.loadDsDiemKho()
     this.dsKhoDi = this.dsKho.filter(item => item.maDvi.startsWith(event));
+    if (node) {
+      node.diemKhoDi = null;
+    }
   };
-  async changeChiCucDen(event) {
+  async changeChiCucDen(event, node) {
     if (this.formData.value.loai !== 'SN_DIEM_KHO') return;
     await this.loadDsDiemKho();
     this.dsKhoDen = this.dsKho.filter(item => item.maDvi.startsWith(event));
+    if (node) {
+      node.diemKhoDen = null;
+    }
   };
   async loadDsDiemKho() {
     const dsTong = await this.donviService.layTatCaDonViByLevel(4);
@@ -418,16 +432,16 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
     this.dataEdit[index].edit = true;
     if (this.dataEdit[index]?.edit) {
       if (this.dataEdit[index].data.maCucDi) {
-        this.changeCucDi(this.dataEdit[index].data.maCucDi)
+        this.changeCucDi(this.dataEdit[index].data.maCucDi, this.dataEdit[index])
       }
       if (this.dataEdit[index].data.maCucDen) {
-        this.changeCucDen(this.dataEdit[index].data.maCucDen)
+        this.changeCucDen(this.dataEdit[index].data.maCucDen, this.dataEdit[index])
       }
       if (this.dataEdit[index].data.maChiCucDi) {
-        this.changeChiCucDi(this.dataEdit[index].data.maChiCucDi)
+        this.changeChiCucDi(this.dataEdit[index].data.maChiCucDi, this.dataEdit[index])
       }
       if (this.dataEdit[index].data.maChiCucDen) {
-        this.changeChiCucDen(this.dataEdit[index].data.maChiCucDen)
+        this.changeChiCucDen(this.dataEdit[index].data.maChiCucDen, this.dataEdit[index])
       }
     }
     this.disabledThemMoi();

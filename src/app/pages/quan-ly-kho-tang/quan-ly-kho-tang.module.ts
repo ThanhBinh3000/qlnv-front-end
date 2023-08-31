@@ -300,6 +300,7 @@ import {
 import { DanhMucDuyetKhoComponent } from "./sap-nhap-kho/danh-muc-duyet-kho/danh-muc-duyet-kho.component";
 import { DieuChuyenKhoSapNhapComponent } from './sap-nhap-kho/dieu-chuyen-kho/dieu-chuyen-kho-sap-nhap.component';
 import { ThongTinDanhMucDuyetKhoComponent } from './sap-nhap-kho/danh-muc-duyet-kho/thong-tin-danh-muc-duyet-kho/thong-tin-danh-muc-duyet-kho.component';
+import { ThongTinDieuChuyenKhoSapNhapComponent } from './sap-nhap-kho/dieu-chuyen-kho/thong-tin-dieu-chuyen-kho-sap-nhap/thong-tin-dieu-chuyen-kho-sap-nhap.component';
 @NgModule({
   declarations: [
     QuanLyKhoTangComponent,
@@ -416,7 +417,8 @@ import { ThongTinDanhMucDuyetKhoComponent } from './sap-nhap-kho/danh-muc-duyet-
     ThongTinQuyetDinhDieuChuyenComponent,
     DanhMucDuyetKhoComponent,
     ThongTinDanhMucDuyetKhoComponent,
-    DieuChuyenKhoSapNhapComponent
+    DieuChuyenKhoSapNhapComponent,
+    ThongTinDieuChuyenKhoSapNhapComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, KiemtraChatluongVtTbTrongThbhComponentModule],
 })

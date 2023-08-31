@@ -33,6 +33,9 @@
 </div>
 
 <div class="bg-trang">
+    <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == '03'" nzShowIcon nzType="error"
+        nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+    </nz-alert>
     <nz-card class="mt-16 flex-card p-lr16 ant-card-bordered">
         <form nz-form nzLayout="vertical" [formGroup]="formData">
             <div nz-row [nzGutter]="24">
@@ -44,7 +47,7 @@
                             </nz-form-label>
                             <nz-input-group>
                                 <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="9999999"
-                                    [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
+                                    [nzStep]="1" [nzSize]="'small'" [nzDisabled]="true">
                                 </nz-input-number>
                             </nz-input-group>
                         </nz-form-control>
@@ -55,7 +58,7 @@
                         <nz-form-control [nzErrorTip]="error">
                             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu quyết định
                             </nz-form-label>
-                            <input nz-input formControlName="trichYeu" [readonly]="isView" />
+                            <input nz-input formControlName="trichYeu" [readonly]="true" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -63,7 +66,7 @@
                     <nz-form-item>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-form-label>Trạng thái sáp nhập</nz-form-label>
-                            <nz-select formControlName="trangThaiSn">
+                            <nz-select formControlName="trangThaiSn" [nzDisabled]="true">
                                 <nz-option *ngFor="let p of listTrangThaiSn" [nzValue]="p.ma"
                                     [nzLabel]="p.giaTri"></nz-option>
                             </nz-select>
@@ -83,7 +86,7 @@
                 <div nz-col [nzSpan]="24" class="mt-16">
                     <nz-form-item>
                         <nz-form-control>
-                            <nz-radio-group formControlName="loai" [nzDisabled]="isView" nzName="radiogroup">
+                            <nz-radio-group formControlName="loai" [nzDisabled]="true" nzName="radiogroup">
                                 <label nz-radio nzValue="SN_DIEM_KHO"> Điều chuyển - sáp nhập điểm kho</label>
                                 <label nz-radio nzValue="SN_CHI_CUC">Điều chuyển - sáp nhập chi cục</label>
                             </nz-radio-group>
@@ -98,7 +101,7 @@
         <div class="title-card">
             <div class="title-chi-tieu">
                 <span></span>
-                <span>Danh sách đơn vị điều chuyển sáo nhập</span>
+                <span>Danh mục kho sáp nhập</span>
             </div>
         </div>
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">

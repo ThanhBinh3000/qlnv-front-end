@@ -111,10 +111,6 @@ export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component imple
   async timKiem() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayKy) {
-        this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('YYYY-MM-DD')
-      }
       await this.search();
     } catch (e) {
       console.log(e)

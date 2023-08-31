@@ -121,7 +121,7 @@
     <div class="title-card">
       <div class="title-chi-tieu">
         <span></span>
-        <span>Danh sách đơn vị điều chuyển sáo nhập</span>
+        <span>Danh sách đơn vị điều chuyển sáp nhập</span>
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -151,8 +151,9 @@
             <td></td>
             <td>
               <nz-input-group>
-                <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maCucDi' (ngModelChange)='changeCucDi($event)'
-                  [ngModelOptions]='{standalone: true}' [nzDisabled]="isDisabledThemMoi">
+                <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maCucDi'
+                  (ngModelChange)='changeCucDi($event, rowItem)' [ngModelOptions]='{standalone: true}'
+                  [nzDisabled]="isDisabledThemMoi">
                   <nz-option *ngFor='let option of dsCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
                   </nz-option>
                 </nz-select>
@@ -161,7 +162,7 @@
             <td>
               <nz-input-group>
                 <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maChiCucDi'
-                  (ngModelChange)='changeChiCucDi($event)' [ngModelOptions]='{standalone: true}'
+                  (ngModelChange)='changeChiCucDi($event, rowItem)' [ngModelOptions]='{standalone: true}'
                   [nzDisabled]="isDisabledThemMoi">
                   <nz-option *ngFor='let option of dsChiCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
                   </nz-option>
@@ -180,7 +181,7 @@
             <td>
               <nz-input-group>
                 <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maCucDen'
-                  (ngModelChange)='changeCucDen($event)' [ngModelOptions]='{standalone: true}'
+                  (ngModelChange)='changeCucDen($event, rowItem)' [ngModelOptions]='{standalone: true}'
                   [nzDisabled]="isDisabledThemMoi">
                   <nz-option *ngFor='let option of dsCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
                   </nz-option>
@@ -190,7 +191,7 @@
             <td>
               <nz-input-group>
                 <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maChiCucDen'
-                  (ngModelChange)='changeChiCucDen($event)' [ngModelOptions]='{standalone: true}'
+                  (ngModelChange)='changeChiCucDen($event, rowItem)' [ngModelOptions]='{standalone: true}'
                   [nzDisabled]="isDisabledThemMoi">
                   <nz-option *ngFor='let option of dsChiCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
                   </nz-option>
@@ -245,7 +246,7 @@
               <td>
                 <nz-input-group>
                   <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maCucDi'
-                    (ngModelChange)='changeCucDi($event)' [ngModelOptions]='{standalone: true}'>
+                    (ngModelChange)='changeCucDi($event, dataEdit[idx].data)' [ngModelOptions]='{standalone: true}'>
                     <nz-option *ngFor='let option of dsCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
                     </nz-option>
                   </nz-select>
@@ -254,7 +255,7 @@
               <td>
                 <nz-input-group>
                   <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maChiCucDi'
-                    (ngModelChange)='changeChiCucDi($event)' [ngModelOptions]='{standalone: true}'>
+                    (ngModelChange)='changeChiCucDi($event, dataEdit[idx].data)' [ngModelOptions]='{standalone: true}'>
                     <nz-option *ngFor='let option of dsChiCucDi' [nzLabel]='option.title' [nzValue]='option.key'>
                     </nz-option>
                   </nz-select>
@@ -272,7 +273,7 @@
               <td>
                 <nz-input-group>
                   <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maCucDen'
-                    (ngModelChange)='changeCucDen($event)' [ngModelOptions]='{standalone: true}'>
+                    (ngModelChange)='changeCucDen($event, dataEdit[idx].data)' [ngModelOptions]='{standalone: true}'>
                     <nz-option *ngFor='let option of dsCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
                     </nz-option>
                   </nz-select>
@@ -281,7 +282,7 @@
               <td>
                 <nz-input-group>
                   <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maChiCucDen'
-                    (ngModelChange)='changeChiCucDen($event)' [ngModelOptions]='{standalone: true}'>
+                    (ngModelChange)='changeChiCucDen($event, dataEdit[idx].data)' [ngModelOptions]='{standalone: true}'>
                     <nz-option *ngFor='let option of dsChiCucDen' [nzLabel]='option.title' [nzValue]='option.key'>
                     </nz-option>
                   </nz-select>

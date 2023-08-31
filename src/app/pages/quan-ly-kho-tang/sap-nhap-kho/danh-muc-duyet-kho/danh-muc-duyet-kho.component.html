@@ -67,18 +67,18 @@
         <div class="group-button">
             <h3 class="text-uppercase">Danh sách duyệt danh mục kho</h3>
             <div class="buttons" *ngIf="userService.isTongCuc">
-                <button type="button" class="btn btn-do" (click)="deleteMulti()">
+                <!-- <button type="button" class="btn btn-do" (click)="deleteMulti()">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
-                </button>
+                </button> -->
                 <button type="button" class="btn btn-sub" (click)="exportData()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)">
+                <!-- <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Tạo quyết định</span>
-                </button>
+                </button> -->
             </div>
         </div>
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -90,7 +90,7 @@
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                 [nzIndeterminate]="indeterminate"></label>
                         </th> -->
-                        <th class="text-left">STT</th>
+                        <th class="text-left" width="40px">STT</th>
                         <th class="text-left">Số quyết định</th>
                         <th class="text-left">Trích yếu</th>
                         <th class="text-left">Ngày ký</th>

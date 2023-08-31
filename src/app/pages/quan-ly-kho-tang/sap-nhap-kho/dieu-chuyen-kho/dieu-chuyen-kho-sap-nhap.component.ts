@@ -9,9 +9,7 @@ import { StorageService } from "../../../../services/storage.service";
 import { CHUC_NANG, STATUS } from "../../../../constants/status";
 import { UserLogin } from "../../../../models/userlogin";
 import { MESSAGE } from "../../../../constants/message";
-import {
-    QuyetDinhDieuChuyenService
-} from "../../../../services/qlnv-kho/dieu-chuyen-sap-nhap-kho/quyet-dinh-dieu-chuyen.service";
+import { DieuChuyenKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/dieu-chuyen-kho.service';
 
 
 @Component({
@@ -30,9 +28,9 @@ export class DieuChuyenKhoSapNhapComponent extends Base2Component implements OnI
         notification: NzNotificationService,
         spinner: NgxSpinnerService,
         modal: NzModalService,
-        private quyetDinhDieuChuyenService: QuyetDinhDieuChuyenService,
+        private dieuChuyenKhoService: DieuChuyenKhoService,
     ) {
-        super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenService);
+        super(httpClient, storageService, notification, spinner, modal, dieuChuyenKhoService);
         this.formData = this.fb.group({
             tenDvi: [],
             maDvi: [],
