@@ -90,6 +90,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       tenCuc: [],
       tongHopDtl: [new Array()],
       fileDinhKems: [new Array<FileDinhKem>()],
+      loai: [LOAI_HH_XUAT_KHAC.LT_6_THANG],
     })
     this.userInfo = this.userService.getUserLogin();
     this.maHauTo = 'DSLT06';
@@ -218,7 +219,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
         return;
       } else {
         await this.danhSachHangDTQGCon6ThangService.search({
-          type: 'TH',
+          loai: this.loaiHhXuatKhac.LT_6_THANG,
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.numberOfElements == 0) {
@@ -230,7 +231,6 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               });
               this.formData.patchValue({
                 maDanhSach: this.selectedItem ?? this.maHauTo,
-                loai: this.loaiHhXuatKhac.LT_6_THANG,
                 tongHopDtl: res.data.content
               });
               let result = await this.createUpdate(this.formData.value);

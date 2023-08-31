@@ -83,9 +83,9 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
       tenTrangThai: [],
       tenDvi: [],
       tenCuc: [],
-      loai: [],
       tongHopDtl: [new Array()],
       fileDinhKems: [new Array<FileDinhKem>()],
+      loai: [LOAI_HH_XUAT_KHAC.VT_BH],
     })
     this.userInfo = this.userService.getUserLogin();
     this.maHauTo = 'DSLT06';

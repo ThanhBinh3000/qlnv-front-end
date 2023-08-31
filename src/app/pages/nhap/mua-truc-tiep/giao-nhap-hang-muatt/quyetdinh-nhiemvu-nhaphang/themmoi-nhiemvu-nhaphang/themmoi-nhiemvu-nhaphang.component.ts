@@ -102,6 +102,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   singleValue = 'a10';
   multipleValue = ['a10', 'c12'];
   dsHongDong = [];
+  soLuong: number = 0;
 
   constructor(
     private router: Router,
@@ -135,8 +136,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       namNhap: [dayjs().get('year')],
       tenDvi: [''],
       maDvi: [''],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: ['78'],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       loaiVthh: [''],
       tenLoaiVthh: [''],
       cloaiVthh: [''],
@@ -231,7 +232,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listHopDong,
-        dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Ngày ký', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Ngày ký', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soHd', 'tenHd', 'ngayKy', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
@@ -259,6 +260,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             ngayKyHd: data.ngayKy,
             trichYeu: data.trichYeu
           })
+          console.log(data, "darta")
           this.dataTable = data.children
         }
         else {
@@ -293,6 +295,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
     let body = {
       "trangThai": STATUS.HOAN_THANH_CAP_NHAT,
       "pthucMuaTrucTiep": "'02', '03'",
+      "maDvi": this.userInfo.MA_DVI
     }
     let res = await this.chaogiaUyquyenMualeService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -317,7 +320,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listUyQuyen,
-        dataHeader: ['Số QĐ PDKQ chào giá ', 'Ngày ký', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số QĐ PDKH mua trực tiếp ', 'Ngày ký', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayPduyet', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
@@ -560,7 +563,9 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             tenHd: data.tenHd,
             tgianNkho: data.tgianNkho,
           });
-          this.dsHongDong = data.soHd.split(",")
+          if(data.soHd){
+            this.dsHongDong = data.soHd.split(",")
+          }
           console.log(this.dsHongDong);
           this.radioValue = data.loaiQd
           if (this.userService.isCuc()) {
@@ -820,11 +825,12 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        if (indexRow) {
-          this.dataTable[indexTable].diaDiemNhapList.splice(indexRow, 1);
-        } else {
-          this.dataTable.splice(indexTable, 1);
-        }
+        // if (indexRow) {
+        //   this.dataTable[indexTable].diaDiemNhapList.splice(indexRow, 1);
+        // } else {
+        //   this.dataTable.splice(indexTable, 1);
+        // }
+        this.dataTable[indexTable].children.splice(indexRow, 1);
       },
     });
   }
@@ -1033,16 +1039,16 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       let soHd = ''
       let tenHd = ''
       let idHd = ''
-      let soLuong: number = 0;
+      let listChildren = []
       res.data.forEach(item =>{
-        this.dataTable = [];
+        // this.dataTable = [];
         soHd = soHd + item.soHd + ","
         tenHd = tenHd + item.tenHd + ","
         idHd = idHd + item.id + ","
         this.formData.patchValue({
           soHd: soHd.substring(0, soHd.length - 1),
           tenHd: tenHd.substring(0, tenHd.length - 1),
-          idHd: idHd.substring(0, tenHd.length - 1),
+          idHd: idHd.substring(0, idHd.length - 1),
           loaiVthh: item.loaiVthh,
           cloaiVthh: item.cloaiVthh,
           tenLoaiVthh: item.tenLoaiVthh,
@@ -1050,14 +1056,15 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
           donViTinh: item.dviTinh,
           idQdPdKq: item.idQdKq,
           soQdPdKq: item.soQd,
-          soLuong: soLuong += item.soLuong,
+          soLuong: this.formData.value.soLuong += item.soLuong,
           tgianNkho: item.tgianKthuc,
           ngayKyHd: item.ngayKy,
           trichYeu: item.trichYeu
         })
-        this.dataTable = item.children
+        listChildren.push(...item.children);
       })
-      console.log(this.formData.value)
+      this.dataTable = listChildren.filter((value, index, self) => self.indexOf(value) === index);
+      console.log(this.dataTable, 3333)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
     }

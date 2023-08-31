@@ -65,7 +65,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   listNam: any[] = [];
   capCuc: string = '2';
   capChiCuc: string = '3';
-  previewName: string = 'bien_ban_lay_mau.docx';
+  previewName: string = '';
   showDlgPreview = false;
   pdfSrc: any;
   printSrc: any;
@@ -400,7 +400,13 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     this.spinner.show()
     let res = await this.bienBanLayMauService.getDetail(+this.id);
     if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data, 123)
       const data = res.data;
+      if(data.loaiVthh.startsWith('02')){
+        this.previewName = 'bien_ban_lay_mau.docx'
+      }else{
+        this.previewName = 'bb_lay_mau_bgiao_mau_dau_thau_lt.docx'
+      }
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.listDaiDienChiCuc = data.chiTiets.filter(x => x.loaiDaiDien == 'CHI_CUC')
       this.listDaiDienCuc = data.chiTiets.filter(x => x.loaiDaiDien == 'CUC')

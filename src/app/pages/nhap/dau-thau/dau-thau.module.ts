@@ -32,6 +32,7 @@ import {
 import {
   ThemmoiThongtinDauthauVtComponent
 } from "./trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau-vt/themmoi-thongtin-dauthau-vt.component";
+import { ThemMoiQdPdHsMtComponent } from './trienkhai-luachon-nhathau/qd-pd-hs-moi-thau/them-moi-qd-pd-hs-mt/them-moi-qd-pd-hs-mt.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import {
     QdPdHsMoiThauComponent,
     ThemMoiQdPdHsMtVtComponent,
     ThemmoiThongtinDauthauVtComponent,
+    ThemMoiQdPdHsMtComponent,
   ],
   imports: [
     CommonModule,

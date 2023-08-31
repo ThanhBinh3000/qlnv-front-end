@@ -4,13 +4,13 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
-<!--      *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU &&  userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_BANHANH') && !isView" >-->
+    <button type="button" class="btn btn-sub xanh-nhat" (click)="save(true)"
+      *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU &&  userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_BANHANH') && !isView" >
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="save()">
-<!--      *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_SUA') && !isView">-->
+    <button type="button" class="btn btn-main" (click)="save()"
+      *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_SUA') && !isView">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -244,6 +244,18 @@
               </ng-container>
             </ng-container>
           </ng-container>
+          <tr *ngIf="listOfData.length > 0">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right blue-text bold-700">TỔNG</td>
+            <td></td>
+            <td></td>
+            <td class="text-right blue-text bold-700">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
+            <td></td>
+            <td></td>
+            <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.0-1' : 'vi_VN' }}</td>
+          </tr>
           </tbody>
         </nz-table>
       </nz-collapse-panel>

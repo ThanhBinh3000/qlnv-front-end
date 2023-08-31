@@ -37,7 +37,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   itemRowUpdate: any = {};
   idGoiThau: number = 0;
   isDieuChinh: boolean = false;
-  previewName: string = "thong_tin_dau_thau_vt.docx";
+  previewName: string = "thong_tin_dau_thau_vt";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

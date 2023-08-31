@@ -7,6 +7,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',
@@ -73,15 +74,6 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  goDetail(id: number, roles?: any, isQuanLy?: boolean) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
-    this.idSelected = id;
-    this.isDetail = true;
-    this.isQuanLy = isQuanLy;
-    this.isAddNew = !isQuanLy;
-  }
 
   async timKiem() {
     this.formData.patchValue({
@@ -95,6 +87,33 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     this.formData.reset();
     this.timKiem();
     this.search();
+  }
+
+  goDetail(id: number, boolean?: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isQuanLy = boolean;
+    this.isAddNew = !boolean;
+  }
+
+  exportDataHopDong(fileName?: string) {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.qdPdKetQuaBttService
+          .exportHopDong(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, fileName ? fileName : 'data.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   disabledNgayPduyetTu = (startValue: Date): boolean => {

@@ -261,4 +261,31 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
     this.initListQuy();
   }
 
+  calcTongSl() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum;
+    }
+  }
+
+  calcTongThanhTien() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * item.donGiaVat;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum;
+    }
+  }
 }

@@ -39,7 +39,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
 
   fileDinhKems: any[] = [];
   dataTable: any[] = [];
-
+  previewName: string = 'ntt_phieu_nhap_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -195,7 +195,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       moTaHangHoa: data.moTaHangHoa,
       donGiaHd: data.hopDongMttHdrs[0]?.donGiaGomThue
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }

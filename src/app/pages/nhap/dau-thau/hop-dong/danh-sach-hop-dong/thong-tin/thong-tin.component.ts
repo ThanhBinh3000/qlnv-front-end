@@ -39,7 +39,7 @@ import {DonviService} from "../../../../../../services/donvi.service";
 import {
   DialogPhanBoHdVtComponent
 } from "../../../../../../components/dialog/dialog-phan-bo-hd-vt/dialog-phan-bo-hd-vt.component";
-import {addDays} from 'date-fns'
+import {addDays, differenceInCalendarDays} from 'date-fns'
 
 interface DonviLienQuanModel {
     id: number;
@@ -186,8 +186,15 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 kieuNx: 'Nhập mua',
               tgianGiaoDuHang: [],
               soNgayThienHd: [],
+              ngayThienHd: [],
+              ngayHlucHd: [],
               donViTinh: [],
               idNguoiDdien: [],
+              tgianBdauTinhPhat: [],
+              tgianGiaoThucTe: [],
+              soTienTinhPhat: [],
+              tgianBdamThienHd: [],
+              slGiaoCham: [],
             }
         );
         this.formData.controls['donGiaVat'].valueChanges.subscribe(value => {
@@ -283,17 +290,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
                         maHdong: detail.soHd?.split('/')[0]
                     });
                     this.idGoiThau = detail.idGoiThau;
-                  if (this.formData.get('ngayKy').value != null) {
-                    let ngayKy = dayjs(this.formData.get('ngayKy').value).toDate();
-                    let tgianGiaoDuHang = addDays(ngayKy, this.formData.get('soNgayThien').value)
-                    this.formData.patchValue({
-                      tgianGiaoDuHang: tgianGiaoDuHang
-                    })
-                  }
                     this.listFileDinhKem = detail.listFileDinhKem;
                     this.listCcPhapLy = detail.listCcPhapLy;
                     this.dataTable = detail.details;
                     this.dataPl = detail.hhPhuLucHdongList;
+                    this.onChangeHluc();
                   if (this.dataBinding) {
                     await this.bindingDataKqLcnt(this.dataBinding.id);
                   }
@@ -496,6 +497,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
         soNgayThien: data.hhQdKhlcntHdr?.tgianThien,
         soNgayThienHd: data.hhQdKhlcntHdr?.dxKhlcntHdr?.tgianThienHd
       })
+      this.onChangeHluc();
       if (this.id > 0 && idGthau > 0) {
         this.dataGthau = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr ? data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.find(item => item.id = idGthau) :
           data.hhQdKhlcntHdr.dsGthau.find(item => item.id = idGthau);
@@ -521,6 +523,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
           soNgayThien: dataDtl.dxuatKhLcntHdr?.tgianThien,
           soNgayThienHd: dataDtl.dxuatKhLcntHdr?.tgianThienHd,
         })
+      this.onChangeHluc();
     }
 
     openDialogGoiThau() {
@@ -827,4 +830,39 @@ export class ThongTinComponent implements OnInit, OnChanges {
       }
   }
 
+  onChangeHluc() {
+    if (this.formData.get('ngayHlucHd').value != null) {
+      let ngayKy = dayjs(this.formData.get('ngayHlucHd').value).toDate();
+      if(this.formData.get('soNgayThienHd').value != null) {
+        let ngayThienHd = addDays(ngayKy, this.formData.get('soNgayThienHd').value)
+        this.formData.patchValue({
+          ngayThienHd: ngayThienHd,
+        })
+      }
+      if(this.formData.get('soNgayThien').value != null) {
+        let tgianGiaoDuHang = addDays(ngayKy, this.formData.get('soNgayThien').value)
+        this.formData.patchValue({
+          tgianGiaoDuHang: tgianGiaoDuHang,
+        })
+        if(this.formData.get('tgianGiaoThucTe').value != null) {
+          let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
+          let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianGiaoDuHang)
+          this.formData.patchValue({
+            tgianBdauTinhPhat: tgianBdauTinhPhat,
+          })
+        }
+      }
+    }
+  }
+
+  onChangeTgianGiaoThucTe() {
+      if(this.formData.get('tgianGiaoThucTe').value != null && this.formData.get('tgianGiaoDuHang').value != null) {
+        let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
+        let tgianGiaoDuHang = dayjs(this.formData.get('tgianGiaoDuHang').value).toDate();
+        let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianGiaoDuHang)
+        this.formData.patchValue({
+          tgianBdauTinhPhat: tgianBdauTinhPhat,
+        })
+      }
+  }
 }

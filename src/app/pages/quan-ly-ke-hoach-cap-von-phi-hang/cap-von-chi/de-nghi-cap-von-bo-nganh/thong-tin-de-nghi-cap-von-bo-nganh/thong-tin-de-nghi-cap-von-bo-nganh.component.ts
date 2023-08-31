@@ -578,7 +578,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       this.tongCong.tongKinhPhiDaCap += item.kinhPhiDaCap ? item.kinhPhiDaCap : 0;
       this.tongCong.tongYcCapThem += item.ycCapThem ? item.ycCapThem : 0;
     });
-    console.log(this.tongCong, 'this.tongCongthis.tongCong');
   }
 
   tinhTongChiTietHangHoa() {

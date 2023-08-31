@@ -221,6 +221,10 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
+    if(this.validateSlKyHd()){
+      this.notification.error(MESSAGE.ERROR, 'Số lượng ký hợp đồng phải bằng số lượng nhập trực tiếp');
+      return;
+    }
     if(this.loaiHd == '02'){
       let dataQd = await this.quyetDinhGiaoNvNhapHangService.getDetail(this.formData.value.idQdGiaoNvNh)
       if(dataQd.data.trangThai != STATUS.BAN_HANH){
@@ -247,6 +251,23 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       } else {
         // this.goBack()
       }
+    }
+  }
+
+  validateSlKyHd(){
+    console.log(this.dataTable, "this.dataTable")
+    let sumSlKyHd = 0;
+    let sumSlNhapTt = 0;
+    this.dataTable.forEach(item =>{
+      item.children.forEach(x =>{
+        sumSlKyHd += Number.parseInt(x.soLuongHd)
+        sumSlNhapTt += x.soLuong
+      })
+    })
+    console.log(sumSlKyHd, "1")
+    console.log(sumSlNhapTt, "2")
+    if(sumSlKyHd > sumSlNhapTt || sumSlKyHd < sumSlNhapTt){
+      return true;
     }
   }
 
@@ -376,10 +397,11 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
                   this.listDviLquan.push(res)
                   this.slChuaKy += res.soLuong
                 }else if(res.luaChon == true && res.signed == true){
-                  this.slDaKy += res.soLuong
+                  this.slDaKy += item.children.find(x => x.idDiaDiem == res.idQdPdKqSldd).soLuongHd
                 }
               })
             })
+            console.log(dataKq.danhSachCtiet, "hihihi")
             this.formData.patchValue({
               idQdKq: dataKq.id,
               soQdKq: dataKq.soQdKq,
@@ -529,9 +551,14 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         donGia: dViCc.donGia,
         donGiaGomThue: dViCc.donGia + (dViCc.donGia * dViCc.thueGtgt / 100),
         sdtDviBan: dViCc.sdt,
-        thanhTien: dViCc.soLuong * dViCc.donGia * 1000,
+        thanhTien: Math.round(dViCc.soLuong * dViCc.donGia * 1000),
       })
     }
+  }
+
+  onSoLuongHdChange(item: any, newValue: number) {
+    console.log(item, "item")
+    console.log(newValue, "newValue")
   }
 
 

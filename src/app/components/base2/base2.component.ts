@@ -652,7 +652,7 @@ export class Base2Component implements OnInit {
   };
   async preview(fileName: string) {
     let body = this.formData.value;
-    this.reportTemplate.fileName = fileName;
+    this.reportTemplate.fileName = fileName + '.docx';
     body.reportTemplateRequest = this.reportTemplate;
     await this.service.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
@@ -662,11 +662,11 @@ export class Base2Component implements OnInit {
     });
   }
   downloadPdf(fileName: string) {
-    saveAs(this.pdfSrc, fileName);
+    saveAs(this.pdfSrc, fileName + '.pdf');
   }
 
   downloadWord(fileName: string) {
-    saveAs(this.wordSrc, fileName);
+    saveAs(this.wordSrc, fileName + '.docx');
   }
 
   closeDlg() {

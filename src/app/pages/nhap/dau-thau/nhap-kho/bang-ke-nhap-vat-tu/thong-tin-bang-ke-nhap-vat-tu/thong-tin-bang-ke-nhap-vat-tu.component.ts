@@ -55,7 +55,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   formData: FormGroup;
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
-
+  previewName: string = 'bang_ke_nhap_vat_tu';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

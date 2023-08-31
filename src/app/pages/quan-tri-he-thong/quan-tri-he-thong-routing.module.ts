@@ -9,6 +9,8 @@ import { ThongKeTruyCapComponent } from "./thong-ke-truy-cap/thong-ke-truy-cap.c
 import { QuanLyChungThuSoComponent } from './quan-ly-thong-tin/quan-ly-chung-thu-so/quan-ly-chung-thu-so.component';
 import { ChotDieuChinhComponent } from './chot-du-lieu/chot-dieu-chinh/chot-dieu-chinh.component';
 import { KetChuyenComponent } from './chot-du-lieu/ket-chuyen/ket-chuyen.component';
+import { QuanLyThongTinTienIchComponent } from './quan-ly-thong-tin/quan-ly-thong-tin-tien-ich/quan-ly-thong-tin-tien-ich.component';
+import { CauHinhDangNhapComponent } from './cau-hinh-dang-nhap/cau-hinh-dang-nhap.component';
 
 const routes: Routes = [
   {
@@ -41,6 +43,10 @@ const routes: Routes = [
         component: QuanTriThamSoComponent,
       },
       {
+        path: 'cau-hinh-dang-nhap',
+        component: CauHinhDangNhapComponent,
+      },
+      {
         path: 'thong-ke-truy-cap',
         component: ThongKeTruyCapComponent,
       },
@@ -63,6 +69,10 @@ const routes: Routes = [
       {
         path: 'chot-du-lieu/ket-chuyen',
         component: KetChuyenComponent,
+      },
+      {
+        path: 'quan-ly-thong-tin/quan-ly-thong-tin-va-tien-ich',
+        component: QuanLyThongTinTienIchComponent,
       },
     ],
   },

@@ -17,6 +17,9 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from "file-saver";
 
 
 @Component({
@@ -51,6 +54,12 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   listDiaDiemNhap: any[] = [];
   listFileDinhKem: any[] = [];
   listFileDinhKemKTCL: any[] = [];
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "phieu_ktra_cl_dau_thau_lt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
 
   constructor(
     httpClient: HttpClient,
@@ -116,6 +125,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         soBbNtbq: [],
         tenThuKho: [],
         tenKtvBq: [],
+        soLuongNhapKho: [],
         tenLdcc: [],
         slKhKb: [],
         slTtKtra: [],
@@ -275,9 +285,11 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         tenLoKho: data.tenLoKho,
         soLuongQdGiaoNvNh: data.soLuong * 1000,
         soLuongDaNhap: soLuongNhap.data,
+        soLuongNhapKho: data.soLuong,
         // soBbNtbq: data.listBienBanNghiemThuBq.find(item => item.id === Math.min(...data.listBienBanNghiemThuBq.map(item => item.id))).soBb,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
+      console.log(this.formData.value)
     }
   }
 
@@ -548,5 +560,30 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
     });
   }
 
+
+  async preview() {
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.phieuKtraCluongService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "phieu_ktra_cl_dau_thau_lt.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "phieu_ktra_cl_dau_thau_lt.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  }
 
 }
