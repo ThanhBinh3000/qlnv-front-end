@@ -13,11 +13,11 @@ import { BienBanSapNhapKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-
 
 
 @Component({
-    selector: 'app-bien-ban-sap-nhap-kho',
-    templateUrl: './bien-ban-sap-nhap-kho.component.html',
-    styleUrls: ['./bien-ban-sap-nhap-kho.component.scss']
+    selector: 'app-bao-cao-ket-qua-sap-nhap',
+    templateUrl: './bao-cao-ket-qua-sap-nhap.component.html',
+    styleUrls: ['./bao-cao-ket-qua-sap-nhap.component.scss']
 })
-export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit {
+export class BaoCaoKetQuaSapNhapComponent extends Base2Component implements OnInit {
 
     CHUC_NANG = CHUC_NANG;
     STATUS = STATUS;
@@ -35,11 +35,11 @@ export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit
             tenDvi: [],
             maDvi: [],
             nam: [],
-            soBienBan: [],
-            soQuyetDinh: [],
-            trichYeu: [],
-            ngayKyTu: [],
-            ngayKyDen: [],
+            soBaoCao: [],
+            soBienBanSapNhap: [],
+            noiDung: [],
+            ngayBaoCaoTu: [],
+            ngayBaoCaoDen: [],
             trangThai: [],
         })
     }
@@ -59,17 +59,17 @@ export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit
         [this.STATUS.BAN_HANH]: "Hoàn thành"
     }
     disabledStartNgayKy = (startValue: Date): boolean => {
-        if (startValue && this.formData.value.ngayKyDen) {
-            return startValue.getTime() >= this.formData.value.ngayKyDen.getTime();
+        if (startValue && this.formData.value.ngayBaoCaoDen) {
+            return startValue.getTime() >= this.formData.value.ngayBaoCaoDen.getTime();
         }
         return false;
     };
 
     disabledEndNgayKy = (endValue: Date): boolean => {
-        if (!endValue || !this.formData.value.ngayKyTu) {
+        if (!endValue || !this.formData.value.ngayBaoCaoTu) {
             return false;
         }
-        return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
+        return endValue.getTime() <= this.formData.value.ngayBaoCaoTu.getTime();
     };
 
     ngOnInit(): void {

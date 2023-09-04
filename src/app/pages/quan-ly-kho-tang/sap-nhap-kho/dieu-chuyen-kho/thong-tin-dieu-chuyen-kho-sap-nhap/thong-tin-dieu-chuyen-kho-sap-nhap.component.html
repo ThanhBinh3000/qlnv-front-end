@@ -184,6 +184,7 @@
         <div class="mt-16 flex-card p-lr16">
             <div class="title-card">
                 <div class="title-chi-tieu">
+                    <span></span>
                     <span>Danh sách điều chuyển hàng DTQG</span>
                 </div>
             </div>
@@ -263,6 +264,7 @@
         <div class="mt-16 flex-card p-lr16">
             <div class="title-card">
                 <div class="title-chi-tieu">
+                    <span></span>
                     <span>Điều chuyển ccdc</span>
                 </div>
             </div>
@@ -313,82 +315,85 @@
                     </tbody>
                 </nz-table>
             </nz-card>
-            <div class="title-card">
-                <div class="title-chi-tieu">
-                    <span>Điều chuyển văn phòng/trụ sở</span>
-                </div>
-                <nz-table #tblData [nzData]="this.dataTableVp" class="nowrap table-chi-tiet" nzBordered>
-                    <thead>
-                        <tr>
-                            <th rowspan="2" style="width: 3%;" class="text-center">STT</th>
-                            <th>Đơn vị chuyển đi</th>
-                            <th>Đơn vị chuyển đến</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngIf="!isView">
-                            <td></td>
-                            <td>
-                                <nz-input-group>
-                                    <input nz-input [(ngModel)]='rowItem.tenDonViDi'
-                                        [ngModelOptions]='{standalone: true}' />
-                                </nz-input-group>
-                            </td>
-                            <td>
-                                <nz-input-group>
-                                    <input nz-input [(ngModel)]='rowItem.tenDonViDen'
-                                        [ngModelOptions]='{standalone: true}' />
-                                </nz-input-group>
-                            </td>
-                            <td *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU'>
-                                <a [ngClass]="{'disabled': isView}" (click)='themMoiItem()'>
-                                    <i class='fa fa-plus' title="Thêm"></i>
-                                </a>
-                                <a [ngClass]="{'disabled': isView}" (click)='clearData()'>
-                                    <i class='fa fa-refresh' title="Làm mới"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr *ngFor="let data of dataTableVp; let idx = index">
-                            <ng-container *ngIf="!data.edit; else editTemplate">
-                                <td>{{ idx + 1 }}</td>
-                                <td>{{ data.tenDonViDi }}</td>
-                                <td>{{data.tenDonViDen}}</td>
-                                <td *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView">
-                                    <a (click)="editItem(idx)">
-                                        <i class="fa fa-pencil" title="Sửa"></i>
-                                    </a>
-                                    <a (click)="xoaItem(idx)">
-                                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                                    </a>
-                                </td>
-                            </ng-container>
-                            <ng-template #editTemplate>
+            <div class="mt-16 flex-card p-lr16">
+                <div class="title-card">
+                    <div class="title-chi-tieu">
+                        <span></span>
+                        <span>Điều chuyển văn phòng/trụ sở</span>
+                    </div>
+                    <nz-table #tblData [nzData]="this.dataTableVp" class="nowrap table-chi-tiet" nzBordered>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="width: 3%;" class="text-center">STT</th>
+                                <th>Đơn vị chuyển đi</th>
+                                <th>Đơn vị chuyển đến</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="!isView">
                                 <td></td>
                                 <td>
                                     <nz-input-group>
-                                        <input nz-input [(ngModel)]='data.tenDonViDi'
-                                            [ngModelOptions]='{standalone: true}' [readonly]="isView" />
+                                        <input nz-input [(ngModel)]='rowItem.tenDonViDi'
+                                            [ngModelOptions]='{standalone: true}' />
                                     </nz-input-group>
                                 </td>
                                 <td>
                                     <nz-input-group>
-                                        <input nz-input [(ngModel)]='data.tenDonViDen'
-                                            [ngModelOptions]='{standalone: true}' [readonly]="isView" />
+                                        <input nz-input [(ngModel)]='rowItem.tenDonViDen'
+                                            [ngModelOptions]='{standalone: true}' />
                                     </nz-input-group>
                                 </td>
-                                <td class="text-center">
-                                    <a (click)="luuEdit(idx)" class="save">
-                                        <i class="fa fa-save" title="Lưu"></i>
+                                <td *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU'>
+                                    <a [ngClass]="{'disabled': isView}" (click)='themMoiItem()'>
+                                        <i class='fa fa-plus' title="Thêm"></i>
                                     </a>
-                                    <a (click)="huyEdit(idx)">
-                                        <i class="fa fa-ban do" title="Hủy"></i> </a>
+                                    <a [ngClass]="{'disabled': isView}" (click)='clearData()'>
+                                        <i class='fa fa-refresh' title="Làm mới"></i>
+                                    </a>
                                 </td>
-                            </ng-template>
-                        </tr>
-                    </tbody>
-                </nz-table>
+                            </tr>
+                            <tr *ngFor="let data of dataTableVp; let idx = index">
+                                <ng-container *ngIf="!data.edit; else editTemplate">
+                                    <td>{{ idx + 1 }}</td>
+                                    <td>{{ data.tenDonViDi }}</td>
+                                    <td>{{data.tenDonViDen}}</td>
+                                    <td *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView">
+                                        <a (click)="editItem(idx)">
+                                            <i class="fa fa-pencil" title="Sửa"></i>
+                                        </a>
+                                        <a (click)="xoaItem(idx)">
+                                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <ng-template #editTemplate>
+                                    <td></td>
+                                    <td>
+                                        <nz-input-group>
+                                            <input nz-input [(ngModel)]='data.tenDonViDi'
+                                                [ngModelOptions]='{standalone: true}' [readonly]="isView" />
+                                        </nz-input-group>
+                                    </td>
+                                    <td>
+                                        <nz-input-group>
+                                            <input nz-input [(ngModel)]='data.tenDonViDen'
+                                                [ngModelOptions]='{standalone: true}' [readonly]="isView" />
+                                        </nz-input-group>
+                                    </td>
+                                    <td class="text-center">
+                                        <a (click)="luuEdit(idx)" class="save">
+                                            <i class="fa fa-save" title="Lưu"></i>
+                                        </a>
+                                        <a (click)="huyEdit(idx)">
+                                            <i class="fa fa-ban do" title="Hủy"></i> </a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
             </div>
         </div>
     </ng-container>

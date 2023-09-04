@@ -23,13 +23,14 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { DanhMucDuyetKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/danh-muc-duyet-kho.service';
 import { DieuChuyenKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/dieu-chuyen-kho.service';
 import { BienBanSapNhapKhoService } from './../../../../../services/qlnv-kho/dieu-chuyen-sap-nhap-kho/bien-ban-sap-nhap-kho.service';
+import { BaoCaoKetQuaSapNhapService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/bao-cao-ket-qua-sap-nhap.service';
 
 @Component({
-    selector: 'app-thong-tin-bien-ban-sap-nhap-kho',
-    templateUrl: './thong-tin-bien-ban-sap-nhap-kho.component.html',
-    styleUrls: ['./thong-tin-bien-ban-sap-nhap-kho.component.scss']
+    selector: 'app-thong-tin-bao-cao-ket-qua-sap-nhap',
+    templateUrl: './thong-tin-bao-cao-ket-qua-sap-nhap.component.html',
+    styleUrls: ['./thong-tin-bao-cao-ket-qua-sap-nhap.component.scss']
 })
-export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implements OnInit {
+export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component implements OnInit {
     @Input('isView') isView: boolean;
     @Output()
     showListEvent = new EventEmitter<any>();
@@ -66,28 +67,10 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
     hasError: boolean = false;
     isDisabledThemMoi: boolean = false;
     danhSachQuyetDinh: any[] = [];
-    daiDienCucData: any[] = [];
-    donViChuyenDiData: any = [];
-    donViChuyenDenData
-    rowInitialCuc: { [key: string]: any } = {
-        chucVu: "",
-        hoVaTen: "",
-        type: 0
-    };
-    rowInitialDi: { [key: string]: any } = {
-        chucVu: "",
-        hoVaTen: "",
-        type: 1
-    };
-    rowInitialDen: { [key: string]: any } = {
-        chucVu: "",
-        hoVaTen: "",
-        type: 2
-    }
     tableHeader: Array<{ [key: string]: string }> = [{ title: "Họ và tên", value: "hoVaTen" }, { title: "Chức vụ", value: "chucVu" }];
-    bienBanSapNhapHangDtl: any[] = [];
-    bienBanSapNhapCcDtl: any[] = [];
-    bienBanSapNhapVpDtl: any[] = [];
+    baoCaoKetQuaHangDtl: any[] = [];
+    baoCaoKetQuaCcDtl: any[] = [];
+    baoCaoKetQuaVpDtl: any[] = [];
     dataViewHang: any[] = [];
     dataViewCcdc: any[] = [];
     constructor(httpClient: HttpClient,
@@ -99,10 +82,11 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
         private danhMucService: DanhMucService,
         private dataService: DataService,
         private dieuChuyenKhoService: DieuChuyenKhoService,
+        private bienBanSapNhapKhoService: BienBanSapNhapKhoService,
         private quyetDinhDieuChuyenService: QuyetDinhDieuChuyenService,
-        private bienBanSapNhapKhoService: BienBanSapNhapKhoService
+        private baoCaoKetQuaSapNhapService: BaoCaoKetQuaSapNhapService
     ) {
-        super(httpClient, storageService, notification, spinner, modal, bienBanSapNhapKhoService);
+        super(httpClient, storageService, notification, spinner, modal, baoCaoKetQuaSapNhapService);
         this.formData = this.fb.group({
             id: [],
             maDvi: [],
@@ -148,24 +132,23 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
             await this.spinner.show();
             let body = this.formData.value;
             body.fileDinhKem = this.listFileDinhKem;
-            body.bienBanSapNhapDtl = [...this.daiDienCucData, ...this.donViChuyenDenData, ...this.donViChuyenDiData];
-            let bienBanSapNhapHangDtl = [];
-            let bienBanSapNhapCcDtl = [];
+            let baoCaoKetQuaHangDtl = [];
+            let baoCaoKetQuaCcDtl = [];
             Array.isArray(this.dataViewHang) && this.dataViewHang.forEach(lv1 => {
                 Array.isArray(lv1.childData) && lv1.childData.forEach(lv2 => {
-                    bienBanSapNhapHangDtl.push({ ...lv2, id: undefined, hdrId: undefined })
+                    baoCaoKetQuaHangDtl.push({ ...lv2, id: undefined, hdrId: undefined })
                 });
             })
             if (this.formData.value.loai === "SN_CHI_CUC") {
                 Array.isArray(this.dataViewCcdc) && this.dataViewCcdc.forEach(lv1 => {
                     Array.isArray(lv1.childData) && lv1.childData.forEach(lv2 => {
-                        bienBanSapNhapCcDtl.push({ ...lv2, id: undefined, hdrId: undefined })
+                        baoCaoKetQuaCcDtl.push({ ...lv2, id: undefined, hdrId: undefined })
                     });
                 })
             };
-            body.bienBanSapNhapHangDtl = bienBanSapNhapHangDtl;
-            body.bienBanSapNhapCcDtl = bienBanSapNhapCcDtl;
-            body.bienBanSapNhapVpDtl = this.bienBanSapNhapVpDtl;
+            body.baoCaoKetQuaHangDtl = baoCaoKetQuaHangDtl;
+            body.baoCaoKetQuaCcDtl = baoCaoKetQuaCcDtl;
+            body.baoCaoKetQuaVpDtl = this.baoCaoKetQuaVpDtl;
             let data = await this.createUpdate(body, null, isGuiDuyet);
             if (data) {
                 this.idInput = data.id;
@@ -197,7 +180,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
                         trangThai: STATUS.BAN_HANH
                     };
                     let res =
-                        await this.quyetDinhDieuChuyenService.approve(
+                        await this.baoCaoKetQuaSapNhapService.approve(
                             body,
                         );
                     if (res.msg == MESSAGE.SUCCESS) {
@@ -227,7 +210,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
 
 
     async getDetail(id: number) {
-        await this.quyetDinhDieuChuyenService
+        await this.baoCaoKetQuaSapNhapService
             .getDetail(id)
             .then((res) => {
                 if (res.msg == MESSAGE.SUCCESS) {
@@ -235,11 +218,11 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
                     this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
                     if (dataDetail) {
                         this.fileDinhKem = dataDetail.fileDinhKem;
-                        this.bienBanSapNhapHangDtl = dataDetail.bienBanSapNhapHangDtl.map(f => ({ ...f, groupBy: `${f.maChiCucDi}${f.maDiemKhoDi}` }));
-                        this.bienBanSapNhapCcDtl = dataDetail.bienBanSapNhapCcDtl.map(f => ({ ...f, groupBy: f.maChiCucDi }));
-                        this.bienBanSapNhapVpDtl = dataDetail.bienBanSapNhapVpDtl;
-                        this.buidView("dataViewHang", "bienBanSapNhapHangDtl");
-                        this.buidView("dataViewCcdc", "bienBanSapNhapCcDtl");
+                        this.baoCaoKetQuaHangDtl = dataDetail.baoCaoKetQuaHangDtl.map(f => ({ ...f, groupBy: `${f.maChiCucDi}${f.maDiemKhoDi}` }));
+                        this.baoCaoKetQuaCcDtl = dataDetail.baoCaoKetQuaCcDtl.map(f => ({ ...f, groupBy: f.maChiCucDi }));
+                        this.baoCaoKetQuaVpDtl = dataDetail.baoCaoKetQuaVpDtl;
+                        this.buidView("dataViewHang", "baoCaoKetQuaHangDtl");
+                        this.buidView("dataViewCcdc", "baoCaoKetQuaCcDtl");
                     };
                 }
             })
@@ -262,22 +245,22 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
         ).value();
         this.expandAll(this[key1])
     }
-    async getDanhsachQuyetDinh() {
+    async getDanhsachBienBanSapNhap() {
         let body = {
             maDvi: this.userInfo.MA_DVI,
             paggingReq: { limit: 2147483647, page: 0 },
         }
-        let res = await this.dieuChuyenKhoService.danhSach(body);
+        let res = await this.bienBanSapNhapKhoService.search(body);
         if (res.msg == MESSAGE.SUCCESS) {
             this.danhSachQuyetDinh = Array.isArray(res?.data?.content) ? res.data.content : [];
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
         }
     }
-    async openDialogSoQuyetDinhDCSN() {
-        await this.getDanhsachQuyetDinh();
+    async openDialogSoBienBanSapNhap() {
+        await this.getDanhsachBienBanSapNhap();
         const modalQD = this.modal.create({
-            nzTitle: 'DANH SÁCH QUYẾT ĐỊNH XUẤT ĐIỀU CHUYỂN SÁP NHẬP',
+            nzTitle: 'DANH SÁCH BIÊN BẢN SÁP NHẬP',
             nzContent: DialogTableSelectionComponent,
             nzMaskClosable: false,
             nzClosable: false,
@@ -291,7 +274,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
         })
         modalQD.afterClose.subscribe(async (dataChose) => {
             if (dataChose && dataChose.id) {
-                const res = await this.dieuChuyenKhoService.getDetail(dataChose.id);
+                const res = await this.bienBanSapNhapKhoService.getDetail(dataChose.id);
                 console.log("dataChose", dataChose, res)
                 this.dataTable = [];
                 // await this.bindingDataQd(dataChose.id, false);

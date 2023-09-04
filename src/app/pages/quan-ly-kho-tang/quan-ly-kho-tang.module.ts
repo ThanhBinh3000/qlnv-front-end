@@ -305,6 +305,11 @@ import { PhieuXuatHangHoaHutComponent } from './sap-nhap-kho/phieu-xuat-hang-hao
 import { ThongTinPhieuXuatHangHaoHutComponent } from './sap-nhap-kho/phieu-xuat-hang-hao-hut/thong-tin-phieu-xuat-hang-hao-hut/thong-tin-phieu-xuat-hang-hao-hut.component';
 import { BienBanSapNhapKhoComponent } from './sap-nhap-kho/bien-ban-sap-nhap-kho/bien-ban-sap-nhap-kho.component';
 import { ThongTinBienBanSapNhapKhoComponent } from './sap-nhap-kho/bien-ban-sap-nhap-kho/thong-tin-bien-ban-sap-nhap-kho/thong-tin-bien-ban-sap-nhap-kho.component';
+import { EditTableComponent } from './sap-nhap-kho/bien-ban-sap-nhap-kho/edit-table/edit-table.component';
+import { PhieuNhapHangSapNhapComponent } from './sap-nhap-kho/phieu-nhap-kho/phieu-nhap-hang.component';
+import { ThongTinPhieuNhapHangSapNhapComponent } from './sap-nhap-kho/phieu-nhap-kho/thong-tin-phieu-nhap-hang/thong-tin-phieu-nhap-hang.component';
+import { BaoCaoKetQuaSapNhapComponent } from './sap-nhap-kho/bao-cao-ket-qua-sap-nhap/bao-cao-ket-qua-sap-nhap.component';
+import { ThongTinBaoCaoKetQuaSapNhapComponent } from './sap-nhap-kho/bao-cao-ket-qua-sap-nhap/thong-tin-bao-cao-ket-qua-sap-nhap/thong-tin-bao-cao-ket-qua-sap-nhap.component';
 @NgModule({
   declarations: [
     QuanLyKhoTangComponent,
@@ -426,9 +431,15 @@ import { ThongTinBienBanSapNhapKhoComponent } from './sap-nhap-kho/bien-ban-sap-
     PhieuXuatHangHoaHutComponent,
     ThongTinPhieuXuatHangHaoHutComponent,
     BienBanSapNhapKhoComponent,
-    ThongTinBienBanSapNhapKhoComponent
+    ThongTinBienBanSapNhapKhoComponent,
+    EditTableComponent,
+    PhieuNhapHangSapNhapComponent,
+    ThongTinPhieuNhapHangSapNhapComponent,
+    BaoCaoKetQuaSapNhapComponent,
+    ThongTinBaoCaoKetQuaSapNhapComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, KiemtraChatluongVtTbTrongThbhComponentModule],
 })
+
 export class QuanLyKhoTangModule {
 }

@@ -114,8 +114,9 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                                    (input)="filterInTable('ngayKy',filterTable.ngayKy)" size="small" />
+                                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
+                                    [(ngModel)]="filterTable.ngayKy"
+                                    (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy), 'date')"></nz-date-picker>
                             </nz-input-group>
                         </th>
                         <th>

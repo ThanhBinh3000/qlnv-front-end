@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -9,16 +9,19 @@ import { StorageService } from "../../../../services/storage.service";
 import { CHUC_NANG, STATUS } from "../../../../constants/status";
 import { UserLogin } from "../../../../models/userlogin";
 import { MESSAGE } from "../../../../constants/message";
-import { BienBanSapNhapKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/bien-ban-sap-nhap-kho.service';
+import {
+    QuyetDinhDieuChuyenService
+} from "../../../../services/qlnv-kho/dieu-chuyen-sap-nhap-kho/quyet-dinh-dieu-chuyen.service";
+import { PhieuXuatHangHaoHutSapNhapService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/phieu-xuat-hang-hao-hut.service';
+import { PhieuNhapHangSapNhapService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/phieu-nhap-hang-sap-nhap.service';
 
 
 @Component({
-    selector: 'app-bien-ban-sap-nhap-kho',
-    templateUrl: './bien-ban-sap-nhap-kho.component.html',
-    styleUrls: ['./bien-ban-sap-nhap-kho.component.scss']
+    selector: 'app-phieu-nhap-hang',
+    templateUrl: './phieu-nhap-hang.component.html',
+    styleUrls: ['./phieu-nhap-hang.component.scss']
 })
-export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit {
-
+export class PhieuNhapHangSapNhapComponent extends Base2Component implements OnInit {
     CHUC_NANG = CHUC_NANG;
     STATUS = STATUS;
 
@@ -28,18 +31,18 @@ export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit
         notification: NzNotificationService,
         spinner: NgxSpinnerService,
         modal: NzModalService,
-        private bienBanSapNhapKhoService: BienBanSapNhapKhoService,
+        private quyetDinhDieuChuyenService: QuyetDinhDieuChuyenService,
+        private phieuNhapHangSapNhapService: PhieuNhapHangSapNhapService
     ) {
-        super(httpClient, storageService, notification, spinner, modal, bienBanSapNhapKhoService);
+        super(httpClient, storageService, notification, spinner, modal, phieuNhapHangSapNhapService);
         this.formData = this.fb.group({
             tenDvi: [],
             maDvi: [],
             nam: [],
-            soBienBan: [],
+            soPhieu: [],
             soQuyetDinh: [],
-            trichYeu: [],
-            ngayKyTu: [],
-            ngayKyDen: [],
+            ngayNhapKhoTu: [],
+            ngayNhapKhoDen: [],
             trangThai: [],
         })
     }
@@ -47,29 +50,40 @@ export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit
     userInfo: UserLogin;
     userdetail: any = {};
     selectedId: number = 0;
+    soQdGiaoNvXhSelected: string;
     isVatTu: boolean = false;
     isView = false;
     children: any = [];
+    idPhieuKnCl: number = 0;
+    openPhieuKnCl = false;
+    // listTrangThai: any[] = [
+    //     { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
+    //     { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Hoàn thành" },
+    // ];
+    // ObTrangThai: { [key: string]: string } = {
+    //     [this.STATUS.DU_THAO]: "Đang nhập dữ liệu",
+    //     [this.STATUS.DA_HOAN_THANH]: "Hoàn thành"
+    // }
     listTrangThai: any[] = [
-        { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
-        { ma: this.STATUS.BAN_HANH, giaTri: "Hoàn thành" },
+        { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: "Đang nhập dữ liệu" },
+        { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Hoàn thành" },
     ];
     ObTrangThai: { [key: string]: string } = {
-        [this.STATUS.DU_THAO]: "Dự thảo",
-        [this.STATUS.BAN_HANH]: "Hoàn thành"
+        [this.STATUS.DANG_NHAP_DU_LIEU]: "Đang nhập dữ liệu",
+        [this.STATUS.DA_HOAN_THANH]: "Hoàn thành"
     }
     disabledStartNgayKy = (startValue: Date): boolean => {
-        if (startValue && this.formData.value.ngayKyDen) {
-            return startValue.getTime() >= this.formData.value.ngayKyDen.getTime();
+        if (startValue && this.formData.value.ngayNhapKhoDen) {
+            return startValue.getTime() >= this.formData.value.ngayNhapKhoDen.getTime();
         }
         return false;
     };
 
     disabledEndNgayKy = (endValue: Date): boolean => {
-        if (!endValue || !this.formData.value.ngayKyTu) {
+        if (!endValue || !this.formData.value.ngayNhapKhoTu) {
             return false;
         }
-        return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
+        return endValue.getTime() <= this.formData.value.ngayNhapKhoTu.getTime();
     };
 
     ngOnInit(): void {
@@ -103,10 +117,11 @@ export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit
         await this.spinner.hide();
     }
 
-    redirectDetail(id, b: boolean) {
+    redirectDetail(id, b: boolean, soQdGiaoNvXh?) {
         this.selectedId = id;
         this.isDetail = true;
         this.isView = b;
+        this.soQdGiaoNvXhSelected = soQdGiaoNvXh;
     }
 
     async showList() {
