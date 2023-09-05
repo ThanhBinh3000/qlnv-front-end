@@ -86,7 +86,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
       body.fileName = "th_bc_sl_cl_ccdc.jrxml";
       body.tenBaoCao = "Báo cáo số lượng chất lượng Công cụ dụng cụ";
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
+      await this.bcCLuongHangDTQGService.bcclXuatHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
@@ -118,7 +118,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
       body.fileName = "bccl_cong_tac_bao_quan_gao.jrxml";
       body.tenBaoCao = "Báo cáo chất lượng công tác quản lý gạo DTQG";
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
+      await this.bcCLuongHangDTQGService.bcclXuatHangDtqg(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

@@ -50,7 +50,8 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, bcCLuongHangDTQGService);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        namNhap: [[]],
+        namXuat: [[]],
         maCuc: null,
         maChiCuc: null,
         loaiVthh: [null, [Validators.required]],
@@ -83,10 +84,10 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.fileName = "th_bc_sl_cl_ccdc.jrxml";
-      body.tenBaoCao = "Báo cáo số lượng chất lượng Công cụ dụng cụ";
+      body.fileName = "bc_hao_hut_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo hao hụt hàng DTQG";
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
+      await this.bcCLuongHangDTQGService.bcclHangHaoHut(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
@@ -105,20 +106,20 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
   }
 
   async preView() {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.spinner.hide();
-      return;
-    }
+    // this.helperService.markFormGroupTouched(this.formData);
+    // if (this.formData.invalid) {
+    //   this.spinner.hide();
+    //   return;
+    // }
     try {
       this.spinner.show();
       let body = this.formData.value;
       body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
-      body.fileName = "bccl_cong_tac_bao_quan_gao.jrxml";
-      body.tenBaoCao = "Báo cáo chất lượng công tác quản lý gạo DTQG";
+      body.fileName = "bc_hao_hut_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo hao hụt hàng DTQG";
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
+      await this.bcCLuongHangDTQGService.bcclHangHaoHut(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

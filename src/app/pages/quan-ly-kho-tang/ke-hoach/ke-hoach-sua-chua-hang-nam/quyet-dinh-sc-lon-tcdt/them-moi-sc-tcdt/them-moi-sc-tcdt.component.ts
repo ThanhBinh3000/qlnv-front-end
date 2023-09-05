@@ -80,7 +80,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
-      loaiTmdt: []
+      loaiTmdt: ['ALL']
     });
   }
 
