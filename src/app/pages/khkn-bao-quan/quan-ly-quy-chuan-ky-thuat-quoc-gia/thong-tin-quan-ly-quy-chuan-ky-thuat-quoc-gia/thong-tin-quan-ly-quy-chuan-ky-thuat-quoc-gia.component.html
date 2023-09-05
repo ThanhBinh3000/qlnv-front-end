@@ -331,9 +331,11 @@
           <tr *ngIf='!isView'>
             <th></th>
             <th>
-              <nz-input-group>
-                <input nz-input [(ngModel)]='rowItem.tenChiTieu' [ngModelOptions]='{standalone: true}' />
-              </nz-input-group>
+              <nz-select nzShowSearch nzAllowClear [(ngModel)]='rowItem.maChiTieu' (ngModelChange)="changChiTieu($event)"
+                         [ngModelOptions]='{standalone: true}'>
+                <nz-option *ngFor='let option of listChiTieu' [nzLabel]='option.giaTri' [nzValue]='option.ma'>
+                </nz-option>
+              </nz-select>
             </th>
             <th *ngIf='formData.value.apDungCloaiVthh == false'>
               <nz-input-group>
@@ -435,9 +437,11 @@
             <ng-template #editTemplate>
               <td></td>
               <td>
-                <nz-input-group>
-                  <input nz-input [(ngModel)]='dataEdit[idx].data.tenChiTieu' [ngModelOptions]='{standalone: true}' />
-                </nz-input-group>
+                <nz-select nzShowSearch nzAllowClear [(ngModel)]='dataEdit[idx].data.maChiTieu' (ngModelChange)="changChiTieu($event, dataEdit[idx].data)"
+                           [ngModelOptions]='{standalone: true}'>
+                  <nz-option *ngFor='let option of listChiTieu' [nzLabel]='option.giaTri' [nzValue]='option.ma'>
+                  </nz-option>
+                </nz-select>
               </td>
               <!-- <td style="text-align:center">
                 <nz-input-group>

@@ -23,9 +23,13 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
-   || (formData.value.trangThai===STATUS.TU_CHOI_LDCC))" type="button" class="btn btn-main" (click)="save()">
+  || (formData.value.trangThai===STATUS.TU_CHOI_LDCC))" type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
+    </button>
+    <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+      <i class=" icon htvbdh_tcdt_print"></i>
+      <span>In/xem trước</span>
     </button>
   </div>
 </nz-affix>
@@ -96,7 +100,8 @@
                 <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ giao nhiệm vụ xuất hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabledQD() ? null :openDialogSoQd()">
-                    <input [readonly]="true" nz-input formControlName="soQd"  (ngModelChange)="changeSoQd($event)" readonly />
+                    <input [readonly]="true" nz-input formControlName="soQd" (ngModelChange)="changeSoQd($event)"
+                      readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -119,8 +124,8 @@
                   Ngày ký hợp đồng
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayHd" nzDisabled>
-                </nz-date-picker>
+                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayHd" nzDisabled>
+                  </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -348,3 +353,27 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="BIÊN BẢN LẤY MẪU" nzWidth="100%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()" class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
