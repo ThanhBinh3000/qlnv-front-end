@@ -10,6 +10,9 @@ import { BaoCaoKqXuatHangDtqgNgoaiDmComponent } from './bao-cao-kq-xuat-hang-dtq
 import { CapNhatDanhSachHangDtqgTheoChiDaoCpComponent } from './danh-sach-hang-du-tru-theo-chi-dao-cua-cp/cap-nhat-danh-sach-hang-dtqg-theo-chi-dao-cp/cap-nhat-danh-sach-hang-dtqg-theo-chi-dao-cp.component';
 import { CapNhapDanhSachHangTrongKhoNgoaiDmComponent } from './danh-sach-hang-du-tru-trong-kho-ngoai-danh-muc/cap-nhap-danh-sach-hang-trong-kho-ngoai-dm/cap-nhap-danh-sach-hang-trong-kho-ngoai-dm.component';
 import { ThongTinQuyetDinhXuatHangKhoiDmComponent } from './quyet-dinh-xuat-hang-khoi-danh-muc/thong-tin-quyet-dinh-xuat-hang-khoi-dm/thong-tin-quyet-dinh-xuat-hang-khoi-dm.component';
+import {
+  VtTbCoThoihanLuukhoConSauThangModule
+} from '../kiemtra-chatluong-vt-tb-truockhi-hethan-luukho/vt-tb-co-thoihan-luukho-con-sau-thang/vt-tb-co-thoihan-luukho-con-sau-thang.module';
 
 
 @NgModule({
@@ -27,6 +30,7 @@ import { ThongTinQuyetDinhXuatHangKhoiDmComponent } from './quyet-dinh-xuat-hang
     CommonModule,
     NzMenuModule,
     ComponentsModule,
+    VtTbCoThoihanLuukhoConSauThangModule,
   ],
   exports: [
     DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent,
