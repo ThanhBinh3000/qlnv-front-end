@@ -26,6 +26,7 @@ import {MESSAGE} from "src/app/constants/message";
 import {STATUS} from 'src/app/constants/status';
 import {chain, cloneDeep} from 'lodash';
 import {v4 as uuidv4} from "uuid";
+import {PREVIEW} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop',
@@ -94,7 +95,8 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   tongSoLuongDeXuat: any;
   tongSoLuongXuatCap: any;
   listVatTuHangHoa: any[] = [];
-
+  templateName = "Phiếu kiểm nghiệm chất lượng";
+  templateNameVt = "Phiếu kiểm nghiệm chất lượng vật tư";
 
   constructor(
     httpClient: HttpClient,
@@ -472,5 +474,21 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
 
   async changeVthh($event: any) {
 
+  }
+  async xemTruocTh(id,tenBaoCao,children) {
+    await this.tongHopPhuongAnCuuTroService.preview({
+      tenBaoCao: tenBaoCao + '.docx',
+      id: id,
+      children: children
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
   }
 }
