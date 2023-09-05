@@ -374,8 +374,6 @@ export class Base2Component implements OnInit {
 
   // Save
   async createUpdate(body, roles?: any) {
-    console.log(body, 'body')
-    console.log(this.service, 'service')
     if (!this.checkPermission(roles)) {
       return
     }
