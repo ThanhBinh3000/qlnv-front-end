@@ -5,6 +5,10 @@
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isChiCuc">
+      <button *ngIf='idSelected' type='button' class='btn btn-sub do mr-2' (click)='preview(idSelected)'>
+        <i class='icon htvbdh_totrinh'></i>
+        <span> In/Xem trước </span>
+      </button>
       <button
         *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_DUYET_LDCCUC')"
         type="button" class="btn btn-sub" (click)="reject(idSelected,STATUS.TU_CHOI_LDCC)">
@@ -39,7 +43,7 @@
                 <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-        <span>Biên bản lấy mẫu/bàn giao mẫu</span>
+        <span>Phiếu kiểm nghiệm chất luợng</span>
       </div>
     </div>
   </div>
@@ -373,3 +377,30 @@
     </nz-collapse-panel>
   </nz-collapse>
 </div>
+<nz-modal [(nzVisible)]='showDlgPreview' nzTitle='THÔNG TIN PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG' nzWidth='100%'
+          (nzOnCancel)='closeDlg()'>
+  <div *nzModalContent class='modal__content'>
+    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)='printPreview()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_printer'></i>
+      In
+    </button>
+    <button nz-button (click)='downloadPdf()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-pdf'></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)='downloadWord()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-word'></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+      <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
