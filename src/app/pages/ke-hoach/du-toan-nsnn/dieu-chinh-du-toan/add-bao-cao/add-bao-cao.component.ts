@@ -38,35 +38,6 @@ import { PhuLucTongHopComponent } from './phu-luc-tong-hop/phu-luc-tong-hop.comp
     styleUrls: ['./add-bao-cao.component.scss']
 })
 export class AddBaoCaoComponent implements OnInit {
-    // @Input() data;
-    // @Output() dataChange = new EventEmitter();
-    // userInfo: any;
-    // trangThais: any[] = TRANG_THAI_TIM_KIEM;
-    // canBos: any[];
-    // // isDataAvailable = false;
-    // status = false;
-    // saveStatus = true;
-    // submitStatus = true;
-    // passStatus = true;
-    // approveStatus = true;
-    // acceptStatus = true;
-    // copyStatus = true;
-    // printStatus = true;
-    // okStatus = true;
-    // finishStatus = true;
-    // viewRecommendedValue: boolean;
-
-    // baoCao: BaoCao = new BaoCao();
-    // listAppendix: any[] = [];
-
-    // fileDetail: NzUploadFile;
-    // fileList: NzUploadFile[] = [];
-    // listFile: File[] = [];
-    // childUnit: any[] = [];
-    // selectedIndex = 0;
-    // dataVp: any[] = [];
-    // bien moi
-
     @Input() data;
     @Output() dataChange = new EventEmitter();
     Utils = Utils;
@@ -525,35 +496,6 @@ export class AddBaoCaoComponent implements OnInit {
         }
     }
 
-
-    // getStatusName(status: string) {
-    //   const statusMoi = status == Utils.TT_06 || status == Utils.TT_07;
-    //   const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
-    //   if (statusMoi && this.userInfo.MA_DVI == maDviCha) {
-    //     return "Mới";
-    //   } else {
-    //     return this.trangThais.find(e => e.id == status)?.tenDm;
-    //   }
-    // };
-
-    //download file về máy tính
-    // async downloadFileCv() {
-    //     if (this.baoCao.congVan?.fileUrl) {
-    //         await this.quanLyVonPhiService.downloadFile(this.baoCao.congVan?.fileUrl).toPromise().then(
-    //             (data) => {
-    //                 fileSaver.saveAs(data, this.baoCao.congVan?.fileName);
-    //             },
-    //             err => {
-    //                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //             },
-    //         );
-    //     } else {
-    //         const file: any = this.fileDetail;
-    //         const blob = new Blob([file], { type: "application/octet-stream" });
-    //         fileSaver.saveAs(blob, file.name);
-    //     }
-    // };
-
     getIndex(maBieuMau: string) {
         let header = '';
         if (maBieuMau.startsWith('pl')) {
@@ -767,14 +709,6 @@ export class AddBaoCaoComponent implements OnInit {
         await this.dieuChinhDuToanService.addHistory(this.baoCao.id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    // Object.assign(this.baoCao, data.data);
-                    // this.baoCao.lstDchinh.forEach(item => {
-                    //     const appendix = this.listAppendix.find(e => e.id == item.maLoai);
-                    //     item.tenPl = appendix.tenPl;
-                    //     item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
-                    // })
-                    // this.getStatusButton();
-                    // this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
                     this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
                     this.back()
                 } else {

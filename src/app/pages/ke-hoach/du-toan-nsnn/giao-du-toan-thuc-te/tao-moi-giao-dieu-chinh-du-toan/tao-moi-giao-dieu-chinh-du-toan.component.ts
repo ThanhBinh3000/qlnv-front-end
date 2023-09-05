@@ -244,9 +244,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		// lấy id bản ghi từ router
 		this.id = this.data.id;
 
-		// lấy mã đơn vị tạo PA
-		// this.maDonViTao = this.userInfo?.MA_DVI;
-
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
 
@@ -282,11 +279,8 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			// call chi tiết bản ghi khi có id
 			await this.getDetailReport();
 		} else {
-			// khi không có id thì thực hiện tạo mới
-			// this.trangThaiBanGhi = '1';
 			this.maDonViTao = this.userInfo?.MA_DVI;
 			this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-			// this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
 			this.maDviTien = '1'
 			this.listIdFilesDelete = this.data?.listIdDeleteFiles;
 			this.lstCtietBcao = this.data?.lstCtiets;
@@ -440,20 +434,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 						})
 					}
 					this.checkSumUp = data.data.checkSumUp;
-					// if (this.lstCtietBcao[0]?.lstCtietDvis.length > 0) {
-					// 	this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
-					// 		this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan))
-					// 	})
-					// }
-					// this.lstCtietBcao.forEach(item => {
-					//   item.tongCong = divMoney(item.tongCong, this.maDviTien);
-					//   if (item.lstCtietDvis) {
-					//     item.lstCtietDvis.forEach(e => {
-					//       // e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null : divMoney(e.soTranChi, this.maDviTien);
-					//       e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
-					//     })
-					//   }
-					// })
 					this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
 					this.updateEditCache();
 					this.getStatusButton();
@@ -925,27 +905,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 				});
 				this.spinner.hide();
 			}
-
-			// this.spinner.show();
-			// await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
-			// 	if (data.statusCode == 0) {
-			// 		this.trangThaiBanGhi = mcn;
-			// 		this.getStatusButton();
-			// 		if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-			// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-			// 		} else {
-			// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-			// 		}
-			// 		// if (this.userInfo?.roles[0]?.code == 'C_KH_VP_LD' && this.soQd) {
-			// 		//   this.statusBtnGuiDVCT = false;
-			// 		// }
-			// 	} else {
-			// 		this.notification.error(MESSAGE.ERROR, data?.msg);
-			// 	}
-			// }, err => {
-			// 	this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			// });
-			// this.spinner.hide();
 		} else {
 			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
 		}
@@ -968,27 +927,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			}
 		});
 	};
-
-	// xem chi tiết PA cha
-	// xemCtietPaBTC() {
-	//   if (!this.idPaBTC) {
-	//     return;
-	//   }
-	//   const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-	//   let url: string;
-	//   if (capDviUser == Utils.TONG_CUC) {
-	//     url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-	//   } else if (this.maPaCha.includes('BTC')) {
-	//     url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-	//   } else {
-	//     if (capDviUser == Utils.CUC_KHU_VUC) {
-	//       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-	//     } else {
-	//       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-	//     }
-	//   }
-	//   window.open(url, '_blank');
-	// };
 	// xem chi tiết PA cha
 	xemCtietPaBTC() {
 		if (!this.idPaBTC) {
@@ -1003,8 +941,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			this.dataChange.emit(obj);
 		}
 		else {
-			// url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-			// window.open(url, '_blank')
 			const obj = {
 				id: this.idPaBTC,
 				preData: this.data,

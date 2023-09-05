@@ -145,20 +145,6 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
             this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Status.TT_KT));
         }
 
-        //lay danh sach danh muc
-        // await this.danhMuc.dMDonVi().toPromise().then(
-        //     data => {
-        //         if (data.statusCode == 0) {
-        //             this.donVis = data.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        //         }
-        //     },
-        //     err => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     }
-        // );
-
         this.onSubmit();
         this.spinner.hide();
     }

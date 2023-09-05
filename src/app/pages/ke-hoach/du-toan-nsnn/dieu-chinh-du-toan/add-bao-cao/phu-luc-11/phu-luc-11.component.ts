@@ -107,7 +107,6 @@ export class PhuLuc11Component implements OnInit {
         "sluongTrongNuoc",
         "sluongNgoaiNuoc",
         "sluongTongSo",
-        // "kinhPhiHoTro",
         "tongNCDtoanKp",
         "dtoanNamTruoc",
         "dtoanDaGiao",
@@ -198,16 +197,7 @@ export class PhuLuc11Component implements OnInit {
                 }))
             })
             this.setLevel();
-            // this.lstCtietBcao.forEach(item => {
-            //     item.tenNoiDung += Utils.getName(item.level, item.maNoiDung);
-            // })
         }
-        // else if (!this.lstCtietBcao[0]?.stt) {
-        //     // this.lstCtietBcao.forEach(item => {
-        //     //     item.stt = item.maNoiDung;
-        //     // })
-        // }
-
         if (this.lstCtietBcao.length > 0) {
             if (!this.lstCtietBcao[0]?.stt) {
                 this.lstCtietBcao = Table.sortWithoutIndex(this.lstCtietBcao, 'maNoiDung');
@@ -215,10 +205,6 @@ export class PhuLuc11Component implements OnInit {
                 this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
             }
         }
-
-        // this.lstCtietBcao.forEach(item => {
-        //     item.tenNoiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
-        // })
 
         this.tinhTong();
         this.getTotal();
@@ -705,10 +691,7 @@ export class PhuLuc11Component implements OnInit {
                 { t: 4, b: 6, l: 8, r: 8, val: 'Tổng nhu cầu dự toán, kinh phí' },
                 { t: 4, b: 5, l: 9, r: 11, val: 'Dự toán, kinh phí được sử dụng trong năm' },
                 { t: 4, b: 6, l: 12, r: 12, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
-                // { t: 4, b: 6, l: 13, r: 13, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
-                // { t: 4, b: 6, l: 14, r: 14, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
                 { t: 4, b: 6, l: 13, r: 13, val: 'Ghi chú' },
-                // { t: 4, b: 6, l: 16, r: 16, val: 'Ý kiến của đơn vị cấp trên' },
 
 
                 { t: 6, b: 6, l: 4, r: 4, val: 'Trong nước' },
@@ -731,10 +714,7 @@ export class PhuLuc11Component implements OnInit {
                 { t: 7, b: 7, l: 10, r: 10, val: '7' },
                 { t: 7, b: 7, l: 11, r: 11, val: '8 = 6 + 7' },
                 { t: 7, b: 7, l: 12, r: 12, val: '9 = 5 - 8' },
-                // { t: 7, b: 7, l: 13, r: 13, val: '10' },
-                // { t: 7, b: 7, l: 14, r: 14, val: '11 = 10 - 9' },
                 { t: 7, b: 7, l: 13, r: 13, val: '12' },
-                // { t: 7, b: 7, l: 16, r: 16, val: '13' },
 
             ]
             fieldOrder = [
@@ -751,9 +731,6 @@ export class PhuLuc11Component implements OnInit {
                 'dtoanDaGiao',
                 'dtoanTongSo',
                 'dtoanDnghiDchinh',
-                // 'dtoanVuTvqtDnghi',
-                // 'chenhLech',
-                // 'ykienDviCtren',
                 'ghiChu',
             ]
 

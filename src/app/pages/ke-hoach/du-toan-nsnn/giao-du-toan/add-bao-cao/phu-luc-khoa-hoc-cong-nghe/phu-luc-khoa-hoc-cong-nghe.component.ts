@@ -137,38 +137,7 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         });
         this.fileList = [];
     };
-
-
-
-    // isDataAvailable = false;
-    // editMoneyUnit = false;
-    // status = false;
-    // donViTiens: any[] = DON_VI_TIEN;
-    // maDviTien: string = '1';
-    // scrollX: string;
-    // editRecommendedValue: boolean;
-    // viewRecommendedValue: boolean;
-    // userInfo: any;
-    // formDetail: any;
-    // maDviTao: any;
-    // thuyetMinh: string;
-    // namBcao: number;
-    // statusBtnOk: boolean;
-    // statusBtnFinish: boolean;
-    // statusPrint: boolean;
-    // // noiDungs: any[] = [];
-    // lstCtietBcaos: ItemData[] = [];
-    // editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     noiDungs: any[] = DANH_MUC;
-    // BOX_NUMBER_WIDTH = 300;
-    // soLaMa: any[] = LA_MA;
-    // amount = AMOUNT;
-    // amount1 = AMOUNT1;
-    // total: ItemData = new ItemData();
-    // tongDieuChinhTang: number;
-    // tongDieuChinhGiam: number;
-    // dToanVuTang: number;
-    // dToanVuGiam: number;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -186,20 +155,6 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         })
     }
     async initialization() {
-
-        // const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL10');
-        // if (category) {
-        //   category.data.forEach(
-        //     item => {
-        //       this.noiDungs.push({
-        //         ...item,
-        //         level: item.ma?.split('.').length - 2,
-        //         giaTri: getName(this.namBcao, item.giaTri),
-        //       })
-        //     }
-        //   )
-        // }
-
         this.spinner.show();
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
@@ -227,15 +182,6 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
             })
         }
 
-        // if (this.lstCtietBcaos.length > 0) {
-        //     if (!this.lstCtietBcaos[0]?.stt) {
-        //         this.setIndex();
-        //         // this.lstCtietBcaos = Table.sortWithoutIndex(this.lstCtietBcaos, 'maNoiDung');
-        //     } else {
-        //     }
-        // }
-
-
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
         this.getTotal();
         this.updateEditCache();
@@ -256,9 +202,6 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
                 this.lstCtietBcaos[ind].stt = stt + '.' + (j + 1).toString();
             }
         }
-        // lstVtuTemp.forEach(item => {
-        //     this.sum(item.stt + '.1');
-        // })
     }
 
     async getFormDetail() {

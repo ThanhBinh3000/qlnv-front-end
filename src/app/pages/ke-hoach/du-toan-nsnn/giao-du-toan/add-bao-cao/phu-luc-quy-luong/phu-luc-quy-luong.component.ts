@@ -154,10 +154,6 @@ export class PhuLucQuyLuongComponent implements OnInit {
         await this.getFormDetail();
         this.namBcao = this.dataInfo.namBcao;
         if (this.status.general) {
-            // const category = await this.danhMucService.danhMucChungGetAll('LTD_PL6');
-            // if (category) {
-            //     this.listVtu = category.data;
-            // }
             this.scrollX = Table.tableWidth(350, 8, 1, 360);
         } else {
             this.scrollX = Table.tableWidth(350, 8, 1, 0);

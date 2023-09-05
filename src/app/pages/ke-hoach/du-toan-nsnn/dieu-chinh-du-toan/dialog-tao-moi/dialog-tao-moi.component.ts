@@ -14,7 +14,6 @@ import { Dcdt, Form, Report } from '../dieu-chinh-du-toan.constant';
 @Component({
     selector: 'dialog-tao-moi',
     templateUrl: './dialog-tao-moi.component.html',
-    // styleUrls: ['./dialog-tao-moi.component.scss'],
 })
 
 export class DialogTaoMoiComponent implements OnInit {
@@ -55,25 +54,13 @@ export class DialogTaoMoiComponent implements OnInit {
         this.response = {
             ...new Report(),
             namBcao: this.response.namBcao,
-            // dotBcao: this.response.dotBcao,
             maDvi: this.userInfo.MA_DVI,
         }
         const requestReport = {
-            // loaiTimKiem: "0",
-            // maDvi: this.response.maDvi,
-            // namBcao: this.response.namBcao,
-            // dotBcao: this.response.dotBcao,
-            // maBcao: "",
-            // paggingReq: {
-            //     limit: 1000,
-            //     page: 1,
-            // },
-            // trangThais: [],
 
             loaiTimKiem: "1",
             maBcao: null,
             maDvi: this.response.maDvi,
-            // dotBcao: this.response.dotBcao,
             namBcao: this.response.namBcao,
             ngayTaoDen: null,
             ngayTaoTu: null,
@@ -151,7 +138,6 @@ export class DialogTaoMoiComponent implements OnInit {
             if (this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1) {
                 const request = {
                     dotBcao: dotBcao,
-                    // maDvi: this.userInfo.MA_DVI,
                     namBcao: this.response.namBcao,
                 }
                 await this.dieuChinhService.soLuongVp(request).toPromise().then(

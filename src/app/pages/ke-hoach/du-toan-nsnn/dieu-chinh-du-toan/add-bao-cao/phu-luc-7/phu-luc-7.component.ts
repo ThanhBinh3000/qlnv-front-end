@@ -69,11 +69,7 @@ export class ItemData {
 
     upperBound() {
         return (
-            // this.dtoanLkeDaGiao > Utils.MONEY_LIMIT ||
             this.ncauDtoan > Utils.MONEY_LIMIT
-            // this.dtoanVuTvqtDnghi > Utils.MONEY_LIMIT ||
-            // this.ncauDtoan > Utils.MONEY_LIMIT ||
-            // this.kphiThieuNamTruoc > Utils.MONEY_LIMIT
         );
     }
 
@@ -149,12 +145,9 @@ export class PhuLuc7Component implements OnInit {
     //danh muc
     lstCtietBcao: ItemData[] = [];
     keys = [
-        // "dmucChiPhiTaiCuaKho",
-        // "binhQuanChiPhiNgoaiCuaKho",
         "tdiemBcaoChiPhiTaiCuaKho",
         "tdiemBcaoChiPhiNgoaiCuaKho",
         "tdiemBcaoChiPhiTongCong",
-        // "tdiemBcaoCcu",
         "dkienThienChiPhiTaiCuaKho",
         "dkienThienChiPhiNgoaiCuaKho",
         "dkienThienChiPhiTongCong",
@@ -164,17 +157,6 @@ export class PhuLuc7Component implements OnInit {
         "dtoanVuTvqtDnghi",
         "kphiThieuNamTruoc",
         "chenhLech",
-
-
-        // 'thNamTruoc',
-        // 'namDtoan',
-        // 'namUocTh',
-        // 'ttienTaiKho',
-        // 'ttienNgoaiKho',
-        // 'tongCong',
-        // 'tdinhKhoTtien',
-        // 'tdinhTcong',
-        // 'chenhLech'
     ]
     lstVatTuFull: any[] = [];
     dsDinhMuc: any[] = [];
@@ -236,10 +218,7 @@ export class PhuLuc7Component implements OnInit {
         this.namBcao = this.dataInfo.namBcao;
 
         if (this.status.general) {
-            // const category = await this.danhMucService.danhMucChungGetAll('LTD_PL2');
-            // if (category) {
             this.noiDungs = TEN_HANG;
-            // }
             this.scrollX = Table.tableWidth(350, 21, 1, 110);
         } else {
             if (this.status.editAppVal) {
@@ -250,58 +229,6 @@ export class PhuLuc7Component implements OnInit {
                 this.scrollX = Table.tableWidth(350, 21, 1, 0);
             }
         }
-
-        // if (this.lstCtietBcao.length == 0) {
-        //     this.noiDungs.forEach(s => {
-        //         this.lstCtietBcao.push(
-        //             new ItemData({
-        //                 id: uuid.v4() + 'FE',
-        //                 stt: s.ma,
-        //                 tenHang: s.tenHang,
-        //                 dmucHang: s.ma,
-        //             })
-        //         )
-        //     })
-        //     this.setLevel();
-        // }
-
-        // if (this.lstCtietBcao.length == 0) {
-        //     this.noiDungs.forEach(e => {
-        //         this.lstCtietBcao.push(new ItemData({
-        //             id: uuid.v4() + 'FE',
-        //             stt: e.ma,
-        //             tenHang: e.tenHang,
-        //             dmucHang: e.ma,
-        //         }))
-        //     })
-        // } else if (!this.lstCtietBcao[0]?.stt) {
-        //     this.lstCtietBcao.forEach(item => {
-        //         item.stt = item.dmucHang;
-        //     })
-        // }
-
-        // await this.getDinhMuc();
-        // this.lstCtietBcao.forEach(item => {
-        //     if (!item.tenHang) {
-        //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.dmucHang);
-        //         item.tenHang = dinhMuc?.tenDinhMuc;
-        //         item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
-        //         item.donViTinh = dinhMuc?.donViTinh;
-        //         // item.ttienTaiKho = Operator.mul(item.dmucTaiKho, item.sluongTaiKho);
-        //     }
-        // })
-
-        // if (this.dataInfo.isSynthetic) {
-        //     this.lstCtietBcao.forEach(item => {
-        //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.dmucHang);
-        //         item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
-        //         // item.changeModel();
-        //     })
-        //     this.sum1()
-        // }
-        // if (!this.lstCtietBcao[0]?.stt) {
-        //     this.setIndex();
-        // }
 
         if (this.lstCtietBcao.length == 0) {
             this.noiDungs.forEach(e => {
@@ -447,20 +374,6 @@ export class PhuLuc7Component implements OnInit {
         })
     }
 
-    // updateAllChecked(): void {
-    //     if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-    //         this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-    //             ...item,
-    //             checked: true
-    //         }));
-    //     } else {
-    //         this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-    //             ...item,
-    //             checked: false
-    //         }));
-    //     }
-    // }
-
     getTotal() {
         this.total.clear();
         this.lstCtietBcao.forEach(item => {
@@ -558,13 +471,6 @@ export class PhuLuc7Component implements OnInit {
     handleCancel() {
         this._modalRef.close();
     };
-
-    // deleteLine(id: any): void {
-    //     this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
-    //     if (typeof id == "number") {
-    //         this.listIdDelete += id + ","
-    //     }
-    // };
 
     deleteLine(id: string) {
         const stt = this.lstCtietBcao.find(e => e.id === id)?.stt;
@@ -750,116 +656,31 @@ export class PhuLuc7Component implements OnInit {
                     const item: ItemData = new ItemData({
                         id: uuid.v4() + 'FE',
                         dmucHang: res.ma,
-                        // tenHang: res.ten,
                         level: parentItem.level + 1,
-                        // maDviTinh: res.maDviTinh,
                     })
                     this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
-                    // }
                 } else {
                     const item: ItemData = new ItemData({
                         id: uuid.v4() + 'FE',
                         dmucHang: res.ma,
-                        // tenHang: res.ten,
                         level: parentItem.level + 1,
-                        // maDviTinh: res.maDviTinh,
                     })
                     this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
                 }
 
                 const stt = this.lstCtietBcao.find(e => e.id == parentItem.id).stt;
-
-
-
-                // await this.getDinhMuc();
-                // this.lstCtietBcao.forEach(item => {
-                //     if (!item.tenDanhMuc) {
-                //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc);
-                //         item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-                //         item.dmucTaiKho = dinhMuc?.tongDmuc;
-                //         item.dviTinh = dinhMuc?.donViTinh;
-                //         item.ttienTaiKho = Operator.mul(item.dmucTaiKho, item.sluongTaiKho);
-                //     }
-                // })
-
-                // if (this.dataInfo.isSynthetic) {
                 this.lstCtietBcao.forEach(item => {
                     if (item.level == 2) {
                         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.dmucHang);
                         item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
                     }
-                    // item.changeModel();
                 })
-                // this.sum1()
-                // }
                 this.sum(stt + '.1');
                 this.updateEditCache();
             }
 
         });
     };
-
-    // selectGoods() {
-    //     const modalTuChoi = this.modal.create({
-    //         nzTitle: 'Danh sách hàng hóa',
-    //         nzContent: DialogDanhSachVatTuHangHoaComponent,
-    //         nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-    //         nzMaskClosable: false,
-    //         nzClosable: false,
-    //         nzWidth: '900px',
-    //         nzFooter: null,
-    //         nzComponentParams: {},
-    //     });
-    //     modalTuChoi.afterClose.subscribe(async (data) => {
-    //         if (data) {
-    //             const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma);
-    //             if (this.lstCtietBcao.findIndex(e => e.dmucHang == data.ma) == -1) {
-    //                 let stt: any;
-    //                 const index = this.lstCtietBcao.findIndex(e => e.dmucHang == '0.2');
-    //                 if (data.ma.startsWith('02')) {
-    //                     stt = '0.2.' + (this.lstCtietBcao.length - index).toString();
-    //                     //them vat tu moi vao bang
-    //                     this.lstCtietBcao.push(new ItemData({
-    //                         id: uuid.v4() + 'FE',
-    //                         stt: stt,
-    //                         dmucHang: data.ma,
-    //                         tenHang: data.ten,
-    //                         donViTinh: dm?.donViTinh,
-    //                         dmucChiPhiTaiCuaKho: dm?.tongDmuc,
-    //                         level: 1,
-    //                     }))
-    //                     this.lstCtietBcao.forEach(e => {
-    //                         if (e.stt.startsWith("0.2.")) {
-    //                             this.lstCtietBcao[index].clear();
-    //                         }
-    //                     })
-    //                     this.getTotal()
-    //                     this.updateEditCache();
-    //                 } else {
-    //                     stt = '0.1.' + index.toString();
-    //                     this.lstCtietBcao.splice(index, 0, new ItemData({
-    //                         id: uuid.v4() + 'FE',
-    //                         stt: stt,
-    //                         dmucHang: data.ma,
-    //                         tenHang: data.ten,
-    //                         donViTinh: dm?.donViTinh,
-    //                         dmucChiPhiTaiCuaKho: dm?.tongDmuc,
-    //                         level: 1,
-    //                     }))
-    //                     const index2 = this.lstCtietBcao.findIndex(e => e.dmucHang == '0.1');
-    //                     this.lstCtietBcao.forEach(e => {
-    //                         if (e.stt.startsWith("0.1.")) {
-    //                             this.lstCtietBcao[index2].clear();
-    //                         }
-    //                     })
-    //                     this.getTotal()
-    //                     this.updateEditCache();
-    //                 }
-
-    //             }
-    //         }
-    //     });
-    // }
 
     getChiMuc(str: string): string {
         str = str.substring(str.indexOf('.') + 1, str.length);
@@ -1029,12 +850,8 @@ export class PhuLuc7Component implements OnInit {
                 { t: 4, b: 6, l: 17, r: 17, val: 'Nhu cầu dự toán năm' + this.namBcao },
                 { t: 4, b: 6, l: 18, r: 18, val: 'Dự toán lũy kế đã giao' },
                 { t: 4, b: 6, l: 19, r: 19, val: 'Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)' },
-                // { t: 4, b: 6, l: 20, r: 20, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
                 { t: 4, b: 6, l: 20, r: 20, val: 'Kinh phí thiếu những năm trước' },
                 { t: 4, b: 6, l: 21, r: 21, val: 'Ghi chú' },
-                // { t: 4, b: 6, l: 23, r: 23, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị ' },
-                // { t: 4, b: 6, l: 24, r: 24, val: 'Ý kiến của đơn vị cấp trên' },
-
                 { t: 5, b: 6, l: 3, r: 3, val: 'Địa phương nhận' },
                 { t: 5, b: 6, l: 4, r: 4, val: 'QĐ giao nhiệm vụ của' + this.dataInfo.tenDvi },
                 { t: 5, b: 6, l: 5, r: 5, val: 'Lượng' },
@@ -1069,11 +886,8 @@ export class PhuLuc7Component implements OnInit {
                 { t: 7, b: 7, l: 17, r: 17, val: '12 = 6 + 11' },
                 { t: 7, b: 7, l: 18, r: 18, val: '13' },
                 { t: 7, b: 7, l: 19, r: 19, val: '14 = 12 - 13' },
-                // { t: 7, b: 7, l: 20, r: 20, val: '15' },
                 { t: 7, b: 7, l: 20, r: 20, val: '16' },
                 { t: 7, b: 7, l: 21, r: 21, val: '17' },
-                // { t: 7, b: 7, l: 23, r: 23, val: '18 = 15 - 14' },
-                // { t: 7, b: 7, l: 24, r: 24, val: '19' },
             ]
             fieldOrder = [
                 'stt',
@@ -1096,11 +910,8 @@ export class PhuLuc7Component implements OnInit {
                 'ncauDtoan',
                 'dtoanLkeDaGiao',
                 'dtoanDnghiDchinh',
-                // 'dtoanVuTvqtDnghi',
                 'kphiThieuNamTruoc',
                 'ghiChu',
-                // 'chenhLech',
-                // 'ykienDviCtren',
             ]
         }
 

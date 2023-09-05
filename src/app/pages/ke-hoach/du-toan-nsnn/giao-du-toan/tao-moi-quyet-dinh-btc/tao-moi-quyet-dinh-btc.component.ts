@@ -728,16 +728,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             },
         );
     }
-
-    // check trạng thái để đặt class cho thẻ trạng thái 
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.isStatus)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // };
-
     // hiển thị tên trạng thái
     getStatusName(status: string) {
         return this.trangThais.find(e => e.id == status)?.tenDm;
@@ -908,13 +898,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
     // Lưu dữ liệu từ editCache vào lstCtiteBcao
     saveEdit(id: string): void {
-        // if (
-        //     (!this.editCache[id].data.nguonKhac) ||
-        //     (!this.editCache[id].data.nguonNsnn)
-        // ) {
-        //     this.notification.warning(MESSAGE.WARNING, "không được để trống")
-        //     return;
-        // }
         if (this.editCache[id].data.nguonKhac < 0 ||
             this.editCache[id].data.nguonNsnn < 0) {
             this.notification.warning(MESSAGE.WARNING, "Giá trị nhập không được âm")

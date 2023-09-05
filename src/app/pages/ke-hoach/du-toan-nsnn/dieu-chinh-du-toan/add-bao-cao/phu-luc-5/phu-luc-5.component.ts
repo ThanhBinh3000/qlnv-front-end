@@ -874,10 +874,7 @@ export class PhuLuc5Component implements OnInit {
                 { t: 7, b: 7, l: 8, r: 8, val: '6 = 4 * 5' },
                 { t: 7, b: 7, l: 9, r: 9, val: '7' },
                 { t: 7, b: 7, l: 10, r: 10, val: '8 = 6 - 7' },
-                // { t: 7, b: 7, l: 11, r: 11, val: '9' },
                 { t: 7, b: 7, l: 11, r: 11, val: '9' },
-                // { t: 7, b: 7, l: 13, r: 13, val: '11 = 9 - 8' },
-                // { t: 7, b: 7, l: 14, r: 14, val: '12' },
                 { t: 7, b: 7, l: 12, r: 12, val: '10' },
 
             ]
@@ -893,10 +890,7 @@ export class PhuLuc5Component implements OnInit {
                 "thanhTien",
                 "dtoanDaGiaoLke",
                 "dtoanDchinh",
-                // "dtoanVuTvqtDnghi",
                 "kphiConThieu",
-                // "chenhLech",
-                // "ykienDviCtren",
                 "ghiChu",
             ]
         }
