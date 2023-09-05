@@ -13,6 +13,7 @@ import { cloneDeep } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { BaseService } from 'src/app/services/base.service';
+import { saveAs } from 'file-saver';
 import {
   DialogTableSelectionComponent,
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
@@ -21,6 +22,8 @@ import {
 } from 'src/app/pages/xuat/kiem-tra-chat-luong/bien-ban-lay-mau/bien-ban-lay-mau.component';
 import { Validators } from '@angular/forms';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { PREVIEW } from '../../../../../constants/fileType';
+import printJS from 'print-js';
 
 @Component({
   selector: 'app-chi-tiet-bien-ban-lay-mau',
@@ -46,6 +49,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   dsDiaDiem: any;
   maHauTo: any;
   public vldTrangThai: BienBanLayMauComponent;
+  templateName = 'xuat-thanh-ly-bien-ban-lay-mau';
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -388,5 +392,35 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     });
     this.formData.patchValue({ xhPhieuKnclDtl: xhBienBanLayMauDtl });
     await this.buildTableView();
+  }
+
+  async preview(id) {
+    this.spinner.show();
+    await this.service.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
   }
 }
