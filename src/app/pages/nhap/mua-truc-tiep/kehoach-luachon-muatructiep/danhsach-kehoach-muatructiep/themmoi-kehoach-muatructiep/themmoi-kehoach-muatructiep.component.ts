@@ -268,7 +268,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       return;
     }
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm mới số lượng, địa điểm mua trực tiếp',
+      nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -279,6 +279,8 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         dataChiTieu: this.dataChiTieu,
         namKh: this.formData.get('namKh').value,
         loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
+        tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         donGiaVat: this.formData.value.donGiaVat,
       },
     });

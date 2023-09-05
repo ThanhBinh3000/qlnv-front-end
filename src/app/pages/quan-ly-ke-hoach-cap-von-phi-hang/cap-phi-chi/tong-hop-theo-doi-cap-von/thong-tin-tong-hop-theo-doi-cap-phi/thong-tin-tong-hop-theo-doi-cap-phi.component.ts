@@ -3,7 +3,7 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -18,13 +18,14 @@ import { TongHopTheoDoiCapPhiService } from 'src/app/services/ke-hoach/von-phi/t
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import {ThongTriDuyetYCapVonService} from "../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapVon.service";
-import {ThongTriDuyetYCapPhiService} from "../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service";
+import { ThongTriDuyetYCapVonService } from '../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
+import { ThongTriDuyetYCapPhiService } from '../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
+import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-thong-tin-tong-hop-theo-doi-cap-phi',
   templateUrl: './thong-tin-tong-hop-theo-doi-cap-phi.component.html',
-  styleUrls: ['./thong-tin-tong-hop-theo-doi-cap-phi.component.scss']
+  styleUrls: ['./thong-tin-tong-hop-theo-doi-cap-phi.component.scss'],
 })
 export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
   @Input() loaiVthhInput: string;
@@ -46,10 +47,11 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
 
   userInfo: UserLogin;
   listFileDinhKem: any[] = [];
-  khBanDauGia: any = {};
+  itemTongHopTd: any = {};
   dsBoNganh: any[] = [];
   chiTietList: any[] = [];
   dsThongTri: any;
+  amount = AMOUNT_NO_DECIMAL;
 
   constructor(
     private modal: NzModalService,
@@ -68,8 +70,8 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.khBanDauGia.trangThai = this.globals.prop.NHAP_DU_THAO;
-    this.khBanDauGia.tenTrangThai = "Dự thảo";
+    this.itemTongHopTd.trangThai = this.globals.prop.NHAP_DU_THAO;
+    this.itemTongHopTd.tenTrangThai = 'Dự thảo';
     await Promise.all([
       this.initForm(),
       this.getListBoNganh(),
@@ -84,11 +86,10 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
       let res = await this.tongHopTheoDoiCapVonService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          this.khBanDauGia = res.data;
-          this.initForm();
-          this.formData.patchValue({soThongTri:+this.khBanDauGia.soThongTri})
-          if (this.khBanDauGia.fileDinhKems) {
-            this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
+          this.itemTongHopTd = res.data;
+          this.formData.patchValue(res.data);
+          if (this.itemTongHopTd.fileDinhKems) {
+            this.listFileDinhKem = this.itemTongHopTd.fileDinhKems;
           }
         }
       }
@@ -105,21 +106,21 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      soThongTri: [, [Validators.required]],
-      maDviDuocDuyet: [this.khBanDauGia ? this.khBanDauGia.maDviDuocDuyet : null],
-      soLenhChiTien: [this.khBanDauGia ? this.khBanDauGia.soLenhChiTien : null, [Validators.required]],
-      chuong: [this.khBanDauGia ? this.khBanDauGia.chuong : null],
-      loai: [this.khBanDauGia ? this.khBanDauGia.loai : null],
-      khoan: [this.khBanDauGia ? this.khBanDauGia.khoan : null],
-      lyDoChi: [this.khBanDauGia ? this.khBanDauGia.lyDoChi : null],
-      soTien: [this.khBanDauGia ? this.khBanDauGia.soTien : null],
-      dviThuHuong: [this.khBanDauGia ? this.khBanDauGia.dviThuHuong : null, [Validators.required]],
-      tenDviThuHuong: [this.khBanDauGia ? this.khBanDauGia.tenDviThuHuong : null],
-      taiKhoan: [this.khBanDauGia ? this.khBanDauGia.taiKhoan : null, [Validators.required]],
-      nganHang: [this.khBanDauGia ? this.khBanDauGia.nganHang : null, [Validators.required]],
-      canCu: [this.khBanDauGia ? this.khBanDauGia.canCu : null],
-      dotTToan: [this.khBanDauGia ? this.khBanDauGia.dotTToan : null],
-
+      soThongTri: [null, [Validators.required]],
+      dviThongTri: [null],
+      tenDviThongTri: [null],
+      soLenhChiTien: [null, [Validators.required]],
+      chuong: [null],
+      loai: [null],
+      nam: [null],
+      khoan: [null],
+      lyDoChi: [null],
+      soTien: [null],
+      dviThuHuong: [null, [Validators.required]],
+      taiKhoan: [null, [Validators.required]],
+      nganHang: [null, [Validators.required]],
+      canCu: [null],
+      dotTToan: [null],
     });
   }
 
@@ -249,4 +250,6 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
       this.formData.patchValue(dataDetail);
     }
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }

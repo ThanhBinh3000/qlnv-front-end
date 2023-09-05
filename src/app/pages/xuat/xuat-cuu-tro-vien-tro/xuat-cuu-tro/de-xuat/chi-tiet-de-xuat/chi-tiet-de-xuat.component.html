@@ -118,7 +118,7 @@
             </nz-select>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị đề xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -138,6 +138,33 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Ngày đề xuất</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <nz-date-picker class="search__input" formControlName="ngayDx" [nzDisabled]="isView"
+                              [nzFormat]="globals.dateFormat">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+            </nz-form-label>
+            <nz-form-control>
+              <nz-radio-group [nzDisabled]="isView || formData.value.deXuatPhuongAn.length > 0"
+                              formControlName="tenVthh"
+                              (ngModelChange)="changeVthh($event)">
+                <label nz-radio nzValue="0101">Thóc tẻ </label>
+                <label nz-radio nzValue="0102">Gạo tẻ</label>
+                <label nz-radio nzValue="02">Vật tư thiết bị</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
@@ -160,41 +187,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-
-      </div>
-      <div nz-row [nzGutter]="24">
-        <div nz-col [nzSpan]="4">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
-            </nz-form-label>
-            <nz-form-control>
-              <nz-radio-group [nzDisabled]="isView || formData.value.deXuatPhuongAn.length > 0" formControlName="tenVthh"
-                              (ngModelChange)="changeVthh($event)">
-                <label nz-radio nzValue="0101">Thóc </label>
-                <label nz-radio nzValue="0102">Gạo </label>
-                <label nz-radio nzValue="02">Vật tư thiết bị</label>
-              </nz-radio-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="8">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu</nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24">
-              <input nz-input formControlName="trichYeu" [readOnly]="isView"/>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="4">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ngày đề xuất</nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24">
-              <nz-date-picker class="search__input" formControlName="ngayDx" [nzDisabled]="isView"
-                              [nzFormat]="globals.dateFormat">
-              </nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thời gian thực hiện xuất viện trợ, cứu trợ đến ngày</nz-form-label>
@@ -202,6 +194,26 @@
               <nz-date-picker class="search__input" formControlName="ngayKetThuc" [nzDisabled]="isView"
                               [nzFormat]="globals.dateFormat">
               </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Mục đích xuất</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <nz-select formControlName="mucDichXuat" [nzDisabled]="isView">
+                <nz-option *ngFor="let p of listMucDichXuat" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <input nz-input formControlName="trichYeu" [readOnly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -413,7 +425,7 @@
                   </div>
                   <div nz-col [nzSpan]="8">
                     <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                      style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number : '1.0-1' : 'vi_VN'}}</span></p>
+                      style="color: #001CFF">{{formDataDtl.value.tonKhoLoaiVthh|number:globals.numberFormat:globals.locale}}</span></p>
                   </div>
                 </div>
               </nz-form-control>
@@ -431,7 +443,7 @@
                   </div>
                   <div nz-col [nzSpan]="8">
                     <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                      style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number : '1.0-1' : 'vi_VN'}}</span></p>
+                      style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span></p>
                   </div>
                 </div>
               </nz-form-control>
@@ -443,21 +455,24 @@
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
                   <nz-select nzAllowClear formControlName="maDvi" (ngModelChange)="changeMaDviDtl($event)"
+                             [nzDisabled]="isView || userService.isCuc()"
                              nzPlaceHolder="Chọn đơn vị" nzShowSearch>
                     <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                   </nz-select>
                 </div>
                 <div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                    style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number : '1.0-1' : 'vi_VN'}}</span></p>
+                    style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span></p>
                 </div>
               </div>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao cục</nz-form-label>
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true"
+                           [nzXs]="7">{{userService.isTongCuc() ? 'Số lượng giao cục' : 'Số lượng đề xuất'}}</nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'">
               <nz-input-number formControlName="soLuong" [nzMin]="1" [nzMax]="999999999999" [nzStep]="0.1"
+                               [nzDisabled]="isView"
                                [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
             </nz-form-control>

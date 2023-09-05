@@ -94,7 +94,8 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
       loaiSuaChua : [null],
       listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtTdscQuyetDinhPdKhlcntCvKad: null,
-      listKtTdscQuyetDinhPdKhlcntCvKh: null
+      listKtTdscQuyetDinhPdKhlcntCvKh: null,
+      loai: ['00']
     });
     super.ngOnInit()
   }
@@ -155,7 +156,6 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
       if (this.itemQdPdKhLcnt && !isBackFromHd) {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
         this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
-        console.log(this.itemQdPdKhLcnt, ' this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt');
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
         }
@@ -166,12 +166,13 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
           "idDuAn": this.itemQdPdKhLcnt.idDuAn,
           "idQdPdDaDtxd": this.itemQdPdKhLcnt.idQdPdDaDtxd,
           "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
+          "loai": '00'
         }
         let res = await this.hopdongService.detailQdPdKhLcnt(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {(this.itemQdPdKhLcnt, 'this item')
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
+            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntDsnt;
             if (this.listHopDong && this.listHopDong.length > 0) {
               this.selectRow(this.listHopDong[0]);
             }

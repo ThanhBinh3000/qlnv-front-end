@@ -53,19 +53,26 @@
     <div class="group-button">
       <h3> DANH SÁCH BẢNG KÊ BÁN LẺ </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do"
-                (click)="deleteMulti(['XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA','XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA'])"
-                *ngIf="userService.isChiCuc()">
+        <button
+          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
+                     userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_SUA')"
+          type="button" class="btn btn-do" (click)="deleteMulti()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData('Danh-sach-bang-ke-ban-le.xlsx')">
+
+        <button
+          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_EXP'):
+           userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_EXP')"
+          type="button" class="btn btn-sub" (click)="exportData('Danh-sach-bang-ke-ban-le.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_BKTML_THEM')" type="button"
-                class="btn btn-main" (click)="themMoiBangKeBanLe($event)">
-          <i class="icon htvbdh_dau-cong"></i>
+        <button
+          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_THEM'):
+           userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM')"
+          type="button" class="btn btn-main" (click)="themMoiBangKeBanLe($event, false, 0)">
+          <i class=" icon htvbdh_dau-cong"></i>
           <span>Thêm bảng kê</span>
         </button>
       </div>
@@ -174,38 +181,36 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let data of basicTable.data; let i = index">
+        <tr *ngFor="let data of basicTable.data; let idx = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != '00'"></label>
           </td>
-          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+          <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
           <td>{{ data.namKh }}</td>
           <td>{{ data.soBangKe }}</td>
           <td>
             <a *ngIf="data.soQdNv && data.idQdNv" nz-button nzType="link"
-               (click)="openModalQdNv(data.idQdNv)">{{
-              data.soQdNv}}</a>
+               (click)="openModalQdNv(data.idQdNv)">
+              {{ data.soQdNv }}</a>
           </td>
-          <td>{{ data.tenNguoiMua}}</td>
+          <td>{{ data.tenNguoiMua }}</td>
           <td>{{ data.diaChiNguoiMua }}</td>
           <td>{{ data.cmt }}</td>
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
-          <td>{{ data.soLuongBanLe | number :
-            '1.0-1' :
-            'vi_VN'}}</td>
-          <td>{{ data.donGia | number :
-            '1.0-1' :
-            'vi_VN'}}</td>
-          <td>{{ data.soLuongBanLe * data.donGia | number :
-            '1.0-1' :
-            'vi_VN'}}
+          <td>{{ data.soLuongBanLe|number:globals.numberFormat:globals.locale}}</td>
+          <td>{{ data.donGia|number:globals.numberFormat:globals.locale}}</td>
+          <td>{{ data.soLuongBanLe * data.donGia|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-left">
-            <a (click)="themMoiBangKeBanLe($event,data.id, i)">
+            <a *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_XEM'):
+                userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_XEM')"
+               (click)="themMoiBangKeBanLe($event,true, data.id, idx)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a (click)="delete(data)">
+            <a *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
+                userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_SUA')"
+               (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
@@ -234,8 +239,8 @@
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModalQdNv()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!-- <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
-    </app-them-moi-qd-giao-nv-xuat-btt> -->
+    <!--    <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">-->
+    <!--    </app-them-moi-qd-giao-nv-xuat-btt>-->
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModalQdNv()" class="modal__button--cancel">

@@ -42,6 +42,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   loadDanhSachQdNv: any[] = [];
   loadDanhSachBbLm: any[] = [];
   flagInit: Boolean = false;
+  previewName: string = 'xdt_bien_ban_lay_mau';
 
   constructor(
     httpClient: HttpClient,
@@ -105,7 +106,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         this.initForm();
       }
       await this.loadDataComboBox();
-    }catch (e) {
+    } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
       await this.spinner.hide();
     } finally {
@@ -179,7 +180,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     let res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data.content;
-      if(data && data.length > 0){
+      if (data && data.length > 0) {
         this.loadDanhSachQdNv = data;
         this.loadDanhSachQdNv = this.loadDanhSachQdNv.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
       }
@@ -224,7 +225,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
 
   async bindingDataQd(id) {
     await this.spinner.show();
-    if (id >0){
+    if (id > 0) {
       await this.quyetDinhGiaoNhiemVuXuatHangService.getDetail(id)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -283,7 +284,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     let res = await this.bienBanLayMauXhService.search(body)
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data
-      if(data && data.content && data.content.length >0){
+      if (data && data.content && data.content.length > 0) {
         this.loadDanhSachBbLm = data.content
       }
     } else {
@@ -425,4 +426,61 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       this.formData.controls["chiTieuKiemTra"].clearValidators();
     }
   }
+
+  // async printPreview() {
+  //   let body = this.formData.value;
+  //   this.reportTemplate = {
+  //     fileName: 'xdt_bien_ban_lay_mau'
+  //   }
+  //   body.reportTemplateRequest = this.reportTemplate;
+  //   await this.bienBanLayMauXhService.preview(body).then(async s => {
+  //     // this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+  //     // this.printSrc = s.data.pdfSrc;
+  //     // this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+  //     // this.showDlgPreview = true;
+  //   });
+  // }
+
+  // downloadPdf() {
+  //   // saveAs(this.pdfSrc, "tong_hop_kh_lcnt.pdf");
+  // }
+
+  // downloadWord() {
+  //   // saveAs(this.wordSrc, "tong_hop_kh_lcnt.docx");
+  // }
+
+  // closeDlg() {
+  //   // this.showDlgPreview = false;
+  // }
+
+  // print() {
+  //   // printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  // }
+
+  // async preview() {
+  //   let body = this.formData.value;
+  //   body.reportTemplateRequest = this.reportTemplate;
+  //   await this.tongHopDeXuatKHLCNTService.preview(body).then(async s => {
+  //     this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+  //     this.printSrc = s.data.pdfSrc;
+  //     this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+  //     this.showDlgPreview = true;
+  //   });
+  // }
+
+  // downloadPdf() {
+  //   saveAs(this.pdfSrc, "tong_hop_kh_lcnt.pdf");
+  // }
+
+  // downloadWord() {
+  //   saveAs(this.wordSrc, "tong_hop_kh_lcnt.docx");
+  // }
+
+  // closeDlg() {
+  //   this.showDlgPreview = false;
+  // }
+
+  // printPreview(){
+  //   printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  // }
 }

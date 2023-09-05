@@ -152,13 +152,13 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     let body = {};
     if (this.loaiVthh.startsWith('02')) {
       body = {
-        // tuNgayQd: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
-        // denNgayQd: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
+        tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
+        denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
         loaiVthh: this.loaiVthh,
-        // namKhoach: this.searchFilter.namKhoach,
-        // trichYeu: this.searchFilter.trichYeu,
-        // soQd: this.searchFilter.soQd,
-        // tongTien: this.searchFilter.tongTien,
+        namKhoach: this.searchFilter.namKhoach,
+        soQd: this.searchFilter.soQd,
+        soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
+        soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
         trangThai: this.STATUS.BAN_HANH,
         lastest: 0,
         paggingReq: {

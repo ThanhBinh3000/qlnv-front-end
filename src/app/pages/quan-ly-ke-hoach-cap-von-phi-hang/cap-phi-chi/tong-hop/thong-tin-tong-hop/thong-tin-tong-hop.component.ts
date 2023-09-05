@@ -112,6 +112,7 @@ export class ThongTinTongHopComponent implements OnInit {
     this.initForm();
     await this.loadListNguonTongHop();
     await this.loaiVTHHGetAll();
+    await this.getListLoaiCPhi();
     if (this.idInput) {
       this.loadChiTiet(this.idInput);
     }
@@ -154,8 +155,15 @@ export class ThongTinTongHopComponent implements OnInit {
     }
   }
 
+  async getListLoaiCPhi() {
+    this.listLoaiChiPhi = [];
+    let res = await this.danhMucService.danhMucChungGetAll('PHI_NGHIEP_VU_DTQG');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiChiPhi = res.data;
+    }
+  }
+
   async changeLoaiHangHoa(id: any) {
-    console.log(id);
     if (id && id > 0) {
       let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
@@ -201,6 +209,8 @@ export class ThongTinTongHopComponent implements OnInit {
     body.ct1s = this.ct1s;
     body.cts = this.cts;
     body.fileDinhKem = this.filePhuongAn;
+    console.log(body,'bodybody');
+    // return ;
     this.spinner.show();
     try {
       if (this.idInput > 0) {
@@ -551,6 +561,7 @@ export class ThongTinTongHopComponent implements OnInit {
     let body = {
       nam: this.formData.value.nam,
       trangThaiTh: STATUS.CHUA_TONG_HOP,
+      trangThai: STATUS.DA_HOAN_THANH,
       pageNumber: 1,
       pageSize: 1000,
     };
@@ -618,12 +629,31 @@ export class ThongTinTongHopComponent implements OnInit {
         });
         row.selected = true;
         this.itemSelectedInfo = cloneDeep(row);
+        if (this.itemSelectedInfo) {
+          let ct2List = this.itemSelectedInfo.ct2s;
+          console.log(ct2List, 'ct2Listct2Listct2Listct2Listct2List');
+          ct2List.forEach(item => {
+            let chiPhi = this.listLoaiChiPhi.find(cp => cp.ma == item.loaiChiPhi);
+            if (chiPhi) {
+              item.tenLoaiChiPhi = chiPhi.giaTri;
+            }
+          });
+        }
       } else if (rowSet === 'rowEdit') {
         this.ct1s.forEach(element => {
           element.selected = false;
         });
         this.rowEdit = cloneDeep(row);
         row.selected = true;
+        if (this.rowEdit) {
+          let ct2List = this.rowEdit.ct2s;
+          ct2List.forEach(item => {
+            let chiPhi = this.listLoaiChiPhi.find(cp => cp.ma == item.loaiChiPhi);
+            if (chiPhi) {
+              item.tenLoaiChiPhi = chiPhi.giaTri;
+            }
+          });
+        }
         this.sortTableId('ct2s');
       }
     }

@@ -97,7 +97,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
       listKtTdscQuyetDinhPdKhlcntCvKh: null,
       khoi: [null],
       loaiCapCt: [null],
-      loai : ['01']
+      loai : ['00']
     });
   }
 
