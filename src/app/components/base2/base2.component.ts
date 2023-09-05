@@ -677,4 +677,20 @@ export class Base2Component implements OnInit {
   printPreview(){
     printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
+
+  async xemTruoc(id,tenBaoCao) {
+    await this.service.preview({
+      tenBaoCao: tenBaoCao + '.docx',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
 }
