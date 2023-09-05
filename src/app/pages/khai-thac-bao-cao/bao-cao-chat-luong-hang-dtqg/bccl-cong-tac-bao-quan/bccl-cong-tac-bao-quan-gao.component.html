@@ -43,7 +43,27 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="(formData.value.loaiKyBc && ((formData.value.loaiKyBc == '01') || (formData.value.loaiKyBc == '02'))) ? 7 : 9" *ngIf="userService.isTongCuc()">
+          <div nz-col nzSpan="4" *ngIf="(formData.value.loaiKyBc && ((formData.value.loaiKyBc == '04'))) " >
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Thời gian báo cáo
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <div nz-row>
+                  <div nz-col nzSpan="11">
+                    <nz-date-picker nzPlaceHolder="Từ" formControlName="tgBaoCaoTu" nzFormat="dd/MM/yyyy"
+                                    class="search__input"></nz-date-picker>
+                  </div>
+                  <div nz-col nzSpan="1">
+                  </div>
+                  <div nz-col nzSpan="11">
+                    <nz-date-picker nzPlaceHolder="Đến" formControlName="tgBaoCaoDen" nzFormat="dd/MM/yyyy"
+                                    class="search__input"></nz-date-picker>
+                  </div>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="(formData.value.loaiKyBc && (formData.value.loaiKyBc == '03')) ? 9 : 7" *ngIf="userService.isTongCuc()">
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col >
@@ -53,7 +73,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="(formData.value.loaiKyBc && ((formData.value.loaiKyBc == '01') || (formData.value.loaiKyBc == '02'))) ? 7 : 9" *ngIf="!userService.isChiCuc()">
+          <div nz-col [nzSpan]="(!formData.value.loaiKyBc || (formData.value.loaiKyBc == '03')) ? 9 : 7" *ngIf="!userService.isChiCuc()">
             <nz-form-item>
               <nz-form-label>Chi Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col >

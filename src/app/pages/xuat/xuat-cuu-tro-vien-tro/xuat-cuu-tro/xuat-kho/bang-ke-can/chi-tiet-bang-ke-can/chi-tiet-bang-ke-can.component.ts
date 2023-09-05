@@ -93,7 +93,8 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   errorInputComponent: any[] = [];
   flagInit: Boolean = true;
   listDiaDiemKho: any[] = [];
-
+  templateName = "Bảng kê cân hàng";
+  templateNameVt = "Bảng kê xuất Vật tư";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

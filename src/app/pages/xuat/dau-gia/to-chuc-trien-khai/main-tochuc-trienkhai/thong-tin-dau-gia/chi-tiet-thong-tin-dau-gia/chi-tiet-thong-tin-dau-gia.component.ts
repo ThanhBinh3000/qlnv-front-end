@@ -15,6 +15,7 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import dayjs from 'dayjs';
 import {cloneDeep} from 'lodash';
+import {PREVIEW} from "src/app/constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-thong-tin-dau-gia',
@@ -43,6 +44,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       {
         id: [],
         nam: [],
+        maDvi: [],
         idQdPd: [],
         soQdPd: [''],
         idQdPdDtl: [],
@@ -65,6 +67,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         tenKieuNx: [''],
         trangThai: [],
         tenTrangThai: [],
+        listTtinDg: []
       }
     );
   }
@@ -101,6 +104,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 soQdPd: dataDtl.soQdPd,
                 idQdPdDtl: dataDtl.id,
                 soQdPdKqBdg: dataDtl.soQdPdKqBdg,
+                maDvi: dataDtl.maDvi,
                 tenDvi: dataDtl.tenDvi,
                 khoanTienDatTruoc: dataDtl.khoanTienDatTruoc,
                 tgianDauGia: ['Từ' + ' ' + dayjs(dataDtl.tgianDkienTu).format('DD/MM/YYYY') + ' ' + 'Đến' + ' ' + dayjs(dataDtl.tgianDkienDen).format('DD/MM/YYYY')],
@@ -115,6 +119,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 tenKieuNx: dataHdr.tenKieuNx,
                 trangThai: dataDtl.trangThai,
                 tenTrangThai: dataDtl.tenTrangThai,
+                listTtinDg: dataDtl.listTtinDg
               })
               await this.calculatorTable(dataDtl.children);
             }
@@ -257,6 +262,28 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
+    });
+  }
+
+  async preview() {
+    let data = [];
+    for (let s of this.formData.value.listTtinDg) {
+      await this.thongTinDauGiaService.getDetail(s.id).then(res => {
+        data = [...data, res.data];
+      });
+    }
+
+    let body = {
+      tenCloaiVthh: this.formData.value.tenCloaiVthh.toUpperCase(),
+      nam: this.formData.value.nam,
+      maDvi: this.formData.value.maDvi,
+      children: data
+    }
+    await this.service.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
     });
   }
 }

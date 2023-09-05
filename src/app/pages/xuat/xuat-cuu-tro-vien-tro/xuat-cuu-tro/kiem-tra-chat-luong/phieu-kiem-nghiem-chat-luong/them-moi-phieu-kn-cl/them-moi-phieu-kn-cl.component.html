@@ -1,20 +1,20 @@
-<nz-affix [nzOffsetTop]='globals.prop.MENU_LV1' class='btn-affix'>
-  <div class='btn-group'>
-    <button type='button' class='btn btn-sub' (click)='goBack()'>
-      <i class='fa fa-arrow-left'></i>
-      <span>Quay lại</span>
-    </button>
-    <button *ngIf='idInput' type='button' class='btn btn-sub' (click)='preview(idInput)'>
-      <i class='icon htvbdh_totrinh'></i>
-      <span> In/Xem trước </span>
-    </button>
-    <button class='btn btn-sub xanh-nhat' type='button'
-            *ngIf=' this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC'
-            (click)='save(true)'>
-      <i class='icon htvbdh_tcdt_guiduyet'></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button type='button' class='btn btn-sub do' (click)='tuChoi()'
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+    <div class="btn-group">
+        <button type="button" class="btn btn-sub" (click)="goBack()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+        </button>
+      <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,loaiVthh=='02'?templateNameVt:templateName)">
+        <i class="icon htvbdh_totrinh"></i>
+        <span> In/Xem trước </span>
+      </button>
+        <button class="btn btn-sub xanh-nhat" type="button"
+            *ngIf=" this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
+            (click)="save(true)">
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <span>Lưu và gửi duyệt</span>
+        </button>
+        <button type="button" class="btn btn-sub do" (click)="tuChoi()"
             *ngIf="  (this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDC   && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_PKNCL_DUYET_LDCUC'))
         ||(this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_TP   && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP'))">
       <i class='icon htvbdh_tcdt_tuchoi do'></i>
@@ -350,3 +350,32 @@
 <ng-template #error let-control>
   <app-template-error #error [control]='control'></app-template-error>
 </ng-template>
+
+<nz-modal [(nzVisible)]="showDlgPreview"  nzWidth="70%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(loaiVthh=='02' ? templateNameVt : templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(loaiVthh=='02' ? templateNameVt : templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+

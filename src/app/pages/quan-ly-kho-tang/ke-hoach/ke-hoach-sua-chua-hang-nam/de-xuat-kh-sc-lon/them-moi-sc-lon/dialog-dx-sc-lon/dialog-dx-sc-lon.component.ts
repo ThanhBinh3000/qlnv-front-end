@@ -63,6 +63,10 @@ export class DialogDxScLonComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    let nguonVon = this.listNguonVon.find(data => data.ma == this.item.nguonVon);
+    if (nguonVon) {
+      this.item.tenNguonVon = nguonVon.giaTri;
+    }
     this._modalRef.close(this.item);
     this.item = new KhSuaChuaLonDtl();
   }
@@ -200,6 +204,7 @@ export class KhSuaChuaLonDtl {
   tgHoanThanh: number;
 
   nguonVon: string;
+  tenNguonVon: string;
 
   tgSuaChua: number;
 

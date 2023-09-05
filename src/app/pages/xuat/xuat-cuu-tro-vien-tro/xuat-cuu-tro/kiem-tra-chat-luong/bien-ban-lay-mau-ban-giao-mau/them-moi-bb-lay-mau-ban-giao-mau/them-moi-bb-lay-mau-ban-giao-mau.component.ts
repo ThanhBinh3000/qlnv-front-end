@@ -45,6 +45,8 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   listFileDinhKem: any = [];
   fileNiemPhong: any = [];
   bienBan: any[] = [];
+  templateName = "Biên bản lấy mẫu bàn giao mẫu";
+  templateNameVt = "Biên bản lấy mẫu bàn giao mẫu vật tư";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
