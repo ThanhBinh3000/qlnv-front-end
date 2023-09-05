@@ -527,7 +527,7 @@ export class Operator {
     let check = true;
     let tong = 0;
     num.forEach(item => {
-      if (item || item === 0) {
+      if (+item) {
         check = false;
       }
       tong += (+item) ? (+item) : 0;

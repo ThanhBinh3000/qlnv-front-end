@@ -355,8 +355,7 @@ export class BieuMau138Component implements OnInit {
 			|| (stt.startsWith('0.1.4') && this.status.editAppVal) || (stt.startsWith('0.1.5') && this.status.editAppVal)) {
 			return false;
 		}
-		const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-		return lstTemp.every(e => !e.stt.startsWith(stt));
+		return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
 	}
 
 	// xoa file trong bang file

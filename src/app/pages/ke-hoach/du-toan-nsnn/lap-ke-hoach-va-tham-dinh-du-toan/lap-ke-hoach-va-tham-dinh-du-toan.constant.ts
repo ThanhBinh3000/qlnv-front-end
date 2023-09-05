@@ -158,6 +158,18 @@ export class Ltd {
             status: false,
         },
         {
+            id: 'TT342_05',
+            tenDm: 'Dự toán thu chi ngân sách nhà nước năm $n$',
+            tenPl: 'Biểu mẫu 05',
+            status: false,
+        },
+        {
+            id: 'TT342_06',
+            tenDm: 'Dự toán thu chi ngân sách nhà nước năm $n$ _ chi tiết theo các đơn vị trực thuộc',
+            tenPl: 'Biểu mẫu 06',
+            status: false,
+        },
+        {
             id: 'TT69_13',
             tenDm: 'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm',
             tenPl: 'Biểu mẫu 13',
