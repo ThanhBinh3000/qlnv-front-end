@@ -301,11 +301,10 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
-  async updateComplete() {
-    console.log(this.formData.value);
+  async updateProcess(trangThai: string) {
     this.formData.value.dataDtl.forEach(s => {
       if (s.maDvi.match(this.userInfo.MA_DVI + ".*")) {
-        s.trangThai = STATUS.HOAN_THANH_CAP_NHAT;
+        s.trangThai = trangThai;
       }
     });
     let body = {

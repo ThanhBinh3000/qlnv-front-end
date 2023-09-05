@@ -1,13 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Globals} from "../../../../shared/globals";
-import {UserService} from "../../../../services/user.service";
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {cloneDeep} from "lodash";
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {
@@ -21,7 +18,6 @@ import {
   QuyetdinhpheduyetTktcTdtService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
 import {STATUS} from "../../../../constants/status";
-import {QuyetDinhPheDuyetKhlcntComponent} from "./quyet-dinh-phe-duyet-khlcnt/quyet-dinh-phe-duyet-khlcnt.component";
 import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";

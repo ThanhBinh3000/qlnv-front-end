@@ -107,7 +107,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
   viewTableHoSo: any[] = [];
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
-
+  templateName = "Hồ sơ kĩ thuật";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

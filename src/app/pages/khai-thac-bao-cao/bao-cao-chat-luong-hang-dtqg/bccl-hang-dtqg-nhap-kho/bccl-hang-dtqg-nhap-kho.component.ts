@@ -33,8 +33,6 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   listLoaiBc: any[] = [];
-  listLoaiKyBc: any[] = [];
-  listKyBc: any[] = [];
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
@@ -75,7 +73,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bccl_cong_tac_bao_quan_gao.pdf");
+    saveAs(this.pdfBlob, "bc_chat_luong_thoc_nhap_kho.pdf");
   }
 
   async downloadExcel() {
@@ -83,10 +81,21 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.fileName = "th_bc_sl_cl_ccdc.jrxml";
-      body.tenBaoCao = "Báo cáo số lượng chất lượng Công cụ dụng cụ";
+      if (body.loaiBc == '01') {
+        body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
+        body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
+      } else {
+        if (body.loaiVthh.startsWith("0101")) {
+          body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
+        }
+        if (body.loaiVthh.startsWith("0102")) {
+          body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
+        }
+      }
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
+      await this.bcCLuongHangDTQGService.bcclNhapHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
@@ -115,10 +124,25 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       let body = this.formData.value;
       body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
-      body.fileName = "bccl_cong_tac_bao_quan_gao.jrxml";
-      body.tenBaoCao = "Báo cáo chất lượng công tác quản lý gạo DTQG";
+      if (body.loaiBc == '01') {
+        body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
+        body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
+        // } else {
+        //   if (body.loaiVthh.startsWith("0101")) {
+        //     body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
+        //     body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
+        //   }
+        //   if (body.loaiVthh.startsWith("0102")) {
+        //     body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
+        //     body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
+        //   }
+        // }
+      } else {
+        body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
+        body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
+      }
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
+      await this.bcCLuongHangDTQGService.bcclNhapHangDtqg(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -152,7 +176,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
     this.listVthh = [];
     let res = await this.danhMucSv.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data;
+      this.listVthh = res.data.filter(item => item.ma.startsWith("01"));
     }
   }
 

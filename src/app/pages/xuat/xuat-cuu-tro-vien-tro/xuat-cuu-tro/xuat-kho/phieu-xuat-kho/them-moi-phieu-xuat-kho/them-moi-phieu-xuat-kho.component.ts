@@ -28,7 +28,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  listSoQuyetDinh: any[] = []
+  listSoQuyetDinh: any[] = [];
   listDiaDiemNhap: any[] = [];
   listPhieuKtraCl: any[] = [];
   fileDinhKems: any[] = [];
@@ -37,6 +37,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   maPhieu: string;
   checked: boolean = false;
   listFileDinhKem: any = [];
+  templateName = "Phiếu xuất kho";
+  templateNameVt = "Phiếu xuất kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
