@@ -370,8 +370,7 @@ export class BieuMau140Component implements OnInit {
 		if ((stt.startsWith('0.1.1') && this.status.viewAppVal == false) || (stt.startsWith('0.1.2') && this.status.viewAppVal == false)) {
 			return false
 		}
-		const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-		return lstTemp.every(e => !e.stt.startsWith(stt));
+		return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
 	}
 
 	checkAdd(data: ItemData) {
