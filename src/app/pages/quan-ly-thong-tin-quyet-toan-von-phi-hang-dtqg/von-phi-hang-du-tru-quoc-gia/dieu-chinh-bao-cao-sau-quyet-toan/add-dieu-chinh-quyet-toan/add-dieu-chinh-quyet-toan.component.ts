@@ -521,22 +521,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
     async save() {
 
         let checkSaveEdit;
-        // if (!this.maDviTien) {
-        //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-        //   return;
-        // }
-        // if (this.thongBao == null) {
-        //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-        //   return;
-        // }
-        //check xem tat ca cac dong du lieu da luu chua?
-        //chua luu thi bao loi, luu roi thi cho di
-        // for (const itm of this.lstCtietBcao) {
-        //   if (!itm.maDviTinh && !itm.soLuong && !itm.donGiaMua && !itm.thanhTien) {
-        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-        //     return;
-        //   }
-        // }
         this.lstCtietBcao.forEach(element => {
             if (this.editCache[element.id].edit === true) {
                 checkSaveEdit = false
@@ -627,24 +611,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             thongBao: this.thongBao,
             maDchinh: this.maDchinh,
         }));
-        // //get file cong van url
-        // const file: any = this.fileDetail;
-        // if (file) {
-        //     if (file.size > Utils.FILE_SIZE) {
-        //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-        //         return;
-        //     } else {
-        //         request.congVan = await this.uploadFile(file);
-        //     }
-        // }
-        // if (file) {
-        //     request.congVan = await this.uploadFile(file);
-        // }
-        // if (!request.congVan.fileName) {
-        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-        //     return;
-        // }
-
         if (listFile.length > 0) {
             this.lstFiles = this.lstFiles.filter(item => item.fileUrl !== undefined)
             request.fileDinhKems = this.lstFiles.concat(listFile);
@@ -740,17 +706,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         } else {
             this.status = true;
         }
-        // let checkParent = false;
-        // let checkChirld = false;
-        // const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        // if (dVi && dVi.maDvi == this.userInfo?.MA_DVI) {
-        //     checkChirld = true;
-        // }
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        // if (checkParent) {
-        //     const index: number = this.trangThais.findIndex(e => e.id == Status.TT_07);
-        //     this.trangThais[index].tenDm = "Mới";
-        // }
         this.saveStatus = this.getBtnStatus([Status.TT_01], Roles.QTVP.ADD_REPORT, checkChirld);
         this.submitStatus = this.getBtnStatus([Status.TT_01], Roles.QTVP.APPROVE_REPORT, checkChirld);
         this.passStatus = this.getBtnStatus([Status.TT_02], Roles.QTVP.DUYET_QUYET_TOAN_REPORT, checkChirld);
@@ -758,67 +714,10 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         this.copyStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.COPY_REPORT, checkChirld);
         this.printStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.PRINT_REPORT, checkChirld);
         this.newStatus = Status.check('reject', this.isStatus) && this.userService.isAccessPermisson(Roles.QTVP.ADD_REPORT) && checkChirld && this.data.preTab == 'danhsachDieuChinh';
-        // const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-
-        // const checkSave = this.userService.isAccessPermisson(Roles.QTVP.EDIT_REPORT);
-        // const checkSubmit = this.userService.isAccessPermisson(Roles.QTVP.APPROVE_REPORT);
-        // const checkPass = this.userService.isAccessPermisson(Roles.QTVP.DUYET_QUYET_TOAN_REPORT);
-        // const checkApprove = this.userService.isAccessPermisson(Roles.QTVP.PHE_DUYET_QUYET_TOAN_REPORT);
-        // const checkCopy = this.userService.isAccessPermisson(Roles.QTVP.COPY_REPORT);
-        // const checkPrint = this.userService.isAccessPermisson(Roles.QTVP.PRINT_REPORT);
-
-        // if (Utils.statusSave.includes(this.isStatus) && checkSave) {
-        //     this.status = false;
-        // } else {
-        //     this.status = true;
-        // }
-
-        // this.saveStatus = Utils.statusSave.includes(this.isStatus) && checkSave && checkChirld;
-        // this.submitStatus = Utils.statusSave.includes(this.isStatus) && checkSubmit && checkChirld;
-        // this.passStatus = Utils.statusSave.includes(this.isStatus) && checkPass && checkChirld;
-        // this.approveStatus = Utils.statusSave.includes(this.isStatus) && checkApprove && checkChirld;
-        // this.copyStatus = Utils.statusSave.includes(this.isStatus) && checkCopy && checkChirld;
-        // this.printStatus = Utils.statusSave.includes(this.isStatus) && checkPrint && checkChirld;
-
     }
     getBtnStatus(status: string[], role: string, check: boolean) {
         return !(status.includes(this.isStatus) && this.userService.isAccessPermisson(role) && check);
     }
-    // sortByIndex() {
-    //   this.setDetail();
-    //   this.lstCtietBcao.sort((item1, item2) => {
-    //     if (item1.level > item2.level) {
-    //       return 1;
-    //     }
-    //     if (item1.level < item2.level) {
-    //       return -1;
-    //     }
-    //     if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-    //       return -1;
-    //     }
-    //     if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-    //       return 1;
-    //     }
-    //     return 0;
-    //   });
-    //   const lstTemp: any[] = [];
-    //   this.lstCtietBcao.forEach(item => {
-    //     const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-    //     if (index == -1) {
-    //       lstTemp.splice(0, 0, item);
-    //     } else {
-    //       lstTemp.splice(index + 1, 0, item);
-    //     }
-    //   })
-
-    //   this.lstCtietBcao = lstTemp;
-    // };
-
-    // setDetail() {
-    //   this.lstCtietBcao.forEach(item => {
-    //     item.level = this.noiDungs.find(e => e.id == item.maLoaiHang)?.level;
-    //   })
-    // };
 
     sortByIndex() {
         this.setLevel();
@@ -952,15 +851,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
     getMoneyUnit() {
         return this.maDviTiens.find(e => e.id == this.maDviTien)?.tenDm;
     };
-
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.isStatus)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // };
-
     //download file công văn về máy tính
     async downloadFileCv() {
         if (this.congVan?.fileUrl) {
@@ -1000,9 +890,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         if (n == 2) {
             xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
         }
-        // if (n == 3) {
-        //   xau = String.fromCharCode(k + 96);
-        // }
         if (n == 3) {
             xau = "-";
         }
@@ -1678,14 +1565,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         await this.quyetToanVonPhiService.restoreReport(this.idInput, id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    // Object.assign(this.baoCao, data.data);
-                    // this.baoCao.lstDchinh.forEach(item => {
-                    //     const appendix = this.listAppendix.find(e => e.id == item.maLoai);
-                    //     item.tenPl = appendix.tenPl;
-                    //     item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
-                    // })
-                    // this.getStatusButton();
-                    // this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
                     this.action('detail')
                     this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');

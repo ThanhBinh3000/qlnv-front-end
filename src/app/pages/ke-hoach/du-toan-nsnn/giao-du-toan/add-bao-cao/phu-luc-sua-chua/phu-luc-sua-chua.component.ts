@@ -169,8 +169,6 @@ export class PhuLucSuaChuaComponent implements OnInit {
         } else {
             this.scrollX = Table.tableWidth(350, 8, 1, 0);
         }
-
-        // this.sortByIndex();
         this.tinhTong();
         this.updateEditCache();
         this.getStatusButton();
@@ -344,7 +342,6 @@ export class PhuLucSuaChuaComponent implements OnInit {
     addLine(): void {
         const item = new ItemData({
             id: uuid.v4(),
-            // stt: "0.1",
             tenCongTrinh: "",
             khVon: 0,
             dtoanDaGiaoLuyKe: 0,
@@ -352,9 +349,6 @@ export class PhuLucSuaChuaComponent implements OnInit {
             khDieuChinh: 0,
             dtoanNam: 0,
         });
-
-        // this.lstCtietBcaos.splice(id, 0, item);
-
         if (this.lstCtietBcaos.length == 0) {
             this.lstCtietBcaos = Table.addHead(item, this.lstCtietBcaos);
 
@@ -371,9 +365,6 @@ export class PhuLucSuaChuaComponent implements OnInit {
     addSame(id: string, initItem: ItemData) {
         this.lstCtietBcaos = Table.addParent(id, initItem, this.lstCtietBcaos);
         const data = this.lstCtietBcaos.find(e => e.tenCongTrinh == initItem.tenCongTrinh);
-        // if (data.maNdung == this.data.extraDataPL2?.maNdung || data.maNdung == this.data.extraDataPL3?.maNdung) {
-        //     this.linkData(data.maNdung)
-        // }
         this.sum(data.stt);
     }
 

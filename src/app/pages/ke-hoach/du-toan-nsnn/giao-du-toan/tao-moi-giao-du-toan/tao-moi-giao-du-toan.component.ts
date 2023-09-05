@@ -887,27 +887,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                 });
                 this.spinner.hide();
             }
-
-
-            // 
-
-            // this.spinner.show();
-            // await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
-            //     if (data.statusCode == 0) {
-            //         this.trangThaiBanGhi = mcn;
-            //         this.getStatusButton();
-            //         if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-            //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-            //         } else {
-            //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-            //         }
-            //     } else {
-            //         this.notification.error(MESSAGE.ERROR, data?.msg);
-            //     }
-            // }, err => {
-            //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            // });
-            // this.spinner.hide();
         } else {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
         }
@@ -1386,15 +1365,5 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         })
         return check;
     };
-
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.trangThaiBanGhi)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // };
-
-
 }
 

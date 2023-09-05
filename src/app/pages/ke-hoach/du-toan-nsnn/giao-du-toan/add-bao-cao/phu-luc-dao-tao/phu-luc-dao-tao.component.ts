@@ -159,19 +159,6 @@ export class PhuLucDaoTaoComponent implements OnInit {
   }
 
   async initialization() {
-    // const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL10');
-    // if (category) {
-    //   category.data.forEach(
-    //     item => {
-    //       this.noiDungs.push({
-    //         ...item,
-    //         level: item.ma?.split('.').length - 2,
-    //         giaTri: getName(this.namBcao, item.giaTri),
-    //       })
-    //     }
-    //   )
-    // }
-
     this.spinner.show();
     Object.assign(this.status, this.dataInfo.status);
     await this.getFormDetail();

@@ -922,25 +922,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        // if (this.id && this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
-        //   this.status = false;
-        // } else {
-        //   this.status = true;
-        // }
-        // if (
-        //   this.trangThaiBanGhi == Utils.TT_BC_1 ||
-        //   this.trangThaiBanGhi == Utils.TT_BC_3 ||
-        //   this.trangThaiBanGhi == Utils.TT_BC_5 ||
-        //   this.trangThaiBanGhi == Utils.TT_BC_8
-        // ) {
-        //   if (this.id && this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
-        //     this.status = true;
-        //   } else {
-        //     this.status = false;
-        //   }
-        // } else {
-        //   this.status = true;
-        // }
         if (Status.TT_01 == this.trangThaiBanGhi && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
             this.status = false;
         } else {
@@ -978,10 +959,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
             this.statusBtnGiao = true;
             this.statusGiaoToanBo = true;
         }
-
-        // if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT || GDT.TRINHDUYET_PA_TONGHOP_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
-        //   this.statusBtnGuiDVCT = false;
-        // }
         if (this.userService.isAccessPermisson(Roles.GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
             this.statusBtnGuiDVCT = false;
         }

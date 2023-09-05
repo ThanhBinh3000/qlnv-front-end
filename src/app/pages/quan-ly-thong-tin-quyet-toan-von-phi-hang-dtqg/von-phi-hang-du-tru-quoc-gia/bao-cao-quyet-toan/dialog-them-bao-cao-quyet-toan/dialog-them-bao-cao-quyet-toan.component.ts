@@ -64,11 +64,6 @@ export class DialogThemBaoCaoQuyetToanComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
             return;
         }
-        // if (this.response.quyQtoan < 1 || this.response.quyQtoan > 4) {
-        //     this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập tháng đúng định dạng số từ 1 đến 12");
-        //     return;
-        // }
-
         this._modalRef.close(this.response);
     }
 

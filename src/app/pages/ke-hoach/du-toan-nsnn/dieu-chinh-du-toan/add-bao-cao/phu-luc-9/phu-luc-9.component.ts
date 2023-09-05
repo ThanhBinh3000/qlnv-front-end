@@ -730,10 +730,7 @@ export class PhuLuc9Component implements OnInit {
                 { t: 4, b: 12, l: 30, r: 33, val: 'Bao gồm' },
                 { t: 4, b: 12, l: 34, r: 36, val: 'Dự toán, kinh phí được sử dụng trong năm' },
                 { t: 4, b: 12, l: 37, r: 37, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
-                // { t: 4, b: 12, l: 38, r: 38, val: 'Dự toán Vụ TVQT đề nghị (+ tăng)(- giảm)' },
                 { t: 4, b: 12, l: 38, r: 38, val: 'Ghi chú' },
-                // { t: 4, b: 12, l: 40, r: 40, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng)(- giảm)' },
-                // { t: 4, b: 12, l: 41, r: 41, val: 'Ý kiến của đơn vị cấp trên' },
 
                 { t: 6, b: 11, l: 5, r: 5, val: 'Tổng số' },
                 { t: 6, b: 7, l: 6, r: 16, val: 'Bao gồm' },
@@ -814,10 +811,7 @@ export class PhuLuc9Component implements OnInit {
                 { t: 12, b: 12, l: 35, r: 35, val: '34' },
                 { t: 12, b: 12, l: 36, r: 36, val: '35 = 34 + 33' },
                 { t: 12, b: 12, l: 37, r: 37, val: '36 = 28 - 35' },
-                // { t: 12, b: 12, l: 38, r: 38, val: '37' },
                 { t: 12, b: 12, l: 38, r: 38, val: '37' },
-                // { t: 12, b: 12, l: 40, r: 40, val: '39 = 47 - 36' },
-                // { t: 12, b: 12, l: 41, r: 41, val: '40' },
 
             ]
             fieldOrder = [
@@ -859,10 +853,7 @@ export class PhuLuc9Component implements OnInit {
                 'dtoanKphiDaGiao',
                 'dtoanKphiCong',
                 'dtoanDnghiDchinh',
-                // 'dtoanVuTvqtDnghi',
                 'ghiChu',
-                // 'chenhLech',
-                // 'ykienDviCtren',
             ]
         }
 

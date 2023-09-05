@@ -220,8 +220,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         } else {
             this.isStatus = this.data.isStatus;
             this.maDonViTao = this.userInfo?.MA_DVI;
-            // this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-            // this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.maDviTien = '1';
             this.spinner.show();
@@ -781,14 +779,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         );
     }
 
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.isStatus)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // };
-
     getStatusName(status: string) {
         return this.trangThais.find(e => e.id == status)?.tenDm;
     };
@@ -1196,13 +1186,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     };
 
     saveEdit(id: string): void {
-        // if (
-        //     (!this.editCache[id].data.nguonKhac) ||
-        //     (!this.editCache[id].data.nguonNsnn)
-        // ) {
-        //     this.notification.warning(MESSAGE.WARNING, "không được để trống")
-        //     return;
-        // }
         if (this.editCache[id].data.nguonKhac < 0 ||
             this.editCache[id].data.nguonNsnn < 0) {
             this.notification.warning(MESSAGE.WARNING, "Giá trị nhập không được âm")

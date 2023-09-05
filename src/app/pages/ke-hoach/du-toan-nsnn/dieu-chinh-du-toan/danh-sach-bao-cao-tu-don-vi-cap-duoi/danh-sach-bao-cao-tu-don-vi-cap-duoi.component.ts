@@ -32,7 +32,6 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     };
 
     userInfo: any;
-    // trangThais: any[] = TRANG_THAI_GUI_DVCT;
     donVis: any[] = [];
     dataTable: any[] = [];
     dataTableAll: any[] = [];
@@ -148,10 +147,6 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
     }
 
-    // getStatusName(trangThai: string) {
-    //     return this.trangThais.find(e => e.id == trangThai)?.ten;
-    // }
-
     ///xem chi tiet bao cao
     viewDetail(data: any) {
         const obj = {
@@ -160,27 +155,6 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         }
         this.dataChange.emit(obj);
     }
-
-    // Tìm kiếm trong bảng
-    // filterInTable(key: string, value: string, isDate: boolean) {
-    //     if (value && value != '') {
-    //         this.dataTable = [];
-    //         let temp = [];
-    //         if (this.dataTableAll && this.dataTableAll.length > 0) {
-    //             if (isDate) {
-    //                 value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
-    //             }
-    //             this.dataTableAll.forEach((item) => {
-    //                 if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-    //                     temp.push(item)
-    //                 }
-    //             });
-    //         }
-    //         this.dataTable = [...this.dataTable, ...temp];
-    //     } else {
-    //         this.dataTable = cloneDeep(this.dataTableAll);
-    //     }
-    // }
 
     //download file về máy tính
     async downloadFileCv(fileUrl, fileName) {

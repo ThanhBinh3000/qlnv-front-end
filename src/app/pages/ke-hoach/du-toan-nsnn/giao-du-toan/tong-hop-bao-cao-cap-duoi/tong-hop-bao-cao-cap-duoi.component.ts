@@ -55,13 +55,11 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
         ngayTaoDen: null,
         maBcao: "",
         donViTao: "",
-        // trangThai: "",
         paggingReq: {
             limit: 10,
             page: 1
         },
         trangThais: [],
-        // trangThaiGiaos: [],
     };
 
     filterTable: any = {
@@ -246,21 +244,11 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     }
 
     xemChiTiet(id: string, maLoaiDan: string) {
-        // if (maLoaiDan == "3") {
-        //     const obj = {
-        //         id: id,
-        //         tabSelected: 'addBaoCao',
-        //     }
-        //     this.dataChange.emit(obj);
-        // } else if (maLoaiDan == "3") {
         const obj = {
             id: id,
             tabSelected: 'addBaoCao',
         }
         this.dataChange.emit(obj);
-        // } else {
-        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-        // }
     }
 
     getStatusName(trangThai: string) {
