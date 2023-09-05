@@ -52,6 +52,7 @@ export class HopDongSclComponent implements OnInit {
         "idDuAn": this.itemTtdt.idDuAn,
         "idQdPdKtkt": this.itemQdPdKtkt.id,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
+        "loai" : "00"
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -77,7 +78,7 @@ export class HopDongSclComponent implements OnInit {
   redirectToChiTiet(data: any, action, isView?: boolean) {
     this.selectedId = data.id;
     this.itemQdPdKhLcnt = data;
-    this.isDetail = true;
+    this.isDetail = false;
     this.flagInfo = action;
     this.isViewDetail = isView ?? false;
   }

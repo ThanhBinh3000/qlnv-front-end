@@ -13,7 +13,7 @@
       <button *ngIf="idInput && formData.value.trangThai == STATUS.DU_THAO " type="button" (click)="delete(formData.value)"
               class="btn btn-sub btn-xoa">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-        <span>Xóa {{idInput}}</span>
+        <span>Xóa</span>
       </button>
       <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO) ">
