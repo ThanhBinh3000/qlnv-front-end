@@ -274,7 +274,7 @@ export class ThongTinPhieuXuatHangHaoHutComponent extends Base2Component impleme
     }
     async getDanhsachQuyetDinh() {
         let body = {
-            maDvi: this.userInfo.MA_DVI.slice(0, -2),
+            maDvi: this.userInfo.MA_DVI.slice(0, 6),
             paggingReq: { limit: 2147483647, page: 0 },
         }
         let res = await this.dieuChuyenKhoService.danhSach(body);

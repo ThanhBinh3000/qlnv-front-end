@@ -38,7 +38,7 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
     listCcPhapLy: any[] = [];
     listFileDinhKem: any[] = [];
     listFile: any[] = [];
-    maQd: string;
+    maBCSN: string;
     expandSetString = new Set<string>();
     listTrangThaiSn: any[] = [
         { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: "Chưa thực hiện" },
@@ -67,6 +67,7 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
     hasError: boolean = false;
     isDisabledThemMoi: boolean = false;
     danhSachQuyetDinh: any[] = [];
+    danhSachBienBanSapNhap: any[] = [];
     tableHeader: Array<{ [key: string]: string }> = [{ title: "Họ và tên", value: "hoVaTen" }, { title: "Chức vụ", value: "chucVu" }];
     baoCaoKetQuaHangDtl: any[] = [];
     baoCaoKetQuaCcDtl: any[] = [];
@@ -92,15 +93,19 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             maDvi: [],
             tenDvi: [],
             nam: [dayjs().get("year"), [Validators.required]],
-            soBienBan: [],
+            soBienBanSapNhap: [],
+            bienBanSapNhapId: [],
+            soBaoCao: [],
+            ngayBaoCao: [],
             soQuyetDinh: [],
-            ngayKy: [],
+            soQuyetDinhId: [],
             loai: [],
-            trichYeu: [],
+            tenLoai: [],
+            noiDung: [],
             trangThai: [STATUS.DU_THAO],
             tenTrangThai: [this.ObTrangThai[STATUS.DU_THAO]],
         });
-        this.maQd = "/" + this.userInfo.MA_QD;
+        this.maBCSN = "/" + this.formData.value.nam + "/" + "BCSN-" + this.userInfo.DON_VI.tenVietTat;
     }
 
     async ngOnInit() {
@@ -132,6 +137,7 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             await this.spinner.show();
             let body = this.formData.value;
             body.fileDinhKem = this.listFileDinhKem;
+            body.soBaoCao = this.formData.value.soBaoCao + this.maBCSN;
             let baoCaoKetQuaHangDtl = [];
             let baoCaoKetQuaCcDtl = [];
             Array.isArray(this.dataViewHang) && this.dataViewHang.forEach(lv1 => {
@@ -148,13 +154,13 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             };
             body.baoCaoKetQuaHangDtl = baoCaoKetQuaHangDtl;
             body.baoCaoKetQuaCcDtl = baoCaoKetQuaCcDtl;
-            body.baoCaoKetQuaVpDtl = this.baoCaoKetQuaVpDtl;
+            body.baoCaoKetQuaVpDtl = this.baoCaoKetQuaVpDtl.map(f => ({ ...f, id: undefined, hdrId: undefined }));
             let data = await this.createUpdate(body, null, isGuiDuyet);
             if (data) {
                 this.idInput = data.id;
-                this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soQuyetDinh: data.soQuyetDinh?.split('/')[0] });
+                this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBaoCao: typeof data.soBaoCao === 'string' || data.soBaoCao instanceof String ? data.soBaoCao?.split('/')[0] : "" });
                 if (isGuiDuyet) {
-                    this.banHanh()
+                    this.hoanThanh()
                 }
             }
         } catch (error) {
@@ -164,7 +170,7 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             await this.spinner.hide()
         }
     }
-    banHanh() {
+    hoanThanh() {
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -177,7 +183,7 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
                 try {
                     let body = {
                         id: this.formData.value.id,
-                        trangThai: STATUS.BAN_HANH
+                        trangThai: STATUS.DA_HOAN_THANH
                     };
                     let res =
                         await this.baoCaoKetQuaSapNhapService.approve(
@@ -215,10 +221,11 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             .then((res) => {
                 if (res.msg == MESSAGE.SUCCESS) {
                     const dataDetail = res.data;
-                    this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
                     if (dataDetail) {
-                        this.fileDinhKem = dataDetail.fileDinhKem;
-                        this.baoCaoKetQuaHangDtl = dataDetail.baoCaoKetQuaHangDtl.map(f => ({ ...f, groupBy: `${f.maChiCucDi}${f.maDiemKhoDi}` }));
+                        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+                        this.listFileDinhKem = dataDetail.fileDinhKem;
+                        this.formData.patchValue({ soBaoCao: typeof dataDetail.soBaoCao === 'string' || dataDetail.soBaoCao instanceof String ? dataDetail.soBaoCao?.split('/')[0] : "" })
+                        this.baoCaoKetQuaHangDtl = dataDetail.baoCaoKetQuaHangDtl.map(f => ({ ...f, groupBy: f.maDiemKhoDi ? `${f.maChiCucDi}${f.maDiemKhoDi}` : f.maChiCucDi }));
                         this.baoCaoKetQuaCcDtl = dataDetail.baoCaoKetQuaCcDtl.map(f => ({ ...f, groupBy: f.maChiCucDi }));
                         this.baoCaoKetQuaVpDtl = dataDetail.baoCaoKetQuaVpDtl;
                         this.buidView("dataViewHang", "baoCaoKetQuaHangDtl");
@@ -249,10 +256,11 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
         let body = {
             maDvi: this.userInfo.MA_DVI,
             paggingReq: { limit: 2147483647, page: 0 },
+            trangThai: STATUS.DA_HOAN_THANH
         }
         let res = await this.bienBanSapNhapKhoService.search(body);
         if (res.msg == MESSAGE.SUCCESS) {
-            this.danhSachQuyetDinh = Array.isArray(res?.data?.content) ? res.data.content : [];
+            this.danhSachBienBanSapNhap = Array.isArray(res?.data?.content) ? res.data.content : [];
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -267,17 +275,24 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             nzWidth: '900px',
             nzFooter: null,
             nzComponentParams: {
-                dataTable: this.danhSachQuyetDinh,
-                dataHeader: ['Số quyết định', "Loại sáp nhập", 'Ngày ký quyết định'],
-                dataColumn: ['soQuyetDinh', 'tenLoai', 'ngayKy'],
+                dataTable: this.danhSachBienBanSapNhap,
+                dataHeader: ['Số biên bản', "Loại sáp nhập", 'Ngày tạo'],
+                dataColumn: ['soBienBan', 'tenLoai', 'ngayTao'],
             },
         })
         modalQD.afterClose.subscribe(async (dataChose) => {
+            this.dataTable = [];
             if (dataChose && dataChose.id) {
                 const res = await this.bienBanSapNhapKhoService.getDetail(dataChose.id);
-                console.log("dataChose", dataChose, res)
-                this.dataTable = [];
-                // await this.bindingDataQd(dataChose.id, false);
+                if (res.msg === MESSAGE.SUCCESS) {
+                    const dataDetail = res.data;
+                    this.formData.patchValue({ soBienBanSapNhap: dataDetail.soBienBan, bienBanSapNhapId: dataDetail.id, soQuyetDinh: dataDetail.soQuyetDinh, soQuyetDinhId: dataDetail.soQuyetDinhId, loai: dataChose.loai, tenLoai: this.obTenLoai[dataDetail.loai] })
+                    this.baoCaoKetQuaHangDtl = Array.isArray(dataDetail.bienBanSapNhapHangDtl) ? dataDetail.bienBanSapNhapHangDtl.map(f => ({ ...f, groupBy: f.maDiemKhoDi ? `${f.maChiCucDi}${f.maDiemKhoDi}` : f.maChiCucDi })) : [];
+                    this.baoCaoKetQuaCcDtl = Array.isArray(dataDetail.bienBanSapNhapCcDtl) ? dataDetail.bienBanSapNhapCcDtl.map(f => ({ ...f, groupBy: f.maChiCucDi })) : [];
+                    this.baoCaoKetQuaVpDtl = Array.isArray(dataDetail.bienBanSapNhapVpDtl) ? dataDetail.bienBanSapNhapVpDtl : [];
+                    this.buidView("dataViewHang", "baoCaoKetQuaHangDtl");
+                    this.buidView("dataViewCcdc", "baoCaoKetQuaCcDtl");
+                }
             }
         });
     };

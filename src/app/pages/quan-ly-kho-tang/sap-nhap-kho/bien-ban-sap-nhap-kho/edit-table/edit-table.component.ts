@@ -21,7 +21,7 @@ export class EditTableComponent implements OnInit {
     @Input() dataColumn: any[] = []
     @Input() dataTable: any[] = [];
 
-    rowItem: any = cloneDeep(this.rowInitial);
+    rowItem: any = {};
     fileAdd: any = {};
     disabledAdd: boolean = false;
     rowDataClone: { [key: string]: any } = {};
@@ -35,6 +35,7 @@ export class EditTableComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.rowItem = cloneDeep(this.rowInitial);
         if (this.dataTable && this.dataTable.length > 0) {
             this.dataTable.forEach((item) => {
                 item.idVirtual = item.id;
@@ -46,7 +47,8 @@ export class EditTableComponent implements OnInit {
 
         if (!this.dataTable) {
             this.dataTable = [];
-        }
+        };
+        console.log("row", this.rowItem)
         this.dataTable.push(this.rowItem);
         this.clearAdd();
     }

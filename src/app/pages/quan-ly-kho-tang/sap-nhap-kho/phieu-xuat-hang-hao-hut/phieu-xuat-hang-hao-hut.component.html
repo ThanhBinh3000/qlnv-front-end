@@ -76,7 +76,7 @@
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
             <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
-                <tbody>
+                <thead>
                     <tr class="header-row">
                         <th width="40px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
@@ -92,6 +92,8 @@
                         <th class="text-left">Trạng thái</th>
                         <th class="text-left">Hành động</th>
                     </tr>
+                </thead>
+                <tbody>
                     <!-- <tr class="header-row search">
               <th></th>
               <th></th>

@@ -10,6 +10,7 @@ import { CHUC_NANG, STATUS } from "../../../../constants/status";
 import { UserLogin } from "../../../../models/userlogin";
 import { MESSAGE } from "../../../../constants/message";
 import { BienBanSapNhapKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/bien-ban-sap-nhap-kho.service';
+import { BaoCaoKetQuaSapNhapService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/bao-cao-ket-qua-sap-nhap.service';
 
 
 @Component({
@@ -29,8 +30,9 @@ export class BaoCaoKetQuaSapNhapComponent extends Base2Component implements OnIn
         spinner: NgxSpinnerService,
         modal: NzModalService,
         private bienBanSapNhapKhoService: BienBanSapNhapKhoService,
+        private baoCaoKetQuaSapNhapService: BaoCaoKetQuaSapNhapService
     ) {
-        super(httpClient, storageService, notification, spinner, modal, bienBanSapNhapKhoService);
+        super(httpClient, storageService, notification, spinner, modal, baoCaoKetQuaSapNhapService);
         this.formData = this.fb.group({
             tenDvi: [],
             maDvi: [],
@@ -52,11 +54,11 @@ export class BaoCaoKetQuaSapNhapComponent extends Base2Component implements OnIn
     children: any = [];
     listTrangThai: any[] = [
         { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
-        { ma: this.STATUS.BAN_HANH, giaTri: "Hoàn thành" },
+        { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Hoàn thành" },
     ];
     ObTrangThai: { [key: string]: string } = {
         [this.STATUS.DU_THAO]: "Dự thảo",
-        [this.STATUS.BAN_HANH]: "Hoàn thành"
+        [this.STATUS.DA_HOAN_THANH]: "Hoàn thành"
     }
     disabledStartNgayKy = (startValue: Date): boolean => {
         if (startValue && this.formData.value.ngayBaoCaoDen) {

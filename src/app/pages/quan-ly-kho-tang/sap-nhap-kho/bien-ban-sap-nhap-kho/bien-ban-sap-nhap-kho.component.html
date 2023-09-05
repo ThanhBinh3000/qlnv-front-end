@@ -81,7 +81,7 @@
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
             <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
-                <tbody>
+                <thead>
                     <tr class="header-row">
                         <!-- <th width="40px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
@@ -133,6 +133,8 @@
                         </th>
                         <th></th>
                     </tr>
+                </thead>
+                <tbody>
                     <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
                         <!-- <td>
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
@@ -140,9 +142,9 @@
                         </td> -->
                         <td>{{(page - 1) * pageSize + idx +1}}</td>
                         <td> {{ data.soBienBan }} </td>
-                        <td>{{ data.trichYeu | date:globals.dateFormat }}</td>
+                        <td>{{ data.trichYeu}}</td>
                         <td>{{ data.soQuyetDinh }}</td>
-                        <td>{{data.ngayKy}}</td>
+                        <td>{{data.ngayKy| date:globals.dateFormat }}</td>
                         <td>{{ ObTrangThai[data.trangThai]}}</td>
                         <td class="text-left">
                             <a *ngIf="data.trangThai ==STATUS.DA_HOAN_THANH" (click)="redirectDetail(data.id, true)">

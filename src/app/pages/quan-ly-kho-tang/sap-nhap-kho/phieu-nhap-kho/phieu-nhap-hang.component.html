@@ -17,17 +17,17 @@
                     </div>
                     <div nz-col nzSpan="4">
                         <nz-form-item class="form-item">
-                            <nz-form-label>Ngày xuất</nz-form-label>
+                            <nz-form-label>Ngày nhập</nz-form-label>
                             <div nz-row>
                                 <div nz-col nzSpan="12" class="cus-start-date">
                                     <nz-date-picker [nzDisabledDate]="disabledStartNgayKy" nzFormat="dd/MM/yyyy"
-                                        formControlName="ngayNhapKhoTu" nzPlaceHolder="Ngày bắt đầu xuất">
+                                        formControlName="ngayNhapKhoTu" nzPlaceHolder="Ngày bắt đầu nhập">
                                     </nz-date-picker>
                                 </div>
                                 <div nz-col nzSpan="12" class="cus-end-date">
                                     <nz-date-picker [nzDisabledDate]="disabledEndNgayKy" nzFormat="dd/MM/yyyy"
                                         formControlName="ngayNhapKhoDen"
-                                        nzPlaceHolder="Ngày kết thúc xuất"></nz-date-picker>
+                                        nzPlaceHolder="Ngày kết thúc nhập"></nz-date-picker>
                                 </div>
                             </div>
                         </nz-form-item>
@@ -59,10 +59,10 @@
         <div class="group-button">
             <h3 class="text-uppercase">Danh sách quyết định điều chuyển - Sáp nhận đơn vị quản lý kho</h3>
             <div class="buttons" *ngIf="userService.isTongCuc">
-                <button type="button" class="btn btn-do" (click)="deleteMulti()">
+                <!-- <button type="button" class="btn btn-do" (click)="deleteMulti()">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
-                </button>
+                </button> -->
                 <button type="button" class="btn btn-sub" (click)="exportData()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
@@ -76,12 +76,12 @@
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
             <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
-                <tbody>
+                <thead>
                     <tr class="header-row">
-                        <th width="40px">
+                        <!-- <th width="40px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                 [nzIndeterminate]="indeterminate"></label>
-                        </th>
+                        </th> -->
                         <th class="text-left">STT</th>
                         <th class="text-left">Số phiếu nhập kho</th>
                         <th class="text-left">Ngày nhập kho</th>
@@ -92,6 +92,8 @@
                         <th class="text-left">Trạng thái</th>
                         <th class="text-left">Hành động</th>
                     </tr>
+                </thead>
+                <tbody>
                     <!-- <tr class="header-row search">
               <th></th>
               <th></th>
@@ -132,10 +134,10 @@
               <th></th>
             </tr> -->
                     <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-                        <td>
+                        <!-- <td>
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                                 [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
-                        </td>
+                        </td> -->
                         <td>{{(page - 1) * pageSize + idx +1}}</td>
                         <td> {{ data.soPhieu }} </td>
                         <td>{{ data.ngayNhapKho | date:globals.dateFormat }}</td>
@@ -148,11 +150,10 @@
                             <a *ngIf="data.trangThai ==STATUS.DA_HOAN_THANH" (click)="redirectDetail(data.id, true)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU"
-                                (click)="redirectDetail(data.id, false)">
+                            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id, false)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
-                            <a *ngIf="data.trangThai ==STATUS.DANG_NHAP_DU_LIEU" (click)="delete(data)">
+                            <a *ngIf="data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">
                                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>

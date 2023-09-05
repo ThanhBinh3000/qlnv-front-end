@@ -146,7 +146,6 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
         };
         try {
             await this.spinner.show();
-            //TODO: api chưa lưu file đính kèm
             let body = this.formData.value;
             body.canCu = this.fileDinhKem;
             body.dieuChuyenKhoHangDtl = cloneDeep(dieuChuyenKhoHangDtl);
@@ -283,7 +282,6 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
         }
     }
     nodeClicked(node) {
-        console.log("node", node)
         if (!node.origin.isLeaf) {
             node.isSelectable = false;
             node.isExpanded = !node.isExpanded;

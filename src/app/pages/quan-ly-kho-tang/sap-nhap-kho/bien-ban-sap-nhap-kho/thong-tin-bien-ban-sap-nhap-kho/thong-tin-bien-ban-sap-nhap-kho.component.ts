@@ -37,7 +37,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
     listCcPhapLy: any[] = [];
     listFileDinhKem: any[] = [];
     listFile: any[] = [];
-    maQd: string;
+    maBBSN: string;
     expandSetString = new Set<string>();
     listTrangThaiSn: any[] = [
         { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: "Chưa thực hiện" },
@@ -67,22 +67,22 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
     isDisabledThemMoi: boolean = false;
     danhSachQuyetDinh: any[] = [];
     daiDienCucData: any[] = [];
-    donViChuyenDiData: any = [];
-    donViChuyenDenData
+    donViChuyenDiData: any[] = [];
+    donViChuyenDenData: any[] = [];
     rowInitialCuc: { [key: string]: any } = {
         chucVu: "",
         hoVaTen: "",
-        type: 0
+        type: "01"
     };
     rowInitialDi: { [key: string]: any } = {
         chucVu: "",
         hoVaTen: "",
-        type: 1
+        type: "02"
     };
     rowInitialDen: { [key: string]: any } = {
         chucVu: "",
         hoVaTen: "",
-        type: 2
+        type: "03"
     }
     tableHeader: Array<{ [key: string]: string }> = [{ title: "Họ và tên", value: "hoVaTen" }, { title: "Chức vụ", value: "chucVu" }];
     bienBanSapNhapHangDtl: any[] = [];
@@ -110,13 +110,16 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
             nam: [dayjs().get("year"), [Validators.required]],
             soBienBan: [],
             soQuyetDinh: [],
+            soQuyetDinhId: [],
             ngayKy: [],
             loai: [],
+            tenLoai: [],
             trichYeu: [],
             trangThai: [STATUS.DU_THAO],
             tenTrangThai: [this.ObTrangThai[STATUS.DU_THAO]],
+            lyDoTuChoi: []
         });
-        this.maQd = "/" + this.userInfo.MA_QD;
+        this.maBBSN = "/" + this.formData.value.nam + "/BBSN-" + this.userInfo.DON_VI.tenVietTat;
     }
 
     async ngOnInit() {
@@ -163,15 +166,16 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
                     });
                 })
             };
-            body.bienBanSapNhapHangDtl = bienBanSapNhapHangDtl;
-            body.bienBanSapNhapCcDtl = bienBanSapNhapCcDtl;
-            body.bienBanSapNhapVpDtl = this.bienBanSapNhapVpDtl;
+            body.bienBanSapNhapHangDtl = bienBanSapNhapHangDtl.map(f => ({ ...f, groupBy: undefined }));
+            body.bienBanSapNhapCcDtl = bienBanSapNhapCcDtl.map(f => ({ ...f, groupBy: undefined }));
+            body.bienBanSapNhapVpDtl = this.bienBanSapNhapVpDtl.map(f => ({ ...f, id: undefined, hdrId: undefined }));
+            body.soBienBan = this.formData.value.soBienBan + this.maBBSN;
             let data = await this.createUpdate(body, null, isGuiDuyet);
             if (data) {
                 this.idInput = data.id;
-                this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soQuyetDinh: data.soQuyetDinh?.split('/')[0] });
+                this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBienBan: typeof data.soBienBan === "string" || data.soBienBan instanceof String ? data.soBienBan?.split('/')[0] : "" });
                 if (isGuiDuyet) {
-                    this.banHanh()
+                    this.hoanThanh()
                 }
             }
         } catch (error) {
@@ -181,7 +185,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
             await this.spinner.hide()
         }
     }
-    banHanh() {
+    hoanThanh() {
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -194,10 +198,10 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
                 try {
                     let body = {
                         id: this.formData.value.id,
-                        trangThai: STATUS.BAN_HANH
+                        trangThai: STATUS.DA_HOAN_THANH
                     };
                     let res =
-                        await this.quyetDinhDieuChuyenService.approve(
+                        await this.bienBanSapNhapKhoService.approve(
                             body,
                         );
                     if (res.msg == MESSAGE.SUCCESS) {
@@ -227,17 +231,22 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
 
 
     async getDetail(id: number) {
-        await this.quyetDinhDieuChuyenService
+        await this.bienBanSapNhapKhoService
             .getDetail(id)
             .then((res) => {
                 if (res.msg == MESSAGE.SUCCESS) {
                     const dataDetail = res.data;
                     this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+                    const soBienBan = typeof dataDetail.soBienBan === "string" || dataDetail.soBienBan instanceof String ? dataDetail.soBienBan.split("/")[0] : "";
+                    this.formData.patchValue({ soBienBan });
                     if (dataDetail) {
                         this.fileDinhKem = dataDetail.fileDinhKem;
-                        this.bienBanSapNhapHangDtl = dataDetail.bienBanSapNhapHangDtl.map(f => ({ ...f, groupBy: `${f.maChiCucDi}${f.maDiemKhoDi}` }));
+                        this.bienBanSapNhapHangDtl = dataDetail.bienBanSapNhapHangDtl.map(f => ({ ...f, groupBy: f.maDiemKhoDi ? `${f.maChiCucDi}${f.maDiemKhoDi}` : f.maChiCucDi }));
                         this.bienBanSapNhapCcDtl = dataDetail.bienBanSapNhapCcDtl.map(f => ({ ...f, groupBy: f.maChiCucDi }));
                         this.bienBanSapNhapVpDtl = dataDetail.bienBanSapNhapVpDtl;
+                        this.daiDienCucData = dataDetail.bienBanSapNhapDtl.filter(f => f.type === "01");
+                        this.donViChuyenDiData = dataDetail.bienBanSapNhapDtl.filter(f => f.type === "02");
+                        this.donViChuyenDenData = dataDetail.bienBanSapNhapDtl.filter(f => f.type === "03");
                         this.buidView("dataViewHang", "bienBanSapNhapHangDtl");
                         this.buidView("dataViewCcdc", "bienBanSapNhapCcDtl");
                     };
@@ -264,12 +273,12 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
     }
     async getDanhsachQuyetDinh() {
         let body = {
-            maDvi: this.userInfo.MA_DVI,
+            maDvi: this.userInfo.MA_DVI.slice(0, 6),
             paggingReq: { limit: 2147483647, page: 0 },
         }
         let res = await this.dieuChuyenKhoService.danhSach(body);
         if (res.msg == MESSAGE.SUCCESS) {
-            this.danhSachQuyetDinh = Array.isArray(res?.data?.content) ? res.data.content : [];
+            this.danhSachQuyetDinh = Array.isArray(res?.data) ? res.data : [];
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -292,8 +301,23 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
         modalQD.afterClose.subscribe(async (dataChose) => {
             if (dataChose && dataChose.id) {
                 const res = await this.dieuChuyenKhoService.getDetail(dataChose.id);
-                console.log("dataChose", dataChose, res)
-                this.dataTable = [];
+                this.bienBanSapNhapHangDtl = [];
+                this.bienBanSapNhapCcDtl = [];
+                this.bienBanSapNhapVpDtl = [];
+                if (res.msg === MESSAGE.SUCCESS) {
+                    this.formData.patchValue({
+                        soQuyetDinh: res.data.soQuyetDinh,
+                        soQuyetDinhId: res.data.soQuyetDinhId,
+                        ngayKy: res.data.ngayKy,
+                        loai: res.data.loai,
+                        tenLoai: this.obTenLoai[res.data.loai]
+                    });
+                    this.bienBanSapNhapHangDtl = Array.isArray(res.data.dieuChuyenKhoHangDtl) ? res.data.dieuChuyenKhoHangDtl.map(f => ({ ...f, groupBy: f.maDiemKhoDi ? `${f.maChiCucDi}${f.maDiemKhoDi}` : f.maChiCucDi })) : [];
+                    this.bienBanSapNhapCcDtl = Array.isArray(res.data.dieuChuyenKhoCcDtl) ? res.data.dieuChuyenKhoCcDtl.map(f => ({ ...f, groupBy: f.maChiCucDi })) : [];
+                    this.bienBanSapNhapVpDtl = Array.isArray(res.data.dieuChuyenKhoVpDtl) ? res.data.dieuChuyenKhoVpDtl : [];
+                    this.buidView("dataViewHang", "bienBanSapNhapHangDtl");
+                    this.buidView("dataViewCcdc", "bienBanSapNhapCcDtl");
+                }
                 // await this.bindingDataQd(dataChose.id, false);
             }
         });
