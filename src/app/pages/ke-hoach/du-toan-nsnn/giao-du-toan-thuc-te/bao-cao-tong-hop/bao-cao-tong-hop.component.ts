@@ -644,12 +644,6 @@ export class BaoCaoTongHopComponent implements OnInit {
             return;
         }
 
-        // lstCtietBcaoTemp.forEach(item => {
-        //   if (item.id?.length == 38) {
-        //     item.id = null;
-        //   }
-        // });
-
         //get list file url
         let checkFile = true;
         for (const iterator of this.listFile) {
@@ -770,11 +764,6 @@ export class BaoCaoTongHopComponent implements OnInit {
                 },
             );
         }
-        // this.lstCtietBcao.filter(item => {
-        //   if (!item.id) {
-        //     item.id = uuid.v4() + 'FE';
-        //   }
-        // });
         this.spinner.hide();
     };
 
@@ -799,16 +788,6 @@ export class BaoCaoTongHopComponent implements OnInit {
         );
         return temp;
     }
-
-    // xem chi tiết bản ghi
-    // xemChiTiet(id: string) {
-    //   const obj = {
-    //     id: id,
-    //     preData: this.data,
-    //     tabSelected: 'next' + this.data?.tabSelected,
-    //   }
-    //   this.dataChange.emit(obj);
-    // }
 
     xemChiTiet(id: string, maLoaiDan: string) {
         if (maLoaiDan == "1") {
@@ -1355,15 +1334,6 @@ export class BaoCaoTongHopComponent implements OnInit {
         })
         return check;
     };
-
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.trangThaiBanGhi)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // };
-
 
 }
 

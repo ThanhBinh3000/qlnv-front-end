@@ -257,34 +257,6 @@ export class PhuLuc13Component implements OnInit {
         this.status.ok = this.status.ok && (this.formDetail.trangThai == Status.NOT_RATE || this.formDetail.trangThai == Status.COMPLETE);
     };
 
-    // getIndex(str: string): string {
-    //     str = str.substring(str.indexOf('.') + 1, str.length);
-    //     let xau = "";
-    //     const chiSo: string[] = str.split('.');
-    //     const n: number = chiSo.length - 1;
-    //     let k: number = parseInt(chiSo[n], 10);
-    //     if (n == 0) {
-    //         xau = chiSo[n];
-    //     }
-    //     if (n == 1) {
-    //         xau = "-";
-    //     }
-    //     if (n == 2) {
-    //         xau = chiSo[n];
-    //     }
-    //     if (n == 3) {
-    //         xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    //     }
-    //     if (n == 4) {
-    //         xau = String.fromCharCode(k + 96);
-    //     }
-    //     if (n == 5) {
-    //         xau = "-";
-    //     }
-    //     return xau;
-    // }
-
-
     updateEditCache(): void {
         this.lstCtietBcao.forEach(item => {
             this.editCache[item.id] = {
@@ -377,103 +349,9 @@ export class PhuLuc13Component implements OnInit {
 
     };
 
-    // sum(stt: string) {
-    //     stt = getHead(stt);
-    //     while (stt != '0') {
-    //         const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-    //         const data = this.lstCtietBcao[index];
-    //         this.lstCtietBcao[index] = {
-    //             ...new ItemData(),
-    //             id: data.id,
-    //             stt: data.stt,
-    //             tenNoiDung: data.tenNoiDung,
-    //             level: data.level,
-    //             maNoiDung: data.maNoiDung,
-    //         }
-    //         this.lstCtietBcao.forEach(item => {
-    //             if (getHead(item.stt) == stt) {
-    //                 this.lstCtietBcao[index].tongNCDtoanKp = Number(sumNumber([this.lstCtietBcao[index].tongNCDtoanKp, item.tongNCDtoanKp]))
-    //                 this.lstCtietBcao[index].dtoanNamTruoc = Number(sumNumber([this.lstCtietBcao[index].dtoanNamTruoc, item.dtoanNamTruoc]))
-    //                 this.lstCtietBcao[index].dtoanDaGiao = Number(sumNumber([this.lstCtietBcao[index].dtoanDaGiao, item.dtoanDaGiao]))
-    //                 this.lstCtietBcao[index].dtoanTongSo = Number(sumNumber([this.lstCtietBcao[index].dtoanTongSo, item.dtoanTongSo]))
-    //                 this.lstCtietBcao[index].dtoanDnghiDchinh = Number(sumNumber([this.lstCtietBcao[index].dtoanDnghiDchinh, item.dtoanDnghiDchinh]))
-    //                 this.lstCtietBcao[index].dtoanVuTvqtDnghi = Number(sumNumber([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]))
-    //             }
-    //         })
-    //         stt = getHead(stt);
-    //     }
-    //     this.getTotal();
-    //     // this.tinhTong();
-    // };
-
-    // addLine(data: any) {
-    //     let parentItem: ItemData = this.lstCtietBcao.find(e => getHead(e.stt) == data.stt);
-    //     parentItem = {
-    //         ...new ItemData(),
-    //         id: uuid.v4() + 'FE',
-    //         maNoiDung: "",
-    //         level: data.level + 1,
-    //         tenNoiDung: "",
-    //     }
-    //     this.lstCtietBcao = addChild(data.id, parentItem, this.lstCtietBcao);
-    //     this.updateEditCache();
-    // };
-
-    // addLow(id: string, initItem: ItemData) {
-    //     this.lstCtietBcao = addChild(id, initItem, this.lstCtietBcao);
-    // };
-
-    // checkDelete(stt: string) {
-    //     const level = stt.split('.').length - 2;
-    //     if (level == 1) {
-    //         return true;
-    //     }
-    //     return false;
-    // };
-
-    // deleteLine(id: string) {
-    //     const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-    //     const nho: string = this.lstCtietBcao[index].stt;
-    //     const head: string = getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-    //     const stt: string = this.lstCtietBcao[index].stt;
-    //     //xóa phần tử và con của nó
-    //     this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
-    //     //update lại số thức tự cho các phần tử cần thiết
-    //     const lstIndex: number[] = [];
-    //     for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
-    //         if (getHead(this.lstCtietBcao[i].stt) == head) {
-    //             lstIndex.push(i);
-    //         }
-    //     }
-    //     this.replaceIndex(lstIndex, -1);
-    //     this.sum(stt);
-    //     this.getTotal();
-    //     this.updateEditCache();
-    // };
-
-    //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
-    // replaceIndex(lstIndex: number[], heSo: number) {
-    //     if (heSo == -1) {
-    //         lstIndex.reverse();
-    //     }
-    //     //thay doi lai stt cac vi tri vua tim duoc
-    //     lstIndex.forEach(item => {
-    //         const str = getHead(this.lstCtietBcao[item].stt) + "." + (getTail(this.lstCtietBcao[item].stt) + heSo).toString();
-    //         const nho = this.lstCtietBcao[item].stt;
-    //         this.lstCtietBcao.forEach(item => {
-    //             item.stt = item.stt.replace(nho, str);
-    //         })
-    //     })
-    // }
-
     handleCancel() {
         this._modalRef.close();
     };
-
-    // changeModel(id: string): void {
-    //     this.editCache[id].data.dtoanTongSo = Operator.sum([this.editCache[id].data.dtoanNamTruoc, this.editCache[id].data.dtoanDaGiao]);
-    //     this.editCache[id].data.dtoanDnghiDchinh = ([this.editCache[id].data.tongNCDtoanKp, - this.editCache[id].data.dtoanTongSo]);
-    // };
 
     getLowStatus(str: string) {
         return this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1;
@@ -523,18 +401,6 @@ export class PhuLuc13Component implements OnInit {
             edit: false
         };
     };
-    // checkAdd(stt: string) {
-
-    //     if (
-    //         stt == "0.1" ||
-    //         stt == "0.2" ||
-    //         stt == "0.3" ||
-    //         stt == "0.4"
-    //     ) {
-    //         return true;
-    //     }
-    //     return false;
-    // };
 
     checkAdd(data: ItemData) {
         if (
@@ -715,10 +581,7 @@ export class PhuLuc13Component implements OnInit {
                 { t: 4, b: 1, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
                 { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán, kinh phí' },
                 { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh<br>(+ tăng)(- giảm)' },
-                // { t: 4, b: 6, l: 7, r: 7, val: 'Dự toán Vụ TVQT đề nghị<br>(+ tăng)(- giảm)' },
                 { t: 4, b: 6, l: 7, r: 7, val: 'Ghi chú' },
-                // { t: 4, b: 6, l: 9, r: 9, val: 'Dự toán chênh lệch < br > giữa Vụ TVQT điều chỉnh < br > và đơn vị đề nghị<br>(+ tăng)(- giảm)' },
-                // { t: 4, b: 6, l: 10, r: 10, val: 'Ý kiến của đơn vị cấp trên' },
 
 
                 { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang được < br > phép sử dụng cho năm nay' },
@@ -734,10 +597,7 @@ export class PhuLuc13Component implements OnInit {
                 { t: 7, b: 7, l: 4, r: 4, val: '3 = 1 + 2' },
                 { t: 7, b: 7, l: 5, r: 5, val: '4' },
                 { t: 7, b: 7, l: 6, r: 6, val: '5 = 4 - 3' },
-                // { t: 7, b: 7, l: 7, r: 7, val: '6' },
                 { t: 7, b: 7, l: 7, r: 7, val: '6' },
-                // { t: 7, b: 7, l: 9, r: 9, val: '8 = 6 - 5' },
-                // { t: 7, b: 7, l: 10, r: 10, val: '9' },
 
             ]
             fieldOrder = [
@@ -748,10 +608,7 @@ export class PhuLuc13Component implements OnInit {
                 'dtoanTongSo',
                 'tongNCDtoanKp',
                 'dtoanDnghiDchinh',
-                // 'dtoanVuTvqtDnghi',
                 'ghiChu',
-                // 'chenhLech',
-                // 'ykienDviCtren',
             ]
         }
 

@@ -169,21 +169,6 @@ export class PhuLuc01NhapComponent implements OnInit {
             this.scrollX = Table.tableWidth(250, 7, 1, 0);
         }
 
-        // this.lstCtietBcaos.forEach(item => {
-        //     if (!item.tenDanhMuc) {
-        //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
-        //         item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-        //         item.namDtDmuc = dinhMuc?.tongDmuc;
-        //         item.maDviTinh = dinhMuc?.donViTinh;
-        //         item.namDtTtien = Operator.mul(item.namDtDmuc, item.namDtSluong);
-        //     } else {
-        //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
-        //         item.namDtDmuc = dinhMuc?.tongDmuc;
-        //         item.maDviTinh = dinhMuc?.donViTinh;
-        //         item.namDtTtien = Operator.mul(item.namDtDmuc, item.namDtSluong);
-        //     }
-        // })
-
         if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
             this.lstCtietBcaos.forEach(item => {
                 const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
@@ -647,10 +632,6 @@ export class PhuLuc01NhapComponent implements OnInit {
         WindowPrt.close();
     }
 
-    // displayValue(num: number): string {
-    //     num = exchangeMoney(num, '1', this.maDviTien);
-    //     return displayNumber(num);
-    // }
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }

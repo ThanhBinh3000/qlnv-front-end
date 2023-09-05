@@ -170,20 +170,7 @@ export class PhuLucTongHopComponent implements OnInit {
 
     async initialization() {
         this.spinner.show();
-        // lấy danh sách đơn vị
-        // await this.danhMuc.dMDonVi().toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode === 0) {
-        //             this.donVis = data?.data;
-        //             this.capDvi = this.donVis.find(e => e.maDvi == this.dataInfo?.maDvi)?.capDvi;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
-        //         }
-        //     }
-        // );
-
         const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
-        // this.userInfo = this.userService.getUserLogin();
         if (category) {
             this.noiDungs = category.data;
         }
@@ -195,10 +182,6 @@ export class PhuLucTongHopComponent implements OnInit {
         this.namBcao = this.dataInfo?.namBcao;
 
         if (this.status.general) {
-            // const category = await this.danhMucService.danhMucChungGetAll('LTD_TT342_BM131');
-            // if (category) {
-            //     this.chiTieus = category.data;
-            // }
             this.scrollX = Table.tableWidth(350, 5, 1, 60);
         } else {
             if (this.status.editAppVal) {
@@ -209,33 +192,6 @@ export class PhuLucTongHopComponent implements OnInit {
                 this.scrollX = Table.tableWidth(350, 5, 1, 0);
             }
         }
-
-        // this.lstCtietBcao = this.dataInfo.data.lstCtietDchinh;
-
-        // if (this.dataInfo?.isSynthetic && this.dataInfo?.isSynthetic == true) {
-        //     let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.dataInfo?.maDvi);
-        //     let lstDvi2 = []
-        //     this.dataInfo.data?.lstCtietDchinh[0]?.child.forEach(s => {
-        //         const Dvi2 = lstDvi1.filter(v => v.maDvi === s.maDviBcao)[0]
-        //         lstDvi2.push(Dvi2)
-        //     })
-        //     this.lstDvi = lstDvi2
-        //     
-
-        // } else {
-        //     this.lstDvi = this.donVis.filter(e => e?.maDvi === this.dataInfo?.maDvi);
-        //     
-        // }
-
-        // if (this.dataInfo.data.trangThai == "3" && this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-        //     this.dataInfo.extraData.forEach(item => {
-        //         if (item.maNoiDung) {
-        //             const index = this.lstCtietBcao.findIndex(e => e.maNoiDung == item.maNoiDung);
-        //             this.lstCtietBcao[index].child = item.child;
-        //         }
-        //     })
-        // }
-
 
         this.formDetail.lstCtietDchinh[0]?.child.forEach(s => {
             this.lstDvi.push(this.donVis.filter(v => v.maDvi === s.maDviBcao)[0])
@@ -271,12 +227,6 @@ export class PhuLucTongHopComponent implements OnInit {
             }
         )
     }
-    // sum1() {
-    //     this.lstCtietBcao.forEach(item => {
-    //         this.sum(item.stt);
-    //     })
-    // }
-
     async getFormDetail() {
         await this.dieuChinhDuToanService.ctietBieuMau(this.dataInfo.id).toPromise().then(
             data => {
@@ -322,7 +272,6 @@ export class PhuLucTongHopComponent implements OnInit {
     }
 
     saveEdit(id: string): void {
-        // set checked editCache = checked lstCtietBcao
         this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked;
         // lay vi tri hang minh sua
         const index = this.lstCtietBcao.findIndex(item => item.id === id);
@@ -350,10 +299,6 @@ export class PhuLucTongHopComponent implements OnInit {
             })
         })
         this.editCache[id].data.child = data
-        // this.lstCtietBcao[index] = {
-        //     ...this.editCache[id].data,
-        //     child: data,
-        // }
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data);
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.sum(this.lstCtietBcao[index].stt);
@@ -426,10 +371,6 @@ export class PhuLucTongHopComponent implements OnInit {
         this.lstCtietBcao[index].child = data
         this.editCache[id] = {
             data: new ItemData(this.lstCtietBcao[index]),
-            // data: {
-            //     ...this.lstCtietBcao[index],
-            //     // child: data,
-            // },
             edit: false
         };
     };
@@ -474,17 +415,6 @@ export class PhuLucTongHopComponent implements OnInit {
             }
         })
     }
-
-
-    // getChiMuc(str: string): string {
-    //     str = str.substring(str.indexOf('.') + 1, str.length);
-    //     let xau = "";
-    //     const chiSo: any = str.split('.');
-    //     const n: number = chiSo.length - 1;
-    //     let k: number = parseInt(chiSo[n], 10);
-
-    //     return xau;
-    // }
 
 
     doPrint() {
@@ -578,7 +508,6 @@ export class PhuLucTongHopComponent implements OnInit {
                 ...new ItemDvi(),
                 maDviBcao: item.maDvi,
                 dtoanVuTvqtDnghi: 0
-                // tenDvi: item.tenDvi,
             })
         })
         this.lstCtietBcao.forEach(item => {
@@ -586,10 +515,6 @@ export class PhuLucTongHopComponent implements OnInit {
                 item.child.forEach(ele => {
                     this.total.child.find(e => e.maDviBcao == ele.maDviBcao).dtoanVuTvqtDnghi += ele.dtoanVuTvqtDnghi;
                 })
-                // console.log(item);
-                // for (let i = 0; i < item.child?.length; i++) {
-                //     this.total.child[i].dtoanVuTvqtDnghi += item.child[i]?.dtoanVuTvqtDnghi;
-                // }
             }
         })
     }

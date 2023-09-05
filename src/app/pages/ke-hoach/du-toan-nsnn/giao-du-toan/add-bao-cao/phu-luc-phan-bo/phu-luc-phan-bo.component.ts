@@ -102,7 +102,6 @@ export class PhuLucPhanBoComponent implements OnInit {
     noiDungs: any[] = [];
     lstDvi: any[] = [];
     donVis: any[] = [];
-    // childUnit:any[] = []
     capDvi: any;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
@@ -160,29 +159,12 @@ export class PhuLucPhanBoComponent implements OnInit {
         if (category) {
             this.noiDungs = category.data;
         }
-        // this.maDvi = this.dataInfo.maDvi;
-        // // lấy danh sách đơn vị
-        // await this.danhMuc.dMDonVi().toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode === 0) {
-        //             this.donVis = data?.data;
-        //             this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
-        //         }
-        //     }
-        // );
-
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         await this.getChildUnit();
         this.namBcao = this.dataInfo?.namBcao;
 
         if (this.status.general) {
-            // const category = await this.danhMucService.danhMucChungGetAll('LTD_TT342_BM131');
-            // if (category) {
-            //     this.chiTieus = category.data;
-            // }
             this.scrollX = Table.tableWidth(350, 5, 1, 60);
         } else {
             if (this.status.editAppVal) {
@@ -194,43 +176,7 @@ export class PhuLucPhanBoComponent implements OnInit {
             }
         }
 
-        // if (this.dataInfo?.isSynthetic && this.dataInfo?.isSynthetic == true) {
-        //     let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.dataInfo.maDvi);
-        //     let lstDvi2 = []
-        //     this.dataInfo.data?.lstCtietBcaos[0].lstCtietDvis.forEach(s => {
-        //         const Dvi2 = lstDvi1.filter(v => v.maDvi === s.maDviNhan)[0]
-        //         lstDvi2.push(Dvi2)
-        //     })
-        //     this.lstDvi = lstDvi2
-        // } else {
-        //     this.lstDvi = this.donVis.filter(e => e?.maDvi === this.dataInfo.maDvi);
-        // }
-
-        // if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-        //     this.dataInfo.extraData.forEach(item => {
-        //         if (item.maNdung) {
-        //             const index = this.lstCtietBcaos.findIndex(e => e.maNdung == item.maNdung);
-        //             this.lstCtietBcaos[index].lstCtietDvis = item?.lstCtietDvis;
-        //         }
-        //     })
-        // }
-
-        //
-
-        // this.formDetail.lstCtietBcaos[0]?.lstCtietDvis.forEach(s => {
-        //     this.lstDvi = this.donVis.filter(v => v.maDvi === s.maDviNhan)
-        // })
-
-        //
-
         if (this.dataInfo?.capDvi == "3") {
-            // let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.dataInfo.maDvi);
-            // let lstDvi2 = []
-            // this.dataInfo.data?.lstCtietBcaos[0].lstCtietDvis.forEach(s => {
-            //     const Dvi2 = lstDvi1.filter(v => v.maDvi === s.maDviNhan)[0]
-            //     lstDvi2.push(Dvi2)
-            // })
-            // this.lstDvi = lstDvi2
             this.donVis = []
             this.donVis.push(
                 {
@@ -247,14 +193,12 @@ export class PhuLucPhanBoComponent implements OnInit {
                     this.lstCtietBcaos[index].lstCtietDvis.forEach(itm => {
                         tongCong += itm.soTranChi
                     })
-                    // this.lstCtietBcaos[index].dtoanGiao = tongCong;
                     this.sum(this.lstCtietBcaos[index].stt)
                 }
             })
 
         } else {
             this.formDetail.lstCtietBcaos[0]?.lstCtietDvis.forEach(s => {
-                // this.donVis.filter(v => v.maDvi === s.maDviNhan)[0]
                 this.lstDvi.push(this.donVis.filter(v => v.maDvi === s.maDviNhan)[0])
 
 
@@ -357,21 +301,6 @@ export class PhuLucPhanBoComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, 'Dòng chưa có dữ liệu, vui lòng nhập!')
             return;
         }
-
-        // this.editCache[id].data.lstCtietDvis.forEach(item => {
-        //     data.push({
-        //         id: item.id,
-        //         maDviNhan: item.maDviNhan,
-        //         soTranChi: item.soTranChi,
-        //         trangThai: item.trangThai,
-        //     })
-        // })
-        // // this.editCache[id].data.lstCtietDvis = data
-        // this.lstCtietBcaos[index] = {
-        //     ...this.editCache[id].data,
-        //     lstCtietDvis: data,
-        // }
-        // this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data);
         this.sum(this.lstCtietBcaos[index].stt);
         this.getTotal();
@@ -400,10 +329,6 @@ export class PhuLucPhanBoComponent implements OnInit {
                 lstCtietDvis: mm,
                 checked: false,
             });
-
-
-
-
             this.lstCtietBcaos.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
                     item.lstCtietDvis.forEach(e => {
@@ -439,10 +364,6 @@ export class PhuLucPhanBoComponent implements OnInit {
         this.editCache[id].data.lstCtietDvis = data
         this.editCache[id] = {
             data: new ItemData(this.lstCtietBcaos[index]),
-            // data: {
-            //     ...this.lstCtietBcaos[index],
-            //     lstCtietDvis: data,
-            // },
             edit: false
         };
     };
@@ -562,39 +483,13 @@ export class PhuLucPhanBoComponent implements OnInit {
             this.total.lstCtietDvis.push({
                 ...new ItemDvi(),
                 maDviNhan: item.maDvi,
-                // tenDvi: item.tenDvi,
             })
         })
-        // this.lstCtietBcaos.forEach(item => {
-        //     if (item.stt.split('.')?.length == 2) {
-        //         // this.total.gtTrenGt = Operator.sum([this.total.gtTrenGt, item.gtTrenGt]);
-        //         // this.total.gtTrenGtBh = Operator.sum([this.total.gtTrenGtBh, item.gtTrenGtBh]);
-        //         // this.total.gtDuoiGt = Operator.sum([this.total.gtDuoiGt, item.gtDuoiGt]);
-        //         // this.total.gtDuoiGtBh = Operator.sum([this.total.gtDuoiGtBh, item.gtDuoiGtBh]);
-        //         // this.total.tong = Operator.sum([this.total.tong, item.tong]);
-        //         for (let i = 0; i < item.lstCtietDvis?.length; i++) {
-        //             this.total.lstCtietDvis[i].soTranChi = Operator.sum([this.total.lstCtietDvis[i].soTranChi, item.lstCtietDvis[i].soTranChi]);
-        //             // this.total.lstDviCapDuoi[i].gtTrenGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtTrenGtBh, item.lstDviCapDuoi[i].gtTrenGtBh]);
-        //             // this.total.lstDviCapDuoi[i].gtDuoiGt = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGt, item.lstDviCapDuoi[i].gtDuoiGt]);
-        //             // this.total.lstDviCapDuoi[i].gtDuoiGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGtBh, item.lstDviCapDuoi[i].gtDuoiGtBh]);
-        //             // this.total.lstDviCapDuoi[i].tong = Operator.sum([this.total.lstDviCapDuoi[i].tong, item.lstDviCapDuoi[i].tong]);
-        //         }
-        //     }
-        // })
 
         this.lstCtietBcaos.forEach(item => {
             if (item.stt.split('.')?.length == 2) {
-                // this.total.gtTrenGt = Operator.sum([this.total.gtTrenGt, item.gtTrenGt]);
-                // this.total.gtTrenGtBh = Operator.sum([this.total.gtTrenGtBh, item.gtTrenGtBh]);
-                // this.total.gtDuoiGt = Operator.sum([this.total.gtDuoiGt, item.gtDuoiGt]);
-                // this.total.gtDuoiGtBh = Operator.sum([this.total.gtDuoiGtBh, item.gtDuoiGtBh]);
-                // this.total.tong = Operator.sum([this.total.tong, item.tong]);
                 for (let i = 0; i < item.lstCtietDvis?.length; i++) {
                     this.total.lstCtietDvis[i].soTranChi = Operator.sum([this.total.lstCtietDvis[i].soTranChi, item.lstCtietDvis[i].soTranChi]);
-                    // this.total.lstDviCapDuoi[i].gtTrenGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtTrenGtBh, item.lstDviCapDuoi[i].gtTrenGtBh]);
-                    // this.total.lstDviCapDuoi[i].gtDuoiGt = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGt, item.lstDviCapDuoi[i].gtDuoiGt]);
-                    // this.total.lstDviCapDuoi[i].gtDuoiGtBh = Operator.sum([this.total.lstDviCapDuoi[i].gtDuoiGtBh, item.lstDviCapDuoi[i].gtDuoiGtBh]);
-                    // this.total.lstDviCapDuoi[i].tong = Operator.sum([this.total.lstDviCapDuoi[i].tong, item.lstDviCapDuoi[i].tong]);
                 }
             }
         })

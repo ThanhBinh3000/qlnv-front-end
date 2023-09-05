@@ -535,10 +535,7 @@ export class PhuLuc3Component implements OnInit {
                 { t: 4, b: 4, l: 4, r: 6, val: 'Dự toán kinh phí được sử dụng trong năm' },
                 { t: 4, b: 6, l: 7, r: 7, val: 'Kinh phí ước thực hiện cả năm' },
                 { t: 4, b: 6, l: 8, r: 8, val: 'Dự toán điều chỉnh Tăng(+)/Giảm(-) ' },
-                // { t: 4, b: 6, l: 9, r: 9, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
                 { t: 4, b: 6, l: 9, r: 9, val: 'Ghi chú' },
-                // { t: 4, b: 6, l: 11, r: 11, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh vàDự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
-                // { t: 4, b: 6, l: 12, r: 12, val: 'Ý kiến của đơn vị cấp trên' },
 
                 { t: 5, b: 6, l: 4, r: 4, val: 'Năm trước chuyển sang' },
                 { t: 5, b: 6, l: 5, r: 5, val: 'Dự toán đã giao trong năm' },

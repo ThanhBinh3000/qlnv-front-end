@@ -334,27 +334,6 @@ export class PheDuyetTongHopComponent implements OnInit {
                 this.spinner.hide();
             },
         });
-
-        // let request = [];
-        // if (!id) {
-        //   request = this.listIdDelete;
-        // } else {
-        //   request = [id];
-        // }
-        // this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
-        //   data => {
-        //     if (data.statusCode == 0) {
-        //       this.listIdDelete = [];
-        //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-        //       this.onSubmit();
-        //     } else {
-        //       this.notification.error(MESSAGE.ERROR, data?.msg);
-        //     }
-        //   },
-        //   err => {
-        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //   }
-        // )
     }
 
     updateSingleChecked(): void {

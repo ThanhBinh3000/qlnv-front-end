@@ -687,10 +687,7 @@ export class PhuLuc10Component implements OnInit {
 				{ t: 4, b: 6, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ tăng) (- giảm)' },
 				{ t: 4, b: 6, l: 6, r: 6, val: 'Kế hoạch năm' + (this.namBcao - 1).toString() + 'sau điều chỉnh' },
 				{ t: 4, b: 6, l: 7, r: 7, val: 'Dự toán đề nghị điều chỉnh lần này' },
-				// { t: 4, b: 6, l: 8, r: 8, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
 				{ t: 4, b: 6, l: 8, r: 8, val: 'Ghi chú (Đã duyệt quyết toán/ chưa duyệt quyết toán)' },
-				// { t: 4, b: 6, l: 10, r: 10, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
-				// { t: 4, b: 6, l: 11, r: 11, val: 'Ý kiến của đơn vị cấp trên' },
 
 
 				{ t: 7, b: 7, l: 0, r: 0, val: 'A' },
@@ -701,10 +698,7 @@ export class PhuLuc10Component implements OnInit {
 				{ t: 7, b: 7, l: 5, r: 5, val: '4' },
 				{ t: 7, b: 7, l: 6, r: 6, val: '5 = 1 + 4' },
 				{ t: 7, b: 7, l: 7, r: 7, val: '6 = 5 - 2' },
-				// { t: 7, b: 7, l: 8, r: 8, val: '7' },
 				{ t: 7, b: 7, l: 8, r: 8, val: '7' },
-				// { t: 7, b: 7, l: 10, r: 10, val: '9 = 7 - 6' },
-				// { t: 7, b: 7, l: 11, r: 11, val: '10' },
 
 			]
 			fieldOrder = [
@@ -716,10 +710,7 @@ export class PhuLuc10Component implements OnInit {
 				'dtoanDchinhDnghi',
 				'kh2021SauDchinh',
 				'dtoanDnghiDchinhLnay',
-				// 'dtoanVuTvqtDnghi',
 				'ghiChu',
-				// 'chenhLech',
-				// 'ykienDviCtren',
 			]
 		}
 

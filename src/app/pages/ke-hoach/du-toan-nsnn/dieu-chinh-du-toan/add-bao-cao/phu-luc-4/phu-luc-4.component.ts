@@ -517,31 +517,6 @@ export class PhuLuc4Component implements OnInit {
             default:
                 return null;
         }
-
-        // if (n == 0) {
-        //     xau = String.fromCharCode(k + 64);
-        // }
-        // if (n == 1) {
-        //     for (let i = 0; i < this.soLaMa.length; i++) {
-        //         while (k >= this.soLaMa[i].gTri) {
-        //             xau += this.soLaMa[i].kyTu;
-        //             k -= this.soLaMa[i].gTri;
-        //         }
-        //     }
-        // }
-        // if (n == 2) {
-        //     xau = chiSo[n];
-        // }
-        // if (n == 3) {
-        //     xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        // }
-        // if (n == 4) {
-        //     xau = String.fromCharCode(k + 96);
-        // }
-        // if (n == 5) {
-        //     xau = "-";
-        // }
-        // return xau;
     }
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
@@ -721,11 +696,7 @@ export class PhuLuc4Component implements OnInit {
                 { t: 4, b: 5, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ tăng) (- giảm)' },
                 { t: 4, b: 5, l: 6, r: 6, val: 'Kế hoạch năm' + (this.namBcao + 1) + 'sau điều chỉnh' },
                 { t: 4, b: 5, l: 7, r: 7, val: 'Dự toán đề nghị điều chỉnh lần này' },
-                // { t: 4, b: 5, l: 8, r: 8, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
                 { t: 4, b: 5, l: 8, r: 8, val: 'Ghi chú (Đã duyệt quyết toán/ chưa duyệt quyết toán)' },
-                // { t: 4, b: 5, l: 10, r: 10, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
-                // { t: 4, b: 5, l: 11, r: 11, val: 'Ý kiến của đơn vị cấp trên' },
-
                 { t: 6, b: 6, l: 0, r: 0, val: 'A' },
                 { t: 6, b: 6, l: 1, r: 1, val: 'B' },
                 { t: 6, b: 6, l: 2, r: 2, val: '1' },
@@ -734,10 +705,7 @@ export class PhuLuc4Component implements OnInit {
                 { t: 6, b: 6, l: 5, r: 5, val: '4' },
                 { t: 6, b: 6, l: 6, r: 6, val: '5 = 1 + 4' },
                 { t: 6, b: 6, l: 7, r: 7, val: '6 = 5 - 2' },
-                // { t: 6, b: 6, l: 8, r: 8, val: '7' },
                 { t: 6, b: 6, l: 8, r: 8, val: '7' },
-                // { t: 6, b: 6, l: 10, r: 10, val: '9 = 7 - 6' },
-                // { t: 6, b: 6, l: 11, r: 11, val: '10' },
             ]
             fieldOrder = [
                 "stt",
@@ -748,10 +716,7 @@ export class PhuLuc4Component implements OnInit {
                 "dtoanDchinhDnghi",
                 "khoachSauDchinh",
                 "dtoanDchinhDnghiLanNay",
-                // "dtoanVuTvqtDnghi",
                 "ghiChu",
-                // "chenhLech",
-                // "ykienDviCtren",
             ]
         }
 

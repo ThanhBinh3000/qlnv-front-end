@@ -161,10 +161,6 @@ export class PhuLucTaiSanComponent implements OnInit {
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
 		if (this.status.general) {
-			// const category = await this.danhMucService.danhMucChungGetAll('LTD_PL6');
-			// if (category) {
-			//     this.listVtu = category.data;
-			// }
 			this.scrollX = Table.tableWidth(350, 8, 1, 360);
 		} else {
 			if (this.status.editAppVal) {
@@ -175,19 +171,6 @@ export class PhuLucTaiSanComponent implements OnInit {
 				this.scrollX = Table.tableWidth(350, 8, 1, 0);
 			}
 		}
-
-		// if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
-		// 	this.lstCtietBcaos.forEach(item => {
-		// 		const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
-		// 		if (!item.tenDanhMuc) {
-		// 			item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-		// 		}
-		// 		item.dmucNamDtoan = dinhMuc?.tongDmuc;
-		// 		item.dviTinh = dinhMuc?.donViTinh;
-		// 		item.ttienNamDtoan = this.numFunc.mul(item.dmucNamDtoan, item.sluongNamDtoan);
-		// 		item.ttienTd = this.numFunc.mul(item.dmucNamDtoan, item.sluongTd);
-		// 	})
-		// }
 		if (!this.lstCtietBcaos[0]?.stt) {
 			let sttItem = 1
 			this.lstCtietBcaos.forEach(item => {
@@ -432,20 +415,6 @@ export class PhuLucTaiSanComponent implements OnInit {
 						dviTinh: data.dviTinh,
 						level: 0,
 					}))
-					// const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
-					// for (let i = 1; i <= lstTemp.length; i++) {
-					// 	this.lstCtietBcaos.push({
-					// 		...new ItemData(),
-					// 		id: uuid.v4() + 'FE',
-					// 		stt: stt + '.' + i.toString(),
-					// 		danhMuc: data.maTaiSan,
-					// 		maDmuc: lstTemp[i - 1].loaiDinhMuc,
-					// 		tenDanhMuc: lstTemp[i - 1].tenTaiSan,
-					// 		dviTinh: lstTemp[i - 1].donViTinh,
-					// 		level: 1,
-					// 		dmucNamDtoan: lstTemp[i - 1].tongDmuc,
-					// 	})
-					// }
 					this.updateEditCache();
 				}
 			}

@@ -41,18 +41,6 @@ export const TRANG_THAI_TIM_KIEM = [
         id: "7",
         tenDm: 'Gửi đơn vị cấp trên'
     },
-    // {
-    //   id: "8",
-    //   tenDm: 'Đơn vị cấp trên từ chối'
-    // },
-    // {
-    //   id: "9",
-    //   tenDm: 'Đơn vị cấp trên tiếp nhận'
-    // },
-    // {
-    //     id: "10",
-    //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
-    // },
 ]
 @Component({
     selector: 'app-phan-bo-du-toan',

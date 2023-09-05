@@ -184,20 +184,6 @@ export class PhuLuc8Component implements OnInit {
         }
 
         await this.getDinhMuc();
-        // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
-        //     this.lstCtietBcao.forEach(item => {
-        //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maMatHang && e.loaiBaoQuan == item.maDmuc);
-        //         if (!item.matHang) {
-        //             item.matHang = dinhMuc?.tenDinhMuc;
-        //         }
-        //         item.dinhMuc = dinhMuc?.tongDmuc;
-        //         item.maDviTinh = dinhMuc?.donViTinh;
-        //         item.luongSlBquanTcong = Operator.sum([item.luongSlBquanTte, item.luongSlBquanUocThien])
-        //         item.tongNcauDtoan = mulNumber(item.dinhMuc, item.luongSlBquanTcong);
-        //         item.dtoanDchinhDnghi = item.tongNcauDtoan - item.kphiCong
-        //         item.dtoanVuTvqtDnghi = item.tongNcauDtoan - item.kphiCong
-        //     })
-        // }
 
         this.lstCtietBcao.forEach(item => {
             if (item.kphiCong == null) {
@@ -493,7 +479,6 @@ export class PhuLuc8Component implements OnInit {
                 stt: data.stt,
                 matHang: data.matHang,
                 level: data.level,
-                // ttienTd: data.ttienTd,
                 maDviTinh: data.maDviTinh,
                 slBquanKh: data.slBquanKh,
                 luongSlBquanTte: data.luongSlBquanTte,
@@ -772,10 +757,7 @@ export class PhuLuc8Component implements OnInit {
                 { t: 4, b: 6, l: 8, r: 8, val: "Tổng nhu cầu dự toán năm" + this.namBcao },
                 { t: 4, b: 4, l: 9, r: 11, val: "Kinh phí được sử dụng năm " + this.namBcao },
                 { t: 4, b: 6, l: 12, r: 12, val: "Dự toán điều chỉnh đề nghị(+ Tăng)(- Giảm)" },
-                // { t: 4, b: 6, l: 13, r: 13, val: "Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)" },
                 { t: 4, b: 6, l: 13, r: 13, val: "Dự toán phí bảo quản thiếu năm 2020" },
-                // { t: 4, b: 6, l: 15, r: 15, val: "Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị" },
-                // { t: 4, b: 6, l: 16, r: 16, val: "Ý kiến của đơn vị cấp trên" },
                 { t: 4, b: 6, l: 14, r: 14, val: "Ghi chú" },
 
                 { t: 5, b: 6, l: 4, r: 4, val: "Số lượng bảo quản thực tế đã thực hiện đến thời điểm báo cáo" },
@@ -798,10 +780,7 @@ export class PhuLuc8Component implements OnInit {
                 { t: 7, b: 7, l: 10, r: 10, val: "8" },
                 { t: 7, b: 7, l: 11, r: 11, val: "9" },
                 { t: 7, b: 7, l: 12, r: 12, val: "10 = 6 - 7" },
-                // { t: 7, b: 7, l: 13, r: 13, val: "11" },
                 { t: 7, b: 7, l: 13, r: 13, val: "12" },
-                // { t: 7, b: 7, l: 15, r: 15, val: "13 = 11 - 10" },
-                // { t: 7, b: 7, l: 16, r: 16, val: "14" },
                 { t: 7, b: 7, l: 14, r: 14, val: "15" },
             ]
             fieldOrder = [
@@ -818,10 +797,7 @@ export class PhuLuc8Component implements OnInit {
                 'kphiDtoanNtruoc',
                 'kphiDtoanGiaoTnam',
                 'dtoanDchinhDnghi',
-                // 'dtoanVuTvqtDnghi',
                 'dtoanPhiBquanThieu',
-                // 'chenhLech',
-                // 'ykienDviCtren',
                 'ghiChu',
             ]
         }

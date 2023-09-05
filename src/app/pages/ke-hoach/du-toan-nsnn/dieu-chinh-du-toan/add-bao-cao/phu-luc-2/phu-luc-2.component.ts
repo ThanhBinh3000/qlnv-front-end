@@ -46,12 +46,6 @@ export class ItemData {
         Object.assign(this, data);
     }
 
-    changeModel() {
-        // this.tong = Operator.sum([this.dtoanKphiNamTruoc, this.dtoanKphiNamNay]);
-        // this.dtoanDnghiDchinh = Operator.sum([this.tongDtoanTrongNam, - this.tong])
-        // this.chenhLech = Operator.sum([this.dtoanVuTvqtDnghi, - this.dtoanDnghiDchinh])
-    }
-
     upperBound() {
         return (
             this.dtoanDnghiMucGia > Utils.MONEY_LIMIT ||
@@ -249,9 +243,6 @@ export class PhuLuc2Component implements OnInit {
                 this.lstCtietBcao[ind].stt = stt + '.' + (j + 1).toString();
             }
         }
-        // lstVtuTemp.forEach(item => {
-        //     this.sum(item.stt + '.1');
-        // })
     }
 
 
@@ -276,23 +267,6 @@ export class PhuLuc2Component implements OnInit {
             }
         )
     }
-
-
-    // async getListTaiSan() {
-    //     const data = await this.danhMucService.danhMucChungGetAll('BC_DC_PL2');
-    //     if (data) {
-    //         data.data.forEach(
-    //             item => {
-    //                 this.lstTaiSans.push({
-    //                     ...item,
-    //                     // level: item.ma?.split('.').length - 2,
-    //                     donViTinh: "cái"
-    //                 })
-    //             }
-    //         )
-
-    //     }
-    // };
 
     getTotal() {
         this.total = new ItemData({});
@@ -502,42 +476,6 @@ export class PhuLuc2Component implements OnInit {
             }
         })
     };
-
-    /*
-    addLine(id: number): void {
-        const item: ItemData = {
-            id: uuid.v4(),
-            stt: "0",
-            checked: false,
-            maTaiSan: "",
-            tenTaiSan: "",
-            dvTinh: "",
-            sluongTsDenTd: 0,
-            sluongTsDaNhan: 0,
-            sluongTsDaPd: 0,
-            sluongTsCong: 0,
-            sluongTsTcDinhMuc: 5,
-            dtoanDnghiSl: 0,
-            dtoanDnghiMucGia: 0,
-            dtoanDnghiThanhTien: 0,
-            dtoanKpNamTruoc: 0,
-            dtoanKpDaGiao: 0,
-            dtoanKpCong: 0,
-            dtoanKpDieuChinh: 0,
-            dtoanVuDnghi: 0,
-            thuyetMinh: "",
-            ghiChu: "",
-            chenhLech: 0,
-            ykienDviCtren: ""
-        };
-
-        this.lstCtietBcao.splice(id, 0, item);
-        this.editCache[item.id] = {
-            edit: true,
-            data: { ...item }
-        };
-    };
-    */
 
     // xoa file trong bang file
     deleteFile(id: string): void {

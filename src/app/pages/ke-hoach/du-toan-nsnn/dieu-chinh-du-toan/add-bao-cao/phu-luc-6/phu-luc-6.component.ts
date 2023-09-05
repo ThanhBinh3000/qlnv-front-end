@@ -696,25 +696,6 @@ export class PhuLuc6Component implements OnInit {
         });
     }
 
-    // action print
-    // doPrint() {
-    //     const WindowPrt = window.open(
-    //         '',
-    //         '',
-    //         'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-    //     );
-    //     let printContent = '';
-    //     printContent = printContent + '<div>';
-    //     printContent =
-    //         printContent + document.getElementById('tablePrint').innerHTML;
-    //     printContent = printContent + '</div>';
-    //     WindowPrt.document.write(printContent);
-    //     WindowPrt.document.close();
-    //     WindowPrt.focus();
-    //     WindowPrt.print();
-    //     WindowPrt.close();
-    // }
-
     handleCancel() {
         this._modalRef.close();
     };
@@ -835,10 +816,7 @@ export class PhuLuc6Component implements OnInit {
                 { t: 4, b: 4, l: 4, r: 8, val: 'Số lượng thực hiện năm' + (this.namBcao - 1).toString() },
                 { t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đã giao lũy kế' },
                 { t: 4, b: 6, l: 10, r: 10, val: 'Dự toán điều chỉnh' },
-                // { t: 4, b: 6, l: 11, r: 11, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
                 { t: 4, b: 6, l: 11, r: 11, val: 'Kinh phí thiếu năm ' + (this.namBcao - 1).toString() },
-                // { t: 4, b: 6, l: 13, r: 13, val: 'Dự toán chênh lệch giữa Vụ TVQT và đơn vị đề nghị (+ tăng) (- giảm)' },
-                // { t: 4, b: 6, l: 14, r: 14, val: 'Ý kiến của đơn vị cấp trên' },
                 { t: 4, b: 6, l: 12, r: 12, val: 'Ghi chú' },
 
                 { t: 5, b: 6, l: 4, r: 4, val: 'Số lượng thực tế đã thực hiện đến thời điểm báo cáo' },
@@ -858,10 +836,7 @@ export class PhuLuc6Component implements OnInit {
                 { t: 7, b: 7, l: 8, r: 8, val: '6 = 4 * 5' },
                 { t: 7, b: 7, l: 9, r: 9, val: '7' },
                 { t: 7, b: 7, l: 10, r: 10, val: '8 = 6 - 7' },
-                // { t: 7, b: 7, l: 11, r: 11, val: '9' },
                 { t: 7, b: 7, l: 11, r: 11, val: '10' },
-                // { t: 7, b: 7, l: 13, r: 13, val: '11 = 9 - 8' },
-                // { t: 7, b: 7, l: 14, r: 14, val: '12' },
                 { t: 7, b: 7, l: 12, r: 12, val: '13' },
             ]
             fieldOrder = [
@@ -876,10 +851,7 @@ export class PhuLuc6Component implements OnInit {
                 'sluongThienTtien',
                 'dtoanGiaoLke',
                 'dtoanDchinh',
-                // 'dtoanVuTvqtDnghi',
                 'kphiThieu',
-                // 'chenhLech',
-                // 'ykienDviCtren',
                 'ghiChu',
             ]
         }

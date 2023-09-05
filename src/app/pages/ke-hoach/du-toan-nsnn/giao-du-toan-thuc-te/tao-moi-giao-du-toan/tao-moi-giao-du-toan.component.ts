@@ -242,7 +242,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 		// lấy mã đơn vị tạo PA
 		this.maDonViTao = this.userInfo?.MA_DVI;
-		// await this.getChildUnit();
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
 		console.log(this.userInfo);
@@ -278,11 +277,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			// call chi tiết bản ghi khi có id
 			await this.getDetailReport();
 		} else {
-			// khi không có id thì thực hiện tạo mới
-			// this.trangThaiBanGhi = '1';
 			this.maDonViTao = this.userInfo?.MA_DVI;
 			this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-			// this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
 			this.maDviTien = '1'
 			this.listIdFilesDelete = this.data?.listIdDeleteFiles;
 			this.lstCtietBcao = this.data?.lstCtiets;
@@ -311,12 +307,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				}
 			)
 		}
-
-
-
-		// if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
-		// 	this.isDvi = false;
-		// }
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {
@@ -360,20 +350,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
-					// this.lstDvi = data.data;
-					// this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
-					// if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
-					// 	this.lstDvi.push(
-					// 		{
-					// 			tenDvi: this.userInfo.TEN_DVI,
-					// 			maDvi: this.userInfo.MA_DVI
-					// 		}
-					// 	)
-					// }
 					this.lstDvi = data.data;
 					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
-
-					// this.donVis = this.lstDvi
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -446,24 +424,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 							item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR)
 						})
 					}
-					// this.checkSumUp = data.data.checkSumUp;
-					// if (this.checkSumUp == true && this.userInfo.CAP_DVI == "1" && this.trangThaiBanGhi == "6") {
-					// 	this.statusBtnTongHop = false
-					// }
-					// if (this.lstCtietBcao[0]?.lstCtietDvis.length > 0) {
-					// 	this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
-					// 		this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan))
-					// 	})
-					// }
-					// this.lstCtietBcao.forEach(item => {
-					//   item.tongCong = divMoney(item.tongCong, this.maDviTien);
-					//   if (item.lstCtietDvis) {
-					//     item.lstCtietDvis.forEach(e => {
-					//       // e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null : divMoney(e.soTranChi, this.maDviTien);
-					//       e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
-					//     })
-					//   }
-					// })
 					this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
 					this.updateEditCache();
 					this.getStatusButton();
@@ -509,8 +469,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			(res) => {
 				if (res.statusCode == 0) {
 					maBcaoNew = res.data;
-					//   let sub = "BTC";
-					//  maBcaoNew =maBcaoNew.slice(0, 2) + sub +maBcaoNew.slice(2);
 				} else {
 					this.notification.error(MESSAGE.ERROR, res?.msg);
 				}
@@ -861,10 +819,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		if (dVi && dVi?.maDviCha == this.userInfo.MA_DVI) {
 			checkParent = true;
 		}
-		// const isParent = this.userInfo.MA_DVI == this.maDviCha;
 		const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 		const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
-		// this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
 		this.statusBtnSave = Status.check('saveWOHist', this.trangThaiBanGhi) && checkSave && checkChirld;
 
 
@@ -936,27 +892,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				});
 				this.spinner.hide();
 			}
-
-			// this.spinner.show();
-			// await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
-			// 	if (data.statusCode == 0) {
-			// 		this.trangThaiBanGhi = mcn;
-			// 		this.getStatusButton();
-			// 		if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-			// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-			// 		} else {
-			// 			this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-			// 		}
-			// 		// if (this.userInfo?.roles[0]?.code == 'C_KH_VP_LD' && this.soQd) {
-			// 		//   this.statusBtnGuiDVCT = false;
-			// 		// }
-			// 	} else {
-			// 		this.notification.error(MESSAGE.ERROR, data?.msg);
-			// 	}
-			// }, err => {
-			// 	this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			// });
-			// this.spinner.hide();
 		} else {
 			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
 		}
@@ -979,27 +914,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			}
 		});
 	};
-
-	// xem chi tiết PA cha
-	// xemCtietPaBTC() {
-	//   if (!this.idPaBTC) {
-	//     return;
-	//   }
-	//   const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-	//   let url: string;
-	//   if (capDviUser == Utils.TONG_CUC) {
-	//     url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-	//   } else if (this.maPaCha.includes('BTC')) {
-	//     url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-	//   } else {
-	//     if (capDviUser == Utils.CUC_KHU_VUC) {
-	//       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-	//     } else {
-	//       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-	//     }
-	//   }
-	//   window.open(url, '_blank');
-	// };
 	// xem chi tiết PA cha
 	xemCtietPaBTC() {
 		if (!this.idPaBTC) {
@@ -1014,8 +928,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			this.dataChange.emit(obj);
 		}
 		else {
-			// url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-			// window.open(url, '_blank')
 			const obj = {
 				id: this.idPaBTC,
 				preData: this.data,
@@ -1536,59 +1448,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			stt = Table.preIndex(stt);
 		};
 	};
-
-	// sum1() {
-	//   this.lstCtietBcao.forEach(itm => {
-	//     let stt = Table.preIndex(itm.stt);
-	//     while (stt != '0') {
-	//       const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-	//       const data = this.lstCtietBcao[index];
-	//       const mm: any[] = [];
-	//       data.lstCtietDvis.forEach(item => {
-	//         mm.push({
-	//           ...item,
-	//           soTranChi: 0,
-	//         })
-	//       });
-	//       this.lstCtietBcao[index] = {
-	//         id: data.id,
-	//         stt: data.stt,
-	//         level: data.level,
-	//         maNdung: data.maNdung,
-	//         tongCong: 0,
-	//         lstCtietDvis: mm,
-	//         checked: false,
-	//       };
-	//       this.lstCtietBcao.forEach(item => {
-	//         if (Table.preIndex(item.stt) == stt) {
-	//           item.lstCtietDvis.forEach(e => {
-	//             const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
-	//             if (e.soTranChi) {
-	//               this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e?.soTranChi);
-	//             }
-	//           })
-	//         }
-	//       })
-	//       this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-	//         this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
-	//       })
-	//       stt = Table.preIndex(stt);
-	//     };
-	//   })
-	// };
-
-	// tính tổng
-	// tinhTong() {
-	//   this.lstCtietBcao.forEach(item => {
-	//     const sttItem = item.stt
-	//     const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
-	//     this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-	//       this.lstCtietBcao[index].tongCong = 0
-	//       this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
-	//     })
-	//   })
-	// };
-
 	getMoneyUnit() {
 		return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
 	}

@@ -241,15 +241,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
                     this.tenDvi = this.donVis.find(e => e.maDvi == this.maDviTao)?.tenDvi
                     this.isStatus = data.data.trangThai
                     this.maDviTien = data.data.maDviTien
-                    // if ((this.userInfo.DON_VI.tenVietTat.includes("CCDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
-                    // if (this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT)) {
-                    //     this.statusBtnNew = false;
-                    // }
-                    // if (this.isStatus == "2") {
-                    //     this.statusBtnCreateReport = false;
-                    // }
-                    // }
-
                     if (this.isStatus == "1") {
                         this.statusBtnNew = true;
                     } else {
