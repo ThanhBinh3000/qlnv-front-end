@@ -42,6 +42,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   listVatTuHangHoa: any[] = [];
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
+  listMucDichXuat: any[] = [];
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -137,6 +138,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         this.loadDsDonVi(),
         this.loadDsDiaDanh(),
         this.loadDsVthh(),
+        this.loadDsMucDichXuat()
       ]);
       await this.loadDetail();
     } catch (e) {
@@ -348,6 +350,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       // this.listVatTuHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^02.*")));
       this.listVatTuHangHoa = res.data;
+    }
+  }
+
+  async loadDsMucDichXuat() {
+    this.listMucDichXuat = [];
+    let res = await this.danhMucService.danhMucChungGetAll('MUC_DICH_CT_VT');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listMucDichXuat = res.data;
     }
   }
 
