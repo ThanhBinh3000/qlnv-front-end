@@ -195,6 +195,37 @@
               </nz-form-control>
             </nz-form-item>
           </div>
+          <div nz-col [nzSpan]="5">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Chứng thư giám định số
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="soChungThuGiamDinh" [readonly]="isView" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="5">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">Ngày giám định</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-date-picker [nzDisabled]="isView" formControlName="ngayGiamDinh" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="14">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Tổ chức giám định
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="toChucGiamDinh" [readonly]="isView" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
 
           <div nz-col [nzSpan]="18">
             <nz-card class="mg-t-16 flex-card p-lr16" nzTitle="Ngăn kho nhập hàng điều chuyển">
@@ -309,6 +340,41 @@
                   </nz-form-item>
                 </div>
               </div>
+
+              <div nz-row [nzGutter]="24">
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                      SL nhập vào lô kho
+                    </nz-form-label>
+                    <nz-form-control>
+                      <span class="text-blue">{{formData.value.slNhapTheoQd|number: '1.0-1':
+                        'vi_VN'}} {{formData.value.tenDonViTinh}}</span>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                      Khối lượng khách hàng khai báo (kg)
+                    </nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="slNhapTheoKb" [readonly]="isView" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                      Khối lượng hàng thực tế kiểm tra (kg)
+                    </nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="slNhapTheoKt" [readonly]="isView" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+
             </nz-card>
           </div>
 
@@ -380,6 +446,16 @@
           <div nz-col [nzSpan]="6">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
+                Biển số xe của phương tiện vận tải
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="bienSoXe" [readonly]="isView" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="6">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
                 Đơn vị/Công ty (của người giao hàng)
               </nz-form-label>
               <nz-form-control>
@@ -398,50 +474,11 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Biển số xe của phương tiện vận tải
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="bienSoXe" [readonly]="isView" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
 
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                SL nhập vào lô kho
-              </nz-form-label>
-              <nz-form-control>
-                <span class="text-blue">{{formData.value.slNhapTheoQd|number: '1.0-1':
-                  'vi_VN'}} {{formData.value.tenDonViTinh}}</span>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Khối lượng khách hàng khai báo (kg)
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="slNhapTheoKb" [readonly]="isView" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Khối lượng hàng thực tế kiểm tra (kg)
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="slNhapTheoKt" [readonly]="isView" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
 
-          <div nz-col [nzSpan]="6">
+
+
+          <!-- <div nz-col [nzSpan]="6">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 Lãnh đạo chi cục
@@ -450,39 +487,9 @@
                 <input nz-input formControlName="lanhDao" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
-          </div>
+          </div> -->
 
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Chứng thư giám định số
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="soChungThuGiamDinh" [readonly]="isView" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
 
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Ngày giám định</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" formControlName="ngayGiamDinh" nzFormat="dd/MM/yyyy">
-                </nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                Tổ chức giám định
-              </nz-form-label>
-              <nz-form-control>
-                <input nz-input formControlName="toChucGiamDinh" [readonly]="isView" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
 
 
 

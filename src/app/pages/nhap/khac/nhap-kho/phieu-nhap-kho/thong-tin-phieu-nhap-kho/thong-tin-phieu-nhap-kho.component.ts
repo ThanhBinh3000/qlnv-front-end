@@ -24,6 +24,7 @@ import { convertTienTobangChu } from "src/app/shared/commonFunction";
 import { v4 as uuidv4 } from 'uuid';
 import { DanhMucDungChungService } from "src/app/services/danh-muc-dung-chung.service";
 import { KIEU_NHAP_XUAT } from "src/app/constants/config";
+import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho',
@@ -61,6 +62,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     private dmService: DanhMucDungChungService,
     private phieuKiemTraChatLuongService: PhieuKtraCluongService,
     private quyetDinhGiaoNhapHangKhacService: QuyetDinhGiaoNhapHangKhacService,
+    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
     private phieuNhapKhoService: PhieuNhapKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuNhapKhoService);
@@ -477,7 +479,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           maLoKho: this.formData.value.maLoKho,
           idQdGiaoNvnh: this.formData.value.qdGiaoNvId,
         }
-        this.getPhieuKTCL(body)
+        await this.getPhieuKTCL(body)
+        await this.loadDsBbnt()
       }
     });
   }
@@ -495,6 +498,27 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         cloaiVthh: phieuKTCL.cloaiVthh,
         tenCloaiVthh: phieuKTCL.tenCloaiVthh,
       })
+    }
+  }
+
+  async loadDsBbnt() {
+    let body = {
+      idQdGiaoNvnh: this.formData.get('qdGiaoNvId').value,
+      maLoKho: this.formData.get('maLoKho').value,
+      maNganKho: this.formData.get('maNganKho').value,
+    }
+    let res = await this.bbNghiemThuBaoQuanService.timKiemBbtheoMaNganLo(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data;
+      let bbNTBQ = ''
+      data.forEach(element => {
+        bbNTBQ = bbNTBQ.concat(`${element.soBbNtBq}, `)
+      });
+      this.formData.patchValue({
+        bbNghiemThuBqld: bbNTBQ
+      })
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
