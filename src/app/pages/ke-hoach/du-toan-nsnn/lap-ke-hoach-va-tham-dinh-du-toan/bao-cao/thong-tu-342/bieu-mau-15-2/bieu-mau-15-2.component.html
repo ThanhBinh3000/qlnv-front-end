@@ -44,9 +44,7 @@
 								<th scope="col" rowspan="4" class="text-col">
 									Ghi chú
 								</th>
-								<th scope="col" rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
 								<th scope="col" rowspan="4" style="width: 60px;" *ngIf="status.general" nzRight></th>
-								<th scope="col" rowspan="4" style="width: 50px;" *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
 								<th scope="col" rowspan="3">
@@ -230,8 +228,6 @@
 								<th scope="col">35</th>
 								<th scope="col"></th>
 								<th scope="col" *ngIf="status.general" nzRight></th>
-								<th scope="col" *ngIf="status.general" nzRight></th>
-								<th scope="col" *ngIf="status.general" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -275,13 +271,11 @@
 								<td>{{Op.fmtVal(total.namKhKphiHphap)}}</td>
 								<td></td>
 								<td *ngIf="status.general" nzRight></td>
-								<td *ngIf="status.general" nzRight></td>
-								<td *ngIf="status.general" nzRight></td>
 							</tr>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
 									<td class="text-center" nzLeft>
-										{{ data.index() }}
+										{{ i + 1 }}
 									</td>
 									<td nzLeft>
 										{{ data.tenDmuc }}
@@ -325,21 +319,12 @@
 									<td>{{Op.fmtVal(data.namKhKphiHphap)}}</td>
 									<td>{{data.ghiChu}}</td>
 									<td *ngIf="status.general" nzRight>
-										<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
-											(click)="deleteLine(data.id)"></i>
-									</td>
-									<td *ngIf="status.general" nzRight>
-										<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
-											(click)="startEdit(data.id)"></i>
-									</td>
-									<td *ngIf="status.general" nzRight>
-										<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.id)"></i>
-
+										<i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
 									</td>
 								</ng-container>
 								<ng-template #editTemplate>
 									<td class="text-center" nzLeft>
-										{{ editCache[data.id].data.index() }}
+										{{ i + 1 }}
 									</td>
 									<td nzLeft>
 										<ng-container *ngIf="data.donVi; else editName">
@@ -532,19 +517,11 @@
 										<input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
 									</td>
 									<td *ngIf="status.general" nzRight>
-										<i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
-											(click)="deleteLine(data.id)"></i>
-									</td>
-
-									<td *ngIf="status.general" nzRight>
 										<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 										<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
 											(nzOnConfirm)="cancelEdit(data.id)" class="save">
 											Hủy
 										</a>
-									</td>
-									<td *ngIf="status.general" nzRight>
-										<i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.id)"></i>
 									</td>
 								</ng-template>
 							</tr>

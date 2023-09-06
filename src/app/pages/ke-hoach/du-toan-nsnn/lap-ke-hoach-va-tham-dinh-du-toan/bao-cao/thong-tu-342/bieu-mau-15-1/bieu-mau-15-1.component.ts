@@ -349,31 +349,6 @@ export class BieuMau151Component implements OnInit {
 		})
 	}
 
-	addLine(id: number): void {
-		const item: ItemData = new ItemData({
-			id: uuid.v4() + 'FE',
-			checked: false,
-		});
-
-		this.lstCtietBcao.splice(id + 1, 0, item);
-		this.editCache[item.id] = {
-			edit: true,
-			data: new ItemData(item)
-		};
-	}
-
-	// xoa theo id
-	deleteById(id: any): void {
-		this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
-	}
-
-	checkDelete(maDa: string) {
-		if (!maDa) {
-			return true;
-		}
-		return false;
-	}
-
 	// xoa file trong bang file
 	deleteFile(id: string): void {
 		this.formDetail.lstFiles = this.formDetail.lstFiles.filter((a: any) => a.id !== id);

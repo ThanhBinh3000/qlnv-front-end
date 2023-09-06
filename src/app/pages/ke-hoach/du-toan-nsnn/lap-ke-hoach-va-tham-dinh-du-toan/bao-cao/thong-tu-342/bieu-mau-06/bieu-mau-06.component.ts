@@ -147,17 +147,14 @@ export class BieuMau06Component implements OnInit {
         this.spinner.show();
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
-        if (this.status.general) {
-            this.scrollX = Table.tableWidth(350, 12, 5, 60);
-        } else {
-            this.scrollX = Table.tableWidth(350, 12, 5, 0);
-        }
+
         this.lstCtietBcao[0].lstDvi.forEach(item => {
             this.lstDvi.push({
                 maDvi: item.maDvi,
                 tenDvi: item.tenDvi,
             })
         })
+        this.scrollX = Table.tableWidth(350, 3 * (this.lstDvi?.length + 1), 0, 0);
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.lstCtietBcao.forEach(item => {
             item.lstDvi.sort((a, b) => {
