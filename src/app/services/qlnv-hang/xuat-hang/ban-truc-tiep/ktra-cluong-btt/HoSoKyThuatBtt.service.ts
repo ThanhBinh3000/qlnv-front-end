@@ -44,7 +44,7 @@ export class HoSoKyThuatBttService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
   preview(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/xem-truoc`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/ho-so-ky-thuat/xem-truoc`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 }
