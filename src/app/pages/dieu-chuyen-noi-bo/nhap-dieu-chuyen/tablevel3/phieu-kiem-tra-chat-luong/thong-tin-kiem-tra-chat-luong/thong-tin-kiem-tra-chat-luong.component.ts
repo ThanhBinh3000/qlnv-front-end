@@ -418,7 +418,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
           this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
             return {
               ...element,
-              edit: false,
+              edit: true,
               chiSoCl: element.tenTchuan,
               chiTieuCl: element.chiSoNhap,
               ketQuaPt: element.ketQuaPt,
