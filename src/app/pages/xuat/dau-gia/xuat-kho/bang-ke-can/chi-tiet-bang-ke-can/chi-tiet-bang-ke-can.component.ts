@@ -28,6 +28,8 @@ import {
   QuyetDinhGiaoNvXuatHangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service";
 import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-bdg-chi-tiet-bang-ke-can',
@@ -541,6 +543,38 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
   convertTien(tien: number): string {
     return convertTienTobangChu(tien);
+  }
+
+  async preview(id) {
+    await this.bangKeCanService.preview({
+      tenBaoCao: 'Bảng kê cân hàng bán đấu giá',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  // downloadPdf() {
+  //   saveAs(this.pdfSrc, "phieu-xuat-kho-ke-hoach-ban-dau-gia.pdf");
+  // }
+  //
+  // downloadWord() {
+  //   saveAs(this.wordSrc, "phieu-xuat-kho-ke-hoach-ban-dau-gia.docx");
+  // }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidator(isGuiDuyet) {
