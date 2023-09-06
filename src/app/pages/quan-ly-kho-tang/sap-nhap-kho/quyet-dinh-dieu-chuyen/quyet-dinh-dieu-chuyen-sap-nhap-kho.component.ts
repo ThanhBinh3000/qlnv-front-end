@@ -132,5 +132,22 @@ export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component imple
   async selectTab(value: number) {
     this.selectTabChange.emit(value)
   }
-
+  checkRoleAdd() {
+    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc();
+  }
+  checkRoleView(trangThai: string) {
+    return !this.checkRoleEdit(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XEM")
+  }
+  checkRoleEdit(trangThai: string) {
+    return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc()
+  }
+  checkRoleDelete(trangThai: string) {
+    return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XOA") && this.userService.isCuc();
+  }
+  checkRoleExport() {
+    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_EXP")
+  }
+  checkRoleDeleteAll() {
+    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XOA") && this.userService.isCuc();
+  }
 }

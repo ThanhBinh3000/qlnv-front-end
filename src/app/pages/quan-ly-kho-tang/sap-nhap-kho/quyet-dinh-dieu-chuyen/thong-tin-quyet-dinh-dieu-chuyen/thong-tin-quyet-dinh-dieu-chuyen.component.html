@@ -15,16 +15,17 @@
           <span>Quay lại</span>
         </button>
         <ng-container>
-          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView" type="button"
+          <button *ngIf="checkRoleApprove(this.formData.value.trangThai)" type="button"
             class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Ban hành</span>
           </button>
-          <button *ngIf="!isView" type="button" class="btn btn-main ml-2" (click)="save()">
+          <button *ngIf="checkRoleSave(this.formData.value.trangThai)" type="button" class="btn btn-main ml-2"
+            (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-          <button *ngIf="formData.value.trangThai === STATUS.BAN_HANH && userService.isCuc()" type="button"
+          <button *ngIf="checkRoleDuyetDMKho(this.formData.value.trangThai)" type="button"
             class="btn btn-sub xanh-nhat ml-2" (click)="goToDanhMucDuyetKho()">
             <i class="icon htvbdh_da-xu-ly"></i>
             <span>Duyệt danh mục kho</span>

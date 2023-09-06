@@ -113,5 +113,22 @@ export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit
         this.isDetail = false;
         await this.search();
     }
-
+    checkRoleAdd() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_BBSN_THEM") && this.userService.isChiCuc()
+    };
+    checkRoleDeleteAll() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_BBSN_XOA") && this.userService.isChiCuc()
+    };
+    checkRoleView(trangThai: string) {
+        return !this.checkRoleEdit(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_BBSN_XEM")
+    };
+    checkRoleEdit(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_BBSN_THEM") && this.userService.isChiCuc()
+    };
+    checkRoleDelete(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_BBSN_XOA") && this.userService.isChiCuc()
+    }
+    checkRoleExport() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_BBSN_EXP")
+    }
 }

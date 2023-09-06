@@ -3,8 +3,7 @@
         <div class="header header-green-background">
             <div class="header-text">
                 <div class="title-chi-tieu">
-                    <span
-                        [ngClass]="formData.value.trangThai == STATUS.DADUYET_CB_CUC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+                    <span [ngClass]="formData.value.trangThai == '02' ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                         {{ ObTrangThai[formData.value.trangThai] }}
                     </span>
                     <span class="text-uppercase">Duyệt danh mục kho (phục vụ cho sáp nhập)</span>
@@ -15,14 +14,12 @@
                     <i class="fa fa-arrow-left"></i>
                     <span>Quay lại</span>
                 </button>
-                <ng-container>
-                    <button *ngIf="formData.value.trangThai === '78'" type="button" class="btn btn-sub xanh-nhat ml-2"
-                        (click)="tuChoi()">
+                <ng-container *ngIf="checkRoleApprove(formData.value.trangThai)">
+                    <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="tuChoi()">
                         <i class="icon htvbdh_tcdt_tuchoi do"></i>
                         <span>Từ chối</span>
                     </button>
-                    <button *ngIf="formData.value.trangThai === '78'" type="button" class="btn btn-sub xanh-nhat ml-2"
-                        (click)="pheDuyet()">
+                    <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>
                     </button>

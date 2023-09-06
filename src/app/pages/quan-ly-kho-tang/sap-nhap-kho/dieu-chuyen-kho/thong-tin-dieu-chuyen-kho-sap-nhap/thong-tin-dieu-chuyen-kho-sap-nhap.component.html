@@ -16,7 +16,8 @@
                     <span>Quay lại</span>
                 </button>
                 <ng-container>
-                    <button *ngIf="!isView" type="button" class="btn btn-main ml-2" (click)="save()">
+                    <button *ngIf="checkRoleSave(formData.value.trangThai)" type="button" class="btn btn-main ml-2"
+                        (click)="save()">
                         <i class="icon htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
                     </button>

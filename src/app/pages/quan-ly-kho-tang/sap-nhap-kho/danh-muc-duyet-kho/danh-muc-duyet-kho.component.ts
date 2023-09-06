@@ -147,4 +147,13 @@ export class DanhMucDuyetKhoComponent extends Base2Component implements OnInit {
         await this.search();
     }
 
+    checkRoleView(trangThai: string) {
+        return !this.checkRoleApprove(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_DDMK_XEM")
+    }
+    checkRoleApprove(trangThai: string) {
+        return trangThai === "78" && this.userService.isAccessPermisson("QLKT_THSDK_DDMK_DUYET") && this.userService.isCuc()
+    }
+    checkRoleExport() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_DDMK_EXP")
+    }
 }

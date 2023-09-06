@@ -24,7 +24,7 @@ import { DanhMucDuyetKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sa
 import { DieuChuyenKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/dieu-chuyen-kho.service';
 import { BienBanSapNhapKhoService } from './../../../../../services/qlnv-kho/dieu-chuyen-sap-nhap-kho/bien-ban-sap-nhap-kho.service';
 import { BaoCaoKetQuaSapNhapService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/bao-cao-ket-qua-sap-nhap.service';
-
+import { saveAs } from 'file-saver';
 @Component({
     selector: 'app-thong-tin-bao-cao-ket-qua-sap-nhap',
     templateUrl: './thong-tin-bao-cao-ket-qua-sap-nhap.component.html',
@@ -308,5 +308,32 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             this.expandSetString.delete(id);
         }
     }
-
+    checkRoleExport() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_BCKQTH_EXP")
+    };
+    exportData(fileName?: string) {
+        if (this.formData.value.id) {
+            this.spinner.show();
+            try {
+                this.baoCaoKetQuaSapNhapService
+                    .exportDetail(this.formData.value.id)
+                    .subscribe((blob) =>
+                        saveAs(blob, fileName ? fileName : 'data.xlsx'),
+                    );
+                this.spinner.hide();
+            } catch (e) {
+                console.log('error: ', e);
+                this.spinner.hide();
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        } else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+        }
+    }
+    checkRoleApprove(trangThai: string) {
+        return trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_BCKQTH_THEM") && this.userService.isChiCuc();
+    };
+    checkRoleSave(trangThai: string) {
+        return trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_BCKQTH_THEM") && this.userService.isChiCuc()
+    }
 }
