@@ -33,4 +33,30 @@ export class ThongTu1302018Service extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
+  bcGtHangXuatCtHtQphongAnTrongKy(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-gt-hang_xuat-ct-ht-qphong-an-trong-ky`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  bcSlGtriHangDtqgXuatVtTrongKy(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-sl-gtri-hang-dtqg-xuat-vt-trong-ky`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  bcTnhanHangDtqg(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-tiep-nhan-hang-dtqg`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  bcNguonHinhThanh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-nguon-hinh-thanh-dtqg`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  bcTongChiChoMhang(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-tong-chi-mua-hang-dtqg-trong-ky`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+
 }
