@@ -40,8 +40,10 @@ export class ItemData {
 	}
 
 	changeModel() {
-		this.ttienNamDtoan = Operator.mul(this.dmucNamDtoan, this.sluongNamDtoan);
-		this.ttienTd = Operator.mul(this.dmucNamDtoan, this.sluongTd);
+		if (this.dmucNamDtoan) {
+			this.ttienNamDtoan = Operator.mul(this.dmucNamDtoan, this.sluongNamDtoan);
+			this.ttienTd = Operator.mul(this.dmucNamDtoan, this.sluongTd);
+		}
 		this.chenhLech = Operator.sum([this.ttienTd, -this.ttienNamDtoan]);
 	}
 
