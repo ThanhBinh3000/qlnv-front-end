@@ -17,7 +17,7 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
 import { saveAs } from "file-saver";
 
@@ -54,12 +54,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   listDiaDiemNhap: any[] = [];
   listFileDinhKem: any[] = [];
   listFileDinhKemKTCL: any[] = [];
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "phieu_ktra_cl_dau_thau_lt.docx",
-    tenBaoCao: "",
-    trangThai: ""
-  };
+  previewName: string = 'nk_bb_ktra_kt';
 
   constructor(
     httpClient: HttpClient,
@@ -558,32 +553,6 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
     this.detail?.ketQuaKiemTra.forEach((lt, i) => {
       lt.stt = i + 1;
     });
-  }
-
-
-  async preview() {
-    let body = this.formData.value;
-    body.reportTemplateRequest = this.reportTemplate;
-    await this.phieuKtraCluongService.preview(body).then(async s => {
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-      this.printSrc = s.data.pdfSrc;
-      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-      this.showDlgPreview = true;
-    });
-  }
-  downloadPdf() {
-    saveAs(this.pdfSrc, "phieu_ktra_cl_dau_thau_lt.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "phieu_ktra_cl_dau_thau_lt.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
 }
