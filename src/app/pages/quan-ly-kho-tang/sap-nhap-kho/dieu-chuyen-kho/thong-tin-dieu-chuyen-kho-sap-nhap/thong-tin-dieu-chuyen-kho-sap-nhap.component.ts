@@ -306,7 +306,9 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                     ngayKy: dataChose.ngayKy,
                     loai: dataChose.loai,
                     tenLoai: dataChose.tenLoai,
-                    trichYeu: dataChose.trichYeu
+                    trichYeu: dataChose.trichYeu,
+                    trangThaiSn: dataChose.trangThaiSn,
+                    tenTrangThaiSn: dataChose.tenTrangThaiSn
                 });
                 let listChiCucDi = []
                 Array.isArray(dataChose.duyetDanhMucKhoDtl) && dataChose.duyetDanhMucKhoDtl.forEach(f => {

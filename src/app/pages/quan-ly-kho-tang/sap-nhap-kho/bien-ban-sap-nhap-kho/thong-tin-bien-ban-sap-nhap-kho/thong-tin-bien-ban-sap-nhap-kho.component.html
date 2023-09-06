@@ -143,156 +143,152 @@
     </form>
     <ng-container *ngIf="formData.value.loai">
         <div class="mt-16 flex-card p-lr16">
-            <div class="title-card">
-                <div class="title-chi-tieu">
-                    <span></span>
-                    <span>Danh sách hàng DTQG đã sáp nhập </span>
-                </div>
-            </div>
-            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-                <nz-table #tblData [nzData]="this.dataViewHang" class="nowrap table-chi-tiet" nzBordered>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th style="width: 3%;" class="text-center">STT</th>
-                            <th style="width: 17%;" class="text-center">Loại hàng hóa</th>
-                            <th class="text-center">Chủng loại hàng hóa</th>
-                            <th style="width: 10%;" class="text-center">Đơn vị tính</th>
-                            <th style="width: 15%;" class="text-center">Số lượng thực tế</th>
-                            <th style="width: 15%;" class="text-center">Số lượng hao hụt</th>
-                            <th style="width: 15%;" class="text-center">Chất lượng hàng hóa</th>
+            <nz-collapse nzAccordion>
+                <nz-collapse-panel [nzHeader]="'ĐIỀU CHUYỂN HÀNG DTQG'" [nzActive]="true">
+                    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                        <nz-table #tblData [nzData]="this.dataViewHang" class="nowrap table-chi-tiet" nzBordered>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th style="width: 3%;" class="text-center">STT</th>
+                                    <th style="width: 17%;" class="text-center">Loại hàng hóa</th>
+                                    <th class="text-center">Chủng loại hàng hóa</th>
+                                    <th style="width: 10%;" class="text-center">Đơn vị tính</th>
+                                    <th style="width: 15%;" class="text-center">Số lượng thực tế</th>
+                                    <th style="width: 15%;" class="text-center">Số lượng hao hụt</th>
+                                    <th style="width: 15%;" class="text-center">Chất lượng hàng hóa</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <ng-container *ngFor="let item of dataViewHang; let idx = index">
-                            <tr>
-                                <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                                    [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
-                                    style="width: 35px">
-                                </td>
-                                <td></td>
-                                <td class="bold">{{(item.tenChiCucDi? item.tenChiCucDi + " - ": "") + (item.tenDiemKhoDi
-                                    ||
-                                    "")}}
-                                </td>
-                                <td class="bold">{{(item.tenChiCucDen? item.tenChiCucDen + " - ": "") +
-                                    (item.tenDiemKhoDen
-                                    ||"")}}
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                                <ng-container *ngFor="let lv2 of item.childData; let idx2=index">
-                                    <tr>
-                                        <td></td>
-                                        <td>{{idx2 + 1}}</td>
-                                        <td>{{lv2.tenLoaiVthh || ""}}</td>
-                                        <td>{{lv2.tenCloaiVthh || ""}}</td>
-                                        <td>{{lv2.donViTinh}}</td>
-                                        <td>{{lv2.slThucTe || ""}}</td>
-                                        <td>{{lv2.slHaoHut}}</td>
-                                        <td>
-                                            <nz-input-group>
-                                                <input nz-input [(ngModel)]="lv2.chatLuongHangHoa"
-                                                    [readOnly]="isView" />
-                                            </nz-input-group>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of dataViewHang; let idx = index">
+                                    <tr class="level-2">
+                                        <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+                                            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
+                                            style="width: 35px">
                                         </td>
+                                        <td></td>
+                                        <td class="bold">{{(item.tenChiCucDi? item.tenChiCucDi + " - ": "") +
+                                            (item.tenDiemKhoDi
+                                            ||
+                                            "")}}
+                                        </td>
+                                        <td class="bold">{{(item.tenChiCucDen? item.tenChiCucDen + " - ": "") +
+                                            (item.tenDiemKhoDen
+                                            ||"")}}
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
-                                </ng-container>
+                                    <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                                        <ng-container *ngFor="let lv2 of item.childData; let idx2=index">
+                                            <tr>
+                                                <td></td>
+                                                <td>{{idx2 + 1}}</td>
+                                                <td>{{lv2.tenLoaiVthh || ""}}</td>
+                                                <td>{{lv2.tenCloaiVthh || ""}}</td>
+                                                <td>{{lv2.donViTinh}}</td>
+                                                <td>{{lv2.slThucTe || ""}}</td>
+                                                <td>{{lv2.slHaoHut}}</td>
+                                                <td>
+                                                    <nz-input-group>
+                                                        <input nz-input [(ngModel)]="lv2.chatLuongHangHoa"
+                                                            [readOnly]="isView" />
+                                                    </nz-input-group>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
 
-                            </ng-container>
-                        </ng-container>
-                    </tbody>
-                </nz-table>
-            </nz-card>
+                                    </ng-container>
+                                </ng-container>
+                            </tbody>
+                        </nz-table>
+                    </nz-card>
+                </nz-collapse-panel>
+            </nz-collapse>
         </div>
     </ng-container>
     <ng-container *ngIf="formData.value.loai==='SN_CHI_CUC'">
         <div class="mt-16 flex-card p-lr16">
-            <div class="title-card">
-                <div class="title-chi-tieu">
-                    <span></span>
-                    <span>Điều chuyển ccdc </span>
-                </div>
-            </div>
-            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-                <nz-table #tblData [nzData]="this.dataViewCcdc" class="nowrap table-chi-tiet" nzBordered>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th style="width: 3%;" class="text-center">STT</th>
-                            <th style="width: 30%;" class="text-center">Tên ccdc</th>
-                            <th style="width: 20%;" class="text-center">Số lượng điều chuyển</th>
-                            <th class="text-center">Đơn vị tính</th>
-                            <th style="width: 30%;" class="text-center">Chất lượng hàng hóa</th>
+            <nz-collapse nzAccordion>
+                <nz-collapse-panel [nzHeader]="'ĐIỀU CHUYỂN CCDC'" [nzActive]="true">
+                    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                        <nz-table #tblData [nzData]="this.dataViewCcdc" class="nowrap table-chi-tiet" nzBordered>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th style="width: 3%;" class="text-center">STT</th>
+                                    <th style="width: 30%;" class="text-center">Tên ccdc</th>
+                                    <th style="width: 20%;" class="text-center">Số lượng điều chuyển</th>
+                                    <th class="text-center">Đơn vị tính</th>
+                                    <th style="width: 30%;" class="text-center">Chất lượng hàng hóa</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <ng-container *ngFor="let item of dataViewCcdc; let idx = index">
-                            <tr>
-                                <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                                    [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
-                                    style="width: 35px">
-                                </td>
-                                <td></td>
-                                <td class="bold">{{item.tenCcdc}}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                                <ng-container *ngFor="let lv2 of item.childData; let idx2=index">
-                                    <tr>
-                                        <td></td>
-                                        <td>{{idx2 + 1}}</td>
-                                        <td>{{lv2.tenCcdc || ""}}</td>
-                                        <td>{{lv2.slDieuChuyen || ""}}</td>
-                                        <td>{{lv2.donViTinh}}</td>
-                                        <td>
-                                            <nz-input-group>
-                                                <input nz-input [(ngModel)]="lv2.chatLuongHangHoa"
-                                                    [readOnly]="isView" />
-                                            </nz-input-group>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of dataViewCcdc; let idx = index">
+                                    <tr class="level-2">
+                                        <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+                                            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
+                                            style="width: 35px">
                                         </td>
+                                        <td></td>
+                                        <td class="bold">{{item.tenCcdc}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
-                                </ng-container>
+                                    <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                                        <ng-container *ngFor="let lv2 of item.childData; let idx2=index">
+                                            <tr>
+                                                <td></td>
+                                                <td>{{idx2 + 1}}</td>
+                                                <td>{{lv2.tenCcdc || ""}}</td>
+                                                <td>{{lv2.slDieuChuyen || ""}}</td>
+                                                <td>{{lv2.donViTinh}}</td>
+                                                <td>
+                                                    <nz-input-group>
+                                                        <input nz-input [(ngModel)]="lv2.chatLuongHangHoa"
+                                                            [readOnly]="isView" />
+                                                    </nz-input-group>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
 
-                            </ng-container>
-                        </ng-container>
-                    </tbody>
-                </nz-table>
-            </nz-card>
+                                    </ng-container>
+                                </ng-container>
+                            </tbody>
+                        </nz-table>
+                    </nz-card>
+                </nz-collapse-panel>
+            </nz-collapse>
         </div>
         <div class="mt-16 flex-card p-lr16">
-            <div class="title-card">
-                <div class="title-chi-tieu">
-                    <span></span>
-                    <span>Điều chuyển ccdc </span>
-                </div>
-            </div>
-            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-                <nz-table #sapNhapVpTable [nzData]="bienBanSapNhapVpDtl" class="nowrap table-chi-tiet" nzBordered>
-                    <thead>
-                        <tr>
-                            <th style="width: 3%;" class="text-center">STT</th>
-                            <th>Đơn vị chuyển đi</th>
-                            <th>Đơn vị chuyển đến</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of bienBanSapNhapVpDtl; let idx=index">
-                            <td>{{idx+1}}</td>
-                            <td>{{ item.tenDonViDi }}</td>
-                            <td>{{item.tenDonViDen}}</td>
-                        </tr>
-                    </tbody>
-                </nz-table>
-            </nz-card>
+            <nz-collapse nzAccordion>
+                <nz-collapse-panel [nzHeader]="'ĐIỀU CHUYỂN CCDC'" [nzActive]="true">
+                    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                        <nz-table #sapNhapVpTable [nzData]="bienBanSapNhapVpDtl" class="nowrap table-chi-tiet"
+                            nzBordered>
+                            <thead>
+                                <tr>
+                                    <th style="width: 3%;" class="text-center">STT</th>
+                                    <th>Đơn vị chuyển đi</th>
+                                    <th>Đơn vị chuyển đến</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of bienBanSapNhapVpDtl; let idx=index">
+                                    <td>{{idx+1}}</td>
+                                    <td>{{ item.tenDonViDi }}</td>
+                                    <td>{{item.tenDonViDen}}</td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </nz-card>
+                </nz-collapse-panel>
+            </nz-collapse>
         </div>
     </ng-container>
 </div>
