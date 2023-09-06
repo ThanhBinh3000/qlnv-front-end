@@ -129,12 +129,8 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
     else return false
   }
 
-  isTongCuc() {
-    return this.userService.isTongCuc()
-  }
-
-  isCuc() {
-    return this.userService.isCuc()
+  isChiCuc() {
+    return this.userService.isChiCuc()
   }
 
   isSua(row) {
@@ -158,11 +154,10 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   async getDSQD() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      // loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI
     }
-    let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
+    let resSoDX = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
       this.dsQuyetDinh = resSoDX.data;
     }
