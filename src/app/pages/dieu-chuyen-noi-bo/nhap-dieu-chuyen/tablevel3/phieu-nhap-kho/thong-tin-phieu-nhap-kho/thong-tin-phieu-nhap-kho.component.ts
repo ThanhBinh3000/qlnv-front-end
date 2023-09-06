@@ -604,8 +604,13 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       this.formData.controls["soBangKeCh"].clearValidators();
       this.formData.controls["soBangKeVt"].clearValidators();
     } else {
-      this.formData.controls["soBangKeCh"].setValidators([Validators.required]);
-      this.formData.controls["soBangKeVt"].setValidators([Validators.required]);
+      if (this.isVatTu) {
+        this.formData.controls["soBangKeCh"].clearValidators();
+        this.formData.controls["soBangKeVt"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["soBangKeVt"].clearValidators();
+        this.formData.controls["soBangKeCh"].setValidators([Validators.required]);
+      }
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return
