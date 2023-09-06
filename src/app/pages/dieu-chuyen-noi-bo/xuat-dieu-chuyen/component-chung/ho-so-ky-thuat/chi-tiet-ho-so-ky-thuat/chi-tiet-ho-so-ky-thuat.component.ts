@@ -24,6 +24,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { HoSoKyThuatBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
 import { BienBanLayMauDieuChuyenService } from '../../services/dcnb-bien-ban-lay-mau.service';
+import {PREVIEW} from "src/app/constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat-xuat-dieu-chuyen',
@@ -438,4 +439,20 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
       }
     });
   };
+  async inBienBan(id, type, loai) {
+    await this.hoSoKyThuatBdgService.preview({
+      id: id,
+      type: type,
+      loai: loai
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
 }
