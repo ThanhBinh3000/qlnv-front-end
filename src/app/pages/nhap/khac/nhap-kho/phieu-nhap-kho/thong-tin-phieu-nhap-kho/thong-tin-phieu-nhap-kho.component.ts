@@ -236,7 +236,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   }
 
   async add(row?: any) {
-    if (!this.formData.value.qdGiaoNvId || !this.formData.value.soPhieuKtraCluong || !this.formData.value.maSo || !this.formData.value.soLuongNhap || !this.formData.value.soLuongNhapTt) {
+    if (!this.formData.value.qdGiaoNvId || !this.formData.value.maSo || !this.formData.value.soLuongNhap || !this.formData.value.soLuongNhapTt) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập đủ thông tin");
       return
     }
@@ -468,6 +468,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           donViTinh: data.dvt,
           tenDonViTinh: data.dvt,
         });
+        this.noiDung = data.tenCloaiVthh
         this.dviTinh = data.dvt
         this.donGia = data.donGia
 
