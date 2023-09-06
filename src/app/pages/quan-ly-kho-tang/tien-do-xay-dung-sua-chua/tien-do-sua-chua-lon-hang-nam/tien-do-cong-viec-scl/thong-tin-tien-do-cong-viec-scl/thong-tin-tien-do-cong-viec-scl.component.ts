@@ -7,9 +7,7 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {UserService} from "../../../../../../services/user.service";
 import {Globals} from "../../../../../../shared/globals";
 import {MESSAGE} from "../../../../../../constants/message";
-import { cloneDeep } from "lodash";
-import {TienDoXayDungCt} from "../tien-do-cong-viec-scl.component";
-
+import {TienDoXayDungCt} from "../../../tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component";
 @Component({
   selector: 'app-thong-tin-tien-do-cong-viec-scl',
   templateUrl: './thong-tin-tien-do-cong-viec-scl.component.html',
@@ -25,7 +23,7 @@ export class ThongTinTienDoCongViecSclComponent implements OnInit {
   item: TienDoXayDungCt = new TienDoXayDungCt();
   userInfo: UserLogin
   valueLabel: boolean = true;
-  tableCvMoi: any[] = []
+  tableCvMoi: any[] = [];
 
   constructor(
     private danhMucService: DanhMucService,
