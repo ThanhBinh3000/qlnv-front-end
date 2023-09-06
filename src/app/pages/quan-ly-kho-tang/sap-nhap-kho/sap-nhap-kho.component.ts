@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Subject} from "rxjs";
-import {UserService} from "../../../services/user.service";
-import {Globals} from "../../../shared/globals";
+import { Subject } from "rxjs";
+import { UserService } from "../../../services/user.service";
+import { Globals } from "../../../shared/globals";
 
 @Component({
   selector: 'app-tien-do-xay-dung-sua-chua',
@@ -23,8 +23,9 @@ export class SapNhapKhoComponent implements OnInit {
     });
   }
   tabSelected: number = 0;
-  selectTab(tab) {
+  selectTab(tab: number) {
     this.tabSelected = tab;
+    console.log("tabSelected", this.tabSelected)
   }
 
 }
