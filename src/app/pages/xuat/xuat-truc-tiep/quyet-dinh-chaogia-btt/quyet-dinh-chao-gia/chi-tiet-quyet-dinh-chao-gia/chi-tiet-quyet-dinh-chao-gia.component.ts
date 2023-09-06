@@ -24,6 +24,8 @@ import {
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {Validators} from "@angular/forms";
 import {saveAs} from 'file-saver';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-chao-gia',
@@ -327,6 +329,38 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     } else {
       return true;
     }
+  }
+
+  async preview(id) {
+    await this.qdPdKetQuaBttService.preview({
+      tenBaoCao: 'Quyết định phê duyệt kết quả chào giá',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "quyet-dinh-phe-duyet-ke-qua-chao-gia.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "quyet-dinh-phe-duyet-ke-qua-chao-gia.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidForm() {
