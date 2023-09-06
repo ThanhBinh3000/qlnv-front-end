@@ -35,6 +35,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   fileDinhKems: any[] = []
   flagInit: Boolean = false;
   maPhieu: string;
+  previewName: string = 'xdt_phieu_kiem_nghiem_cl';
 
   constructor(
     httpClient: HttpClient,
@@ -99,8 +100,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       } else {
         this.initForm();
       }
-      await  this.loadDataComboBox();
-    }catch (e) {
+      await this.loadDataComboBox();
+    } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
       await this.spinner.hide();
     } finally {
@@ -166,9 +167,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let res = await this.bienBanLayMauXhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content
-      if(data && data.length > 0){
-        let set = new Set(this.loadPhieuKnghiemCluong.map(item =>JSON.stringify({soBienBan: item.soBbLayMau})));
-        this.dataBienBanLayMau = data.filter(item =>{
+      if (data && data.length > 0) {
+        let set = new Set(this.loadPhieuKnghiemCluong.map(item => JSON.stringify({ soBienBan: item.soBbLayMau })));
+        this.dataBienBanLayMau = data.filter(item => {
           const key = JSON.stringify({ soBienBan: item.soBienBan });
           return !set.has(key);
         });
@@ -199,7 +200,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
   async loadDataDtailBienBanLayMau(id) {
     await this.spinner.show();
-    if(id){
+    if (id) {
       await this.bienBanLayMauXhService.getDetail(id)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -253,7 +254,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let res = await this.xhPhieuKnghiemCluongService.search(body)
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data
-      if(data && data.content && data.content.length >0){
+      if (data && data.content && data.content.length > 0) {
         this.loadPhieuKnghiemCluong = data.content
       }
     } else {
