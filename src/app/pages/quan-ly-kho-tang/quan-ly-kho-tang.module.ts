@@ -310,6 +310,7 @@ import { PhieuNhapHangSapNhapComponent } from './sap-nhap-kho/phieu-nhap-kho/phi
 import { ThongTinPhieuNhapHangSapNhapComponent } from './sap-nhap-kho/phieu-nhap-kho/thong-tin-phieu-nhap-hang/thong-tin-phieu-nhap-hang.component';
 import { BaoCaoKetQuaSapNhapComponent } from './sap-nhap-kho/bao-cao-ket-qua-sap-nhap/bao-cao-ket-qua-sap-nhap.component';
 import { ThongTinBaoCaoKetQuaSapNhapComponent } from './sap-nhap-kho/bao-cao-ket-qua-sap-nhap/thong-tin-bao-cao-ket-qua-sap-nhap/thong-tin-bao-cao-ket-qua-sap-nhap.component';
+import { TreeSelectSapNhapComponent } from './sap-nhap-kho/dieu-chuyen-kho/tree-select/tree-select.component';
 @NgModule({
   declarations: [
     QuanLyKhoTangComponent,
@@ -436,7 +437,8 @@ import { ThongTinBaoCaoKetQuaSapNhapComponent } from './sap-nhap-kho/bao-cao-ket
     PhieuNhapHangSapNhapComponent,
     ThongTinPhieuNhapHangSapNhapComponent,
     BaoCaoKetQuaSapNhapComponent,
-    ThongTinBaoCaoKetQuaSapNhapComponent
+    ThongTinBaoCaoKetQuaSapNhapComponent,
+    TreeSelectSapNhapComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, KiemtraChatluongVtTbTrongThbhComponentModule],
 })

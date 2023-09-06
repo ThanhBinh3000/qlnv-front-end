@@ -24,6 +24,7 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { QuyetDinhDieuChuyenService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/quyet-dinh-dieu-chuyen.service';
 import { DieuChuyenKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/dieu-chuyen-kho.service';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { TreeSelectSapNhapComponent } from '../tree-select/tree-select.component';
 
 @Component({
     selector: 'app-thong-tin-dieu-chuyen-kho-sap-nhap',
@@ -69,6 +70,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     dataTableChiCuc: any[] = [];
     dataViewChiCuc: any[] = [];
     listDs: { [key: string]: any[] } = {};
+    lisDsDonVi: any[] = [];
     dataTableVp: any[] = [];
     rowItem: { [key: string]: any } = {};
     rowDataVpClone: { [key: string]: any } = {};
@@ -173,25 +175,10 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     //     return item.childData ? this.flattenTree(item.childData) : item;
     //   });
     // }
-    async expandAllHang() {
-        this.dataViewHang.forEach(s => {
+    expandAll(key: string) {
+        this[key].forEach(s => {
             this.expandSetString.add(s.idVirtual);
         });
-        if (this.formData.value.id) {
-            if (this.formData.value.loai === "SN_DIEM_KHO") {
-                await Promise.all(this.dataViewHang.map(f => this.loadDsDiemKho(f.maDiemKhoDen)));
-            } else if (this.formData.value.loai === "SN_CHI_CUC") {
-                await Promise.all(this.dataViewHang.map(f => this.loadDsDiemKho(f.maChiCucDen)));
-            }
-        }
-    }
-    async expandAllChiCuc() {
-        this.dataViewChiCuc.forEach(s => {
-            this.expandSetString.add(s.idVirtual);
-        });
-        if (this.formData.value.id && this.formData.value.loai === "SN_CHI_CUC") {
-            await Promise.all(this.dataViewChiCuc.map(f => this.loadDsDiemKho(f.maChiCucDen)))
-        }
     }
     onExpandStringChange(id: string, checked: boolean): void {
         if (checked) {
@@ -200,8 +187,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
             this.expandSetString.delete(id);
         }
     }
-    async loadDsDiemKho(maDviCha) {
-        if (this.listDs[maDviCha]?.length > 0) return;
+    async loadDsDonVi(maDviCha: string) {
         let body = {
             maDviCha
         };
@@ -209,10 +195,10 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
         if (res.msg == MESSAGE.SUCCESS) {
             if (Array.isArray(res.data)) {
                 res.data[0].children = res.data[0].children.filter(f => f.type !== "PB")
-                this.listDs[maDviCha] = cloneDeep(res.data);
-                this.listDs[maDviCha][0].expanded = true;
+                this.lisDsDonVi = cloneDeep(res.data);
+                this.lisDsDonVi[0].expanded = true;
             } else {
-                this.listDs[maDviCha] = [];
+                this.lisDsDonVi = [];
             }
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -221,79 +207,22 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     handleChangeLoaiSapNhap(loai: string) {
 
     }
-    handleClickTree = (value, data, loai: string) => {
-        if (value?.node?.origin?.isLeaf) {
-            if (loai === "SN_DIEM_KHO") {
-                if (value.node.origin.maDvi.length === 16) {
-                    data.maLoKhoDen = value.node.origin.maDvi;
-                    data.tenLoKhoDen = value.node.origin.title;
-                    data.maNganKhoDen = value.node.parentNode.origin.maDvi;
-                    data.tenNganKhoDen = value.node.parentNode.origin.title;
-                    data.maNhaKhoDen = value.node.parentNode.parentNode.origin.maDvi;
-                    data.tenNhaKhoDen = value.node.parentNode.parentNode.origin.title;
-                } else if (value.node.origin.maDvi.length === 14) {
-                    data.maLoKhoDen = null;
-                    data.tenLoKhoDen = null;
-                    data.maNganKhoDen = value.node.origin.maDvi;
-                    data.tenNganKhoDen = value.node.origin.title;
-                    data.maNhaKhoDen = value.node.parentNode.origin.maDvi;
-                    data.tenNhaKhoDen = value.node.parentNode.origin.title;
-                };
-            }
-            else if (loai === 'SN_CHI_CUC') {
-                if (value.node.origin.maDvi.length === 16) {
-                    data.maLoKhoDen = value.node.origin.maDvi;
-                    data.tenLoKhoDen = value.node.origin.title;
-                    data.maNganKhoDen = value.node.parentNode.origin.maDvi;
-                    data.tenNganKhoDen = value.node.parentNode.origin.title;
-                    data.maNhaKhoDen = value.node.parentNode.parentNode.origin.maDvi;
-                    data.tenNhaKhoDen = value.node.parentNode.parentNode.origin.title;
-                    data.maDiemKhoDen = value.node.parentNode.parentNode.parentNode.origin.maDvi;
-                    data.tenDiemKhoDen = value.node.parentNode.parentNode.parentNode.origin.title;
-                } else if (value.node.origin.maDvi.length === 14) {
-                    data.maLoKhoDen = null;
-                    data.tenLoKhoDen = null;
-                    data.maNganKhoDen = value.node.origin.maDvi;
-                    data.tenNganKhoDen = value.node.origin.title;
-                    data.maNhaKhoDen = value.node.parentNode.origin.maDvi;
-                    data.tenNhaKhoDen = value.node.parentNode.origin.title;
-                    data.maDiemKhoDen = value.node.parentNode.parentNode.parentNode.origin.maDvi;
-                    data.tenDiemKhoDen = value.node.parentNode.parentNode.parentNode.origin.title;
-                };
-            }
-            const thuKhoDenId = value.node.origin.idThuKho
-            data.thuKhoDenId = thuKhoDenId;
-            data.thayDoiThuKho = data.thuKhoId !== thuKhoDenId
-        }
-    };
-    handleClear = (data, loai: string) => {
-        data.title = null;
-        data.maLoKhoDen = null;
-        data.tenLoKhoDen = null;
-        data.maNganKhoDen = null;
-        data.tenNganKhoDen = null;
-        data.maNhaKhoDen = null;
-        data.tenNhaKhoDen = null;
-        data.thuKhoDenId = null;
-        data.thayDoiThuKho = false;
-        if (loai === "SN_CHI_CUC") {
-            data.maDiemKhoDen = null;
-            data.tenDiemKhoDen = null;
-        }
-    }
-    nodeClicked(node) {
-        if (!node.origin.isLeaf) {
-            node.isSelectable = false;
-            node.isExpanded = !node.isExpanded;
-        }
-    }
-    showTitle = (node: NzTreeNode) => {
+
+    showTitle2 = (node: NzTreeNode, data) => {
+        console.log("node", node)
         let title = "";
         const { loai } = this.formData.value;
         if (node?.origin?.maDvi?.length === 16) {
             title = loai === "SN_DIEM_KHO" ? node.origin.title + " - " + node.parentNode.origin.title + " - " + node.parentNode.parentNode.origin.title : node.origin.title + " - " + node.parentNode.origin.title + " - " + node.parentNode.parentNode.origin.title + " - " + node.parentNode.parentNode.parentNode.origin.title;
         } else if (node?.origin?.maDvi?.length === 14) {
             title = loai === "SN_DIEM_KHO" ? node.origin.title + " - " + node.parentNode.origin.title : node.origin.title + " - " + node.parentNode.origin.title + " - " + node.parentNode.parentNode.origin.title;
+        };
+        data.title = title;
+    };
+    renderTitle(data) {
+        let title = "";
+        if (data) {
+            title = (data.tenLoKhoDen ? data.tenLoKhoDen + " - " : "") + (data.tenNganKhoDen ? data.tenNganKhoDen + " - " : "") + (data.tenNhaKhoDen ? data.tenNhaKhoDen + " - " : "") + (data.tenDiemKhoDen || "");
         };
         return title
     }
@@ -306,13 +235,18 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                     if (dataDetail) {
                         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
                         this.dataTableHang = Array.isArray(dataDetail.dieuChuyenKhoHangDtl) ? dataDetail.dieuChuyenKhoHangDtl.map(f => ({
-                            ...f, keyValue: f.maLoKhoDen ? f.maLoKhoDen : f.maNganKhoDen, groupBy: this.formData.value.loai === 'SN_DIEM_KHO' ? `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}` :
+                            ...f, title: this.renderTitle(f),
+                            groupBy: this.formData.value.loai === 'SN_DIEM_KHO' ? `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}` :
                                 `${f.maChiCucDi}-${f.maChiCucDen}`
                         })) : [];
-                        this.buildHang();
+                        this.buildView("dataTableHang", "dataViewHang");
                         if (dataDetail.loai === "SN_CHI_CUC") {
-                            this.dataTableChiCuc = Array.isArray(dataDetail.dieuChuyenKhoCcDtl) ? dataDetail.dieuChuyenKhoCcDtl.map(f => ({ ...f, keyValue: f.maLoKhoDen ? f.maLoKhoDen : f.maNganKhoDen, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
-                            this.buildChiCuc();
+                            this.dataTableChiCuc = Array.isArray(dataDetail.dieuChuyenKhoCcDtl) ? dataDetail.dieuChuyenKhoCcDtl.map(f => ({
+                                ...f,
+                                title: this.renderTitle(f),
+                                groupBy: `${f.maChiCucDi}-${f.maChiCucDen}`
+                            })) : []
+                            this.buildView("dataTableChiCuc", "dataViewChiCuc");
                             this.dataTableVp = Array.isArray(dataDetail.dieuChuyenKhoVpDtl) ? dataDetail.dieuChuyenKhoVpDtl : []
                         };
                         this.fileDinhKem = dataDetail.canCu;
@@ -324,8 +258,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             });
     }
-    async buildHang() {
-        this.dataViewHang = chain(this.dataTableHang).groupBy("groupBy").map((s, k) => {
+    buildView(key1: string, key2: string) {
+        this[key2] = chain(this[key1]).groupBy("groupBy").map((s, k) => {
             const groupBy = s.find(f => f.groupBy === k);
             return {
                 ...groupBy,
@@ -334,19 +268,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
 
             }
         }).value();
-        this.expandAllHang()
-    }
-    async buildChiCuc() {
-        this.dataViewChiCuc = chain(this.dataTableChiCuc).groupBy("groupBy").map((s, k) => {
-            const groupBy = s.find(f => f.groupBy === k);
-            return {
-                ...groupBy,
-                idVirtual: uuidv4(),
-                childData: s
-
-            }
-        }).value();
-        this.expandAllChiCuc()
+        this.expandAll(key2)
     }
     async openDialogSoQdDC() {
         let dataQdDc = [];
@@ -397,7 +319,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                     // let datas = await Promise.all(listChiCucDi.map(f => this.dieuChuyenKhoService.chiTietHang({ ...f })));
                     let datasDieuChuyen = [];
 
-                    if (this.formData.value.loai === "SN_DIEM_KHO") {
+                    if (this.formData.value.loai) {
                         await Promise.all(listChiCucDi.map(f => this.dieuChuyenKhoService.chiTietHangSapNhapDiemKho({ ...f }).then(res => {
                             if (res.msg === MESSAGE.SUCCESS) {
                                 const resData = Array.isArray(res.data) ? res.data.map(item => ({ ...item, maCucDi: f.maCucDi, tenCucDi: f.tenCucDi, maCucDen: f.maCucDen, tenCucDen: f.tenCucDen, maChiCucDi: f.maChiCucDi, tenChiCucDi: f.tenChiCucDi, maDiemKhoDi: f.maDiemKhoDi, tenDiemKhoDi: f.tenDiemKhoDi })) : [];
@@ -409,16 +331,10 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                             this.dataTableHang = Array.isArray(datasDieuChuyen) ? datasDieuChuyen.map(f => ({
                                 ...f, groupBy: `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}`
                             })) : [];
-                            this.buildHang();
+                            this.buildView("dataTableHang", "dataViewHang");
                         }
                     }
                     else if (this.formData.value.loai === "SN_CHI_CUC") {
-                        await Promise.all(listChiCucDi.map(f => this.dieuChuyenKhoService.chiTietHangSapNhapChiCuc({ ...f }).then(res => {
-                            if (res.msg === MESSAGE.SUCCESS) {
-                                const resData = Array.isArray(res.data) ? res.data.map(item => ({ ...item, maCucDi: f.maCucDi, tenCucDi: f.tenCucDi, maCucDen: f.maCucDen, tenCucDen: f.tenCucDen, maChiCucDi: f.maChiCucDi, tenChiCucDi: f.tenChiCucDi, maDiemKhoDi: f.maDiemKhoDi, tenDiemKhoDi: f.tenDiemKhoDi })) : [];
-                                datasDieuChuyen = [...datasDieuChuyen, ...resData]
-                            }
-                        })));
                         let dataCCDC = [];
                         await Promise.all(listChiCucDi.map(f => this.dieuChuyenKhoService.chiTietCCDC({ ...f }).then(res => {
                             if (res.msg === MESSAGE.SUCCESS) {
@@ -426,16 +342,9 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                                 dataCCDC = [...dataCCDC, ...resData]
                             }
                         })));
-                        if (datasDieuChuyen.length > 0) {
-
-                            this.dataTableHang = Array.isArray(datasDieuChuyen) ? datasDieuChuyen.map(f => ({
-                                ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}`
-                            })) : [];
-                            this.buildHang();
-                        };
                         if (dataCCDC.length > 0) {
                             this.dataTableChiCuc = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
-                            this.buildChiCuc()
+                            this.buildView("dataTableChiCuc", "dataViewChiCuc")
                         }
                     }
 
@@ -444,31 +353,6 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
             }
         });
     };
-
-    // async bindingDataQd(id, isFirst) {
-    //     try {
-    //         if (id > 0) {
-    //             await this.spinner.show();
-    //             let dataRes = await this.danhMucDuyetKhoService.getDetail(id)
-    //             if (dataRes.msg == MESSAGE.SUCCESS) {
-    //                 const data = dataRes.data;
-    //                 this.formData.patchValue({
-    //                     qddcId: data.id,
-    //                     soQddc: data.soQdinh,
-    //                     ngayKyQddc: data.ngayKyQdinh,
-    //                 });
-
-    //             }
-    //             else {
-    //                 this.notification.error(MESSAGE.ERROR, dataRes.msg);
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.log("error", error)
-    //     } finally {
-    //         await this.spinner.hide();
-    //     }
-    // }
     //xử lý điều chuyển văn phòng trụ sở
     themMoiItem(): void {
         if (!this.rowItem?.tenDonViDi?.trim() || !this.rowItem?.tenDonViDen?.trim()) {
@@ -508,6 +392,76 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     }
     huyEdit(index: number): void {
         this.dataTableVp[index] = { ...this.rowDataVpClone };
+    }
+
+    async openModelHangHoa(maDiemKhoDen: string, data: any) {
+        if (!maDiemKhoDen) {
+            this.lisDsDonVi = [];
+            return;
+        };
+        await this.loadDsDonVi(maDiemKhoDen);
+        const modalQD = this.modal.create({
+            nzTitle: 'DANH SÁCH ĐƠN VỊ',
+            // nzContent: DialogTableSelectionComponent,
+            nzContent: TreeSelectSapNhapComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzBodyStyle: {
+                height: '400px'
+            },
+            nzFooter: null,
+            nzComponentParams: {
+                treeData: this.lisDsDonVi,
+            },
+        })
+        modalQD.afterClose.subscribe(async (value) => {
+            const { loai } = this.formData.value;
+            if (value) {
+                if (loai === "SN_DIEM_KHO") {
+                    if (value.origin.maDvi.length === 16) {
+                        data.maLoKhoDen = value.origin.maDvi;
+                        data.tenLoKhoDen = value.origin.title;
+                        data.maNganKhoDen = value.parentNode.origin.maDvi;
+                        data.tenNganKhoDen = value.parentNode.origin.title;
+                        data.maNhaKhoDen = value.parentNode.parentNode.origin.maDvi;
+                        data.tenNhaKhoDen = value.parentNode.parentNode.origin.title;
+                    } else if (value.origin.maDvi.length === 14) {
+                        data.maLoKhoDen = null;
+                        data.tenLoKhoDen = null;
+                        data.maNganKhoDen = value.origin.maDvi;
+                        data.tenNganKhoDen = value.origin.title;
+                        data.maNhaKhoDen = value.parentNode.origin.maDvi;
+                        data.tenNhaKhoDen = value.parentNode.origin.title;
+                    };
+                }
+                else if (loai === 'SN_CHI_CUC') {
+                    if (value.origin.maDvi.length === 16) {
+                        data.maLoKhoDen = value.origin.maDvi;
+                        data.tenLoKhoDen = value.origin.title;
+                        data.maNganKhoDen = value.parentNode.origin.maDvi;
+                        data.tenNganKhoDen = value.parentNode.origin.title;
+                        data.maNhaKhoDen = value.parentNode.parentNode.origin.maDvi;
+                        data.tenNhaKhoDen = value.parentNode.parentNode.origin.title;
+                        data.maDiemKhoDen = value.parentNode.parentNode.parentNode.origin.maDvi;
+                        data.tenDiemKhoDen = value.parentNode.parentNode.parentNode.origin.title;
+                    } else if (value.origin.maDvi.length === 14) {
+                        data.maLoKhoDen = null;
+                        data.tenLoKhoDen = null;
+                        data.maNganKhoDen = value.origin.maDvi;
+                        data.tenNganKhoDen = value.origin.title;
+                        data.maNhaKhoDen = value.parentNode.origin.maDvi;
+                        data.tenNhaKhoDen = value.parentNode.origin.title;
+                        data.maDiemKhoDen = value.parentNode.parentNode.origin.maDvi;
+                        data.tenDiemKhoDen = value.parentNode.parentNode.origin.title;
+                    };
+                }
+                this.showTitle2(value, data);
+                const thuKhoDenId = value.origin.idThuKho
+                data.thuKhoDenId = thuKhoDenId;
+                data.thayDoiThuKho = data.thuKhoId !== thuKhoDenId;
+            }
+        })
     }
 }
 

@@ -96,7 +96,7 @@
         </form>
     </nz-card>
 
-    <ng-container *ngIf="formData.value.loai==='SN_DIEM_KHO'">
+    <ng-container *ngIf="formData.value.loai">
         <div class="mt-16 flex-card p-lr16">
             <div class="title-card">
                 <div class="title-chi-tieu">
@@ -141,14 +141,7 @@
                                             " - " : "") + (lv2.tenNhaKhoDi? lv2.tenNhaKhoDi: "") + (lv2.tenCloaiVthh)+
                                             ": " + lv2.slTon }}</td>
                                         <td>
-                                            <nz-input-group>
-                                                <!-- <nz-select nzShowSearch nzAllowClear [(ngModel)]='lv2.maCucDen'
-                                                    (nzFocus)="loadDsDiemKho(lv2.maChiCucDen)"
-                                                    [ngModelOptions]='{standalone: true}'>
-                                                    <nz-option *ngFor='let option of listDs[lv2.maChiCucDen]'
-                                                        [nzLabel]='option.title' [nzValue]='option.key'>
-                                                    </nz-option>
-                                                </nz-select> -->
+                                            <!-- <nz-input-group>
                                                 <nz-tree-select #treeSelectComPonent
                                                     [nzNodes]="listDs[lv2.maDiemKhoDen] || []"
                                                     [(ngModel)]="lv2.keyValue"
@@ -166,6 +159,10 @@
                                                         </div>
                                                     </ng-template>
                                                 </nz-tree-select>
+                                            </nz-input-group> -->
+                                            <nz-input-group nzAddOnAfterIcon="down"
+                                                (click)="openModelHangHoa(lv2.maDiemKhoDen, lv2)">
+                                                <input nz-input [(ngModel)]="lv2.title" [readOnly]="true" />
                                             </nz-input-group>
                                         </td>
                                         <td style="text-align: center"><label nz-checkbox nzDisabled
@@ -181,86 +178,6 @@
         </div>
     </ng-container>
     <ng-container *ngIf="formData.value.loai==='SN_CHI_CUC'">
-        <div class="mt-16 flex-card p-lr16">
-            <div class="title-card">
-                <div class="title-chi-tieu">
-                    <span></span>
-                    <span>Danh sách điều chuyển hàng DTQG</span>
-                </div>
-            </div>
-            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-                <nz-table #tblData [nzData]="this.dataViewHang" class="nowrap table-chi-tiet" nzBordered>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th style="width: 3%;" class="text-center">STT</th>
-                            <th style="width: 40%;" class="text-center">Đơn vị chuyển đi</th>
-                            <th style="width: 40%;" class="text-center">Đơn vị chuyển đến</th>
-                            <th style="width: 17%;" class="text-center">Thay đổi thủ kho</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <ng-container *ngFor="let item of dataViewHang; let idx = index">
-                            <tr>
-                                <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                                    [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
-                                    style="width: 35px"></td>
-                                <td></td>
-                                <td class="bold">{{item.tenChiCucDi? item.tenChiCucDi : ""}}
-                                </td>
-                                <td class="bold">{{item.tenChiCucDen? item.tenChiCucDen : ""}}
-                                </td>
-                                <td></td>
-                            </tr>
-                            <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                                <ng-container *ngFor="let lv2 of item.childData; let idx2=index">
-                                    <tr>
-                                        <td></td>
-                                        <td>{{idx2 + 1}}</td>
-                                        <td>{{(lv2.tenLoKhoDi ? lv2.tenLoKhoDi + " - ": "") + (lv2.tenNganKhoDi?
-                                            lv2.tenNganKhoDi +
-                                            " - " : "") + (lv2.tenNhaKhoDi ? lv2.tenNhaKhoDi + " - ": "") +
-                                            (lv2.tenDiemKhoDi? lv2.tenDiemKhoDi + " - ": "")+ (lv2.tenCloaiVthh) + ": "
-                                            + (lv2.slTon)}}</td>
-                                        <td>
-                                            <nz-input-group>
-                                                <!-- <nz-select nzShowSearch nzAllowClear [(ngModel)]='lv2.maCucDen'
-                                                    (nzFocus)="loadDsDiemKho(lv2.maChiCucDen)"
-                                                    [ngModelOptions]='{standalone: true}'>
-                                                    <nz-option *ngFor='let option of listDs[lv2.maChiCucDen]'
-                                                        [nzLabel]='option.title' [nzValue]='option.key'>
-                                                    </nz-option>
-                                                </nz-select> -->
-                                                <nz-tree-select #treeSelectComPonent
-                                                    [nzNodes]="listDs[lv2.maChiCucDen] || []" [(ngModel)]="lv2.keyValue"
-                                                    (nzOpenChange)="loadDsDiemKho(lv2.maChiCucDen)" nzShowSearch
-                                                    nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
-                                                    (nzTreeClick)="handleClickTree($event, lv2, 'SN_CHI_CUC')"
-                                                    (nzCleared)="handleClear(lv2, 'SN_CHI_CUC')"
-                                                    [nzDisplayWith]="showTitle" [nzDisabled]="isView">
-                                                    <ng-template #nzTreeTemplate let-node>
-                                                        <div class="ant-tree-node-content-wrapper"
-                                                            (click)="nodeClicked(node)"
-                                                            [class.ant-tree-node-selected]="node.isSelected"
-                                                            [ngClass]="{'disabled-node': !node.origin.isLeaf}">
-                                                            <span fxFlex> {{ node.title }}</span>
-                                                        </div>
-                                                    </ng-template>
-                                                </nz-tree-select>
-                                            </nz-input-group>
-                                        </td>
-                                        <td style="text-align: center"><label nz-checkbox nzDisabled
-                                                [ngModel]="lv2.thayDoiThuKho"></label></td>
-                                    </tr>
-                                </ng-container>
-
-                            </ng-container>
-                        </ng-container>
-                    </tbody>
-                </nz-table>
-            </nz-card>
-        </div>
         <div class="mt-16 flex-card p-lr16">
             <div class="title-card">
                 <div class="title-chi-tieu">
