@@ -15,6 +15,8 @@ import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {saveAs} from 'file-saver';
 import {STATUS} from 'src/app/constants/status';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-them-moi-thong-tin-ban-truc-tiep',
@@ -60,7 +62,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         soQdPd: [''],
         maDvi: [''],
         tenDvi: [''],
-        pthucBanTrucTiep: [''],
+        pthucBanTrucTiep: ['01'],
         diaDiemChaoGia: [''],
         ngayMkho: [''],
         ngayKthuc: [''],
@@ -92,7 +94,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         await Promise.all([
           this.onExpandChange(0, true),
           this.loadDetail(this.idInput),
-          this.initForm(),
         ])
       }
     } catch (e) {
@@ -101,13 +102,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
-  }
-
-  initForm() {
-    this.formData.patchValue({
-      pthucBanTrucTiep: '01',
-
-    })
   }
 
   async showFirstRow($event, dataToChuc: any) {
@@ -121,7 +115,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data;
-            this.dataTable = data.children.filter(item => item.typeQdKq == 0);
+            this.dataTable = data.children;
             if (this.dataTable && this.dataTable.length > 0) {
               this.showFirstRow(event, this.dataTable[0].children);
             }
@@ -446,6 +440,38 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.donGiaDuocDuyet = item[0].donGiaDuocDuyet
       await this.spinner.hide();
     }
+  }
+
+  async preview(id) {
+    await this.chaoGiaMuaLeUyQuyenService.preview({
+      tenBaoCao: 'Thông tin chào giá bán trực tiếp',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "thong-tin-chao-gia-ban-truc-tiep.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "thong-tin-chao-gia-ban-truc-tiep.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidator() {

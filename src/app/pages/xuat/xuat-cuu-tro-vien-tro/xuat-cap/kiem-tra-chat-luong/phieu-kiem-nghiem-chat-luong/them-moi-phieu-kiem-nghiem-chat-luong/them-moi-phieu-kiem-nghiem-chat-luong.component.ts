@@ -20,6 +20,7 @@ import { PhieuKiemNghiemChatLuongService } from './../../../../../../../services
 import {
   QuyetDinhGiaoNvCuuTroService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
+import {KhCnQuyChuanKyThuat} from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -45,12 +46,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   checked: boolean = false;
   listFileDinhKem: any = [];
   maVthh: string;
-  phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
-    new PhieuKiemNghiemChatLuongHang();
-  viewChiTiet: boolean = false;
-  ketQuaKiemNghiemHangCreate: KetQuaKiemNghiemChatLuongHang =
-    new KetQuaKiemNghiemChatLuongHang();
-  dsKetQuaKiemNghiemHangClone: Array<KetQuaKiemNghiemChatLuongHang> = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -59,6 +55,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
 
@@ -172,17 +169,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async loadDanhMucPhuongThucBaoQuan() {
-    let body = {
-      maHthuc: null,
-      paggingReq: {
-        limit: 1000,
-        page: 1,
-      },
-      str: null,
-      tenHthuc: null,
-      trangThai: null,
-    };
-    let res = await this.danhMucService.loadDanhMucHinhThucBaoQuan(body);
+    let res = await this.danhMucService.danhMucChungGetAll('HINH_THUC_BAO_QUAN');
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content) {
         this.listHinhThucBaoQuan = res.data.content;
@@ -282,12 +269,20 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         thuKho: data.tenThuKho,
       })
       if (!isChiTiet) {
-        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+        let [dmTieuChuan] = await Promise.all([this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh)])
         if (dmTieuChuan.data) {
-          this.dataTableChiTieu = dmTieuChuan.data.children;
-          this.dataTableChiTieu.forEach(element => {
-            element.edit = false
-          });
+          console.log(dmTieuChuan.data,"dmTieuChuan.data")
+          this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({
+            edit: false,
+            chiSoXuat: element.mucYeuCauXuat,
+            tenTchuan: element.tenChiTieu,
+            maChiTieu: element.maChiTieu,
+            danhGia: element.danhGia,
+            hdrId: element.hdrId,
+            id: element.id,
+            ketQuaPt: element.ketQuaPt,
+            phuongPhap: element.phuongPhapXd
+          })) : [];
         }
       }
     }
