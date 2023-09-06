@@ -209,7 +209,6 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     }
 
     showTitle2 = (node: NzTreeNode, data) => {
-        console.log("node", node)
         let title = "";
         const { loai } = this.formData.value;
         if (node?.origin?.maDvi?.length === 16) {
