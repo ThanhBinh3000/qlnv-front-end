@@ -15,13 +15,18 @@
                     <i class="fa fa-arrow-left"></i>
                     <span>Quay lại</span>
                 </button>
+                <button *ngIf="checkRoleExport()" type="button" class="btn btn-sub ml-2" (click)="exportData()">
+                    <i class="icon htvbdh_chuyen-xu-ly"></i>
+                    <span>Xuất file</span>
+                </button>
                 <ng-container>
-                    <button *ngIf="formData.value.trangThai != STATUS.DA_HOAN_THANH && !isView" type="button"
+                    <button *ngIf="checkRoleApprove(formData.value.trangThai)" type="button"
                         class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
                         <i class="icon htvbdh_checkfile2"></i>
                         <span>Hoàn thành</span>
                     </button>
-                    <button *ngIf="!isView" type="button" class="btn btn-main ml-2" (click)="save()">
+                    <button *ngIf="checkRoleSave(formData.value.trangThai)" type="button" class="btn btn-main ml-2"
+                        (click)="save()">
                         <i class="icon htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
                     </button>

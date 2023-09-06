@@ -64,11 +64,11 @@ export class PhieuXuatHangHoaHutComponent extends Base2Component implements OnIn
     //     [this.STATUS.DA_HOAN_THANH]: "Hoàn thành"
     // }
     listTrangThai: any[] = [
-        { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: "Đang nhập dữ liệu" },
+        { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
         { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Hoàn thành" },
     ];
     ObTrangThai: { [key: string]: string } = {
-        [this.STATUS.DANG_NHAP_DU_LIEU]: "Đang nhập dữ liệu",
+        [this.STATUS.DU_THAO]: "Dự thảo",
         [this.STATUS.DA_HOAN_THANH]: "Hoàn thành"
     }
     disabledStartNgayKy = (startValue: Date): boolean => {
@@ -126,6 +126,24 @@ export class PhieuXuatHangHoaHutComponent extends Base2Component implements OnIn
     async showList() {
         this.isDetail = false;
         await this.search();
+    }
+    checkRoleAdd() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_THEM") && this.userService.isChiCuc()
+    };
+    checkRoleDeleteAll() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_XOA") && this.userService.isChiCuc()
+    }
+    checkRoleView(trangThai: string) {
+        return !this.checkRoleEdit(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_XEM")
+    };
+    checkRoleEdit(trangThai: string) {
+        return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_THEM") && this.userService.isChiCuc()
+    }
+    checkRoleDelete(trangThai: string) {
+        return trangThai == STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_XOA") && this.userService.isChiCuc()
+    }
+    checkRoleExport() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_EXP")
     }
 
 }

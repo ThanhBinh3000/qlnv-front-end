@@ -1,4 +1,4 @@
-import {ChiTietMenu} from "src/app/models/ChiTietMenu";
+import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
 export const QUAN_LY_KHO_TANG_MAIN_ROUTE = 'quan-ly-kho-tang';
 export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
@@ -33,6 +33,7 @@ export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'sap-nhap',
     idHover: 'sap-nhap',
     hasTab: false,
+    accessPermisson: "QLKT_THSDK"
   },
   // {
   //   icon: 'htvbdh_tcdt_baocao2',

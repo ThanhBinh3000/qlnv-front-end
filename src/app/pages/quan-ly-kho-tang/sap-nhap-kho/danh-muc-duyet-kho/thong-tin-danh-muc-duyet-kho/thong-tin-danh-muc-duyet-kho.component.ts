@@ -224,6 +224,9 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             });
     }
+    checkRoleApprove(trangThai: string) {
+        return trangThai == "78" && this.userService.isAccessPermisson("QLKT_THSDK_DDMK_DUYET") && this.userService.isCuc();
+    }
 }
 
 

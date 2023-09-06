@@ -499,6 +499,16 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
     } else {
       this.isDisabledThemMoi = false;
     }
+  };
+
+  checkRoleApprove(trangThai: string) {
+    return trangThai !== STATUS.BAN_HANH && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc()
+  }
+  checkRoleSave(trangThai: string) {
+    return trangThai !== STATUS.BAN_HANH && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc()
+  }
+  checkRoleDuyetDMKho(trangThai: string) {
+    return trangThai === STATUS.BAN_HANH && (this.userService.isAccessPermisson("QLKT_THSDK_DDMK_XEM") || this.userService.isAccessPermisson("QLKT_THSDK_DDMK_DUYET")) && this.userService.isCuc();
   }
 
 }
