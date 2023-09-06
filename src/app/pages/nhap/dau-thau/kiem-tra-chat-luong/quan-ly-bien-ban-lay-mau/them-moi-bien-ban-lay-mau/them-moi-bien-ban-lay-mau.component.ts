@@ -23,16 +23,16 @@ import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { HelperService } from 'src/app/services/helper.service';
 import { isEmpty } from 'lodash';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
-import { saveAs } from 'file-saver';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
   templateUrl: './them-moi-bien-ban-lay-mau.component.html',
   styleUrls: ['./them-moi-bien-ban-lay-mau.component.scss'],
 })
-export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
+export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() isTatCa: boolean;
@@ -40,7 +40,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  formData: FormGroup;
   maSuffix: string = '/BBLM-CCDTVP';
   listFileDinhKem: any[] = [];
   listDaiDienCuc: any[] = [];
@@ -65,17 +64,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   listNam: any[] = [];
   capCuc: string = '2';
   capChiCuc: string = '3';
-  previewName: string = '';
-  showDlgPreview = false;
-  pdfSrc: any;
-  printSrc: any;
-  wordSrc: any;
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "",
-    tenBaoCao: "",
-    trangThai: ""
-  };
+  previewName: string = 'nk_bb_lay_mau';
   listHangHoa: any[] = [];
   listDaiDien: any[] = [
     {
@@ -95,11 +84,13 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   ];
   STATUS = STATUS
   constructor(
-    private spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private bienBanLayMauService: QuanLyBienBanLayMauService,
-    private notification: NzNotificationService,
     private router: Router,
-    private modal: NzModalService,
     public globals: Globals,
     private routerActive: ActivatedRoute,
     public userService: UserService,
@@ -107,9 +98,8 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-    private fb: FormBuilder,
-    private helperService: HelperService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, bienBanLayMauService);
     this.formData = this.fb.group({
       id: [],
       trangThai: [STATUS.DU_THAO],
@@ -402,9 +392,9 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       console.log(res.data, 123)
       const data = res.data;
-      if(data.loaiVthh.startsWith('02')){
+      if (data.loaiVthh.startsWith('02')) {
         this.previewName = 'bien_ban_lay_mau.docx'
-      }else{
+      } else {
         this.previewName = 'bb_lay_mau_bgiao_mau_dau_thau_lt.docx'
       }
       this.helperService.bidingDataInFormGroup(this.formData, data);
@@ -535,32 +525,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     //   this.formTaiLieuClone.file = this.nameFile;
     //   this.isSave = !isEqual(this.formTaiLieuClone, this.formTaiLieu);
     // }
-  }
-
-  async preview(fileName: string) {
-    let body = this.formData.value;
-    this.reportTemplate.fileName = fileName;
-    body.reportTemplateRequest = this.reportTemplate;
-    await this.bienBanLayMauService.preview(body).then(async s => {
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-      this.printSrc = s.data.pdfSrc;
-      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-      this.showDlgPreview = true;
-    });
-  }
-  downloadPdf(fileName: string) {
-    saveAs(this.pdfSrc, fileName);
-  }
-
-  downloadWord(fileName: string) {
-    saveAs(this.wordSrc, fileName);
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
 }
