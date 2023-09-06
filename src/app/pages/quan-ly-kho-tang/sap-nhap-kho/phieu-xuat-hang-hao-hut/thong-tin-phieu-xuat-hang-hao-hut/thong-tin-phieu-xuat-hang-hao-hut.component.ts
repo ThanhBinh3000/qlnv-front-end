@@ -23,7 +23,7 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { DanhMucDuyetKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/danh-muc-duyet-kho.service';
 import { DieuChuyenKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/dieu-chuyen-kho.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-
+import { saveAs } from 'file-saver';
 @Component({
     selector: 'app-thong-tin-phieu-xuat-hang-hao-hut',
     templateUrl: './thong-tin-phieu-xuat-hang-hao-hut.component.html',
@@ -369,5 +369,33 @@ export class ThongTinPhieuXuatHangHaoHutComponent extends Base2Component impleme
     }
     convertTien(tien: number, donVi: string): string {
         return (tien && tien > 0) ? `${convertTienTobangChu(tien)} (${donVi})` : '';
+    }
+    checkRoleExport() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_EXP")
+    };
+    exportData(fileName?: string) {
+        if (this.formData.value.id) {
+            this.spinner.show();
+            try {
+                this.phieuXuatHangHaoHutSapNhapService
+                    .exportDetail(this.formData.value.id)
+                    .subscribe((blob) =>
+                        saveAs(blob, fileName ? fileName : 'data.xlsx'),
+                    );
+                this.spinner.hide();
+            } catch (e) {
+                console.log('error: ', e);
+                this.spinner.hide();
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        } else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+        }
+    }
+    checkRoleApprove(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_THEM") && this.userService.isChiCuc()
+    };
+    checkRoleSave(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_THEM") && this.userService.isChiCuc()
     }
 }

@@ -15,14 +15,18 @@
                     <i class="fa fa-arrow-left"></i>
                     <span>Quay lại</span>
                 </button>
+                <button *ngIf="checkRoleExport()" type="button" class="btn btn-sub ml-2" (click)="exportData()">
+                    <i class="icon htvbdh_chuyen-xu-ly"></i>
+                    <span>Xuất file</span>
+                </button>
                 <ng-container>
-                    <button *ngIf="formData.value.trangThai != STATUS.DA_HOAN_THANH && !isView" type="button"
+                    <button *ngIf="checkRoleApprove(formData.value.trangThai)" type="button"
                         class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
                         <i class="icon htvbdh_checkfile2"></i>
                         <span>Hoàn thành</span>
                     </button>
-                    <button *ngIf="formData.value.trangThai != STATUS.DA_HOAN_THANH && !isView" type="button"
-                        class="btn btn-main ml-2" (click)="save()">
+                    <button *ngIf="checkRoleSave(formData.value.trangThai)" type="button" class="btn btn-main ml-2"
+                        (click)="save()">
                         <i class="icon htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
                     </button>
@@ -94,36 +98,48 @@
     </nz-card>
 
     <div class="mt-16 flex-card p-lr16">
-        <div class="title-card">
+        <!-- <div class="title-card">
             <div class="title-chi-tieu">
                 <span></span>
                 <span>Đại diện cục dự trữ nhà nước kv</span>
             </div>
-        </div>
-        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-            <app-edit-table [dataTable]="daiDienCucData" [rowInitial]="rowInitialCuc" [dataHeader]="tableHeader"
-                [isEdit]="true"></app-edit-table>
-        </nz-card>
-        <div class="title-card">
+        </div> -->
+        <nz-collapse nzAccordion>
+            <nz-collapse-panel [nzHeader]="'ĐẠI DIỆN CỤC DỰ TRỮ NHÀ NƯỚC KV'" [nzActive]="true">
+                <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                    <app-edit-table [dataTable]="daiDienCucData" [rowInitial]="rowInitialCuc" [dataHeader]="tableHeader"
+                        [isEdit]="true"></app-edit-table>
+                </nz-card>
+            </nz-collapse-panel>
+        </nz-collapse>
+        <!-- <div class="title-card">
             <div class="title-chi-tieu">
                 <span></span>
                 <span>Đại diện đơn vị chuyển đi</span>
             </div>
-        </div>
-        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-            <app-edit-table [dataTable]="donViChuyenDiData" [rowInitial]="rowInitialDi" [dataHeader]="tableHeader"
-                [isEdit]="true"></app-edit-table>
-        </nz-card>
-        <div class="title-card">
+        </div> -->
+        <nz-collapse nzAccordion>
+            <nz-collapse-panel [nzHeader]="'ĐẠI DIỆN ĐƠN VỊ CHUYỂN ĐI'" [nzActive]="true">
+                <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                    <app-edit-table [dataTable]="donViChuyenDiData" [rowInitial]="rowInitialDi"
+                        [dataHeader]="tableHeader" [isEdit]="true"></app-edit-table>
+                </nz-card>
+            </nz-collapse-panel>
+        </nz-collapse>
+        <!-- <div class="title-card">
             <div class="title-chi-tieu">
                 <span></span>
                 <span>Đại diện đơn vị chuyển đên</span>
             </div>
-        </div>
-        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-            <app-edit-table [dataTable]="donViChuyenDenData" [rowInitial]="rowInitialDen" [dataHeader]="tableHeader"
-                [isEdit]="true"></app-edit-table>
-        </nz-card>
+        </div> -->
+        <nz-collapse nzAccordion>
+            <nz-collapse-panel [nzHeader]="'ĐẠI DIỆN ĐƠN VỊ CHUYỂN ĐẾN'" [nzActive]="true">
+                <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                    <app-edit-table [dataTable]="donViChuyenDenData" [rowInitial]="rowInitialDen"
+                        [dataHeader]="tableHeader" [isEdit]="true"></app-edit-table>
+                </nz-card>
+            </nz-collapse-panel>
+        </nz-collapse>
     </div>
 </div>
 <div class="bg-trang">
@@ -235,7 +251,7 @@
                                             style="width: 35px">
                                         </td>
                                         <td></td>
-                                        <td class="bold">{{item.tenCcdc}}</td>
+                                        <td class="bold">{{item.tenChiCucDi}}</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

@@ -127,6 +127,25 @@ export class PhieuNhapHangSapNhapComponent extends Base2Component implements OnI
     async showList() {
         this.isDetail = false;
         await this.search();
+    };
+
+    checkRoleAdd() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_PNH_THEM") && this.userService.isChiCuc()
+    };
+    checkRoleDeleteAll() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_PNH_XOA") && this.userService.isChiCuc()
+    };
+    checkRoleView(trangThai: string) {
+        return !this.checkRoleEdit(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_PNH_XEM")
+    };
+    checkRoleEdit(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_PNH_THEM") && this.userService.isChiCuc()
+    };
+    checkRoleDelete(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_PNH_XOA") && this.userService.isChiCuc()
+    };
+    checkRoleExport() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_PNH_EXP")
     }
 
 }

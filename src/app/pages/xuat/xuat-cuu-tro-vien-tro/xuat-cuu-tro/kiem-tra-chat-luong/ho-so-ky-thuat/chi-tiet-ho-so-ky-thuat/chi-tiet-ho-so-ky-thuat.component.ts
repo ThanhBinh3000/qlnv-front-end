@@ -24,6 +24,7 @@ import {
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {PREVIEW} from "src/app/constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat',
@@ -108,6 +109,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
   templateName = "Hồ sơ kĩ thuật";
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -424,7 +426,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
-      console.log(dataChose,'dataChose')
+      console.log(dataChose, 'dataChose')
       if (dataChose) {
         this.formData.patchValue({
           idBbLayMau: dataChose.id,
@@ -433,4 +435,21 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       }
     });
   };
+
+  async inBienBan(id, type, loai) {
+    await this.hoSoKyThuatCtvtService.preview({
+      id: id,
+      type: type,
+      loai: loai
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
 }

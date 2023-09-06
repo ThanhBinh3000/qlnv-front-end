@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -378,5 +379,33 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
     }
     convertTien(tien: number, donVi: string): string {
         return (tien && tien > 0) ? `${convertTienTobangChu(tien)} (${donVi})` : '';
+    };
+    checkRoleExport() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_PNH_EXP")
+    };
+    exportData(fileName?: string) {
+        if (this.formData.value.id) {
+            this.spinner.show();
+            try {
+                this.phieuNhapHangSapNhapService
+                    .exportDetail(this.formData.value.id)
+                    .subscribe((blob) =>
+                        saveAs(blob, fileName ? fileName : 'data.xlsx'),
+                    );
+                this.spinner.hide();
+            } catch (e) {
+                console.log('error: ', e);
+                this.spinner.hide();
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        } else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+        }
+    }
+    checkRoleApprove(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_PNH_THEM") && this.userService.isChiCuc();
+    }
+    checkRoleSave(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_PNH_THEM") && this.userService.isChiCuc();
     }
 }

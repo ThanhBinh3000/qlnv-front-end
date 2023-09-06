@@ -115,5 +115,22 @@ export class BaoCaoKetQuaSapNhapComponent extends Base2Component implements OnIn
         this.isDetail = false;
         await this.search();
     }
-
+    checkRoleAdd() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_BCKQTH_THEM") && this.userService.isChiCuc()
+    }
+    checkRoleDeleteAll() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_BCKQTH_XOA") && this.userService.isChiCuc()
+    }
+    checkRoleView(trangThai: string) {
+        return !this.checkRoleEdit(trangThai) && !this.checkRoleView(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_BCKQTH_XEM")
+    }
+    checkRoleEdit(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_BCKQTH_THEM") && this.userService.isChiCuc()
+    }
+    checkRoleDelete(trangThai: string) {
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_BCKQTH_XOA") && this.userService.isChiCuc()
+    };
+    checkRoleExport() {
+        return this.userService.isAccessPermisson("QLKT_THSDK_BCKQTH_EXP")
+    }
 }
