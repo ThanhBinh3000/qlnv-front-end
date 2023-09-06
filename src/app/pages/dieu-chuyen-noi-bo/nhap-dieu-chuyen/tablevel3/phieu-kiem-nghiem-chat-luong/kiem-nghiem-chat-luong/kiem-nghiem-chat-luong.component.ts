@@ -142,17 +142,10 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
     else return false
   }
 
-  isTongCuc() {
-    return this.userService.isTongCuc()
-  }
-
   isCuc() {
     return this.userService.isCuc()
   }
 
-  // isChiCuc() {
-  //   return false//this.userService.isChiCuc()
-  // }
 
   selectTab(tab: number) {
     if (this.isDetail) {

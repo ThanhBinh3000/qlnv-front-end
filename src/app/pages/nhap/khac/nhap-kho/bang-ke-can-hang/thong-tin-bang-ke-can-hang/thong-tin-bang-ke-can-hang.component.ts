@@ -128,7 +128,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       console.log('data', this.data)
       this.formData.patchValue({
         soQdPdNk: this.data.soQdPdNk,
-        ngayKyQdinh: "2023-31-07",//ngayKyQdinh
+        ngayKyQdinh: this.data.ngayKyQdinh,
         idQdPdNk: this.data.idQdPdNk,
         tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,

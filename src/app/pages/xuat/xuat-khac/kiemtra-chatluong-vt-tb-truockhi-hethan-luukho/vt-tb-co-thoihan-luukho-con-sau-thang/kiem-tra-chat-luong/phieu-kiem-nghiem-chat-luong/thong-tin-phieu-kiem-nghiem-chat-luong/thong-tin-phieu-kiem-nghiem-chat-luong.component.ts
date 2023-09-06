@@ -1,41 +1,41 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../../../../components/base2/base2.component";
-import {PhuongPhapLayMau} from "../../../../../../../../models/PhuongPhapLayMau";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../../../services/danhmuc.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from '../../../../../../../../components/base2/base2.component';
+import { PhuongPhapLayMau } from '../../../../../../../../models/PhuongPhapLayMau';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DanhMucService } from '../../../../../../../../services/danhmuc.service';
 import {
-  QuyetDinhGiaoNvXuatHangService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service";
+  QuyetDinhGiaoNvXuatHangService,
+} from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service';
 import {
-  PhieuXuatNhapKhoService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
-import {KhCnQuyChuanKyThuat} from "../../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+  PhieuXuatNhapKhoService,
+} from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service';
+import { KhCnQuyChuanKyThuat } from '../../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import {
-  BienBanLayMauVtKtclService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BienBanLayMauVtKtcl.service";
-import dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {STATUS} from "../../../../../../../../constants/status";
-import {FileDinhKem} from "../../../../../../../../models/FileDinhKem";
-import {MESSAGE} from "../../../../../../../../constants/message";
+  BienBanLayMauVtKtclService,
+} from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BienBanLayMauVtKtcl.service';
+import dayjs from 'dayjs';
+import { Validators } from '@angular/forms';
+import { STATUS } from '../../../../../../../../constants/status';
+import { FileDinhKem } from '../../../../../../../../models/FileDinhKem';
+import { MESSAGE } from '../../../../../../../../constants/message';
 import {
-  DialogTableSelectionComponent
-} from "../../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+  DialogTableSelectionComponent,
+} from '../../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { FILETYPE, PREVIEW } from '../../../../../../../../constants/fileType';
 import {
-  PhieuKdclVtKtclService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service";
-import {MangLuoiKhoService} from "../../../../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {DataService} from "../../../../../../../../services/data.service";
+  PhieuKdclVtKtclService,
+} from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service';
+import { MangLuoiKhoService } from '../../../../../../../../services/qlnv-kho/mangLuoiKho.service';
+import { DataService } from '../../../../../../../../services/data.service';
 
 @Component({
   selector: 'app-thong-tin-phieu-kiem-nghiem-chat-luong',
   templateUrl: './thong-tin-phieu-kiem-nghiem-chat-luong.component.html',
-  styleUrls: ['./thong-tin-phieu-kiem-nghiem-chat-luong.component.scss']
+  styleUrls: ['./thong-tin-phieu-kiem-nghiem-chat-luong.component.scss'],
 })
 export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
 
@@ -46,9 +46,9 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   @Output()
   showListEvent = new EventEmitter<any>();
   LIST_DANH_GIA: any[] = [
-    {value: 0, label: "Không đạt"},
-    {value: 1, label: "Đạt"}
-  ]
+    { value: 0, label: 'Không đạt' },
+    { value: 1, label: 'Đạt' },
+  ];
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
   listSoQuyetDinh: any[] = [];
@@ -67,7 +67,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   listFiles: any = [];
   listBbLayMau: any = [];
   dataTableChiTieu: any[] = [];
-  templateName = "xuat-khac-phieu_khiem_nghiem_cl.docx";
+  templateName = 'xuat-khac-phieu_khiem_nghiem_cl.docx';
 
   constructor(
     httpClient: HttpClient,
@@ -89,9 +89,9 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
     this.formData = this.fb.group(
       {
         id: [0],
-        nam: [dayjs().get("year")],
+        nam: [dayjs().get('year')],
         maDvi: [, [Validators.required]],
-        loaiBienBan: ["LAY_MAU", [Validators.required]],
+        loaiBienBan: ['LAY_MAU', [Validators.required]],
         maQhNs: [],
         idQdGiaoNvXh: [null, [Validators.required]],
         soQdGiaoNvXh: [null, [Validators.required]],
@@ -99,7 +99,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         idBbLayMau: [null, [Validators.required]],
         soBbLayMau: [null, [Validators.required]],
         soPhieu: [null, [Validators.required]],
-        ngayLapPhieu: [null,],
+        ngayLapPhieu: [null],
         ngayKiemDinh: [null, [Validators.required]],
         ngayXuatLayMau: [null],
         dviKiemNghiem: [null, [Validators.required]],
@@ -132,7 +132,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         ngayLayMau: [null],
         xhXkVtPhieuKdclDtl: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
-      }
+      },
     );
     this.maPhieu = 'PKNCL-' + this.userInfo.DON_VI.tenVietTat;
   }
@@ -144,7 +144,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
       await Promise.all([
         this.loadSoQuyetDinhGiaoNvXh(),
       ]);
-      await this.loadDetail(this.idInput)
+      await this.loadDetail(this.idInput);
       this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -169,11 +169,12 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
             this.formData.patchValue({
               soBbLayMau: data.soBbLayMau,
               tenDiaDiem: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
-            })
+            });
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
-              let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : Array.from(data.ppLayMau);
-              ppLayMauOptions = ppLayMauOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
+              console.log(data.ppLayMau, 'ppLayMauppLayMauppLayMau');
+              let ppLayMauOptions = data.ppLayMau.indexOf(',') > 0 ? data.ppLayMau.split(',') : [data.ppLayMau];
+              ppLayMauOptions = ppLayMauOptions.map((str, index) => ({ label: str, value: index + 1, checked: true }));
               this.formData.patchValue({
                 ppLayMauList: ppLayMauOptions,
               });
@@ -188,7 +189,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let id = await this.userService.getId('XH_XK_VT_PHIEU_KDCL_HDR_SEQ')
+      let id = await this.userService.getId('XH_XK_VT_PHIEU_KDCL_HDR_SEQ');
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
@@ -211,11 +212,11 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
 
   async loadSoQuyetDinhGiaoNvXh() {
     let body = {
-      namKeHoach: this.formData.get("nam").value,
+      namKeHoach: this.formData.get('nam').value,
       dvql: this.userInfo.MA_DVI,
       trangThai: STATUS.DA_DUYET_LDC,
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
-    }
+    };
     let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -238,7 +239,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         dataHeader: ['Số quyết định', 'Ngày quyết định', 'Năm'],
         dataColumn: ['soQuyetDinh', 'ngayKy', 'namKeHoach'],
       },
-    })
+    });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data);
@@ -253,7 +254,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
       this.formData.patchValue({
         soQdGiaoNvXh: data.soQuyetDinh,
         idQdGiaoNvXh: data.id,
-        ngayQdGiaoNvXh: data.ngayKy
+        ngayQdGiaoNvXh: data.ngayKy,
       });
       await this.getListBbLayMau(data);
     } catch (e) {
@@ -269,9 +270,9 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
     try {
       let body = {
         soQdGiaoNvXh: itemQdGnvXh.soQuyetDinh,
-        nam: this.formData.get("nam").value
-      }
-      let res = await this.bienBanLayMauVtKtclService.search(body)
+        nam: this.formData.get('nam').value,
+      };
+      let res = await this.bienBanLayMauVtKtclService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.listBbLayMau = res.data.content;
       }
@@ -286,8 +287,8 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
     await this.spinner.show();
     let body = {
       soQdGiaoNvXh: item,
-    }
-    let res = await this.bienBanLayMauVtKtclService.search(body)
+    };
+    let res = await this.bienBanLayMauVtKtclService.search(body);
     const data = res.data;
     this.bienBan = data.content;
     const listDd = [
@@ -315,7 +316,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
       nzComponentParams: {
         dataTable: this.listDiaDiemNhap,
         dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho'],
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -336,14 +337,14 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         tenLoKho: data.tenLoKho,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
-      })
+      });
     }
   }
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
     if (this.fileDinhKems && this.fileDinhKems.length > 0) {
-      body.fileDinhKems = this.fileDinhKems
+      body.fileDinhKems = this.fileDinhKems;
     }
     body.xhXkVtPhieuKdclDtl = this.dataTableChiTieu;
     let data = await this.createUpdate(body);
@@ -391,13 +392,13 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         break;
       }
     }
-    this.reject(this.idInput, trangThai)
+    this.reject(this.idInput, trangThai);
   }
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
     if (trangThai == STATUS.CHO_DUYET_LDC || trangThai == STATUS.CHO_DUYET_TP) {
-      return true
+      return true;
     }
     return false;
   }
@@ -405,8 +406,8 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   async loadPhuongPhapLayMau(data, isDetail?) {
     if (isDetail) {
       if (data.ppLayMau) {
-        let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : Array.from(data.ppLayMau);
-        ppLayMauOptions = ppLayMauOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
+        let ppLayMauOptions = data.ppLayMau.indexOf(',') > 0 ? data.ppLayMau.split(',') : Array.from(data.ppLayMau);
+        ppLayMauOptions = ppLayMauOptions.map((str, index) => ({ label: str, value: index + 1, checked: true }));
         this.formData.patchValue({
           ppLayMauList: ppLayMauOptions,
         });
@@ -420,12 +421,12 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
               let option = {
                 label: item.giaTri,
                 value: item.ma,
-                checked: true
-              }
+                checked: true,
+              };
               ppLayMauOptions.push(option);
               this.formData.patchValue({
                 ppLayMauList: ppLayMauOptions,
-              })
+              });
             });
           }
         } else {
@@ -433,12 +434,12 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         }
       }).catch(err => {
         this.notification.error(MESSAGE.ERROR, err.msg);
-      })
+      });
     }
   }
 
   async loadChiTieuCl(itemBbLayMau) {
-    let [dmTieuChuan] = await Promise.all([this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(itemBbLayMau.cloaiVthh)])
+    let [dmTieuChuan] = await Promise.all([this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(itemBbLayMau.cloaiVthh)]);
     if (dmTieuChuan.data) {
       this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({
         edit: false,
@@ -449,7 +450,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         hdrId: element.hdrId,
         id: element.id,
         ketQua: element.ketQuaPt,
-        ppKiemTra: element.phuongPhapXd
+        ppKiemTra: element.phuongPhapXd,
       })) : [];
     }
   }
@@ -481,15 +482,15 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   async tenThuKho(event) {
     let body = {
       maDvi: event,
-      capDvi: (event?.length / 2 - 1)
-    }
+      capDvi: (event?.length / 2 - 1),
+    };
     const detail = await this.mangLuoiKhoService.getDetailByMa(body);
     if (detail.statusCode == 0) {
-      const detailThuKho = detail.data.object.detailThuKho
+      const detailThuKho = detail.data.object.detailThuKho;
       if (detailThuKho) {
         this.formData.patchValue({
-          thuKho: detailThuKho.hoTen
-        })
+          thuKho: detailThuKho.hoTen,
+        });
       }
     }
   }

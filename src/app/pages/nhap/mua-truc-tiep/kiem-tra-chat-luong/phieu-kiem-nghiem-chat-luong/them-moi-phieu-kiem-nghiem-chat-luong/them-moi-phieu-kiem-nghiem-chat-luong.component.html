@@ -21,9 +21,7 @@
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf=" formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC
-             && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKNCL_DUYET_TP')
-             && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKNCL_DUYET_LDC')" (click)="pheDuyet()">
+        <button class="btn btn-sub xanh-nhat" *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKNCL_DUYET_TP') || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKNCL_DUYET_LDC'))" (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
         </button>
