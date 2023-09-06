@@ -20,7 +20,7 @@ import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.c
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { endOfMonth } from 'date-fns';
 import printJS from "print-js";
-import {PREVIEW} from "../../constants/fileType";
+import { PREVIEW } from "../../constants/fileType";
 
 @Component({
   selector: 'app-base2',
@@ -672,11 +672,11 @@ export class Base2Component implements OnInit {
   closeDlg() {
     this.showDlgPreview = false;
   }
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
-  async xemTruoc(id,tenBaoCao) {
+  async xemTruoc(id, tenBaoCao) {
     await this.service.preview({
       tenBaoCao: tenBaoCao + '.docx',
       id: id
