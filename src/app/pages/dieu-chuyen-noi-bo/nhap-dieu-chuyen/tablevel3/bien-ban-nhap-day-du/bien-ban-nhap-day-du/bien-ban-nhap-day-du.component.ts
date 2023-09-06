@@ -179,17 +179,9 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
     else return false
   }
 
-  isTongCuc() {
-    return this.userService.isTongCuc()
+  isChiCuc() {
+    return this.userService.isChiCuc()
   }
-
-  isCuc() {
-    return this.userService.isCuc()
-  }
-
-  // isChiCuc() {
-  //   return false//this.userService.isChiCuc()
-  // }
 
   selectTab(tab: number) {
     if (this.isDetail) {

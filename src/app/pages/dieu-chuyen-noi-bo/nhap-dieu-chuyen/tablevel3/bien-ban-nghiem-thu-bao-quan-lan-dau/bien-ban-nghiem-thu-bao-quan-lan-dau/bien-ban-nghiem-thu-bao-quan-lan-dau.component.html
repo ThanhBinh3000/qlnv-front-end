@@ -85,7 +85,7 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)">
+          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)" *ngIf="isChiCuc()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>

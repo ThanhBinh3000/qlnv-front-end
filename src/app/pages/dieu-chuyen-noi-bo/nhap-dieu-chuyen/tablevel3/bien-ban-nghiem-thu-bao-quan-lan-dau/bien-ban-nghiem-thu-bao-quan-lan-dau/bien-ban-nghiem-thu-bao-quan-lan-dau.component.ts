@@ -122,17 +122,9 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
     else return false
   }
 
-  isTongCuc() {
-    return this.userService.isTongCuc()
+  isChiCuc() {
+    return this.userService.isChiCuc()
   }
-
-  isCuc() {
-    return this.userService.isCuc()
-  }
-
-  // isChiCuc() {
-  //   return false//this.userService.isChiCuc()
-  // }
 
   selectTab(tab: number) {
     if (this.isDetail) {
