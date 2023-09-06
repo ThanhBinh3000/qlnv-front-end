@@ -789,15 +789,15 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_KT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async tuChoi() {
     let trangThai = () => {
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_TK)
         return STATUS.TU_CHOI_TK
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
-        return STATUS.TU_CHOI_KT
+      // if (this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
+      //   return STATUS.TU_CHOI_KT
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
         return STATUS.TU_CHOI_LDCC
     };
