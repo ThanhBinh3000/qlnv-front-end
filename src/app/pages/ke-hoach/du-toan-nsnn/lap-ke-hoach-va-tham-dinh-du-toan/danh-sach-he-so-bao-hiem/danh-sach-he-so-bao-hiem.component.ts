@@ -84,7 +84,7 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
             trangThais = [this.searchFilter.trangThai];
         }
         const requestReport = {
-            namBcao: this.searchFilter.nam,
+            nam: this.searchFilter.nam,
             ngayTaoDen: Utils.fmtDate(this.searchFilter.denNgay),
             ngayTaoTu: Utils.fmtDate(this.searchFilter.tuNgay),
             paggingReq: {
