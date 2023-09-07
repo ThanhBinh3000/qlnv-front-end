@@ -588,7 +588,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             lstCtietBcaoTemp.congVan = this.congVan;
         }
 
-        if (!lstCtietBcaoTemp?.congVan || !this.congVan?.fileUrl) {
+        if (!lstCtietBcaoTemp?.congVan || !this.congVan?.fileName) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
