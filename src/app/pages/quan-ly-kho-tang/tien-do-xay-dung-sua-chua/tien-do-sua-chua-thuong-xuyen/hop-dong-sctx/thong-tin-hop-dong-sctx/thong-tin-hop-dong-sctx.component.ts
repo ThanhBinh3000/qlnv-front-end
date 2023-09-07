@@ -33,8 +33,8 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
   tongMucDt: number = 0;
   @Input() flagThemMoi: string;
   @Input() itemDuAn: string;
-  @Input()
-  itemQdPdKhLcnt: any;
+  @Input() itemQdPdKhLcnt: any;
+  @Input() itemQdPdKtkt: any;
   listHopDong: any[] = []
   itemSelected: any;
   openPopThemMoiHd = false;
@@ -90,11 +90,11 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
       tongTien: [0],
       trangThaiHd: [],
       tenTrangThaiHd: [],
-      loaiSuaChua: [null],
       fileDinhKems: [null],
+      loaiSuaChua : [null],
       listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtTdscQuyetDinhPdKhlcntCvKad: null,
-      listKtTdscQuyetDinhPdKhlcntCvKh: null
+      listKtTdscQuyetDinhPdKhlcntCvKh: null,
     });
     super.ngOnInit()
   }
@@ -155,7 +155,6 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
       if (this.itemQdPdKhLcnt && !isBackFromHd) {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
         this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
-        console.log(this.itemQdPdKhLcnt, ' this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt');
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
         }
@@ -164,14 +163,15 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
         let body = {
           "namKh": this.itemQdPdKhLcnt.namKh,
           "idDuAn": this.itemQdPdKhLcnt.idDuAn,
-          "idQdPdDaDtxd": this.itemQdPdKhLcnt.idQdPdDaDtxd,
+          "idQdPdKtkt": this.itemQdPdKtkt.idQdPdDaDtxd,
           "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
+          "loai": '01'
         }
         let res = await this.hopdongService.detailQdPdKhLcnt(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {(this.itemQdPdKhLcnt, 'this item')
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
+            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntDsnt;
             if (this.listHopDong && this.listHopDong.length > 0) {
               this.selectRow(this.listHopDong[0]);
             }

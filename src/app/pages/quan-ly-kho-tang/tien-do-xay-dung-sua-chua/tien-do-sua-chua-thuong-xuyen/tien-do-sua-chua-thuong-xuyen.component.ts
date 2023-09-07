@@ -27,6 +27,13 @@ import {
 import {
   TongHopScThuongXuyenService
 } from "../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service";
+import {
+  QuyetdinhpheduyetKqLcntSclService
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
+import {HopdongTdscService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {
+  KtKhSuaChuaBtcService
+} from "../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 
 @Component({
   selector: 'app-tien-do-sua-chua-thuong-xuyen',
@@ -65,10 +72,9 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
     private donViService: DonviService,
     private ktQdScThuongXuyenService: TongHopScThuongXuyenService,
     private qdPheDuyetBaoCaoKtktService: QdPheDuyetBaoCaoKtktService,
-    private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
     private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService,
-    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
-    private hopdongService: HopdongService,
+    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntSclService,
+    private hopdongService: HopdongTdscService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdScThuongXuyenService)
     super.ngOnInit();
@@ -182,15 +188,14 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
       let res = await this.qdPheDuyetBaoCaoKtktService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdKtkt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-        // //Check tiếp quyết định phê duyệt bản vẽ
-        // if (this.itemQdPdKtkt) {
-        //   // await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
-        await this.loadItemQdPdKhLcnt(this.itemQdPdKtkt);
-        //   // await this.loadListItemQdPdKqLcnt(this.itemTtdt);
-        //   // await this.loadItemHopDong();
-        // } else {
-        //   this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
-        // }
+        //Check tiếp quyết định phê duyệt bản vẽ
+        if (this.itemQdPdKtkt) {
+          await this.loadItemQdPdKhLcnt(this.itemQdPdKtkt);
+          await this.loadListItemQdPdKqLcnt(this.itemTtdt);
+          await this.loadItemHopDong();
+        } else {
+          this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -198,24 +203,6 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + 11);
     } finally {
       this.spinner.hide();
-    }
-  }
-
-  async loadItemQdPdTktcTdt(itemQdPdTktcTdt) {
-    if (itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH) {
-      let body = {
-        "idQdPdDaDtxd": this.itemQdPdKtkt.id,
-        "paggingReq": {
-          "limit": 10,
-          "page": 0
-        }
-      }
-      let res = await this.quyetdinhpheduyetTktcTdtService.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.itemQdPdKtkt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
     }
   }
 
@@ -233,6 +220,7 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
       let res = await this.quyetdinhpheduyetKhlcntService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdKhLcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+        this.itemTtdt = this.itemQdPdKhLcnt;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -260,6 +248,7 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
         "namKh": itemTtdt.namKh,
         "soQdPdKhlcnt": itemTtdt.soQd,
         "idQdPdKhlcnt": itemTtdt.id,
+        "loai": "01",
         "paggingReq": {
           "limit": 10,
           "page": 0
