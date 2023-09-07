@@ -98,7 +98,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         maDvi: [],
         maQhns: [],
         soBbTinhKho: [],
-        ngayTaoBb: [],
+        ngayLap: [],
         qdinhDccId: [],
         soQdinhDcc: ['', [Validators.required]],
         ngayKyQdDcc: [''],
@@ -185,7 +185,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
         // soBbTinhKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-        ngayTaoBb: dayjs().format('YYYY-MM-DD'),
+        ngayLap: dayjs().format('YYYY-MM-DD'),
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
         ...this.passData,
@@ -436,6 +436,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
+    body.ngayKetThucXuat = this.formData.value.ngayLap;
     body.fileBbTinhKhoDaKy = this.fileBbTinhKhoDaKy;
     body.loaiDc = this.loaiDc;
     body.isVatTu = this.isVatTu;
@@ -445,7 +446,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     // if (this.formData.value.tongSlXuatTheoQd > this.formData.value.tongSlXuatTheoTt) {
     //   return this.notification.error(MESSAGE.ERROR, "Số lượng xuất thực tế nhỏ hơn số lượng xuất theo quyết định")
     // }
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbTinhKho: data.soBbTinhKho ? data.soBbTinhKho : this.genSoBienBanTinhKho(data.id) })
       if (isGuiDuyet) {
@@ -482,7 +483,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         break;
       }
     }
-    this.approve(this.formData.value.id, trangThai, msg);
+    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
   }
 
   tuChoi() {
