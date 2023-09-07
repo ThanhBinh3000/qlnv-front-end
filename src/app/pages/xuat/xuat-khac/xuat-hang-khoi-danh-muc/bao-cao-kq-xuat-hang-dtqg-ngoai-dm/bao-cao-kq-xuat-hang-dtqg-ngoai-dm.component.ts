@@ -5,17 +5,13 @@ import { StorageService } from '../../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import {
-  QuyetDinhXuatGiamVattuService,
-} from '../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhXuatGiamVattu.service';
 import { UserLogin } from '../../../../../models/userlogin';
 import { MESSAGE } from '../../../../../constants/message';
 import dayjs from 'dayjs';
 import { CHUC_NANG, STATUS } from '../../../../../constants/status';
 import {
-  BckqKiemDinhMauService,
-} from '../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service';
-import { MangLuoiKhoService } from '../../../../../services/qlnv-kho/mangLuoiKho.service';
+  BckqXuatHangKdmService
+} from '../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/BckqXuatHangKdm.service';
 
 @Component({
   selector: 'app-bao-cao-kq-xuat-hang-dtqg-ngoai-dm',
@@ -32,9 +28,9 @@ export class BaoCaoKqXuatHangDtqgNgoaiDmComponent extends Base2Component impleme
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bckqKiemDinhMauService: BckqKiemDinhMauService,
+    private bckqXuatHangKdmService: BckqXuatHangKdmService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bckqKiemDinhMauService);
+    super(httpClient, storageService, notification, spinner, modal, bckqXuatHangKdmService);
     this.formData = this.fb.group({
       tenDvi: [],
       maDvi: [],
