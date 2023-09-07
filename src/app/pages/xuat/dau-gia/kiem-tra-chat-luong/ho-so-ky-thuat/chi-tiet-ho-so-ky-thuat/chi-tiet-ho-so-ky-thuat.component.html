@@ -5,6 +5,10 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+      <button type="button" class="btn btn-sub" (click)="inBienBan(id,'BDG','HS')">
+        <i class="icon htvbdh_totrinh"></i>
+        <span> In/Xem trước </span>
+      </button>
       <button (click)="approve(id,STATUS.DA_KY,'Bạn có muốn xác nhận ?')"
               [disabled]="formData.value.kqKiemTra != 1"
               class="btn btn-sub" type="button">
@@ -333,6 +337,9 @@
           </a>
           <a *ngIf="item.trangThai != STATUS.DA_KY" (click)="redirectToBienBan(false,item)">
             <i class="fa fa-edit" title="Chỉnh sửa"></i>
+          </a>
+          <a *ngIf="item.trangThai == STATUS.DA_KY" (click)="inBienBan(idSelected,'BDG',item.loaiBb)">
+            <i class="fa fa-print" title="Xem biên bản"></i>
           </a>
         </td>
       </tr>

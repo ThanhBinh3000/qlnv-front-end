@@ -26,6 +26,9 @@ import {DonviService} from 'src/app/services/donvi.service';
 import {chiTietBangCanKeHang} from 'src/app/models/DeXuatKeHoachBanTrucTiep';
 import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import {saveAs} from 'file-saver';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-them-moi-bang-ke-can-hang-btt',
@@ -724,6 +727,38 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       }, 0);
       return sum;
     }
+  }
+
+  async preview(id) {
+    await this.bangCanKeHangBttService.preview({
+      tenBaoCao: 'Bảng kê cân hàng bán trực tiếp',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "bang-ke-can-hang-ban-truc-tiep.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "bang-ke-can-hang-ban-truc-tiep.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidator(isGuiDuyet) {

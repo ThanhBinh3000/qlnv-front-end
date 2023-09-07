@@ -589,11 +589,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
 
   async save(isGuiDuyet?) {
-    if (this.isVatTu) {
-      this.formData.controls["soBangKeCh"].clearValidators();
-    } else {
-      this.formData.controls["soBangKeVt"].clearValidators();
-    }
+
     if (!this.formData.value.thayDoiThuKho || !this.isVatTu) {
       this.formData.controls["soPhieuKtraCluong"].clearValidators();
       this.formData.controls["idPhieuKtraCluong"].clearValidators();
@@ -601,6 +597,14 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     if (!isGuiDuyet) {
       this.formData.controls["soBangKeCh"].clearValidators();
       this.formData.controls["soBangKeVt"].clearValidators();
+    } else {
+      if (this.isVatTu) {
+        this.formData.controls["soBangKeCh"].clearValidators();
+        this.formData.controls["soBangKeVt"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["soBangKeVt"].clearValidators();
+        this.formData.controls["soBangKeCh"].setValidators([Validators.required]);
+      }
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return

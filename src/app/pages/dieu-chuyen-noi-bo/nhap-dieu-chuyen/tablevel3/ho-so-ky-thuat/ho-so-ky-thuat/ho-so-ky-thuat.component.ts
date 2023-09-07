@@ -47,7 +47,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       ngayDuyetTc: null,
       ngayHieuLuc: null,
       trichYeu: null,
-      type: ["01"],
+      type: ["DCNBN"],
       loaiDc: ["DCNB"]
     })
     this.filterTable = {
@@ -84,6 +84,22 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   async initData() {
     this.userInfo = this.userService.getUserLogin();
   }
+
+  disabledStartNgayBdNhap = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayBdNhap) {
+      return startValue.getTime() > this.formData.value.denNgayBdNhap.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayBdNhap = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayBdNhap) {
+      return endValue.getTime() < this.formData.value.tuNgayBdNhap.getTime();
+    } else {
+      return false;
+    }
+  };
 
   isShowDS() {
     if (this.isChiCuc()) return true

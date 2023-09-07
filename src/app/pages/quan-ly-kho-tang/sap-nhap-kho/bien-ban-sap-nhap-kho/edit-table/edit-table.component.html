@@ -1,0 +1,58 @@
+<nz-table #tblData [nzData]="dataTable" class="nowrap table-chi-tiet" nzBordered>
+    <thead>
+        <tr>
+            <th style="width: 3%;" class="text-center">STT</th>
+            <th *ngFor="let item of dataHeader">{{item.title}}</th>
+            <th width="60px">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngIf="isEdit">
+            <td></td>
+            <td *ngFor="let item of dataHeader">
+                <nz-input-group>
+                    <input nz-input [(ngModel)]='rowItem[item.value]' [ngModelOptions]='{standalone: true}'
+                        [readOnly]="disabledAdd" />
+                </nz-input-group>
+            </td>
+            <td>
+                <a [ngClass]="{'disabled': disabledAdd}" (click)='addRow()'>
+                    <i class='fa fa-plus' title="Thêm"></i>
+                </a>
+                <a [ngClass]="{'disabled': disabledAdd}" (click)='clearAdd()'>
+                    <i class='fa fa-refresh' title="Làm mới"></i>
+                </a>
+            </td>
+        </tr>
+        <tr *ngFor="let item of dataTable; let idx = index">
+            <ng-container *ngIf="!item.edit; else editTemplate">
+                <td>{{ idx + 1 }}</td>
+                <td *ngFor="let i of dataHeader">{{ item[i.value] }}</td>
+                <td *ngIf="isEdit">
+                    <a (click)="editRow(idx)">
+                        <i class="fa fa-pencil" title="Sửa"></i>
+                    </a>
+                    <a (click)="deleteRow(idx)">
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                    </a>
+                </td>
+            </ng-container>
+            <ng-template #editTemplate>
+                <td></td>
+                <td *ngFor="let i of dataHeader">
+                    <nz-input-group>
+                        <input nz-input [(ngModel)]='item[i.value]' [ngModelOptions]='{standalone: true}'
+                            [readonly]="!isEdit" />
+                    </nz-input-group>
+                </td>
+                <td class="text-center">
+                    <a (click)="saveEdit(idx)" class="save">
+                        <i class="fa fa-save" title="Lưu"></i>
+                    </a>
+                    <a (click)="cancleEdit(idx)">
+                        <i class="fa fa-ban do" title="Hủy"></i> </a>
+                </td>
+            </ng-template>
+        </tr>
+    </tbody>
+</nz-table>

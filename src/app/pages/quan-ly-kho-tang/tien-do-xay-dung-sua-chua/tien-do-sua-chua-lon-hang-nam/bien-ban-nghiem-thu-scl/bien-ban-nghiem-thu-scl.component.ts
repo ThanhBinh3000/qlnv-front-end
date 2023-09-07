@@ -10,6 +10,9 @@ import {
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/bien-ban-nghiem-thu-dtxd.service";
 import dayjs from "dayjs";
 import {ThongTinBienBanSclComponent} from "./thong-tin-bien-ban-scl/thong-tin-bien-ban-scl.component";
+import {
+  BienBanNghiemThuTdscServiceService
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/bien-ban-nghiem-thu-tdsc.service";
 
 @Component({
   selector: 'app-bien-ban-nghiem-thu-scl',
@@ -19,6 +22,7 @@ import {ThongTinBienBanSclComponent} from "./thong-tin-bien-ban-scl/thong-tin-bi
 export class BienBanNghiemThuSclComponent extends Base2Component implements OnInit {
   @Input() itemDuAn: any;
   @Input() itemQdPdKhLcnt: any
+  @Input() itemQdPdKtkt: any
   selectedId: number;
   isViewDetail: boolean;
 
@@ -28,7 +32,7 @@ export class BienBanNghiemThuSclComponent extends Base2Component implements OnIn
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanSv: BienBanNghiemThuDtxdService
+    private bienBanSv: BienBanNghiemThuTdscServiceService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanSv);
     super.ngOnInit()
@@ -36,6 +40,7 @@ export class BienBanNghiemThuSclComponent extends Base2Component implements OnIn
       namKh: [null],
       maDvi: [null],
       idDuAn: [null],
+      loai: ['00']
     });
   }
 
@@ -65,7 +70,7 @@ export class BienBanNghiemThuSclComponent extends Base2Component implements OnIn
 
   async filter() {
     this.formData.patchValue({
-      namKh: this.itemDuAn.namKeHoach,
+      namKh: this.itemDuAn.namKh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       idDuAn: this.itemDuAn.id
     })

@@ -28,9 +28,6 @@ import {
   DialogThemMoiDmNhomHangComponent
 } from "../../../../../../components/dialog/dialog-them-moi-dm-nhom-hang/dialog-them-moi-dm-nhom-hang.component";
 import * as uuidv4 from "uuid";
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
-import { saveAs } from "file-saver";
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
   templateUrl: './thong-tin-bien-ban-nghiem-thu-bao-quan.component.html',
@@ -74,12 +71,9 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   dsHangPD = []
   typeData: string;
   typeAction: string;
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "bb_nt_bao_quan_lan_dau_dau_thau_lt.docx",
-    tenBaoCao: "",
-    trangThai: ""
-  };
+
+  previewName: string = 'nk_bb_nghiem_thu_bqld';
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -1156,28 +1150,4 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     this.updateDataTable()
   }
 
-  async preview() {
-    let body = this.formData.value;
-    body.reportTemplateRequest = this.reportTemplate;
-    await this.quanLyNghiemThuKeLotService.preview(body).then(async s => {
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-      this.printSrc = s.data.pdfSrc;
-      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-      this.showDlgPreview = true;
-    });
-  }
-  downloadPdf() {
-    saveAs(this.pdfSrc, "bb_nt_bao_quan_lan_dau_dau_thau_lt.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "bb_nt_bao_quan_lan_dau_dau_thau_lt.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
-  }
 }

@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import dayjs from "dayjs";
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {StorageService} from "../../../../services/storage.service";
-import {CHUC_NANG, STATUS} from "../../../../constants/status";
-import {UserLogin} from "../../../../models/userlogin";
-import {MESSAGE} from "../../../../constants/message";
+import { Base2Component } from "../../../../components/base2/base2.component";
+import { StorageService } from "../../../../services/storage.service";
+import { CHUC_NANG, STATUS } from "../../../../constants/status";
+import { UserLogin } from "../../../../models/userlogin";
+import { MESSAGE } from "../../../../constants/message";
 import {
   QuyetDinhDieuChuyenService
-} from "../../../../services/qlnv-kho/dieu-chuyen-sap-nhap-kho/QuyetDinhDieuChuyen.service";
+} from "../../../../services/qlnv-kho/dieu-chuyen-sap-nhap-kho/quyet-dinh-dieu-chuyen.service";
 
 
 @Component({
@@ -20,7 +20,7 @@ import {
   styleUrls: ['./quyet-dinh-dieu-chuyen-sap-nhap-kho.component.scss']
 })
 export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component implements OnInit {
-
+  @Output("selectTabChange") selectTabChange = new EventEmitter<any>();
   CHUC_NANG = CHUC_NANG;
   STATUS = STATUS;
 
@@ -56,14 +56,23 @@ export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component imple
   idPhieuKnCl: number = 0;
   openPhieuKnCl = false;
   listTrangThaiSn: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: "Chưa hoàn thành"},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: "Đang hoàn thành"},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành"},
+    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: "Chưa thực hiện" },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: "Đang thực hiện" },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },
   ];
+  ObTrangThaiSn: { [key: string]: string } = {
+    [this.STATUS.CHUA_THUC_HIEN]: "Chưa thực hiện",
+    [this.STATUS.DANG_THUC_HIEN]: "Đang thực hiện",
+    [this.STATUS.DA_HOAN_THANH]: "Đã hoàn thành",
+  }
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
-    {ma: this.STATUS.BAN_HANH, giaTri: "Ban hành"},
+    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: "Đang nhập dữ liệu" },
+    { ma: this.STATUS.BAN_HANH, giaTri: "Ban hành" },
   ];
+  ObTrangThai: { [key: string]: string } = {
+    [this.STATUS.DANG_NHAP_DU_LIEU]: "Đang nhập dữ liệu",
+    [this.STATUS.BAN_HANH]: "Ban hành"
+  }
   disabledStartNgayKy = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKyDen) {
       return startValue.getTime() >= this.formData.value.ngayKyDen.getTime();
@@ -102,10 +111,6 @@ export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component imple
   async timKiem() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayKy) {
-        this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('YYYY-MM-DD')
-      }
       await this.search();
     } catch (e) {
       console.log(e)
@@ -124,5 +129,25 @@ export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component imple
     this.isDetail = false;
     await this.search();
   }
-
+  async selectTab(value: number) {
+    this.selectTabChange.emit(value)
+  }
+  checkRoleAdd() {
+    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc();
+  }
+  checkRoleView(trangThai: string) {
+    return !this.checkRoleEdit(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XEM")
+  }
+  checkRoleEdit(trangThai: string) {
+    return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc()
+  }
+  checkRoleDelete(trangThai: string) {
+    return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XOA") && this.userService.isCuc();
+  }
+  checkRoleExport() {
+    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_EXP")
+  }
+  checkRoleDeleteAll() {
+    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XOA") && this.userService.isCuc();
+  }
 }

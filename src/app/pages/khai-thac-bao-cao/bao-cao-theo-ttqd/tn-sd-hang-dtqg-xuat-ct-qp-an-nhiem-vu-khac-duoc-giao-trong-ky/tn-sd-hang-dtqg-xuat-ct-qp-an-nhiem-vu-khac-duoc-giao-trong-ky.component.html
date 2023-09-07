@@ -1,6 +1,6 @@
 <div class="luong-thuc__danh-sach">
   <div class="bg-trang">
-    <h3 class="text-uppercase">Số lượng và giá trị hàng DTQG xuất viện trợ trong kỳ</h3>
+    <h3 class="text-uppercase">Tiếp nhận sử dụng hàng DTQG xuất cứu trợ, quốc phòng, an ninh và nhiệm vụ khác được giao trong kỳ</h3>
     <nz-card class="mt16 flex-card p-lr16">
       <form nzLayout="vertical" nz-form [formGroup]="formData">
         <ng-template #error let-control>
@@ -164,6 +164,10 @@
             class="modal__button--save">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       Tải báo cáo
+    </button>
+    <button nz-button (click)="downloadExcel()" class="modal__button--save">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      Tải báo cáo Excel
     </button>
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>

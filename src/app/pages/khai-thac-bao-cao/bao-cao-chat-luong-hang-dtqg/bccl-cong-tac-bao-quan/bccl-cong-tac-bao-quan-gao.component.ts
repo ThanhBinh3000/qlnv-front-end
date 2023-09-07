@@ -56,6 +56,8 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
         kyBc: [null],
         maCuc: null,
         maChiCuc: null,
+        tgBaoCaoTu: null,
+        tgBaoCaoDen: null,
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         loaiBc: [null, [Validators.required]],
@@ -108,7 +110,21 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     this.showDlgPreview = false;
   }
 
+  setValidators() {
+    if (this.formData.value.loaiBc == '02' && this.userService.isTongCuc()) {
+      this.formData.controls["maCuc"].setValidators([Validators.required]);
+    }
+    if (this.formData.value.loaiKyBc == '01' && this.formData.value.loaiKyBc == '02') {
+      this.formData.controls["kyBc"].setValidators([Validators.required]);
+    }
+    if (this.formData.value.loaiKyBc == '04') {
+      this.formData.controls["tgBaoCaoTu"].setValidators([Validators.required]);
+      this.formData.controls["tgBaoCaoDen"].setValidators([Validators.required]);
+    }
+  }
+
   async preView() {
+    this.setValidators();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -122,8 +138,8 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       body.typeFile = "pdf";
       body.trangThai = "01";
       if (body.loaiBc == '01') {
-        body.fileName = "bccl_cong_tac_bao_quan_gao_tong_hop.jrxml";
-        body.tenBaoCao = "BBáo cáo chất lượng công tác bảo quản gạo (tổng hợp)";
+        body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
+        body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
       } else {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bccl_cong_tac_bao_quan_thoc_chi_tiet.jrxml";

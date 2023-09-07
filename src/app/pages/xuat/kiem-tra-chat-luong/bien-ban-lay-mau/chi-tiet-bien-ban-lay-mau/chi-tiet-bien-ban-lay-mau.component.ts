@@ -1,31 +1,34 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {MESSAGE} from "src/app/constants/message";
-import {HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG} from "src/app/constants/status";
-import {v4 as uuidv4} from "uuid";
-import {cloneDeep} from 'lodash';
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {KhCnQuyChuanKyThuat} from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
-import {BaseService} from "src/app/services/base.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DonviService } from 'src/app/services/donvi.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG } from 'src/app/constants/status';
+import { v4 as uuidv4 } from 'uuid';
+import { cloneDeep } from 'lodash';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import { BaseService } from 'src/app/services/base.service';
+import { saveAs } from 'file-saver';
 import {
-  DialogTableSelectionComponent
-} from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
+  DialogTableSelectionComponent,
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import {
-  BienBanLayMauComponent
-} from "src/app/pages/xuat/kiem-tra-chat-luong/bien-ban-lay-mau/bien-ban-lay-mau.component";
-import {Validators} from "@angular/forms";
-import {FileDinhKem} from "src/app/models/DeXuatKeHoachuaChonNhaThau";
+  BienBanLayMauComponent,
+} from 'src/app/pages/xuat/kiem-tra-chat-luong/bien-ban-lay-mau/bien-ban-lay-mau.component';
+import { Validators } from '@angular/forms';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { PREVIEW } from '../../../../../constants/fileType';
+import printJS from 'print-js';
 
 @Component({
   selector: 'app-chi-tiet-bien-ban-lay-mau',
   templateUrl: './chi-tiet-bien-ban-lay-mau.component.html',
-  styleUrls: ['./chi-tiet-bien-ban-lay-mau.component.scss']
+  styleUrls: ['./chi-tiet-bien-ban-lay-mau.component.scss'],
 })
 export class ChiTietBienBanLayMauComponent extends Base2Component implements OnInit {
   @Input() inputService: any;
@@ -46,6 +49,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   dsDiaDiem: any;
   maHauTo: any;
   public vldTrangThai: BienBanLayMauComponent;
+  templateName = 'xuat-thanh-ly-bien-ban-lay-mau';
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -106,8 +110,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       xhBienBanLayMauDtl: [new Array()],
       ppLayMau: [],
       chiTieuKiemTra: [],
-      ngayTao: []
-    })
+      ngayTao: [],
+    });
   }
 
   async ngOnInit() {
@@ -116,11 +120,11 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       super.service = this.inputService;
       this.maHauTo = '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
-        this.loadDsQdGnv()
+        this.loadDsQdGnv(),
       ]);
       await this.loadDetail();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
@@ -133,8 +137,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.soBbQd) {
-              this.maHauTo = '/' + res.data.soBbQd?.split("/")[1];
-              res.data.soBbQd = res.data.soBbQd?.split("/")[0];
+              this.maHauTo = '/' + res.data.soBbQd?.split('/')[1];
+              res.data.soBbQd = res.data.soBbQd?.split('/')[0];
             }
             this.formData.patchValue(res.data);
             this.formData.value.xhBienBanLayMauDtl.forEach(s => {
@@ -158,7 +162,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       this.daiDienRow.type = HSKT_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN;
       this.daiDienRow.idVirtual = uuidv4();
       let newData = [...this.formData.value.xhBienBanLayMauDtl, this.daiDienRow];
-      this.formData.patchValue({xhBienBanLayMauDtl: newData});
+      this.formData.patchValue({ xhBienBanLayMauDtl: newData });
       await this.buildTableView();
       this.daiDienRow = {};
     }
@@ -180,7 +184,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     let index = newValue.findIndex(s => s.idVirtual == item.idVirtual);
     item.edit = false;
     newValue.splice(index, 1, item);
-    this.formData.patchValue({xhBienBanLayMauDtl: newValue});
+    this.formData.patchValue({ xhBienBanLayMauDtl: newValue });
     await this.buildTableView();
   }
 
@@ -193,20 +197,19 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     let newValue = cloneDeep(this.formData.value.xhBienBanLayMauDtl);
     let index = newValue.findIndex(s => s.idVirtual == item.idVirtual);
     newValue.splice(index, 1);
-    this.formData.patchValue({xhBienBanLayMauDtl: newValue});
+    this.formData.patchValue({ xhBienBanLayMauDtl: newValue });
     await this.buildTableView();
   }
 
   async buildTableView() {
     this.viewTableDaiDien = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == HSKT_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN));
-
-    let ppLayMau = cloneDeep(this.formData.value.xhPhieuKnclDtl.filter(s => s.type == LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU));
+    let ppLayMau = this.formData.value.xhPhieuKnclDtl && this.formData.value.xhPhieuKnclDtl.length > 0 ? cloneDeep(this.formData.value.xhPhieuKnclDtl.filter(s => s.type == LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU)) : [];
     let ppLayMauArr = ppLayMau.map(s => s.ten);
     this.dsPpLayMau.forEach(s => {
       if (ppLayMauArr.includes(s.giaTri)) {
         s.selected = true;
       }
-    })
+    });
   }
 
   async loadDsPpLayMau() {
@@ -217,8 +220,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
             let option = {
               label: item.giaTri,
               value: item.ma,
-              checked: true
-            }
+              checked: true,
+            };
             this.dsPpLayMau.push(option);
           });
         }
@@ -238,8 +241,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
             let option = {
               label: item.tenChiTieu,
               value: item.id,
-              checked: true
-            }
+              checked: true,
+            };
             this.dsCtChatLuong.push(option);
           });
         }
@@ -255,8 +258,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     await this.inputServiceGnv.search({
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
-        page: 0
-      }
+        page: 0,
+      },
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
@@ -282,9 +285,9 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       nzComponentParams: {
         dataTable: this.dsQdGnv,
         dataHeader: ['Số quyết định xuất hàng', 'Trích yếu', 'Ngày ký'],
-        dataColumn: ['soBbQd', 'trichYeu', 'ngayKy']
+        dataColumn: ['soBbQd', 'trichYeu', 'ngayKy'],
       },
-    })
+    });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
@@ -314,9 +317,9 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       nzComponentParams: {
         dataTable: this.dsDiaDiem,
         dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Tên loại', 'Tên chủng loại'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'tenLoaiVthh', 'tenCloaiVthh'],
       },
-    })
+    });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
@@ -347,15 +350,15 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     await this.helperService.ignoreRequiredForm(this.formData);
     let body = {
       ...this.formData.value,
-      soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
-    }
+      soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null,
+    };
     console.log(body);
     await this.createUpdate(body);
     await this.helperService.restoreRequiredForm(this.formData);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    let body = {...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo}
+    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo };
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -367,15 +370,15 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
         this.formData.patchValue({
           idQdGnv: res.data.id,
           soQdGnv: res.data.soQd,
-          ngayKyQdGnv: res.data.ngayKy
-        })
+          ngayKyQdGnv: res.data.ngayKy,
+        });
       } else if (res.data.quyetDinhDtl) {
         this.dsDiaDiem = res.data.quyetDinhDtl;
         this.formData.patchValue({
           idQdGnv: res.data.id,
           soQdGnv: res.data.soBbQd,
-          ngayKyQdGnv: res.data.ngayKy
-        })
+          ngayKyQdGnv: res.data.ngayKy,
+        });
       }
     }
   }
@@ -385,9 +388,39 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     xhBienBanLayMauDtl = xhBienBanLayMauDtl.filter(s => s.type != LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU);
     let newData = [];
     $event.forEach(s => {
-      xhBienBanLayMauDtl = [...xhBienBanLayMauDtl, {ten: s, type: LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU}];
+      xhBienBanLayMauDtl = [...xhBienBanLayMauDtl, { ten: s, type: LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }];
     });
-    this.formData.patchValue({xhPhieuKnclDtl: xhBienBanLayMauDtl});
+    this.formData.patchValue({ xhPhieuKnclDtl: xhBienBanLayMauDtl });
     await this.buildTableView();
+  }
+
+  async preview(id) {
+    this.spinner.show();
+    await this.service.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
   }
 }

@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { PhieuXuatKhoDieuChuyenService } from './../../services/dcnb-xuat-kho.service';
 import { PhieuKiemNghiemChatLuongDieuChuyenService } from './../../services/dcnb-phieu-kiem-nghiem-chat-luong.service';
@@ -21,6 +22,7 @@ import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-
 import { PassDataXK } from '../phieu-xuat-kho.component';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
+import { PREVIEW } from 'src/app/constants/fileType';
 @Component({
   selector: 'app-xuat-dcnb-them-moi-phieu-xuat-kho',
   templateUrl: './them-moi-phieu-xuat-kho.component.html',
@@ -76,6 +78,17 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     4: "Xuất không thu tiền",
     5: "Khác"
   };
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview: boolean;
+  pdfSrc: string;
+  wordSrc: string;
+  excelSrc: string;
+  isPrint: boolean;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -670,5 +683,46 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       this.formData.controls["thoiGianGiaoNhan"].clearValidators();
     }
   }
+  async preview() {
+    this.reportTemplate.fileName = "phieu_xuat_kho.docx";
+    let body = {
+      reportTemplateRequest: this.reportTemplate,
+      ...this.formData.value
+    }
+    await this.phieuXuatKhoDieuChuyenService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf() {
+    saveAs(this.pdfSrc, "phieu_xuat_kho.pdf");
+  }
 
+  downloadWord() {
+    saveAs(this.wordSrc, "phieu_xuat_kho.docx");
+  }
+  downloadExcel() {
+    saveAs(this.excelSrc, "phieu_xuat_kho.xlsx");
+  }
+  doPrint() {
+    const WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('modal').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }

@@ -13,13 +13,18 @@ export class ThongTu1082018Service extends BaseService {
     super(httpClient, 'bc-tt-qd', '/qlnv-report');
   }
 
-  baoCaoSLuongCLuongCcdc(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-sl-cl-ccdc`;
+  bcThienPhiBaoQuanDm(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-tinh-hinh-th-phi-bao-quan-hang-dtqg-theo-dinh-muc`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
   bcCtNhapXuatTonKhoHangDTQG(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-ct-nhap-xuat-ton-kho`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  bcThienPhiNhapXuatDtqg(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-th-phi-nhap-xuat-vt-ct-ht-dtqg`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
