@@ -40,8 +40,10 @@ export class ItemData {
 	}
 
 	changeModel() {
-		this.ttienNamDtoan = Operator.mul(this.dmucNamDtoan, this.sluongNamDtoan);
-		this.ttienTd = Operator.mul(this.dmucNamDtoan, this.sluongTd);
+		if (this.dmucNamDtoan) {
+			this.ttienNamDtoan = Operator.mul(this.dmucNamDtoan, this.sluongNamDtoan);
+			this.ttienTd = Operator.mul(this.dmucNamDtoan, this.sluongTd);
+		}
 		this.chenhLech = Operator.sum([this.ttienTd, -this.ttienNamDtoan]);
 	}
 
@@ -366,8 +368,7 @@ export class PhuLuc01Component implements OnInit {
 	}
 
 	checkEdit(stt: string) {
-		const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-		return lstTemp.every(e => !e.stt.startsWith(stt));
+		return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
 	}
 
 	// start edit

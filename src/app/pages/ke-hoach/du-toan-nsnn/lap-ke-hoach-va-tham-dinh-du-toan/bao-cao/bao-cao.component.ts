@@ -39,6 +39,8 @@ import { BieuMau14Component } from './thong-tu-69/bieu-mau-14/bieu-mau-14.compon
 import { BieuMau16Component } from './thong-tu-69/bieu-mau-16/bieu-mau-16.component';
 import { BieuMau17Component } from './thong-tu-69/bieu-mau-17/bieu-mau-17.component';
 import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.component';
+import { BieuMau05Component } from './thong-tu-342/bieu-mau-05/bieu-mau-05.component';
+import { BieuMau06Component } from './thong-tu-342/bieu-mau-06/bieu-mau-06.component';
 
 @Component({
     selector: 'app-bao-cao',
@@ -651,6 +653,12 @@ export class BaoCaoComponent implements OnInit {
                 break;
             case 'TT342_16':
                 nzContent = BieuMau160Component;
+                break;
+            case 'TT342_05':
+                nzContent = BieuMau05Component;
+                break;
+            case 'TT342_06':
+                nzContent = BieuMau06Component;
                 break;
             // thong tu 69
             case 'TT69_13':

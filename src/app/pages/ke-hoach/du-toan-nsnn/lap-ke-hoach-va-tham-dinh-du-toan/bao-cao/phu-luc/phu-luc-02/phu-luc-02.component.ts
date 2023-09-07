@@ -44,16 +44,20 @@ export class ItemData {
 	}
 
 	changeModel() {
-		this.ttienTaiKho = Operator.mul(this.sluongTaiKho, this.dmucTaiKho);
+		if (this.dmucTaiKho) {
+			this.ttienTaiKho = Operator.mul(this.sluongTaiKho, this.dmucTaiKho);
+			this.tdinhKhoTtien = Operator.mul(this.tdinhKhoSluong, this.dmucTaiKho);
+		}
 		this.ttienNgoaiKho = Operator.mul(this.binhQuanNgoaiKho, this.sluongTaiKho);
 		this.tongCong = Operator.sum([this.ttienNgoaiKho, this.ttienTaiKho]);
-		this.tdinhKhoTtien = Operator.mul(this.tdinhKhoSluong, this.dmucTaiKho);
 		this.tdinhTcong = Operator.sum([this.tdinhKhoTtien, this.ttienNgoaiKho]);
 		this.chenhLech = Operator.sum([this.tdinhTcong, -this.tongCong]);
 	}
 
 	changeTd() {
-		this.tdinhKhoTtien = Operator.mul(this.tdinhKhoSluong, this.dmucTaiKho);
+		if (this.dmucTaiKho) {
+			this.tdinhKhoTtien = Operator.mul(this.tdinhKhoSluong, this.dmucTaiKho);
+		}
 		this.tdinhTcong = Operator.sum([this.tdinhKhoTtien, this.ttienNgoaiKho]);
 		this.chenhLech = Operator.sum([this.tdinhTcong, -this.tongCong]);
 	}
@@ -438,8 +442,7 @@ export class PhuLuc02Component implements OnInit {
 	}
 
 	checkEdit(stt: string) {
-		const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-		return lstTemp.every(e => !e.stt.startsWith(stt));
+		return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
 	}
 
 	checkAdd(data: ItemData) {

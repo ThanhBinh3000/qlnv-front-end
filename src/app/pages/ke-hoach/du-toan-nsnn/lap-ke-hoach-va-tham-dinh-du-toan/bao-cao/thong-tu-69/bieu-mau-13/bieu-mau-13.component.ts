@@ -354,8 +354,7 @@ export class BieuMau13Component implements OnInit {
     }
 
     checkEdit(stt: string) {
-        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-        return lstTemp.every(e => !e.stt.startsWith(stt));
+        return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
     }
 
     // xoa file trong bang file
