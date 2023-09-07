@@ -20,6 +20,9 @@ import {
 import {
   BienBanLayMauBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-them-phieu-ktra-cluong-btt',
@@ -367,6 +370,38 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         }
       },
     });
+  }
+
+  async preview(id) {
+    await this.phieuKtraCluongBttService.preview({
+      tenBaoCao: 'Phiếu kiểm nghiệm chất lượng bán trực tiếp',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "phieu-kiem-nghiem-chat-luong-ban-truc-tiep.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "phieu-kiem-nghiem-chat-luong-ban-truc-tiep.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidator(isGuiDuyet) {

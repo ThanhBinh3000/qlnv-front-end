@@ -14,6 +14,7 @@ import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
+import {ThongTu1082018Service} from "../../../../services/bao-cao/ThongTu1082018.service";
 
 @Component({
   selector: 'app-tinh-hinh-th-phi-bq-hang-dtqg-theo-dinh-muc',
@@ -22,7 +23,9 @@ import { saveAs } from "file-saver";
 })
 export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
 
   dsBoNganh: any[] = [];
   selectedVthhCache: any;
@@ -40,14 +43,14 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
               notification: NzNotificationService,
               spinner: NgxSpinnerService,
               modal: NzModalService,
-              private thongTu1452013Service: ThongTu1452013Service,
+              private thongTu1082018Service: ThongTu1082018Service,
               public userService: UserService,
               private donViService: DonviService,
               private danhMucService: DanhMucService,
 
               private donviService: DonviService,
               public globals: Globals) {
-    super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
+    super(httpClient, storageService, notification, spinner, modal, thongTu1082018Service);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
@@ -85,7 +88,7 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_tang_hang_du_tru_quoc_gia.pdf");
+    saveAs(this.pdfBlob, "bc_tinh_hinh_th_phi_bao_quan_hang_dtqg_theo_dinh_muc_130.pdf");
   }
 
   closeDlg() {
@@ -101,10 +104,10 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
       }
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch tăng hàng dự trữ quốc gia";
+      body.fileName = "bc_tinh_hinh_th_phi_bao_quan_hang_dtqg_theo_dinh_muc_130.jrxml";
+      body.tenBaoCao = "Báo cáo tình hình thực hiện phí bảo quản hàng DTQG theo định mức";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1082018Service.bcThienPhiBaoQuanDm(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -114,6 +117,28 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_tinh_hinh_th_phi_bao_quan_hang_dtqg_theo_dinh_muc_130.jrxml";
+      body.tenBaoCao = "Báo cáo tình hình thực hiện phí bảo quản hàng DTQG theo định mức";
+      body.trangThai = "01";
+      await this.thongTu1082018Service.bcThienPhiBaoQuanDm(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bc_tinh_hinh_th_phi_bao_quan_hang_dtqg_theo_dinh_muc_130.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
   async loadDsDonVi() {

@@ -85,7 +85,7 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)">
+          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)" *ngIf="isChiCuc()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -235,10 +235,12 @@
                               'vi_VN')}}</td>
                             <td>{{(row5.tenTrangThai || "")}}</td>
                             <td>
-                              <a *ngIf="row5.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row5.id, true)">
+                              <a *ngIf="row5.trangThai === STATUS.DA_DUYET_LDCC"
+                                (click)="redirectDetail(row5.id, true)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                               </a>
-                              <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row5.id, false)">
+                              <a *ngIf="row5.trangThai == STATUS.DU_THAO || row5.trangThai == STATUS.TU_CHOI_TK || row5.trangThai == STATUS.TU_CHOI_LDCC"
+                                (click)="redirectDetail(row5.id, false)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="xoa(row5)">

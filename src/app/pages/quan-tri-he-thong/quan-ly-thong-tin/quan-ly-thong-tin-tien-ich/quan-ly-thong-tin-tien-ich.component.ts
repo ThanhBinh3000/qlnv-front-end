@@ -219,6 +219,18 @@ export class QuanLyThongTinTienIchComponent extends Base2Component implements On
     }
   }
 
+  async changePageIndex(event) {
+    this.allChecked = false
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.allChecked = false
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
   async add(row?: any) {
     await this.spinner.show();
 

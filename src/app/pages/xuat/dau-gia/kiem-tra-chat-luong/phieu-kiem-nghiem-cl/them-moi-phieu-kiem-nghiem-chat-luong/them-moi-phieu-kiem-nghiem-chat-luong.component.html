@@ -30,6 +30,10 @@
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
+    <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+      <i class=" icon htvbdh_tcdt_print"></i>
+      <span>In/xem trước</span>
+    </button>
   </div>
 </nz-affix>
 <div class="bg-trang">
@@ -256,16 +260,17 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse>
-      <nz-collapse-panel nzActive="true" nzHeader="KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)">
+      <nz-collapse-panel nzActive="true"
+        nzHeader="KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <br>
           <div nz-row [nzGutter]="[24]">
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-<!--                <nz-form-label [nzNoColon]="true"></nz-form-label>-->
+                <!--                <nz-form-label [nzNoColon]="true"></nz-form-label>-->
                 <nz-form-control [nzErrorTip]="error">
                   <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isDisabled()"
-                            [ngClass]="isDisabled() ? 'disable' : ''" formControlName="ketQua"></textarea>
+                    [ngClass]="isDisabled() ? 'disable' : ''" formControlName="ketQua"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -337,3 +342,26 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="BIÊN BẢN CHUẨN BỊ KHO" nzWidth="100%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()" class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

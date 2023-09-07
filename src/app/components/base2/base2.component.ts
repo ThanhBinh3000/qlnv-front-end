@@ -20,7 +20,7 @@ import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.c
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { endOfMonth } from 'date-fns';
 import printJS from "print-js";
-import {PREVIEW} from "../../constants/fileType";
+import { PREVIEW } from "../../constants/fileType";
 
 @Component({
   selector: 'app-base2',
@@ -373,7 +373,7 @@ export class Base2Component implements OnInit {
   }
 
   // Save
-  async createUpdate(body, roles?: any) {
+  async createUpdate(body, roles?: any, isHideMessage?: boolean) {
     if (!this.checkPermission(roles)) {
       return
     }
@@ -391,11 +391,11 @@ export class Base2Component implements OnInit {
       }
       if (res.msg == MESSAGE.SUCCESS) {
         if (body.id && body.id > 0) {
-          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
+          !isHideMessage && this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
           return res.data;
         } else {
           this.formData.patchValue({ id: res.data.id });
-          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
+          !isHideMessage && this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
           return res.data;
         }
       } else {
@@ -672,11 +672,11 @@ export class Base2Component implements OnInit {
   closeDlg() {
     this.showDlgPreview = false;
   }
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
-  async xemTruoc(id,tenBaoCao) {
+  async xemTruoc(id, tenBaoCao) {
     await this.service.preview({
       tenBaoCao: tenBaoCao + '.docx',
       id: id

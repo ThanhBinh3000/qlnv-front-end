@@ -98,7 +98,7 @@ export class CtNhapXuatTonKhoHangDtqgTt108Component extends Base2Component imple
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_ct_nhap_xuat_tkho_hang_dtqg_tt_108.pdf");
+    saveAs(this.pdfBlob, "bc_ct_nhap_xuat_ton_kho_hang_dtqg_108.pdf");
   }
 
   closeDlg() {
@@ -111,7 +111,7 @@ export class CtNhapXuatTonKhoHangDtqgTt108Component extends Base2Component imple
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_ct_nhap_xuat_tkho_hang_dtqg_tt_108.xlsx";
+      body.fileName = "bc_ct_nhap_xuat_ton_kho_hang_dtqg_108.jrxml";
       body.tenBaoCao = "Báo cáo chi tiết nhập xuất tồn kho hàng DTQG";
       body.trangThai = "01";
       body.ngayBatDauQuy = this.convertDateToString(this.ngayBatDauQuy);
