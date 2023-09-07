@@ -7,10 +7,8 @@ import { Operator, Status, Table, Utils } from "src/app/Utility/utils";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
@@ -210,10 +208,6 @@ export class BieuMau06Component implements OnInit {
 
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
-        if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
         if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
@@ -297,7 +291,7 @@ export class BieuMau06Component implements OnInit {
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
             { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 4, l: 1, r: 1, val: 'Chỉ tiêu' },
+            { t: 4, b: 6, l: 1, r: 1, val: 'Chỉ tiêu' },
             { t: 4, b: 5, l: 2, r: 4, val: 'Tổng số' },
             { t: 6, b: 6, l: 2, r: 2, val: 'Ước thực hiện năm ' + (this.dataInfo.namBcao - 1).toString() + ' (Năm hiện hành)' },
             { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán năm ' + (this.dataInfo.namBcao).toString() + ' (Năm kế hoạch)' },
@@ -308,6 +302,9 @@ export class BieuMau06Component implements OnInit {
             { t: 7, b: 7, l: 3, r: 3, val: '2' },
             { t: 7, b: 7, l: 4, r: 4, val: '3' },
         ]
+        if (this.lstDvi.length > 0) {
+            header.push({ t: 4, b: 4, l: 5, r: 4 + 3 * this.lstDvi.length, val: 'Chi tiết đơn vị báo cáo' })
+        }
         this.lstDvi.forEach((item, index) => {
             const left = 4 + index * 3;
             header.push({ t: 5, b: 5, l: left + 1, r: left + 3, val: item.tenDvi })
@@ -318,7 +315,7 @@ export class BieuMau06Component implements OnInit {
             header.push({ t: 7, b: 7, l: left + 2, r: left + 2, val: '(2)' })
             header.push({ t: 7, b: 7, l: left + 3, r: left + 3, val: '(3)' })
         })
-        const headerBot = 9;
+        const headerBot = 7;
         this.lstCtietBcao.forEach((item, index) => {
             const row = headerBot + index + 1;
             header.push({ t: row, b: row, l: 0, r: 0, val: item.getIndex() })

@@ -41,9 +41,9 @@ export class ItemData {
 
     changeModel() {
         this.sluongTsanTcong = Operator.sum([this.sluongTsanTdiemBcao, this.sluongTsanDaNhan, this.sluongTsanPduyet]);
-        if (this.dtoanDnghiSluong > Operator.sum([this.tchuanDmucTda, -this.sluongTsanTcong])) {
-            this.dtoanDnghiSluong = Operator.sum([this.tchuanDmucTda, -this.sluongTsanTcong]);
-        }
+        // if (this.dtoanDnghiSluong > Operator.sum([this.tchuanDmucTda, -this.sluongTsanTcong])) {
+        //     this.dtoanDnghiSluong = Operator.sum([this.tchuanDmucTda, -this.sluongTsanTcong]);
+        // }
         this.thanhTien = Operator.mul(this.dtoanDnghiSluong, this.dtoanDnghiMgia);
         this.tdinhTtien = Operator.mul(this.tdinhSluong, this.dtoanDnghiMgia);
         this.chenhLech = Operator.sum([this.tdinhTtien, -this.thanhTien]);
@@ -281,6 +281,10 @@ export class PhuLuc06Component implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        if (this.editCache[id].data.dtoanDnghiSluong > Operator.sum([this.editCache[id].data.tchuanDmucTda, -this.editCache[id].data.sluongTsanTcong])) {
+            this.notification.warning(MESSAGE.WARNING, 'Dữ liệu cột 6 <= (cột 5 - cột 4)');
+            return;
+        }
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
