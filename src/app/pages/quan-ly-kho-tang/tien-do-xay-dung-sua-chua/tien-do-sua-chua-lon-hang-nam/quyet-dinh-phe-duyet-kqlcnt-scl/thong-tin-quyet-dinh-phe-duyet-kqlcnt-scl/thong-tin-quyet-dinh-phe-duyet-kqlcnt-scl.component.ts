@@ -8,13 +8,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {MESSAGE} from "../../../../../../constants/message";
-import {
-  QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {FILETYPE} from "../../../../../../constants/fileType";
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {
@@ -86,6 +80,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
       diaChi: [null],
       ghiChu: [null],
       tongMucDt: [0],
+      loai: ['00'],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],

@@ -18,6 +18,7 @@ import {ThongTinBienBanSctxComponent} from "./thong-tin-bien-ban-sctx/thong-tin-
 export class BienBanNghiemThuSctxComponent extends Base2Component implements OnInit {
   @Input() itemDuAn: any;
   @Input() itemQdPdKhLcnt: any
+  @Input() itemQdPdKtkt: any
   selectedId: number;
   isViewDetail: boolean;
 

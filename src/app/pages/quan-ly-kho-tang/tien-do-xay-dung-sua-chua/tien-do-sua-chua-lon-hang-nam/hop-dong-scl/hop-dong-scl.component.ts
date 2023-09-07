@@ -19,8 +19,7 @@ export class HopDongSclComponent implements OnInit {
   isDetail: boolean = true;
   flagInfo: string = 'addnew';
   STATUS = STATUS;
-  @Input()
-  itemQdPdKhLcnt: any;
+  @Input() itemQdPdKhLcnt: any;
   @Input() itemQdPdKtkt: any;
   @Input()   itemDuAn: any;
   @Input()
