@@ -113,8 +113,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       soPhieuXuatKho: [''],
       ngayTaoPhieu: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayXuatKho: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      taiKhoanCo: [],
-      taiKhoanNo: [],
+      taiKhoanCo: ['', [Validators.required]],
+      taiKhoanNo: ['', [Validators.required]],
       soQddc: ['', [Validators.required]],
       qddcId: ['', [Validators.required]],
       ngayKyQddc: ['', [Validators.required]],
@@ -562,7 +562,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       body.thayDoiThuKho = this.thayDoiThuKho;
       body.type = this.type;
       body.loaiQdinh = this.loaiDc === "CUC" ? "XUAT" : undefined;
-      let data = await this.createUpdate(body);
+      let data = await this.createUpdate(body, null, isGuiDuyet);
       if (data) {
         this.formData.patchValue({ id: data.id, soPhieuXuatKho: data.soPhieuXuatKho ? data.soPhieuXuatKho : this.genSoPhieuXuat(data.id), trangThai: data.trangThai });
         if (isGuiDuyet) {
@@ -609,7 +609,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           msg = 'Bạn có muốn duyệt bản ghi ?'
           break;
       }
-      this.approve(this.formData.value.id, trangThai, msg);
+      this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
     } else {
       switch (this.formData.value.trangThai) {
         case STATUS.CHO_DUYET_LDCC:

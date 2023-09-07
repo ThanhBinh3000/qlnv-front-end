@@ -453,7 +453,9 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
 
     }
   }
-
+  pheDuyet() {
+    this.approve(this.idInput, STATUS.DA_DUYET_LDCC, 'Bạn có muốn duyệt quyết định này', MESSAGE.PHE_DUYET_SUCCESS)
+  }
 
   async flattenTree(tree) {
     return tree.flatMap((item) => {

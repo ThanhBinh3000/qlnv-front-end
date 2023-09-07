@@ -85,7 +85,7 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
+                <nz-form-label nzRequired [nzNoColon]="true">
                   Mã QHNS
                 </nz-form-label>
                 <input nz-input readonly formControlName="maQhns" />
@@ -119,10 +119,10 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
+                <nz-form-label nzRequired [nzNoColon]="true">
                   Ngày lập phiếu
                 </nz-form-label>
-                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayTao" nzDisabled>
+                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayLapPhieu" nzDisabled>
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -279,8 +279,8 @@
                       class="min-h-24 f-size-13 text-black text-bold" *ngFor="let item of listHinhThucBaoQuan">
                       {{item.giaTri}}
                     </label> -->
-                    <label [ngModelOptions]="{standalone: true}" [ngModel]="item.checked" [nzDisabled]="true"
-                      nz-checkbox *ngFor="let item of phuongPhapLayMaus" class="text-bold"> {{item.giaTri}}
+                    <label [ngModelOptions]="{standalone: true}" [ngModel]="true" [nzDisabled]="true" nz-checkbox
+                      *ngFor="let item of listHinhThucBaoQuan" class="text-bold"> {{item.giaTri}}
                     </label>
                   </div>
                 </nz-form-control>
