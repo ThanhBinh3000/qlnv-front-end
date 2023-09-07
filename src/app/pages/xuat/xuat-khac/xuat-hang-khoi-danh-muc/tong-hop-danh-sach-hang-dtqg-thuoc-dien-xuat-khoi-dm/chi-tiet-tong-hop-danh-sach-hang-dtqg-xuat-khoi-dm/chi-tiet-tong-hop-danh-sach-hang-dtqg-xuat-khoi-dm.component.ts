@@ -256,28 +256,34 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
                 }
                 this.dataTh = [...this.dataTh, ...item.children];
               });
+              let listLoaiHinhXuatByCLoaiVthh = this.dataTh.map(({ ma, loaiHinhXuat }) => ({ ma, loaiHinhXuat }));
               let listDtl = [];
               let listCLoaiVthh = [];
               this.dataTh.forEach(s => {
                 listCLoaiVthh.push(s.ma);
-                let itemDtl = {
-                  loaiVthh: s.maCha,
-                  cloaiVthh: s.ma,
-                  donViTinh: s.maDviTinh,
-                  loaiHinhXuat: s.loaiHinhXuat,
-                };
-                listDtl.push(itemDtl);
               });
               let body = {
-                listCloaiVthh: listCLoaiVthh,
+                // listCloaiVthh: ['010102', '021102', '021302', '020301'],
+                // maDvi: '010102',
+                listCloaiVthh : listCLoaiVthh,
                 maDvi: this.userInfo.MA_DVI,
               };
-              console.log(listCLoaiVthh, 'listCLoaiVthhlistCLoaiVthhlistCLoaiVthh');
               let resp = await this.mangLuoiKhoService.dsNganLoKhoTheoCloaiVthh(body);
               if (resp.msg == MESSAGE.SUCCESS) {
-                if(resp.data && resp.data.length > 0){
-
-                }else{
+                if (resp.data && resp.data.length > 0) {
+                  resp.data.forEach(s => {
+                    let itemHh = listLoaiHinhXuatByCLoaiVthh.find(it => it.ma == s.cloaiVthh);
+                    let itemDtl = {
+                      loaiVthh: s.loaiVthh,
+                      cloaiVthh: s.cloaiVthh,
+                      slTonKho: s.slTon,
+                      loaiHinhXuat: itemHh ? itemHh.loaiHinhXuat : null,
+                      maDiaDiem: s.maDvi,
+                      donViTinh: s.donViTinh,
+                    };
+                    listDtl.push(itemDtl);
+                  });
+                } else {
                   this.notification.warning(MESSAGE.WARNING, 'Cục DTNN KV không dự trữ hàng hóa có trong quyết định xuất hàng khỏi danh mục.');
                   return;
                 }
@@ -286,14 +292,14 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
               }
               this.formData.patchValue({
                 maDanhSach: this.selectedItem ?? this.maHauTo,
-                tongHopDtl: listDtl,
+                tongHopDtl: (listDtl && listDtl.length) > 0 ? listDtl : [],
               });
-              // let result = await this.createUpdate(this.formData.value);
-              // if (result) {
-              //   this.selectedItem = cloneDeep(result);
-              //   await this.buildTableView(result.tongHopDtl);
-              //   this.step.emit({ step: 2, item: this.selectedItem });
-              // }
+              let result = await this.createUpdate(this.formData.value);
+              if (result) {
+                this.selectedItem = cloneDeep(result);
+                await this.buildTableView(result.tongHopDtl);
+                this.step.emit({ step: 2, item: this.selectedItem });
+              }
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -324,7 +330,6 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
 
 
   @Input() categoryId: string;
-
   async ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstInit) {
       if (changes.eventOk) {
@@ -372,7 +377,6 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
         this.changeShow.emit({ showDetail: false, item: this.selectedItem });
       }
     }
-
   }
 
   onClickShowDetail() {

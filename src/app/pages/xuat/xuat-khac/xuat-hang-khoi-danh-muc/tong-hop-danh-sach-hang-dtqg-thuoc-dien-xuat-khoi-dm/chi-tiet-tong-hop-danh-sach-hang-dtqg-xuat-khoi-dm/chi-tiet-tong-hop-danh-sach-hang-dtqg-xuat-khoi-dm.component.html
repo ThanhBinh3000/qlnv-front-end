@@ -101,22 +101,15 @@
             <th>Chủng loại</th>
             <th>Điểm kho</th>
             <th>Ngăn/lô kho</th>
-            <th>Ngày nhập kho</th>
-            <th>SL hết hạn (12 tháng) <br /> đề xuất xuất bán</th>
             <th>SL tồn</th>
             <th>ĐVT</th>
-            <th>Ngày đề xuất</th>
           </tr>
           </thead>
           <tbody>
-
           <ng-container *ngFor='let item of tblData.data, let i = index;'>
             <tr>
               <td>{{numberToRoman(i + 1)}}</td>
               <td>{{item.tenChiCuc}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -132,11 +125,8 @@
                 <td>{{lv1.tenCloaiVthh}}</td>
                 <td>{{lv1.tenDiemKho}}</td>
                 <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
-                <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
-                <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
                 <td>{{lv1.slTonKho|number:globals.numberFormat}}</td>
                 <td>{{lv1.donViTinh}}</td>
-                <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
               </tr>
             </ng-container>
           </ng-container>

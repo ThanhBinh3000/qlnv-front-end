@@ -144,7 +144,8 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
         return s.tongHopDtl.map(s1 => {
           delete s.tongHopDtl;
           s.idVirtual = uuidv4();
-          s.header = s.nam + s.maDanhSach + s.tenDanhSach;
+          s.header = s.maDanhSach + s.tenDanhSach;
+          s.soQdXhKdm = s.soQdXhKdm;
           this.expandSetString.add(s.idVirtual);
           return Object.assign(s1, s);
         })
@@ -208,7 +209,7 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
         return {
           idVirtual: idVirtual,
           id: rowItem.id,
-          nam: rowItem.nam,
+          soQdXhKdm: rowItem.soQdXhKdm,
           tenCuc: rowItem.tenCuc,
           maDanhSach: rowItem.maDanhSach,
           tenDanhSach: rowItem.tenDanhSach,

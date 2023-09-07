@@ -42,4 +42,8 @@ export class HoSoKyThuatCtvtService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/ho-so-ky-thuat/phe-duyet`
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+  preview(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/ho-so-ky-thuat/xem-truoc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }
