@@ -338,7 +338,7 @@
           <a *ngIf="item.trangThai != STATUS.DA_KY" (click)="redirectToBienBan(false,item)">
             <i class="fa fa-edit" title="Chỉnh sửa"></i>
           </a>
-          <a *ngIf="item.trangThai == STATUS.DA_KY" (click)="inBienBan(idSelected,'CTVT',item.loaiBb)">
+          <a (click)="inBienBan(id,'CTVT',item.loaiBb)">
             <i class="fa fa-print" title="Xem biên bản"></i>
           </a>
         </td>

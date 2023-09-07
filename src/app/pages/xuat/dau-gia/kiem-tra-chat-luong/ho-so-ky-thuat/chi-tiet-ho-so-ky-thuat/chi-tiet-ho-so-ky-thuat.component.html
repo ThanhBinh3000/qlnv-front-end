@@ -338,7 +338,7 @@
           <a *ngIf="item.trangThai != STATUS.DA_KY" (click)="redirectToBienBan(false,item)">
             <i class="fa fa-edit" title="Chỉnh sửa"></i>
           </a>
-          <a *ngIf="item.trangThai == STATUS.DA_KY" (click)="inBienBan(idSelected,'BDG',item.loaiBb)">
+          <a (click)="inBienBan(id,'BDG',item.loaiBb)">
             <i class="fa fa-print" title="Xem biên bản"></i>
           </a>
         </td>
@@ -376,3 +376,30 @@
                                   (saveDtl)="saveDtl($event)">
   </app-chi-tiet-bien-ban-kiem-tra-dau-gia>
 </ng-container>
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
