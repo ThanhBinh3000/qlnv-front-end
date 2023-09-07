@@ -108,6 +108,7 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
   viewTableHoSo: any[] = [];
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
+  templateName: string="Hồ sơ kỹ thuật";
 
   constructor(
     httpClient: HttpClient,
