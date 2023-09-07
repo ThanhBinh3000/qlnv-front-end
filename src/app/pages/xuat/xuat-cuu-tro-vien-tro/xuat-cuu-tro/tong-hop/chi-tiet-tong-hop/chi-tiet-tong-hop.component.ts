@@ -437,14 +437,18 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
           .groupBy("noiDungDx")
           .map((v, k) => {
             let row = v.find(s => s.noiDungDx === k);
+            let row1 = v.find(s => s.noiDungDx === k);
             let rs = chain(v)
               .groupBy("loaiVthh")
               .map((v1, k1) => {
-                let row = v1.find(s => s.loaiVthh === k1);
+                let row2 = v1.find(s => s.loaiVthh === k1);
                 return {
                   idVirtual: uuidv4(),
                   loaiVthh: k1,
-                  tenLoaiVthh: row.tenLoaiVthh,
+                  tenLoaiVthh: row2.tenLoaiVthh,
+                  donViTinh: row2.donViTinh,
+                  soLuong: row2.soLuong,
+                  soLuongDx: row2.soLuongDx,
                   tonKho: 0,
                   childData: v1
                 }
@@ -464,6 +468,8 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
           soDx: row.soDx,
           trichYeuDx: row.trichYeuDx,
           ngayKyDx: row.ngayKyDx,
+          mucDich: row.mucDichXuat,
+          thoiGian: row.ngayKyDx,
           childData: rs
         };
       }).value();
