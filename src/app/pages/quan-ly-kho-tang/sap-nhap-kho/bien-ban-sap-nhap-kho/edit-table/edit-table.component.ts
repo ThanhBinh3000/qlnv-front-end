@@ -48,7 +48,6 @@ export class EditTableComponent implements OnInit {
         if (!this.dataTable) {
             this.dataTable = [];
         };
-        console.log("row", this.rowItem)
         this.dataTable.push(this.rowItem);
         this.clearAdd();
     }
