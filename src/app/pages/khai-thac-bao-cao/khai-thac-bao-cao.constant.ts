@@ -14,4 +14,18 @@ export const NHAP_ROUTE_LIST = [
     dropdown: 'bao-cao-chat-luong-hang-dtqg',
     idHover: 'bao-cao-chat-luong-hang-dtqg',
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Báo cáo nhập-xuất, mua-bán hàng DTQG',
+    url: `/${NHAP_MAIN_ROUTE}/bao-cao-nhap-xuat-hang-dtqg`,
+    dropdown: 'bao-cao-nhap-xuat-hang-dtqg',
+    idHover: 'bao-cao-nhap-xuat-hang-dtqg',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Báo cáo nghiệp vụ quản lý kho tàng',
+    url: `/${NHAP_MAIN_ROUTE}/bao-cao-nghiep-vu-qly-kho`,
+    dropdown: 'bao-cao-nghiep-vu-qly-kho',
+    idHover: 'bao-cao-nghiep-vu-qly-kho',
+  },
 ];
