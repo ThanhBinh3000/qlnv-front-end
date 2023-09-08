@@ -104,13 +104,13 @@
             <div nz-col nzSpan='12'>
               <nz-form-item class='form-item'>
                 <nz-form-label [nzNoColon]='true' nzRequired>
-                  Số QĐ giao NV xuất hàng
+                  Mã danh sách hàng thuộc diện xuất khỏi danh mục
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-select formControlName='soQdGiaoNvXh' [nzSize]='size'
-                             (ngModelChange)='changeValueQdGiaoNvXh($event)' nzMode='multiple'
+                             (ngModelChange)='changeValueMaDsTongHop($event)' nzMode='multiple'
                              nzPlaceHolder='Chọn số QĐ giao nhiệm vụ xuất hàng' [nzDisabled]='idInput > 0'>
-                    <nz-option *ngFor='let option of listQdGiaoNvXhOption' [nzLabel]='option.soQuyetDinh'
+                    <nz-option *ngFor='let option of listDsTongTop' [nzLabel]='option.soQuyetDinh'
                                [nzValue]='option.soQuyetDinh'></nz-option>
                   </nz-select>
                 </nz-form-control>

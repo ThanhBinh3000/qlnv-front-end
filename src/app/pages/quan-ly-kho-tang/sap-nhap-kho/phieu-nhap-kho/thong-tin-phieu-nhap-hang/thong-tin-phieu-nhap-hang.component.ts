@@ -154,6 +154,8 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
             let body = this.formData.value;
             body.phieuNhapHangDtl = this.dataTable;
             body.fileDinhKem = this.listFileDinhKem;
+            body.tongSoTien = 0;
+            body.tongSoTienBc = "";
             let data = await this.createUpdate(body, null, isGuiDuyet);
             if (data) {
                 this.idInput = data.id;
@@ -372,11 +374,11 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
         this.formData.patchValue({ tongSoLuong, tongSoLuongBc })
     }
 
-    handleChangeThanhTien(value) {
-        const tongSoTien = this.dataTable.reduce((sum, cur) => sum += !isNaN(cur.soTien) ? cur.soTien : 0, 0);
-        const tongSoTienBc = this.convertTien(tongSoTien, 'VNĐ');
-        this.formData.patchValue({ tongSoTien, tongSoTienBc })
-    }
+    // handleChangeThanhTien(value) {
+    //     const tongSoTien = this.dataTable.reduce((sum, cur) => sum += !isNaN(cur.soTien) ? cur.soTien : 0, 0);
+    //     const tongSoTienBc = this.convertTien(tongSoTien, 'VNĐ');
+    //     this.formData.patchValue({ tongSoTien, tongSoTienBc })
+    // }
     convertTien(tien: number, donVi: string): string {
         return (tien && tien > 0) ? `${convertTienTobangChu(tien)} (${donVi})` : '';
     };

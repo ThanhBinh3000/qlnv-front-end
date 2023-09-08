@@ -80,8 +80,8 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
       tchuanCluong: [''],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       phanLoai: ['TH', [Validators.required]],
       soQdCc: [''],
       idSoQdCc: [''],
@@ -206,7 +206,8 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         soQd: data.soQd?.split('/')[0]
       })
       this.idSoQdCc = data.idSoQdCc
-      this.danhsachDx = data.children;
+      this.danhsachDx = data.children.filter(x => x.maDvi.includes(this.userInfo.MA_DVI));
+      console.log(this.danhsachDx, "danhsachDx")
       this.fileDinhKem = data.fileDinhKems;
     }
     this.showDetail(event, this.danhsachDx[0]);
@@ -396,7 +397,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   }
 
   isDisabled() {
-    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
       return false;
     } else {
       return true;

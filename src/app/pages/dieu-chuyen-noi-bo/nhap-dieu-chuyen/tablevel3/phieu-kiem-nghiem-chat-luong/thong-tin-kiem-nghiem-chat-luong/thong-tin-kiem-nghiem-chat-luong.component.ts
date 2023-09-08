@@ -12,10 +12,12 @@ import {
 import { MESSAGE } from "src/app/constants/message";
 import { STATUS } from "src/app/constants/status";
 import { DanhMucService } from "src/app/services/danhmuc.service";
+import { BienBanLayMauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-lay-mau";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
 import { BienBanNhapDayKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nhap-day-kho";
 import { PhieuKiemNghiemChatLuongService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-nghiem-chat-luong";
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
+import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
 import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import { StorageService } from "src/app/services/storage.service";
 import * as uuidv4 from "uuid";
@@ -60,6 +62,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private bienBanNhapDayKhoService: BienBanNhapDayKhoService,
+    private bienBanLayMauService: BienBanLayMauService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
@@ -75,6 +79,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       ngayLapPhieu: [dayjs().format('YYYY-MM-DD')],
       soQdinhDc: [],
       qdDcId: [],
+      ngayQdinhDc: [],
       nguoiKN: [],
       tpNguoiKt: [],
       tpNguoiKtId: [],
@@ -92,7 +97,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       soBbLayMau: [],
       ngayLayMau: [],
       bbLayMauId: [],
-      ngayKiem: [],
+      ngayKiem: [dayjs().format('YYYY-MM-DD')],
       soBbTinhKho: [],
       slHangBQ: [],
       ngayNhapDayKho: [],
@@ -122,7 +127,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
-      ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+      nguoiKN: this.userInfo.TEN_DAY_DU,
       soPhieu: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       id: id,
       loaiDc: this.loaiDc,
@@ -165,7 +170,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
           return {
             ...element,
-            edit: false,
+            edit: true,
             chiSoCl: element.tenTchuan,
             chiTieuCl: element.chiSoNhap,
             ketQuaPt: element.ketQuaPt,
@@ -309,6 +314,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           soQdinhDc: data.soQdinh,
           ngayQdinhDc: data.ngayKyQdinh,
           qdDcId: data.id,
+          tenLoNganKho: "",
           tenLoKho: "",
           maLoKho: "",
           tenNganKho: "",
@@ -372,18 +378,79 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           bbLayMauId: data.id
         });
         await this.dsHinhThucBaoQuan(data.cloaiVthh)
+        await this.loadChiTietBBLM(data.id)
+
       }
     });
+  }
+
+  async loadChiTietBBLM(id: number) {
+    let res = await this.bienBanLayMauService.getDetail(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+
+      const data = res.data
+      this.formData.patchValue({
+        tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`,
+        tenLoKho: data.tenLoKho,
+        maLoKho: data.maLoKho,
+        tenNganKho: data.tenNganKho,
+        maNganKho: data.maNganKho,
+        tenNhaKho: data.tenNhaKho,
+        maNhaKho: data.maNhaKho,
+        tenDiemKho: data.tenDiemKho,
+        maDiemKho: data.maDiemKho,
+        loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        // tichLuongKhaDung: data.tichLuongKd,
+        tenDonViTinh: data.tenDonViTinh,
+        // slNhapLoKho: data.soLuongPhanBo
+      });
+
+      // await this.loadThuKho(data.maNganKho, data.tenNganKho)
+      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+      if (dmTieuChuan.data) {
+        console.log('dmTieuChuan')
+        this.dataTableChiTieu = dmTieuChuan.data.children;
+        this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+          return {
+            ...element,
+            edit: true,
+            chiSoCl: element.tenTchuan,
+            chiTieuCl: element.chiSoNhap,
+            ketQuaPt: element.ketQuaPt,
+            danhGia: element.danhGia
+          }
+        });
+      }
+    }
+  }
+
+  async loadThuKho(maNganKho, tenNhaKho) {
+    let body = {
+      maDvi: this.formData.value.maDvi,
+      capDvi: tenNhaKho
+    }
+    const res = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (res.statusCode == 0) {
+      const detailThuKho = res.data.object.detailThuKho
+      if (detailThuKho) {
+        this.formData.patchValue({
+          thuKhoId: detailThuKho.id,
+          tenThuKho: detailThuKho.fullName
+        })
+      }
+    }
   }
 
   async openDialogBBNDK() {
     await this.spinner.show();
     let body = {
-      // trangThai: STATUS.BAN_HANH,
+      trangThai: STATUS.DA_DUYET_LDCC,
       loaiDc: this.loaiDc,
-      // maDvi: this.userInfo.MA_DVI
-      // maLoKho: this.formData.value.maLoKho,
-      // maNganKho: this.formData.value.maNganKho,
+      maLoKho: this.formData.value.maLoKho,
+      maNganKho: this.formData.value.maNganKho,
     }
     let res = await this.bienBanNhapDayKhoService.getDanhSach(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -406,9 +473,12 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log('openDialogBBNDK', data)
         this.formData.patchValue({
           soBbTinhKho: data.soBb,
-          bbTinhKhoId: data.id
+          bbTinhKhoId: data.id,
+          ngayNhapDayKho: data.ngayKtNhap,
+          slHangBQ: data.soLuongQdDcCuc
         });
       }
     });
@@ -468,7 +538,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
             return {
               ...element,
-              edit: false,
+              edit: true,
               chiSoCl: element.tenTchuan,
               chiTieuCl: element.chiSoNhap,
               ketQuaPt: element.ketQuaPt,
@@ -485,15 +555,17 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     if (res.msg == MESSAGE.SUCCESS) {
 
       const data = res.data
-      this.dsKeHoach = []
-      if (data.danhSachQuyetDinh.length == 0) return
-      data.danhSachQuyetDinh.map(qdinh => {
-        this.dsKeHoach = this.dsKeHoach.concat(qdinh.danhSachKeHoach)
-      })
+      // this.dsKeHoach = []
+      // if (data.danhSachQuyetDinh.length == 0) return
+      // data.danhSachQuyetDinh.map(qdinh => {
+      //   this.dsKeHoach = this.dsKeHoach.concat(qdinh.danhSachKeHoach)
+      // })
 
 
     }
   }
+
+
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
     if (parantExpand) {

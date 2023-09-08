@@ -342,6 +342,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       id: id
     }).then(async res => {
       if (res.data) {
+        this.printSrc = res.data.pdfSrc;
         this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
         this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
         this.showDlgPreview = true;

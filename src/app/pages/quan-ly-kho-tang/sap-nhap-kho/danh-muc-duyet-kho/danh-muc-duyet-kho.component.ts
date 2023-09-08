@@ -43,6 +43,8 @@ export class DanhMucDuyetKhoComponent extends Base2Component implements OnInit {
             ngayKyDen: [],
             trangThai: [],
             trangThaiSn: [],
+            tenTrangThai: [],
+            tenTrangThaiSn: []
         })
     }
 
@@ -148,12 +150,12 @@ export class DanhMucDuyetKhoComponent extends Base2Component implements OnInit {
     }
 
     checkRoleView(trangThai: string) {
-        return !this.checkRoleApprove(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_DDMK_XEM")
+        return !this.checkRoleApprove(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_DDDM_XEM")
     }
     checkRoleApprove(trangThai: string) {
-        return trangThai === "78" && this.userService.isAccessPermisson("QLKT_THSDK_DDMK_DUYET") && this.userService.isCuc()
+        return trangThai === "78" && this.userService.isAccessPermisson("QLKT_THSDK_DDDM_DUYET") && this.userService.isCuc()
     }
     checkRoleExport() {
-        return this.userService.isAccessPermisson("QLKT_THSDK_DDMK_EXP")
+        return this.userService.isAccessPermisson("QLKT_THSDK_DDDM_EXP")
     }
 }

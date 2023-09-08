@@ -46,7 +46,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
         { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },
     ];
     ObTrangThai: { [key: string]: string } = {
-        [this.STATUS.DANG_NHAP_DU_LIEU]: "Dang nhập dữ liệu"
+        [this.STATUS.DANG_NHAP_DU_LIEU]: "Đang nhập dữ liệu"
     };
     obLoai: { [key: string]: string } = {
         "SN_DIEM_KHO": "Điều chuyển - sáp nhập điểm kho",

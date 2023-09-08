@@ -292,7 +292,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           await this.hoanThanhCapNhat()
         }
         await this.loadDetail(this.idInput)
-        this.goBack()
+        // this.goBack()
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }

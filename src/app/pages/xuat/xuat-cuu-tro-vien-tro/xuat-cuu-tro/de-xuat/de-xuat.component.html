@@ -2,47 +2,66 @@
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-        <div nz-row [nzGutter]="20">
+        <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="3">
-            <label> Năm kế hoạch </label>
-            <nz-select formControlName="nam">
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-            </nz-select>
+            <nz-form-item>
+              <nz-form-label>Năm kế hoạch</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="nam">
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
           </div>
-          <div nz-col nzSpan="5">
-            <label>Đơn vị đề xuất</label>
-            <nz-select formControlName="maDvi">
-              <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
-            </nz-select>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label>Đơn vị đề xuất</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="maDvi">
+                  <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
           </div>
-          <div nz-col nzSpan="5">
-            <label>Thời hạn xuất viện trợ, cứu trợ</label>
-            <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledStartNgayKt" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayKetThucTu" nzPlaceHolder="Ngày bắt đầu">
-                </nz-date-picker>
-              </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledEndNgayKt" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayKetThucDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
-              </div>
-            </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label>Thời hạn xuất viện trợ, cứu trợ</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <div nz-row>
+                  <div nz-col nzSpan="12" class="cus-start-date">
+                    <nz-date-picker [nzDisabledDate]="disabledStartNgayKt" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayKetThucTu" nzPlaceHolder="Ngày bắt đầu">
+                    </nz-date-picker>
+                  </div>
+                  <div nz-col nzSpan="12" class="cus-end-date">
+                    <nz-date-picker [nzDisabledDate]="disabledEndNgayKt" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayKetThucDen" nzPlaceHolder="Ngày kết thúc">
+                    </nz-date-picker>
+                  </div>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
           </div>
-          <div nz-col nzSpan="5">
-            <label>Ngày đề xuất</label>
-            <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledStartNgayDX" nzFormat="dd/MM/yyyy" formControlName="ngayDxTu"
-                                nzPlaceHolder="Ngày bắt đầu">
-                </nz-date-picker>
-              </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledEndNgayDx" nzFormat="dd/MM/yyyy" formControlName="ngayDxDen"
-                                nzPlaceHolder="Ngày kết thúc">
-                </nz-date-picker>
-              </div>
-            </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label>Ngày đề xuất</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <div nz-row>
+                  <div nz-col nzSpan="12" class="cus-start-date">
+                    <nz-date-picker [nzDisabledDate]="disabledStartNgayDX" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayDxTu"
+                                    nzPlaceHolder="Ngày bắt đầu">
+                    </nz-date-picker>
+                  </div>
+                  <div nz-col nzSpan="12" class="cus-end-date">
+                    <nz-date-picker [nzDisabledDate]="disabledEndNgayDx" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayDxDen"
+                                    nzPlaceHolder="Ngày kết thúc">
+                    </nz-date-picker>
+                  </div>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
           </div>
         </div>
       </form>
@@ -308,6 +327,9 @@
     </nz-card>
   </div>
 </div>
+<ng-template #error let-control>
+  <app-template-error #error [control]="control"></app-template-error>
+</ng-template>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-chi-tiet-de-xuat [idSelected]="idSelected" [isView]="isView" (showListEvent)="showList()">
   </app-chi-tiet-de-xuat>
