@@ -197,13 +197,13 @@
             <td></td>
             <td></td>
             <td>{{ children.tenDiemKho }}</td>
-            <td>{{ children.tenLoKho }} {{ children.tenNganKho }}, {{ children.tenNhaKho }}
-            </td>
+            <td>{{ (children.tenLoKho ? children.tenLoKho + ' - ' : '') + children.tenNganKho }}
+              , {{ children.tenNhaKho }}</td>
             <td>{{ children.maDviTsan}}</td>
             <td>{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
             <td>{{ children.donViTinh}}</td>
             <td>{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-            <td>{{ children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
+            <td>{{ children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-right" *ngIf="!isView">
             </td>
           </tr>

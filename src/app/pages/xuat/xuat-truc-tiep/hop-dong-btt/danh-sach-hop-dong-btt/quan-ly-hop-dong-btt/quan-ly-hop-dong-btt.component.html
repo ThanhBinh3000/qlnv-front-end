@@ -84,7 +84,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
                   <nz-form-control>
-                    <nz-input-number [nzSize]="'small'" formControlName="thanhTien"
+                    <nz-input-number [nzSize]="'small'" formControlName="tongGiaTriHdong"
                                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                     </nz-input-number>
                   </nz-form-control>
@@ -221,7 +221,7 @@
             <th> Trạng thái HĐ</th>
             <th> Số QĐ giao NV XH</th>
             <th> Trạng thái XH</th>
-            <th> Hành động</th>
+            <th *ngIf="userService.isCuc()"> Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -238,7 +238,7 @@
             <td>{{data.tenTrangThai}}</td>
             <td>{{data.soQdNv}}</td>
             <td>{{data.tenTrangThaiXh}}</td>
-            <td>
+            <td *ngIf="userService.isCuc()">
               <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="redirectHopDong(data.id, true, true) ">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
@@ -263,7 +263,7 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
+            <th *ngIf="userService.isCuc()"></th>
           </tr>
           </tfoot>
         </nz-table>

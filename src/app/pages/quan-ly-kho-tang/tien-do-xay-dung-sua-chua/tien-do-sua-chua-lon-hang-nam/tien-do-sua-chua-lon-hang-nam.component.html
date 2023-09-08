@@ -252,18 +252,20 @@
                 [ngClass]="{'disabled-tab': !trangThaiHopDong}"
                 [nzSelected]="tabSelected == '06'" (click)="selectTab('06')">
               Tiến độ công việc
-              <!--              <img *ngIf="!trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
-              <!--              <img *ngIf="trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
+                            <img *ngIf="!trangThaiTienDoCv" class="ml-1"
+                                 src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+                            <img *ngIf="trangThaiTienDoCv" class="ml-1"
+                                 src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
             <li nz-menu-item
-                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')">
+                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')"
+                [ngClass]="{'disabled-tab': !trangThaiTienDoCv}"
+            >
               Biên bản nghiệm thu
-              <!--              <img *ngIf="!trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
-              <!--              <img *ngIf="trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
+                            <img *ngIf="!trangThaiBb" class="ml-1"
+                                 src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+                            <img *ngIf="trangThaiBb" class="ml-1"
+                                 src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
           </ul>
         </nz-affix>

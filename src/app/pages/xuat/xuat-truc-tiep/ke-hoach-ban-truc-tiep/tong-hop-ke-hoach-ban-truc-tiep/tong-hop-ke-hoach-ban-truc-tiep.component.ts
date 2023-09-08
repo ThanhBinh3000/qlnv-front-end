@@ -70,14 +70,16 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   }
 
   async ngOnInit() {
-    this.spinner.show();
+    await this.spinner.show();
     try {
-      this.timKiem();
-      await this.search();
-      this.spinner.hide();
+      await Promise.all([
+        await this.timKiem(),
+        await this.search(),
+      ]);
+      await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -88,19 +90,19 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     this.isView = isView;
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      this.loadDsVthh();
+      await this.loadDsVthh();
     }
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await this.timKiem();
+    await this.search();
   }
 
   async loadDsVthh() {
@@ -110,7 +112,7 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     }
   }
 
-  taoQdinh(data: number) {
+  async taoQdinh(data: number) {
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
     tabActive.classList.remove('ant-menu-item-selected')

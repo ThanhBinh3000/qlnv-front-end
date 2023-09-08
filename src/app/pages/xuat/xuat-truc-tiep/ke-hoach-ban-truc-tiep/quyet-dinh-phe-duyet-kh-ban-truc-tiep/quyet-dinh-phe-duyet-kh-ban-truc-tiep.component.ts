@@ -52,7 +52,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       soTrHdr: null,
       trangThai: null,
       loaiVthh: null,
-      lastest: 0
+      lastest: null
     })
     this.filterTable = {
       namKh: '',
@@ -75,12 +75,14 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   async ngOnInit() {
     await this.spinner.show();
     try {
-      await this.timKiem()
-      await this.search();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+      ]);
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -92,10 +94,10 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await this.timKiem();
+    await this.search();
   }
 
   redirectDetail(id, isView: boolean) {

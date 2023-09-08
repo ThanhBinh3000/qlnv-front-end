@@ -80,6 +80,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         kieuNx: [''],
         tenKieuNx: [''],
         thoiHanBan: [''],
+        tongGiaTriHdong: [],
       }
     );
   }
@@ -141,13 +142,20 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
               trangThai: data.trangThai,
               tenTrangThai: data.tenTrangThai,
             })
-            this.fileUyQuyen = data.fileUyQuyen;
-            this.fileBanLe = data.fileBanLe;
+            let tongGiaTriHdong: number = 0
+            this.dataTable.forEach((item) => {
+              item.children.forEach((child) => {
+                tongGiaTriHdong += child.thanhTien;
+              })
+            })
             if (data.pthucBanTrucTiep) {
               this.formData.patchValue({
+                tongGiaTriHdong: tongGiaTriHdong,
                 pthucBanTrucTiep: data.pthucBanTrucTiep.toString()
               })
             }
+            this.fileUyQuyen = data.fileUyQuyen;
+            this.fileBanLe = data.fileBanLe;
           }
         })
         .catch((e) => {
@@ -215,6 +223,10 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         this.isBothFalse = true;
       }
     })
+  }
+
+  onChangeThanhTien() {
+    this.rowItem.thanhTien = this.rowItem.donGia * this.rowItem.soLuong
   }
 
   addRow(): void {
@@ -301,6 +313,10 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       Object.assign(this.listOfData[idx], this.dataEdit[idx].data);
       this.dataEdit[idx].edit = false;
     }
+  }
+
+  onChangeThanhTienEdit(index) {
+    this.dataEdit[index].data.thanhTien = this.dataEdit[index].data.soLuong * this.dataEdit[index].data.donGia
   }
 
   validateSoLuongEdit(index) {
@@ -470,7 +486,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.showDlgPreview = false;
   }
 
-  printPreview(){
+  printPreview() {
     printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
