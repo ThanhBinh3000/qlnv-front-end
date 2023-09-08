@@ -532,6 +532,7 @@ export class BaoCaoComponent implements OnInit {
             luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
             isOffice: this.isOffice,
             isSynth: this.baoCao.lstBcaoDviTrucThuocs.length > 0,
+            isHistory: this.baoCao.lichSu?.length > 0,
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.save = dataInfo.status.save && (this.userInfo?.sub == bieuMau.nguoiBcao);

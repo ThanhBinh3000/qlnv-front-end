@@ -230,7 +230,7 @@ export class BaoCao04aComponent implements OnInit {
         }
         this.luyKes = this.dataInfo.luyKes?.lstCtietBcaos;
         // nếu là báo cáo văn phòng thì lấy ra các dòng số lượng của nó
-        if (this.dataInfo.isOffice && this.formDetail.trangThai == Status.NEW) {
+        if (!this.dataInfo.isHistory && this.dataInfo.isOffice && this.formDetail.trangThai == Status.NEW) {
             this.slTheoQd = this.lstCtietBcao.find(e => e.maNdungChi == this.para.slQd);
             this.slThNamTruoc = this.lstCtietBcao.find(e => e.maNdungChi == this.para.slNamTruoc);
             this.slThNamNay = this.lstCtietBcao.find(e => e.maNdungChi == this.para.slNamNay);
