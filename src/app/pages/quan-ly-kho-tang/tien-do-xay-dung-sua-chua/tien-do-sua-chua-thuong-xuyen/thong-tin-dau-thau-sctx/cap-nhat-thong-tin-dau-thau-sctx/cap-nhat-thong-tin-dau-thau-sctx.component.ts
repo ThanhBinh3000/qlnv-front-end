@@ -16,11 +16,11 @@ import {
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
 
 @Component({
-  selector: 'app-cap-nhat-thong-tin-dau-thau-scl',
-  templateUrl: './cap-nhat-thong-tin-dau-thau-scl.component.html',
-  styleUrls: ['./cap-nhat-thong-tin-dau-thau-scl.component.scss']
+  selector: 'app-cap-nhat-thong-tin-dau-thau-sctx',
+  templateUrl: './cap-nhat-thong-tin-dau-thau-sctx.component.html',
+  styleUrls: ['./cap-nhat-thong-tin-dau-thau-sctx.component.scss']
 })
-export class CapNhatThongTinDauThauSclComponent extends Base2Component implements OnInit {
+export class CapNhatThongTinDauThauSctxComponent extends Base2Component implements OnInit {
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
