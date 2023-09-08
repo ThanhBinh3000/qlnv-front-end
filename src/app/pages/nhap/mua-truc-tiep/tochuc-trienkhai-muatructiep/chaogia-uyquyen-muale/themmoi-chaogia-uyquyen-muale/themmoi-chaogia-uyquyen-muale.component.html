@@ -5,7 +5,7 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="radioValue == '01' && (this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT)"
+      *ngIf="(this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT)"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Hoàn thành cập nhập</span>
