@@ -45,9 +45,9 @@ export class KhknBaoQuanComponent implements OnInit, AfterViewInit {
     ) { }
 
     ngOnInit(): void {
-        // if (this.router.url) {
-        //     this.routerUrl = this.router.url;
-        // }
+        if (this.router.url) {
+            this.routerUrl = this.router.url;
+        }
         this.userInfo = this.userService.getUserLogin();
     }
 
