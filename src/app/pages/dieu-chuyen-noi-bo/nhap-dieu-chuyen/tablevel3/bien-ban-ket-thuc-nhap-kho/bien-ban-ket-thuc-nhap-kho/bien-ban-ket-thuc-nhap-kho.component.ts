@@ -123,17 +123,9 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     else return false
   }
 
-  isTongCuc() {
-    return this.userService.isTongCuc()
+  isChiCuc() {
+    return this.userService.isChiCuc()
   }
-
-  isCuc() {
-    return this.userService.isCuc()
-  }
-
-  // isChiCuc() {
-  //   return false//this.userService.isChiCuc()
-  // }
 
   selectTab(tab: number) {
     if (this.isDetail) {

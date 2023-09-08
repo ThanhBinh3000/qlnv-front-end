@@ -202,7 +202,8 @@
                             (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
-                          <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">
+                          <a *ngIf="row3.trangThai == STATUS.DU_THAO || row3.trangThai == STATUS.TUCHOI_TBP_TVQT || row3.trangThai == STATUS.TU_CHOI_LDCC"
+                            (click)="redirectDetail(row3.id, false)">
                             <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="xoa(row3)">

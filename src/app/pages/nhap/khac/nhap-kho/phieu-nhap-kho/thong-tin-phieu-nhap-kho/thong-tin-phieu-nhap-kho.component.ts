@@ -21,7 +21,7 @@ import { PhieuKtraCluongService } from "src/app/services/qlnv-hang/nhap-hang/nha
 import { QuyetDinhGiaoNhapHangKhacService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhGiaoNhapHangKhac.service";
 import { StorageService } from "src/app/services/storage.service";
 import { convertTienTobangChu } from "src/app/shared/commonFunction";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 import { DanhMucDungChungService } from "src/app/services/danh-muc-dung-chung.service";
 import { KIEU_NHAP_XUAT } from "src/app/constants/config";
 import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";

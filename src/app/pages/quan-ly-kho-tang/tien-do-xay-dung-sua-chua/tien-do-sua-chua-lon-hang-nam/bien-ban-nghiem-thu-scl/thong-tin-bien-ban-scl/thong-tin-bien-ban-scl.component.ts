@@ -19,6 +19,12 @@ import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungs
 import {
   DialogMmBbGiaoNhanComponent
 } from "../../../../../dinh-muc/may-moc-thiet-bi/mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component";
+import {
+  HopdongTdscService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {
+  BienBanNghiemThuTdscServiceService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/bien-ban-nghiem-thu-tdsc.service";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-scl',
@@ -54,8 +60,8 @@ export class ThongTinBienBanSclComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanSv: BienBanNghiemThuDtxdService,
-    private hopdongService: HopdongService
+    private bienBanSv: BienBanNghiemThuTdscServiceService,
+    private hopdongService: HopdongTdscService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanSv);
     super.ngOnInit()
@@ -80,6 +86,7 @@ export class ThongTinBienBanSclComponent extends Base2Component implements OnIni
       chatLuong: [null],
       ketLuan: [null],
       trangThai: ['00'],
+      loai: ['00'],
       tenTrangThai: ['Dự thảo'],
     });
   }
@@ -107,9 +114,11 @@ export class ThongTinBienBanSclComponent extends Base2Component implements OnIni
   async loadDsHopDong() {
     this.spinner.show();
     try {
+      console.log(this.itemDuAn,3333)
       let body = {
-        "namKh" : this.itemDuAn.namKeHoach,
-        "idDuAn" : this.itemDuAn.id
+        "namKh" : this.itemDuAn.namKh,
+        "idDuAn" : this.itemDuAn.id,
+        "page" : "00"
       }
       let res = await this.hopdongService.listHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -140,7 +149,7 @@ export class ThongTinBienBanSclComponent extends Base2Component implements OnIni
             soBienBan: dataSobb && dataSobb.length > 0 ? dataSobb[0] : null,
             tenHopDong : data && data.hopDong && data.hopDong.tenHd ? data.hopDong.tenHd : ''
           })
-          let dataList = data.listKtTdxdBienbanNghiemthuDtl;
+          let dataList = data.listKtTdscBienbanNghiemthuDtl;
           if (dataList && dataList.length > 0) {
             this.talbeChuDauTu = dataList.filter(item => item.loai == '00');
             this.tableDvSuDung = dataList.filter(item => item.loai == '01');
@@ -176,7 +185,7 @@ export class ThongTinBienBanSclComponent extends Base2Component implements OnIni
     body.fileDinhKems = this.fileDinhKem
     body.idDuAn = this.itemDuAn.id
     body.idQdPdKhlcnt = this.itemQdPdKhLcnt.id
-    body.listKtTdxdBienbanNghiemthuDtl = [...this.talbeChuDauTu, this.talbeDvThiCong, this.tableDvSuDung, this.talbeDvGiamSat].flat();
+    body.listKtTdscBienbanNghiemthuDtl = [...this.talbeChuDauTu, this.talbeDvThiCong, this.tableDvSuDung, this.talbeDvGiamSat].flat();
     if (isKy) {
       this.modal.confirm({
         nzClosable: false,

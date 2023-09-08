@@ -19,6 +19,9 @@ import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungs
 import {
   DialogMmBbGiaoNhanComponent
 } from "../../../../../dinh-muc/may-moc-thiet-bi/mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component";
+import {
+  KtDtxdBbNghiemThuDtl
+} from "../../../tien-do-sua-chua-lon-hang-nam/bien-ban-nghiem-thu-scl/thong-tin-bien-ban-scl/thong-tin-bien-ban-scl.component";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-sctx',
@@ -414,12 +417,4 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
   closeModal() {
     this.modal.closeAll();
   }
-}
-
-export class KtDtxdBbNghiemThuDtl {
-  chucVu: string;
-  hoTen: string;
-  id: number = 0;
-  ktTdxdBienbanNghiemthuId: number = 0;
-  loai: string;
 }

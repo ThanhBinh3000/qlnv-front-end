@@ -484,7 +484,11 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             if (i === index) {
                 return { ...f, isEdit: true }
             } else {
-                return { ...f, isEdit: false }
+                if (f.isEdit) {
+                    return { ...this.canBoThamGiaClone, isEdit: false }
+                } else {
+                    return { ...f }
+                }
             }
         });
         this.formData.patchValue({

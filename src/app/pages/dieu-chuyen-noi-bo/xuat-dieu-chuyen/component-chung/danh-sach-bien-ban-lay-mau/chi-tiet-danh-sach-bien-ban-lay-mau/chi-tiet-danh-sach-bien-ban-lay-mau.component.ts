@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { BienBanLayMauDieuChuyenService } from './../../services/dcnb-bien-ban-lay-mau.service';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -24,6 +25,7 @@ import { cloneDeep } from 'lodash';
 import { PassData } from '../danh-sach-bien-ban-lay-mau.component';
 import { formatNumber } from '@angular/common';
 import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import { PREVIEW } from 'src/app/constants/fileType';
 interface PhuongPhapLayMauDC extends PhuongPhapLayMau {
   checked: true
 }
@@ -71,7 +73,19 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     [STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
     [STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
   }
-  chiTieuKiemTra: any[]
+  chiTieuKiemTra: any[];
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview: boolean;
+  pdfSrc: string;
+  wordSrc: string;
+  excelSrc: string;
+  isPrint: boolean;
+  tabSelected: number = 0;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -462,7 +476,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}-${f.giaTri}`)?.join("-*");
     body.pplayMau = this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}-${f.checked}`).join("-*");
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (!data) return;
     this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbLayMau: data.soBbLayMau ? data.soBbLayMau : data.id ? `${data.id}/${data.nam}/${this.maBb}` : '' })
     if (isGuiDuyet) {
@@ -486,7 +500,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         break;
       }
     };
-    this.approve(this.formData.value.id, trangThai, msg);
+    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
   }
 
   tuChoi() {
@@ -526,6 +540,66 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   //     this.save(true)
   //   }
   // }
+  async preview() {
+    this.spinner.show();
+    try {
+      this.reportTemplate.fileName = this.tabSelected === 0 ? "bien_ban_lay_mau.docx" : "bien_ban_ban_giao_mau.docx";
+      let body = {
+        reportTemplateRequest: this.reportTemplate,
+        isSave: false,
+        type: this.tabSelected === 0 ? "BBLM" : "",
+        ...this.formData.value
+      }
+      await this.bienBanLayMauDieuChuyenService.preview(body).then(async s => {
+        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.showDlgPreview = true;
+      });
+    } catch (e) {
+      console.log('error: ', e);
+      this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+    }
+    finally {
+      this.spinner.hide();
+    }
+  }
+  closeDlg() {
+    this.showDlgPreview = false;
+  };
+  downloadPdf() {
+    if (this.tabSelected === 0) {
+      saveAs(this.pdfSrc, "bien_ban_lay_mau.pdf");
+    } else {
+      saveAs(this.pdfSrc, "bien_ban_ban_giao_mau.pdf");
+    }
+  };
+  downloadExcel() {
+    if (this.tabSelected === 0) {
+      saveAs(this.pdfSrc, "bien_ban_lay_mau.xlsx");
+    } else {
+      saveAs(this.pdfSrc, "bien_ban_ban_giao_mau.xlsx");
+    }
+  };
+  doPrint() {
+    const WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('modal').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
+  selectTab(tab: number) {
+    this.tabSelected = tab
+  }
   setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
       this.formData.controls['maDvi'].setValidators([Validators.required]);
