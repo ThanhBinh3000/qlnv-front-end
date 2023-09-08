@@ -321,8 +321,8 @@
                     <td>{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
                     <td>{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
                     <td>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{data.donGia + (data.donGia * 5 / 100) | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{data.soLuong * (data.donGia + (data.donGia * 5 / 100)) * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                   </tr>
                 </ng-container>
               </ng-container>
