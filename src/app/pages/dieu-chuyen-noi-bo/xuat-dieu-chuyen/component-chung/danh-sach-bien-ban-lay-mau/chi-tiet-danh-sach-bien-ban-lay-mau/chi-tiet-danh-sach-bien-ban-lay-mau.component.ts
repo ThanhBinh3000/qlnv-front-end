@@ -476,7 +476,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}-${f.giaTri}`)?.join("-*");
     body.pplayMau = this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}-${f.checked}`).join("-*");
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (!data) return;
     this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbLayMau: data.soBbLayMau ? data.soBbLayMau : data.id ? `${data.id}/${data.nam}/${this.maBb}` : '' })
     if (isGuiDuyet) {
@@ -500,7 +500,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         break;
       }
     };
-    this.approve(this.formData.value.id, trangThai, msg);
+    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
   }
 
   tuChoi() {

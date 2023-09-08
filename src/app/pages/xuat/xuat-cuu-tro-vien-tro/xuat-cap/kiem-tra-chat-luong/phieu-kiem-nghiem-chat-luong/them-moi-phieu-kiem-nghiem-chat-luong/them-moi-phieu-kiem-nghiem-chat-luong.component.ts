@@ -46,7 +46,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   checked: boolean = false;
   listFileDinhKem: any = [];
   maVthh: string;
-
+  templateName = "Phiếu kiểm nghiệm chất lượng-Xuất cấp";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

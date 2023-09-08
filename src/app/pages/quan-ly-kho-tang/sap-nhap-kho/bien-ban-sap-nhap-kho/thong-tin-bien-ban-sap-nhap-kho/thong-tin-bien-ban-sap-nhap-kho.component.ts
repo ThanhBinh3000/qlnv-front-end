@@ -157,7 +157,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
             let bienBanSapNhapCcDtl = [];
             Array.isArray(this.dataViewHang) && this.dataViewHang.forEach(lv1 => {
                 Array.isArray(lv1.childData) && lv1.childData.forEach(lv2 => {
-                    bienBanSapNhapHangDtl.push({ ...lv2, id: undefined, hdrId: undefined })
+                    bienBanSapNhapHangDtl.push({ ...lv2, id: undefined, hdrId: undefined, slThucTe: lv2.slThucTe ? lv2.slThucTe : 0, slHaoHut: lv2.slHaoHut ? lv2.slHaoHut : 0 })
                 });
             })
             if (this.formData.value.loai === "SN_CHI_CUC") {

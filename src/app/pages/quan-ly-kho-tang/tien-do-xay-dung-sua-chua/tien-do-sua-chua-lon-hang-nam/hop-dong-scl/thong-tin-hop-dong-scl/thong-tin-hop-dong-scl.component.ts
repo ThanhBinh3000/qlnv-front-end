@@ -33,8 +33,8 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
   tongMucDt: number = 0;
   @Input() flagThemMoi: string;
   @Input() itemDuAn: string;
-  @Input()
-  itemQdPdKhLcnt: any;
+  @Input() itemQdPdKhLcnt: any;
+  @Input() itemQdPdKtkt: any;
   listHopDong: any[] = []
   itemSelected: any;
   openPopThemMoiHd = false;
@@ -164,7 +164,7 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
         let body = {
           "namKh": this.itemQdPdKhLcnt.namKh,
           "idDuAn": this.itemQdPdKhLcnt.idDuAn,
-          "idQdPdDaDtxd": this.itemQdPdKhLcnt.idQdPdDaDtxd,
+          "idQdPdKtkt": this.itemQdPdKtkt.idQdPdDaDtxd,
           "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
           "loai": '00'
         }

@@ -29,6 +29,7 @@ import {DatePipe} from "@angular/common";
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {PREVIEW} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-pd',
@@ -37,6 +38,7 @@ import {
 })
 export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
+  @Input() loaiVthh: string;
   radioValue: any;
   cacheData: any[] = [];
   fileDinhKem: Array<FileDinhKem> = [];
@@ -92,7 +94,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   listVatTuHangHoa: any[] = [];
   quyetDinhPdDtlCache: any[] = [];
   maHauTo: any;
-
+  templateName = "Quyết định phê duyệt phương án";
+  templateNameVt = "Quyết định phê duyệt phương án vật tư";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -400,6 +403,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                   idVirtual: uuidv4(),
                   loaiVthh: k1,
                   tenLoaiVthh: row1.tenLoaiVthh,
+                  tenCloaiVthh: row1.tenCloaiVthh,
+                  soLuong: row1.soLuong,
+                  soLuongDx: row1.soLuongDx,
                   tonKho: 0,
                   childData: v1
                 }
@@ -510,5 +516,22 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.expandSetStringCache.delete(id);
     }
     console.log(this.expandSetStringCache, 'expandSetStringCache')
+  }
+
+  async xemTruocPd(id,tenBaoCao,children) {
+    await this.tongHopPhuongAnCuuTroService.preview({
+      tenBaoCao: tenBaoCao + '.docx',
+      id: id,
+      children: children
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
   }
 }

@@ -8,13 +8,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {MESSAGE} from "../../../../../../constants/message";
-import {
-  QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {FILETYPE} from "../../../../../../constants/fileType";
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {
@@ -36,8 +30,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
-  @Input()
-  itemQdPdKhLcnt: any;
+  @Input() itemQdPdKhLcnt: any;
+  @Input() itemDuAn: any;
   STATUS = STATUS;
   maQd = "/" + this.userInfo.MA_QD;
   trangThaiTtdt: boolean = true;
@@ -82,11 +76,15 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
       idQdPdKhlcnt: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenCongTrinh: [null],
+      loaiCongTrinh: [null],
       chuDauTu: [null],
       diaChi: [null],
       ghiChu: [null],
       tongMucDt: [0],
+      loai: ['00'],
       trangThai: ['00'],
+      trangThaiDt: [],
+      trangThaiHd: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       ccPhapLy: [],
@@ -120,6 +118,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
         tenCongTrinh: this.itemQdPdKhLcnt.tenCongTrinh,
         idDuAn: this.itemQdPdKhLcnt.idDuAn,
         tongMucDt: this.itemQdPdKhLcnt.tongMucDt,
+        loaiCongTrinh: this.itemDuAn.tenLoaiCongTrinh,
       });
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {

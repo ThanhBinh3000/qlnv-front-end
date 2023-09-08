@@ -142,7 +142,7 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             let baoCaoKetQuaCcDtl = [];
             Array.isArray(this.dataViewHang) && this.dataViewHang.forEach(lv1 => {
                 Array.isArray(lv1.childData) && lv1.childData.forEach(lv2 => {
-                    baoCaoKetQuaHangDtl.push({ ...lv2, id: undefined, hdrId: undefined })
+                    baoCaoKetQuaHangDtl.push({ ...lv2, id: undefined, hdrId: undefined, slThucTe: lv2.slThucTe ? lv2.slThucTe : 0, slHaoHut: lv2.slHaoHut ? lv2.slHaoHut : 0 })
                 });
             })
             if (this.formData.value.loai === "SN_CHI_CUC") {
