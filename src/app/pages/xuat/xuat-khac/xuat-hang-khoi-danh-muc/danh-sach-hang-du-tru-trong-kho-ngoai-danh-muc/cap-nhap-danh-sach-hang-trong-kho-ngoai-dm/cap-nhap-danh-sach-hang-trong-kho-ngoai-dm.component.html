@@ -110,8 +110,8 @@
           <ng-container *ngFor="let item of tblData.data, let i = index;">
             <tr>
               <td>{{numberToRoman(i + 1)!}}</td>
-              <td class="bold">{{item.ten}}</td>
-              <td></td>
+              <td class="bold">{{item.tenNhomHang}}</td>
+              <td  class="bold">{{item.ten}}</td>
               <td></td>
               <td></td>
               <td>{{item.maDviTinh}}</td>
@@ -121,23 +121,23 @@
               <tr>
                 <td style="text-align: right;">{{i2 + 1}}</td>
                 <td></td>
-                <td class="bold">{{lv1.ten}}</td>
                 <td></td>
+                <td class="bold">{{lv1.ten}}</td>
                 <td></td>
                 <td>{{lv1.maDviTinh}}</td>
                 <td>TCDT</td>
               </tr>
-              <ng-container *ngFor="let lv2 of lv1.children,let i3=index">
-                <tr>
-                  <td style="text-align: right;">{{i3 + 1}}</td>
-                  <td></td>
-                  <td></td>
-                  <td>{{lv2.ten}}</td>
-                  <td></td>
-                  <td>{{lv2.maDviTinh}}</td>
-                  <td>TCDT</td>
-                </tr>
-              </ng-container>
+<!--              <ng-container *ngFor="let lv2 of lv1.children,let i3=index">-->
+<!--                <tr>-->
+<!--                  <td style="text-align: right;">{{i3 + 1}}</td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td>{{lv2.ten}}</td>-->
+<!--                  <td></td>-->
+<!--                  <td>{{lv2.maDviTinh}}</td>-->
+<!--                  <td>TCDT</td>-->
+<!--                </tr>-->
+<!--              </ng-container>-->
             </ng-container>
           </ng-container>
           </tbody>
