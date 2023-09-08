@@ -55,13 +55,19 @@ export class EditTableComponent implements OnInit {
     clearAdd() {
         this.rowItem = cloneDeep(this.rowInitial);
     }
-    editRow(index) {
+    editRow(index: number) {
+        this.dataTable = this.dataTable.map((f, i) => {
+            if (f.edit) {
+                return { ...this.rowDataClone, edit: false }
+            }
+            return { ...f, edit: false }
+        });
         this.dataTable[index].edit = true;
         this.rowDataClone = { ...this.dataTable[index] }
         this.clearAdd();
         this.disabledAdd = true;
     }
-    deleteRow(index) {
+    deleteRow(index: number) {
         if (this.isEdit) {
             this.modal.confirm({
                 nzClosable: false,
