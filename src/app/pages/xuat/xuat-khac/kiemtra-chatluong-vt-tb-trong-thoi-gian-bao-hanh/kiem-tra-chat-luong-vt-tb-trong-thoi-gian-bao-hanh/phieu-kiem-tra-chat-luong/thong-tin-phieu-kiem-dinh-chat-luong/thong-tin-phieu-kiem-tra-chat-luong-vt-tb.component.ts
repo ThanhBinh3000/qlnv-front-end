@@ -65,7 +65,7 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
     {value: 1, label: "Đạt"}
   ]
   dataTableChiTieu: any[] = [];
-
+  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
