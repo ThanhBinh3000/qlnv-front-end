@@ -20,7 +20,8 @@ import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {
   PhieuKiemNgiemClLuongThucHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/PhieuKiemNgiemClLuongThucHangDTQG.service";
-
+import { PREVIEW } from '../../../../../../constants/fileType';
+import {saveAs} from 'file-saver';
 @Component({
   selector: 'them-moi-bao-cao-ket-qua-kiem-dinh-mau',
   templateUrl: './them-moi-bao-cao-ket-qua-kiem-dinh-mau.component.html',
@@ -41,7 +42,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
   selectedId: number;
   isFirstInit = true;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
-
+  templateName = 'xuat_khac_ktcl_luong_thuc_bao_cao_kq_kiem_dinh';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -241,5 +242,29 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
     }else {
       this.kiemTraCl = false;
     }
+  }
+  async preview(id) {
+    this.spinner.show();
+    await this.baoCaoKqKdLuongThucHangDTQGService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + ".pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + ".docx");
   }
 }

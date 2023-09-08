@@ -1,18 +1,3 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <button
-      *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') || userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM')) && !isView"
-      class="btn btn-main"
-      (click)="save(true)">
-      <i class="icon  htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
-    </button>
-  </div>
-</nz-affix>
 <div class="bg-trang">
   <div class="header header-green-background">
     <div class="header-text">
@@ -22,6 +7,19 @@
         </span>
         <span>Công trình nghiên cứu</span>
       </div>
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-sub ml-2" (click)="quayLai()">
+        <i class="fa fa-arrow-left"></i>
+        <span>Quay lại</span>
+      </button>
+      <button
+        *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') || userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM')) && !isView"
+        class="btn btn-main ml-2"
+        (click)="save(true)">
+        <i class="icon  htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
     </div>
   </div>
   <nz-card class="mg-t-16 flex-card p-lr16">

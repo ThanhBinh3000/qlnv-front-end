@@ -121,7 +121,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tonKhoLoaiVthh: [''],
         tonKhoCloaiVthh: [''],
         donViTinh: [''],
-        soLuong: [''],
+        soLuong: [0, [Validators.required, Validators.min(1)]],
         mapVthh: [''],
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
@@ -170,7 +170,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         });
     } else {
       this.maHauTo = '/ĐXCTVT-' + this.userInfo.DON_VI.tenVietTat;
-      this.formData.patchValue({tenVthh: '0101', kieuNhapXuat: 'Xuất không thu tiền', loaiNhapXuat: 'Xuất cứu trợ'})
+      this.formData.patchValue({
+        tenVthh: '0101',
+        tenDvi: this.userInfo.TEN_DVI,
+        kieuNhapXuat: 'Xuất không thu tiền',
+        loaiNhapXuat: 'Xuất cứu trợ'
+      })
     }
   }
 
@@ -218,15 +223,18 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           noiDung: data.noiDung,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
-          maDvi:data.maDvi,
+          maDvi: data.maDvi,
           edit: level
         });
       } else if (level == 2) {
         data.edit = level;
         this.formDataDtl.patchValue(data);
+        if (this.userService.isCuc()) {
+          this.formDataDtl.patchValue({maDvi: this.userInfo.MA_DVI});
+        }
+        await this.changeMaDviDtl(this.userInfo.MA_DVI);
       }
     } else {
-
       this.formDataDtl.patchValue({
         idVirtual: uuidv4(),
         loaiVthh: this.listLoaiHangHoa[0].ma,
@@ -234,8 +242,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       });
       if (this.userService.isCuc()) {
         this.formDataDtl.patchValue({maDvi: this.userInfo.MA_DVI});
-        await this.changeMaDviDtl(this.userInfo.MA_DVI);
       }
+      await this.changeMaDviDtl(this.userInfo.MA_DVI);
     }
     // await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
     this.modalChiTiet = true;
@@ -243,6 +251,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   async luuPhuongAn() {
     this.helperService.markFormGroupTouched(this.formDataDtl);
+    console.log(this.formDataDtl,'this.formDataDtlthis.formDataDtlthis.formDataDtl');
     if (this.formDataDtl.invalid) {
       return;
     }
@@ -294,6 +303,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           .groupBy("loaiVthh")
           .map((v, k) => {
               let row = v.find(s => s.loaiVthh === k);
+              let tonKho = v.reduce((prev, next) => prev + next.tonKho, 0);
+              let soLuong = v.reduce((prev, next) => prev + next.soLuong, 0);
               return {
                 idVirtual: uuidv4(),
                 loaiVthh: k,
@@ -301,8 +312,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
                 cloaiVthh: row.cloaiVthh,
                 tenCloaiVthh: row.tenCloaiVthh,
                 noiDung: row.noiDung,
-                tonKho: 0,
-                soLuong: row.soLuong,
+                tonKho: tonKho,
+                soLuong: soLuong,
                 childData: v
               }
             }
@@ -367,20 +378,35 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.formDataDtl.patchValue({
         tenDvi: item.tenDvi
       })
+      await this.kiemTraTonKho();
+    }
+  }
+
+  async kiemTraTonKho() {
+    let maDvi = this.formDataDtl.value.maDvi;
+    let loaiVthh = this.formDataDtl.value.loaiVthh;
+    let cloaiVthh = this.formDataDtl.value.cloaiVthh;
+    if (maDvi) {
       await this.quanLyHangTrongKhoService.getTrangThaiHt({
-        maDvi: $event,
-        loaiVthh: this.formDataDtl.value.loaiVthh
+        maDvi: maDvi,
+        loaiVthh: loaiVthh,
+        // cloaiVthh: cloaiVthh
       }).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
           if (data.length > 0) {
-            let tonKho = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+            let tonKhoLoaiVthh = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+            let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
+            let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
             this.formDataDtl.patchValue({
-              tonKhoLoaiVthh: tonKho,
-              tonKhoDvi: tonKho
+              tonKhoLoaiVthh: tonKhoLoaiVthh,
+              tonKhoCloaiVthh: tonKhoCloaiVthh
             });
+            cloaiVthh ? this.formDataDtl.controls['soLuong'].setValidators([Validators.max(tonKhoCloaiVthh)]) : this.formDataDtl.controls['soLuong'].setValidators([Validators.max(tonKhoLoaiVthh)]);
+            this.formDataDtl.controls['soLuong'].markAsDirty();
+            this.formDataDtl.controls['soLuong'].updateValueAndValidity();
           } else {
-            this.formDataDtl.patchValue({tonKhoDvi: 0, tonKhoLoaiVthh: 0});
+            this.formDataDtl.patchValue({tonKhoLoaiVthh: 0, tonKhoCloaiVthh: 0});
           }
         }
       });
@@ -401,11 +427,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '02'));
       Object.assign(this.listLoaiHangHoa, filter.children);
     }
+    await this.kiemTraTonKho();
   }
 
   async changeLoaiVthh($event) {
     try {
-      await this.spinner.show();
       if ($event) {
         this.listChungLoaiHangHoa = [];
         let filter = cloneDeep(this.listLoaiHangHoa.find(s => s.key == $event));
@@ -414,9 +440,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         }
         let item = this.listLoaiHangHoa.find(s => s.ma === $event);
         this.formDataDtl.patchValue({
-          tenLoaiVthh: item.ten
-        })
+          tenLoaiVthh: item.ten,
+          donViTinh: item.maDviTinh
+        });
       }
+      await this.kiemTraTonKho();
       if (this.formDataDtl.value.cloaiVthh) {
         let item = this.listChungLoaiHangHoa.find(s => s.ma === this.formDataDtl.value.cloaiVthh);
         if (!item) {
@@ -440,5 +468,6 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tenCloaiVthh: item.ten
       });
     }
+    await this.kiemTraTonKho();
   }
 }

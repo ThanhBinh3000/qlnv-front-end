@@ -12,11 +12,6 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             {
-                path: '',
-                redirectTo: 'quan-ly-cong-trinh-nghien-cuu-bao-quan',
-                pathMatch: 'full'
-            },
-            {
                 path: 'quan-ly-cong-trinh-nghien-cuu-bao-quan',
                 component: QuanLyCongTrinhNghienCuuBaoQuanComponent,
                 canActivate: [AuthGuard],
