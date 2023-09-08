@@ -637,7 +637,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   luuEdit(index: number): void {
     this.hasError = (false);
     const idx = this.dataTable.findIndex(item => item.maChiTieu == this.dataTableView[index].maChiTieu);
-    if (this.formData.value.apDungCloaiVthh == true) {
+    if (this.formData.value.apDungCloaiVthh == true  && !this.formData.value.soVanBanSuaDoi) {
       if (this.checkExitsData(this.dataEdit[index].data, this.dataTable)) {
         this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng tên chỉ tiêu');
         return;
