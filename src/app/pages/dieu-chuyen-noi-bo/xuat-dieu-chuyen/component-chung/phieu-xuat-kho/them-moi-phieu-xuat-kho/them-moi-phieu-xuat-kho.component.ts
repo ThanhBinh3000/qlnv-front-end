@@ -409,9 +409,9 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
   //   }
   // }
 
-  openDialogDdiemNhapHang() {
+  openDialogDdiemXuatHang() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách địa điểm nhập hàng',
+      nzTitle: 'Danh sách địa điểm xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
