@@ -81,9 +81,9 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       ngayLayMau: [dayjs().format('YYYY-MM-DD')],
       soQdinhDcc: [],
       qdccId: [],
-      soBbNDK: [],
-      ngayNDK: [],
-      bbNDKId: [],
+      soBbNhapDayKho: [],
+      ngayNhapDayKho: [],
+      bbnhapDayKhoId: [],
       tenLoNganKho: [, [Validators.required]],
       tenLoKho: [],
       maLoKho: [],
@@ -98,6 +98,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       cloaiVthh: [],
       tenCloaiVthh: [],
       dsBienBan: [],
+      soBbNtBqLd: [],
+      bbNtBqLdId: [],
       ktvBaoQuan: [],
       dviKiemNghiem: [],
       diaDiemLayMau: [],
@@ -321,7 +323,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách biên bản tịnh kho',
+      nzTitle: 'Danh sách biên bản nhập đầy kho',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -329,7 +331,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: dsBBNDK,
-        dataHeader: ['Số nhập đầy kho'],
+        dataHeader: ['Số BB nhập đầy kho'],
         dataColumn: ['soBb']
       },
     });
@@ -337,15 +339,60 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       if (data) {
         console.log('openDialogQD', data)
         this.formData.patchValue({
-          soBbNDK: data.soBb,
-          ngayNDK: data.ngayPDuyet,
-          bbNDKId: data.id,
+          soBbNhapDayKho: data.soBb,
+          ngayNhapDayKho: data.ngayPDuyet,
+          bbnhapDayKhoId: data.id,
 
         });
         // await this.loadChiTietQdinh(data.id);
       }
     });
   }
+
+  async openDialogBBNTBQLD() {
+    if (this.isView) return
+    await this.spinner.show();
+    let dsBBNDK = []
+    let body = {
+      trangThai: STATUS.DA_DUYET_LDCC,
+      loaiDc: this.loaiDc,
+      qdccId: this.formData.value.qdccId,
+      maLoKho: this.formData.value.maLoKho,
+      maNganKho: this.formData.value.maNganKho
+    }
+    let res = await this.bienBanNghiemThuBaoQuanLanDauService.getDanhSach(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      dsBBNDK = res.data;
+    }
+    await this.spinner.hide();
+
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách biên bản nghiệm thu bảo quản lần đầu',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: dsBBNDK,
+        dataHeader: ['Số biên bản nghiệm thu bảo quản lần đầu'],
+        dataColumn: ['soBban']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        console.log('openDialogQD', data)
+        this.formData.patchValue({
+          soBbNtBqLd: data.soBban,
+          bbNtBqLdId: data.id,
+
+        });
+        // await this.loadChiTietQdinh(data.id);
+      }
+    });
+  }
+
+
 
   async loadChiTietQdinh(id: number) {
     let res = await this.quyetDinhDieuChuyenCucService.getDetail(id);
@@ -410,7 +457,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         });
         await this.loadPhuongPhapLayMau(data.cloaiVthh)
         await this.getTieuChiCanKiemTra(data.loaiVthh, data.cloaiVthh)
-        await this.dsBBNTBQLD(this.formData.value.qdccId, this.formData.value.soQdinhDcc, data.maLoKhoNhan, data.maNganKhoNhan)
+        // await this.dsBBNTBQLD(this.formData.value.qdccId, this.formData.value.soQdinhDcc, data.maLoKhoNhan, data.maNganKhoNhan)
       }
     });
   }
