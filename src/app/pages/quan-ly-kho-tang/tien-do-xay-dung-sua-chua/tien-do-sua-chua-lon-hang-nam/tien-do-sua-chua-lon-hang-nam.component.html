@@ -272,18 +272,18 @@
                                                   (dataItemPdKtkt)="receivedData($event,'01')"></app-quyet-dinh-phe-duyet-bao-cao-ktkt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '02'">
-          <app-quyet-dinh-phe-duyet-khlcnt-scl [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'03')" [itemQdPdBcKtkt]="itemQdPdKtkt"
+          <app-quyet-dinh-phe-duyet-khlcnt-scl [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'02')" [itemQdPdBcKtkt]="itemQdPdKtkt"
                                                [itemQdPdKhLcnt]="itemQdPdKhLcnt">
           </app-quyet-dinh-phe-duyet-khlcnt-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '03'">
           <app-cap-nhat-thong-tin-dau-thau-scl [idInput]="itemQdPdKhLcnt.id" [itemDuAn]="itemSelected"
-                                           (dataItemTtdt)="receivedData($event,'04')">
+                                           (dataItemTtdt)="receivedData($event,'03')">
           </app-cap-nhat-thong-tin-dau-thau-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '04'">
           <app-quyet-dinh-phe-duyet-kqlcnt-scl [itemTtdt]="itemTtdt"
-                                               [itemDuAn]="itemSelected">
+                                               [itemDuAn]="itemSelected" >
           </app-quyet-dinh-phe-duyet-kqlcnt-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '05'">

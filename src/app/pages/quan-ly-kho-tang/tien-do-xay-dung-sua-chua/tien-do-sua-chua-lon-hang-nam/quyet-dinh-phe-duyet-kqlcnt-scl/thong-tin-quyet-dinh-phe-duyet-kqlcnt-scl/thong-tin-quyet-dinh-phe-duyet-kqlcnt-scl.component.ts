@@ -30,8 +30,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
-  @Input()
-  itemQdPdKhLcnt: any;
+  @Input() itemQdPdKhLcnt: any;
+  @Input() itemDuAn: any;
   STATUS = STATUS;
   maQd = "/" + this.userInfo.MA_QD;
   trangThaiTtdt: boolean = true;
@@ -76,12 +76,15 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
       idQdPdKhlcnt: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenCongTrinh: [null],
+      loaiCongTrinh: [null],
       chuDauTu: [null],
       diaChi: [null],
       ghiChu: [null],
       tongMucDt: [0],
       loai: ['00'],
       trangThai: ['00'],
+      trangThaiDt: [],
+      trangThaiHd: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       ccPhapLy: [],
@@ -115,6 +118,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
         tenCongTrinh: this.itemQdPdKhLcnt.tenCongTrinh,
         idDuAn: this.itemQdPdKhLcnt.idDuAn,
         tongMucDt: this.itemQdPdKhLcnt.tongMucDt,
+        loaiCongTrinh: this.itemDuAn.tenLoaiCongTrinh,
       });
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {

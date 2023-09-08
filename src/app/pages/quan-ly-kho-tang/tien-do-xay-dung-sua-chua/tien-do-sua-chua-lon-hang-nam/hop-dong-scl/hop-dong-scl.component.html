@@ -1,4 +1,4 @@
-<div class="luong-thuc__danh-sach" *ngIf="!isDetail; else templateThemmoi">
+<div class="luong-thuc__danh-sach" *ngIf="isDetail; else templateThemmoi">
 </div>
 <ng-template #templateThemmoi>
   <app-thong-tin-hop-dong-scl  [id]="selectedId" (showListEvent)="showList()"
@@ -7,7 +7,6 @@
                                [itemQdPdKhLcnt]="itemQdPdKhLcnt"
                                [itemQdPdKtkt]="itemQdPdKtkt"
                                [idInput]="selectedId" [flagThemMoi]="flagInfo">
-
   </app-thong-tin-hop-dong-scl>
 </ng-template>
 
