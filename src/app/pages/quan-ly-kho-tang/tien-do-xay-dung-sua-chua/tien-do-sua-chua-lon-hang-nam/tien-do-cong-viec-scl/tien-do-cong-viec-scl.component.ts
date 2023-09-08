@@ -37,13 +37,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   STATUS = STATUS;
   rowItemCha: TienDoXayDungCt = new TienDoXayDungCt();
   itemHopDong : any;
-  listTrangThai: any[] = [
-    {ma: 'Quý I', giaTri: 'Quý I'},
-    {ma: 'Quý II', giaTri: 'Quý II'},
-    {ma: 'Quý III', giaTri: 'Quý III'},
-    {ma: 'Quý IV', giaTri: 'Quý IV'},
-  ];
-
+  listThang: any[] = [];
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -64,6 +58,16 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
 
   ngOnInit(): void {
     this.loadItemDsGoiThau();
+  }
+
+  loadDsThang() {
+    for (let i = 1; i <= 12; i++) {
+      let item = {
+        ma: 'Tháng ' + i,
+        giaTri: 'Tháng ' + i
+      }
+      this.listThang = [...this.listThang, item].flat();
+    }
   }
 
 
