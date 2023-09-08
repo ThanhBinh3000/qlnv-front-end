@@ -13,6 +13,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-quan-ly-quy-chuan-ky-thuat-quoc-gia',
@@ -68,6 +69,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
+    private router: Router,
 
   ) {
     super(httpClient, storageService, notification, spinner, modal, khCnQuyChuanKyThuat);
@@ -116,6 +118,9 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   };
 
   async ngOnInit() {
+    // if (!this.userService.isAccessPermisson('KHCNBQ_QCKTTCCS')) {
+    //   this.router.navigateByUrl('/error/401')
+    // }
     this.spinner.show();
     try {
       if (!this.typeVthh || this.typeVthh == '') {
