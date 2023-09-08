@@ -53,7 +53,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       ngayCgiaTu: null,
       ngayCgiaDen: null,
       tochucCanhan: null,
-      maDviChiCuc: null,
+      maChiCuc: null,
       loaiVthh: null,
     })
 
@@ -70,8 +70,8 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.timKiem();
       await Promise.all([
+        this.timKiem(),
         this.search(),
         this.initData()
       ]);
@@ -96,16 +96,16 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     }
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await this.timKiem();
+    await this.search();
   }
 
   redirectDetail(id, isView: boolean) {

@@ -147,7 +147,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     await this.spinner.show()
     if (this.validateData()) {
       if (this.listAllDviTsan.length == this.listDviTsanDaKy.length) {
-        this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoàn thành thực hiện hợp đồng ?")
+        this.approve(this.id, STATUS.HOAN_THANH_CAP_NHAT, "Bạn có muốn hoàn thành thực hiện hợp đồng ?")
       }
       else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả các mã đơn vị tài sản");

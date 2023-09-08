@@ -133,7 +133,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
             child.donGiaDuocDuyet = null;
           }
         }
-        child.thanhTienDuocDuyet = child.donGiaDuocDuyet != null ? child.donGiaDuocDuyet * child.soLuongDeXuat : null;
+        child.thanhTien = child.donGiaDuocDuyet != null ? child.donGiaDuocDuyet * child.soLuongDeXuat : null;
       }
     }
     this.formData.patchValue({

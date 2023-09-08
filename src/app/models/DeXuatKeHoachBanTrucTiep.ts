@@ -25,7 +25,7 @@ export class ChiTietThongTinBanTrucTiepChaoGia {
   donGia: number;
   thueGtgt: number;
   luaChon: boolean = false;
-  idSoQdPduyetCgia: number;
+  thanhTien: number;
   fileDinhKems: FileDinhKem = new FileDinhKem();
 }
 
