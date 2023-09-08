@@ -76,6 +76,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       soTrHdr: null,
       loaiVthh: null,
     });
+
     this.filterTable = {
       namKh: '',
       soQdPd: '',
@@ -93,15 +94,16 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.timKiem();
+      await this.spinner.show();
       await Promise.all([
+        this.timKiem(),
         this.search(),
         this.initData()
       ]);
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -120,16 +122,16 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     }
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await this.timKiem();
+    await this.search();
   }
 
   redirectDetail(id, isView: boolean) {

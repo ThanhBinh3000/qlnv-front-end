@@ -97,7 +97,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       pthucGnhan: [''],
       thongBao: [''],
       tongSoLuong: [],
-      donGia: [],
       thanhTien: [],
       ghiChu: [''],
       trangThai: [''],
@@ -581,7 +580,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.formData.controls["soDxuat"].setValidators([Validators.required]);
     this.formData.controls["trichYeu"].setValidators([Validators.required]);
     this.formData.controls["ngayTao"].setValidators([Validators.required]);
-    // this.formData.controls["ngayPduyet"].setValidators([Validators.required]);
     this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
     this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
     // this.formData.controls["tchuanCluong"].setValidators([Validators.required]);
@@ -589,7 +587,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
     this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
     this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
-    // this.formData.controls["pthucGnhan"].setValidators([Validators.required]);
     this.formData.controls["thongBao"].setValidators([Validators.required]);
     this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
     this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
