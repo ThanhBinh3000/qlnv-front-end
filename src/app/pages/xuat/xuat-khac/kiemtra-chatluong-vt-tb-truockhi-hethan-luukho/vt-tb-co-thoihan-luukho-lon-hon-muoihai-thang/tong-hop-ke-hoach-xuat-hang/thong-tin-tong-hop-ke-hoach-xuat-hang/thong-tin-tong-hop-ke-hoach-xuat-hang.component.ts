@@ -52,7 +52,7 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
   expandSetStringCuc = new Set<string>();
   expandSetStringLoaiVthh = new Set<string>();
   numberToRoman = NumberToRoman;
-
+  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,

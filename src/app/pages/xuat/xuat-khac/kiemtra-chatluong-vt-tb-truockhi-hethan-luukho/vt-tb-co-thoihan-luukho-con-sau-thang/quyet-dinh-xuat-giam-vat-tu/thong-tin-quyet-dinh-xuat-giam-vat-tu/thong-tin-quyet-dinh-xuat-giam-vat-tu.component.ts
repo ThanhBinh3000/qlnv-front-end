@@ -1,18 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NzSelectSizeType} from "ng-zorro-antd/select";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {chain, cloneDeep, isEmpty} from "lodash";
+import {chain, cloneDeep} from "lodash";
 import * as uuid from "uuid";
 import {
   PhieuXuatNhapKhoService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
-import {
-  PhieuKdclVtKtclService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service";
 import {
   QuyetDinhGiaoNvXuatHangService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service";
@@ -22,7 +18,6 @@ import {
 import {Validators} from "@angular/forms";
 import dayjs from "dayjs";
 import {MESSAGE} from "../../../../../../../constants/message";
-import {isArray} from "rxjs/internal-compatibility";
 import {Base2Component} from "../../../../../../../components/base2/base2.component";
 import {CHUC_NANG, STATUS} from "../../../../../../../constants/status";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
@@ -63,6 +58,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
     {value: 1, label: "Đạt"}
   ]
   maQd: string;
+  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
 
   constructor(
     httpClient: HttpClient,
