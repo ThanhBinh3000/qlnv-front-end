@@ -162,7 +162,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       });
       await this.loadChiTietQdinh(this.data.qddccId);
       await this.loadPhuongPhapLayMau(this.data.maChLoaiHangHoa)
-      await this.getTieuChiCanKiemTra(this.data.maHangHoa, this.data.maChLoaiHangHoa)
+      await this.loadChiTieuChatLuongs(this.data.maChLoaiHangHoa)
     }
 
   }
@@ -204,11 +204,12 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
           page: 0
         }
       }
-      const res = await this.khCnQuyChuanKyThuat.search(body);
-      if (res.statusCode == 0) {
-        const data = res.data
-        await this.loadChiTieuChatLuongs(data?.content[0]?.id, data.cloaiVthh)
-      }
+      // const res = await this.khCnQuyChuanKyThuat.search(body);
+      // if (res.statusCode == 0) {
+      //   const data = res.data
+      //   await this.loadChiTieuChatLuongs(data?.content[0]?.id, data.cloaiVthh)
+      // }
+      await this.loadChiTieuChatLuongs(data.cloaiVthh)
 
       if (data.pplayMau) {
         const dspplayMau = data.pplayMau.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
@@ -456,7 +457,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
           idKeHoachDtl: data.id
         });
         await this.loadPhuongPhapLayMau(data.cloaiVthh)
-        await this.getTieuChiCanKiemTra(data.loaiVthh, data.cloaiVthh)
+        await this.loadChiTieuChatLuongs(data.cloaiVthh)
         // await this.dsBBNTBQLD(this.formData.value.qdccId, this.formData.value.soQdinhDcc, data.maLoKhoNhan, data.maNganKhoNhan)
       }
     });
@@ -469,22 +470,22 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     }
   }
 
-  async getTieuChiCanKiemTra(loaiVthh: string, cloaiVthh?: string) {
-    const body = {
-      loaiVthh,
-      // cloaiVthh,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0
-      }
-    }
-    const res = await this.khCnQuyChuanKyThuat.search(body);
-    if (res.statusCode == 0) {
-      const data = res.data
-      this.loadChiTieuChatLuongs(data?.content[0]?.id, cloaiVthh)
-    }
+  // async getTieuChiCanKiemTra(loaiVthh: string, cloaiVthh?: string) {
+  //   const body = {
+  //     loaiVthh,
+  //     // cloaiVthh,
+  //     paggingReq: {
+  //       limit: this.globals.prop.MAX_INTERGER,
+  //       page: 0
+  //     }
+  //   }
+  //   const res = await this.khCnQuyChuanKyThuat.search(body);
+  //   if (res.statusCode == 0) {
+  //     const data = res.data
+  //     this.loadChiTieuChatLuongs(data?.content[0]?.id, cloaiVthh)
+  //   }
 
-  };
+  // };
 
   async dsBBNTBQLD(qdDcId, soQdinhDc, maLoKho, maNganKho) {
     const body = {
@@ -509,21 +510,30 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     }
   }
 
-  async loadChiTieuChatLuongs(id: number, cloaiVthh: string) {
-    if (id) {
-      const res = await this.khCnQuyChuanKyThuat.getDetail(id);
+  async loadChiTieuChatLuongs(cloaiVthh: string) {
+    // if (id) {
+    //   const res = await this.khCnQuyChuanKyThuat.getDetail(id);
+    //   if (res?.msg === MESSAGE.SUCCESS) {
+    //     if (res.data?.apDungCloaiVthh) {
+    //       this.chiTieuChatLuongs = Array.isArray(res.data.tieuChuanKyThuat) ? res.data.tieuChuanKyThuat.map((f) => ({
+    //         id: f.id, giaTri: f.tenChiTieu + " " + f.mucYeuCauNhap, checked: false
+    //       })) : []
+    //     } else {
+    //       this.chiTieuChatLuongs = Array.isArray(res.data.tieuChuanKyThuat) ? res.data.tieuChuanKyThuat.filter(f => f.cloaiVthh === cloaiVthh).map((f) => ({
+    //         id: f.id, giaTri: f.tenChiTieu + " " + f.mucYeuCauNhap, checked: false
+    //       })) : []
+    //     }
+    //   }
+    // }
+    if (cloaiVthh) {
+      const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(cloaiVthh);
       if (res?.msg === MESSAGE.SUCCESS) {
-        if (res.data?.apDungCloaiVthh) {
-          this.chiTieuChatLuongs = Array.isArray(res.data.tieuChuanKyThuat) ? res.data.tieuChuanKyThuat.map((f) => ({
-            id: f.id, giaTri: f.tenChiTieu + " " + f.mucYeuCauNhap, checked: false
-          })) : []
-        } else {
-          this.chiTieuChatLuongs = Array.isArray(res.data.tieuChuanKyThuat) ? res.data.tieuChuanKyThuat.filter(f => f.cloaiVthh === cloaiVthh).map((f) => ({
-            id: f.id, giaTri: f.tenChiTieu + " " + f.mucYeuCauNhap, checked: false
-          })) : []
-        }
+        this.chiTieuChatLuongs = Array.isArray(res.data) ? res.data.map((f) => ({
+          id: f.id, giaTri: (f.tenChiTieu || "") + " " + (f.mucYeuCauNhap || ""), checked: true
+        })) : []
       }
     }
+
   }
 
 
