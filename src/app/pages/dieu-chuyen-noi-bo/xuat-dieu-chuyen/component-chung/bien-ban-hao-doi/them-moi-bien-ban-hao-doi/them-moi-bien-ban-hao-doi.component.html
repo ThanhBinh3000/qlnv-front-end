@@ -141,7 +141,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/ Lô kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemXuatHang()">
                 <input [readonly]="isView || !addChung" nz-input formControlName="tenNganLoKho" readonly />
               </nz-input-group>
             </nz-form-control>
@@ -151,7 +151,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemXuatHang()">
                 <input [readonly]="isView || !addChung" nz-input formControlName="tenNhaKho" readonly />
               </nz-input-group>
             </nz-form-control>
@@ -161,7 +161,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemXuatHang()">
                 <input [readonly]="isView || addChung" nz-input formControlName="tenDiemKho" readonly />
               </nz-input-group>
             </nz-form-control>
@@ -324,14 +324,14 @@
           </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
-          <b>
+          <div class="bold mb-20-">
             Số lượng hao thực tế
-          </b>
-          <div nz-row nzSpan="24">
+          </div>
+          <div nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số lượng
+                  <span class="color-grey">Số lượng</span>
                 </nz-form-label>
                 <!-- <span>
                   {{formData.value.slHaoTt}}
@@ -348,7 +348,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tỉ lệ
+                  <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
                 <!-- <span>{{formData.value.tiLeHaoTt}}</span> -->
                 <nz-form-control>
@@ -363,14 +363,14 @@
           </div>
         </div>
         <div nz-col nzSpan="12">
-          <b>
+          <div class="bold mb-20-">
             Số lượng hao vượt định mức
-          </b>
+          </div>
           <div nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số lượng
+                  <span class="color-grey">Số lượng</span>
                 </nz-form-label>
                 <!-- <span>
                   {{formData.value.slHaoVuotDm}}
@@ -387,7 +387,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tỉ lệ
+                  <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
                 <!-- <span>{{formData.value.tiLeHaoVuotDm}}</span> -->
                 <nz-form-control>
@@ -402,14 +402,14 @@
           </div>
         </div>
         <div nz-col nzSpan="12">
-          <b>
+          <div class="bold mb-20-">
             Số lượng hao được thanh lý
-          </b>
+          </div>
           <div nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số lượng
+                  <span class="color-grey">Số lượng</span>
                 </nz-form-label>
                 <!-- <span>
                   {{formData.value.slHaoThanhLy}}
@@ -426,7 +426,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tỉ lệ
+                  <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
                 <!-- <nz-select formControlName="tiLeHaoThanhLy" [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">
@@ -444,12 +444,12 @@
           </div>
         </div>
         <div nz-col nzSpan="12">
-          <b> Số lượng hao dưới định mức</b>
+          <div class="bold mb-20-"> Số lượng hao dưới định mức</div>
           <div nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số lượng
+                  <span class="color-grey">Số lượng</span>
                 </nz-form-label>
                 <!-- <span>
                   {{formData.value.slHaoDuoiDm}}
@@ -466,7 +466,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tỉ lệ
+                  <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
                 <!-- <nz-select formControlName="tiLeHaoVuotDm" [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">

@@ -228,11 +228,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         qdccId: this.passData.qddccId
       });
       if (this.passData.cloaiVthh) {
-        const [chiTietHangHoa, dataChiTieu] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(this.passData.cloaiVthh), this.getTieuChiCanKiemTra(this.passData.loaiVthh)]);
-        this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: false })) : [];
-        if (dataChiTieu?.msg === MESSAGE.SUCCESS) {
-          await this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, this.passData.cloaiVthh)
-        }
+        this.getPPLayMau(this.passData.cloaiVthh)
+        this.getChiTietTieuChiCanKiemTra(this.passData.cloaiVthh)
       }
     }
 
@@ -359,30 +356,17 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
 
     }
   }
-  async getTieuChiCanKiemTra(loaiVthh: string, cloaiVthh?: string) {
-    const body = {
-      loaiVthh, cloaiVthh, paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0
-      }
-    }
-    const res = await this.khCnQuyChuanKyThuat.search(body);
-    console.log("ress", res)
-    return res;
-  };
-  async getChiTietTieuChiCanKiemTra(id: number, cloaiVthh: string) {
-    if (id) {
-      const res = await this.khCnQuyChuanKyThuat.getDetail(id);
+  async getPPLayMau(cloaiVthh) {
+    const chiTietHangHoa = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
+    this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: false })) : [];
+  }
+  async getChiTietTieuChiCanKiemTra(cloaiVthh: string) {
+    if (cloaiVthh) {
+      const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(cloaiVthh);
       if (res?.msg === MESSAGE.SUCCESS) {
-        if (res.data?.apDungCloaiVthh) {
-          this.chiTieuKiemTra = Array.isArray(res.data.tieuChuanKyThuat) ? res.data.tieuChuanKyThuat.map((f) => ({
-            id: f.id, giaTri: f.tenChiTieu + " " + f.mucYeuCauNhap, checked: true
-          })) : []
-        } else {
-          this.chiTieuKiemTra = Array.isArray(res.data.tieuChuanKyThuat) ? res.data.tieuChuanKyThuat.filter(f => f.cloaiVthh === cloaiVthh).map((f) => ({
-            id: f.id, giaTri: f.tenChiTieu + " " + f.mucYeuCauNhap, checked: true
-          })) : []
-        }
+        this.chiTieuKiemTra = Array.isArray(res.data) ? res.data.map((f) => ({
+          id: f.id, giaTri: (f.tenChiTieu || "") + " " + (f.mucYeuCauXuat || ""), checked: true
+        })) : []
       }
     }
   }
@@ -454,11 +438,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       })
     }
     if (data.cloaiVthh) {
-      const [chiTietHangHoa, dataChiTieu] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(data.cloaiVthh), this.getTieuChiCanKiemTra(data.loaiVthh)]);
-      this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: false })) : [];
-      if (dataChiTieu?.msg === MESSAGE.SUCCESS) {
-        this.getChiTietTieuChiCanKiemTra(dataChiTieu.data?.content[0]?.id, data.cloaiVthh)
-      }
+      this.getPPLayMau(data.cloaiVthh)
+      this.getChiTietTieuChiCanKiemTra(data.cloaiVthh)
     }
   }
 
