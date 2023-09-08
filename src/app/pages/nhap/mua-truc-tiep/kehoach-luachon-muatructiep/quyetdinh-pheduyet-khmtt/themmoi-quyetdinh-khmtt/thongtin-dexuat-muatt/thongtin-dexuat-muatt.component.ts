@@ -132,21 +132,37 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         dataChiTieu: this.dataChiTieu,
         namKh: this.formData.get('namKh').value,
         loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
         donGiaVat: this.formData.value.donGiaVat,
         maDviCuc: this.formData.value.maDvi
       },
     });
+    // modalGT.afterClose.subscribe((data) => {
+    //   if (!data) {
+    //     return;
+    //   }
+    //   const existingIndex = this.dataTable.findIndex(item => item.maDvi === data.maDvi);
+    //   if (existingIndex !== -1) {
+    //     this.dataTable[existingIndex] = { ...data, children: this.dataTable[existingIndex].children };
+    //   } else {
+    //     this.dataTable.push(data);
+    //   }
+    //   this.emitDataTable();
+    //   this.calculatorTable();
+    // });
     modalGT.afterClose.subscribe((data) => {
       if (!data) {
         return;
       }
-      const existingIndex = this.dataTable.findIndex(item => item.maDvi === data.maDvi);
-      if (existingIndex !== -1) {
-        this.dataTable[existingIndex] = { ...data, children: this.dataTable[existingIndex].children };
+      if (index >= 0) {
+        this.dataTable[index] = data;
       } else {
+        // if (!this.validateAddDiaDiem(data)) {
+        //   return
+        // }
+        console.log(data, "popup")
         this.dataTable.push(data);
       }
-      this.emitDataTable();
       this.calculatorTable();
     });
   }
