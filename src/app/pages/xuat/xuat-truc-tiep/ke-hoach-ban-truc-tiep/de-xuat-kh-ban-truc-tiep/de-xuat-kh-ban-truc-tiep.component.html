@@ -248,7 +248,7 @@
           <td class="text-left">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">
             <a *ngIf="data.soQdPd && data.idSoQdPd" nz-button nzType="link"
-               (click)="openModalQdPd(data.idSoQdPd)">{{
+               (click)="openModal('QdPd',data.idSoQdPd)">{{
               data.soQdPd}}</a>
           </td>
           <td class="text-left">{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
@@ -259,13 +259,13 @@
           <td class="text-left">{{ data.slHdDaKy }}</td>
           <td class="text-left">
             <a *ngIf="data.soQdCtieu && data.idSoQdCtieu" nz-button nzType="link"
-               (click)="openModalChiTieu(data.idSoQdCtieu)">{{
+               (click)="openModal('ChiTieu',data.idSoQdCtieu)">{{
               data.soQdCtieu}}</a>
           </td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-left" *ngIf="userService.isTongCuc()"><span
             *ngIf="!data.idThop">{{ data.tenTrangThaiTh }}</span><a *ngIf="data.idThop" nz-button nzType="link"
-                                                                    (click)="openModalTh(data.idThop)">{{ data.idThop }}</a>
+                                                                    (click)="openModal('Th',data.idThop)">{{ data.idThop }}</a>
           </td>
           <td class="text-left">
             <a *ngIf="loaiVthh.startsWith('02') ? vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_XEM')&&
@@ -326,39 +326,39 @@
   </app-them-moi-de-xuat-kh-ban-truc-tiep>
 </div>
 <!--xem -->
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('QdPd')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
                                                 [isView]="true">
     </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('QdPd')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewChiTieu" (nzOnCancel)="closeModalChiTieu()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewChiTieu" (nzOnCancel)="closeModal('ChiTieu')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="idChiTieu" [isViewDetail]="true"
                                                       [isViewOnModal]="true"></app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalChiTieu()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('ChiTieu')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
 </nz-modal>
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModal('Th')">
   <ng-container *nzModalContent class="modal__content">
     <app-them-moi-tong-hop-kh-ban-truc-tiep [idInput]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
                                             [isView]="true">
     </app-them-moi-tong-hop-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalTh()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('Th')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
