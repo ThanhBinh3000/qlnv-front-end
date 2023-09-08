@@ -1,7 +1,7 @@
 import { MAIN_ROUTES } from "src/app/layout/main/main-routing.constant";
 import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
-export const KHKN_BAO_QUAN_MAIN_ROUTE = MAIN_ROUTES.khcnBaoQuan;
+export const KHKN_BAO_QUAN_MAIN_ROUTE = MAIN_ROUTES.khcnBaoQuan
 export const KHKN_BAO_QUAN_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_congtrinhnghiencuu',
@@ -9,7 +9,7 @@ export const KHKN_BAO_QUAN_ROUTE_LIST: Array<ChiTietMenu> = [
         url: `/${KHKN_BAO_QUAN_MAIN_ROUTE}/quan-ly-cong-trinh-nghien-cuu-bao-quan`,
         dropdown: 'dau-thau',
         idHover: 'dauthau',
-        hasTab: false,
+        hasTab: false
     },
     {
         icon: 'htvbdh_tcdt_quytrinhkythuat',
