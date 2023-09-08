@@ -380,6 +380,9 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   }
 
   async selectRow(data) {
+    this.trangThaiHopDong = false;
+    this.trangThaiTienDoCv = false;
+    this.trangThaiBb = false;
     this.itemSelected = data;
     if (this.itemSelected) {
       this.tabSelected = null;
