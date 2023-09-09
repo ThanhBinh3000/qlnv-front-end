@@ -443,7 +443,7 @@
                 <td>{{children.donViTinh}}</td>
                 <td>{{children.donGiaDeXuat|number:globals.numberFormat:globals.locale}}</td>
                 <td>{{children.thanhTienDeXuat|number:globals.numberFormat:globals.locale}}</td>
-                <td>{{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
+                <td>{{children.donGiaDuocDuyet == 0 ? null : children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
                 <td>{{children.thanhTienDuocDuyet == 0 ? null : children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
                 <td class="text-right" *ngIf="!isView">
                 </td>

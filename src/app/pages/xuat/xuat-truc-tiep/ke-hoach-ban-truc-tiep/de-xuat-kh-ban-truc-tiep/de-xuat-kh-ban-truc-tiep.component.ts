@@ -176,7 +176,6 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     }
   }
 
-
   disabledNgayTaoTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayTaoDen) {
       return false;
