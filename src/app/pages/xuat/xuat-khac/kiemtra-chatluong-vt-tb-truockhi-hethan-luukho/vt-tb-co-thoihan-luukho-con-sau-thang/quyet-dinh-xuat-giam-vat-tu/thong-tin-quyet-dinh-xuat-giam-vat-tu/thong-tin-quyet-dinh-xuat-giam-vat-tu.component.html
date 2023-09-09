@@ -14,6 +14,10 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
+        <button *ngIf='idInput' type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
+          <i class='icon htvbdh_totrinh'></i>
+          <span> In/Xem trước </span>
+        </button>
         <button
           *ngIf="this.userService.isTongCuc() && idInput > 0 && formData.value.trangThai != STATUS.BAN_HANH"
           class="btn btn-sub xanh-nhat mr-2" (click)="pheDuyet()">

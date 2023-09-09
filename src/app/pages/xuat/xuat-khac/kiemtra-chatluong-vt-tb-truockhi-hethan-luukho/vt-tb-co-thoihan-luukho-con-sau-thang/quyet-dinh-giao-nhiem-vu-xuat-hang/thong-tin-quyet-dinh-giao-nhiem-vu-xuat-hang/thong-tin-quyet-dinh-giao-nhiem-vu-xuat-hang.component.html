@@ -15,6 +15,10 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
+        <button *ngIf='idInput' type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
+          <i class='icon htvbdh_totrinh'></i>
+          <span> In/Xem trước </span>
+        </button>
         <button type="button" (click)="save(true)" class="btn btn-sm ml-2"
                 *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
