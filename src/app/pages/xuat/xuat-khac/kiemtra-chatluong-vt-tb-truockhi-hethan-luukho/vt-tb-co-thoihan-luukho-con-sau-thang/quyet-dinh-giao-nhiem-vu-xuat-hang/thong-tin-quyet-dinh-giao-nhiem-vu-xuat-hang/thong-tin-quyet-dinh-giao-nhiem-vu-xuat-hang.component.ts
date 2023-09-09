@@ -9,6 +9,7 @@ import { DonviService } from '../../../../../../../services/donvi.service';
 import { DanhMucService } from '../../../../../../../services/danhmuc.service';
 import { v4 as uuidv4 } from 'uuid';
 import { chain, cloneDeep, isEmpty } from 'lodash';
+import { saveAs } from 'file-saver';
 import {
   QuyetDinhGiaoNvXuatHangService,
 } from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service';
@@ -22,7 +23,7 @@ import { LOAI_HH_XUAT_KHAC } from '../../../../../../../constants/config';
 import {
   TongHopDanhSachVttbService,
 } from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service';
-import { FILETYPE } from '../../../../../../../constants/fileType';
+import { FILETYPE, PREVIEW } from '../../../../../../../constants/fileType';
 import { KeHoachLuongThuc } from '../../../../../../../models/KeHoachLuongThuc';
 import { DialogTuChoiComponent } from '../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import {
@@ -52,6 +53,7 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
   dataThTree: any[] = [];
   dataThTreeXuatHuy: any[] = [];
   expandSetString = new Set<string>();
+  templateName = 'xuat_khac_ktcl_vat_tu_6_thang_qd_giao_nv_xuat_hang';
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -495,6 +497,31 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
+  }
+
+  async preview(id) {
+    this.spinner.show();
+    await this.quyetDinhGiaoNvXuatHangService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
   }
 
 }
