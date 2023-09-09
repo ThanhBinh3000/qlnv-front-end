@@ -306,7 +306,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
 
   async preview(id) {
     this.spinner.show();
-    await this.quyetDinhGiaoNvXuatHangService.preview({
+    await this.quyetDinhXuatGiamVattuService.preview({
       tenBaoCao: this.templateName,
       id: id,
     }).then(async res => {
