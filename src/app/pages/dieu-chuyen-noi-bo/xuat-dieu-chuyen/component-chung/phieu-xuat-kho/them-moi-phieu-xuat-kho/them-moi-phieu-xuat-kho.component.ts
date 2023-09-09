@@ -113,8 +113,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       soPhieuXuatKho: [''],
       ngayTaoPhieu: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayXuatKho: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      taiKhoanCo: ['', [Validators.required]],
-      taiKhoanNo: ['', [Validators.required]],
+      taiKhoanCo: [''],
+      taiKhoanNo: [''],
       soQddc: ['', [Validators.required]],
       qddcId: ['', [Validators.required]],
       ngayKyQddc: ['', [Validators.required]],
@@ -142,11 +142,11 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       ktvBaoQuan: [''],
       keToanTruong: [''],
       keToanTruongId: [''],
-      nguoiGiaoHang: [''],
-      soCmt: [''],
-      ctyNguoiGh: [''],
-      diaChi: [''],
-      thoiGianGiaoNhan: [''],
+      nguoiGiaoHang: ['', [Validators.required]],
+      soCmt: ['', [Validators.required]],
+      ctyNguoiGh: ['', [Validators.required]],
+      diaChi: ['', [Validators.required]],
+      thoiGianGiaoNhan: ['', [Validators.required]],
       // loaiHinhNX: [""],
       // kieuNX: [""],
       soBangKeCh: [''],
@@ -183,6 +183,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       if (this.isViewOnModal) {
         this.isView = true
       }
+      this.setValidate()
       this.userInfo = this.userService.getUserLogin();
       if (this.loaiDc === "CHI_CUC") {
         this.getLoaiHinhNhapXuat({ loai: 'LOAI_HINH_NHAP_XUAT', ma: '94' });
@@ -656,18 +657,13 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       return false;
     }
   }
-  setValidate(isGuiDuyet: boolean) {
+  setValidate(isGuiDuyet?: boolean) {
     if (!this.thayDoiThuKho) {
       this.formData.controls['soPhieuKnChatLuong'].clearValidators();
       this.formData.controls['phieuKnChatLuongHdrId'].clearValidators();
       this.formData.controls['ngayKyPhieuKnChatLuong'].clearValidators();
     }
     if (isGuiDuyet) {
-      this.formData.controls["nguoiGiaoHang"].setValidators([Validators.required]);
-      this.formData.controls["soCmt"].setValidators([Validators.required]);
-      this.formData.controls["ctyNguoiGh"].setValidators([Validators.required]);
-      this.formData.controls["diaChi"].setValidators([Validators.required]);
-      this.formData.controls["thoiGianGiaoNhan"].setValidators([Validators.required]);
       if (this.isVatTu) {
         this.formData.controls["bangKeVtId"].setValidators([Validators.required]);
         this.formData.controls["soBangKeVt"].setValidators([Validators.required]);
@@ -675,14 +671,35 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
         this.formData.controls["bangKeChId"].setValidators([Validators.required]);
         this.formData.controls["soBangKeCh"].setValidators([Validators.required]);
       }
-    } else {
-      this.formData.controls["nguoiGiaoHang"].clearValidators();
-      this.formData.controls["soCmt"].clearValidators();
-      this.formData.controls["ctyNguoiGh"].clearValidators();
-      this.formData.controls["diaChi"].clearValidators();
-      this.formData.controls["thoiGianGiaoNhan"].clearValidators();
     }
   }
+  // setValidate(isGuiDuyet: boolean) {
+  //   if (!this.thayDoiThuKho) {
+  //     this.formData.controls['soPhieuKnChatLuong'].clearValidators();
+  //     this.formData.controls['phieuKnChatLuongHdrId'].clearValidators();
+  //     this.formData.controls['ngayKyPhieuKnChatLuong'].clearValidators();
+  //   }
+  //   if (isGuiDuyet) {
+  //     this.formData.controls["nguoiGiaoHang"].setValidators([Validators.required]);
+  //     this.formData.controls["soCmt"].setValidators([Validators.required]);
+  //     this.formData.controls["ctyNguoiGh"].setValidators([Validators.required]);
+  //     this.formData.controls["diaChi"].setValidators([Validators.required]);
+  //     this.formData.controls["thoiGianGiaoNhan"].setValidators([Validators.required]);
+  //     if (this.isVatTu) {
+  //       this.formData.controls["bangKeVtId"].setValidators([Validators.required]);
+  //       this.formData.controls["soBangKeVt"].setValidators([Validators.required]);
+  //     } else {
+  //       this.formData.controls["bangKeChId"].setValidators([Validators.required]);
+  //       this.formData.controls["soBangKeCh"].setValidators([Validators.required]);
+  //     }
+  //   } else {
+  //     this.formData.controls["nguoiGiaoHang"].clearValidators();
+  //     this.formData.controls["soCmt"].clearValidators();
+  //     this.formData.controls["ctyNguoiGh"].clearValidators();
+  //     this.formData.controls["diaChi"].clearValidators();
+  //     this.formData.controls["thoiGianGiaoNhan"].clearValidators();
+  //   }
+  // }
   async preview() {
     this.reportTemplate.fileName = "phieu_xuat_kho.docx";
     let body = {
