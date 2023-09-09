@@ -11,7 +11,6 @@ import {
   BckqKiemDinhMauService,
 } from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service';
 import { CHUC_NANG, STATUS } from '../../../../../../../../constants/status';
-import { PhuongPhapLayMau } from '../../../../../../../../models/PhuongPhapLayMau';
 import { FILETYPE, PREVIEW } from '../../../../../../../../constants/fileType';
 import { MESSAGE } from '../../../../../../../../constants/message';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
