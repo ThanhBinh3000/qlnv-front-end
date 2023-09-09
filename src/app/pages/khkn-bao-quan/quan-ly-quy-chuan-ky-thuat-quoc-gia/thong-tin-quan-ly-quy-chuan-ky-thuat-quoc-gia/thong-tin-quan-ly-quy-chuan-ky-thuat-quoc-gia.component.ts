@@ -448,16 +448,16 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     });
   }
 
-  async loadLoaiHangHoa() {
+  async loadLoaiHangHoa(maBn?) {
     try {
       let hangHoa: any;
       if (this.userInfo.MA_DVI == '0101') {
         hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-          'maDvi': this.userInfo.MA_DVI,
+          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI,
         }).toPromise();
       } else {
         hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-          'maDvi': this.userInfo.MA_DVI.substring(0, 2),
+          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI.substring(0, 2),
         }).toPromise();
       }
       if (hangHoa) {
@@ -818,5 +818,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   doPrint() {
     printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  changeBoNganh() {
+    this.loadLoaiHangHoa(this.formData.get('maBn').value);
   }
 }
