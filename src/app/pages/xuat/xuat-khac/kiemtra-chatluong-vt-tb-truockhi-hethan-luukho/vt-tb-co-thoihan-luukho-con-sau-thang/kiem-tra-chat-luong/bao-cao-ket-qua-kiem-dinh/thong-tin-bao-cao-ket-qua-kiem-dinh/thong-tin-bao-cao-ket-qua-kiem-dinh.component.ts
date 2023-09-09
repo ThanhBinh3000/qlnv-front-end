@@ -12,7 +12,7 @@ import {
 } from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service';
 import { CHUC_NANG, STATUS } from '../../../../../../../../constants/status';
 import { PhuongPhapLayMau } from '../../../../../../../../models/PhuongPhapLayMau';
-import { FILETYPE } from '../../../../../../../../constants/fileType';
+import { FILETYPE, PREVIEW } from '../../../../../../../../constants/fileType';
 import { MESSAGE } from '../../../../../../../../constants/message';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import {
@@ -27,7 +27,7 @@ import { isArray } from 'rxjs/internal-compatibility';
 import {
   PhieuKdclVtKtclService,
 } from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service';
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-thong-tin-bao-cao-ket-qua-kiem-dinh',
   templateUrl: './thong-tin-bao-cao-ket-qua-kiem-dinh.component.html',
@@ -62,6 +62,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     { value: 1, label: 'Đạt' },
   ];
   dataPhieuKncl: any;
+  templateName = 'xuat_khac_ktcl_vat_tu_6_thang_bc_kq_kiem_dinh_mau';
 
   constructor(
     httpClient: HttpClient,
@@ -333,7 +334,6 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     if (this.itemSelected) {
       this.itemSelected = null;
     }
-    console.log(data, 'datadatadatadata');
     if (data.idPhieuKncl) {
       await await this.phieuKdclVtKtclService.getDetail(data.idPhieuKncl).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -346,5 +346,31 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     }
     data.selected = true;
     this.itemSelected = data;
+  }
+
+
+  async preview(id) {
+    this.spinner.show();
+    await this.bckqKiemDinhMauService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
   }
 }
