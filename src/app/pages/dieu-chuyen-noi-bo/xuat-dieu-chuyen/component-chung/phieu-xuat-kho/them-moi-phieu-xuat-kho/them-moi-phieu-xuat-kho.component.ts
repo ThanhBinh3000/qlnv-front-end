@@ -579,8 +579,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     // this.logdataTable();
   }
 
-  async loadChiTiet(id) {
-    let data = await this.detail(id);
+  async loadChiTiet(idInput: number) {
+    let data = await this.detail(idInput);
     if (data) {
       this.fileDinhKems = data.fileDinhKems;
       this.dataTable = cloneDeep(data.dcnbPhieuXuatKhoDtl);
@@ -595,7 +595,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     return (tien && Number(tien) > 0) ? `${convertTienTobangChu(tien)} (${donVi})` : '';
   }
 
-  pheDuyet(isPheDuyet) {
+  pheDuyet(isPheDuyet: boolean) {
     let trangThai = ''
     let msg = '';
     if (isPheDuyet) {
