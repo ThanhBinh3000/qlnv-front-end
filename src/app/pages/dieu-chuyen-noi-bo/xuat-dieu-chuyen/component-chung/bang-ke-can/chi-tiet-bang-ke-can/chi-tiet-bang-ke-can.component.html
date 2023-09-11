@@ -362,7 +362,7 @@
           <nz-form-label class="label-color-kh"> Tổng trọng lượng kể cả bao bì(kg)
           </nz-form-label>
           <nz-form-control style="margin-top: 5px;">
-            <span>{{formData.value.tongTrongLuongCabaoBi|number:'1.0-0'}}</span>
+            <span>{{formData.value.tongTrongLuongCabaoBi|number: '1.0-1' : 'vi_VN'}}</span>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -371,7 +371,7 @@
           <nz-form-label class="label-color-kh"> Tổng trọng lượng hàng đã trừ bì (viết bằng số)
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error" style="margin-top: 5px;">
-            <span>{{formData.value.tongTrongLuongTruBi|number:'1.0-0'}}</span>
+            <span>{{formData.value.tongTrongLuongTruBi|number: '1.0-1' : 'vi_VN'}}</span>
           </nz-form-control>
         </nz-form-item>
       </div>
