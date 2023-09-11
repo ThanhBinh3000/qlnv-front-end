@@ -140,25 +140,24 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 id: [0],
                 nam: [dayjs().get("year")],
                 maDvi: [''],
-                maQhns: [''],
+                maQhns: ['', [Validators.required]],
                 soBangKe: [''],
                 qdinhDccId: ['', Validators.required],
-                soQdinhDcc: [''],
-                ngayKyQdDcc: [''],
-                ngayNhap: [''],
-                maDiemKho: ['', Validators.required],
-                maNhaKho: [''],
-                maNganKho: [''],
+                soQdinhDcc: ['', [Validators.required]],
+                ngayKyQdDcc: ['', [Validators.required]],
+                ngayNhap: ['', [Validators.required]],
+                maDiemKho: ['', [Validators.required]],
+                maNhaKho: ['', [Validators.required]],
+                maNganKho: ['', [Validators.required]],
                 maLoKho: [''],
                 maKho: [''],
-                phieuXuatKhoId: ['', Validators.required],
-                soPhieuXuatKho: [''],
+                phieuXuatKhoId: ['', [Validators.required]],
+                soPhieuXuatKho: ['', [Validators.required]],
                 ngayXuatKho: [''],
                 diaDaDiemKho: ['', Validators.required],
-                loaiVthh: [''],
-                cloaiVthh: [''],
+                loaiVthh: ['', [Validators.required]],
+                cloaiVthh: ['', [Validators.required]],
                 donViTinh: [''],
-                tenDonViTinh: [''],
                 moTaHangHoa: [''],
                 tenNguoiGiaoHang: [''],
                 cccd: [''],
@@ -177,8 +176,8 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 trangThai: ['00'],
                 tenDvi: [''],
                 diaChiDvi: [''],
-                tenLoaiVthh: [''],
-                tenCloaiVthh: [''],
+                tenLoaiVthh: ['', [Validators.required]],
+                tenCloaiVthh: ['', [Validators.required]],
                 tenTrangThai: ['Dự thảo'],
                 tenChiCuc: [''],
                 tenDiemKho: ['', [Validators.required]],
@@ -282,7 +281,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
             await this.bangKeXuatVatTuDieuChuyenService.getDetail(idInput)
                 .then((res) => {
                     if (res.msg === MESSAGE.SUCCESS) {
-                        this.formData.patchValue({ ...res.data, tenDonViTinh: res.data.tenDonViTinh ? res.data.tenDonViTinh : res.data.donViTinh, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
+                        this.formData.patchValue({ ...res.data, donViTinh: res.data.donViTinh ? res.data.donViTinh : res.data.donViTinh, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
                     }
                 })
                 .catch((e) => {
@@ -298,7 +297,6 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 thuKhoId: null,
                 tenThuKho: this.userInfo.TEN_DAY_DU,
                 ...this.passData,
-                tenDonViTinh: this.passData?.tenDonViTinh ? this.passData.tenDonViTinh : this.passData.donViTinh,
                 tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho
             });
             this.chiTietDiemKho(this.passData.maDiemKho);
@@ -587,7 +585,6 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                         tenCloaiVthh: '',
                         tenNguoiGiaoHang: '',
                         donViTinh: '',
-                        tenDonViTinh: '',
                         soPhieuXuatKho: '',
                         phieuXuatKhoId: '',
                         cccd: '',
@@ -675,7 +672,6 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 tenLoaiVthh: dataRes.data.tenLoaiVthh,
                 tenCloaiVthh: dataRes.data.tenCloaiVthh,
                 donViTinh: dataRes.data.donViTinh,
-                tenDonViTinh: dataRes.data.tenDonViTinh ? dataRes.data.tenDonViTinh : dataRes.data.donViTinh,
                 thoiGianGiaoNhan: dataRes.data.thoiGianGiaoNhan,
 
                 maLoKho: dataRes.data.maLoKho,

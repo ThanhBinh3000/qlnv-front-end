@@ -15,7 +15,7 @@ import { BienBanLayMauDieuChuyenService } from '../services/dcnb-bien-ban-lay-ma
 
 export interface PassData {
     idBbLayMau: number, qddccId: number, soQdinhDcc: string, maLoKho: string, tenLoKho: string, maNganKho: string, tenNganKho: string, maNhaKho: string,
-    tenNhaKho: string, maDiemKho: string, tenDiemKho: string, loaiVthh: string, tenLoaiVthh: string, cloaiVthh: string, tenCloaiVthh: string, thuKho: number, tenThuKho: string, donViTinh: string, tenDonViTinh: string
+    tenNhaKho: string, maDiemKho: string, tenDiemKho: string, loaiVthh: string, tenLoaiVthh: string, cloaiVthh: string, tenCloaiVthh: string, thuKho: number, tenThuKho: string, donViTinh: string
 }
 @Component({
     selector: 'app-danh-sach-bien-ban-lay-mau',
@@ -50,7 +50,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     dataTable: any[];
     passData: PassData = {
         idBbLayMau: null, qddccId: null, soQdinhDcc: '', maLoKho: '', tenLoKho: '', maNganKho: '', tenNganKho: '', maNhaKho: '', tenNhaKho: '', maDiemKho: '',
-        tenDiemKho: '', loaiVthh: '', tenLoaiVthh: '', cloaiVthh: '', tenCloaiVthh: '', thuKho: null, tenThuKho: '', donViTinh: '', tenDonViTinh: ''
+        tenDiemKho: '', loaiVthh: '', tenLoaiVthh: '', cloaiVthh: '', tenCloaiVthh: '', thuKho: null, tenThuKho: '', donViTinh: '',
     }
     LIST_TRANG_THAI: { [key: string]: string } = {
         [STATUS.DU_THAO]: "Dự thảo",
@@ -253,13 +253,13 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
 
     }
     redirectToChiTiet(data: any, isView: boolean, idBbLayMau?: number, qddccId?: number, soQdinhDcc?: string, maLoKho?: string, tenLoKho?: string,
-        maNganKho?: string, tenNganKho?: string, maNhaKho?: string, tenNhaKho?: string, maDiemKho?: string, tenDiemKho?: string, loaiVthh?: string, tenLoaiVthh?: string, cloaiVthh?: string, tenCloaiVthh?: string, thuKho?: number, tenThuKho?: string, donViTinh?: string, tenDonViTinh?: string) {
+        maNganKho?: string, tenNganKho?: string, maNhaKho?: string, tenNhaKho?: string, maDiemKho?: string, tenDiemKho?: string, loaiVthh?: string, tenLoaiVthh?: string, cloaiVthh?: string, tenCloaiVthh?: string, thuKho?: number, tenThuKho?: string, donViTinh?: string) {
         this.selectedId = idBbLayMau;
         this.isDetail = true;
         this.isView = isView;
         this.passData = {
             idBbLayMau, qddccId, soQdinhDcc, maLoKho, tenLoKho,
-            maNganKho, tenNganKho, maNhaKho, tenNhaKho, maDiemKho, tenDiemKho, loaiVthh, tenLoaiVthh, cloaiVthh, tenCloaiVthh, thuKho, tenThuKho, donViTinh, tenDonViTinh
+            maNganKho, tenNganKho, maNhaKho, tenNhaKho, maDiemKho, tenDiemKho, loaiVthh, tenLoaiVthh, cloaiVthh, tenCloaiVthh, thuKho, tenThuKho, donViTinh
         }
     }
     disabledTuNgay = (startValue: Date): boolean => {
