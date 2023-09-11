@@ -90,7 +90,7 @@
                   </nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogToChucCaNhan()">
-                      <input [readonly]="true" nz-input formControlName="tenDviMua" readonly/>
+                      <input [readonly]="true" nz-input formControlName="tenDviMua" (ngModelChange)="ChangeToChucCaNhan($event)" readonly/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -598,7 +598,7 @@
                   <td>{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
                   <td>{{ children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
                   <td>{{ children.donGiaKyHd|number:globals.numberFormat:globals.locale }}</td>
-                  <td>{{ children.soLuongKyHd * children.donGiaKyHd|number:globals.numberFormat:globals.locale }}</td>
+                  <td>{{ children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
                 </tr>
               </ng-container>
             </ng-container>
@@ -698,7 +698,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ PD KH bán trực tiếp ủy quyền</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogUyQuyen()">
-                      <input [readonly]="true" nz-input formControlName="soQdPd" readonly/>
+                      <input [readonly]="true" nz-input formControlName="soQdPd" (ngModelChange)="changeSoQdPd($event)" readonly/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -1180,7 +1180,7 @@
                   </nz-form-label>
                   <nz-form-control nz-col>
                     <span
-                      style="color: blue">{{formData.value.tongSlBanttQdkhChuakyHd|number:globals.numberFormat:globals.locale}}
+                      style="color: blue">{{formData.value.tongSlChuaKyHdong|number:globals.numberFormat:globals.locale}}
                       {{formData.value.donViTinh}}</span>
                   </nz-form-control>
                 </nz-form-item>
@@ -1198,6 +1198,7 @@
               <th [width]="35"> STT</th>
               <th> Địa điểm xuất kho</th>
               <th> Điểm kho</th>
+              <th> Lô kho</th>
               <th> Mã ĐVTS</th>
               <th> SL xuất bán trực tiếp</th>
               <th> ĐVT</th>
@@ -1209,6 +1210,8 @@
               <td>{{ i + 1 }}</td>
               <td>{{data.diaDiemKho}}</td>
               <td>{{data.tenDiemKho}}</td>
+              <td>{{data.tenLoKho == null ? data.tenNganKho : data.tenLoKho }}
+                ,{{ data.tenNhaKho }}</td>
               <td>{{data.maDviTsan}}</td>
               <td>{{data.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
               <td>{{data.donViTinh}}</td>

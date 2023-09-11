@@ -55,7 +55,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
   expandSetStringLoaiVthh = new Set<string>();
   @Output() tabFocus = new EventEmitter<number>();
   numberToRoman = NumberToRoman;
-
+  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,

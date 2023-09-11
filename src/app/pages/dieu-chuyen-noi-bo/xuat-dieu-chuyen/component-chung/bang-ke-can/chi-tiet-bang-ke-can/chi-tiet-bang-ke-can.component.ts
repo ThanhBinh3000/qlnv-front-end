@@ -331,7 +331,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     this.phuongAnView.forEach(i => i.selected = false);
     item.selected = true;
   }
-  async save() {
+  async save(isGuiDuyet?: boolean) {
     try {
 
       // this.formData.disable()
@@ -343,24 +343,12 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
       this.helperService.markFormGroupTouched(this.formData);
       if (!this.formData.valid) return;
-      let res;
-      if (body.id && body.id > 0) {
-        res = await this.bangKeCanHangDieuChuyenService.update(body);
-      } else {
-        res = await this.bangKeCanHangDieuChuyenService.create(body);
-      }
-      if (res.msg === MESSAGE.SUCCESS) {
-        if (this.formData.get('id').value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      const data = await this.createUpdate(body, null, isGuiDuyet);
+      if (data) {
+        this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBangKe: data.soBangKe });
+        if (isGuiDuyet) {
+          this.pheDuyet();
         }
-        this.formData.get("id").setValue(res.data.id);
-        this.formData.get("trangThai").setValue(res.data.trangThai);
-        this.formData.get("soBangKe").setValue(res.data.soBangKe)
-        // this.genSoBangKe(res.data.id)
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (error) {
       console.log("e", error)
@@ -371,7 +359,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     }
   }
   pheDuyet() {
-    this.approve(this.idInput, STATUS.DA_DUYET_LDCC, 'Bạn có muốn duyệt quyết định này', MESSAGE.PHE_DUYET_SUCCESS)
+    this.approve(this.formData.value.id, STATUS.DA_DUYET_LDCC, 'Bạn có muốn duyệt quyết định này', null, MESSAGE.PHE_DUYET_SUCCESS)
   }
 
   async flattenTree(tree) {

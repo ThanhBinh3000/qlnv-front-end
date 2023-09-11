@@ -63,18 +63,18 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
       thanhTien: '',
     };
   }
-
   async ngOnInit() {
     try {
+      await this.spinner.show();
       await Promise.all([
         this.timKiem(),
         this.search(),
       ]);
-      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -86,37 +86,38 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
 
   async clearFilter() {
     this.formData.reset();
-    await this.timKiem();
-    await this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
-
   async themMoiBangKeBanLe($event, isView: boolean, idInput?: number, index?: number) {
-    const modalGT = this.modal.create({
-      nzContent: DialogThemMoiBangKeBanLeComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzStyle: {top: '200px'},
-      nzWidth: '1500px',
-      nzFooter: null,
-      nzComponentParams: {
-        idInput: idInput,
-        loaiVthh: this.loaiVthh,
-        isView: isView,
-      },
-    });
-    modalGT.afterClose.subscribe((data) => {
+    try {
+      const modalGT = this.modal.create({
+        nzContent: DialogThemMoiBangKeBanLeComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzStyle: { top: '200px' },
+        nzWidth: '1500px',
+        nzFooter: null,
+        nzComponentParams: {
+          idInput,
+          loaiVthh: this.loaiVthh,
+          isView,
+        },
+      });
+      const data = await modalGT.afterClose.toPromise();
+      if (data) {
+        if (index >= 0) {
+          this.dataTable[index] = data;
+        } else {
+          this.dataTable.push(data);
+        }
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
       this.search();
-      if (!data) {
-        return;
-      }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      } else {
-        this.dataTable.push(data);
-      }
-    });
-  };
+    }
+  }
 
   openModalQdNv(id: number) {
     this.idQdNv = id;

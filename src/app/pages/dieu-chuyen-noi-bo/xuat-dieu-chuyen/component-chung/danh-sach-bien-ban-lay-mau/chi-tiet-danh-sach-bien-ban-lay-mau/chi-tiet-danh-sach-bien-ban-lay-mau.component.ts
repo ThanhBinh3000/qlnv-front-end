@@ -109,7 +109,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         maQhns: [],
         qdccId: [, [Validators.required]],
         soQdinhDcc: [, [Validators.required]],
-        ngayQdDc: [],
+        // ngayQdDc: [],
         ktvBaoQuan: [],
         soBbLayMau: [],
         ngayLayMau: [dayjs().format('YYYY-MM-DD')],
@@ -227,6 +227,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho,
         qdccId: this.passData.qddccId
       });
+      // if (this.passData.qddccId) {
+      //   this.getChiTietQD(this.passData.qddccId)
+      // }
       if (this.passData.cloaiVthh) {
         this.getPPLayMau(this.passData.cloaiVthh)
         this.getChiTietTieuChiCanKiemTra(this.passData.cloaiVthh)
@@ -290,7 +293,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         this.formData.patchValue({
           soQdinhDcc: '',
           qdccId: '',
-          ngayQdDc: '',
+          // ngayQdDc: '',
           tenNganLoKho: '',
           maLoKho: '',
           tenLoKho: '',
@@ -325,7 +328,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       this.formData.patchValue({
         soQdinhDcc: data.soQdinh,
         qdccId: data.id,
-        ngayQdDc: data.ngayKyQdinh,
+        // ngayQdDc: data.ngayKyQdinh,
         // loaiVthh: data.loaiVthh,
         // tenLoaiVthh: data.tenLoaiVthh,
       });
@@ -356,8 +359,15 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
 
     }
   }
+  // async getChiTietQD(id: number) {
+  //   const res = await this.quyetDinhDieuChuyenCucService.getDetail(id);
+  //   if (res.msg === MESSAGE.SUCCESS) {
+  //     this.formData.patchValue({ ngayQdDc: res.data.ngayKyQdinh })
+  //   }
+  // }
   async getPPLayMau(cloaiVthh) {
     const chiTietHangHoa = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
+    this.formData.patchValue({ donViTinh: null, tenDonViTinh: chiTietHangHoa.data.maDviTinh });
     this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: false })) : [];
   }
   async getChiTietTieuChiCanKiemTra(cloaiVthh: string) {
@@ -464,7 +474,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       this.pheDuyet();
     }
   }
-
   pheDuyet() {
     let trangThai = '';
     let msg = '';

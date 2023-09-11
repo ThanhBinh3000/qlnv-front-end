@@ -277,7 +277,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       isVatTu: this.isVatTu,
       loaiDc: this.loaiDc,
       thayDoiThuKho: this.thayDoiThuKho,
-      maDvi: this.idInput > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
+      maDvi: this.formData.value.id > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body);
@@ -293,8 +293,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-  async getDetail(id: number) {
-    let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.getDetail(id);
+  async getDetail(idInput: number) {
+    let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.getDetail(idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         const data = res.data;
@@ -392,7 +392,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
             this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -484,7 +484,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
       },
-      maDvi: this.idInput > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
+      maDvi: this.formData.value.id > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
       // loaiVthh: this.loaiVthh,
     }
     let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.dsBBLMKiemNghiem(body);

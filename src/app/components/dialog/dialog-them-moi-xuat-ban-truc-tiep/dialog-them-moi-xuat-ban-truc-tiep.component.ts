@@ -339,13 +339,13 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         if (index >= 0) {
           this.editCache[index].data.tonKho = cloneDeep(val);
         } else {
-          this.thongTinXuatBanTrucTiep.tonKho = 100000;
+          this.thongTinXuatBanTrucTiep.tonKho = cloneDeep(val);
         }
       } else {
-        this.thongTinXuatBanTrucTiep.tonKho = 100000;
+        this.thongTinXuatBanTrucTiep.tonKho = 0;
       }
     } catch (error) {
-      this.thongTinXuatBanTrucTiep.tonKho = 100000;
+      this.thongTinXuatBanTrucTiep.tonKho = 0;
     }
   }
 

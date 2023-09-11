@@ -32,7 +32,7 @@
           <span>Duyệt</span>
         </button>
         <button (click)="save(false)"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !isViewDetail)  "
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO|| formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC && !isViewDetail)  "
                 class="btn btn-main btn-sm waves-effect waves-light ml-2">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -272,10 +272,10 @@
               <td>
                 <input nz-input [readOnly]="isViewDetail" [(ngModel)]="lv1.maDviTsan"/>
               </td>
-              <td *ngIf="this.formData.value.loai == 'XUAT_MAU'">
-                <input nz-input [readOnly]="isViewDetail" [(ngModel)]="lv1.slLayMau"/>
-              </td>
-              <td *ngIf="this.formData.value.loai == 'XUAT_BH'">
+              <td>
+                <nz-input-number [nzDisabled]="isViewDetail" [(ngModel)]="lv1.slLayMau" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
+                                 [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
                 <input nz-input [readOnly]="isViewDetail" [(ngModel)]="lv1.slLayMau"/>
               </td>
               <td></td>
