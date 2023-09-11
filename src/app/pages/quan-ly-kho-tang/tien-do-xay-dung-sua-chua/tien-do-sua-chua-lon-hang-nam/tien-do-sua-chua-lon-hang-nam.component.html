@@ -294,10 +294,10 @@
           </app-hop-dong-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '06'">
-          <app-tien-do-cong-viec-scl  [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemQdPdKtkt]="itemQdPdKtkt"></app-tien-do-cong-viec-scl>
+          <app-tien-do-cong-viec-scl  [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemQdPdKtkt]="itemQdPdKtkt" [itemDuAn]="itemSelected"></app-tien-do-cong-viec-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '07'">
-          <app-bien-ban-nghiem-thu-scl [itemDuAn]="itemSelected" [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemQdPdKtkt]="itemQdPdKtkt"></app-bien-ban-nghiem-thu-scl>
+          <app-bien-ban-nghiem-thu-scl [itemDuAn]="itemSelected" [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemQdPdKtkt]="itemQdPdKtkt" (dataBbnt)="receivedData($event,'07')"></app-bien-ban-nghiem-thu-scl>
         </ng-container>
       </nz-card>
     </div>

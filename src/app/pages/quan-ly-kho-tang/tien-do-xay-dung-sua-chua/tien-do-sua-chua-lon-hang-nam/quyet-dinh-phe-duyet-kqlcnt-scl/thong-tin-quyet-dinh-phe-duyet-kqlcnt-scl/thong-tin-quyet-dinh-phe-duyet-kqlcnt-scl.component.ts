@@ -17,6 +17,7 @@ import {
 import {
   QdPheDuyetKhlcntTdsclService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl',
@@ -67,7 +68,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
-      namKh: [null],
+      namKh: [dayjs().get('year')],
       maDvi: [this.userInfo.MA_DVI],
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
@@ -111,14 +112,13 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
   async bindingData() {
     if (this.itemQdPdKhLcnt) {
       this.formData.patchValue({
-        namKh: this.itemQdPdKhLcnt.namKh,
-        idQdPdKhlcnt: this.itemQdPdKhLcnt.id,
-        soQdPdKhlcnt: this.itemQdPdKhLcnt.soQd,
-        chuDauTu: this.itemQdPdKhLcnt.chuDauTu,
-        tenCongTrinh: this.itemQdPdKhLcnt.tenCongTrinh,
-        idDuAn: this.itemQdPdKhLcnt.idDuAn,
-        tongMucDt: this.itemQdPdKhLcnt.tongMucDt,
-        loaiCongTrinh: this.itemDuAn.tenLoaiCongTrinh,
+        idQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.id ? this.itemQdPdKhLcnt.id : null  ,
+        soQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.soQd ?this.itemQdPdKhLcnt.soQd : null,
+        chuDauTu: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.chuDauTu ? this.itemQdPdKhLcnt.chuDauTu : null,
+        tenCongTrinh: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.tenCongTrinh ? this.itemQdPdKhLcnt.tenCongTrinh : null,
+        idDuAn: this.itemDuAn && this.itemDuAn.idDuAn ? this.itemDuAn.idDuAn : null,
+        tongMucDt:this.itemQdPdKhLcnt &&  this.itemQdPdKhLcnt.tongMucDt ?  this.itemQdPdKhLcnt.tongMucDt : null,
+        loaiCongTrinh: this.itemDuAn && this.itemDuAn.tenLoaiCongTrinh ? this.itemDuAn.tenLoaiCongTrinh : null,
       });
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -135,6 +135,10 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            tenCongTrinh: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.tenCongTrinh ? this.itemQdPdKhLcnt.tenCongTrinh : null,
+            idDuAn: this.itemDuAn && this.itemDuAn.idDuAn ? this.itemDuAn.idDuAn : null,
+          })
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
           })

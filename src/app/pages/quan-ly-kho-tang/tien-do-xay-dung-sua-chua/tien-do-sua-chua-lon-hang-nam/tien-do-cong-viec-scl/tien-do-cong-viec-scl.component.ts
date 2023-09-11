@@ -28,6 +28,7 @@ import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydung
 export class TienDoCongViecSclComponent extends Base2Component implements OnInit {
   @Input() itemQdPdKhLcnt: any;
   @Input() itemQdPdKtkt: any;
+  @Input() itemDuAn: any;
   listHopDong: any[] = [];
   dataTable: any[] = [];
   dataTableReq: any[] = [];
@@ -57,6 +58,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   }
 
   ngOnInit(): void {
+    this.loadDsThang()
     this.loadItemDsGoiThau();
   }
 
@@ -87,7 +89,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
           if (listGoiThau && listGoiThau.length > 0) {
             listGoiThau.forEach(item => item.chuDauTu = res.data.chuDauTu);
           }
-          this.listHopDong = listGoiThau;
+          this.listHopDong = listGoiThau.filter(item => item.hopDong && item.hopDong.soHd);
           if (this.listHopDong && this.listHopDong.length > 0) {
             this.selectRow(this.listHopDong[0]);
           }
