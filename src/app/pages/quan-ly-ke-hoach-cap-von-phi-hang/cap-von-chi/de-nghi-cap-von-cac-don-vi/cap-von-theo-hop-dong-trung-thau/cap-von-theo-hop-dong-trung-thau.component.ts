@@ -415,10 +415,10 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
     changeModel(id: string) {
         const gt = this.baoCao.loaiDnghi == Cvnc.VTU ? this.editCache[id].data.gtThucHien : this.editCache[id].data.gtHopDong;
         this.editCache[id].data.tongVonVaDtoanDaCap = Operator.sum([this.editCache[id].data.lkCong, this.editCache[id].data.dtoanDaGiao]);
-        this.editCache[id].data.vonDnCapLanNay = Operator.sum([gt, -this.editCache[id].data.phatViPham, -this.editCache[id].data.tongVonVaDtoanDaCap]);
+        this.editCache[id].data.vonDnCapLanNay = Operator.sum([gt, -this.editCache[id].data.tongVonVaDtoanDaCap]);
         this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.ung, this.editCache[id].data.cap]);
         this.editCache[id].data.tongTien = Operator.sum([this.editCache[id].data.tongVonVaDtoanDaCap, this.editCache[id].data.cong]);
-        this.editCache[id].data.soConDuocCap = Operator.sum([gt, -this.editCache[id].data.phatViPham, -this.editCache[id].data.tongTien]);
+        this.editCache[id].data.soConDuocCap = Operator.sum([gt, -this.editCache[id].data.tongTien]);
     }
     // cộng từ mức con lên mức cha
     sum(stt: string) {
@@ -447,7 +447,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             if (stt == '0.1') {
                 const gt = this.baoCao.loaiDnghi == Cvnc.VTU ? this.lstCtiets[index].gtThucHien : this.lstCtiets[index].gtHopDong;
                 this.lstCtiets[index].tongVonVaDtoanDaCap = Operator.sum([this.lstCtiets[index].lkCong, this.lstCtiets[index].dtoanDaGiao]);
-                this.lstCtiets[index].vonDnCapLanNay = Operator.sum([gt, -this.lstCtiets[index].phatViPham, -this.lstCtiets[index].tongVonVaDtoanDaCap]);
+                this.lstCtiets[index].vonDnCapLanNay = Operator.sum([gt, -this.lstCtiets[index].tongVonVaDtoanDaCap]);
                 this.lstCtiets[index].cong = Operator.sum([this.lstCtiets[index].ung, this.lstCtiets[index].cap]);
                 this.lstCtiets[index].tongTien = Operator.sum([this.lstCtiets[index].tongVonVaDtoanDaCap, this.lstCtiets[index].cong]);
                 this.lstCtiets[index].soConDuocCap = Operator.sum([gt, -this.lstCtiets[index].tongTien]);
@@ -571,30 +571,30 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                 { t: 5, b: 5, l: 3, r: 3, val: 'Thực hiện' },
                 { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị hợp đồng (đã bao gồm VAT) (đồng)' },
                 { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị thực hiện' },
-                { t: 4, b: 5, l: 6, r: 6, val: 'Vi phạm hợp đồng' },
-                { t: 4, b: 4, l: 7, r: 8, val: 'Thanh lý hợp đồng' },
-                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
-                { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
-                { t: 4, b: 4, l: 9, r: 11, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 11, r: 11, val: 'Cộng' },
-                { t: 4, b: 5, l: 12, r: 12, val: 'Dự toán đã giao' },
-                { t: 4, b: 5, l: 13, r: 13, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
-                { t: 4, b: 5, l: 14, r: 14, val: 'Vốn đề nghị cấp lần này' },
-                { t: 4, b: 4, l: 15, r: 19, val: 'Vốn duyệt cấp lần này' },
-                { t: 5, b: 5, l: 15, r: 15, val: 'Ngày' },
-                { t: 5, b: 5, l: 16, r: 16, val: 'Niên độ NS' },
-                { t: 5, b: 5, l: 17, r: 17, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 18, r: 18, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 19, r: 19, val: 'Cộng' },
-                { t: 4, b: 5, l: 20, r: 20, val: 'Tổng cấp (tổng tiền được cấp sau lần này)' },
-                { t: 4, b: 5, l: 21, r: 21, val: 'Số còn được cấp' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán đã giao' },
+                { t: 4, b: 4, l: 7, r: 9, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Cộng' },
+                { t: 4, b: 5, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
+                { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này' },
+                { t: 4, b: 4, l: 12, r: 16, val: 'Vốn duyệt cấp lần này' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Ngày' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Niên độ NS' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 15, r: 15, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 16, r: 16, val: 'Cộng' },
+                { t: 4, b: 5, l: 17, r: 17, val: 'Tổng cấp (tổng tiền được cấp sau lần này)' },
+                { t: 4, b: 5, l: 18, r: 18, val: 'Số còn được cấp' },
+                { t: 4, b: 5, l: 19, r: 19, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 20, r: 21, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 20, r: 20, val: 'Số lượng' },
+                { t: 5, b: 5, l: 21, r: 21, val: 'Thành tiền' },
                 { t: 4, b: 5, l: 22, r: 22, val: 'Ghi chú' },
             ]
-            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'slThucHien', 'gtHopDong', 'gtThucHien', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'lkUng', 'lkCap', 'lkCong',
-                'dtoanDaGiao', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay', 'uncNgay', 'uncNienDo', 'ung', 'cap', 'cong', 'tongTien', 'soConDuocCap', 'ghiChu'];
-            calHeader = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11=9+10', '12', '13=11+12', '14=5-6-13', '15', '16', '17', '18', '19=17+18', '20=13+19', '21=5-6-20', 'D'];
+            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'slThucHien', 'gtHopDong', 'gtThucHien', 'dtoanDaGiao', 'lkUng', 'lkCap', 'lkCong',
+                'tongVonVaDtoanDaCap', 'vonDnCapLanNay', 'uncNgay', 'uncNienDo', 'ung', 'cap', 'cong', 'tongTien', 'soConDuocCap', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'ghiChu'];
+            calHeader = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9=7+8', '10=6+9', '11=5-10', '12', '13', '14', '15', '16=14+15', '17=10+16', '18=5-17', '19', '20', '21', 'D'];
         } else {
             header = [
                 { t: 0, b: 5, l: 0, r: 18, val: null },
@@ -605,28 +605,28 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                 { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
                 { t: 5, b: 5, l: 2, r: 2, val: 'Hợp đồng' },
                 { t: 4, b: 5, l: 3, r: 3, val: 'Giá trị hợp đồng (đã bao gồm VAT) (đồng)' },
-                { t: 4, b: 5, l: 4, r: 4, val: 'Vi phạm hợp đồng' },
-                { t: 4, b: 4, l: 5, r: 6, val: 'Thanh lý hợp đồng' },
-                { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng' },
-                { t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
-                { t: 4, b: 4, l: 7, r: 9, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
-                { t: 5, b: 5, l: 7, r: 7, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 8, r: 8, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Cộng' },
-                { t: 4, b: 5, l: 10, r: 10, val: 'Dự toán đã giao' },
-                { t: 4, b: 5, l: 11, r: 11, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
-                { t: 4, b: 5, l: 12, r: 12, val: 'Vốn đề nghị cấp lần này' },
-                { t: 4, b: 4, l: 13, r: 15, val: 'Vốn duyệt cấp lần này' },
-                { t: 5, b: 5, l: 13, r: 13, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 14, r: 14, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 15, r: 15, val: 'Cộng' },
-                { t: 4, b: 5, l: 16, r: 16, val: 'Tổng cấp (tổng tiền được cấp sau lần này)' },
-                { t: 4, b: 5, l: 17, r: 17, val: 'Số còn được cấp' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Dự toán đã giao' },
+                { t: 4, b: 4, l: 5, r: 7, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Cộng' },
+                { t: 4, b: 5, l: 8, r: 8, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
+                { t: 4, b: 5, l: 9, r: 9, val: 'Vốn đề nghị cấp lần này' },
+                { t: 4, b: 4, l: 10, r: 12, val: 'Vốn duyệt cấp lần này' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Cộng' },
+                { t: 4, b: 5, l: 13, r: 13, val: 'Tổng cấp (tổng tiền được cấp sau lần này)' },
+                { t: 4, b: 5, l: 14, r: 14, val: 'Số còn được cấp' },
+                { t: 4, b: 5, l: 15, r: 15, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 16, r: 17, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 16, r: 16, val: 'Số lượng' },
+                { t: 5, b: 5, l: 17, r: 17, val: 'Thành tiền' },
                 { t: 4, b: 5, l: 18, r: 18, val: 'Ghi chú' },
             ]
-            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'gtHopDong', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'lkUng', 'lkCap', 'lkCong',
-                'dtoanDaGiao', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay', 'ung', 'cap', 'cong', 'tongTien', 'soConDuocCap', 'ghiChu'];
-            calHeader = ['A', '1', '2', '4', '6', '7', '8', '9', '10', '11=9+10', '12', '13=11+12', '14=4-6-13', '17', '18', '19=17+18', '20=13+19', '21=4-6-20', 'D'];
+            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'gtHopDong', 'dtoanDaGiao', 'lkUng', 'lkCap', 'lkCong', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay',
+                'ung', 'cap', 'cong', 'tongTien', 'soConDuocCap', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'ghiChu'];
+            calHeader = ['A', '1', '2', '4', '6', '7', '8', '9=7+8', '10=6+9', '11=4-10', '14', '15', '16=14+15', '17=10+16', '18=4-17', '19', '20', '21', 'D'];
         }
         const filterData = this.lstCtiets.filter(e => e.level < (this.isSynth ? 2 : 1)).map(item => {
             const row: any = {};
