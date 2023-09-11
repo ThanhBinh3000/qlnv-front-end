@@ -13,10 +13,6 @@ import {
   MmHopDongCt
 } from "../../../../../dinh-muc/may-moc-thiet-bi/mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
 import {
-  BienBanNghiemThuDtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/bien-ban-nghiem-thu-dtxd.service";
-import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import {
   DialogMmBbGiaoNhanComponent
 } from "../../../../../dinh-muc/may-moc-thiet-bi/mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component";
 import {
@@ -97,10 +93,6 @@ export class ThongTinBienBanSclComponent extends Base2Component implements OnIni
       this.loadDsHopDong()
       if (this.id > 0) {
         this.detail(this.id)
-      } else {
-        this.formData.patchValue({
-          namKeHoach: this.itemDuAn.namKeHoach
-        })
       }
       this.maBb = `/${this.formData.value.namKeHoach}/BBNT-` + this.userInfo.DON_VI.tenVietTat;
       this.spinner.hide();
@@ -114,9 +106,8 @@ export class ThongTinBienBanSclComponent extends Base2Component implements OnIni
   async loadDsHopDong() {
     this.spinner.show();
     try {
-      console.log(this.itemDuAn,3333)
       let body = {
-        "namKh" : this.itemDuAn.namKh,
+        "namKh" : this.formData.value.namKeHoach,
         "idDuAn" : this.itemDuAn.id,
         "page" : "00"
       }
@@ -411,7 +402,7 @@ export class ThongTinBienBanSclComponent extends Base2Component implements OnIni
           this.formData.patchValue({
             soHopDong: data.soHd,
             tenHopDong: data.tenHd,
-            tenDuAn : data.tenDuAn,
+            tenDuAn : this.itemDuAn.tenCongTrinh,
             idHopDong : data.id,
             chuDauTu : data.cdtTen
           })

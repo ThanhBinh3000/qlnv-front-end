@@ -42,7 +42,8 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   listKieuNx: any[] = [];
   loadDanhSachQdGiaoNv: any[] = [];
   dataHopDong:any[] = [];
-
+  templateName = "Quyết định giao nhiệm vụ";
+  templateNameVt = "Quyết định giao nhiệm vụ vật tư";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

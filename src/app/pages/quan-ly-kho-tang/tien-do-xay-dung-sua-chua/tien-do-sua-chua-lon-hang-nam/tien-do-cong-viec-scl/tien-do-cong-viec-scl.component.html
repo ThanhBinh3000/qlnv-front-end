@@ -60,26 +60,20 @@
       <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số QĐ PD dự án ĐTXD</nz-form-label>
-            <span class="text-blue"></span>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="6">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số QĐ PD bản vẽ TKTC và tổng dự toán</nz-form-label>
-            <span class="text-blue"></span>
+            <nz-form-label [nzNoColon]="true"> Số QĐ PD Báo cáo KTKT</nz-form-label>
+            <span class="text-blue">{{itemQdPdKtkt && itemQdPdKtkt.soQd ? itemQdPdKtkt.soQd : ''}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt KH LCNT</nz-form-label>
-            <span class="text-blue"></span>
+            <span class="text-blue">{{itemQdPdKhLcnt && itemQdPdKhLcnt.soQd ? itemQdPdKtkt.soQd : ''}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ LCNT</nz-form-label>
-            <span class="text-blue"></span>
+            <span class="text-blue">{{itemHopDong && itemHopDong.hopDong && itemHopDong.hopDong.soQdPdKqlcnt ? itemHopDong.hopDong.soQdPdKqlcnt : ''}}</span>
           </nz-form-item>
         </div>
       </div>
@@ -99,7 +93,7 @@
     <thead>
     <tr>
       <th nzWidth="40px" rowSpan="3" class="text-center">STT</th>
-      <th class="text-center" rowSpan="3">Quý</th>
+      <th class="text-center" rowSpan="3">Tháng</th>
       <th class="text-center" rowSpan="3" nzWidth="250px">Tên công tác/hạng mục công việc</th>
       <th class="text-center" rowSpan="3" nzWidth="100px">ĐVT</th>
       <th class="text-center" colSpan="5">Khối lượng</th>
