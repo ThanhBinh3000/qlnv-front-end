@@ -77,7 +77,7 @@
                 <nz-form-label [nzNoColon]='true'>
                   Đơn vị nhận báo cáo
                 </nz-form-label>
-                <input nz-input formControlName='maDviNhan' />
+                <input nz-input [readOnly]='isView' formControlName='maDviNhan' />
               </nz-form-item>
             </div>
             <div nz-col nzSpan='4'>
@@ -86,7 +86,7 @@
                   Số báo cáo
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <input nz-input formControlName='soBaoCao' />
+                  <input nz-input [readOnly]='isView' formControlName='soBaoCao' />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -108,7 +108,7 @@
                   Tên báo cáo
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <input nz-input formControlName='tenBaoCao' />
+                  <input nz-input [readOnly]='isView' formControlName='tenBaoCao' />
                 </nz-form-control>
               </nz-form-item>
             </div>
