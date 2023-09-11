@@ -289,22 +289,22 @@
                                         Giá trị thực hiện
                                     </th>
                                     <th scope="col" rowspan="2">
-                                        Vi phạm hợp đồng
-                                    </th>
-                                    <th scope="colgroup" colspan="2">
-                                        Thanh lý hợp đồng
+                                        Dự toán đã giao
                                     </th>
                                     <th scope="colgroup" colspan="3">
                                         Lũy kế cấp vốn đến thời điểm báo cáo
-                                    </th>
-                                    <th scope="col" rowspan="2">
-                                        Dự toán đã giao
                                     </th>
                                     <th scope="col" rowspan="2">
                                         Tổng vốn và Dự toán đã cấp đến trước thời điểm báo cáo
                                     </th>
                                     <th scope="col" rowspan="2">
                                         Vốn đề nghị cấp lần này
+                                    </th>
+                                    <th scope="col" rowspan="2">
+                                        Vi phạm hợp đồng
+                                    </th>
+                                    <th scope="colgroup" colspan="2">
+                                        Thanh lý hợp đồng
                                     </th>
                                 </tr>
                                 <tr>
@@ -318,12 +318,6 @@
                                         Thực hiện
                                     </th>
                                     <th scope="col">
-                                        Số lượng
-                                    </th>
-                                    <th scope="col">
-                                        Thành tiền
-                                    </th>
-                                    <th scope="col">
                                         Vốn ứng
                                     </th>
                                     <th scope="col">
@@ -331,6 +325,12 @@
                                     </th>
                                     <th scope="col">
                                         Tổng vốn
+                                    </th>
+                                    <th scope="col">
+                                        Số lượng
+                                    </th>
+                                    <th scope="col">
+                                        Thành tiền
                                     </th>
                                 </tr>
                                 <tr>
@@ -343,12 +343,12 @@
                                     <th scope="col"> 6 </th>
                                     <th scope="col"> 7 </th>
                                     <th scope="col"> 8 </th>
-                                    <th scope="col"> 9 </th>
-                                    <th scope="col"> 10 </th>
-                                    <th scope="col"> 11=9+10 </th>
+                                    <th scope="col"> 9=7+8 </th>
+                                    <th scope="col"> 10=6+9 </th>
+                                    <th scope="col"> {{ baoCao.loaiDnghi == Cvnc.VTU ? "11=5-10" : "11=4-10"}} </th>
                                     <th scope="col"> 12 </th>
-                                    <th scope="col"> 13=11+12 </th>
-                                    <th scope="col"> {{ baoCao.loaiDnghi == Cvnc.VTU ? "14=5-6-13" : "14=4-6-13"}} </th>
+                                    <th scope="col"> 13 </th>
+                                    <th scope="col"> 14 </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -373,13 +373,7 @@
                                             {{ Op.fmtVal(data.gtThucHien) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.phatViPham) }}
-                                        </td>
-                                        <td>
-                                            {{ Op.fmtVal(data.tlSoluong) }}
-                                        </td>
-                                        <td>
-                                            {{ Op.fmtVal(data.tlThanhTien) }}
+                                            {{ Op.fmtVal(data.dtoanDaGiao) }}
                                         </td>
                                         <td>
                                             {{ Op.fmtVal(data.lkUng) }}
@@ -391,13 +385,19 @@
                                             {{ Op.fmtVal(data.lkCong) }}
                                         </td>
                                         <td>
-                                            {{ Op.fmtVal(data.dtoanDaGiao) }}
-                                        </td>
-                                        <td>
                                             {{ Op.fmtVal(data.tongVonVaDtoanDaCap) }}
                                         </td>
                                         <td>
                                             {{ Op.fmtVal(data.vonDnCapLanNay) }}
+                                        </td>
+                                        <td>
+                                            {{ Op.fmtVal(data.phatViPham) }}
+                                        </td>
+                                        <td>
+                                            {{ Op.fmtVal(data.tlSoluong) }}
+                                        </td>
+                                        <td>
+                                            {{ Op.fmtVal(data.tlThanhTien) }}
                                         </td>
                                     </ng-container>
                                 </tr>
