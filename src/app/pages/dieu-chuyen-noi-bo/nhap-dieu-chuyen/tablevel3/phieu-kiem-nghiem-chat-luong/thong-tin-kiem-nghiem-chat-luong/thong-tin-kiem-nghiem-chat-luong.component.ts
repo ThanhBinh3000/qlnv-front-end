@@ -106,7 +106,6 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       cloaiVthh: [],
       tenCloaiVthh: [],
       donViTinh: [],
-      donViTinh: [],
       hinhThucBq: [],
       danhGiaCamQuan: [],
       dcnbPhieuKnChatLuongDtl: [new Array<any>(),],
