@@ -162,7 +162,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       ngayDuyetTp: [''],
       ngayGDuyet: [''],
       ngayKiem: [dayjs().format('YYYY-MM-DD')],
-      ngayKyQdinh: [''],
+      ngayQdinhDc: [''],
       ngayLayMau: [''],
       ngayPDuyet: [''],
       ngayXuatDocKho: [''],
@@ -258,6 +258,18 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     if (this.passData.maChLoaiHangHoa) {
       this.getChiTietHangHoa(this.passData.maChLoaiHangHoa)
     }
+    if (this.passData.qdinhDccId) {
+      this.getDetailQuyetDinhCuc(this.passData.qdinhDccId)
+    }
+  }
+  async getDetailQuyetDinhCuc(id: number) {
+    let dataRes = await this.quyetDinhDieuChuyenCucService.getDetail(id)
+    const data = dataRes.data;
+    this.formData.patchValue({
+      soQdinhDc: data.soQdinh,
+      qdDcId: data.id,
+      ngayQdinhDc: data.ngayKyQdinh,
+    });
   }
   async loadSoQuyetDinh() {
     let body = {
@@ -464,7 +476,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
       loaiDc: this.loaiDc,
-      qdccId: this.formData.value.qdDcId,
+      thayDoiThuKho: this.thayDoiThuKho,
+      isVatTu: this.isVatTu,
+      type: this.type,
+      soQdinhDcc: this.formData.value.soQdinhDc,
       paggingReq: {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
@@ -531,15 +546,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   async bindingDataQd(id, isChiTiet?) {
     try {
       await this.spinner.show();
-      let dataRes = await this.quyetDinhDieuChuyenCucService.getDetail(id)
-      const data = dataRes.data;
-      this.formData.patchValue({
-        soQdinhDc: data.soQdinh,
-        qdDcId: data.id,
-        ngayKyQdinh: data.ngayKyQdinh,
-        // loaiVthh: data.loaiVthh,
-        // tenLoaiVthh: data.tenLoaiVthh,
-      });
+      await this.getDetailQuyetDinhCuc(id)
 
       if (!isChiTiet) {
         // const listBienBanLayMau=

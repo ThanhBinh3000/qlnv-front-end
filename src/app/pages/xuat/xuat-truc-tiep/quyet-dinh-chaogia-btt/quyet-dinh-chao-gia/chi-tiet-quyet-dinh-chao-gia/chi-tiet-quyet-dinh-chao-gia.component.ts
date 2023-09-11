@@ -82,6 +82,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       slHdDaKy: [],
       slHdChuaKy: [],
       tongSoLuong: [],
+      tongGiaTriHdong: [],
       trangThai: [''],
       tenTrangThai: [''],
       lyDoTuChoi: [''],
@@ -143,6 +144,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
 
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
+    this.setValidator();
     let body = {
       ...this.formData.value,
       soQdKq: this.formData.value.soQdKq ? this.formData.value.soQdKq + this.maHauTo : null
@@ -253,10 +255,12 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
               this.showFirstRow(event, this.dataTable[0].children);
             }
             if (this.dataTable) {
+              let tongGiaTriHdong : number = 0
               this.dataTable.forEach((item) => {
                 item.id = null;
                 item.children.forEach((child) => {
                   child.id = null
+                  tongGiaTriHdong += child.thanhTien;
                   child.children.forEach((s) => {
                     s.id = null
                     if (s.fileDinhKems) {
@@ -264,6 +268,9 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
                     }
                   })
                 })
+              })
+              this.formData.patchValue({
+                tongGiaTriHdong : tongGiaTriHdong,
               })
             }
           }
@@ -363,14 +370,15 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
+  setValidator() {
+    this.formData.controls["soQdPd"].setValidators([Validators.required]);
+  }
   setValidForm() {
     this.formData.controls["namKh"].setValidators([Validators.required]);
-    // this.formData.controls["maDvi"].setValidators([Validators.required]);
     this.formData.controls["tenDvi"].setValidators([Validators.required]);
     this.formData.controls["soQdKq"].setValidators([Validators.required]);
     this.formData.controls["ngayKy"].setValidators([Validators.required]);
     this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-    this.formData.controls["soQdPd"].setValidators([Validators.required]);
     this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
     this.formData.controls["trichYeu"].setValidators([Validators.required]);
     this.formData.controls["diaDiemChaoGia"].setValidators([Validators.required]);

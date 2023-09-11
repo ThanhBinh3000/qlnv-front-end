@@ -70,15 +70,14 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   }
 
   async ngOnInit() {
-    this.spinner.show();
     try {
-      this.timKiem();
-      await this.search();
-      this.spinner.hide();
+      await this.spinner.show();
+      await Promise.all([this.timKiem(), this.search()]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -88,29 +87,29 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     this.isView = isView;
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-    })
+    });
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      this.loadDsVthh();
+      await this.loadDsVthh();
     }
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await this.timKiem();
+    await this.search();
   }
 
   async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+    const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listLoaiHangHoa = res.data?.filter(x => x.ma.length === 4) || [];
     }
   }
 
-  taoQdinh(data: number) {
+  async taoQdinh(data: number) {
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
     tabActive.classList.remove('ant-menu-item-selected')
@@ -130,7 +129,6 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     await this.search();
   }
 
-
   disabledNgayThopTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayThopDen) {
       return false;
@@ -146,13 +144,16 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   };
 
   openModalQdPd(id: number) {
-    this.idQdPd = id;
-    this.isViewQdPd = true;
+    this.updateQdPd(id, true);
   }
 
   closeModalQdPd() {
-    this.idQdPd = null;
-    this.isViewQdPd = false;
+    this.updateQdPd(null, false);
+  }
+
+  private updateQdPd(id: number | null, isView: boolean) {
+    this.idQdPd = id;
+    this.isViewQdPd = isView;
   }
 }
 

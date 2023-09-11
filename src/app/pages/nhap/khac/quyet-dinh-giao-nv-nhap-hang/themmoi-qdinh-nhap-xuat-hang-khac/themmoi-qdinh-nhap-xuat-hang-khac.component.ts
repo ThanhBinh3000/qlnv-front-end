@@ -270,7 +270,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
   async loadDsDonVi() {
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI,
+      maDviCha: this.userService.isChiCuc() ? this.userInfo.MA_DVI.substring(0,6) : this.userInfo.MA_DVI,
       type: "DV"
     };
     let res = await this.donViService.layDonViTheoCapDo(body);
@@ -288,7 +288,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
     let listOfData: any;
     let slNhap = 0;
     this.helperService.setIndexArray(this.dataTable);
-    listOfData = this.dataTable.filter(x => x.maCuc.includes(this.userInfo.MA_DVI))
+    listOfData = this.userService.isChiCuc() ? this.dataTable.filter(x => x.maCuc.includes(this.userInfo.MA_DVI.substring(0,6))) : this.dataTable.filter(x => x.maCuc.includes(this.userInfo.MA_DVI))
     this.listDataGroup = chain(listOfData).groupBy("maCuc").map((value, key) => (
       {
         tenCuc: this.listDonVi[DANH_MUC_LEVEL.CUC].find(i => i.maDvi == key)?.tenDvi,
