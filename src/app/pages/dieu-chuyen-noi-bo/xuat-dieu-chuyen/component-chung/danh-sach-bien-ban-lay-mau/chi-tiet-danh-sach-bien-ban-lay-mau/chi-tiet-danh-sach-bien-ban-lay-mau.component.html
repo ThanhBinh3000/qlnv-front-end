@@ -9,7 +9,7 @@
             <span>In/xem trước</span>
         </button>
         <button *ngIf="[STATUS.CHO_DUYET_LDCC].includes(this.formData.value.trangThai) && userService.isChiCuc()"
-            type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
+            type="button" class="btn btn-sub" (click)="reject(formData.value.id,STATUS.TU_CHOI_LDCC)">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
