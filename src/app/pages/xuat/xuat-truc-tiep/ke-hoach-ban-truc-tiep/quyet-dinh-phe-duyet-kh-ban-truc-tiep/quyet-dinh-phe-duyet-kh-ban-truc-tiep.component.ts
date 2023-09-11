@@ -73,17 +73,17 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
+      await this.spinner.show();
       await Promise.all([
         this.timKiem(),
         this.search(),
       ]);
-      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
-      await this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -106,24 +106,34 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     this.isView = isView;
   }
 
-  openModalDxKh(id: number) {
-    this.idDxKh = id;
-    this.isViewDxKh = true;
+  openModal(entityType: string, id: number) {
+    switch (entityType) {
+      case 'DxKh':
+        this.idDxKh = id;
+        this.isViewDxKh = true;
+        break;
+      case 'Thop':
+        this.idThop = id;
+        this.isViewThop = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closeModalDxKh() {
-    this.idDxKh = null;
-    this.isViewDxKh = false;
-  }
-
-  openModalTh(id: number) {
-    this.idThop = id;
-    this.isViewThop = true;
-  }
-
-  closeModalTh() {
-    this.idThop = null;
-    this.isViewThop = false;
+  closeModal(entityType: string) {
+    switch (entityType) {
+      case 'DxKh':
+        this.idDxKh = null;
+        this.isViewDxKh = false;
+        break;
+      case 'Thop':
+        this.idThop = null;
+        this.isViewThop = false;
+        break;
+      default:
+        break;
+    }
   }
 
   disabledNgayKyQdTu = (startValue: Date): boolean => {

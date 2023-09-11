@@ -61,33 +61,30 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    await this.spinner.show()
-    if (changes) {
-      if (this.dataInput) {
-        this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
+    if (changes.dataInput) {
+      await this.spinner.show();
+      const dataInput = changes.dataInput.currentValue;
+      if (dataInput) {
+        this.helperService.bidingDataInFormGroup(this.formData, dataInput);
+        const hasValidTime = dataInput.tgianDkienTu && dataInput.tgianDkienDen;
         this.formData.patchValue({
-          thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
-        })
-        this.dataTable = this.dataInput.children
-        await this.calculatorTable(this.dataInput);
+          thoiGianDuKien: hasValidTime ? [dataInput.tgianDkienTu, dataInput.tgianDkienDen] : null
+        });
+        this.dataTable = dataInput.children;
+        await this.calculatorTable(dataInput);
       } else {
         this.formData.reset();
       }
+      await this.spinner.hide();
     }
-    await this.spinner.hide()
   }
 
   expandSet = new Set<number>();
-
   onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
+    checked ? this.expandSet.add(id) : this.expandSet.delete(id);
   }
 
- async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
+  async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
       nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
       nzContent: DialogThemMoiXuatBanTrucTiepComponent,
@@ -101,39 +98,34 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
         cloaiVthh: this.dataInput.cloaiVthh,
       },
     });
-    modalGT.afterClose.subscribe(async (data) => {
-      if (!data) {
-        return;
+    modalGT.afterClose.subscribe(async (updatedData) => {
+      if (updatedData && index >= 0) {
+        this.dataTable[index] = updatedData;
+        await this.calculatorTable();
       }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      }
-      await this.calculatorTable();
     });
-  };
+  }
 
   async calculatorTable(data?) {
     for (const item of this.dataTable) {
       for (const child of item.children) {
-        let bodyPag = {
+        const isVatTuDtqg = data.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU);
+        const maDvi = isVatTuDtqg ? '' : item.maDvi;
+        const bodyPag = {
           namKeHoach: data.namKh,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           trangThai: STATUS.BAN_HANH,
-          maDvi: data.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : item.maDvi,
+          maDvi: maDvi,
           loaiGia: 'LG04'
+        };
+        const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
+        if (pag.msg === MESSAGE.SUCCESS) {
+          child.donGiaDuocDuyet = pag.data ? pag.data[0].giaQdTcdt : null;
+        } else {
+          child.donGiaDuocDuyet = null;
         }
-        let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-        if (pag.msg == MESSAGE.SUCCESS) {
-          if (pag.data) {
-            pag.data.forEach(s => {
-              child.donGiaDuocDuyet = s.giaQdTcdt;
-            })
-          } else {
-            child.donGiaDuocDuyet = null;
-          }
-        }
-        child.thanhTien = child.donGiaDuocDuyet != null ? child.donGiaDuocDuyet * child.soLuongDeXuat : null;
+        child.thanhTien = child.donGiaDuocDuyet !== null ? child.donGiaDuocDuyet * child.soLuongDeXuat : null;
       }
     }
     this.formData.patchValue({
