@@ -160,7 +160,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.soLuongDc,
-        dviTinh: this.data.tenDonViTinh,
+        dviTinh: this.data.donViTinh,
       });
       await this.getDanhSachTT(this.data.qdDcCucId, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
@@ -367,7 +367,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          dviTinh: data.tenDonViTinh,
+          dviTinh: data.donViTinh,
           soLuongQdDcCuc: data.soLuongPhanBo,
         });
 

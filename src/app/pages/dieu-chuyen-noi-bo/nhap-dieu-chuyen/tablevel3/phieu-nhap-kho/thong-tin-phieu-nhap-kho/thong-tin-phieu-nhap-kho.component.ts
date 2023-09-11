@@ -483,11 +483,11 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           soLuongQdDcCuc: data.soLuongPhanBo,
-          dviTinh: data.tenDonViTinh,
+          dviTinh: data.donViTinh,
           thayDoiThuKho: data.thayDoiThuKho,
           idKeHoachDtl: data.id
         });
-        this.dviTinh = data.tenDonViTinh
+        this.dviTinh = data.donViTinh
         this.noiDung = data.tenCloaiVthh
         this.duToanKinhPhi = data.duToanKphi
       }

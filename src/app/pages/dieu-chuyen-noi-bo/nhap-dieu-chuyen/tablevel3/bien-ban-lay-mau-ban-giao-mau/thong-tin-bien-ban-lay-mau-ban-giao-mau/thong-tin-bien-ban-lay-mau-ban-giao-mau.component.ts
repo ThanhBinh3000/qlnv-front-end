@@ -158,7 +158,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
-        tenDonViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
       });
       await this.loadChiTietQdinh(this.data.qddccId);
       await this.loadPhuongPhapLayMau(this.data.maChLoaiHangHoa)
@@ -298,7 +298,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
           loaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
         });
         this.phuongPhapLayMaus = []
         await this.loadChiTietQdinh(data.id);
@@ -453,7 +453,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          tenDonViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
           idKeHoachDtl: data.id
         });
         await this.loadPhuongPhapLayMau(data.cloaiVthh)
