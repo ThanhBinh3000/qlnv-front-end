@@ -88,11 +88,11 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
         this.timKiem(),
         this.search(),
       ]);
-      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
-      await this.spinner.hide();
+      console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -101,20 +101,19 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       loaiVthh: this.loaiVthh,
     })
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      this.loadDsVthh();
+     await this.loadDsVthh();
     }
   }
 
   async clearFilter() {
     this.formData.reset();
-    await this.timKiem();
-    await this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listClVthh = res.data?.filter((x) => x.ma.length == 4);
+    const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listClVthh = res.data?.filter(x => x.ma.length === 4) || [];
     }
   }
 

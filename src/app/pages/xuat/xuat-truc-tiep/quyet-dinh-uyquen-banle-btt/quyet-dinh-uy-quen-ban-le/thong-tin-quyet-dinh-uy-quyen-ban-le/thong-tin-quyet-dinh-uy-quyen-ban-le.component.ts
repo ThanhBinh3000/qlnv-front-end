@@ -65,7 +65,6 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
       this.maQd = this.userInfo.MA_QD;
       if (this.idInput) {
@@ -75,14 +74,14 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
         ]);
       }
     } catch (e) {
-      console.log('error: ', e);
-      await this.spinner.hide();
+      console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    await this.spinner.hide();
   }
 
-  async loadDataComboBox() {
+  loadDataComboBox() {
     this.listPthucBanTt = [
       {
         ma: '02',
@@ -96,71 +95,72 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
   }
 
   async loadDetail(id: number) {
-    if (id > 0) {
-      await this.chaoGiaMuaLeUyQuyenService.getDetail(id)
-        .then(async (res) => {
-          const data = res.data
-          this.dataTable = data.children.filter(s => s.maDvi == this.userInfo.MA_DVI);
-          this.dataTable.forEach((item) => {
-            item.children.forEach((child) => {
-              this.listOfData.push(child)
-              this.diaDiemKho(child)
-            })
-
-          })
-          this.formData.patchValue({
-            namKh: data.namKh,
-            soQdPd: data.soQdPd,
-            ngayKyQd: data.xhQdPdKhBttHdr.ngayKyQd,
-            ngayHluc: data.xhQdPdKhBttHdr.ngayHluc,
-            loaiVthh: data.xhQdPdKhBttHdr.loaiVthh,
-            tenLoaiVthh: data.tenLoaiVthh,
-            pthucBanTrucTiep: data.pthucBanTrucTiep,
-            trichYeu: data.xhQdPdKhBttHdr.trichYeu,
-            thoiGianDeXuatBtt: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null,
-            thoiGianPdBtt: (data.ngayMkho && data.ngayKthuc) ? [data.ngayMkho, data.ngayKthuc] : null
-          })
-          this.fileUyQuyen = data.fileUyQuyen;
-          this.fileBanLe = data.fileBanLe;
-        })
-        .catch((e) => {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        });
+    if (id <= 0) {
+      return;
+    }
+    try {
+      const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(id);
+      if (!res.data) {
+        return;
+      }
+      const data = res.data;
+      this.dataTable = data.children.filter(s => s.maDvi == this.userInfo.MA_DVI);
+      for (const item of this.dataTable) {
+        for (const child of item.children) {
+          this.listOfData.push(child);
+          await this.diaDiemKho(child);
+        }
+      }
+      this.formData.patchValue({
+        namKh: data.namKh,
+        soQdPd: data.soQdPd,
+        ngayKyQd: data.xhQdPdKhBttHdr.ngayKyQd,
+        ngayHluc: data.xhQdPdKhBttHdr.ngayHluc,
+        loaiVthh: data.xhQdPdKhBttHdr.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        pthucBanTrucTiep: data.pthucBanTrucTiep,
+        trichYeu: data.xhQdPdKhBttHdr.trichYeu,
+        thoiGianDeXuatBtt: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null,
+        thoiGianPdBtt: (data.ngayMkho && data.ngayKthuc) ? [data.ngayMkho, data.ngayKthuc] : null,
+      });
+      this.fileUyQuyen = data.fileUyQuyen;
+      this.fileBanLe = data.fileBanLe;
+    } catch (e) {
+      console.error('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
   }
 
   async diaDiemKho(dataCha) {
-    let body = {
+    const body = {
       trangThai: "01",
       maDviCha: this.userInfo.MA_DVI
     };
-    const res = await this.donViService.getAll(body)
-    const dataDk = res.data.filter(item => item.maDvi == dataCha.maDiemKho);
-    dataCha.diaChi = dataDk.diaChi
-
-    dataDk.forEach(s => {
-      dataCha.diaDiemKho = s.diaChi
-    })
-  }
-
-  calcTong(column) {
-    if (this.listOfData) {
-      const sum = this.listOfData.reduce((prev, cur) => {
-        prev += cur[column];
-        return prev;
-      }, 0);
-      return sum;
+    try {
+      const res = await this.donViService.getAll(body);
+      const dataDk = res.data.find(item => item.maDvi === dataCha.maDiemKho);
+      if (dataDk) {
+        dataCha.diaChi = dataDk.diaChi;
+        dataCha.diaDiemKho = dataCha.diaChi;
+      }
+    } catch (e) {
+      console.error('error: ', e);
     }
   }
 
-  themMoiBangKeBanLe($event, data?: null, index?: number) {
+  calcTong(column) {
+    if (!this.listOfData) return 0;
+    return this.listOfData.reduce((sum, cur) => sum + (cur[column] || 0), 0);
+  }
+
+  themMoiBangKeBanLe($event, data: any = null, index: number = -1) {
     const modalGT = this.modal.create({
       nzContent: DialogThemMoiBangKeBanLeComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzStyle: {top: '200px'},
+      nzStyle: { top: '200px' },
       nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
@@ -168,15 +168,12 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
         loaiVthh: this.loaiVthh,
       },
     });
-    modalGT.afterClose.subscribe((data) => {
-      if (!data) {
-        return;
-      }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      } else {
-        this.dataTable.push(data);
+    modalGT.afterClose.subscribe((result) => {
+      if (result && index >= 0) {
+        this.dataTable[index] = result;
+      } else if (result) {
+        this.dataTable.push(result);
       }
     });
-  };
+  }
 }

@@ -18,6 +18,8 @@ import {CHUC_NANG, STATUS} from "src/app/constants/status";
   styleUrls: ['./bien-ban-lay-mau.component.scss']
 })
 export class BienBanLayMauComponent extends Base2Component implements OnInit {
+  @Input() loaiXuat: any;
+  @Input() loaiVthh: any;
   @Input() inputService: any;
   @Input() inputServiceGnv: any;
   inputData: any;
@@ -51,11 +53,16 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
       ngayLayMauDen: null,
       type: null,
       loaiVthh: null,
+      loaiXuat: null
     })
   }
 
   async ngOnInit() {
     try {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        type: this.loaiXuat
+      });
       super.service = this.inputService;
       await this.search();
     } catch (e) {

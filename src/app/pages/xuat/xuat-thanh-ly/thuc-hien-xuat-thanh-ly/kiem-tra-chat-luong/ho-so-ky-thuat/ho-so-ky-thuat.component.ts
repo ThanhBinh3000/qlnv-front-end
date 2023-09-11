@@ -5,17 +5,15 @@ import {StorageService} from "src/app/services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
+
+import {MESSAGE} from "src/app/constants/message";
+import {HoSoKyThuatThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoKyThuatThanhLy.service";
 import {
   PhieuKiemNghiemChatLuongService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service";
-import dayjs from "dayjs";
-import {
-  HoSoKyThuatCtvtService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
-import {MESSAGE} from "src/app/constants/message";
+} from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service";
 
 @Component({
-  selector: 'app-ho-so-ky-thuat-cuu-tro',
+  selector: 'app-ho-so-ky-thuat-thanh-ly',
   templateUrl: './ho-so-ky-thuat.component.html',
   styleUrls: ['./ho-so-ky-thuat.component.scss']
 })
@@ -35,10 +33,10 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
-    private hoSoKyThuatCtvtService: HoSoKyThuatCtvtService
+    public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    private hoSoKyThuatThanhLyService: HoSoKyThuatThanhLyService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatThanhLyService);
     this.formData = this.fb.group({
       id: [],
       idQdGiaoNvNh: [],
@@ -77,7 +75,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     this.formData.patchValue({
-      type: 'CTVT'
+      type: 'TL'
     });
     try {
       await Promise.all([
