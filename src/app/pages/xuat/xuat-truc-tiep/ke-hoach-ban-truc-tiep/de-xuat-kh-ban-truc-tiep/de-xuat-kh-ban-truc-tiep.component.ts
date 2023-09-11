@@ -128,8 +128,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
 
   async clearFilter() {
     this.formData.reset();
-    await this.timKiem();
-    await this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {

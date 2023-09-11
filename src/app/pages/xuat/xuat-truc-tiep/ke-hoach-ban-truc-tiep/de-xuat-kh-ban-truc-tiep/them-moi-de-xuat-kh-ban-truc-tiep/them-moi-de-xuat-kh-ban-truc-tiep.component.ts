@@ -25,7 +25,6 @@ import {
   DialogThemMoiXuatBanTrucTiepComponent
 } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
-import {DatePipe} from "@angular/common";
 import {QuyetDinhGiaCuaBtcService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
@@ -41,6 +40,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   @Input() showFromTH: boolean;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   listPhuongThucThanhToan: any[] = [];
@@ -50,7 +50,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   listVatTuCha: any[] = [];
   listVatTu = [];
   dataDonGiaDuocDuyet: any;
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -65,7 +64,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanTrucTiepService);
-
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
@@ -81,7 +79,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       idSoQdCtieu: [],
       soQdCtieu: [''],
       loaiVthh: ['', [Validators.required]],
-      tenLoaiVthh: ['', [Validators.required]],
+      tenLoaiVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
@@ -425,22 +423,27 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   }
 
   async save() {
-    if (!this.validateNgay()) return;
-    await this.helperService.ignoreRequiredForm(this.formData);
-    const body = {
-      ...this.formData.value,
-      soDxuat: this.formData.value.soDxuat ? this.formData.value.soDxuat + this.maHauTo : null,
-      tgianDkienTu: null,
-      tgianDkienDen: null,
-      children: this.dataTable
-    };
-    const thoiGianDuKienValue = this.formData.get('thoiGianDuKien').value;
-    if (thoiGianDuKienValue) {
-      body.tgianDkienTu = this.formatDate(thoiGianDuKienValue, 0);
-      body.tgianDkienDen = this.formatDate(thoiGianDuKienValue, 1);
+    try {
+      await this.helperService.ignoreRequiredForm(this.formData);
+      if (!this.validateNgay()) return;
+      this.formData.controls["soDxuat"].setValidators([Validators.required]);
+      const body = {
+        ...this.formData.value,
+        soDxuat: this.formData.value.soDxuat ? this.formData.value.soDxuat + this.maHauTo : null,
+        tgianDkienTu: null,
+        tgianDkienDen: null,
+        children: this.dataTable
+      };
+      const thoiGianDuKienValue = this.formData.get('thoiGianDuKien').value;
+      if (thoiGianDuKienValue) {
+        body.tgianDkienTu = this.formatDate(thoiGianDuKienValue, 0);
+        body.tgianDkienDen = this.formatDate(thoiGianDuKienValue, 1);
+      }
+      await this.createUpdate(body);
+      await this.helperService.restoreRequiredForm(this.formData);
+    } catch (e) {
+      console.log('error', e);
     }
-    await this.createUpdate(body);
-    await this.helperService.restoreRequiredForm(this.formData);
   }
 
   formatDate(dateRange, index) {
@@ -472,26 +475,19 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   async getDataChiTieu() {
     const namKhValue = +this.formData.get('namKh').value;
     const res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(namKhValue);
-    if (res2.msg === MESSAGE.SUCCESS) {
-      this.dataChiTieu = res2.data;
-      this.formData.patchValue({
-        soQdCtieu: res2.data.soQuyetDinh,
-        idSoQdCtieu: res2.data.id
-      });
-      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) && Array.isArray(res2.data.khVatTuXuat) && res2.data.khVatTuXuat.length > 0) {
-        const uniqueVatTuCha = res2.data.khVatTuXuat
-          .filter((item, index, self) => item.maVatTuCha !== null && index === self.findIndex(value => value.maVatTuCha === item.maVatTuCha))
-          .map(item => ({ maVatTuCha: item.maVatTuCha, tenVatTuCha: item.tenVatTuCha }));
-        this.listVatTuCha = uniqueVatTuCha;
-      } else {
-        this.listVatTuCha = [];
-      }
+    this.dataChiTieu = res2.msg === MESSAGE.SUCCESS ? res2.data : null;
+    const patchValues = {
+      soQdCtieu: this.dataChiTieu?.soQuyetDinh || null,
+      idSoQdCtieu: this.dataChiTieu?.id || null
+    };
+    this.formData.patchValue(patchValues);
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) && Array.isArray(this.dataChiTieu.khVatTuXuat) && this.dataChiTieu.khVatTuXuat.length > 0) {
+      const uniqueVatTuCha = this.dataChiTieu.khVatTuXuat
+        .filter((item, index, self) => item.maVatTuCha !== null && index === self.findIndex(value => value.maVatTuCha === item.maVatTuCha))
+        .map(item => ({maVatTuCha: item.maVatTuCha, tenVatTuCha: item.tenVatTuCha}));
+      this.listVatTuCha = uniqueVatTuCha;
     } else {
-      this.dataChiTieu = null;
-      this.formData.patchValue({
-        soQdCtieu: null,
-        idSoQdCtieu: null
-      });
+      this.listVatTuCha = [];
     }
   }
 
@@ -515,9 +511,8 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   }
 
   validateNgay() {
-    const ngayTao = new Date(this.formData.value.ngayTao);
-    const ngayPduyet = new Date(this.formData.value.ngayPduyet);
-    if (this.formData.value.ngayPduyet && ngayTao > ngayPduyet) {
+    const {ngayTao, ngayPduyet} = this.formData.value;
+    if (ngayPduyet && new Date(ngayTao) > new Date(ngayPduyet)) {
       this.notification.error(MESSAGE.ERROR, "Ngày tạo không được vượt quá ngày phê duyệt");
       return false;
     }
@@ -534,7 +529,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
     this.formData.controls["diaChi"].setValidators([Validators.required]);
     this.formData.controls["namKh"].setValidators([Validators.required]);
-    this.formData.controls["soDxuat"].setValidators([Validators.required]);
     this.formData.controls["trichYeu"].setValidators([Validators.required]);
     this.formData.controls["ngayTao"].setValidators([Validators.required]);
     this.formData.controls["soQdCtieu"].setValidators([Validators.required]);

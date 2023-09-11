@@ -69,15 +69,17 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
-      await this.timKiem()
-      await this.search();
-      await this.spinner.hide();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+      ]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -88,10 +90,9 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -100,26 +101,25 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     this.isView = isView;
   }
 
-  openModalDxKh(id: number) {
-    this.idDxKh = id;
-    this.isViewDxKh = true;
+  openModal(id: number, modalType: string) {
+    if (modalType === 'DxKh') {
+      this.idDxKh = id;
+      this.isViewDxKh = true;
+    } else if (modalType === 'Thop') {
+      this.idThop = id;
+      this.isViewThop = true;
+    }
   }
 
-  closeModalDxKh() {
-    this.idDxKh = null;
-    this.isViewDxKh = false;
+  closeModal(modalType: string) {
+    if (modalType === 'DxKh') {
+      this.idDxKh = null;
+      this.isViewDxKh = false;
+    } else if (modalType === 'Thop') {
+      this.idThop = null;
+      this.isViewThop = false;
+    }
   }
-
-  openModalTh(id: number) {
-    this.idThop = id;
-    this.isViewThop = true;
-  }
-
-  closeModalTh() {
-    this.idThop = null;
-    this.isViewThop = false;
-  }
-
 
   disabledNgayKyQdTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayKyQdDen) {
