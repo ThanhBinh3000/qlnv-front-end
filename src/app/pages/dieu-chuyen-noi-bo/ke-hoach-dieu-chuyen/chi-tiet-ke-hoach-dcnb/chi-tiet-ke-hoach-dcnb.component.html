@@ -384,7 +384,7 @@
                         <td>{{lv2.tenLoKho ? lv2.tenLoKho + "-": ""}}{{lv2.tenNganKho}}-{{lv2.tenNhaKho}}</td>
                         <td>{{lv2.tenLoaiVthh}}</td>
                         <td>{{lv2.tenCloaiVthh}}</td>
-                        <td>{{lv2.tenDonViTinh}}</td>
+                        <td>{{lv2.donViTinh}}</td>
                         <td>{{lv2.tonKho|number:'1.0-1' : 'vi_VN'}}</td>
                         <td>{{lv2.soLuongDc|number:'1.0-1' : 'vi_VN'}}</td>
                         <td>{{lv2.duToanKphi|number:'1.0-1' : 'vi_VN'}}</td>
@@ -674,7 +674,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="7" class="dcnb-label">Tồn kho </nz-form-label>
             <span><span style="color: #001CFF">{{formDataChiTiet.value.tonKho |number : '1.0-1' :
-              'vi_VN'}}</span><span>({{formDataChiTiet.value.tenDonViTinh}})</span></span>
+              'vi_VN'}}</span><span>({{formDataChiTiet.value.donViTinh}})</span></span>
           </nz-form-item>
 
           <nz-form-item>
@@ -804,7 +804,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" class="dcnb-label">Tồn kho </nz-form-label>
                 <span><span style="color: #001CFF">{{formDataChiTiet.value.tonKho |number : '1.0-1' :
-                  'vi_VN'}}</span><span>({{formDataChiTiet.value.tenDonViTinh}})</span></span>
+                  'vi_VN'}}</span><span>({{formDataChiTiet.value.donViTinh}})</span></span>
               </nz-form-item>
 
               <nz-form-item>

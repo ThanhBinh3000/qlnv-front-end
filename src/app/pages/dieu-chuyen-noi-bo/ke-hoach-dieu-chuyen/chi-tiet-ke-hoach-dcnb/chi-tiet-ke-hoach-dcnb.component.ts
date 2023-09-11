@@ -172,7 +172,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         tenLoaiVthh: ['', [Validators.required]],
         tenCloaiVthh: ['', [Validators.required]],
         donViTinh: ['', [Validators.required]],
-        tenDonViTinh: ['', [Validators.required]],
         tonKho: [0, [Validators.required]],
         hdrId: [undefined],
         maDiemKhoNhan: ['', [Validators.required]],
@@ -433,7 +432,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       cloaiVthh: "",
       tenCloaiVthh: "",
       donViTinh: "",
-      tenDonViTinh: "",
       tonKho: 0
     });
     this.getListNhaKhoBq(value)
@@ -456,7 +454,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       cloaiVthh: "",
       tenCloaiVthh: "",
       donViTinh: "",
-      tenDonViTinh: "",
       tonKho: 0
     });
     this.getListNganKhoBq(value);
@@ -526,8 +523,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
               tenLoaiVthh: res.data[0].tenLoaiVthh,
               cloaiVthh: res.data[0].cloaiVthh,
               tenCloaiVthh: res.data[0].tenCloaiVthh,
-              donViTinh: res.data[0].donViTinhId,
-              tenDonViTinh: res.data[0].tenDonViTinh,
+              donViTinh: res.data[0].tenDonViTinh,
               tonKho: res.data[0].slHienThoi
             });
           } else {
@@ -588,7 +584,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       cloaiVthh: "",
       tenCloaiVthh: "",
       donViTinh: "",
-      tenDonViTinh: "",
       tonKho: 0
     });
   }

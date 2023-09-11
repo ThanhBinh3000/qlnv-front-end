@@ -209,8 +209,8 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       maDvi: event
     }
     let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
-    let resChiTieu = this.dataChiTieu.khLuongThuc.find(x => x.maDonVi == event);
     console.log(this.dataChiTieu)
+    let resChiTieu = this.dataChiTieu.khLuongThuc.find(x => x.maDonVi == event);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.donViService.getDonVi({ str: event })
     this.listDiemKho = [];

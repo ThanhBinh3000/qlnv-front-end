@@ -13,6 +13,9 @@ import * as dayjs from "dayjs";
 import {MESSAGE} from "../../../../../constants/message";
 import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {STATUS} from 'src/app/constants/status';
+import { PREVIEW } from '../../../../../constants/fileType';
+import printJS from 'print-js';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-du-lieu-tong-hop-tcdt',
@@ -54,7 +57,11 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
     trangThai: '',
     trangThaiPdBtc: '',
   };
-
+  templateName = 'bao-cao-so-lieu-quyet-toan-toan-nganh';
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  showDlgPreview = false;
   constructor(
     private readonly fb: FormBuilder,
     public globals: Globals,
@@ -408,5 +415,36 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
       });
     }
   }
+  async preview(id) {
+    this.spinner.show();
+    await this.vonPhiService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
 
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
 }
