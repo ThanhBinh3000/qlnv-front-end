@@ -139,7 +139,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tongSlTheoQd: this.data.soLuongDc,
-        donViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
       });
       await this.getDanhSachTT(this.data.qdDcCucId, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
@@ -370,7 +370,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          donViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
           idKeHoachDtl: data.id,
           tongSlTheoQd: data.soLuongDc,
         });
