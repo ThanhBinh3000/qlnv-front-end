@@ -299,7 +299,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
 
 
-  openDialogDdiemNhapHang() {
+  openDialogDdiemXuatHang() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm xuất hàng',
       nzContent: DialogTableSelectionComponent,

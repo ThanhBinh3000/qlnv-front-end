@@ -110,10 +110,10 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất, phê duyệt không được lớn hơn số lượng chỉ tiêu kế hoạch")
         return;
       }
-      if (this.listOfData.length == 0 && this.userService.isCuc()) {
-        this.notification.error(MESSAGE.ERROR, "Danh sách điểm kho không được để trống")
-        return;
-      }
+      // if (this.listOfData.length == 0 && this.userService.isCuc()) {
+      //   this.notification.error(MESSAGE.ERROR, "Danh sách điểm kho không được để trống")
+      //   return;
+      // }
       let data = this.formData.value;
       this.listOfData.forEach(item =>{
         item.donGia = data.donGia
@@ -231,7 +231,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         tongSoLuongChuaTh: resChiTieu?.ntnThoc - soLuongDaLenKh.data
       })
       console.log("changeChiCuc", this.formData.value);
-      this.listOfData = chiCuc.children
+      // this.listOfData = chiCuc.children
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
     }

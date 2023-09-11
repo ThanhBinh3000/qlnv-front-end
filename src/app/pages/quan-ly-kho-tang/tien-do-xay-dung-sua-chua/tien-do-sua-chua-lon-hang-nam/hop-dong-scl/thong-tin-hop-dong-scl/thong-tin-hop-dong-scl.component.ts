@@ -242,7 +242,11 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
             id: item.id
           };
           this.hopdongService.delete(body).then(async () => {
-            let resp = await this.hopdongService.danhSachHdTheoKhlcnt(this.idInput);
+            let body = {
+              idQdPdKhlcnt : this.itemQdPdKhLcnt.id,
+              loai: "00"
+            }
+            let resp = await this.hopdongService.danhSachHdTheoKhlcnt(body);
             if (resp.msg == MESSAGE.SUCCESS) {
               this.listHopDong = resp.data;
             }

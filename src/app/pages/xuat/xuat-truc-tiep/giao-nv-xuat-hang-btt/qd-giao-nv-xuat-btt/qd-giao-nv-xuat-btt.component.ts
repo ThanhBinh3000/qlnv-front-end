@@ -82,13 +82,16 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
-      this.timKiem();
-      await this.search();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+      ]);
+      await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }

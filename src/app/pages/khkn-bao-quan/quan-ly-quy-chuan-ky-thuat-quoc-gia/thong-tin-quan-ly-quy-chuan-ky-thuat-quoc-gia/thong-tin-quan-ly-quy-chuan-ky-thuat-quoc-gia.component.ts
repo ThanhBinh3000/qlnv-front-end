@@ -327,7 +327,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
     body.fileDinhKems = this.taiLieuDinhKemList;
     body.loaiVthh = this.listOfTagOptions.join(',');
-    body.listTenLoaiVthh = this.listLoaiVthh.join(',');
+    let uniquelistLoaiVthh =  [...new Map(this.listLoaiVthh.map(item => [item, item])).values()];
+    body.listTenLoaiVthh = uniquelistLoaiVthh.join(',');
     body.apDungTai = this.userInfo.MA_DVI.substring(0, 2);
     let res;
     if (this.id > 0) {
@@ -448,16 +449,16 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     });
   }
 
-  async loadLoaiHangHoa() {
+  async loadLoaiHangHoa(maBn?) {
     try {
       let hangHoa: any;
       if (this.userInfo.MA_DVI == '0101') {
         hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-          'maDvi': this.userInfo.MA_DVI,
+          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI,
         }).toPromise();
       } else {
         hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-          'maDvi': this.userInfo.MA_DVI.substring(0, 2),
+          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI.substring(0, 2),
         }).toPromise();
       }
       if (hangHoa) {
@@ -717,6 +718,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
+        debugger;
         this.listOfTagOptions = [];
         this.listLoaiVthh = [];
         this.dataTable = [];
@@ -763,7 +765,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   async getDsChiTieu(loaiVthh: any[]) {
     let res = await this.danhMucService.danhMucChungGetAll('CHI_TIEU_CL');
     if (res.msg == MESSAGE.SUCCESS) {
+      console.log(loaiVthh, 'loaiVthhloaiVthhloaiVthh');
       this.listChiTieu = res.data.filter(item => loaiVthh.includes(item.phanLoai));
+      console.log(this.listChiTieu, 'this.listChiTieuthis.listChiTieuthis.listChiTieu');
     }
   }
 
@@ -818,5 +822,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   doPrint() {
     printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  changeBoNganh() {
+    this.loadLoaiHangHoa(this.formData.get('maBn').value);
   }
 }

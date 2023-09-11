@@ -11,7 +11,10 @@
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span> Hoàn thành cập nhập </span>
     </button>
-    <button *ngIf="this.listOfData.length > 0 && idInput" type="button" class="btn btn-sub" (click)="preview(idInput)">
+    <button
+      *ngIf="formData.value.trangThai != STATUS.CHUA_CAP_NHAT && idInput && formData.value.pthucBanTrucTiep == '01' "
+      type="button" class="btn btn-sub"
+      (click)="preview(idInput)">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
     </button>
@@ -238,7 +241,7 @@
                 <td>{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
                 <td>{{ children.donViTinh}}</td>
                 <td>{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
-                <td>{{ children.donGiaDuocDuyet * children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
+                <td>{{ children.thanhTien|number:globals.numberFormat:globals.locale}}</td>
               </tr>
             </ng-container>
           </ng-container>
@@ -259,7 +262,7 @@
             <th class="text-center"> Thành tiền (đ)</th>
             <th class="text-center"> File đính kèm</th>
             <th class="text-center"> Lựa chọn</th>
-            <th class="text-center" *ngIf="!isView"> Hành động</th>
+            <th class="text-center"> Hành động</th>
           </tr>
           <tr *ngIf="!isView">
             <th class="text-center"></th>
@@ -275,13 +278,15 @@
             </th>
             <th>
               <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="rowItem.soLuong"
+                               (ngModelChange)="onChangeThanhTien()"
                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
             </th>
             <th>
               <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
+                               (ngModelChange)="onChangeThanhTien()"
                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
             </th>
-            <th>{{ rowItem.soLuong * rowItem.donGia|number:globals.numberFormat:globals.locale}}</th>
+            <th>{{ rowItem.thanhTien|number:globals.numberFormat:globals.locale}}</th>
             <th>
               <nz-form-control>
                 <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
@@ -320,22 +325,22 @@
               <td>{{ data.ngayChaoGia|date:'dd/MM/YYYY' }}</td>
               <td>{{ data.soLuong|number:globals.numberFormat:globals.locale}}</td>
               <td>{{ data.donGia|number:globals.numberFormat:globals.locale}}</td>
-              <td>{{ data.soLuong * data.donGia|number:globals.numberFormat:globals.locale}}</td>
+              <td>{{ data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
               <td>{{ data.fileDinhKems?.fileName }}</td>
               <td><label nz-checkbox [(ngModel)]="data.luaChon"
                          [nzDisabled]="isDisabledLuaChon(true)"></label>
               </td>
-              <td *ngIf="!isView">
+              <td>
                 <a (click)="downloadFile(data.fileDinhKems)">
                   <i class="icon htvbdh_tcdt_import "></i>
                 </a>
-                <a (click)="startEdit(idx)"
-                   *ngIf=" formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
+                <a *ngIf="!isView"
+                   (click)="startEdit(idx)"
                    class="text-center">
                   <i class=" fa fa-pencil"></i>
                 </a>
-                <a (click)="deleteRow(idx)"
-                   *ngIf=" formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
+                <a *ngIf="!isView"
+                   (click)="deleteRow(idx)"
                    class="text-center">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
@@ -364,15 +369,17 @@
               </td>
               <td>
                 <nz-input-number nz-input [nzSize]="'small'"
-                                 [(ngModel)]="dataEdit[idx].data.soLuong " [nzFormatter]="globals.formatter"
+                                 [(ngModel)]="dataEdit[idx].data.soLuong" (ngModelChange)="onChangeThanhTienEdit(idx)"
+                                 [nzFormatter]="globals.formatter"
                                  [nzParser]="globals.parser"></nz-input-number>
               </td>
               <td>
-                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia"
-                                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
-
+                <nz-input-number nz-input [nzSize]="'small'"
+                                 [(ngModel)]="dataEdit[idx].data.donGia" (ngModelChange)="onChangeThanhTienEdit(idx)"
+                                 [nzFormatter]="globals.formatter"
+                                 [nzParser]="globals.parser"></nz-input-number>
               </td>
-              <td>{{ dataEdit[idx].data.soLuong * dataEdit[idx].data.donGia|number:globals.numberFormat:globals.locale}}</td>
+              <td>{{ dataEdit[idx].data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
               <td>
                 <nz-form-control>
                   <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
@@ -390,17 +397,17 @@
               </td>
               <th><label nz-checkbox [(ngModel)]="dataEdit[idx].data.luaChon"></label>
               </th>
-              <td class="text-center" *ngIf="!isView">
+              <td class="text-center">
                 <a (click)="downloadFile(dataEdit[idx].data.fileDinhKems)">
                   <i class="icon htvbdh_tcdt_import "></i>
                 </a>
                 <a
-                  *ngIf="formData.value.trangThai == STATUS.CHUA_CAP_NHAT || formData.value.trangThai == STATUS.DANG_CAP_NHAT"
+                  *ngIf="!isView"
                   (click)="saveEdit(idx)" class="save">
                   <i class="icon htvbdh_tcdt_save"></i>
                 </a>
                 <a
-                  *ngIf="formData.value.trangThai == STATUS.CHUA_CAP_NHAT || formData.value.trangThai == STATUS.DANG_CAP_NHAT"
+                  *ngIf="!isView"
                   (click)="cancelEdit(idx)">
                   <i class="fa fa-ban do"></i>
                 </a>

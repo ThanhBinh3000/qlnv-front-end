@@ -538,6 +538,10 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data;
           console.log(data, "hello");
+          const sum = data.hhQdGiaoNvNhangDtlList.reduce((prev, cur) => {
+            prev += cur.soLuong;
+            return prev;
+          }, 0);
           this.formData.patchValue({
             id: data.id,
             namNhap: data.namNhap,
@@ -557,7 +561,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             tenTrangThai: data.tenTrangThai,
             lyDoTuChoi: data.ldoTuchoi,
             idHd: data.idHd,
-            soLuong: data.hhQdGiaoNvNhangDtlList.find(x => x.maDvi.includes(this.userInfo.MA_DVI)).soLuong,
+            soLuong: this.userService.isChiCuc() ? data.hhQdGiaoNvNhangDtlList.find(x => x.maDvi.includes(this.userInfo.MA_DVI)).soLuong : sum,
             donViTinh: data.donViTinh,
             soHd: data.soHd,
             tenHd: data.tenHd,

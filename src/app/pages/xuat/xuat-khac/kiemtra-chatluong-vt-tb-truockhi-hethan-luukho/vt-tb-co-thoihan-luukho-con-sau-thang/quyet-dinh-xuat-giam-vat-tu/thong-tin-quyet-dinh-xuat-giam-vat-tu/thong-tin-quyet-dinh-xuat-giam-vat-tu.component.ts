@@ -1,35 +1,41 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {chain, cloneDeep} from "lodash";
-import * as uuid from "uuid";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzSelectSizeType } from 'ng-zorro-antd/select';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { chain, cloneDeep, isEmpty } from 'lodash';
+import * as uuid from 'uuid';
 import {
-  PhieuXuatNhapKhoService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
+  PhieuXuatNhapKhoService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service';
 import {
-  QuyetDinhGiaoNvXuatHangService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service";
+  PhieuKdclVtKtclService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service';
 import {
-  BckqKiemDinhMauService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service";
-import {Validators} from "@angular/forms";
-import dayjs from "dayjs";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {CHUC_NANG, STATUS} from "../../../../../../../constants/status";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+  QuyetDinhGiaoNvXuatHangService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service';
 import {
-  QuyetDinhXuatGiamVattuService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhXuatGiamVattu.service";
-import {FILETYPE} from "../../../../../../../constants/fileType";
+  BckqKiemDinhMauService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service';
+import { Validators } from '@angular/forms';
+import dayjs from 'dayjs';
+import { MESSAGE } from '../../../../../../../constants/message';
+import { isArray } from 'rxjs/internal-compatibility';
+import { Base2Component } from '../../../../../../../components/base2/base2.component';
+import { CHUC_NANG, STATUS } from '../../../../../../../constants/status';
+import { DanhMucService } from '../../../../../../../services/danhmuc.service';
+import {
+  QuyetDinhXuatGiamVattuService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhXuatGiamVattu.service';
+import { FILETYPE, PREVIEW } from '../../../../../../../constants/fileType';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-xuat-giam-vat-tu',
   templateUrl: './thong-tin-quyet-dinh-xuat-giam-vat-tu.component.html',
-  styleUrls: ['./thong-tin-quyet-dinh-xuat-giam-vat-tu.component.scss']
+  styleUrls: ['./thong-tin-quyet-dinh-xuat-giam-vat-tu.component.scss'],
 })
 export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
@@ -49,16 +55,16 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
   listBcKqKdMauOption: any[] = [];
   listPhieuXuatKho: any[] = [];
   listLoaiHinhNhapXuat: any[] = [
-    {value: 'XUAT_GIAM', label: "Xuất mẫu bị hủy khỏi kho"},
-  ]
+    { value: 'XUAT_GIAM', label: 'Xuất mẫu bị hủy khỏi kho' },
+  ];
   dataThTree: any[] = [];
   expandSetString = new Set<string>();
   LIST_DANH_GIA: any[] = [
-    {value: 0, label: "Không đạt"},
-    {value: 1, label: "Đạt"}
-  ]
+    { value: 0, label: 'Không đạt' },
+    { value: 1, label: 'Đạt' },
+  ];
+  templateName = 'xuat_khac_ktcl_vat_tu_6_thang_qd_xuat_giam_vt';
   maQd: string;
-  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
 
   constructor(
     httpClient: HttpClient,
@@ -76,32 +82,32 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
     this.formData = this.fb.group({
       id: [],
       tenDvi: [null, [Validators.required]],
-      namKeHoach: [dayjs().get("year")],
+      namKeHoach: [dayjs().get('year')],
       maDvi: [null, [Validators.required]],
       maDviNhan: [null, [Validators.required]],
       tenTrangThai: ['Dự Thảo'],
       trangThai: [STATUS.DU_THAO],
       tenDviNhan: [],
       soQuyetDinh: [],
-      loai: ["XUAT_GIAM"],
+      loai: ['XUAT_GIAM'],
       trichYeu: [],
       soCanCu: [null, [Validators.required]],
       idCanCu: [null, [Validators.required]],
-      ngayKy: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
+      ngayKy: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       thoiHanXuatGiam: [],
       xhXkVtPhieuXuatNhapKho: [new Array()],
       fileDinhKems: [new Array()],
-    })
+    });
   }
 
   async ngOnInit() {
     try {
       this.spinner.show();
-      this.maQd = "/" + this.userInfo.MA_QD
+      this.maQd = '/' + this.userInfo.MA_QD;
       await Promise.all([
         this.loadBcKqKdMau(),
-      ])
-      await this.loadDetail(this.idInput)
+      ]);
+      await this.loadDetail(this.idInput);
       this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra');
@@ -113,9 +119,9 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
 
   async loadBcKqKdMau() {
     let body = {
-      nam: this.formData.get("namKeHoach").value,
+      nam: this.formData.get('namKeHoach').value,
       trangThai: STATUS.DA_DUYET_LDC,
-    }
+    };
     let res = await this.bckqKiemDinhMauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -135,16 +141,16 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
             if (dataDetail) {
               this.formData.patchValue({
                 soQuyetDinh: dataDetail.soQuyetDinh?.split('/')[0],
-              })
+              });
               this.listFile = dataDetail.fileDinhKems;
               if (dataDetail.fileDinhKems && dataDetail.fileDinhKems.length > 0) {
                 dataDetail.fileDinhKems.forEach(item => {
                   if (item.fileType == FILETYPE.FILE_DINH_KEM) {
-                    this.listFileDinhKem.push(item)
+                    this.listFileDinhKem.push(item);
                   } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
-                    this.listCcPhapLy.push(item)
+                    this.listCcPhapLy.push(item);
                   }
-                })
+                });
               }
               this.listPhieuXuatKho = cloneDeep(dataDetail.xhXkVtPhieuXuatNhapKho);
               this.buildTableView();
@@ -177,14 +183,14 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
           idCanCu: objBaoCaoKqKdMau.id,
           maDviNhan: objBaoCaoKqKdMau.maDvi,
           tenDviNhan: objBaoCaoKqKdMau.tenDvi,
-          xhXkVtPhieuXuatNhapKho: this.listPhieuXuatKho
+          xhXkVtPhieuXuatNhapKho: this.listPhieuXuatKho,
         });
       } else {
         this.listPhieuXuatKho = [];
         this.buildTableView();
         this.formData.patchValue({
           idCanCu: null,
-          xhXkVtPhieuXuatNhapKho: null
+          xhXkVtPhieuXuatNhapKho: null,
         });
       }
     } catch (e) {
@@ -197,18 +203,18 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
 
   buildTableView() {
     let dataView = chain(this.listPhieuXuatKho)
-      .groupBy("maChiCuc")
+      .groupBy('maChiCuc')
       .map((value, key) => {
-        let phieuXuatKho = value.find(f => f.maChiCuc === key)
+        let phieuXuatKho = value.find(f => f.maChiCuc === key);
         return {
           idVirtual: uuid.v4(),
-          maChiCuc: key != "null" ? key : '',
+          maChiCuc: key != 'null' ? key : '',
           tenChiCuc: phieuXuatKho ? phieuXuatKho.tenChiCuc : null,
-          childData: value
+          childData: value,
         };
       }).value();
-    this.dataThTree = dataView
-    this.expandAll()
+    this.dataThTree = dataView;
+    this.expandAll();
   }
 
   async save(isGuiDuyet?) {
@@ -216,14 +222,14 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
     this.listFile = [];
     if (this.listFileDinhKem.length > 0) {
       this.listFileDinhKem.forEach(item => {
-        item.fileType = FILETYPE.FILE_DINH_KEM
-        this.listFile.push(item)
+        item.fileType = FILETYPE.FILE_DINH_KEM;
+        this.listFile.push(item);
       });
     }
     if (this.listCcPhapLy.length > 0) {
       this.listCcPhapLy.forEach(element => {
-        element.fileType = FILETYPE.CAN_CU_PHAP_LY
-        this.listFile.push(element)
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY;
+        this.listFile.push(element);
       });
     }
     if (this.listFile && this.listFile.length > 0) {
@@ -238,8 +244,8 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
     if (data) {
       this.idInput = data.id;
       this.formData.patchValue({
-        id: data.id
-      })
+        id: data.id,
+      });
       if (isGuiDuyet) {
         this.pheDuyet();
       }
@@ -281,13 +287,13 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
         break;
       }
     }
-    this.reject(this.idInput, trangThai)
+    this.reject(this.idInput, trangThai);
   }
 
   expandAll() {
     this.dataThTree.forEach(s => {
       this.expandSetString.add(s.idVirtual);
-    })
+    });
   }
 
   onExpandStringChange(id: string, checked: boolean): void {
@@ -298,4 +304,28 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
     }
   }
 
+  async preview(id) {
+    this.spinner.show();
+    await this.quyetDinhXuatGiamVattuService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
 }

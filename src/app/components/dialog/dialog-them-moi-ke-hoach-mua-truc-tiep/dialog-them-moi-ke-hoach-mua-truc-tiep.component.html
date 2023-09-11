@@ -98,15 +98,29 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+<!--            <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">-->
+<!--              <nz-form-item>-->
+<!--                <nz-form-label [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>-->
+<!--                <nz-form-control nz-col [nzSpan]="24">-->
+<!--                                    <span class="text-green">{{formData.value.tongSoLuong }}-->
+<!--                                      (Tấn)</span>-->
+<!--                </nz-form-control>-->
+<!--              </nz-form-item>-->
+<!--            </div>-->
+
             <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                                    <span class="text-green">{{formData.value.tongSoLuong }}
-                                      (Tấn)</span>
+                <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-input-number [nzDisabled]="this.listOfData.length > 0"
+                    formControlName="tongSoLuong"
+                    (input)="calTongThanhTien()"
+                    [nzPrecisionMode]="customPrecisionFn"
+                  ></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>
+
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng thành tiền trình phê duyệt </nz-form-label>

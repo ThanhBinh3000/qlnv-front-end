@@ -79,6 +79,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       ngayLapPhieu: [dayjs().format('YYYY-MM-DD')],
       soQdinhDc: [],
       qdDcId: [],
+      ngayQdinhDc: [],
       nguoiKN: [],
       tpNguoiKt: [],
       tpNguoiKtId: [],
@@ -169,7 +170,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
           return {
             ...element,
-            edit: false,
+            edit: true,
             chiSoCl: element.tenTchuan,
             chiTieuCl: element.chiSoNhap,
             ketQuaPt: element.ketQuaPt,
@@ -415,7 +416,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
           return {
             ...element,
-            edit: false,
+            edit: true,
             chiSoCl: element.tenTchuan,
             chiTieuCl: element.chiSoNhap,
             ketQuaPt: element.ketQuaPt,
@@ -537,7 +538,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
             return {
               ...element,
-              edit: false,
+              edit: true,
               chiSoCl: element.tenTchuan,
               chiTieuCl: element.chiSoNhap,
               ketQuaPt: element.ketQuaPt,

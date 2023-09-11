@@ -123,7 +123,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
 
   async initForm() {
     this.formData.patchValue({
-      tenDvi: this.userInfo.TEN_PHONG_BAN,
+      tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
       namKh: dayjs().get('year'),
       ngayQdNv: dayjs().format('YYYY-MM-DD'),
@@ -396,31 +396,26 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     }))
   }
 
-  selectMaDviTsan($event) {
+ async selectMaDviTsan($event) {
     this.dataTable = [];
     let currentSelectList = cloneDeep(this.listDviTsan);
     if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
-      let listAll = currentSelectList.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
-      listAll.forEach(item => {
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.dataTable.forEach((child) => {
-            if (child.maDvi == item.maDvi) {
-              child.children = [...child.children, ...item.children]
-            } else {
-              this.dataTable = [...this.dataTable, item]
-            }
-          })
+      const selectedItems = currentSelectList.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
+      selectedItems.forEach((item) => {
+        const existingItem = this.dataTable.find(child => child.maDvi === item.maDvi);
+        if (existingItem) {
+          existingItem.children.push(...item.children);
         } else {
-          this.dataTable = [...this.dataTable, item]
+          this.dataTable.push(item);
         }
       });
-      this.calculatorTable();
+      await this.calculatorTable();
     } else {
       this.dataTable = []
     }
   }
 
-  calculatorTable() {
+ async calculatorTable() {
     let soLuongBanTrucTiep: number = 0;
     this.dataTable.forEach((item) => {
       item.children.forEach((child) => {

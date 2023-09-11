@@ -390,7 +390,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   }
 
 
-  openDialogDdiemNhapHang() {
+  openDialogDdiemXuatHang() {
     if (!this.addChung) return;
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm xuất hàng',

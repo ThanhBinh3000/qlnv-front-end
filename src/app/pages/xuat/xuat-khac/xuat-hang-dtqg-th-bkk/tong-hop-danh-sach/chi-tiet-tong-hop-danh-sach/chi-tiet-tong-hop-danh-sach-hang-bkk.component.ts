@@ -220,13 +220,13 @@ export class ChiTietTongHopDanhSachHangBkkComponent extends Base2Component imple
               } else {
                 res.data.content.forEach(s => {
                   s.tongHopDtl.forEach(it => {
-                    it.idDsHdr = cloneDeep(it.id);
+                    it.idDsHdr = cloneDeep(s.id);
                     it.id = null;
                   });
                 });
                 let listDtl = [];
                 res.data.content.forEach(item => {
-                  listDtl = [...item.tongHopDtl];
+                  listDtl = [...listDtl,...item.tongHopDtl];
                 })
                 this.formData.patchValue({
                   maDanhSach: this.selectedItem ?? this.maHauTo,

@@ -21,8 +21,8 @@ import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 })
 
 export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnInit {
-  @Input()
-  loaiVthh: string;
+
+  @Input() loaiVthh: string;
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: XuatTrucTiepComponent
   dsDonvi: any[] = [];
@@ -76,6 +76,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       soTrHdr: null,
       loaiVthh: null,
     });
+
     this.filterTable = {
       namKh: '',
       soQdPd: '',
@@ -93,16 +94,17 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.timKiem();
+      await this.spinner.show();
       await Promise.all([
+        this.timKiem(),
         this.search(),
         this.initData()
       ]);
-      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -115,21 +117,19 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
 
   async loadDsTong() {
     const dsTong = await this.donviService.layDonViCon();
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong.data;
-    }
+    this.dsDonvi = isEmpty(dsTong) ? [] : dsTong.data;
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await this.timKiem();
+    await this.search();
   }
 
   redirectDetail(id, isView: boolean) {
@@ -138,36 +138,43 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     this.isView = isView;
   }
 
-  openModalChiTieu(id: number) {
-    this.idChiTieu = id;
-    this.isViewChiTieu = true;
+  openModal(modalName: string, id: number) {
+    switch (modalName) {
+      case 'ChiTieu':
+        this.idChiTieu = id;
+        this.isViewChiTieu = true;
+        break;
+      case 'QdPd':
+        this.idQdPd = id;
+        this.isViewQdPd = true;
+        break;
+      case 'Th':
+        this.idThop = id;
+        this.isViewThop = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closeModalChiTieu() {
-    this.idChiTieu = null;
-    this.isViewChiTieu = false;
+  closeModal(modalName: string) {
+    switch (modalName) {
+      case 'ChiTieu':
+        this.idChiTieu = null;
+        this.isViewChiTieu = false;
+        break;
+      case 'QdPd':
+        this.idQdPd = null;
+        this.isViewQdPd = false;
+        break;
+      case 'Th':
+        this.idThop = null;
+        this.isViewThop = false;
+        break;
+      default:
+        break;
+    }
   }
-
-  openModalQdPd(id: number) {
-    this.idQdPd = id;
-    this.isViewQdPd = true;
-  }
-
-  closeModalQdPd() {
-    this.idQdPd = null;
-    this.isViewQdPd = false;
-  }
-
-  openModalTh(id: number) {
-    this.idThop = id;
-    this.isViewThop = true;
-  }
-
-  closeModalTh() {
-    this.idThop = null;
-    this.isViewThop = false;
-  }
-
 
   disabledNgayTaoTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayTaoDen) {
