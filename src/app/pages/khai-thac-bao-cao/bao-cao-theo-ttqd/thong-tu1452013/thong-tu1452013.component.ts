@@ -18,7 +18,9 @@ import {createLogErrorHandler} from "@angular/compiler-cli/ngcc/src/execution/ta
 })
 export class ThongTu1452013Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   showDlgPreview = false;
   listNam: any[] = [];
   formData: FormGroup;
@@ -93,6 +95,27 @@ export class ThongTu1452013Component implements OnInit {
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
       this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      // this.setListCondition();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_nhap_xuat_ton_kho_hang_dtnn.jrxml";
+      body.tenBaoCao = "Báo cáo nhập, xuất, tồn kho hàng dự trữ nhà nước";
+      body.trangThai = "01";
+      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
+        this.excelBlob = s;
+        saveAs(this.excelBlob, "bc_nhap_xuat_ton_kho_hang_dtnn.xlsx");
+      });
     } catch (e) {
       console.log(e);
     } finally {

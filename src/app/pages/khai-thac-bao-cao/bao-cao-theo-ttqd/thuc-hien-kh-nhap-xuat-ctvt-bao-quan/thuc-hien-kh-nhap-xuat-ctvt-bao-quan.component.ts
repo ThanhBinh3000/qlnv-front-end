@@ -22,7 +22,9 @@ import { saveAs } from "file-saver";
 })
 export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -80,7 +82,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_tong_hop_nhap_xuat_hang_dtqg.pdf");
+    saveAs(this.pdfBlob, "bc_thuc_hien_kh_hoach_nhap_xuat_ct_vt_bao_quan_hang_dtqg.pdf");
   }
 
   closeDlg() {
@@ -94,8 +96,8 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
       let body = this.formData.value;
       console.log("body", body);
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
+      body.fileName = "bc_thuc_hien_kh_hoach_nhap_xuat_ct_vt_bao_quan_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo thực hiện KH hoạch nhập, xuất, ct, vt, bảo quản hàng DTQG";
       body.trangThai = "01";
       await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
         this.pdfBlob = s;
@@ -107,6 +109,32 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      if (this.formData.value.thoiGianSx) {
+        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
+        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
+      }
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_thuc_hien_kh_hoach_nhap_xuat_ct_vt_bao_quan_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo thực hiện KH hoạch nhập, xuất, ct, vt, bảo quản hàng DTQG";
+      body.trangThai = "01";
+      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bc_thuc_hien_kh_hoach_nhap_xuat_ct_vt_bao_quan_hang_dtqg.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
   async loadDsDonVi() {
@@ -176,7 +204,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
       listVthhCondition.push(item.loaiVthh);
       listCloaiVthhCondition.push(item.cloaiVthh);
     });
-    this.formData.get("loaiVthh").setValue(listVthhCondition);
+    // this.formData.get("loaiVthh").setValue(listVthhCondition);
     this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
   }
 }
