@@ -157,7 +157,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
         // cloaiVthh: this.data.maChLoaiHangHoa,
         // tenCloaiVthh: this.data.tenChLoaiHangHoa,
         // tichLuongKhaDung: this.data.tichLuongKd,
-        // donViTinh: this.data.tenDonViTinh,
+        // donViTinh: this.data.donViTinh,
       });
       // await this.loadChiTietQdinh(this.data.qdinhDcId);
       // await this.layDonViCon(this.data.maDiemKho)
@@ -312,7 +312,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
           cloaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
         });
         // await this.loadChiTietQdinh(data.id);
       }
@@ -353,7 +353,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          donViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
         });
         await this.layDonViCon(data.maDiemKhoNhan)
       }
@@ -448,7 +448,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          donViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
           tenNguoiGiaoHang: data.hoVaTenNguoiGiao,
           cccd: data.cmndNguoiGiao,
           donViNguoiGiaoHang: data.donViNguoiGiao,
