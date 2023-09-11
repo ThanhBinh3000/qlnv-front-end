@@ -215,7 +215,7 @@
                           </td>
                         </tr>
                         <ng-container *ngFor="let row5 of row4.children, let y = index">
-                          <tr *ngIf="row5.soLapBBKLot">
+                          <tr *ngIf="row5.soBBKLot">
                             <td></td>
                             <td></td>
                             <td></td>
@@ -226,7 +226,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{row5.soLapBBKLot || ""}}</td>
+                            <td>{{row5.soBBKLot || ""}}</td>
                             <td>{{row5.ngayLapBBKLot |date: "dd/MM/yyyy"}}</td>
                             <td>{{row5.ngayKetThucNtKeLot |date: "dd/MM/yyyy"}}</td>
                             <td>{{(row5.tongKinhPhiTT |number: '1.0-1':
