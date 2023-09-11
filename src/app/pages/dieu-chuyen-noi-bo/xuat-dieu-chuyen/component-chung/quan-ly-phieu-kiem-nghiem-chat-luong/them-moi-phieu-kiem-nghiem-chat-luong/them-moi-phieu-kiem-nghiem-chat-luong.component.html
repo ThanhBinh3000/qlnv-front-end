@@ -242,7 +242,7 @@
             </div>
             <div nz-col [nzSpan]="8">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hàng</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="tenLoaiVthh" readonly="true" />
                 </nz-form-control>
@@ -250,7 +250,7 @@
             </div>
             <div nz-col [nzSpan]="8">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Chủng loại hàng</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="tenCloaiVthh" readonly="true" />
                 </nz-form-control>
@@ -260,7 +260,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tenDonViTinh" readonly="true" />
+                  <input nz-input formControlName="donViTinh" readonly="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -441,7 +441,7 @@
         <form class="mg-t-16" nzLayout="vertical" nz-form [formGroup]="formData">
           <div class="header-text">
             <div class="title-chi-tieu">
-              <span>Nhận xét kết luận</span>
+              <span>Nhận xét kết luận <span style="color: red">(*)</span></span>
             </div>
           </div>
           <div class="search__body" nz-row [nzGutter]="[18, 6]">

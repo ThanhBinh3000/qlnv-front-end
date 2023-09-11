@@ -141,7 +141,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenLoKho: [],
         tenNganKho: [],
         tenNganLoKho: ['', [Validators.required]],
-        dcnbBienBanTinhKhoDtl: [new Array()]
+        dcnbBienBanTinhKhoDtl: [new Array()],
+        donViTinh: []
       }
     );
     this.maBb = '-BBTK';

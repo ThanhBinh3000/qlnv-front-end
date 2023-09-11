@@ -349,7 +349,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
             });
             if (dataNganLo) {
               this.formData.patchValue({
-                donViTinh: dataNganLo.tenDonViTinh,
+                donViTinh: dataNganLo.donViTinh,
                 duToanKinhPhiDc: dataNganLo.duToanKphi
               })
             }
@@ -438,7 +438,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
           soLuongCanDc: data.soLuongDc,
-          donViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,

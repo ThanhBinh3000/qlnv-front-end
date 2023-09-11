@@ -173,7 +173,6 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         tenCloaiVthh: [],
         soPhieuKtChatLuong: [],
         donViTinh: [],
-        tenDonViTinh: [],
         // fileDinhKems: [new Array<FileDinhKem>()],
       }
     );
@@ -429,7 +428,6 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         moTaHangHoa: data.moTaHangHoa,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         donViTinh: data.donViTinh,
-        tenDonViTinh: data.tenDonViTinh
       })
       // this.listBbTinhKho = this.listBbTinhKho.filter(item => (item.maDiemKho == data.maDiemKho));
       this.loadSoBbTinhKho();
