@@ -48,7 +48,9 @@ export class ItemData {
 			this.ttienTaiKho = Operator.mul(this.sluongTaiKho, this.dmucTaiKho);
 			this.tdinhKhoTtien = Operator.mul(this.tdinhKhoSluong, this.dmucTaiKho);
 		}
-		this.ttienNgoaiKho = Operator.mul(this.binhQuanNgoaiKho, this.sluongTaiKho);
+		if (this.binhQuanNgoaiKho) {
+			this.ttienNgoaiKho = Operator.mul(this.binhQuanNgoaiKho, this.sluongTaiKho);
+		}
 		this.tongCong = Operator.sum([this.ttienNgoaiKho, this.ttienTaiKho]);
 		this.tdinhTcong = Operator.sum([this.tdinhKhoTtien, this.ttienNgoaiKho]);
 		this.chenhLech = Operator.sum([this.tdinhTcong, -this.tongCong]);
@@ -216,19 +218,19 @@ export class PhuLuc02Component implements OnInit {
 				item.tenDanhMuc = dinhMuc?.tenDinhMuc;
 				item.dmucTaiKho = dinhMuc?.tongDmuc;
 				item.dviTinh = dinhMuc?.donViTinh;
-				item.ttienTaiKho = Operator.mul(item.dmucTaiKho, item.sluongTaiKho);
+				item.changeModel();
 			}
 		})
 
-		if (this.dataInfo.isSynthetic) {
-			this.lstCtietBcao.forEach(item => {
-				const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc);
-				item.dmucTaiKho = dinhMuc?.tongDmuc;
-				item.ttienTaiKho = Operator.mul(item.sluongTaiKho, item.dmucTaiKho);
-				item.tongCong = Operator.sum([item.ttienTaiKho, item.ttienNgoaiKho]);
-			})
-			this.sum1()
-		}
+		// if (this.dataInfo.isSynthetic) {
+		// 	this.lstCtietBcao.forEach(item => {
+		// 		const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc);
+		// 		item.dmucTaiKho = dinhMuc?.tongDmuc;
+		// 		item.ttienTaiKho = Operator.mul(item.sluongTaiKho, item.dmucTaiKho);
+		// 		item.tongCong = Operator.sum([item.ttienTaiKho, item.ttienNgoaiKho]);
+		// 	})
+		// 	this.sum1()
+		// }
 
 		this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
 		this.getTotal();

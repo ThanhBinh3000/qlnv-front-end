@@ -47,6 +47,9 @@ export class DialogTaoMoiComponent implements OnInit {
         this.listAppendix.forEach(e => {
             e.tenDm = Utils.getName(this.response.namBcao, e.tenDm);
         })
+        if (this.userService.isChiCuc()) {
+            this.listAppendix = this.listAppendix.filter(e => e.id != 'TT342_06');
+        }
         this.response = {
             ...new Report(),
             namBcao: this.response.namBcao,

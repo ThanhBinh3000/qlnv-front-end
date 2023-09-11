@@ -282,7 +282,7 @@ export class PhuLuc06Component implements OnInit {
     // luu thay doi
     saveEdit(id: string): void {
         if (this.editCache[id].data.dtoanDnghiSluong > Operator.sum([this.editCache[id].data.tchuanDmucTda, -this.editCache[id].data.sluongTsanTcong])) {
-            this.notification.warning(MESSAGE.WARNING, 'Dữ liệu cột 6 <= (cột 5 - cột 4)');
+            this.notification.warning(MESSAGE.WARNING, 'Số lượng dự toán đề nghị  không vượt quá hiệu của số lượng tiêu chuẩn định mức tối đa và tổng tài sản hiện có');
             return;
         }
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
