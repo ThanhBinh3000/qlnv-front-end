@@ -144,7 +144,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 soBangKe: [''],
                 qdinhDccId: ['', Validators.required],
                 soQdinhDcc: ['', [Validators.required]],
-                ngayKyQdDcc: ['', [Validators.required]],
+                ngayKyQdinhDcc: ['', [Validators.required]],
                 ngayNhap: ['', [Validators.required]],
                 maDiemKho: ['', [Validators.required]],
                 maNhaKho: ['', [Validators.required]],
@@ -582,7 +582,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                     this.formData.patchValue({
                         soQdinhDcc: data.soQdinh,
                         qdinhDccId: data.id,
-                        ngayKyQdDcc: data.ngayKyQdinh,
+                        ngayKyQdinhDcc: data.ngayKyQdinh,
                         dcnbBangKeXuatVTDtl: [],
                         maLoKho: '',
                         tenLoKho: '',
