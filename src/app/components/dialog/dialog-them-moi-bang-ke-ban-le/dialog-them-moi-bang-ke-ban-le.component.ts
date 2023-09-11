@@ -71,28 +71,32 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
+      await this.spinner.show();
       if (this.idInput) {
-        await this.loadChiTiet(this.idInput);
+        await this.detail(this.idInput);
       } else {
         await this.initForm();
       }
     } catch (e) {
       console.log('error: ', e);
-      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    await this.spinner.hide();
   }
 
   async initForm() {
-    let id = await this.userService.getId('XH_BANG_KE_BTT_SEQ')
-    this.formData.patchValue({
-      tenDvi: this.userInfo.TEN_DVI,
-      soBangKe: `${id}/${this.formData.value.namKh}/BK-CCDT KVVP`,
-    });
-    await this.loadBangKeBanHang()
+    try {
+      const id = await this.userService.getId('XH_BANG_KE_BTT_SEQ');
+      this.formData.patchValue({
+        tenDvi: this.userInfo.TEN_DVI,
+        soBangKe: `${id}/${this.formData.value.namKh}/BK-CCDT KVVP`,
+      });
+      await this.loadBangKeBanHang();
+    } catch (error) {
+      console.error('Error in initForm:', error);
+    }
   }
 
   async loadBangKeBanHang() {
@@ -111,84 +115,77 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
     }
   }
 
-  async loadChiTiet(id) {
-    await this.detail(id);
-  }
-
   async openDialogNhiemVu() {
-    await this.spinner.show();
-    let body = {
-      loaiVthh: this.loaiVthh,
-      trangThai: STATUS.BAN_HANH,
-      pthucBanTrucTiep: '03',
-      namKh: this.formData.value.namKh
-    };
-    let res = await this.quyetDinhNvXuatBttService.search(body)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content
-      if (data && data.length > 0) {
-        let set = new Set(this.loadBangKeBanLe.map((item => JSON.stringify({soQdNv: item.soQdNv}))));
-        this.listNhiemVuXh = data.filter(item => {
-          const key = JSON.stringify({soQdNv: item.soQdNv});
-          return !set.has(key);
-        });
-        this.listNhiemVuXh = this.listNhiemVuXh.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+    try {
+      await this.spinner.show();
+      const body = {
+        loaiVthh: this.loaiVthh,
+        trangThai: STATUS.BAN_HANH,
+        pthucBanTrucTiep: '03',
+        namKh: this.formData.value.namKh
+      };
+      const res = await this.quyetDinhNvXuatBttService.search(body);
+      if (res.msg !== MESSAGE.SUCCESS) {
+        throw new Error(res.msg);
       }
+      const data = res.data.content || [];
+      const set = new Set(this.loadBangKeBanLe.map(item => item.soQdNv));
+      this.listNhiemVuXh = data.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI)).filter(item => !set.has(item.soQdNv));
+      const modalQD = this.modal.create({
+        nzTitle: 'THÔNG TIN QUYẾT ĐỊNH BÁN LẺ',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: this.listNhiemVuXh,
+          dataHeader: ['Số quyết định nhiệm vụ', 'Ngày ký quyết định nhiệm vụ', 'Tên loại vật tư hàng hóa'],
+          dataColumn: ['soQdNv', 'ngayQdNv', 'tenLoaiVthh'],
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          await this.onChangeQdBanLe(data.id);
+        }
+      });
+    } catch (error) {
+      console.error('error: ', error);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    const modalQD = this.modal.create({
-      nzTitle: 'THÔNG TIN QUYẾT ĐỊNH BÁN LẺ',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listNhiemVuXh,
-        dataHeader: ['Số quyết định phê duyệt kế hoạch BDG', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
-        dataColumn: ['soQdNv', 'tenLoaiVthh', 'tenCloaiVthh'],
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        await this.onChangeQdBanLe(data.id);
-      }
-    });
-    await this.spinner.hide();
   }
 
   async onChangeQdBanLe(id) {
-    await this.spinner.show();
-    if (id > 0) {
-      await this.quyetDinhNvXuatBttService.getDetail(id)
-        .then((res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            const data = res.data
-            this.formData.patchValue({
-              idQdNv: data.id,
-              soQdNv: data.soQdNv,
-              soLuongBanTrucTiep: data.soLuongBanTrucTiep,
-              loaiVthh: data.loaiVthh,
-              tenLoaiVthh: data.tenLoaiVthh,
-              cloaiVthh: data.cloaiVthh,
-              tenCloaiVthh: data.tenCloaiVthh,
-            });
-            data.children.forEach((item) => {
-              item.children.find((child) => {
-                this.formData.patchValue({
-                  donGia: child?.donGiaDuocDuyet
-                });
-              })
-            })
-          }
-        }).catch((e) => {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    try {
+      if (id <= 0) return;
+      await this.spinner.show();
+      const res = await this.quyetDinhNvXuatBttService.getDetail(id);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const data = res.data;
+        this.formData.patchValue({
+          idQdNv: data.id,
+          soQdNv: data.soQdNv,
+          soLuongBanTrucTiep: data.soLuongBanTrucTiep,
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
         });
+        const childWithDonGia = data.children.find(item => item.children.length > 0);
+        if (childWithDonGia) {
+          this.formData.patchValue({
+            donGia: childWithDonGia.children[0].donGiaDuocDuyet || null
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error in onChangeQdBanLe:', error);
+      this.notification.error(MESSAGE.ERROR, error.message || MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    await this.spinner.hide();
   }
 
   async changeSoLuong(event) {
@@ -199,11 +196,17 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
   }
 
   async save() {
-    await this.helperService.ignoreRequiredForm(this.formData);
-    this.setValidator();
-    let body = this.formData.value;
-    await this.createUpdate(body);
-    await this.helperService.restoreRequiredForm(this.formData);
+    try {
+      await this.helperService.ignoreRequiredForm(this.formData);
+      this.setValidator();
+      const body = this.formData.value;
+      await this.createUpdate(body);
+    } catch (error) {
+      console.error('Error in save:', error);
+      this.notification.error(MESSAGE.ERROR, error.message || MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.helperService.restoreRequiredForm(this.formData);
+    }
   }
 
   onCancel() {

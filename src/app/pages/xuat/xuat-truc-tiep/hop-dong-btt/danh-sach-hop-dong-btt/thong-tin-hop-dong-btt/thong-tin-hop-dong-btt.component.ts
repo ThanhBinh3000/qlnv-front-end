@@ -27,6 +27,7 @@ import {DonviService} from 'src/app/services/donvi.service';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
+import _ from 'lodash';
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -52,7 +53,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   listDviTsanFilter: any[] = [];
   listDviTsan: any[] = [];
   listAllDviTsan: any[] = [];
-  listDiaDiemKho: any[] = [];
+  flagInit: Boolean = false;
   listSoQdKqBtt: any[] = [];
   listSoQdPdKh: any[] = [];
 
@@ -148,13 +149,17 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   async ngOnInit() {
     try {
       this.maHopDongSuffix = `/${this.formData.value.namHd}/HĐMB`;
-      await Promise.all([this.loadDataComboBox(), this.loadDsVthh()]);
+      await Promise.all([
+        this.loadDataComboBox(),
+        this.loadDsVthh()
+      ]);
       this.initForm();
     } catch (e) {
-      console.log('error: ', e);
+      console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
+      this.flagInit = true;
     }
   }
 
@@ -323,7 +328,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     await this.spinner.show();
     const uniqueKeyMap = new Map();
     for (const obj of this.listTccnChaoGia) {
-      const key = `${obj.tochucCanhan}${obj.mst}${obj.sdt}${obj.luaChon}`;
+      const key = `${obj.tochucCanhan}${obj.mst}${obj.luaChon}`;
       if (uniqueKeyMap.has(key)) {
         const existingObj = uniqueKeyMap.get(key);
         existingObj.someProperty += obj.someProperty;
@@ -378,28 +383,35 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
+  ChangeToChucCaNhan(event) {
+    if (this.flagInit && event && event !== this.formData.value.tenDviMua) {
+      this.formData.patchValue({
+        listMaDviTsan: null,
+      });
+    }
+  }
+
   async setListDviTsanCuc(inputTable) {
     this.listDviTsan = [];
+
     inputTable.forEach((item) => {
-      item.children.forEach(element => {
-        const dataGroup = chain(element.children)
+      item.children.forEach((element) => {
+        const dataGroup = _.chain(element.children)
           .groupBy('tochucCanhan')
           .map((value, key) => ({
             tochucCanhan: key,
-            toChuc: value
+            toChuc: value,
           }))
           .value();
-        item.dataDviTsan = dataGroup;
-        item.dataDviTsan.forEach(x => {
+        dataGroup.forEach((x) => {
           x.tenDvi = item.tenDvi;
           x.maDvi = item.maDvi;
           x.diaChi = item.diaChi;
           x.maDviTsan = element.maDviTsan;
-          x.children = item.children.filter(s => s.maDviTsan == element.maDviTsan);
-          if (x.maDviTsan) {
-            this.listDviTsan = [...this.listDviTsan, x];
-          }
-        })
+          x.children = item.children.filter((s) => s.maDviTsan === element.maDviTsan);
+        });
+        const filteredDataGroup = dataGroup.filter((x) => x.maDviTsan);
+        this.listDviTsan.push(...filteredDataGroup);
       });
     });
   }
@@ -423,6 +435,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         const existingItem = this.dataTable.find(child => child.maDvi === item.maDvi);
         if (existingItem) {
           existingItem.children.push(...item.children);
+          existingItem.toChuc.push(...item.toChuc);
         } else {
           this.dataTable.push(item);
         }
@@ -434,43 +447,59 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   async calculatorTable() {
-    this.listHdDaKy = this.listHdDaKy.filter(item => item.trangThai === STATUS.DA_KY);
-    let soLuongBanTrucTiep = 0;
-    let donGiaBanTrucTiep = this.userService.isChiCuc() ? this.dataTable[0].donGiaDuocDuyet : 0;
-    for (const item of this.dataTable) {
-      if (!this.userService.isChiCuc()) {
-        item.soLuongChiCuc = item.soLuongBanTrucTiepHd = 0;
+    if (this.userService.isChiCuc()) {
+      this.dataTable.forEach(item => {
+        item.thanhTien = item.soLuongDeXuat * item.donGiaDuocDuyet
+      })
+      this.formData.patchValue({
+        soLuongBanTrucTiep: this.dataTable.reduce((prev, cur) => prev + cur.soLuongDeXuat, 0),
+        thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
+      });
+    } else {
+      let tonThanhTien = 0;
+      for (const item of this.dataTable) {
         for (const child of item.children) {
-          const matchingChild = child.children.find(s => s.tochucCanhan === item.tochucCanhan);
-          if (matchingChild) {
-            child.soLuongKyHd = matchingChild.soLuong;
-            child.donGiaKyHd = matchingChild.donGia;
+          const toChucItem = item.toChuc.find(s => s.idDviDtl === child.id);
+          if (toChucItem) {
+            child.soLuongKyHd = toChucItem.soLuong;
+            child.donGiaKyHd = toChucItem.donGia;
+            child.thanhTien = child.soLuongKyHd * child.donGiaKyHd;
+            tonThanhTien += child.thanhTien;
           }
-          item.soLuongChiCuc += child.soLuongDeXuat;
-          item.soLuongBanTrucTiepHd += child.soLuongKyHd;
-          donGiaBanTrucTiep += child.donGiaKyHd;
         }
+        item.soLuongChiCuc = item.children.reduce((prev, cur) => prev + cur.soLuongDeXuat, 0);
+        item.soLuongBanTrucTiepHd = item.children.reduce((prev, cur) => prev + cur.soLuongKyHd, 0);
       }
-      soLuongBanTrucTiep += this.userService.isChiCuc() ? item.soLuongDeXuat : item.soLuongBanTrucTiepHd;
+      this.formData.patchValue({
+        soLuongBanTrucTiep: this.dataTable.reduce((prev, cur) => prev + cur.soLuongBanTrucTiepHd, 0),
+        thanhTien: tonThanhTien,
+      });
     }
-    this.formData.patchValue({
-      soLuongBanTrucTiep: soLuongBanTrucTiep,
-      donGiaBanTrucTiep: soLuongBanTrucTiep,
-      thanhTien: soLuongBanTrucTiep * donGiaBanTrucTiep
-    });
     await this.loadDiaDiemKho();
   }
 
   async loadDiaDiemKho() {
-    const isChiCuc = this.userService.isChiCuc();
-    const trangThai = "01";
+    const promises = [];
     for (const item of this.dataTable) {
-      const maDviKho = isChiCuc ? item.maDiemKho : item.children.maDiemKho;
-      const res = await this.donViService.getAll({trangThai, maDviCha: isChiCuc ? item.maDvi : this.userInfo.MA_DVI});
-      const diaDiemKho = res.data.find(s => s.maDvi === maDviKho);
-      if (diaDiemKho) {
-        isChiCuc ? (item.diaDiemKho = diaDiemKho.diaChi) : item.children.forEach(child => (child.diaDiemKho = diaDiemKho.diaChi));
+      if (this.userService.isChiCuc()) {
+        promises.push(this.loadDiaDiemKhoForItem(item));
+      } else {
+        for (const child of item.children) {
+          promises.push(this.loadDiaDiemKhoForItem(child));
+        }
       }
+    }
+    await Promise.all(promises);
+  }
+
+  async loadDiaDiemKhoForItem(item) {
+    const res = await this.donViService.getAll({
+      trangThai: "01",
+      maDviCha: item.maDvi
+    });
+    const diaDiemKho = res.data.find(s => s.maDvi === item.maDiemKho);
+    if (diaDiemKho) {
+      item.diaDiemKho = diaDiemKho.diaChi;
     }
   }
 
@@ -507,7 +536,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        await this.onChangeUyQuyen(data.idQdPdDtl);
+        await this.onChangeUyQuyen(data.idChaoGia);
       }
     });
     await this.spinner.hide();
@@ -558,6 +587,13 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
+  changeSoQdPd(event) {
+    if (this.flagInit && event && event !== this.formData.value.soQdPd) {
+      this.formData.patchValue({
+        listMaDviTsan: null,
+      });
+    }
+  }
 
   setListMaDviTsanChiCuc(inputTable) {
     this.listDviTsan = [];
@@ -637,22 +673,22 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   calcTong(column) {
-    if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur[column];
-        return prev;
-      }, 0);
-      return sum;
+    if (!this.dataTable) {
+      return 0;
     }
+    return this.dataTable.reduce((sum, item) => sum + (item[column] || 0), 0);
   }
 
   setValidator() {
+    const validatorsToApply = [];
     if (this.userService.isCuc()) {
-      this.formData.controls["soQdKq"].setValidators([Validators.required]);
+      validatorsToApply.push(Validators.required);
     }
     if (this.userService.isChiCuc()) {
-      this.formData.controls["soQdPd"].setValidators([Validators.required]);
+      validatorsToApply.push(Validators.required);
     }
+    this.formData.controls["soQdKq"].setValidators(validatorsToApply);
+    this.formData.controls["soQdPd"].setValidators(validatorsToApply);
     this.formData.controls["soHd"].setValidators([Validators.required]);
   }
 
