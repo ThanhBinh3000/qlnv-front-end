@@ -84,12 +84,13 @@
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="openPopThongTin" (nzOnCancel)="closeThongTinModal()">
   <div *nzModalTitle>
-    <p style="font-size: 18px">ĐỀ XUẤT KẾ HOẠCH XÂY DỰNG CỦA CỤC DTNN KV</p>
+    <p style="font-size: 18px">QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ LỰA CHỌN NHÀ THẦU </p>
   </div>
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl [id]="selectedId" (showListEvent)="showList()"
                                                    [isViewDetail]="isViewDetail"
                                                    [itemQdPdKhLcnt]="itemTtdt"
+                                                   [itemDuAn]="itemDuAn"
                                                    [idInput]="selectedId">
 
     </app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl>

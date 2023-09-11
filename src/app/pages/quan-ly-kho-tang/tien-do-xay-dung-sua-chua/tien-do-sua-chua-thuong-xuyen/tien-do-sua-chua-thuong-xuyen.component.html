@@ -210,8 +210,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !itemQdPdKtkt || itemQdPdKtkt.trangThai != STATUS.BAN_HANH}"
-                [nzSelected]="tabSelected == '02'" (click)="selectTab('02')"
-                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT')">
+                [nzSelected]="tabSelected == '02'" (click)="selectTab('02')">
               Quyết định phê duyệt KHLCNT
               <img *ngIf="!itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
@@ -231,8 +230,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !itemTtdt || itemTtdt.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT}"
-                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"
-                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">
+                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')">
               Quyết định PD KQ lựa chọn nhà thầu
               <img
                 *ngIf="!trangThaiQdPdKqLcnt"
@@ -243,8 +241,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !trangThaiQdPdKqLcnt}"
-                [nzSelected]="tabSelected == '05'" (click)="selectTab('05')"
-                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD')">
+                [nzSelected]="tabSelected == '05'" (click)="selectTab('05')">
               Hợp đồng và PL hợp đồng
               <img *ngIf="!trangThaiHopDong" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
@@ -255,18 +252,20 @@
                 [ngClass]="{'disabled-tab': !trangThaiHopDong}"
                 [nzSelected]="tabSelected == '06'" (click)="selectTab('06')">
               Tiến độ công việc
-              <!--              <img *ngIf="!trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
-              <!--              <img *ngIf="trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
+              <img *ngIf="!trangThaiTienDoCv" class="ml-1"
+                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+              <img *ngIf="trangThaiTienDoCv" class="ml-1"
+                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
             <li nz-menu-item
-                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')">
+                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')"
+                [ngClass]="{'disabled-tab': !trangThaiTienDoCv}"
+            >
               Biên bản nghiệm thu
-              <!--              <img *ngIf="!trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
-              <!--              <img *ngIf="trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
+              <img *ngIf="!trangThaiBb" class="ml-1"
+                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+              <img *ngIf="trangThaiBb" class="ml-1"
+                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
           </ul>
         </nz-affix>
