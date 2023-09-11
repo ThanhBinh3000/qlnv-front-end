@@ -209,6 +209,9 @@ export class BaoCaoComponent implements OnInit {
                     tenDm: Utils.getName(this.baoCao.namBcao, e.tenDm),
                 })
             })
+            if (this.userService.isChiCuc()) {
+                this.listAppendix = this.listAppendix.filter(e => e.id != 'TT342_06');
+            }
         }
 
         this.path = this.baoCao.maDvi + '/' + this.baoCao.maBcao;
