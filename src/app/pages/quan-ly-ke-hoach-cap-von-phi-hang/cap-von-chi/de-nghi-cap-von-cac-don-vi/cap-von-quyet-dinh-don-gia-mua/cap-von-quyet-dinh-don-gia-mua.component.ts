@@ -498,7 +498,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 { t: 5, b: 5, l: 8, r: 8, val: 'Tổng cấp vốn' },
                 { t: 5, b: 5, l: 9, r: 9, val: 'Tổng cộng' },
                 { t: 4, b: 5, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp' },
-                { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+                { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này' },
             ]
             const fieldHD = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtThucHien', 'dtoanDaGiao', 'lkUng', 'lkCap',
                 'lkCong', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];
@@ -537,7 +537,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             { t: 5, b: 5, l: 7, r: 7, val: 'Tổng cấp vốn' },
             { t: 5, b: 5, l: 8, r: 8, val: 'Tổng cộng' },
             { t: 4, b: 5, l: 9, r: 9, val: 'Tổng vốn và dự toán đã cấp' },
-            { t: 4, b: 5, l: 10, r: 10, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+            { t: 4, b: 5, l: 10, r: 10, val: 'Vốn đề nghị cấp lần này' },
             { t: 4, b: 4, l: 11, r: 13, val: 'Vốn duyệt cấp lần này' },
             { t: 5, b: 5, l: 11, r: 11, val: 'Cấp ứng' },
             { t: 5, b: 5, l: 12, r: 12, val: 'Cấp vốn' },

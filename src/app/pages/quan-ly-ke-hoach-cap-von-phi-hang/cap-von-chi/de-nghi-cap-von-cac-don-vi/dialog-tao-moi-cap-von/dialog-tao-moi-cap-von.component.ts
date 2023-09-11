@@ -62,7 +62,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         this.request.trangThai = null;
         this.spinner.show();
         await this.capVonNguonChiService.timKiemDeNghi(this.request.request()).toPromise().then(
-            (data) => {
+            async (data) => {
                 if (data.statusCode == 0) {
                     let lstBcao = [];
                     if (data.data.content?.length > 0) {
@@ -134,7 +134,11 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                                 cong: null,
                             })
                             temp.tongVonVaDtoanDaCap = Operator.sum([temp.lkCong, temp.dtoanDaGiao]);
-                            temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien, -temp.tongVonVaDtoanDaCap]);
+                            if (this.response.loaiDnghi == Cvnc.THOC || this.response.loaiDnghi == Cvnc.VTU) {
+                                temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien, -temp.tongVonVaDtoanDaCap]);
+                            } else {
+                                temp.vonDnCapLanNay = Operator.sum([temp.gtHopDong, -temp.tongVonVaDtoanDaCap]);
+                            }
                             this.response.lstCtiets.push(temp);
                         })
                     } else {
@@ -265,7 +269,6 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-
         this._modalRef.close({
             baoCao: this.response,
             id: null,

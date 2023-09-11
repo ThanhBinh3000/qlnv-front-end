@@ -413,7 +413,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             { t: 5, b: 5, l: 8, r: 8, val: 'Tổng cấp vốn' },
             { t: 5, b: 5, l: 9, r: 9, val: 'Tổng cộng' },
             { t: 4, b: 5, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp' },
-            { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+            { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này' },
         ]
         const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtThucHien', 'dtoanDaGiao', 'lkUng', 'lkCap',
             'lkCong', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];

@@ -331,16 +331,10 @@
                                         Giá trị thực hiện
                                     </th>
                                     <th scope="col" rowspan="2">
-                                        Vi phạm hợp đồng
-                                    </th>
-                                    <th scope="colgroup" colspan="2">
-                                        Thanh lý hợp đồng
+                                        Dự toán đã giao
                                     </th>
                                     <th scope="colgroup" colspan="3">
                                         Lũy kế cấp vốn đến thời điểm báo cáo
-                                    </th>
-                                    <th scope="col" rowspan="2">
-                                        Dự toán đã giao
                                     </th>
                                     <th scope="col" rowspan="2">
                                         Tổng vốn và Dự toán đã cấp đến trước thời điểm báo cáo
@@ -352,10 +346,16 @@
                                         Vốn duyệt cấp lần này
                                     </th>
                                     <th scope="col" rowspan="2">
-                                        Lũy kế vốn cấp sau vốn duyệt cấp lần này
+                                        Tổng tiền(Tổng tiền được cấp sau lần này)
                                     </th>
                                     <th scope="col" rowspan="2">
                                         Số còn được cấp
+                                    </th>
+                                    <th scope="col" rowspan="2">
+                                        Vi phạm hợp đồng
+                                    </th>
+                                    <th scope="colgroup" colspan="2">
+                                        Thanh lý hợp đồng
                                     </th>
                                     <th scope="col" rowspan="2" class="text-col">
                                         Ghi chú
@@ -374,12 +374,6 @@
                                     </th>
                                     <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
                                         Thực hiện
-                                    </th>
-                                    <th scope="col">
-                                        Số lượng
-                                    </th>
-                                    <th scope="col">
-                                        Thành tiền
                                     </th>
                                     <th scope="col">
                                         Vốn ứng
@@ -405,6 +399,12 @@
                                     <th scope="col">
                                         Cộng
                                     </th>
+                                    <th scope="col">
+                                        Số lượng
+                                    </th>
+                                    <th scope="col">
+                                        Thành tiền
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th scope="col" nzLeft> A </th>
@@ -416,19 +416,19 @@
                                     <th scope="col"> 6 </th>
                                     <th scope="col"> 7 </th>
                                     <th scope="col"> 8 </th>
-                                    <th scope="col"> 9 </th>
-                                    <th scope="col"> 10 </th>
-                                    <th scope="col"> 11=9+10 </th>
-                                    <th scope="col"> 12 </th>
-                                    <th scope="col"> 13=11+12 </th>
-                                    <th scope="col"> {{ baoCao.loaiDnghi == Cvnc.VTU ? "14=5-6-13" : "14=4-6-13"}} </th>
-                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 15 </th>
-                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 16 </th>
-                                    <th scope="col"> 17 </th>
-                                    <th scope="col"> 18 </th>
-                                    <th scope="col"> 19=17+18 </th>
-                                    <th scope="col"> 20=13+19 </th>
-                                    <th scope="col"> {{ baoCao.loaiDnghi == Cvnc.VTU ? "21=5-6-20" : "14=4-6-20"}} </th>
+                                    <th scope="col"> 9=7+8 </th>
+                                    <th scope="col"> 10=6+9 </th>
+                                    <th scope="col"> {{ baoCao.loaiDnghi == Cvnc.VTU ? "11=5-10" : "11=4-10"}} </th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 12 </th>
+                                    <th scope="col" *ngIf="baoCao.loaiDnghi == Cvnc.VTU"> 13 </th>
+                                    <th scope="col"> 14 </th>
+                                    <th scope="col"> 15 </th>
+                                    <th scope="col"> 16=14+15 </th>
+                                    <th scope="col"> 17=10+16 </th>
+                                    <th scope="col"> {{ baoCao.loaiDnghi == Cvnc.VTU ? "18=5-17" : "18=4-17"}} </th>
+                                    <th scope="col"> 19 </th>
+                                    <th scope="col"> 20 </th>
+                                    <th scope="col"> 21 </th>
                                     <th scope="col"> D </th>
                                     <th scope="col" *ngIf="isSynth"> </th>
                                     <th scope="col" *ngIf="status.save" nzRight></th>
@@ -455,16 +455,10 @@
                                         <td *ngIf="baoCao.loaiDnghi == Cvnc.VTU">
                                             {{ Op.fmtVal(data.gtThucHien) }}
                                         </td>
-                                        <td>
-                                            {{ Op.fmtVal(data.phatViPham) }}
-                                        </td>
-                                        <td>
-                                            {{ Op.fmtVal(data.tlSoluong) }}
-                                        </td>
-                                        <td>
-                                            {{ Op.fmtVal(data.tlThanhTien) }}
-                                        </td>
                                         <ng-container *ngIf="!editCache[data.id].edit; else editTemplateVb">
+                                            <td>
+                                                {{ Op.fmtVal(data.dtoanDaGiao) }}
+                                            </td>
                                             <td>
                                                 {{ Op.fmtVal(data.lkUng) }}
                                             </td>
@@ -473,9 +467,6 @@
                                             </td>
                                             <td>
                                                 {{ Op.fmtVal(data.lkCong) }}
-                                            </td>
-                                            <td>
-                                                {{ Op.fmtVal(data.dtoanDaGiao) }}
                                             </td>
                                             <td>
                                                 {{ Op.fmtVal(data.tongVonVaDtoanDaCap) }}
@@ -505,6 +496,15 @@
                                                 {{ Op.fmtVal(data.soConDuocCap) }}
                                             </td>
                                             <td>
+                                                {{ Op.fmtVal(data.phatViPham) }}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(data.tlSoluong) }}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(data.tlThanhTien) }}
+                                            </td>
+                                            <td>
                                                 {{ data.ghiChu }}
                                             </td>
                                             <td *ngIf="isSynth">
@@ -517,6 +517,11 @@
                                         </ng-container>
                                         <ng-template #editTemplateVb>
                                             <td>
+                                                <input class="money-input" currencyMask [options]="Op.amount"
+                                                    [(ngModel)]="editCache[data.id].data.dtoanDaGiao"
+                                                    (ngModelChange)="changeModel(data.id)" />
+                                            </td>
+                                            <td>
                                                 {{ Op.fmtVal(editCache[data.id].data.lkUng) }}
                                             </td>
                                             <td>
@@ -524,11 +529,6 @@
                                             </td>
                                             <td>
                                                 {{ Op.fmtVal(editCache[data.id].data.lkCong) }}
-                                            </td>
-                                            <td>
-                                                <input class="money-input" currencyMask [options]="Op.amount"
-                                                    [(ngModel)]="editCache[data.id].data.dtoanDaGiao"
-                                                    (ngModelChange)="changeModel(data.id)" />
                                             </td>
                                             <td>
                                                 {{ Op.fmtVal(editCache[data.id].data.tongVonVaDtoanDaCap) }}
@@ -562,6 +562,15 @@
                                             </td>
                                             <td>
                                                 {{ Op.fmtVal(editCache[data.id].data.soConDuocCap) }}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(data.phatViPham) }}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(data.tlSoluong) }}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(data.tlThanhTien) }}
                                             </td>
                                             <td>
                                                 <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
