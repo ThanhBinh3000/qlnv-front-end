@@ -18,6 +18,8 @@ import {CHUC_NANG, STATUS} from "src/app/constants/status";
   styleUrls: ['./phieu-kiem-nghiem-chat-luong.component.scss']
 })
 export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
+  @Input() loaiXuat: any;
+  @Input() loaiVthh: any;
   @Input() inputService: any;
   @Input() inputServiceGnv: any;
   @Input() inputServiceBbLayMau: any;
@@ -59,6 +61,10 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
 
   async ngOnInit() {
     try {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        type: this.loaiXuat
+      });
       super.service = this.inputService;
       await this.search();
     } catch (e) {

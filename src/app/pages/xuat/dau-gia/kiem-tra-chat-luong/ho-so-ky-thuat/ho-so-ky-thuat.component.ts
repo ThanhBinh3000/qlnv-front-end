@@ -19,6 +19,7 @@ import {MESSAGE} from "src/app/constants/message";
   templateUrl: './ho-so-ky-thuat.component.html',
   styleUrls: ['./ho-so-ky-thuat.component.scss']
 })
+//hosokythuatchung
 export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   isDetail: boolean = false;
