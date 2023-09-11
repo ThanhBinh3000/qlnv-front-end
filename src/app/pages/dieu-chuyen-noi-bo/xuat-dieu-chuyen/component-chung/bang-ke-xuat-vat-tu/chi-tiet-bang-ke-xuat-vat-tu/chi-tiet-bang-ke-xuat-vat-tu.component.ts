@@ -455,7 +455,20 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         }
     }
     pheDuyet() {
-        this.approve(this.formData.value.id, STATUS.DA_DUYET_LDCC, 'Bạn có muốn duyệt quyết định này', null, MESSAGE.PHE_DUYET_SUCCESS)
+        let trangThai = '';
+        let msg = '';
+        switch (this.formData.value.trangThai) {
+            case STATUS.TU_CHOI_LDCC:
+            case STATUS.DU_THAO:
+                trangThai = STATUS.CHO_DUYET_LDCC
+                msg = 'Bạn có muốn gửi duyệt ?'
+                break;
+            case STATUS.CHO_DUYET_LDCC:
+                trangThai = STATUS.DA_DUYET_LDCC
+                msg = 'Bạn có muốn duyệt bản ghi ?'
+                break;
+        }
+        this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS)
     }
 
     async flattenTree(tree) {
