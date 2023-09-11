@@ -467,7 +467,14 @@
                                 <td></td>
                                 <td class="text-right">{{item.tongThanhTienVat | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td class="text-right text-red">{{item.soLuongChiTieu - item.tongSoLuong - item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td></td>
+                                <td>
+                                  <a *ngIf="!isDisable() && item.children.length == 0" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
+                                    <i class="fa fa-pencil" title="Sửa"></i>
+                                  </a>
+                                  <a *ngIf="!isDisable() && item.children.length == 0" (click)="deleteRow(i)">
+                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                  </a>
+                                </td>
                             </tr>
                             <ng-container>
                                 <tr *ngFor="let children of item.children, let y = index">

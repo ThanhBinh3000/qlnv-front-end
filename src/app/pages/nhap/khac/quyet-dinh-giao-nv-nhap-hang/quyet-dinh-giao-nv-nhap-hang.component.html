@@ -52,16 +52,16 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP HÀNG </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_NK_QDGNVNH_XOA')" type="button" class="btn btn-do" (click)="deleteSelect()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_EXP')" type="button" class="btn btn-sub"
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_NK_QDGNVNH_EXP')" type="button" class="btn btn-sub"
                 (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToThongTin(0)">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_NK_QDGNVNH_THEM')" type="button" class="btn btn-main" (click)="redirectToThongTin(0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo quyết định</span>
         </button>
