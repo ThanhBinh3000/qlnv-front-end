@@ -23,16 +23,6 @@
           </div>
           <div nz-col nzSpan="6">
             <nz-form-item>
-              <nz-form-label>Cục DTNN KV</nz-form-label>
-              <nz-form-control>
-                <nz-select formControlName="maCuc" nzShowSearch nzAllowClear>
-                  <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
-                </nz-select>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="6">
-            <nz-form-item>
               <nz-form-label>Chi cục DTNN KV</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="maChiCuc" nzShowSearch nzAllowClear>
@@ -75,12 +65,13 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Tổng hợp danh sách vt,tb trong thời gian bảo hành theo hợp đồng cần kiểm tra</h3>
+      <h3 class="text-uppercase">Tổng hợp danh sách vt,tb trong thời gian bảo hành theo hợp đồng cần xuất để kiểm
+        tra</h3>
       <div>
-        <a (click)="danhSach()" style="color: blue">
+        <a (click)="danhSach()" style="color: blue" *ngIf="userService.isCuc">
           Xem toàn bộ danh sách
         </a>
-        <button type="button" class="btn btn-main" (click)="showModal(true)">
+        <button type="button" class="btn btn-main" (click)="showModal(true)" *ngIf="userService.isCuc">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tổng hợp DS VT,TB trong thời gian BH theo hợp đồng</span>
         </button>
@@ -97,16 +88,16 @@
               <th>Năm KH</th>
               <th>Mã danh sách</th>
               <th>Chi cục DTNN</th>
-              <th>Loại hàng hóa</th>
+              <th>Loại hàng</th>
               <th>Chủng loại</th>
               <th>Điểm kho</th>
               <th>Ngăn/lô kho</th>
               <th>Ngày nhập kho</th>
-              <th>Số lượng</th>
+              <th>SL hỏng cần BH</th>
               <th class="text-center">Thời gian BH còn lại <br>theo HĐ</th>
               <th>Tồn kho</th>
               <th>ĐVT</th>
-              <th class="text-center">Ngày tổng hợp  <br> (chốt DS)</th>
+              <th class="text-center">Ngày tổng hợp <br> (chốt DS)</th>
               <th>Trạng thái</th>
               <th class="text-center">Kết quả <br> KTCL</th>
               <th>Hành động</th>
@@ -174,9 +165,9 @@
                         <td>{{lv2.tenLoaiVthh}}</td>
                         <td>{{lv2.tenCloaiVthh}}</td>
                         <td>{{lv2.tenDiemKho}}</td>
-                        <td>{{lv2.tenLoKho ? (lv2.tenLoKho +' '+ lv2.tenNganKho): lv2.tenNganKho}}</td>
+                        <td>{{lv2.tenLoKho ? (lv2.tenLoKho + ' ' + lv2.tenNganKho) : lv2.tenNganKho}}</td>
                         <td>{{lv2.ngayNhapKho}}</td>
-                        <td>{{lv2.slHetHan}}</td>
+                        <td>{{lv2.slHetHan | date:globals.dateFormat}}</td>
                         <td>{{lv2.thoiHanLk|number:globals.numberFormat}}</td>
                         <td>{{lv2.slTonKho}}</td>
                         <td>{{lv2.donViTinh}}</td>
@@ -226,7 +217,8 @@
           nzTitle="TỔNG HỢP DS HÀNG DTQG CÒN 6 THÁNG HẾT HẠN LƯU KHO NHƯNG CHƯA CÓ KẾ HOẠCH XUẤT">
   <ng-container *nzModalContent>
     <app-chi-tiet-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh [selectedItem]="selectedItem" (step)="changeStep($event)"
-                                        [eventOk]="clickOk" (changeShow)="changeShowDetail($event)">
+                                                             [eventOk]="clickOk"
+                                                             (changeShow)="changeShowDetail($event)">
 
     </app-chi-tiet-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh>
   </ng-container>

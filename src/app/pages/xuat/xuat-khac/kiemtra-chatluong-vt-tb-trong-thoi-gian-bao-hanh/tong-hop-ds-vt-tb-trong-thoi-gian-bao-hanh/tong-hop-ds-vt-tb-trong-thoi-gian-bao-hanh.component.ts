@@ -221,6 +221,7 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
           trangThai: rowItem.trangThai,
           tenTrangThai: rowItem.tenTrangThai,
           ngayTao: rowItem.ngayTao,
+          fileDinhKems:rowItem.fileDinhKems,
           childData: rs
         };
       }).value();
