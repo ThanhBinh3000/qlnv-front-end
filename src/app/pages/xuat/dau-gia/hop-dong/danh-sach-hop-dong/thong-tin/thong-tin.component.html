@@ -5,6 +5,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+      <button
+        type="button" class="btn btn-sub" (click)="preview(previewName)">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Xem trước</span>
+      </button>
       <button class="btn btn-sub btn-sm waves-effect xanh-nhat"
               (click)="saveAndSend(STATUS.DA_KY,'Bạn có muốn ký hợp đồng ?','Lưu và ký thành công!')"
               *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isCuc()">
@@ -664,3 +669,30 @@
   <app-phu-luc [isViewPhuLuc]="isViewPhuLuc" [idPhuLuc]="idPhuLuc" [loaiVthh]="loaiVthh" (showListEvent)="showChiTiet()"
                [objHopDongHdr]="objHopDongHdr"></app-phu-luc>
 </ng-container>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="TỔNG HỢP ĐỀ XUẤT KẾ HOẠCH MUA TRỰC TIẾP" nzWidth="70%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 650px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
