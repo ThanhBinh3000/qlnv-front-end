@@ -222,6 +222,10 @@
                 <td>{{data.soQdGnv}}</td>
                 <td>{{data.tenTrangThai}}</td>
                 <td>
+                  <a
+                     (click)="redirectHopDong(true,data.id)">
+                    <i class="fa fa-eye" title="Xem"></i>
+                  </a>
                   <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
                     (click)="redirectHopDong(true,data.id)">
                     <i class="fa fa-pencil" title="Sửa"></i>
