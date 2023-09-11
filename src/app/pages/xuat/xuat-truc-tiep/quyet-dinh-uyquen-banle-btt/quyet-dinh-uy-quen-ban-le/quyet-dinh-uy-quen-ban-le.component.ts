@@ -10,7 +10,6 @@ import {DonviService} from 'src/app/services/donvi.service';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import {STATUS} from 'src/app/constants/status';
 
 @Component({
   selector: 'app-quyet-dinh-uy-quen-ban-le',
@@ -74,12 +73,16 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
 
   async ngOnInit() {
     try {
-      await this.timKiem();
-      await this.search();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.search()
+      ]);
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -91,9 +94,11 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
   }
 
   async clearFilter() {
-    await this.formData.reset();
-    await this.timKiem();
-    this.search();
+    this.formData.reset();
+    await Promise.all([
+      this.timKiem(),
+      this.search()
+    ]);
   }
 
   redirectToChiTiet(id: number) {
