@@ -37,7 +37,7 @@ export class BienBanNghiemThuSctxComponent extends Base2Component implements OnI
       namKh: [null],
       maDvi: [null],
       idDuAn: [null],
-      loai: ['00']
+      loai: ['01']
     });
   }
 

@@ -82,7 +82,7 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       chatLuong: [null],
       ketLuan: [null],
       trangThai: ['00'],
-      loai: ['00'],
+      loai: ['01'],
       tenTrangThai: ['Dự thảo'],
     });
   }
@@ -109,7 +109,7 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       let body = {
         "namKh" : this.formData.value.namKeHoach,
         "idDuAn" : this.itemDuAn.id,
-        "page" : "00"
+        "page" : "01"
       }
       let res = await this.hopdongService.listHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {

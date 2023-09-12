@@ -100,7 +100,8 @@
       <th class="text-center" colSpan="2">Đơn giá thanh toán</th>
       <th class="text-center" colSpan="5">Thành tiền</th>
       <th class="text-center" rowSpan="3">Ghi chú</th>
-      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight>Hành động</th>
+<!--      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">Hành động</th>-->
+      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight >Hành động</th>
     </tr>
     <tr>
       <th class="text-center" colSpan="2">Tổng số</th>
@@ -125,7 +126,7 @@
     <tr>
       <th></th>
       <th>
-        <nz-select [(ngModel)]="rowItemCha.quy">
+        <nz-select [(ngModel)]="rowItemCha.thang">
           <nz-option *ngFor="let p of listThang" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
         </nz-select>
       </th>
@@ -143,7 +144,8 @@
       <th></th>
       <th></th>
       <th></th>
-      <th></th>
+      <th ></th>
+<!--      <th class="text-center" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">-->
       <th class="text-center" nzRight>
         <a (click)="themItemcha()">
           <i class="table-icon icon htvbdh_dau-cong"></i>
@@ -158,7 +160,7 @@
     <ng-container *ngFor="let data of dataTable , let idx = index">
       <tr>
         <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-        <td class="font-weight-bold">{{data.quy}}</td>
+        <td class="font-weight-bold">{{data.thang}}</td>
         <td></td>
         <td></td>
         <td></td>
@@ -174,6 +176,7 @@
         <td></td>
         <td></td>
         <td></td>
+<!--        <td class="text-center" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">-->
         <td class="text-center" nzRight>
           <a (click)="themMoiItem(data, idx, dataTable[idx])">
             <i class="table-icon icon htvbdh_dau-cong"></i>
@@ -188,20 +191,81 @@
           <td></td>
           <td class="text-right font-weight-bold">{{y + 1}}</td>
           <td>{{item.tenCongViec}}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>{{item.donViTinh}}</td>
+          <td class="text-right">{{item.klTheoHd | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.klPhatSinh | number : '1.0-1' : 'vi_VN'}}</td>
+          <td *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klPhatSinh" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.klLuyKeTruoc | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klLuyKeTruoc" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.klThucHien | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klThucHien" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.klLuyKeCuoi | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klLuyKeCuoi" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.giaTheoHd | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.giaTheoHd" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.giaBoSung | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.giaBoSung" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right">{{item.ttTheoHd | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.ttPhatSinh | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttPhatSinh" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.ttLuyKeTruoc | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttLuyKeTruoc" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.ttThucHien | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttThucHien" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.ttLuyKeCuoi | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttLuyKeCuoi" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td>{{item.ghiChu}}</td>
+<!--          <td class="text-center" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)" >-->
           <td class="text-center" nzRight >
             <a (click)="themMoiItem(item, y, dataTable[idx])">
               <i class="fa fa-pencil" title="Sửa"></i>
