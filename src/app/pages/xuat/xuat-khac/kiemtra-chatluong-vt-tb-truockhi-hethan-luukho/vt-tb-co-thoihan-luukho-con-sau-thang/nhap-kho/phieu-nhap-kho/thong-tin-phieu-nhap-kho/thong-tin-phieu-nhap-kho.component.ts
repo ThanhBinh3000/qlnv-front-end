@@ -224,7 +224,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
   async bindingDataQd(data, maDiaDiem?) {
     try {
-      console.log(data, 'datadatadata');
       this.listNganLoKho = [];
       await this.spinner.show();
       if (data) {
@@ -241,7 +240,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
               this.listNganLoKho.push(item);
             }
           });
-          console.log(this.listNganLoKho, ' this.listNganLoKho this.listNganLoKho');
           // this.listNganLoKho = res.data.content;
         }
         this.formData.patchValue({
