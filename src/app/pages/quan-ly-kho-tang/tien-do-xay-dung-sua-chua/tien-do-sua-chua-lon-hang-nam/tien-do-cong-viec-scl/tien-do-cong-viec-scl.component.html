@@ -46,11 +46,11 @@
         </div>
       </div>
       <div class="btn-group">
-        <button class="btn btn-sub xanh-nhat ml-2" (click)="hoanThanh()" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+        <button class="btn btn-sub xanh-nhat ml-2" (click)="hoanThanh()" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_TDCV_THEM')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Hoàn thành</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_TDCV_THEM')">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
