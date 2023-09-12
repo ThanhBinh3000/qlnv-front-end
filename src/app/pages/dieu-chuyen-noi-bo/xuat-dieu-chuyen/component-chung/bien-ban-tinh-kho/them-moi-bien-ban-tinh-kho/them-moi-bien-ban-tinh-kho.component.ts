@@ -142,7 +142,9 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenNganKho: [],
         tenNganLoKho: ['', [Validators.required]],
         dcnbBienBanTinhKhoDtl: [new Array()],
-        donViTinh: ['', [Validators.required]]
+        donViTinh: ['', [Validators.required]],
+        soPhieuKnChatLuong: ['', [Validators.required]],
+        phieuKnChatLuongHdrId: ['', [Validators.required]]
       }
     );
     this.maBb = '-BBTK';
@@ -357,33 +359,33 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         maLoKho: this.formData.value.maLoKho,
         maNganKho: this.formData.value.maNganKho
       }
-      let res = await this.phieuXuatKhoDieuChuyenService.getThongTinChungPhieuXuatKho(body)
-      const list = res.data;
-      // this.listPhieuXuatKho = list.filter(item => ((this.formData.value.maLoKho && this.formData.value.maLoKho === item.maloKho) ||
-      //   (!this.formData.value.maLoKho && this.formData.value.maNganKho && this.formData.value.maNganKho === item.maNganKho)));
-      const dataTable = Array.isArray(list) ? list.map(f => ({
-        bangKeCanHangHdrId: f.bangKeCanHangId,
-        hdrId: null,
-        id: null,
-        ngayXuatKho: f.ngayXuatKho,
-        phieuKtChatLuongHdrId: f.phieuKiemNghiemClId,
-        phieuXuatKhoHdrId: f.id,
-        soPhieuKtChatLuong: f.soPhieuKiemNghiemCl,
-        soPhieuXuatKho: f.soPhieuXuatKho,
-        soBangKeCanHang: f.soBangKeCanHang,
-        soLuongXuat: f.soLuong
-      })) : [];
-      const tongSlXuat = dataTable.reduce((sum, cur) => sum += cur.soLuongXuat, 0);
-      this.formData.patchValue({ tongSlXuatTheoTt: tongSlXuat, dcnbBienBanTinhKhoDtl: dataTable })
+      let res = await this.phieuXuatKhoDieuChuyenService.getThongTinChungPhieuXuatKho(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const list = res.data;
+        // this.listPhieuXuatKho = list.filter(item => ((this.formData.value.maLoKho && this.formData.value.maLoKho === item.maloKho) ||
+        //   (!this.formData.value.maLoKho && this.formData.value.maNganKho && this.formData.value.maNganKho === item.maNganKho)));
+        const dataTable = Array.isArray(list) ? list.map(f => ({
+          bangKeCanHangHdrId: this.isVatTu ? f.bangKeXuatVtId : f.bangKeCanHangId,
+          hdrId: null,
+          id: null,
+          ngayXuatKho: f.ngayXuatKho,
+          phieuXuatKhoHdrId: f.id,
+          soPhieuXuatKho: f.soPhieuXuatKho,
+          soBangKeCanHang: this.isVatTu ? f.soBangKeXuatVt : f.soBangKeCanHang,
+          soLuongXuat: f.soLuong
+        })) : [];
+        const tongSlXuat = dataTable.reduce((sum, cur) => sum += cur.soLuongXuat, 0);
+        this.formData.patchValue({ tongSlXuatTheoTt: tongSlXuat, dcnbBienBanTinhKhoDtl: dataTable, soPhieuKnChatLuong: list[0]?.soPhieuKiemNghiemCl, phieuKnChatLuongHdrId: list[0]?.phieuKiemNghiemClId })
 
-      if (this.formData.value.dcnbBienBanTinhKhoDtl && this.formData.value.dcnbBienBanTinhKhoDtl.length > 0) {
-        const maxDate = new Date(Math.min.apply(null, this.formData.value.dcnbBienBanTinhKhoDtl.map(function (e) {
-          return new Date(e.ngayXuatKho);
-        })));
-        const minDateString = maxDate.toISOString().slice(0, 10);
-        this.formData.patchValue({
-          ngayBatDauXuat: minDateString
-        })
+        if (this.formData.value.dcnbBienBanTinhKhoDtl && this.formData.value.dcnbBienBanTinhKhoDtl.length > 0) {
+          const maxDate = new Date(Math.min.apply(null, this.formData.value.dcnbBienBanTinhKhoDtl.map(function (e) {
+            return new Date(e.ngayXuatKho);
+          })));
+          const minDateString = maxDate.toISOString().slice(0, 10);
+          this.formData.patchValue({
+            ngayBatDauXuat: minDateString
+          })
+        }
       }
     }
   }
