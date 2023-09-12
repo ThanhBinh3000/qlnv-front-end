@@ -179,7 +179,7 @@
                             <td class="text-right">{{itemDetail.giaTriPd | number : '1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right">{{itemDetail.luyKeVon | number : '1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right">{{itemDetail.vonDauTu | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td nzRight>{{itemDetail.tenTrangThai}}</td>
+                            <td nzRight>{{itemDetail.tenTrangThaiTd}}</td>
                           </tr>
                         </ng-container>
                       </ng-container>
@@ -201,7 +201,7 @@
         <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
           <ul nz-menu nzMode="horizontal">
             <li nz-menu-item [nzSelected]="tabSelected == '01'" (click)="selectTab('01')"
-                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">
+                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSC_QDPDBCKTKT')">
               Quyết định phê duyệt báo cáo KTKT
               <img *ngIf="itemQdPdKtkt && itemQdPdKtkt.trangThai == STATUS.BAN_HANH" class="ml-1"
               src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>

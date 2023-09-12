@@ -25,6 +25,8 @@ import {
 import {
   QuyetDinhGiaCuaBtcService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {PREVIEW} from "../../../../../../../constants/fileType";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
@@ -72,6 +74,17 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   dataTableTtThamKhao: any[] = [];
   typeConst = TYPE_PAG;
   tenLoaiVthh: string;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "de_xuat_phuong_an_gia.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -738,7 +751,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.pagTtChungs.forEach(item => {
       if (this.type == 'GCT') {
         item.giaDnVat = item.giaDn + item.giaDn * item.vat;
-      } else  {
+      } else {
         if (this.formData.value.vat && ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
           item.vat = this.formData.value.vat;
           item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat;
@@ -808,5 +821,47 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (page == 'ttc') {
       this.rowItemTtc = new ThongTinChungPag();
     }
+  }
+
+  downloadPdf() {
+    if (this.type == 'GCT') {
+      saveAs(this.pdfSrc, "de_xuat_phuong_an_gia.pdf");
+    } else {
+      saveAs(this.pdfSrc, "de_xuat_phuong_an_gia.pdf");
+    }
+  }
+
+  async downloadExcel() {
+    saveAs(this.excelSrc, "de_xuat_phuong_an_gia.xlsx");
+  }
+
+  async preview() {
+    this.spinner.show();
+    try {
+      let body = {
+        reportTemplateRequest: this.reportTemplate,
+        id : this.idInput
+      }
+      await this.giaDeXuatGiaService.preview(body).then(async s => {
+        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.printSrc = s.data.pdfSrc;
+        this.showDlgPreview = true;
+        this
+      });
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  doPrint() {
+    printJS({printable: this.printSrc, type: 'pdf', base64: true});
   }
 }
