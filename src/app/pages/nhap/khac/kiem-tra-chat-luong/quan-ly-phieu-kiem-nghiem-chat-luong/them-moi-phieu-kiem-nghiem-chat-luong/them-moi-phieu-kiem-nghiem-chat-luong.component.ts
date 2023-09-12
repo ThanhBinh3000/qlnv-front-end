@@ -69,6 +69,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   listBbNhapDayKho: any[] = [];
   hhQdPdNhapKhacDtlReq: any;
   dsDanhGia: any[] = [];
+  previewName: string = 'nk_phieu_knghiem_cl';
 
   phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
     new PhieuKiemNghiemChatLuongHang();
@@ -166,11 +167,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       ]);
       if (this.id > 0) {
         await this.getDetail(this.id);
-      }else {
+      } else {
         await this.initForm();
       }
 
-      if (this.qdGvuNh){
+      if (this.qdGvuNh) {
         await this.initForm();
         await this.bindingDataQd(this.qdGvuNh);
       }
@@ -683,8 +684,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       tenLoaiVthh: data.tenLoaiVthh,
       moTaHangHoa: data.moTaHangHoa,
     });
-    data.dtlList.forEach(item =>{
-      if(item.idBbLayMau == this.id){
+    data.dtlList.forEach(item => {
+      if (item.idBbLayMau == this.id) {
         // this.listBbBanGiaoMau.push(item.bbLayMau);
         this.formData.patchValue({
           tenCloaiVthh: item.tenCloaiVthh,

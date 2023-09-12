@@ -5,10 +5,6 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {
-  BienBanNghiemThuDtxdService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/bien-ban-nghiem-thu-dtxd.service";
-import dayjs from "dayjs";
 import {ThongTinBienBanSclComponent} from "./thong-tin-bien-ban-scl/thong-tin-bien-ban-scl.component";
 import {
   BienBanNghiemThuTdscServiceService

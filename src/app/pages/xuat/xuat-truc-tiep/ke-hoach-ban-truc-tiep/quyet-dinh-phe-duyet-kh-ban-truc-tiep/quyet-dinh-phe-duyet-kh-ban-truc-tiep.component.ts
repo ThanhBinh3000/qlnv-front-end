@@ -96,8 +96,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   async clearFilter() {
     this.formData.reset();
-    await this.timKiem();
-    await this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -106,33 +105,23 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     this.isView = isView;
   }
 
-  openModal(entityType: string, id: number) {
-    switch (entityType) {
-      case 'DxKh':
-        this.idDxKh = id;
-        this.isViewDxKh = true;
-        break;
-      case 'Thop':
-        this.idThop = id;
-        this.isViewThop = true;
-        break;
-      default:
-        break;
+  openModal(id: number, modalType: string) {
+    if (modalType === 'DxKh') {
+      this.idDxKh = id;
+      this.isViewDxKh = true;
+    } else if (modalType === 'Thop') {
+      this.idThop = id;
+      this.isViewThop = true;
     }
   }
 
-  closeModal(entityType: string) {
-    switch (entityType) {
-      case 'DxKh':
-        this.idDxKh = null;
-        this.isViewDxKh = false;
-        break;
-      case 'Thop':
-        this.idThop = null;
-        this.isViewThop = false;
-        break;
-      default:
-        break;
+  closeModal(modalType: string) {
+    if (modalType === 'DxKh') {
+      this.idDxKh = null;
+      this.isViewDxKh = false;
+    } else if (modalType === 'Thop') {
+      this.idThop = null;
+      this.isViewThop = false;
     }
   }
 

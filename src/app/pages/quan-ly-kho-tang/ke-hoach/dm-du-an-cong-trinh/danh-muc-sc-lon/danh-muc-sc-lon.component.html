@@ -217,8 +217,8 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThaiTd"
+                     (input)="filterInTable('tenTrangThaiTd',filterTable.tenTrangThaiTd)" size="small"/>
             </nz-input-group>
           </th>
           <th nzRight></th>
@@ -246,7 +246,7 @@
           <td >{{ data.soQdPheDuyet }}</td>
           <td >{{ data.ngayQdPd  | date: 'dd/MM/YYYY' }}</td>
           <td  class="text-right">{{ data.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
-          <td >{{ data.tenTrangThai }}</td>
+          <td >{{ data.tenTrangThaiTd }}</td>
           <td nzRight>
             <a  (click)="openDialog(data, true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_XEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>

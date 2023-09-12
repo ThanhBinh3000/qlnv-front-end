@@ -186,11 +186,11 @@
           <td>{{ data.trichYeu }}</td>
           <td>
             <a *ngIf="data.soTrHdr && data.idTrHdr" nz-button nzType="link"
-               (click)="openModal('DxKh',data.idTrHdr)">
+               (click)="openModal(data.idTrHdr, 'DxKh')">
               {{ data.soTrHdr }}</a>
           </td>
           <td>
-            <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModal('Thop',data.idThHdr)">
+            <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModal(data.idThHdr, 'Thop')">
               {{ data.idThHdr }}</a>
           </td>
           <td *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>

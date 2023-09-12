@@ -1,38 +1,38 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../../../services/danhmuc.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from '../../../../../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DanhMucService } from '../../../../../../../../services/danhmuc.service';
 import {
-  QuyetDinhGiaoNvXuatHangService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service";
+  QuyetDinhGiaoNvXuatHangService,
+} from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service';
 import {
-  BckqKiemDinhMauService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service";
+  BckqKiemDinhMauService,
+} from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service';
 import {
-  PhieuXuatNhapKhoService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
-import dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {STATUS} from "../../../../../../../../constants/status";
-import {FileDinhKem} from "../../../../../../../../models/FileDinhKem";
-import {MESSAGE} from "../../../../../../../../constants/message";
+  PhieuXuatNhapKhoService,
+} from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service';
+import dayjs from 'dayjs';
+import { Validators } from '@angular/forms';
+import { STATUS } from '../../../../../../../../constants/status';
+import { FileDinhKem } from '../../../../../../../../models/FileDinhKem';
+import { MESSAGE } from '../../../../../../../../constants/message';
 import {
-  DialogTableSelectionComponent
-} from "../../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {convertTienTobangChu} from "../../../../../../../../shared/commonFunction";
+  DialogTableSelectionComponent,
+} from '../../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component';
+import { convertTienTobangChu } from '../../../../../../../../shared/commonFunction';
 import {
-  BienBanKetThucNhapKhoService
-} from "../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BienBanKetThucNhapKho.service";
-import {now} from "moment";
+  BienBanKetThucNhapKhoService,
+} from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BienBanKetThucNhapKho.service';
+import { now } from 'moment';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-ket-thuc-nhap-kho',
   templateUrl: './thong-tin-bien-ban-ket-thuc-nhap-kho.component.html',
-  styleUrls: ['./thong-tin-bien-ban-ket-thuc-nhap-kho.component.scss']
+  styleUrls: ['./thong-tin-bien-ban-ket-thuc-nhap-kho.component.scss'],
 })
 export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component implements OnInit {
 
@@ -42,7 +42,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  listSoBcKqkdMau: any[] = []
+  listSoBcKqkdMau: any[] = [];
   listDiaDiemNhap: any[] = [];
   listPhieuKtraCl: any[] = [];
   fileDinhKems: any[] = [];
@@ -71,11 +71,11 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     this.formData = this.fb.group(
       {
         id: [0],
-        namKeHoach: [dayjs().get("year")],
+        namKeHoach: [dayjs().get('year')],
         maDvi: [],
         maQhns: [],
         soBienBan: [],
-        ngayLapBienBan: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
+        ngayLapBienBan: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
         idCanCu: [null, [Validators.required]],
         soCanCu: [null, [Validators.required]],
         maDiaDiem: [null, [Validators.required]],
@@ -93,7 +93,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         soPhieuKncl: [],
         idPhieuKncl: [],
         ktvBaoQuan: [],
-        ngayKetThucNhap: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
+        ngayKetThucNhap: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
         ngayBatDauNhap: [],
         ngayHetHanLuuKho: [],
         ghiChu: ['', [Validators.required]],
@@ -110,7 +110,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
         listPhieuNhapKho: [new Array()],
-      }
+      },
     );
     this.maPhieu = 'BBKTNK-' + this.userInfo.DON_VI.tenVietTat;
   }
@@ -119,9 +119,9 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     try {
       await this.spinner.show();
       await Promise.all([
-        this.loadSoBaoCaoKqKdMau()
-      ])
-      await this.loadDetail(this.idInput)
+        this.loadSoBaoCaoKqKdMau(),
+      ]);
+      await this.loadDetail(this.idInput);
       await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -154,7 +154,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let id = await this.userService.getId('XH_XK_VT_BB_KT_NHAP_KHO_SEQ')
+      let id = await this.userService.getId('XH_XK_VT_BB_KT_NHAP_KHO_SEQ');
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
@@ -181,8 +181,8 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     let body = {
       trangThai: STATUS.DA_DUYET_LDC,
       dvql: this.userInfo.MA_DVI.substring(0, this.userInfo.MA_DVI.length - 2),
-      nam: this.formData.get("namKeHoach").value,
-    }
+      nam: this.formData.get('namKeHoach').value,
+    };
     let res = await this.bckqKiemDinhMauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -205,7 +205,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         dataHeader: ['Số báo cáo', 'Ngày báo cáo', 'Năm'],
         dataColumn: ['soBaoCao', 'ngayBaoCao', 'nam'],
       },
-    })
+    });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data);
@@ -216,13 +216,12 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
 
   async bindingDataQd(data, maDiaDiem?) {
     try {
-      console.log(maDiaDiem, 'maDiaDiemmaDiaDiemmaDiaDiem')
       await this.spinner.show();
       if (data) {
         let res = await this.phieuXuatNhapKhoService.search({
           soBcKqkdMau: data.soBaoCao,
           idBcKqkdMau: data.id,
-          namKeHoach: this.formData.get("namKeHoach").value,
+          namKeHoach: this.formData.get('namKeHoach').value,
           loaiPhieu: 'XUAT',
           loai: 'XUAT_MAU',
         });
@@ -232,7 +231,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         this.formData.patchValue({
           soCanCu: data.soBaoCao,
           idCanCu: data.id,
-          maDiaDiem: maDiaDiem ? maDiaDiem : null
+          maDiaDiem: maDiaDiem ? maDiaDiem : null,
         });
       }
     } catch (e) {
@@ -247,19 +246,21 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       await this.spinner.show();
       if (data) {
         let res = await this.phieuXuatNhapKhoService.search({
-          soBcKqkdMau: data.soBaoCao,
-          idBcKqkdMau: data.id,
-          namKeHoach: this.formData.get("namKeHoach").value,
+          soCanCu: data.soBaoCao,
+          idCanCu: data.id,
+          namKeHoach: this.formData.get('namKeHoach').value,
           loaiPhieu: 'NHAP',
           loai: 'NHAP_MAU',
         });
         if (res.msg == MESSAGE.SUCCESS) {
-          this.dataPhieuNhapKho = res.data.content;
-          this.formData.patchValue({
-            listPhieuNhapKho: res.data.content,
-            ngayBatDauNhap: this.dataPhieuNhapKho[0].ngayXuatNhap,
-            ngayKetThucNhap: this.formData.get("ngayLapBienBan").value
-          })
+          if (res.data.content && res.data.content.length > 0) {
+            this.dataPhieuNhapKho = res.data.content;
+            this.formData.patchValue({
+              listPhieuNhapKho: res.data.content,
+              ngayBatDauNhap: this.dataPhieuNhapKho[0].ngayXuatNhap,
+              ngayKetThucNhap: this.formData.get('ngayLapBienBan').value,
+            });
+          }
         }
       }
     } catch (e) {
@@ -283,14 +284,14 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           soPhieuKncl: item.soPhieuKncl,
           idPhieuKncl: item.idPhieuKncl,
           tenCloaiVthh: item.tenCloaiVthh,
-        })
+        });
       }
     }
   }
 
   async save() {
     try {
-      this.formData.disable()
+      this.formData.disable();
       let body = this.formData.value;
       body.fileDinhKems = this.fileDinhKems;
       await this.createUpdate(body);
@@ -337,13 +338,13 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         break;
       }
     }
-    this.reject(this.idInput, trangThai)
+    this.reject(this.idInput, trangThai);
   }
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
     if (trangThai == STATUS.CHO_DUYET_LDCC) {
-      return true
+      return true;
     }
     return false;
   }
@@ -353,7 +354,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       maSo: null,
       slLayMau: null,
       slThucTe: null,
-    })
+    });
   }
 
   convertTien(tien: number): string {
