@@ -209,7 +209,6 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data);
-        await this.bindingDataPhieuNhapKho(data);
       }
     });
   };
@@ -242,12 +241,15 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   }
 
   async bindingDataPhieuNhapKho(data, maDiaDiem?) {
+    console.log(data, 'datadatadata');
+    this.dataPhieuNhapKho = [];
     try {
       await this.spinner.show();
       if (data) {
         let res = await this.phieuXuatNhapKhoService.search({
-          soCanCu: data.soBaoCao,
-          idCanCu: data.id,
+          soCanCu: data.soBcKqkdMau,
+          maDiaDiem: data.maDiaDiem,
+          idCanCu: data.idBcKqkdMau,
           namKeHoach: this.formData.get('namKeHoach').value,
           loaiPhieu: 'NHAP',
           loai: 'NHAP_MAU',
@@ -285,6 +287,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           idPhieuKncl: item.idPhieuKncl,
           tenCloaiVthh: item.tenCloaiVthh,
         });
+        await this.bindingDataPhieuNhapKho(item);
       }
     }
   }
