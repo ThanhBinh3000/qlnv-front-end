@@ -121,7 +121,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
         tenNhaKho: [null],
         tenNganKho: [null],
         tenLoKho: [null],
-        xhXkVtBbLayMauDtl: [new Array()],
+        bbLayMauDtl: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
       }
     );
@@ -166,7 +166,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
               this.canCu = data.fileDinhKems.filter(item => item.fileType === FILETYPE.CAN_CU_PHAP_LY);
               this.fileNiemPhong = data.fileDinhKems.filter(item => item.fileType === FILETYPE.ANH_DINH_KEM);
             }
-            this.dataTable=this.formData.value.xhXkVtBbLayMauDtl ;
+            this.dataTable=this.formData.value.bbLayMauDtl ;
             this.dataTable.forEach((item, index) => {
               this.dataEdit[index] = {
                 edit: false,
@@ -352,6 +352,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
     }
     // xử lý người liên quan
     body.bbLayMauDtl = this.dataTable;
+    console.log(body,"body")
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
