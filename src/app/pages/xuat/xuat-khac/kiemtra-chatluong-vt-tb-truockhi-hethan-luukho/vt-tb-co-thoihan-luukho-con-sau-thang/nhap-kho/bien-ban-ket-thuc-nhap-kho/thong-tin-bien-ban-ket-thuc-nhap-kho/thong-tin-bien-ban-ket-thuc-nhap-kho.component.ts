@@ -241,7 +241,6 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   }
 
   async bindingDataPhieuNhapKho(data, maDiaDiem?) {
-    console.log(data, 'datadatadata');
     this.dataPhieuNhapKho = [];
     try {
       await this.spinner.show();
