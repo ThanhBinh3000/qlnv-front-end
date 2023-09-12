@@ -115,7 +115,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soLuongQdDcCuc: [],
       dviTinh: [],
       bbNghiemThuBqld: [],
-      bbKtnk: [],
+      soBbKetThucNk: [],
       soBangKeCh: [, [Validators.required]],
       soBangKeVt: [, [Validators.required]],
       tongSLNhapTT: [],
@@ -161,26 +161,28 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         soQdDcCuc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayKyQdinh,
         qdDcCucId: this.data.qdDcCucId,
-        // tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
-        // tenLoKho: this.data.tenLoKho,
-        // maLoKho: this.data.maLoKho,
-        // tenNganKho: this.data.tenNganKho,
-        // maNganKho: this.data.maNganKho,
-        // tenNhaKho: this.data.tenNhaKho,
-        // maNhaKho: this.data.maNhaKho,
-        // tenDiemKho: this.data.tenDiemKho,
-        // maDiemKho: this.data.maDiemKho,
-        // loaiVthh: this.data.maHangHoa,
-        // tenLoaiVthh: this.data.tenHangHoa,
-        // cloaiVthh: this.data.maChLoaiHangHoa,
-        // tenCloaiVthh: this.data.tenChLoaiHangHoa,
-        // soLuongQdDcCuc: this.data.slDienChuyen,
-        // dviTinh: this.data.donViTinh,
-        // thayDoiThuKho: this.data.thayDoiThuKho
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
+        tenLoKho: this.data.tenLoKho,
+        maLoKho: this.data.maLoKho,
+        tenNganKho: this.data.tenNganKho,
+        maNganKho: this.data.maNganKho,
+        tenNhaKho: this.data.tenNhaKho,
+        maNhaKho: this.data.maNhaKho,
+        tenDiemKho: this.data.tenDiemKho,
+        maDiemKho: this.data.maDiemKho,
+        loaiVthh: this.data.maHangHoa,
+        tenLoaiVthh: this.data.tenHangHoa,
+        cloaiVthh: this.data.maChLoaiHangHoa,
+        tenCloaiVthh: this.data.tenChLoaiHangHoa,
+        soLuongQdDcCuc: this.data.slDienChuyen,
+        dviTinh: this.data.donViTinh,
+        thayDoiThuKho: this.data.thayDoiThuKho
       });
-      // this.dviTinh = this.data.donViTinh
-      // this.noiDung = this.data.tenChLoaiHangHoa
-      // this.duToanKinhPhi = this.data.duToanKinhPhiDc
+
+      this.dviTinh = this.data.donViTinh
+      this.noiDung = this.data.tenChLoaiHangHoa
+      this.duToanKinhPhi = this.data.duToanKinhPhiDc
+
       await this.loadChiTietQdinh(this.data.qdDcCucId);
     }
 
@@ -447,7 +449,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   }
 
   async openDialogKhoNhap() {
-    if (this.isVatTu) return
+    if (this.isVatTu && this.formData.value.thayDoiThuKho) return
     await this.spinner.show();
 
     await this.spinner.hide();
