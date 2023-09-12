@@ -171,6 +171,13 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
     }
   }
 
+  isDisabled() {
+    let trangThai = this.formData.value.trangThai;
+    if (trangThai == STATUS.CHO_DUYET_LDCC) {
+      return true;
+    }
+    return false;
+  }
 
   async changeValueBcKqKdMau(event) {
     try {
