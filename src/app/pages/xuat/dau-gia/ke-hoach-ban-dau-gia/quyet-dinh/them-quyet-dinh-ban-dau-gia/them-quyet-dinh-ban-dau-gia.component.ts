@@ -51,7 +51,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   isTongHop: boolean
   selected: boolean = false;
   maDviCuc: string;
-  vatidateBanHanh: boolean = false;
   showDlgPreview = false;
   pdfBlob: any;
   pdfSrc: any;
@@ -82,15 +81,15 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       soTrHdr: [''],
       idTrHdr: [''],
       trichYeu: [''],
-      loaiVthh: ['', [Validators.required]],
-      tenLoaiVthh: ['', [Validators.required]],
+      loaiVthh: [''],
+      tenLoaiVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
       tchuanCluong: [''],
       trangThai: [''],
       tenTrangThai: [''],
-      phanLoai: ['', [Validators.required]],
+      phanLoai: [''],
       soQdCc: [''],
       slDviTsan: [],
       loaiHinhNx: [''],
@@ -101,41 +100,9 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     })
   }
 
-  setValidator(isGuiDuyet?) {
-    if (isGuiDuyet) {
-      this.formData.controls["soQdPd"].setValidators([Validators.required]);
-      this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
-      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-    } else {
-      this.formData.controls["soQdPd"].clearValidators();
-      this.formData.controls["ngayKyQd"].clearValidators();
-      this.formData.controls["ngayHluc"].clearValidators();
-    }
-    if (this.formData.get('phanLoai').value == 'TH') {
-      this.formData.controls["idThHdr"].setValidators([Validators.required]);
-      this.formData.controls["idTrHdr"].clearValidators();
-      this.formData.controls["soTrHdr"].clearValidators();
-    }
-    if (this.formData.get('phanLoai').value == 'TTr') {
-      this.formData.controls["idThHdr"].clearValidators();
-      this.formData.controls["idTrHdr"].setValidators([Validators.required]);
-      this.formData.controls["soTrHdr"].setValidators([Validators.required]);
-    }
-  }
-
-  isDetailPermission() {
-    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
-      return true;
-    }
-    return false;
-  }
-
-  deleteSelect() {
-  }
-
   async ngOnInit() {
-    await this.spinner.show();
     try {
+      await this.spinner.show();
       this.maHauTo = '/' + this.userInfo.MA_QD;
       if (this.idInput > 0) {
         await this.loadChiTiet(this.idInput)
@@ -144,17 +111,15 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       }
       await this.bindingDataTongHop(this.dataTongHop);
     } catch (e) {
-      console.log('error: ', e);
-      await this.spinner.hide();
+      console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    await this.spinner.hide();
   }
 
   async onChangeNamKh() {
-    this.formData.patchValue({
-      namKh: this.formData.value.nam
-    })
+    this.formData.get('namKh').setValue(this.formData.get('nam').value);
   }
 
   async initForm() {
@@ -171,380 +136,432 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async bindingDataTongHop(dataTongHop?) {
-    if (dataTongHop) {
-      if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD) {
-        this.formData.patchValue({
-          cloaiVthh: dataTongHop.cloaiVthh,
-          tenCloaiVthh: dataTongHop.tenCloaiVthh,
-          loaiVthh: dataTongHop.loaiVthh,
-          tenLoaiVthh: dataTongHop.tenLoaiVthh,
-          idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
-          phanLoai: 'TH',
-        })
-        await this.selectMaTongHop(this.formData.value.idThHdr);
-      } else {
-        await this.loadChiTiet(dataTongHop.idQdPd);
-        dataTongHop.trangThai == STATUS.DA_BAN_HANH_QD ? this.isView = true : this.isView = false;
-      }
+    if (!dataTongHop) return;
+    if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD) {
+      this.formData.patchValue({
+        cloaiVthh: dataTongHop.cloaiVthh,
+        tenCloaiVthh: dataTongHop.tenCloaiVthh,
+        loaiVthh: dataTongHop.loaiVthh,
+        tenLoaiVthh: dataTongHop.tenLoaiVthh,
+        idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
+        phanLoai: 'TH',
+      })
+      await this.onChangeIdThHdr(this.formData.value.idThHdr);
+    } else {
+      await this.loadChiTiet(dataTongHop.idQdPd);
+      this.isView = dataTongHop.trangThai === STATUS.DA_BAN_HANH_QD;
     }
   }
 
   async save() {
-    await this.helperService.ignoreRequiredForm(this.formData);
-    let body = {
-      ...this.formData.value,
-      soQdPd: this.formData.value.soQdPd ? this.formData.value.soQdPd + this.maHauTo : null
+    try {
+      await this.helperService.ignoreRequiredForm(this.formData);
+      this.setValidator();
+      const body = {
+        ...this.formData.value,
+        soQdPd: this.formData.value.soQdPd ? this.formData.value.soQdPd + this.maHauTo : null,
+        children: this.danhsachDx,
+        canCuPhapLy: this.canCuPhapLy,
+        fileDinhKem: this.fileDinhKem,
+      };
+      await this.createUpdate(body);
+      await this.helperService.restoreRequiredForm(this.formData);
+    } catch (error) {
+      console.error("Lỗi khi lưu:", error);
     }
-    body.children = this.danhsachDx;
-    body.canCuPhapLy = this.canCuPhapLy;
-    body.fileDinhKem = this.fileDinhKem;
-    await this.createUpdate(body);
-    await this.helperService.restoreRequiredForm(this.formData);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    await this.vatidateBanHanhQd(this.danhsachDx)
-    if (this.vatidateBanHanh == false) {
+    if (!(await this.validateBanHanhQd(this.danhsachDx))) {
       this.notification.error(MESSAGE.ERROR, 'Hiện chưa có giá bán cụ thể được duyệt cho loại hàng hóa này.');
-    } else {
-      let body = {
-        ...this.formData.value,
-        soQdPd: this.formData.value.soQdPd ? this.formData.value.soQdPd + this.maHauTo : null
-      }
-      body.children = this.danhsachDx;
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+      return;
     }
+    this.setValidForm();
+    const soQdPd = this.formData.value.soQdPd ? `${this.formData.value.soQdPd}${this.maHauTo}` : null;
+    const body = {
+      ...this.formData.value,
+      soQdPd,
+      children: this.danhsachDx,
+      canCuPhapLy: this.canCuPhapLy,
+      fileDinhKem: this.fileDinhKem,
+    };
+    await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
-  async vatidateBanHanhQd(data) {
-    data.forEach((item) => {
-      item.children.forEach((child) => {
-        child.children.forEach(s => {
-          if (!s.donGiaDuocDuyet) {
-            this.vatidateBanHanh = false;
-          } else {
-            this.vatidateBanHanh = true
-          }
-        })
-      })
-    })
+  async validateBanHanhQd(data) {
+    return data.some(item =>
+      item.children.some(child =>
+        child.children.some(s => s.donGiaDuocDuyet)
+      )
+    );
   }
 
   async loadChiTiet(id: number) {
-    if (id) {
-      let data = await this.detail(id);
-      if (data) {
-        this.formData.patchValue({
-          soQdPd: data.soQdPd?.split('/')[0],
-          namKh: this.formData.value.nam
-        })
-        this.canCuPhapLy = data.canCuPhapLy;
-        this.fileDinhKem = data.fileDinhKem;
-      }
-      this.danhsachDx = data.children;
-      await this.calculatorTable();
-      if (this.danhsachDx && this.danhsachDx.length > 0) {
-        await this.showFirstRow(event, this.danhsachDx[0]);
-      }
+    if (!id) return;
+    const data = await this.detail(id);
+    if (!data) return;
+    const {soQdPd, children} = data;
+    this.formData.patchValue({
+      soQdPd: soQdPd?.split('/')[0] || null,
+      namKh: this.formData.value.nam,
+    });
+    this.canCuPhapLy = data.canCuPhapLy;
+    this.fileDinhKem = data.fileDinhKem;
+    this.danhsachDx = children;
+    await this.calculatorTable();
+    if (this.danhsachDx && this.danhsachDx.length > 0) {
+      await this.showFirstRow(event, this.danhsachDx[0]);
     }
   }
 
   async calculatorTable() {
-    for (const item of this.danhsachDx) {
-      for (const child of item.children) {
-        for (const s of child.children) {
-          let bodyPag = {
-            namKeHoach: this.formData.get('namKh').value,
-            loaiVthh: this.formData.get('loaiVthh').value,
-            cloaiVthh: this.formData.get('cloaiVthh').value,
-            trangThai: STATUS.BAN_HANH,
-            maDvi: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : child.maDvi,
-            loaiGia: 'LG04'
-          }
-          let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-          if (pag.msg == MESSAGE.SUCCESS) {
-            if (pag.data) {
-              pag.data.forEach(a => {
-                s.donGiaDuocDuyet = a.giaQdTcdt;
-              })
-            } else {
-              s.donGiaDuocDuyet = null;
-            }
-          }
+    const namKhValue = this.formData.get('namKh').value;
+    const loaiVthhValue = this.formData.get('loaiVthh').value;
+    const cloaiVthhValue = this.formData.get('cloaiVthh').value;
+    const trangThai = STATUS.BAN_HANH;
+    const loaiGia = 'LG04';
+    await Promise.all(this.danhsachDx.map(async (item) => {
+      await Promise.all(item.children.map(async (child) => {
+        const maDvi = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : child.maDvi;
+        const bodyPag = {
+          namKeHoach: namKhValue,
+          loaiVthh: loaiVthhValue,
+          cloaiVthh: cloaiVthhValue,
+          trangThai,
+          maDvi,
+          loaiGia
+        };
+        await Promise.all(child.children.map(async (s) => {
+          const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
+          s.donGiaDuocDuyet = pag.msg === MESSAGE.SUCCESS ? (pag.data ? pag.data[0].giaQdTcdt : null) : null;
           s.giaKhoiDiemDd = s.soLuongDeXuat * s.donGiaDuocDuyet;
-          s.soTienDtruocDd = s.soLuongDeXuat * s.donGiaDuocDuyet * item.khoanTienDatTruoc / 100;
+          s.soTienDtruocDd = s.giaKhoiDiemDd * item.khoanTienDatTruoc / 100;
           child.tongGiaKdiemDd += s.giaKhoiDiemDd;
           child.tongTienDtruocDd += s.soTienDtruocDd;
-          item.tongTienGiaKdTheoDgiaDd += child.tongGiaKdiemDd;
-          item.tongKhoanTienDtTheoDgiaDd += child.tongTienDtruocDd;
-        }
-      }
-    }
+        }));
+      }));
+    }));
+    this.danhsachDx.forEach((item) => {
+      item.tongTienGiaKdTheoDgiaDd = item.children.reduce((acc, child) => acc + child.tongGiaKdiemDd, 0);
+      item.tongKhoanTienDtTheoDgiaDd = item.children.reduce((acc, child) => acc + child.tongTienDtruocDd, 0);
+    });
   }
 
   async openDialogTh() {
-    if (this.formData.get('phanLoai').value != 'TH') {
+    const selectedPhanLoai = this.formData.get('phanLoai').value;
+    if (selectedPhanLoai !== 'TH') {
       return;
     }
-    await this.spinner.show();
-    let body = {
-      trangThai: STATUS.CHUA_TAO_QD,
-      namKh: this.formData.value.nam,
-      loaiVthh: this.loaiVthh,
-    }
-    let res = await this.tongHopDeXuatKeHoachBanDauGiaService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listDanhSachTongHop = res.data.content;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-    await this.spinner.hide();
-    const modalQD = this.modal.create({
-      nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT BÁN ĐẤU GIÁ',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDanhSachTongHop,
-        dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
-        dataColumn: ['id', 'noiDungThop']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        await this.selectMaTongHop(data.id);
+    try {
+      await this.spinner.show();
+      const body = {
+        trangThai: STATUS.CHUA_TAO_QD,
+        namKh: this.formData.value.nam,
+        loaiVthh: this.loaiVthh,
+      };
+      const res = await this.tongHopDeXuatKeHoachBanDauGiaService.search(body);
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        this.listDanhSachTongHop = res.data.content;
+      } else if (res && res.msg) {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
-    });
-    await this.spinner.hide();
+      const modalQD = this.modal.create({
+        nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT BÁN ĐẤU GIÁ',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: this.listDanhSachTongHop,
+          dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
+          dataColumn: ['id', 'noiDungThop'],
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          await this.onChangeIdThHdr(data.id);
+        }
+      });
+    } catch (error) {
+      console.error('An error occurred:', error);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
-  async selectMaTongHop(idTh) {
-    await this.spinner.show()
-    let soLuongDviTsan: number = 0;
-    if (idTh > 0) {
-      await this.tongHopDeXuatKeHoachBanDauGiaService.getDetail(idTh)
-        .then(async (res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            const dataTh = res.data;
-            if (dataTh.idQdPd) {
-              await this.loadChiTiet(dataTh.idQdPd)
-            } else {
-              dataTh.children.forEach((item) => {
-                soLuongDviTsan += item.slDviTsan;
-              })
-              this.formData.patchValue({
-                cloaiVthh: dataTh.cloaiVthh,
-                tenCloaiVthh: dataTh.tenCloaiVthh,
-                loaiVthh: dataTh.loaiVthh,
-                tenLoaiVthh: dataTh.tenLoaiVthh,
-                slDviTsan: soLuongDviTsan,
-                namKh: this.formData.value.nam,
-                idThHdr: dataTh.id,
-                idTrHdr: null,
-                soTrHdr: null,
-              })
-              await this.getDataChiTieu();
-              for (let item of dataTh.children) {
-                let res = await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr);
-                if (res.msg == MESSAGE.SUCCESS) {
-                  const dataDx = res.data;
-                  this.formData.patchValue({
-                    tchuanCluong: dataDx.tchuanCluong,
-                    loaiHinhNx: dataDx.loaiHinhNx,
-                    tenLoaiHinhNx: dataDx.tenLoaiHinhNx,
-                    kieuNx: dataDx.kieuNx,
-                    tenKieuNx: dataDx.tenKieuNx,
-                  })
-                  dataDx.idDxHdr = dataDx.id;
-                  this.danhsachDx.push(dataDx);
-                  if (this.danhsachDx && this.danhsachDx.length > 0) {
-                    this.showFirstRow(event, this.danhsachDx[0]);
-                  }
-                }
-              }
-              this.dataInput = null;
-              this.dataInputCache = null;
+  async onChangeIdThHdr(idTh) {
+    try {
+      await this.spinner.show();
+      if (idTh <= 0) {
+        return;
+      }
+      const res = await this.tongHopDeXuatKeHoachBanDauGiaService.getDetail(idTh);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
+        return;
+      }
+      const data = res.data;
+      if (data.idQdPd) {
+        await this.loadChiTiet(data.idQdPd);
+      } else {
+        const soLuongDviTsan = data.children.reduce((total, item) => total + item.slDviTsan, 0);
+        this.formData.patchValue({
+          cloaiVthh: data.cloaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          slDviTsan: soLuongDviTsan,
+          namKh: this.formData.value.nam,
+          idThHdr: data.id,
+          idTrHdr: null,
+          soTrHdr: null,
+        });
+        await this.getDataChiTieu();
+        for (let item of data.children) {
+          const res = await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr);
+          if (res.msg === MESSAGE.SUCCESS) {
+            const dataDx = res.data;
+            this.formData.patchValue({
+              tchuanCluong: dataDx.tchuanCluong,
+              loaiHinhNx: dataDx.loaiHinhNx,
+              tenLoaiHinhNx: dataDx.tenLoaiHinhNx,
+              kieuNx: dataDx.kieuNx,
+              tenKieuNx: dataDx.tenKieuNx,
+            });
+            dataDx.idDxHdr = dataDx.id;
+            this.danhsachDx.push(dataDx);
+            if (this.danhsachDx && this.danhsachDx.length > 0) {
+              this.showFirstRow(event, this.danhsachDx[0]);
             }
           }
-        }).catch((e) => {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        });
+        }
+        this.dataInput = null;
+        this.dataInputCache = null;
+      }
+    } catch (error) {
+      console.error('error: ', error);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    await this.spinner.hide()
   }
 
   async getDataChiTieu() {
-    let res2 = null;
-    res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCucQd(
-      +this.formData.get('nam').value,
-    );
-    if (res2.msg == MESSAGE.SUCCESS) {
+    const namKhValue = +this.formData.get('nam').value;
+    try {
+      const res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCucQd(namKhValue);
       this.formData.patchValue({
-        soQdCc: res2.data != null ? res2.data.soQuyetDinh : null,
+        soQdCc: res2.msg === MESSAGE.SUCCESS ? (res2.data ? res2.data.soQuyetDinh : null) : null,
       });
-    } else {
+    } catch (error) {
+      console.error('An error occurred:', error);
       this.formData.patchValue({
-        soQdCc: null
+        soQdCc: null,
       });
     }
   }
 
   async openDialogTr() {
-    if (this.formData.get('phanLoai').value != 'TTr') {
-      return
+    const selectedPhanLoai = this.formData.get('phanLoai').value;
+    if (selectedPhanLoai !== 'TTr') {
+      return;
     }
-    await this.spinner.show();
-    let body = {
-      trangThai: STATUS.DA_DUYET_CBV,
-      trangThaiTh: STATUS.CHUA_TONG_HOP,
-      namKh: this.formData.value.nam,
-      loaiVthh: this.loaiVthh,
-    }
-    let res = await this.deXuatKhBanDauGiaService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listToTrinh = res.data.content;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-    const modalQD = this.modal.create({
-      nzTitle: 'DANH SÁCH ĐỀ XUẤT KẾ HOẠCH BÁN ĐẤU GIÁ',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listToTrinh,
-        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-        dataColumn: ['soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        await this.onChangeIdTrHdr(data.id);
+    try {
+      await this.spinner.show();
+      let body = {
+        trangThai: STATUS.DA_DUYET_CBV,
+        trangThaiTh: STATUS.CHUA_TONG_HOP,
+        namKh: this.formData.value.nam,
+        loaiVthh: this.loaiVthh,
       }
-    });
-    await this.spinner.hide();
+      let res = await this.deXuatKhBanDauGiaService.search(body);
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        this.listToTrinh = res.data.content;
+      } else if (res && res.msg) {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+      }
+      const modalQD = this.modal.create({
+        nzTitle: 'DANH SÁCH ĐỀ XUẤT KẾ HOẠCH BÁN ĐẤU GIÁ',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: this.listToTrinh,
+          dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+          dataColumn: ['soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          await this.onChangeIdTrHdr(data.id);
+        }
+      });
+    } catch (error) {
+      console.error('An error occurred:', error);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   async onChangeIdTrHdr(idDx) {
-    await this.spinner.show();
-    this.danhsachDx = [];
-    if (idDx > 0) {
-      await this.deXuatKhBanDauGiaService.getDetail(idDx)
-        .then(async (res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            const dataDx = res.data;
-            dataDx.idDxHdr = dataDx.id;
-            this.formData.patchValue({
-              cloaiVthh: dataDx.cloaiVthh,
-              tenCloaiVthh: dataDx.tenCloaiVthh,
-              loaiVthh: dataDx.loaiVthh,
-              tenLoaiVthh: dataDx.tenLoaiVthh,
-              tchuanCluong: dataDx.tchuanCluong,
-              moTaHangHoa: dataDx.moTaHangHoa,
-              tgianDkienTu: dataDx.tgianDkienTu,
-              tgianDkienDen: dataDx.tgianDkienDen,
-              tgianTtoan: dataDx.tgianTtoan,
-              tgianTtoanGhiChu: dataDx.tgianTtoanGhiChu,
-              pthucTtoan: dataDx.pthucTtoan,
-              tgianGnhan: dataDx.tgianGnhan,
-              tgianGnhanGhiChu: dataDx.tgianGnhanGhiChu,
-              pthucGnhan: dataDx.pthucGnhan,
-              thongBaoKh: dataDx.thongBaoKh,
-              trichYeu: dataDx.trichYeu,
-              slDviTsan: dataDx.slDviTsan,
-              loaiHinhNx: dataDx.loaiHinhNx,
-              tenLoaiHinhNx: dataDx.tenLoaiHinhNx,
-              kieuNx: dataDx.kieuNx,
-              tenKieuNx: dataDx.tenKieuNx,
-              namKh: this.formData.value.nam,
-              idThHdr: null,
-              soTrHdr: dataDx.soDxuat,
-              idTrHdr: dataDx.id,
-            })
-            await this.getDataChiTieu();
-            this.danhsachDx.push(dataDx);
-            if (this.danhsachDx && this.danhsachDx.length > 0) {
-              this.showFirstRow(event, this.danhsachDx[0]);
-            }
-            this.dataInput = null;
-            this.dataInputCache = null;
-          }
-        }).catch((e) => {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        });
+    try {
+      await this.spinner.show();
+      this.danhsachDx = [];
+      if (idDx <= 0) {
+        return;
+      }
+      const res = await this.deXuatKhBanDauGiaService.getDetail(idDx);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
+        return;
+      }
+      const data = res.data;
+      data.idDxHdr = data.id;
+      this.formData.patchValue({
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        tchuanCluong: data.tchuanCluong,
+        moTaHangHoa: data.moTaHangHoa,
+        tgianDkienTu: data.tgianDkienTu,
+        tgianDkienDen: data.tgianDkienDen,
+        tgianTtoan: data.tgianTtoan,
+        tgianTtoanGhiChu: data.tgianTtoanGhiChu,
+        pthucTtoan: data.pthucTtoan,
+        tgianGnhan: data.tgianGnhan,
+        tgianGnhanGhiChu: data.tgianGnhanGhiChu,
+        pthucGnhan: data.pthucGnhan,
+        thongBaoKh: data.thongBaoKh,
+        slDviTsan: data.slDviTsan,
+        loaiHinhNx: data.loaiHinhNx,
+        tenLoaiHinhNx: data.tenLoaiHinhNx,
+        kieuNx: data.kieuNx,
+        tenKieuNx: data.tenKieuNx,
+        namKh: this.formData.value.nam,
+        idThHdr: null,
+        soTrHdr: data.soDxuat,
+        idTrHdr: data.id,
+      });
+      await this.getDataChiTieu();
+      this.danhsachDx.push(data);
+      if (this.danhsachDx && this.danhsachDx.length > 0) {
+        this.showFirstRow(event, this.danhsachDx[0]);
+      }
+      this.dataInput = null;
+      this.dataInputCache = null;
+    } catch (error) {
+      console.error('error:', error);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    await this.spinner.hide();
   }
 
   index = 0;
 
   async showDetail($event, index) {
     await this.spinner.show();
-    if ($event.type == 'click') {
-      this.selected = false
-      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-      $event.target.parentElement.classList.add('selectedRow');
-      this.isTongHop = this.formData.value.phanLoai == 'TH';
-      this.dataInput = this.danhsachDx[index];
-      if (this.dataInput) {
-        let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
-        this.dataInputCache = res.data;
+    if ($event.type === 'click') {
+      const selectedRow = $event.target.parentElement;
+      const previouslySelectedRow = selectedRow.parentElement.querySelector('.selectedRow');
+      if (previouslySelectedRow) {
+        previouslySelectedRow.classList.remove('selectedRow');
       }
+      selectedRow.classList.add('selectedRow');
+      this.selected = false;
       this.index = index;
-      await this.spinner.hide();
     } else {
-      this.selected = true
-      this.isTongHop = this.formData.value.phanLoai == 'TH';
-      this.dataInput = this.danhsachDx[0];
-      if (this.dataInput) {
-        let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
-        this.dataInputCache = res.data;
-      }
+      this.selected = true;
       this.index = 0;
-      await this.spinner.hide();
     }
-  }
-
-  isDisabledQD() {
-    if (this.formData.value.id == null) {
-      return false
-    } else {
-      return true;
+    this.isTongHop = this.formData.value.phanLoai === 'TH';
+    this.dataInput = this.danhsachDx[this.index];
+    if (this.dataInput) {
+      const res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
+      this.dataInputCache = res.data;
     }
+    await this.spinner.hide();
   }
 
   async preview(id) {
-    await this.quyetDinhPdKhBdgService.preview({
-      tenBaoCao: this.templateName,
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+    try {
+      const response = await this.quyetDinhPdKhBdgService.preview({
+        tenBaoCao: this.templateName,
+        id: id,
+      });
+
+      if (response.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + response.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + response.data.wordSrc;
         this.showDlgPreview = true;
       } else {
         this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
       }
-    });
+    } catch (error) {
+      console.error('Lỗi:', error);
+      this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+    }
+  }
+
+  downloadFile(src: string, fileName: string) {
+    saveAs(src, fileName);
   }
 
   downloadPdf() {
-    saveAs(this.pdfSrc, this.templateName + ".pdf");
+    this.downloadFile(this.pdfSrc, this.templateName + ".pdf");
   }
 
   downloadWord() {
-    saveAs(this.wordSrc, this.templateName + ".docx");
+    this.downloadFile(this.wordSrc, this.templateName + ".docx");
   }
 
   closeDlg() {
     this.showDlgPreview = false;
+  }
+
+  isDisabledQD() {
+    return this.formData.value.id != null;
+  }
+
+  setValidator() {
+    const thHdrValidators = this.formData.get('phanLoai').value === 'TH' ? [Validators.required] : [];
+    const trHdrValidators = this.formData.get('phanLoai').value === 'TTr' ? [Validators.required] : [];
+
+    this.formData.controls["idThHdr"].setValidators(thHdrValidators);
+    this.formData.controls["idThHdr"].updateValueAndValidity();
+
+    this.formData.controls["idTrHdr"].setValidators(trHdrValidators);
+    this.formData.controls["idTrHdr"].updateValueAndValidity();
+
+    this.formData.controls["soTrHdr"].setValidators(trHdrValidators);
+    this.formData.controls["soTrHdr"].updateValueAndValidity();
+  }
+
+  setValidForm() {
+    const requiredFields = [
+      "namKh",
+      "soQdPd",
+      "ngayKyQd",
+      "ngayHluc",
+      "trichYeu",
+      "soQdCc",
+      "tenLoaiVthh",
+      "tenCloaiVthh",
+      "tenLoaiHinhNx",
+      "tenKieuNx",
+      "tchuanCluong"
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 }

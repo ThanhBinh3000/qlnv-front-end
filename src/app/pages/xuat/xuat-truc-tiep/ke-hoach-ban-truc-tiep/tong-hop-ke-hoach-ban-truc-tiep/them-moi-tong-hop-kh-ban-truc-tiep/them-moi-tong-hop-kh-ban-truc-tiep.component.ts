@@ -140,44 +140,54 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   async tongHopDeXuatTuCuc() {
     try {
-      this.spinner.show();
+      await this.spinner.show();
       this.setValidator();
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
-        throw new Error('Vui lòng điền đủ thông tin.');
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
+        return;
       }
       const body = this.formTraCuu.value;
       const res = await this.tongHopKhBanTrucTiepService.tonghop(body);
-      if (res.msg !== MESSAGE.SUCCESS) {
-        throw new Error(res.msg);
+      if (res.msg === MESSAGE.SUCCESS) {
+        if (res.data === null || (Array.isArray(res.data) && res.data.length === 0)) {
+          this.notification.error(MESSAGE.ERROR, 'Dữ liệu không có.');
+          this.isTongHop = false;
+        } else {
+          const data = res.data;
+          const idTh = await this.userService.getId("XH_THOP_DX_KH_BTT_HDR_SEQ");
+          this.helperService.bidingDataInFormGroup(this.formData, body);
+          this.formData.patchValue({
+            idTh,
+            ngayThop: dayjs().format("YYYY-MM-DD"),
+            children: data.children,
+          });
+          if (this.formData.value.children && this.formData.value.children.length > 0) {
+            this.showFirstRow(event, this.formData.value.children[0].idDxHdr);
+          }
+          this.isTongHop = true;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.isTongHop = false;
       }
-      const data = res.data;
-      const idTh = await this.userService.getId("XH_THOP_DX_KH_BTT_HDR_SEQ");
-      this.helperService.bidingDataInFormGroup(this.formData, body);
-      this.formData.patchValue({
-        idTh,
-        ngayThop: dayjs().format("YYYY-MM-DD"),
-        children: data.children,
-      });
-      if (this.formData.value.children && this.formData.value.children.length > 0) {
-        this.showFirstRow(event, this.formData.value.children[0].idDxHdr);
-      }
-      this.isTongHop = true;
-    } catch (error) {
-      console.error('Error:', error);
+    } catch (e) {
+      console.error('error:', e);
       this.isTongHop = false;
-      this.notification.error(MESSAGE.ERROR, error.message || MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
   async save() {
     try {
-      this.helperService.ignoreRequiredForm(this.formData);
-      await this.createUpdate(this.formData.value);
-    } finally {
-      this.helperService.restoreRequiredForm(this.formData);
+      await this.helperService.ignoreRequiredForm(this.formData);
+      const body = this.formData.value;
+      await this.createUpdate(body);
+      await this.helperService.restoreRequiredForm(this.formData);
+    } catch (error) {
+      console.error('Error in save:', error);
     }
   }
 
@@ -217,7 +227,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     });
     modal.afterClose.subscribe(data => {
       if (data) {
-        const { ma, ten, parent } = data;
+        const {ma, ten, parent} = data;
         this.formTraCuu.patchValue({
           cloaiVthh: ma,
           tenCloaiVthh: ten,
@@ -254,10 +264,10 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
       const tenLoaiVthh = res.data
         .flatMap(item => item.children || [])
         .find(s => s.ma === this.loaiVthh)?.ten;
-      this.formTraCuu.patchValue({ tenLoaiVthh });
+      this.formTraCuu.patchValue({tenLoaiVthh});
     } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
       const tenLoaiVthh = res.data.find(s => s.ma === this.loaiVthh)?.ten;
-      this.formTraCuu.patchValue({ tenLoaiVthh });
+      this.formTraCuu.patchValue({tenLoaiVthh});
     }
   }
 

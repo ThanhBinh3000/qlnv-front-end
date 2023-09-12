@@ -101,7 +101,6 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
     try {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
-        capDvi: this.userInfo.CAP_DVI,
         loai : '01'
       })
       let body = this.formData.value
