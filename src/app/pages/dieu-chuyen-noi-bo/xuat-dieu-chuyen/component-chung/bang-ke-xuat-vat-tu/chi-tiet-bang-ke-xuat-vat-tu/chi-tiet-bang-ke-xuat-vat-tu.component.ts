@@ -282,6 +282,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 .then((res) => {
                     if (res.msg === MESSAGE.SUCCESS) {
                         this.formData.patchValue({ ...res.data, donViTinh: res.data.donViTinh ? res.data.donViTinh : res.data.donViTinh, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
+                        this.tinhTongSl()
                     }
                 })
                 .catch((e) => {

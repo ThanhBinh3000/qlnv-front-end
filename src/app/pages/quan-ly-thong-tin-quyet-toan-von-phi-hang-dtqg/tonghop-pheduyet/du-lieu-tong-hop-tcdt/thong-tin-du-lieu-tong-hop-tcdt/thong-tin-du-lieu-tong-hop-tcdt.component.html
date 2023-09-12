@@ -21,22 +21,22 @@
         <i class='icon htvbdh_totrinh'></i>
         <span> In/Xem trước </span>
       </button>
-      <button *ngIf='!isView && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)' type='button'
+      <button *ngIf='!isView && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) ' type='button'
               class='btn btn-sub xanh-nhat ml-2' (click)='save(true)'>
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf='formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc()' type='button'
+      <button *ngIf='formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc() && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_DULIEUTCDT_LDTC")' type='button'
               class='btn btn-sub xanh-nhat ml-2' (click)='pheDuyet()'>
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Duyệt</span>
       </button>
-      <button *ngIf='formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc()' type='button'
+      <button *ngIf='formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc() && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_DULIEUTCDT_LDTC")' type='button'
               class='btn btn-sub do ml-2' (click)='tuChoi()'>
         <i class='icon htvbdh_tcdt_tuchoi'></i>
         <span>Từ chối</span>
       </button>
-      <button *ngIf='!isView'
+      <button *ngIf='!isView  && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_DULIEUTCDT_SUA")'
               type='button' class='btn btn-main ml-2' (click)='save()'>
         <i class='icon htvbdh_tcdt_save'></i>
         <span>Lưu</span>
