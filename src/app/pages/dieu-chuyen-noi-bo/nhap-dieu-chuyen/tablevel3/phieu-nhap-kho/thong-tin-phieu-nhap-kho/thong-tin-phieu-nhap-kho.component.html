@@ -156,7 +156,7 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="4" *ngIf="isVatTu">
+            <div nz-col [nzSpan]="4" *ngIf="isVatTu && formData.value.thayDoiThuKho">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Số BB chuẩn bị kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -167,7 +167,7 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="4" *ngIf="isVatTu">
+            <div nz-col [nzSpan]="4" *ngIf="isVatTu && formData.value.thayDoiThuKho">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày lập BB chuẩn bị kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -177,7 +177,7 @@
               </nz-form-item>
             </div>
 
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="8" *ngIf="formData.value.thayDoiThuKho">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Lô/Ngăn kho
                 </nz-form-label>
@@ -188,6 +188,19 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+
+            <div nz-col nzSpan="8" *ngIf="!formData.value.thayDoiThuKho">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">Lô/Ngăn kho
+                </nz-form-label>
+                <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKhoNhap()">
+                    <input [readonly]="true" nz-input formControlName="tenLoNganKho" readonly="true" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
             <!-- <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngăn kho
@@ -424,7 +437,7 @@
                 <nz-form-label [nzNoColon]="true">số BB kết thúc nhập kho
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <input nz-input formControlName="bbKtnk" [readonly]="true" />
+                  <input nz-input formControlName="soBbKetThucNk" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
