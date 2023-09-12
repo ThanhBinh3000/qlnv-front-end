@@ -69,7 +69,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       cloaiVthh: [, [Validators.required]],
       tenCloaiVthh: [, [Validators.required]],
       tonKho: [, [Validators.required]],
-      tenDonViTinh: [, [Validators.required]],
+      donViTinh: [, [Validators.required]],
       soLuongDc: [, [Validators.required]],
       duToanKphi: [],
       thoiGianDkDc: [, [Validators.required]],
@@ -345,7 +345,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
                   cloaiVthh: res.data[0].cloaiVthh,
                   tenCloaiVthh: res.data[0].tenCloaiVthh,
                   tonKho: res.data[0].slHienThoi,
-                  tenDonViTinh: res.data[0].tenDonViTinh,
+                  donViTinh: res.data[0].tenDonViTinh,
                 })
               } else {
                 this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
@@ -379,7 +379,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               cloaiVthh: res.data[0].cloaiVthh,
               tenCloaiVthh: res.data[0].tenCloaiVthh,
               tonKho: res.data[0].slHienThoi,
-              tenDonViTinh: res.data[0].tenDonViTinh,
+              donViTinh: res.data[0].tenDonViTinh,
             })
           } else {
             this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
@@ -391,7 +391,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             cloaiVthh: "",
             tenCloaiVthh: "",
             tonKho: "",
-            tenDonViTinh: "",
+            donViTinh: "",
           })
         }
 
