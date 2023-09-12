@@ -21,8 +21,9 @@
                     <th scope="col" rowspan="3" nzWidth="50px" nzLeft>STT</th>
                     <th scope="col" rowspan="3" nzWidth="150px" nzLeft>Hàng DTQG</th>
                     <th scope="colgroup" colspan="3" rowspan="2">Nhận</th>
-                    <th scope="colgroup" colspan="{{userService.isChiCuc() ? 6 : 9}}">Chi</th>
-                    <th scope="col" rowspan="3" class="text-col">Ghi chú</th>
+                    <th scope="colgroup" colspan="{{userService.isChiCuc() ? 3 : 6}}">Chi</th>
+                    <th scope="colgroup" colspan="3" rowspan="2"> Luỹ kế số đã nộp lên Đơn vị cấp trên </th>
+                    <th scope="colgroup" colspan="3" rowspan="2"> Số dư </th>
                 </tr>
                 <tr>
                     <th scope="colgroup" *ngIf="!userService.isChiCuc()" colspan="3">
@@ -30,9 +31,6 @@
                     </th>
                     <th scope="colgroup" colspan="3">
                         Tổng thanh toán cho khách hàng
-                    </th>
-                    <th scope="colgroup" colspan="3">
-                        Số dư
                     </th>
                 </tr>
                 <tr>
@@ -42,6 +40,9 @@
                     <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp ứng</th>
                     <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp vốn</th>
                     <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp</th>
+                    <th scope="col">Tổng vốn ứng</th>
+                    <th scope="col">Tổng vốn cấp</th>
+                    <th scope="col">Tổng vốn</th>
                     <th scope="col">Tổng vốn ứng</th>
                     <th scope="col">Tổng vốn cấp</th>
                     <th scope="col">Tổng vốn</th>
@@ -61,10 +62,12 @@
                     <th scope="col">7</th>
                     <th scope="col">8</th>
                     <th scope="col">9=7+8</th>
-                    <th scope="col">10=1-4-7</th>
-                    <th scope="col">11=2-5-8</th>
+                    <th scope="col">10</th>
+                    <th scope="col">11</th>
                     <th scope="col">12=10+11</th>
-                    <th scope="col">C</th>
+                    <th scope="col">13=1-4-7-10</th>
+                    <th scope="col">14=2-5-8-11</th>
+                    <th scope="col">15=13+14</th>
                 </tr>
             </thead>
             <tbody>
@@ -103,6 +106,15 @@
                         {{ Op.fmtNum(data.ttTong) }}
                     </td>
                     <td>
+                        {{ Op.fmtNum(data.daNopVonUng) }}
+                    </td>
+                    <td>
+                        {{ Op.fmtNum(data.daNopVonCap) }}
+                    </td>
+                    <td>
+                        {{ Op.fmtNum(data.daNopTong) }}
+                    </td>
+                    <td>
                         {{ Op.fmtNum(data.duVonUng) }}
                     </td>
                     <td>
@@ -110,9 +122,6 @@
                     </td>
                     <td>
                         {{ Op.fmtNum(data.duTong) }}
-                    </td>
-                    <td>
-                        {{ data.ghiChu }}
                     </td>
                 </tr>
             </tbody>

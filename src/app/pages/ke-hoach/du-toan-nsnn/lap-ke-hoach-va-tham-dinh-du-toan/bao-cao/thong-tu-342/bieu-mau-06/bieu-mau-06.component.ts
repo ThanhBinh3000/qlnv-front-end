@@ -156,7 +156,7 @@ export class BieuMau06Component implements OnInit {
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.lstCtietBcao.forEach(item => {
             item.lstDvi.sort((a, b) => {
-                if (this.lstDvi.findIndex(e => e.maDvi == a.maDvi) <= this.lstDvi.findIndex(e => e.maDvi == b.maDvi)) {
+                if (this.lstDvi.findIndex(e => e.maDvi == a.maDvi) >= this.lstDvi.findIndex(e => e.maDvi == b.maDvi)) {
                     return 1;
                 }
                 return -1

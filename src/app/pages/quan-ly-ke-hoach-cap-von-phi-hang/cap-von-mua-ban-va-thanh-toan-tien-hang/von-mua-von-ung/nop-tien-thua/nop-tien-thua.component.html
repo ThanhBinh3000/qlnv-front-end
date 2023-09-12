@@ -41,8 +41,8 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span [ngClass]="statusClass()">
-                            {{ getStatusName() }}
+                        <span [ngClass]="Status.statusClass(baoCao.trangThai)">
+                            {{Status.reportStatusName(baoCao.trangThai, isParent)}}
                         </span>
                         <span>Nộp tiền vốn thừa</span>
                     </div>
@@ -60,6 +60,7 @@
                             <th scope="col">Ngày trình duyệt</th>
                             <th scope="col">Ngày duyệt</th>
                             <th scope="col">Ngày phê duyệt</th>
+                            <th scope="col">Ngày tiếp nhận</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,18 +69,11 @@
                             <td *ngIf="isParent">{{ baoCao.tenDvi }}</td>
                             <td>{{ baoCao.namDnghi }}</td>
                             <td>{{ baoCao.dot }}</td>
-                            <ng-container *ngIf="isParent; else dvcd">
-                                <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
-                                <td>{{ Utils.fmtDate(baoCao.ngayTrinhDvct) }}</td>
-                                <td>{{ Utils.fmtDate(baoCao.ngayDuyetDvct) }}</td>
-                                <td>{{ Utils.fmtDate(baoCao.ngayPheDuyetDvct) }}</td>
-                            </ng-container>
-                            <ng-template #dvcd>
-                                <td>{{ Utils.fmtDate(baoCao.ngayTao) }}</td>
-                                <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
-                                <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
-                                <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
-                            </ng-template>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTao) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayTraKq) }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -109,50 +103,14 @@
                 <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
                     <thead>
                         <tr>
-                            <th scope="col" rowspan="3" nzWidth="50px" nzLeft>STT</th>
-                            <th scope="col" rowspan="3" nzWidth="150px" nzLeft>Hàng DTQG</th>
-                            <th scope="colgroup" colspan="3" rowspan="2">Nhận</th>
-                            <th scope="colgroup" colspan="{{capDvi == 3 ? 6 : 9}}">Chi</th>
-                            <th scope="colgroup" colspan="9">Nộp lên đơn vị cấp trên</th>
-                            <th scope="col" rowspan="3" class="text-col">Ghi chú</th>
-                            <th scope="col" *ngIf="status.save" rowSpan="3" style="width: 60px;" nzRight></th>
+                            <th scope="col" rowspan="2" nzWidth="50px" nzLeft>STT</th>
+                            <th scope="col" rowspan="2" nzWidth="150px" nzLeft>Hàng DTQG</th>
+                            <th scope="colgroup" colspan="3">Số đã nộp Đơn vị cấp trên (Lũy kế đến trước lần nộp này)
+                            </th>
+                            <th scope="colgroup" colspan="4">Nộp đợt {{baoCao.dot}}</th>
+                            <th scope="col" rowspan="2" style="width: 60px;" *ngIf="status.save" nzRight></th>
                         </tr>
                         <tr>
-                            <th scope="colgroup" *ngIf="capDvi != 3" colspan="3">
-                                Giao cho đơn vị cấp dưới
-                            </th>
-                            <th scope="colgroup" colspan="3">
-                                Tổng thanh toán cho khách hàng
-                            </th>
-                            <th scope="colgroup" colspan="3">
-                                Số dư
-                            </th>
-                            <th scope="colgroup" colspan="3">
-                                Số đã nộp đơn vị cấp trên
-                            </th>
-                            <th scope="colgroup" colspan="4">
-                                Nộp đợt {{ baoCao.dot }}
-                            </th>
-                            <th scope="col" rowspan="2">
-                                Lũy kế sau lần nộp này
-                            </th>
-                            <th scope="col" rowspan="2">
-                                Số còn phải nộp
-                            </th>
-                        </tr>
-                        <tr>
-                            <th scope="col">Tổng vốn ứng</th>
-                            <th scope="col">Tổng vốn cấp</th>
-                            <th scope="col">Tổng vốn</th>
-                            <th scope="col" *ngIf="capDvi != 3">Tổng cấp ứng</th>
-                            <th scope="col" *ngIf="capDvi != 3">Tổng cấp vốn</th>
-                            <th scope="col" *ngIf="capDvi != 3">Tổng cấp</th>
-                            <th scope="col">Tổng vốn ứng</th>
-                            <th scope="col">Tổng vốn cấp</th>
-                            <th scope="col">Tổng vốn</th>
-                            <th scope="col">Tổng vốn ứng</th>
-                            <th scope="col">Tổng vốn cấp</th>
-                            <th scope="col">Tổng vốn</th>
                             <th scope="col">Vốn ứng</th>
                             <th scope="col">Vốn cấp</th>
                             <th scope="col">Tổng vốn</th>
@@ -167,25 +125,10 @@
                             <th scope="col">1</th>
                             <th scope="col">2</th>
                             <th scope="col">3=1+2</th>
-                            <th scope="col" *ngIf="capDvi != 3">4</th>
-                            <th scope="col" *ngIf="capDvi != 3">5</th>
-                            <th scope="col" *ngIf="capDvi != 3">6=4+5</th>
-                            <th scope="col">7</th>
-                            <th scope="col">8</th>
-                            <th scope="col">9=7+8</th>
-                            <th scope="col">10=1-4-7</th>
-                            <th scope="col">11=2-5-8</th>
-                            <th scope="col">12=10+11</th>
-                            <th scope="col">13</th>
-                            <th scope="col">14</th>
-                            <th scope="col">15</th>
-                            <th scope="col">16</th>
-                            <th scope="col">17</th>
-                            <th scope="col">18</th>
-                            <th scope="col">19</th>
-                            <th scope="col">20=15+19</th>
-                            <th scope="col">21=12-20</th>
-                            <th scope="col">C</th>
+                            <th scope="col">4</th>
+                            <th scope="col">5</th>
+                            <th scope="col">6</th>
+                            <th scope="col">7=5+6</th>
                             <th scope="col" *ngIf="status.save" nzRight></th>
                         </tr>
                     </thead>
@@ -196,42 +139,6 @@
                             </td>
                             <td nzLeft>
                                 {{ data.tenHangDtqg }}
-                            </td>
-                            <td>
-                                {{ Op.fmtVal(data.nhanVonUng) }}
-                            </td>
-                            <td>
-                                {{ Op.fmtVal(data.nhanVonCap) }}
-                            </td>
-                            <td>
-                                {{ Op.fmtVal(data.nhanTong) }}
-                            </td>
-                            <td *ngIf="capDvi != 3">
-                                {{ Op.fmtVal(data.giaoCapUng) }}
-                            </td>
-                            <td *ngIf="capDvi != 3">
-                                {{ Op.fmtVal(data.giaoCapVon) }}
-                            </td>
-                            <td *ngIf="capDvi != 3">
-                                {{ Op.fmtVal(data.giaoTong) }}
-                            </td>
-                            <td>
-                                {{ Op.fmtVal(data.ttVonUng) }}
-                            </td>
-                            <td>
-                                {{ Op.fmtVal(data.ttVonCap) }}
-                            </td>
-                            <td>
-                                {{ Op.fmtVal(data.ttTong) }}
-                            </td>
-                            <td>
-                                {{ Op.fmtVal(data.duVonUng) }}
-                            </td>
-                            <td>
-                                {{ Op.fmtVal(data.duVonCap) }}
-                            </td>
-                            <td>
-                                {{ Op.fmtVal(data.duTong) }}
                             </td>
                             <td>
                                 {{ Op.fmtVal(data.daNopVonUng) }}
@@ -255,15 +162,6 @@
                                 <td>
                                     {{ Op.fmtVal(data.nopTong) }}
                                 </td>
-                                <td>
-                                    {{ Op.fmtVal(data.lkSauLanNay) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.soConPhaiNop) }}
-                                </td>
-                                <td>
-                                    {{ data.ghiChu }}
-                                </td>
                                 <td *ngIf="status.save" nzRight>
                                     <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                 </td>
@@ -286,15 +184,6 @@
                                 </td>
                                 <td>
                                     {{ Op.fmtVal(editCache[data.id].data.nopTong) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.lkSauLanNay) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.soConPhaiNop) }}
-                                </td>
-                                <td>
-                                    <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                                 </td>
                                 <td *ngIf="status.save" nzRight>
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
