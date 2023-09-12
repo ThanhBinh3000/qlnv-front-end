@@ -6,7 +6,7 @@ export class Cvmb {
     static readonly THANH_TOAN = '3';
     static readonly TIEN_THUA = '4';
     static readonly VON_BAN = '5';
-    static readonly HOP_DONG_VON_BAN = '6';
+    static readonly QUAN_LY_VON_BAN = '6';
     static readonly QUAN_LY_THU_CHI = '7';
 
     static readonly THOC = "0";
@@ -241,8 +241,8 @@ export class TienThua {
 
     changeModel() {
         this.nopTong = Operator.sum([this.nopVonUng, this.nopVonCap]);
-        this.lkSauLanNay = Operator.sum([this.daNopTong, this.nopTong]);
-        this.soConPhaiNop = Operator.sum([this.duTong, -this.lkSauLanNay]);
+        // this.lkSauLanNay = Operator.sum([this.daNopTong, this.nopTong]);
+        // this.soConPhaiNop = Operator.sum([this.duTong, -this.lkSauLanNay]);
     }
 
     upperBound() {
@@ -277,10 +277,6 @@ export class Report {
     ngayPheDuyet: string;
     ngayTraKq: string;
     trangThai: string = Status.TT_01;
-    ngayTrinhDvct: string;
-    ngayDuyetDvct: string;
-    ngayPheDuyetDvct: string;
-    trangThaiDvct: string = Status.TT_01;
     trangThaiThop: string;
     maDviTien: string;
     lyDoTuChoi: string;

@@ -136,36 +136,22 @@ export class NopTienThuaComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.baoCao = this.dataInfo?.baoCao;
-            this.baoCao.trangThaiDvct = Status.TT_01;
             this.lstCtiets = this.baoCao.lstCtiets;
-        }
-        this.capDvi = parseInt(this.userInfo.CAP_DVI, 10);
-        if (this.userInfo.MA_DVI == this.baoCao.maDviCha) {
-            this.capDvi += 1;
-        }
-        if (!this.baoCao.trangThaiDvct) {
-            this.baoCao.trangThaiDvct = Status.TT_01;
         }
         this.updateEditCache();
         this.getStatusButton();
     }
 
     getStatusButton() {
+        const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
-        if (this.isParent) {
-            this.status.save = false;
-            this.status.submit = Status.check('submit', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT_GN);
-            this.status.pass = Status.check('pass', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.PASS_NTT_GN);
-            this.status.approve = Status.check('approve', this.baoCao.trangThaiDvct) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_NTT_GN);
-            this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_NTT_GN) && !(!this.baoCao.id);
-        } else {
-            this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_NTT);
-            this.status.submit = Status.check('submit', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT) && !(!this.baoCao.id);
-            this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.PASS_NTT);
-            this.status.approve = Status.check('approve', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_NTT);
-            this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_NTT) && !(!this.baoCao.id);
-        }
-        this.scrollX = this.status.save ? Table.tableWidth(200, 21, 1, 60) : Table.tableWidth(200, 21, 1, 0);
+        this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_NTT) && isChild;
+        this.status.submit = Status.check('submit', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_NTT) && isChild && !(!this.baoCao.id);
+        this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.PASS_NTT) && isChild;
+        this.status.approve = Status.check('approve', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_NTT) && isChild;
+        this.status.approve = Status.check('accept', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_NTT) && this.isParent;
+        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_NTT) && (isChild || this.isParent) && !(!this.baoCao.id);
+        this.scrollX = this.status.save ? Table.tableWidth(200, 7, 0, 60) : Table.tableWidth(200, 7, 0, 0);
     }
 
     back() {
@@ -218,21 +204,14 @@ export class NopTienThuaComponent implements OnInit {
             id: this.baoCao.id,
             maChucNang: mcn,
             lyDoTuChoi: lyDoTuChoi,
-            maLoai: this.isParent ? '1' : null,
         };
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
-                if (this.isParent) {
-                    this.baoCao.trangThaiDvct = mcn;
-                    this.baoCao.ngayTrinhDvct = data.data.ngayTrinhDvct;
-                    this.baoCao.ngayDuyetDvct = data.data.ngayDuyetDvct;
-                    this.baoCao.ngayPheDuyetDvct = data.data.ngayPheDuyetDvct;
-                } else {
-                    this.baoCao.trangThai = mcn;
-                    this.baoCao.ngayTrinh = data.data.ngayTrinh;
-                    this.baoCao.ngayDuyet = data.data.ngayDuyet;
-                    this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
-                }
+                this.baoCao.trangThai = mcn;
+                this.baoCao.ngayTrinh = data.data.ngayTrinh;
+                this.baoCao.ngayDuyet = data.data.ngayDuyet;
+                this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
+                this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
                 if (Status.check('reject', mcn)) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
@@ -365,14 +344,6 @@ export class NopTienThuaComponent implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.baoCao.lstFiles.find(element => element?.id == id);
         await this.quanLyVonPhiService.downFile(file, doc);
-    }
-
-    getStatusName() {
-        return this.isParent ? Status.statusDvctName(this.baoCao.trangThaiDvct) : Status.reportStatusName(this.baoCao.trangThai);
-    }
-
-    statusClass() {
-        return this.isParent ? Status.statusClass(this.baoCao.trangThaiDvct) : Status.statusClass(this.baoCao.trangThai);
     }
 
     exportToExcel() {

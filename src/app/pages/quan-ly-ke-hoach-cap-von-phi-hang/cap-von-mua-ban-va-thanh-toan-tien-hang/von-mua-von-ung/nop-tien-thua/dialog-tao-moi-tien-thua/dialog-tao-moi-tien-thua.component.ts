@@ -8,7 +8,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { Report, TienThua } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Cvmb, Report, TienThua } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab } from '../../von-mua-von-ung.constant';
 
 @Component({
@@ -37,6 +37,13 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
 
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
+        if (this.userService.isChiCuc()) {
+            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.THOC);
+        } else if (this.userService.isCuc()) {
+            this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU);
+        } else {
+            this.loaiDns = Cvmb.LOAI_DE_NGHI
+        }
         this.lstNam = Utils.getListYear(5, 10);
         this.response.maLoai = this.request.maLoai;
     }
@@ -58,12 +65,12 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                         lstBcao = data.data.content;
                         lstBcao.sort((a, b) => b.dot - a.dot);
                         if ([Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThai) ||
-                            (!this.userService.isTongCuc() && lstBcao[0].trangThai == Status.TT_07 && [Status.TT_01, Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThaiDvct))) {
+                            !this.userService.isTongCuc() && lstBcao[0].trangThai == Status.TT_07) {
                             this.notification.warning(MESSAGE.WARNING, 'Trạng thái của đợt trước không cho phép tạo mới!')
                             this.response.loaiDnghi = null;
                             return;
                         } else {
-                            const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai) || !Status.check('reject', e.trangThaiDvct));
+                            const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
                             if (index != -1) {
                                 this.initReport(lstBcao?.length + 1, lstBcao[index].id)
                             } else {
@@ -92,18 +99,24 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
         this.response.dot = dot;
         this.response.trangThai = Status.TT_01;
         this.response.nguoiTao = this.userInfo.sub;
+        this.response.lstCtiets = [];
         await this.getMaDnghi();
-        await this.getThuChi();
         if (id) {
             await this.capVonMuaBanTtthService.ctietVonMuaBan(id).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
-                        this.response.lstCtiets.forEach(item => {
-                            const temp = data.data.lstCtiets.find(e => e.maHangDtqg == item.maHangDtqg);
-                            item.daNopVonUng = Operator.sum([temp.daNopVonUng, temp.nopVonUng]);
-                            item.daNopVonCap = Operator.sum([temp.daNopVonCap, temp.nopVonCap]);
-                            item.daNopTong = Operator.sum([item.daNopVonUng, item.daNopVonCap]);
-                            item.changeModel()
+                        data.data.lstCtiets.forEach(item => {
+                            const temp = new TienThua({
+                                ...item,
+                                daNopVonUng: Operator.sum([item.daNopVonUng, item.nopVonUng]),
+                                daNopVonCap: Operator.sum([item.daNopVonCap, item.nopVonCap]),
+                                nopUncNgay: null,
+                                nopVonUng: null,
+                                nopVonCap: null,
+                                nopTong: null,
+                            })
+                            temp.daNopTong = Operator.sum([temp.daNopVonUng, temp.daNopVonCap]);
+                            this.response.lstCtiets.push(temp)
                         })
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -115,6 +128,12 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                     this.response.namDnghi = null;
                 },
             );
+        } else {
+            this.response.lstCtiets.push(new TienThua({
+                id: uuid.v4() + 'FE',
+                maHangDtqg: this.response.loaiDnghi,
+                tenHangDtqg: this.loaiDns.find(e => e.id == this.response.loaiDnghi)?.tenDm,
+            }))
         }
     }
 
@@ -126,28 +145,6 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                     this.response.loaiDnghi = null;
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                this.response.loaiDnghi = null
-            },
-        );
-    }
-
-    async getThuChi() {
-        await this.capVonMuaBanTtthService.ctietThuChi(this.response.namDnghi).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    data.data.forEach(item => {
-                        this.response.lstCtiets.push(new TienThua({
-                            ...item,
-                            id: uuid.v4() + 'FE',
-                        }));
-                    })
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                    this.response.loaiDnghi = null
                 }
             },
             (err) => {
