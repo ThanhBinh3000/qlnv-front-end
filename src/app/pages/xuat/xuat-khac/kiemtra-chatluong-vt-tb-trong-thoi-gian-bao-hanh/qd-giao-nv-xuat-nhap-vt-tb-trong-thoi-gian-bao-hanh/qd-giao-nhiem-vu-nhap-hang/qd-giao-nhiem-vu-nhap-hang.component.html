@@ -66,7 +66,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button (click)="themMoi(null,false)" *ngIf="userService.isCuc()"
+        <button (click)="redirectDetail(null,false)" *ngIf="userService.isCuc()"
                 type="button" class="btn btn-sub xanh">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo quyết định</span>
@@ -198,15 +198,20 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThai==STATUS.DA_DUYET_LDC || data.trangThai==STATUS.CHO_DUYET_LDC"
-               (click)="themMoi(data.id, true)">
+            <a *ngIf="data.trangThai==STATUS.DA_DUYET_LDC "
+               (click)="redirectDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC"
-               (click)="themMoi(data.id, false)">
+            <a *ngIf="data.trangThai==STATUS.DU_THAO ||data.trangThai ==STATUS.TU_CHOI_TP || data.trangThai==STATUS.TU_CHOI_LDC"
+               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC" (click)="delete(data)">
+            <a
+              *ngIf="data.trangThai== STATUS.CHO_DUYET_LDC || data.trangThai== STATUS.CHO_DUYET_TP"
+              (click)="redirectDetail(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+            </a>
+            <a *ngIf="data.trangThai==STATUS.DU_THAO " (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
