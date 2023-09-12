@@ -157,7 +157,7 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>
             <a *ngIf="data.soQdPd && data.idHdr" nz-button nzType="link"
-               (click)="openModalQdPdKh(data.idHdr)">
+               (click)="openModal(data.idHdr, 'QdPdKh')">
               {{ data.soQdPd }}
             </a>
           </td>
@@ -168,7 +168,7 @@
           <td>{{ data.ngayNhanCgia | date: 'dd/MM/YYYY' }}</td>
           <td>
             <a *ngIf="data.soQdKq && data.idQdKq" nz-button nzType="link"
-               (click)="openModalQdPdKq(data.idQdKq)">
+               (click)="openModal(data.idQdKq, 'QdPdKq')">
               {{ data.soQdKq }}</a>
           </td>
           <td>{{ data.tenLoaiVthh }}</td>
@@ -215,26 +215,26 @@
   </app-them-moi-thong-tin-ban-truc-tiep>
 </div>
 <!--xem -->
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModalQdPdKh()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdPdKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
                                                 [isView]="true">
     </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalQdPdKh()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('QdPdKh')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKq" (nzOnCancel)="closeModalQdPdKq()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKq" (nzOnCancel)="closeModal('QdPdKq')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-quyet-dinh-chao-gia [idInput]="idQdPdKq" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
     </app-chi-tiet-quyet-dinh-chao-gia>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalQdPdKq()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('QdPdKq')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

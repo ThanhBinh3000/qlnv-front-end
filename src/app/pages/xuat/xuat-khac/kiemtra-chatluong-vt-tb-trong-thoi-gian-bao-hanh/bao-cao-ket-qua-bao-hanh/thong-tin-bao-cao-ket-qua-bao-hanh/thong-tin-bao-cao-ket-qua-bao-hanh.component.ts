@@ -58,7 +58,7 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
   ]
   dataPhieuKncl: any;
   maBc: string;
-
+  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

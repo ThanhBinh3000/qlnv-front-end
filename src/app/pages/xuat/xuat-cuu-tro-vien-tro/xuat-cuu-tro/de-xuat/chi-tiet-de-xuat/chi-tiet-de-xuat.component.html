@@ -95,9 +95,11 @@
   <nz-card class="mt16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <ng-template #error let-control>
-<!--        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}-->
-<!--        </ng-container>-->
+        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+        </ng-container>
         <ng-container *ngIf="control.hasError('max')">Số lượng không hợp lệ hoặc vượt quá số lượng tồn kho
+        </ng-container>
+        <ng-container *ngIf="control.hasError('min')">Số lượng không hợp lệ hoặc vượt quá số lượng tồn kho
         </ng-container>
       </ng-template>
       <div class="mt16 flex-card p-lr16">
@@ -371,7 +373,7 @@
                         <td>{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                       </ng-container>
                       <td>{{lv2.tenDvi}}</td>
-                      <td>{{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                      <td>{{lv2.tonKhoLoaiVthh||lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                       <td>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
                       <td>
                         <a>
@@ -479,6 +481,7 @@
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
                   <nz-input-number formControlName="soLuong" [nzMax]="999999999999" [nzStep]="1"
+                                   nzPlaceHolder="Nhập số lượng"
                                    [nzDisabled]="isView"
                                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                   </nz-input-number>

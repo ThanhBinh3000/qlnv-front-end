@@ -68,6 +68,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   tongSoLuong: number;
   tongThanhTien: number;
   dsDonvi: any[] = [];
+  previewName: string = "Thông tin hợp đồng bán";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

@@ -158,7 +158,6 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         loaiVthh: [''],
         cloaiVthh: [''],
         donViTinh: [''],
-        tenDonViTinh: [''],
         moTaHangHoa: [''],
         tenNguoiGiaoHang: [''],
         cccd: [''],
@@ -331,7 +330,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     this.phuongAnView.forEach(i => i.selected = false);
     item.selected = true;
   }
-  async save() {
+  async save(isGuiDuyet?: boolean) {
     try {
 
       // this.formData.disable()
@@ -343,24 +342,12 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
       this.helperService.markFormGroupTouched(this.formData);
       if (!this.formData.valid) return;
-      let res;
-      if (body.id && body.id > 0) {
-        res = await this.bangKeCanHangDieuChuyenService.update(body);
-      } else {
-        res = await this.bangKeCanHangDieuChuyenService.create(body);
-      }
-      if (res.msg === MESSAGE.SUCCESS) {
-        if (this.formData.get('id').value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      const data = await this.createUpdate(body, null, isGuiDuyet);
+      if (data) {
+        this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBangKe: data.soBangKe });
+        if (isGuiDuyet) {
+          this.pheDuyet();
         }
-        this.formData.get("id").setValue(res.data.id);
-        this.formData.get("trangThai").setValue(res.data.trangThai);
-        this.formData.get("soBangKe").setValue(res.data.soBangKe)
-        // this.genSoBangKe(res.data.id)
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (error) {
       console.log("e", error)
@@ -371,7 +358,20 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     }
   }
   pheDuyet() {
-    this.approve(this.idInput, STATUS.DA_DUYET_LDCC, 'Bạn có muốn duyệt quyết định này', MESSAGE.PHE_DUYET_SUCCESS)
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_LDCC:
+      case STATUS.DU_THAO:
+        trangThai = STATUS.CHO_DUYET_LDCC
+        msg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      case STATUS.CHO_DUYET_LDCC:
+        trangThai = STATUS.DA_DUYET_LDCC
+        msg = 'Bạn có muốn duyệt bản ghi ?'
+        break;
+    }
+    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS)
   }
 
   async flattenTree(tree) {
@@ -454,7 +454,6 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
             tenCloaiVthh: '',
             tenNguoiGiaoHang: '',
             donViTinh: '',
-            tenDonViTinh: '',
             soPhieuXuatKho: '',
             phieuXuatKhoId: '',
             cccd: '',
@@ -567,7 +566,6 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         tenLoaiVthh: dataRes.data.tenLoaiVthh,
         tenCloaiVthh: dataRes.data.tenCloaiVthh,
         donViTinh: dataRes.data.donViTinh,
-        tenDonViTinh: dataRes.data.tenDonViTinh ? dataRes.data.tenDonViTinh : dataRes.data.donViTinh,
         thoiGianGiaoNhan: dataRes.data.thoiGianGiaoNhan,
 
         maLoKho: dataRes.data.maLoKho,

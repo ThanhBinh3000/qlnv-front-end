@@ -64,17 +64,17 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
+      await this.spinner.show();
       await Promise.all([
         this.timKiem(),
         this.search(),
       ]);
-      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -88,8 +88,10 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
 
   async clearFilter() {
     this.formData.reset();
-    await this.timKiem();
-    await this.search();
+    await Promise.all([
+      this.timKiem(),
+      this.search()
+    ]);
   }
 
   goDetail(id: number, boolean?: boolean) {
@@ -100,23 +102,21 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   }
 
   exportDataHopDong(fileName?: string) {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-      try {
-        this.qdPdKetQuaBttService
-          .exportHopDong(this.formData.value)
-          .subscribe((blob) =>
-            saveAs(blob, fileName ? fileName : 'data.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
+    if (this.totalRecord <= 0) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+      return;
     }
+    this.spinner.show();
+    this.qdPdKetQuaBttService.exportHopDong(this.formData.value).subscribe(
+      (blob) => {
+        saveAs(blob, fileName ? fileName : 'data.xlsx');
+      }, (error) => {
+        console.error('error: ', error);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }, () => {
+        this.spinner.hide();
+      }
+    );
   }
 
   disabledNgayPduyetTu = (startValue: Date): boolean => {

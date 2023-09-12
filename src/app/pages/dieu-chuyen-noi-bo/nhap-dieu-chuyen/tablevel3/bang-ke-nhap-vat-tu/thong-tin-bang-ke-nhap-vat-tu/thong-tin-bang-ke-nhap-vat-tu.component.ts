@@ -148,7 +148,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.soLuongDc,
-        donViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
       });
       await this.loadChiTietQdinh(this.data.qdinhDcId);
       await this.layDonViCon(this.data.maDiemKho)
@@ -285,7 +285,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
           cloaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -328,7 +328,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          donViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
 
         });
 

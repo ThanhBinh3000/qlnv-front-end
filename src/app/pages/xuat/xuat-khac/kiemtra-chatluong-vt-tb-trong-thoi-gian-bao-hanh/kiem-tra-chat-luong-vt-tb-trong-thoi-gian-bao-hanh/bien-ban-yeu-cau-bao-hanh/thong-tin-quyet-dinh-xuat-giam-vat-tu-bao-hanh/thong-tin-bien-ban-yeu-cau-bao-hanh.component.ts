@@ -62,7 +62,7 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
     {value: 1, label: "Đạt"}
   ]
   maQd: string;
-
+  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
 
   constructor(
     httpClient: HttpClient,

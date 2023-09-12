@@ -229,10 +229,6 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       } else if (level == 2) {
         data.edit = level;
         this.formDataDtl.patchValue(data);
-        if (this.userService.isCuc()) {
-          this.formDataDtl.patchValue({maDvi: this.userInfo.MA_DVI});
-        }
-        await this.changeMaDviDtl(this.userInfo.MA_DVI);
       }
     } else {
       this.formDataDtl.patchValue({
@@ -240,18 +236,17 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         loaiVthh: this.listLoaiHangHoa[0].ma,
         tenLoaiVthh: this.listLoaiHangHoa[0].ten
       });
-      if (this.userService.isCuc()) {
-        this.formDataDtl.patchValue({maDvi: this.userInfo.MA_DVI});
-      }
-      await this.changeMaDviDtl(this.userInfo.MA_DVI);
     }
     // await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
+    if (this.userService.isCuc()) {
+      this.formDataDtl.patchValue({maDvi: this.userInfo.MA_DVI});
+      await this.changeMaDviDtl(this.userInfo.MA_DVI);
+    }
     this.modalChiTiet = true;
   }
 
   async luuPhuongAn() {
-    this.helperService.markFormGroupTouched(this.formDataDtl);
-    console.log(this.formDataDtl,'this.formDataDtlthis.formDataDtlthis.formDataDtl');
+    await this.helperService.markFormGroupTouched(this.formDataDtl);
     if (this.formDataDtl.invalid) {
       return;
     }
@@ -264,12 +259,20 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         }
       });
     } else {
+      let exist = this.formData.value.deXuatPhuongAn.find(s => s.idVirtual === row.idVirtual) ||
+        this.formData.value.deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === '') ||
+        this.formData.value.deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === row.cloaiVthh);
+      if (exist) {
+        Object.assign(exist, row);
+      } else {
+        deXuatPhuongAn = [...deXuatPhuongAn, row];
+      }/*
       let existRowIndex = deXuatPhuongAn.findIndex(s => s.idVirtual === row.idVirtual);
       if (existRowIndex !== -1) {
         deXuatPhuongAn[existRowIndex] = row;
       } else {
         deXuatPhuongAn = [...deXuatPhuongAn, row];
-      }
+      }*/
     }
     this.formData.patchValue({deXuatPhuongAn: deXuatPhuongAn});
     await this.buildTableView();
@@ -284,12 +287,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   async xoaPhuongAn(data: any, dataParent?: any) {
     let deXuatPhuongAn = this.formData.value.deXuatPhuongAn;
-    if (data.noiDung) {
-      deXuatPhuongAn = deXuatPhuongAn.filter(s => s.noiDung !== data.noiDung);
+    if (data.idVirtual) {
+      deXuatPhuongAn = deXuatPhuongAn.filter(s => s.idVirtual != data.idVirtual);
     } else if (dataParent) {
       deXuatPhuongAn = deXuatPhuongAn.filter(s => !(s.tenLoaiVthh === data.tenLoaiVthh && s.noiDung === dataParent.noiDung));
-    } else if (data.idVirtual) {
-      deXuatPhuongAn = deXuatPhuongAn.filter(s => s.idVirtual != data.idVirtual);
+    } else if (data.noiDung) {
+      deXuatPhuongAn = deXuatPhuongAn.filter(s => s.noiDung !== data.noiDung);
     }
     this.formData.patchValue({deXuatPhuongAn: deXuatPhuongAn});
     await this.buildTableView();
@@ -402,11 +405,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
               tonKhoLoaiVthh: tonKhoLoaiVthh,
               tonKhoCloaiVthh: tonKhoCloaiVthh
             });
-            cloaiVthh ? this.formDataDtl.controls['soLuong'].setValidators([Validators.max(tonKhoCloaiVthh)]) : this.formDataDtl.controls['soLuong'].setValidators([Validators.max(tonKhoLoaiVthh)]);
-            this.formDataDtl.controls['soLuong'].markAsDirty();
+            cloaiVthh ?
+              this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoCloaiVthh)]) :
+              this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoLoaiVthh)]);
             this.formDataDtl.controls['soLuong'].updateValueAndValidity();
           } else {
             this.formDataDtl.patchValue({tonKhoLoaiVthh: 0, tonKhoCloaiVthh: 0});
+            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(0)]);
+            this.formDataDtl.controls['soLuong'].updateValueAndValidity();
           }
         }
       });
