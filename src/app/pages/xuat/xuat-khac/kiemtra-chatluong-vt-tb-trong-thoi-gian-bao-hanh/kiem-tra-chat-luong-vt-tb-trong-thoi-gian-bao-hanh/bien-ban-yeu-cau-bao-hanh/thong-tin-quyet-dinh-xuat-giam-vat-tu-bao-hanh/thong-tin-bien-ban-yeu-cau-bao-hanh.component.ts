@@ -234,7 +234,8 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
     let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.listSoQuyetDinh = data.content;
+      this.listSoQuyetDinh = data.content.filter(i=>i.soLanLm==2);
+      console.log(this.listSoQuyetDinh,"1111")
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

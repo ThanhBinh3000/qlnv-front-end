@@ -1,29 +1,29 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   BbNghiemThuBaoQuanService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {STATUS} from "../../../../../../constants/status";
-import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { MESSAGE } from "../../../../../../constants/message";
+import { STATUS } from "../../../../../../constants/status";
+import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {
   QuyetDinhGiaoNhapHangKhacService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhGiaoNhapHangKhac.service";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
-import {DanhMucCongCuDungCuService} from "../../../../../../services/danh-muc-cong-cu-dung-cu.service";
-import {cloneDeep} from 'lodash';
-import {convertMaCcdc, convertTienTobangChu} from 'src/app/shared/commonFunction';
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { FileDinhKem } from "../../../../../../models/FileDinhKem";
+import { DanhMucCongCuDungCuService } from "../../../../../../services/danh-muc-cong-cu-dung-cu.service";
+import { cloneDeep } from 'lodash';
+import { convertMaCcdc, convertTienTobangChu } from 'src/app/shared/commonFunction';
 import * as dayjs from "dayjs";
-import {Validators} from "@angular/forms";
+import { Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-lap-bien-ban-nghiem-thu-bao-quan',
@@ -50,6 +50,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
   createRowUpdate: any = {};
   createTcRowUpdate: any = {};
   tongKphi: any;
+  previewName: string = 'nk_bb_nghiem_thu_bqld';
 
   constructor(
     httpClient: HttpClient,

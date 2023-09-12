@@ -209,7 +209,6 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data);
-        await this.bindingDataPhieuNhapKho(data);
       }
     });
   };
@@ -226,7 +225,6 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           loai: 'XUAT_MAU',
         });
         if (res.msg == MESSAGE.SUCCESS) {
-          console.log(res.data.content, 'res.data.content');
           this.listNganLoKho = res.data.content;
         }
         this.formData.patchValue({
@@ -243,19 +241,20 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   }
 
   async bindingDataPhieuNhapKho(data, maDiaDiem?) {
+    this.dataPhieuNhapKho = [];
     try {
       await this.spinner.show();
       if (data) {
         let res = await this.phieuXuatNhapKhoService.search({
-          soBcKqkdMau: data.soBaoCao,
-          idBcKqkdMau: data.id,
+          soCanCu: data.soBcKqkdMau,
+          maDiaDiem: data.maDiaDiem,
+          idCanCu: data.idBcKqkdMau,
           namKeHoach: this.formData.get('namKeHoach').value,
           loaiPhieu: 'NHAP',
           loai: 'NHAP_MAU',
         });
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data.content && res.data.content.length > 0) {
-            console.log(res.data.content,'res.data.contentres.data.content');
             this.dataPhieuNhapKho = res.data.content;
             this.formData.patchValue({
               listPhieuNhapKho: res.data.content,
@@ -287,6 +286,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           idPhieuKncl: item.idPhieuKncl,
           tenCloaiVthh: item.tenCloaiVthh,
         });
+        await this.bindingDataPhieuNhapKho(item);
       }
     }
   }
