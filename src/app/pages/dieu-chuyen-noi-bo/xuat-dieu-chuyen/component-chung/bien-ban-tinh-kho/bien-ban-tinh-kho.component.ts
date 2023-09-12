@@ -38,6 +38,9 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
   idQdDcModal: number;
   idPhieuXk: number;
   openPhieuXk: boolean;
+  bangKeId: number;
+  openBangKeCanHang: boolean = false;
+  openBangKeXuatVt: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -275,6 +278,15 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
   closePhieuXkModal() {
     this.idPhieuXk = null;
     this.openPhieuXk = false
+  }
+  openBangKeModal(id: number) {
+    this.bangKeId = id;
+    this.openBangKeXuatVt = this.isVatTu;
+    this.openBangKeCanHang = !this.isVatTu
+  }
+  closeBangKeModal() {
+    this.openBangKeCanHang = false;
+    this.openBangKeXuatVt = false;
   }
   checkRoleView(data: any): boolean {
     return data.trangThai && !this.checkRoleAdd(data) && !this.checkRoleEdit(data) && !this.checkRoleApprove(data) && !this.checkRoleDetele(data)
