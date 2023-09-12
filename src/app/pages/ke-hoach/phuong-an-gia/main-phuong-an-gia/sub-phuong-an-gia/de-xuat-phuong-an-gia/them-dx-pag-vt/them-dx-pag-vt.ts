@@ -751,7 +751,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.pagTtChungs.forEach(item => {
       if (this.type == 'GCT') {
         item.giaDnVat = item.giaDn + item.giaDn * item.vat;
-      } else  {
+      } else {
         if (this.formData.value.vat && ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
           item.vat = this.formData.value.vat;
           item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat;
@@ -840,7 +840,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     try {
       let body = {
         reportTemplateRequest: this.reportTemplate,
-        khPhuongAnGia : this.formData.value
+        id : this.idInput
       }
       await this.giaDeXuatGiaService.preview(body).then(async s => {
         this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
