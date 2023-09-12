@@ -548,8 +548,7 @@ export class PhuLucTongHopComponent implements OnInit {
             this.lstCtietBcao[index].tongDchinhGiam = 0
             this.lstCtietBcao[index].tongDchinhTang = 0
             this.lstCtietBcao[index].child.forEach(item => {
-
-                if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi !== null) {
+                if (item.dtoanVuTvqtDnghi && item.dtoanVuTvqtDnghi !== null && this.lstCtietBcao[index].level !== 0) {
                     if (item.dtoanVuTvqtDnghi < 0) {
                         this.lstCtietBcao[index].tongDchinhGiam += Number(item.dtoanVuTvqtDnghi);
                     } else {
@@ -557,8 +556,30 @@ export class PhuLucTongHopComponent implements OnInit {
                     }
                 }
             })
+
+            let stt = this.getHead(item.stt);
+            while (stt != '0') {
+                const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+                const data = this.lstCtietBcao[index];
+                this.lstCtietBcao[index] = new ItemData({
+                    id: data.id,
+                    stt: data.stt,
+                    maNoiDung: data.maNoiDung,
+                    level: data.level,
+                    child: data.child,
+                })
+                this.lstCtietBcao.forEach(itm => {
+                    if (this.getHead(itm.stt) == stt) {
+                        this.lstCtietBcao[index].tongDchinhGiam = Operator.sum([this.lstCtietBcao[index].tongDchinhGiam, itm.tongDchinhGiam]);
+                        this.lstCtietBcao[index].tongDchinhTang = Operator.sum([this.lstCtietBcao[index].tongDchinhTang, itm.tongDchinhTang]);
+                    }
+                })
+                stt = this.getHead(stt);
+            }
         })
-    };
+
+    }
+
 
     // xoa file trong bang file
     deleteFile(id: string): void {
