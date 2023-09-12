@@ -95,8 +95,8 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   tongSoLuongDeXuat: any;
   tongSoLuongXuatCap: any;
   listVatTuHangHoa: any[] = [];
-  templateName = "Phiếu kiểm nghiệm chất lượng";
-  templateNameVt = "Phiếu kiểm nghiệm chất lượng vật tư";
+  templateName = "Tổng hợp phương an cứu trợ";
+  templateNameVt = "Tổng hợp phương an cứu trợ vật tư";
 
   constructor(
     httpClient: HttpClient,
