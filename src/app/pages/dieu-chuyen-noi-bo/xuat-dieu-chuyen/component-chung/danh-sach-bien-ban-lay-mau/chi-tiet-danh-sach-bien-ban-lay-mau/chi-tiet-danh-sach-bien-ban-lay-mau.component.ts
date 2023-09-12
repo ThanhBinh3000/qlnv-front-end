@@ -130,8 +130,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         soBbTinhKho: [],
         ngayXuatDocKho: [],
         tenDvi: [''],
-        tenLoaiVthh: [''],
-        tenCloaiVthh: [''],
+        tenLoaiVthh: ['', [Validators.required]],
+        tenCloaiVthh: ['', [Validators.required]],
         tenTrangThai: ['Dự Thảo'],
         diaChiDvi: [],
         tenDiemKho: ['', [Validators.required]],
@@ -150,7 +150,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         thuKho: [null],
         tenThuKho: [''],
         donViTinh: '',
-        tenDonViTinh: [''],
         ghiChu: ['']
       }
     );
@@ -310,7 +309,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           thuKho: null,
           tenThuKho: '',
           donViTinh: '',
-          tenDonViTinh: '',
           soLuongMau: '',
         });
         this.chiTieuKiemTra = [],
@@ -367,7 +365,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   // }
   async getPPLayMau(cloaiVthh) {
     const chiTietHangHoa = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
-    this.formData.patchValue({ donViTinh: null, tenDonViTinh: chiTietHangHoa.data.maDviTinh });
+    this.formData.patchValue({ donViTinh: chiTietHangHoa.data.maDviTinh });
     this.phuongPhapLayMaus = Array.isArray(chiTietHangHoa?.data?.ppLayMau) ? chiTietHangHoa?.data?.ppLayMau.map(f => ({ ...f, checked: false })) : [];
   }
   async getChiTietTieuChiCanKiemTra(cloaiVthh: string) {
@@ -415,7 +413,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           thuKho: null,
           tenThuKho: '',
           donViTinh: '',
-          tenDonViTinh: '',
           soLuongMau: '',
         });
         this.chiTieuKiemTra = [],
@@ -444,7 +441,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         thuKho: data.thuKhoId,
         tenThuKho: data.thuKho,
         donViTinh: data.donViTinh,
-        tenDonViTinh: data.tenDonViTinh
       })
     }
     if (data.cloaiVthh) {

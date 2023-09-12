@@ -69,7 +69,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Cán bộ tạo HSKT</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <input nz-input readonly formControlName="canBoTaoHoSo" />
+                <input nz-input readonly formControlName="tenNguoiTao" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -90,11 +90,13 @@
               </nz-form-control>
             </nz-form-item>
           </div>
+
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Ngày duyệt HSKT</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Ngày duyệt HSKT</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <input nz-input readonly formControlName="ngayDuyetNh" />
+                <nz-date-picker [nzDisabled]="isView" formControlName="ngayDuyetNh" [nzFormat]="globals.dateFormat">
+                </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -105,8 +107,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ điều chuyển của Cục
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMauXuat()">
-                  <input [readonly]="true" nz-input formControlName="soQdGiaoNvNh" readonly />
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
+                  <input [readonly]="true" nz-input formControlName="soQdDcCuc" readonly />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -114,10 +116,13 @@
 
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu (Khi nhập)
+              <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input readonly formControlName="soBbLayMauNh" />
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBLMGBGM()">
+                  <input nz-input readonly formControlName="soBbLayMauNh" />
+                </nz-input-group>
+
               </nz-form-control>
             </nz-form-item>
           </div>

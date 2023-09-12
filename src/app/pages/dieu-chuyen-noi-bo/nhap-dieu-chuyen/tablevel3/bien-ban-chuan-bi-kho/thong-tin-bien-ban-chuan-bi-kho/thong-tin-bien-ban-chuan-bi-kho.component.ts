@@ -109,7 +109,6 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       tichLuong: [],
       tichLuongKhaDung: [],
       donViTinh: [],
-      tenDonViTinh: [],
       dsPhieuNhapKho: [],
       slThucNhapDc: [],
       hthucKlot: [],
@@ -182,8 +181,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
         tichLuong: this.data.tichLuongKd,
-        donViTinh: this.data.tenDonViTinh,
-        tenDonViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       await this.loadDataBaoQuan(this.data.maChLoaiHangHoa)
@@ -468,7 +466,6 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           tichLuong: "",
           tichLuongKhaDung: "",
           donViTinh: "",
-          tenDonViTinh: "",
         });
         this.listPhuongThucBaoQuan = []
         this.listHinhThucBaoQuan = []
@@ -514,8 +511,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuong: data.tichLuongKd,
           tichLuongKhaDung: data.tichLuongKd,
-          donViTinh: data.tenDonViTinh,
-          tenDonViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
         });
         await this.loadDataBaoQuan(data.cloaiVthh)
         await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)

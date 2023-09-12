@@ -158,7 +158,6 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         loaiVthh: [''],
         cloaiVthh: [''],
         donViTinh: [''],
-        tenDonViTinh: [''],
         moTaHangHoa: [''],
         tenNguoiGiaoHang: [''],
         cccd: [''],
@@ -359,7 +358,20 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     }
   }
   pheDuyet() {
-    this.approve(this.formData.value.id, STATUS.DA_DUYET_LDCC, 'Bạn có muốn duyệt quyết định này', MESSAGE.PHE_DUYET_SUCCESS)
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_LDCC:
+      case STATUS.DU_THAO:
+        trangThai = STATUS.CHO_DUYET_LDCC
+        msg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      case STATUS.CHO_DUYET_LDCC:
+        trangThai = STATUS.DA_DUYET_LDCC
+        msg = 'Bạn có muốn duyệt bản ghi ?'
+        break;
+    }
+    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS)
   }
 
   async flattenTree(tree) {
@@ -442,7 +454,6 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
             tenCloaiVthh: '',
             tenNguoiGiaoHang: '',
             donViTinh: '',
-            tenDonViTinh: '',
             soPhieuXuatKho: '',
             phieuXuatKhoId: '',
             cccd: '',
@@ -555,7 +566,6 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         tenLoaiVthh: dataRes.data.tenLoaiVthh,
         tenCloaiVthh: dataRes.data.tenCloaiVthh,
         donViTinh: dataRes.data.donViTinh,
-        tenDonViTinh: dataRes.data.tenDonViTinh ? dataRes.data.tenDonViTinh : dataRes.data.donViTinh,
         thoiGianGiaoNhan: dataRes.data.thoiGianGiaoNhan,
 
         maLoKho: dataRes.data.maLoKho,

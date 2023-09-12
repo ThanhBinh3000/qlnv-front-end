@@ -141,7 +141,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenLoKho: [],
         tenNganKho: [],
         tenNganLoKho: ['', [Validators.required]],
-        dcnbBienBanTinhKhoDtl: [new Array()]
+        dcnbBienBanTinhKhoDtl: [new Array()],
+        donViTinh: ['', [Validators.required]]
       }
     );
     this.maBb = '-BBTK';
@@ -240,8 +241,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định'],
+        dataColumn: ['soQdinh', 'ngayKyQdinh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -342,7 +343,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
         tongSlXuatTheoQd: data.soLuongDc || 0,
         tonKhoBanDau: data.tonKho || 0,
-        slConLaiTheoSs: data.tonKho - data.soLuongDc
+        slConLaiTheoSs: data.tonKho - data.soLuongDc,
+        donViTinh: data.donViTinh
 
       })
       let body = {

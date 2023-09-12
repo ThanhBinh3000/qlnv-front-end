@@ -105,7 +105,6 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       tenLoaiVthh: [],
       cloaiVthh: [],
       tenCloaiVthh: [],
-      tenDonViTinh: [],
       donViTinh: [],
       hinhThucBq: [],
       danhGiaCamQuan: [],
@@ -161,7 +160,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
-        tenDonViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.maChLoaiHangHoa);
@@ -334,7 +333,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           loaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -404,7 +403,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         // tichLuongKhaDung: data.tichLuongKd,
-        tenDonViTinh: data.tenDonViTinh,
+        donViTinh: data.donViTinh,
         // slNhapLoKho: data.soLuongPhanBo
       });
 
@@ -527,7 +526,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          tenDonViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
           slNhapLoKho: data.soLuongPhanBo
         });
 

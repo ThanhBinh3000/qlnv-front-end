@@ -335,7 +335,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           if (dataChiCuc) {
             this.listDiaDiemNhap = cloneDeep(dataChiCuc);
             // this.formData.patchValue({
-            //   donViTinh: dataChiCuc[0]?.tenDonViTinh,
+            //   donViTinh: dataChiCuc[0]?.donViTinh,
             //   duToanKinhPhiDc: dataChiCuc[0]?.duToanKphi
             // })
           };
@@ -349,7 +349,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
             });
             if (dataNganLo) {
               this.formData.patchValue({
-                donViTinh: dataNganLo.tenDonViTinh,
+                donViTinh: dataNganLo.donViTinh,
                 duToanKinhPhiDc: dataNganLo.duToanKphi
               })
             }
@@ -438,7 +438,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
           soLuongCanDc: data.soLuongDc,
-          donViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
@@ -505,7 +505,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
             phieuKnChatLuongHdrId: dataPhieuKn.id,
             soPhieuKnChatLuong: dataPhieuKn.soPhieu,
             ngayKyPhieuKnChatLuong: dataPhieuKn.ngayDuyetLdCuc,
-            // donViTinh: dataPhieu.tenDonViTinh,
+            donViTinh: dataPhieu.donViTinh,
             ktvBaoQuan: dataPhieuKn.nguoiKt,
             ktvBaoQuanId: dataPhieuKn.nguoiKtId,
             // duToanKinhPhiDc: data.duToanKphi

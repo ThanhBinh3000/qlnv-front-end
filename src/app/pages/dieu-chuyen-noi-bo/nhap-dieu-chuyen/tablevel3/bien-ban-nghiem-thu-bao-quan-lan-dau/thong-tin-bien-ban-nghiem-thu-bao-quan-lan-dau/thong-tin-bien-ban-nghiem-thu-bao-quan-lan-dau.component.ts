@@ -100,7 +100,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       cloaiVthh: [],
       tenCloaiVthh: [],
       tichLuongKhaDung: [],
-      tenDonViTinh: [],
+      donViTinh: [],
       dsPhieuNhapKho: [],
       slThucNhapDc: [],
       hinhThucBaoQuan: [],
@@ -173,7 +173,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
         cloaiVthh: this.data.cloaiVthh,
         tenCloaiVthh: this.data.tenCloaiVthh,
         tichLuongKhaDung: this.data.tichLuongKd,
-        tenDonViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
         idKeHoachDtl: this.data.qdinhDccId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
@@ -649,7 +649,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
           cloaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
         });
         this.listPhuongThucBaoQuan = []
         this.listHinhThucBaoQuan = []
@@ -701,7 +701,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          tenDonViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
           idKeHoachDtl: data.id
         });
         await this.loadDataBaoQuan(data.cloaiVthh)
