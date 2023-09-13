@@ -25,7 +25,7 @@ export class QuyetDinhGiaoNhapHangService extends BaseService {
   }
 
   layTatCaQdGiaoNvNh(body) {
-    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/ds-qd-giao-nv-nh`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-qd-giao-nv-nh`;
     return this._httpClient.post<any>(url, body).toPromise();
   }
 }
