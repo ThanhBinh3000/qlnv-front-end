@@ -6,6 +6,7 @@
                                [itemDuAn]="itemDuAn"
                                [itemQdPdKhLcnt]="itemQdPdKhLcnt"
                                [itemQdPdKtkt]="itemQdPdKtkt"
+                               *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_HD_XEM')"
                                [idInput]="selectedId" [flagThemMoi]="flagInfo">
   </app-thong-tin-hop-dong-scl>
 </ng-template>

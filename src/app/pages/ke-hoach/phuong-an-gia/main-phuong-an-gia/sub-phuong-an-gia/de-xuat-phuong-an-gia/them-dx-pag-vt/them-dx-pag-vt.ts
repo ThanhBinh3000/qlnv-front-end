@@ -831,10 +831,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  async downloadExcel() {
-    saveAs(this.excelSrc, "de_xuat_phuong_an_gia.xlsx");
-  }
-
   async preview() {
     this.spinner.show();
     try {
@@ -863,5 +859,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   doPrint() {
     printJS({printable: this.printSrc, type: 'pdf', base64: true});
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "de_xuat_phuong_an_gia.docx");
   }
 }

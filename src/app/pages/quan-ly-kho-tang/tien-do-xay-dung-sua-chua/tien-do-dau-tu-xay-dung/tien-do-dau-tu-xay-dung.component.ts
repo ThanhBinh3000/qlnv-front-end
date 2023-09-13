@@ -25,6 +25,7 @@ import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',
@@ -68,6 +69,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
     private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
     private hopdongService: HopdongService,
+    private router: Router,
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit()
@@ -75,6 +77,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.formData = this.fb.group({
       namKeHoach: [''],
       tenDuAn: [''],
