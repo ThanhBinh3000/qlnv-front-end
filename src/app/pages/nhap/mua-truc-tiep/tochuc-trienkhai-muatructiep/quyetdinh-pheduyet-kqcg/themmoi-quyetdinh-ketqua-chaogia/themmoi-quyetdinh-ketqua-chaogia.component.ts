@@ -29,7 +29,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   selected: boolean = false;
   danhSachCtiet: any[] = [];
   showFromTT: boolean;
-
+  previewName: string = 'mtt_qd_pd_kq_chao_gia';
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,

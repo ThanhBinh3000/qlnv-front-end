@@ -16,6 +16,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { formatNumber } from "@angular/common";
 import { DanhMucService } from "../../../services/danhmuc.service";
 import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -87,7 +88,19 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   listDiemKho: any[] = [];
   listAllDiemKho: any[] = [];
   listType = ["MLK", "DV"]
-
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   async ngOnInit() {
     this.userInfo = await this.userService.getUserLogin();
     this.initForm();
@@ -247,11 +260,15 @@ export class DialogThemMoiVatTuComponent implements OnInit {
           listDiemKho.push(item);
         }
         this.listAllDiemKho.push(listDiemKho);
-        this.listOfData[i].children.forEach((i) => {
-          i.thanhTienDx = i.soLuong * this.formData.get('donGiaTamTinh').value
-          i.thanhTienQd = i.soLuong * this.formData.get('donGiaVat').value
+        if(this.listOfData[i].children.length > 0) {
+          this.listOfData[i].children.forEach((i) => {
+            i.thanhTienDx = i.soLuong * this.formData.get('donGiaTamTinh').value
+            i.thanhTienQd = i.soLuong * this.formData.get('donGiaVat').value
+            this.listThongTinDiemKho.push(new DanhSachGoiThau());
+          })
+        } else {
           this.listThongTinDiemKho.push(new DanhSachGoiThau());
-        })
+        }
       }
     }
   }
@@ -423,6 +440,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   clearChiCuc() {
     this.thongTinChiCuc.maDvi = null
+    this.thongTinChiCuc.soLuong = null
   }
 
   calculatorThanhTien() {

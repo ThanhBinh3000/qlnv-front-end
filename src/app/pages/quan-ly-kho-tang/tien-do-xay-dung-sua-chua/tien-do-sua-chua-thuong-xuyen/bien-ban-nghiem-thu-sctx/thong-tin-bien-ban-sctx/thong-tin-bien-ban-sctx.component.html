@@ -14,12 +14,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="save(true)" *ngIf="formData.value.trangThai == STATUS.DU_THAO">
+      <button class="btn btn-sub ml-2" (click)="save(true)" *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_THEM')">
         <i class="icon htvbdh_trinh "></i>
         <span>Đã ký</span>
       </button>
       <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save(false)"
-              *ngIf="formData.value.trangThai == STATUS.DU_THAO">
+              *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_THEM')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>

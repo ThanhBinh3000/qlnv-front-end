@@ -343,7 +343,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   }
 
   async preview() {
-    this.reportTemplate.fileName = this.previewName;
+    this.reportTemplate.fileName = this.previewName + '.docx';
     let body = this.formData.value;
     body.reportTemplateRequest = this.reportTemplate;
     await this.dauThauService.previewVt(body).then(async s => {

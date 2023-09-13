@@ -142,7 +142,7 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ giao nhiệm vụ xuất hàng
+            <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ giao NV nhập hàng
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
@@ -158,8 +158,7 @@
               <nz-input-group  [nzAddOnAfterIcon]="'folder-open'" (click)="openDialogDdiemNhapHang()">
                 <input nz-input [value]="
                         (formData.value.tenLoKho ? formData.value.tenLoKho + '/ ' : '') +
-                        (formData.value.tenNganKho ? formData.value.tenNganKho + '/ ' : '') +
-                        (formData.value.tenNhaKho ? formData.value.tenNhaKho : '')
+                        (formData.value.tenNganKho ? formData.value.tenNganKho + '/ ' : '')
                       " readonly="isView"/>
               </nz-input-group>
             </nz-form-control>
@@ -210,7 +209,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Loại hàng hóa DTQG
+              Loại hàng DTQG
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -222,7 +221,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Chủng loại hàng hóa DTQG
+              Chủng loại hàng DTQG
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -234,7 +233,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Cán bộ lập phiếu
+              Cán bộ lập phiếu (cán bộ bộ phận TVQT)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -306,7 +305,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Đơn vị/Công ty
+              Đơn vị/Công ty (của người giao hàng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -366,8 +365,9 @@
             <th colSpan="2">Số lượng nhập</th>
           </tr>
           <tr>
-            <th>Theo căn cứ báo cáo KQKĐ mẫu (1)</th>
+            <th>Theo Số QĐ giao NV nhập hàng(1)</th>
             <th>Thực nhập (2)</th>
+            <th rowSpan="2">Hành động</th>
           </tr>
           <tr>
           </tr>
@@ -407,6 +407,11 @@
                 </nz-input-group>
               </nz-form-control>
             </td>
+            <td>
+              <a (click)="clearItemRow()">
+                <i class="fa fa-refresh"></i>
+              </a>
+            </td>
           </tr>
           </tbody>
         </nz-table>
@@ -417,7 +422,7 @@
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Tổng số lượng
+              Tổng số lượng (viết bằng chữ)
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <input nz-input [ngModelOptions]="{standalone: true}"
@@ -429,7 +434,7 @@
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              File đính kèm phiếu xuất kho đã ký
+              File đính kèm phiếu nhập kho đã ký
             </nz-form-label>
             <div class="list-file">
               <file-list [data]="fileDinhKems"></file-list>

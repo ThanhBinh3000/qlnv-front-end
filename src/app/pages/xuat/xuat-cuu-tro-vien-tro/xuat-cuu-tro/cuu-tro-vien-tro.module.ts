@@ -28,7 +28,7 @@ import {
   ThanhPhanThamGiaComponent
 } from "./kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau/thanh-phan-tham-gia/thanh-phan-tham-gia.component";
 import {
-  PhieuKiemNghiemChatLuongComponent
+  PhieuKiemNghiemChatLuongComponent1
 } from "./kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component";
 import {
   ThemMoiPhieuKnClComponent
@@ -72,6 +72,7 @@ import { QuyetDinhPdComponent } from './quyet-dinh-pd/quyet-dinh-pd.component';
 import { QuyetDinhGnvComponent } from './quyet-dinh-gnv/quyet-dinh-gnv.component';
 import { ChiTietQuyetDinhPdComponent } from './quyet-dinh-pd/chi-tiet-quyet-dinh-pd/chi-tiet-quyet-dinh-pd.component';
 import { ChiTietQuyetDinhGnvComponent } from './quyet-dinh-gnv/chi-tiet-quyet-dinh-gnv/chi-tiet-quyet-dinh-gnv.component';
+import {XuatModule} from "src/app/pages/xuat/xuat.module";
 
 @NgModule({
   declarations: [
@@ -86,7 +87,7 @@ import { ChiTietQuyetDinhGnvComponent } from './quyet-dinh-gnv/chi-tiet-quyet-di
     BienBanLayMauBanGiaoMauComponent,
     ThemMoiBbLayMauBanGiaoMauComponent,
     ThanhPhanThamGiaComponent,
-    PhieuKiemNghiemChatLuongComponent,
+    PhieuKiemNghiemChatLuongComponent1,
     ThemMoiPhieuKnClComponent,
     KiemTraChatLuongComponent,
     HoSoKyThuatComponent,
@@ -126,6 +127,7 @@ import { ChiTietQuyetDinhGnvComponent } from './quyet-dinh-gnv/chi-tiet-quyet-di
     NzStatisticModule,
     NzPipesModule,
     CuuTroVienTroRoutingModule,
+    XuatModule,
   ],
   exports: [
     CuuTroVienTroComponent,
@@ -139,7 +141,7 @@ import { ChiTietQuyetDinhGnvComponent } from './quyet-dinh-gnv/chi-tiet-quyet-di
     BienBanLayMauBanGiaoMauComponent,
     ThemMoiBbLayMauBanGiaoMauComponent,
     ThanhPhanThamGiaComponent,
-    PhieuKiemNghiemChatLuongComponent,
+    PhieuKiemNghiemChatLuongComponent1,
     ThemMoiPhieuKnClComponent,
     KiemTraChatLuongComponent,
     HoSoKyThuatComponent,

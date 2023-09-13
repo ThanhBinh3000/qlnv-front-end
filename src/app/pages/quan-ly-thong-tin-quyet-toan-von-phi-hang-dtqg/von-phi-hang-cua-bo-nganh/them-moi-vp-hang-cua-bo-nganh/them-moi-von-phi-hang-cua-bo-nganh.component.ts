@@ -1,26 +1,24 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {cloneDeep} from 'lodash';
-import {NgxSpinnerService} from "ngx-spinner";
-import * as dayjs from "dayjs";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {STATUS} from 'src/app/constants/status';
-import {DinhMucPhiNxBq} from "../../../../models/DinhMucPhi";
-import {KeHoachVonPhiBNCT} from "../../../../models/KeHoachVonPhiBNCT";
-import {MESSAGE} from "../../../../constants/message";
-import {DonviService} from "../../../../services/donvi.service";
-import {ThongTinKhaoSatGia} from "../../../../models/DeXuatPhuongAnGia";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {HelperService} from "../../../../services/helper.service";
-import {QuyetToanVonPhiService} from "../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
-import {DialogTuChoiComponent} from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { cloneDeep } from 'lodash';
+import { NgxSpinnerService } from 'ngx-spinner';
+import * as dayjs from 'dayjs';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { STATUS } from 'src/app/constants/status';
+import { KeHoachVonPhiBNCT } from '../../../../models/KeHoachVonPhiBNCT';
+import { MESSAGE } from '../../../../constants/message';
+import { DonviService } from '../../../../services/donvi.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { HelperService } from '../../../../services/helper.service';
+import { QuyetToanVonPhiService } from '../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service';
+import { DialogTuChoiComponent } from '../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
   selector: 'app-them-moi-von-phi-hang-cua-bo-nganh',
   templateUrl: './them-moi-von-phi-hang-cua-bo-nganh.component.html',
-  styleUrls: ['./them-moi-von-phi-hang-cua-bo-nganh.component.scss']
+  styleUrls: ['./them-moi-von-phi-hang-cua-bo-nganh.component.scss'],
 })
 export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   formData: FormGroup;
@@ -73,7 +71,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       ngayNhap: ['', [Validators.required]],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
-      lyDoTuChoi: [null]
+      lyDoTuChoi: [null],
     });
   }
 
@@ -99,10 +97,10 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
           lyDoTuChoi: data.lyDoTuChoi,
           ngayNhap: data.ngayNhap,
           tenTrangThai: data.tenTrangThai,
-          trangThai: data.trangThai
+          trangThai: data.trangThai,
         });
-        this.dsQtNsChiTw = data.dsQtNsChiTw;
-        this.dsQtNsKpChiNvDtqg = data.dsQtNsKpChiNvDtqg;
+        this.dsQtNsChiTw = cloneDeep(data.dsQtNsChiTw);
+        this.dsQtNsKpChiNvDtqg = cloneDeep(data.dsQtNsKpChiNvDtqg);
         this.taiLieuDinhKemList = data.taiLieuDinhKems;
         this.updateEditQtNsKpChiNvDtqgCache();
         this.updateEditQtNsChiTwCache();
@@ -121,15 +119,17 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       return;
     }
     let body = {
-      "id": null,
-      "namQt": this.formData.value.namQuyetToan,
-      "trangThai": this.formData.value.trangThai,
-      "ngayNhap": this.formData.get("ngayNhap").value ? dayjs(this.formData.get("ngayNhap").value).format("YYYY-MM-DD") : null,
-      "dsQtNsChiTw": this.dsQtNsChiTw,
-      "dsQtNsKpChiNvDtqg": this.dsQtNsKpChiNvDtqg,
-      "taiLieuDinhKems": this.taiLieuDinhKemList,
-      "loai": "00"
+      'id': null,
+      'namQt': this.formData.value.namQuyetToan,
+      'trangThai': this.formData.value.trangThai,
+      'ngayNhap': this.formData.get('ngayNhap').value ? dayjs(this.formData.get('ngayNhap').value).format('YYYY-MM-DD') : null,
+      'dsQtNsChiTw': this.dsQtNsChiTw,
+      'dsQtNsKpChiNvDtqg': this.dsQtNsKpChiNvDtqg,
+      'taiLieuDinhKems': this.taiLieuDinhKemList,
+      'loai': '00',
     };
+    console.log(body,'bodybodybody');
+    return;
     this.spinner.show();
     try {
       if (this.idInput > 0) {
@@ -200,7 +200,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       this.dsQtNsChiTw.forEach((item, index) => {
         this.dataQtNsChiTwEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -211,7 +211,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       this.dsQtNsKpChiNvDtqg.forEach((item, index) => {
         this.dataQtNsKpChiNvDtqgEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -277,15 +277,15 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
 
   cancelEditQtNsChiTw(idx) {
     this.dataQtNsChiTwEdit[idx] = {
-      data: {...this.dsQtNsChiTw[idx]},
-      edit: false
+      data: { ...this.dsQtNsChiTw[idx] },
+      edit: false,
     };
   }
 
   cancelEditQtNsKpChiNvDtqg(idx) {
     this.dataQtNsKpChiNvDtqgEdit[idx] = {
-      data: {...this.dsQtNsKpChiNvDtqg[idx]},
-      edit: false
+      data: { ...this.dsQtNsKpChiNvDtqg[idx] },
+      edit: false,
     };
   }
 
@@ -379,7 +379,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
           const res = await this.vonPhiService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
-            this.quayLai()
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
