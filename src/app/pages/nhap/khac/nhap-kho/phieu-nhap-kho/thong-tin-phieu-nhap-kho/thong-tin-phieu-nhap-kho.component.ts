@@ -25,6 +25,7 @@ import * as uuidv4 from "uuid";
 import { DanhMucDungChungService } from "src/app/services/danh-muc-dung-chung.service";
 import { KIEU_NHAP_XUAT } from "src/app/constants/config";
 import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
+import moment from "moment";
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho',
@@ -149,7 +150,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       console.log('data', this.data)
       this.formData.patchValue({
         soQdGiaoNv: this.data.soQdPdNk,
-        ngayQdGiaoNv: "2023-31-07",//ngayKyQdinh
+        ngayQdGiaoNv: moment(this.data.ngayKyQdinh, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD'),
         qdGiaoNvId: this.data.idQdPdNk,
         tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
