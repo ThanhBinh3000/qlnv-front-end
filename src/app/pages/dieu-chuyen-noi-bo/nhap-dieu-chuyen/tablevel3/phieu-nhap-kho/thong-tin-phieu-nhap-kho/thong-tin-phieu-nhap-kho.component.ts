@@ -99,11 +99,11 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       cloaiVthh: [],
       tenCloaiVthh: [],
       thayDoiThuKho: [],
-      thuKho: [],
+      tenThuKho: [],
       idThuKho: [],
-      lanhDao: [],
+      tenLanhDao: [],
       idLanhDao: [],
-      ktvBaoQuan: [],
+      tenKyThuatVien: [],
       keToanTruong: [],
       hoVaTenNguoiGiao: [],
       cmndNguoiGiao: [],
@@ -113,13 +113,13 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       tenLoaiHinhNhapXuat: [],
       tenKieuNhapXuat: [],
       soLuongQdDcCuc: [],
-      dviTinh: [],
+      donViTinh: [],
       bbNghiemThuBqld: [],
       soBbKetThucNk: [],
       soBangKeCh: [, [Validators.required]],
       soBangKeVt: [, [Validators.required]],
-      tongSLNhapTT: [],
-      tongKPDCTT: [],
+      tongSoLuongBc: [],
+      tongKinhPhiBc: [],
       duToanKinhPhi: [],
       children: [new Array<any>(),],
       ghiChu: [],
@@ -142,7 +142,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
-      ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+      tenThuKho: this.userInfo.TEN_DAY_DU,
       soPhieuNhapKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
       isVatTu: this.isVatTu,
@@ -175,7 +175,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.slDienChuyen,
-        dviTinh: this.data.donViTinh,
+        donViTinh: this.data.donViTinh,
         thayDoiThuKho: this.data.thayDoiThuKho
       });
 
@@ -224,9 +224,9 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, dviTinh: data.children[0].dviTinh });
+      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, donViTinh: data.donViTinh });
       this.dsTH = data.children
-      this.dviTinh = data.children[0].dviTinh
+      this.dviTinh = data.donViTinh
       this.noiDung = data.tenCloaiVthh
       this.duToanKinhPhi = data.children[0].duToanKinhPhi
       this.chungTuDinhKem = data.chungTuDinhKem
@@ -276,13 +276,13 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     this.dsTH = cloneDeep(this.dsTH)
     const tongsoLuongNhapDc = this.dsTH.reduce((previous, current) => previous + current.soLuongNhapDc, 0);
     const tongthucTeKinhPhi = this.dsTH.reduce((previous, current) => previous + current.thucTeKinhPhi, 0);
-    const tongSLNhapTT = this.convertTien(tongsoLuongNhapDc) + " " + this.convertDVT(this.dviTinh)
-    const tongKPDCTT = this.convertTien(tongthucTeKinhPhi) + " triệu đồng"
+    const tongSoLuongBc = this.convertTien(tongsoLuongNhapDc) + " " + this.convertDVT(this.dviTinh)
+    const tongKinhPhiBc = this.convertTien(tongthucTeKinhPhi) + " triệu đồng"
 
 
     this.formData.patchValue({
-      tongSLNhapTT,
-      tongKPDCTT,
+      tongSoLuongBc,
+      tongKinhPhiBc,
       maSo: "",
       soLuongNhapDc: "",
       thucTeKinhPhi: "",
@@ -327,10 +327,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     this.dsTH[index].edit = false;
   }
 
-  deleteRow(data: any) {
-    // this.dataTableChiTieu = this.dataTableChiTieu.filter(x => x.id != data.id);
-    // this.sortTableId();
-    // this.updateEditCache();
+  deleteRow(index: number) {
+    this.dsTH = this.dsTH.filter((item, i) => i !== index)
   }
 
   editRow(index: number) {
@@ -390,7 +388,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           soLuongQdDcCuc: "",
-          dviTinh: "",
+          donViTinh: "",
         });
         await this.loadChiTietQdinh(data.id);
       }
@@ -443,7 +441,29 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     if (res.msg == MESSAGE.SUCCESS) {
 
       const data = res.data
-      // this.noiDung = data.tenCloaiVthh
+      console.log('loadChiTietKTCL', data)
+      this.formData.patchValue({
+        tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
+        tenLoKho: data.tenLoKho,
+        maLoKho: data.maLoKho,
+        tenNganKho: data.tenNganKho,
+        maNganKho: data.maNganKho,
+        tenNhaKho: data.tenNhaKho,
+        maNhaKho: data.maNhaKho,
+        tenDiemKho: data.tenDiemKho,
+        maDiemKho: data.maDiemKho,
+        loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        tichLuongKhaDung: data.tichLuongKhaDung,
+        soLuongQdDcCuc: data.slNhapTheoQd,
+        donViTinh: data.donViTinh,
+        thayDoiThuKho: data.thayDoiThuKho,
+      });
+      this.dviTinh = data.donViTinh
+      this.noiDung = data.tenCloaiVthh
+      // this.duToanKinhPhi = data.duToanKphi
 
     }
   }
@@ -485,7 +505,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           soLuongQdDcCuc: data.soLuongPhanBo,
-          dviTinh: data.donViTinh,
+          donViTinh: data.donViTinh,
           thayDoiThuKho: data.thayDoiThuKho,
           idKeHoachDtl: data.id
         });
@@ -572,7 +592,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         soLuongQdDcCuc: data.soLuongQdDcCuc,
-        dviTinh: data.donViTinh,
+        donViTinh: data.donViTinh,
       });
       this.dviTinh = data.donViTinh
       this.noiDung = data.tenCloaiVthh
