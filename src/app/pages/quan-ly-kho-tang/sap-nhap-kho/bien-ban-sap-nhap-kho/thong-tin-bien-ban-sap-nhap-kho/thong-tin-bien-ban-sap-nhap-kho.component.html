@@ -15,7 +15,8 @@
                     <i class="fa fa-arrow-left"></i>
                     <span>Quay lại</span>
                 </button>
-                <button *ngIf="checkRoleExport()" type="button" class="btn btn-sub ml-2" (click)="exportData()">
+                <button *ngIf="checkRoleExport()" type="button" class="btn btn-sub ml-2"
+                    (click)="exportData('Biên bản sáp nhập')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
@@ -108,7 +109,7 @@
             <nz-collapse-panel [nzHeader]="'ĐẠI DIỆN CỤC DỰ TRỮ NHÀ NƯỚC KV'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                     <app-edit-table [dataTable]="daiDienCucData" [rowInitial]="rowInitialCuc" [dataHeader]="tableHeader"
-                        [isEdit]="true"></app-edit-table>
+                        [isEdit]="!isView"></app-edit-table>
                 </nz-card>
             </nz-collapse-panel>
         </nz-collapse>
@@ -122,7 +123,7 @@
             <nz-collapse-panel [nzHeader]="'ĐẠI DIỆN ĐƠN VỊ CHUYỂN ĐI'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                     <app-edit-table [dataTable]="donViChuyenDiData" [rowInitial]="rowInitialDi"
-                        [dataHeader]="tableHeader" [isEdit]="true"></app-edit-table>
+                        [dataHeader]="tableHeader" [isEdit]="!isView"></app-edit-table>
                 </nz-card>
             </nz-collapse-panel>
         </nz-collapse>
@@ -136,7 +137,7 @@
             <nz-collapse-panel [nzHeader]="'ĐẠI DIỆN ĐƠN VỊ CHUYỂN ĐẾN'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                     <app-edit-table [dataTable]="donViChuyenDenData" [rowInitial]="rowInitialDen"
-                        [dataHeader]="tableHeader" [isEdit]="true"></app-edit-table>
+                        [dataHeader]="tableHeader" [isEdit]="!isView"></app-edit-table>
                 </nz-card>
             </nz-collapse-panel>
         </nz-collapse>
@@ -206,8 +207,8 @@
                                                 <td>{{lv2.tenLoaiVthh || ""}}</td>
                                                 <td>{{lv2.tenCloaiVthh || ""}}</td>
                                                 <td>{{lv2.donViTinh}}</td>
-                                                <td>{{lv2.slThucTe || ""}}</td>
-                                                <td>{{lv2.slHaoHut}}</td>
+                                                <td>{{lv2.slThucTe || 0}}</td>
+                                                <td>{{lv2.slHaoHut || 0}}</td>
                                                 <td>
                                                     <nz-input-group>
                                                         <input nz-input [(ngModel)]="lv2.chatLuongHangHoa"

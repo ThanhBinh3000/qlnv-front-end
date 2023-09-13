@@ -176,17 +176,17 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.nam }}</td>
           <td>
-            <a *ngIf="data.soQdPd && data.idQdHdr" nz-button nzType="link" (click)="openModalQdPdKh(data.idQdHdr)">
+            <a *ngIf="data.soQdPd && data.idQdHdr" nz-button nzType="link" (click)="openModal(data.idQdHdr, 'QdPdKh')">
               {{ data.soQdPd }}</a>
           </td>
           <td>{{ data.soQdDcBdg }}</td>
           <td>
             <a *ngIf="data.soQdPdKqBdg && data.idQdPdKqBdg" nz-button nzType="link"
-               (click)="openModalKqBdg(data.idQdPdKqBdg)">
+               (click)="openModal(data.idQdPdKqBdg, 'KqBdg')">
               {{ data.soQdPdKqBdg }}</a>
           </td>
           <td>
-            <a *ngIf="data.soDxuat && data.idDxHdr" nz-button nzType="link" (click)="openModalDxBdg(data.idDxHdr)">
+            <a *ngIf="data.soDxuat && data.idDxHdr" nz-button nzType="link" (click)="openModal(data.idDxHdr, 'DxBdg')">
               {{ data.soDxuat }}</a>
 
           </td>
@@ -237,40 +237,40 @@
   </app-chi-tiet-thong-tin-dau-gia>
 </div>
 <!--xem -->
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModalQdPdKh()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdPdKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
     </app-them-quyet-dinh-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalQdPdKh()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('QdPdKh')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
 </nz-modal>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxBdg" (nzOnCancel)="closeModalDxBdg()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxBdg" (nzOnCancel)="closeModal('DxBdg')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-de-xuat-ke-hoach-ban-dau-gia [idInput]="idDxBdg" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
                                            [isView]="true">
     </app-them-de-xuat-ke-hoach-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalDxBdg()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('DxBdg')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
 </nz-modal>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKqBdg" (nzOnCancel)="closeModalKqBdg()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKqBdg" (nzOnCancel)="closeModal('KqBdg')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <!--    <app-them-moi-quyet-dinh-phe-duyet-ket-qua [idInput]="idKqBdg" [loaiVthh]="loaiVthh" [isViewOnModal]="true">-->
     <!--    </app-them-moi-quyet-dinh-phe-duyet-ket-qua>-->
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalKqBdg()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('KqBdg')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

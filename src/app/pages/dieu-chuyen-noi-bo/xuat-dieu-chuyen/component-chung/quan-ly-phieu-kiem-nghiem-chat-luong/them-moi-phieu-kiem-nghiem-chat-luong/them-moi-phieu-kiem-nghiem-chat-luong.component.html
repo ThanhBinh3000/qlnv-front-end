@@ -85,7 +85,7 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
+                <nz-form-label nzRequired [nzNoColon]="true">
                   Mã QHNS
                 </nz-form-label>
                 <input nz-input readonly formControlName="maQhns" />
@@ -119,10 +119,10 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
+                <nz-form-label nzRequired [nzNoColon]="true">
                   Ngày lập phiếu
                 </nz-form-label>
-                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayTao" nzDisabled>
+                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayLapPhieu" nzDisabled>
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -158,7 +158,7 @@
                   Ngày hiệu lực của QĐ
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyQdinh" nzDisabled>
+                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayQdinhDc" nzDisabled>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -242,7 +242,7 @@
             </div>
             <div nz-col [nzSpan]="8">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hàng</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="tenLoaiVthh" readonly="true" />
                 </nz-form-control>
@@ -250,7 +250,7 @@
             </div>
             <div nz-col [nzSpan]="8">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Chủng loại hàng</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="tenCloaiVthh" readonly="true" />
                 </nz-form-control>
@@ -260,7 +260,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tenDonViTinh" readonly="true" />
+                  <input nz-input formControlName="donViTinh" readonly="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -279,8 +279,8 @@
                       class="min-h-24 f-size-13 text-black text-bold" *ngFor="let item of listHinhThucBaoQuan">
                       {{item.giaTri}}
                     </label> -->
-                    <label [ngModelOptions]="{standalone: true}" [ngModel]="item.checked" [nzDisabled]="true"
-                      nz-checkbox *ngFor="let item of phuongPhapLayMaus" class="text-bold"> {{item.giaTri}}
+                    <label [ngModelOptions]="{standalone: true}" [ngModel]="true" [nzDisabled]="true" nz-checkbox
+                      *ngFor="let item of listHinhThucBaoQuan" class="text-bold"> {{item.giaTri}}
                     </label>
                   </div>
                 </nz-form-control>
@@ -441,7 +441,7 @@
         <form class="mg-t-16" nzLayout="vertical" nz-form [formGroup]="formData">
           <div class="header-text">
             <div class="title-chi-tieu">
-              <span>Nhận xét kết luận</span>
+              <span>Nhận xét kết luận <span style="color: red">(*)</span></span>
             </div>
           </div>
           <div class="search__body" nz-row [nzGutter]="[18, 6]">

@@ -14,6 +14,10 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
+        <button type="button" class="btn btn-sub mr-2" (click)="xemTruoc(idInput,templateName)">
+          <i class="icon htvbdh_totrinh"></i>
+          <span> In/Xem trước </span>
+        </button>
         <button *ngIf="this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
                 class="btn btn-sub xanh-nhat mr-2" (click)="save(true)">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -46,7 +50,7 @@
   <nz-card class="mt16 flex-card p-lr16">
     <!-- Thông tin chung -->
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="8">
@@ -85,7 +89,7 @@
             <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Mã QHNS(Mã quan hệ ngân sách)
+                  Mã QHNS (Mã quan hệ ngân sách)
                 </nz-form-label>
                 <input nz-input readonly formControlName="maQhNs"/>
               </nz-form-item>
@@ -238,26 +242,83 @@
         </div>
       </div>
     </div>
-    <div nz-row [nzGutter]="[18,6]">
-      <div nz-col nzSpan="12">
-        <nz-form-item>
-          <nz-form-label [nzNoColon]="true" nzSpan="24">
-            Đại diện Cục DTNN KV
-          </nz-form-label>
-        </nz-form-item>
-        <app-thanh-phan-tham-gia [loaiDaiDien]="'CUC'" [(dataTable)]="listDaiDienCuc" [isView]="isView">
-        </app-thanh-phan-tham-gia>
-      </div>
-      <div nz-col nzSpan="12">
-        <nz-form-item>
-          <nz-form-label [nzNoColon]="true" nzSpan="24">
-            Đại diện Chi Cục DTNN KV
-          </nz-form-label>
-        </nz-form-item>
-        <app-thanh-phan-tham-gia [loaiDaiDien]="'CHI_CUC'" [(dataTable)]="listDaiDienChiCuc" [isView]="isView">
-        </app-thanh-phan-tham-gia>
-      </div>
-    </div>
+    <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th nzWidth="20px">STT</th>
+        <th>Họ tên</th>
+        <th>Đơn vị</th>
+        <th nzWidth="50px">Hành động</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td></td>
+        <td>
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.daiDien" [ngModelOptions]="{standalone: true}"/>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-select [(ngModel)]="rowItem.loaiDaiDien">
+            <nz-option nzValue="Đại diện Cục Dự trữ Nhà nước" nzLabel="Đại diện Cục Dự trữ Nhà nước"></nz-option>
+            <nz-option nzValue="Đại diện Chi cục Dự trữ Nhà nước"
+                       nzLabel="Đại diện Chi cục Dự trữ Nhà nước"></nz-option>
+            <nz-option nzValue="Đại diện đơn vị cung cấp" nzLabel="Đại diện đơn vị cung cấp"></nz-option>
+          </nz-select>
+        </td>
+        <td>
+          <a [ngClass]="{'disabled': isView}" (click)="themMoiItem1()">
+            <i class="fa fa-plus"></i>
+          </a>
+          <a [ngClass]="{'disabled': isView}" (click)="clearData1()">
+            <i class="fa fa-refresh"></i>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+      <tbody>
+      <tr *ngFor="let data1 of dataTable; let idx = index">
+        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data1.daiDien }}</td>
+          <td>{{ data1.loaiDaiDien }}</td>
+          <td>
+            <a (click)="editItem1(idx)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a (click)="xoaItem1(idx)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <td></td>
+          <td>
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.daiDien" [ngModelOptions]="{standalone: true}"/>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-select [(ngModel)]="dataEdit[idx].data.loaiDaiDien">
+              <nz-option nzValue="Đại diện Cục Dự trữ Nhà nước" nzLabel="Đại diện Cục Dự trữ Nhà nước"></nz-option>
+              <nz-option nzValue="Đại diện Chi cục Dự trữ Nhà nước"
+                         nzLabel="Đại diện Chi cục Dự trữ Nhà nước"></nz-option>
+              <nz-option nzValue="Đại diện đơn vị cung cấp" nzLabel="Đại diện đơn vị cung cấp"></nz-option>
+            </nz-select>
+          </td>
+          <td class="text-center">
+            <a (click)="luuEdit1(idx)" class="save">
+              <i class="fa fa-save"></i>
+            </a>
+            <a (click)="huyEdit1(idx)">
+              <i class="fa fa-ban do"></i> </a>
+          </td>
+        </ng-template>
+      </tr>
+      </tbody>
+    </nz-table>
     <div class="mg-t-16 header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
@@ -330,3 +391,32 @@
     </form>
   </nz-card>
 </div>
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord( templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+

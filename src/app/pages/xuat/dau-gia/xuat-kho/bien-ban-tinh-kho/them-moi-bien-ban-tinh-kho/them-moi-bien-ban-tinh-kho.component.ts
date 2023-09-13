@@ -27,6 +27,7 @@ import {
 import {
   QuyetDinhGiaoNvXuatHangService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
+import {PREVIEW} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-bdg-them-moi-bien-ban-tinh-kho',
@@ -477,6 +478,34 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         }
       }
     }
+  }
+
+  async preview(id) {
+    await this.bienBanTinhKhoService.preview({
+      tenBaoCao: 'Biên bản tịnh kho ba đấu giá',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  // downloadPdf() {
+  //   saveAs(this.pdfSrc, "phieu-xuat-kho-ke-hoach-ban-dau-gia.pdf");
+  // }
+  //
+  // downloadWord() {
+  //   saveAs(this.wordSrc, "phieu-xuat-kho-ke-hoach-ban-dau-gia.docx");
+  // }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 
   setValidator(isGuiDuyet) {

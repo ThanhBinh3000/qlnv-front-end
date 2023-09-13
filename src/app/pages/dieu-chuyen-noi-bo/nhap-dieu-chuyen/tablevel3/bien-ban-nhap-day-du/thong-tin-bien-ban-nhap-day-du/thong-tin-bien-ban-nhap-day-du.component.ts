@@ -56,7 +56,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
   detailData: any
   dsKeHoach: any[] = []
 
-  allCheckedTT = false;
+  allCheckedTT = true;
   indeterminateTT = false;
   tongSL: string;
 
@@ -160,7 +160,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.soLuongDc,
-        dviTinh: this.data.tenDonViTinh,
+        dviTinh: this.data.donViTinh,
       });
       await this.getDanhSachTT(this.data.qdDcCucId, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
@@ -200,9 +200,10 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       maNganKho,
       isVatTu: false
     }
-    const children = this.detailData?.children || []
+
     let res = await this.phieuNhapKhoService.getDanhSachTT(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      const children = this.idInput ? this.detailData?.children : res.data
       this.danhSach = res.data.map(element => {
         const check = children.find(item => item.soPhieuNhapKho === element.soPhieuNhapKho)
         return {
@@ -210,6 +211,17 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
           checked: !!check || false
         }
       });
+      const pnk = this.danhSach.filter(item => item.checked)[0]
+      if (pnk) {
+        this.formData.patchValue({
+          ngayBdNhap: pnk.ngayNhapKho
+        })
+      } else {
+        this.formData.patchValue({
+          ngayBdNhap: ""
+        })
+      }
+      this.tongSL = this.danhSach.filter(item => item.checked).reduce((pre, cur) => pre + Number(cur.soLuong), 0)
     }
   }
 
@@ -355,7 +367,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          dviTinh: data.tenDonViTinh,
+          dviTinh: data.donViTinh,
           soLuongQdDcCuc: data.soLuongPhanBo,
         });
 

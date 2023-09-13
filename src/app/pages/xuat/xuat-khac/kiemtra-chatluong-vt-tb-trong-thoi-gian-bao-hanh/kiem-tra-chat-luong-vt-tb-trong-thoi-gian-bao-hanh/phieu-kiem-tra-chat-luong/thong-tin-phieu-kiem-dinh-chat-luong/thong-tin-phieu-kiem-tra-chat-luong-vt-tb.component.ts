@@ -65,7 +65,7 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
     {value: 1, label: "Đạt"}
   ]
   dataTableChiTieu: any[] = [];
-
+  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -139,6 +139,7 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
       this.spinner.show();
       await Promise.all([
         this.loadSoQuyetDinhGiaoNvXh(),
+        this.getlistBbBaoHanh(),
       ])
       await this.loadDetail(this.idInput)
       this.spinner.hide();
@@ -253,7 +254,6 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
         idQdGiaoNvXh: data.id,
         ngayQdGiaoNvXh: data.ngayKy,
       });
-      await this.getlistBbBaoHanh(data);
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {
@@ -261,13 +261,13 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
     }
   }
 
-  async getlistBbBaoHanh(itemQdGnvXh) {
+  async getlistBbBaoHanh(itemQdGnvXh?) {
     await this.spinner.show();
     this.listBbBaoHanh = [];
     try {
       let body = {
-        soQdGiaoNvXh: itemQdGnvXh.soQuyetDinh,
-        nam: this.formData.get("nam").value
+        nam: this.formData.get("nam").value,
+        trangThai: STATUS.DA_HOAN_THANH,
       }
       let res = await this.banYeuCauBaoHanhService.search(body)
       if (res.msg == MESSAGE.SUCCESS) {

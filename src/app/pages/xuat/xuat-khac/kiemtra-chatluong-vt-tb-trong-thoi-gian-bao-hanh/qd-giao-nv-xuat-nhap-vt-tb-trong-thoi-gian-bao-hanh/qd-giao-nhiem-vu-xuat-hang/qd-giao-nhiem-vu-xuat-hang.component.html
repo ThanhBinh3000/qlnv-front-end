@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Năm kế hoạch</nz-form-label>
+              <nz-form-label>Năm xuất</nz-form-label>
               <nz-select formControlName="namKeHoach" nzAllowClear>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
@@ -70,10 +70,10 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button (click)="themMoi(null,false)" *ngIf="userService.isCuc()"
+        <button (click)="redirectDetail(null,false)" *ngIf="userService.isCuc()"
                 type="button" class="btn btn-sub xanh">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm mới</span>
+          <span>Tạo quyết định</span>
         </button>
       </div>
     </div>
@@ -90,7 +90,7 @@
           <th class="text-left">Năm xuất</th>
           <th class="text-left">Số quyết định</th>
           <th class="text-left">Ngày quyết định</th>
-          <th class="text-left">Loại hình nhập xuất</th>
+          <th class="text-left">Loại hình xuất</th>
           <th class="text-left">Căn cứ trên bản tổng hợp/Phiếu KĐCL</th>
           <th class="text-left">Số QĐ xuất giảm VT của Tổng cục</th>
           <th class="text-left">Số BB yêu cầu bảo hành</th>
@@ -190,15 +190,20 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThai==STATUS.DA_DUYET_LDC || data.trangThai==STATUS.CHO_DUYET_LDC"
-               (click)="themMoi(data.id, true)">
+            <a *ngIf="data.trangThai==STATUS.DA_DUYET_LDC "
+               (click)="redirectDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC"
-               (click)="themMoi(data.id, false)">
+            <a *ngIf="data.trangThai==STATUS.DU_THAO ||data.trangThai ==STATUS.TU_CHOI_TP || data.trangThai==STATUS.TU_CHOI_LDC"
+               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC" (click)="delete(data)">
+            <a
+              *ngIf="data.trangThai== STATUS.CHO_DUYET_LDC || data.trangThai== STATUS.CHO_DUYET_TP"
+              (click)="redirectDetail(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+            </a>
+            <a *ngIf="data.trangThai==STATUS.DU_THAO " (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

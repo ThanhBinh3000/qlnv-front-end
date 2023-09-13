@@ -296,7 +296,7 @@
                 <td>{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
                 <td>{{ children.donViTinh}}</td>
                 <td>{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
-                <td>{{ children.donGiaDuocDuyet * children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
+                <td>{{ children.thanhTien|number:globals.numberFormat:globals.locale}}</td>
               </tr>
             </ng-container>
           </ng-container>
@@ -331,7 +331,7 @@
               <td nzLeft>{{data.ngayChaoGia|date: 'dd/MM/YYYY'}}</td>
               <td nzLeft>{{data.soLuong|number:globals.numberFormat:globals.locale}}</td>
               <td nzLeft>{{data.donGia|number:globals.numberFormat:globals.locale}}</td>
-              <td nzLeft>{{data.soLuong * data.donGia|number:globals.numberFormat:globals.locale}}</td>
+              <td nzLeft>{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
               <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>
               <td><label nz-checkbox [(ngModel)]="data.luaChon"
                          [nzDisabled]="isDisabledLuaChon(true)"></label>
@@ -354,7 +354,7 @@
               <td nzLeft>{{data.ngayChaoGia}}</td>
               <td nzLeft>{{data.soLuong|number:globals.numberFormat:globals.locale}}</td>
               <td nzLeft>{{data.donGia|number:globals.numberFormat:globals.locale}}</td>
-              <td nzLeft>{{data.soLuong * data.donGia|number:globals.numberFormat:globals.locale}}</td>
+              <td nzLeft>{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
               <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>
               <td nzLeft>
                 <label nz-checkbox [(ngModel)]="data.luaChon"></label>
@@ -391,7 +391,7 @@
                 Ghi chú
               </nz-form-label>
               <nz-form-control>
-                <textarea [readonly]="isView" nz-input [rows]="3" formControlName="trichYeu"></textarea>
+                <textarea [readonly]="isView" nz-input [rows]="3" formControlName="ghiChu"></textarea>
               </nz-form-control>
             </nz-form-item>
           </div>

@@ -98,7 +98,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         maDvi: [],
         maQhns: [],
         soBbTinhKho: [],
-        ngayTaoBb: [],
+        ngayLap: [],
         qdinhDccId: [],
         soQdinhDcc: ['', [Validators.required]],
         ngayKyQdDcc: [''],
@@ -141,7 +141,10 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenLoKho: [],
         tenNganKho: [],
         tenNganLoKho: ['', [Validators.required]],
-        dcnbBienBanTinhKhoDtl: [new Array()]
+        dcnbBienBanTinhKhoDtl: [new Array()],
+        donViTinh: ['', [Validators.required]],
+        soPhieuKnChatLuong: ['', [Validators.required]],
+        phieuKnChatLuongHdrId: ['', [Validators.required]]
       }
     );
     this.maBb = '-BBTK';
@@ -185,7 +188,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
         // soBbTinhKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-        ngayTaoBb: dayjs().format('YYYY-MM-DD'),
+        ngayLap: dayjs().format('YYYY-MM-DD'),
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
         ...this.passData,
@@ -240,8 +243,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định'],
+        dataColumn: ['soQdinh', 'ngayKyQdinh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -299,7 +302,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
 
 
-  openDialogDdiemNhapHang() {
+  openDialogDdiemXuatHang() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm xuất hàng',
       nzContent: DialogTableSelectionComponent,
@@ -342,7 +345,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
         tongSlXuatTheoQd: data.soLuongDc || 0,
         tonKhoBanDau: data.tonKho || 0,
-        slConLaiTheoSs: data.tonKho - data.soLuongDc
+        slConLaiTheoSs: data.tonKho - data.soLuongDc,
+        donViTinh: data.donViTinh
 
       })
       let body = {
@@ -355,33 +359,33 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         maLoKho: this.formData.value.maLoKho,
         maNganKho: this.formData.value.maNganKho
       }
-      let res = await this.phieuXuatKhoDieuChuyenService.getThongTinChungPhieuXuatKho(body)
-      const list = res.data;
-      // this.listPhieuXuatKho = list.filter(item => ((this.formData.value.maLoKho && this.formData.value.maLoKho === item.maloKho) ||
-      //   (!this.formData.value.maLoKho && this.formData.value.maNganKho && this.formData.value.maNganKho === item.maNganKho)));
-      const dataTable = Array.isArray(list) ? list.map(f => ({
-        bangKeCanHangHdrId: f.bangKeCanHangId,
-        hdrId: null,
-        id: null,
-        ngayXuatKho: f.ngayXuatKho,
-        phieuKtChatLuongHdrId: f.phieuKiemNghiemClId,
-        phieuXuatKhoHdrId: f.id,
-        soPhieuKtChatLuong: f.soPhieuKiemNghiemCl,
-        soPhieuXuatKho: f.soPhieuXuatKho,
-        soBangKeCanHang: f.soBangKeCanHang,
-        soLuongXuat: f.soLuong
-      })) : [];
-      const tongSlXuat = dataTable.reduce((sum, cur) => sum += cur.soLuongXuat, 0);
-      this.formData.patchValue({ tongSlXuatTheoTt: tongSlXuat, dcnbBienBanTinhKhoDtl: dataTable })
+      let res = await this.phieuXuatKhoDieuChuyenService.getThongTinChungPhieuXuatKho(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const list = res.data;
+        // this.listPhieuXuatKho = list.filter(item => ((this.formData.value.maLoKho && this.formData.value.maLoKho === item.maloKho) ||
+        //   (!this.formData.value.maLoKho && this.formData.value.maNganKho && this.formData.value.maNganKho === item.maNganKho)));
+        const dataTable = Array.isArray(list) ? list.map(f => ({
+          bangKeCanHangHdrId: this.isVatTu ? f.bangKeXuatVtId : f.bangKeCanHangId,
+          hdrId: null,
+          id: null,
+          ngayXuatKho: f.ngayXuatKho,
+          phieuXuatKhoHdrId: f.id,
+          soPhieuXuatKho: f.soPhieuXuatKho,
+          soBangKeCanHang: this.isVatTu ? f.soBangKeXuatVt : f.soBangKeCanHang,
+          soLuongXuat: f.soLuong
+        })) : [];
+        const tongSlXuat = dataTable.reduce((sum, cur) => sum += cur.soLuongXuat, 0);
+        this.formData.patchValue({ tongSlXuatTheoTt: tongSlXuat, dcnbBienBanTinhKhoDtl: dataTable, soPhieuKnChatLuong: list[0]?.soPhieuKiemNghiemCl, phieuKnChatLuongHdrId: list[0]?.phieuKiemNghiemClId })
 
-      if (this.formData.value.dcnbBienBanTinhKhoDtl && this.formData.value.dcnbBienBanTinhKhoDtl.length > 0) {
-        const maxDate = new Date(Math.min.apply(null, this.formData.value.dcnbBienBanTinhKhoDtl.map(function (e) {
-          return new Date(e.ngayXuatKho);
-        })));
-        const minDateString = maxDate.toISOString().slice(0, 10);
-        this.formData.patchValue({
-          ngayBatDauXuat: minDateString
-        })
+        if (this.formData.value.dcnbBienBanTinhKhoDtl && this.formData.value.dcnbBienBanTinhKhoDtl.length > 0) {
+          const maxDate = new Date(Math.min.apply(null, this.formData.value.dcnbBienBanTinhKhoDtl.map(function (e) {
+            return new Date(e.ngayXuatKho);
+          })));
+          const minDateString = maxDate.toISOString().slice(0, 10);
+          this.formData.patchValue({
+            ngayBatDauXuat: minDateString
+          })
+        }
       }
     }
   }
@@ -436,6 +440,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
+    body.ngayKetThucXuat = this.formData.value.ngayLap;
     body.fileBbTinhKhoDaKy = this.fileBbTinhKhoDaKy;
     body.loaiDc = this.loaiDc;
     body.isVatTu = this.isVatTu;
@@ -445,7 +450,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     // if (this.formData.value.tongSlXuatTheoQd > this.formData.value.tongSlXuatTheoTt) {
     //   return this.notification.error(MESSAGE.ERROR, "Số lượng xuất thực tế nhỏ hơn số lượng xuất theo quyết định")
     // }
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbTinhKho: data.soBbTinhKho ? data.soBbTinhKho : this.genSoBienBanTinhKho(data.id) })
       if (isGuiDuyet) {
@@ -482,7 +487,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         break;
       }
     }
-    this.approve(this.formData.value.id, trangThai, msg);
+    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
   }
 
   tuChoi() {
@@ -501,7 +506,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         break;
       }
     }
-    this.reject(this.idInput, trangThai)
+    this.reject(this.formData.value.id, trangThai)
   }
 
   isDisabled() {

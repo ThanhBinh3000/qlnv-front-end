@@ -71,16 +71,17 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
 
   async ngOnInit() {
     try {
-      this.timKiem();
+      await this.spinner.show();
       await Promise.all([
+        this.timKiem(),
         this.search(),
         this.initData()
       ]);
-      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -90,16 +91,18 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([
+      this.timKiem(),
+      this.search()
+    ]);
   }
 
   redirectDetail(id, isView: boolean) {

@@ -52,6 +52,7 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
   numberToRoman = NumberToRoman;
   maHauTo: any;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
+  fileDinhKems: any[] = [];
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -110,7 +111,7 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.selectedItem = res.data;
-            console.log(this.selectedItem,888)
+            console.log(this.selectedItem, 888)
             this.formData.patchValue(res.data);
             this.formData.value.tongHopDtl.forEach(s => {
               s.idVirtual = uuidv4();
@@ -218,17 +219,16 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.numberOfElements == 0) {
-              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy hàng hóa cần thanh lý trong danh sách.');
+              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy danh sách cần tổng hợp');
             } else {
               res.data.content.forEach(s => {
                 s.idDsHdr = cloneDeep(s.id);
                 s.id = null;
               });
-              this.formData.patchValue({
-                maDanhSach: this.selectedItem ?? this.maHauTo,
-                loai: this.loaiHhXuatKhac.VT_BH,
-                tongHopDtl: res.data.content
-              });
+              let body = this.formData.value;
+              body.maDanhSach = this.selectedItem ?? this.maHauTo;
+              body.fileDinhKems = this.fileDinhKems;
+              body.tongHopDtl = res.data.content;
               let result = await this.createUpdate(this.formData.value);
               if (result) {
                 this.selectedItem = cloneDeep(result);

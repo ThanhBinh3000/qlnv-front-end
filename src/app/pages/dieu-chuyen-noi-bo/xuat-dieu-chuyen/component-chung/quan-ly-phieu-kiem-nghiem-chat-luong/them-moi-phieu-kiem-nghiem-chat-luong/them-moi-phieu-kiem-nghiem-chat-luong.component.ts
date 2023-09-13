@@ -58,7 +58,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   @Input() passData: PassDataPKNCL = {
     soQdinhDcc: '', qdinhDccId: null, ngayQDHieuLuc: '', soBBLayMau: '', ngaylayMau: '', soPhieuKnChatLuong: '', phieuKnChatLuongId: null, bblayMauId: null,
     donViTinh: '', maChLoaiHangHoa: '', maHangHoa: '', maDiemKho: '', maNhaKho: '', maNganKho: '', maLoKho: '',
-    tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenLoKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', tenDonViTinh: '', thuKhoId: null, tenThuKho: ''
+    tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenLoKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', thuKhoId: null, tenThuKho: ''
   };
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -146,14 +146,13 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       nam: [dayjs().get('year'), [Validators.required]],
       tenDvi: ['', [Validators.required]],
       maDvi: ['', [Validators.required]],
-      maQhns: [''],
+      maQhns: ['', [Validators.required]],
       tenNguoiKiemNghiem: [''],
       tpNguoiKt: [''],
 
       ketQuaDanhGia: [''],
-      ngayTao: [dayjs().format('YYYY-MM-DD')],
+      ngayLapPhieu: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       donViTinh: [''],
-      tenDonViTinh: [''],
       loaiVthh: [''],
       maDiemKho: [''],
       maLoKho: [''],
@@ -162,7 +161,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       ngayDuyetTp: [''],
       ngayGDuyet: [''],
       ngayKiem: [dayjs().format('YYYY-MM-DD')],
-      ngayKyQdinh: [''],
+      ngayQdinhDc: [''],
       ngayLayMau: [''],
       ngayPDuyet: [''],
       ngayXuatDocKho: [''],
@@ -175,17 +174,17 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       qdDcId: [null],
       soBbHaoDoi: [''],
       bbLayMauId: [''],
-      soBbLayMau: [''],
+      soBbLayMau: ['', [Validators.required]],
       soBbTinhKho: [''],
       soPhieu: [''],
-      soQdinhDc: [''],
-      tenCloaiVthh: [''],
+      soQdinhDc: ['', [Validators.required]],
+      tenCloaiVthh: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       tenNhaKho: ['', [Validators.required]],
-      tenNganKho: ['', [Validators.required]],
+      tenNganKho: [''],
       tenLoKho: [''],
       tenNganLoKho: ['', [Validators.required]],
-      tenLoaiVthh: [''],
+      tenLoaiVthh: ['', [Validators.required]],
       tenThuKho: [''],
       thuKhoId: [null],
       tpNguoiKtId: [null],
@@ -233,7 +232,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       tpNguoiKt: this.userInfo.MA_KTBQ,
       trangThai: STATUS.DU_THAO,
       donViTinh: this.passData.donViTinh,
-      tenDonViTinh: this.passData.tenDonViTinh,
       loaiVthh: this.passData.maHangHoa,
       cloaiVthh: this.passData.maChLoaiHangHoa,
       maDiemKho: this.passData.maDiemKho,
@@ -255,6 +253,21 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       thuKhoId: this.passData.thuKhoId,
       tenThuKho: this.passData.tenThuKho,
     });
+    if (this.passData.maChLoaiHangHoa) {
+      this.getChiTietHangHoa(this.passData.maChLoaiHangHoa)
+    }
+    if (this.passData.qdinhDccId) {
+      this.getDetailQuyetDinhCuc(this.passData.qdinhDccId)
+    }
+  }
+  async getDetailQuyetDinhCuc(id: number) {
+    let dataRes = await this.quyetDinhDieuChuyenCucService.getDetail(id)
+    const data = dataRes.data;
+    this.formData.patchValue({
+      soQdinhDc: data.soQdinh,
+      qdDcId: data.id,
+      ngayQdinhDc: data.ngayKyQdinh,
+    });
   }
   async loadSoQuyetDinh() {
     let body = {
@@ -262,7 +275,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       isVatTu: this.isVatTu,
       loaiDc: this.loaiDc,
       thayDoiThuKho: this.thayDoiThuKho,
-      maDvi: this.idInput > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
+      maDvi: this.formData.value.id > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body);
@@ -278,8 +291,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-  async getDetail(id: number) {
-    let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.getDetail(id);
+  async getDetail(idInput: number) {
+    let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.getDetail(idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         const data = res.data;
@@ -287,6 +300,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         // this.bindingDataBbLayMau(data.soBbLayMau.split('/')[0], true);
         this.dataTableChiTieu = data.dcnbPhieuKnChatLuongDtl;
         this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem;
+        this.listHinhThucBaoQuan = typeof data.hinhThucBq === "string" || data.hinhThucBq instanceof String ? data.hinhThucBq.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] })) : [];
 
         await this.bindingDataBbLayMau(data.bbLayMauId, true)
       }
@@ -313,14 +327,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       let body = this.formData.value;
       body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu.map(f => ({ ...f, id: f.hdrId ? f.id : undefined }));
       body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
-      // body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}-${i.giaTri}`).join("-*");
+      body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}-${i.giaTri}`).join("-*");
       // body.pplayMau = this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}-${f.checked}`).join("-*");
       body.loaiDc = this.loaiDc;
       body.isVatTu = this.isVatTu;
       body.thayDoiThuKho = this.thayDoiThuKho;
       body.type = this.type;
       body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
-      let data = await this.createUpdate(body);
+      let data = await this.createUpdate(body, null, isGuiDuyet);
       if (!data) return;
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soPhieu: data.soPhieu ? data.soPhieu : data.id ? `${data.id}/${data.nam}/${this.maBb}` : '' })
       if (isGuiDuyet) {
@@ -376,7 +390,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
             this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -460,12 +474,15 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
       loaiDc: this.loaiDc,
-      qdccId: this.formData.value.qdDcId,
+      thayDoiThuKho: this.thayDoiThuKho,
+      isVatTu: this.isVatTu,
+      type: this.type,
+      soQdinhDcc: this.formData.value.soQdinhDc,
       paggingReq: {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
       },
-      maDvi: this.idInput > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
+      maDvi: this.formData.value.id > 0 ? this.formData.value.maDvi : this.userInfo.MA_DVI
       // loaiVthh: this.loaiVthh,
     }
     let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.dsBBLMKiemNghiem(body);
@@ -508,7 +525,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
           thuKhoId: null,
           tenThuKho: '',
           donViTinh: '',
-          tenDonViTinh: '',
 
           bbLayMauId: '',
           soBbLayMau: '',
@@ -527,15 +543,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   async bindingDataQd(id, isChiTiet?) {
     try {
       await this.spinner.show();
-      let dataRes = await this.quyetDinhDieuChuyenCucService.getDetail(id)
-      const data = dataRes.data;
-      this.formData.patchValue({
-        soQdinhDc: data.soQdinh,
-        qdDcId: data.id,
-        ngayKyQdinh: data.ngayKyQdinh,
-        // loaiVthh: data.loaiVthh,
-        // tenLoaiVthh: data.tenLoaiVthh,
-      });
+      await this.getDetailQuyetDinhCuc(id)
 
       if (!isChiTiet) {
         // const listBienBanLayMau=
@@ -585,7 +593,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
           thuKhoId: null,
           tenThuKho: '',
           donViTinh: '',
-          tenDonViTinh: '',
 
           bbLayMauId: '',
           soBbLayMau: '',
@@ -605,7 +612,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     let res = await this.bienBanLayMauDieuChuyenService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
-      this.phuongPhapLayMaus = data.pplayMau && typeof data.pplayMau === "string" && data?.pplayMau?.split("-*") ? data.pplayMau.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: this.booleanParse(f.split("-")[2]) })) : []
+      // this.phuongPhapLayMaus = data.pplayMau && typeof data.pplayMau === "string" && data?.pplayMau?.split("-*") ? data.pplayMau.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: this.booleanParse(f.split("-")[2]) })) : []
       if (!isChiTiet) {
         this.formData.patchValue({
           bbLayMauId: data.id,
@@ -627,10 +634,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
           thuKhoId: data.thuKho,
           tenThuKho: data.tenThuKho,
           donViTinh: data.donViTinh,
-          tenDonViTinh: data.tenDonViTinh,
           // moTaHangHoa: data.moTaHangHoa,
           // tenThuKho: data.bbNhapDayKho.tenNguoiTao
         })
+        if (data.cloaiVthh) {
+          this.getChiTietHangHoa(data.cloaiVthh)
+        }
         const dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
         if (dmTieuChuan.data) {
           this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({ edit: false, chiSoCl: element.mucYeuCauXuat, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhapXd })) : [];
@@ -645,7 +654,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       // }
     }
   }
-
+  async getChiTietHangHoa(cloaiVthh: string) {
+    const res = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listHinhThucBaoQuan = Array.isArray(res.data.hinhThucBq) ? res.data.hinhThucBq : [];
+    }
+  }
   // async loadDanhMucPhuongThucBaoQuan() {
   //   let body = {
   //     maHthuc: null,

@@ -186,11 +186,11 @@
           <td>{{ data.trichYeu }}</td>
           <td>
             <a *ngIf="data.soTrHdr && data.idTrHdr" nz-button nzType="link"
-               (click)="openModalDxKh(data.idTrHdr)">
+               (click)="openModal(data.idTrHdr, 'DxKh')">
               {{ data.soTrHdr }}</a>
           </td>
           <td>
-            <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModalTh(data.idThHdr)">
+            <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModal(data.idThHdr, 'Thop')">
               {{ data.idThHdr }}</a>
           </td>
           <td *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>
@@ -244,27 +244,27 @@
   </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
 </div>
 <!--xem -->
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModal('Thop')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-tong-hop-kh-ban-truc-tiep [idInput]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
                                             [isView]="true">
     </app-them-moi-tong-hop-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalTh()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('Thop')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxKh" (nzOnCancel)="closeModalDxKh()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxKh" (nzOnCancel)="closeModal('DxKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-de-xuat-kh-ban-truc-tiep [idInput]="idDxKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
                                            [isView]="true">
     </app-them-moi-de-xuat-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalDxKh()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('DxKh')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

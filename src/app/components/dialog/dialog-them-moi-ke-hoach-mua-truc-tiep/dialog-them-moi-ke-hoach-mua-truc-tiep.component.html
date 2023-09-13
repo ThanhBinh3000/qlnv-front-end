@@ -13,7 +13,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div *ngIf="userService.isCuc()" nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
@@ -21,7 +21,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div *ngIf="userService.isCuc()" nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
@@ -63,7 +63,7 @@
 <!--                        [nzPrecisionMode]="customPrecisionFn"-->
 <!--                        nzPlaceHolder="Đơn giá đề xuất"-->
 <!--                      ></nz-input-number>-->
-                      <input  class="money-input"  currencyMask formControlName="donGia"  [options]="amount"/>
+                      <input [readonly]="!userService.isCuc()" class="money-input"  currencyMask formControlName="donGia"  [options]="amount"/>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -85,15 +85,42 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div *ngIf="userService.isTongCuc()" nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                                    <span class="text-green">{{formData.value.tongSoLuong }}
-                                      (Tấn)</span>
+                <nz-form-label nzRequired [nzNoColon]="true"> SL nhập phê duyệt (kg)</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-input-number
+                    formControlName="tongSoLuong"
+                    (input)="calTongThanhTien()"
+                    [nzPrecisionMode]="customPrecisionFn"
+                    nzPlaceHolder="SL nhập phê duyệt"
+                  ></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>
+<!--            <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">-->
+<!--              <nz-form-item>-->
+<!--                <nz-form-label [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>-->
+<!--                <nz-form-control nz-col [nzSpan]="24">-->
+<!--                                    <span class="text-green">{{formData.value.tongSoLuong }}-->
+<!--                                      (Tấn)</span>-->
+<!--                </nz-form-control>-->
+<!--              </nz-form-item>-->
+<!--            </div>-->
+
+            <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-input-number [nzDisabled]="this.listOfData.length > 0"
+                    formControlName="tongSoLuong"
+                    (input)="calTongThanhTien()"
+                    [nzPrecisionMode]="customPrecisionFn"
+                  ></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng thành tiền trình phê duyệt </nz-form-label>
@@ -103,7 +130,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng thành tiền theo đơn giá có VAT được duyệt </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">

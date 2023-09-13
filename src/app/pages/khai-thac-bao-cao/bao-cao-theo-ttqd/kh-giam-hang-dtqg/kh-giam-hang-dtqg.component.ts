@@ -22,7 +22,9 @@ import { saveAs } from "file-saver";
 })
 export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -116,6 +118,32 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      if (this.formData.value.thoiGianSx) {
+        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
+        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
+      }
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
+      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
+      body.trangThai = "01";
+      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bc_kh_giam_hang_du_tru_quoc_gia.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
   async loadDsDonVi() {

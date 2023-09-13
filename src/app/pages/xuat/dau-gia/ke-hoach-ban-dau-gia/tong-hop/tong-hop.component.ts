@@ -70,15 +70,14 @@ export class TongHopComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
-    this.spinner.show();
     try {
-      this.timKiem();
-      await this.search();
-      this.spinner.hide();
+      await this.spinner.show();
+      await Promise.all([this.timKiem(), this.search()]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -88,25 +87,24 @@ export class TongHopComponent extends Base2Component implements OnInit {
     this.isView = isView;
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-    })
+    });
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      this.loadDsVthh();
+      await this.loadDsVthh();
     }
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+    const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listLoaiHangHoa = res.data?.filter(x => x.ma.length === 4) || [];
     }
   }
 
@@ -130,16 +128,6 @@ export class TongHopComponent extends Base2Component implements OnInit {
     await this.search();
   }
 
-  openModalQdPd(id: number) {
-    this.idQdPd = id;
-    this.isViewQdPd = true;
-  }
-
-  closeModalQdPd() {
-    this.idQdPd = null;
-    this.isViewQdPd = false;
-  }
-
   disabledNgayThopTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayThopDen) {
       return false;
@@ -153,4 +141,17 @@ export class TongHopComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayThopTu.getTime();
   };
+
+  openModalQdPd(id: number) {
+    this.updateQdPd(id, true);
+  }
+
+  closeModalQdPd() {
+    this.updateQdPd(null, false);
+  }
+
+  private updateQdPd(id: number | null, isView: boolean) {
+    this.idQdPd = id;
+    this.isViewQdPd = isView;
+  }
 }

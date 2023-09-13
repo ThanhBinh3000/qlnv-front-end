@@ -1,14 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {
-  BienBanNghiemThuDtxdService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/bien-ban-nghiem-thu-dtxd.service";
-import dayjs from "dayjs";
 import {ThongTinBienBanSclComponent} from "./thong-tin-bien-ban-scl/thong-tin-bien-ban-scl.component";
 import {
   BienBanNghiemThuTdscServiceService
@@ -23,6 +19,7 @@ export class BienBanNghiemThuSclComponent extends Base2Component implements OnIn
   @Input() itemDuAn: any;
   @Input() itemQdPdKhLcnt: any
   @Input() itemQdPdKtkt: any
+  @Output() dataBbnt = new EventEmitter<object>();
   selectedId: number;
   isViewDetail: boolean;
 
@@ -64,7 +61,8 @@ export class BienBanNghiemThuSclComponent extends Base2Component implements OnIn
       }
     });
     modalQD.afterClose.subscribe(async (listData) => {
-      this.filter()
+      this.filter();
+      this.dataBbnt.emit()
     })
   }
 

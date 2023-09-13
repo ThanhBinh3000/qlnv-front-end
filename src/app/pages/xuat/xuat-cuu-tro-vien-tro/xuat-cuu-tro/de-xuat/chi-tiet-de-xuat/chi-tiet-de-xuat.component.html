@@ -97,6 +97,10 @@
       <ng-template #error let-control>
         <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
         </ng-container>
+        <ng-container *ngIf="control.hasError('max')">Số lượng không hợp lệ hoặc vượt quá số lượng tồn kho
+        </ng-container>
+        <ng-container *ngIf="control.hasError('min')">Số lượng không hợp lệ hoặc vượt quá số lượng tồn kho
+        </ng-container>
       </ng-template>
       <div class="mt16 flex-card p-lr16">
         <div class="header header-green-background mg-t-16">
@@ -172,7 +176,7 @@
               <nz-select formControlName="loaiNhapXuat"
                          [nzDisabled]="isView">
                 <nz-option nzValue="Xuất cứu trợ" nzLabel="Xuất cứu trợ"></nz-option>
-                <nz-option nzValue="Xuất viện trợ" nzLabel="Xuất viện trợ"></nz-option>
+                <nz-option *ngIf="userService.isTongCuc()" nzValue="Xuất viện trợ" nzLabel="Xuất viện trợ"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -209,7 +213,7 @@
         </div>
       </div>
       <div nz-row [nzGutter]="24">
-        <div nz-col [nzSpan]="8">
+        <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -344,7 +348,7 @@
                   </ng-container>
                   <td></td>
                   <td></td>
-                  <td></td>
+                  <td>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
                   <td>
                     <a>
                       <i class="fa fa-plus" *ngIf="!isView" (click)="themPhuongAn(lv1,1)"></i>
@@ -369,7 +373,7 @@
                         <td>{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                       </ng-container>
                       <td>{{lv2.tenDvi}}</td>
-                      <td>{{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                      <td>{{lv2.tonKhoLoaiVthh||lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                       <td>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
                       <td>
                         <a>
@@ -407,12 +411,12 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'">
               <nz-select nzAllowClear formControlName="noiDung"
-                         nzPlaceHolder="Chọn địa danh" nzShowSearch>
+                         nzPlaceHolder="Vui lòng chọn" nzShowSearch>
                 <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
-          <ng-container *ngIf="formData.value.tenVthh=='02'">
+          <ng-container *ngIf="true">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Loại hàng DTQG</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập loại hàng'">
@@ -425,7 +429,8 @@
                   </div>
                   <div nz-col [nzSpan]="8">
                     <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                      style="color: #001CFF">{{formDataDtl.value.tonKhoLoaiVthh|number:globals.numberFormat:globals.locale}}</span></p>
+                      style="color: #001CFF">{{formDataDtl.value.tonKhoLoaiVthh|number:globals.numberFormat:globals.locale}}</span>
+                    </p>
                   </div>
                 </div>
               </nz-form-control>
@@ -437,13 +442,14 @@
                   <div nz-col [nzSpan]="16">
                     <nz-select nzAllowClear formControlName="cloaiVthh" (ngModelChange)="changeCloaiVthh($event)"
                                nzPlaceHolder="Chọn chủng loại hàng" nzShowSearch
-                               [nzDisabled]="listChungLoaiHangHoa.length <= 0">
+                               [nzDisabled]="listChungLoaiHangHoa.length <= 0 || formData.value.tenVthh != '02'">
                       <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
                     </nz-select>
                   </div>
                   <div nz-col [nzSpan]="8">
                     <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                      style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span></p>
+                      style="color: #001CFF">{{formDataDtl.value.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</span>
+                    </p>
                   </div>
                 </div>
               </nz-form-control>
@@ -453,28 +459,39 @@
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Cục DTNN</nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập đơn vị'">
               <div nz-row [nzGutter]="48">
-                <div nz-col [nzSpan]="16">
+                <div nz-col [nzSpan]="24">
                   <nz-select nzAllowClear formControlName="maDvi" (ngModelChange)="changeMaDviDtl($event)"
                              [nzDisabled]="isView || userService.isCuc()"
                              nzPlaceHolder="Chọn đơn vị" nzShowSearch>
                     <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                   </nz-select>
                 </div>
-                <div nz-col [nzSpan]="8">
+                <!--<div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                    style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span></p>
-                </div>
+                    style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span>
+                  </p>
+                </div>-->
               </div>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" [nzRequired]="true"
                            [nzXs]="7">{{userService.isTongCuc() ? 'Số lượng giao cục' : 'Số lượng đề xuất'}}</nz-form-label>
-            <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'">
-              <nz-input-number formControlName="soLuong" [nzMin]="1" [nzMax]="999999999999" [nzStep]="0.1"
-                               [nzDisabled]="isView"
-                               [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
+            <nz-form-control [nzErrorTip]="error">
+              <div nz-row [nzGutter]="48">
+                <div nz-col [nzSpan]="16">
+                  <nz-input-number formControlName="soLuong" [nzMax]="999999999999" [nzStep]="1"
+                                   nzPlaceHolder="Nhập số lượng"
+                                   [nzDisabled]="isView"
+                                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                  </nz-input-number>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <p style="font-size: 13px;font-weight: 500">Đơn vị tính:
+                    <span>{{formDataDtl.value.donViTinh}}</span>
+                  </p>
+                </div>
+              </div>
             </nz-form-control>
           </nz-form-item>
         </nz-card>

@@ -170,6 +170,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
           soDxuat: data.soDxuat?.split('/')[0],
         })
         this.dataTable = data.children;
+        console.log(this.dataTable)
         this.fileDinhKem = data.fileDinhKems;
         this.bindingCanCu(data.ccXdgDtlList);
         this.calculatorTable();
@@ -315,11 +316,14 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     let tongSoLuong: number = 0;
     this.dataTable.forEach((item) => {
       let soLuongChiCuc = 0;
-      item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong;
-        tongMucDt += child.soLuong * child.donGia * 1000
-      })
+      if(item.children.length > 0){
+        item.children.forEach(child => {
+          soLuongChiCuc += child.soLuong;
+          tongSoLuong += child.soLuong;
+          tongMucDt += child.soLuong * child.donGia * 1000
+        })
+      }
+      tongSoLuong += item.tongSoLuong
       item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({

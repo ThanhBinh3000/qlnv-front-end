@@ -52,7 +52,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       soTrHdr: null,
       trangThai: null,
       loaiVthh: null,
-      lastest: 0
+      lastest: null
     })
     this.filterTable = {
       namKh: '',
@@ -73,15 +73,17 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
-      await this.timKiem()
-      await this.search();
-      await this.spinner.hide();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+      ]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -92,10 +94,9 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -104,24 +105,24 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     this.isView = isView;
   }
 
-  openModalDxKh(id: number) {
-    this.idDxKh = id;
-    this.isViewDxKh = true;
+  openModal(id: number, modalType: string) {
+    if (modalType === 'DxKh') {
+      this.idDxKh = id;
+      this.isViewDxKh = true;
+    } else if (modalType === 'Thop') {
+      this.idThop = id;
+      this.isViewThop = true;
+    }
   }
 
-  closeModalDxKh() {
-    this.idDxKh = null;
-    this.isViewDxKh = false;
-  }
-
-  openModalTh(id: number) {
-    this.idThop = id;
-    this.isViewThop = true;
-  }
-
-  closeModalTh() {
-    this.idThop = null;
-    this.isViewThop = false;
+  closeModal(modalType: string) {
+    if (modalType === 'DxKh') {
+      this.idDxKh = null;
+      this.isViewDxKh = false;
+    } else if (modalType === 'Thop') {
+      this.idThop = null;
+      this.isViewThop = false;
+    }
   }
 
   disabledNgayKyQdTu = (startValue: Date): boolean => {

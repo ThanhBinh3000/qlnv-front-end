@@ -89,11 +89,11 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.initForm();
+  async ngOnInit() {
+    await this.initForm();
     this.updateEditCache();
     this.disableChiCuc();
-    this.getGiaToiDa(this.userInfo.MA_DVI);
+    await this.getGiaToiDa(this.maDviCuc ? this.maDviCuc : this.userInfo.MA_DVI);
   }
 
   save() {
@@ -106,10 +106,14 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn đơn giá tối đa được duyệt bao gồm VAT")
         return;
       }
-      if (this.listOfData.length == 0 && this.userService.isCuc()) {
-        this.notification.error(MESSAGE.ERROR, "Danh sách điểm kho không được để trống")
+      if (this.formData.get('tongSoLuong').value > (this.formData.get('soLuongChiTieu').value - this.formData.get('soLuongKhDd').value)) {
+        this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất, phê duyệt không được lớn hơn số lượng chỉ tiêu kế hoạch")
         return;
       }
+      // if (this.listOfData.length == 0 && this.userService.isCuc()) {
+      //   this.notification.error(MESSAGE.ERROR, "Danh sách điểm kho không được để trống")
+      //   return;
+      // }
       let data = this.formData.value;
       this.listOfData.forEach(item =>{
         item.donGia = data.donGia
@@ -127,7 +131,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     debugger
     this.userInfo = this.userService.getUserLogin();
     this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
-    this.loadDonVi();
+    await this.loadDonVi();
     // if(this.dataAll){
     //
     // }
@@ -146,7 +150,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         maDvi: this.formData.value.maDvi
       }
       let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
-      console.log(soLuongDaLenKh.data)
       this.formData.value.soLuongKhDd = soLuongDaLenKh.data;
       this.formData.value.tongSoLuongChuaTh = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKhDd
       // this.changeChiCuc(this.dataEdit.maDvi);
@@ -206,8 +209,8 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       maDvi: event
     }
     let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
+    console.log(this.dataChiTieu)
     let resChiTieu = this.dataChiTieu.khLuongThuc.find(x => x.maDonVi == event);
-    console.log(resChiTieu)
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.donViService.getDonVi({ str: event })
     this.listDiemKho = [];
@@ -215,20 +218,20 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       this.formData.patchValue({
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
-        dvt: resChiTieu.donViTinh,
+        dvt: resChiTieu?.donViTinh,
         // maDonVi: res.data.maDvi,
-        soLuongKhDd: soLuongDaLenKh.data,
-        soLuongChiTieu: chiCuc?.soLuongChiTieu ? chiCuc?.soLuongChiTieu : resChiTieu?.ntnThoc,
-        soLuongNhap: chiCuc?.soLuongNhap,
-        tongSoLuong: chiCuc?.tongSoLuong,
+        soLuongKhDd: soLuongDaLenKh?.data,
+        soLuongChiTieu: resChiTieu?.ntnThoc,
+        // soLuongNhap: chiCuc?.soLuongNhap,
+        // tongSoLuong: chiCuc?.tongSoLuong,
         // donGiaVat: chiCuc?.donGiaVat,
-        tongThanhTien: chiCuc?.tongThanhTien,
-        tongThanhTienVat: chiCuc?.tongThanhTienVat,
-        donGia: chiCuc?.donGia,
-        tongSoLuongChuaTh: (chiCuc?.soLuongChiTieu ? chiCuc?.soLuongChiTieu : resChiTieu?.ntnThoc) - soLuongDaLenKh.data
+        // tongThanhTien: chiCuc?.tongThanhTien,
+        // tongThanhTienVat: chiCuc?.tongThanhTienVat,
+        // donGia: chiCuc?.donGia,
+        tongSoLuongChuaTh: resChiTieu?.ntnThoc - soLuongDaLenKh.data
       })
       console.log("changeChiCuc", this.formData.value);
-      this.listOfData = chiCuc.children
+      // this.listOfData = chiCuc.children
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
     }

@@ -270,10 +270,16 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO:
-      case STATUS.TU_CHOI_LDC: {
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        mess = 'Bạn có muối gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
-        mess = 'Bạn có muối gửi duyệt?'
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDC: {
@@ -333,8 +339,12 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
         try {
           let trangThai;
           switch (this.formData.get('trangThai').value) {
+            case STATUS.CHO_DUYET_TP: {
+              trangThai = STATUS.TU_CHOI_TP;
+              break;
+            }
             case STATUS.CHO_DUYET_LDC: {
-              trangThai = STATUS.TU_CHOI_LDC
+              trangThai = STATUS.TU_CHOI_LDC;
               break;
             }
           }
@@ -424,6 +434,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
           soCanCu: data.maDanhSach
         });
         console.log(data.tongHopDtl, ' data.tongHopDtl data.tongHopDtl')
+        this.dataTh=[],
         data.tongHopDtl.forEach(item => {
           let it = new ItemXhXkVtQdGiaonvXhDtl();
           it.id = item.id;

@@ -31,9 +31,9 @@
         span {
           display: flex;
           flex: auto;
-          justify-content: end;
+          justify-content: flex-end;
 
-          & + span {
+          &+span {
             font-size: 32px;
           }
         }
@@ -99,6 +99,7 @@
 }
 
 ::ng-deep .fixcard2 {
+
   // height: 100%;
   .ant-form-vertical {
     padding: 4px 8px 0 8px;
@@ -166,7 +167,7 @@
   outline: 1px solid transparent;
   width: 100%;
 
-  & > div {
+  &>div {
     &:first-child {
       border-top-left-radius: 0px;
       border-bottom-left-radius: 0px;
@@ -286,6 +287,7 @@
     margin-bottom: 0;
     box-shadow: 0 2px 5px 0px rgb(0 0 0 / 3%);
   }
+
   .contentscroll {
     background: #f5f5f5 !important;
   }
@@ -305,7 +307,7 @@
         font-size: 10px;
       }
 
-      & > li > span {
+      &>li>span {
         margin-right: 4px;
       }
     }
@@ -340,8 +342,8 @@
 
     .ant-card-meta-description,
     .ant-comment-content-author-name,
-    .ant-comment-content-author-name > *,
-    .ant-comment-content-author-name > :hover {
+    .ant-comment-content-author-name>*,
+    .ant-comment-content-author-name> :hover {
       color: #444;
     }
 
@@ -436,25 +438,18 @@
   }
 
   .calendar-full {
-    .ant-picker-calendar-full
-      .ant-picker-date-panel
-      .ant-picker-content
-      tbody
-      .ant-picker-calendar-date-content
-      ul
-      li
-      .secondary.bgxam {
+    .ant-picker-calendar-full .ant-picker-date-panel .ant-picker-content tbody .ant-picker-calendar-date-content ul li .secondary.bgxam {
       display: inline-block;
       white-space: normal;
       line-height: 1;
     }
 
-    .bgxam span + span,
-    .ngaybanhanh span + span {
+    .bgxam span+span,
+    .ngaybanhanh span+span {
       margin-left: 0;
     }
 
-    .secondary > span + span {
+    .secondary>span+span {
       overflow: visible;
     }
 
@@ -548,11 +543,7 @@
       overflow: hidden;
     }
 
-    .calendar-full
-      .ant-picker-calendar-full
-      .ant-picker-date-panel
-      .ant-picker-content
-      tbody {
+    .calendar-full .ant-picker-calendar-full .ant-picker-date-panel .ant-picker-content tbody {
       height: calc(100vh - 130px) !important;
     }
 
@@ -575,7 +566,7 @@
       margin-top: 24px;
     }
 
-    .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap {
+    .ant-tabs>.ant-tabs-nav .ant-tabs-nav-wrap {
       padding-left: 24px;
     }
 
@@ -583,7 +574,7 @@
       padding: 8px 0;
     }
 
-    .ant-tabs-top > .ant-tabs-nav::before {
+    .ant-tabs-top>.ant-tabs-nav::before {
       z-index: 1;
       border-color: $tab-menu-border;
       bottom: -1px;
@@ -622,8 +613,8 @@
       .text-lg,
       .ant-card-body span,
       .ant-card-body b,
-      .bgxam span + span,
-      .ngaybanhanh span + span {
+      .bgxam span+span,
+      .ngaybanhanh span+span {
         color: #aaa !important;
         // pointer-events: none;
       }
@@ -723,6 +714,7 @@
     }
 
     .fixcard2 {
+
       .ant-card-body,
       .ant-card-head-title {
         display: none;

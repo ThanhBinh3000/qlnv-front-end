@@ -8,13 +8,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {MESSAGE} from "../../../../../../constants/message";
-import {
-  QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {FILETYPE} from "../../../../../../constants/fileType";
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {
@@ -23,6 +17,7 @@ import {
 import {
   QdPheDuyetKhlcntTdsclService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl',
@@ -36,8 +31,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
-  @Input()
-  itemQdPdKhLcnt: any;
+  @Input() itemQdPdKhLcnt: any;
+  @Input() itemDuAn: any;
   STATUS = STATUS;
   maQd = "/" + this.userInfo.MA_QD;
   trangThaiTtdt: boolean = true;
@@ -73,7 +68,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
-      namKh: [null],
+      namKh: [dayjs().get('year')],
       maDvi: [this.userInfo.MA_DVI],
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
@@ -82,11 +77,15 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
       idQdPdKhlcnt: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenCongTrinh: [null],
+      loaiCongTrinh: [null],
       chuDauTu: [null],
       diaChi: [null],
       ghiChu: [null],
       tongMucDt: [0],
+      loai: ['00'],
       trangThai: ['00'],
+      trangThaiDt: [],
+      trangThaiHd: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       ccPhapLy: [],
@@ -113,13 +112,13 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
   async bindingData() {
     if (this.itemQdPdKhLcnt) {
       this.formData.patchValue({
-        namKh: this.itemQdPdKhLcnt.namKh,
-        idQdPdKhlcnt: this.itemQdPdKhLcnt.id,
-        soQdPdKhlcnt: this.itemQdPdKhLcnt.soQd,
-        chuDauTu: this.itemQdPdKhLcnt.chuDauTu,
-        tenCongTrinh: this.itemQdPdKhLcnt.tenCongTrinh,
-        idDuAn: this.itemQdPdKhLcnt.idDuAn,
-        tongMucDt: this.itemQdPdKhLcnt.tongMucDt,
+        idQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.id ? this.itemQdPdKhLcnt.id : null  ,
+        soQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.soQd ?this.itemQdPdKhLcnt.soQd : null,
+        chuDauTu: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.chuDauTu ? this.itemQdPdKhLcnt.chuDauTu : null,
+        tenCongTrinh: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.tenCongTrinh ? this.itemQdPdKhLcnt.tenCongTrinh : null,
+        idDuAn: this.itemDuAn && this.itemDuAn.idDuAn ? this.itemDuAn.idDuAn : null,
+        tongMucDt:this.itemQdPdKhLcnt &&  this.itemQdPdKhLcnt.tongMucDt ?  this.itemQdPdKhLcnt.tongMucDt : null,
+        loaiCongTrinh: this.itemDuAn && this.itemDuAn.tenLoaiCongTrinh ? this.itemDuAn.tenLoaiCongTrinh : null,
       });
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -136,6 +135,10 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            tenCongTrinh: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.tenCongTrinh ? this.itemQdPdKhLcnt.tenCongTrinh : null,
+            idDuAn: this.itemDuAn && this.itemDuAn.idDuAn ? this.itemDuAn.idDuAn : null,
+          })
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
           })

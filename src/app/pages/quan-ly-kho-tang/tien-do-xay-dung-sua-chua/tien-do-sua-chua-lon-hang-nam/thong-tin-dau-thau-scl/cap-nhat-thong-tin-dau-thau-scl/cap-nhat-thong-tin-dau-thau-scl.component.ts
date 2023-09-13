@@ -77,6 +77,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
       soQdPdKhlcnt: [null],
       tenCongTrinh: [null],
       chuDauTu: [null],
+      loaiCongTrinh: [null],
       trangThaiDt: [null],
       tongMucDt: [],
       tongSoGt: [],
@@ -115,6 +116,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
           this.formData.patchValue({
             soQdPdKhlcnt: data.soQd,
             tenCongTrinh: this.itemDuAn.tenCongTrinh,
+            loaiCongTrinh: this.itemDuAn.tenLoaiCongTrinh,
             tongMucDt: data.tongTien,
             chuDauTu: data.chuDauTu,
             trangThaiDt: data.trangThaiDt,

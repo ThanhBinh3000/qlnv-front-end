@@ -90,6 +90,7 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
+      idDuAn: [null],
       namKeHoach: [null],
       maDvi: [this.userInfo.MA_DVI],
       idQdPdKqlcnt: [null],
@@ -137,10 +138,9 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
       dvccMoTai: [null],
       thanhTien: [],
       tenDuAn: [null],
-      idDuAn: [null],
       thanhTienBangChu: [],
       fileDinhKems: [null],
-      listKtTdscHopDongKlcv: [[]]
+      listKtTdscHopDongKlcv: [[]],
     });
   }
 
@@ -163,8 +163,7 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
 
   async bindingData() {
     if (this.itemGoiThau && this.itemQdPdKhlcnt) {
-      console.log(this.itemGoiThau,11111)
-      console.log(this.itemQdPdKhlcnt,22222)
+      console.log(this.itemGoiThau,211111)
       let rs = await this.quyetdinhpheduyetKqLcntService.getDetail(this.itemGoiThau.idQdPdKqlcnt);
       let dataQdPdKqlcnt;
       let goiThau;
@@ -232,6 +231,7 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
       return;
     }
     this.formData.value.soHd = this.formData.value.soHd + this.hauToSoHd;
+    this.formData.value.idDuAn = this.itemDuAn.id
     if (this.dataKlcv && this.dataKlcv.length > 0) {
       this.formData.value.listKtTdscHopDongKlcv = this.dataKlcv;
     } else {

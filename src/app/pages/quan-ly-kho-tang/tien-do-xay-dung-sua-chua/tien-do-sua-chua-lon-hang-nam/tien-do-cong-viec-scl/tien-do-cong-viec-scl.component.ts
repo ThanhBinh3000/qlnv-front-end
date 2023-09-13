@@ -28,6 +28,7 @@ import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydung
 export class TienDoCongViecSclComponent extends Base2Component implements OnInit {
   @Input() itemQdPdKhLcnt: any;
   @Input() itemQdPdKtkt: any;
+  @Input() itemDuAn: any;
   listHopDong: any[] = [];
   dataTable: any[] = [];
   dataTableReq: any[] = [];
@@ -37,13 +38,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   STATUS = STATUS;
   rowItemCha: TienDoXayDungCt = new TienDoXayDungCt();
   itemHopDong : any;
-  listTrangThai: any[] = [
-    {ma: 'Quý I', giaTri: 'Quý I'},
-    {ma: 'Quý II', giaTri: 'Quý II'},
-    {ma: 'Quý III', giaTri: 'Quý III'},
-    {ma: 'Quý IV', giaTri: 'Quý IV'},
-  ];
-
+  listThang: any[] = [];
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -63,7 +58,18 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   }
 
   ngOnInit(): void {
+    this.loadDsThang()
     this.loadItemDsGoiThau();
+  }
+
+  loadDsThang() {
+    for (let i = 1; i <= 12; i++) {
+      let item = {
+        ma: 'Tháng ' + i,
+        giaTri: 'Tháng ' + i
+      }
+      this.listThang = [...this.listThang, item].flat();
+    }
   }
 
 
@@ -83,7 +89,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
           if (listGoiThau && listGoiThau.length > 0) {
             listGoiThau.forEach(item => item.chuDauTu = res.data.chuDauTu);
           }
-          this.listHopDong = listGoiThau;
+          this.listHopDong = listGoiThau.filter(item => item.hopDong && item.hopDong.soHd);
           if (this.listHopDong && this.listHopDong.length > 0) {
             this.selectRow(this.listHopDong[0]);
           }

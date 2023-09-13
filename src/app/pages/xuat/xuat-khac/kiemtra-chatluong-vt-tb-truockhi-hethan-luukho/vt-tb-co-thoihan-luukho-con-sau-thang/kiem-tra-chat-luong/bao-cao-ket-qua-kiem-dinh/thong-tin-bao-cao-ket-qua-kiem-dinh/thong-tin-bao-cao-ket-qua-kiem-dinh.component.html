@@ -77,7 +77,7 @@
                 <nz-form-label [nzNoColon]='true'>
                   Đơn vị nhận báo cáo
                 </nz-form-label>
-                <input nz-input formControlName='maDviNhan' />
+                <input nz-input [readOnly]='isView' formControlName='maDviNhan' />
               </nz-form-item>
             </div>
             <div nz-col nzSpan='4'>
@@ -86,7 +86,7 @@
                   Số báo cáo
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <input nz-input formControlName='soBaoCao' />
+                  <input nz-input [readOnly]='isView' formControlName='soBaoCao' />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -108,7 +108,7 @@
                   Tên báo cáo
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <input nz-input formControlName='tenBaoCao' />
+                  <input nz-input [readOnly]='isView' formControlName='tenBaoCao' />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -280,6 +280,33 @@
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)='closePhieuKnClModal()' class='modal__button--cancel'>
+      <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal [(nzVisible)]='showDlgPreview' nzTitle='THÔNG TIN BÁO CÁO KẾT QUẢ KIỂM ĐỊNH MẪU' nzWidth='100%'
+          (nzOnCancel)='closeDlg()'>
+  <div *nzModalContent class='modal__content'>
+    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)='printPreview()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_printer'></i>
+      In
+    </button>
+    <button nz-button (click)='downloadPdf()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-pdf'></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)='downloadWord()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-word'></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
       <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
       Đóng
     </button>

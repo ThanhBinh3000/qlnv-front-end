@@ -27,12 +27,9 @@
           <th width="60px">STT</th>
           <th width="100px">Năm KH</th>
           <th width="130px">Số QĐ PD KQLCNT</th>
-          <th width="230px">Dự án</th>
-          <th width="230px">Chủ đầu tư</th>
-          <th width="">Trích yếu</th>
           <th width="150px">Ngày ký QĐ PD KQLCNT</th>
+          <th width="">Trích yếu</th>
           <th width="150px">Số gói thầu</th>
-          <th width="150px">Số QĐ PD KHLCNT</th>
           <th width="175px">Trạng thái</th>
           <th width="130px" class="text-center">Hành động</th>
         </tr>
@@ -46,12 +43,9 @@
           <td>{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.namKh }}</td>
           <td>{{ data.soQd }}</td>
-          <td>{{ data.tenDuAn }}</td>
-          <td>{{ data.chuDauTu }}</td>
-          <td>{{ data.trichYeu }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.trichYeu }}</td>
           <td>{{ data.soGoiThau | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{ data.soQdPdKhlcnt }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center">
             <a *ngIf="data.trangThai == STATUS.BAN_HANH "
@@ -90,12 +84,13 @@
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="openPopThongTin" (nzOnCancel)="closeThongTinModal()">
   <div *nzModalTitle>
-    <p style="font-size: 18px">ĐỀ XUẤT KẾ HOẠCH XÂY DỰNG CỦA CỤC DTNN KV</p>
+    <p style="font-size: 18px">QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ LỰA CHỌN NHÀ THẦU </p>
   </div>
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl [id]="selectedId" (showListEvent)="showList()"
                                                    [isViewDetail]="isViewDetail"
                                                    [itemQdPdKhLcnt]="itemTtdt"
+                                                   [itemDuAn]="itemDuAn"
                                                    [idInput]="selectedId">
 
     </app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl>

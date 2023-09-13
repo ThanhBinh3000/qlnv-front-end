@@ -53,7 +53,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       ngayCgiaTu: null,
       ngayCgiaDen: null,
       tochucCanhan: null,
-      maDviChiCuc: null,
+      maChiCuc: null,
       loaiVthh: null,
     })
 
@@ -70,15 +70,17 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.timKiem();
+      await this.spinner.show();
       await Promise.all([
+        this.timKiem(),
         this.search(),
         this.initData()
       ]);
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -91,21 +93,20 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
 
   async loadDsTong() {
     const dsTong = await this.donviService.layDonViCon();
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong.data;
-    }
+    if (isEmpty(dsTong)) return;
+    this.dsDonvi = dsTong.data;
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await this.timKiem();
+    await this.search();
   }
 
   redirectDetail(id, isView: boolean) {
@@ -114,24 +115,34 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     this.isView = isView;
   }
 
-  openModalQdPdKh(id: number) {
-    this.idQdPdKh = id;
-    this.isViewQdPdKh = true;
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'QdPdKh':
+        this.idQdPdKh = id;
+        this.isViewQdPdKh = true;
+        break;
+      case 'QdPdKq':
+        this.idQdPdKq = id;
+        this.isViewQdPdKq = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closeModalQdPdKh() {
-    this.idQdPdKh = null;
-    this.isViewQdPdKh = false;
-  }
-
-  openModalQdPdKq(id: number) {
-    this.idQdPdKq = id;
-    this.isViewQdPdKq = true;
-  }
-
-  closeModalQdPdKq() {
-    this.idQdPdKq = null;
-    this.isViewQdPdKq = false;
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'QdPdKh':
+        this.idQdPdKh = null;
+        this.isViewQdPdKh = false;
+        break;
+      case 'QdPdKq':
+        this.idQdPdKq = null;
+        this.isViewQdPdKq = false;
+        break;
+      default:
+        break;
+    }
   }
 
   disabledNgayChaoGiaTu = (startValue: Date): boolean => {

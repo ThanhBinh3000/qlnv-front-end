@@ -95,7 +95,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       cloaiVthh: [],
       tenCloaiVthh: [],
       tichLuongKhaDung: [],
-      tenDonViTinh: [],
+      donViTinh: [],
       dsBienBan: [],
       tenLoKhoXuat: [],
       maLoKhoXuat: [],
@@ -183,7 +183,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
-        tenDonViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.cloaiVthh);
@@ -358,7 +358,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
           loaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
         });
         await this.loadChiTietQdinh(data.id);
       }
@@ -384,6 +384,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
+      console.log('data', data)
       if (data) {
         this.formData.patchValue({
           tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
@@ -408,7 +409,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          tenDonViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
           slNhapTheoQd: data.soLuongPhanBo
         });
 

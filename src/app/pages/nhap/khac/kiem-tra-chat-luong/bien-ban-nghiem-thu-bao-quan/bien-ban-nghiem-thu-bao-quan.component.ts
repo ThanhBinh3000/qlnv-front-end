@@ -1,13 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from "dayjs";
-import {MESSAGE} from "../../../../../constants/message";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {BbNghiemThuBaoQuanService} from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
+import { MESSAGE } from "../../../../../constants/message";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { BbNghiemThuBaoQuanService } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import { STATUS } from 'src/app/constants/status';
 import { saveAs } from 'file-saver';
 
@@ -38,7 +38,7 @@ export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bbNghiemThuBaoQuanService :BbNghiemThuBaoQuanService
+    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bbNghiemThuBaoQuanService);
   }
@@ -214,13 +214,13 @@ export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements 
       || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') && data.trangThai == STATUS.DA_DUYET_LDCC);
   }
 
-  hienThiXem(data){
+  hienThiXem(data) {
     if (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_XEM')) {
-      if(this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TK || data.trangThai == STATUS.TU_CHOI_KT || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+      if (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TK || data.trangThai == STATUS.TU_CHOI_KT || data.trangThai == STATUS.TU_CHOI_LDCC)) {
         return false;
       } else if ((this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_THUKHO') && data.trangThai == STATUS.CHO_DUYET_TK)
         || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_KETOAN') && data.trangThai == STATUS.CHO_DUYET_KT)
-        || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') && data.trangThai == STATUS.DA_DUYET_LDCC) ) {
+        || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') && data.trangThai == STATUS.DA_DUYET_LDCC)) {
         return false;
       }
       return true;
