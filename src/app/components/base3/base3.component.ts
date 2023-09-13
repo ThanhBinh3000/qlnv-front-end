@@ -20,6 +20,8 @@ import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.c
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { endOfMonth } from 'date-fns';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PREVIEW } from 'src/app/constants/fileType';
+import printJS from 'print-js';
 
 @Component({
   selector: 'app-base3',
@@ -662,6 +664,49 @@ export class Base3Component implements OnInit {
     }
     return false;
   }
+
+  showDlgPreview = false;
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  previewName: string = '';
+  async preview(fileName: string) {
+    let body = this.formData.value;
+    this.reportTemplate.fileName = fileName + '.docx';
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.service.preview(body).then(async s => {
+      if (s.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+        this.printSrc = s.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.info(MESSAGE.NOTIFICATION, MESSAGE.TEMPLATE_NULL);
+      }
+
+    });
+  }
+  downloadPdf(fileName: string) {
+    saveAs(this.pdfSrc, fileName + '.pdf');
+  }
+
+  downloadWord(fileName: string) {
+    saveAs(this.wordSrc, fileName + '.docx');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+  }
+
 
 
 

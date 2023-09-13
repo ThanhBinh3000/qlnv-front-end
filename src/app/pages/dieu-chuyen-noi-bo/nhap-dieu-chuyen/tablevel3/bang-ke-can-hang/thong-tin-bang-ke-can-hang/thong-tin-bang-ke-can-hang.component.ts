@@ -95,7 +95,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       cccd: [],
       donViNguoiGiaoHang: [],
       diaChiDonViNguoiGiaoHang: [],
-      tgianGiaoNhanHang: [],
+      thoiGianGiaoNhan: [],
       loaiVthh: [],
       tenLoaiVthh: [],
       cloaiVthh: [],
@@ -124,7 +124,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
-      ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+      tenThuKho: this.userInfo.TEN_DAY_DU,
       soBangKe: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
@@ -453,7 +453,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
           cccd: data.cmndNguoiGiao,
           donViNguoiGiaoHang: data.donViNguoiGiao,
           diaChiDonViNguoiGiaoHang: data.diaChi,
-          tgianGiaoNhanHang: data.tgianGiaoNhanHang,
+          thoiGianGiaoNhan: data.tgianGiaoNhanHang,
         });
 
         await this.layDonViCon(data.maDiemKho)
