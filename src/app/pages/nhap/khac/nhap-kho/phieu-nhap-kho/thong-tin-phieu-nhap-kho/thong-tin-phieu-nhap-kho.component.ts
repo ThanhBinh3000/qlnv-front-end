@@ -50,6 +50,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   dviTinh: string;
   donGia: string;
   thanhTien: number;
+  previewName: string = 'nk_phieu_nhap_kho';
 
   constructor(
     httpClient: HttpClient,

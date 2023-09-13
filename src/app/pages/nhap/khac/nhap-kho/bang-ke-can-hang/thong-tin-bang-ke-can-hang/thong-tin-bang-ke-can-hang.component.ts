@@ -40,6 +40,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   chungTuDinhKem: any[] = [];
   fileDinhKemReq: any[] = [];
   listDanhSachQuyetDinh: any[] = [];
+  previewName: string = 'nk_bang_ke_can_hang';
 
   dsKeHoach: any[] = []
 

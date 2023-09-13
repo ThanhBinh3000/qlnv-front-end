@@ -32,6 +32,7 @@ export class ThongTinBienBanNhapDayKhoComponent extends Base2Component implement
   @Output()
   showListEvent = new EventEmitter<any>();
 
+  previewName: string = 'nk_bb_ndk';
   maBb: string;
   danhSach: any[] = []
   dataTableView: any[] = []
