@@ -101,8 +101,8 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
           tenTrangThai: data.tenTrangThai,
           trangThai: data.trangThai
         });
-        this.dsQtNsChiTw = data.dsQtNsChiTw;
-        this.dsQtNsKpChiNvDtqg = data.dsQtNsKpChiNvDtqg;
+        this.dsQtNsChiTw = cloneDeep(data.dsQtNsChiTw);
+        this.dsQtNsKpChiNvDtqg = cloneDeep(data.dsQtNsKpChiNvDtqg);
         this.taiLieuDinhKemList = data.taiLieuDinhKems;
         this.updateEditQtNsKpChiNvDtqgCache();
         this.updateEditQtNsChiTwCache();

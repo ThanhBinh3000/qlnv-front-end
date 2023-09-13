@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="[20]">
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Năm báo cáo</nz-form-label>
+              <nz-form-label>Năm</nz-form-label>
               <nz-select formControlName="nam">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
@@ -13,8 +13,8 @@
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Số báo cáo KQKĐ mẫu</nz-form-label>
-              <input placeholder="" nz-input formControlName="soBckqKdm"/>
+              <nz-form-label>Số QĐ giao NV nhập hàng</nz-form-label>
+              <input placeholder="" nz-input formControlName="soCanCu"/>
             </nz-form-item>
           </div>
           <div nz-col nzSpan="4">
@@ -78,8 +78,8 @@
         <tr>
           <th width="60px" class="text-center">STT</th>
           <th></th>
-          <th width="">Số báo cáo KQKĐ mẫu</th>
-          <th width="">Năm báo cáo</th>
+          <th width="">Số QĐ giao NV nhập hàng</th>
+          <th width="">Năm</th>
           <th width="">Điểm Kho</th>
           <th width="">Ngăn/Lô kho</th>
           <th width="">Chủng loại hàng DTQD</th>

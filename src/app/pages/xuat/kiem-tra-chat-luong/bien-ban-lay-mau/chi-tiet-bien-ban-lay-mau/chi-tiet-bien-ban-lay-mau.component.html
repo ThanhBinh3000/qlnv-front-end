@@ -5,8 +5,8 @@
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isChiCuc">
-      <button *ngIf='idSelected' type='button' class='btn btn-sub do mr-2' (click)='preview(idSelected)'>
-        <i class='icon htvbdh_totrinh'></i>
+      <button *ngIf='idSelected' type="button" class="btn btn-sub" (click)="preview(idSelected)">
+        <i class="icon htvbdh_totrinh"></i>
         <span> In/Xem trước </span>
       </button>
       <button
@@ -23,7 +23,8 @@
         <span>Duyệt</span>
       </button>
       <button *ngIf="formData.value.trangThai == STATUS.DU_THAO ||formData.value.trangThai == STATUS.TU_CHOI_LDCC"
-              type="button" class="btn btn-sub" (click)="saveAndSend(STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+              type="button" class="btn btn-sub"
+              (click)="saveAndSend(STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -96,7 +97,7 @@
                   Đơn vị
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input readonly formControlName="tenDvi"/>
+                  <input nz-input readonly formControlName="tenChiCuc"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -347,7 +348,7 @@
 
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 6]">
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>
               Số lượng mẫu hàng kiểm tra
@@ -360,34 +361,45 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onChangePpLayMau($event)">
+              <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group>
+
+              <!--<nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onChangePpLayMau($event)"
+                                   formControlName="chiTieuKiemTra">
                 <div nz-row>
                   <ng-container *ngFor="let item of dsPpLayMau">
                     <div nz-col nzSpan="24"><label nz-checkbox [nzChecked]="item.selected"
-                                                   [nzValue]="item.giaTri">{{item.giaTri}}</label></div>
+                                                   [nzValue]="item.label">{{item.label}}</label></div>
                   </ng-container>
                 </div>
-              </nz-checkbox-wrapper>
+              </nz-checkbox-wrapper>-->
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>
               Các chỉ tiêu cần kiểm tra
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="chiTieuKiemTra" [readonly]="isView"/>
+              <nz-checkbox-group formControlName="ctChatLuong" nzDisabled="true"></nz-checkbox-group>
+              <!--<nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onChangeCtChatLuong($event)">
+                <div nz-row>
+                  <ng-container *ngFor="let item of dsCtChatLuong">
+                    <div nz-col nzSpan="24"><label nz-checkbox [nzChecked]="item.selected"
+                                                   [nzValue]="item.label">{{item.label}}</label></div>
+                  </ng-container>
+                </div>
+              </nz-checkbox-wrapper>-->
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label [nzNoColon]="true">Niêm phong
             </nz-form-label>
             <label nz-checkbox formControlName="niemPhong" [nzDisabled]="isView">Đã
               niêm phong mẫu</label>

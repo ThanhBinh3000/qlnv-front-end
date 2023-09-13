@@ -51,8 +51,10 @@
     <div nz-col [nzSpan]="4">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đề xuất có VAT (đ/kg)</nz-form-label>
-        <nz-input-number formControlName="donGiaTamTinh" [nzSize]="'small'" (input)="calculatorThanhTienDx()" [nzStep]="0.1">
-        </nz-input-number>
+        <input nz-input
+               formControlName="donGiaTamTinh" class="money-input" currencyMask [options]="amount">
+<!--        <nz-input-number formControlName="donGiaTamTinh" [nzSize]="'small'" (input)="calculatorThanhTienDx()" [nzStep]="0.1">-->
+<!--        </nz-input-number>-->
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="5">
@@ -115,7 +117,11 @@
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
+        <td>
+          <nz-input-number [(ngModel)]="thongTinChiCuc.soLuong" class="text-right" nz-input [nzMin]="1"
+                           [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+          </nz-input-number>
+        </td>
         <td></td>
         <td></td>
         <td class="text-left" [nzRight]="true">

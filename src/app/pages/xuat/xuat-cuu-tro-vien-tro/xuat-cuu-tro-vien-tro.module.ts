@@ -6,6 +6,7 @@ import {XuatCuuTroVienTroRoutingModule} from "./xuat-cuu-tro-vien-tro-routing.mo
 import {XuatCapModule} from "./xuat-cap/xuat-cap.module";
 import {XuatCuuTroVienTroComponent} from "./xuat-cuu-tro-vien-tro.component";
 import {CuuTroVienTroModule} from "./xuat-cuu-tro/cuu-tro-vien-tro.module";
+import {XuatModule} from "src/app/pages/xuat/xuat.module";
 
 @NgModule({
   declarations: [
@@ -13,11 +14,12 @@ import {CuuTroVienTroModule} from "./xuat-cuu-tro/cuu-tro-vien-tro.module";
   ],
   imports: [
     CommonModule,
-    ComponentsModule,
-    DirectivesModule,
     XuatCuuTroVienTroRoutingModule,
+    DirectivesModule,
+    ComponentsModule,
     CuuTroVienTroModule,
     XuatCapModule,
+    XuatModule,
   ],
   exports: [
     XuatCuuTroVienTroComponent
