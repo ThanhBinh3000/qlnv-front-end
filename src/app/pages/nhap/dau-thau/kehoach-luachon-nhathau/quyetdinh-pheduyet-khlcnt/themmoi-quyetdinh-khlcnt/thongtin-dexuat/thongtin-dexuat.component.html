@@ -283,9 +283,9 @@
         <td></td>
         <td *ngIf="isCache"></td>
         <td *ngIf="isCache"></td>
-        <td class="text-right blue-text bold-700">{{ dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-        <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right bold-700">{{ dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh *1000| number :'1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right blue-text bold-700">{{ dtGoiThau.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
+        <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right bold-700">{{ dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh *1000| number :'1.0-99' : 'vi_VN' }}</td>
         <td></td>
         <td></td>
         <td class="text-right" *ngIf="!isView">
@@ -305,11 +305,11 @@
             <td>{{chiCuc.tenDvi}}</td>
             <td></td>
             <td></td>
-            <td *ngIf="isCache" class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-1' : 'vi_VN'}}</td>
-            <td *ngIf="isCache" class="text-right red-text">{{chiCuc.soLuongDaMua| number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right bold-700">{{ chiCuc.soLuong * dtGoiThau.donGiaTamTinh *1000| number :'1.0-1' : 'vi_VN' }}</td>
+            <td *ngIf="isCache" class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
+            <td *ngIf="isCache" class="text-right red-text">{{chiCuc.soLuongDaMua| number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right bold-700">{{ chiCuc.soLuong * dtGoiThau.donGiaTamTinh *1000| number :'1.0-99' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
             <td *ngIf="!isView"></td>
@@ -324,11 +324,11 @@
                 <td>{{diemKho.diaDiemNhap}}</td>
                 <td *ngIf="isCache"></td>
                 <td *ngIf="isCache"></td>
-                <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+                <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
+                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh * 1000 | number : '1.0-99' : 'vi_VN'}}</td>
+                <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-99' : 'vi_VN'}}</td>
+                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-99' : 'vi_VN'}}</td>
                 <td class="text-right" *ngIf="!isView">
                   <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
                     <i class="fa fa-pencil" title="Sửa"></i>
@@ -351,9 +351,9 @@
       <td></td>
       <td *ngIf="isCache"></td>
       <td *ngIf="isCache"></td>
-      <td class="text-right blue-text bold-700">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right blue-text bold-700">{{ calcTongSl() | number : '1.0-99' : 'vi_VN' }}</td>
       <td></td>
-      <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.0-99' : 'vi_VN' }}</td>
       <td></td>
       <td></td>
       <td *ngIf="!isView">

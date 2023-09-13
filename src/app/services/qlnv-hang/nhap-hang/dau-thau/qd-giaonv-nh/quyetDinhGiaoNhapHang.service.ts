@@ -24,4 +24,8 @@ export class QuyetDinhGiaoNhapHangService extends BaseService {
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 
+  layTatCaQdGiaoNvNh(body) {
+    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/ds-qd-giao-nv-nh`;
+    return this._httpClient.post<any>(url, body).toPromise();
+  }
 }
