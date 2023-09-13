@@ -5,8 +5,8 @@
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isChiCuc">
-      <button *ngIf='idSelected' type='button' class='btn btn-sub do mr-2' (click)='preview(idSelected)'>
-        <i class='icon htvbdh_totrinh'></i>
+      <button *ngIf='idSelected' type="button" class="btn btn-sub" (click)="preview(idSelected)">
+        <i class="icon htvbdh_totrinh"></i>
         <span> In/Xem trước </span>
       </button>
       <button
@@ -250,14 +250,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onChangePpLayMau($event)">
-                    <div nz-row>
-                      <ng-container *ngFor="let item of dsPpLayMau">
-                        <div nz-col nzSpan="24"><label nz-checkbox [nzChecked]="item.selected"
-                                                       [nzValue]="item.giaTri">{{item.giaTri}}</label></div>
-                      </ng-container>
-                    </div>
-                  </nz-checkbox-wrapper>
+                  <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
