@@ -38,7 +38,8 @@ export class ThemMoiQdxhComponent extends Base3Component implements OnInit {
     private quyetDinhScService: QuyetDinhScService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, quyetDinhXhService);
-    this.defaultURL = 'sua-chua/xuat-hang/giao-nv-xh'
+    this.defaultURL = 'sua-chua/xuat-hang/giao-nv-xh';
+    this.previewName = 'sc_qd_giao_nvxh'
     this.getId();
     this.formData = this.fb.group({
       id: [],
