@@ -96,7 +96,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       tenCloaiVthh: [],
       tichLuongKhaDung: [],
       donViTinh: [],
-      dsBienBan: [],
+      soBBNtLd: [],
+      bBNtLdId: [],
       tenLoKhoXuat: [],
       maLoKhoXuat: [],
       tenNganKhoXuat: [],
@@ -242,14 +243,17 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       isVatTu: false
     }
     let bbNTBQ = ''
+    let bBNtLdId = ''
     let res = await this.bienBanNghiemThuBaoQuanLanDauService.getDanhSach(body);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data
       data.forEach(element => {
         bbNTBQ = bbNTBQ.concat(`${element.soBban}, `)
+        bBNtLdId = bbNTBQ.concat(`${element.id}, `)
       });
       this.formData.patchValue({
-        dsBienBan: bbNTBQ
+        soBBNtLd: bbNTBQ,
+        bBNtLdId
       })
       console.log('phieuNhapKhoService', res)
     }
