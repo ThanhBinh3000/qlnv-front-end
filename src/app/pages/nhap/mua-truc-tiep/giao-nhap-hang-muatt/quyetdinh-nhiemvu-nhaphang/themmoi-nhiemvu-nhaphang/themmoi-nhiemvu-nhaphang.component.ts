@@ -1,12 +1,10 @@
-import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from './../../../../../../services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
-import { QuyetDinhGiaoNvNhapHangService } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
-import { HopdongPhulucHopdongService } from './../../../../../../services/hopdong-phuluc-hopdong.service';
+import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from '../../../../../../services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
+import { QuyetDinhGiaoNvNhapHangService } from '../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
+import { HopdongPhulucHopdongService } from '../../../../../../services/hopdong-phuluc-hopdong.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  FormBuilder, FormGroup,
   Validators
 } from '@angular/forms';
-import { Router } from '@angular/router';
 import { differenceInCalendarDays } from 'date-fns';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -16,67 +14,49 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DATEPICKER_CONFIG, LEVEL_USER } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat, ThongTinDiaDiemNhap } from 'src/app/models/QuyetDinhNhapXuat';
-import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { FormArray } from '@angular/forms';
 import {FILETYPE} from "../../../../../../constants/fileType";
 import {QuyetDinhPheDuyetKeHoachMTTService} from "../../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
 import {ChaogiaUyquyenMualeService} from "../../../../../../services/chaogia-uyquyen-muale.service";
 import {NzSelectSizeType} from "ng-zorro-antd/select";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
 @Component({
   selector: 'app-themmoi-nhiemvu-nhaphang',
   templateUrl: './themmoi-nhiemvu-nhaphang.component.html',
   styleUrls: ['./themmoi-nhiemvu-nhaphang.component.scss']
 })
-export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
+export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() typeVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
-  formData: FormGroup;
-  chiTietQDGiaoNhapXuatHang: any = [];
   taiLieuDinhKemList: any[] = [];
-  datePickerConfig = DATEPICKER_CONFIG;
   type: string = '';
   quyetDinhNhapXuat: QuyetDinhNhapXuat = new QuyetDinhNhapXuat();
-  dataQDNhapXuat;
   optionsDonVi: any[] = [];
   optionsFullDonVi: any[] = [];
-  optionsFullHangHoa: any[] = [];
-  optionsHangHoa: any[] = [];
-  userInfo: UserLogin;
-  routerUrl: string;
-  quyetDinhNhapXuatDetailCreate: DetailQuyetDinhNhapXuat;
   dsQuyetDinhNhapXuatDetailClone: Array<DetailQuyetDinhNhapXuat> = [];
   isAddQdNhapXuat: boolean = false;
   isChiTiet: boolean = false;
   radioValue: string = '01';
   loaiStr: string;
   maVthh: string;
-  idVthh: number;
   routerVthh: string;
   today = new Date();
   listNam: any[] = [];
-  // hopDongList: any[] = [];
   listFileDinhKem: any[] = [];
   canCuPhapLy: any[] = [];
 
   STATUS = STATUS
   maQdSuffix: string;
-
-  hopDongIds: any[number] = [];
 
   listHopDong: any[] = [];
 
@@ -103,24 +83,21 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   multipleValue = ['a10', 'c12'];
   dsHongDong = [];
   soLuong: number = 0;
-
+  previewName: string = 'qd_giao_nhiem_vu_nhap_hang_lt';
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private modal: NzModalService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
-    private notification: NzNotificationService,
-    private spinner: NgxSpinnerService,
-    public globals: Globals,
-    public userService: UserService,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
-    private uploadFileService: UploadFileService,
     private hopdongPhulucHopdongService: HopdongPhulucHopdongService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private quyetDinhPheDuyetKeHoachMTTService : QuyetDinhPheDuyetKeHoachMTTService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
-    private helperService: HelperService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvNhapHangService);
     this.formData = this.fb.group({
       id: [null],
       soQd: [''],
@@ -724,12 +701,6 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       result.push(i);
     }
     return result;
-  }
-
-  isDetail(): boolean {
-    return (
-      this.isViewDetail
-    );
   }
 
   expandSet = new Set<number>();

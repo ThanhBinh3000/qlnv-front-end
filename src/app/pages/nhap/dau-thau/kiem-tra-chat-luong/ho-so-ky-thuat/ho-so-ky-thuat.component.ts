@@ -4,9 +4,6 @@ import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent } from 'src/app/components/base/base.component';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -19,24 +16,26 @@ import { StorageService } from 'src/app/services/storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../constants/status";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 @Component({
   selector: 'app-ho-so-ky-thuat',
   templateUrl: './ho-so-ky-thuat.component.html',
   styleUrls: ['./ho-so-ky-thuat.component.scss']
 })
-export class HoSoKyThuatComponent extends BaseComponent implements OnInit {
+export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
 
   searchFilter = {
-    soQdNhap: '',
-    soBienBan: '',
-    tenVatTuCha: '',
-    maVatTuCha: '',
-    tenVatTu: '',
-    maVatTu: '',
-    ngayTongHop: '',
+    soHoSoKyThuat: '',
+    soBbKtraNgoaiQuan: '',
+    soBbKtraVanHanh: '',
+    soBbKtraHskt: '',
   };
 
   optionsDonVi: any[] = [];
@@ -70,14 +69,31 @@ export class HoSoKyThuatComponent extends BaseComponent implements OnInit {
     ketLuan: '',
     tenTrangThai: '',
   };
+  tuNgayTao: Date | null = null;
+  denNgayTao: Date | null = null;
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayTao) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayTao.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayTao) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayTao.getTime();
+  };
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private hoSoKyThuatService: HoSoKyThuatService,
   ) {
-    super(httpClient, storageService, hoSoKyThuatService);
-    super.ngOnInit();
+    super(httpClient, storageService, notification, spinner, modal,  hoSoKyThuatService);
   }
 
   async ngOnInit() {
@@ -134,7 +150,13 @@ export class HoSoKyThuatComponent extends BaseComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
-      loaiVthh: this.loaiVthh
+      loaiVthh: this.loaiVthh,
+      soHoSoKyThuat: this.searchFilter.soHoSoKyThuat,
+      soBbKtraNgoaiQuan: this.searchFilter.soBbKtraNgoaiQuan,
+      soBbKtraVanHanh: this.searchFilter.soBbKtraVanHanh,
+      soBbKtraHskt: this.searchFilter.soBbKtraHskt,
+      tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
     };
     let res = await this.hoSoKyThuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -151,47 +173,6 @@ export class HoSoKyThuatComponent extends BaseComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
-  }
-
-  selectHangHoa() {
-    let data = this.loaiVthh;
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
-      nzContent: DialogDanhSachHangHoaComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: { data },
-    });
-    modalTuChoi.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.bindingDataHangHoa(data);
-      }
-    });
-  }
-
-  async bindingDataHangHoa(data) {
-    if (data.loaiHang == "M" || data.loaiHang == "LT") {
-      this.searchFilter.maVatTuCha = data.parent.ma;
-      this.searchFilter.tenVatTuCha = data.parent.ten;
-      this.searchFilter.maVatTu = data.ma;
-      this.searchFilter.tenVatTu = data.ten;
-    }
-    if (data.loaiHang == "VT") {
-      if (data.cap == "3") {
-        this.searchFilter.maVatTuCha = data.parent.parent.ma;
-        this.searchFilter.tenVatTuCha = data.parent.parent.ten;
-        this.searchFilter.maVatTu = data.parent.ma;
-        this.searchFilter.tenVatTu = data.parent.ten;
-      }
-      if (data.cap == "2") {
-        this.searchFilter.maVatTuCha = data.parent.ma;
-        this.searchFilter.tenVatTuCha = data.parent.ten;
-        this.searchFilter.maVatTu = data.ma;
-        this.searchFilter.tenVatTu = data.ten;
-      }
-    }
   }
 
   async changePageIndex(event) {
@@ -222,14 +203,13 @@ export class HoSoKyThuatComponent extends BaseComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soQdNhap: '',
-      soBienBan: '',
-      tenVatTuCha: '',
-      maVatTuCha: '',
-      tenVatTu: '',
-      maVatTu: '',
-      ngayTongHop: '',
+      soHoSoKyThuat: '',
+      soBbKtraNgoaiQuan: '',
+      soBbKtraVanHanh: '',
+      soBbKtraHskt: '',
     };
+    this.tuNgayTao = null;
+    this.denNgayTao = null;
     this.search();
   }
 
@@ -287,12 +267,6 @@ export class HoSoKyThuatComponent extends BaseComponent implements OnInit {
       try {
         let body = {
           "maDonVi": this.userInfo.MA_DVI,
-          "maVatTu": this.searchFilter.maVatTu,
-          "maVatTuCha": this.searchFilter.maVatTuCha,
-          "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1 ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD') : null,
-          "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0 ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD') : null,
-          "soBienBan": this.searchFilter.soBienBan,
-          "soQdNhap": this.searchFilter.soQdNhap,
         };
         this.hoSoKyThuatService
           .export(body)
@@ -370,20 +344,20 @@ export class HoSoKyThuatComponent extends BaseComponent implements OnInit {
     }
   }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soBienBan: '',
-      soQuyetDinhNhap: '',
-      ngayKiemTra: '',
-      tenVatTuCha: '',
-      tenVatTu: '',
-      ketLuan: '',
-      tenTrangThai: '',
+  hienThiXem(data){
+    if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XEM') && data != null) {
+      if(this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_THEM')
+        && (data.trangThai == STATUS.DU_THAO
+          || data.trangThai == STATUS.TU_CHOI_TP
+          || data.trangThai == STATUS.TU_CHOI_LDC)) {
+        return false;
+      } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP) {
+        return false;
+      } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC) {
+        return false;
+      }
+      return true;
     }
+    return false;
   }
-
-  print() {
-
-  }
-
 }

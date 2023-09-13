@@ -40,6 +40,8 @@ import {
   DialogPhanBoHdVtComponent
 } from "../../../../../../components/dialog/dialog-phan-bo-hd-vt/dialog-phan-bo-hd-vt.component";
 import {addDays, differenceInCalendarDays} from 'date-fns'
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
 
 interface DonviLienQuanModel {
     id: number;
@@ -103,7 +105,17 @@ export class ThongTinComponent implements OnInit, OnChanges {
     isDieuChinh: boolean = false;
     dataGthau: any = {};
     namKhoach: number = 0;
-
+  showDlgPreview = false;
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  previewName : string;
     constructor(
         private router: Router,
         private fb: FormBuilder,
@@ -235,11 +247,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
     }
 
     async loadDataComboBox() {
-        this.listLoaiHopDong = [];
-        let resHd = await this.danhMucService.loaiHopDongGetAll();
-        if (resHd.msg == MESSAGE.SUCCESS) {
-            this.listLoaiHopDong = resHd.data;
-        }
+      this.listLoaiHopDong = [];
+      let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
+      if (resHd.msg == MESSAGE.SUCCESS) {
+        this.listLoaiHopDong = resHd.data;
+      }
     }
 
   async loadListNguoiDaiDien() {
@@ -359,11 +371,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
             if (this.loaiVthh.startsWith("02")) {
               this.formData.controls["noiDung"].setValidators([Validators.required]);
               this.formData.controls["dieuKien"].setValidators([Validators.required]);
+              this.formData.controls["soNgayThien"].setValidators([Validators.required]);
             }
             this.formData.controls["idQdKqLcnt"].setValidators([Validators.required]);
             this.formData.controls["tenGoiThau"].setValidators([Validators.required]);
             this.formData.controls["tenHd"].setValidators([Validators.required]);
-            this.formData.controls["soNgayThien"].setValidators([Validators.required]);
             this.formData.controls["maDvi"].setValidators([Validators.required]);
             this.formData.controls["tenDvi"].setValidators([Validators.required]);
             this.formData.controls["diaChi"].setValidators([Validators.required]);
@@ -859,13 +871,56 @@ export class ThongTinComponent implements OnInit, OnChanges {
   }
 
   onChangeTgianGiaoThucTe() {
-      if(this.formData.get('tgianGiaoThucTe').value != null && this.formData.get('tgianGiaoDuHang').value != null) {
-        let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
-        let tgianGiaoDuHang = dayjs(this.formData.get('tgianGiaoDuHang').value).toDate();
-        let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianGiaoDuHang)
-        this.formData.patchValue({
-          tgianBdauTinhPhat: tgianBdauTinhPhat,
-        })
+      if(this.loaiVthh.startsWith('02')) {
+        if(this.formData.get('tgianGiaoThucTe').value != null && this.formData.get('tgianGiaoDuHang').value != null) {
+          let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
+          let tgianGiaoDuHang = dayjs(this.formData.get('tgianGiaoDuHang').value).toDate();
+          let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianGiaoDuHang)
+          this.formData.patchValue({
+            tgianBdauTinhPhat: tgianBdauTinhPhat,
+          })
+        }
+      } else {
+        if(this.formData.get('tgianGiaoThucTe').value != null && this.formData.get('tgianNkho').value != null) {
+          let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
+          let tgianNkho = dayjs(this.formData.get('tgianNkho').value).toDate();
+          let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianNkho)
+          this.formData.patchValue({
+            tgianBdauTinhPhat: tgianBdauTinhPhat,
+          })
+        }
       }
+
+  }
+
+  async preview() {
+      if (this.loaiVthh.startsWith('02')) {
+        this.previewName = 'thong_tin_hop_dong_vt'
+      } else {
+        this.previewName = 'thong_tin_hop_dong_lt'
+      }
+    let body = this.formData.value;
+    this.reportTemplate.fileName = this.previewName + '.docx';
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.hopDongService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf(fileName: string) {
+    saveAs(this.pdfSrc, fileName + '.pdf');
+  }
+
+  downloadWord(fileName: string) {
+    saveAs(this.wordSrc, fileName + '.docx');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 }

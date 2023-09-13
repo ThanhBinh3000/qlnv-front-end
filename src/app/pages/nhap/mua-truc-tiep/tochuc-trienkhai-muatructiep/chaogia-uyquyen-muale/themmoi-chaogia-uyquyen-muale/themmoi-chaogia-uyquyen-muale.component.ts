@@ -43,6 +43,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   listDiemKho: any[] = [];
   listChiCuc: any[] = [];
   selected: boolean = false;
+  previewName : string = 'mtt_thong_tin_chao_gia';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
