@@ -128,8 +128,6 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       'taiLieuDinhKems': this.taiLieuDinhKemList,
       'loai': '00',
     };
-    console.log(body,'bodybodybody');
-    return;
     this.spinner.show();
     try {
       if (this.idInput > 0) {
