@@ -183,17 +183,18 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         tenLoaiVthh: this.data.tenHangHoa,
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
-        tichLuongKhaDung: this.data.tichLuongKd,
+        tichLuongKhaDung: this.data.tichLuongKhaDung,
         donViTinh: this.data.donViTinh,
+        slNhapTheoQd: this.data.soLuongDc
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
-      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.cloaiVthh);
+      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.maChLoaiHangHoa);
       if (dmTieuChuan.data) {
         this.dataTableChiTieu = dmTieuChuan.data.children;
         this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
           return {
             ...element,
-            edit: false,
+            edit: true,
             chiSoCl: element.tenTchuan,
             chiTieuCl: element.chiSoNhap,
             ketQuaPt: element.ketQuaPt,
