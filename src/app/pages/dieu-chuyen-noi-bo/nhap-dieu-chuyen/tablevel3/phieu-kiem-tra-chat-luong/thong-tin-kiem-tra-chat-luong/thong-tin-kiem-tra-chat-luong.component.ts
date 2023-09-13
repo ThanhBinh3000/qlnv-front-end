@@ -76,7 +76,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       soPhieu: [],
       ngayLapPhieu: [dayjs().format('YYYY-MM-DD')],
       soQdinhDc: [],
-      ngayQdinhDc: [],
+      ngayQdinhDcc: [],
       qdDcId: [],
       ktvBaoQuan: [],
       thuTruong: [],
@@ -96,7 +96,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       tenCloaiVthh: [],
       tichLuongKhaDung: [],
       donViTinh: [],
-      dsBienBan: [],
+      soBBNtLd: [],
+      bBNtLdId: [],
       tenLoKhoXuat: [],
       maLoKhoXuat: [],
       tenNganKhoXuat: [],
@@ -159,7 +160,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
         soQdinhDc: this.data.soQdinh,
-        ngayQdinhDc: this.data.ngayHieuLucQd,
+        ngayQdinhDcc: this.data.ngayHieuLucQd,
         qdDcId: this.data.qdinhDccId,
         tenLoNganKho: `${this.data.tenLoKhoNhan} ${this.data.tenNganKhoNhan}`,
         tenLoKho: this.data.tenLoKhoNhan,
@@ -220,6 +221,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       if (data) {
         this.dataTableChiTieu = data.dcnbPhieuKtChatLuongDtl
         this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem
+        this.phieuKTCLDinhKem = data.phieuKTCLDinhKem
+
         this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`, });
         await this.loadChiTietQdinh(data.qdDcId);
         await this.getDataKho(data.maLoKho || data.maNganKho)
@@ -240,14 +243,17 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       isVatTu: false
     }
     let bbNTBQ = ''
+    let bBNtLdId = ''
     let res = await this.bienBanNghiemThuBaoQuanLanDauService.getDanhSach(body);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data
       data.forEach(element => {
         bbNTBQ = bbNTBQ.concat(`${element.soBban}, `)
+        bBNtLdId = bbNTBQ.concat(`${element.id}, `)
       });
       this.formData.patchValue({
-        dsBienBan: bbNTBQ
+        soBBNtLd: bbNTBQ,
+        bBNtLdId
       })
       console.log('phieuNhapKhoService', res)
     }
@@ -337,8 +343,9 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       if (data) {
         this.formData.patchValue({
           soQdinhDc: data.soQdinh,
-          ngayQdinhDc: data.ngayKyQdinh,
+          ngayQdinhDcc: data.ngayKyQdinh,
           qdDcId: data.id,
+          tenLoNganKho: "",
           tenLoKho: "",
           maLoKho: "",
           tenNganKho: "",
