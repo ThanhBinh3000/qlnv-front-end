@@ -207,18 +207,19 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
     let mess = '';
     switch (this.formData.get('trangThai').value) {
       case STATUS.DU_THAO:
-      case STATUS.TU_CHOI_LDC: {
-        trangThai = STATUS.CHO_DUYET_LDC;
+      case STATUS.TU_CHOI_LDTC:
+      case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.CHO_DUYET_LDTC;
         mess = 'Bạn có muối gửi duyệt?';
         break;
       }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC;
+      case STATUS.CHO_DUYET_LDTC: {
+        trangThai = STATUS.DA_DUYET_LDTC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?';
         break;
       }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_LDC;
+      case STATUS.CHO_DUYET_LDTC: {
+        trangThai = STATUS.TU_CHOI_LDTC;
         mess = 'Bạn có chắc chắn muốn từ chối ?';
         break;
       }
@@ -274,8 +275,12 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
         try {
           let trangThai;
           switch (this.formData.get('trangThai').value) {
-            case STATUS.CHO_DUYET_LDC: {
-              trangThai = STATUS.TU_CHOI_LDC;
+            case STATUS.CHO_DUYET_LDV: {
+              trangThai = STATUS.TU_CHOI_LDV;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDTC: {
+              trangThai = STATUS.TU_CHOI_LDTC;
               break;
             }
           }
