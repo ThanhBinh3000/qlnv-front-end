@@ -36,7 +36,7 @@
           <span>Duyệt</span>
         </a>
         <button (click)='save(false)'
-                *ngIf='(formData.value.trangThai == STATUS.DU_THAO && !isViewDetail)  '
+                *ngIf='((formData.value.trangThai == STATUS.DU_THAO  || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isViewDetail)  '
                 class='btn btn-main btn-sm waves-effect waves-light ml-2'>
           <i class='icon htvbdh_tcdt_save'></i>
           <span>Lưu</span>

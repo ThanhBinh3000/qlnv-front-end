@@ -1,26 +1,26 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from 'dayjs';
-import {saveAs} from 'file-saver';
-import {cloneDeep} from 'lodash';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import {
-  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT
+  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DonviService} from 'src/app/services/donvi.service';
-import {DeNghiCapPhiBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {STATUS} from "../../../../constants/status";
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DonviService } from 'src/app/services/donvi.service';
+import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { STATUS } from '../../../../constants/status';
 
 @Component({
   selector: 'app-de-nghi-cap-phi-bo-nganh',
   templateUrl: './de-nghi-cap-phi-bo-nganh.component.html',
-  styleUrls: ['./de-nghi-cap-phi-bo-nganh.component.scss']
+  styleUrls: ['./de-nghi-cap-phi-bo-nganh.component.scss'],
 })
 export class DeNghiCapPhiBoNganhComponent implements OnInit {
   constructor(
@@ -44,17 +44,17 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   listNam: any[] = [];
   listBoNganh: any[] = [];
   listTrangThai: any[] = [
-    {ma: STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
+    { ma: STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
   ];
 
   yearNow: number = 0;
   searchFilter = {
-    soDeNghi: "",
-    tenBoNganh: "",
-    nam: "",
-    ngayDeNghiTuNgay: "",
-    ngayDeNghiDenNgay: "",
+    soDeNghi: '',
+    tenBoNganh: '',
+    nam: '',
+    ngayDeNghiTuNgay: '',
+    ngayDeNghiDenNgay: '',
   };
   filterTable: any = {
     soDeNghi: '',
@@ -89,9 +89,9 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   async ngOnInit() {
     try {
       this.listVthh = LIST_VAT_TU_HANG_HOA;
-      this.getListNam()
-      this.getListBoNganh()
-      this.initData()
+      this.getListNam();
+      this.getListBoNganh();
+      this.initData();
       await this.search();
     } catch (e) {
       console.log('error: ', e);
@@ -145,14 +145,13 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
       maBoNganh: this.searchFilter.tenBoNganh ? this.searchFilter.tenBoNganh : '',
       maDvis: [this.detail.maDvi],
       nam: this.searchFilter.nam ? this.searchFilter.nam : '',
-      ngayDeNghiTuNgay: this.searchFilter.ngayDeNghiTuNgay ?  dayjs(this.searchFilter.ngayDeNghiTuNgay).format('YYYY-MM-DD') : '',
-      ngayDeNghiDenNgay: this.searchFilter.ngayDeNghiDenNgay ?   dayjs(this.searchFilter.ngayDeNghiDenNgay).format('YYYY-MM-DD') : '',
-      trangThai: "",
+      ngayDeNghiTuNgay: this.searchFilter.ngayDeNghiTuNgay ? this.searchFilter.ngayDeNghiTuNgay : '',
+      ngayDeNghiDenNgay: this.searchFilter.ngayDeNghiDenNgay ? this.searchFilter.ngayDeNghiDenNgay : '',
+      trangThai: '',
       trangThais: [],
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-
     let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -186,7 +185,8 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     this.listBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listBoNganh = res.data;
+      this.listBoNganh = res.data.filter(item => item.code != 'BTC' && item.code != 'BQP' && item.code != 'BCA');
+      console.log(this.listBoNganh, ' this.listBoNganh this.listBoNganh');
     }
   }
 
@@ -249,22 +249,22 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
 
   clearFilter() {
     // this.searchFilter.nam = dayjs().get('year');
-    this.searchFilter.soDeNghi = "";
-    this.searchFilter.ngayDeNghiTuNgay = "";
-    this.searchFilter.ngayDeNghiDenNgay = "";
-    this.searchFilter.tenBoNganh = "";
-    this.searchFilter.nam = "";
+    this.searchFilter.soDeNghi = '';
+    this.searchFilter.ngayDeNghiTuNgay = '';
+    this.searchFilter.ngayDeNghiDenNgay = '';
+    this.searchFilter.tenBoNganh = '';
+    this.searchFilter.nam = '';
 
     this.filterTable = {
-      "soDeNghi": '',
-      "tenBoNganh": '',
-      "ngayDeNghi": '',
-      "nam": '',
-      "trangThaiId": '',
-      "tenTrangThai": '',
-      "tongTien": '',
-      "kinhPhiDaCap": '',
-      "ycCapThem": ''
+      'soDeNghi': '',
+      'tenBoNganh': '',
+      'ngayDeNghi': '',
+      'nam': '',
+      'trangThaiId': '',
+      'tenTrangThai': '',
+      'tongTien': '',
+      'kinhPhiDaCap': '',
+      'ycCapThem': '',
     };
     this.search();
 
@@ -375,8 +375,8 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
           this.spinner.show();
           try {
             const body = {
-              ids: dataDelete
-            }
+              ids: dataDelete,
+            };
             let res = await this.deNghiCapPhiBoNganhService.deleteMultiple(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
@@ -409,13 +409,13 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
         if (date) {
           this.dataTableAll.forEach((item) => {
             if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
-              temp.push(item)
+              temp.push(item);
             }
           });
         } else {
           this.dataTableAll.forEach((item) => {
             if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-              temp.push(item)
+              temp.push(item);
             }
           });
         }
