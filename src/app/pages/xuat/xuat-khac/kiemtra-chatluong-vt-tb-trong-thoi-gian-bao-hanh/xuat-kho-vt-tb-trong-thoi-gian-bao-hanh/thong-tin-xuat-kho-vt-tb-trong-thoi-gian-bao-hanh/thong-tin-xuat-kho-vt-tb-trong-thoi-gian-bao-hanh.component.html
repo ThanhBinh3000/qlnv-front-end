@@ -374,6 +374,7 @@
           <tr>
             <th>Theo QĐ giao NV xuất hàng (1)</th>
             <th>Thực Xuất (2)</th>
+            <th rowSpan="2">Hành động</th>
           </tr>
           <tr>
           </tr>
@@ -406,12 +407,17 @@
             <td>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <nz-input-number nz-input [nzSize]="'small'" formControlName="slThucXuat"
+                  <nz-input-number nz-input [nzSize]="'small'" formControlName="slThucTe"
                                    [nzDisabled]="isView" [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
+            </td>
+            <td>
+              <a (click)="clearItemRow()">
+                <i class="fa fa-refresh"></i>
+              </a>
             </td>
           </tr>
           </tbody>
@@ -427,7 +433,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <input nz-input [ngModelOptions]="{standalone: true}"
-                     [ngModel]="formData.value.slThucXuat > 0 ? convertTien(formData.value.slThucXuat) : ''"
+                     [ngModel]="formData.value.slThucTe > 0 ? convertTien(formData.value.slThucTe) : ''"
                      readonly/>
             </nz-form-control>
           </nz-form-item>
