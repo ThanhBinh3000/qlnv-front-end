@@ -242,6 +242,7 @@ export class ThemMoiHopDongSctxComponent extends  Base2Component implements OnIn
       this.formData.value.listPhuLuc = this.listPhuLuc;
     }
     this.formData.value.idDuAn = this.itemDuAn.id
+    this.formData.value.tenDuAn = this.itemDuAn.tenCongTrinh
     if (isKy) {
       this.modal.confirm({
         nzClosable: false,

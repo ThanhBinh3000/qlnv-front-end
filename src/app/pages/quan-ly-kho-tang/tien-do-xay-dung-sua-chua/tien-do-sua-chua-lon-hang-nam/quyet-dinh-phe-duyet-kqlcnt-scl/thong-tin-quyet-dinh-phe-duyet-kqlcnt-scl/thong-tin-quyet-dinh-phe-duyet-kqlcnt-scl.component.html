@@ -14,12 +14,12 @@
     <!--        <span>Quay lại</span>-->
     <!--      </button>-->
     <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
-            *ngIf="formData.value.trangThai == STATUS.DU_THAO">
+            *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Ban hành</span>
     </button>
     <button (click)="save()"
-            *ngIf="formData.value.trangThai == STATUS.DU_THAO"
+            *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')"
             class="btn btn-main btn-sm waves-effect waves-light ml-2">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -130,9 +130,9 @@
     <nz-collapse>
       <nz-collapse-panel [nzActive]="true" nzHeader="Kết quả lựa chọn nhà thầu" class="mg-t-10">
         <nz-card class="flex-card">
-          <div nz-row [nzGutter]="[24]">
+          <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12">
-              <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
+              <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
                 <div nz-col nzSpan="24">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KH LCNT</nz-form-label>

@@ -52,7 +52,8 @@ export class ThemMoiKthucComponent extends Base3Component implements OnInit {
     private danhSachSuaChuaService: DanhSachSuaChuaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, bienBanKetThucNhapScService);
-    this.defaultURL = 'sua-chua/nhap-hang/bb-kt-nhap'
+    this.defaultURL = 'sua-chua/nhap-hang/bb-kt-nhap';
+    this.previewName = 'sc_bien_ban_giao_nhan'
     this.getId();
     this.formData = this.fb.group({
       id: [],

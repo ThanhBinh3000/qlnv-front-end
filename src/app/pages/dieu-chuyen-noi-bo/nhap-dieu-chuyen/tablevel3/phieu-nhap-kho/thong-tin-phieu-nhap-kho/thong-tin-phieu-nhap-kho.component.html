@@ -270,7 +270,7 @@
                   Cán bộ lập phiếu (Thủ kho)
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="thuKho" [readonly]="true" />
+                  <input nz-input formControlName="tenThuKho" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -281,7 +281,7 @@
                   Lãnh đạo chi cục
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="lanhDao" [readonly]="true" />
+                  <input nz-input formControlName="tenLanhDao" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -296,7 +296,7 @@
                   KTV bảo quản
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="ktvBaoQuan" [readonly]="true" />
+                  <input nz-input formControlName="tenKyThuatVien" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -402,7 +402,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <span class="text-blue">{{formData.value.soLuongQdDcCuc|number:'1.0-1':'vi_VN'}}</span><span>
-                    ({{formData.value.dviTinh}})</span>
+                    ({{formData.value.donViTinh}})</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -517,7 +517,7 @@
                   </form>
                 </th>
                 <th>
-                  <a (click)="add()">
+                  <a (click)="add()" *ngIf="!isView">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
                 </th>
@@ -537,7 +537,7 @@
                     <a (click)="editRow(i)">
                       <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
-                    <a (click)="deleteRow(data)">
+                    <a (click)="deleteRow(i)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
@@ -581,7 +581,7 @@
                   Tổng số lượng nhập điều chuyển thực tế (viết bằng chữ)
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tongSLNhapTT" [readonly]="true" />
+                  <input nz-input formControlName="tongSoLuongBc" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </form>
@@ -595,7 +595,7 @@
                   Tổng số kinh phí điều chuyển thực tế (viết bằng chữ)
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tongKPDCTT" [readonly]="true" />
+                  <input nz-input formControlName="tongKinhPhiBc" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </form>

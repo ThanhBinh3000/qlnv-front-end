@@ -35,6 +35,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   @Output()
   showListEvent = new EventEmitter<any>();
 
+  previewName: string = 'nk_bb_gn';
   maBb: string;
   fileCanCuReq: any[] = [];
   fileDinhKemReq: any[] = [];

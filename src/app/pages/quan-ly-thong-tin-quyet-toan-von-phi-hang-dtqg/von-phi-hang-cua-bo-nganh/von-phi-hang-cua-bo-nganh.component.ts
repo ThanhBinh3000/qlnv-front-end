@@ -216,6 +216,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
   themMoi() {
     this.isDetail = true;
     this.idSelected = null;
+    this.isViewDetail = false;
   }
 
   exportData() {

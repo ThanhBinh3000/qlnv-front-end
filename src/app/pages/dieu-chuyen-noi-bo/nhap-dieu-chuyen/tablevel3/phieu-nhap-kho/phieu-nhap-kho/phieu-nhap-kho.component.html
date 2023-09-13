@@ -170,7 +170,7 @@
                           <td class="bold">{{row4.soPhieuNhapKho || ""}}</td>
                           <td class="bold">{{row4.ngayNhapKho|date: "dd/MM/yyyy"}}</td>
                           <td class="bold">{{row4.soPhieuKiemTraCl || ""}}</td>
-                          <td></td>
+                          <td class="bold">{{row4.ngayGiamDinh|date: "dd/MM/yyyy"}}</td>
                           <td class="bold">{{row4.tenTrangThai || ""}}</td>
                           <td>
                             <a *ngIf="row4.trangThai === STATUS.DA_DUYET_LDCC" (click)="redirectDetail(row4.id, true)">

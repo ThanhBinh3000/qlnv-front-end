@@ -472,8 +472,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (id > 0) {
       let res = await this.giaDeXuatGiaService.getDetail(id);
       const data = res.data;
-      console.log(data.vat, 111)
-      console.log(this.listVat, 222)
       this.maDx = data.soDeXuat ? '/' + data.soDeXuat.split('/')[1] : '/TCDT-KH';
       this.formData.patchValue({
         id: data.id,
@@ -499,6 +497,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.pagPpXacDinhGias = data.pagPpXacDinhGias;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
+      this.dataTableTtThamKhao = data.ketQuaKhaoSatTtThamKhao;
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.fileDinhKemList = data.fileDinhKems;
       this.updateEditCache('ttc')
@@ -765,6 +764,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     body.canCuPhapLy = this.dataTableCanCuXdg;
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
+    body.ketQuaKhaoSatTtThamKhao = this.dataTableTtThamKhao;
     body.type = this.type;
     body.soDeXuat = body.soDeXuat + this.maDx;
     body.fileDinhKemReqs = this.fileDinhKemList;
@@ -831,10 +831,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  async downloadExcel() {
-    saveAs(this.excelSrc, "de_xuat_phuong_an_gia.xlsx");
-  }
-
   async preview() {
     this.spinner.show();
     try {
@@ -863,5 +859,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   doPrint() {
     printJS({printable: this.printSrc, type: 'pdf', base64: true});
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "de_xuat_phuong_an_gia.docx");
   }
 }

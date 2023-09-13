@@ -80,7 +80,7 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
         "idDuAn": this.itemQdPdKhLcnt.idDuAn,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
         "idQdPdKtkt": this.itemQdPdKtkt.id,
-        "loai": "00"
+        "loai": "01"
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -160,7 +160,7 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
   }
 
   themItemcha() {
-    if (!this.rowItemCha.quy) {
+    if (!this.rowItemCha.thang) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng chọn quý");
       return;
     }
@@ -206,7 +206,7 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.quy == item.quy) {
+        if (it.thang == item.thang) {
           rs = true;
           return;
         }
@@ -278,8 +278,8 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
   }
 
   convertListToTree() {
-    this.dataTable = chain(this.dataTableReq).groupBy("quy")
-      .map((value, key) => ({ quy: key, dataChild: value, idVirtual : uuidv4() }))
+    this.dataTable = chain(this.dataTableReq).groupBy("thang")
+      .map((value, key) => ({ thang: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
   }
 

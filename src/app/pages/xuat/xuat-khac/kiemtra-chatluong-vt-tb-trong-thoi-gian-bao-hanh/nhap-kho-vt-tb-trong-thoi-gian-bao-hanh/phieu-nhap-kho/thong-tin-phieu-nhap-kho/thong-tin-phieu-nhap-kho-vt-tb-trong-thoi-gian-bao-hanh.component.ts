@@ -245,10 +245,16 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
     });
 
     modalQD.afterClose.subscribe(async (data) => {
+      this.formData.patchValue({
+        tenDiemKho: null,
+        tenNhaKho: null,
+        tenNganKho: null,
+        tenLoKho: null,
+      });
       if (data) {
-        await this.bindingDataQd(data.id);
-        await this.phieuKdcl(data);
-        await this.phieuKtcl(data);
+         this.bindingDataQd(data.id);
+         this.phieuKdcl(data);
+         this.phieuKtcl(data);
       }
     });
   };
@@ -314,7 +320,6 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
   }
 
   async phieuKdcl(item) {
-    await this.spinner.show();
     let body = {
       soQdGiaoNvNh: item.soQuyetDinh,
       paggingReq: {
@@ -346,7 +351,6 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
 
 
   async phieuKtcl(item) {
-    await this.spinner.show();
     let body = {
       soQdGiaoNvNh: item.soQuyetDinh,
       paggingReq: {
@@ -432,7 +436,6 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
   clearItemRow() {
     this.formData.patchValue({
       maSo: null,
-      slLayMau: null,
       slThucTe: null,
     })
   }
