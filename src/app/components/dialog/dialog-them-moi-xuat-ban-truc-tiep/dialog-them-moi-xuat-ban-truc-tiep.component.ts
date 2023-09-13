@@ -53,11 +53,11 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     private userService: UserService,
     private donViService: DonviService,
     private modal: NzModalService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private helperService: HelperService,
-    private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     this.formData = this.fb.group({
@@ -224,19 +224,19 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     if (!this.dataDonGiaDuocDuyet || this.dataDonGiaDuocDuyet.length === 0) {
       return;
     }
-    const donGiaToSet = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)
-      ? this.dataDonGiaDuocDuyet[0].giaQdTcdt
-      : (this.dataDonGiaDuocDuyet.find(item => item.maChiCuc === this.formData.value.maDvi) || {}).giaQdTcdt;
-    if (donGiaToSet !== undefined) {
-      if (this.dataEdit) {
-        this.listOfData.forEach(s => {
-          s.donGiaDuocDuyet = donGiaToSet;
-        });
-      } else {
-        this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = donGiaToSet;
-      }
-    } else {
+    const donGiaDuocDuyet = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)
+      ? this.dataDonGiaDuocDuyet
+      : this.dataDonGiaDuocDuyet.filter(item => item.maChiCuc === this.formData.value.maDvi);
+
+    if (!donGiaDuocDuyet || donGiaDuocDuyet.length === 0) {
       this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = null;
+      return;
+    }
+    const giaQdTcdt = donGiaDuocDuyet[0].giaQdTcdt;
+    if (this.dataEdit) {
+      this.listOfData.forEach(s => s.donGiaDuocDuyet = giaQdTcdt);
+    } else {
+      this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = giaQdTcdt;
     }
   }
 
@@ -342,10 +342,10 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
           this.thongTinXuatBanTrucTiep.tonKho = cloneDeep(val);
         }
       } else {
-        this.thongTinXuatBanTrucTiep.tonKho = 0;
+        console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho');
       }
     } catch (error) {
-      this.thongTinXuatBanTrucTiep.tonKho = 0;
+      console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho', error);
     }
   }
 
@@ -498,11 +498,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   }
 
   disableChiCuc() {
-    if (this.listOfData.length > 0) {
-      this.selectedChiCuc = true;
-    } else {
-      this.selectedChiCuc = false;
-    }
+    this.selectedChiCuc = this.listOfData.length > 0;
   }
 
   calcTong(columnName) {

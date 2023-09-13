@@ -406,7 +406,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   async loadPhuongPhapLayMau(data, isDetail?) {
     if (isDetail) {
       if (data.ppLayMau) {
-        let ppLayMauOptions = data.ppLayMau.indexOf(',') > 0 ? data.ppLayMau.split(',') : Array.from(data.ppLayMau);
+        let ppLayMauOptions = data.ppLayMau.indexOf(',') > 0 ? data.ppLayMau.split(',') : [data.ppLayMau];
         ppLayMauOptions = ppLayMauOptions.map((str, index) => ({ label: str, value: index + 1, checked: true }));
         this.formData.patchValue({
           ppLayMauList: ppLayMauOptions,

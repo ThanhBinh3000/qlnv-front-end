@@ -89,6 +89,8 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
       tenTrangThai: ['Dự thảo'],
       tenTrangThaiBtc: ['Chờ duyệt-BTC'],
       soToTrinh: [null, [Validators.required]],
+      soQdBtc: [null],
+      ngayQdBtc: [null],
       ngayTongHop: ['', [Validators.required]],
     });
   }
@@ -150,6 +152,8 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
       'taiLieuDinhKems': this.taiLieuDinhKemList,
       'loai': '02',
       'soToTrinh': this.formData.value.soToTrinh,
+      'soQdBtc': this.formData.value.soQdBtc,
+      'ngayQdBtc': this.formData.get('ngayQdBtc').value ? dayjs(this.formData.get('ngayQdBtc').value).format('YYYY-MM-DD') : null,
     };
     this.spinner.show();
     try {

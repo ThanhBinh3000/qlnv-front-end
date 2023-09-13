@@ -115,7 +115,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soLuongQdDcCuc: [],
       dviTinh: [],
       bbNghiemThuBqld: [],
-      bbKtnk: [],
+      soBbKetThucNk: [],
       soBangKeCh: [, [Validators.required]],
       soBangKeVt: [, [Validators.required]],
       tongSLNhapTT: [],
@@ -175,12 +175,14 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.slDienChuyen,
-        dviTinh: this.data.tenDonvitinh,
+        dviTinh: this.data.donViTinh,
         thayDoiThuKho: this.data.thayDoiThuKho
       });
-      this.dviTinh = this.data.tenDonvitinh
+
+      this.dviTinh = this.data.donViTinh
       this.noiDung = this.data.tenChLoaiHangHoa
       this.duToanKinhPhi = this.data.duToanKinhPhiDc
+
       await this.loadChiTietQdinh(this.data.qdDcCucId);
     }
 
@@ -274,7 +276,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     this.dsTH = cloneDeep(this.dsTH)
     const tongsoLuongNhapDc = this.dsTH.reduce((previous, current) => previous + current.soLuongNhapDc, 0);
     const tongthucTeKinhPhi = this.dsTH.reduce((previous, current) => previous + current.thucTeKinhPhi, 0);
-    const tongSLNhapTT = this.convertTien(tongsoLuongNhapDc) + this.convertDVT(this.dviTinh)
+    const tongSLNhapTT = this.convertTien(tongsoLuongNhapDc) + " " + this.convertDVT(this.dviTinh)
     const tongKPDCTT = this.convertTien(tongthucTeKinhPhi) + " triệu đồng"
 
 
@@ -447,7 +449,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   }
 
   async openDialogKhoNhap() {
-    if (this.isVatTu) return
+    if (this.isVatTu && this.formData.value.thayDoiThuKho) return
     await this.spinner.show();
 
     await this.spinner.hide();
@@ -590,7 +592,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
   async save(isGuiDuyet?) {
 
-    if (!this.formData.value.thayDoiThuKho || !this.isVatTu) {
+    if (!this.formData.value.thayDoiThuKho || this.isVatTu) {
       this.formData.controls["soPhieuKtraCluong"].clearValidators();
       this.formData.controls["idPhieuKtraCluong"].clearValidators();
     }

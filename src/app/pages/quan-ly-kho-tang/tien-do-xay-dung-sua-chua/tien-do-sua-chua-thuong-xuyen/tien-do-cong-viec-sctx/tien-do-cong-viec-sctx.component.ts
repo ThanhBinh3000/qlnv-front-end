@@ -19,6 +19,7 @@ import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydung
 import {
   ThongTinTienDoCongViecSctxComponent
 } from "./thong-tin-tien-do-cong-viec-sctx/thong-tin-tien-do-cong-viec-sctx.component";
+
 @Component({
   selector: 'app-tien-do-cong-viec-sctx',
   templateUrl: './tien-do-cong-viec-sctx.component.html',
@@ -27,6 +28,7 @@ import {
 export class TienDoCongViecSctxComponent extends Base2Component implements OnInit {
   @Input() itemQdPdKhLcnt: any;
   @Input() itemQdPdKtkt: any;
+  @Input() itemDuAn: any;
   listHopDong: any[] = [];
   dataTable: any[] = [];
   dataTableReq: any[] = [];
@@ -36,13 +38,7 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
   STATUS = STATUS;
   rowItemCha: TienDoXayDungCt = new TienDoXayDungCt();
   itemHopDong : any;
-  listTrangThai: any[] = [
-    {ma: 'Quý I', giaTri: 'Quý I'},
-    {ma: 'Quý II', giaTri: 'Quý II'},
-    {ma: 'Quý III', giaTri: 'Quý III'},
-    {ma: 'Quý IV', giaTri: 'Quý IV'},
-  ];
-
+  listThang: any[] = [];
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -62,7 +58,18 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
   }
 
   ngOnInit(): void {
+    this.loadDsThang()
     this.loadItemDsGoiThau();
+  }
+
+  loadDsThang() {
+    for (let i = 1; i <= 12; i++) {
+      let item = {
+        ma: 'Tháng ' + i,
+        giaTri: 'Tháng ' + i
+      }
+      this.listThang = [...this.listThang, item].flat();
+    }
   }
 
 
@@ -73,7 +80,7 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
         "idDuAn": this.itemQdPdKhLcnt.idDuAn,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
         "idQdPdKtkt": this.itemQdPdKtkt.id,
-        "loai": "01"
+        "loai": "00"
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -82,7 +89,7 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
           if (listGoiThau && listGoiThau.length > 0) {
             listGoiThau.forEach(item => item.chuDauTu = res.data.chuDauTu);
           }
-          this.listHopDong = listGoiThau;
+          this.listHopDong = listGoiThau.filter(item => item.hopDong && item.hopDong.soHd);
           if (this.listHopDong && this.listHopDong.length > 0) {
             this.selectRow(this.listHopDong[0]);
           }

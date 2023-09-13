@@ -21,22 +21,22 @@
         <i class='icon htvbdh_totrinh'></i>
         <span> In/Xem trước </span>
       </button>
-      <button *ngIf='!isView && formData.value.trangThai == STATUS.DU_THAO' type='button'
+      <button *ngIf='!isView && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) ' type='button'
               class='btn btn-sub xanh-nhat ml-2' (click)='save(true)'>
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf='formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc()' type='button'
+      <button *ngIf='formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc() && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_DULIEUTCDT_LDTC")' type='button'
               class='btn btn-sub xanh-nhat ml-2' (click)='pheDuyet()'>
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Duyệt</span>
       </button>
-      <button *ngIf='formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc()' type='button'
+      <button *ngIf='formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc() && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_DULIEUTCDT_LDTC")' type='button'
               class='btn btn-sub do ml-2' (click)='tuChoi()'>
         <i class='icon htvbdh_tcdt_tuchoi'></i>
         <span>Từ chối</span>
       </button>
-      <button *ngIf='!isView'
+      <button *ngIf='!isView  && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_DULIEUTCDT_SUA")'
               type='button' class='btn btn-main ml-2' (click)='save()'>
         <i class='icon htvbdh_tcdt_save'></i>
         <span>Lưu</span>
@@ -127,7 +127,7 @@
           <th rowSpan='2' width='200px'>Số đã thẩm định <br />và thông báo quyết toán</th>
           <th rowSpan='2' width='200px'>Lệch số quyết toán<br /> với số được chi</th>
           <th colspan='4' width='700px'>Gồm</th>
-          <!--          <th rowSpan="2" width="200px" class="text-center">Hành động</th>-->
+          <th rowSpan='2' *ngIf='!isView' width='120px' class='text-center'>Hành động</th>
         </tr>
         <tr>
           <th class='text-center'>Tổng</th>
@@ -159,7 +159,7 @@
           <th class='text-center'>(12)</th>
           <th class='text-center'>(13)</th>
           <th class='text-center'>(14)</th>
-          <!--          <th class="text-center"></th>-->
+          <th *ngIf='!isView' class='text-center'></th>
         </tr>
         <!--        <tr>-->
         <!--          <th class="text-center"></th>-->
@@ -272,14 +272,14 @@
             <td class='text-right'>{{data.soTuPhaiNop | number}}</td>
             <td class='text-right'>{{data.soDuNamSau | number}}</td>
             <td class='text-right'>{{data.soTuNamSau | number}}</td>
-            <!--            <td class="text-center">-->
-            <!--              <a *ngIf="!isView" (click)="editQtNsChiTw(i)">-->
-            <!--                <i class="fa fa-pencil" title="Sửa"></i>-->
-            <!--              </a>-->
-            <!--              <a *ngIf="!isView" (click)="deleteQtNsChiTw(i)">-->
-            <!--                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-            <!--              </a>-->
-            <!--            </td>-->
+            <td class='text-center'>
+              <a *ngIf='!isView' (click)='editQtNsChiTw(i)'>
+                <i class='fa fa-pencil' title='Sửa'></i>
+              </a>
+              <!--              <a *ngIf='!isView' (click)='deleteQtNsChiTw(i)'>-->
+              <!--                <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>-->
+              <!--              </a>-->
+            </td>
           </ng-container>
           <ng-template #editTemplate>
             <td></td>
@@ -363,13 +363,13 @@
                                [nzParser]='globals.parser'>
               </nz-input-number>
             </td>
-            <!--            <td class="text-center">-->
-            <!--              <a (click)="saveEditQtNsChiTw(i)" class="save">-->
-            <!--                <i class="fa fa-save"></i>-->
-            <!--              </a>-->
-            <!--              <a (click)="cancelEditQtNsChiTw(i)">-->
-            <!--                <i class="fa fa-ban do"></i> </a>-->
-            <!--            </td>-->
+            <td class='text-center'>
+              <a (click)='saveEditQtNsChiTw(i)' class='save'>
+                <i class='fa fa-save'></i>
+              </a>
+              <a (click)='cancelEditQtNsChiTw(i)'>
+                <i class='fa fa-ban do'></i> </a>
+            </td>
           </ng-template>
         </tr>
         </tbody>
@@ -394,7 +394,7 @@
           <td class='text-right font-weight-bold'>{{sumCT1('soTuPhaiNop') | number}}</td>
           <td class='text-right font-weight-bold'>{{sumCT1('soDuNamSau') | number}}</td>
           <td class='text-right font-weight-bold'>{{sumCT1('soTuNamSau') | number}}</td>
-          <!--          <td class="text-right font-weight-bold"></td>-->
+          <td class='text-right font-weight-bold' *ngIf='!isView'></td>
         </tr>
         </tfoot>
       </nz-table>
@@ -423,7 +423,7 @@
           <th rowSpan='2' width='200px'>Số đã thẩm định <br />và thông báo quyết toán</th>
           <th rowSpan='2' width='200px'>Lệch số quyết toán<br /> với số được chi</th>
           <th colspan='4' width='700px'>Gồm</th>
-          <!--          <th rowSpan="2" width="200px" class="text-center">Hành động</th>-->
+          <th rowSpan='2' width='120px' *ngIf='!isView' class='text-center'>Hành động</th>
         </tr>
         <tr>
           <th class='text-center'>Tổng</th>
@@ -455,7 +455,7 @@
           <th class='text-center'>(12)</th>
           <th class='text-center'>(13)</th>
           <th class='text-center'>(14)</th>
-          <!--          <th class="text-center"></th>-->
+          <th class='text-center' *ngIf='!isView'></th>
         </tr>
         <!--        <tr>-->
         <!--          <th class="text-center"></th>-->
@@ -572,14 +572,14 @@
             <td class='text-right'>{{data.soTuPhaiNop | number}}</td>
             <td class='text-right'>{{data.soDuNamSau | number}}</td>
             <td class='text-right'>{{data.soTuNamSau | number}}</td>
-            <!--            <td class="text-center">-->
-            <!--              <a *ngIf="!isView" (click)="editQtNsKpChiNvDtqg(i)">-->
-            <!--                <i class="fa fa-pencil" title="Sửa"></i>-->
-            <!--              </a>-->
-            <!--              <a *ngIf="!isView" (click)="deleteQtNsKpChiNvDtqg(i)">-->
-            <!--                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-            <!--              </a>-->
-            <!--            </td>-->
+            <td class='text-center'>
+              <a *ngIf='!isView' (click)='editQtNsKpChiNvDtqg(i)'>
+                <i class='fa fa-pencil' title='Sửa'></i>
+              </a>
+              <!--              <a *ngIf='!isView' (click)='deleteQtNsKpChiNvDtqg(i)'>-->
+              <!--                <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>-->
+              <!--              </a>-->
+            </td>
           </ng-container>
           <ng-template #editTemplate>
             <td></td>
@@ -663,13 +663,13 @@
                                [nzParser]='globals.parser'>
               </nz-input-number>
             </td>
-            <!--            <td class="text-center">-->
-            <!--              <a (click)="saveEditQtNsKpChiNvDtqg(i)" class="save">-->
-            <!--                <i class="fa fa-save"></i>-->
-            <!--              </a>-->
-            <!--              <a (click)="cancelEditQtNsKpChiNvDtqg(i)">-->
-            <!--                <i class="fa fa-ban do"></i> </a>-->
-            <!--            </td>-->
+            <td class='text-center'>
+              <a (click)='saveEditQtNsKpChiNvDtqg(i)' class='save'>
+                <i class='fa fa-save'></i>
+              </a>
+              <a (click)='cancelEditQtNsKpChiNvDtqg(i)'>
+                <i class='fa fa-ban do'></i> </a>
+            </td>
           </ng-template>
         </tr>
         </tbody>
@@ -694,7 +694,7 @@
           <td class='text-right font-weight-bold'>{{sumCT2('soTuPhaiNop') | number}}</td>
           <td class='text-right font-weight-bold'>{{sumCT2('soDuNamSau') | number}}</td>
           <td class='text-right font-weight-bold'>{{sumCT2('soTuNamSau') | number}}</td>
-          <!--          <td class="text-right font-weight-bold"></td>-->
+          <td class='text-right font-weight-bold' *ngIf='!isView'></td>
         </tr>
         </tfoot>
       </nz-table>

@@ -655,10 +655,15 @@ export class Base2Component implements OnInit {
     this.reportTemplate.fileName = fileName + '.docx';
     body.reportTemplateRequest = this.reportTemplate;
     await this.service.preview(body).then(async s => {
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-      this.printSrc = s.data.pdfSrc;
-      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-      this.showDlgPreview = true;
+      if (s.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+        this.printSrc = s.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.info(MESSAGE.NOTIFICATION, MESSAGE.TEMPLATE_NULL);
+      }
+
     });
   }
   downloadPdf(fileName: string) {

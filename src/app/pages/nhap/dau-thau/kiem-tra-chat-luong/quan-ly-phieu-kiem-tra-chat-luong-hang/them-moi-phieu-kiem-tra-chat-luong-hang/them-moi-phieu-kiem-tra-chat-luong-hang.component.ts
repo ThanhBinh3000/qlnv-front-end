@@ -17,9 +17,6 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import { PREVIEW } from "../../../../../../constants/fileType";
-import printJS from "print-js";
-import { saveAs } from "file-saver";
 
 
 @Component({

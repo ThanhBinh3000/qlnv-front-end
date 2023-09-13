@@ -22,7 +22,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Quản lý thông tin đấu giá</span>
+        <span> QUẢN LÝ THÔNG TIN ĐẤU GIÁ </span>
       </div>
     </div>
   </div>
@@ -69,8 +69,8 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước</nz-form-label>
                     <nz-form-control>
-                      <nz-input-number [nzSize]="'small'" formControlName="tongTienDatTruoc"
-                                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                      <nz-input-number formControlName="tongTienDatTruoc" [nzFormatter]="formatterTien"
+                                       [nzParser]="globals.parser" nzDisabled class="blue-text">
                       </nz-input-number>
                     </nz-form-control>
                   </nz-form-item>
@@ -80,7 +80,7 @@
                     <nz-form-label [nzNoColon]="true"> % Khoản tiền đặt trước</nz-form-label>
                     <nz-form-control>
                       <nz-input-group>
-                        <input nz-input formControlName="khoanTienDatTruoc" readonly/>
+                        <input nz-input formControlName="khoanTienDatTruocHienThi" readonly />
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
@@ -141,11 +141,10 @@
                 </div>
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt
-                    </nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt</nz-form-label>
                     <nz-form-control>
-                      <nz-input-number [nzSize]="'small'" formControlName="tongTienDatTruocDd"
-                                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                      <nz-input-number formControlName="tongTienDatTruocDd" [nzFormatter]="formatterTien"
+                                       [nzParser]="globals.parser" nzDisabled class="blue-text">
                       </nz-input-number>
                     </nz-form-control>
                   </nz-form-item>
@@ -174,10 +173,10 @@
                 </div>
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">  Tổng số lượng xuất bán</nz-form-label>
                     <nz-form-control>
-                      <nz-input-number [nzSize]="'small'" formControlName="tongSoLuong"
-                                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                      <nz-input-number formControlName="tongSoLuong" [nzFormatter]="formatterSoLuong"
+                                       [nzParser]="globals.parser" nzDisabled class="blue-text">
                       </nz-input-number>
                     </nz-form-control>
                   </nz-form-item>
@@ -226,6 +225,7 @@
           <tr>
             <th width="">Số QĐ PD KH BĐG/Số QĐ ĐC KH BĐG</th>
             <th width="">Lần đấu giá</th>
+            <th width="">Tổng sô ĐVTS cần đấu giá</th>
             <th width="">Thông báo bán đấu giá</th>
             <th width="">Tổ chức thực hiện dịch vụ BĐG</th>
             <th width="">Thời gian tổ chức cuộc đấu giá</th>
@@ -241,6 +241,7 @@
               (click)="showDetail($event,data)">
             <td>{{ data.soQdPd }}</td>
             <td>{{ data.lanDauGia }}</td>
+            <td>{{ data.soDviTsan }}</td>
             <td>{{ data.maThongBao }}</td>
             <td>{{ data.tenToChuc }}</td>
             <td>{{ data.tgianDauGiaTu | date: 'dd/MM/YYYY' }}
