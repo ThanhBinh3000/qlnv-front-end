@@ -848,12 +848,12 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
 
   changeDiemKho(isEdit?) {
     if (isEdit) {
-      this.listNhaKhoEdit = [];
-      this.listNganKhoEdit = [];
-      this.listNganLoEdit = [];
-      this.rowItemEdit.maNhaKho = null;
-      this.rowItemEdit.maNganKho = null;
-      this.rowItemEdit.maLoKho = null;
+      // this.listNhaKhoEdit = [];
+      // this.listNganKhoEdit = [];
+      // this.listNganLoEdit = [];
+      // this.rowItemEdit.maNhaKho = null;
+      // this.rowItemEdit.maNganKho = null;
+      // this.rowItemEdit.maLoKho = null;
       let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
       if (diemKho && diemKho.length > 0) {
         this.listNhaKhoEdit = diemKho[0].children;
@@ -936,6 +936,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
 
   async saveDdiemNhap(statusSave, hoanThanh?) {
     let checkTable = false;
+    let msg = '';
     this.dataTable.forEach(item => {
       item.trangThai = statusSave
       item.children.forEach(x =>{
@@ -944,15 +945,20 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
         }
       })
     })
-    if(checkTable){
-      this.notification.error(MESSAGE.ERROR, 'Bạn phải hoàn thành cập nhật lô kho');
-      return;
+    if(hoanThanh){
+      msg = 'Bạn có muốn hoàn thành cập nhật'
+    }else{
+      msg = 'Bạn có lưu cập nhật'
     }
+    // if(checkTable){
+    //   this.notification.error(MESSAGE.ERROR, 'Bạn phải hoàn thành cập nhật lô kho');
+    //   return;
+    // }
 
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có muốn hoàn thành cập nhật',
+      nzContent: msg,
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,

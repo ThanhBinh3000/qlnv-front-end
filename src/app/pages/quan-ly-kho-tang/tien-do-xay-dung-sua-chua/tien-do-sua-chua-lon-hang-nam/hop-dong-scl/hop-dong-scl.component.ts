@@ -7,6 +7,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {STATUS} from "../../../../../constants/status";
 import {MESSAGE} from "../../../../../constants/message";
 import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {UserService} from "../../../../../services/user.service";
 
 @Component({
   selector: 'app-hop-dong-scl',
@@ -31,7 +32,8 @@ export class HopDongSclComponent implements OnInit {
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     private modal: NzModalService,
-    private hopdongService: HopdongTdscService
+    private hopdongService: HopdongTdscService,
+    public userService : UserService
   ) {
 
   }
