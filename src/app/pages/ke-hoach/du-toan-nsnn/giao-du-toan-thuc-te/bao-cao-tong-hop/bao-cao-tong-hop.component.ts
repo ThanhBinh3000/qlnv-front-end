@@ -916,10 +916,14 @@ export class BaoCaoTongHopComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.trangThaiBanGhi = mcn;
                     this.getStatusButton();
-                    if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    if (mcn == Status.TT_02) {
+                        this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
+                    } else if (mcn == Status.TT_06) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
+                    } else if (mcn == Status.TT_07) {
+                        this.notification.success(MESSAGE.SUCCESS, "Gửi đơn vị cấp trên thành công");
+                    } else if (mcn == Status.TT_09) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRANG_THAI_TIEP_NHAN);
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
