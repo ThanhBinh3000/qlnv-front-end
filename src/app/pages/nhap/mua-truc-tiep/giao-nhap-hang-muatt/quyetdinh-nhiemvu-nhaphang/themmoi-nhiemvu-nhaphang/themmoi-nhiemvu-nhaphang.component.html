@@ -38,7 +38,7 @@
         </ng-container>
         <ng-container *ngIf="formData.value.trangThai == STATUS.BAN_HANH && userService.isChiCuc() && (formData.value.trangThaiDtl == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiDtl == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO')">
             <button type="button" class="btn btn-sub xanh-nhat"
-                (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
+                (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT, true)">
                 <i class="icon htvbdh_duyet"></i>
                 <span>Hoàn thành</span>
             </button>
