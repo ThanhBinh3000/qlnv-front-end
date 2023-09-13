@@ -128,9 +128,9 @@
                    [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.soQd }}</td>
+          <td>{{ data.soBbQd }}</td>
           <td>{{ data.ngayKy |date:globals.dateFormat}}</td>
-          <td><a nz-button nzType="link" (click)="openThModal(data.idTongHop)"> {{data.maTongHop}}</a></td>
+          <td><a nz-button nzType="link" (click)="openThModal(data.idTongHop)"> {{data.idTongHop}}</a></td>
           <td>{{ data.ngayThop |date:globals.dateFormat}}</td>
           <td><a nz-button nzType="link" (click)="openDxPaModal(data.idDx)"> {{data.soDx}}</a></td>
           <td>{{ data.ngayDx |date:globals.dateFormat}}</td>
@@ -186,13 +186,13 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-chi-tiet-quyet-dinh-pd [idSelected]="idSelected" [isView]="isView" [dataInit]="dataInit" [loaiVthh]="loaiVthh"
-                                                (showListEvent)="showList()">
+                              (showListEvent)="showList()">
   </app-chi-tiet-quyet-dinh-pd>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxPa" (nzOnCancel)="closeDxPaModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin-xay-dung-phuong-an [idInput]="dxPaId" [loaiVthhInput]="loaiVthh" [isViewOnModal]="true">
-    </app-thong-tin-xay-dung-phuong-an>
+    <app-chi-tiet-de-xuat [idSelected]="idDx">
+    </app-chi-tiet-de-xuat>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeDxPaModal()" class="modal__button--cancel">
@@ -204,8 +204,8 @@
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openTh" (nzOnCancel)="closeThModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin-tong-hop-phuong-an [idInput]="idTh" [loaiVthhInput]="loaiVthh" [isViewOnModal]="true">
-    </app-thong-tin-tong-hop-phuong-an>
+    <app-chi-tiet-tong-hop [idSelected]="idTh">
+    </app-chi-tiet-tong-hop>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeThModal()" class="modal__button--cancel">

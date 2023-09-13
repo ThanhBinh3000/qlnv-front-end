@@ -209,7 +209,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
 
 
   async loadDetail(id: number) {
-    if (id>0) {
+    if (id > 0) {
       await this.tongHopPhuongAnCuuTroService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -225,6 +225,8 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
+    } else {
+      this.formData.patchValue({loaiNhapXuat: 'Xuất cứu trợ'})
     }
   }
 
@@ -276,6 +278,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   }
 
   async save() {
+    console.log(this.phuongAnHdrView, 'phuongAnHdrView')
     await this.helperService.ignoreRequiredForm(this.formData);
     let body = this.formData.value;
     await this.createUpdate(body);
@@ -436,12 +439,12 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("noiDungDx")
           .map((v, k) => {
-            let row = v.find(s => s.noiDungDx === k);
             let row1 = v.find(s => s.noiDungDx === k);
             let rs = chain(v)
               .groupBy("loaiVthh")
               .map((v1, k1) => {
                 let row2 = v1.find(s => s.loaiVthh === k1);
+                let tonKhoCloaiVthh = v.reduce((prev, next) => prev + next.tonKhoCloaiVthh, 0);
                 return {
                   idVirtual: uuidv4(),
                   loaiVthh: k1,
@@ -449,7 +452,8 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
                   donViTinh: row2.donViTinh,
                   soLuong: row2.soLuong,
                   soLuongDx: row2.soLuongDx,
-                  tonKho: 0,
+                  tonKho: row2.tonKhoLoaiVthh || tonKhoCloaiVthh,
+                  tenCloaiVthh: row2.tenCloaiVthh,
                   childData: v1
                 }
               }).value();
@@ -467,8 +471,8 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
           maDvi: row.maDvi,
           soDx: row.soDx,
           trichYeuDx: row.trichYeuDx,
+          mucDichXuat: row.mucDichXuat,
           ngayKyDx: row.ngayKyDx,
-          mucDich: row.mucDichXuat,
           thoiGian: row.ngayKyDx,
           childData: rs
         };
@@ -480,7 +484,8 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   async changeVthh($event: any) {
 
   }
-  async xemTruocTh(id,tenBaoCao,children) {
+
+  async xemTruocTh(id, tenBaoCao, children) {
     await this.tongHopPhuongAnCuuTroService.preview({
       tenBaoCao: tenBaoCao + '.docx',
       id: id,

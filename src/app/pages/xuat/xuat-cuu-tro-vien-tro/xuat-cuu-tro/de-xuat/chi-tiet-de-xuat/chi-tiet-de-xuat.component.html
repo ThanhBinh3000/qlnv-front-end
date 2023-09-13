@@ -160,9 +160,9 @@
               <nz-radio-group [nzDisabled]="isView || formData.value.deXuatPhuongAn.length > 0"
                               formControlName="tenVthh"
                               (ngModelChange)="changeVthh($event)">
-                <label nz-radio nzValue="0101">Thóc tẻ </label>
-                <label nz-radio nzValue="0102">Gạo tẻ</label>
-                <label nz-radio nzValue="02">Vật tư thiết bị</label>
+                <label nz-radio nzValue="Thóc tẻ">Thóc tẻ </label>
+                <label nz-radio nzValue="Gạo tẻ">Gạo tẻ</label>
+                <label nz-radio nzValue="Vật tư thiết bị">Vật tư thiết bị</label>
               </nz-radio-group>
             </nz-form-control>
           </nz-form-item>
@@ -227,7 +227,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Nội dung phương án xuất cứu trợ</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <textarea rows="3" class="search__input" nz-input formControlName="noiDungDx"
+              <textarea rows="3" class="search__input" nz-input formControlName="noiDung"
                         [readOnly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
@@ -288,7 +288,7 @@
           <tr>
             <th [rowspan]="2"></th>
             <th [rowspan]="2" style="width: 35px">STT</th>
-            <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
+            <th [rowspan]="2">Địa phương / cơ quan / đơn vị nhận cứu trợ</th>
             <th [rowspan]="2">Loại hàng DTQG</th>
             <ng-container *ngIf="formData.value.tenVthh=='02'">
               <th [colspan]="3">Chủng loại hàng DTQG</th>
@@ -407,7 +407,7 @@
       <div class="modal-card">
         <nz-card>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương nhận cứu trợ, viện trợ
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương / cơ quan / đơn vị nhận cứu trợ
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'">
               <nz-select nzAllowClear formControlName="noiDung"
@@ -511,7 +511,7 @@
     &lt;!&ndash;    <form nz-form>&ndash;&gt;
     <div class="modal-card">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương nhận cứu trợ, viện trợ
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương / cơ quan / đơn vị nhận cứu trợ
         </nz-form-label>
         <nz-form-control>
           <input nz-input [(ngModel)]="phuongAnRow.noiDungEdit">
