@@ -88,7 +88,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       maNhaKho: [],
       tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
-      diaDiemKho: [],
+      diaDaDiemKho: [],
       tenThuKho: [],
       thuKhoId: [],
       tenPhuTrach: [],
@@ -358,7 +358,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       const dataDiemKho = res.data.find(f => f.maDvi === maDiemKho);
       if (dataDiemKho) {
         this.formData.patchValue({
-          diaDiemKho: dataDiemKho.diaChi
+          diaDaDiemKho: dataDiemKho.diaChi
         })
       }
     }
