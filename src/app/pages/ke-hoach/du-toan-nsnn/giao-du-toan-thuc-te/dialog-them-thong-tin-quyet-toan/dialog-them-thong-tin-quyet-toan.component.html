@@ -14,7 +14,7 @@
                     <nz-upload [nzBeforeUpload]="beforeUploadCV">
                         <button nz-button>
                             <i nz-icon nzType="upload"></i>
-                            Select File
+                            Chọn tệp
                         </button>
                     </nz-upload>
                     <div class="tep__sqd" (click)="downloadFileCv()">
@@ -41,7 +41,7 @@
             <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
                 <button nz-button>
                     <i nz-icon nzType="upload"></i>
-                    Select File
+                    Chọn tệp
                 </button>
             </nz-upload>
             <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
