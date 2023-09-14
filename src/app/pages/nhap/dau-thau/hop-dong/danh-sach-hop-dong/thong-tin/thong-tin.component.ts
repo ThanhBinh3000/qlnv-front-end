@@ -151,7 +151,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 ghiChuNgayKy: [null],
                 namHd: [dayjs().get('year')],
                 ngayHieuLuc: [null],
-                soNgayThien: [null, [Validators.required]],
+                soNgayThien: [null],
                 tgianNkho: [null],
                 tenLoaiVthh: [null],
                 moTaHangHoa: [null],

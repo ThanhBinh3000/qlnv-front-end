@@ -158,7 +158,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         tenNganKho: this.data.tenNganKho,
         maNganKho: this.data.maNganKho,
         tenNhaKho: this.data.tenNhaKho,
-        maNhaKho: this.data.maNhaKhoNhan,
+        maNhaKho: this.data.maNhaKho,
         tenDiemKho: this.data.tenDiemKho,
         maDiemKho: this.data.maDiemKho,
         loaiVthh: this.data.maHangHoa,
