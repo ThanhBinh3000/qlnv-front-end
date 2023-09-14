@@ -75,7 +75,7 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
   userInfo: UserLogin;
   userdetail: any = {};
   isVatTu: boolean = false;
-  dxPaId: number = 0;
+  idDx: number = 0;
   openDxPa = false;
   idTh: number = 0;
   openTh = false;
@@ -159,12 +159,12 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
   }
 
   openDxPaModal(id: number) {
-    this.dxPaId = id;
+    this.idDx = id;
     this.openDxPa = true;
   }
 
   closeDxPaModal() {
-    this.dxPaId = null;
+    this.idDx = null;
     this.openDxPa = false;
   }
 

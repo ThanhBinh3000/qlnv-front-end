@@ -80,7 +80,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tenVthh: [''],
         ngayDx: [''],
         ngayKetThuc: [''],
-        noiDungDx: [''],
+        noiDung: [''],
         trangThai: [STATUS.DU_THAO],
         idThop: [''],
         maTongHop: [''],
@@ -171,7 +171,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     } else {
       this.maHauTo = '/ĐXCTVT-' + this.userInfo.DON_VI.tenVietTat;
       this.formData.patchValue({
-        tenVthh: '0101',
+        tenVthh: 'Gạo tẻ',
         tenDvi: this.userInfo.TEN_DVI,
         kieuNhapXuat: 'Xuất không thu tiền',
         loaiNhapXuat: 'Xuất cứu trợ'

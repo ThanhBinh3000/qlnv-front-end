@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruocTh(idSelected,loaiVthhInput =='02'?templateNameVt:templateName,phuongAnHdrView)">
+    <button type="button" class="btn btn-sub"
+            (click)="xemTruocTh(idSelected,loaiVthhInput =='02'?templateNameVt:templateName,phuongAnHdrView)">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>
@@ -79,9 +80,9 @@
               Loại hình nhập xuất
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="loaiNhapXuat" [nzDisabled]="!!formData.value.id" [nzAllowClear]="true">
+              <nz-select formControlName="loaiNhapXuat" [nzDisabled]="!!formData.value.id">
                 <nz-option nzValue="Xuất cứu trợ" nzLabel="Xuất cứu trợ"></nz-option>
-                <nz-option nzValue="Xuất viện trợ" nzLabel="Xuất viện trợ"></nz-option>
+<!--                <nz-option nzValue="Xuất viện trợ" nzLabel="Xuất viện trợ"></nz-option>-->
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -93,9 +94,9 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-radio-group [nzDisabled]="!!formData.value.id" formControlName="tenVthh"
                               (ngModelChange)="changeVthh($event)">
-                <label nz-radio nzValue="0101">Thóc tẻ</label>
-                <label nz-radio nzValue="0102">Gạo tẻ</label>
-                <label nz-radio nzValue="02">Vật tư thiết bị</label>
+                <label nz-radio nzValue="Thóc tẻ">Thóc tẻ</label>
+                <label nz-radio nzValue="Gạo tẻ">Gạo tẻ</label>
+                <label nz-radio nzValue="Vật tư thiết bị">Vật tư thiết bị</label>
               </nz-radio-group>
             </nz-form-control>
           </nz-form-item>
@@ -188,7 +189,7 @@
               <td>{{item.tenDvi}}</td>
               <td>{{item.soDx}}</td>
               <td>{{item.ngayKyDx|date:globals.dateFormat}}</td>
-              <td>{{item.trichYeuDx}}</td>
+              <td>{{item.mucDichXuat}}</td>
             </tr>
           </ng-container>
           </tbody>
@@ -223,7 +224,7 @@
             <tr>
               <th [rowspan]="2" style="width: 35px"></th>
               <th [rowspan]="2" style="width: 35px">STT</th>
-              <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
+              <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
               <th [rowspan]="2">Loại hàng DTQG</th>
               <th [colspan]="3">Chủng loại hàng DTQG</th>
               <th [colspan]="2">Số lượng</th>
@@ -261,7 +262,7 @@
                     <td></td>
                     <td>{{lv1.tenLoaiVthh}}</td>
                     <td></td>
-                    <td></td>
+                    <td>{{lv1.donViTinh}}</td>
                     <td><strong>{{lv1.tonKho|number:globals.numberFormat:globals.locale}}</strong></td>
                     <td></td>
                     <td></td>
@@ -274,9 +275,16 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>{{lv2.tenCloaiVthh}}</td>
-                        <td>{{lv2.donViTinh}}</td>
-                        <td>{{lv2.tonKho|number:globals.numberFormat:globals.locale}}</td>
+                        <ng-container *ngIf="lv2.tenCloaiVthh">
+                          <td>{{lv2.tenCloaiVthh}}</td>
+                          <td>{{lv2.donViTinh}}</td>
+                          <td>{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                        </ng-container>
+                        <ng-container *ngIf="!lv2.tenCloaiVthh">
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </ng-container>
                         <td>{{lv2.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                         <td>
                           <nz-input-number nzSize="small" [(ngModel)]="lv2.soLuong"></nz-input-number>
@@ -300,7 +308,7 @@
   </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>
 </div>
 
-<nz-modal [(nzVisible)]="showDlgPreview"  nzWidth="70%"
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%"
           (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
