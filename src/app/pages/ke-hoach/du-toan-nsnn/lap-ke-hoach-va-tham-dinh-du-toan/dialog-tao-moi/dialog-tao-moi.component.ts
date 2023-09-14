@@ -130,10 +130,11 @@ export class DialogTaoMoiComponent implements OnInit {
                                     item.id = uuid.v4() + 'FE';
                                 }
                                 item.maDviTien = '1';
-                                item.trangThai = '3';
+                                item.trangThai = Status.NEW;
                                 const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
                                 item.tenPl = pl.tenPl;
                                 item.tenDm = pl.tenDm;
+                                item.nguoiBcao = this.userInfo?.sub;
                             })
                         } else {
                             this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -153,7 +154,8 @@ export class DialogTaoMoiComponent implements OnInit {
                         maBieuMau: item.id,
                         tenPl: item.tenPl,
                         tenDm: item.tenDm,
-                        trangThai: '3',
+                        trangThai: Status.NEW,
+                        nguoiBcao: this.userInfo?.sub,
                         lstCtietLapThamDinhs: [],
                     })
                 })
