@@ -10,17 +10,17 @@
         <i class='icon htvbdh_tcdt_tuchoi do'></i>
         <span>Từ chối</span>
       </button>
-      <button *ngIf='(idInput>0 && detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU) ' type='button'
+      <button *ngIf='(idInput>0 && detail.trangThai == STATUS.CHO_DUYET_LDV) ' type='button'
               class='btn btn-sub' (click)='pheDuyet()'>
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Duyệt</span>
       </button>
-      <button *ngIf='detail.trangThai == globals.prop.NHAP_DU_THAO' type='button' class='btn btn-sub'
-              (click)='idInput===0 ? save(false) :guiDuyet()' [disabled]='!formData.valid'>
+      <button *ngIf='detail.trangThai == STATUS.DU_THAO' type='button' class='btn btn-sub'
+              (click)='save(true) ' [disabled]='!formData.valid'>
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf='detail.trangThai == globals.prop.NHAP_DU_THAO' type='button' class='btn btn-main'
+      <button *ngIf='detail.trangThai ==STATUS.DU_THAO' type='button' class='btn btn-main'
               (click)='save(false)' [disabled]='!formData.valid'>
         <i class='icon htvbdh_tcdt_save'></i>
         <span>Lưu</span>
@@ -33,7 +33,7 @@
         <div class='header-text'>
           <div class='title-chi-tieu'>
                         <span
-                          [ngClass]="(detail.trangThai == globals.prop.NHAP_DA_DUYET_LD_VU )? 'da-ban-hanh' :'du-thao-va-lanh-dao-duyet'">
+                          [ngClass]="(detail.trangThai == STATUS.DA_DUYET_LDV )? 'da-ban-hanh' :'du-thao-va-lanh-dao-duyet'">
                             {{detail.tenTrangThai}}
                         </span>
             <span>Tổng hợp đề nghị cấp phí chi nghiệp vụ DTQG Bộ/Ngành</span>
@@ -164,7 +164,7 @@
               <td>{{ data.soTaiKhoan }}</td>
               <td>{{ data.nganHang }}</td>
               <td>{{ data.tenHangHoa }}</td>
-              <td>{{ data.ycCapThemPhi | number: '1.0-1' }}</td>
+              <td class='text-right'>{{ data.ycCapThemPhi |number : '1.0-1' : 'vi-VN'}}</td>
             </tr>
             <tr>
               <th></th>
@@ -173,7 +173,7 @@
               <th></th>
               <th></th>
               <th class='text-right'> Tổng</th>
-              <th class='bg-gray  text-money text-specical-money'>{{tongBang1(cts) | number: '1.0-1'}}
+              <th class='bg-gray  text-money text-specical-money'>{{tongBang1(cts) | number : '1.0-1' : 'vi-VN'}}
               </th>
             </tr>
             </tbody>
@@ -200,19 +200,19 @@
             <tr *ngFor='let data of basicTable2.data; let i = index'>
               <td>{{data.tenLoaiChiPhi}}</td>
               <td>{{data.namPhatSinh}}</td>
-              <td>{{data.tongTien | number: '1.0-1'}}</td>
-              <td>{{data.kinhPhiDaCap | number: '1.0-1'}}</td>
-              <td>{{data.yeuCauCapThem | number: '1.0-1'}}</td>
+              <td class='text-right'>{{data.tongTien | number : '1.0-1' : 'vi-VN'}}</td>
+              <td class='text-right'>{{data.kinhPhiDaCap | number : '1.0-1' : 'vi-VN'}}</td>
+              <td class='text-right'>{{data.yeuCauCapThem | number : '1.0-1' : 'vi-VN'}}</td>
             </tr>
             <tr>
               <th></th>
               <th class='text-right'> Tổng</th>
               <th class='bg-gray  text-money text-specical-money'>
-                {{tongChiPhiBang2(rowDisplay) | number: '1.0-1'}}</th>
+                {{tongChiPhiBang2(rowDisplay) | number : '1.0-1' : 'vi-VN'}}</th>
               <th class='bg-gray  text-money text-specical-money'>
-                {{tongKinhPhiBang2(rowDisplay) | number: '1.0-1'}}</th>
+                {{tongKinhPhiBang2(rowDisplay) | number : '1.0-1' : 'vi-VN'}}</th>
               <th class='bg-gray  text-money text-specical-money'>
-                {{tongCapThemBang2(rowDisplay) | number : '1.0-1'}}
+                {{tongCapThemBang2(rowDisplay) | number : '1.0-1' : 'vi-VN'}}
               </th>
             </tr>
             </tbody>
@@ -249,7 +249,7 @@
               <td>{{ data.soTaiKhoan }}</td>
               <td>{{ data.nganHang }}</td>
               <td>{{ data.tenHangHoa }}</td>
-              <td>{{ data.ycCapThemPhi | number:
+              <td class='text-right'>{{ data.ycCapThemPhi | number:
                 '1.0-1' }}</td>
               <!--                <td *ngIf='!(isDisableField() || isView)'>-->
               <!--                  <a (click)="editRow(data, 'ct1s')">-->
@@ -278,7 +278,7 @@
               <!--                  <input type='text' nz-input [(ngModel)]='data.tenHangHoa' />-->
               <!--                </td>-->
               <!--                <td>-->
-              <!--                  {{data.ycCapThemPhi | number: '1.0-1'}}-->
+              <!--                  {{data.ycCapThemPhi | number : '1.0-1' : 'vi-VN'}}-->
               <!--                </td>-->
               <!--                <td>-->
               <!--                  <a (click)="saveEdit(data, 'ct1s')" class='save'>-->
@@ -337,21 +337,36 @@
                   </nz-option>
                 </nz-select>
               </td>
-              <td>
-                <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'
-                                 [(ngModel)]='create.tongTien' [nzDisabled]='rowEdit.isView'></nz-input-number>
+              <td class='text-right'>
+                <input class='money-input' [min]='0'
+                       currencyMask [options]='amount'
+                       [readOnly]='rowEdit.isView'
+                       [(ngModel)]='create.tongTien' />
+<!--                <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'-->
+<!--                                 [(ngModel)]='create.tongTien' [nzDisabled]='rowEdit.isView'></nz-input-number>-->
               </td>
-              <td>
-                <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'
-                                 [nzMax]='(create.tongTien ?? 0)' [(ngModel)]='create.kinhPhiDaCap'
-                                 [nzDisabled]='rowEdit.isView'>
-                </nz-input-number>
+              <td class='text-right'>
+                <input class='money-input' [min]='0'
+                       [max]='(create.tongTien ?? 0)'
+                       currencyMask [options]='amount'
+                       [readOnly]='rowEdit.isView'
+                       [(ngModel)]='create.kinhPhiDaCap' />
+
+<!--                <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'-->
+<!--                                 [nzMax]='(create.tongTien ?? 0)' [(ngModel)]='create.kinhPhiDaCap'-->
+<!--                                 [nzDisabled]='rowEdit.isView'>-->
+<!--                </nz-input-number>-->
               </td>
-              <td>
-                <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'
-                                 [nzMax]='(create.tongTien ?? 0) - (create.kinhPhiDaCap ?? 0)'
-                                 [(ngModel)]='create.yeuCauCapThem' [nzDisabled]='rowEdit.isView'>
-                </nz-input-number>
+              <td class='text-right'>
+                <input class='money-input' [min]='0'
+                       [max]='(create.tongTien ?? 0) - (create.kinhPhiDaCap ?? 0)'
+                       currencyMask [options]='amount'
+                       [readOnly]='rowEdit.isView'
+                       [(ngModel)]='create.yeuCauCapThem' />
+<!--                <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'-->
+<!--                                 [nzMax]='(create.tongTien ?? 0) - (create.kinhPhiDaCap ?? 0)'-->
+<!--                                 [(ngModel)]='create.yeuCauCapThem' [nzDisabled]='rowEdit.isView'>-->
+<!--                </nz-input-number>-->
               </td>
               <td>
                 <a (click)='addRow()' [class.disabled]='rowEdit.isView'>
@@ -366,9 +381,9 @@
               <ng-container *ngIf='!data.edit; else editItemTemplate'>
                 <td>{{data.tenLoaiChiPhi}}</td>
                 <td>{{data.namPhatSinh}}</td>
-                <td>{{data.tongTien | number: '1.0-1'}}</td>
-                <td>{{data.kinhPhiDaCap | number: '1.0-1'}}</td>
-                <td>{{data.yeuCauCapThem | number: '1.0-1'}}</td>
+                <td class='text-right'>{{data.tongTien | number : '1.0-1' : 'vi-VN'}}</td>
+                <td class='text-right'>{{data.kinhPhiDaCap | number : '1.0-1' : 'vi-VN'}}</td>
+                <td class='text-right'>{{data.yeuCauCapThem | number : '1.0-1' : 'vi-VN'}}</td>
                 <td>
                   <a (click)="editRow(data, 'ct2s')" [class.disabled]='rowEdit.isView'>
                     <i class='fa fa-pencil' title='Sửa'></i>
@@ -393,18 +408,29 @@
                   </nz-select>
                 </td>
                 <td>
-                  <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'
-                                   [(ngModel)]='data.tongTien'></nz-input-number>
+                  <input class='money-input' [min]='0'
+                         currencyMask [options]='amount'
+                         [(ngModel)]='data.tongTien' />
+<!--                  <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'-->
+<!--                                   [(ngModel)]='data.tongTien'></nz-input-number>-->
                 </td>
                 <td>
-                  <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'
-                                   [nzMax]='(data.tongTien ?? 0)' [(ngModel)]='data.kinhPhiDaCap'>
-                  </nz-input-number>
+                  <input class='money-input' [min]='0'
+                         currencyMask [options]='amount'
+                         [max]='(data.tongTien ?? 0)'
+                         [(ngModel)]='data.kinhPhiDaCap' />
+<!--                  <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'-->
+<!--                                   [nzMax]='(data.tongTien ?? 0)' [(ngModel)]='data.kinhPhiDaCap'>-->
+<!--                  </nz-input-number>-->
                 </td>
                 <td>
-                  <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'
-                                   [nzMax]='(data.tongTien ?? 0) - (data.kinhPhiDaCap ?? 0)'
-                                   [(ngModel)]='data.yeuCauCapThem'></nz-input-number>
+                  <input class='money-input' [min]='0'
+                         currencyMask [options]='amount'
+                         [max]='(data.tongTien ?? 0) - (data.kinhPhiDaCap ?? 0)'
+                         [(ngModel)]='data.yeuCauCapThem' />
+<!--                  <nz-input-number class='search__input' [nzSize]="'small'" [nzMin]='0'-->
+                  <!--                                   [nzMax]='(data.tongTien ?? 0) - (data.kinhPhiDaCap ?? 0)'-->
+                  <!--                                   [(ngModel)]='data.yeuCauCapThem'></nz-input-number>-->
                 </td>
                 <td>
                   <a (click)="saveEdit(data, 'ct2s')" class='save'>
@@ -420,11 +446,11 @@
               <th></th>
               <th class='text-right'> Tổng</th>
               <th class='bg-gray  text-money text-specical-money'>
-                {{tongChiPhiBang2(rowEdit) | number: '1.0-1'}}</th>
+                {{tongChiPhiBang2(rowEdit) | number : '1.0-1' : 'vi-VN'}}</th>
               <th class='bg-gray  text-money text-specical-money'>
-                {{tongKinhPhiBang2(rowEdit) | number: '1.0-1'}}</th>
+                {{tongKinhPhiBang2(rowEdit) | number : '1.0-1' : 'vi-VN'}}</th>
               <th class='bg-gray  text-money text-specical-money'>
-                {{tongCapThemBang2(rowEdit) | number : '1.0-1'}}
+                {{tongCapThemBang2(rowEdit) | number : '1.0-1' : 'vi-VN'}}
               </th>
               <th></th>
             </tr>
