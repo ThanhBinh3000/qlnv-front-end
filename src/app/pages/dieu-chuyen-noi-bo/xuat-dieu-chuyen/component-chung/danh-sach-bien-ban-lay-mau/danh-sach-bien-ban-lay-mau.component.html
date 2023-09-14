@@ -83,8 +83,7 @@
             <th>Số BB LM/BGM</th>
             <th>Ngày lấy mẫu</th>
             <th>Số BB tịnh kho</th>
-            <th>Ngày xuất dốc kho</th>
-            <th>Số BB hao dôi</th>
+            <th>Ngày lập BB tịnh kho</th>
             <th>Trạng thái</th>
             <th style="width: 10%">Hành động</th>
           </tr>
@@ -102,7 +101,6 @@
               </td>
               <td>{{item.namKh}}</td>
               <!-- <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td> -->
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -130,8 +128,6 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
-
                 </tr>
                 <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                   <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -148,8 +144,7 @@
                       <td>{{lv2.soBBLayMau}}</td>
                       <td>{{lv2.ngaylayMau | date: 'dd/MM/YYYY' }}</td>
                       <td>{{lv2.soBBTinhKho}}</td>
-                      <td>{{lv2.ngayXuatDocKho}}</td>
-                      <td>{{lv2.bbHaoDoi}}</td>
+                      <td>{{lv2.ngayTinhKho}}</td>
                       <td>{{LIST_TRANG_THAI[lv2.trangThai]}}</td>
                       <td class="text-left">
                         <a *ngIf="checkRoleAdd(lv2.trangThai)"

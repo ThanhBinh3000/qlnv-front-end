@@ -12,7 +12,7 @@ import { chain, groupBy } from 'lodash';
 import { PhieuXuatKhoDieuChuyenService } from '../services/dcnb-xuat-kho.service';
 
 export interface PassDataXK {
-  soQddc: string, qddcId: boolean, soPhieuKnChatLuong: string, phieuKnChatLuongHdrId: number, maDiemKho: string, maNganKho: string, maNhaKho: string, maLoKho: string
+  soQddc: string, qddcId: number, soPhieuKnChatLuong: string, phieuKnChatLuongHdrId: number, maDiemKho: string, maNganKho: string, maNhaKho: string, maLoKho: string
   tenDiemKho: string, tenNganKho: string, tenNhaKho: string, tenLoKho: string, loaiVthh: string, cloaiVthh: string, tenLoaiVthh: string, tenCloaiVthh: string, soLuongCanDc: number, donViTinh: string
 }
 @Component({

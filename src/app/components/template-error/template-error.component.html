@@ -8,4 +8,10 @@
     control.errors.maxlength.requiredLength }}
     ký tự
 </ng-container>
+<ng-container *ngIf="control.hasError('min')">Dữ liệu không được nhỏ hơn {{
+    control.errors.min.min}}
+</ng-container>
+<ng-container *ngIf="control.hasError('max')">Dữ liệu không được lớn hơn {{
+    control.errors.max.max}}
+</ng-container>
 <!-- </ng-template> -->

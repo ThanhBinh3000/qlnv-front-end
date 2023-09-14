@@ -102,17 +102,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         [this.STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
     }
     maBb: string;
-    reportTemplate: any = {
-        typeFile: "",
-        fileName: "",
-        tenBaoCao: "",
-        trangThai: ""
-    };
-    showDlgPreview: boolean;
-    pdfSrc: string;
-    wordSrc: string;
-    excelSrc: string;
-    isPrint: boolean;
+    previewName: string = "bang_ke_xuat_vat_tu";
     constructor(
         httpClient: HttpClient,
         storageService: StorageService,
@@ -138,8 +128,8 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         this.formData = this.fb.group(
             {
                 id: [0],
-                nam: [dayjs().get("year")],
-                maDvi: [''],
+                nam: [dayjs().get("year"), [Validators.required]],
+                maDvi: ['', [Validators.required]],
                 maQhns: ['', [Validators.required]],
                 soBangKe: [''],
                 qdinhDccId: ['', Validators.required],
@@ -157,12 +147,12 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 diaDaDiemKho: ['', Validators.required],
                 loaiVthh: ['', [Validators.required]],
                 cloaiVthh: ['', [Validators.required]],
-                donViTinh: [''],
+                donViTinh: ['', [Validators.required]],
                 moTaHangHoa: [''],
-                tenNguoiGiaoHang: [''],
-                cccd: [''],
-                donViNguoiGiaoHang: [''],
-                diaChiDonViNguoiGiaoHang: [''],
+                tenNguoiGiaoHang: ['', [Validators.required]],
+                cccd: ['', [Validators.required]],
+                donViNguoiGiaoHang: ['', [Validators.required]],
+                diaChiDonViNguoiGiaoHang: ['', [Validators.required]],
                 thoiGianGiaoNhan: [''],
                 tongTrongLuongBaoBi: [0],
                 tongTrongLuongCabaoBi: [0],
@@ -173,12 +163,12 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 ngayPduyet: [''],
                 nguoiPduyetId: [''],
                 lyDoTuChoi: [''],
-                trangThai: ['00'],
-                tenDvi: [''],
+                trangThai: ['00', [Validators.required]],
+                tenDvi: ['', [Validators.required]],
                 diaChiDvi: [''],
                 tenLoaiVthh: ['', [Validators.required]],
                 tenCloaiVthh: ['', [Validators.required]],
-                tenTrangThai: ['Dự thảo'],
+                tenTrangThai: ['Dự thảo', [Validators.required]],
                 tenChiCuc: [''],
                 tenDiemKho: ['', [Validators.required]],
                 tenNhaKho: ['', [Validators.required]],
@@ -187,13 +177,13 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 tenNganLoKho: ['', [Validators.required]],
                 nguoiPduyet: [''],
                 nguoiGduyet: [''],
-                thuKhoId: [''],
-                tenThuKho: [''],
+                thuKhoId: ['', [Validators.required]],
+                tenThuKho: ['', [Validators.required]],
                 dcnbBangKeXuatVTDtl: [new Array()]
             }
         );
         this.userInfo = this.userService.getUserLogin();
-        this.maBb = `BKCH-${this.userInfo.DON_VI?.tenVietTat}`;
+        this.maBb = `BKXVT-${this.userInfo.DON_VI?.tenVietTat}`;
 
         // this.setTitle();
     }
@@ -295,7 +285,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 maDvi: this.userInfo.MA_DVI,
                 tenDvi: this.userInfo.TEN_DVI,
                 maQhns: this.userInfo.DON_VI.maQhns,
-                thuKhoId: null,
+                thuKhoId: this.userInfo.ID,
                 tenThuKho: this.userInfo.TEN_DAY_DU,
                 ...this.passData,
                 tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho
@@ -725,47 +715,5 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 dcnbBangKeXuatVTDtl: this.formData.value.dcnbBangKeXuatVTDtl
             })
         }
-    }
-    async preview() {
-        this.reportTemplate.fileName = "bang_ke_xuat_vat_tu.docx";
-        let body = {
-            reportTemplateRequest: this.reportTemplate,
-            ...this.formData.value
-        }
-        await this.bangKeXuatVatTuDieuChuyenService.preview(body).then(async s => {
-            this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-            this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-            this.showDlgPreview = true;
-        });
-    }
-    downloadPdf() {
-        saveAs(this.pdfSrc, "bang_ke_xuat_vat_tu.pdf");
-    }
-
-    downloadWord() {
-        saveAs(this.wordSrc, "bang_ke_xuat_vat_tu.docx");
-    }
-    downloadExcel() {
-        saveAs(this.excelSrc, "bang_ke_xuat_vat_tu.xlsx");
-    }
-    doPrint() {
-        const WindowPrt = window.open(
-            '',
-            '',
-            'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-        );
-        let printContent = '';
-        printContent = printContent + '<div>';
-        printContent =
-            printContent + document.getElementById('modal').innerHTML;
-        printContent = printContent + '</div>';
-        WindowPrt.document.write(printContent);
-        WindowPrt.document.close();
-        WindowPrt.focus();
-        WindowPrt.print();
-        WindowPrt.close();
-    }
-    closeDlg() {
-        this.showDlgPreview = false;
     }
 }
