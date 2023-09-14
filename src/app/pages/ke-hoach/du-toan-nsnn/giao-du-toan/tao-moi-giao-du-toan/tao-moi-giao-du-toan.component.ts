@@ -1063,7 +1063,9 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
     // call api giao số liệu trong cột được chọn
     giaoSoTranChi(maDviNhan: any) {
-
+        if (maDviNhan == null) {
+            this.statusGiaoToanBo = !this.statusGiaoToanBo
+        }
         const lstGiao: any[] = [];
         if (maDviNhan) {
             const lstCtiet: any[] = [];
@@ -1107,7 +1109,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                     ngayTao: this.ngayTao,
                 });
             }
-
         } else {
             if (this.lstCtietBcao.length > 0) {
                 this.lstCtietBcao[0].lstCtietDvis.forEach(item => {

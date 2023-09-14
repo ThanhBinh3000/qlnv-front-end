@@ -1473,6 +1473,9 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     // call api giao số liệu trong cột được chọn
     giaoSoTranChi(maDviNhan: any) {
         this.spinner.show();
+        if (maDviNhan == null) {
+            this.statusGiaoToanBo = !this.statusGiaoToanBo
+        }
         const lstGiao: any[] = [];
         if (maDviNhan) {
             const lstCtiet: any[] = [];
