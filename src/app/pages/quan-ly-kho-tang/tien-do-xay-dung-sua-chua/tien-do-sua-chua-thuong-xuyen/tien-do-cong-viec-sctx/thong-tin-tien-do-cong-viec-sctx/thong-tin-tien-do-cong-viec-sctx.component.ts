@@ -47,7 +47,7 @@ export class ThongTinTienDoCongViecSctxComponent implements OnInit {
     } else {
       this.tableCongViec.forEach(item => {
         item.loai = "00";
-        item.quy = this.dataInput.quy
+        item.thang = this.dataInput.thang
       })
       let arr = [...this.tableCongViec, this.tableCvMoi].flat()
       this._modalRef.close(arr)
@@ -63,6 +63,10 @@ export class ThongTinTienDoCongViecSctxComponent implements OnInit {
       this.tableCongViec = this.dataTable.filter(item => item.loai == "00");
       this.tableCvMoi = this.dataTable.filter(item => item.loai == "01");
     } else {
+      this.dataTable.forEach(item => {
+        item.klTheoHd = item.khoiLuong ?? null
+        item.ttTheoHd = item.donGia ?? null
+      })
       this.tableCongViec = this.dataTable
     }
   }
@@ -90,7 +94,7 @@ export class ThongTinTienDoCongViecSctxComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    this.item.quy = this.dataInput.quy
+    this.item.thang = this.dataInput.thang
     this.item.loai = "01"
     this.tableCvMoi = [...this.tableCvMoi, this.item]
     this.dataTableRes.push(this.item)

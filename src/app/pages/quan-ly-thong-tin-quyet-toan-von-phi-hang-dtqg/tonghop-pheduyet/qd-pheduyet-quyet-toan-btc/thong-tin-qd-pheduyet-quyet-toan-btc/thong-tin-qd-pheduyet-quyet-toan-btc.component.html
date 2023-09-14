@@ -84,6 +84,26 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan='3'>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]='true'> Số QĐ của BTC
+            </nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]='error'>
+              <nz-input-group id='soQdBtc'>
+                <input type='text' [readonly]='isView' nz-input formControlName='soQdBtc' />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]='4'>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]='true'> Ngày QĐ của BTC</nz-form-label>
+            <nz-form-control [nzErrorTip]='error'>
+              <nz-date-picker [nzDisabled]='isView' formControlName='ngayQdBtc' nzFormat='dd/MM/yyyy'>
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
       <div nz-row [nzGutter]='[20]'>
         <div nz-col nzSpan='20'>
@@ -115,7 +135,7 @@
                 [nzFrontPagination]='false' [nzShowPagination]='false' [nzScroll]="{ x: '1700px' }">
         <thead>
         <tr>
-<!--          <th width='50px' rowSpan='2'></th>-->
+          <!--          <th width='50px' rowSpan='2'></th>-->
           <th width='50px' rowSpan='2'>STT</th>
           <th rowSpan='2' width='200px' class='text-center'>Tên Bộ, cơ quan TW</th>
           <th rowSpan='2' width='200px' class='text-center'>Tổng số được chi<br /> trong niên độ</th>
@@ -125,7 +145,7 @@
           <th rowSpan='2' width='200px'>Số đã thẩm định <br />và thông báo quyết toán</th>
           <th rowSpan='2' width='200px'>Lệch số quyết toán<br /> với số được chi</th>
           <th colspan='4' width='700px'>Gồm</th>
-          <th rowSpan='3' width='200px' class='text-center' *ngIf='trangThaiEditDetail && !isView'>Hành động</th>
+          <th rowSpan='2' width='200px' class='text-center' *ngIf='trangThaiEditDetail && !isView'>Hành động</th>
         </tr>
         <tr>
           <th class='text-center'>Tổng</th>
@@ -142,7 +162,6 @@
         <tr>
           <th class='text-center'></th>
           <th class='text-center'></th>
-          <th class='text-center'></th>
           <th class='text-center'>(1=2+7)</th>
           <th class='text-center'>(2=3+4)</th>
           <th class='text-center'>(3)</th>
@@ -157,6 +176,7 @@
           <th class='text-center'>(12)</th>
           <th class='text-center'>(13)</th>
           <th class='text-center'>(14)</th>
+<!--          <th class='text-center'></th>-->
           <th class='text-center' *ngIf='trangThaiEditDetail && !isView'></th>
         </tr>
         <!--        <tr>-->
@@ -251,7 +271,7 @@
         <tr *ngFor='let data of dsQtNsChiTw ;let i = index'>
           <ng-container
             *ngIf='(dataQtNsChiTwEdit && dataQtNsChiTwEdit[i] && !dataQtNsChiTwEdit[i].edit) ; else editTemplate '>
-<!--            <td></td>-->
+            <!--            <td></td>-->
             <td class='text-center'>{{i + 1}} </td>
             <td>{{data.tenBoNganh}}</td>
             <td
@@ -270,8 +290,8 @@
             <td class='text-right'>{{data.soTuPhaiNop | number}}</td>
             <td class='text-right'>{{data.soDuNamSau | number}}</td>
             <td class='text-right'>{{data.soTuNamSau | number}}</td>
-            <td class='text-center'>
-              <a *ngIf='trangThaiEditDetail && !isView' (click)='editQtNsChiTw(i)'>
+            <td class='text-center'  *ngIf='trangThaiEditDetail && !isView' >
+              <a (click)='editQtNsChiTw(i)'>
                 <i class='fa fa-pencil' title='Sửa'></i>
               </a>
               <!--                          <a *ngIf="!isView" (click)="deleteQtNsChiTw(i)">-->
@@ -374,7 +394,7 @@
         <tfoot>
         <tr>
           <td></td>
-          <td></td>
+<!--          <td></td>-->
           <td class='text-right font-weight-bold'>Tổng</td>
           <td
             class='text-right font-weight-bold'>{{sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') + sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc') | number}}</td>
@@ -411,7 +431,7 @@
                 [nzShowPagination]='false' #groupingTable [nzScroll]="{ x: '1700px' }">
         <thead>
         <tr>
-<!--          <th width='50px' rowSpan='2'></th>-->
+          <!--          <th width='50px' rowSpan='2'></th>-->
           <th width='50px' rowSpan='2'>STT</th>
           <th rowSpan='2' width='200px' class='text-center'>Tên Bộ, cơ quan TW</th>
           <th rowSpan='2' width='200px' class='text-center'>Tổng số được chi<br /> trong niên độ</th>
@@ -421,7 +441,7 @@
           <th rowSpan='2' width='200px'>Số đã thẩm định <br />và thông báo quyết toán</th>
           <th rowSpan='2' width='200px'>Lệch số quyết toán<br /> với số được chi</th>
           <th colspan='4' width='700px'>Gồm</th>
-          <th rowSpan='3' width='200px' class='text-center' *ngIf='trangThaiEditDetail && !isView'>Hành động</th>
+          <th rowSpan='2' width='200px' class='text-center' *ngIf='trangThaiEditDetail && !isView'>Hành động</th>
         </tr>
         <tr>
           <th class='text-center'>Tổng</th>
@@ -436,7 +456,6 @@
           <th class='text-center'>Số tạm ứng được chuyển<br /> năm sau thanh toán</th>
         </tr>
         <tr>
-          <th class='text-center'></th>
           <th class='text-center'></th>
           <th class='text-center'></th>
           <th class='text-center'>(1=2+7)</th>
@@ -551,7 +570,7 @@
         <tr *ngFor='let data of dsQtNsKpChiNvDtqg ;let i = index'>
           <ng-container
             *ngIf='(dataQtNsKpChiNvDtqgEdit && dataQtNsKpChiNvDtqgEdit[i] && !dataQtNsKpChiNvDtqgEdit[i].edit) ; else editTemplate '>
-<!--            <td></td>-->
+            <!--            <td></td>-->
             <td class='text-center'>{{i + 1}} </td>
             <td>{{data.tenBoNganh}}</td>
             <td
@@ -674,7 +693,7 @@
         <tfoot>
         <tr>
           <td></td>
-          <td></td>
+<!--          <td></td>-->
           <td class='text-right font-weight-bold'>Tổng</td>
           <td
             class='text-right font-weight-bold'>{{sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') + sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc') | number}}</td>

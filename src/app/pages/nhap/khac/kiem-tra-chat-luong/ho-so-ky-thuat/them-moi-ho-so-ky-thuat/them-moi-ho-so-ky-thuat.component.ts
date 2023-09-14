@@ -33,11 +33,11 @@ import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import {ChiTietThongTinChaoGia} from "../../../../../../models/DeXuatKeHoachMuaTrucTiep";
-import {HoSoTaiLieu} from "../../../../../../models/HoSoKyThuatNhapKhac";
+import { ChiTietThongTinChaoGia } from "../../../../../../models/DeXuatKeHoachMuaTrucTiep";
+import { HoSoTaiLieu } from "../../../../../../models/HoSoKyThuatNhapKhac";
 import { saveAs } from 'file-saver';
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
-import {HoSoKyThuatNkService} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/hoSoKyThuatNk.service";
+import { FileDinhKem } from "../../../../../../models/FileDinhKem";
+import { HoSoKyThuatNkService } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/hoSoKyThuatNk.service";
 import {
   QuanLyBienBanLayMauKhacService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quanLyBienBanLayMauKhac.service";
@@ -60,6 +60,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   isBienBan: boolean = false;
   idBienBan: number;
   loaiBienBan: string;
+  previewName: string = 'nk_ho_so_kt';
 
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
@@ -179,10 +180,10 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
         console.log(data, "222")
-        if(data.idBbLayMau){
+        if (data.idBbLayMau) {
           await this.buldingDataBbLayMau(data)
         }
-        if(data.children){
+        if (data.children) {
           this.dataTable = data.children
           this.updateEditCache()
         }
@@ -277,7 +278,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     });
   };
 
-  async buldingDataBbLayMau(data: any){
+  async buldingDataBbLayMau(data: any) {
     console.log(data, "bien ban")
     let res = await this.bienBanLayMauService.getDetail(data.idBbLayMau);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -348,9 +349,9 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     let body = this.formData.value;
     body.fileDinhkems = this.fileDinhKem;
     body.children = this.dataTable;
-    if(body.listHoSoBienBan != undefined){
+    if (body.listHoSoBienBan != undefined) {
 
-    }else{
+    } else {
       // body.listHoSoBienBan = this.dataTableBienBan
     }
     let res = null;

@@ -152,13 +152,13 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         soQdDcCuc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayKyQd,
         qdDcCucId: this.data.qdDcCucId,
-        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
         maNganKho: this.data.maNganKho,
         tenNhaKho: this.data.tenNhaKho,
-        maNhaKho: this.data.maNhaKhoNhan,
+        maNhaKho: this.data.maNhaKho,
         tenDiemKho: this.data.tenDiemKho,
         maDiemKho: this.data.maDiemKho,
         loaiVthh: this.data.maHangHoa,
@@ -168,7 +168,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         soLuongQdDcCuc: this.data.soLuongDc,
         dviTinh: this.data.donViTinh,
       });
-      await this.getDanhSachTT(this.data.qdDcCucId, this.data.maLoKho, this.data.maNganKho)
+      await this.getDanhSachTT(this.data.soQdinh, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
     }
 
@@ -199,16 +199,16 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         this.fileCanCuReq = data.fileCanCu
         this.fileDinhKemReq = data.fileDinhKems
         this.loadChiTietQdinh(data.qdDcCucId)
-        this.getDanhSachTT(data.qdDcCucId, data.maLoKho, data.maNganKho)
+        this.getDanhSachTT(data.soQdDcCuc, data.maLoKho, data.maNganKho)
       }
 
     }
     await this.spinner.hide();
   }
 
-  async getDanhSachTT(qdinhDccId, maLoKho, maNganKho) {
+  async getDanhSachTT(soQdDcCuc, maLoKho, maNganKho) {
     const body = {
-      qdinhDccId,
+      soQdDcCuc,
       maLoKho,
       maNganKho,
       isVatTu: true
@@ -378,7 +378,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
           dviTinh: data.donViTinh,
         });
       }
-      await this.getDanhSachTT(data.id, data.maLoKhoNhan, data.maNganKhoNhan)
+      await this.getDanhSachTT(this.formData.value.soQdDcCuc, data.maLoKhoNhan, data.maNganKhoNhan)
     });
   }
 
@@ -430,10 +430,38 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
           soBbKtNhapKho: data.soBBKtNH,
           idBbKtNhapKho: data.id
         });
-        // await this.getDanhSachTT(data.id)
-        await this.loadChiTietQdinh(data.id);
+        await this.loadCTBBKTNK(data.id);
+
       }
     });
+  }
+
+  async loadCTBBKTNK(id: number) {
+    let res = await this.bienBanKetThucNhapKhoService.getDetail(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+
+      const data = res.data
+      console.log('loadCTBBKTNK', data)
+      this.formData.patchValue({
+        tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
+        tenLoKho: data.tenNhaKho,
+        maLoKho: data.maLoKho,
+        tenNganKho: data.tenNganKho,
+        maNganKho: data.maNganKho,
+        tenNhaKho: data.tenNhaKho,
+        maNhaKho: data.maNhaKho,
+        tenDiemKho: data.tenDiemKh,
+        maDiemKho: data.maDiemKho,
+        loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        tichLuongKhaDung: data.tichLuongKd,
+        soLuongQdDcCuc: data.soLuongPhanBo,
+        dviTinh: data.donViTinh,
+      });
+      await this.getDanhSachTT(this.formData.value.qdDcCucId, data.maLoKho, data.maNganKho)
+    }
   }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {

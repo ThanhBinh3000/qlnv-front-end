@@ -135,14 +135,13 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       soLuong: 0
     })
     this.listCuc = [];
-    this.loadListDonVi();
+    this.dataTable = [];
+    await this.loadListDonVi();
     this.thongTinCuc = new DanhSachGoiThau();
-    this.dataTable = []
   }
 
   async loadListDonVi() {
     if (this.dataChiTieu) {
-      debugger
       for (let index = 0; index < this.dataChiTieu.khVatTuNhap.length; index++) {
         if (this.formGoiThau.get('cloaiVthh').value == null) {
           // if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh || this.dataChiTieu.khVatTuNhap[index].maVatTu == this.loaiVthh) {

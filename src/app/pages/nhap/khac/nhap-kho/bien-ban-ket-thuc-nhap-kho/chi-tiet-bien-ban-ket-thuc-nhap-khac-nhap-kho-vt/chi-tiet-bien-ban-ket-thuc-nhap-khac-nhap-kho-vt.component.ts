@@ -33,6 +33,7 @@ export class ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Co
     @Output()
     showListEvent = new EventEmitter<any>();
 
+    previewName: string = 'nk_bb_kt_nk';
     maBb: string;
     fileDinhKemReq: any[] = [];
     listDanhSachQuyetDinh: any[] = [];

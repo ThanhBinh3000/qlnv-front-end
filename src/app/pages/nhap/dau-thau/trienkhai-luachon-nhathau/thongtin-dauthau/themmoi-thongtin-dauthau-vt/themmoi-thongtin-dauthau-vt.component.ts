@@ -364,7 +364,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   }
 
   async preview() {
-    this.reportTemplate.fileName = this.previewName;
+    this.reportTemplate.fileName = this.previewName + '.docx';
     let body = {
       id : this.idInput,
       reportTemplateRequest : this.reportTemplate,

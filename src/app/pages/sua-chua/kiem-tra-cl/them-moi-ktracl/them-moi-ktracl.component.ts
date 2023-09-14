@@ -51,7 +51,8 @@ export class ThemMoiKtraclComponent extends Base3Component implements OnInit {
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, kiemTraChatLuongSc);
-    this.defaultURL = 'sua-chua/kiem-tra-cl'
+    this.defaultURL = 'sua-chua/kiem-tra-cl';
+    this.previewName = 'sc_kiem_tra_chat_luong'
     this.getId();
     this.formData = this.fb.group({
       id: [],

@@ -109,6 +109,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       tichLuong: [],
       tichLuongKhaDung: [],
       donViTinh: [],
+      duToanKphi: [],
       dsPhieuNhapKho: [],
       slThucNhapDc: [],
       hthucKlot: [],
@@ -418,7 +419,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
 
     let body = {
       trangThai: STATUS.BAN_HANH,
-      // loaiVthh: ['0101', '0102'],
+      thayDoiThuKho: true,
       isVatTu: true,
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
@@ -512,6 +513,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           tichLuong: data.tichLuongKd,
           tichLuongKhaDung: data.tichLuongKd,
           donViTinh: data.donViTinh,
+          duToanKphi: data.duToanKphi,
         });
         await this.loadDataBaoQuan(data.cloaiVthh)
         await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)

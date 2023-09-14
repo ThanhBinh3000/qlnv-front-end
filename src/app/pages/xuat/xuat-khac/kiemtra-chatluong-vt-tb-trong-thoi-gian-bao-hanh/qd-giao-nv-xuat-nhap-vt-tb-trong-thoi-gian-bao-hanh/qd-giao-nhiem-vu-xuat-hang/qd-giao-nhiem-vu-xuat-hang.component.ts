@@ -63,7 +63,7 @@ export class QdGiaoNhiemVuXuatHangComponent extends Base2Component implements On
     await this.search();
   }
 
-  themMoi(id, isView) {
+  redirectDetail(id, isView) {
     this.isDetail = true;
     this.selectedId = id;
     this.isView = isView;

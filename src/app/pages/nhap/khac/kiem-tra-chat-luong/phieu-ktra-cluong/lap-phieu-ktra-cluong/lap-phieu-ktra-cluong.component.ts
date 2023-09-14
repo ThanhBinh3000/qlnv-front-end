@@ -86,9 +86,9 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
         soLuongKhKhaiBao: [null,],
         soLuongTtKtra: [null,],
         idBbNtBq: [null,],
-        soBbNtBq: [null,],
+        soBbNtBq: [null, [Validators.required]],
 
-        idDdiemGiaoNvNh: [, [Validators.required]],
+        idDdiemGiaoNvNh: [],
         maDiemKho: ['', [Validators.required]],
         tenDiemKho: ['', [Validators.required]],
         maNhaKho: ['', [Validators.required]],
@@ -163,12 +163,12 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
   async save(isGuiDuyet: boolean) {
     // if (this.validateSave()) {
     try {
-      this.spinner.show();
-      //     this.helperService.markFormGroupTouched(this.formData);
-      //     if (this.formData.invalid) {
-      //       await this.spinner.hide();
-      //       return;
-      //     }
+      await this.spinner.show();
+      await this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        await this.spinner.hide();
+        return;
+      }
       let body = this.formData.value;
       body.fileDinhKemCtgd = this.fileDinhKemCtgd;
       body.fileDinhKemKtcl = this.fileDinhKemKtcl;
@@ -199,10 +199,10 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
       }
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
     // }
   }
@@ -436,6 +436,7 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
       maNganKho: this.formData.get('maNganKho').value,
     }
     let res = await this.bbNghiemThuBaoQuanService.timKiemBbtheoMaNganLo(body);
+    console.log(res.data, "loadDsBbnt")
     if (res.msg == MESSAGE.SUCCESS) {
       this.listBbNtbqld = res.data;
     } else {
