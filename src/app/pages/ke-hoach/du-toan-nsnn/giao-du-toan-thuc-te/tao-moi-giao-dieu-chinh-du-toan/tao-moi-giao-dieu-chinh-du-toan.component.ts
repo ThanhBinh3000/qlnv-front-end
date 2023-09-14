@@ -892,14 +892,20 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 						this.trangThaiBanGhi = mcn;
 						this.getStatusName();
 						this.getStatusButton();
-						if (mcn == Status.TT_02) {
-							this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
-						} else if (mcn == Status.TT_06) {
-							this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
-						} else if (mcn == Status.TT_07) {
-							this.notification.success(MESSAGE.SUCCESS, "Gửi đơn vị cấp trên thành công");
-						} else if (mcn == Status.TT_09) {
-							this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRANG_THAI_TIEP_NHAN);
+						if (Status.check('reject', mcn)) {
+							this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+						} else {
+							if (mcn == Status.TT_02) {
+								this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUBMIT_SUCCESS);
+							} else if (mcn == Status.TT_04) {
+								this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+							} else if (mcn == Status.TT_06) {
+								this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
+							} else if (mcn == Status.TT_07) {
+								this.notification.success(MESSAGE.SUCCESS, "Gửi đơn vị cấp trên thành công");
+							} else if (mcn == Status.TT_09) {
+								this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRANG_THAI_TIEP_NHAN);
+							}
 						}
 					} else {
 						this.notification.error(MESSAGE.ERROR, data?.msg);
