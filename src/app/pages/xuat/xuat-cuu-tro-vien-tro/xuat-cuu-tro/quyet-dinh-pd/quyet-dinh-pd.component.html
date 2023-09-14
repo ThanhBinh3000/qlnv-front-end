@@ -113,9 +113,9 @@
           <th width="">Số công văn/đề xuất</th>
           <th width="">Ngày đề xuất</th>
           <th width="">Loại hàng hóa</th>
-          <th width="" class="text-center">Tổng SL đề xuất <br> cứu trợ, viện trợ (kg)</th>
-          <th width="" class="text-center">Tổng SL xuất kho <br> cứu trợ, viện trợ (kg)</th>
-          <th width="" class="text-center">SL xuất CT, VT <br> chuyển sang xuất cấp (kg)</th>
+<!--          <th width="" class="text-center">Tổng SL đề xuất <br> cứu trợ, viện trợ (kg)</th>-->
+<!--          <th width="" class="text-center">Tổng SL xuất kho <br> cứu trợ, viện trợ (kg)</th>-->
+<!--          <th width="" class="text-center">SL xuất CT, VT <br> chuyển sang xuất cấp (kg)</th>-->
           <th width="">Trích yếu</th>
           <th width="">Trạng thái</th>
           <th width="90px">Hành động</th>
@@ -134,10 +134,10 @@
           <td>{{ data.ngayThop |date:globals.dateFormat}}</td>
           <td><a nz-button nzType="link" (click)="openDxPaModal(data.idDx)"> {{data.soDx}}</a></td>
           <td>{{ data.ngayDx |date:globals.dateFormat}}</td>
-          <td>{{ data.tenLoaiVthh }}</td>
-          <td>{{ data.tongSoLuongDx |number:globals.numberFormat:globals.locale }}</td>
-          <td>{{ data.tongSoLuong |number:globals.numberFormat:globals.locale }}</td>
-          <td>{{ data.soLuongXuaCap |number:globals.numberFormat:globals.locale}}</td>
+          <td>{{ data.tenVthh }}</td>
+<!--          <td>{{ data.tongSoLuongDx |number:globals.numberFormat:globals.locale }}</td>-->
+<!--          <td>{{ data.tongSoLuong |number:globals.numberFormat:globals.locale }}</td>-->
+<!--          <td>{{ data.soLuongXuaCap |number:globals.numberFormat:globals.locale}}</td>-->
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">

@@ -28,6 +28,7 @@ import {
 import {NzTreeNodeOptions} from "ng-zorro-antd/core/tree";
 import {DANH_MUC_LEVEL} from "src/app/pages/luu-kho/luu-kho.constant";
 import {NzTreeSelectComponent} from "ng-zorro-antd/tree-select";
+import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.service";
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-gnv',
@@ -59,6 +60,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   expandSetString = new Set<string>();
   listKieuNhapXuat: any;
   maHauTo: any;
+  selectedNode: any;
 
   constructor(
     httpClient: HttpClient,
@@ -70,6 +72,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
     private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
     this.formData = this.fb.group({
@@ -158,7 +161,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   async ngOnInit() {
     try {
       await this.spinner.show();
-      this.maHauTo = '/QĐGNV-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsDonVi(),
         this.loadDsDiaDanh(),
@@ -194,6 +196,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
+      this.maHauTo = '/QĐGNV-' + this.userInfo.DON_VI.tenVietTat;
       this.formData.patchValue({trangThai: STATUS.DU_THAO, tenTrangThai: 'Dự thảo'});
     }
   }
@@ -346,6 +349,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             let detail = res.data;
             detail.quyetDinhPdDtl.forEach(s => {
               delete s.id;
+              s.soLuongDx = s.soLuong;
+              s.soLuong = 0;
             });
             this.formData.patchValue({
               idQdPd: detail.id,
@@ -367,7 +372,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
   }
 
-  async buildTableView() {
+  async buildTableView1() {
     this.formData.value.dataDtl.forEach(s => {
       s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
         (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
@@ -381,46 +386,112 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.phuongAnView = chain(data)
       .groupBy("noiDungDx")
       .map((value, key) => {
-        let noiDungDxRow = value.find(s => s.noiDungDx === key);
+        let noiDungDxRow = value.find(s => s.noiDungDx === key) || {};
         let rs = chain(value)
           .groupBy("tenLoaiVthh")
           .map((v, k) => {
-            let tenLoaiVthhRow = v.find(s => s.tenLoaiVthh === k);
+            let tenLoaiVthhRow = v.find(s => s.tenLoaiVthh === k) || {};
             let rs = chain(v)
               .groupBy("tenChiCuc")
               .map((v1, k1) => {
-                let tenChiCucRow = v1.find(s => s.tenChiCuc === k1);
+                let tenChiCucRow = v1.find(s => s.tenChiCuc === k1) || {};
                 let soLuongXuat = v1.reduce((prev, next) => prev + next.soLuong, 0);
                 let rs = chain(v1)
                   .groupBy("tenCloaiVthh")
                   .map((v2, k2) => {
-                    let tenCloaiVthhRow = v2.find(s => s.tenCloaiVthh === k2);
+                    let tenCloaiVthhRow = v2.find(s => s.tenCloaiVthh === k2) || {};
                     let soLuongXuat = v2.reduce((prev, next) => prev + next.soLuong, 0);
                     return {
                       idVirtual: uuidv4(),
-                      tenCloaiVthh: tenCloaiVthhRow?.tenCloaiVthh ?? '',
-                      cloaiVthh: tenCloaiVthhRow?.cloaiVthh ?? '',
-                      tonKhoCloaiVthh: tenCloaiVthhRow?.tonKhoCloaiVthh ?? 0,
+                      tenCloaiVthh: tenCloaiVthhRow.tenCloaiVthh || '',
+                      cloaiVthh: tenCloaiVthhRow.cloaiVthh || '',
+                      tonKhoCloaiVthh: tenCloaiVthhRow.tonKhoCloaiVthh || 0,
                       soLuongXuat: soLuongXuat,
                       childData: v2
                     }
                   }).value();
                 return {
                   idVirtual: uuidv4(),
-                  tenChiCuc: tenChiCucRow?.tenChiCuc ?? '',
-                  soLuongGiao: tenChiCucRow?.soLuongGiao ?? 0,
+                  tenChiCuc: tenChiCucRow.tenChiCuc || '',
+                  soLuongGiao: tenChiCucRow.soLuongGiao || 0,
                   soLuongXuat: soLuongXuat,
+                  tonKhoDvi: tenLoaiVthhRow.tonKhoDvi || 0,
                   childData: rs
                 }
               }).value();
+            let soLuong = rs.reduce((prev, next) => prev + next.soLuong, 0);
+            return {
+              idVirtual: uuidv4(),
+              loaiVthh: tenLoaiVthhRow.loaiVthh || '',
+              tenLoaiVthh: tenLoaiVthhRow.tenLoaiVthh || '',
+              tonKhoLoaiVthh: tenLoaiVthhRow.tonKhoLoaiVthh || 0,
+              soLuongGiao: tenLoaiVthhRow.soLuongGiao || 0,
+              soLuongDx: tenLoaiVthhRow.soLuongDx || 0,
+              soLuong: soLuong,
+              donViTinh: tenLoaiVthhRow.donViTinh || '',
+              childData: rs
+            }
+          }).value();
+        return {
+          idVirtual: uuidv4(),
+          noiDungDx: key,
+          soLuong: 0,
+          soLuongDx: 0,
+          childData: rs
+        };
+      }).value();
+    console.log(this.phuongAnView, 'phuongAnViewphuongAnView')
+    this.expandAll();
+  }
+
+  async buildTableView() {
+    this.formData.value.dataDtl.forEach(s => {
+      s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+        (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
+        (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
+        (s.tenLoKho ?? '');
+      s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
+    });
+    let data = this.formData.value.dataDtl;
+    if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC) {
+      data = this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*"));
+    }
+    this.phuongAnView = chain(data)
+      .groupBy("noiDungDx")
+      .map((value, key) => {
+        let noiDungDxRow = value.find(s => s.noiDungDx === key) || {};
+        let rs = chain(value)
+          .groupBy("tenHang")
+          .map((v, k) => {
+            let tenLoaiVthhRow = v.find(s => s.tenHang === k) || {};
+            let rs = chain(v)
+              .groupBy("tenChiCuc")
+              .map((v1, k1) => {
+                let tenChiCucRow = v1.find(s => s.tenChiCuc === k1) || {};
+                let soLuong = v1.reduce((prev, next) => prev + next.soLuong, 0);
+                return {
+                  idVirtual: uuidv4(),
+                  tenChiCuc: tenChiCucRow.tenChiCuc || '',
+                  soLuongGiao: tenChiCucRow.soLuongGiao || 0,
+                  soLuong: soLuong,
+                  tonKhoDvi: tenLoaiVthhRow.tonKhoDvi || 0,
+                  childData: v1
+                }
+              }).value();
+            let soLuong = rs.reduce((prev, next) => prev + next.soLuong, 0);
             let soLuongGiao = rs.reduce((prev, next) => prev + next.soLuongGiao, 0);
             return {
               idVirtual: uuidv4(),
-              loaiVthh: tenLoaiVthhRow?.loaiVthh ?? '',
-              tenLoaiVthh: tenLoaiVthhRow?.tenLoaiVthh ?? '',
-              tonKho: tenLoaiVthhRow?.tonKhoLoaiVthh ?? 0,
+              tenHang: k,
+              loaiVthh: tenLoaiVthhRow.loaiVthh || '',
+              tenLoaiVthh: tenLoaiVthhRow.tenLoaiVthh || '',
+              cloaiVthh: tenLoaiVthhRow.cloaiVthh || '',
+              tenCloaiVthh: tenLoaiVthhRow.tenCloaiVthh || '',
+              tonKhoLoaiVthh: tenLoaiVthhRow.tonKhoLoaiVthh || 0,
               soLuongGiao: soLuongGiao,
-              soLuongDx: tenLoaiVthhRow?.soLuongDx ?? 0,
+              soLuongDx: tenLoaiVthhRow.soLuongDx || 0,
+              soLuong: soLuong,
+              donViTinh: tenLoaiVthhRow.donViTinh || '',
               childData: rs
             }
           }).value();
@@ -455,30 +526,20 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (data) {
       let edit = false;
       if (level == 1) {
-        let baseData = data.childData[0].childData[0].childData[0];
+        let baseData = data.childData[0].childData[0];
         if (!data.childData[0].tenChiCuc) {
           edit = true
         }
         this.formDataDtl.patchValue({
           noiDungDx: baseData.noiDungDx,
           loaiVthh: baseData.loaiVthh,
+          cloaiVthh: baseData.cloaiVthh,
           soLuongDx: baseData.soLuongDx,
+          tonKhoDvi: baseData.tonKhoDvi,
+          donViTinh: baseData.donViTinh,
           edit: edit
         });
       } else if (level == 2) {
-        let baseData = data.childData[0].childData[0];
-        if (!data.childData[0].cloaiVthh) {
-          edit = true
-        }
-        this.formDataDtl.patchValue({
-          noiDungDx: baseData.noiDungDx,
-          loaiVthh: baseData.loaiVthh,
-          tenChiCuc: baseData.tenChiCuc,
-          soLuongDx: baseData.soLuongDx,
-          soLuongGiao: baseData.soLuongGiao,
-          edit: edit
-        });
-      } else if (level == 3) {
         let baseData = data.childData[0];
         if (!data.childData[0].tenDiaDiem) {
           edit = true
@@ -486,9 +547,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         this.formDataDtl.patchValue({
           noiDungDx: baseData.noiDungDx,
           loaiVthh: baseData.loaiVthh,
-          tenChiCuc: baseData.tenChiCuc,
           cloaiVthh: baseData.cloaiVthh,
           soLuongDx: baseData.soLuongDx,
+          tonKhoDvi: baseData.tonKhoDvi,
+          donViTinh: baseData.donViTinh,
+          tenChiCuc: baseData.tenChiCuc,
           soLuongGiao: baseData.soLuongGiao,
           edit: edit
         });
@@ -508,8 +571,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       return;
     }
     let row = this.formDataDtl.value;
-    console.log(row, 'row')
-    console.log(this.formData.value, 'this.formData.value')
     row.tenChiCuc = row.tenChiCuc || this.listDonVi.find(s => s.maDvi == row.maDvi)?.tenDvi;
     row.tenCloaiVthh = row.tenCloaiVthh || this.listChungLoaiHangHoa.find(s => s.ma == row.cloaiVthh)?.ten;
 
@@ -521,7 +582,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         this.formData.value.dataDtl = [...this.formData.value.dataDtl, row]
       }
     }
-    console.log(this.formData, 'formDataformData')
     await this.buildTableView();
     await this.huyPhuongAn();
   }
@@ -532,25 +592,37 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.selectedNode = null; // Clear the selected node
   }
 
-
-  async xoaPhuongAn(data: any, dataParent?: any) {
-    let filter = this.formData.value.dataDtl.filter(s => s.noiDungDx == data.noiDungDx && s.loaiVthh == data.loaiVthh && s.tenChiCuc == data.tenChiCuc);
-    if (filter.length == 1) {
-      data.maDvi = data.maDvi.substring(0, 8);
-      data.tenCloaiVthh = '';
-      data.tenDiemKho = '';
-      data.tenNhaKho = '';
-      data.tenNganKho = '';
-      data.tenLoKho = '';
-      data.soLuong = 0;
-    } else {
+  async xoaPhuongAn(data: any, parent?: any, lv?: any) {
+    if (lv == 2) {
+      this.formData.value.dataDtl = this.formData.value.dataDtl.filter!(s => s.noiDungDx == data.noiDungDx && s.tenHang == data.tenHang && s.tenChiCuc == data.tenChiCuc);
+      if (parent.childData.length == 1) {
+        let baseData = data.childData[0];
+        let dataTmp = {
+          noiDungDx: baseData.noiDungDx,
+          loaiVthh: baseData.loaiVthh,
+          cloaiVthh: baseData.cloaiVthh,
+          soLuongDx: baseData.soLuongDx,
+          tonKhoDvi: baseData.tonKhoDvi,
+          donViTinh: baseData.donViTinh,
+        };
+        this.formData.value.dataDtl = [...this.formData.value.dataDtl, dataTmp]
+      }
+    } else if (lv == 3) {
       this.formData.value.dataDtl = this.formData.value.dataDtl.filter(s => s.idVirtual != data.idVirtual);
+      if (parent.childData.length == 1) {
+        data.soLuong = null;
+        data.maDvi = data.maDvi.substring(0,8);
+        data.tenDiemKho = '';
+        data.tenNhaKho = '';
+        data.tenNganKho = '';
+        data.tenLoKho = '';
+        this.formData.value.dataDtl = [...this.formData.value.dataDtl, data]
+      }
     }
     await this.buildTableView();
   }
 
   selectDiaDiem(node: NzTreeNodeOptions) {
-    console.log(node, 'node')
     if (node.isLeaf) {
       let current = node.origin;
       //chon lo
@@ -575,17 +647,38 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           tenNganKho: current.tenDvi
         });
       }
-
+      this.kiemTraTonKho();
     } else {
       node.isSelectable = false;
       node.isExpanded = !node.isExpanded;
     }
   }
 
-  selectedNode: any;
-
-  titleDisplay(node: any) {
-    return node ? node.title : '';
+  async kiemTraTonKho() {
+    let maDvi = this.formDataDtl.value.maDvi;
+    let loaiVthh = this.formDataDtl.value.loaiVthh;
+    let cloaiVthh = this.formDataDtl.value.cloaiVthh;
+    if (maDvi) {
+      await this.quanLyHangTrongKhoService.getTrangThaiHt({
+        maDvi: maDvi,
+        loaiVthh: loaiVthh,
+        cloaiVthh: cloaiVthh ?? null
+      }).then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          let data = res.data;
+          if (data.length > 0) {
+            let tonKhoDvi = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+            let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
+            let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+            this.formDataDtl.patchValue({
+              tonKhoDvi: tonKhoDvi,
+              tonKhoCloaiVthh: tonKhoCloaiVthh
+            });
+          } else {
+            this.formDataDtl.patchValue({tonKhoDvi: 0, tonKhoCloaiVthh: 0});
+          }
+        }
+      });
+    }
   }
-
 }

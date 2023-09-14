@@ -94,9 +94,9 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-radio-group [nzDisabled]="!!formData.value.id" formControlName="tenVthh"
                               (ngModelChange)="changeVthh($event)">
-                <label nz-radio nzValue="0101">Thóc tẻ</label>
-                <label nz-radio nzValue="0102">Gạo tẻ</label>
-                <label nz-radio nzValue="02">Vật tư thiết bị</label>
+                <label nz-radio nzValue="Thóc tẻ">Thóc tẻ</label>
+                <label nz-radio nzValue="Gạo tẻ">Gạo tẻ</label>
+                <label nz-radio nzValue="Vật tư thiết bị">Vật tư thiết bị</label>
               </nz-radio-group>
             </nz-form-control>
           </nz-form-item>
@@ -224,7 +224,7 @@
             <tr>
               <th [rowspan]="2" style="width: 35px"></th>
               <th [rowspan]="2" style="width: 35px">STT</th>
-              <th [rowspan]="2">Địa phương / cơ quan / đơn vị nhận cứu trợ</th>
+              <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
               <th [rowspan]="2">Loại hàng DTQG</th>
               <th [colspan]="3">Chủng loại hàng DTQG</th>
               <th [colspan]="2">Số lượng</th>

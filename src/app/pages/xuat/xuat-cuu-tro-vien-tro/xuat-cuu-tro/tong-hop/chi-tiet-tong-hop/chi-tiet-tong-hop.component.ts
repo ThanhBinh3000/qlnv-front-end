@@ -126,7 +126,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         loaiNhapXuat: [''],
         loaiVthh: [''],
         cloaiVthh: [''],
-        tenVthh: ['0101', [Validators.required]],
+        tenVthh: ['Gạo tẻ', [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         idQdPd: [''],
         soQdPd: [''],

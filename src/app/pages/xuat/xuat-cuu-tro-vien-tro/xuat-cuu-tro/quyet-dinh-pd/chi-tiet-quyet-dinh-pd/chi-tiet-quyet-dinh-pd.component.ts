@@ -96,6 +96,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   maHauTo: any;
   templateName = "Quyết định phê duyệt phương án";
   templateNameVt = "Quyết định phê duyệt phương án vật tư";
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -130,6 +131,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         soLuongXuaCap: [],
         loaiVthh: [],
         cloaiVthh: [],
+        tenVthh: [],
         loaiNhapXuat: [],
         kieuNhapXuat: [],
         mucDichXuat: [],
@@ -355,7 +357,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               s.loaiNhapXuat = detail.loaiNhapXuat;
               s.kieuNhapXuat = detail.kieuNhapXuat;
               s.mucDichXuat = detail.mucDichXuat;
-              s.tenVthh = detail.mucDichXuat;
+              s.tenVthh = detail.tenVthh;
             });
             this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatPhuongAn);
             if (!this.formData.value.id) {
@@ -394,19 +396,21 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         let rs = chain(value)
           .groupBy("noiDungDx")
           .map((v, k) => {
-            let row = v.find(s => s.noiDung === k);
+            let row1 = v.find(s => s.noiDungDx === k);
             let rs = chain(v)
               .groupBy("loaiVthh")
               .map((v1, k1) => {
-                let row1 = v1.find(s => s.loaiVthh === k1);
+                let row2 = v1.find(s => s.loaiVthh === k1);
+                let tonKhoCloaiVthh = v.reduce((prev, next) => prev + next.tonKhoCloaiVthh, 0);
                 return {
                   idVirtual: uuidv4(),
                   loaiVthh: k1,
-                  tenLoaiVthh: row1.tenLoaiVthh,
-                  tenCloaiVthh: row1.tenCloaiVthh,
-                  soLuong: row1.soLuong,
-                  soLuongDx: row1.soLuongDx,
-                  tonKho: 0,
+                  tenLoaiVthh: row2.tenLoaiVthh,
+                  donViTinh: row2.donViTinh,
+                  soLuong: row2.soLuong,
+                  soLuongDx: row2.soLuongDx,
+                  tonKho: row2.tonKhoLoaiVthh || tonKhoCloaiVthh,
+                  tenCloaiVthh: row2.tenCloaiVthh,
                   childData: v1
                 }
               }).value();
@@ -424,7 +428,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           maDvi: row.maDvi,
           soDx: row.soDx,
           trichYeuDx: row.trichYeuDx,
+          mucDichXuat: row.mucDichXuat,
           ngayKyDx: row.ngayKyDx,
+          thoiGian: row.ngayKyDx,
           childData: rs
         };
       }).value();
@@ -437,16 +443,21 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         let rs = chain(value)
           .groupBy("noiDungDx")
           .map((v, k) => {
-            let row = v.find(s => s.noiDung === k);
+            let row1 = v.find(s => s.noiDungDx === k);
             let rs = chain(v)
               .groupBy("loaiVthh")
               .map((v1, k1) => {
-                let row = v1.find(s => s.loaiVthh === k1);
+                let row2 = v1.find(s => s.loaiVthh === k1);
+                let tonKhoCloaiVthh = v.reduce((prev, next) => prev + next.tonKhoCloaiVthh, 0);
                 return {
                   idVirtual: uuidv4(),
                   loaiVthh: k1,
-                  tenLoaiVthh: row.tenLoaiVthh,
-                  tonKho: 0,
+                  tenLoaiVthh: row2.tenLoaiVthh,
+                  donViTinh: row2.donViTinh,
+                  soLuong: row2.soLuong,
+                  soLuongDx: row2.soLuongDx,
+                  tonKho: row2.tonKhoLoaiVthh || tonKhoCloaiVthh,
+                  tenCloaiVthh: row2.tenCloaiVthh,
                   childData: v1
                 }
               }).value();
@@ -464,7 +475,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           maDvi: row.maDvi,
           soDx: row.soDx,
           trichYeuDx: row.trichYeuDx,
+          mucDichXuat: row.mucDichXuat,
           ngayKyDx: row.ngayKyDx,
+          thoiGian: row.ngayKyDx,
           childData: rs
         };
       }).value();
@@ -518,7 +531,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     console.log(this.expandSetStringCache, 'expandSetStringCache')
   }
 
-  async xemTruocPd(id,tenBaoCao,children) {
+  async xemTruocPd(id, tenBaoCao, children) {
     await this.tongHopPhuongAnCuuTroService.preview({
       tenBaoCao: tenBaoCao + '.docx',
       id: id,

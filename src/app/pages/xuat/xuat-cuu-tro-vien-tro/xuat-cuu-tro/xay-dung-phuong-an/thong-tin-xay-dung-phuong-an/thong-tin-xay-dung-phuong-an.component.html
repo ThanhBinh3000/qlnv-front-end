@@ -231,7 +231,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Địa phương / cơ quan / đơn vị nhận cứu trợ</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Địa phương/cơ quan/đơn vị nhận cứu trợ</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <textarea rows="3" class="search__input" nz-input formControlName="noiDungDx"
                         [readOnly]="isView"></textarea>
@@ -384,7 +384,7 @@
           <tr>
             <th [rowspan]="2"></th>
             <th [rowspan]="2" style="width: 35px">STT</th>
-            <th [rowspan]="2">Địa phương / cơ quan / đơn vị nhận cứu trợ</th>
+            <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
             <th [rowspan]="2">Tổng SL đề xuất CT, VT ({{formData.value.donViTinh}})</th>
             <th [colspan]="3">Cục DTNN KV</th>
             <th [colspan]="2">Chi cục DTNN</th>
@@ -517,7 +517,7 @@
           <tr>
             <th [rowspan]="2"></th>
             <th [rowspan]="2" style="width: 35px">STT</th>
-            <th [rowspan]="2">Địa phương / cơ quan / đơn vị nhận cứu trợ</th>
+            <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
             <th [rowspan]="2">Tổng SL đề xuất CT, VT ({{formData.value.donViTinh}})</th>
             <th [colspan]="2">Chi cục DTNN</th>
             <th [colspan]="2">Chủng loại hàng hóa</th>
@@ -635,14 +635,14 @@
 </div>
 
 <!--tong cuc-->
-<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible" [nzFooter]="modalFooter" [nzClosable]="false"
+<nz-modal [nzWidth]="'60%'" [(nzVisible)]="isVisible" [nzFooter]="modalFooter" [nzClosable]="false"
           nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
   <ng-container *nzModalContent>
     <!--    <form nz-form>-->
     <div class="modal-card">
       <nz-card nzTitle="Thông tin giao xuất cứu trợ, viện trợ">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương / cơ quan / đơn vị nhận cứu trợ
+          <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương/cơ quan/đơn vị nhận cứu trợ
           </nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'"
                            [nzValidateStatus]="checkVld('inputNoiDung')">
@@ -775,13 +775,13 @@
 </nz-modal>
 
 <!--modal sua noi dung-->
-<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisibleSuaNoiDung" [nzFooter]="modalFooterSuaNoiDung" [nzClosable]="false"
+<nz-modal [nzWidth]="'60%'" [(nzVisible)]="isVisibleSuaNoiDung" [nzFooter]="modalFooterSuaNoiDung" [nzClosable]="false"
           nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
   <ng-container *nzModalContent>
     <!--    <form nz-form>-->
     <div class="modal-card">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương / cơ quan / đơn vị nhận cứu trợ</nz-form-label>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương/cơ quan/đơn vị nhận cứu trợ</nz-form-label>
         <nz-form-control>
           <input nz-input [(ngModel)]="phuongAnRow.noiDungEdit">
         </nz-form-control>
