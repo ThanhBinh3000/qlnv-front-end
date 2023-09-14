@@ -282,7 +282,7 @@
           <td *ngIf="userService.isChiCuc()">{{ item.tenTrangThai }}</td>
           <td *ngIf="!userService.isChiCuc()"></td>
           <td *ngIf="!userService.isChiCuc()">{{ item.tenTrangThai }}</td>
-          <td *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"></td>
+          <td *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO') "></td>
         </tr>
         <tr
           *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO') && item.trangThai != STATUS.HOAN_THANH_CAP_NHAT ">
@@ -354,10 +354,10 @@
             <td *ngIf="!userService.isChiCuc()"></td>
             <td *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"
                 style="text-align: center;">
-              <a>
+              <a *ngIf="item.trangThai != STATUS.HOAN_THANH_CAP_NHAT">
                 <i (click)="editRow(i, y)" class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a>
+              <a *ngIf="item.trangThai != STATUS.HOAN_THANH_CAP_NHAT">
                 <i (click)="xoaDiaDiemNhap(i,y)" class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -420,7 +420,7 @@
           <td class="text-blue">{{ calcTong(i) | number : '1.0-1' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
-          <td *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"></td>
+          <td *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO') && item.trangThai != STATUS.HOAN_THANH_CAP_NHAT"></td>
         </tr>
       </ng-container>
       </tbody>
