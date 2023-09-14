@@ -44,7 +44,8 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
     private quyetDinhXhService: QuyetDinhXhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, phieuXuatKhoScService);
-    this.defaultURL = 'sua-chua/xuat-hang/phieu-xuat-kho'
+    this.defaultURL = 'sua-chua/xuat-hang/phieu-xuat-kho';
+    this.previewName = 'sc_phieu_xuat_kho'
     this.getId();
     this.formData = this.fb.group({
       id: [],

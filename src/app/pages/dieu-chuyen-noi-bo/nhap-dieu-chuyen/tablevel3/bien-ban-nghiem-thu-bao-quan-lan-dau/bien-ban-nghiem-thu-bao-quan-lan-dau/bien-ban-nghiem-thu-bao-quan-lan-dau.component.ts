@@ -126,6 +126,14 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
     return this.userService.isChiCuc()
   }
 
+  isDuyet(row) {
+    return this.userService.isChiCuc() && (row.trangThai === STATUS.CHO_DUYET_TK || row.trangThai === STATUS.CHO_DUYET_KT || row.trangThai === STATUS.CHO_DUYET_LDCC)
+  }
+
+  isEdit(row) {
+    return this.userService.isChiCuc() && (row.trangThai == STATUS.DU_THAO || row.trangThai == STATUS.TU_CHOI_TK || row.trangThai == STATUS.TU_CHOI_LDCC)
+  }
+
   selectTab(tab: number) {
     if (this.isDetail) {
       this.quayLai()

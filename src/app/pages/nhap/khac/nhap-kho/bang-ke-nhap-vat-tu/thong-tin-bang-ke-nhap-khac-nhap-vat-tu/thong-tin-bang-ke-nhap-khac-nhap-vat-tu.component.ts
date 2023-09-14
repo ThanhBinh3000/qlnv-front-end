@@ -34,6 +34,8 @@ export class ThongTinBangKeNhapKhacNhapVatTuComponent extends Base2Component imp
   @Output()
   showListEvent = new EventEmitter<any>();
 
+  previewName: string = 'nk_bang_ke_nvt';
+
   maBb: string;
   chungTuDinhKem: any[] = [];
   fileDinhKemReq: any[] = [];

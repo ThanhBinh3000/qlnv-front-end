@@ -48,7 +48,8 @@ export class ThemMoiBknComponent extends Base3Component implements OnInit {
     private quyetDinhNhService: QuyetDinhNhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, bangKeNhapScService);
-    this.defaultURL = 'sua-chua/nhap-hang/bang-ke-nhap'
+    this.defaultURL = 'sua-chua/nhap-hang/bang-ke-nhap';
+    this.previewName = 'sc_bang_ke_nhap_vt';
     this.getId();
     this.formData = this.fb.group({
       id: [],

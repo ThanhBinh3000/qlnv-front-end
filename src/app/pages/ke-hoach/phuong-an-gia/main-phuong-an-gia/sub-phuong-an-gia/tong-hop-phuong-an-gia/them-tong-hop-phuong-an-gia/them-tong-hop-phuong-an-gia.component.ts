@@ -441,6 +441,14 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   doPrint() {
     printJS({printable: this.printSrc, type: 'pdf', base64: true});
   }
+
+  downloadWord() {
+    if (this.type == 'GCT') {
+      saveAs(this.wordSrc, "tong_hop_phuong_an_gia_gct.docx");
+    } else {
+      saveAs(this.wordSrc, "tong_hop_phuong_an_gia_gmtdbtt.docx");
+    }
+  }
 }
 
 

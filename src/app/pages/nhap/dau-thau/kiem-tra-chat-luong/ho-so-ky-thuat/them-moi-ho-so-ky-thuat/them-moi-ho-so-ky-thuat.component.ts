@@ -115,26 +115,42 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     public userService: UserService,
     private hoSoKyThuatService: HoSoKyThuatService,
     private bienBanLayMauService: QuanLyBienBanLayMauService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
-    super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
-      maDvi: ['', [Validators.required]],
-      tenDvi: ['', [Validators.required]],
-      nam: [dayjs().get('year'), [Validators.required]],
+      maDvi: [''],
+      tenDvi: [''],
+      tenNguoiTao: [''],
+      nam: [dayjs().get('year')],
       ngayTao: [dayjs().format('YYYY-MM-DD')],
-      soBbLayMau: [null, [Validators.required]],
-      soHoSoKyThuat: [null, [Validators.required]],
-      idQdGiaoNvNh: [null, [Validators.required]],
-      soQdGiaoNvNh: [null, [Validators.required]],
-      soHd: [null, [Validators.required]],
+      soBbLayMau: [null],
+      soHoSoKyThuat: [null],
+      idQdGiaoNvNh: [null],
+      soQdGiaoNvNh: [null],
+      soHd: [null],
       ldoTuchoi: [],
       trangThai: [],
       tenTrangThai: [],
+      ngayPduyet: [],
+      ngayKyHd: [],
+      tenNganLoKho: [],
+      tenNhaKho: [],
+      tenDiemKho: [],
+      diaDiemKho: [],
+      tenLoaiVthh: [],
+      tenCloaiVthh: [],
+      soLuong: [],
+      dvt: [],
+      tenChiCuc: [],
+      lanhDaoChiCuc: [],
+      truongPhong: [],
+      lanhDaoCuc: [],
+      dviCungCap: [],
     });
   }
 
@@ -202,23 +218,6 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   }
 
   async openDialogBbLayMau() {
-    let body = {
-      "maDvi": this.userInfo.MA_DVI,
-      "loaiVthh": this.loaiVthh,
-      "paggingReq": {
-        "limit": this.globals.prop.MAX_INTERGER,
-        "page": 0
-      },
-      "trangThai": STATUS.BAN_HANH,
-      "namNhap": this.formData.get('nam').value
-    }
-    let res = await this.bienBanLayMauService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listBanGiaoMau = data.content;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách biên bản lấy mẫu/bàn giao mẫu',
       nzContent: DialogTableSelectionComponent,
@@ -228,8 +227,8 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listBanGiaoMau,
-        dataHeader: ['Số biên bản', 'Loại hàng hóa'],
-        dataColumn: ['soBienBan', 'tenLoaiVthh'],
+        dataHeader: ['Số biên bản', 'Ngăn/Lô kho', 'Nhà Kho', 'Điểm kho'],
+        dataColumn: ['soBienBan', 'tenNganLoKho', 'tenNhaKho', 'tenDiemKho'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
@@ -238,7 +237,11 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
           soBbLayMau: dataChose.soBienBan,
           soHd: dataChose.soHd,
           soQdGiaoNvNh: dataChose.soQdGiaoNvNh,
-          idQdGiaoNvNh: dataChose.idQdGiaoNvNh
+          idQdGiaoNvNh: dataChose.idQdGiaoNvNh,
+          tenNganLoKho: dataChose.tenNganLoKho,
+          tenNhaKho: dataChose.tenNhaKho,
+          tenDiemKho: dataChose.tenDiemKho,
+          tenChiCuc: dataChose.tenDvi,
         });
       }
     });
@@ -378,4 +381,44 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     this.ngOnInit();
   }
 
+  async openDialogSoQd() {
+    let body = {
+      "loaiVthh": this.loaiVthh,
+      "trangThai": this.STATUS.BAN_HANH,
+    }
+    let res = await this.quyetDinhGiaoNhapHangService.layTatCaQdGiaoNvNh(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listSoQuyetDinh = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listSoQuyetDinh,
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG', ' Chủng loại hàng DTQG'],
+        dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh', 'tenCloaiVthh'],
+      },
+    })
+    modalQD.afterClose.subscribe(async (dataChose) => {
+      if (dataChose) {
+        this.formData.patchValue({
+          soHd: dataChose.hopDong?.soHd,
+          ngayKyHd: dataChose.hopDong?.ngayKy,
+          dviCungCap: dataChose.hopDong?.tenNhaThau,
+          soQdGiaoNvNh: dataChose.soQd,
+          idQdGiaoNvNh: dataChose.id,
+          tenLoaiVthh: dataChose.tenLoaiVthh,
+          tenCloaiVthh: dataChose.tenCloaiVthh,
+          dvt: dataChose.donViTinh,
+        });
+        this.listBanGiaoMau = dataChose.listBienBanLayMau;
+      }
+    });
+  };
 }

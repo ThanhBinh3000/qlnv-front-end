@@ -96,7 +96,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         maSo: [],
         donViTinh: [],
         slLayMau: [],
-        slThucXuat: [],
+        slThucTe: [],
         ghiChu: ['', [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         tenDvi: [],
@@ -225,8 +225,13 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         dataColumn: ['nam', 'soQuyetDinh', 'ngayKy',],
       },
     });
-
     modalQD.afterClose.subscribe(async (data) => {
+      this.formData.patchValue({
+        tenDiemKho: null,
+        tenNhaKho: null,
+        tenNganKho: null,
+        tenLoKho: null,
+      });
       if (data) {
         await this.bindingDataQd(data);
       }
@@ -401,8 +406,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
   clearItemRow() {
     this.formData.patchValue({
       maSo: null,
-      slLayMau: null,
-      slThucXuat: null,
+      slThucTe: null,
     })
   }
 
