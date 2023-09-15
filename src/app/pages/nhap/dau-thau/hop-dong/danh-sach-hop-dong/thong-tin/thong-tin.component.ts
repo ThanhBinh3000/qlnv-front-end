@@ -232,6 +232,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 text: dayNow - i,
             });
         }
+        if (!this.loaiVthh.startsWith('02')) {
+          this.formData.patchValue({
+            donViTinh: 'tấn',
+          })
+        }
         await Promise.all([
             this.loadDataComboBox(),
             this.onChangeNam(),
@@ -302,6 +307,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
                     this.formData.patchValue({
                         maHdong: detail.soHd?.split('/')[0]
                     });
+                  if (!this.loaiVthh.startsWith('02')) {
+                    this.formData.patchValue({
+                      donViTinh: 'tấn',
+                    })
+                  }
                     this.idGoiThau = detail.idGoiThau;
                     this.listFileDinhKem = detail.listFileDinhKem;
                     this.listCcPhapLy = detail.listCcPhapLy;
