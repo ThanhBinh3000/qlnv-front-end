@@ -26,6 +26,7 @@ import {TongHopDeNghiCapVonService} from 'src/app/services/ke-hoach/von-phi/tong
 import {FileDinhKem} from 'src/app/models/FileDinhKem';
 import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {STATUS} from "../../../../../constants/status";
+import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-thong-tin-tong-hop',
@@ -80,7 +81,7 @@ export class ThongTinTonghopComponent implements OnInit {
     },
   ]
   isDetail: boolean = false;
-
+  amount = AMOUNT_NO_DECIMAL;
   constructor(
     private modal: NzModalService,
     private tongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
@@ -629,4 +630,6 @@ export class ThongTinTonghopComponent implements OnInit {
     this.isDetail = true;
     this.isView = isView;
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }
