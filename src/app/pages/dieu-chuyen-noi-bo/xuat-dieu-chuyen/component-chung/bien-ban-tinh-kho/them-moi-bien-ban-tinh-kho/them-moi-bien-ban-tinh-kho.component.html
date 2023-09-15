@@ -268,7 +268,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="6">
+                <div nz-col [nzSpan]="6" *ngIf="thayDoiThuKho">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true" nzRequired> Số phiếu kiểm nghiệm chất lượng</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
