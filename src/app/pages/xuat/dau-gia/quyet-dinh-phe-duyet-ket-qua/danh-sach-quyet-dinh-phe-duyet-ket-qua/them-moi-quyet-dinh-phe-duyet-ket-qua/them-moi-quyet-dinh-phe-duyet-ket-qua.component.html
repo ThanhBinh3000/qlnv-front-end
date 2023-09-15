@@ -86,7 +86,7 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Số kế hoạch/ tờ trình</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Số quyết định</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{maHauTo}}">
                     <nz-input-number formControlName="soQdKq" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
@@ -108,7 +108,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayHluc" [nzDisabled]="isView">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayHieuLuc" [nzDisabled]="isView">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -134,7 +134,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <input placeholder="" nz-input formControlName="tenKieuNx" readonly/>
+                  <input placeholder="" nz-input formControlName="tenKieuNhapXuat" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -142,7 +142,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Mã thông báo bán đấu giá</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabled() ? null : openMaThongBao()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openMaThongBao()">
                     <input [readonly]="true" nz-input formControlName="maThongBao" readonly/>
                   </nz-input-group>
                 </nz-form-control>
@@ -154,7 +154,7 @@
                   thành
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabled() ? null : openMaThongBao()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openMaThongBao()">
                     <input [readonly]="true" nz-input formControlName="soBienBan" readonly/>
                   </nz-input-group>
                 </nz-form-control>
@@ -184,7 +184,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Phương thức giao nhận</nz-form-label>
                 <nz-form-control nz-col>
-                  <input placeholder="" nz-input formControlName="pthucGnhan" readonly/>
+                  <input placeholder="" nz-input formControlName="phuongThucGiaoNhan" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -192,7 +192,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Thời gian giao nhận (Ngày)</nz-form-label>
                 <nz-form-control nz-col>
-                  <input placeholder="" nz-input formControlName="tgianGnhan" readonly/>
+                  <input placeholder="" nz-input formControlName="tgianGiaoNhanNgay" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -273,13 +273,13 @@
               <td></td>
               <td></td>
               <td
-                style="color: black ;font-weight: bold;"> {{item.slBanDauGiaChiCuc|number:globals.numberFormat:globals.locale }}</td>
+                style="color: black ;font-weight: bold;"> {{item.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
               <td></td>
               <td></td>
               <td
-                style="color: black ;font-weight: bold;"> {{item.giaKhoiDiemChiCuc|number:globals.numberFormat:globals.locale }}</td>
+                style="color: black ;font-weight: bold;"> {{item.tongGiaKhoiDiem|number:globals.numberFormat:globals.locale }}</td>
               <td
-                style="color: black ;font-weight: bold;"> {{item.soTienDatTruocCc|number:globals.numberFormat:globals.locale }}</td>
+                style="color: black ;font-weight: bold;"> {{item.tongTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -298,7 +298,7 @@
                 <td>{{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
                 <td>{{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
                 <td>{{children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
-                <td>{{children.soLuongDeXuat * children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
+                <td>{{children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
                 <td>{{children.toChucCaNhan}}</td>
               </tr>
             </ng-container>
@@ -324,7 +324,7 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview"  nzWidth="70%"
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%"
           (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
