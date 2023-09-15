@@ -75,7 +75,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   }
   chiTieuKiemTra: any[];
   tabSelected: number = 0;
-  previewName: string = "bien_ban_lay_mau";
+  previewName: string = "bien_ban_lay_mau_ban_giao_mau_lt_dieu_chuyen.docx";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

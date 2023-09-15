@@ -111,7 +111,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     { value: 1, label: "Đạt" }
   ]
   maBb: string;
-  previewName: string = "phieu_kiem_nghiem_chat_luong_hang_du_tru_quoc_gia";
+  previewName: string = "";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -183,6 +183,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       keHoachDcDtlId: [null, [Validators.required]]
     });
     this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
+    this.previewName = this.isVatTu ? "phieu_kiem_nghiem_chat_luong_vt_dieu_chuyen.docx" : "nhap_xuat_lt_phieu_kiem_nghiem_chat_luong_lt.docx"
   }
   booleanParse = (str: string): boolean => {
     if (str === "true") return true;

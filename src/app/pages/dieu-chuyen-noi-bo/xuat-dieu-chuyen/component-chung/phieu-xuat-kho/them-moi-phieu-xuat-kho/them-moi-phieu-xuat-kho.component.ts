@@ -77,7 +77,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     4: "Xuất không thu tiền",
     5: "Khác"
   };
-  previewName: string = "phieu_xuat_kho";
+  previewName: string = "phieu_xuat_kho_lt_vt_xuat_dieu_chuyen.docx";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -587,19 +587,22 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
   pheDuyet(isPheDuyet: boolean) {
     let trangThai = ''
     let msg = '';
+    let MSG = '';
     if (isPheDuyet) {
       switch (this.formData.value.trangThai) {
         case STATUS.TU_CHOI_LDCC:
         case STATUS.DU_THAO:
           trangThai = STATUS.CHO_DUYET_LDCC
           msg = 'Bạn có muốn gửi duyệt ?'
+          MSG = MESSAGE.GUI_DUYET_SUCCESS
           break;
         case STATUS.CHO_DUYET_LDCC:
           trangThai = STATUS.DA_DUYET_LDCC
           msg = 'Bạn có muốn duyệt bản ghi ?'
+          MSG = MESSAGE.PHE_DUYET_SUCCESS
           break;
       }
-      this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
+      this.approve(this.formData.value.id, trangThai, msg, null, MSG);
     } else {
       switch (this.formData.value.trangThai) {
         case STATUS.CHO_DUYET_LDCC:
