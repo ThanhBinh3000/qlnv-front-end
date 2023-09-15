@@ -79,7 +79,7 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
       ngayKetThucXuat: '',
       tenDiemKho: '',
       tenLoKho: '',
-      soBangKeXuatDclt: '',
+      soBangKeXuatDcLt: '',
       soPhieuXuatKho: '',
       ngayXuatKho: '',
       tenTrangThai: '',
