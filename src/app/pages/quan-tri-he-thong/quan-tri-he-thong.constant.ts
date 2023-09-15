@@ -98,4 +98,43 @@ export const NHAP_ROUTE_LIST = [
     ],
     isSelected: false
   },
+  {
+    id: 8,
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Chốt dữ liệu',
+    url: `/${NHAP_MAIN_ROUTE}/chot-du-lieu`,
+    dropdown: 'chot-du-lieu',
+    idHover: 'chot-du-lieu',
+    isCollapse: true,
+    callapses: [
+      {
+        id: 1,
+        icon: 'htvbdh_tcdt_icon-common',
+        title: 'Chốt điều chỉnh giá',
+        url: `/${NHAP_MAIN_ROUTE}/chot-du-lieu/chot-dieu-chinh`,
+        dropdown: 'chot-dieu-chinh',
+        idHover: 'chot-dieu-chinh',
+        isSelected: false
+      },
+      {
+        id: 2,
+        icon: 'htvbdh_tcdt_icon-common',
+        title: 'Chốt nhập xuất',
+        url: `/${NHAP_MAIN_ROUTE}/chot-du-lieu/chot-nhap-xuat`,
+        dropdown: 'chot-nhap-xuat',
+        idHover: 'chot-nhap-xuat',
+        isSelected: false
+      },
+      {
+        id: 3,
+        icon: 'htvbdh_tcdt_icon-common',
+        title: 'Kết chuyển',
+        url: `/${NHAP_MAIN_ROUTE}/chot-du-lieu/ket-chuyen`,
+        dropdown: 'ket-chuyen',
+        idHover: 'ket-chuyen',
+        isSelected: false
+      }
+    ],
+    isSelected: false
+  },
 ];

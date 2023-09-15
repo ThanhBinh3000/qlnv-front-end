@@ -186,7 +186,6 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listBoNganh = res.data.filter(item => item.code != 'BTC' && item.code != 'BQP' && item.code != 'BCA');
-      console.log(this.listBoNganh, ' this.listBoNganh this.listBoNganh');
     }
   }
 

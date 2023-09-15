@@ -677,10 +677,12 @@ export class Base3Component implements OnInit {
   };
   previewName: string = '';
   async preview(fileName: string) {
+    this.spinner.show();
     let body = this.formData.value;
     this.reportTemplate.fileName = fileName + '.docx';
     body.reportTemplateRequest = this.reportTemplate;
     await this.service.preview(body).then(async s => {
+      this.spinner.hide();
       if (s.data) {
         this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
         this.printSrc = s.data.pdfSrc;

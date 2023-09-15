@@ -121,15 +121,17 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class='text-left'>
-            <a *ngIf='data.trangThai==STATUS.DA_DUYET_LDC || data.trangThai==STATUS.CHO_DUYET_LDC'
-               (click)='themMoi(data.id, true)'>
+            <a
+              *ngIf='data.trangThai==STATUS.DA_DUYET_LDV || data.trangThai==STATUS.CHO_DUYET_LDV || data.trangThai==STATUS.CHO_DUYET_LDTC || data.trangThai==STATUS.DA_DUYET_LDTC'
+              (click)='themMoi(data.id, true)'>
               <i class='fa fa-eye' title='Xem chi tiết'></i>
             </a>
-            <a *ngIf='data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC'
-               (click)='themMoi(data.id, false)'>
+            <a
+              *ngIf='data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDTC || data.trangThai==STATUS.TU_CHOI_LDV'
+              (click)='themMoi(data.id, false)'>
               <i class='fa fa-pencil' title='Sửa'></i>
             </a>
-            <a *ngIf='data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC' (click)='delete(data)'>
+            <a *ngIf='data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDV' (click)='delete(data)'>
               <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
             </a>
           </td>
