@@ -183,24 +183,24 @@ export class BieuMau152Component implements OnInit {
 			this.scrollX = Table.tableWidth(350, 35, 1, 0);
 		}
 
-		const reqGetDonViCon = {
-			maDviCha: this.dataInfo.maDvi,
-			trangThai: '01',
-		}
-		await this.quanLyVonPhiService.dmDviCon(reqGetDonViCon).toPromise().then(res => {
-			if (res.statusCode == 0) {
-				if (this.dataInfo.capDvi == "1") {
-					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
-				} else if (this.dataInfo.capDvi == "2") {
-					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CCDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
-				}
-			} else {
-				this.notification.error(MESSAGE.ERROR, res?.msg);
+		if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
+			const reqGetDonViCon = {
+				maDviCha: this.dataInfo.maDvi,
+				trangThai: '01',
 			}
-		}, err => {
-			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		})
-		if (this.dataInfo?.isSynthetic) {
+			await this.quanLyVonPhiService.dmDviCon(reqGetDonViCon).toPromise().then(res => {
+				if (res.statusCode == 0) {
+					if (this.dataInfo.capDvi == "1") {
+						this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
+					} else if (this.dataInfo.capDvi == "2") {
+						this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CCDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
+					}
+				} else {
+					this.notification.error(MESSAGE.ERROR, res?.msg);
+				}
+			}, err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			})
 			this.donVis.forEach(item => {
 				if (this.lstCtietBcao.findIndex(e => e.donVi == item.maDvi) == -1) {
 					this.lstCtietBcao.push(new ItemData({

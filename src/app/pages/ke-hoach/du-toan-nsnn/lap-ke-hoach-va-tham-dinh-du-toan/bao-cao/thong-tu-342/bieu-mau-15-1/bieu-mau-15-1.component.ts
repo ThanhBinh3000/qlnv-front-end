@@ -12,6 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
+import { ScriptTarget } from 'typescript';
 
 export class ItemData {
 	id: string;
@@ -158,29 +159,30 @@ export class BieuMau151Component implements OnInit {
 		Object.assign(this.status, this.dataInfo.status);
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
-		if (this.status) {
+		if (this.status.general) {
 			this.scrollX = Table.tableWidth(350, 26, 1, 60);
 		} else {
 			this.scrollX = Table.tableWidth(350, 26, 1, 0);
 		}
-		const reqGetDonViCon = {
-			maDviCha: this.dataInfo.maDvi,
-			trangThai: '01',
-		}
-		await this.quanLyVonPhiService.dmDviCon(reqGetDonViCon).toPromise().then(res => {
-			if (res.statusCode == 0) {
-				if (this.dataInfo.capDvi == "1") {
-					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
-				} else if (this.dataInfo.capDvi == "2") {
-					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CCDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
-				}
-			} else {
-				this.notification.error(MESSAGE.ERROR, res?.msg);
+
+		if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
+			const reqGetDonViCon = {
+				maDviCha: this.dataInfo.maDvi,
+				trangThai: '01',
 			}
-		}, err => {
-			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		})
-		if (this.dataInfo?.isSynthetic) {
+			await this.quanLyVonPhiService.dmDviCon(reqGetDonViCon).toPromise().then(res => {
+				if (res.statusCode == 0) {
+					if (this.dataInfo.capDvi == "1") {
+						this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
+					} else if (this.dataInfo.capDvi == "2") {
+						this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CCDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
+					}
+				} else {
+					this.notification.error(MESSAGE.ERROR, res?.msg);
+				}
+			}, err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			})
 			this.donVis.forEach(item => {
 				if (this.lstCtietBcao.findIndex(e => e.maLvuc == item.maDvi) == -1) {
 					this.lstCtietBcao.push(new ItemData({
