@@ -655,6 +655,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       this.formData.controls['phieuKnChatLuongHdrId'].clearValidators();
       this.formData.controls['ngayKyPhieuKnChatLuong'].clearValidators();
       this.formData.controls['ktvBaoQuan'].clearValidators();
+      this.formData.controls['ktvBaoQuanId'].clearValidators();
     }
     if (isGuiDuyet) {
       if (this.isVatTu) {
