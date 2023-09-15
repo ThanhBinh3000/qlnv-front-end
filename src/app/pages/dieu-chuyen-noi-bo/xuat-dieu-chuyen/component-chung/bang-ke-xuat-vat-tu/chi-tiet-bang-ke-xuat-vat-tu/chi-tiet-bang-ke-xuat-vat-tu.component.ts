@@ -102,7 +102,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         [this.STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
     }
     maBb: string;
-    previewName: string = "bang_ke_xuat_vat_tu";
+    previewName: string = "bang_ke_xuat_vat_tu_dieu_chuyen.docx";
     constructor(
         httpClient: HttpClient,
         storageService: StorageService,
@@ -463,7 +463,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 MSG = MESSAGE.PHE_DUYET_SUCCESS
                 break;
         }
-        this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS)
+        this.approve(this.formData.value.id, trangThai, msg, null, MSG)
     }
 
     async flattenTree(tree) {

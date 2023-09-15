@@ -102,7 +102,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   }
   maBb: string;
   danhSachHangHoaQD: any[] = [];
-  previewName: string = "bang_ke_can_hang";
+  previewName: string = "nhap_xuat_lt_bang_ke_can_hang_nhap_lt.docx";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

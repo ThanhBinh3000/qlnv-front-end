@@ -77,7 +77,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   //   soQdinhDcc: '', qdinhDccId: null, soBbTinhKho: '', bbtinhKhoId: null, maDiemKho: '', tenDiemKho: '', maNhaKho: '', tenNhaKho: '',
   //   maNganKho: '', tenNganKho: '', maLoKho: '', tenLoKho: '', loaiVthh: '', cloaiVthh: '', tenLoaiVthh: '', tenCloaiVthh: '',
   // }
-  previewName: string = 'bien_ban_hao_doi';
+  previewName: string = 'bien_ban_hao_doi_lt_xuat_dieu_chuyen.docx';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
