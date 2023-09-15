@@ -275,14 +275,17 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
           data.danhSachQuyetDinh.forEach(element => {
             if (Array.isArray(element.danhSachKeHoach)) {
               element.danhSachKeHoach.forEach(item => {
-                if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho === item.maNganKho) || (f.maLoKho && f.maLoKho === item.maLoKho))) < 0) {
+                // if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho === item.maNganKho) || (f.maLoKho && f.maLoKho === item.maLoKho))) < 0) {
+                // }
+                // dataChiCuc.push(item)
+                if (item.thayDoiThuKho === this.thayDoiThuKho) {
                   dataChiCuc.push(item)
                 }
               });
             }
           });
         }
-        this.listDiaDiemNhap = cloneDeep(dataChiCuc);
+        this.listDiaDiemNhap = dataChiCuc.map(f => ({ ...f, noiNhan: `${f.tenDiemKhoNhan || ""} - ${f.tenNhaKhoNhan || ""} - ${f.tenNganKhoNhan || ""} - ${f.tenLoKhoNhan || ""}` }));
       }
     } catch (error) {
       console.log("e", error);
@@ -300,12 +303,12 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDiaDiemNhap,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataHeader: ['Điểm kho xuất', 'Nhà kho xuất', 'Ngăn kho xuất', 'Lô kho xuất', "Nơi nhận"],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'noiNhan']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
