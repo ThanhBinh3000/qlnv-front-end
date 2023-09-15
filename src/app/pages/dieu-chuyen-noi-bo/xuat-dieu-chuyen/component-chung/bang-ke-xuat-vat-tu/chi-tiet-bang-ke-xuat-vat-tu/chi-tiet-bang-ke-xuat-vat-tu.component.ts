@@ -102,7 +102,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         [this.STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
     }
     maBb: string;
-    previewName: string = "bang_ke_xuat_vat_tu_dieu_chuyen.docx";
+    previewName: string = "bang_ke_xuat_vat_tu_dieu_chuyen";
     constructor(
         httpClient: HttpClient,
         storageService: StorageService,
