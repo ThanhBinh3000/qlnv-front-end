@@ -196,7 +196,7 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
         this._modalRef.close({
             baoCao: this.response,
             id: null,
-            tabSelected: Tab.TIEN_THUA,
+            tabSelected: this.response.maLoai == Cvmb.TIEN_THUA ? Tab.TIEN_THUA : Tab.TH_TIEN_THUA,
         });
     }
 
