@@ -179,7 +179,8 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         thuKhoId: ['', [Validators.required]],
         tenThuKho: ['', [Validators.required]],
         dcnbBangKeCanHangDtl: [new Array(), [Validators.required, Validators.minLength(1)]],
-        thoiHanDieuChuyen: ['']
+        thoiHanDieuChuyen: [''],
+        keHoachDcDtlId: [, [Validators.required]]
       }
     );
     this.userInfo = this.userService.getUserLogin();
@@ -349,18 +350,21 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   pheDuyet() {
     let trangThai = '';
     let msg = '';
+    let MSG = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_LDCC
         msg = 'Bạn có muốn gửi duyệt ?'
+        MSG = MESSAGE.GUI_DUYET_SUCCESS
         break;
       case STATUS.CHO_DUYET_LDCC:
         trangThai = STATUS.DA_DUYET_LDCC
         msg = 'Bạn có muốn duyệt bản ghi ?'
+        MSG = MESSAGE.PHE_DUYET_SUCCESS
         break;
     }
-    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS)
+    this.approve(this.formData.value.id, trangThai, msg, null, MSG)
   }
 
   async flattenTree(tree) {
@@ -454,7 +458,8 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
             tongTrongLuongTruBi: 0,
             tongTrongLuongTruBiText: '',
             dcnbBangKeCanHangDtl: [],
-            thoiHanDieuChuyen: ''
+            thoiHanDieuChuyen: '',
+            keHoachDcDtlId: '',
           });
           this.danhSachHangHoaQD = [];
           if (data.id) {
@@ -556,6 +561,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         tenCloaiVthh: dataRes.data.tenCloaiVthh,
         donViTinh: dataRes.data.donViTinh,
         thoiGianGiaoNhan: dataRes.data.thoiGianGiaoNhan,
+        keHoachDcDtlId: dataRes.data.keHoachDcDtlId,
 
         maLoKho: dataRes.data.maLoKho,
         tenLoKho: dataRes.data.tenLoKho,

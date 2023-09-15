@@ -140,7 +140,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         thuKho: [null],
         tenThuKho: [''],
         donViTinh: '',
-        ghiChu: ['']
+        ghiChu: [''],
+        keHoachDcDtlId: [, [Validators.required]]
       }
     );
     this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
@@ -300,6 +301,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           tenThuKho: '',
           donViTinh: '',
           soLuongMau: '',
+          keHoachDcDtlId: null
         });
         this.chiTieuKiemTra = [],
           this.phuongPhapLayMaus = [];
@@ -404,6 +406,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           tenThuKho: '',
           donViTinh: '',
           soLuongMau: '',
+          keHoachDcDtlId: null
         });
         this.chiTieuKiemTra = [],
           this.phuongPhapLayMaus = [];
@@ -431,6 +434,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         thuKho: data.thuKhoId,
         tenThuKho: data.thuKho,
         donViTinh: data.donViTinh,
+        keHoachDcDtlId: data.id
       })
     }
     if (data.cloaiVthh) {

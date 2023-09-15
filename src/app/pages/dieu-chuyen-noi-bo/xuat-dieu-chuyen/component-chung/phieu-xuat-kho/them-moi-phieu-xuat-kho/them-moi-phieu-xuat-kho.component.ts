@@ -159,8 +159,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       loaiHinhNhapXuat: ["", [Validators.required]],
       tenLoaiHinhNhapXuat: ["", [Validators.required]],
       kieuNhapXuat: ["", [Validators.required]],
-      tenKieuNhapXuat: ["", [Validators.required]]
-
+      tenKieuNhapXuat: ["", [Validators.required]],
+      keHoachDcDtlId: [, [Validators.required]]
     });
     this.maBb = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
   }
@@ -432,6 +432,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           tenLoaiVthh: data.tenLoaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           duToanKpDc: data.duToanKphi,
+          keHoachDcDtlId: data.id,
 
           soPhieuKnChatLuong: '',
           phieuKnChatLuongHdrId: '',

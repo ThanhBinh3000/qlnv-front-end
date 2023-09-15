@@ -163,6 +163,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         tenCloaiVthh: ['', [Validators.required]],
         soPhieuKtChatLuong: [],
         donViTinh: ['', [Validators.required]],
+        keHoachDcDtlId: [, [Validators.required]]
         // fileDinhKems: [new Array<FileDinhKem>()],
       }
     );
@@ -284,7 +285,8 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       tongSlXuatTheoTt: 0,
       danhSachBangKe: [],
       thongTinHaoHut: [],
-      ngayBatDauXuat: ''
+      ngayBatDauXuat: '',
+      keHoachDcDtlId: null
 
     })
   }
@@ -418,6 +420,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         moTaHangHoa: data.moTaHangHoa,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         donViTinh: data.donViTinh,
+        keHoachDcDtlId: data.id
       })
       // this.listBbTinhKho = this.listBbTinhKho.filter(item => (item.maDiemKho == data.maDiemKho));
       this.loadSoBbTinhKho();
@@ -522,6 +525,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   pheDuyet() {
     let trangThai = '';
     let msg = '';
+    let MSG = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.TU_CHOI_KT:
@@ -529,25 +533,29 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.GUI_DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_KT;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.DA_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.PHE_DUYET_SUCCESS;
         break;
       }
     }
-    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
+    this.approve(this.formData.value.id, trangThai, msg, null, MSG);
   }
   showTuChoi() {
     return ([STATUS.CHO_DUYET_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.CHO_DUYET_LDCC].includes(this.formData.value.trangThai)) && this.userService.isChiCuc()
