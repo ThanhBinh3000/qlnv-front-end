@@ -66,17 +66,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   fileBbTinhKhoDaKy: FileDinhKem[] = [];
 
   LIST_TRANG_THAI = LIST_TRANG_THAI_BBTK;
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "",
-    tenBaoCao: "",
-    trangThai: ""
-  };
-  showDlgPreview: boolean;
-  pdfSrc: string;
-  wordSrc: string;
-  excelSrc: string;
-  isPrint: boolean;
+  previewName: string = "bien_ban_tinh_kho";
 
   constructor(
     httpClient: HttpClient,
@@ -94,35 +84,35 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     this.formData = this.fb.group(
       {
         id: [],
-        nam: [dayjs().get("year")],
-        maDvi: [],
-        maQhns: [],
+        nam: [dayjs().get("year"), [Validators.required]],
+        maDvi: [, [Validators.required]],
+        maQhns: [, [Validators.required]],
         soBbTinhKho: [],
-        ngayLap: [],
-        qdinhDccId: [],
+        ngayLap: [, [Validators.required]],
+        qdinhDccId: [, [Validators.required]],
         soQdinhDcc: ['', [Validators.required]],
-        ngayKyQdDcc: [''],
+        ngayKyQdDcc: ['', [Validators.required]],
         maDiemKho: ['', [Validators.required]],
         maNhaKho: ['', [Validators.required]],
         maNganKho: ['', [Validators.required]],
         maLoKho: [],
-        loaiVthh: [],
-        cloaiVthh: [],
+        loaiVthh: [, [Validators.required]],
+        cloaiVthh: [, [Validators.required]],
         moTaHangHoa: [],
-        ngayBatDauXuat: [],
-        ngayKetThucXuat: [],
-        tonKhoBanDau: [],
-        tongSlXuatTheoQd: [],
-        tongSlXuatTheoTt: [],
-        slConLaiTheoSs: [],
-        slConLaiTheoTt: [],
+        ngayBatDauXuat: [, [Validators.required]],
+        ngayKetThucXuat: [, [Validators.required]],
+        tonKhoBanDau: [0],
+        tongSlXuatTheoQd: [0],
+        tongSlXuatTheoTt: [0],
+        slConLaiTheoSs: [0],
+        slConLaiTheoTt: [0],
         chenhLechSlConLai: [],
-        slThua: [],
-        slThieu: [],
-        nguyenNhan: [''],
-        kienNghi: [''],
-        ghiChu: [''],
-        thuKho: [],
+        slThua: [0],
+        slThieu: [0],
+        nguyenNhan: ['', [Validators.required]],
+        kienNghi: ['', [Validators.required]],
+        ghiChu: ['', [Validators.required]],
+        thuKho: ['', [Validators.required]],
         ktvBaoQuan: [],
         ktvBaoQuanId: [],
         keToan: [],
@@ -132,19 +122,20 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
         diaChiDvi: [],
-        tenDvi: [],
-        tenCloaiVthh: [],
-        tenLoaiVthh: [],
-        tenTrangThai: ['Dự Thảo'],
+        tenDvi: [, [Validators.required]],
+        tenCloaiVthh: [, [Validators.required]],
+        tenLoaiVthh: [, [Validators.required]],
+        tenTrangThai: ['Dự Thảo', [Validators.required]],
         tenNhaKho: ['', [Validators.required]],
         tenDiemKho: ['', [Validators.required]],
         tenLoKho: [],
         tenNganKho: [],
         tenNganLoKho: ['', [Validators.required]],
-        dcnbBienBanTinhKhoDtl: [new Array()],
+        dcnbBienBanTinhKhoDtl: [new Array(), [Validators.required, Validators.minLength(1)]],
         donViTinh: ['', [Validators.required]],
         soPhieuKnChatLuong: ['', [Validators.required]],
-        phieuKnChatLuongHdrId: ['', [Validators.required]]
+        phieuKnChatLuongHdrId: ['', [Validators.required]],
+        keHoachDcDtlId: [, [Validators.required]]
       }
     );
     this.maBb = '-BBTK';
@@ -343,6 +334,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
 
+        keHoachDcDtlId: data.id,
+
         tongSlXuatTheoQd: data.soLuongDc || 0,
         tonKhoBanDau: data.tonKho || 0,
         slConLaiTheoSs: data.tonKho - data.soLuongDc,
@@ -412,7 +405,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       slConLaiTheoSs: 0,
       tongSlXuatTheoTt: 0,
       dcnbBienBanTinhKhoDtl: [],
-      ngayBatDauXuat: ''
+      ngayBatDauXuat: '',
+      keHoachDcDtlId: ''
 
     })
   }
@@ -462,6 +456,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   pheDuyet() {
     let trangThai = '';
     let msg = '';
+    let MSG = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.TU_CHOI_KT:
@@ -469,25 +464,29 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.GUI_DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_KT;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.DUYET_SUCCESS
         break;
       }
       case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.DA_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.PHE_DUYET_SUCCESS
         break;
       }
     }
-    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
+    this.approve(this.formData.value.id, trangThai, msg, null, MSG);
   }
 
   tuChoi() {
@@ -558,48 +557,5 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     this.idPhieuXuatKho = null;
     this.isViewModalBKCH = false;
     this.idBKCH = null;
-  }
-  //Preview
-  async preview() {
-    this.reportTemplate.fileName = "bien_ban_hao_doi.docx";
-    let body = {
-      reportTemplateRequest: this.reportTemplate,
-      ...this.formData.value
-    }
-    await this.bienBanTinhKhoDieuChuyenService.preview(body).then(async s => {
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-      this.showDlgPreview = true;
-    });
-  }
-  downloadPdf() {
-    saveAs(this.pdfSrc, "bien_ban_hao_doi.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "bien_ban_hao_doi.docx");
-  }
-  downloadExcel() {
-    saveAs(this.excelSrc, "bien_ban_hao_doi.xlsx");
-  }
-  doPrint() {
-    const WindowPrt = window.open(
-      '',
-      '',
-      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-    );
-    let printContent = '';
-    printContent = printContent + '<div>';
-    printContent =
-      printContent + document.getElementById('modal').innerHTML;
-    printContent = printContent + '</div>';
-    WindowPrt.document.write(printContent);
-    WindowPrt.document.close();
-    WindowPrt.focus();
-    WindowPrt.print();
-    WindowPrt.close();
-  }
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 }

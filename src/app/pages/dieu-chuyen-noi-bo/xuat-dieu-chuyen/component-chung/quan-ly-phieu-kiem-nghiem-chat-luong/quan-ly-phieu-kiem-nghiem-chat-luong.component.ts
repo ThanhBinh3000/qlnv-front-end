@@ -28,7 +28,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 export interface PassDataPKNCL {
   soPhieuKnChatLuong: string, phieuKnChatLuongId: number, soQdinhDcc: string, qdinhDccId: number, ngayQDHieuLuc: string, soBBLayMau: string, bblayMauId: number, ngaylayMau: string, tenLoKho: string, maLoKho: string,
   tenNganKho: string, maNganKho: string, tenNhaKho: string, maNhaKho: string, tenDiemKho: string, maDiemKho: string, tenHangHoa: string, maHangHoa: string, tenChLoaiHangHoa: string, maChLoaiHangHoa: string,
-  thuKhoId: number, tenThuKho: string, donViTinh: string
+  thuKhoId: number, tenThuKho: string, donViTinh: string, keHoachDcDtlId: number
 }
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -82,7 +82,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   passData: PassDataPKNCL = {
     soPhieuKnChatLuong: '', phieuKnChatLuongId: null, soQdinhDcc: '', qdinhDccId: null, ngayQDHieuLuc: '', soBBLayMau: '', bblayMauId: null, ngaylayMau: '', tenLoKho: '', maLoKho: '',
     tenNganKho: '', maNganKho: '', tenNhaKho: '', maNhaKho: '', tenDiemKho: '', maDiemKho: '', tenHangHoa: '', maHangHoa: '', tenChLoaiHangHoa: '', maChLoaiHangHoa: '', thuKhoId: null, tenThuKho: '',
-    donViTinh: ''
+    donViTinh: '', keHoachDcDtlId: null
   };
   LIST_TRANG_THAI: { [key: string]: string } = {
     [STATUS.DU_THAO]: "Dự thảo",
@@ -445,7 +445,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       soPhieuKnChatLuong: lv2.soPhieuKnChatLuong, phieuKnChatLuongId: lv2.id, soQdinhDcc: lv2.soQdinh, qdinhDccId: lv2.qdinhDccId, ngayQDHieuLuc: lv2.ngayQDHieuLuc,
       soBBLayMau: lv2.soBBLayMau, bblayMauId: lv2.bblayMauId, ngaylayMau: lv2.ngaylayMau, tenLoKho: lv2.tenLoKho, maLoKho: lv2.maLoKho, tenNganKho: lv2.tenNganKho,
       maNganKho: lv2.maNganKho, tenNhaKho: lv2.tenNhaKho, maNhaKho: lv2.maNhaKho, tenDiemKho: lv2.tenDiemKho, maDiemKho: lv2.maDiemKho, tenHangHoa: lv2.tenHangHoa,
-      maHangHoa: lv2.maHangHoa, tenChLoaiHangHoa: lv2.tenChLoaiHangHoa, maChLoaiHangHoa: lv2.maChLoaiHangHoa, thuKhoId: lv2.thuKhoId, tenThuKho: lv2.thuKho, donViTinh: lv2.donViTinh
+      maHangHoa: lv2.maHangHoa, tenChLoaiHangHoa: lv2.tenChLoaiHangHoa, maChLoaiHangHoa: lv2.maChLoaiHangHoa, thuKhoId: lv2.thuKhoId, tenThuKho: lv2.thuKho, donViTinh: lv2.donViTinh, keHoachDcDtlId: lv2.keHoachDcDtlId
     }
   }
 
