@@ -74,18 +74,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     [STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
   }
   chiTieuKiemTra: any[];
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "",
-    tenBaoCao: "",
-    trangThai: ""
-  };
-  showDlgPreview: boolean;
-  pdfSrc: string;
-  wordSrc: string;
-  excelSrc: string;
-  isPrint: boolean;
   tabSelected: number = 0;
+  previewName: string = "bien_ban_lay_mau";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -110,26 +100,26 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         qdccId: [, [Validators.required]],
         soQdinhDcc: [, [Validators.required]],
         // ngayQdDc: [],
-        ktvBaoQuan: [],
+        ktvBaoQuan: [, [Validators.required]],
         soBbLayMau: [],
         ngayLayMau: [dayjs().format('YYYY-MM-DD')],
-        dviKiemNghiem: [],
-        diaDiemLayMau: [],
+        dviKiemNghiem: [, [Validators.required]],
+        diaDiemLayMau: [, [Validators.required]],
         loaiVthh: [, [Validators.required]],
         cloaiVthh: [, [Validators.required]],
         moTaHangHoa: [],
-        maDiemKho: [],
-        maNhaKho: [],
-        maNganKho: [],
+        maDiemKho: [, [Validators.required]],
+        maNhaKho: [, [Validators.required]],
+        maNganKho: [, [Validators.required]],
         maLoKho: [],
-        soLuongMau: [],
+        soLuongMau: [, [Validators.required, Validators.min(1)]],
         ketQuaNiemPhong: [],
-        trangThai: [STATUS.DU_THAO],
+        trangThai: [STATUS.DU_THAO, [Validators.required]],
         lyDoTuChoi: [],
         soBbHaoDoi: [],
         soBbTinhKho: [],
         ngayXuatDocKho: [],
-        tenDvi: [''],
+        tenDvi: ['', [Validators.required]],
         tenLoaiVthh: ['', [Validators.required]],
         tenCloaiVthh: ['', [Validators.required]],
         tenTrangThai: ['Dự Thảo'],
@@ -150,7 +140,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         thuKho: [null],
         tenThuKho: [''],
         donViTinh: '',
-        ghiChu: ['']
+        ghiChu: [''],
+        keHoachDcDtlId: [, [Validators.required]]
       }
     );
     this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
@@ -310,6 +301,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           tenThuKho: '',
           donViTinh: '',
           soLuongMau: '',
+          keHoachDcDtlId: null
         });
         this.chiTieuKiemTra = [],
           this.phuongPhapLayMaus = [];
@@ -414,6 +406,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
           tenThuKho: '',
           donViTinh: '',
           soLuongMau: '',
+          keHoachDcDtlId: null
         });
         this.chiTieuKiemTra = [],
           this.phuongPhapLayMaus = [];
@@ -441,6 +434,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         thuKho: data.thuKhoId,
         tenThuKho: data.thuKho,
         donViTinh: data.donViTinh,
+        keHoachDcDtlId: data.id
       })
     }
     if (data.cloaiVthh) {
@@ -450,7 +444,15 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   }
 
   async save(isGuiDuyet?) {
-    this.setValidator(isGuiDuyet)
+    // this.setValidator(isGuiDuyet)
+    if (!Array.isArray(this.phuongPhapLayMaus) || this.phuongPhapLayMaus.length <= 0) {
+      return this.notification.error(MESSAGE.ERROR, "Chưa có thông tin phương pháp lấy mẫu.")
+    } else if (!this.phuongPhapLayMaus.find(f => f.checked)) {
+      return this.notification.error(MESSAGE.ERROR, "Chưa có phương pháp lấy mẫu nào được chon.")
+    }
+    if (!Array.isArray(this.chiTieuKiemTra) || this.chiTieuKiemTra.length <= 0) {
+      return this.notification.error(MESSAGE.ERROR, "Chưa có thông tin chỉ tiêu kiểm tra.")
+    }
     let body = this.formData.value;
     body.loaiDc = this.loaiDc;
     body.isVatTu = this.isVatTu;
@@ -473,20 +475,23 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   pheDuyet() {
     let trangThai = '';
     let msg = '';
+    let MSG = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.GUI_DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.DA_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.PHE_DUYET_SUCCESS;
         break;
       }
     };
-    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
+    this.approve(this.formData.value.id, trangThai, msg, null, MSG);
   }
 
   tuChoi() {
@@ -526,87 +531,32 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   //     this.save(true)
   //   }
   // }
-  async preview() {
-    this.spinner.show();
-    try {
-      this.reportTemplate.fileName = this.tabSelected === 0 ? "bien_ban_lay_mau.docx" : "bien_ban_ban_giao_mau.docx";
-      let body = {
-        reportTemplateRequest: this.reportTemplate,
-        isSave: false,
-        type: this.tabSelected === 0 ? "BBLM" : "",
-        ...this.formData.value
-      }
-      await this.bienBanLayMauDieuChuyenService.preview(body).then(async s => {
-        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-        this.showDlgPreview = true;
-      });
-    } catch (e) {
-      console.log('error: ', e);
-      this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-    }
-    finally {
-      this.spinner.hide();
-    }
-  }
-  closeDlg() {
-    this.showDlgPreview = false;
-  };
-  downloadPdf() {
-    if (this.tabSelected === 0) {
-      saveAs(this.pdfSrc, "bien_ban_lay_mau.pdf");
-    } else {
-      saveAs(this.pdfSrc, "bien_ban_ban_giao_mau.pdf");
-    }
-  };
-  downloadExcel() {
-    if (this.tabSelected === 0) {
-      saveAs(this.pdfSrc, "bien_ban_lay_mau.xlsx");
-    } else {
-      saveAs(this.pdfSrc, "bien_ban_ban_giao_mau.xlsx");
-    }
-  };
-  doPrint() {
-    const WindowPrt = window.open(
-      '',
-      '',
-      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-    );
-    let printContent = '';
-    printContent = printContent + '<div>';
-    printContent =
-      printContent + document.getElementById('modal').innerHTML;
-    printContent = printContent + '</div>';
-    WindowPrt.document.write(printContent);
-    WindowPrt.document.close();
-    WindowPrt.focus();
-    WindowPrt.print();
-    WindowPrt.close();
-  }
+
   selectTab(tab: number) {
-    this.tabSelected = tab
+    this.tabSelected = tab;
+    this.previewName = tab === 0 ? "bien_ban_lay_mau" : "bien_ban_ban_giao_mau";
   }
-  setValidator(isGuiDuyet) {
-    if (isGuiDuyet) {
-      this.formData.controls['maDvi'].setValidators([Validators.required]);
-      // this.formData.controls['soBbLayMau'].setValidators([Validators.required]);
-      this.formData.controls['dviKiemNghiem'].setValidators([Validators.required]);
-      this.formData.controls['diaDiemLayMau'].setValidators([Validators.required]);
-      this.formData.controls['soLuongMau'].setValidators([Validators.required]);
-      // this.formData.controls['pplayMau'].setValidators([Validators.required]);
-      // this.formData.controls['chiTieuKiemTra'].setValidators([Validators.required]);
-      this.formData.controls['ngayLayMau'].setValidators([Validators.required]);
-    } else {
-      this.formData.controls['maDvi'].clearValidators();
-      // this.formData.controls['soBbLayMau'].clearValidators();
-      this.formData.controls['dviKiemNghiem'].clearValidators();
-      this.formData.controls['diaDiemLayMau'].clearValidators();
-      this.formData.controls['soLuongMau'].clearValidators();
-      // this.formData.controls['pplayMau'].clearValidators();
-      // this.formData.controls['chiTieuKiemTra'].clearValidators();
-      this.formData.controls['ngayLayMau'].clearValidators();
-    }
-  }
+  // setValidator(isGuiDuyet) {
+  //   if (isGuiDuyet) {
+  //     this.formData.controls['maDvi'].setValidators([Validators.required]);
+  //     // this.formData.controls['soBbLayMau'].setValidators([Validators.required]);
+  //     this.formData.controls['dviKiemNghiem'].setValidators([Validators.required]);
+  //     this.formData.controls['diaDiemLayMau'].setValidators([Validators.required]);
+  //     this.formData.controls['soLuongMau'].setValidators([Validators.required]);
+  //     // this.formData.controls['pplayMau'].setValidators([Validators.required]);
+  //     // this.formData.controls['chiTieuKiemTra'].setValidators([Validators.required]);
+  //     this.formData.controls['ngayLayMau'].setValidators([Validators.required]);
+  //   } else {
+  //     this.formData.controls['maDvi'].clearValidators();
+  //     // this.formData.controls['soBbLayMau'].clearValidators();
+  //     this.formData.controls['dviKiemNghiem'].clearValidators();
+  //     this.formData.controls['diaDiemLayMau'].clearValidators();
+  //     this.formData.controls['soLuongMau'].clearValidators();
+  //     // this.formData.controls['pplayMau'].clearValidators();
+  //     // this.formData.controls['chiTieuKiemTra'].clearValidators();
+  //     this.formData.controls['ngayLayMau'].clearValidators();
+  //   }
+  // }
 
 }
 ;
