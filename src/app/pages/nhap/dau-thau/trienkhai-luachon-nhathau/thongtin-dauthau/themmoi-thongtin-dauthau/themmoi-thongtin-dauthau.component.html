@@ -206,7 +206,7 @@
                     <div nz-row [nzGutter]="24" class="label-50 mg-t-10 ">
                         <div nz-col nzSpan="24">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
                                 <nz-form-control>
                                     <input class="text-blue" nz-input formControlName="tenLoaiVthh" readonly="true" />
                                 </nz-form-control>
@@ -214,7 +214,7 @@
                         </div>
                         <div nz-col nzSpan="24" *ngIf="!loaiVthh.startsWith('02')">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
                                 <nz-form-control>
                                     <input class="text-blue" nz-input formControlName="tenCloaiVthh" readonly="true" />
                                 </nz-form-control>

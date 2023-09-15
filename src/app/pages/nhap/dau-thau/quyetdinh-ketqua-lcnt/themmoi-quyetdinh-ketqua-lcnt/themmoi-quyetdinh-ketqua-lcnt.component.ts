@@ -362,7 +362,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdPdKhlcnt,
-        dataHeader: ['Số Đề Xuất KHLCNT', 'Số QĐ PD KHLCNT', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Tổng số gói thầu', 'Số gói thầu trúng', 'Số gói thầu trượt'],
+        dataHeader: ['Số Đề Xuất KHLCNT', 'Số QĐ PD KHLCNT', 'Loại hàng DTQG', 'Chủng loại hàng DTQG', 'Tổng số gói thầu', 'Số gói thầu trúng', 'Số gói thầu trượt'],
         dataColumn: ['soDxuat', 'soQdPdKhlcnt', 'tenLoaiVthh', 'tenCloaiVthh', 'soGthau', 'soGthauTrung', 'soGthauTruot']
       },
     });
