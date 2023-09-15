@@ -337,6 +337,14 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listThongTinDiemKho.push(new DanhSachGoiThau());
         this.listAllDiemKho.push(this.listDiemKho);
         this.listDiemKho = [];
+        let soLuong: number = 0;
+        this.listOfData.forEach(item => {
+          soLuong = soLuong + item.soLuong
+        });
+        this.formData.patchValue({
+          soLuong: soLuong,
+        })
+        this.calcTong();
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
       }
@@ -404,6 +412,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.listOfData = this.listOfData.filter((d, index) => index !== i);
       this.listAllDiemKho.splice(i, 1);
     }
+    this.calcTong()
   }
 
   validateSlChiCuc(i) {
