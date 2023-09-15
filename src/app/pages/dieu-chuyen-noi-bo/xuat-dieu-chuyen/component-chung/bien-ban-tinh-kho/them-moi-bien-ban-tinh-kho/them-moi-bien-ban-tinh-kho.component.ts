@@ -148,6 +148,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       if (this.isViewOnModal) {
         this.isView = true;
       }
+      this.setValidate();
       await this.loadDetail(this.idInput)
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -557,5 +558,11 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     this.idPhieuXuatKho = null;
     this.isViewModalBKCH = false;
     this.idBKCH = null;
+  }
+  setValidate() {
+    if (!this.thayDoiThuKho) {
+      this.formData.controls["soPhieuKnChatLuong"].clearValidators();
+      this.formData.controls["phieuKnChatLuongHdrId"].clearValidators();
+    }
   }
 }
