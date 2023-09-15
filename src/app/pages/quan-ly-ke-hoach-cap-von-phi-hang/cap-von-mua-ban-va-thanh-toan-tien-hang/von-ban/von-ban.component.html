@@ -9,6 +9,10 @@
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == Tab.THU_CHI">
+            <app-quan-ly-von-ban [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-quan-ly-von-ban>
+        </ng-container>
         <ng-container *ngIf="tabSelected == Tab.DS_VON_BAN_NOP_DVCT">
             <app-danh-sach-von-ban-nop-dvct [dataInfo]="data" (dataChange)="changeTab($event)">
             </app-danh-sach-von-ban-nop-dvct>

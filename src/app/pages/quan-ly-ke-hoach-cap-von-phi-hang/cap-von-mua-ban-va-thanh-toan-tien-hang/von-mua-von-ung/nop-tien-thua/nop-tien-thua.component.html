@@ -5,6 +5,10 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
+            <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
+                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                <span>Xuất</span>
+            </button>
             <button *ngIf="status.save" type="button" class="btn btn-sub" (click)="action('save')">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
@@ -29,9 +33,13 @@
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
-                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
-                <span>Xuất</span>
+            <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('accept')">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Tiếp nhận</span>
+            </button>
+            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
             </button>
         </div>
     </nz-affix>
@@ -53,9 +61,9 @@
                     <thead>
                         <tr>
                             <th scope="col">Mã cấp ứng</th>
-                            <th scope="col" *ngIf="isParent">Tên đơn vị</th>
                             <th scope="col">Năm</th>
                             <th scope="col">Đợt</th>
+                            <th scope="col">Loại đề nghị</th>
                             <th scope="col">Ngày tạo</th>
                             <th scope="col">Ngày trình duyệt</th>
                             <th scope="col">Ngày duyệt</th>
@@ -66,9 +74,9 @@
                     <tbody>
                         <tr>
                             <td>{{ baoCao.maCapUng }}</td>
-                            <td *ngIf="isParent">{{ baoCao.tenDvi }}</td>
                             <td>{{ baoCao.namDnghi }}</td>
                             <td>{{ baoCao.dot }}</td>
+                            <td>{{ Cvmb.suggestionName(baoCao.loaiDnghi)}}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayTao) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
@@ -104,7 +112,7 @@
                     <thead>
                         <tr>
                             <th scope="col" rowspan="2" nzWidth="50px" nzLeft>STT</th>
-                            <th scope="col" rowspan="2" nzWidth="150px" nzLeft>Hàng DTQG</th>
+                            <th scope="col" rowspan="2" nzWidth="250px" nzLeft>Hàng DTQG</th>
                             <th scope="colgroup" colspan="3">Số đã nộp Đơn vị cấp trên (Lũy kế đến trước lần nộp này)
                             </th>
                             <th scope="colgroup" colspan="4">Nộp đợt {{baoCao.dot}}</th>

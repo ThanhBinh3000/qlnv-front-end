@@ -8,6 +8,7 @@ export class Cvmb {
     static readonly VON_BAN = '5';
     static readonly QUAN_LY_VON_BAN = '6';
     static readonly QUAN_LY_THU_CHI = '7';
+    static readonly TONG_HOP_TIEN_THUA = '8';
 
     static readonly THOC = "0";
     static readonly GAO = "1";
@@ -131,6 +132,8 @@ export class ThanhToan {
     level: number;
     tenKhachHang: string;
     qdPheDuyet: string;
+    maHangDtqg: string;
+    tenHangDtqg: string;
     maDvi: string;
     tenDvi: string;
     slKeHoach: number;
@@ -157,6 +160,7 @@ export class ThanhToan {
     soConPhaiNop: number;
     dot: number;
     congVan: string;
+    nopNsnn: number;
     ghiChu: string;
 
     constructor(data: Partial<Pick<ThanhToan, keyof ThanhToan>>) {
@@ -215,6 +219,9 @@ export class TienThua {
     nhanVonUng: number;
     nhanVonCap: number;
     nhanTong: number;
+    nhanTtUng: number;
+    nhanTtCap: number;
+    nhanTtTong: number;
     giaoCapUng: number;
     giaoCapVon: number;
     giaoTong: number;
@@ -233,6 +240,8 @@ export class TienThua {
     nopTong: number;
     lkSauLanNay: number;
     soConPhaiNop: number;
+    dot: number;
+    idCapDuoi: string;
     ghiChu: string;
 
     constructor(data: Partial<Pick<TienThua, keyof TienThua>>) {
