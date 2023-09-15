@@ -117,7 +117,6 @@
           <th>Ngày đề xuất</th>
           <th>Ngày duyệt đề xuất</th>
           <th>Loại hàng hoá</th>
-          <th>Tổng SL đề xuất CT, VT (kg)</th>
           <th>Trích yếu</th>
           <th>Trạng thái ĐX</th>
           <th>Trạng thái TH</th>
@@ -125,113 +124,6 @@
           <th>Trạng thái QĐ</th>
           <th>Số QĐ</th>
           <th width="90px">Hành động</th>
-        </tr>
-        <tr class="search-table">
-          <th></th>
-          <th></th>
-          <th>
-            <nz-input-group>
-              <nz-input-group>
-                <nz-select nzAllowClear [(ngModel)]="filterTable.nam"
-                           (ngModelChange)="filterInTable('nam',filterTable.nam)">
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                </nz-select>
-              </nz-input-group>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiNhapXuat"
-                     (input)="filterInTable('tenLoaiNhapXuat',filterTable.tenLoaiNhapXuat)" size="small"/>
-            </nz-input-group>
-
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDx"
-                     (input)="filterInTable('soDx',filterTable.soDx)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDonVi"
-                     (input)="filterInTable('tenDonVi',filterTable.tenDonVi)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký" [(ngModel)]="filterTable.ngayDx"
-                              (ngModelChange)="filterInTable('ngayDx', convertDateToString(filterTable.ngayDx))">
-              </nz-date-picker>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký" [(ngModel)]="filterTable.ngayPduyet"
-                              (ngModelChange)="filterInTable('ngayPduyet', convertDateToString(filterTable.ngayPduyet))">
-              </nz-date-picker>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
-                     (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongSoLuong"
-                     (input)="filterInTable('tongSoLuong',filterTable.tongSoLuong)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
-                         (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
-                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-              </nz-select>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <nz-select nzAllowClear [(ngModel)]="filterTable.trangThaiTh"
-                         (ngModelChange)="filterInTable('trangThaiTh',filterTable.trangThaiTh)">
-                <nz-option *ngFor="let p of listTrangThaiTh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-              </nz-select>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
-                     (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <nz-select nzAllowClear [(ngModel)]="filterTable.trangThaiTQd"
-                         (ngModelChange)="filterInTable('trangThaiTQd',filterTable.trangThaiTQd)">
-                <nz-option *ngFor="let p of listTrangThaiQd" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-              </nz-select>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soQd',filterTable.soQd)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"
-                     (input)="filterInTable('soBbTinhKho',filterTable.soBbTinhKho)" size="small"/>
-            </nz-input-group>
-          </th>
         </tr>
         </thead>
         <tbody>
@@ -247,8 +139,8 @@
           <td>{{ data.tenDviDx }}</td>
           <td>{{ data.ngayDx | date: globals.dateFormat }}</td>
           <td>{{ data.ngayPduyet| date: globals.dateFormat }}</td>
-          <td>{{ data.tenLoaiVthh }}</td>
-          <td>{{ data.tongSoLuong| number: globals.numberFormat:globals.locale}}</td>
+          <td>{{ data.tenVthh }}</td>
+<!--          <td>{{ data.tongSoLuong| number: globals.numberFormat:globals.locale}}</td>-->
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiTh }}</td>

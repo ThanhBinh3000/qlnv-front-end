@@ -282,7 +282,7 @@
           <tr>
             <th [rowspan]="2"></th>
             <th [rowspan]="2">STT</th>
-            <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
+            <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
             <th [rowspan]="2">Tên chi cục</th>
             <th [colspan]="2">Chủng loại hàng hóa</th>
             <th [rowspan]="2">Điểm kho</th>
@@ -393,12 +393,12 @@
   </nz-card>
 </div>
 
-<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()"
+<nz-modal [nzWidth]="'60%'" [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()"
           (nzOnOk)="handleOk()" nzTitle="Chi tiết phương án">
   <ng-container *nzModalContent>
     <!--    <form nz-form>-->
     <nz-form-item>
-      <nz-form-label [nzXs]="7">Địa phương nhận cứu trợ, viện trợ</nz-form-label>
+      <nz-form-label [nzXs]="7">Địa phương/cơ quan/đơn vị nhận cứu trợ</nz-form-label>
       <nz-form-control>
         <input nz-input [(ngModel)]="noiDungRow.noiDung" [nzAutocomplete]="auto" [readonly]="true">
         <nz-autocomplete #auto>

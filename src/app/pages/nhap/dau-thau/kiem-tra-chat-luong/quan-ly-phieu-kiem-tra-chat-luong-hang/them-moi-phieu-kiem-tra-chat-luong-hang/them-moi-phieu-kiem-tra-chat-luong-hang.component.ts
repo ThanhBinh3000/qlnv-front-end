@@ -135,7 +135,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       await Promise.all([
         this.loadTieuChuan(),
         this.loadData(),
-        // this.loadSoQuyetDinh(),
+        this.loadDsHthucBquan(),
       ]);
       if (this.id) {
         await this.loadChiTiet(this.id);
@@ -266,9 +266,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
 
   async bindingDataDdNhap(data) {
     if (data) {
-      console.log(data);
       let soLuongNhap = await this.phieuKtraCluongService.getSoLuongNhap({ "idDdiemGiaoNvNh": data.id });
-      console.log(soLuongNhap);
       this.formData.patchValue({
         idDdiemGiaoNvNh: data.id,
         maDiemKho: data.maDiemKho,
@@ -283,9 +281,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         soLuongDaNhap: soLuongNhap.data,
         soLuongNhapKho: data.soLuong,
         soBbNtbq: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id))).soBbNtBq,
+        hthucBquan: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id))).hthucBquan,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
-      console.log(this.formData.value)
+      await this.loadDsHthucBquan();
     }
   }
 
@@ -328,6 +327,15 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
     let resNx = await this.danhMucService.danhMucChungGetAll("KET_QUA_DANH_GIA");
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listDanhGia = resNx.data;
+    }
+  }
+
+  async loadDsHthucBquan () {
+    if (this.formData.value.cloaiVthh) {
+      let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listHinhThucBaoQuan = res.data?.hinhThucBq
+      }
     }
   }
   async loadChiTiet(id: number) {
@@ -393,17 +401,16 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         res = await this.phieuKtraCluongService.create(body);
       }
       if (res.msg == MESSAGE.SUCCESS) {
+        this.id = res.data.id;
+        this.formData.get('id').setValue(res.data.id)
         if (isGuiDuyet) {
           await this.spinner.hide();
-          this.id = res.data.id;
           this.pheDuyet();
         } else {
           if (this.formData.get('id').value) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
           }
           await this.spinner.hide();
         }
@@ -542,7 +549,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   }
 
   saveEdit(index: number): void {
-    this.dataTableChiTieu[index].tenDanhGia = this.listDanhGia.find(i => i.ma == this.dataTableChiTieu[index].danhGia).giaTri;
+    this.dataTableChiTieu[index].tenDanhGia = this.listDanhGia.find(i => i.ma == this.dataTableChiTieu[index].danhGia)?.giaTri;
     this.dataTableChiTieu[index].edit = false;
   }
 
