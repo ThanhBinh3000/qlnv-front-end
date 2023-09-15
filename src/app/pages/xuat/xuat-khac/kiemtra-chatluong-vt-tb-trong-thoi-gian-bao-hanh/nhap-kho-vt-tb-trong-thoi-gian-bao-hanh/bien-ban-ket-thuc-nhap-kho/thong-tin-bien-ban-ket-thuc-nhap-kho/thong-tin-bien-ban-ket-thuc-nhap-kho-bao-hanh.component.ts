@@ -55,7 +55,7 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
   listNganLoKho: any = [];
   dataPhieuNhapKho: any = [];
   listPhieuNhapKho: any = [];
-
+  templateName = "Biên bản kết thúc nhập kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

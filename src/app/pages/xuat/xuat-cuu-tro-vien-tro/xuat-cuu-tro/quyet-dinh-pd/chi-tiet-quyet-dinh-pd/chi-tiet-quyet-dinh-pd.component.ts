@@ -519,7 +519,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async xemTruocPd(id,tenBaoCao,children) {
-    await this.tongHopPhuongAnCuuTroService.preview({
+    await this.quyetDinhPheDuyetPhuongAnCuuTroService.preview({
       tenBaoCao: tenBaoCao + '.docx',
       id: id,
       children: children

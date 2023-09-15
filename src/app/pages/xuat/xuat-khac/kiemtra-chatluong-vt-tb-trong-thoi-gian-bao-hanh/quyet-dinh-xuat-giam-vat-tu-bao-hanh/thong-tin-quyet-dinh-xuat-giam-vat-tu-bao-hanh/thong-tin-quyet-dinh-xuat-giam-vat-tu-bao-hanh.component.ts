@@ -29,6 +29,7 @@ import {
 import {
   BaoCaoKdmVtTbTrongThoiGianBaoHanh
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BaoCaoKdmVtTbTrongThoiGianBaoHanh.service";
+import {DonviService} from "../../../../../../services/donvi.service";
 
 
 @Component({
@@ -63,6 +64,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
     {value: 1, label: "Đạt"}
   ]
   maQd: string;
+  dviNhan: any;
 
   constructor(
     httpClient: HttpClient,
@@ -73,6 +75,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
     private phieuXuatKhoService: PhieuXuatNhapKhoService,
     private quyetDinhXuatGiamVtBaoHanhService: QuyetDinhXuatGiamVtBaoHanhService,
     private danhMucService: DanhMucService,
+    private donviService: DonviService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private baoCaoKdmVtTbTrongThoiGianBaoHanh: BaoCaoKdmVtTbTrongThoiGianBaoHanh,
   ) {
@@ -105,6 +108,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       this.spinner.show();
       this.maQd = "/" + this.userInfo.MA_QD
       await Promise.all([
+        this.loadDsCuc()
       ])
       await this.loadDetail(this.idInput)
       this.spinner.hide();
@@ -264,7 +268,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
   async openDialogSoQd() {
     await this.loadSoBaoCao();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định giao nhiệm vụ xuất hàng',
+      nzTitle: 'Danh sách số báo cáo kết quả kiểm định mẫu',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -293,13 +297,13 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
         return m.qdGiaonvXhDtl
           .filter(i=> i.mauBiHuy==true);
       }).flat();
+
       this.formData.patchValue({
         soCanCu: responseData.soBaoCao,
         idCanCu: responseData.id,
         listSoQdGiaoNvXh: responseData.soCanCu,
         listIdQdGiaoNvXh: responseData.idCanCu,
-        maDviNhan: responseData.maDviNhan,
-        tenDviNhan: responseData.tenDviNhan,
+        maDviNhan: responseData.maDvi,
         qdXuatGiamVtDtl:this.dataTable,
       });
       this.buildTableView(this.dataTable)
@@ -309,7 +313,11 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       await this.spinner.hide();
     }
   }
-
+  async loadDsCuc() {
+    const dsTong = await this.donviService.layTatCaDonViByLevel(2);
+    this.dviNhan = dsTong && Array.isArray(dsTong.data) ? dsTong.data.filter(item => item.type != "PB") : []
+    console.log(this.dviNhan,"111")
+  }
   buildTableView(data) {
     let dataView = chain(this.dataTable)
       .groupBy("maDiaDiem")
