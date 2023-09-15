@@ -79,32 +79,33 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
+      await this.spinner.show();
       await Promise.all([
         this.timKiem(),
         this.search(),
         this.loadDsVthh(),
-      ])
-      await this.spinner.hide();
+      ]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
   }
 
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-
     })
   }
 
   async clearFilter() {
     this.formData.reset();
-    await this.timKiem()
-    await this.search();
+    await Promise.all([
+      this.timKiem(),
+      this.search()
+    ])
   }
 
   redirectDetail(id, isView: boolean) {
@@ -114,40 +115,50 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
   }
 
   async loadDsVthh() {
-    let res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-        res.data.forEach((item) => {
-          const data = item.children.filter(s => s.ma == this.loaiVthh)
-          data.forEach(child => {
-            this.listCloaiVthh = child.children
-          })
-        })
-      }
-      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
-        const data = res.data.filter(s => s.ma === this.loaiVthh);
-        data.forEach((item) => {
-          this.listCloaiVthh = item.children
-        })
-      }
-      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-        const data = res.data.filter(s => s.ma === this.loaiVthh)
-        data.forEach((item) => {
-          this.listVthh = item.children
-        })
-      }
+    const res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
+    if (res.msg !== MESSAGE.SUCCESS) return;
+    const matchingItem = res.data.find(item => (
+      (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) ?
+        item.children.some(child => child.ma === this.loaiVthh) :
+        item.ma === this.loaiVthh
+    ));
+    if (!matchingItem) return;
+    if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+      this.listCloaiVthh = matchingItem.children.find(child => child.ma === this.loaiVthh)?.children || [];
+    } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
+      this.listCloaiVthh = matchingItem.children || [];
+    } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      this.listVthh = matchingItem.children || [];
     }
   }
 
-  async onChangeCloaiVthh(event) {
+  onChangeCloaiVthh(event) {
     this.formData.patchValue({
       cloaiVthh: null,
       tenCloaiVthh: null,
-    })
-    const data = this.listVthh.filter(s => s.ma ===event)
-    data.forEach((item) =>{
-      this.listCloaiVthh = item.children
-    })
+    });
+    const selectedData = this.listVthh.find(item => item.ma === event);
+    this.listCloaiVthh = selectedData ? selectedData.children : [];
+  }
+
+  openModal(id: number, modalType: string) {
+    if (modalType === 'QdPd') {
+      this.idQdPd = id;
+      this.isViewQdPd = true;
+    } else if (modalType === 'MaThongBao') {
+      this.idThongTin = id;
+      this.isViewThongTin = true;
+    }
+  }
+
+  closeModal(modalType: string) {
+    if (modalType === 'QdPd') {
+      this.idQdPd = null;
+      this.isViewQdPd = false;
+    } else if (modalType === 'MaThongBao') {
+      this.idThongTin = null;
+      this.isViewThongTin = false;
+    }
   }
 
   disabledNgayKyTu = (startValue: Date): boolean => {
@@ -163,24 +174,4 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
     }
     return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
   };
-
-  openModalQdPd(id: number) {
-    this.idQdPd = id;
-    this.isViewQdPd = true;
-  }
-
-  closeModalQdPd() {
-    this.idQdPd = null;
-    this.isViewQdPd = false;
-  }
-
-  openModalMaThongBao(id: number) {
-    this.idThongTin = id;
-    this.isViewThongTin = true;
-  }
-
-  closeModalMaThongBao() {
-    this.idThongTin = null;
-    this.isViewThongTin = false;
-  }
 }
