@@ -1,25 +1,25 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {saveAs} from 'file-saver';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {chain, cloneDeep, isEmpty} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {TongHopTheoDoiCapVonService} from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {DonviService} from "../../../../services/donvi.service";
-import {NumberToRoman} from "../../../../shared/commonFunction";
+import { Component, Input, OnInit } from '@angular/core';
+import { saveAs } from 'file-saver';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { chain, cloneDeep, isEmpty } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { DonviService } from '../../../../services/donvi.service';
+import { NumberToRoman } from '../../../../shared/commonFunction';
 
 @Component({
   selector: 'app-tong-hop-theo-doi-cap-von',
   templateUrl: './tong-hop-theo-doi-cap-von.component.html',
-  styleUrls: ['./tong-hop-theo-doi-cap-von.component.scss']
+  styleUrls: ['./tong-hop-theo-doi-cap-von.component.scss'],
 })
 export class TongHopTheoDoiCapVonComponent implements OnInit {
   @Input()
@@ -31,8 +31,8 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật'},
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
   ];
 
   searchFilter = {
@@ -79,7 +79,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      await this.initData()
+      await this.initData();
       await this.search();
     } catch (e) {
       console.log('error: ', e);
@@ -110,7 +110,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
+          if (item.trangThai == STATUS.DANG_THUC_HIEN) {
             item.checked = true;
           }
         });
@@ -139,16 +139,16 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "chuong": this.searchFilter.chuong,
-      "khoan": this.searchFilter.khoan,
-      "loai": this.searchFilter.loai,
-      "nam": this.searchFilter.nam,
-      "dviThongTri": this.searchFilter.dviThongTri,
-      "soLenhChiTien": this.searchFilter.soLenhChiTien,
-      "soThongTri": this.searchFilter.soThongTri,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "page": this.page - 1
+      'chuong': this.searchFilter.chuong,
+      'khoan': this.searchFilter.khoan,
+      'loai': this.searchFilter.loai,
+      'nam': this.searchFilter.nam,
+      'dviThongTri': this.searchFilter.dviThongTri,
+      'soLenhChiTien': this.searchFilter.soLenhChiTien,
+      'soThongTri': this.searchFilter.soThongTri,
+      'paggingReq': {
+        'limit': this.pageSize,
+        'page': this.page - 1,
       },
     };
     let res = await this.tongHopTheoDoiCapVonService.timKiem(body);
@@ -169,20 +169,54 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
 
   async buildTableView(data?: any) {
     this.dataTableTree = chain(data)
-      .groupBy("tenDviThongTri")
-      .map((v, k) => {
-          let rowItem = v.find(s => s.tenDviThongTri === k);
-          let idVirtual = uuidv4();
-          this.expandSetString.add(idVirtual);
-          return {
-            idVirtual: idVirtual,
-            tenDviThongTri: k,
-            nam: rowItem?.nam,
-            childData: v
-          }
-        }
-      ).value();
+      .groupBy('tenDviThongTri')
+      .map((value, key) => {
+        let rs = chain(value)
+          .groupBy('nam')
+          .map((v, k) => {
+              let idVirtual = uuidv4();
+              this.expandSetString.add(idVirtual);
+              return {
+                idVirtual: idVirtual,
+                nam: k,
+                childData: v,
+              };
+            },
+          ).value();
+        let idVirtual = uuidv4();
+        this.expandSetString.add(idVirtual);
+        return {
+          idVirtual: idVirtual,
+          tenDviThongTri: key,
+          childData: rs,
+        };
+      }).value();
+    console.log(this.dataTableTree, 'this.dataTableTree this.dataTableTree ');
+    // this.dataTableTree = chain(data)
+    //   .groupBy('tenDviThongTri')
+    //   .map((v, k) => {
+    //       let rs = chain(v)
+    //         .groupBy('nam')
+    //         .map((v, k) => {
+    //           return {
+    //             idVirtual: uuidv4(),
+    //             nam: k,
+    //             childData: rs,
+    //           };
+    //         });
+    //       let rowItem = v.find(s => s.tenDviThongTri === k);
+    //       let idVirtual = uuidv4();
+    //       this.expandSetString.add(idVirtual);
+    //       return {
+    //         idVirtual: idVirtual,
+    //         tenDviThongTri: k,
+    //         nam: rowItem?.nam,
+    //         childData: v,
+    //       };
+    //     },
+    //   ).value();
   }
+
   onExpandStringChange(id: string, checked: boolean) {
     if (checked) {
       this.expandSetString.add(id);
@@ -190,6 +224,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       this.expandSetString.delete(id);
     }
   }
+
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -299,15 +334,15 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "chuong": this.searchFilter.chuong,
-          "khoan": this.searchFilter.khoan,
-          "loai": this.searchFilter.loai,
-          "dviThongTri": this.searchFilter.dviThongTri,
-          "soLenhChiTien": this.searchFilter.soLenhChiTien,
-          "soThongTri": this.searchFilter.soThongTri,
-        }
+          'chuong': this.searchFilter.chuong,
+          'khoan': this.searchFilter.khoan,
+          'loai': this.searchFilter.loai,
+          'dviThongTri': this.searchFilter.dviThongTri,
+          'soLenhChiTien': this.searchFilter.soLenhChiTien,
+          'soThongTri': this.searchFilter.soThongTri,
+        };
         this.tongHopTheoDoiCapVonService.exportList(body).subscribe((blob) => {
-          saveAs(blob, 'danh-sach-tong-hop-theo-doi-cap-von.xlsx')
+          saveAs(blob, 'danh-sach-tong-hop-theo-doi-cap-von.xlsx');
         });
         this.spinner.hide();
       } catch (e) {
@@ -343,8 +378,8 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
           this.spinner.show();
           try {
             const body = {
-              ids: dataDelete
-            }
+              ids: dataDelete,
+            };
             let res = await this.tongHopTheoDoiCapVonService.deleteMultiple(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
@@ -376,7 +411,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+            temp.push(item);
           }
         });
       }
