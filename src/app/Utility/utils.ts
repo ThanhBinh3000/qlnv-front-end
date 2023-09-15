@@ -191,41 +191,6 @@ export class Status {
     return Status.TRANG_THAI_KIEM_TRA.find(e => e.id == status)?.tenDm;
   }
 
-  static readonly TRANG_THAI_PD_DVCT = [
-    {
-      id: Status.TT_01,
-      tenDm: 'Mới',
-    },
-    {
-      id: Status.TT_02,
-      tenDm: 'Trình duyệt',
-    },
-    {
-      id: Status.TT_03,
-      tenDm: 'Từ chối duyệt',
-    },
-    {
-      id: Status.TT_04,
-      tenDm: 'Duyệt',
-    },
-    {
-      id: Status.TT_05,
-      tenDm: 'Từ chối phê duyệt',
-    },
-    {
-      id: Status.TT_06,
-      tenDm: 'Phê duyệt',
-    },
-    {
-      id: Status.TT_07,
-      tenDm: 'Phê duyệt',
-    },
-  ]
-
-  static statusDvctName(id: string) {
-    return Status.TRANG_THAI_PD_DVCT.find(e => e.id == id)?.tenDm;
-  }
-
   static readonly DA_TONG_HOP = '1';
   static readonly CHUA_TONG_HOP = '0';
   static readonly TRANG_THAI_TONG_HOP = [
@@ -241,6 +206,24 @@ export class Status {
 
   static synthStatusName(id: string) {
     return Status.TRANG_THAI_TONG_HOP.find(e => e.id == id)?.tenDm;
+  }
+
+  static notiMessage(trangThai: string) {
+    if (Status.check('reject', trangThai)) {
+      return 'Từ chối thành công';
+    }
+    switch (trangThai) {
+      case Status.TT_02:
+        return 'Trình duyệt thành công';
+      case Status.TT_04:
+        return 'Duyệt thành công';
+      case Status.TT_07:
+        return 'Phê duyệt thành công';
+      case Status.TT_09:
+        return 'Tiếp nhận thành công';
+      default:
+        return '';
+    }
   }
 }
 
@@ -1211,15 +1194,14 @@ export class Roles {
     PRINT_NTT: 'VONPHIHANG_VONMBANTT_IN_BC_NTV_TH',
     EXPORT_NTT: 'VONPHIHANG_VONMBANTT_XUAT_BC_NTV_TH',
     //ghi nhan tien von thua
-    // ADD_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV_TH',
-    SUBMIT_NTT_GN: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV_TH',
-    // EDIT_NTT_GN: 'VONPHIHANG_VONMBANTT_SUA_BC_GNV_TH',
-    COPY_NTT_GN: 'VONPHIHANG_VONMBANTT_COPY_BC_GNV_TH',
-    PASS_NTT_GN: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_GNV_TH',
-    APPROVE_NTT_GN: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_BC_GNV_TH',
-    VIEW_NTT_GN: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV_TH',
-    PRINT_NTT_GN: 'VONPHIHANG_VONMBANTT_IN_BC_GNV_TH',
-    EXPORT_NTT_GN: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV_TH',
+    SYNTH_NTT: 'VONPHIHANG_VONMBANTT_TONGHOP_NTV_TH',
+    VIEW_TH_NTT: 'VONPHIHANG_VONMBANTT_XEM_TONGHOP_NTV_TH',
+    EDIT_TH_NTT: 'VONPHIHANG_VONMBANTT_SUA_TONGHOP_NTV_TH',
+    DEL_TH_NTT: 'VONPHIHANG_VONMBANTT_XOA_TONGHOP_NTV_TH',
+    EXPORT_TH_NTT: 'VONPHIHANG_VONMBANTT_XUAT_TONGHOP_NTV_TH',
+    SUBMIT_TH_NTT: 'VONPHIHANG_VONMBANTT_TONGHOP_NTV_TH',
+    PASS_TH_NTT: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOI_BC_NTV_TH',
+    APPROVE_TH_NTT: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOI_BC_NTV_TH',
   };
 
   static readonly CVNC = {

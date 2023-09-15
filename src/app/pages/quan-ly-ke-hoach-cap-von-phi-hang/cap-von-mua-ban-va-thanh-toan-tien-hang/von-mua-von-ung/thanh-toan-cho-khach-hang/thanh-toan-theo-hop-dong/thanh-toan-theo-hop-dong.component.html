@@ -156,6 +156,9 @@
                             <th scope="colgroup" colspan="5">
                                 Ủy nhiệm chi (Số thanh toán đợt {{baoCao.dot}})
                             </th>
+                            <th scope="col" rowspan="2">
+                                Nộp NSNN
+                            </th>
                             <th scope="col" rowspan="2" class="text-col">
                                 Ghi chú
                             </th>
@@ -224,6 +227,7 @@
                             <th scope="col">17</th>
                             <th scope="col">18</th>
                             <th scope="col">19=17+18</th>
+                            <th scope="col">20</th>
                             <th scope="col">C</th>
                             <th scope="col" *ngIf="status.save" nzRight></th>
                         </tr>
@@ -295,6 +299,9 @@
                                     {{ Op.fmtVal(data.cong) }}
                                 </td>
                                 <td>
+                                    {{ Op.fmtVal(data.nopNsnn) }}
+                                </td>
+                                <td>
                                     {{ data.ghiChu }}
                                 </td>
                                 <td *ngIf="status.save" nzRight>
@@ -363,6 +370,10 @@
                                 </td>
                                 <td>
                                     {{ Op.fmtVal(editCache[data.id].data.cong) }}
+                                </td>
+                                <td>
+                                    <input class="money-input" currencyMask [options]="Op.amount"
+                                        [(ngModel)]="editCache[data.id].data.nopNsnn" />
                                 </td>
                                 <td>
                                     <input nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />

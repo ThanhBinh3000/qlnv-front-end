@@ -101,6 +101,10 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
         this.response.nguoiTao = this.userInfo.sub;
         this.response.lstCtiets = [];
         await this.getMaDnghi();
+        if (this.response.maLoai == Cvmb.TONG_HOP_TIEN_THUA) {
+            await this.callSynthetic();
+            return;
+        }
         if (id) {
             await this.capVonMuaBanTtthService.ctietVonMuaBan(id).toPromise().then(
                 async (data) => {
@@ -131,8 +135,8 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
         } else {
             this.response.lstCtiets.push(new TienThua({
                 id: uuid.v4() + 'FE',
-                maHangDtqg: this.response.loaiDnghi,
-                tenHangDtqg: this.loaiDns.find(e => e.id == this.response.loaiDnghi)?.tenDm,
+                maHangDtqg: this.userInfo.MA_DVI,
+                tenHangDtqg: this.userInfo.TEN_DVI,
             }))
         }
     }
@@ -154,8 +158,37 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
         );
     }
 
+    async callSynthetic() {
+        const request = {
+            namDnghi: this.response.namDnghi,
+            maLoai: Cvmb.TIEN_THUA,
+            maDvi: this.userInfo.MA_DVI,
+            loaiDnghi: this.response.loaiDnghi,
+        }
+        await this.capVonMuaBanTtthService.tongHopVonBan(request).toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    res.data.forEach(item => {
+                        this.response.lstCtiets.push(new TienThua({
+                            ...item,
+                            id: uuid.v4() + 'FE',
+                        }))
+                    })
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                    this.response.loaiDnghi = null;
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                this.response.loaiDnghi = null;
+            },
+        );
+        this.spinner.hide();
+    }
+
     handleOk() {
-        if (!this.response.namDnghi) {
+        if (!this.response.namDnghi || !this.response.loaiDnghi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }

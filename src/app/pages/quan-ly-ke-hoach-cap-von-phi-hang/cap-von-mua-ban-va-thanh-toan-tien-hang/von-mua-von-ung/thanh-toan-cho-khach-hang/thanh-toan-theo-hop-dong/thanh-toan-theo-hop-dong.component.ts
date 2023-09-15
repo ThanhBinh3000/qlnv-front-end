@@ -214,12 +214,11 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
+                this.baoCao.ngayTrinh = data.data.ngayTrinh;
+                this.baoCao.ngayDuyet = data.data.ngayDuyet;
+                this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -374,7 +373,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 5, l: 0, r: 21, val: null },
+            { t: 0, b: 5, l: 0, r: 22, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: "Thanh toán cho khách hàng theo hợp đồng trúng thầu" },
             { t: 4, b: 5, l: 0, r: 0, val: 'Tên khách hàng' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
@@ -401,10 +400,11 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
             { t: 5, b: 5, l: 18, r: 18, val: 'Cấp ứng' },
             { t: 5, b: 5, l: 19, r: 19, val: 'Cấp vốn' },
             { t: 5, b: 5, l: 20, r: 20, val: 'Cộng' },
-            { t: 4, b: 5, l: 21, r: 21, val: 'Ghi chú' },
+            { t: 4, b: 5, l: 21, r: 21, val: 'Nộp NSNN' },
+            { t: 4, b: 5, l: 22, r: 22, val: 'Ghi chú' },
         ]
         const fieldOrder = ['tenKhachHang', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'slThucHien', 'donGia', 'gtHopDong', 'gtThucHien', 'phatViPham', 'tlSoluong',
-            'tlThanhTien', 'lkUng', 'lkCap', 'lkCong', 'soConDcTt', 'soDuyetTt', 'uncNgay', 'uncNienDoNs', 'ung', 'cap', 'cong', 'ghiChu'];
+            'tlThanhTien', 'lkUng', 'lkCap', 'lkCong', 'soConDcTt', 'soDuyetTt', 'uncNgay', 'uncNienDoNs', 'ung', 'cap', 'cong', 'nopNsnn', 'ghiChu'];
         const filterData = this.lstCtiets.map((item, index) => {
             const row: any = {};
             fieldOrder.forEach(field => {
@@ -423,7 +423,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
             return row;
         })
         // thêm công thức tính cho biểu mẫu
-        const calHeader = ['A', 'B', '1', '2', '3', '4', '5=2*4', '6=3*4', '7', '8', '9', '10', '11', '12=10+11', '13=6-7-12', '14', '15', '16', '17', '18', '19=17+18', 'C'];
+        const calHeader = ['A', 'B', '1', '2', '3', '4', '5=2*4', '6=3*4', '7', '8', '9', '10', '11', '12=10+11', '13=6-7-12', '14', '15', '16', '17', '18', '19=17+18', '20', 'C'];
         let cal = {};
         fieldOrder.forEach((field, index) => {
             cal[field] = calHeader[index];

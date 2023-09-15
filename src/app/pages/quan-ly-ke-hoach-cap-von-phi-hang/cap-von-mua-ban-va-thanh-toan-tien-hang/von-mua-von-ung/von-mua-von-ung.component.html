@@ -22,6 +22,10 @@
             </app-danh-sach-von-mua-von-ung>
         </ng-container>
         <ng-container *ngIf="tabSelected == Tab.DS_GN_TT">
+            <app-danh-sach-tien-thua-tu-dvcd [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-danh-sach-tien-thua-tu-dvcd>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == Tab.DS_TH_TT">
             <app-danh-sach-von-mua-von-ung [dataInfo]="data" (dataChange)="changeTab($event)">
             </app-danh-sach-von-mua-von-ung>
         </ng-container>
@@ -40,6 +44,10 @@
         <ng-container *ngIf="tabSelected == Tab.TIEN_THUA">
             <app-nop-tien-thua [dataInfo]="data" (dataChange)="changeTab($event)">
             </app-nop-tien-thua>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == Tab.TH_TIEN_THUA">
+            <app-tong-hop-tien-thua [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-tong-hop-tien-thua>
         </ng-container>
         <ng-container *ngIf="tabSelected == Tab.THANH_TOAN_HOP_DONG">
             <app-thanh-toan-theo-hop-dong [dataInfo]="data" (dataChange)="changeTab($event)">

@@ -12,7 +12,7 @@
         </div>
     </nz-card>
     <div class="group-button">
-        <h3 class="text-uppercase">Quản lý thu chi</h3>
+        <h3 class="text-uppercase">Quản lý vốn bán</h3>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
@@ -20,12 +20,18 @@
                 <tr>
                     <th scope="col" rowspan="3" nzWidth="50px" nzLeft>STT</th>
                     <th scope="col" rowspan="3" nzWidth="150px" nzLeft>Hàng DTQG</th>
-                    <th scope="colgroup" colspan="3" rowspan="2">Nhận</th>
+                    <th scope="colgroup" colspan="{{userService.isChiCuc() ? 3 : 6}}">Nhận</th>
                     <th scope="colgroup" colspan="{{userService.isChiCuc() ? 3 : 6}}">Chi</th>
                     <th scope="colgroup" colspan="3" rowspan="2"> Luỹ kế số đã nộp lên Đơn vị cấp trên </th>
                     <th scope="colgroup" colspan="3" rowspan="2"> Số dư </th>
                 </tr>
                 <tr>
+                    <th scope="colgroup" colspan="3">
+                        Đơn vị cấp trên
+                    </th>
+                    <th scope="colgroup" *ngIf="!userService.isChiCuc()" colspan="3">
+                        Tiền thừa từ Đơn vị cấp dưới
+                    </th>
                     <th scope="colgroup" *ngIf="!userService.isChiCuc()" colspan="3">
                         Giao cho đơn vị cấp dưới
                     </th>
@@ -37,6 +43,9 @@
                     <th scope="col">Tổng vốn ứng</th>
                     <th scope="col">Tổng vốn cấp</th>
                     <th scope="col">Tổng vốn</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp ứng</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp vốn</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp</th>
                     <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp ứng</th>
                     <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp vốn</th>
                     <th scope="col" *ngIf="!userService.isChiCuc()">Tổng cấp</th>
@@ -59,15 +68,18 @@
                     <th scope="col" *ngIf="!userService.isChiCuc()">4</th>
                     <th scope="col" *ngIf="!userService.isChiCuc()">5</th>
                     <th scope="col" *ngIf="!userService.isChiCuc()">6=4+5</th>
-                    <th scope="col">7</th>
-                    <th scope="col">8</th>
-                    <th scope="col">9=7+8</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">7</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">8</th>
+                    <th scope="col" *ngIf="!userService.isChiCuc()">9=7+8</th>
                     <th scope="col">10</th>
                     <th scope="col">11</th>
                     <th scope="col">12=10+11</th>
-                    <th scope="col">13=1-4-7-10</th>
-                    <th scope="col">14=2-5-8-11</th>
+                    <th scope="col">13</th>
+                    <th scope="col">14</th>
                     <th scope="col">15=13+14</th>
+                    <th scope="col">16=1+4-7-10-13</th>
+                    <th scope="col">17=2+5-8-11-14</th>
+                    <th scope="col">18=16+17</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,6 +98,15 @@
                     </td>
                     <td>
                         {{ Op.fmtNum(data.nhanTong) }}
+                    </td>
+                    <td *ngIf="!userService.isChiCuc()">
+                        {{ Op.fmtNum(data.nhanTtUng) }}
+                    </td>
+                    <td *ngIf="!userService.isChiCuc()">
+                        {{ Op.fmtNum(data.nhanTtCap) }}
+                    </td>
+                    <td *ngIf="!userService.isChiCuc()">
+                        {{ Op.fmtNum(data.nhanTtTong) }}
                     </td>
                     <td *ngIf="!userService.isChiCuc()">
                         {{ Op.fmtNum(data.giaoCapUng) }}
