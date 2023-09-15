@@ -66,7 +66,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   fileBbTinhKhoDaKy: FileDinhKem[] = [];
 
   LIST_TRANG_THAI = LIST_TRANG_THAI_BBTK;
-  previewName: string = "bien_ban_tinh_kho_lt_xuat_dieu_chuyen.docx";
+  previewName: string = "bien_ban_tinh_kho_lt_xuat_dieu_chuyen";
 
   constructor(
     httpClient: HttpClient,

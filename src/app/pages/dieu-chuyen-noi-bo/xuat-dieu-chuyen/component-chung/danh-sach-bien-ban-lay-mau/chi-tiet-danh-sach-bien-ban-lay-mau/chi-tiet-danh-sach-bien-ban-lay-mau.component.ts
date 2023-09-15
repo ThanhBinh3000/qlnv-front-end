@@ -75,7 +75,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   }
   chiTieuKiemTra: any[];
   tabSelected: number = 0;
-  previewName: string = "bien_ban_lay_mau_ban_giao_mau_lt_dieu_chuyen.docx";
+  previewName: string = "bien_ban_lay_mau_ban_giao_mau_lt_dieu_chuyen";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -150,7 +150,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   }
   numberFomater = (value) => (value || value == "0") ? formatNumber(value, 'vi_VN', '1.0-1') : '';
   booleanParse = (str: string): boolean => {
-    console.log("str", str)
     if (str === "true") return true;
     return false;
   }
@@ -188,8 +187,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             this.bienBanLayMauDinhKem = cloneDeep(data.bienBanLayMauDinhKem);
             this.canCu = data.canCu;
             this.fileDinhKemChupMauNiemPhong = cloneDeep(data.fileDinhKemChupMauNiemPhong);
-            this.phuongPhapLayMaus = Array.isArray(data?.pplayMau?.split("-*")) ? data.pplayMau.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: this.booleanParse(f.split("-")[2]) })) : [];
-            this.chiTieuKiemTra = Array.isArray(data?.chiTieuKiemTra?.split("-*")) ? data.chiTieuKiemTra.split("-*").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1], checked: true })) : [];
+            this.phuongPhapLayMaus = Array.isArray(data?.pplayMau?.split("-*")) ? data.pplayMau.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1], checked: this.booleanParse(f.split("+*")[2]) })) : [];
+            this.chiTieuKiemTra = Array.isArray(data?.chiTieuKiemTra?.split("-*")) ? data.chiTieuKiemTra.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1], checked: true })) : [];
             const obj = Array.isArray(data.dcnbBienBanLayMauDtl) ? data.dcnbBienBanLayMauDtl.reduce((obj, cur) => {
               if (cur.loaiDaiDien == "00") {
                 obj.listDaiDienCuc.push({ ...cur, daiDien: cur.tenDaiDien })

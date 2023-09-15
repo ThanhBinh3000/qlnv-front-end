@@ -77,7 +77,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   //   soQdinhDcc: '', qdinhDccId: null, soBbTinhKho: '', bbtinhKhoId: null, maDiemKho: '', tenDiemKho: '', maNhaKho: '', tenNhaKho: '',
   //   maNganKho: '', tenNganKho: '', maLoKho: '', tenLoKho: '', loaiVthh: '', cloaiVthh: '', tenLoaiVthh: '', tenCloaiVthh: '',
   // }
-  previewName: string = 'bien_ban_hao_doi_lt_xuat_dieu_chuyen.docx';
+  previewName: string = 'bien_ban_hao_doi_lt_xuat_dieu_chuyen';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -163,8 +163,10 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         tenCloaiVthh: ['', [Validators.required]],
         soPhieuKtChatLuong: [],
         donViTinh: ['', [Validators.required]],
-        keHoachDcDtlId: [, [Validators.required]]
+        keHoachDcDtlId: [, [Validators.required]],
         // fileDinhKems: [new Array<FileDinhKem>()],
+        ngayBatDauXuat: [, Validators.required],
+        ngayKetThucXuat: [, Validators.required]
       }
     );
     this.maBb = '-BBHD';
@@ -329,8 +331,8 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định'],
+        dataColumn: ['soQdinh', 'ngayKyQdinh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -498,7 +500,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         tiLeHaoTt = slHaoTt / (tongSlXuatTheoTt * 100)
       }
 
-      this.formData.patchValue({ soBbTinhKho: res.data.soBbTinhKho, tongSlXuatTheoQd: tongSlXuatTheoQd, tongSlXuatTheoTt: tongSlXuatTheoTt, ngayBatDauXuatTt: res.data.ngayBatDauXuat, ngayKetThucXuatTt: res.data.ngayKeThucXuat, slHaoTt, donViTinh: res.data.donViTinh })
+      this.formData.patchValue({ soBbTinhKho: res.data.soBbTinhKho, tongSlXuatTheoQd: tongSlXuatTheoQd, tongSlXuatTheoTt: tongSlXuatTheoTt, ngayBatDauXuat: res.data.ngayBatDauXuat, ngayKetThucXuat: res.data.ngayKetThucXuat, ngayBatDauXuatTt: res.data.ngayBatDauXuat, ngayKetThucXuatTt: res.data.ngayKetThucXuat, slHaoTt, donViTinh: res.data.donViTinh })
     }
   }
   async save(isGuiDuyet?) {

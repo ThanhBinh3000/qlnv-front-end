@@ -77,7 +77,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     4: "Xuất không thu tiền",
     5: "Khác"
   };
-  previewName: string = "phieu_xuat_kho_lt_vt_xuat_dieu_chuyen.docx";
+  previewName: string = "phieu_xuat_kho_lt_vt_xuat_dieu_chuyen";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
