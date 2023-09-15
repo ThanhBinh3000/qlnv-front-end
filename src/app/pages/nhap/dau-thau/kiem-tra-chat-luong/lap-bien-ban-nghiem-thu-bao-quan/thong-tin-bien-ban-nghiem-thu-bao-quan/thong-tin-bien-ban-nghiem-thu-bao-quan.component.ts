@@ -343,7 +343,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
               this.danhSachFileDinhKem.push(item)
             })
           }
-          this.bindingDataDdNhap(dataDdNhap);
+          await this.bindingDataDdNhap(dataDdNhap);
           this.viewTableTH()
         }
       }
