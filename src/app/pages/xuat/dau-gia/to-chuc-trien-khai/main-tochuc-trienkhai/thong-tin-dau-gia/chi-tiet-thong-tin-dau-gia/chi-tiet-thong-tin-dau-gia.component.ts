@@ -99,8 +99,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         return;
       }
       const data = res.data;
-      console.log(data.donViTinh, 999)
-
       this.dataTable = cloneDeep(data.listTtinDg);
       if (this.dataTable && this.dataTable.length > 0) {
         await this.showFirstRow(event, this.dataTable[0]);

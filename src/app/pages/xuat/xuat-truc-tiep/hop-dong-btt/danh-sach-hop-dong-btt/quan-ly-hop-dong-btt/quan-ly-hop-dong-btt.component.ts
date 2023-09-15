@@ -70,7 +70,9 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     if (this.idInput) {
       await this.spinner.show();
       try {
-        await this.getDetail();
+        if (this.idInput){
+          await this.getDetail();
+        }
       } catch (e) {
         console.error('error: ', e);
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
