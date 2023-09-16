@@ -133,21 +133,21 @@ export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component imple
     this.selectTabChange.emit(value)
   }
   checkRoleAdd() {
-    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc();
+    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isTongCuc();
   }
   checkRoleView(trangThai: string) {
     return !this.checkRoleEdit(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XEM")
   }
   checkRoleEdit(trangThai: string) {
-    return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc()
+    return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isTongCuc()
   }
   checkRoleDelete(trangThai: string) {
-    return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XOA") && this.userService.isCuc();
+    return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XOA") && this.userService.isTongCuc();
   }
   checkRoleExport() {
     return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_EXP")
   }
   checkRoleDeleteAll() {
-    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XOA") && this.userService.isCuc();
+    return this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_XOA") && this.userService.isTongCuc();
   }
 }
