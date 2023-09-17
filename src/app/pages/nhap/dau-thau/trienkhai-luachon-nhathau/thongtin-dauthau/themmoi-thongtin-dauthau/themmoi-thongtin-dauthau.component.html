@@ -377,7 +377,8 @@
                     </tr>
                   </ng-container>
                   <ng-template #kqTemplate>
-                    <tr>
+                    <tr (click)="showDetail($event,dtGoiThau)"
+                        [ngClass]="{'bg-selected': this.selected && i == 0}">
                       <ng-container *ngIf="!dtGoiThau.edit; else editTemplate">
                           <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                           <td>{{dtGoiThau.goiThau}}</td>

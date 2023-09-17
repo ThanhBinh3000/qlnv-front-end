@@ -96,7 +96,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         ngayHluc: [],
         namKhoach: [dayjs().get('year')],
         trichYeu: [null],
-        soQdPdKhlcnt: ['', [Validators.required]],
+        soQdPdKhlcnt: [''],
         idQdPdKhlcnt: [''],
         idQdPdKhlcntDtl: [''],
         ghiChu: [null,],
@@ -154,7 +154,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         })
         this.danhSachFileDinhKem = dataDetail.fileDinhKems;
         this.danhSachFileCanCuPL = dataDetail.canCuPhapLy;
-        if (dataDetail.children.length > 0) {
+        if (dataDetail.children?.length > 0) {
           dataDetail.children.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
               this.danhSachFileDinhKem.push(item)
@@ -198,30 +198,19 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       })
       body.detailList = detail;
     } else {
-      if (this.danhSachFileDinhKem.length > 0) {
-        this.danhSachFileDinhKem.forEach(item => {
-          item.fileType = FILETYPE.FILE_DINH_KEM
-          this.listFile.push(item)
-        })
-      }
-      if (this.danhSachFileCanCuPL.length > 0) {
-        this.danhSachFileCanCuPL.forEach(element => {
-          element.fileType = FILETYPE.CAN_CU_PHAP_LY
-          this.listFile.push(element)
-        })
-      }
-      body.fileDinhKems = this.listFile;
+      body.fileDinhKems = this.danhSachFileDinhKem;
+      body.listCcPhapLy = this.danhSachFileCanCuPL;
       let detail = [];
-      this.thongTinDauThau.listOfData.forEach(item => {
-        let dtl = {
-          idGoiThau: item.id,
-          idNhaThau: item.kqlcntDtl?.idNhaThau,
-          donGiaVat: item.kqlcntDtl?.donGiaVat,
-          trangThai: item.kqlcntDtl?.trangThai,
-          tenNhaThau: item.kqlcntDtl?.tenNhaThau
-        }
-        detail.push(dtl)
-      })
+      // this.thongTinDauThau.listOfData.forEach(item => {
+      //   let dtl = {
+      //     idGoiThau: item.id,
+      //     idNhaThau: item.kqlcntDtl?.idNhaThau,
+      //     donGiaVat: item.kqlcntDtl?.donGiaVat,
+      //     trangThai: item.kqlcntDtl?.trangThai,
+      //     tenNhaThau: item.kqlcntDtl?.tenNhaThau
+      //   }
+      //   detail.push(dtl)
+      // })
       body.detailList = detail;
     }
 

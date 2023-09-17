@@ -338,7 +338,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
           await this.bindingDataQd(res.data?.idQdGiaoNvNh);
           let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
 
-          if (res.data.children1.length > 0) {
+          if (res.data.children1?.length > 0) {
             res.data.children1.forEach(item => {
               this.danhSachFileDinhKem.push(item)
             })

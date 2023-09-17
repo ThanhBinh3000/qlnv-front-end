@@ -328,11 +328,10 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
           trichYeu: this.searchFilter.trichYeu,
           soQd: this.searchFilter.soQd,
           lastest: 1,
-          paggingReq: {
-            limit: this.pageSize,
-            page: this.page - 1,
-          },
           maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+        }
+        if (this.loaiVthh.startsWith('02')) {
+          body.lastest = 0
         }
         this.thongTinDauThauService
           .export(body)
