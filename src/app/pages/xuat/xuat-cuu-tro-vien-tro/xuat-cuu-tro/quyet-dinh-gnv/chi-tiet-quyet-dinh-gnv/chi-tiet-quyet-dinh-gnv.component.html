@@ -5,6 +5,12 @@
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isCuc()">
+      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH" type="button"
+              class="btn btn-sub xanh-nhat"
+              (click)="updateProcess(STATUS.DA_HOAN_THANH)">
+        <i class="icon htvbdh_duyet"></i>
+        <span>Hoàn thành phân bổ</span>
+      </button>
       <button (click)="reject(idSelected,STATUS.TU_CHOI_LDC)"
               *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
               class="btn btn-sub" type="button">
@@ -56,12 +62,6 @@
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH" type="button"
-              class="btn btn-sub xanh-nhat"
-              (click)="updateProcess(STATUS.DA_HOAN_THANH)">
-        <i class="icon htvbdh_duyet"></i>
-        <span>Hoàn thành phân bổ</span>
-      </button>
       <button type="button" class="btn btn-main"
               *ngIf="(formData.value.trangThai === STATUS.BAN_HANH)"
               (click)="updateProcess(STATUS.DANG_THUC_HIEN)">
@@ -450,6 +450,9 @@
               <nz-form-control [nzErrorTip]="'Vui lòng nhập loại hàng'">
                 <div nz-row [nzGutter]="48">
                   <div nz-col [nzSpan]="16">
+                    <!--                    <nz-input-group>-->
+                    <!--                      <input [readonly]="true" nz-input formControlName="tenVthh" readonly="true"/>-->
+                    <!--                    </nz-input-group>-->
                     <nz-select nzAllowClear formControlName="loaiVthh" [nzDisabled]="true"
                                nzPlaceHolder="Chọn loại hàng" nzShowSearch>
                       <nz-option *ngFor="let p of listLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>

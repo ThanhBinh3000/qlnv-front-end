@@ -13,15 +13,15 @@
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA')">
       Quyết định phê duyệt phương án
     </li>
-    <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)"
+    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH')">
       Quyết định giao nhiệm vụ xuất hàng
     </li>
-    <li [nzSelected]="tabSelected==5" nz-menu-item (click)="selectTab(5)"
+    <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL')">
       Kiểm tra chất lượng
     </li>
-    <li [nzSelected]="tabSelected==6" nz-menu-item (click)="selectTab(6)"
+    <li [nzSelected]="tabSelected==5" nz-menu-item (click)="selectTab(5)"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK')">
       Xuất kho
     </li>
@@ -45,16 +45,13 @@
       <app-quyet-dinh-pd></app-quyet-dinh-pd>
     </ng-container>
     <ng-container *ngIf="tabSelected == 3">
-      <!-- <app-hop-dong></app-hop-dong> -->
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 4">
       <!--      <app-quyet-dinh-gnv-xuat-hang></app-quyet-dinh-gnv-xuat-hang>-->
       <app-quyet-dinh-gnv></app-quyet-dinh-gnv>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 5">
+    <ng-container *ngIf="tabSelected == 4">
       <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 6">
+    <ng-container *ngIf="tabSelected == 5">
       <app-xuat-kho></app-xuat-kho>
     </ng-container>
   </div>
