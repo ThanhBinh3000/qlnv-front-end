@@ -1,22 +1,22 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import {XuatThanhLyComponent} from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {MESSAGE} from "src/app/constants/message";
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {CHUC_NANG} from 'src/app/constants/status';
-import {chain, cloneDeep, isEmpty} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {TongHopThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
-import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { XuatThanhLyComponent } from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { MESSAGE } from "src/app/constants/message";
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { CHUC_NANG } from 'src/app/constants/status';
+import { chain, cloneDeep, isEmpty } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { TongHopThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
+import { DanhSachThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
 import dayjs from "dayjs";
-import {NumberToRoman} from 'src/app/shared/commonFunction';
-import {Validators} from "@angular/forms";
+import { NumberToRoman } from 'src/app/shared/commonFunction';
+import { Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-thanh-ly',
@@ -47,16 +47,16 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
   public vldTrangThai: XuatThanhLyComponent;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private tongHopThanhLyService: TongHopThanhLyService,
-              private danhSachThanhLyService: DanhSachThanhLyService,
-              private xuatThanhLyComponent: XuatThanhLyComponent,
-              private cdr: ChangeDetectorRef) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private tongHopThanhLyService: TongHopThanhLyService,
+    private danhSachThanhLyService: DanhSachThanhLyService,
+    private xuatThanhLyComponent: XuatThanhLyComponent,
+    private cdr: ChangeDetectorRef) {
     super(httpClient, storageService, notification, spinner, modal, tongHopThanhLyService);
     this.vldTrangThai = xuatThanhLyComponent;
     this.formData = this.fb.group({
@@ -78,7 +78,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
       nguoiGduyetId: [],
       ngayPduyet: [],
       nguoiPduyetId: [],
-      ngayTao:[dayjs().format('YYYY-MM-DD HH:mm:ss')],
+      ngayTao: [dayjs().format('YYYY-MM-DD HH:mm:ss')],
       lyDoTuChoi: [],
       tongSlHienTai: [],
       tongSlDeXuat: [],
@@ -117,7 +117,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             // this.maHauTo = '/' + res.data.maDanhSach.split("/")[1];
             // res.data.maDanhSach = res.data.maDanhSach.split("/")[0];
-            this.selectedItem=res.data;
+            this.selectedItem = res.data;
             this.formData.patchValue(res.data);
             this.formData.value.tongHopDtl.forEach(s => {
               s.idVirtual = uuidv4();
@@ -170,9 +170,9 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({cloaiVthh: null})
+    this.formData.patchValue({ cloaiVthh: null })
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -187,18 +187,18 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
     this.selectedItem.childData = chain(data)
       .groupBy("tenChiCuc")
       .map((v, k) => {
-          let rowItem = v.find(s => s.tenChiCuc === k);
-          let idVirtual = uuidv4();
-          this.expandSetString.add(idVirtual);
-          return {
-            idVirtual: idVirtual,
-            tenChiCuc: k,
-            tenCuc: rowItem?.tenCuc,
-            maDiaDiem: rowItem?.maDiaDiem,
-            tenCloaiVthh: rowItem?.tenCloaiVthh,
-            childData: v
-          }
+        let rowItem = v.find(s => s.tenChiCuc === k);
+        let idVirtual = uuidv4();
+        this.expandSetString.add(idVirtual);
+        return {
+          idVirtual: idVirtual,
+          tenChiCuc: k,
+          tenCuc: rowItem?.tenCuc,
+          maDiaDiem: rowItem?.maDiaDiem,
+          tenCloaiVthh: rowItem?.tenCloaiVthh,
+          childData: v
         }
+      }
       ).value();
   }
 
@@ -243,11 +243,13 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
                 maDanhSach: this.selectedItem ?? this.maHauTo,
                 tongHopDtl: res.data.content
               });
-              let result = await this.createUpdate(this.formData.value);
+              let body = this.formData.value;
+              body.fileDinhKemReq = this.fileDinhKem;
+              let result = await this.createUpdate(body);
               if (result) {
                 this.selectedItem = cloneDeep(result);
                 await this.buildTableView(result.tongHopDtl);
-                this.step.emit({step: 2, item: this.selectedItem});
+                this.step.emit({ step: 2, item: this.selectedItem });
               }
             }
           } else {
@@ -292,7 +294,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
                 let res = await this.tongHopThanhLyService.approve(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                   this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt tổng hợp thành công.');
-                  this.step.emit({step: 1});
+                  this.step.emit({ step: 1 });
                 } else {
                   this.notification.error(MESSAGE.ERROR, res.msg);
                 }
@@ -308,7 +310,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
       }
       if (changes.eventCancel) {
         // this.quayLai();
-        this.step.emit({step: 0});
+        this.step.emit({ step: 0 });
       }
     }
 

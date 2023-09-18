@@ -28,6 +28,7 @@ import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydung
 export class TienDoCongViecSclComponent extends Base2Component implements OnInit {
   @Input() itemQdPdKhLcnt: any;
   @Input() itemQdPdKtkt: any;
+  @Input() itemDuAn: any;
   listHopDong: any[] = [];
   dataTable: any[] = [];
   dataTableReq: any[] = [];
@@ -57,6 +58,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   }
 
   ngOnInit(): void {
+    this.loadDsThang()
     this.loadItemDsGoiThau();
   }
 
@@ -87,7 +89,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
           if (listGoiThau && listGoiThau.length > 0) {
             listGoiThau.forEach(item => item.chuDauTu = res.data.chuDauTu);
           }
-          this.listHopDong = listGoiThau;
+          this.listHopDong = listGoiThau.filter(item => item.hopDong && item.hopDong.soHd);
           if (this.listHopDong && this.listHopDong.length > 0) {
             this.selectRow(this.listHopDong[0]);
           }
@@ -119,6 +121,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
         if (res.data) {
           const data = res.data;
           this.dataKlcv = data.listKtTdscHopDongKlcv && data.listKtTdscHopDongKlcv.length > 0 ? data.listKtTdscHopDongKlcv : [];
+          console.log(this.dataKlcv,3333)
           this.expandAll();
         }
       } else {
@@ -139,7 +142,6 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
       let res = await this.tienDoCongViecService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          console.log(res.data,2222)
           const data = res.data;
           this.dataTableReq = cloneDeep(data);
           this.convertListToTree()
@@ -158,12 +160,12 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   }
 
   themItemcha() {
-    if (!this.rowItemCha.quy) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn quý");
+    if (!this.rowItemCha.thang) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn tháng");
       return;
     }
     if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
-      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng quý");
+      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng tháng");
       return;
     }
     this.rowItemCha.idVirtual = uuidv4();
@@ -204,7 +206,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.quy == item.quy) {
+        if (it.thang == item.thang) {
           rs = true;
           return;
         }
@@ -276,8 +278,8 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   }
 
   convertListToTree() {
-    this.dataTable = chain(this.dataTableReq).groupBy("quy")
-      .map((value, key) => ({ quy: key, dataChild: value, idVirtual : uuidv4() }))
+    this.dataTable = chain(this.dataTableReq).groupBy("thang")
+      .map((value, key) => ({ thang: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
   }
 

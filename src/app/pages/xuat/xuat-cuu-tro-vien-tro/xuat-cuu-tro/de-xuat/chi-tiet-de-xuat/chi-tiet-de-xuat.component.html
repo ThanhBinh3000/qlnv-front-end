@@ -95,9 +95,11 @@
   <nz-card class="mt16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <ng-template #error let-control>
-<!--        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}-->
-<!--        </ng-container>-->
+        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+        </ng-container>
         <ng-container *ngIf="control.hasError('max')">Số lượng không hợp lệ hoặc vượt quá số lượng tồn kho
+        </ng-container>
+        <ng-container *ngIf="control.hasError('min')">Số lượng không hợp lệ hoặc vượt quá số lượng tồn kho
         </ng-container>
       </ng-template>
       <div class="mt16 flex-card p-lr16">
@@ -158,9 +160,9 @@
               <nz-radio-group [nzDisabled]="isView || formData.value.deXuatPhuongAn.length > 0"
                               formControlName="tenVthh"
                               (ngModelChange)="changeVthh($event)">
-                <label nz-radio nzValue="0101">Thóc tẻ </label>
-                <label nz-radio nzValue="0102">Gạo tẻ</label>
-                <label nz-radio nzValue="02">Vật tư thiết bị</label>
+                <label nz-radio nzValue="Thóc tẻ">Thóc tẻ </label>
+                <label nz-radio nzValue="Gạo tẻ">Gạo tẻ</label>
+                <label nz-radio nzValue="Vật tư thiết bị">Vật tư thiết bị</label>
               </nz-radio-group>
             </nz-form-control>
           </nz-form-item>
@@ -225,7 +227,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Nội dung phương án xuất cứu trợ</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <textarea rows="3" class="search__input" nz-input formControlName="noiDungDx"
+              <textarea rows="3" class="search__input" nz-input formControlName="noiDung"
                         [readOnly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
@@ -286,9 +288,9 @@
           <tr>
             <th [rowspan]="2"></th>
             <th [rowspan]="2" style="width: 35px">STT</th>
-            <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
+            <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
             <th [rowspan]="2">Loại hàng DTQG</th>
-            <ng-container *ngIf="formData.value.tenVthh=='02'">
+            <ng-container *ngIf="formData.value.tenVthh=='Vật tư thiết bị'">
               <th [colspan]="3">Chủng loại hàng DTQG</th>
             </ng-container>
             <th [colspan]="2">Cục DTNN KV</th>
@@ -296,7 +298,7 @@
             <th [rowspan]="2" style="width: 10%">Hành động</th>
           </tr>
           <tr>
-            <ng-container *ngIf="formData.value.tenVthh=='02'">
+            <ng-container *ngIf="formData.value.tenVthh=='Vật tư thiết bị'">
               <th>Chủng loại hàng</th>
               <th>ĐVT</th>
               <th>Tồn kho</th>
@@ -313,7 +315,7 @@
               <td>{{i + 1}}</td>
               <td>{{ item.noiDung }}</td>
               <td></td>
-              <ng-container *ngIf="formData.value.tenVthh=='02'">
+              <ng-container *ngIf="formData.value.tenVthh=='Vật tư thiết bị'">
                 <td></td>
                 <td></td>
                 <td></td>
@@ -339,7 +341,7 @@
                   <td></td>
                   <td></td>
                   <td>{{lv1.tenLoaiVthh}}</td>
-                  <ng-container *ngIf="formData.value.tenVthh=='02'">
+                  <ng-container *ngIf="formData.value.tenVthh=='Vật tư thiết bị'">
                     <td></td>
                     <td></td>
                     <td></td>
@@ -365,13 +367,13 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <ng-container *ngIf="formData.value.tenVthh=='02'">
+                      <ng-container *ngIf="formData.value.tenVthh=='Vật tư thiết bị'">
                         <td>{{lv2.tenCloaiVthh}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td>{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                       </ng-container>
                       <td>{{lv2.tenDvi}}</td>
-                      <td>{{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                      <td>{{lv2.tonKhoLoaiVthh||lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                       <td>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
                       <td>
                         <a>
@@ -398,14 +400,14 @@
 </div>
 
 <!--tong cuc-->
-<nz-modal [nzWidth]="'50%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
+<nz-modal [nzWidth]="'60%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
           (nzAfterOpen)="changeLoaiVthh(formDataDtl.value.loaiVthh)" nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="formDataDtl">
       <div class="modal-card">
         <nz-card>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương nhận cứu trợ, viện trợ
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương/cơ quan/đơn vị nhận cứu trợ
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'">
               <nz-select nzAllowClear formControlName="noiDung"
@@ -440,7 +442,7 @@
                   <div nz-col [nzSpan]="16">
                     <nz-select nzAllowClear formControlName="cloaiVthh" (ngModelChange)="changeCloaiVthh($event)"
                                nzPlaceHolder="Chọn chủng loại hàng" nzShowSearch
-                               [nzDisabled]="listChungLoaiHangHoa.length <= 0 || formData.value.tenVthh != '02'">
+                               [nzDisabled]="listChungLoaiHangHoa.length <= 0 || formData.value.tenVthh != 'Vật tư thiết bị'">
                       <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
                     </nz-select>
                   </div>
@@ -479,6 +481,7 @@
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
                   <nz-input-number formControlName="soLuong" [nzMax]="999999999999" [nzStep]="1"
+                                   nzPlaceHolder="Nhập số lượng"
                                    [nzDisabled]="isView"
                                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                   </nz-input-number>
@@ -502,13 +505,13 @@
 </nz-modal>
 
 <!--modal sua noi dung-->
-<!--<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisibleSuaNoiDung" [nzFooter]="modalFooterSuaNoiDung" [nzClosable]="false"
+<!--<nz-modal [nzWidth]="'60%'" [(nzVisible)]="isVisibleSuaNoiDung" [nzFooter]="modalFooterSuaNoiDung" [nzClosable]="false"
           nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
   <ng-container *nzModalContent>
     &lt;!&ndash;    <form nz-form>&ndash;&gt;
     <div class="modal-card">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương nhận cứu trợ, viện trợ
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương/cơ quan/đơn vị nhận cứu trợ
         </nz-form-label>
         <nz-form-control>
           <input nz-input [(ngModel)]="phuongAnRow.noiDungEdit">

@@ -4,31 +4,31 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+      <i class=" icon htvbdh_tcdt_print"></i>
+      <span>In/xem trước</span>
+    </button>
     <button class="btn btn-sub xanh-nhat" type="button"
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM') "
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
+    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC "
+    <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')"
       (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
     <button class="btn btn-sub xanh"
-      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
+      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')  "
       (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
-    </button>
-    <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
-      <i class=" icon htvbdh_tcdt_print"></i>
-      <span>In/xem trước</span>
     </button>
   </div>
 </nz-affix>
@@ -220,7 +220,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
+                <nz-form-label [nzNoColon]="true" nzRequired>
                   BB nghiệm thu BQLĐ
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -243,7 +243,7 @@
             </div>
             <div nz-col nzSpan="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
+                <nz-form-label [nzNoColon]="true">
                   Số CMT/CCCD
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -267,7 +267,7 @@
             </div>
             <div nz-col nzSpan="9">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
+                <nz-form-label [nzNoColon]="true">
                   Địa chỉ
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -279,7 +279,7 @@
             </div>
             <div nz-col nzSpan="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
+                <nz-form-label [nzNoColon]="true">
                   Biển số phương tiện vận tải
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -290,7 +290,7 @@
             </div>
             <div nz-col nzSpan="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
+                <nz-form-label [nzNoColon]="true">
                   Chứng thư giám định số
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -303,7 +303,7 @@
             </div>
             <div nz-col nzSpan="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
+                <nz-form-label [nzNoColon]="true">
                   Ngày giám định
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -318,7 +318,7 @@
             </div>
             <div nz-col nzSpan="3" nzRequired>
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
+                <nz-form-label [nzNoColon]="true">
                   Tổ chức giám định
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -353,9 +353,9 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="3" nzRequired>
+            <div nz-col nzSpan="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
+                <nz-form-label [nzNoColon]="true">
                   Lãnh đạo chi cục
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -388,6 +388,17 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="slTtKtra" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Hình thức kê lót/bảo quản</nz-form-label>
+                <nz-form-control>
+                  <nz-select nzAllowClear [nzDisabled]="true" formControlName="hthucBquan">
+                    <nz-option *ngFor="let p of listHinhThucBaoQuan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                    </nz-option>
+                  </nz-select>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -446,12 +457,13 @@
             [nzData]="dataTableChiTieu">
             <thead>
               <tr>
-                <th width="30px">STT</th>
-                <th>Chỉ tiêu chất lượng</th>
-                <th width="60px">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
-                <th width="400px">Kết quả phân tích</th>
-                <th>Phương pháp</th>
-                <th width="60px" *ngIf="!(isDisableField() || isView)">
+                <th nzWidth="2%">STT</th>
+                <th nzWidth="20%">Chỉ tiêu chất lượng</th>
+                <th nzWidth="20%">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+                <th nzWidth="20%"><span style='color: red;'>*</span> Kết quả phân tích</th>
+                <th nzWidth="20%"><span style='color: red;'>*</span> Phương pháp kiểm tra chất lượng</th>
+                <th nzWidth="13%"><span style='color: red;'>*</span> Đánh giá</th>
+                <th nzWidth="5%" *ngIf="!(isDisableField() || isView)">
                   Hành động
                 </th>
               </tr>
@@ -464,6 +476,7 @@
                   <td>{{data.chiSoNhap}}</td>
                   <td>{{data.ketQuaKiemTra}}</td>
                   <td>{{data.phuongPhap}}</td>
+                  <td>{{data.tenDanhGia}}</td>
                   <td *ngIf="!(isDisableField() || isView)">
                     <a (click)="editRow(i)">
                       <i class="fa fa-pencil" title="Sửa"></i>
@@ -481,6 +494,12 @@
                     <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaKiemTra" />
                   </td>
                   <td>{{data.phuongPhap}}</td>
+                  <td>
+                    <nz-select [(ngModel)]='data.danhGia'>
+                      <nz-option *ngFor='let item of listDanhGia' [nzValue]='item.ma' [nzLabel]='item.giaTri'>
+                      </nz-option>
+                    </nz-select>
+                  </td>
                   <td>
                     <a (click)="saveEdit(i)" class="save">
                       <i class="fa fa-save"></i>
@@ -560,7 +579,7 @@
     </nz-card> -->
   <!--   END KQ ĐG -->
 </div>
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="BIÊN BẢN CHUẨN BỊ KHO" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="PHIẾU KIỂM TRA CHẤT LƯỢNG" nzWidth="100%" (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>

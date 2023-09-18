@@ -32,7 +32,7 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
   @Input('isViewDetail') isViewDetail: boolean;
   tongMucDt: number = 0;
   @Input() flagThemMoi: string;
-  @Input() itemDuAn: string;
+  @Input() itemDuAn: any;
   @Input() itemQdPdKhLcnt: any;
   @Input() itemQdPdKtkt: any;
   listHopDong: any[] = []
@@ -155,6 +155,10 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
     try {
       if (this.itemQdPdKhLcnt && !isBackFromHd) {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
+        this.formData.patchValue({
+          tenDuAn : this.itemDuAn.tenCongTrinh,
+          tenNguonVon : this.itemQdPdKhLcnt.nguonVonDt
+        })
         this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
@@ -164,7 +168,7 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
         let body = {
           "namKh": this.itemQdPdKhLcnt.namKh,
           "idDuAn": this.itemQdPdKhLcnt.idDuAn,
-          "idQdPdKtkt": this.itemQdPdKtkt.idQdPdDaDtxd,
+          "idQdPdKtkt": this.itemQdPdKtkt.id,
           "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
           "loai": '00'
         }

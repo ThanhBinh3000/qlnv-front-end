@@ -98,8 +98,7 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
 
   async clearFilter() {
     this.formData.reset();
-    await this.timKiem();
-    await this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   async loadDsVthh() {

@@ -27,12 +27,16 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../constants/status";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {PREVIEW} from "../../../../../constants/fileType";
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
   templateUrl: './themmoi-qdinh-nhap-xuat-hang.component.html',
   styleUrls: ['./themmoi-qdinh-nhap-xuat-hang.component.scss'],
 })
-export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
+export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
   @Output()
@@ -87,21 +91,18 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   listNganKhoEdit: any[] = [];
   listNganLoEdit: any[] = [];
   listCanCu: any[] = [];
-
+  previewName : string;
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private modal: NzModalService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
-    private notification: NzNotificationService,
-    private spinner: NgxSpinnerService,
-    public globals: Globals,
-    public userService: UserService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private uploadFileService: UploadFileService,
     private thongTinHopDongSercive: ThongTinHopDongService,
-    private helperService: HelperService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNhapHangService);
     this.formData = this.fb.group({
       id: [''],
       soQd: [''],
@@ -220,6 +221,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
               x.tenTrangThai = "Chưa thực hiện";
             });
           } else {
+            this.formData.patchValue({
+              donViTinh: 'tấn',
+            })
             this.dataTable = data.details[0].children;
             this.dataTable.forEach(x => {
               x.trangThai = STATUS.CHUA_THUC_HIEN;
@@ -427,6 +431,11 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          if (!this.loaiVthh.startsWith('02')) {
+            this.formData.patchValue({
+              donViTinh: 'tấn',
+            })
+          }
           this.formData.patchValue({
             soQd: data.soQd?.split('/')[0],
           });
@@ -458,7 +467,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           }
           this.listFileDinhKem = data.fileDinhKems;
           this.listCanCu = data.fileCanCu;
-          console.log(this.dataTable)
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -592,12 +600,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       result.push(i);
     }
     return result;
-  }
-
-  isDetail(): boolean {
-    return (
-      this.isViewDetail
-    );
   }
 
   expandSet = new Set<number>();
@@ -899,6 +901,23 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  async preview() {
+    if (this.loaiVthh.startsWith('02')) {
+      this.previewName = 'qd_giao_nhiem_vu_nhap_hang_vt'
+    } else {
+      this.previewName = 'qd_giao_nhiem_vu_nhap_hang_lt'
+    }
+    let body = this.formData.value;
+    this.reportTemplate.fileName = this.previewName + '.docx';
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.service.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
   }
 
 }

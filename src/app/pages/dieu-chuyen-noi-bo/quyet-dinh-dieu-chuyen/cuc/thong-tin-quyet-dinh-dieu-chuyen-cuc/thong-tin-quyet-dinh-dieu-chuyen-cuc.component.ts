@@ -695,12 +695,12 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       }).value();
 
 
-    // if (data?.length !== 0) {
-    //   const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-    //   this.formData.patchValue({
-    //     tongDuToanKp: tongDuToanChiPhi,
-    //   })
-    // };
+    if (data?.length > 0) {
+      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+      this.formData.patchValue({
+        tongDuToanKp: tongDuToanChiPhi,
+      })
+    };
     console.log('dataView', dataView)
     return dataView
   }

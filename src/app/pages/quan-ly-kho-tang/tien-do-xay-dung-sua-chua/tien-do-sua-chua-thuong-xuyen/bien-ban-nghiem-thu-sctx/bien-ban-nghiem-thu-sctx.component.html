@@ -1,11 +1,11 @@
 <div class="bg-trang">
   <div class="cangiua group-button-search">
     <button
-      type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
+      type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XEM')">
       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
       <span>Xóa</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null)">
+    <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null)" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_THEM')">
       <i class="icon htvbdh_dau-cong"></i>
       <span>Thêm</span>
     </button>
@@ -41,13 +41,13 @@
         <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
         <td>{{  data.tenTrangThai  }}</td>
         <td>
-          <a (click)="redirectToChiTiet(true, data.id)">
+          <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XEM')">
             <i class="fa fa-eye" title="Xem chi tiết"></i>
           </a>
-          <a (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO"  >
+          <a (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_THEM')"  >
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
-          <a (click)="delete(data)" *ngIf="data.trangThai == STATUS.DU_THAO" >
+          <a (click)="delete(data)" *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XOA')" >
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           </a>
         </td>

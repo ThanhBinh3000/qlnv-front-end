@@ -23,7 +23,7 @@ import { BangKeCanHangDieuChuyenService } from '../services/dcnb-bang-ke-can-han
 export interface PassDataXuatBangKeCanHang {
   soQdinhDcc: string, qdinhDccId: number, ngayKyQdDcc: string, thoiHanDieuChuyen: string, maDiemKho: string, tenDiemKho: string, maNhaKho: string, tenNhaKho: string, maNganKho: string, tenNganKho: string,
   maLoKho: string, tenLoKho: string, soPhieuXuatKho: string, phieuXuatKhoId: number, loaiVthh: string, tenLoaiVthh: string, cloaiVthh: string, tenCloaiVthh: string, diaDaDiemKho: string, tenNguoiGiaoHang: string, cccd: string,
-  donViNguoiGiaoHang: string, diaChiDonViNguoiGiaoHang: string, donViTinh: string, tenDonViTinh: string, thoiGianGiaoNhan: string
+  donViNguoiGiaoHang: string, diaChiDonViNguoiGiaoHang: string, donViTinh: string, thoiGianGiaoNhan: string, keHoachDcDtlId: number
 }
 @Component({
   selector: 'app-xuat-dcnb-bang-ke-can',
@@ -57,7 +57,7 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
   passData: PassDataXuatBangKeCanHang = {
     soQdinhDcc: '', qdinhDccId: null, ngayKyQdDcc: '', thoiHanDieuChuyen: '', maDiemKho: '', tenDiemKho: '', maNhaKho: '', tenNhaKho: '', maNganKho: '', tenNganKho: '',
     maLoKho: '', tenLoKho: '', soPhieuXuatKho: '', phieuXuatKhoId: null, loaiVthh: '', tenLoaiVthh: '', cloaiVthh: '', tenCloaiVthh: '', diaDaDiemKho: '', tenNguoiGiaoHang: '', cccd: '',
-    donViNguoiGiaoHang: '', diaChiDonViNguoiGiaoHang: '', donViTinh: '', tenDonViTinh: '', thoiGianGiaoNhan: ''
+    donViNguoiGiaoHang: '', diaChiDonViNguoiGiaoHang: '', donViTinh: '', thoiGianGiaoNhan: '', keHoachDcDtlId: null
   }
   constructor(
     httpClient: HttpClient,
@@ -236,7 +236,7 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.passData = {
       soQdinhDcc: '', qdinhDccId: null, ngayKyQdDcc: '', thoiHanDieuChuyen: '', maDiemKho: '', tenDiemKho: '', maNhaKho: '', tenNhaKho: '', maNganKho: '', tenNganKho: '',
       maLoKho: '', tenLoKho: '', soPhieuXuatKho: '', phieuXuatKhoId: null, loaiVthh: '', tenLoaiVthh: '', cloaiVthh: '', tenCloaiVthh: '', diaDaDiemKho: '', tenNguoiGiaoHang: '', cccd: '',
-      donViNguoiGiaoHang: '', diaChiDonViNguoiGiaoHang: '', donViTinh: '', tenDonViTinh: '', thoiGianGiaoNhan: ''
+      donViNguoiGiaoHang: '', diaChiDonViNguoiGiaoHang: '', donViTinh: '', thoiGianGiaoNhan: '', keHoachDcDtlId: null
     }
   }
 
@@ -252,7 +252,7 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
     this.passData = {
       soQdinhDcc: data.soQdinh, qdinhDccId: data.qdinhDcId, ngayKyQdDcc: data.ngayKyQdinh, thoiHanDieuChuyen: data.thoiHanDieuChuyen, maDiemKho: data.maDiemKho, tenDiemKho: data.tenDiemKho, maNhaKho: data.maNhaKho, tenNhaKho: data.tenNhaKho, maNganKho: data.maNganKho, tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho, tenLoKho: data.tenLoKho, soPhieuXuatKho: data.soPhieuXuatKho, phieuXuatKhoId: data.phieuXuatKhoId, loaiVthh: data.maHangHoa, tenLoaiVthh: data.tenHangHoa, cloaiVthh: data.maChLoaiHangHoa, tenCloaiVthh: data.tenChLoaiHangHoa, diaDaDiemKho: '', tenNguoiGiaoHang: data.nguoiGiaoHang, cccd: data.soCmt,
-      donViNguoiGiaoHang: data.ctyNguoiGh, diaChiDonViNguoiGiaoHang: data.diaChi, donViTinh: data.donViTinh, tenDonViTinh: data.tenDonViTinh, thoiGianGiaoNhan: data.thoiGianGiaoNhan
+      donViNguoiGiaoHang: data.ctyNguoiGh, diaChiDonViNguoiGiaoHang: data.diaChi, donViTinh: data.donViTinh, thoiGianGiaoNhan: data.thoiGianGiaoNhan, keHoachDcDtlId: data.keHoachDcDtlId
     }
   }
 

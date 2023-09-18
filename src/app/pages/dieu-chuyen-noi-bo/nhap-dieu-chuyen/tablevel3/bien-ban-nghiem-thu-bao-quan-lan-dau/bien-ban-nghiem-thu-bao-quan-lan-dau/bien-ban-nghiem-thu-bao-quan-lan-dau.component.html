@@ -215,7 +215,7 @@
                           </td>
                         </tr>
                         <ng-container *ngFor="let row5 of row4.children, let y = index">
-                          <tr *ngIf="row5.soLapBBKLot">
+                          <tr *ngIf="row5.soBBKLot">
                             <td></td>
                             <td></td>
                             <td></td>
@@ -226,7 +226,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{row5.soLapBBKLot || ""}}</td>
+                            <td>{{row5.soBBKLot || ""}}</td>
                             <td>{{row5.ngayLapBBKLot |date: "dd/MM/yyyy"}}</td>
                             <td>{{row5.ngayKetThucNtKeLot |date: "dd/MM/yyyy"}}</td>
                             <td>{{(row5.tongKinhPhiTT |number: '1.0-1':
@@ -239,8 +239,10 @@
                                 (click)="redirectDetail(row5.id, true)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                               </a>
-                              <a *ngIf="row5.trangThai == STATUS.DU_THAO || row5.trangThai == STATUS.TU_CHOI_TK || row5.trangThai == STATUS.TU_CHOI_LDCC"
-                                (click)="redirectDetail(row5.id, false)">
+                              <a *ngIf="isDuyet(row5)" (click)="redirectDetail(row5.id, true)">
+                                <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
+                              </a>
+                              <a *ngIf="isEdit(row5)" (click)="redirectDetail(row5.id, false)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="xoa(row5)">

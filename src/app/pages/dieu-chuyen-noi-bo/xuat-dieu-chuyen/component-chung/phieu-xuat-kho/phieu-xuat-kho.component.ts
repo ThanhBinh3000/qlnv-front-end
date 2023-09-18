@@ -12,8 +12,9 @@ import { chain, groupBy } from 'lodash';
 import { PhieuXuatKhoDieuChuyenService } from '../services/dcnb-xuat-kho.service';
 
 export interface PassDataXK {
-  soQddc: string, qddcId: boolean, soPhieuKnChatLuong: string, phieuKnChatLuongHdrId: number, maDiemKho: string, maNganKho: string, maNhaKho: string, maLoKho: string
-  tenDiemKho: string, tenNganKho: string, tenNhaKho: string, tenLoKho: string, loaiVthh: string, cloaiVthh: string, tenLoaiVthh: string, tenCloaiVthh: string, soLuongCanDc: number
+  soQddc: string, qddcId: number, soPhieuKnChatLuong: string, phieuKnChatLuongHdrId: number, maDiemKho: string, maNganKho: string, maNhaKho: string, maLoKho: string
+  tenDiemKho: string, tenNganKho: string, tenNhaKho: string, tenLoKho: string, loaiVthh: string, cloaiVthh: string, tenLoaiVthh: string, tenCloaiVthh: string, soLuongCanDc: number, donViTinh: string,
+  keHoachDcDtlId: number
 }
 @Component({
   selector: 'app-xuat-dcnb-phieu-xuat-kho',
@@ -236,7 +237,8 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     this.passData = {
       soQddc: lv2.soQdinh, qddcId: lv2.qdinhDccId, soPhieuKnChatLuong: lv2.soPhieuKiemNghiemCl, phieuKnChatLuongHdrId: lv2.phieuKiemNghiemId, maDiemKho: lv2.maDiemKho,
       maNhaKho: lv2.maNhaKho, maNganKho: lv2.maNganKho, maLoKho: lv2.maLoKho, tenDiemKho: lv2.tenDiemKho, tenNhaKho: lv2.tenNhaKho, tenNganKho: lv2.tenNganKho, tenLoKho: lv2.tenLoKho,
-      loaiVthh: lv2.maHangHoa, cloaiVthh: lv2.maChLoaiHangHoa, tenLoaiVthh: lv2.tenHangHoa, tenCloaiVthh: lv2.tenChLoaiHangHoa, soLuongCanDc: lv2.slDienChuyen
+      loaiVthh: lv2.maHangHoa, cloaiVthh: lv2.maChLoaiHangHoa, tenLoaiVthh: lv2.tenHangHoa, tenCloaiVthh: lv2.tenChLoaiHangHoa, soLuongCanDc: lv2.slDienChuyen, donViTinh: lv2.donViTinh,
+      keHoachDcDtlId: lv2.keHoachDcDtlId
     }
   }
 

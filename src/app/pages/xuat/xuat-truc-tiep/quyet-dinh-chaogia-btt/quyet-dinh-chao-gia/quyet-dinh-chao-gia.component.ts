@@ -77,11 +77,11 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
         this.search(),
         this.initData()
       ]);
-      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
-      await this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -99,8 +99,10 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
 
   async clearFilter() {
     this.formData.reset();
-    await this.timKiem();
-    await this.search();
+    await Promise.all([
+      this.timKiem(),
+      this.search()
+    ]);
   }
 
   redirectDetail(id, isView: boolean) {

@@ -1,28 +1,28 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DonviService } from 'src/app/services/donvi.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG } from 'src/app/constants/status';
-import { BaseService } from 'src/app/services/base.service';
-import { saveAs } from 'file-saver';
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {DonviService} from 'src/app/services/donvi.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {BBLM_LOAI_DOI_TUONG, HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG} from 'src/app/constants/status';
+import {BaseService} from 'src/app/services/base.service';
+import {saveAs} from 'file-saver';
 import {
   BienBanLayMauComponent,
 } from 'src/app/pages/xuat/kiem-tra-chat-luong/bien-ban-lay-mau/bien-ban-lay-mau.component';
-import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { Validators } from '@angular/forms';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {KhCnQuyChuanKyThuat} from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {Validators} from '@angular/forms';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {
   DialogTableSelectionComponent,
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { v4 as uuidv4 } from 'uuid';
-import { cloneDeep } from 'lodash';
-import { PREVIEW } from '../../../../../constants/fileType';
+import {v4 as uuidv4} from 'uuid';
+import {cloneDeep} from 'lodash';
+import {PREVIEW} from '../../../../../constants/fileType';
 import printJS from 'print-js';
 
 @Component({
@@ -52,7 +52,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   dsDiaDiem: any;
   maHauTo: any;
   public vldTrangThai: BienBanLayMauComponent;
-  templateName = 'xuat-thanh-ly-phieu_khiem_nghiem_cl';
+  templateName = 'phieu_khiem_nghiem_cl';
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -111,7 +111,9 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       loaiBb: [],
       type: [],
       fileDinhKem: [new Array<FileDinhKem>()],
-      xhPhieuKnclDtl: [[]],
+      xhPhieuKnclDtl: [new Array()],
+      ppLayMau: [new Array()],
+      ctChatLuong: [new Array()],
       ngayTao: [],
     });
   }
@@ -220,7 +222,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo };
+    let body = {...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo};
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -229,7 +231,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       this.daiDienRow.type = HSKT_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN;
       this.daiDienRow.idVirtual = uuidv4();
       let newData = [...this.formData.value.xhPhieuKnclDtl, this.daiDienRow];
-      this.formData.patchValue({ xhPhieuKnclDtl: newData });
+      this.formData.patchValue({xhPhieuKnclDtl: newData});
       await this.buildTableView();
       this.daiDienRow = {};
     }
@@ -251,7 +253,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let index = newValue.findIndex(s => s.idVirtual == item.idVirtual);
     item.edit = false;
     newValue.splice(index, 1, item);
-    this.formData.patchValue({ xhPhieuKnclDtl: newValue });
+    this.formData.patchValue({xhPhieuKnclDtl: newValue});
     await this.buildTableView();
   }
 
@@ -264,7 +266,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let newValue = cloneDeep(this.formData.value.xhPhieuKnclDtl);
     let index = newValue.findIndex(s => s.idVirtual == item.idVirtual);
     newValue.splice(index, 1);
-    this.formData.patchValue({ xhPhieuKnclDtl: newValue });
+    this.formData.patchValue({xhPhieuKnclDtl: newValue});
     await this.buildTableView();
   }
 
@@ -379,6 +381,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         await this.bindingQdGnv(data.id);
         //load ds bb lay mau
         await this.inputServiceBbLayMau.search({
+          type: 'CTVT',
           paggingReq: {
             limit: this.globals.prop.MAX_INTERGER,
             page: 0,
@@ -453,6 +456,13 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
             soQdGnv: res.data.soBbQd,
             ngayKyQdGnv: res.data.ngayKy,
           });
+        } else if (res.data.dataDtl) {
+          this.dsDiaDiem = res.data.dataDtl;
+          this.formData.patchValue({
+            idQdGnv: res.data.id,
+            soQdGnv: res.data.soBbQd,
+            ngayKyQdGnv: res.data.ngayKy,
+          });
         }
       }
     } catch (e) {
@@ -480,7 +490,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           this.formData.patchValue({
             idBbLayMau: data.id,
             soBbLayMau: data.soBbQd,
-            ngayLayMau: data.ngayTao,
+            ngayBbLayMau: data.ngayTao,
             maDiaDiem: data.maDiaDiem,
             loaiVthh: data.loaiVthh,
             cloaiVthh: data.cloaiVthh,
@@ -490,6 +500,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
             tenNhaKho: data.tenNhaKho,
             tenNganKho: data.tenNganKho,
             tenLoKho: data.tenLoKho,
+            xhPhieuKnclDtl:data.xhBienBanLayMauDtl
           });
         }
       }
@@ -506,9 +517,9 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     xhPhieuKnclDtl = xhPhieuKnclDtl.filter(s => s.type != LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU);
     let newData = [];
     $event.forEach(s => {
-      xhPhieuKnclDtl = [...xhPhieuKnclDtl, { ten: s, type: LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }];
+      xhPhieuKnclDtl = [...xhPhieuKnclDtl, {ten: s, type: LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU}];
     });
-    this.formData.patchValue({ xhPhieuKnclDtl: xhPhieuKnclDtl });
+    this.formData.patchValue({xhPhieuKnclDtl: xhPhieuKnclDtl});
     await this.buildTableView();
   }
 
@@ -539,7 +550,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+    printJS({printable: this.printSrc, type: 'pdf', base64: true});
   }
 
 }

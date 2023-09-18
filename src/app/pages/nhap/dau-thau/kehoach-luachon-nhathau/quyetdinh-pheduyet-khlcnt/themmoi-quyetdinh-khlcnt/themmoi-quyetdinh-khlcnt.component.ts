@@ -370,7 +370,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         this.idInput = res.data.id;
-        this.guiDuyet();
+        await this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

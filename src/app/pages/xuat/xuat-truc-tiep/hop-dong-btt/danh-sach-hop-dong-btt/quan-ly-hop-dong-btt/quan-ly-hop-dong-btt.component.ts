@@ -70,9 +70,11 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     if (this.idInput) {
       await this.spinner.show();
       try {
-        await this.getDetail();
+        if (this.idInput){
+          await this.getDetail();
+        }
       } catch (e) {
-        console.log('error: ', e);
+        console.error('error: ', e);
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       } finally {
         await this.spinner.hide();
@@ -115,8 +117,9 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       }
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
   }
 
@@ -151,8 +154,9 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       }
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
   }
 
@@ -163,16 +167,24 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   idHopDong: number;
 
   async showDetail($event, id: number) {
-    await this.spinner.show();
-    if ($event.type == 'click') {
-      this.selected = false
-      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-      $event.target.parentElement.classList.add('selectedRow')
-    } else {
-      this.selected = true
+    try {
+      await this.spinner.show();
+      if ($event.type == 'click') {
+        this.selected = false;
+        const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
+        if (selectedRow) {
+          selectedRow.classList.remove('selectedRow');
+        }
+        $event.target.parentElement.classList.add('selectedRow');
+      } else {
+        this.selected = true;
+      }
+      this.idHopDong = id;
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      await this.spinner.hide();
     }
-    this.idHopDong = id;
-    await this.spinner.hide();
   }
 
   async redirectHopDong(id: number, isView: boolean, isShowHd: boolean) {
@@ -180,7 +192,11 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     this.isView = isView;
     this.isEditHopDong = isShowHd;
     if (!isShowHd) {
-      await this.ngOnInit()
+      try {
+        await this.ngOnInit();
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
   }
 
@@ -262,21 +278,21 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     });
   }
 
-  validateData(): boolean {
+  async validateData(): Promise<boolean> {
     if (!this.dataTable || this.dataTable.length === 0) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng thêm hợp đồng");
+      await this.notification.error(MESSAGE.ERROR, "Vui lòng thêm hợp đồng");
       return false;
     }
     const isAnyContractNotSigned = this.dataTable.some(item => item && item.trangThai !== STATUS.DA_KY);
     if (isAnyContractNotSigned) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả các hợp đồng");
+      await this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả các hợp đồng");
       return false;
     }
     return true;
   }
 
   async deleteHd(data) {
-    this.modal.confirm({
+    await this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
       nzContent: 'Bạn có chắc chắn muốn xóa?',
@@ -284,32 +300,26 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
+      nzOnOk: async () => {
+        await this.spinner.show();
         try {
           let body = {
             id: data.id
           };
-          this.hopDongBttService.delete(body).then(async () => {
-            await this.getDetail();
-            await this.spinner.hide();
-          });
+          await this.hopDongBttService.delete(body);
+          await this.getDetail();
         } catch (e) {
           console.log('error: ', e);
-          this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          await this.spinner.hide();
         }
       },
     });
   }
 
   calcTong(column) {
-    if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur[column];
-        return prev;
-      }, 0);
-      return sum;
-    }
+    if (!this.dataTable) return 0;
+    return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
   }
 }

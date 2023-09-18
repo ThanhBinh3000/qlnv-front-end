@@ -261,7 +261,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="2">
+        <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -271,7 +271,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="2">
+        <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -281,7 +281,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="2">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hình kho</nz-form-label>
             <nz-form-control>
@@ -289,7 +289,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="2">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Tích lượng</nz-form-label>
             <nz-form-control>
@@ -299,19 +299,9 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> DS phiếu nhập kho</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Số BB nhập đầy kho</nz-form-label>
             <nz-form-control>
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openSoPhieuNhapKho()">
-                <input [readonly]="true" nz-input formControlName="soPhieuNhapKho" readonly />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="4">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Thực nhập</nz-form-label>
-            <nz-form-control>
-              <input [readonly]="true" nz-input formControlName="slThucNhap" readonly />
+              <input [readonly]="true" nz-input formControlName="soBbNhapDayKho" readonly />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -319,8 +309,19 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Hình thức kê lót/bảo quản</nz-form-label>
             <nz-form-control>
-              <nz-select [nzDisabled]="isView" formControlName="hthucBquan">
+              <nz-select nzAllowClear [nzDisabled]="isView" formControlName="hthucBquan">
                 <nz-option *ngFor="let p of listHinhThucBaoQuan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Loại hình bảo quản</nz-form-label>
+            <nz-form-control>
+              <nz-select nzAllowClear [nzDisabled]="isView" formControlName="lhinhBquan">
+                <nz-option *ngFor="let p of listLhbq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -330,19 +331,25 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Phương thức bảo quản</nz-form-label>
             <nz-form-control>
-              <nz-select [nzDisabled]="isView" formControlName="pthucBquan">
+              <nz-select nzAllowClear [nzDisabled]="isView" formControlName="pthucBquan">
                 <nz-option *ngFor="let p of listPhuongThucBaoQuan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="2">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Định mức được giao</nz-form-label>
             <nz-form-control>
               <input [readonly]="true" nz-input formControlName="dinhMucGiao" readonly />
             </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="2">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thực nhập</nz-form-label>
+            <span class="blue-text">{{formattedSlThucNhap}} kg</span>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">

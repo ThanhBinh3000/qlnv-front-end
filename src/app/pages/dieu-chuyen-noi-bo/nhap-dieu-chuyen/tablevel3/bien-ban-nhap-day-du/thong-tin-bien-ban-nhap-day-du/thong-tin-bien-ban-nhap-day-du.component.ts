@@ -106,19 +106,20 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       soLuongQdDcCuc: [],
       lyDoTuChoi: [],
       ghiChu: [],
-      ktvBaoQuan: [],
+      tenKyThuatVien: [],
       idKyThuatVien: [],
-      thuKho: [],
+      tenThuKho: [],
       idThuKho: [],
-      keToan: [],
+      tenKeToan: [],
       idKeToan: [],
       idLanhDao: [],
-      lanhDao: [],
+      tenLanhDao: [],
       children: [new Array<any>(),],
       type: ["01"],
       loaiDc: ["DCNB"],
       loaiQdinh: [],
-      thayDoiThuKho: []
+      thayDoiThuKho: [],
+      keHoachDcDtlId: [, [Validators.required]]
     }
     );
   }
@@ -130,7 +131,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
-      ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+      tenThuKho: this.userInfo.TEN_DAY_DU,
       soBb: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
       loaiDc: this.loaiDc,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
@@ -160,9 +161,10 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.soLuongDc,
-        dviTinh: this.data.tenDonViTinh,
+        dviTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
-      await this.getDanhSachTT(this.data.qdDcCucId, this.data.maLoKho, this.data.maNganKho)
+      await this.getDanhSachTT(this.data.soQdinh, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
     }
 
@@ -181,21 +183,22 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
     if (id) {
       let data = await this.detail(id);
       if (!data) return
+      this.detailData = data
       this.formData.patchValue({
         ...data,
         tenLoNganKho: `${data.tenLoKho} - ${data.tenNganKho}`,
       });
       this.fileDinhKemReq = data.fileDinhKems
       this.danhSach = data.children
-      await this.getDanhSachTT(data.qdDcCucId, data.maLoKho, data.maNganKho)
+      await this.getDanhSachTT(data.soQdDcCuc, data.maLoKho, data.maNganKho)
       await this.loadChiTietQdinh(data.qdDcCucId);
     }
     await this.spinner.hide();
   }
 
-  async getDanhSachTT(qdinhDccId, maLoKho, maNganKho) {
+  async getDanhSachTT(soQdDcCuc, maLoKho, maNganKho) {
     const body = {
-      qdinhDccId,
+      soQdDcCuc,
       maLoKho,
       maNganKho,
       isVatTu: false
@@ -325,6 +328,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           dviTinh: "",
+          keHoachDcDtlId: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -367,11 +371,12 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          dviTinh: data.tenDonViTinh,
+          dviTinh: data.donViTinh,
           soLuongQdDcCuc: data.soLuongPhanBo,
+          keHoachDcDtlId: data.id
         });
 
-        await this.getDanhSachTT(this.formData.value.qdDcCucId, data.maLoKhoNhan, data.maNganKhoNhan)
+        await this.getDanhSachTT(this.formData.value.soQdDcCuc, data.maLoKhoNhan, data.maNganKhoNhan)
       }
     });
   }
@@ -382,7 +387,6 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
 
       const data = res.data
       if (!data) return
-      this.detailData = data
       this.dsKeHoach = []
       if (data.danhSachQuyetDinh.length == 0) return
       data.danhSachQuyetDinh.map(qdinh => {

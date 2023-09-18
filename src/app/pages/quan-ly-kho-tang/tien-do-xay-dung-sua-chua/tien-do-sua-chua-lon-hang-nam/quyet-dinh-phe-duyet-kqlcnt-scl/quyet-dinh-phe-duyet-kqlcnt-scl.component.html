@@ -3,12 +3,12 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu</h3>
       <div class="buttons">
-        <button type="button" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT_XOA')"
+        <button type="button" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XOA')"
                 (click)="deleteMulti()" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT_THEM')"
+        <button *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')"
                 type="button" class="btn btn-main" (click)="openThongTinModal()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -48,14 +48,14 @@
           <td>{{ data.soGoiThau | number: '1.0-1': 'vi_VN' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center">
-            <a *ngIf="data.trangThai == STATUS.BAN_HANH "
+            <a *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XEM') "
                (click)="openThongTinModal(data.id, true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="openThongTinModal(data.id,false)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')" (click)="openThongTinModal(data.id,false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XOA') " (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
@@ -84,12 +84,14 @@
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="openPopThongTin" (nzOnCancel)="closeThongTinModal()">
   <div *nzModalTitle>
-    <p style="font-size: 18px">ĐỀ XUẤT KẾ HOẠCH XÂY DỰNG CỦA CỤC DTNN KV</p>
+    <p style="font-size: 18px">QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ LỰA CHỌN NHÀ THẦU </p>
   </div>
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl [id]="selectedId" (showListEvent)="showList()"
                                                    [isViewDetail]="isViewDetail"
                                                    [itemQdPdKhLcnt]="itemTtdt"
+                                                   [itemDuAn]="itemDuAn"
+                                                   *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XEM')"
                                                    [idInput]="selectedId">
 
     </app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl>

@@ -15,13 +15,13 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
+        <button *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_TTDT_THEM')"
                 type="button" class="btn btn-sub xanh-nhat  ml-2" (click)="save(true)">
           <i class="icon htvbdh_checkfile2"></i>
           <span>Hoàn thành</span>
         </button>
         <button
-          *ngIf="idGoiThau > 0 && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT_THEM')"
+          *ngIf="idGoiThau > 0 && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_TTDT_THEM')"
           class="btn btn-main btn-sm waves-effect waves-light  ml-2" (click)="save(false)">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>

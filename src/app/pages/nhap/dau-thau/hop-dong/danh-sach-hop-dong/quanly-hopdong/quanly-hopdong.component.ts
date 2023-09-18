@@ -15,7 +15,9 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {UserLogin} from "../../../../../../models/userlogin";
 import {UserService} from "../../../../../../services/user.service";
 import {NzModalService} from 'ng-zorro-antd/modal';
-
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import {saveAs} from 'file-saver';
 @Component({
   selector: 'app-quanly-hopdong',
   templateUrl: './quanly-hopdong.component.html',
@@ -33,7 +35,18 @@ export class QuanlyHopdongComponent implements OnInit {
   idHopDong: number;
   isEditHopDong: boolean
   userInfo: UserLogin;
-
+  showDlgPreview = false;
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  previewName : string;
+  listNguoiDaiDien: any[] = [];
   constructor(
     public globals: Globals,
     private helperService: HelperService,
@@ -98,6 +111,7 @@ export class QuanlyHopdongComponent implements OnInit {
       await this.spinner.show()
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
+        this.loadListNguoiDaiDien(),
       ]);
       if (this.id) {
         await this.getDetail(this.id)
@@ -111,6 +125,21 @@ export class QuanlyHopdongComponent implements OnInit {
         firstRow.classList.add("selectedRow");
       }
     });
+  }
+
+  async loadListNguoiDaiDien() {
+    let body = {
+      maDvi: '0101',
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      }
+    }
+    await this.userService.search(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listNguoiDaiDien = res.data?.content
+      }
+    })
   }
 
   async getDetail(id) {
@@ -379,5 +408,38 @@ export class QuanlyHopdongComponent implements OnInit {
       })
       return sum;
     }
+  }
+
+  async preview(id) {
+    if (this.loaiVthh.startsWith('02')) {
+      this.previewName = 'thong_tin_hop_dong_vt'
+    } else {
+      this.previewName = 'thong_tin_hop_dong_lt'
+    }
+    this.reportTemplate.fileName = this.previewName + '.docx';
+    let body = {
+      id: id,
+      reportTemplateRequest: this.reportTemplate
+    }
+    await this.thongTinHopDong.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf(fileName: string) {
+    saveAs(this.pdfSrc, fileName + '.pdf');
+  }
+
+  downloadWord(fileName: string) {
+    saveAs(this.wordSrc, fileName + '.docx');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 }

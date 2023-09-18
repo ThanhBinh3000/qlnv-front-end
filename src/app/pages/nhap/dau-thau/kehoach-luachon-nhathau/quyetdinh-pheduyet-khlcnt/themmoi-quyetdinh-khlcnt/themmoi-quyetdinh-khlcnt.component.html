@@ -186,7 +186,7 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]=6>
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open">
                   <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
@@ -196,7 +196,7 @@
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item *ngIf="!formData.value.loaiVthh.startsWith('02')">
-              <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open">
                   <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
@@ -220,7 +220,7 @@
               <th>Ngày duyệt KH</th>
               <th>Trích yếu</th>
               <th>Tên dự án</th>
-              <th>Số lượng (Kg)</th>
+              <th>Số lượng (Tấn)</th>
               <th>Tổng tiền gồm thuế (đồng)</th>
             </tr>
           </thead>

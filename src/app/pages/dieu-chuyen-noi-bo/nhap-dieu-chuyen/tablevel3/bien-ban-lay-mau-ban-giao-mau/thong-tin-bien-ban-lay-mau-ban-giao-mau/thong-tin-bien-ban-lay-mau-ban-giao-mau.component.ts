@@ -115,6 +115,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       loaiQdinh: [],
       thayDoiThuKho: [],
       lyDoTuChoi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -139,7 +140,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     }
 
     if (this.data) {
-      console.log('data', this.data)
+      // console.log('data', this.data)
       this.formData.patchValue({
         soQdinhDcc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayHieuLuc,
@@ -158,7 +159,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
-        tenDonViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qddccId);
       await this.loadPhuongPhapLayMau(this.data.maChLoaiHangHoa)
@@ -274,7 +276,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log('openDialogQD', data)
+        // console.log('openDialogQD', data)
         this.formData.patchValue({
           soQdinhDcc: data.soQdinh,
           qdccId: data.id,
@@ -298,7 +300,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
           loaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
+          keHoachDcDtlId: ""
         });
         this.phuongPhapLayMaus = []
         await this.loadChiTietQdinh(data.id);
@@ -453,8 +456,9 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          tenDonViTinh: data.tenDonViTinh,
-          idKeHoachDtl: data.id
+          donViTinh: data.donViTinh,
+          idKeHoachDtl: data.id,
+          keHoachDcDtlId: data.id
         });
         await this.loadPhuongPhapLayMau(data.cloaiVthh)
         await this.loadChiTieuChatLuongs(data.cloaiVthh)

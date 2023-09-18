@@ -161,7 +161,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_LDC) {
+    if (trangThai == STATUS.CHO_DUYET_LDC || trangThai == STATUS.DA_DUYET_LDC) {
       return true;
     }
     return false;

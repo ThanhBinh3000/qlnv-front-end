@@ -40,6 +40,10 @@ import {
   DialogPhanBoHdVtComponent
 } from "../../../../../../components/dialog/dialog-phan-bo-hd-vt/dialog-phan-bo-hd-vt.component";
 import {addDays, differenceInCalendarDays} from 'date-fns'
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 interface DonviLienQuanModel {
     id: number;
@@ -103,7 +107,30 @@ export class ThongTinComponent implements OnInit, OnChanges {
     isDieuChinh: boolean = false;
     dataGthau: any = {};
     namKhoach: number = 0;
-
+  showDlgPreview = false;
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  previewName : string;
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
     constructor(
         private router: Router,
         private fb: FormBuilder,
@@ -139,7 +166,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 ghiChuNgayKy: [null],
                 namHd: [dayjs().get('year')],
                 ngayHieuLuc: [null],
-                soNgayThien: [null, [Validators.required]],
+                soNgayThien: [null],
                 tgianNkho: [null],
                 tenLoaiVthh: [null],
                 moTaHangHoa: [null],
@@ -195,6 +222,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
               soTienTinhPhat: [],
               tgianBdamThienHd: [],
               slGiaoCham: [],
+              namKhoach: [],
             }
         );
         this.formData.controls['donGiaVat'].valueChanges.subscribe(value => {
@@ -219,6 +247,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 text: dayNow - i,
             });
         }
+        if (!this.loaiVthh.startsWith('02')) {
+          this.formData.patchValue({
+            donViTinh: 'tấn',
+          })
+        }
         await Promise.all([
             this.loadDataComboBox(),
             this.onChangeNam(),
@@ -234,11 +267,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
     }
 
     async loadDataComboBox() {
-        this.listLoaiHopDong = [];
-        let resHd = await this.danhMucService.loaiHopDongGetAll();
-        if (resHd.msg == MESSAGE.SUCCESS) {
-            this.listLoaiHopDong = resHd.data;
-        }
+      this.listLoaiHopDong = [];
+      let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
+      if (resHd.msg == MESSAGE.SUCCESS) {
+        this.listLoaiHopDong = resHd.data;
+      }
     }
 
   async loadListNguoiDaiDien() {
@@ -289,6 +322,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
                     this.formData.patchValue({
                         maHdong: detail.soHd?.split('/')[0]
                     });
+                  if (!this.loaiVthh.startsWith('02')) {
+                    this.formData.patchValue({
+                      donViTinh: 'tấn',
+                    })
+                  }
                     this.idGoiThau = detail.idGoiThau;
                     this.listFileDinhKem = detail.listFileDinhKem;
                     this.listCcPhapLy = detail.listCcPhapLy;
@@ -358,11 +396,11 @@ export class ThongTinComponent implements OnInit, OnChanges {
             if (this.loaiVthh.startsWith("02")) {
               this.formData.controls["noiDung"].setValidators([Validators.required]);
               this.formData.controls["dieuKien"].setValidators([Validators.required]);
+              this.formData.controls["soNgayThien"].setValidators([Validators.required]);
             }
             this.formData.controls["idQdKqLcnt"].setValidators([Validators.required]);
             this.formData.controls["tenGoiThau"].setValidators([Validators.required]);
             this.formData.controls["tenHd"].setValidators([Validators.required]);
-            this.formData.controls["soNgayThien"].setValidators([Validators.required]);
             this.formData.controls["maDvi"].setValidators([Validators.required]);
             this.formData.controls["tenDvi"].setValidators([Validators.required]);
             this.formData.controls["diaChi"].setValidators([Validators.required]);
@@ -495,7 +533,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
         loaiVthh: data.hhQdKhlcntHdr?.loaiVthh,
         tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
         soNgayThien: data.hhQdKhlcntHdr?.tgianThien,
-        soNgayThienHd: data.hhQdKhlcntHdr?.dxKhlcntHdr?.tgianThienHd
+        soNgayThienHd: data.hhQdKhlcntHdr?.dxKhlcntHdr?.tgianThienHd,
+        namKhoach: data.namKhoach,
       })
       this.onChangeHluc();
       if (this.id > 0 && idGthau > 0) {
@@ -521,7 +560,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
             moTaHangHoa: dataDtl.dxuatKhLcntHdr?.moTaHangHoa,
             tgianNkho: dataDtl.dxuatKhLcntHdr?.tgianNhang,
           soNgayThien: dataDtl.dxuatKhLcntHdr?.tgianThien,
-          soNgayThienHd: dataDtl.dxuatKhLcntHdr?.tgianThienHd,
+          // soNgayThienHd: dataDtl.dxuatKhLcntHdr?.tgianThienHd,
+          namKhoach: data.namKhoach,
         })
       this.onChangeHluc();
     }
@@ -856,13 +896,66 @@ export class ThongTinComponent implements OnInit, OnChanges {
   }
 
   onChangeTgianGiaoThucTe() {
-      if(this.formData.get('tgianGiaoThucTe').value != null && this.formData.get('tgianGiaoDuHang').value != null) {
-        let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
-        let tgianGiaoDuHang = dayjs(this.formData.get('tgianGiaoDuHang').value).toDate();
-        let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianGiaoDuHang)
+      if(this.loaiVthh.startsWith('02')) {
+        if(this.formData.get('tgianGiaoThucTe').value != null && this.formData.get('tgianGiaoDuHang').value != null) {
+          let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
+          let tgianGiaoDuHang = dayjs(this.formData.get('tgianGiaoDuHang').value).toDate();
+          let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianGiaoDuHang)
+          this.formData.patchValue({
+            tgianBdauTinhPhat: tgianBdauTinhPhat,
+          })
+        }
+      } else {
+        if(this.formData.get('tgianGiaoThucTe').value != null && this.formData.get('tgianNkho').value != null) {
+          let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
+          let tgianNkho = dayjs(this.formData.get('tgianNkho').value).toDate();
+          let tgianBdauTinhPhat = differenceInCalendarDays(tgianGiaoThucTe, tgianNkho)
+          this.formData.patchValue({
+            tgianBdauTinhPhat: tgianBdauTinhPhat,
+          })
+        }
+      }
+  }
+
+  onchangeTgThienHd() {
+    if (this.formData.get('ngayHlucHd').value != null) {
+      let ngayKy = dayjs(this.formData.get('ngayHlucHd').value).toDate();
+      if (this.formData.get('soNgayThienHd').value != null) {
+        let ngayThienHd = addDays(ngayKy, this.formData.get('soNgayThienHd').value)
         this.formData.patchValue({
-          tgianBdauTinhPhat: tgianBdauTinhPhat,
+          ngayThienHd: ngayThienHd,
         })
       }
+    }
+  }
+  async preview() {
+      if (this.loaiVthh.startsWith('02')) {
+        this.previewName = 'thong_tin_hop_dong_vt'
+      } else {
+        this.previewName = 'thong_tin_hop_dong_lt'
+      }
+    let body = this.formData.value;
+    this.reportTemplate.fileName = this.previewName + '.docx';
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.hopDongService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf(fileName: string) {
+    saveAs(this.pdfSrc, fileName + '.pdf');
+  }
+
+  downloadWord(fileName: string) {
+    saveAs(this.wordSrc, fileName + '.docx');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 }

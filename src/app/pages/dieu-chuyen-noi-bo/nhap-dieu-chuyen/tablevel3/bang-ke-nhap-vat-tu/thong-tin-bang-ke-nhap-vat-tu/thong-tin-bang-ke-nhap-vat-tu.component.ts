@@ -88,7 +88,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       maNhaKho: [],
       tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
-      diaDiemKho: [],
+      diaDaDiemKho: [],
       tenThuKho: [],
       thuKhoId: [],
       tenPhuTrach: [],
@@ -107,6 +107,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       lyDoTuChoi: [],
       soSerial: [],
       soBaoBi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -129,7 +130,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
+      // console.log('this.data', this.data)
       this.formData.patchValue({
         soQdinhDcc: this.data.soQdinh,
         ngayKyQdinhDcc: this.data.ngayKyQd,
@@ -148,7 +149,8 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.soLuongDc,
-        donViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDcId);
       await this.layDonViCon(this.data.maDiemKho)
@@ -285,7 +287,8 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
           cloaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
+          keHoachDcDtlId: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -328,8 +331,8 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          donViTinh: data.tenDonViTinh,
-
+          donViTinh: data.donViTinh,
+          keHoachDcDtlId: data.id
         });
 
         await this.layDonViCon(data.maDiemKho)
@@ -358,7 +361,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       const dataDiemKho = res.data.find(f => f.maDvi === maDiemKho);
       if (dataDiemKho) {
         this.formData.patchValue({
-          diaDiemKho: dataDiemKho.diaChi
+          diaDaDiemKho: dataDiemKho.diaChi
         })
       }
     }

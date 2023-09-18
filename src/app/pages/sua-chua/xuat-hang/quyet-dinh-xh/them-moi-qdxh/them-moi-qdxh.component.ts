@@ -38,7 +38,8 @@ export class ThemMoiQdxhComponent extends Base3Component implements OnInit {
     private quyetDinhScService: QuyetDinhScService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, quyetDinhXhService);
-    this.defaultURL = 'sua-chua/xuat-hang/giao-nv-xh'
+    this.defaultURL = 'sua-chua/xuat-hang/giao-nv-xh';
+    this.previewName = 'sc_qd_giao_nvxh'
     this.getId();
     this.formData = this.fb.group({
       id: [],
@@ -147,7 +148,7 @@ export class ThemMoiQdxhComponent extends Base3Component implements OnInit {
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC);
+    return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC) && this.userService.isAccessPermisson('SCHDTQG_XH_QDGNVXH_THEM');
   }
 
   save(isGuiDuyet?) {
@@ -211,7 +212,7 @@ export class ThemMoiQdxhComponent extends Base3Component implements OnInit {
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC;
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('SCHDTQG_XH_QDGNVXH_DUYET_TP')) || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('SCHDTQG_XH_QDGNVXH_DUYET_LDCUC'));
     }
     return false
   }

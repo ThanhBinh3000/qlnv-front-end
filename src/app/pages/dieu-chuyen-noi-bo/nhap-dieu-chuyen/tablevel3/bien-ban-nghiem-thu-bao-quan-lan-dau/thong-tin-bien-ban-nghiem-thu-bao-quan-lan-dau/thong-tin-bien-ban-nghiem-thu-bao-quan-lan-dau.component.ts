@@ -100,7 +100,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       cloaiVthh: [],
       tenCloaiVthh: [],
       tichLuongKhaDung: [],
-      tenDonViTinh: [],
+      donViTinh: [],
       dsPhieuNhapKho: [],
       slThucNhapDc: [],
       hinhThucBaoQuan: [],
@@ -124,7 +124,8 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       loaiDc: ["DCNB"],
       loaiQdinh: [],
       lyDoTuChoi: [],
-      thayDoiThuKho: []
+      thayDoiThuKho: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -173,8 +174,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
         cloaiVthh: this.data.cloaiVthh,
         tenCloaiVthh: this.data.tenCloaiVthh,
         tichLuongKhaDung: this.data.tichLuongKd,
-        tenDonViTinh: this.data.tenDonViTinh,
-        idKeHoachDtl: this.data.qdinhDccId
+        donViTinh: this.data.donViTinh,
+        idKeHoachDtl: this.data.qdinhDccId,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       await this.loadDataBaoQuan(this.data.cloaiVthh)
@@ -601,7 +603,8 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       // loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
-      type: this.formData.value.type
+      type: this.formData.value.type,
+      thayDoiThuKho: true
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -649,7 +652,8 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
           cloaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
+          keHoachDcDtlId: ""
         });
         this.listPhuongThucBaoQuan = []
         this.listHinhThucBaoQuan = []
@@ -701,8 +705,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          tenDonViTinh: data.tenDonViTinh,
-          idKeHoachDtl: data.id
+          donViTinh: data.donViTinh,
+          idKeHoachDtl: data.id,
+          keHoachDcDtlId: data.id
         });
         await this.loadDataBaoQuan(data.cloaiVthh)
         await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)

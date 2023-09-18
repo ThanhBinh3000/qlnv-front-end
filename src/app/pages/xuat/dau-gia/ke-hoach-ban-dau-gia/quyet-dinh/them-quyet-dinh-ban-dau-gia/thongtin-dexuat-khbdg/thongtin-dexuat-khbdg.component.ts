@@ -78,30 +78,28 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    await this.spinner.show()
-    if (changes) {
-      if (this.dataInput) {
-        this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
+    if (changes.dataInput) {
+      await this.spinner.show();
+      const dataInput = changes.dataInput.currentValue;
+      if (dataInput) {
+        this.helperService.bidingDataInFormGroup(this.formData, dataInput);
+        const hasValidTime = dataInput.tgianDkienTu && dataInput.tgianDkienDen;
         this.formData.patchValue({
-          thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
-        })
-        this.dataTable = this.dataInput.children
-        await this.calculatorTable(this.dataInput);
+          thoiGianDuKien: hasValidTime ? [dataInput.tgianDkienTu, dataInput.tgianDkienDen] : null
+        });
+        this.dataTable = dataInput.children;
+        await this.calculatorTable(dataInput);
       } else {
         this.formData.reset();
       }
+      await this.spinner.hide();
     }
-    await this.spinner.hide()
   }
 
   expandSet = new Set<number>();
 
   onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
+    checked ? this.expandSet.add(id) : this.expandSet.delete(id);
   }
 
   async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
@@ -118,14 +116,11 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
         cloaiVthh: this.dataInput.cloaiVthh,
       },
     });
-    modalGT.afterClose.subscribe(async (data) => {
-      if (!data) {
-        return;
+    modalGT.afterClose.subscribe(async (updatedData) => {
+      if (updatedData && index >= 0) {
+        this.dataTable[index] = updatedData;
+        await this.calculatorTable();
       }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      }
-      await this.calculatorTable();
     });
   }
 

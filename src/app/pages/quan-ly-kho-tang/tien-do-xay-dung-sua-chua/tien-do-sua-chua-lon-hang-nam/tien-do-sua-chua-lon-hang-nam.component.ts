@@ -101,7 +101,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     try {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
-        capDvi: this.userInfo.CAP_DVI,
         loai : '00'
       })
       let body = this.formData.value
@@ -144,6 +143,9 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         break;
       case '05':
         this.trangThaiHopDong = data;
+        break;
+      case '07':
+       this.loadBbNghiemThu()
         break;
     }
   }
@@ -273,6 +275,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   }
 
   async loadItemDsGoiThau() {
+    if (this.itemHopDong.length > 0) {
       let body = {
         "namKh": this.itemSelected.namKh,
         "idDuAn": this.itemSelected.id,
@@ -297,29 +300,32 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+    }
   }
   async loadBbNghiemThu() {
-    let body = {
-      namKh: this.itemSelected.namKh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      idDuAn: this.itemSelected.id,
-      loai : "00",
-      paggingReq : {
-        limit: 999,
-        page: 0
+    if (this.itemHopDong.length > 0) {
+      let body = {
+        namKh: this.itemSelected.namKh,
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+        idDuAn: this.itemSelected.id,
+        loai : "00",
+        paggingReq : {
+          limit: 999,
+          page: 0
+        }
       }
-    }
-    let res = await this.bienBanSv.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data.content;
-      if (data && data.length > 0) {
-        if (data.length == this.itemHopDong.length) {
-          this.trangThaiBb = true;
-          data.forEach(item => {
-            if (item.trangThai != STATUS.DA_KY) {
-              this.trangThaiBb = false;
-            }
-          })
+      let res = await this.bienBanSv.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data.content;
+        if (data && data.length > 0) {
+          if (data.length == this.itemHopDong.length) {
+            this.trangThaiBb = true;
+            data.forEach(item => {
+              if (item.trangThai != STATUS.DA_KY) {
+                this.trangThaiBb = false;
+              }
+            })
+          }
         }
       }
     }

@@ -366,7 +366,9 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
     let trangThai = '';
     let mess = '';
     switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO: {
+      case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC: {
         trangThai = STATUS.CHO_DUYET_TP;
         mess = 'Bạn có muối gửi duyệt?';
         break;

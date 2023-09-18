@@ -289,6 +289,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+        // soPhieuNhapKho: data?.hhPhieuNhapKhoHdr.find(x => x.maLoKho == data.maLoKho).soPhieuNhapKho,
       })
       // this.loadLoaiKho()
     }
@@ -361,7 +362,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
-        console.log(this.formData.value)
+        console.log(data)
         await this.bindingDataQd(res.data?.idQdGiaoNvNh);
         let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
         this.bindingDataDdNhap(dataDdNhap);

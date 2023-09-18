@@ -41,7 +41,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   dsKeHoach: any[] = []
 
   danhSach: any[] = []
-  allCheckedTT = false;
+  allCheckedTT = true;
   indeterminateTT = false;
 
   constructor(
@@ -72,7 +72,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       soBb: [],
       ngayLap: [dayjs().format('YYYY-MM-DD')],
       soQdinhDcc: [],
-      ngayQdDcCuc: [],
+      ngayQdinhDcc: [],
       qdinhDccId: [],
       tenLoNganKho: [],
       tenLoKho: [],
@@ -98,6 +98,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       tenLanhDaoChiCuc: [],
       ghiChu: [],
       lyDoTuChoi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -120,10 +121,10 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
+      // console.log('this.data', this.data)
       this.formData.patchValue({
         soQdinhDcc: this.data.soQdinh,
-        ngayQdDcCuc: this.data.ngayKyQd,
+        ngayQdinhDcc: this.data.ngayKyQd,
         qdinhDccId: this.data.qdDcCucId,
         tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
@@ -139,9 +140,10 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tongSlTheoQd: this.data.soLuongDc,
-        donViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
-      await this.getDanhSachTT(this.data.qdDcCucId, this.data.maLoKho, this.data.maNganKho)
+      await this.getDanhSachTT(this.data.soQdinh, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
     }
 
@@ -169,7 +171,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         this.danhSach = data.dcnbBBKetThucNKDtl
         this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
         this.fileDinhKemReq = data.fileDinhKems
-        await this.getDanhSachTT(data.qdinhDccId, data.maLoKho, data.maNganKho)
+        await this.getDanhSachTT(data.soQdinhDcc, data.maLoKho, data.maNganKho)
       }
 
     }
@@ -191,16 +193,17 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   //   }
   // }
 
-  async getDanhSachTT(qdinhDccId, maLoKho, maNganKho) {
+  async getDanhSachTT(soQdDcCuc, maLoKho, maNganKho) {
     const body = {
-      qdinhDccId,
+      soQdDcCuc,
       maLoKho,
       maNganKho,
       isVatTu: true
     }
-    const children = this.danhSach
+    let children = this.danhSach
     let res = await this.phieuNhapKhoService.getDanhSachTT(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      if (children.length == 0) children = res.data
       this.danhSach = res.data.map(element => {
         const check = children.find(item => item.soPhieuNhapKho === element.soPhieuNhapKho)
         return {
@@ -208,6 +211,16 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           checked: !!check || false
         }
       });
+      const pnk = this.danhSach.filter(item => item.checked)[0]
+      if (pnk) {
+        this.formData.patchValue({
+          ngayBatDauNhap: pnk.ngayNhapKho
+        })
+      } else {
+        this.formData.patchValue({
+          ngayBatDauNhap: ""
+        })
+      }
     }
   }
 
@@ -296,7 +309,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       if (data) {
         this.formData.patchValue({
           soQdinhDcc: data.soQdinh,
-          ngayQdDcCuc: data.ngayKyQdinh,
+          ngayQdinhDcc: data.ngayKyQdinh,
           qdinhDccId: data.id,
           tenLoKho: "",
           maLoKho: "",
@@ -320,6 +333,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           donViTinh: "",
+          keHoachDcDtlId: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -370,12 +384,13 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          donViTinh: data.tenDonViTinh,
+          donViTinh: data.donViTinh,
           idKeHoachDtl: data.id,
           tongSlTheoQd: data.soLuongDc,
+          keHoachDcDtlId: data.id
         });
 
-        await this.getDanhSachTT(this.formData.value.qdinhDccId, data.maLoKhoNhan, data.maNganKhoNhan)
+        await this.getDanhSachTT(this.formData.value.soQdDcCuc, data.maLoKhoNhan, data.maNganKhoNhan)
       }
     });
   }
@@ -411,6 +426,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         id: undefined
       }
     })
+    body.ngayKetThucNhap = body.ngayLap
     body.fileDinhKemReq = this.fileDinhKemReq;
 
     if (this.idInput) {
