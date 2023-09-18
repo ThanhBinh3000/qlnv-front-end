@@ -427,7 +427,7 @@
 </div>
 
 <!--popup them sua-->
-<nz-modal [nzWidth]="'60%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
+<nz-modal [nzWidth]="'70%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
 
           nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
   <ng-container *nzModalContent>
@@ -510,7 +510,7 @@
             <nz-form-label [nzXs]="7" [nzRequired]="true">Chọn điểm kho</nz-form-label>
             <nz-form-control>
               <div nz-row [nzGutter]="48">
-                <div nz-col [nzSpan]="20">
+                <div nz-col [nzSpan]="16">
                   <nz-tree-select #NzTreeSelectComponent [nzNodes]="listDiaDiemKho" [nzShowSearch]="true"
                                   [ngModel]="selectedNode"
                                   [ngModelOptions]="{standalone: true}"
@@ -527,7 +527,7 @@
                     </ng-template>
                   </nz-tree-select>
                 </div>
-                <div nz-col [nzSpan]="4">
+                <div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
                     style="color: #001CFF">{{formDataDtl.value.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</span>
                   </p>
