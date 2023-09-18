@@ -480,7 +480,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
                   tenChiCuc: tenChiCucRow.tenChiCuc || '',
                   soLuongGiao: tenChiCucRow.soLuongGiao || 0,
                   soLuong: soLuong,
-                  tonKhoDvi: tenLoaiVthhRow.tonKhoDvi || 0,
+                  tonKhoDvi: tenChiCucRow.tonKhoDvi || 0,
                   childData: v1
                 }
               }).value();
