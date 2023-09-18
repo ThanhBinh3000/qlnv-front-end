@@ -1,22 +1,22 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {MESSAGE} from "../../../constants/message";
-import {cloneDeep} from 'lodash';
-import {saveAs} from 'file-saver';
-import {NgxSpinnerService} from "ngx-spinner";
-import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
-import * as dayjs from "dayjs";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {QuyetToanVonPhiService} from "../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {STATUS} from "../../../constants/status";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { MESSAGE } from '../../../constants/message';
+import { cloneDeep } from 'lodash';
+import { saveAs } from 'file-saver';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { PAGE_SIZE_DEFAULT } from '../../../constants/config';
+import * as dayjs from 'dayjs';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { QuyetToanVonPhiService } from '../../../services/ke-hoach/von-phi/quyetToanVonPhi.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { STATUS } from '../../../constants/status';
 
 @Component({
   selector: 'app-von-phi-hang-cua-bo-nganh',
   templateUrl: './von-phi-hang-cua-bo-nganh.component.html',
-  styleUrls: ['./von-phi-hang-cua-bo-nganh.component.scss']
+  styleUrls: ['./von-phi-hang-cua-bo-nganh.component.scss'],
 })
 export class VonPhiHangCuaBoNganhComponent implements OnInit {
   formData: FormGroup;
@@ -86,14 +86,14 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
       body.ngayNhapDen = body.ngayNhap[1];
     }
     if (body.ngayCapNhat != null) {
-      body.ngayCapNhatTu = body.ngayCapNhat[0];
-      body.ngayCapNhatDen = body.ngayCapNhat[1];
+      body.ngaySuaTu = body.ngayCapNhat[0];
+      body.ngaySuaDen = body.ngayCapNhat[1];
     }
     body.loai = '00';
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
-    }
+    };
     let res = await this.vonPhiService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -151,7 +151,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.vonPhiService.delete({id: item.id}).then((res) => {
+          this.vonPhiService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -179,7 +179,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+            temp.push(item);
           }
         });
       }
@@ -274,7 +274,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.vonPhiService.deleteMuti({ids: dataDelete});
+            let res = await this.vonPhiService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -291,7 +291,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
         },
       });
     } else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+      this.notification.error(MESSAGE.ERROR, 'Không có dữ liệu phù hợp để xóa.');
     }
   }
 

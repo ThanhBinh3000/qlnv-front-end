@@ -328,7 +328,10 @@ export class Base3Component implements OnInit {
   }
 
   // Export data
-  exportData(fileName?: string) {
+  exportData(fileName?: string, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -633,7 +636,10 @@ export class Base3Component implements OnInit {
     return endValue.getTime() <= this.formData.value.ngayDen.getTime();
   };
 
-  redirectCreate() {
+  redirectCreate(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.router.navigate([this.defaultURL + '/them-moi']);
   }
 
@@ -641,7 +647,10 @@ export class Base3Component implements OnInit {
     this.router.navigate([url]);
   }
 
-  redirectDetail(idDetail) {
+  redirectDetail(idDetail, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.router.navigate([this.defaultURL + '/chi-tiet', idDetail]);
   }
 
@@ -676,7 +685,10 @@ export class Base3Component implements OnInit {
     trangThai: ""
   };
   previewName: string = '';
-  async preview(fileName: string) {
+  async preview(fileName: string, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.spinner.show();
     let body = this.formData.value;
     this.reportTemplate.fileName = fileName + '.docx';

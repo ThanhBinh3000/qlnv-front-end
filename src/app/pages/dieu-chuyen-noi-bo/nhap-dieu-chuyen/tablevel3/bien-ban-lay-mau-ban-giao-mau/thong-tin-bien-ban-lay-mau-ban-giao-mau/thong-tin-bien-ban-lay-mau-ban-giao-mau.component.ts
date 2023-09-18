@@ -47,13 +47,13 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
   listDaiDienCuc: any[] = [];
   listDaiDienChiCuc: any[] = [];
 
-  ketQuaNiemPhong: false
-  checked: false
+  ketQuaNiemPhong: false;
+  checked: false;
 
-  dsKeHoach: any[] = []
-  phuongPhapLayMaus: any[] = []
-  chiTieuChatLuongs: any[] = []
-
+  dsKeHoach: any[] = [];
+  phuongPhapLayMaus: any[] = [];
+  chiTieuChatLuongs: any[] = [];
+  previewName: string = "nhap_vt_bien_ban_lay_mau_ban_giao_mau_vt";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -115,6 +115,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       loaiQdinh: [],
       thayDoiThuKho: [],
       lyDoTuChoi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -139,7 +140,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     }
 
     if (this.data) {
-      console.log('data', this.data)
+      // console.log('data', this.data)
       this.formData.patchValue({
         soQdinhDcc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayHieuLuc,
@@ -159,6 +160,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
         donViTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qddccId);
       await this.loadPhuongPhapLayMau(this.data.maChLoaiHangHoa)
@@ -274,7 +276,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log('openDialogQD', data)
+        // console.log('openDialogQD', data)
         this.formData.patchValue({
           soQdinhDcc: data.soQdinh,
           qdccId: data.id,
@@ -299,6 +301,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           donViTinh: "",
+          keHoachDcDtlId: ""
         });
         this.phuongPhapLayMaus = []
         await this.loadChiTietQdinh(data.id);
@@ -454,7 +457,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           donViTinh: data.donViTinh,
-          idKeHoachDtl: data.id
+          idKeHoachDtl: data.id,
+          keHoachDcDtlId: data.id
         });
         await this.loadPhuongPhapLayMau(data.cloaiVthh)
         await this.loadChiTieuChatLuongs(data.cloaiVthh)

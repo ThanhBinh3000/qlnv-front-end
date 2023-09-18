@@ -70,7 +70,8 @@
         <h3 class="text-uppercase">Tổng hợp danh sách hàng QTQG cần sữa chữa</h3>
         <div class="buttons">
             <a (click)="redirectUrl('/sua-chua/danh-sach')" class="link">Xem toàn bộ danh sách</a>
-            <button type="button" class="btn btn-main" (click)="openDialogDs()" *ngIf="userService.isCuc()">
+            <button type="button" class="btn btn-main" (click)="openDialogDs('SCHDTQG_THDSCSC_TONGHOP')"
+                *ngIf="userService.isCuc()">
                 <i class="icon htvbdh_dau-cong"></i>
                 <span>Tổng hợp DS hàng cần sửa chữa</span>
             </button>
@@ -133,7 +134,7 @@
                             <a (click)="showDetail(item.id)">
                                 <span class="icon htvbdh_eye"></span>
                             </a>
-                            <a *ngIf="item.trangThai == STATUS.DU_THAO" (click)="delete(item)">
+                            <a *ngIf="item.trangThai == STATUS.DU_THAO" (click)="delete(item,'SCHDTQG_THDSCSC_XOA')">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>

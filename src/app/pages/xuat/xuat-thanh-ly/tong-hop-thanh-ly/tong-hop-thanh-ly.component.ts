@@ -1,21 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {XuatThanhLyComponent} from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {MESSAGE} from "src/app/constants/message";
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {CHUC_NANG} from 'src/app/constants/status';
-import {chain, isEmpty} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {TongHopThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
-import {FormGroup} from "@angular/forms";
-import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
-import {NumberToRoman} from 'src/app/shared/commonFunction';
+import { Component, OnInit } from '@angular/core';
+import { XuatThanhLyComponent } from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { MESSAGE } from "src/app/constants/message";
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { CHUC_NANG } from 'src/app/constants/status';
+import { chain, isEmpty } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { TongHopThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
+import { FormGroup } from "@angular/forms";
+import { DanhSachThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
+import { NumberToRoman } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-tong-hop-thanh-ly',
@@ -43,15 +43,15 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
   step: any = 1;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private tongHopThanhLyService: TongHopThanhLyService,
-              private danhSachThanhLyService: DanhSachThanhLyService,
-              private xuatThanhLyComponent: XuatThanhLyComponent) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private tongHopThanhLyService: TongHopThanhLyService,
+    private danhSachThanhLyService: DanhSachThanhLyService,
+    private xuatThanhLyComponent: XuatThanhLyComponent) {
     super(httpClient, storageService, notification, spinner, modal, tongHopThanhLyService);
     this.vldTrangThai = xuatThanhLyComponent;
     this.formData = this.fb.group({
@@ -173,9 +173,9 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({cloaiVthh: null})
+    this.formData.patchValue({ cloaiVthh: null })
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -193,18 +193,18 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => {
-              let rowItem = v.find(s => s.tenChiCuc === k);
-              let idVirtual = uuidv4();
-              this.expandSetString.add(idVirtual);
-              return {
-                idVirtual: idVirtual,
-                tenChiCuc: k,
-                tenCuc: rowItem?.tenCuc,
-                maDiaDiem: rowItem?.maDiaDiem,
-                tenCloaiVthh: rowItem?.tenCloaiVthh,
-                childData: v
-              }
+            let rowItem = v.find(s => s.tenChiCuc === k);
+            let idVirtual = uuidv4();
+            this.expandSetString.add(idVirtual);
+            return {
+              idVirtual: idVirtual,
+              tenChiCuc: k,
+              tenCuc: rowItem?.tenCuc,
+              maDiaDiem: rowItem?.maDiaDiem,
+              tenCloaiVthh: rowItem?.tenCloaiVthh,
+              childData: v
             }
+          }
           ).value();
         let rowItem = value.find(s => s.header === key);
         let idVirtual = uuidv4();
@@ -243,7 +243,7 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
   showModal(isVisibleModal: boolean, item?: any) {
     this.isVisibleModal = isVisibleModal;
     this.selectedItem = item;
-    this.modalWidth = item ? '100vw' : '30vw';
+    this.modalWidth = item ? '100vw' : '50vw';
     // this.step = item ? '1' : '2';
   }
 

@@ -21,8 +21,7 @@ import {CHUC_NANG} from "../../../../../constants/status";
 })
 export class TongHopComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  @Input()
-  listVthh: any[] = [];
+  @Input() listVthh: any[] = [];
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: DauGiaComponent;
   isView = false;

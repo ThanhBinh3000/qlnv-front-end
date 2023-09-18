@@ -319,14 +319,16 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_TP == STATUS.CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CUC,
           };
+          console.log(this.detail, "body")
           let res =
             await this.hoSoKyThuatService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            await this.loadChiTiet(this.id)
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }

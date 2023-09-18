@@ -43,7 +43,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
 
   dsHangTH = []
   tongSL: number
-
+  previewName: string = "nhap_vt_bang_ke_nhap_vat_tu"
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -107,6 +107,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       lyDoTuChoi: [],
       soSerial: [],
       soBaoBi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -129,7 +130,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
+      // console.log('this.data', this.data)
       this.formData.patchValue({
         soQdinhDcc: this.data.soQdinh,
         ngayKyQdinhDcc: this.data.ngayKyQd,
@@ -149,6 +150,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.soLuongDc,
         donViTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDcId);
       await this.layDonViCon(this.data.maDiemKho)
@@ -286,6 +288,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           donViTinh: "",
+          keHoachDcDtlId: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -329,7 +332,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           donViTinh: data.donViTinh,
-
+          keHoachDcDtlId: data.id
         });
 
         await this.layDonViCon(data.maDiemKho)

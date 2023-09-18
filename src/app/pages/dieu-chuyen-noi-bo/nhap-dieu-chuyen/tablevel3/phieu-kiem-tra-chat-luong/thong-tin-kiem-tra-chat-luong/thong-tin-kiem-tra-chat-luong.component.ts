@@ -50,7 +50,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     "Không đạt",
     "Đạt"
   ]
-
+  previewName: string = "nhap_lt_phieu_kiem_tra_chat_luong_lt";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -130,7 +130,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       type: ["01"],
       loaiDc: [this.loaiDc],
       loaiQdinh: [],
-      thayDoiThuKho: []
+      thayDoiThuKho: [],
+      keHoachDcDtlId: [, [Validators.required]]
     }
     );
   }
@@ -155,7 +156,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
@@ -185,7 +185,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKhaDung,
         donViTinh: this.data.donViTinh,
-        slNhapTheoQd: this.data.soLuongDc
+        slNhapTheoQd: this.data.soLuongDc,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.maChLoaiHangHoa);
@@ -256,7 +257,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         soBBNtLd: bbNTBQ,
         bBNtLdId
       })
-      console.log('phieuNhapKhoService', res)
     }
   }
 
@@ -367,6 +367,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           donViTinh: "",
+          keHoachDcDtlId: ""
         });
         await this.loadChiTietQdinh(data.id);
       }
@@ -392,7 +393,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      console.log('data', data)
       if (data) {
         this.formData.patchValue({
           tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
@@ -418,7 +418,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           donViTinh: data.donViTinh,
-          slNhapTheoQd: data.soLuongPhanBo
+          slNhapTheoQd: data.soLuongPhanBo,
+          keHoachDcDtlId: data.id,
         });
 
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);

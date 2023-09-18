@@ -60,7 +60,10 @@ export class TongHopComponent extends Base3Component implements OnInit {
     })
   }
 
-  openDialogDs() {
+  openDialogDs(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     if (this.userService.isAccessPermisson('SCHDTQG_THDSCSC_TONGHOP')) {
       const modalGT = this.modal.create({
         nzTitle: 'TỔNG HỢP DANH SÁCH HÀNG CẦN SỬA CHỮA',

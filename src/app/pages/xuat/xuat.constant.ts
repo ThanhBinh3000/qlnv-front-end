@@ -9,6 +9,7 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: '/cuu-tro-vien-tro',
     idHover: 'cuu-tro-vien-tro',
     hasTab: false,
+    accessPermisson: 'XHDTQG_XCTVTXC',
   },
   {
     icon: 'htvbdh_tcdt_dauthau',
@@ -17,6 +18,7 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'dau-thau',
     idHover: 'dauthau',
     hasTab: false,
+    accessPermisson: 'XHDTQG_PTDG'
   },
   {
     icon: 'htvbdh_tcdt_muatructiep',
@@ -25,6 +27,7 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'xuat-truc-tiep',
     idHover: 'xuat-truc-tiep',
     hasTab: false,
+    accessPermisson: 'XHDTQG_PTTT'
   },
   {
     icon: 'htvbdh_tcdt_tieuhuy',
@@ -33,6 +36,7 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'dau-thau',
     idHover: 'dauthau',
     hasTab: false,
+    accessPermisson: 'XHDTQG_XTL'
   },
   {
     icon: 'htvbdh_tcdt_tieuhuy',
@@ -41,6 +45,7 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'dau-thau',
     idHover: 'dauthau',
     hasTab: false,
+    accessPermisson: 'XHDTQG_XTH'
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
@@ -49,6 +54,7 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'xuat-khac',
     idHover: 'xuat-khac',
     hasTab: false,
+    accessPermisson: 'XHDTQG_XK'
   },
   /*{
     icon: 'htvbdh_tcdt_icon-common',

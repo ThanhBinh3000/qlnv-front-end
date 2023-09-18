@@ -89,7 +89,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   dsDonVi: any;
   tongThanhTien: any;
   tongSoLuong: any;
-  tongSoLuongDeXuat: any;
+  tongSoLuongDx: any;
   tongSoLuongXuatCap: any;
   listVatTuHangHoa: any[] = [];
   quyetDinhPdDtlCache: any[] = [];
@@ -222,7 +222,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      this.formData.patchValue({type: 'TTr'});
+      this.formData.patchValue({type: 'TTr', tenDvi: this.userInfo.TEN_DVI,});
     }
   }
 
@@ -393,6 +393,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       .groupBy("soDx")
       .map((value, key) => {
         let row = value.find(s => s.soDx === key);
+        let soLuongDx = value.reduce((prev, next) => prev + next.soLuongDx, 0);
         let rs = chain(value)
           .groupBy("noiDungDx")
           .map((v, k) => {
@@ -431,6 +432,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           mucDichXuat: row.mucDichXuat,
           ngayKyDx: row.ngayKyDx,
           thoiGian: row.ngayKyDx,
+          soLuongDx: soLuongDx,
           childData: rs
         };
       }).value();
@@ -440,6 +442,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       .groupBy("soDx")
       .map((value, key) => {
         let row = value.find(s => s.soDx === key);
+        let soLuongDx = value.reduce((prev, next) => prev + next.soLuongDx, 0);
         let rs = chain(value)
           .groupBy("noiDungDx")
           .map((v, k) => {
@@ -478,11 +481,13 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           mucDichXuat: row.mucDichXuat,
           ngayKyDx: row.ngayKyDx,
           thoiGian: row.ngayKyDx,
+          soLuongDx: soLuongDx,
           childData: rs
         };
       }).value();
     console.log(this.phuongAnHdrView, this.formData.value.quyetDinhPdDtl, '123')
     console.log(this.phuongAnHdrViewCache, this.quyetDinhPdDtlCache, '123')
+    await this.tinhTong();
     this.expandAll();
   }
 
@@ -532,7 +537,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async xemTruocPd(id, tenBaoCao, children) {
-    await this.tongHopPhuongAnCuuTroService.preview({
+    await this.quyetDinhPheDuyetPhuongAnCuuTroService.preview({
       tenBaoCao: tenBaoCao + '.docx',
       id: id,
       children: children
@@ -546,5 +551,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
       }
     });
+  }
+
+  async tinhTong() {
+    this.tongSoLuongDx = this.phuongAnHdrViewCache.reduce((prev, next) => prev + next.soLuongDx, 0);
   }
 }

@@ -63,7 +63,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   ]
 
   detail: any
-
+  previewName = "nhap_vt_bien_ban_giao_nhan";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -124,7 +124,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       hoVaTen: [],
       chucVu: [],
       dvi: [],
-
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -147,7 +147,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
+      // console.log('this.data', this.data)
       this.formData.patchValue({
         soQdDcCuc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayKyQd,
@@ -167,6 +167,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.soLuongDc,
         dviTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.getDanhSachTT(this.data.soQdinh, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
@@ -324,6 +325,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
           tichLuongKhaDung: "",
           soLuongQdDcCuc: "",
           dviTinh: "",
+          keHoachDcDtlId: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -376,6 +378,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
           tichLuongKhaDung: data.tichLuongKd,
           soLuongQdDcCuc: data.soLuongPhanBo,
           dviTinh: data.donViTinh,
+          keHoachDcDtlId: data.id
         });
       }
       await this.getDanhSachTT(this.formData.value.soQdDcCuc, data.maLoKhoNhan, data.maNganKhoNhan)
@@ -441,7 +444,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     if (res.msg == MESSAGE.SUCCESS) {
 
       const data = res.data
-      console.log('loadCTBBKTNK', data)
+      // console.log('loadCTBBKTNK', data)
       this.formData.patchValue({
         tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
         tenLoKho: data.tenNhaKho,
@@ -459,6 +462,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         tichLuongKhaDung: data.tichLuongKd,
         soLuongQdDcCuc: data.soLuongPhanBo,
         dviTinh: data.donViTinh,
+        keHoachDcDtlId: data.keHoachDcDtlId
       });
       await this.getDanhSachTT(this.formData.value.qdDcCucId, data.maLoKho, data.maNganKho)
     }

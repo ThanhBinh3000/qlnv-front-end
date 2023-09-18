@@ -647,6 +647,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     let res = await this.dxKhNhapKhacService.dsDxDuocTaoQDinhPDuyet();
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsDxTaoQd = res.data;
+      console.log(this.dsDxTaoQd)
     }
     await this.spinner.hide();
 

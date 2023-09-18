@@ -2,26 +2,34 @@ import { cloneDeep } from 'lodash';
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
+import { chain, isEmpty } from 'lodash';
 import { saveAs } from 'file-saver';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, LOAI_HH_XUAT_KHAC, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from '../../../../../../constants/status';
+import { Base2Component } from '../../../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../../services/storage.service';
+import { DanhMucService } from '../../../../../../services/danhmuc.service';
+import {
+  DanhSachVtTbTrongThoiGIanBaoHanh,
+} from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/DanhSachVtTbTrongThoiGianBaoHanh.service';
 
 @Component({
   selector: 'app-de-xuat-dieu-chinh',
   templateUrl: './de-xuat-dieu-chinh.component.html',
   styleUrls: ['./de-xuat-dieu-chinh.component.scss'],
 })
-export class DeXuatDieuChinhComponent implements OnInit {
+export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
   @Output()
   showDieuChinhEvent = new EventEmitter<any>();
 
@@ -47,6 +55,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
   dataTableAll: any[] = [];
 
   optionsDonVi: any[] = [];
+  dsDonvi: any[] = [];
   inputDonVi: string = '';
   optionsDonViShow: any[] = [];
   selectedDonVi: any = {};
@@ -54,7 +63,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
   lastBreadcrumb: string;
 
   isDetail: boolean = false;
-  isCreateQdDc: boolean =false;
+  isCreateQdDc: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
   isViewDetailQdDc: boolean = false;
@@ -68,22 +77,30 @@ export class DeXuatDieuChinhComponent implements OnInit {
     namKeHoach: '',
     tenHangHoa: '',
     tenTrangThai: '',
-    soQdDc:''
+    soQdDc: '',
   };
 
   allChecked = false;
   indeterminate = false;
 
-  constructor(
-    private router: Router,
-    private spinner: NgxSpinnerService,
-    private deXuatDieuChinhService: DeXuatDieuChinhService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    private donViService: DonviService,
-    public userService: UserService,
-    public globals: Globals,
-  ) { }
+
+  constructor(httpClient: HttpClient,
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private donViService: DonviService,
+              private deXuatDieuChinhService: DeXuatDieuChinhService) {
+    super(httpClient, storageService, notification, spinner, modal, deXuatDieuChinhService);
+    this.formData = this.fb.group({
+      namKeHoach: [],
+      maDvi: [],
+      idTongHop: [],
+      maTongHop: [],
+      maDiaDiem: [],
+    });
+  }
+
 
   async ngOnInit() {
     this.spinner.show();
@@ -104,7 +121,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
       }
       await Promise.all([
         this.search(),
-        // this.loadDonVi(),
+        this.loadDsDonVi(),
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -159,6 +176,13 @@ export class DeXuatDieuChinhComponent implements OnInit {
       this.optionsDonViShow = cloneDeep(this.optionsDonVi);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadDsDonVi() {
+    const dsTong = await this.donViService.layDonViCon();
+    if (!isEmpty(dsTong)) {
+      this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
     }
   }
 
@@ -224,7 +248,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
 
   async showList() {
     this.isDetail = false;
-    await this.search()
+    await this.search();
   }
 
   clearFilter() {
@@ -427,9 +451,8 @@ export class DeXuatDieuChinhComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(MESSAGE.ERROR, 'Không có dữ liệu phù hợp để xóa.');
     }
   }
 
@@ -440,13 +463,12 @@ export class DeXuatDieuChinhComponent implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
           if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -461,6 +483,6 @@ export class DeXuatDieuChinhComponent implements OnInit {
       namKeHoach: '',
       tenHangHoa: '',
       tenTrangThai: '',
-    }
+    };
   }
 }

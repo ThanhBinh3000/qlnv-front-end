@@ -165,7 +165,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         this.loadDsDonVi(),
         this.loadDsDiaDanh(),
         this.loadDsVthh(),
-        this.loadDsDiemKho(),
       ]);
       await this.loadDetail();
     } catch (e) {
@@ -197,7 +196,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         });
     } else {
       this.maHauTo = '/QĐGNV-' + this.userInfo.DON_VI.tenVietTat;
-      this.formData.patchValue({trangThai: STATUS.DU_THAO, tenTrangThai: 'Dự thảo'});
+      this.formData.patchValue({
+        trangThai: STATUS.DU_THAO,
+        tenTrangThai: 'Dự thảo',
+        tenDvi: this.userInfo.TEN_DVI,
+      });
     }
   }
 
@@ -218,7 +221,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       trangThai: "01",
       maDviCha: this.userInfo.MA_DVI,
       // maDviCha: '01010201',
-      // type: "DV"
+      type: "DV"
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -228,14 +231,17 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
   }
 
-  async loadDsDiemKho() {
+  async loadDsDiemKho(maDvi: any, loaiVthh: any, cloaiVthh: any) {
+    this.listDiaDiemKho = [];
     let body = {
-      // maDviCha: '01010201',
-      maDviCha: this.userInfo.MA_DVI,
+      maDvi: this.userInfo.MA_DVI,
+      loaiVthh: loaiVthh,
+      cloaiVthh: cloaiVthh,
     };
-    let res = await this.donViService.layTatCaDangTree(body);
+    let res = await this.donViService.getDonViHangTree(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDiaDiemKho = res.data;
+      console.log(res, 'ressss')
+      this.listDiaDiemKho = [...this.listDiaDiemKho, res.data];
       this.listDiaDiemKho[0].expanded = true;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -474,7 +480,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
                   tenChiCuc: tenChiCucRow.tenChiCuc || '',
                   soLuongGiao: tenChiCucRow.soLuongGiao || 0,
                   soLuong: soLuong,
-                  tonKhoDvi: tenLoaiVthhRow.tonKhoDvi || 0,
+                  tonKhoDvi: tenChiCucRow.tonKhoDvi || 0,
                   childData: v1
                 }
               }).value();
@@ -562,6 +568,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi));
     })
     await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
+    await this.loadDsDiemKho(this.userInfo.MA_DVI, this.formDataDtl.value.loaiVthh, this.formDataDtl.value.cloaiVthh);
     this.modalChiTiet = true;
   }
 
@@ -611,7 +618,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       this.formData.value.dataDtl = this.formData.value.dataDtl.filter(s => s.idVirtual != data.idVirtual);
       if (parent.childData.length == 1) {
         data.soLuong = null;
-        data.maDvi = data.maDvi.substring(0,8);
+        data.maDvi = data.maDvi.substring(0, 8);
         data.tenDiemKho = '';
         data.tenNhaKho = '';
         data.tenNganKho = '';
@@ -667,13 +674,23 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
           if (data.length > 0) {
+            if (loaiVthh == '0101' || loaiVthh == '0102') {
+              this.formDataDtl.patchValue({
+                cloaiVthh: data[0].cloaiVthh,
+                // tonKhoCloaiVthh:data[0].slHienThoi
+              });
+            }
             let tonKhoDvi = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
             let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
+            if (dataCloai.length == 0) {
+              dataCloai = data;
+            }
             let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
             this.formDataDtl.patchValue({
               tonKhoDvi: tonKhoDvi,
               tonKhoCloaiVthh: tonKhoCloaiVthh
             });
+            console.log(this.formDataDtl.value, '123213')
           } else {
             this.formDataDtl.patchValue({tonKhoDvi: 0, tonKhoCloaiVthh: 0});
           }
