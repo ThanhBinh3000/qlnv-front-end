@@ -27,6 +27,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { Ct1sTonghop } from './../../../../../models/TongHopDeNghiCapVon';
 import { STATUS } from '../../../../../constants/status';
+import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-thong-tin-tong-hop',
@@ -40,6 +41,7 @@ export class ThongTinTongHopComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   formData: FormGroup;
   detail: any = {};
+  STATUS =STATUS;
   pageSize: number = PAGE_SIZE_DEFAULT;
   page: number = 1;
   dataTableAll: any[] = [];
@@ -76,7 +78,7 @@ export class ThongTinTongHopComponent implements OnInit {
 
   oldDataEdit1: any = {};
   oldDataEdit2: any = {};
-
+  amount = AMOUNT_NO_DECIMAL;
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
   listLoaiChiPhi: any[] = [];
@@ -198,7 +200,7 @@ export class ThongTinTongHopComponent implements OnInit {
     }
   }
 
-  async save(isOther?: boolean) {
+  async save(isGuiDuyet?: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -209,18 +211,16 @@ export class ThongTinTongHopComponent implements OnInit {
     body.ct1s = this.ct1s;
     body.cts = this.cts;
     body.fileDinhKem = this.filePhuongAn;
-    console.log(body,'bodybody');
     // return ;
     this.spinner.show();
     try {
       if (this.idInput > 0) {
         let res = await this.tongHopDeNghiCapVonService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          if (!isGuiDuyet) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
-            return res.data.id;
+            this.guiDuyet();
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -228,11 +228,14 @@ export class ThongTinTongHopComponent implements OnInit {
       } else {
         let res = await this.tongHopDeNghiCapVonService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          if (!isGuiDuyet) {
+            this.formData.patchValue({
+              id: res.data.id,
+            });
+            this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
           } else {
-            return res.data.id;
+            this.guiDuyet();
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -269,7 +272,7 @@ export class ThongTinTongHopComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_VU,
+            trangThai: STATUS.CHO_DUYET_LDV,
           };
 
           let res = await this.tongHopDeNghiCapVonService.updateStatus(body);

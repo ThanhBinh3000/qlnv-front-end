@@ -502,13 +502,13 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   };
 
   checkRoleApprove(trangThai: string) {
-    return trangThai !== STATUS.BAN_HANH && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc()
+    return trangThai !== STATUS.BAN_HANH && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isTongCuc()
   }
   checkRoleSave(trangThai: string) {
-    return trangThai !== STATUS.BAN_HANH && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isCuc()
+    return trangThai !== STATUS.BAN_HANH && this.userService.isAccessPermisson("QLKT_THSDK_QDDCSN_THEM") && this.userService.isTongCuc()
   }
   checkRoleDuyetDMKho(trangThai: string) {
-    return trangThai === STATUS.BAN_HANH && (this.userService.isAccessPermisson("QLKT_THSDK_DDMK_XEM") || this.userService.isAccessPermisson("QLKT_THSDK_DDMK_DUYET")) && this.userService.isCuc();
+    return trangThai === STATUS.BAN_HANH && (this.userService.isAccessPermisson("QLKT_THSDK_DDMK_XEM") || this.userService.isAccessPermisson("QLKT_THSDK_DDMK_DUYET")) && this.userService.isTongCuc();
   }
 
 }

@@ -1,41 +1,41 @@
-<div *ngIf="!isDetail">
-  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-    <div class="btn-group">
-      <button type="button" class="btn btn-sub" (click)="back()">
-        <i class="fa fa-arrow-left"></i>
+<div *ngIf='!isDetail'>
+  <nz-affix [nzOffsetTop]='globals.prop.MENU_LV1' class='btn-affix'>
+    <div class='btn-group'>
+      <button type='button' class='btn btn-sub' (click)='back()'>
+        <i class='fa fa-arrow-left'></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="(idInput>0 && detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU)" type="button"
-              class="btn btn-sub" (click)="tuChoi()">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <button *ngIf='(idInput>0 && detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU)' type='button'
+              class='btn btn-sub' (click)='tuChoi()'>
+        <i class='icon htvbdh_tcdt_tuchoi do'></i>
         <span>Từ chối</span>
       </button>
-      <button *ngIf="(idInput>0 && detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU) " type="button"
-              class="btn btn-sub" (click)="pheDuyet()">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <button *ngIf='(idInput>0 && detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU) ' type='button'
+              class='btn btn-sub' (click)='pheDuyet()'>
+        <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Duyệt</span>
       </button>
       <button
-        *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU"
-        type="button" class="btn btn-sub"
-        (click)="save(true)" [disabled]="!formData.valid">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        *ngIf='detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU'
+        type='button' class='btn btn-sub'
+        (click)='save(true)' [disabled]='!formData.valid'>
+        <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == STATUS.TU_CHOI_TP || detail.trangThai == STATUS.TU_CHOI_LDC|| detail.trangThai == STATUS.TU_CHOI_LDV "
-        type="button" class="btn btn-main"
-        (click)="save(false)" [disabled]="!formData.valid">
-        <i class="icon htvbdh_tcdt_save"></i>
+        *ngIf='detail.trangThai == globals.prop.NHAP_DU_THAO || detail.trangThai == STATUS.TU_CHOI_TP || detail.trangThai == STATUS.TU_CHOI_LDC|| detail.trangThai == STATUS.TU_CHOI_LDV '
+        type='button' class='btn btn-main'
+        (click)='save(false)' [disabled]='!formData.valid'>
+        <i class='icon htvbdh_tcdt_save'></i>
         <span>Lưu</span>
       </button>
     </div>
   </nz-affix>
-  <div class="bg-trang">
-    <nz-card class="mt16 flex-card p-lr16">
-      <div class="header mg-t-16">
-        <div class="header-text">
-          <div class="title-chi-tieu">
+  <div class='bg-trang'>
+    <nz-card class='mt16 flex-card p-lr16'>
+      <div class='header mg-t-16'>
+        <div class='header-text'>
+          <div class='title-chi-tieu'>
             <span
               [ngClass]="(detail.trangThai == STATUS.DA_DUYET_LDV )? 'da-ban-hanh' :'du-thao-va-lanh-dao-duyet'">
               {{detail.tenTrangThai}}
@@ -44,75 +44,75 @@
           </div>
         </div>
       </div>
-      <form nzLayout="vertical" nz-form [formGroup]="formData">
-        <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="3">
+      <form nzLayout='vertical' nz-form [formGroup]='formData'>
+        <div nz-row [nzGutter]='24'>
+          <div nz-col [nzSpan]='3'>
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Năm</nz-form-label>
-              <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <nz-select [nzDisabled]="idInput > 0" formControlName="nam">
-                  <nz-option *ngFor="let nam of listNam" [nzValue]="nam.value" [nzLabel]="nam.text"></nz-option>
+              <nz-form-label nzRequired [nzNoColon]='true'> Năm</nz-form-label>
+              <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
+                <nz-select [nzDisabled]='idInput > 0' formControlName='nam'>
+                  <nz-option *ngFor='let nam of listNam' [nzValue]='nam.value' [nzLabel]='nam.text'></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]='6'>
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Nguồn tổng hợp</nz-form-label>
-              <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <nz-select [nzDisabled]="idInput > 0" formControlName="nguonTongHop">
-                  <nz-option *ngFor="let item of nguonTongHopList" [nzValue]="item.id" [nzLabel]="item.value">
+              <nz-form-label nzRequired [nzNoColon]='true'> Nguồn tổng hợp</nz-form-label>
+              <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
+                <nz-select [nzDisabled]='idInput > 0' formControlName='nguonTongHop'>
+                  <nz-option *ngFor='let item of nguonTongHopList' [nzValue]='item.id' [nzLabel]='item.value'>
                   </nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
         </div>
-        <div nz-row [nzGutter]="24" *ngIf="isTonghop">
-          <div nz-col [nzSpan]="9">
-            <div nz-row [nzGutter]="24">
-              <div nz-col [nzSpan]="8">
+        <div nz-row [nzGutter]='24' *ngIf='isTonghop'>
+          <div nz-col [nzSpan]='9'>
+            <div nz-row [nzGutter]='24'>
+              <div nz-col [nzSpan]='8'>
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Mã tổng hợp</nz-form-label>
-                  <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <input readonly nz-input formControlName="maTongHop"/>
+                  <nz-form-label [nzNoColon]='true'> Mã tổng hợp</nz-form-label>
+                  <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
+                    <input readonly nz-input formControlName='maTongHop' />
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="8">
+              <div nz-col [nzSpan]='8'>
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Ngày tổng hợp</nz-form-label>
-                  <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-form-label nzRequired [nzNoColon]='true'> Ngày tổng hợp</nz-form-label>
+                  <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
                     <nz-input-group>
-                      <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayTongHop"
-                                      [nzDisabled]="isView">
+                      <nz-date-picker class='search__input' nzFormat='dd/MM/yyyy' formControlName='ngayTongHop'
+                                      [nzDisabled]='true'>
                       </nz-date-picker>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="8">
+              <div nz-col [nzSpan]='8'>
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Mã Tờ Trình</nz-form-label>
-                  <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <input nz-input formControlName="maToTrinh" [readonly]="isView"/>
+                  <nz-form-label [nzNoColon]='true'> Mã Tờ Trình</nz-form-label>
+                  <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
+                    <input nz-input formControlName='maToTrinh' [readonly]='isView' />
                   </nz-form-control>
                 </nz-form-item>
               </div>
             </div>
-            <div nz-row [nzGutter]="24">
-              <div nz-col [nzSpan]="24">
+            <div nz-row [nzGutter]='24'>
+              <div nz-col [nzSpan]='24'>
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> File phương án đã được TC duyệt</nz-form-label>
-                  <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <div class="list-file">
-                      <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                        <input type="text" nz-input formControlName="nameFilePhuongAn" [readonly]="isView"/>
+                  <nz-form-label [nzNoColon]='true'> File phương án đã được TC duyệt</nz-form-label>
+                  <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
+                    <div class='list-file'>
+                      <nz-input-group [nzSuffix]='suffixTemplateInfo'>
+                        <input type='text' nz-input formControlName='nameFilePhuongAn' [readonly]='isView' />
                       </nz-input-group>
                       <ng-template #suffixTemplateInfo>
-                        <div class="icon-file-dinh-kem">
-                          <i class="icon htvbdh_tcdt_tep"></i>
-                          <input class="input-file" (change)="getNameFile($event)" type="file" [readonly]="isView"/>
+                        <div class='icon-file-dinh-kem'>
+                          <i class='icon htvbdh_tcdt_tep'></i>
+                          <input class='input-file' (change)='getNameFile($event)' type='file' [readonly]='isView' />
                         </div>
                       </ng-template>
                     </div>
@@ -121,52 +121,52 @@
               </div>
             </div>
           </div>
-          <div nz-col [nzSpan]="15">
+          <div nz-col [nzSpan]='15'>
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Nội dung tổng hợp</nz-form-label>
-              <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <textarea [readonly]="isView" nz-input formControlName="noiDung" rows="4"></textarea>
+              <nz-form-label [nzNoColon]='true'> Nội dung tổng hợp</nz-form-label>
+              <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
+                <textarea [readonly]='isView' nz-input formControlName='noiDung' rows='4'></textarea>
               </nz-form-control>
             </nz-form-item>
           </div>
         </div>
         <ng-template #error let-control>
-          <app-template-error #error [control]="control"></app-template-error>
+          <app-template-error #error [control]='control'></app-template-error>
         </ng-template>
-        <div nz-col [nzSpan]="24" *ngIf="!idInput">
-          <div class="tong-hop-button group-button-search text-right mg-t-16">
-            <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="clearFilter()">
-              <i class=" icon htvbdh_nhap-lai1"></i>
+        <div nz-col [nzSpan]='24' *ngIf='!idInput'>
+          <div class='tong-hop-button group-button-search text-right mg-t-16'>
+            <button class='btn btn-sub btn-sm waves-effect waves-light' (click)='clearFilter()'>
+              <i class=' icon htvbdh_nhap-lai1'></i>
               <span>Nhập lại</span>
             </button>
-            <button [disabled]="!formData.valid" class="btn btn-main btn-sm waves-effect waves-light"
-                    (click)="loadThongTinChiTiet(formData.value.nguonTongHop)">
-              <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
+            <button [disabled]='!formData.valid' class='btn btn-main btn-sm waves-effect waves-light'
+                    (click)='loadThongTinChiTiet(formData.value.nguonTongHop)'>
+              <i class='icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc'></i>
               <span>Tổng hợp đề nghị cấp vốn chi DTQG</span>
             </button>
           </div>
         </div>
         <ng-template #error let-control>
-          <app-template-error #error [control]="control"></app-template-error>
+          <app-template-error #error [control]='control'></app-template-error>
         </ng-template>
       </form>
     </nz-card>
-    <div *ngIf="isTonghop" class="title-form-chi-tiet pd-10">Chi tiết thông tin tổng hợp</div>
-    <nz-card *ngIf="isTonghop" class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable class="nowrap table__container-tt" [nzData]="listThongTinChiTiet"
-                [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+    <div *ngIf='isTonghop' class='title-form-chi-tiet pd-10'>Chi tiết thông tin tổng hợp</div>
+    <nz-card *ngIf='isTonghop' class='mt-2px flex-card data-table card-border-content table-card'>
+      <nz-table #basicTable class='nowrap table__container-tt' [nzData]='listThongTinChiTiet'
+                [nzFrontPagination]='false' [nzShowPagination]='false' nzBordered>
         <thead>
         <tr>
           <!--          <th style="width: 35px" rowSpan="2">STT</th>-->
-          <th rowSpan="2">Nguồn dữ liệu tổng hợp</th>
-          <th rowSpan="2">Số đề nghị</th>
-          <th rowSpan="2">Năm</th>
-          <th rowSpan="2">Ngày đề nghị</th>
-          <th rowSpan="2">Loại tiền</th>
-          <th colSpan="2">Tổng tiền</th>
-          <th colSpan="2">Kinh phí đã cấp</th>
-          <th colSpan="2">Kinh phí đề nghị cấp lần này</th>
-          <th rowSpan="2" class="text-center">Hành động</th>
+          <th rowSpan='2'>Nguồn dữ liệu tổng hợp</th>
+          <th rowSpan='2'>Số đề nghị</th>
+          <th rowSpan='2'>Năm</th>
+          <th rowSpan='2'>Ngày đề nghị</th>
+          <th rowSpan='2'>Loại tiền</th>
+          <th colSpan='2'>Tổng tiền</th>
+          <th colSpan='2'>Kinh phí đã cấp</th>
+          <th colSpan='2'>Kinh phí đề nghị cấp lần này</th>
+          <th rowSpan='2' class='text-center'>Hành động</th>
         </tr>
         <tr>
           <th>Ngoại tệ</th>
@@ -178,23 +178,23 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let data of basicTable.data; let i = index">
+        <tr *ngFor='let data of basicTable.data; let i = index'>
           <!--          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>-->
-          <td *ngIf="data.parentName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ data.tenBoNganh }}</td>
-          <td *ngIf="!data.parentName"> {{ data.tenBoNganh }}</td>
+          <td *ngIf='data.parentName'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ data.tenBoNganh }}</td>
+          <td *ngIf='!data.parentName'> {{ data.tenBoNganh }}</td>
           <td>{{ data.soDeNghi }}</td>
           <td>{{ data.nam}} </td>
           <td>{{ data.ngayDeNghi | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.tenLoaiTien }}</td>
-          <td>{{ data.tongTienNt | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.kinhPhiDaCapNt  | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.ycCapThemNt | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{ data.ycCapThem | number : '1.0-1' : 'vi_VN' }}</td>
-          <td class="text-left">
-            <a *ngIf="!data.isSum && data.maBn != 'BTC'" (click)="goToDetail(data, true)">
-              <i class="fa fa-eye" title="Xem chi tiết"></i>
+          <td class='text-right'>{{ data.tongTienNt | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right'>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class='text-right'>{{ data.kinhPhiDaCapNt  | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class='text-right'>{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class='text-right'>{{ data.ycCapThemNt | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right'>{{ data.ycCapThem | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class='text-left'>
+            <a *ngIf="!data.isSum && data.maBn != 'BTC'" (click)='goToDetail(data, true)'>
+              <i class='fa fa-eye' title='Xem chi tiết'></i>
             </a>
           </td>
         </tr>
@@ -202,24 +202,24 @@
       </nz-table>
     </nz-card>
     <!-- cái này nhập tay  -->
-    <div *ngIf="isTonghop" class="title-form-chi-tiet pd-10">Phương án của tổng cục</div>
-    <nz-card *ngIf="isTonghop" class="flex-card p-lr16">
-      <div nz-row [nzGutter]="[18, 6]" class="pd-10">
-        <div nz-col nzSpan="24" class="table-ket-qua">
-          <nz-table #basicTable class="table__container-tt" nzBordered [nzFrontPagination]="false"
-                    [nzShowPagination]="false"
-                    [nzData]="detail?.tCThem">
+    <div *ngIf='isTonghop' class='title-form-chi-tiet pd-10'>Phương án của tổng cục</div>
+    <nz-card *ngIf='isTonghop' class='flex-card p-lr16'>
+      <div nz-row [nzGutter]='[18, 6]' class='pd-10'>
+        <div nz-col nzSpan='24' class='table-ket-qua'>
+          <nz-table #basicTable class='table__container-tt' nzBordered [nzFrontPagination]='false'
+                    [nzShowPagination]='false'
+                    [nzData]='detail?.tCThem'>
             <thead>
             <tr>
-              <th rowSpan="2">Nguồn dữ liệu tổng hợp</th>
-              <th rowSpan="2">Số đề nghị</th>
-              <th rowSpan="2">Năm</th>
-              <th rowSpan="2">Ngày đề nghị</th>
-              <th rowSpan="2">Loại tiền</th>
-              <th colSpan="2">Tổng tiền</th>
-              <th colSpan="2">Kinh phí đã cấp</th>
-              <th colSpan="2">Kinh phí đề nghị cấp lần này</th>
-              <th *ngIf="!(isDisableField() || isView)" rowSpan="2" class="text-center">Hành động</th>
+              <th rowSpan='2'>Nguồn dữ liệu tổng hợp</th>
+              <th rowSpan='2'>Số đề nghị</th>
+              <th rowSpan='2'>Năm</th>
+              <th rowSpan='2'>Ngày đề nghị</th>
+              <th rowSpan='2'>Loại tiền</th>
+              <th colSpan='2'>Tổng tiền</th>
+              <th colSpan='2'>Kinh phí đã cấp</th>
+              <th colSpan='2'>Kinh phí đề nghị cấp lần này</th>
+              <th *ngIf='!(isDisableField() || isView)' rowSpan='2' class='text-center'>Hành động</th>
             </tr>
             <tr>
               <th>Ngoại tệ</th>
@@ -231,24 +231,24 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let data of basicTable.data; let i = index">
-              <ng-container *ngIf="!editDataCache[data.stt]?.edit; else editTemplate">
+            <tr *ngFor='let data of basicTable.data; let i = index'>
+              <ng-container *ngIf='!editDataCache[data.stt]?.edit; else editTemplate'>
                 <!--                <td class="text-center">{{i + 1}}</td>-->
-                <td *ngIf="data.parentName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ data.tenBoNganh }}</td>
-                <td *ngIf="!data.parentName"> {{ data.tenBoNganh }}</td>
+                <td *ngIf='data.parentName'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ data.tenBoNganh }}</td>
+                <td *ngIf='!data.parentName'> {{ data.tenBoNganh }}</td>
                 <td>{{ data.soDeNghi }}</td>
                 <td>{{ data.nam}} </td>
                 <td>{{ data.ngayDeNghi | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ data.tenLoaiTien }}</td>
-                <td>{{ data.tongTienNt | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
-                <td>{{ data.kinhPhiDaCapNt  | number : '1.0-1' : 'vi_VN' }}</td>
-                <td>{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN' }}</td>
-                <td>{{ data.tcCapThemNt | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{ data.tcCapThem | number : '1.0-1' : 'vi_VN' }}</td>
+                <td class='text-right'>{{ data.tongTienNt | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='text-right'>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
+                <td class='text-right'>{{ data.kinhPhiDaCapNt  | number : '1.0-1' : 'vi_VN' }}</td>
+                <td class='text-right'>{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN' }}</td>
+                <td class='text-right'>{{ data.tcCapThemNt | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='text-right'>{{ data.tcCapThem | number : '1.0-1' : 'vi_VN' }}</td>
                 <td>
-                  <a (click)="editRow(data.stt)" *ngIf="!data.isSum  &&  !(isDisableField() || isView)">
-                    <i class="fa fa-pencil" title="Sửa"></i>
+                  <a (click)='editRow(data.stt)' *ngIf='!data.isSum  &&  !(isDisableField() || isView)'>
+                    <i class='fa fa-pencil' title='Sửa'></i>
                   </a>
                 </td>
               </ng-container>
@@ -260,32 +260,41 @@
                 <td>{{editDataCache[data.stt]?.data.nam}}</td>
                 <td>{{editDataCache[data.stt]?.data.ngayDeNghi | date: 'dd/MM/yyyy'}}</td>
                 <td>{{editDataCache[data.stt]?.data.tenLoaiTien}}</td>
-                <td>{{editDataCache[data.stt]?.data.tongTienNt}}</td>
-                <td>{{editDataCache[data.stt]?.data.tongTien}}</td>
-                <td>{{editDataCache[data.stt]?.data.kinhPhiDaCapNt}}</td>
-                <td>{{editDataCache[data.stt]?.data.kinhPhiDaCap}}</td>
+                <td class='text-right'>{{editDataCache[data.stt]?.data.tongTienNt}}</td>
+                <td class='text-right'>{{editDataCache[data.stt]?.data.tongTien}}</td>
+                <td class='text-right'>{{editDataCache[data.stt]?.data.kinhPhiDaCapNt}}</td>
+                <td class='text-right'>{{editDataCache[data.stt]?.data.kinhPhiDaCap}}</td>
                 <td>
-                  <span *ngIf="editDataCache[data.stt]?.data.loaiTien == '01'">{{editDataCache[data.stt]?.data.tcCapThemNt}}</span>
-                  <nz-input-number type="text" nz-input *ngIf="editDataCache[data.stt]?.data.loaiTien !== '01'" [nzSize]="'small'"
-                                   [(ngModel)]="editDataCache[data.stt]?.data.tcCapThemNt" [nzMin]="0"
-                                   [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
-                                   [nzParser]="globals.parser">
-                  </nz-input-number>
+                  <span
+                    *ngIf="editDataCache[data.stt]?.data.loaiTien == '01'">{{editDataCache[data.stt]?.data.tcCapThemNt}}</span>
+                  <!--                  <nz-input-number type="text" nz-input *ngIf="editDataCache[data.stt]?.data.loaiTien !== '01'" [nzSize]="'small'"-->
+                  <!--                                   [(ngModel)]="editDataCache[data.stt]?.data.tcCapThemNt" [nzMin]="0"-->
+                  <!--                                   [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"-->
+                  <!--                                   [nzParser]="globals.parser">-->
+                  <!--                  </nz-input-number>-->
+                  <input class='money-input' *ngIf="editDataCache[data.stt]?.data.loaiTien !== '01'" [min]='0'
+                         [max]='globals.prop.MAX_INPUT'
+                         currencyMask [options]='amount'
+                         [(ngModel)]='editDataCache[data.stt]?.data.tcCapThemNt' />
                 </td>
                 <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'"
-                                   [(ngModel)]="editDataCache[data.stt]?.data.tcCapThem" [nzMin]="0"
-                                   [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
-                                   [nzParser]="globals.parser">
-                  </nz-input-number>
+                  <input class='money-input' [min]='0'
+                         [max]='globals.prop.MAX_INPUT'
+                         currencyMask [options]='amount'
+                         [(ngModel)]='editDataCache[data.stt]?.data.tcCapThem' />
+                  <!--                  <nz-input-number type="text" nz-input [nzSize]="'small'"-->
+                  <!--                                   [(ngModel)]="editDataCache[data.stt]?.data.tcCapThem" [nzMin]="0"-->
+                  <!--                                   [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"-->
+                  <!--                                   [nzParser]="globals.parser">-->
+                  <!--                  </nz-input-number>-->
                 </td>
                 <td>
-                  <a (click)="saveEdit(data.stt)" class="save"
+                  <a (click)='saveEdit(data.stt)' class='save'
                      [class.disabled]="!editDataCache[data.stt]?.data.tcCapThem || editDataCache[data.stt]?.data.tcCapThem == ''">
-                    <i class="fa fa-save"></i>
+                    <i class='fa fa-save'></i>
                   </a>
-                  <a (click)="cancelEdit(data.stt)">
-                    <i class="fa fa-times do"></i>
+                  <a (click)='cancelEdit(data.stt)'>
+                    <i class='fa fa-times do'></i>
                   </a>
                 </td>
               </ng-template>
@@ -297,7 +306,7 @@
     </nz-card>
   </div>
 </div>
-<div class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-de-nghi-cap-von-bo-nganh [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
+<div class='chi-tiet' *ngIf='isDetail'>
+  <app-thong-tin-de-nghi-cap-von-bo-nganh [idInput]='selectedId' [isView]='isView' (showListEvent)='showList()'>
   </app-thong-tin-de-nghi-cap-von-bo-nganh>
 </div>

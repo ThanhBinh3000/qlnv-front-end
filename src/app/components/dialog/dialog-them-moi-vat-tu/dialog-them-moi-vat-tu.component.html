@@ -109,14 +109,14 @@
       <tr *ngIf="!isReadOnly" class="root-input">
         <td></td>
         <td>
-          <nz-select [(ngModel)]="thongTinChiCuc.maDvi">
+          <nz-select [(ngModel)]="thongTinChiCuc.maDvi" (ngModelChange)="onChangeChiCuc(thongTinChiCuc.maDvi)">
             <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
           </nz-select>
         </td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
+        <td>{{thongTinChiCuc.soLuongTheoChiTieu}}</td>
+        <td>{{thongTinChiCuc.soLuongDaMua}}</td>
         <td>
           <nz-input-number [(ngModel)]="thongTinChiCuc.soLuong" class="text-right" nz-input [nzMin]="1"
                            [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
