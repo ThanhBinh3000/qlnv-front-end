@@ -157,4 +157,10 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
       },
     });
   }
+
+  goDetail(id: number, isView?: any) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
 }

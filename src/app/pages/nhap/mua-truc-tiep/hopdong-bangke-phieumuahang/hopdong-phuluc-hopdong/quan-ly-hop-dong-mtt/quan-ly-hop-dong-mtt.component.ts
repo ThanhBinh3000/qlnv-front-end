@@ -25,7 +25,7 @@ import { STATUS, STATUS_LABEL } from 'src/app/constants/status';
   templateUrl: './quan-ly-hop-dong-mtt.component.html',
   styleUrls: ['./quan-ly-hop-dong-mtt.component.scss']
 })
-export class QuanLyHopDongMttComponent implements OnInit {
+export class QuanLyHopDongMttComponent extends Base2Component implements OnInit {
 
   @Input() id: number;
   @Input() loaiVthh: string;
@@ -46,16 +46,17 @@ export class QuanLyHopDongMttComponent implements OnInit {
   STATUS = STATUS
   isDetail: boolean
   tongSlChaoGia: number;
+  previewName: string = '';
+
 
   constructor(
-    private fb: FormBuilder,
-    private httpClient: HttpClient,
-    private storageService : StorageService,
-    private notification: NzNotificationService,
-    private spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     public globals: Globals,
     public userService: UserService,
-    private modal: NzModalService,
     private thongTinPhuLucHopDongService: MttHopDongPhuLucHdService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
@@ -63,6 +64,7 @@ export class QuanLyHopDongMttComponent implements OnInit {
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
     private danhMucService: DanhMucService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, thongTinPhuLucHopDongService);
     this.formData = this.fb.group({
       id: [],
       namKh: [''],
@@ -79,10 +81,13 @@ export class QuanLyHopDongMttComponent implements OnInit {
       canhanTochuc: [],
       trangThaiHd: [''],
       tenTrangThaiHd: [''],
+      idQdKq: [''],
+      idQdGiaoNvNh: [''],
     });
   }
 
   async ngOnInit() {
+    this.previewName = this.userService.isChiCuc() ? 'nhap_truc_tiep_hop_dong_chicuc' : 'nhap_truc_tiep_hop_dong_cuc'
     this.userInfo = this.userService.getUserLogin();
     this.dataTable = []
     await this.spinner.show()
@@ -124,6 +129,7 @@ export class QuanLyHopDongMttComponent implements OnInit {
             tenLoaiVthh: dataTtin.data?.tenLoaiVthh,
             tenCloaiVthh: dataTtin.data?.tenCloaiVthh,
             trangThaiHd: data.trangThaiHd,
+            idQdKq: data.id,
             tenTrangThaiHd: data.tenTrangThaiHd
 
           })
@@ -158,8 +164,8 @@ export class QuanLyHopDongMttComponent implements OnInit {
             tenLoaiVthh: res.data.tenLoaiVthh,
             tenCloaiVthh: res.data.tenCloaiVthh,
             trangThaiHd: res.data.hhQdPheduyetKhMttHdr?.trangThaiHd,
-            tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr?.tenTrangThaiHd
-
+            tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr?.tenTrangThaiHd,
+            idQdGiaoNvNh: res.data.id
           })
         console.log(this.formData.value)
         this.idQdKh = res.data.idQdPdKh
@@ -372,10 +378,10 @@ export class QuanLyHopDongMttComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  showList(idHopDong: number) {
-    this.isDetail = false;
-    this.getDetail(idHopDong);
-    this.showListEvent.emit();
-  }
+  // showList(idHopDong: number) {
+  //   this.isDetail = false;
+  //   this.getDetail(idHopDong);
+  //   this.showListEvent.emit();
+  // }
 
 }
