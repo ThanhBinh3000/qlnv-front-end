@@ -148,7 +148,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         soQdinhDc: this.data.soQdinh,
         ngayQdinhDc: this.data.ngayKyQdinh,
         qdDcId: this.data.qdinhDccId,
-        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho || ""}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -200,7 +200,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       let data = await this.detail(id);
       if (data) {
         this.dataTableChiTieu = data.dcnbPhieuKnChatLuongDtl
-        this.formData.patchValue(data);
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}` });
         await this.dsHinhThucBaoQuan(data.cloaiVthh)
         if (data.hinhThucBq) {
           const dshinhThucBq = data.hinhThucBq.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
@@ -395,7 +395,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
 
       const data = res.data
       this.formData.patchValue({
-        tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`,
+        tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}`,
         tenLoKho: data.tenLoKho,
         maLoKho: data.maLoKho,
         tenNganKho: data.tenNganKho,
@@ -511,7 +511,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan || ""}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,

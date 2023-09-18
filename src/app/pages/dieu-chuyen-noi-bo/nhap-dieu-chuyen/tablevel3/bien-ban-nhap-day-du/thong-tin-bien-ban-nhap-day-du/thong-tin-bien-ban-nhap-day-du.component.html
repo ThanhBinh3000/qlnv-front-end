@@ -5,7 +5,10 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-
+      <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>In/xem trước</span>
+      </button>
       <button
         *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
         type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
