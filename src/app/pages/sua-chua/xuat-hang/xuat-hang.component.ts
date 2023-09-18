@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
@@ -14,6 +15,7 @@ export class XuatHangComponent implements OnInit {
   constructor(
     private router: Router,
     public globals: Globals,
+    public userService: UserService
   ) {
     router.events.subscribe((val) => {
       this.routerUrl = this.router.url;
@@ -22,16 +24,20 @@ export class XuatHangComponent implements OnInit {
 
   routes: any[] = [
     {
-      url : '/giao-nv-xh',
-      name : 'Quyết định giao nhiệm vụ xuất hàng'
+      url: '/giao-nv-xh',
+      name: 'Quyết định giao nhiệm vụ xuất hàng',
+      accessPermisson: 'SCHDTQG_XH_QDGNVXH'
     },
     {
-      url : '/phieu-xuat-kho',
-      name : 'Phiếu xuất kho'
+      url: '/phieu-xuat-kho',
+      name: 'Phiếu xuất kho',
+      accessPermisson: 'SCHDTQG_XH_PXK'
     },
     {
-      url : '/bang-ke',
-      name : 'Bảng kê xuất vật tư'
+      url: '/bang-ke',
+      name: 'Bảng kê xuất vật tư',
+      accessPermisson: 'SCHDTQG_XH_BKXVT'
+
     }
   ]
 

@@ -65,15 +65,16 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách báo cáo kết quả sửa chữa hàng DTQG</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-do" (click)="deleteMulti()">
+      <button type="button" class="btn btn-do" (click)="deleteMulti('SCHDTQG_BC_XOA')">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData()">
+      <button type="button" class="btn btn-sub" (click)="exportData('SCHDTQG_BC_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="userService.isCuc()" (click)="redirectCreate()">
+      <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
+        (click)="redirectCreate('SCHDTQG_BC_THEM')">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Tạo BCKQ sửa chữa hàng DTQG</span>
       </button>
@@ -183,10 +184,10 @@
             <a (click)="redirectDetail(data.id)">
               <span class="icon htvbdh_eye"></span>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'SCHDTQG_BC_THEM')">
               <span class="fa fa-pencil"></span>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'SCHDTQG_BC_XOA')">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

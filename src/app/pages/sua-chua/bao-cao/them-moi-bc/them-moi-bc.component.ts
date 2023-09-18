@@ -178,7 +178,7 @@ export class ThemMoiBcComponent extends Base3Component implements OnInit {
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC;
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC) && this.userService.isAccessPermisson('SCHDTQG_BC_THEM');
   }
 
   save(isGuiDuyet?) {
@@ -240,7 +240,8 @@ export class ThemMoiBcComponent extends Base3Component implements OnInit {
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC
+    return ((trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('SCHDTQG_BC_DUYETTP'))
+      || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('SCHDTQG_BC_DUYETLDCUC')))
   }
 
 }

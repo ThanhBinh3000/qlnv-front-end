@@ -278,7 +278,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
-        soLuong: data.soLuong,
+        soLuong: data.soLuong * 1000,
         soLuongQdGiaoNvNh: data.soLuong * 1000,
         soBb: data.listBienBanNghiemThuBq.find(item => item.id === Math.min(...data.listBienBanNghiemThuBq.map(item => item.id))).soBb,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
