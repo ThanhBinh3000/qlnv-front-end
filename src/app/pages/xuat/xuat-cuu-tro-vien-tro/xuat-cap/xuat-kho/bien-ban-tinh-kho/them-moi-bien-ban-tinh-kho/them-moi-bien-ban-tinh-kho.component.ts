@@ -46,6 +46,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   openPhieuXk = false;
   idBangKe: number = 0;
   openBangKe = false;
+  templateName = "Biên bản tịnh kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
