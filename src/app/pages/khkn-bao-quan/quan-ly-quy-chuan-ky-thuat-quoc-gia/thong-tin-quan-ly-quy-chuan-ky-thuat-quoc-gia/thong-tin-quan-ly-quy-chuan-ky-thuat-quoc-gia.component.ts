@@ -341,6 +341,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.formData.patchValue({
         id: res.data.id,
         trangThai: res.data.trangThai,
+        loaiVthh: this.listOfTagOptions.join(',')
       });
       if (isGuiDuyet) {
         await this.guiDuyet();
