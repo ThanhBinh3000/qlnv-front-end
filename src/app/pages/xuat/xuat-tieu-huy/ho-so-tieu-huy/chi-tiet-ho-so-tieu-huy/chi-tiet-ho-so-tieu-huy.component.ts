@@ -1,23 +1,23 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
 import * as dayjs from "dayjs";
-import {STATUS} from "src/app/constants/status";
-import {FileDinhKem} from "src/app/models/DeXuatKeHoachuaChonNhaThau";
-import {MESSAGE} from "src/app/constants/message";
-import {chain, cloneDeep} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {NumberToRoman} from 'src/app/shared/commonFunction';
-import {Validators} from "@angular/forms";
-import {HoSoTieuHuyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/HoSoTieuHuy.service";
-import {TongHopTieuHuyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/TongHopTieuHuy.service";
-import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { STATUS } from "src/app/constants/status";
+import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
+import { MESSAGE } from "src/app/constants/message";
+import { chain, cloneDeep } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { NumberToRoman } from 'src/app/shared/commonFunction';
+import { Validators } from "@angular/forms";
+import { HoSoTieuHuyService } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/HoSoTieuHuy.service";
+import { TongHopTieuHuyService } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/TongHopTieuHuy.service";
+import { DialogTuChoiComponent } from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 export class XhTlHoSoDtl {
   id: number = 0;
@@ -66,14 +66,14 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
   isFirstInit = true;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donViService: DonviService,
-              private danhMucService: DanhMucService,
-              private hoSoTieuHuyService: HoSoTieuHuyService,
-              private tongHopTieuHuyService: TongHopTieuHuyService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donViService: DonviService,
+    private danhMucService: DanhMucService,
+    private hoSoTieuHuyService: HoSoTieuHuyService,
+    private tongHopTieuHuyService: TongHopTieuHuyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoTieuHuyService);
     this.maHauTo = '/HS-' + this.userInfo.DON_VI.tenVietTat;
@@ -132,17 +132,16 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
   }
 
   async loadDsTieuHuy() {
-    this.tongHopTieuHuyService.search({
-      trangThai: STATUS.DA_TONG_HOP,
+    this.tongHopTieuHuyService.getDsTaoHoSo({
+      trangThai: STATUS.GUI_DUYET,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: this.page - 1,
       },
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        if (data && data.content && data.content.length > 0) {
-          this.dsAll.dsTieuHuy = data.content;
+        if (res.data && res.data.length > 0) {
+          this.dsAll.dsTieuHuy = res.data;
         }
       }
     });
@@ -175,17 +174,17 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
     this.danhSachTieuHuyView = chain(data)
       .groupBy("tenChiCuc")
       .map((v, k) => {
-          let rowItem = v.find(s => s.tenChiCuc === k);
-          let idVirtual = uuidv4();
-          return {
-            idVirtual: idVirtual,
-            tenChiCuc: k,
-            tenCuc: rowItem?.tenCuc,
-            maDiaDiem: rowItem?.maDiaDiem,
-            tenCloaiVthh: rowItem?.tenCloaiVthh,
-            childData: v
-          }
+        let rowItem = v.find(s => s.tenChiCuc === k);
+        let idVirtual = uuidv4();
+        return {
+          idVirtual: idVirtual,
+          tenChiCuc: k,
+          tenCuc: rowItem?.tenCuc,
+          maDiaDiem: rowItem?.maDiaDiem,
+          tenCloaiVthh: rowItem?.tenCloaiVthh,
+          childData: v
         }
+      }
       ).value();
     console.log(this.danhSachTieuHuyView, 'this.danhSachTieuHuyView')
   }
@@ -198,15 +197,15 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
       })
     });*/
     let dt = this.danhSachTieuHuyView.flatMap((item) => item.childData);
-    this.formData.patchValue({hoSoDtl: dt})
-    this.formData.disable({emitEvent: false});
+    this.formData.patchValue({ hoSoDtl: dt })
+    this.formData.disable({ emitEvent: false });
     let body = {
       ...this.formData.value,
       soHoSo: this.formData.value.soHoSo ? this.formData.value.soHoSo + this.maHauTo : this.maHauTo
     };
     let rs = await this.createUpdate(body);
-    this.formData.enable({emitEvent: false});
-    this.formData.patchValue({id: rs.id})
+    this.formData.enable({ emitEvent: false });
+    this.formData.patchValue({ id: rs.id })
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
@@ -217,7 +216,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
           })
         });*/
     let dt = this.danhSachTieuHuyView.flatMap((item) => item.childData);
-    body = {...body, soHoSo: this.formData.value.soHoSo + this.maHauTo}
+    body = { ...body, soHoSo: this.formData.value.soHoSo + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
