@@ -202,21 +202,21 @@
         <td>{{ data.trichYeu }}</td>
         <td></td>
         <td>
-          <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link" (click)="openModalQdPd(data.idQdPd)">
+          <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link" (click)="openModal(data.idQdPd, 'QdPd')">
             {{ data.soQdPd }}</a>
         </td>
         <td>
-          <a *ngIf="data.maThongBao && data.idThongTin" nz-button nzType="link"
-             (click)="openModalMaThongBao(data.idThongTin)">
+          <a *ngIf="data.maThongBao && data.idThongBao" nz-button nzType="link"
+             (click)="openModal(data.idThongBao, 'MaThongBao')">
             {{ data.maThongBao }}</a>
         </td>
 
         <td>{{ data.tenHinhThucDauGia }}</td>
-        <td>{{ data.tenPthucDauGia }}</td>
+        <td>{{ data.tenPhuongThucDauGia }}</td>
         <td>{{ data.soTbKhongThanh }}</td>
         <td>
-          <a *ngIf="data.soBienBan && data.idThongTin" nz-button nzType="link"
-             (click)="openModalMaThongBao(data.idThongTin)">
+          <a *ngIf="data.soBienBan && data.idThongBao" nz-button nzType="link"
+             (click)="openModal(data.idThongBao, 'MaThongBao')">
             {{ data.soBienBan }}</a>
         </td>
         <td>{{ data.tenTrangThai }}</td>
@@ -277,13 +277,13 @@
   </app-them-moi-quyet-dinh-phe-duyet-ket-qua>
 </div>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('QdPd')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
     </app-them-quyet-dinh-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('QdPd')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
@@ -291,13 +291,13 @@
 </nz-modal>
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThongTin"
-          (nzOnCancel)="closeModalMaThongBao()">
+          (nzOnCancel)="closeModal('MaThongBao')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
 <!--    <app-thongtin-daugia [idInput]="idThongTin" [isView]="true">-->
 <!--    </app-thongtin-daugia>-->
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalMaThongBao()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('MaThongBao')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

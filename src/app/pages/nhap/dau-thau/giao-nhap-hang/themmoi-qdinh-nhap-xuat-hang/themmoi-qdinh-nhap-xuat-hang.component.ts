@@ -221,6 +221,9 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
               x.tenTrangThai = "Chưa thực hiện";
             });
           } else {
+            this.formData.patchValue({
+              donViTinh: 'tấn',
+            })
             this.dataTable = data.details[0].children;
             this.dataTable.forEach(x => {
               x.trangThai = STATUS.CHUA_THUC_HIEN;
@@ -428,6 +431,11 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          if (!this.loaiVthh.startsWith('02')) {
+            this.formData.patchValue({
+              donViTinh: 'tấn',
+            })
+          }
           this.formData.patchValue({
             soQd: data.soQd?.split('/')[0],
           });
@@ -459,7 +467,6 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
           }
           this.listFileDinhKem = data.fileDinhKems;
           this.listCanCu = data.fileCanCu;
-          console.log(this.dataTable)
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }

@@ -4,38 +4,39 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {CurrencyMaskInputMode} from 'ngx-currency'
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { CurrencyMaskInputMode } from 'ngx-currency';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {
-  DiaDiemGiaoNhan, PhanLoTaiSan
+  DiaDiemGiaoNhan, PhanLoTaiSan,
 } from 'src/app/models/KeHoachBanDauGia';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {DeNghiCapVonBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
-import {ThongTriDuyetYCapVonService} from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
-import {UserService} from 'src/app/services/user.service';
-import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
-import {TongHopDeNghiCapVonService} from "../../../../../services/ke-hoach/von-phi/tongHopDeNghiCapVon.service";
-import {includes} from 'lodash';
-import {kmr_IQ} from "ng-zorro-antd/i18n";
-import {STATUS} from "../../../../../constants/status";
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
+import { ThongTriDuyetYCapVonService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
+import { UserService } from 'src/app/services/user.service';
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { TongHopDeNghiCapVonService } from '../../../../../services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
+import { includes } from 'lodash';
+import { kmr_IQ } from 'ng-zorro-antd/i18n';
+import { STATUS } from '../../../../../constants/status';
+import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
   templateUrl: './thong-tin-thong-tri-duyet-y-du-toan.component.html',
-  styleUrls: ['./thong-tin-thong-tri-duyet-y-du-toan.component.scss']
+  styleUrls: ['./thong-tin-thong-tri-duyet-y-du-toan.component.scss'],
 })
 
 export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
@@ -47,7 +48,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   @Input() id: number;
   formData: FormGroup;
   cacheData: any[] = [];
-  options = {prefix: '', thousands: '.', decimal: ',', inputMode: CurrencyMaskInputMode.NATURAL}
+  options = { prefix: '', thousands: '.', decimal: ',', inputMode: CurrencyMaskInputMode.NATURAL };
   fileDinhKem: Array<FileDinhKem> = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
@@ -78,6 +79,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   rowItem: any = {};
   chiTietList: any[] = [];
   STATUS = STATUS;
+  amount = AMOUNT_NO_DECIMAL;
 
   constructor(
     private modal: NzModalService,
@@ -106,6 +108,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
+    this.itemThongTri.trangThai = '00';
     this.itemThongTri.nam = dayjs().year();
     this.initForm();
     await Promise.all([
@@ -120,21 +123,23 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   initForm() {
+    console.log(this.itemThongTri, 'this.itemThongTrithis.itemThongTrithis.itemThongTri');
     this.formData = this.fb.group({
-      id: [this.itemThongTri ? this.itemThongTri.id : null, [],],
-      nam: [this.itemThongTri ? this.itemThongTri.nam : null, [Validators.required],],
-      soThongTri: [this.itemThongTri ? this.itemThongTri.soThongTri : null, [Validators.required],],
-      ngayLap: [this.itemThongTri ? this.itemThongTri.ngayLap : null, [Validators.required],],
-      lyDoChi: [this.itemThongTri ? this.itemThongTri.lyDoChi : null, [Validators.required],],
-      soDnCapVon: [this.itemThongTri ? this.itemThongTri.soDnCapVon : null, [Validators.required],],
-      maDvi: [this.userInfo.MA_DVI, [Validators.required],],
-      loai: [this.itemThongTri ? this.itemThongTri.loai : null, [Validators.required],],
-      loaiTien: [this.itemThongTri ? this.itemThongTri.loaiTien : null,],
+      id: [this.itemThongTri ? this.itemThongTri.id : null, []],
+      nam: [this.itemThongTri ? this.itemThongTri.nam : null, [Validators.required]],
+      trangThai: [(this.itemThongTri ? this.itemThongTri.trangThai : '00'), [Validators.required]],
+      soThongTri: [this.itemThongTri ? this.itemThongTri.soThongTri : null, [Validators.required]],
+      ngayLap: [this.itemThongTri ? this.itemThongTri.ngayLap : null, [Validators.required]],
+      lyDoChi: [this.itemThongTri ? this.itemThongTri.lyDoChi : null, [Validators.required]],
+      soDnCapVon: [this.itemThongTri ? this.itemThongTri.soDnCapVon : null, [Validators.required]],
+      maDvi: [this.userInfo.MA_DVI, [Validators.required]],
+      loai: [this.itemThongTri ? this.itemThongTri.loai : null, [Validators.required]],
+      loaiTien: [this.itemThongTri ? this.itemThongTri.loaiTien : null],
       tenLoaiTien: [this.itemThongTri ? this.itemThongTri.tenLoaiTien : null],
-      khoan: [this.itemThongTri ? this.itemThongTri.khoan : null, [Validators.required],],
-      chuong: [this.itemThongTri ? this.itemThongTri.chuong : null, [Validators.required],],
+      khoan: [this.itemThongTri ? this.itemThongTri.khoan : null, [Validators.required]],
+      chuong: [this.itemThongTri ? this.itemThongTri.chuong : null, [Validators.required]],
       dviThongTri: [this.itemThongTri ? this.itemThongTri.dviThongTri : null, [Validators.required]],
-      nhanXet: [this.itemThongTri ? this.itemThongTri.nhanXet : null, [Validators.required],],
+      nhanXet: [this.itemThongTri ? this.itemThongTri.nhanXet : null, [Validators.required]],
       dviThuHuong: [this.itemThongTri ? this.itemThongTri.dviThuHuong : null],
       tenDviThuHuong: [this.itemThongTri ? this.itemThongTri.tenDviThuHuong : null],
       dviThuHuongStk: [this.itemThongTri ? this.itemThongTri.dviThuHuongStk : null],
@@ -153,7 +158,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       let sum = data.map((item) => item.soTien).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 
@@ -162,7 +167,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       let sum = data.map((item) => item.soTienNt).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 
@@ -171,7 +176,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     let body = {
       pageNumber: 1,
       pageSize: 1000,
-    }
+    };
     let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDeNghi = res.data.content;
@@ -183,12 +188,12 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     let body = {
       pageNumber: 1,
       pageSize: 1000,
-    }
+    };
     let res = await this.tongHopDeNghiCapVonService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listTongHop = res.data.content;
       if (this.listTongHop && this.listTongHop.length > 0) {
-        this.listTongHop = this.listTongHop.filter(item => item.trangThai == STATUS.DA_DUYET_LDV)
+        this.listTongHop = this.listTongHop.filter(item => item.trangThai == STATUS.DA_DUYET_LDV);
       }
     }
   }
@@ -197,7 +202,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     this.dsBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsBoNganh = res.data;
+      // this.dsBoNganh = res.data;
       this.dsBoNganhFix = res.data;
     }
   }
@@ -222,8 +227,8 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
           this.changeMaTongHop();
           this.changeDonVi();
           this.formData.patchValue({
-            dviThuHuong: Number(this.itemThongTri.dviThuHuong)
-          })
+            dviThuHuong: Number(this.itemThongTri.dviThuHuong),
+          });
         }
       })
       .catch((e) => {
@@ -237,7 +242,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  async save(isOther?: boolean) {
+  async save(isPheDuyet?: boolean) {
     this.spinner.show();
     try {
       let body = this.formData.value;
@@ -248,11 +253,13 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       if (this.idInput > 0) {
         let res = await this.thongTriDuyetYCapVonService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          this.idInput = res.data.id;
+          this.itemThongTri = res.data;
+          if (!isPheDuyet) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
+            // this.back();
           } else {
-            return res.data.id;
+            this.guiDuyet(res.data.id);
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -260,11 +267,14 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       } else {
         let res = await this.thongTriDuyetYCapVonService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          this.idInput = res.data.id;
+          this.itemThongTri = res.data;
+          if (!isPheDuyet) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
+            // this.back();
           } else {
-            return res.data.id;
+            console.log(res.data,'res.datares.datares.data');
+            this.guiDuyet(res.data.id);
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -281,7 +291,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     }
   }
 
-  async guiDuyet() {
+  async guiDuyet(id?) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -294,11 +304,11 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: id ? id : this.idInput,
             trangThai: STATUS.CHO_DUYET_LDV,
           };
           let res = await this.thongTriDuyetYCapVonService.updateStatus(body);
-          await this.save(true);
+          // await this.save(true);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
               MESSAGE.SUCCESS,
@@ -318,9 +328,12 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     });
   }
 
-  pheDuyet() {
-    let trangThai = STATUS.DA_DUYET_LDV;
-    if (this.itemThongTri.trangThai == STATUS.DA_DUYET_LDV) {
+  pheDuyet(id?) {
+    let trangThai = STATUS.CHO_DUYET_LDTC;
+    if (this.itemThongTri.trangThai == STATUS.CHO_DUYET_LDV) {
+      trangThai = STATUS.CHO_DUYET_LDTC;
+    }
+    if (this.itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC) {
       trangThai = STATUS.DA_DUYET_LDTC;
     }
     this.modal.confirm({
@@ -335,8 +348,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
-            lyDoTuChoi: null,
+            id: id ? id : this.idInput,
             trangThai: trangThai,
           };
           let res =
@@ -360,9 +372,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   tuChoi() {
-    let trangThai = this.globals.prop.NHAP_TU_CHOI_LD_VU;
-    if (this.formData.value.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU) {
-      trangThai = this.globals.prop.NHAP_TU_CHOI_LD_TONG_CUC;
+    let trangThai = STATUS.TU_CHOI_LDV;
+    if (this.itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC) {
+      trangThai = STATUS.TU_CHOI_LDTC;
     }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -380,7 +392,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_VU,
+            trangThai: trangThai,
           };
           const res = await this.thongTriDuyetYCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -420,7 +432,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   clear() {
-    this.rowItem = {}
+    this.rowItem = {};
   }
 
   showEditItem(idx: number, type: string) {
@@ -433,7 +445,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
             item.edit = false;
           }
         }
-      })
+      });
     }
   }
 
@@ -453,29 +465,33 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         if (map.includes('BTC')) {
           map.push('Bộ Tài chính');
         }
-        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.code))
+        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.code));
       }
     }
   }
 
   async changeDonVi() {
+    this.formData.patchValue({
+      'dviThuHuong': null,
+    });
     this.listDviThuHuong = [];
     if (this.formData.value.dviThongTri) {
       if (this.formData.value.dviThongTri == 'BTC') {
         let item = {
-          "dvCungCapHang": "Tổng cục dự trữ nhà nước",
-          "nganHang": null,
-          "id": "BTC",
-          "soTaiKhoan": null
+          'dvCungCapHang': 'Tổng cục dự trữ nhà nước',
+          'nganHang': null,
+          'id': 'BTC',
+          'soTaiKhoan': null,
+          'maHopDong': '',
         };
         this.listDviThuHuong.push(item);
         this.formData.patchValue({
-          "dviThuHuong": this.listDviThuHuong[0].id,
-        })
+          'dviThuHuong': this.listDviThuHuong[0].id,
+        });
       } else {
         let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
           maBoNganh: this.formData.value.dviThongTri,
-          maTh: this.formData.value.soDnCapVon
+          maTh: this.formData.value.soDnCapVon,
         });
         if (res.msg == MESSAGE.SUCCESS && res.data) {
           this.listDviThuHuong = res.data;
@@ -493,7 +509,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         tenDviThuHuong: data.dvCungCapHang,
         loaiTien: data.loaiTien,
         tenLoaiTien: data.tenLoaiTien,
-      })
+      });
     }
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }

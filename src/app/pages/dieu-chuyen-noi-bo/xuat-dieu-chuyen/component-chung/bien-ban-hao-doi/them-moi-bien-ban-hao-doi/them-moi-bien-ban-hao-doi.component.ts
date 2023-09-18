@@ -77,17 +77,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   //   soQdinhDcc: '', qdinhDccId: null, soBbTinhKho: '', bbtinhKhoId: null, maDiemKho: '', tenDiemKho: '', maNhaKho: '', tenNhaKho: '',
   //   maNganKho: '', tenNganKho: '', maLoKho: '', tenLoKho: '', loaiVthh: '', cloaiVthh: '', tenLoaiVthh: '', tenCloaiVthh: '',
   // }
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "",
-    tenBaoCao: "",
-    trangThai: ""
-  };
-  showDlgPreview: boolean;
-  pdfSrc: string;
-  wordSrc: string;
-  excelSrc: string;
-  isPrint: boolean;
+  previewName: string = 'bien_ban_hao_doi_lt_xuat_dieu_chuyen';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -106,14 +96,14 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     this.formData = this.fb.group(
       {
         id: [],
-        nam: [dayjs().get("year")],
-        maDvi: [],
-        maQhns: [],
+        nam: [dayjs().get("year"), [Validators.required]],
+        maDvi: ['', [Validators.required]],
+        maQhns: ['', [Validators.required]],
         soBienBan: [],
-        ngayLap: [],
-        qdinhDccId: [],
+        ngayLap: ['', [Validators.required]],
+        qdinhDccId: ['', [Validators.required]],
         soQdinhDcc: ['', [Validators.required]],
-        ngayKyQdDcc: [],
+        ngayKyQdDcc: ['', [Validators.required]],
         maDiemKho: ['', [Validators.required]],
         maNhaKho: ['', [Validators.required]],
         maNganKho: ['', [Validators.required]],
@@ -160,20 +150,23 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         lanhDaoChiCuc: [],
         lanhDaoChiCucId: [],
 
-        soBbTinhKho: [],
-        bbtinhKhoId: [],
+        soBbTinhKho: ['', [Validators.required]],
+        bbtinhKhoId: ['', [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         tenTrangThai: ['Dự Thảo'],
         lyDoTuChoi: [],
         diaChiDvi: [],
-        tenDvi: [],
-        loaiVthh: [],
-        cloaiVthh: [],
-        tenLoaiVthh: [],
-        tenCloaiVthh: [],
+        tenDvi: ['', [Validators.required]],
+        loaiVthh: ['', [Validators.required]],
+        cloaiVthh: ['', [Validators.required]],
+        tenLoaiVthh: ['', [Validators.required]],
+        tenCloaiVthh: ['', [Validators.required]],
         soPhieuKtChatLuong: [],
-        donViTinh: [],
+        donViTinh: ['', [Validators.required]],
+        keHoachDcDtlId: [, [Validators.required]],
         // fileDinhKems: [new Array<FileDinhKem>()],
+        ngayBatDauXuat: [, Validators.required],
+        ngayKetThucXuat: [, Validators.required]
       }
     );
     this.maBb = '-BBHD';
@@ -208,7 +201,8 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         if (res.msg == MESSAGE.SUCCESS) {
           this.formData.patchValue(res.data);
           const data = res.data;
-          this.formData.patchValue({ soBienBan: this.genSoBBHaoDoi(data.id), tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho })
+          this.formData.patchValue({ soBienBan: this.genSoBBHaoDoi(data.id), tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho }),
+            this.loadSoBbTinhKho()
         }
       } catch (e) {
         console.log('error: ', e);
@@ -294,7 +288,8 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       tongSlXuatTheoTt: 0,
       danhSachBangKe: [],
       thongTinHaoHut: [],
-      ngayBatDauXuat: ''
+      ngayBatDauXuat: '',
+      keHoachDcDtlId: null
 
     })
   }
@@ -306,6 +301,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       maLoKho: this.formData.value.maLoKho,
       qdinhDccId: this.formData.value.qdinhDccId,
       maNganKho: this.formData.value.maNganKho,
+      maDvi: this.formData.value.maDvi,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -337,8 +333,8 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định'],
+        dataColumn: ['soQdinh', 'ngayKyQdinh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -371,14 +367,17 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
           data.danhSachQuyetDinh.forEach(element => {
             if (Array.isArray(element.danhSachKeHoach)) {
               element.danhSachKeHoach.forEach(item => {
-                if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho === item.maNganKho) || (f.maLoKho && f.maLoKho === item.maLoKho))) < 0) {
+                // if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho === item.maNganKho) || (f.maLoKho && f.maLoKho === item.maLoKho))) < 0) {
+                //   dataChiCuc.push(item)
+                // }
+                if (item.thayDoiThuKho === this.thayDoiThuKho) {
                   dataChiCuc.push(item)
                 }
               });
             }
           });
         }
-        this.listDiaDiemNhap = cloneDeep(dataChiCuc);
+        this.listDiaDiemNhap = dataChiCuc.map(f => ({ ...f, noiNhan: `${f.tenDiemKhoNhan || ""} - ${f.tenNhaKhoNhan || ""} - ${f.tenNganKhoNhan || ""} - ${f.tenLoKhoNhan}` }));
       }
     } catch (error) {
       console.log('e', error)
@@ -396,12 +395,12 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDiaDiemNhap,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataHeader: ['Điểm kho xuất', 'Nhà kho xuất', 'Ngăn kho xuất', 'Lô kho xuất', "Nơi nhận"],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'noiNhan']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -428,6 +427,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         moTaHangHoa: data.moTaHangHoa,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         donViTinh: data.donViTinh,
+        keHoachDcDtlId: data.id
       })
       // this.listBbTinhKho = this.listBbTinhKho.filter(item => (item.maDiemKho == data.maDiemKho));
       this.loadSoBbTinhKho();
@@ -505,7 +505,11 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         tiLeHaoTt = slHaoTt / (tongSlXuatTheoTt * 100)
       }
 
-      this.formData.patchValue({ soBbTinhKho: res.data.soBbTinhKho, tongSlXuatTheoQd: tongSlXuatTheoQd, tongSlXuatTheoTt: tongSlXuatTheoTt, ngayBatDauXuatTt: res.data.ngayBatDauXuat, ngayKetThucXuatTt: res.data.ngayKeThucXuat, slHaoTt })
+      this.formData.patchValue({
+        soBbTinhKho: res.data.soBbTinhKho, tongSlXuatTheoQd: tongSlXuatTheoQd, tongSlXuatTheoTt: tongSlXuatTheoTt,
+        ngayBatDauXuat: res.data.ngayBatDauXuat, ngayKetThucXuat: res.data.ngayKetThucXuat, ngayBatDauXuatTt: res.data.ngayBatDauXuat,
+        ngayKetThucXuatTt: res.data.ngayKetThucXuat, slHaoTt, donViTinh: res.data.donViTinh, tiLeHaoTt
+      })
     }
   }
   async save(isGuiDuyet?) {
@@ -532,6 +536,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   pheDuyet() {
     let trangThai = '';
     let msg = '';
+    let MSG = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.TU_CHOI_KT:
@@ -539,25 +544,29 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.GUI_DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_KT;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.DA_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.PHE_DUYET_SUCCESS;
         break;
       }
     }
-    this.approve(this.formData.value.id, trangThai, msg, null, MESSAGE.PHE_DUYET_SUCCESS);
+    this.approve(this.formData.value.id, trangThai, msg, null, MSG);
   }
   showTuChoi() {
     return ([STATUS.CHO_DUYET_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.CHO_DUYET_LDCC].includes(this.formData.value.trangThai)) && this.userService.isChiCuc()
@@ -616,48 +625,5 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     return tree.flatMap((item) => {
       return item.childData ? this.flattenTree(item.childData) : item;
     });
-  }
-  //Preview
-  async preview() {
-    this.reportTemplate.fileName = "bien_ban_hao_doi.docx";
-    let body = {
-      reportTemplateRequest: this.reportTemplate,
-      ...this.formData.value
-    }
-    await this.bienBanHaoDoiDieuChuyenService.preview(body).then(async s => {
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-      this.showDlgPreview = true;
-    });
-  }
-  downloadPdf() {
-    saveAs(this.pdfSrc, "bien_ban_hao_doi.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "bien_ban_hao_doi.docx");
-  }
-  downloadExcel() {
-    saveAs(this.excelSrc, "bien_ban_hao_doi.xlsx");
-  }
-  doPrint() {
-    const WindowPrt = window.open(
-      '',
-      '',
-      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-    );
-    let printContent = '';
-    printContent = printContent + '<div>';
-    printContent =
-      printContent + document.getElementById('modal').innerHTML;
-    printContent = printContent + '</div>';
-    WindowPrt.document.write(printContent);
-    WindowPrt.document.close();
-    WindowPrt.focus();
-    WindowPrt.print();
-    WindowPrt.close();
-  }
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 }

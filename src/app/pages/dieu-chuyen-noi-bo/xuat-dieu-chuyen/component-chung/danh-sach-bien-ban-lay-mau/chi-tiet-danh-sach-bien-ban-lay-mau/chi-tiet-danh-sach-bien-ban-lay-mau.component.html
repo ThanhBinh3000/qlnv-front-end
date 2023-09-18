@@ -4,7 +4,7 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub do ml-2" (click)="preview()">
+        <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>In/xem trước</span>
         </button>
@@ -87,7 +87,7 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
+                                <nz-form-label [nzNoColon]="true" nzRequired>
                                     Đơn vị
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -97,7 +97,7 @@
                         </div>
                         <div nz-col [nzSpan]="4">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
+                                <nz-form-label [nzNoColon]="true" nzRequired>
                                     Mã QHNS (Mã quan hệ ngân sách)
                                 </nz-form-label>
                                 <input nz-input readonly formControlName="maQhns" />
@@ -119,7 +119,7 @@
 
                         <div nz-col [nzSpan]="4">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">
+                                <nz-form-label [nzNoColon]="true" nzRequired>
                                     Ngày lấy mẫu (Ngày tạo biên bản)
                                 </nz-form-label>
                                 <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayLayMau"
@@ -142,7 +142,7 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> KTV bảo quản</nz-form-label>
+                                <nz-form-label [nzNoColon]="true" nzRequired> KTV bảo quản</nz-form-label>
                                 <nz-form-control>
                                     <input nz-input formControlName="ktvBaoQuan" readonly />
                                 </nz-form-control>
@@ -151,7 +151,7 @@
 
                         <div nz-col [nzSpan]="9">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Đơn vị kiểm nghiệm</nz-form-label>
+                                <nz-form-label [nzNoColon]="true" nzRequired> Đơn vị kiểm nghiệm</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <input nz-input formControlName="dviKiemNghiem" [readonly]="isView" />
                                 </nz-form-control>
@@ -159,7 +159,7 @@
                         </div>
                         <div nz-col [nzSpan]="9">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">Địa điểm lấy mẫu</nz-form-label>
+                                <nz-form-label [nzNoColon]="true" nzRequired>Địa điểm lấy mẫu</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <input nz-input formControlName="diaDiemLayMau" [readonly]="isView" />
                                 </nz-form-control>
@@ -450,10 +450,10 @@
     <div *nzModalTitle class="level2">
         <ul nz-menu nzMode="horizontal" class="bg-transparent">
             <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
-                Biên bản lấy mẫu/bàn giao mẫu
+                Biên bản lấy mẫu
             </li>
             <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
-                Phiếu kiểm nghiệm chất lượng
+                Biên bản bàn giao mẫu
             </li>
         </ul>
     </div>
@@ -468,17 +468,17 @@
         </ng-container>
     </div>
     <div *nzModalFooter>
-        <button nz-button (click)="downloadPdf()" class="modal__button--save ml-2">
+        <button type="button" class="btn btn-main ml-2" (click)="printPreview()">
+            <i nz-icon nzType="printer" nzTheme="outline"></i>
+            <span>In</span>
+        </button>
+        <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save ml-2">
             <i class="icon htvbdh_file-pdf"></i>
             Xuất .pdf
         </button>
-        <button nz-button (click)="downloadExcel()" class="modal__button--save ml-2">
+        <button nz-button (click)="downloadWord(previewName)" class="modal__button--save ml-2">
             <i class="icon htvbdh_nhap-excel"></i>
-            Xuất Excel
-        </button>
-        <button type="button" class="btn btn-main ml-2" (click)="doPrint()">
-            <i nz-icon nzType="printer" nzTheme="outline"></i>
-            <span>In</span>
+            Xuất .docx
         </button>
         <button nz-button (click)="closeDlg()" class="modal__button--cancel ml-2">
             <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
