@@ -114,6 +114,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maCan: [],
       soBaoBi: [],
       trongLuongCaBaoBi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -136,7 +137,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
+      // console.log('this.data', this.data)
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
@@ -313,6 +314,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           donViTinh: "",
+          keHoachDcDtlId: ""
         });
         // await this.loadChiTietQdinh(data.id);
       }
@@ -354,6 +356,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           donViTinh: data.donViTinh,
+          keHoachDcDtlId: data.id
         });
         await this.layDonViCon(data.maDiemKhoNhan)
       }
@@ -454,6 +457,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
           donViNguoiGiaoHang: data.donViNguoiGiao,
           diaChiDonViNguoiGiaoHang: data.diaChi,
           thoiGianGiaoNhan: data.tgianGiaoNhanHang,
+          keHoachDcDtlId: data.keHoachDcDtlId
         });
 
         await this.layDonViCon(data.maDiemKho)

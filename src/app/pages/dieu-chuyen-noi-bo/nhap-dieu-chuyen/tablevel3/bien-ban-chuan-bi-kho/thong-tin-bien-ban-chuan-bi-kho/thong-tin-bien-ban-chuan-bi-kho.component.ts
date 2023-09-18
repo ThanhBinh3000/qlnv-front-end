@@ -139,6 +139,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       donGiaTrongNam: [],
       soLuongNamTruoc: [],
       thanhTienNamTruoc: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -162,7 +163,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
+      // console.log('this.data', this.data)
       this.formData.patchValue({
         soQdDcCuc: this.data.soQdinh,
         ngayQdDcCuc: this.data.thoiHanDieuChuyen,
@@ -183,6 +184,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         tichLuongKhaDung: this.data.tichLuongKd,
         tichLuong: this.data.tichLuongKd,
         donViTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       await this.loadDataBaoQuan(this.data.maChLoaiHangHoa)
@@ -467,6 +469,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           tichLuong: "",
           tichLuongKhaDung: "",
           donViTinh: "",
+          keHoachDcDtlId: ""
         });
         this.listPhuongThucBaoQuan = []
         this.listHinhThucBaoQuan = []
@@ -514,6 +517,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           tichLuongKhaDung: data.tichLuongKd,
           donViTinh: data.donViTinh,
           duToanKphi: data.duToanKphi,
+          keHoachDcDtlId: data.id
         });
         await this.loadDataBaoQuan(data.cloaiVthh)
         await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)
