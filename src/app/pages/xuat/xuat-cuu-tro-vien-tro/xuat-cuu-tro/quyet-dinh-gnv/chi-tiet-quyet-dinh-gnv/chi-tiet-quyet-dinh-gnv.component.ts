@@ -674,19 +674,23 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
           if (data.length > 0) {
+            if (loaiVthh == '0101' || loaiVthh == '0102') {
+              this.formDataDtl.patchValue({
+                cloaiVthh: data[0].cloaiVthh,
+                // tonKhoCloaiVthh:data[0].slHienThoi
+              });
+            }
             let tonKhoDvi = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
             let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
+            if (dataCloai.length == 0) {
+              dataCloai = data;
+            }
             let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
             this.formDataDtl.patchValue({
               tonKhoDvi: tonKhoDvi,
               tonKhoCloaiVthh: tonKhoCloaiVthh
             });
-            if (this.formDataDtl.value.loaiVthh == '0101' || this.formDataDtl.value.loaiVthh == '0102') {
-              this.formDataDtl.patchValue({
-                cloaiVthh: data[0].cloaiVthh,
-                tonKhoCloaiVthh: 123
-              })
-            }
+            console.log(this.formDataDtl.value, '123213')
           } else {
             this.formDataDtl.patchValue({tonKhoDvi: 0, tonKhoCloaiVthh: 0});
           }

@@ -427,7 +427,7 @@
 </div>
 
 <!--popup them sua-->
-<nz-modal [nzWidth]="'60%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
+<nz-modal [nzWidth]="'70%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
 
           nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
   <ng-container *nzModalContent>
@@ -473,8 +473,7 @@
                   <div nz-col [nzSpan]="16">
                     <nz-select nzAllowClear formControlName="cloaiVthh"
                                nzPlaceHolder="Chọn chủng loại hàng" nzShowSearch
-                               [nzDisabled]="true"
-                               (ngModelChange)="kiemTraTonKho()">
+                               [nzDisabled]="true">
                       <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
                     </nz-select>
                   </div>
@@ -516,10 +515,14 @@
                                   [ngModel]="selectedNode"
                                   [ngModelOptions]="{standalone: true}"
                   >
-                    <ng-template #nzTreeTemplate let-node>
+                    <ng-template #nzTreeTemplate let-node let-origin="origin">
                       <div class="node-content" [ngClass]="{'disabled-node': !node.isLeaf}"
                            [class.ant-tree-node-selected]="node.isSelected" (click)="selectDiaDiem(node)">
                         {{ node.title }}
+                        <ng-container *ngIf="node.isLeaf && (origin.capDvi == 6 || origin.capDvi ==7)">
+                          <strong>{{origin.tenCloaiVthh || origin.tenLoaiVthh}}</strong>
+                          Số lượng: <strong>{{origin.slTon|number:globals.numberFormat:globals.locale}}</strong>
+                        </ng-container>
                       </div>
                     </ng-template>
                   </nz-tree-select>
