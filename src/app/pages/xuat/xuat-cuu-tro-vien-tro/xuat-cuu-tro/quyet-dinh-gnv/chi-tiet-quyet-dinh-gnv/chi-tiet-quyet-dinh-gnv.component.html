@@ -473,8 +473,7 @@
                   <div nz-col [nzSpan]="16">
                     <nz-select nzAllowClear formControlName="cloaiVthh"
                                nzPlaceHolder="Chọn chủng loại hàng" nzShowSearch
-                               [nzDisabled]="true"
-                               (ngModelChange)="kiemTraTonKho()">
+                               [nzDisabled]="true">
                       <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
                     </nz-select>
                   </div>
@@ -511,20 +510,24 @@
             <nz-form-label [nzXs]="7" [nzRequired]="true">Chọn điểm kho</nz-form-label>
             <nz-form-control>
               <div nz-row [nzGutter]="48">
-                <div nz-col [nzSpan]="16">
+                <div nz-col [nzSpan]="20">
                   <nz-tree-select #NzTreeSelectComponent [nzNodes]="listDiaDiemKho" [nzShowSearch]="true"
                                   [ngModel]="selectedNode"
                                   [ngModelOptions]="{standalone: true}"
                   >
-                    <ng-template #nzTreeTemplate let-node>
+                    <ng-template #nzTreeTemplate let-node let-origin="origin">
                       <div class="node-content" [ngClass]="{'disabled-node': !node.isLeaf}"
                            [class.ant-tree-node-selected]="node.isSelected" (click)="selectDiaDiem(node)">
                         {{ node.title }}
+                        <ng-container *ngIf="node.isLeaf && (origin.capDvi == 6 || origin.capDvi ==7)">
+                          <strong>{{origin.tenCloaiVthh || origin.tenLoaiVthh}}</strong>
+                          Số lượng: <strong>{{origin.slTon|number:globals.numberFormat:globals.locale}}</strong>
+                        </ng-container>
                       </div>
                     </ng-template>
                   </nz-tree-select>
                 </div>
-                <div nz-col [nzSpan]="8">
+                <div nz-col [nzSpan]="4">
                   <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
                     style="color: #001CFF">{{formDataDtl.value.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</span>
                   </p>
