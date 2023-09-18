@@ -73,7 +73,7 @@
                   <span>Tạo quyết định</span>
                 </button>-->
         <button type="button" class="btn btn-main" (click)="redirectDetail(null, false)"
-        >
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')">
           <i class="icon htvbdh_soanthao"></i>
           <span>Tạo quyết định</span>
         </button>

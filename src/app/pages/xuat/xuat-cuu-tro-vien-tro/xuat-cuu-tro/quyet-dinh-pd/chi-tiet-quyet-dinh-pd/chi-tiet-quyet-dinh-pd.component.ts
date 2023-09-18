@@ -222,7 +222,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      this.formData.patchValue({type: 'TTr'});
+      this.formData.patchValue({type: 'TTr', tenDvi: this.userInfo.TEN_DVI,});
     }
   }
 
