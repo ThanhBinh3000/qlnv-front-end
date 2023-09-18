@@ -63,7 +63,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   ]
 
   detail: any
-
+  previewName = "nhap_vt_bien_ban_giao_nhan";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

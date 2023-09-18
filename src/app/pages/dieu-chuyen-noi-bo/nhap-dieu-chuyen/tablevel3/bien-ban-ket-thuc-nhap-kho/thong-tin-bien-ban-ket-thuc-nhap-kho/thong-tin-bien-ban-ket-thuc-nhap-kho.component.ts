@@ -43,7 +43,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   danhSach: any[] = []
   allCheckedTT = true;
   indeterminateTT = false;
-
+  previewName: string = "nhap_vt_bien_ban_ket_thuc_nhap_kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

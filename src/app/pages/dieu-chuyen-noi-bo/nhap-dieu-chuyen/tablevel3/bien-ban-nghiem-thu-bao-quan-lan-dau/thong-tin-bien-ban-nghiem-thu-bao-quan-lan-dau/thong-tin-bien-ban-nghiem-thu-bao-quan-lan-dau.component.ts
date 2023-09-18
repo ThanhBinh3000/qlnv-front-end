@@ -51,7 +51,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   dsHangPD = []
   typeData: string;
   typeAction: string;
-
+  previewName: string = "nhap_lt_bien_ban_nghiem_thu_bao_quan_lan_dau"
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

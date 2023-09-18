@@ -137,10 +137,10 @@ export class PhieuXuatHangHoaHutComponent extends Base2Component implements OnIn
         return !this.checkRoleEdit(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_XEM")
     };
     checkRoleEdit(trangThai: string) {
-        return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_THEM") && this.userService.isChiCuc()
+        return trangThai === STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_THEM") && this.userService.isChiCuc()
     }
     checkRoleDelete(trangThai: string) {
-        return trangThai == STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_XOA") && this.userService.isChiCuc()
+        return trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_XOA") && this.userService.isChiCuc()
     }
     checkRoleExport() {
         return this.userService.isAccessPermisson("QLKT_THSDK_PXHHH_EXP")

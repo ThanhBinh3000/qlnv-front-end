@@ -119,7 +119,7 @@
             </th>
             <th>
               <nz-input-group>
-                <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
+                <nz-select nzAllowClear [(ngModel)]="filterTable.trangThaiSn"
                   (ngModelChange)="filterInTable('trangThaiSn',filterTable.trangThaiSn)">
                   <nz-option *ngFor="let p of listTrangThaiSn" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                 </nz-select>

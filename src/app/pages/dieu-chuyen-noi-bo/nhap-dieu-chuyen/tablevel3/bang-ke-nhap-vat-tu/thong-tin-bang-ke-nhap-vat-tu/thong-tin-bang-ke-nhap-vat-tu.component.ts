@@ -43,7 +43,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
 
   dsHangTH = []
   tongSL: number
-
+  previewName: string = "nhap_vt_bang_ke_nhap_vat_tu"
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

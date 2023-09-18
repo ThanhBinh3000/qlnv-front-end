@@ -55,7 +55,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   dviTinh: string;
   thanhTienTrongNam: number;
   tongGiaTri: number;
-
+  previewName: string = "nhap_lt_bien_ban_chuan_bi_kho"
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

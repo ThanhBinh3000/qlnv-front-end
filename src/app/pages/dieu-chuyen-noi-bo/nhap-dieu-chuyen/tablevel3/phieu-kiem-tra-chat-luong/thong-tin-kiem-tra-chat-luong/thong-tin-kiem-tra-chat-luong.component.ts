@@ -50,7 +50,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     "Không đạt",
     "Đạt"
   ]
-
+  previewName: string = "nhap_lt_phieu_kiem_tra_chat_luong_lt";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

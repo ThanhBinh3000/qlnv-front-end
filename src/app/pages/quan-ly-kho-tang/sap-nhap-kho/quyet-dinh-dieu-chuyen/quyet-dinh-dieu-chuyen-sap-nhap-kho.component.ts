@@ -118,6 +118,25 @@ export class QuyetDinhDieuChuyenSapNhapKhoComponent extends Base2Component imple
     await this.spinner.hide();
   }
 
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == this.STATUS.DANG_NHAP_DU_LIEU) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
   redirectDetail(id, b: boolean, soQdGiaoNvXh?) {
     this.selectedId = id;
     this.isDetail = true;
