@@ -321,11 +321,11 @@ export class Search {
     loaiDnghi: string;
     namDnghi: number;
     canCuVeGia: string;
+    quyetDinh: string;
     ngayTaoDen: any;
     ngayTaoTu: any;
     paggingReq: Pagging = new Pagging();
     trangThai: string = Status.TT_01;
-    trangThaiDvct: string;
 
     request() {
         return {
@@ -336,12 +336,12 @@ export class Search {
             maDvi: this.maDvi,
             loaiDnghi: this.loaiDnghi,
             namDnghi: this.namDnghi,
+            quyetDinh: this.quyetDinh,
             canCuVeGia: this.canCuVeGia,
             ngayTaoTu: this.ngayTaoTu ? Utils.fmtDate(this.ngayTaoTu) : null,
             ngayTaoDen: this.ngayTaoDen ? Utils.fmtDate(this.ngayTaoDen) : null,
             paggingReq: this.paggingReq,
             trangThai: this.trangThai,
-            trangThaiDvct: this.trangThaiDvct,
         }
     }
 
@@ -350,10 +350,10 @@ export class Search {
         this.maCapUng = null;
         this.loaiDnghi = null;
         this.namDnghi = null;
+        this.quyetDinh = null;
         this.canCuVeGia = null;
         this.ngayTaoTu = null;
         this.ngayTaoDen = null;
         this.trangThai = null;
-        this.trangThaiDvct = null;
     }
 }

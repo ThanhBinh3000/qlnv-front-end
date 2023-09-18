@@ -41,7 +41,7 @@ export class QuanLyThuChiComponent implements OnInit {
 
     async search() {
         this.spinner.show();
-        await this.capVonMuaBanTtthService.ctietThuChi(this.namDnghi).toPromise().then(
+        await this.capVonMuaBanTtthService.ctietThuChi(this.namDnghi, Cvmb.QUAN_LY_THU_CHI).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.lstCtiets = [];
