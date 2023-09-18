@@ -115,7 +115,7 @@
             </nz-select>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị ra QĐ giao nv xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -123,7 +123,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số QĐ xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -135,7 +135,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Ngày ký QĐ xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -147,7 +147,7 @@
         </div>
       </div>
       <div nz-row [nzGutter]="24">
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label>Căn cứ trên QĐ phê duyệt phương án</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -165,7 +165,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -173,7 +173,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -520,8 +520,8 @@
                            [class.ant-tree-node-selected]="node.isSelected" (click)="selectDiaDiem(node)">
                         {{ node.title }}
                         <ng-container *ngIf="node.isLeaf && (origin.capDvi == 6 || origin.capDvi ==7)">
-                          <strong>{{origin.tenCloaiVthh || origin.tenLoaiVthh}}</strong>
-                          Số lượng: <strong>{{origin.slTon|number:globals.numberFormat:globals.locale}}</strong>
+                          <i>{{origin.tenCloaiVthh || origin.tenLoaiVthh}}</i>
+                          Số lượng: <i>{{origin.slTon|number:globals.numberFormat:globals.locale}}</i>
                         </ng-container>
                       </div>
                     </ng-template>
