@@ -260,6 +260,7 @@ export class TongHopTienThuaComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.baoCao.id = data.data.id;
+                        this.dataInfo.id = this.baoCao.id;
                         this.action('detail');
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -290,7 +291,7 @@ export class TongHopTienThuaComponent implements OnInit {
         const obj = {
             id: id,
             preData: this.dataInfo,
-            tabSelected: this.dataInfo.tabSelected == Tab.TIEN_THUA,
+            tabSelected: Tab.TIEN_THUA,
         }
         this.dataChange.emit(obj);
     }

@@ -50,10 +50,10 @@
                         {{ data.tenHangDtqg }}
                     </td>
                     <td>
-                        {{ Op.fmtNum(data.slHopDong) }}
+                        {{ data.maHangDtqg == Cvmb.THOC ? Op.fmtNum(data.gtKeHoach) : Op.fmtNum(data.gtHopDong) }}
                     </td>
                     <td>
-                        {{ Op.fmtNum(data.slThucHien) }}
+                        {{ Op.fmtNum(data.gtThucHien) }}
                     </td>
                     <td>
                         {{ Op.fmtNum(data.lkUng) }}

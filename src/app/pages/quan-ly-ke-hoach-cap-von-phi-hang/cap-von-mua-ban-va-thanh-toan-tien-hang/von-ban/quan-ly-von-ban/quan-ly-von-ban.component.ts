@@ -6,7 +6,7 @@ import { Operator, Table } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
-import { ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { Cvmb, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-quan-ly-von-ban',
@@ -17,6 +17,7 @@ export class QuanLyVonBanComponent implements OnInit {
     @Input() dataInfo: any;
     @Output() dataChange = new EventEmitter();
     Op = Operator;
+    Cvmb = Cvmb;
     namDnghi: number;
     id: string;
     lstCtiets: ThanhToan[] = [];
@@ -41,7 +42,7 @@ export class QuanLyVonBanComponent implements OnInit {
 
     async search() {
         this.spinner.show();
-        await this.capVonMuaBanTtthService.ctietThuChi(this.namDnghi).toPromise().then(
+        await this.capVonMuaBanTtthService.ctietThuChi(this.namDnghi, Cvmb.QUAN_LY_VON_BAN).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.lstCtiets = [];

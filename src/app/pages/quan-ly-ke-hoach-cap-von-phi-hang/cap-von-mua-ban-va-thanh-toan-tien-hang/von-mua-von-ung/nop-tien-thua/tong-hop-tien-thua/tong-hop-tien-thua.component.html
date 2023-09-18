@@ -9,6 +9,10 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
+            <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
+                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                <span>Xuất</span>
+            </button>
             <button *ngIf="status.submit" type="button" class="btn btn-sub" (click)="action('submit')">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
@@ -28,10 +32,6 @@
             <button *ngIf="status.approve" type="button" class="btn btn-do" (click)="action('nonapprove')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
-            </button>
-            <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
-                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
-                <span>Xuất</span>
             </button>
         </div>
     </nz-affix>
