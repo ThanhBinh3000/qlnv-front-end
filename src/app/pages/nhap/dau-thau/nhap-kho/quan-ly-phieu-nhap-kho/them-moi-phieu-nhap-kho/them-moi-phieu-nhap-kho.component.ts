@@ -104,7 +104,13 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       trangThai: [],
       tenTrangThai: [],
       lyDoTuChoi: [],
-      donGiaHd: []
+      donGiaHd: [],
+      loaiHinhNx: 'Mua đấu thầu',
+      kieuNx: 'Nhập mua',
+      dviCungCap: [],
+      ngayQdGiaoNvNh: [],
+      tenNganLoKho: [],
+      tenThuKho: [],
     })
   }
 
@@ -208,8 +214,10 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
-      ngayHd: data.hopDong.ngayKy,
-      donGiaHd: data.hopDong.donGia
+      thoiGianGiaoNhan: data.tgianNkho,
+      ngayHd: data.hopDong?.ngayKy,
+      donGiaHd: data.hopDong?.donGia,
+      dviCungCap: data.hopDong?.tenNhaThau,
     });
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
@@ -234,46 +242,49 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.dataTable = [];
-
-        this.formData.patchValue({
-          idDdiemGiaoNvNh: data.id,
-          maDiemKho: data.maDiemKho,
-          tenDiemKho: data.tenDiemKho,
-          maNhaKho: data.maNhaKho,
-          tenNhaKho: data.tenNhaKho,
-          maNganKho: data.maNganKho,
-          tenNganKho: data.tenNganKho,
-          maLoKho: data.maLoKho,
-          tenLoKho: data.tenLoKho,
-
-        });
-        if (this.loaiVthh.startsWith('02')) {
-          this.formData.patchValue({
-            nguoiTaoPhieuKtraCl: data.bienBanGuiHang.tenNguoiTao,
-            soBienBanGuiHang: data.bienBanGuiHang.soBienBanGuiHang,
-          });
-        } else {
-          this.listPhieuKtraCl = [];
-          this.listPhieuKtraCl = data.listPhieuKtraCl.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC && isEmpty(item.phieuNhapKho)));
-          this.formData.patchValue({
-            soPhieuKtraCl: '',
-          });
-        }
-        let dataObj = {
-          moTaHangHoa: this.loaiVthh.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
-          maSo: '',
-          donViTinh: '',
-          soLuongChungTu: 0,
-          soLuongThucNhap: 0,
-          donGia: this.formData.value.donGiaHd
-        }
-        this.dataTable.push(dataObj)
-      }
+      await this.bindingDataDdNhap(data);
     });
   }
 
+  async bindingDataDdNhap(data) {
+    if (data) {
+      this.dataTable = [];
+      this.formData.patchValue({
+        idDdiemGiaoNvNh: data.id,
+        maDiemKho: data.maDiemKho,
+        tenDiemKho: data.tenDiemKho,
+        maNhaKho: data.maNhaKho,
+        tenNhaKho: data.tenNhaKho,
+        maNganKho: data.maNganKho,
+        tenNganKho: data.tenNganKho,
+        maLoKho: data.maLoKho,
+        tenLoKho: data.tenLoKho,
+        tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
+      });
+      if (this.loaiVthh.startsWith('02')) {
+        this.formData.patchValue({
+          nguoiTaoPhieuKtraCl: data.bienBanGuiHang.tenNguoiTao,
+          soBienBanGuiHang: data.bienBanGuiHang.soBienBanGuiHang,
+        });
+      } else {
+        // this.listPhieuKtraCl = [];
+        // this.listPhieuKtraCl = data.listPhieuKtraCl.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC && isEmpty(item.phieuNhapKho)));
+        this.formData.patchValue({
+          soPhieuKtraCl: data.listPhieuKtraCl[0]?.soPhieu,
+          tenThuKho: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id)))?.tenThuKho,
+        });
+      }
+      let dataObj = {
+        moTaHangHoa: this.loaiVthh.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
+        maSo: '',
+        donViTinh: this.loaiVthh.startsWith('02') ? '' : 'kg',
+        soLuongChungTu: 0,
+        soLuongThucNhap: 0,
+        donGia: this.formData.value.donGiaHd
+      }
+      this.dataTable.push(dataObj)
+    }
+  }
   openDialogPhieuKtraCl() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách phiếu kiểm tra chất lượng',
@@ -305,10 +316,13 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       if (res.data) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
-        this.dataTable = data.hangHoaList;
         this.formData.patchValue({
           soBangKeCanHang: data.bangKeCanHang?.soBangKe
         })
+        await this.bindingDataQd(res.data?.idQdGiaoNvNh);
+        let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
+        await this.bindingDataDdNhap(dataDdNhap);
+        this.dataTable = data.hangHoaList;
       }
     }
   }
