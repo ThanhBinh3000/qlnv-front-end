@@ -267,11 +267,6 @@
                 <td>
                   <span
                     *ngIf="editDataCache[data.stt]?.data.loaiTien == '01'">{{editDataCache[data.stt]?.data.tcCapThemNt}}</span>
-                  <!--                  <nz-input-number type="text" nz-input *ngIf="editDataCache[data.stt]?.data.loaiTien !== '01'" [nzSize]="'small'"-->
-                  <!--                                   [(ngModel)]="editDataCache[data.stt]?.data.tcCapThemNt" [nzMin]="0"-->
-                  <!--                                   [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"-->
-                  <!--                                   [nzParser]="globals.parser">-->
-                  <!--                  </nz-input-number>-->
                   <input class='money-input' *ngIf="editDataCache[data.stt]?.data.loaiTien !== '01'" [min]='0'
                          [max]='globals.prop.MAX_INPUT'
                          currencyMask [options]='amount'
@@ -282,11 +277,6 @@
                          [max]='globals.prop.MAX_INPUT'
                          currencyMask [options]='amount'
                          [(ngModel)]='editDataCache[data.stt]?.data.tcCapThem' />
-                  <!--                  <nz-input-number type="text" nz-input [nzSize]="'small'"-->
-                  <!--                                   [(ngModel)]="editDataCache[data.stt]?.data.tcCapThem" [nzMin]="0"-->
-                  <!--                                   [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"-->
-                  <!--                                   [nzParser]="globals.parser">-->
-                  <!--                  </nz-input-number>-->
                 </td>
                 <td>
                   <a (click)='saveEdit(data.stt)' class='save'
