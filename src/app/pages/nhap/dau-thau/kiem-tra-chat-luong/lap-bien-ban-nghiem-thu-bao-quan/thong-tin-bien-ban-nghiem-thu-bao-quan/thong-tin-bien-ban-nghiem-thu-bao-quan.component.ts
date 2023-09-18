@@ -245,9 +245,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
-      slThucNhap: data.soLuong,
     });
-    this.formattedSlThucNhap = this.formData.get('slThucNhap') ? formatNumber(this.formData.get('slThucNhap').value * 1000, 'vi_VN', '1.0-99') : '0';
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
@@ -288,9 +286,11 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        slThucNhap: data.soLuong,
         soBbNhapDayKho: data.bienBanNhapDayKho?.soBienBanNhapDayKho,
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
       })
+      this.formattedSlThucNhap = this.formData.get('slThucNhap') ? formatNumber(this.formData.get('slThucNhap').value * 1000, 'vi_VN', '1.0-99') : '0';
     }
   }
 
