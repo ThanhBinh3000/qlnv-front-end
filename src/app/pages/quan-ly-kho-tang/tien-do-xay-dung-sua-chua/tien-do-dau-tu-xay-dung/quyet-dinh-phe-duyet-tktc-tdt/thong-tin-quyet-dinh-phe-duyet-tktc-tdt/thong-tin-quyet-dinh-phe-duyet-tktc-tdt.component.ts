@@ -122,6 +122,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
         idDuAn: this.itemDuAn.id,
         soQdKhDtxdNam: this.itemDuAn.soQdPdKhNam,
         soQdPdDaDtxd: this.itemQdPdDaDtxd.soQd,
+        soQdPdDtxd: this.itemQdPdDaDtxd.soQd,
         idQdPdDaDtxd: this.itemQdPdDaDtxd.id,
         loaiDuAn: this.itemDuAn.loaiDuAn,
         loaiCapCt: this.itemQdPdDaDtxd.loaiCapCt,
@@ -177,7 +178,8 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
             khoi: this.itemDuAn.tenKhoi,
-            namKh: this.itemDuAn.namKeHoach
+            namKh: this.itemDuAn.namKeHoach,
+            soQdPdDtxd: this.itemQdPdDaDtxd.soQd,
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -299,6 +301,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           id: res.id,
         });
         this.idInput = res.id;
+        this.emitDataTktcTdt(res);
       }
     }
   }

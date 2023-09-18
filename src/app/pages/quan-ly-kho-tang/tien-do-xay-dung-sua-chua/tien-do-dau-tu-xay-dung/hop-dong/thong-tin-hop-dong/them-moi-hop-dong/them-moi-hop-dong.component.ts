@@ -178,7 +178,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
         idQdPdKhlcnt: this.itemQdPdKhlcnt.id,
         idDuAn: this.itemQdPdKhlcnt.idDuAn,
         tenDuAn: this.itemQdPdKhlcnt.tenDuAn,
-        soQdPdKqlcnt: this.itemGoiThau.soQdPdKqlcnt,
+        soQdPdKqlcnt: this.itemQdPdKhlcnt.soQdPdKqlcnt,
         idGoiThau: this.itemGoiThau.id,
         tenGoiThau: this.itemGoiThau.noiDung,
         ngayKyKqlcnt: dataQdPdKqlcnt ? dataQdPdKqlcnt.ngayKy : null,

@@ -26,6 +26,9 @@ import {
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 import {Router} from "@angular/router";
+import {
+  BienBanNghiemThuDtxdService
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/bien-ban-nghiem-thu-dtxd.service";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',
@@ -47,7 +50,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   itemQdPdTktcTdt: any;
   itemQdPdKhLcnt: any;
   itemTtdt: any;
-  itemHopDong: any;
+  itemHopDong: any[] = [];
 
   //trangthai qd pd kết quả lcnt
   trangThaiQdPdKqLcnt: boolean = false;
@@ -55,6 +58,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   trangThaiHopDong: boolean = false;
   //trang thái tiến độ công việc -- hỏi lại cách tính trạng thái của tab này.
   trangThaiTienDoCv: boolean = false;
+  trangThaiBb: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -70,6 +74,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
     private hopdongService: HopdongService,
     private router: Router,
+    private bienBanSv: BienBanNghiemThuDtxdService
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit()
@@ -193,6 +198,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
           await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
           await this.loadListItemQdPdKqLcnt(this.itemTtdt);
           await this.loadItemHopDong();
+          await this.loadItemDsGoiThau();
+          await this.loadBbNghiemThu();
         } else {
           this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
         }
@@ -201,7 +208,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       }
     } catch (e) {
       console.log(e, 'aaaaaaaaaaaaaa')
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + 11);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
     }
@@ -285,6 +292,62 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+  async loadItemDsGoiThau() {
+    if (this.itemHopDong.length > 0) {
+      let body = {
+        "namKh": this.itemSelected &&  this.itemSelected.namKeHoach ? this.itemSelected.namKeHoach : null,
+        "idDuAn": this.itemSelected && this.itemSelected.id ? this.itemSelected.id : null,
+        "idQdPdKhLcnt": this.itemQdPdKhLcnt &&  this.itemQdPdKhLcnt.id ? this.itemQdPdKhLcnt.id : null,
+        "idQdPdDaDtxd": this.itemQdPdDaDtxd &&  this.itemQdPdDaDtxd.id ? this.itemQdPdDaDtxd.id : null,
+      }
+      let res = await this.hopdongService.detailQdPdKhLcnt(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          let listGoiThau = res.data.listKtTdscQuyetDinhPdKhlcntCvKh;
+          if (listGoiThau && listGoiThau.length > 0) {
+            listGoiThau.forEach(item => {
+              if (item.trangThaiTd == STATUS.DA_HOAN_THANH) {
+                this.trangThaiTienDoCv = true;
+              }
+            });
+          }
+        } else {
+          this.notification.warning(MESSAGE.WARNING, "Không tìm thấy thông tin gói thầu cho dự án này, vui lòng kiểm tra lại.");
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+  async loadBbNghiemThu() {
+    if (this.itemHopDong.length > 0) {
+      let body = {
+        namKh: this.itemSelected&&  this.itemSelected.namKeHoach ? this.itemSelected.namKeHoach : null,
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+        idDuAn: this.idSelected && this.itemSelected.id ? this.itemSelected.id : null,
+        loai : "00",
+        paggingReq : {
+          limit: 999,
+          page: 0
+        }
+      }
+      let res = await this.bienBanSv.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data.content;
+        if (data && data.length > 0) {
+          if (data.length == this.itemHopDong.length) {
+            this.trangThaiBb = true;
+            data.forEach(item => {
+              if (item.trangThai != STATUS.DA_KY) {
+                this.trangThaiBb = false;
+              }
+            })
+          }
+        }
       }
     }
   }

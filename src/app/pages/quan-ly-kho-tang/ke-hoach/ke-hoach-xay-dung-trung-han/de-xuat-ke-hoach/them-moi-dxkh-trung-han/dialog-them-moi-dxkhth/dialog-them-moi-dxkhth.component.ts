@@ -108,14 +108,13 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   async getAllDmKho() {
     let body = {
       "type" : "DMK",
-      "maDvi" : this.userInfo.MA_DVI
+      "maDvi" : this.userInfo.MA_DVI,
+      "khoi" : this.dataInput.khoi,
+      "trangThai" : STATUS.CHUA_THUC_HIEN
     }
     let res = await this.dmKhoService.getAllDmKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmKho = res.data
-      if (this.listDmKho && this.listDmKho.length > 0) {
-        this.listDmKho = this.listDmKho.filter(item =>  (item.khoi == this.dataInput.khoi))
-      }
     }
   }
 
@@ -123,8 +122,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     this.item.namKeHoach = dayjs().get('year');
     this.item.khoi = this.dataInput.khoi;
     if (this.type == 'sua') {
-      console.log(this.dataInput.maDuAn,123)
-      console.log(this.listDmKho,1222223)
       this.item.maDuAn = this.dataInput.maDuAn;
       this.item.diaDiem = this.dataInput.diaDiem;
       this.item.loaiDuAn = this.dataInput.loaiDuAn;
