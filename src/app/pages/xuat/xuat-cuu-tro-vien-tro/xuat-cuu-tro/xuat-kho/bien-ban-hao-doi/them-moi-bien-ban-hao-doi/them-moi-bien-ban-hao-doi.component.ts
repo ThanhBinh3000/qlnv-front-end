@@ -49,7 +49,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   openPhieuXk = false;
   idBangKe: number = 0;
   openBangKe = false;
-
+  templateName = "Biên bản hao dôi";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -88,7 +88,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tongSlNhap: [],
         ngayKtNhap: [],
         tongSlXuat: [],
-        ngayKtXuat: [],
         slHaoThucTe: [],
         tiLeHaoThucTe: [],
         slHaoThanhLy: [],
@@ -297,9 +296,12 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       this.dataTable = bienBan.listPhieuXuatKho
     }
     this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
+    let slHaoHut= this.formData.value.tongSlNhap*this.formData.value.dinhMucHaoHut;
     this.formData.patchValue({
       ngayKetThucXuat: this.dataTable[0].ngayXuatKho,
       ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
+      tongSlXuat:this.tongSoLuongXk,
+      sLHaoHutTheoDm: slHaoHut,
     })
   }
 
