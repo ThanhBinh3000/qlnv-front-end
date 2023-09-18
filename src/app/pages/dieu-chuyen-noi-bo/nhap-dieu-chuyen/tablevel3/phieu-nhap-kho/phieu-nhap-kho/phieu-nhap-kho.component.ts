@@ -186,8 +186,6 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
           }
         });
       this.dataTableView = this.buildTableView(data)
-      console.log('data', data, res)
-      console.log('this.dataTableView', this.dataTableView)
     }
   }
 

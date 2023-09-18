@@ -49,11 +49,11 @@
       <h3>Danh sách hồ sơ kỹ thuật</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XOA')">
+          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_EXP')" type="button" class="btn btn-sub"
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_EXP')" type="button" class="btn btn-sub"
           (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
@@ -166,16 +166,20 @@
             <td>{{data.soBbKtraHskt}}</td>
             <td>{{data.tenTrangThai}}</td>
             <td>
-              <a *ngIf="data.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XEM')"
+              <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_XEM')"
                 (click)="redirectToChiTiet(true, data.id)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf="(data.trangThai != STATUS.DA_DUYET_LDC ) && userService.isCuc()
-              && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_THEM')"
+              <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC ) && userService.isCuc()
+              && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_THEM')"
                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XOA')"
+              <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_DUYET_TP') || data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_DUYET_LDCUC') ) && userService.isCuc() "
+                 (click)="redirectToChiTiet(false, data.id)">
+                <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
+              </a>
+              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_XOA')"
                 (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>

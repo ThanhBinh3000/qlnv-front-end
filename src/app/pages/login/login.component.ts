@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {OldResponseData} from 'src/app/interfaces/response';
-import {ApiService} from 'src/app/services/api.service';
-import {AuthService} from 'src/app/services/auth.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {UserAPIService} from 'src/app/services/user/userApi.service';
-import {StorageService} from 'src/app/services/storage.service';
-import {STORAGE_KEY} from 'src/app/constants/config';
-import {LIST_PAGES} from "../../layout/main/main-routing.constant";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { OldResponseData } from 'src/app/interfaces/response';
+import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { UserAPIService } from 'src/app/services/user/userApi.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { STORAGE_KEY } from 'src/app/constants/config';
+import { LIST_PAGES } from '../../layout/main/main-routing.constant';
 
 declare var vgcapluginObject: any;
 
@@ -87,7 +87,12 @@ export class LoginComponent implements OnInit {
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
-        this.router.navigate([this.setDefultModule(allRoles)]);
+        if (allRoles) {
+          this.router.navigate([this.setDefultModule(allRoles)]);
+        } else {
+          this.notification.warning(MESSAGE.WARNING, 'Không có quyền truy cập.');
+          return;
+        }
         this.spinner.hide();
       });
     } catch (err) {
@@ -101,7 +106,7 @@ export class LoginComponent implements OnInit {
     jsonData = JSON.parse(jsonData);
     for (let item of this.lstPage) {
       if (!item.code || jsonData.includes(item.code)) {
-        url = item.route
+        url = item.route;
         if (url) {
           break;
         }

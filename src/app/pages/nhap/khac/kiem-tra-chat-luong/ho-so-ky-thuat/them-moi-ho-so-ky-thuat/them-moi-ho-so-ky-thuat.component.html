@@ -7,25 +7,25 @@
       </button>
 
       <button type="button" class="btn btn-sub do"
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC"
+        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_DUYET_TP') || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_DUYET_LDCUC')) "
         (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button class="btn btn-sub xanh-nhat"
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC"
+        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_DUYET_TP') || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_DUYET_LDCUC'))"
         (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet "></i>
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat"
-        *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
+        *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_THEM') "
         (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh"
-        *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
+        *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_THEM') "
         (click)="save(false)">
         <i class="icon  htvbdh_tcdt_save"></i>
         <span>Lưu</span>

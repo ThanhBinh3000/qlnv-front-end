@@ -115,6 +115,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       loaiQdinh: [],
       thayDoiThuKho: [],
       lyDoTuChoi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     }
     );
   }
@@ -139,7 +140,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
+      // console.log('this.data', this.data)
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
@@ -161,6 +162,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
         donViTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.maChLoaiHangHoa);
@@ -334,6 +336,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           donViTinh: "",
+          keHoachDcDtlId: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -404,7 +407,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         tenCloaiVthh: data.tenCloaiVthh,
         // tichLuongKhaDung: data.tichLuongKd,
         donViTinh: data.donViTinh,
-        // slNhapLoKho: data.soLuongPhanBo
+        // slNhapLoKho: data.soLuongPhanBo,
+        keHoachDcDtlId: data.keHoachDcDtlId
       });
 
       // await this.loadThuKho(data.maNganKho, data.tenNganKho)
@@ -527,7 +531,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
           donViTinh: data.donViTinh,
-          slNhapLoKho: data.soLuongPhanBo
+          slNhapLoKho: data.soLuongPhanBo,
+          keHoachDcDtlId: data.id
         });
 
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
