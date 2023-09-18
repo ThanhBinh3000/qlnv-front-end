@@ -118,7 +118,8 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       type: ["01"],
       loaiDc: ["DCNB"],
       loaiQdinh: [],
-      thayDoiThuKho: []
+      thayDoiThuKho: [],
+      keHoachDcDtlId: [, [Validators.required]]
     }
     );
   }
@@ -161,6 +162,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.soLuongDc,
         dviTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.getDanhSachTT(this.data.soQdinh, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
@@ -326,6 +328,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           dviTinh: "",
+          keHoachDcDtlId: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -370,6 +373,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
           tichLuongKhaDung: data.tichLuongKd,
           dviTinh: data.donViTinh,
           soLuongQdDcCuc: data.soLuongPhanBo,
+          keHoachDcDtlId: data.id
         });
 
         await this.getDanhSachTT(this.formData.value.soQdDcCuc, data.maLoKhoNhan, data.maNganKhoNhan)

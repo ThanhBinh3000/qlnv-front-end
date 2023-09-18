@@ -98,6 +98,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       tenLanhDaoChiCuc: [],
       ghiChu: [],
       lyDoTuChoi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -120,7 +121,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
+      // console.log('this.data', this.data)
       this.formData.patchValue({
         soQdinhDcc: this.data.soQdinh,
         ngayQdinhDcc: this.data.ngayKyQd,
@@ -140,6 +141,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tongSlTheoQd: this.data.soLuongDc,
         donViTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.getDanhSachTT(this.data.soQdinh, this.data.maLoKho, this.data.maNganKho)
       await this.loadChiTietQdinh(this.data.qdDcCucId);
@@ -331,6 +333,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           donViTinh: "",
+          keHoachDcDtlId: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -384,6 +387,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
           donViTinh: data.donViTinh,
           idKeHoachDtl: data.id,
           tongSlTheoQd: data.soLuongDc,
+          keHoachDcDtlId: data.id
         });
 
         await this.getDanhSachTT(this.formData.value.soQdDcCuc, data.maLoKhoNhan, data.maNganKhoNhan)

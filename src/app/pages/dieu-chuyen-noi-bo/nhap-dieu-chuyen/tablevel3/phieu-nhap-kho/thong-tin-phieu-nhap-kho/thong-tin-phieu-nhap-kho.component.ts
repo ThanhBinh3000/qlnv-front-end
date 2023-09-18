@@ -131,11 +131,11 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soLuongNhapDc: [],
       thucTeKinhPhi: [],
       lyDoTuChoi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
   async ngOnInit() {
-    console.log('this.userInfo.DON_VI', this.userInfo)
     this.maBb = 'PNK-CCDTVP';
     let id = await this.userService.getId('DCNB_BB_NT_BQ_HDR_SEQ')
     this.formData.patchValue({
@@ -154,7 +154,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
@@ -176,7 +175,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.slDienChuyen,
         donViTinh: this.data.donViTinh,
-        thayDoiThuKho: this.data.thayDoiThuKho
+        thayDoiThuKho: this.data.thayDoiThuKho,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
 
       this.dviTinh = this.data.donViTinh
@@ -389,6 +389,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           tichLuongKhaDung: "",
           soLuongQdDcCuc: "",
           donViTinh: "",
+          keHoachDcDtlId: ""
         });
         await this.loadChiTietQdinh(data.id);
       }
@@ -441,7 +442,6 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     if (res.msg == MESSAGE.SUCCESS) {
 
       const data = res.data
-      console.log('loadChiTietKTCL', data)
       this.formData.patchValue({
         tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
         tenLoKho: data.tenLoKho,
@@ -460,6 +460,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         soLuongQdDcCuc: data.slNhapTheoQd,
         donViTinh: data.donViTinh,
         thayDoiThuKho: data.thayDoiThuKho,
+        keHoachDcDtlId: data.keHoachDcDtlId
       });
       this.dviTinh = data.donViTinh
       this.noiDung = data.tenCloaiVthh
@@ -507,7 +508,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           soLuongQdDcCuc: data.soLuongPhanBo,
           donViTinh: data.donViTinh,
           thayDoiThuKho: data.thayDoiThuKho,
-          idKeHoachDtl: data.id
+          idKeHoachDtl: data.id,
+          keHoachDcDtlId: data.id
         });
         this.dviTinh = data.donViTinh
         this.noiDung = data.tenCloaiVthh
