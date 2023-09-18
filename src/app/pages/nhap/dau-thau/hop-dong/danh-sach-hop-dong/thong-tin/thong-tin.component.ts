@@ -42,6 +42,8 @@ import {
 import {addDays, differenceInCalendarDays} from 'date-fns'
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 interface DonviLienQuanModel {
     id: number;
@@ -116,6 +118,19 @@ export class ThongTinComponent implements OnInit, OnChanges {
     trangThai: ""
   };
   previewName : string;
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
     constructor(
         private router: Router,
         private fb: FormBuilder,
@@ -545,7 +560,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
             moTaHangHoa: dataDtl.dxuatKhLcntHdr?.moTaHangHoa,
             tgianNkho: dataDtl.dxuatKhLcntHdr?.tgianNhang,
           soNgayThien: dataDtl.dxuatKhLcntHdr?.tgianThien,
-          soNgayThienHd: dataDtl.dxuatKhLcntHdr?.tgianThienHd,
+          // soNgayThienHd: dataDtl.dxuatKhLcntHdr?.tgianThienHd,
           namKhoach: data.namKhoach,
         })
       this.onChangeHluc();
@@ -900,9 +915,19 @@ export class ThongTinComponent implements OnInit, OnChanges {
           })
         }
       }
-
   }
 
+  onchangeTgThienHd() {
+    if (this.formData.get('ngayHlucHd').value != null) {
+      let ngayKy = dayjs(this.formData.get('ngayHlucHd').value).toDate();
+      if (this.formData.get('soNgayThienHd').value != null) {
+        let ngayThienHd = addDays(ngayKy, this.formData.get('soNgayThienHd').value)
+        this.formData.patchValue({
+          ngayThienHd: ngayThienHd,
+        })
+      }
+    }
+  }
   async preview() {
       if (this.loaiVthh.startsWith('02')) {
         this.previewName = 'thong_tin_hop_dong_vt'

@@ -241,7 +241,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let slGthauTrung  = 0
       data.children.forEach(item => {
         tongMucDt += item.soLuong * item.donGiaTamTinh
-        if (item.trangThai == STATUS.THANH_CONG) {
+        if (item.trangThaiDt == STATUS.THANH_CONG) {
           slGthauTrung += 1
           tongMucDtTrung += item.soLuong * item.donGiaNhaThau
         }
