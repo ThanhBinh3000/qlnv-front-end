@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
@@ -14,6 +15,7 @@ export class XuatHangComponent implements OnInit {
   constructor(
     private router: Router,
     public globals: Globals,
+    public userService: UserService
   ) {
     router.events.subscribe((val) => {
       this.routerUrl = this.router.url;
