@@ -22,16 +22,20 @@ export class XuatHangComponent implements OnInit {
 
   routes: any[] = [
     {
-      url : '/giao-nv-xh',
-      name : 'Quyết định giao nhiệm vụ xuất hàng'
+      url: '/giao-nv-xh',
+      name: 'Quyết định giao nhiệm vụ xuất hàng',
+      accessPermisson: 'SCHDTQG_XH_QDGNVXH'
     },
     {
-      url : '/phieu-xuat-kho',
-      name : 'Phiếu xuất kho'
+      url: '/phieu-xuat-kho',
+      name: 'Phiếu xuất kho',
+      accessPermisson: 'SCHDTQG_XH_PXK'
     },
     {
-      url : '/bang-ke',
-      name : 'Bảng kê xuất vật tư'
+      url: '/bang-ke',
+      name: 'Bảng kê xuất vật tư',
+      accessPermisson: 'SCHDTQG_XH_BKXVT'
+
     }
   ]
 
