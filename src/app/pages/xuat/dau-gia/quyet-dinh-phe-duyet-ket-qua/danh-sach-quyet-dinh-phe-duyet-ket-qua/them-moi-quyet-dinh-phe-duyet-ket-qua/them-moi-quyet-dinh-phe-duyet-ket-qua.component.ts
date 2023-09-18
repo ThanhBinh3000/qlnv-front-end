@@ -219,7 +219,6 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
           dataColumn: ['maThongBao', 'soBienBan', 'tenLoaiVthh', 'tenCloaiVthh']
         },
       });
-
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           await this.onChangeTtinDgia(data.id);
