@@ -2,3 +2,9 @@
   color: gray; /* hoặc bất kỳ kiểu CSS bạn muốn để hiển thị trạng thái vô hiệu hóa */
   cursor: not-allowed; /* Để cho thấy rằng node không thể click */
 }
+.custom-node {
+  cursor: pointer;
+  line-height: 24px;
+  margin-left: 4px;
+  display: inline-block;
+}

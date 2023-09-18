@@ -56,7 +56,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
   checked: boolean = false;
   listFileDinhKem: any = [];
   listNganLoKho: any = [];
-
+  templateName = "Phiếu nhập kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -85,6 +85,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
         duCo: [],
         idCanCu: [],
         soCanCu: [],
+        ngayKyCanCu: [],
         maDiaDiem: [null, [Validators.required]],
         ngayQdGiaoNvXh: [],
         maNhaKho: [],
@@ -267,6 +268,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
     this.formData.patchValue({
       soCanCu: data.soQuyetDinh,
       idCanCu: data.id,
+      ngayKyCanCu:data.ngayKy,
     });
     let diaDiem = data.qdGiaonvXhDtl.filter(item =>
       item.maDiaDiem.substring(0, 8) == this.userInfo.MA_DVI

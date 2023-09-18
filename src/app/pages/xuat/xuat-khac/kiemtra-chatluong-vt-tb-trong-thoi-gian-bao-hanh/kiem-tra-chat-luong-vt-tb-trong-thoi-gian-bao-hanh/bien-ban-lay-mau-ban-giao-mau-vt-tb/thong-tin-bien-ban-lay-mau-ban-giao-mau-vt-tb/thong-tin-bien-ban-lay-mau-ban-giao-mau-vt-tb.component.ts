@@ -63,7 +63,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
   dataEdit: { [key: string]: { edit: boolean; data: BbLayMauDtl } } = {};
   hasError: boolean = false;
   dataTable: any[] = []
-  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
+  templateName = "Biên bản lấy mẫu bàn giao mẫu";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

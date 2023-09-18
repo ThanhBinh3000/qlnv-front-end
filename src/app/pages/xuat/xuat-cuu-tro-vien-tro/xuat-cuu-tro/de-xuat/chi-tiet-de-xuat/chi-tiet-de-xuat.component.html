@@ -435,7 +435,7 @@
                 </div>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
+            <nz-form-item *ngIf="!(listChungLoaiHangHoa.length <= 0 || formData.value.tenVthh != 'Vật tư thiết bị')">
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng DTQG</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập chủng loại hàng'">
                 <div nz-row [nzGutter]="48">
