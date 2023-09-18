@@ -81,7 +81,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
       ngayDuyetKeHoach: [],
       ngayTrinhDuyetBtc: [],
       ngayDuyetBtc: [],
-      ngayDxXuatHang: [dayjs().format("YYYY-MM-DD")],
+      ngayDxXuatHang: [],
       thoiGianDuKienXuatHang: [],
       thoiGianDuKienXuatTu: [],
       thoiGianDuKienXuatDen: [],

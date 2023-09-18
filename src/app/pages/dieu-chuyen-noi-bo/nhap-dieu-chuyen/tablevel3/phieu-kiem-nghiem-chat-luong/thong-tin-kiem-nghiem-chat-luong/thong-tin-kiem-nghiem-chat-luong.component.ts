@@ -51,7 +51,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     "Đạt"
   ]
 
-
+  previewName: string = 'nhap_xuat_lt_phieu_kiem_nghiem_chat_luong_lt';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -115,7 +115,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       loaiQdinh: [],
       thayDoiThuKho: [],
       lyDoTuChoi: [],
-      keHoachDcDtlId: [, [Validators.required]]
+      keHoachDcDtlId: [, [Validators.required]],
+      ngayHieuLuc: [, [Validators.required]]
     }
     );
   }
@@ -147,7 +148,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         soQdinhDc: this.data.soQdinh,
         ngayQdinhDc: this.data.ngayKyQdinh,
         qdDcId: this.data.qdinhDccId,
-        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho || ""}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -162,7 +163,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         tichLuongKhaDung: this.data.tichLuongKd,
         donViTinh: this.data.donViTinh,
-        keHoachDcDtlId: this.data.keHoachDcDtlId
+        keHoachDcDtlId: this.data.keHoachDcDtlId,
+        ngayHieuLuc: this.data.ngayHieuLucQd
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.maChLoaiHangHoa);
@@ -198,7 +200,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       let data = await this.detail(id);
       if (data) {
         this.dataTableChiTieu = data.dcnbPhieuKnChatLuongDtl
-        this.formData.patchValue(data);
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}` });
         await this.dsHinhThucBaoQuan(data.cloaiVthh)
         if (data.hinhThucBq) {
           const dshinhThucBq = data.hinhThucBq.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
@@ -336,7 +338,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
           donViTinh: "",
-          keHoachDcDtlId: ""
+          keHoachDcDtlId: "",
+          ngayHieuLuc: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -392,7 +395,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
 
       const data = res.data
       this.formData.patchValue({
-        tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`,
+        tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}`,
         tenLoKho: data.tenLoKho,
         maLoKho: data.maLoKho,
         tenNganKho: data.tenNganKho,
@@ -508,7 +511,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan || ""}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
@@ -557,8 +560,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
   async loadChiTietQdinh(id: number) {
     let res = await this.quyetDinhDieuChuyenCucService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
-
-      const data = res.data
+      const data = res.data;
+      this.formData.patchValue({ ngayHieuLuc: data.ngayHieuLuc })
       // this.dsKeHoach = []
       // if (data.danhSachQuyetDinh.length == 0) return
       // data.danhSachQuyetDinh.map(qdinh => {

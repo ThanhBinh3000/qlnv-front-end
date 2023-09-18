@@ -59,7 +59,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
   allCheckedTT = true;
   indeterminateTT = false;
   tongSL: string;
-
+  previewName: string = "nhap_lt_bien_ban_nhap_day_kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

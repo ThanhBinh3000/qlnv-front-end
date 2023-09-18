@@ -49,7 +49,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   // dsHangPD = []
   // typeData: string;
   // typeAction: string;
-
+  previewName: string = "nhap_xuat_lt_bang_ke_can_hang_nhap_lt";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

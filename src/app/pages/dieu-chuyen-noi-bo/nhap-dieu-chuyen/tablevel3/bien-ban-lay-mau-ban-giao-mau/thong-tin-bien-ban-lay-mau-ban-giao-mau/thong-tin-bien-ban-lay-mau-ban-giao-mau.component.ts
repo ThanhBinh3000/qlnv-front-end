@@ -47,13 +47,13 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
   listDaiDienCuc: any[] = [];
   listDaiDienChiCuc: any[] = [];
 
-  ketQuaNiemPhong: false
-  checked: false
+  ketQuaNiemPhong: false;
+  checked: false;
 
-  dsKeHoach: any[] = []
-  phuongPhapLayMaus: any[] = []
-  chiTieuChatLuongs: any[] = []
-
+  dsKeHoach: any[] = [];
+  phuongPhapLayMaus: any[] = [];
+  chiTieuChatLuongs: any[] = [];
+  previewName: string = "nhap_vt_bien_ban_lay_mau_ban_giao_mau_vt";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
