@@ -234,7 +234,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.formDataDtl.patchValue({
         idVirtual: uuidv4(),
         loaiVthh: this.listLoaiHangHoa[0].ma,
-        tenLoaiVthh: this.listLoaiHangHoa[0].ten
+        tenLoaiVthh: this.listLoaiHangHoa[0].ten,
       });
     }
     // await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
@@ -246,6 +246,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
 
   async luuPhuongAn() {
+    await this.helperService.ignoreRequiredForm(this.formDataDtl);
     await this.helperService.markFormGroupTouched(this.formDataDtl);
     if (this.formDataDtl.invalid) {
       return;
@@ -277,6 +278,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.formData.patchValue({deXuatPhuongAn: deXuatPhuongAn});
     await this.buildTableView();
     await this.huyPhuongAn();
+    await this.helperService.restoreRequiredForm(this.formDataDtl);
   }
 
   async huyPhuongAn() {
@@ -421,11 +423,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   async changeVthh($event) {
     this.listLoaiHangHoa = [];
-    if ($event == '0101') {
+    if ($event == 'Thóc tẻ') {
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
       let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == '0101'));
       Object.assign(this.listLoaiHangHoa, filter);
-    } else if ($event == '0102') {
+    } else if ($event == 'Gạo tẻ') {
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
       let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == '0102'));
       Object.assign(this.listLoaiHangHoa, filter);

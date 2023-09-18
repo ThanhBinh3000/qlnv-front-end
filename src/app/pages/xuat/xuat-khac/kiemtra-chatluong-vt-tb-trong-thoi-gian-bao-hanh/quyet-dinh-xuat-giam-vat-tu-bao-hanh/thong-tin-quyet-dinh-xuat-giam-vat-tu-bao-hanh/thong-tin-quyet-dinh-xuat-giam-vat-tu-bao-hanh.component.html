@@ -31,7 +31,7 @@
           <span>Duyệt</span>
         </button>
         <button (click)="save(false)"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !isView)  "
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC && !isView)  "
                 class="btn btn-main btn-sm waves-effect waves-light ml-2">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -39,10 +39,13 @@
       </div>
     </div>
   </nz-affix>
+  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC" nzShowIcon nzType="error"
+            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
     <!-- Thông tin chung -->
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="2">
@@ -61,7 +64,7 @@
             <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số QĐ xuất giảm
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số QĐ xuất giảm vật tư
                   </nz-form-label>
                   <nz-input-group [nzAddOnAfter]="maQd">
                     <input nz-input formControlName="soQuyetDinh" [readonly]="isView"/>
@@ -72,7 +75,7 @@
             <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ xuất giảm
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ xuất giảm vật tư
                   </nz-form-label>
                   <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
                                   nzPlaceHolder="Ngày ký QĐ xuất hàng"
@@ -85,7 +88,7 @@
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true" nzRequired>Căn cứ trên báo cáo KQKĐ mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="!isView?openDialogSoQd():''">
                     <input nz-input formControlName="soCanCu" [readonly]="isView"/>
                   </nz-input-group>
                 </nz-form-control>
@@ -117,9 +120,14 @@
             <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Đơn vị nhận nhận quyết định
+                  Đơn vị nhận báo cáo
                 </nz-form-label>
-                <input nz-input readonly formControlName="tenDviNhan"/>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-select formControlName="maDviNhan" nzDisabled>
+                    <nz-option *ngFor="let p of dviNhan" [nzValue]="p.maDvi"
+                               [nzLabel]="p.title"></nz-option>
+                  </nz-select>
+                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="12">
@@ -175,13 +183,14 @@
         <th>STT</th>
         <th></th>
         <th>Chi cục DTNN</th>
-        <th>Loại hàng hóa</th>
+        <th>Loại hàng</th>
         <th>Chủng loại</th>
         <th>Điểm kho</th>
         <th>Ngăn/lô kho</th>
         <th>ĐVT</th>
         <th>Mã đơn vị tài sản</th>
-        <th>Số lượng xuất để lấy mẫu</th>
+        <th>SL lấy mẫu đã xuất</th>
+        <th>Kết quả kiểm định</th>
         <th>Số phiếu KĐCL</th>
         <th class="text-center">Mẫu có bị hủy?</th>
       </tr>
@@ -193,6 +202,7 @@
           <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
               [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"></td>
           <td class="bold">{{item.tenChiCuc}}</td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -216,8 +226,9 @@
               <td>{{lv1.donViTinh}}</td>
               <td>{{lv1.maDviTsan}}</td>
               <td>{{lv1.slLayMau}}</td>
+              <td>{{lv1.isDat == 1 ? 'Đạt' : 'Không đạt'}}</td>
               <td>{{lv1.soPhieuKdcl}}</td>
-              <td>
+              <td class="text-center">
                 <label nz-checkbox [(ngModel)]="lv1.mauBiHuy" [nzDisabled]="true"></label>
               </td>
             </tr>

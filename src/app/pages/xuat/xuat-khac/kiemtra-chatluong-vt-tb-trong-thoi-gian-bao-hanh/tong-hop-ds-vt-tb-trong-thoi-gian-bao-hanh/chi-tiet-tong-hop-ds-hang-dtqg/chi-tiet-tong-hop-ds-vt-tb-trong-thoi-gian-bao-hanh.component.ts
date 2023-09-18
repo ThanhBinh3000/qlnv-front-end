@@ -215,7 +215,7 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
         return;
       } else {
         await this.danhSachVtTbTrongThoiGIanBaoHanh.search({
-          type: 'TH',
+          loai: LOAI_HH_XUAT_KHAC.VT_BH,
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.numberOfElements == 0) {

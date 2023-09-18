@@ -13,11 +13,25 @@ import {cloneDeep} from 'lodash';
 export class XuatCuuTroVienTroComponent implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
+  defaultTabCtvt: any = 0;
 
   constructor(
     public userService: UserService,
     public globals: Globals
   ) {
+    if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA')) {
+      this.defaultTabCtvt = 0;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA')) {
+      this.defaultTabCtvt = 1;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA')) {
+      this.defaultTabCtvt = 2;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH')) {
+      this.defaultTabCtvt = 3;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL')) {
+      this.defaultTabCtvt = 4;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK')) {
+      this.defaultTabCtvt = 5;
+    }
   }
 
   ngOnInit(): void {

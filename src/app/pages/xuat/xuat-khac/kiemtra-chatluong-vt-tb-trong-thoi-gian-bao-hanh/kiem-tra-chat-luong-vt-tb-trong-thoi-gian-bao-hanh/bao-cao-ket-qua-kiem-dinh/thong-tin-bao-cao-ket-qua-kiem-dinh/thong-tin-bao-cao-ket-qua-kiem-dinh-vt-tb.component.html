@@ -117,10 +117,11 @@
                 </nz-date-picker>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="6" >
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ trên bản tổng hợp/Phiếu KĐCL
+                  <nz-form-label [nzNoColon]="true" class="label-color-kh">Số QĐ giao NV xuất hàng/Phiếu KTCL sau bảo
+                    hành
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showModal(true)">
@@ -308,7 +309,7 @@
               <nz-form-control>
                 <nz-radio-group formControlName="loaiCanCu" [nzDisabled]="isView" nzName="radiogroup">
                   <label nz-radio nzValue="QD_GNV"> Quyết định giao nhiệm vụ xuất hàng</label>
-                  <label nz-radio nzValue="PHIEU_KTCL"> Phiếu kiểm </label>
+                  <label nz-radio nzValue="PHIEU_KTCL"> Phiếu kiểm tra chất lượng sau bảo hành</label>
                 </nz-radio-group>
               </nz-form-control>
             </nz-form-item>
@@ -377,7 +378,7 @@
     </ng-container>
   </ng-container>
   <ng-template #modalFooter>
-    <div class="modal-footer" >
+    <div class="modal-footer">
       <div class="nut mr-40px">
         <div class="cantrai">
         </div>
