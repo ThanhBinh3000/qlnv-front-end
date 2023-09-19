@@ -193,10 +193,12 @@ export class DialogTongHopComponent implements OnInit {
             maDvi: this.userInfo.MA_DVI,
             loaiDnghi: this.response.loaiDnghi,
             canCuVeGia: this.response.canCuVeGia,
+            quyetDinh: this.response.quyetDinh,
         }
         await this.capVonMuaBanTtthService.tongHopVonBan(request).toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
+                    this.response.lstCtiets = [];
                     this.response.lstCtiets.push(new ThanhToan({
                         id: uuid.v4() + 'FE',
                         stt: '0.1',
