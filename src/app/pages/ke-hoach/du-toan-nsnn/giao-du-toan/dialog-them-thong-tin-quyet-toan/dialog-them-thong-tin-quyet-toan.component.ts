@@ -120,7 +120,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
 
     async getPhuongAn() {
         this.spinner.show()
-        await this.GiaoDuToanChiService.timKiemMaPaGiaoNSNN().toPromise().then(
+        await this.GiaoDuToanChiService.timKiemMaPaGiaoNSNN1().toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.phuongAns = data.data;

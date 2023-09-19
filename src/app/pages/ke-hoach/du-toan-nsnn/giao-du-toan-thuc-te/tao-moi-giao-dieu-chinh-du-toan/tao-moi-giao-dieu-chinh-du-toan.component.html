@@ -41,6 +41,7 @@
                     <span>Phê duyệt</span>
                 </button>
             </ng-template>
+
             <button class="btn btn-main" (click)="action('nonaccept')" [hidden]="statusBtnDVCT">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Từ chối</span>
@@ -57,7 +58,7 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span [ngClass]="Status.statusClass(trangThaiBanGhi)">{{getStatusName()}}</span>
-                        <span>Phương án giao điều chỉnh dự toán chi NSNN</span>
+                        <span>Phương án điều chỉnh giao dự toán chi NSNN</span>
                     </div>
                 </div>
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -75,8 +76,7 @@
                                     </ng-template>
                                 </th>
                                 <th scope="col" nzWidth="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định
-                                    BTC
-                                    giao)</th>
+                                    BTC giao)</th>
                                 <th scope="col" nzWidth="175px">Mã phương án</th>
                                 <th scope="col" nzWidth="175px">Năm phương án</th>
                                 <th scope="col" nzWidth="175px">Ngày tạo</th>
@@ -211,16 +211,15 @@
                                     <td nzLeft></td>
                                     <td nzLeft></td>
                                     <td></td>
+                                    <td></td>
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
-                                            <div *ngIf="isDvi">
-                                                <div *ngIf="e.maDviNhan == item.maDvi">
-                                                    <ng-container *ngIf="e.trangThai == null">
-                                                        <a (click)="giaoSoTranChi(e.maDviNhan)">
-                                                            Giao
-                                                        </a>
-                                                    </ng-container>
-                                                </div>
+                                            <div *ngIf="e.maDviNhan == item.maDvi">
+                                                <ng-container *ngIf="e.trangThai == null">
+                                                    <a (click)="giaoSoTranChi(e.maDviNhan)">
+                                                        Giao
+                                                    </a>
+                                                </ng-container>
                                             </div>
                                         </div>
                                     </td>
@@ -314,13 +313,12 @@
                                     <tr *ngFor="let data of lstFiles; let i = index">
                                         <td>{{ i + 1 }} </td>
                                         <td>{{ data.fileName }}</td>
-                                        <td>
-                                            <button class="btn btn-function"
-                                                (click)="downloadFile(data.id)">Xem</button>
-                                        </td>
-                                        <td *ngIf="!status">
-                                            <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
-                                        </td>
+                                        <a (click)="downloadFile(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="!status" (click)="deleteFile(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
                                     </tr>
                                 </tbody>
                             </nz-table>
@@ -333,7 +331,7 @@
             <ng-template #extraTemplate>
                 <div class="buttons">
                     <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)"
-                        [hidden]="statusGiaoToanBo || !isDvi">
+                        [hidden]="statusGiaoToanBo ">
                         <span>Giao toàn bộ</span>
                     </button>
                 </div>
