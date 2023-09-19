@@ -16,8 +16,7 @@
           <span>Quay lại</span>
         </button>
         <ng-container *ngIf="userService.isTongCuc">
-          <button (click)="reject(idInput,STATUS.TU_CHOI_LDV)"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDV') && (formData.value.trangThaiTc===STATUS.CHO_DUYET_LDV)"
+          <button (click)="reject(idInput,STATUS.TU_CHOI_LDV)" *ngIf="(formData.value.trangThai===STATUS.DA_DUYET_LDC)"
             class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
@@ -35,27 +34,27 @@
             <span>Từ chối</span>
           </button>
           <button (click)="approve(idInput,STATUS.CHO_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDV') && (formData.value.trangThaiTc===STATUS.CHO_DUYET_LDV)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDV') && (formData.value.trangThaiTc === STATUS.CHO_DUYET_LDV)"
             class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
           <button (click)="approve(idInput,STATUS.DA_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC') && (formData.value.trangThaiTc===STATUS.CHO_DUYET_LDTC)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC') && (formData.value.trangThaiTc === STATUS.CHO_DUYET_LDTC)"
             class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
           <button (click)="approve(idInput,STATUS.CHODUYET_BTC,'Bạn có muốn duyệt quyết định này')"
-            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC') && (formData.value.trangThai===STATUS.DA_DUYET_LDTC)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC') && (formData.value.trangThai === STATUS.DA_DUYET_LDTC)"
             class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Trình duyệt bộ tài chính</span>
           </button>
-          <button *ngIf="(formData.value.trangThaiTc == STATUS.DU_THAO ||
+          <button *ngIf="formData.value.trangThaiTc == STATUS.DU_THAO ||
               formData.value.trangThaiTc == STATUS.TU_CHOI_LDV ||
-              formData.value.trangThaiTc == STATUS.TU_CHOI_LDTC)
-              && userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDV')" type="button" class="btn btn-sub"
+              formData.value.trangThaiTc == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.DA_DUYET_LDC"
+            type="button" class="btn btn-sub"
             (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?')">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>

@@ -44,7 +44,7 @@ export class ChiTietBangKeCanThanhLyComponent extends Base2Component implements 
   listSoQuyetDinh: any[] = [];
   bangKeDtlCreate: any = {};
   bangKeDtlClone: any = {};
-
+  templateName = "Bảng kê cân hàng";
 
   constructor(
     httpClient: HttpClient,

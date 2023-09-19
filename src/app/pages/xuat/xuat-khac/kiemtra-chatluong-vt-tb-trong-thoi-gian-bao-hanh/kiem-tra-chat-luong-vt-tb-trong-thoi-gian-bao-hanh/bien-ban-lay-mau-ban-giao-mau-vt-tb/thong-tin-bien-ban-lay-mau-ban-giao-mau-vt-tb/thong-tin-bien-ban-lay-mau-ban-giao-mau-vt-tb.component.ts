@@ -103,6 +103,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
         maNganKho: [null],
         maLoKho: [null],
         soLuongMau: [null, [Validators.required]],
+        slTonKho: [null],
         ppLayMau: [null],
         chiTieuKiemTra: [null],
         ppLayMauList: [null],
@@ -465,6 +466,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
           cloaiVthh: item.cloaiVthh,
           tenCloaiVthh: item.tenCloaiVthh,
           ngayXuatLayMau: item.ngayXuat,
+          slTonKho: item.slTonKho,
         });
         await this.loadPhuongPhapLayMau(item.cloaiVthh);
         await this.loadChiTieuCl(item.cloaiVthh);
