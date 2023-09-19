@@ -15,7 +15,7 @@ import {
 import { MESSAGE } from "src/app/constants/message";
 
 @Component({
-  selector: 'app-ho-so-ky-thuat',
+  selector: 'app-ndc-ho-so-ky-thuat',
   templateUrl: './ho-so-ky-thuat.component.html',
   styleUrls: ['./ho-so-ky-thuat.component.scss']
 })
