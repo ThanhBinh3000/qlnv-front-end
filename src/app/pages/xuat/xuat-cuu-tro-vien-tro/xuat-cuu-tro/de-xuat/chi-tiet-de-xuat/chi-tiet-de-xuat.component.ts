@@ -431,7 +431,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
       let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == '0102'));
       Object.assign(this.listLoaiHangHoa, filter);
-    } else {
+    }
+    else if ($event == 'Muối trắng') {
+      let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '04'));
+      Object.assign(this.listLoaiHangHoa, filter.children);
+    }
+    else {
       let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '02'));
       Object.assign(this.listLoaiHangHoa, filter.children);
     }
