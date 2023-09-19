@@ -43,7 +43,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
 
   danhSach: any[] = []
   tongSLN: number;
-  allCheckedTT = false;
+  allCheckedTT = true;
   indeterminateTT = false;
 
   danhSachDD: any[] = []
@@ -214,9 +214,10 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       maNganKho,
       isVatTu: true
     }
-    const danhSachBangKe = this.detail?.danhSachBangKe || []
+
     let res = await this.phieuNhapKhoService.getDanhSachTT(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      const danhSachBangKe = this.detail?.danhSachBangKe || res.data
       this.danhSach = res.data.map(element => {
         const check = danhSachBangKe.find(item => item.soPhieuNhapKho === element.soPhieuNhapKho)
         return {
@@ -224,6 +225,13 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
           checked: !!check || false
         }
       });
+      this.tongSLN = this.danhSach.reduce((pre, cur) => pre + Number(cur.soLuong), 0)
+      if (this.danhSach.length > 0) {
+        const ngayBdNhap = this.danhSach[0].ngayNhapKho
+        this.formData.patchValue({
+          ngayBdNhap
+        })
+      }
     }
   }
 
@@ -453,18 +461,18 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         maNganKho: data.maNganKho,
         tenNhaKho: data.tenNhaKho,
         maNhaKho: data.maNhaKho,
-        tenDiemKho: data.tenDiemKh,
+        tenDiemKho: data.tenDiemKho,
         maDiemKho: data.maDiemKho,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
-        tichLuongKhaDung: data.tichLuongKd,
-        soLuongQdDcCuc: data.soLuongPhanBo,
+        // tichLuongKhaDung: data.tichLuongKd,
+        soLuongQdDcCuc: data.tongSlTheoQd,
         dviTinh: data.donViTinh,
         keHoachDcDtlId: data.keHoachDcDtlId
       });
-      await this.getDanhSachTT(this.formData.value.qdDcCucId, data.maLoKho, data.maNganKho)
+      await this.getDanhSachTT(this.formData.value.soQdDcCuc, data.maLoKho, data.maNganKho)
     }
   }
 
