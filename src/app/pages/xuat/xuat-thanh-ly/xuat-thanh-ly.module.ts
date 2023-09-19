@@ -78,6 +78,7 @@ import {
 import {
   ChiTietBienBanKiemTraComponent
 } from "src/app/pages/xuat/xuat-thanh-ly/thuc-hien-xuat-thanh-ly/kiem-tra-chat-luong/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-bien-ban-kiem-tra/chi-tiet-bien-ban-kiem-tra.component";
+import {DauGiaModule} from "../dau-gia/dau-gia.module";
 
 
 @NgModule({
@@ -123,17 +124,18 @@ import {
     ChiTietHoSoKyThuatComponent,
     ChiTietBienBanKiemTraComponent
   ],
-  imports: [
-    CommonModule,
-    XuatThanhLyRoutingModule,
-    DirectivesModule,
-    NzStatisticModule,
-    NzPipesModule,
-    MainModule,
-    ComponentsModule,
-    HopDongModule,
-    XuatModule,
-  ],
+    imports: [
+        CommonModule,
+        XuatThanhLyRoutingModule,
+        DirectivesModule,
+        NzStatisticModule,
+        NzPipesModule,
+        MainModule,
+        ComponentsModule,
+        HopDongModule,
+        XuatModule,
+        DauGiaModule,
+    ],
   exports: [
     ThanhLyDanhSachHangComponent
   ],
