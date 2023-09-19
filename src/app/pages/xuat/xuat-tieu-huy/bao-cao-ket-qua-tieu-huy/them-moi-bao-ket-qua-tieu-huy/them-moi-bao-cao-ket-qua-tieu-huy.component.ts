@@ -269,7 +269,7 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    if (this.userService.isTongCuc()) {
+    if (this.userService.isCuc()) {
       return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC) && this.userService.isAccessPermisson('XHDTQG_XTH_BCKQ_THEM');
     }
     return false
@@ -277,7 +277,7 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    if (this.userService.isTongCuc()) {
+    if (this.userService.isCuc()) {
       return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTH_BCKQ_DUYETTP'))
         || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTH_BCKQ_DUYETLDC'))
     }
