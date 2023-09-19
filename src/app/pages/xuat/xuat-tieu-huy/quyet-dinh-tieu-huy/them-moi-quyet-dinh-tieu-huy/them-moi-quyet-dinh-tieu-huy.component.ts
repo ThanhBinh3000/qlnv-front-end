@@ -179,10 +179,13 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base2Component implements 
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
+        console.log(this.formData.value);
+
         if (data && data.content && data.content.length > 0 && this.formData.value.idHoSo == null) {
-          this.listHoSo = data.content.filter(item => item.soQd == null && item.soQd == this.formData.value.soQd);
+          console.log('abcc');
+          this.listHoSo = data.content.filter(item => item.soQd == null);
         } else {
-          this.listHoSo = data.content;
+          this.listHoSo = data.content.filter(item => (item.soQd == null || item.soQd?.split('/')[0] == this.formData.value.soQd));
         }
       } else {
         this.listHoSo = [];
