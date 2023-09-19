@@ -149,15 +149,15 @@ export class GiaoDuToanChiService extends BaseService {
   // tim kiem danh sach ma phuong an giao dieu chinh du toan NSNN
   timKiemMaPaGiaoNSNN(): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/giao_du_toan/danh-sach/phuong-an-duyet'
+      this.urlDefault + '/giao_du_toan/danh-sach/phuong-an-duyet?maLoaiDans=1&maLoaiDans=2'
       // 'http://192.168.1.103:8094/giao_du_toan/danh-sach/phuong-an-duyet'
     );
   };
   // tim kiem danh sach ma phuong an giao dieu chinh du toan NSNN
   timKiemMaPaGiaoNSNN1(): Observable<any> {
     return this.httpClient.get(
-      // this.urlDefault + '/giao_du_toan/danh-sach/phuong-an-duyet'
-      'http://192.168.1.105:8094/giao_du_toan/danh-sach/phuong-an-duyet'
+      this.urlDefault + '/giao_du_toan/danh-sach/phuong-an-duyet?maLoaiDans=3'
+      // 'http://192.168.1.103:8094/giao_du_toan/danh-sach/phuong-an-duyet'
     );
   };
 
