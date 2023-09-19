@@ -42,7 +42,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log(this.dataInput,222)
     this.userInfo = this.userService.getUserLogin();
     this.namKh = dayjs().get('year');
     this.getAllLoaiDuAn();
@@ -146,6 +145,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       if (result && result.length > 0) {
         this.item = result[0];
         this.item.tgKcHt = this.item.tgKhoiCong + ' - ' + this.item.tgHoanThanh
+        this.item.namKeHoach = dayjs().get('year')
       }
     }
   }

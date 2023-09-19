@@ -14,7 +14,7 @@ export class MainXuatKhoComponent implements OnInit {
   constructor(public userService: UserService, public globals: Globals) { }
 
   ngOnInit() {
-    console.log(this.loaiVthh);
+    // console.log(this.loaiVthh);
   }
   tabSelected = 0;
   selectTab(tab) {

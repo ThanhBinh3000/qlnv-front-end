@@ -514,8 +514,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           this.listOfTagOptions = this.listOfTagOptions.slice(0, this.listOfTagOptions.length - 1);
         },
       });
-    } else {
-
     }
     if (this.listOfTagOptions.length > 0) {
       await this.getDsChiTieu(this.listOfTagOptions);
