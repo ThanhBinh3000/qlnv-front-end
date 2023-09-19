@@ -98,18 +98,15 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.perm.pass = Roles.CVMB.PASS_NTT;
                 this.perm.approve = Roles.CVMB.APPROVE_NTT;
                 break;
-            case Tab.DS_GN_TT:
-                this.title = 'DANH SÁCH GHI NHẬN TIỀN THỪA NỘP TỪ ĐƠN VỊ CẤP DƯỚI';
-                this.trangThais = Status.TRANG_THAI_DVCT;
-                this.searchFilter.loaiTimKiem = '1';
-                this.getChildUnit();
-                this.searchFilter.maLoai = Cvmb.TIEN_THUA;
-                this.perm.create = 'NO';
-                this.perm.edit = 'NO';
-                this.perm.delete = 'NO';
-                this.perm.pass = Roles.CVMB.PASS_NTT_GN;
-                this.perm.approve = Roles.CVMB.APPROVE_NTT_GN;
-                this.isParent = true;
+            case Tab.DS_TH_TT:
+                this.title = 'DANH SÁCH TỔNG HỢP TIỀN THỪA TỪ ĐƠN VỊ CẤP DƯỚI';
+                this.searchFilter.loaiTimKiem = '0';
+                this.searchFilter.maLoai = Cvmb.TONG_HOP_TIEN_THUA;
+                this.perm.create = Roles.CVMB.SYNTH_NTT;
+                this.perm.edit = Roles.CVMB.EDIT_TH_NTT;
+                this.perm.delete = Roles.CVMB.DEL_TH_NTT;
+                this.perm.pass = Roles.CVMB.PASS_TH_NTT;
+                this.perm.approve = Roles.CVMB.APPROVE_TH_NTT;
                 break;
             case Tab.DS_TTKH:
                 this.title = 'DANH SÁCH THANH TOÁN CHO KHÁCH HÀNG';
@@ -139,10 +136,6 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     async search() {
-        if (this.searchFilter.loaiTimKiem == '1') {
-            this.searchFilter.trangThaiDvct = this.searchFilter.trangThai;
-            // this.searchFilter.trangThai = Status.TT_07;
-        }
         this.spinner.show();
         await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.searchFilter.request()).toPromise().then(
             (data) => {
@@ -200,7 +193,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         let nzContent: ComponentType<any>;
         if (this.searchFilter.maLoai == Cvmb.GHI_NHAN_CU_VON || this.searchFilter.maLoai == Cvmb.CU_VON_DVCD) {
             nzContent = DialogTaoMoiCapUngVonComponent;
-        } else if (this.searchFilter.maLoai == Cvmb.TIEN_THUA) {
+        } else if (this.searchFilter.maLoai == Cvmb.TIEN_THUA || this.searchFilter.maLoai == Cvmb.TONG_HOP_TIEN_THUA) {
             nzContent = DialogTaoMoiTienThuaComponent;
         } else {
             nzContent = DialogTaoMoiThanhToanComponent;
@@ -238,6 +231,9 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 break;
             case Cvmb.TIEN_THUA:
                 obj.tabSelected = Tab.TIEN_THUA;
+                break;
+            case Cvmb.TONG_HOP_TIEN_THUA:
+                obj.tabSelected = Tab.TH_TIEN_THUA;
                 break;
             case Cvmb.THANH_TOAN:
                 if (data.canCuVeGia == Cvmb.HOP_DONG) {

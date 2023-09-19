@@ -5,13 +5,13 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
-                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
-                <span>Xuất</span>
-            </button>
             <button *ngIf="status.save" type="button" class="btn btn-sub" (click)="action('save')">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
+            </button>
+            <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
+                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                <span>Xuất</span>
             </button>
             <button *ngIf="status.submit" type="button" class="btn btn-sub" (click)="action('submit')">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -33,14 +33,6 @@
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('accept')">
-                <i class="icon htvbdh_tcdt_pheduyet"></i>
-                <span>Tiếp nhận</span>
-            </button>
-            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
         </div>
     </nz-affix>
 
@@ -50,9 +42,9 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span [ngClass]="Status.statusClass(baoCao.trangThai)">
-                            {{Status.reportStatusName(baoCao.trangThai, isParent)}}
+                            {{Status.reportStatusName(baoCao.trangThai)}}
                         </span>
-                        <span>Nộp tiền vốn thừa</span>
+                        <span>Tổng hợp tiền thừa từ Đơn vị cấp dưới</span>
                     </div>
                 </div>
             </div>
@@ -68,7 +60,6 @@
                             <th scope="col">Ngày trình duyệt</th>
                             <th scope="col">Ngày duyệt</th>
                             <th scope="col">Ngày phê duyệt</th>
-                            <th scope="col">Ngày tiếp nhận</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,7 +72,6 @@
                             <td>{{ Utils.fmtDate(baoCao.ngayTrinh) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayDuyet) }}</td>
                             <td>{{ Utils.fmtDate(baoCao.ngayPheDuyet) }}</td>
-                            <td>{{ Utils.fmtDate(baoCao.ngayTraKq) }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -112,20 +102,14 @@
                     <thead>
                         <tr>
                             <th scope="col" rowspan="2" nzWidth="50px" nzLeft>STT</th>
-                            <th scope="col" rowspan="2" nzWidth="250px" nzLeft>Hàng DTQG</th>
-                            <th scope="colgroup" colspan="3">Số đã nộp Đơn vị cấp trên (Lũy kế đến trước lần nộp này)
-                            </th>
-                            <th scope="colgroup" colspan="4">Nộp đợt {{baoCao.dot}}</th>
-                            <th scope="col" rowspan="2" style="width: 60px;" *ngIf="status.save" nzRight></th>
+                            <th scope="col" rowspan="2" nzWidth="250px" nzLeft>Đơn vị cấp dưới</th>
+                            <th scope="colgroup" colspan="3">Tổng nhận từ Đơn vị cấp dưới đến thời điểm này</th>
+                            <th scope="col" rowspan="2">Đợt (của Đơn vị cấp dưới)</th>
                         </tr>
                         <tr>
                             <th scope="col">Vốn ứng</th>
                             <th scope="col">Vốn cấp</th>
                             <th scope="col">Tổng vốn</th>
-                            <th scope="col">Ủy nhiệm chi ngày</th>
-                            <th scope="col">Vốn ứng</th>
-                            <th scope="col">Vốn cấp</th>
-                            <th scope="col">Tổng vốn nộp lần này</th>
                         </tr>
                         <tr>
                             <th scope="col" nzLeft>A</th>
@@ -134,10 +118,6 @@
                             <th scope="col">2</th>
                             <th scope="col">3=1+2</th>
                             <th scope="col">4</th>
-                            <th scope="col">5</th>
-                            <th scope="col">6</th>
-                            <th scope="col">7=5+6</th>
-                            <th scope="col" *ngIf="status.save" nzRight></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,50 +137,9 @@
                             <td>
                                 {{ Op.fmtVal(data.daNopTong) }}
                             </td>
-                            <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                <td>
-                                    {{ Utils.fmtDate(data.nopUncNgay) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.nopVonUng) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.nopVonCap) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.nopTong) }}
-                                </td>
-                                <td *ngIf="status.save" nzRight>
-                                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-                                </td>
-                            </ng-container>
-                            <ng-template #editTemplate>
-                                <td>
-                                    <nz-date-picker class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.nopUncNgay" nzFormat="dd/MM/yyyy">
-                                    </nz-date-picker>
-                                </td>
-                                <td>
-                                    <input class="money-input" currencyMask [options]="Op.amount"
-                                        [(ngModel)]="editCache[data.id].data.nopVonUng"
-                                        (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                </td>
-                                <td>
-                                    <input class="money-input" currencyMask [options]="Op.amount"
-                                        [(ngModel)]="editCache[data.id].data.nopVonCap"
-                                        (ngModelChange)="editCache[data.id].data.changeModel()" />
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.nopTong) }}
-                                </td>
-                                <td *ngIf="status.save" nzRight>
-                                    <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                                    <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                                        (nzOnConfirm)="cancelEdit(data.id)" class="save">
-                                        Hủy
-                                    </a>
-                                </td>
-                            </ng-template>
+                            <td>
+                                <a class="save" (click)="viewDetail(data.idCapDuoi)">{{data.dot}}</a>
+                            </td>
                         </tr>
                     </tbody>
                 </nz-table>

@@ -12,25 +12,29 @@
                     [(ngModel)]="searchFilter.namDnghi"></nz-input-number>
             </div>
             <div nz-col nzSpan="3">
+                <label class="search__label">Đợt</label>
+                <nz-input-number [nzSize]="'small'" [nzMin]="1" [(ngModel)]="searchFilter.dot"></nz-input-number>
+            </div>
+            <div nz-col nzSpan="3">
                 <label class="search__label">Loại</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại" [(ngModel)]="searchFilter.loaiDnghi">
                     <nz-option *ngFor="let item of Cvmb.LOAI_DE_NGHI" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
-            <div *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN" nz-col nzSpan="3">
+            <!-- <div nz-col nzSpan="3">
                 <label class="search__label">Căn cứ về giá</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá"
                     [(ngModel)]="searchFilter.canCuVeGia">
                     <nz-option *ngFor="let item of Cvmb.CAN_CU_GIA" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
-            </div>
+            </div> -->
             <div nz-col nzSpan="3">
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                     [(ngModel)]="searchFilter.trangThai">
-                    <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Status.TRANG_THAI_DVCT" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -43,6 +47,16 @@
                 <label class="search__label">Đến ngày</label>
                 <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="6">
+                <label class="search__label">Đơn vị</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDvi"
+                    (ngModelChange)="changeModel()">
+                    <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                    </nz-option>
+                </nz-select>
             </div>
         </div>
         <div nz-col class="cangiua group-button-search">
@@ -59,17 +73,7 @@
         </div>
     </nz-card>
     <div class="group-button">
-        <h3 class="text-uppercase">{{ title }}</h3>
-        <div class="buttons">
-            <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                <span>Xóa</span>
-            </button>
-            <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
-                <i class="icon htvbdh_tcdt_tao-qd"></i>
-                <span>Thêm</span>
-            </button>
-        </div>
+        <h3 class="text-uppercase">Tiền thừa nộp từ đơn vị cấp dưới</h3>
     </div>
 
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -77,31 +81,28 @@
             [nzShowPagination]="false" nzBordered>
             <thead>
                 <tr>
-                    <th scope="col" *ngIf="statusDelete" nzWidth="45px">
-                        <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
-                    </th>
                     <th scope="col" nzWidth="60px" class="text-center">STT</th>
+                    <th scope="col">Đơn vị</th>
                     <th scope="col">Mã cấp ứng</th>
                     <th scope="col">Năm</th>
-                    <th scope="col">Đợt</th>
                     <th scope="col">Loại</th>
-                    <th scope="col" *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">Căn cứ về giá</th>
-                    <th scope="col">Ngày tạo</th>
+                    <!-- <th scope="col">Căn cứ về giá</th> -->
+                    <th scope="col">Quyết định</th>
+                    <th scope="col">Đợt</th>
                     <th scope="col">Ngày trình duyệt</th>
-                    <th scope="col">Ngày duyệt</th>
-                    <th scope="col">Ngày phê duyệt</th>
+                    <th scope="col">Ngày tiếp nhận</th>
                     <th scope="col">Trạng thái</th>
-                    <th scope="col" style="width: 90px;">Hành động</th>
+                    <th scope="col">Trạng thái tổng hợp</th>
+                    <th scope="col">Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
-                    <td *ngIf="statusDelete">
-                        <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                            [nzDisabled]="!data.isDelete"></label>
-                    </td>
                     <td class="text-center">
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
+                    </td>
+                    <td>
+                        {{ getUnitName(data.maDvi) }}
                     </td>
                     <td>
                         {{ data.maCapUng}}
@@ -110,43 +111,35 @@
                         {{ data.namDnghi }}
                     </td>
                     <td>
-                        {{ data.dot }}
-                    </td>
-                    <td>
                         {{ Cvmb.suggestionName(data.loaiDnghi)}}
                     </td>
-                    <td *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">
+                    <!-- <td>
                         {{ Cvmb.priceBasisName(data.canCuVeGia) }}
+                    </td> -->
+                    <td>
+                        {{ data.quyetDinh }}
                     </td>
                     <td>
-                        {{ Utils.fmtDate(data.ngayTao) }}
-                    </td>
-                    <td>
-                        {{ Utils.fmtDate(data.ngayTrinh) }}
-                    </td>
-                    <td>
-                        {{ Utils.fmtDate(data.ngayDuyet) }}
+                        {{ data.dot }}
                     </td>
                     <td>
                         {{ Utils.fmtDate(data.ngayPheDuyet) }}
                     </td>
                     <td>
-                        {{Status.reportStatusName(data.trangThai, isParent)}}
+                        {{ Utils.fmtDate(data.ngayTraKq) }}
+                    </td>
+                    <td>
+                        {{Status.reportStatusName(data.trangThai, true)}}
                         <ng-container *ngIf="Status.check('reject', data.trangThai)">
                             <br>Lý do: {{data.lyDoTuChoi}}
                         </ng-container>
                     </td>
+                    <td>
+                        {{ Status.synthStatusName(data.trangThaiThop) }}
+                    </td>
                     <td class="text-left">
                         <a (click)="viewDetail(data)">
-                            <ng-container *ngIf="data.isEdit; else view">
-                                <i class="fa fa-pencil" title="Sửa"></i>
-                            </ng-container>
-                            <ng-template #view>
-                                <i class="fa fa-eye" title="Xem chi tiết"></i>
-                            </ng-template>
-                        </a>
-                        <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
-                            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                            <i class="fa fa-eye"></i>
                         </a>
                     </td>
                 </tr>

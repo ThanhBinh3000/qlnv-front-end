@@ -11,15 +11,17 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BtnStatus, Cvmb, Report, ThanhToan } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { BtnStatus, Cvmb, Report, TienThua } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import * as XLSX from 'xlsx';
+import { Tab } from '../../von-mua-von-ung.constant';
 
 @Component({
-    selector: 'app-thanh-toan-theo-hop-dong',
-    templateUrl: './thanh-toan-theo-hop-dong.component.html',
+    selector: 'app-tong-hop-tien-thua',
+    templateUrl: './tong-hop-tien-thua.component.html',
     styleUrls: ['../../von-mua-von-ung.component.scss'],
 })
-export class ThanhToanTheoHopDongComponent implements OnInit {
+
+export class TongHopTienThuaComponent implements OnInit {
     @Input() dataInfo;
     @Output() dataChange = new EventEmitter();
     Status = Status;
@@ -30,14 +32,17 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
     userInfo: any;
     //thong tin chung bao cao
     baoCao: Report = new Report();
-    lstCtiets: ThanhToan[] = [];
-    editCache: { [key: string]: { edit: boolean; data: ThanhToan } } = {};
+    lstCtiets: TienThua[] = [];
+    trangThais: any[] = [];
+    title: string;
     maDviTien: string = '1';
     scrollX: string;
+    capDvi: number;
     //trang thai cac nut
     status: BtnStatus = new BtnStatus();
-    isDataAvailable: boolean = false;
+    isParent: boolean = false;
     editMoneyUnit: boolean = false;
+    isDataAvailable: boolean = false;
     //file
     fileList: NzUploadFile[] = [];
     listFile: File[] = [];
@@ -65,7 +70,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private spinner: NgxSpinnerService,
-        private userService: UserService,
+        public userService: UserService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
@@ -126,7 +131,6 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
     }
 
     async initialization() {
-        //lay id cua de nghi
         this.userInfo = this.userService.getUserLogin();
         if (this.dataInfo?.id) {
             this.baoCao.id = this.dataInfo?.id;
@@ -135,26 +139,17 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtiets = this.baoCao.lstCtiets;
         }
-        this.updateEditCache();
         this.getStatusButton();
     }
 
-    //check role cho các nut trinh duyet
     getStatusButton() {
-        const isChild = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-        this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && isChild;
-        this.status.submit = Status.check('submit', this.baoCao.trangThai) && isChild && !(!this.baoCao.id);
-        this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
-        this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
-        // this.status.export = this.baoCao.trangThai == Status.TT_07 && isChild;
-        this.status.export = isChild && !(!this.baoCao.id);
-
-        this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_TTKH);
-        this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_TTKH);
-        this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_TTKH);
-        this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_TTKH);
-        this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_TTKH);
-        this.scrollX = this.status.save ? Table.tableWidth(450, 19, 1, 60) : Table.tableWidth(450, 19, 1, 0);
+        const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
+        this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_TH_NTT) && isChild;
+        this.status.submit = Status.check('submit', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_TH_NTT) && isChild && !(!this.baoCao.id);
+        this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.PASS_TH_NTT) && isChild;
+        this.status.approve = Status.check('approve', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_TH_NTT) && isChild;
+        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_TH_NTT) && (isChild || this.isParent) && !(!this.baoCao.id);
+        this.scrollX = this.status.save ? Table.tableWidth(200, 7, 0, 60) : Table.tableWidth(200, 7, 0, 0);
     }
 
     back() {
@@ -164,20 +159,17 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         this.dataChange.emit(obj);
     }
 
-    // call chi tiet bao cao
     async getDetailReport() {
         await this.capVonMuaBanTtthService.ctietVonMuaBan(this.baoCao.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
-                    this.lstCtiets = [];
+                    this.lstCtiets = []
                     data.data.lstCtiets.forEach(item => {
-                        this.lstCtiets.push(new ThanhToan(item));
+                        this.lstCtiets.push(new TienThua(item));
                     })
-                    this.lstCtiets = Table.sortByIndex(this.lstCtiets);
                     this.baoCao.listIdDeleteFiles = [];
                     this.listFile = [];
-                    this.updateEditCache();
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -204,7 +196,6 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         });
     }
 
-    // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
         const requestGroupButtons = {
             id: this.baoCao.id,
@@ -247,22 +238,12 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
 
     // luu
     async save() {
-        if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
-
-        if (this.lstCtiets.some(e => e.lkCong > Utils.MONEY_LIMIT || e.gtKeHoach > Utils.MONEY_LIMIT)) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
-            return;
-        }
-
         if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
 
-        const lstCtietTemp: ThanhToan[] = [];
+        const lstCtietTemp: TienThua[] = [];
         this.lstCtiets.forEach(item => {
             lstCtietTemp.push(item.request())
         })
@@ -279,6 +260,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.baoCao.id = data.data.id;
+                        this.dataInfo.id = this.baoCao.id;
                         this.action('detail');
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -305,53 +287,13 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         }
     }
 
-    updateEditCache(): void {
-        this.lstCtiets.forEach(item => {
-            this.editCache[item.id] = {
-                edit: false,
-                data: new ThanhToan(item)
-            };
-        });
-    }
-
-    startEdit(id: string): void {
-        this.editCache[id].edit = true;
-    }
-
-    // huy thay doi
-    cancelEdit(id: string): void {
-        const index = this.lstCtiets.findIndex(item => item.id === id);
-        // lay vi tri hang minh sua
-        this.editCache[id] = {
-            data: new ThanhToan(this.lstCtiets[index]),
-            edit: false
-        };
-    }
-
-    // luu thay doi
-    saveEdit(id: string): void {
-        const index = this.lstCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        Object.assign(this.lstCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
-        this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        this.sum(this.lstCtiets[index].stt)
-    }
-
-    changeModel(data: ThanhToan) {
-        this.editCache[data.id].data.changeModel(true, data);
-    }
-
-    sum(stt: string) {
-        stt = Table.preIndex(stt);
-        while (stt != '0') {
-            const index = this.lstCtiets.findIndex(e => e.stt == stt);
-            this.lstCtiets[index].clear();
-            this.lstCtiets.forEach(item => {
-                if (Table.preIndex(item.stt) == stt) {
-                    this.lstCtiets[index].sum(item);
-                }
-            })
-            stt = Table.preIndex(stt);
+    viewDetail(id: string) {
+        const obj = {
+            id: id,
+            preData: this.dataInfo,
+            tabSelected: Tab.TIEN_THUA,
         }
+        this.dataChange.emit(obj);
     }
 
     // xoa file trong bang file
@@ -368,62 +310,28 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
     }
 
     exportToExcel() {
-        if (this.lstCtiets.some(e => this.editCache[e.id].edit)) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
         const header = [
-            { t: 0, b: 5, l: 0, r: 22, val: null },
-            { t: 0, b: 0, l: 0, r: 8, val: "Thanh toán cho khách hàng theo hợp đồng trúng thầu" },
-            { t: 4, b: 5, l: 0, r: 0, val: 'Tên khách hàng' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
-            { t: 4, b: 4, l: 2, r: 4, val: 'Số lượng' },
-            { t: 5, b: 5, l: 2, r: 2, val: 'Kế hoạch' },
-            { t: 5, b: 5, l: 3, r: 3, val: 'Hợp đồng' },
-            { t: 5, b: 5, l: 4, r: 4, val: 'Thực hiện' },
-            { t: 4, b: 5, l: 5, r: 5, val: 'Đơn giá (Đồng /kg)' },
-            { t: 4, b: 5, l: 6, r: 6, val: 'Giá trị hợp đồng (đã bao gồm VAT) (đồng)' },
-            { t: 4, b: 5, l: 7, r: 7, val: 'Giá trị thực hiện' },
-            { t: 4, b: 5, l: 8, r: 8, val: 'Phạt vi phạm hợp đồng' },
-            { t: 4, b: 4, l: 9, r: 10, val: 'Thanh lý hợp đồng' },
-            { t: 5, b: 5, l: 9, r: 9, val: 'Số lượng' },
-            { t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền' },
-            { t: 4, b: 4, l: 11, r: 13, val: 'Số thanh toán lũy kế (Bao gồm số thanh toán lần này)' },
-            { t: 5, b: 5, l: 11, r: 11, val: 'Cấp ứng' },
-            { t: 5, b: 5, l: 12, r: 12, val: 'Cấp vốn' },
-            { t: 5, b: 5, l: 13, r: 13, val: 'Cộng' },
-            { t: 4, b: 5, l: 14, r: 14, val: 'Số còn được thanh toán' },
-            { t: 4, b: 5, l: 15, r: 15, val: 'Số duyệt thanh toán lần này' },
-            { t: 4, b: 4, l: 16, r: 20, val: 'Ủy nhiệm chi (Số thanh toán đợt ' + this.baoCao.dot.toString() + ')' },
-            { t: 5, b: 5, l: 16, r: 16, val: 'Ngày' },
-            { t: 5, b: 5, l: 17, r: 17, val: 'Niên độ NS' },
-            { t: 5, b: 5, l: 18, r: 18, val: 'Cấp ứng' },
-            { t: 5, b: 5, l: 19, r: 19, val: 'Cấp vốn' },
-            { t: 5, b: 5, l: 20, r: 20, val: 'Cộng' },
-            { t: 4, b: 5, l: 21, r: 21, val: 'Nộp NSNN' },
-            { t: 4, b: 5, l: 22, r: 22, val: 'Ghi chú' },
+            { t: 0, b: 6, l: 0, r: 5, val: null },
+            { t: 0, b: 0, l: 0, r: 8, val: 'Tổng hợp tiền thừa từ Đơn vị cấp dưới' },
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị cấp dưới' },
+            { t: 4, b: 4, l: 2, r: 4, val: 'Tổng nhận từ Đơn vị cấp dưới đến thời điểm này' },
+            { t: 5, b: 5, l: 2, r: 2, val: 'Tổng ứng' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'Tổng cấp' },
+            { t: 5, b: 5, l: 4, r: 4, val: 'Tổng vốn' },
+            { t: 4, b: 5, l: 5, r: 5, val: 'Đợt (của Đơn vị cấp dưới)' },
         ]
-        const fieldOrder = ['tenKhachHang', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'slThucHien', 'donGia', 'gtHopDong', 'gtThucHien', 'phatViPham', 'tlSoluong',
-            'tlThanhTien', 'lkUng', 'lkCap', 'lkCong', 'soConDcTt', 'soDuyetTt', 'uncNgay', 'uncNienDoNs', 'ung', 'cap', 'cong', 'nopNsnn', 'ghiChu'];
+        const fieldOrder = ['stt', 'tenHangDtqg', 'daNopVonUng', 'daNopVonCap', 'daNopTong', 'dot'];
+        const calHeader = ['A', 'B', '1', '2', '3=1+2', '4'];
+
         const filterData = this.lstCtiets.map((item, index) => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                switch (field) {
-                    case 'stt':
-                        row[field] = index + 1;
-                        break;
-                    case 'uncNgay':
-                        row[field] = Utils.fmtDate(item[field]);
-                        break;
-                    default:
-                        row[field] = item[field];
-                        break;
-                }
+                row[field] = field == 'stt' ? (index + 1) : item[field];
             })
             return row;
         })
         // thêm công thức tính cho biểu mẫu
-        const calHeader = ['A', 'B', '1', '2', '3', '4', '5=2*4', '6=3*4', '7', '8', '9', '10', '11', '12=10+11', '13=6-7-12', '14', '15', '16', '17', '18', '19=17+18', '20', 'C'];
         let cal = {};
         fieldOrder.forEach((field, index) => {
             cal[field] = calHeader[index];

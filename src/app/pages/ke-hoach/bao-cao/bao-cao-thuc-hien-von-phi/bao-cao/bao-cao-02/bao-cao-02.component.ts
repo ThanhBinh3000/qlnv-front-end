@@ -197,6 +197,7 @@ export class BaoCao02Component implements OnInit {
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.updateEditCache();
         this.getStatusButton();
+        this.getTotal();
         this.spinner.hide();
     }
 

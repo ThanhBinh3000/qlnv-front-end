@@ -270,11 +270,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                 this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -372,7 +368,6 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
 
     startEdit(id: string): void {
         this.editCache[id].edit = true;
-        console.log(this.editCache[id].data);
     }
 
     // huy thay doi

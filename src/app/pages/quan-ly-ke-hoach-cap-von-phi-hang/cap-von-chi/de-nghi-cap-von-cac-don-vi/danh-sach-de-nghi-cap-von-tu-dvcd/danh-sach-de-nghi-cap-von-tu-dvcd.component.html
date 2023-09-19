@@ -89,9 +89,9 @@
                     <th scope="col">Đơn vị</th>
                     <th scope="col">Mã cấp ứng</th>
                     <th scope="col">Năm</th>
-                    <th scope="col">Loại</th>
-                    <th scope="col">Căn cứ về giá</th>
                     <th scope="col">Số quyết định chỉ tiêu</th>
+                    <th scope="col">Căn cứ về giá</th>
+                    <th scope="col">Loại</th>
                     <th scope="col">Số lần</th>
                     <th scope="col">Ngày trình duyệt</th>
                     <th scope="col">Ngày trả kết quả</th>
@@ -115,13 +115,13 @@
                         {{ data.namDnghi }}
                     </td>
                     <td>
-                        {{ Cvnc.suggestionName(data.loaiDnghi)}}
+                        {{ data.soQdChiTieu }}
                     </td>
                     <td>
                         {{ Cvnc.priceBasisName(data.canCuVeGia) }}
                     </td>
                     <td>
-                        {{ data.soQdChiTieu }}
+                        {{ Cvnc.suggestionName(data.loaiDnghi)}}
                     </td>
                     <td>
                         {{ data.soLan }}

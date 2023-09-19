@@ -150,6 +150,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtiets = this.baoCao.lstCtiets;
             this.lstCtiets = Table.sortByIndex(this.lstCtiets)
+            console.log(this.lstCtiets);
             this.setLevel()
             this.sum('0.1');
             this.updateEditCache();
@@ -270,12 +271,12 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
+                this.baoCao.ngayTrinh = data.data.ngayTrinh;
+                this.baoCao.ngayDuyet = data.data.ngayDuyet;
+                this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
+                this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
