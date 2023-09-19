@@ -97,6 +97,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       tenLoaiVthh: [],
       cloaiVthh: [],
       tenCloaiVthh: [],
+      donViTinh: [],
       dsBienBan: [],
       soBbNtBqLd: [],
       bbNtBqLdId: [],
@@ -140,7 +141,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     }
 
     if (this.data) {
-      // console.log('data', this.data)
+      console.log('data', this.data)
       this.formData.patchValue({
         soQdinhDcc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayHieuLuc,
@@ -433,6 +434,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log('data', data)
         this.formData.patchValue({
           tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,

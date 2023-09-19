@@ -345,10 +345,10 @@
           <tr *ngFor="let data of basicTable.data; let i = index">
             <ng-container *ngIf="!data.edit; else editTemplate">
               <td class="text-center">{{i + 1}}</td>
-              <td>{{data.tenTchuan}}</td>
-              <td>{{data.chiSoNhap}}</td>
+              <td>{{data.tenChiTieu ? data.tenChiTieu : data.tenTchuan}}</td>
+              <td>{{data.mucYeuCauNhap ? data.mucYeuCauNhap : data.chiSoNhap}}</td>
               <td>{{data.ketQuaKiemTra}}</td>
-              <td>{{data.phuongPhap}}</td>
+              <td>{{data.phuongPhapXd ? data.phuongPhapXd : data.phuongPhap}}</td>
               <td>
                 <nz-select [(ngModel)]=data.danhGia>
                   <nz-option *ngFor="let p of dsDanhGia" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
@@ -362,12 +362,12 @@
             </ng-container>
             <ng-template #editTemplate>
               <td></td>
-              <td>{{data.tenTchuan}}</td>
-              <td>{{data.chiSoNhap}}</td>
+              <td>{{data.tenChiTieu ? data.tenChiTieu : data.tenTchuan}}</td>
+              <td>{{data.mucYeuCauNhap ? data.mucYeuCauNhap : data.chiSoNhap}}</td>
               <td>
                 <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaKiemTra" />
               </td>
-              <td>{{data.phuongPhap}}</td>
+              <td>{{data.phuongPhapXd ? data.phuongPhapXd : data.phuongPhap"}}</td>
               <td>
                 <nz-select [(ngModel)]=data.danhGia>
                   <nz-option *ngFor="let p of dsDanhGia" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
