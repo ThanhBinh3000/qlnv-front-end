@@ -176,8 +176,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
           const data = res.data;
           this.dataTableReq = data.chiTiets;
           if (this.dataTableReq && this.dataTableReq.length > 0) {
-            this.tablePaTcTren = this.convertListData(this.dataTableReq.filter(item => item.tmdt > 5000000000));
-            this.tablePaTcDuoi = this.convertListData(this.dataTableReq.filter(item => item.tmdt <= 5000000000));
+            this.tablePaTcTren = this.convertListData(this.dataTableReq.filter(item => item.tmdt > 15000000000));
+            this.tablePaTcDuoi = this.convertListData(this.dataTableReq.filter(item => item.tmdt <= 15000000000));
             this.dataTableTren = cloneDeep(this.tablePaTcTren);
             this.dataTableDuoi = cloneDeep(this.tablePaTcDuoi);
           }
@@ -238,11 +238,11 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       this.dataTableReq = data.chiTiets;
       let listDx = data.chiTietDxs;
       if (listDx && listDx.length > 0) {
-        this.tablePaTcTren = this.convertListData(listDx?.filter(item => item.tmdt > 5000000000));
-        this.tablePaTcDuoi = this.convertListData(listDx?.filter(item => item.tmdt <= 5000000000));
+        this.tablePaTcTren = this.convertListData(listDx?.filter(item => item.tmdt > 15000000000));
+        this.tablePaTcDuoi = this.convertListData(listDx?.filter(item => item.tmdt <= 15000000000));
       }
-      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
-      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
+      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
+      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
     }
   }
 

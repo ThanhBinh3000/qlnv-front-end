@@ -121,6 +121,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         idVirtual: [''],
         id: [],
         idDx: [],
+        idQdPdDtl: [],
         soLuongDx: [],
         soLuongGiao: [],
         loaiNhapXuat: [],
@@ -354,10 +355,12 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(data.id);
             let detail = res.data;
             detail.quyetDinhPdDtl.forEach(s => {
-              delete s.id;
+              s.idQdPdDtl = s.id;
               s.soLuongDx = s.soLuong;
               s.soLuong = 0;
+              delete s.id;
             });
+
             this.formData.patchValue({
               idQdPd: detail.id,
               soQdPd: detail.soBbQd,
@@ -366,6 +369,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               tenVthh: detail.tenVthh,
               dataDtl: detail.quyetDinhPdDtl
             })
+            console.log(this.formData.value, 'asdadas')
             await this.buildTableView();
           }
         });
@@ -543,6 +547,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           soLuongDx: baseData.soLuongDx,
           tonKhoDvi: baseData.tonKhoDvi,
           donViTinh: baseData.donViTinh,
+          idQdPdDtl: baseData.idQdPdDtl,
           edit: edit
         });
       } else if (level == 2) {
@@ -559,6 +564,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           donViTinh: baseData.donViTinh,
           tenChiCuc: baseData.tenChiCuc,
           soLuongGiao: baseData.soLuongGiao,
+          idQdPdDtl: baseData.idQdPdDtl,
           edit: edit
         });
       }

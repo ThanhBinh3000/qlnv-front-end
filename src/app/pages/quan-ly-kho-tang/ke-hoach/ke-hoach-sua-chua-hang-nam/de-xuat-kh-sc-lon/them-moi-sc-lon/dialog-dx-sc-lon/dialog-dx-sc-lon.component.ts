@@ -106,7 +106,6 @@ export class DialogDxScLonComponent implements OnInit {
 
   async getAllDmKho() {
     let body = {
-      "namKh": dayjs().get("year"),
       "maDvi" : this.userService.isCuc() ? this.userInfo.MA_DVI  :null,
       "paggingReq": {
         limit: 999999,
@@ -118,7 +117,7 @@ export class DialogDxScLonComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmScLon = res.data.content;
       if (this.type == 'them' && this.listDmScLon && this.listDmScLon.length > 0) {
-        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 5000000000 : item.tmdt <= 5000000000));
+        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000));
       }
     }
   }

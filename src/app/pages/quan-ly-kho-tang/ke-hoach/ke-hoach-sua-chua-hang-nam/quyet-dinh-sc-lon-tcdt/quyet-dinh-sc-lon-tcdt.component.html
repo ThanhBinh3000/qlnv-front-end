@@ -164,7 +164,7 @@
           <td>{{ data.id }}</td>
           <td>{{ data.tgTongHop | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.noiDung }}</td>
-          <td>{{ data.loaiTmdt == 'TREN5TY' ? '> 5 tỷ' :  data.loaiTmdt == 'DUOI5TY' ? '<= 5 tỷ' : 'Tất cả'  }}</td>
+          <td>{{ data.loaiTmdt == 'TREN15TY' ? '> 15 tỷ' :   '<= 15 tỷ' }}</td>
           <td><a nz-button nzType="link" (click)="openModalQdDc(data.soQdBtc, '00')">{{
             data.soQdBtc }}</a></td>
           <td><a nz-button nzType="link" (click)="openModalQdDc(data.soQdTcdt, '01')">{{
