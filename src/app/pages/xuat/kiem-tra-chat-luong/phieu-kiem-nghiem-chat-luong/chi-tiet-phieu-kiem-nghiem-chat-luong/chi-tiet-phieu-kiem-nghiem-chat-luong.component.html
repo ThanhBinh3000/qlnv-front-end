@@ -294,8 +294,7 @@
   </nz-collapse>
   <nz-collapse>
     <nz-collapse-panel nzHeader="Kết quả phân tích chỉ tiêu chất lượng" nzActive="true">
-      <form nzLayout="vertical" nz-form [formGroup]="formData">
-        <nz-table class="nowrap pd-t-16" #basicTable [nzData]="viewTableDaiDien" nzBordered>
+        <nz-table class="nowrap pd-t-16" #basicTable [nzData]="viewCtChatLuong" nzBordered>
           <thead>
           <tr>
             <th class="text-center" nzWidth="50px">STT</th>
@@ -311,53 +310,21 @@
           <tr *ngFor="let data of basicTable.data;let i = index">
             <ng-container *ngIf="!data.edit">
               <td class="text-center">{{i + 1}}</td>
-              <td>{{data.chiTieuCl}}</td>
-              <td>{{data.chiSoCl}}</td>
-              <td>{{data.ketQua}}</td>
-              <td>{{data.phuongPhap}}</td>
-              <td>{{data.danhGia}}</td>
-              <td>
-                <a (click)="suaDaiDien(data)">
-                  <i class="fa fa-edit"></i>
-                </a>
-                <a>
-                  <i class="fa fa-trash-o do" nz-popconfirm nz-button
-                     nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
-                     (nzOnConfirm)="xoaDaiDien(data)"></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-container *ngIf="data.edit">
-              <td class="text-center">{{i + 1}}</td>
-              <td>{{data.chiTieuCl}}</td>
+              <td>{{data.ten}}</td>
               <td>{{data.chiSoCl}}</td>
               <td><input nz-input [(ngModel)]="data.ketQua"/></td>
-              <td>
-                <nz-select [(ngModel)]="data.phuongPhap">
-                  <nz-option nzValue="{{item.ten}}" nzLabel="{{item.ten}}" *ngFor="let item of dsPpKiemTra">
-                  </nz-option>
-                </nz-select>
-              </td>
+              <td>{{data.phuongPhap}}</td>
               <td>
                 <nz-select [(ngModel)]="data.danhGia">
                   <nz-option nzValue="Đạt" nzLabel="Đạt"></nz-option>
                   <nz-option nzValue="Không đạt" nzLabel="Không đạt"></nz-option>
                 </nz-select>
               </td>
-              <td>
-                <a>
-                  <i class="fa fa-save" nz-popconfirm nz-button
-                     nzPopconfirmTitle="Bạn có chắc muốn lưu thay đổi ?"
-                     (nzOnConfirm)="luuDaiDien(data)"></i>
-                </a>
-                <a (click)="huySuaDaiDien()">
-                  <i class="fa fa-ban do"></i>
-                </a>
-              </td>
             </ng-container>
           </tr>
           </tbody>
         </nz-table>
+      <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label>Nhận xét kết luận</nz-form-label>
