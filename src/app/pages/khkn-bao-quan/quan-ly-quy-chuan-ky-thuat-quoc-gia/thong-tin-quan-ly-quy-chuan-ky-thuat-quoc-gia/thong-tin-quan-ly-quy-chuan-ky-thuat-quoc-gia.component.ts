@@ -586,7 +586,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           this.notification.error(MESSAGE.ERROR, 'Vui lòng nhập tên chỉ tiêu');
         }
       } else {
-        if (this.rowItem.tenChiTieu && this.rowItem.cloaiVthh != null) {
+        if (this.rowItem.maChiTieu && ((this.listCloaiVthh.length > 0 && this.rowItem.cloaiVthh != null) || this.listCloaiVthh.length == 0)) {
           this.sortTableId();
           let item = cloneDeep(this.rowItem);
           // item.stt = this.dataTable.length + 1;
@@ -596,7 +596,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
             ...this.dataTable,
             item,
           ];
-
+          this.dataTableView = cloneDeep(this.dataTable);
           this.rowItem = new QuyChunKyThuatQuocGia();
           this.updateEditCache();
         } else {
