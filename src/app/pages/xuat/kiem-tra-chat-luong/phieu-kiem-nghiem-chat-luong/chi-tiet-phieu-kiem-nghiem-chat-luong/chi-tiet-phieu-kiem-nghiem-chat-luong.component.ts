@@ -31,6 +31,7 @@ import printJS from 'print-js';
   styleUrls: ['./chi-tiet-phieu-kiem-nghiem-chat-luong.component.scss'],
 })
 export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
+  @Input() loaiXuat: any;
   @Input() inputService: any;
   @Input() inputServiceGnv: BaseService;
   @Input() inputServiceBbLayMau: BaseService;
@@ -206,10 +207,14 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         });
     } else if (this.inputData) {
       await this.bindingQdGnv(this.inputData.idQdGnv);
+    } else {
+      this.formData.patchValue({type: this.loaiXuat})
     }
   }
 
   async save() {
+    console.log(this.formData.value, 'asd')
+    console.log(this.viewCtChatLuong, 'clll')
     await this.helperService.ignoreRequiredForm(this.formData);
     this.formData.controls.soQdGnv.setValidators([Validators.required]);
     let body = {
@@ -271,7 +276,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async buildTableView() {
-    this.viewTableDaiDien = cloneDeep(this.formData.value.xhPhieuKnclDtl.filter(s => s.type == HSKT_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN));
+    this.viewTableDaiDien = cloneDeep(this.formData.value.xhPhieuKnclDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN));
 
     let ppLayMau = cloneDeep(this.formData.value.xhPhieuKnclDtl.filter(s => s.type == LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU));
     let ppLayMauArr = ppLayMau.map(s => s.ten);
@@ -281,6 +286,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       }
     });
 
+    this.viewCtChatLuong = this.formData.value.xhPhieuKnclDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG);
   }
 
   async loadDsPpLayMau() {
@@ -487,6 +493,10 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           });
         } else if (res.data) {
           let data = res.data;
+          data.xhBienBanLayMauDtl.forEach(s => {
+            delete s.id,
+            s.danhGia = 'Đạt';
+          });
           this.formData.patchValue({
             idBbLayMau: data.id,
             soBbLayMau: data.soBbQd,
@@ -500,8 +510,10 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
             tenNhaKho: data.tenNhaKho,
             tenNganKho: data.tenNganKho,
             tenLoKho: data.tenLoKho,
-            xhPhieuKnclDtl:data.xhBienBanLayMauDtl
+            xhPhieuKnclDtl: data.xhBienBanLayMauDtl
           });
+          await this.buildTableView();
+
         }
       }
     } catch (e) {
