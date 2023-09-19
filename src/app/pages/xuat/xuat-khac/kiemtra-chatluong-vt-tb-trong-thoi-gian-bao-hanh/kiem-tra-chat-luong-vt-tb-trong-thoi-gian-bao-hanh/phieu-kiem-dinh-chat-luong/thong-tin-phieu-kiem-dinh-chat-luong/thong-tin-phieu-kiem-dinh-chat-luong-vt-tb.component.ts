@@ -127,6 +127,8 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         tpKtbq: [null],
         thuKho: [null],
         ngayLayMau: [null],
+        soLuongMau : [null],
+        slTonKho: [null],
         phieuKdclDtl: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
       }
@@ -428,7 +430,8 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
           cloaiVthh: item.cloaiVthh,
           tenCloaiVthh: item.tenCloaiVthh,
           ngayLayMau: item.ngayLayMau,
-          soLuongLm:item.soLuongLm,
+          soLuongMau:item.soLuongMau,
+          slTonKho:item.slTonKho,
           donViTinh:item.donViTinh,
         });
         await this.loadPhuongPhapLayMau(item.cloaiVthh);
