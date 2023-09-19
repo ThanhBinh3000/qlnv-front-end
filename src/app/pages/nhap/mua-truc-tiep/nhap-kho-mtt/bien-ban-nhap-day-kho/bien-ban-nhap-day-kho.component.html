@@ -169,7 +169,7 @@
                                              (click)="redirectToChiTiet(false, dataPhieu.id)">
                                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                                           </a>
-                                          <a *ngIf="(dataPhieu.trangThai == STATUS.DU_THAO || dataPhieu.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_THEM')"
+                                          <a *ngIf="(dataPhieu.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_THEM')) || (dataPhieu.trangThai == STATUS.TU_CHOI_LDCC || dataPhieu.trangThai == STATUS.TU_CHOI_KTVBQ || dataPhieu.trangThai == STATUS.TU_CHOI_KT)"
                                              (click)="redirectToChiTiet(false, dataPhieu.id)">
                                             <i class="fa fa-pencil" title="Sửa"></i>
                                           </a>
