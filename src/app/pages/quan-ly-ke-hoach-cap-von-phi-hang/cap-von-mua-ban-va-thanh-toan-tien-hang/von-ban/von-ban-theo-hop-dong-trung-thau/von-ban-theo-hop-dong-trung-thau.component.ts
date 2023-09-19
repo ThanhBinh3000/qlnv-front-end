@@ -150,6 +150,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtiets = this.baoCao.lstCtiets;
             this.lstCtiets = Table.sortByIndex(this.lstCtiets)
+            console.log(this.lstCtiets);
             this.setLevel()
             this.sum('0.1');
             this.updateEditCache();

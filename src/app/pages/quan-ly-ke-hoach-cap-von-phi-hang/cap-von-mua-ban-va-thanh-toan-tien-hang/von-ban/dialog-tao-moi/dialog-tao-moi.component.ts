@@ -172,6 +172,10 @@ export class DialogTaoMoiComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm');
             this.response.canCuVeGia = null;
         }
+        if (this.response.canCuVeGia == Cvmb.HOP_DONG) {
+            this.response.quyetDinh = null;
+            return;
+        }
         const request = {
             namKHoach: this.response.namDnghi,
             maDvi: this.userInfo?.MA_DVI,

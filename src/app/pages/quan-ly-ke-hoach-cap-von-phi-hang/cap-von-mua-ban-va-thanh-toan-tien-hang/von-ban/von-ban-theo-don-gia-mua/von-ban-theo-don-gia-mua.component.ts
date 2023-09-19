@@ -368,7 +368,6 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
 
     startEdit(id: string): void {
         this.editCache[id].edit = true;
-        console.log(this.editCache[id].data);
     }
 
     // huy thay doi

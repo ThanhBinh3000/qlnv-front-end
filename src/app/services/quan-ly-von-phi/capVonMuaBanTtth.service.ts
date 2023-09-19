@@ -14,7 +14,7 @@ export class CapVonMuaBanTtthService extends BaseService {
 	}
 
 	urlTest = 'http://localhost:9150';
-	urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
+	urlDefault = environment.SERVICE_API + '/qlnv-khoachphi-dev';
 
 	//danh sach op dong
 	dsachHopDong(request: any): Observable<any> {
