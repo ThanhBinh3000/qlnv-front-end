@@ -75,7 +75,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       namKeHoach: [dayjs().get("year")],
-      soQuyetDinh: [null],
+      soQuyetDinh: [''],
       ngayTrinhBtc: [null],
       ngayKyBtc: [null],
       ngayHieuLuc: [null],
@@ -124,7 +124,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         phuongAnTc: data.phuongAnTc,
-        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
+        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : '',
         ngayTrinhBtc: data.ngayTrinhBtc,
         ngayKyBtc: data.ngayKyBtc,
         ngayHieuLuc: data.ngayKyBtc,
@@ -136,6 +136,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         tenTrangThai: data.tenTrangThai
       });
       this.fileDinhKems = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
       let listDx = data.ctRes;
       if (listDx) {
         this.dataTableReq = listDx.ctietList;
@@ -386,11 +387,15 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         sl = sum;
       }
     } else {
-      const sum = this.dataTableReq.reduce((prev, cur) => {
-        prev += cur[row];
-        return prev;
-      }, 0);
-      sl = sum;
+      let itemSelected = this.listDx.find(item => item.selected == true);
+      if (itemSelected) {
+        let arr = this.dataTableReq.filter(item => item.soCv == itemSelected.soCongVan)
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur[row];
+          return prev;
+        }, 0);
+        sl = sum;
+      }
     }
     return sl;
   }
