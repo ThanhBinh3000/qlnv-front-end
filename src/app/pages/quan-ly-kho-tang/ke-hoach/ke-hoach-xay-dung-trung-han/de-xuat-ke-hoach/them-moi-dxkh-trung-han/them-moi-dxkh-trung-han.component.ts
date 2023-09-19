@@ -389,7 +389,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           ngayDuyet: data.ngayDuyet,
           namBatDau: data.namBatDau,
           namKetThuc: data.namKetThuc,
-          lyDo: data.lyDoTuChoi
+          lyDo: data.lyDoTuChoi,
+          namKeHoach: data.namKeHoach
         });
       this.listFileDinhKem = data.fileDinhKems;
       this.dataTable = data.chiTiets;
