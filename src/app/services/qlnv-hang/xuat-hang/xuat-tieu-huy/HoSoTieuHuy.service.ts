@@ -9,7 +9,7 @@ export class HoSoTieuHuyService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-tieu-huy/ho-so', '');
+    super(httpClient, 'xuat-hang/xuat-tieu-huy/ho-so', '/qlnv-hang');
   }
 
 }

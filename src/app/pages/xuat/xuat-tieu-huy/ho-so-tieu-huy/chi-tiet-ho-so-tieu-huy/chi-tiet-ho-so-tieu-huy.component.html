@@ -15,7 +15,29 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <ng-container *ngIf="userService.isTongCuc">
+        <button
+          *ngIf="showPheDuyetTuChoi() || (userService.isTongCuc() && (formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DANG_DUYET_CB_VU))"
+          type="button" class="btn btn-sub do ml-2" (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
+          <span>Từ chối</span>
+        </button>
+        <button *ngIf="showPheDuyetTuChoi()" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet "></i>
+          <span>Duyệt</span>
+        </button>
+        <button *ngIf="showSave()" type="button" class="btn btn-sub xanh-nhat ml-2"
+          (click)="saveAndSend(formData.value, userService.isTongCuc() ? STATUS.CHO_DUYET_LDV : STATUS.CHO_DUYET_TP , 'Bạn có muốn gửi duyệt ?')">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Lưu và gửi duyệt</span>
+        </button>
+        <button *ngIf="showSave()" type="button" class="btn btn-main ml-2" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+
+
+
+        <!-- <ng-container *ngIf="userService.isTongCuc">
           <button (click)="reject(idInput,STATUS.TU_CHOI_LDV)" *ngIf="(formData.value.trangThai===STATUS.DA_DUYET_LDC)"
             class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
@@ -59,8 +81,8 @@
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
-          <button
-            *ngIf="(formData.value.trangThaiTc == STATUS.DU_THAO|| formData.value.trangThaiTc == STATUS.TU_CHOI_LDTC || formData.value.trangThaiTc == STATUS.TU_CHOI_LDV)"
+          <button *ngIf="(formData.value.trangThaiTc == STATUS.DU_THAO|| formData.value.trangThaiTc == STATUS.TU_CHOI_LDTC || 
+            formData.value.trangThaiTc == STATUS.TU_CHOxcI_LDV || formData.value.trangThai == STATUS.DA_DUYET_LDC)"
             type="button" class="btn btn-main " (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
@@ -105,7 +127,7 @@
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-        </ng-container>
+        </ng-container> -->
       </div>
     </nz-affix>
   </div>

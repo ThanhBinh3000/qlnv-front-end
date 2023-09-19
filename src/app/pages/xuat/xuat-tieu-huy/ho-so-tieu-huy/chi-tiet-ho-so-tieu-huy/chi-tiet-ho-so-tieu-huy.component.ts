@@ -159,6 +159,13 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
             this.formData.value.hoSoDtl.forEach(s => {
               s.idVirtual = uuidv4();
             });
+            if (res.data.idDanhSach) {
+              this.tongHopTieuHuyService.getDetail(res.data.idDanhSach).then(th => {
+                if (th.data) {
+                  this.dsAll.dsTieuHuy = [...this.dsAll.dsTieuHuy, th.data]
+                }
+              })
+            }
             await this.buildTableView(this.formData.value.hoSoDtl);
           }
         })
@@ -190,12 +197,6 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
   }
 
   async save() {
-    /*let dt = this.danhSachTieuHuyView.flatMap(s => {
-      return s.childData.map(data => {
-        delete s.childData;
-        return Object.assign(s, data);
-      })
-    });*/
     let dt = this.danhSachTieuHuyView.flatMap((item) => item.childData);
     this.formData.patchValue({ hoSoDtl: dt })
     this.formData.disable({ emitEvent: false });
@@ -209,12 +210,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    /*    let dt = this.danhSachTieuHuyView.flatMap(s => {
-          return s.childData.map(data => {
-            delete s.childData;
-            return Object.assign(s, data);
-          })
-        });*/
+    console.log(trangThai);
     let dt = this.danhSachTieuHuyView.flatMap((item) => item.childData);
     body = { ...body, soHoSo: this.formData.value.soHoSo + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
@@ -257,4 +253,98 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
       }
     }
   }
+
+  showSave() {
+    let trangThai = this.formData.value.trangThai;
+    if (this.userService.isCuc()) {
+      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_THEM');
+    }
+    if (this.userService.isTongCuc()) {
+      return (trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU) && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_THEM');
+    }
+    return false
+  }
+
+  showPheDuyetTuChoi() {
+    let trangThai = this.formData.value.trangThai;
+    if (this.userService.isCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETTP')) || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDC'));
+    }
+    if (this.userService.isTongCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDV'))
+        || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC')
+          || (trangThai == STATUS.DADUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_TRINHDUYETBTC'))
+          || (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_TRINHDUYETBTC')));
+    }
+    return false
+  }
+
+  pheDuyet() {
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      // Approve
+      case STATUS.DU_THAO:
+        trangThai = STATUS.CHO_DUYET_TP;
+        break;
+      case STATUS.CHO_DUYET_TP:
+        trangThai = STATUS.CHO_DUYET_LDC;
+        break;
+      case STATUS.CHO_DUYET_LDC:
+        trangThai = STATUS.DA_DUYET_LDC;
+        break;
+      case STATUS.DANG_DUYET_CB_VU:
+      case STATUS.DA_DUYET_LDC:
+        trangThai = STATUS.CHO_DUYET_LDV;
+        break;
+      case STATUS.CHO_DUYET_LDV:
+        trangThai = STATUS.CHO_DUYET_LDTC;
+        break;
+      case STATUS.CHO_DUYET_LDTC:
+        trangThai = STATUS.DA_DUYET_LDTC;
+        break;
+      case STATUS.DA_DUYET_LDTC:
+        trangThai = STATUS.CHODUYET_BTC;
+        break;
+      case STATUS.CHODUYET_BTC:
+        trangThai = STATUS.DADUYET_BTC;
+        break;
+      //Reject
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.TU_CHOI_LDV:
+      case STATUS.TU_CHOI_LDTC:
+      case STATUS.TU_CHOI_CBV:
+        trangThai = STATUS.DU_THAO;
+        break;
+    }
+    this.approve(this.formData.value.id, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
+  }
+
+  tuChoi() {
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TP:
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      case STATUS.CHO_DUYET_LDC:
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      case STATUS.CHO_DUYET_LDV:
+        trangThai = STATUS.TU_CHOI_LDV;
+        break;
+      case STATUS.CHO_DUYET_LDTC:
+        trangThai = STATUS.TU_CHOI_LDTC;
+        break;
+      case STATUS.DA_DUYET_LDC:
+      case STATUS.DANG_DUYET_CB_VU:
+        trangThai = STATUS.TU_CHOI_CBV;
+        break;
+      case STATUS.CHODUYET_BTC:
+        trangThai = STATUS.TUCHOI_BTC;
+        break;
+    }
+    this.reject(this.formData.value.id, trangThai);
+  }
+
+
 }
