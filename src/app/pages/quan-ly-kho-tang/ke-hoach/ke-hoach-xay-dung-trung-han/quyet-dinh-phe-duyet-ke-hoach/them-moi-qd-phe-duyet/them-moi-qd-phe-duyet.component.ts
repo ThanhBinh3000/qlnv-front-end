@@ -133,7 +133,8 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         namKetThuc: data.namKetThuc,
         loaiDuAn: data.loaiDuAn,
         trangThai: data.trangThai,
-        tenTrangThai: data.tenTrangThai
+        tenTrangThai: data.tenTrangThai,
+        namKeHoach: data.namKeHoach,
       });
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;

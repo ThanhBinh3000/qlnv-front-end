@@ -80,7 +80,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
-      loaiTmdt: ['ALL']
+      loaiTmdt: ['DUOI15TY']
     });
   }
 
@@ -140,11 +140,11 @@ export class ThemMoiScTcdtComponent implements OnInit {
       this.dataTableReq = data.chiTiets;
       let resultDx = data.chiTietDxs
       if (resultDx && resultDx.length > 0) {
-        this.dataTableDxDuoi = this.convertListData(resultDx?.filter(item => item.tmdt <= 5000000000));
-        this.dataTableDxTren = this.convertListData(resultDx?.filter(item => item.tmdt > 5000000000));
+        this.dataTableDxDuoi = this.convertListData(resultDx?.filter(item => item.tmdt <= 15000000000));
+        this.dataTableDxTren = this.convertListData(resultDx?.filter(item => item.tmdt > 15000000000));
       }
-      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
-      this.dataTableDuoi= this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
+      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
+      this.dataTableDuoi= this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
     }
   }
 
@@ -348,8 +348,8 @@ export class ThemMoiScTcdtComponent implements OnInit {
         this.isTongHop = true;
         this.dataTableReq = list.listDxCuc;
         this.dataTableDxReq = cloneDeep(this.dataTableReq);
-        this.dataTableDxDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
-        this.dataTableDxTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
+        this.dataTableDxDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
+        this.dataTableDxTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
         this.dataTableTren = cloneDeep(this.dataTableDxTren);
         this.dataTableDuoi= cloneDeep(this.dataTableDxDuoi);
       } else {
