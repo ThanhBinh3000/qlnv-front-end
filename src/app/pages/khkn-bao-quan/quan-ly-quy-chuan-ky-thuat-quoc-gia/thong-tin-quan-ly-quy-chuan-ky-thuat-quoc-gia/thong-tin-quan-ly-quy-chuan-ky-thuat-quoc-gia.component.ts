@@ -533,7 +533,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           if (typeData) {
             typeData.tenCloaiVthh = this.listCloaiVthh.find(d => +d.key == cloaiVtt)?.title;
           } else {
-            console.log(this.listCloaiVthh,111)
             this.rowItem.tenCloaiVthh = this.listCloaiVthh.find(d => +d.key == cloaiVtt)?.title;
           }
         }
