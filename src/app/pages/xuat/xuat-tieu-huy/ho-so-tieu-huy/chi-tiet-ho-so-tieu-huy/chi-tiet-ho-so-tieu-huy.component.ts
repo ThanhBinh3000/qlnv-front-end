@@ -273,8 +273,15 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
     if (this.userService.isTongCuc()) {
       return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDV'))
         || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC')
-          || (trangThai == STATUS.DADUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_TRINHDUYETBTC'))
           || (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_TRINHDUYETBTC')));
+    }
+    return false
+  }
+
+  showTrinhBtc() {
+    let trangThai = this.formData.value.trangThai;
+    if (this.userService.isTongCuc()) {
+      return (trangThai == STATUS.DA_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_TRINHDUYETBTC'));
     }
     return false
   }
