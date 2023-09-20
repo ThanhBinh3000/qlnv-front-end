@@ -571,7 +571,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         });
       }
     }
-
     this.listDonVi.forEach(s => {
       s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi));
     })
@@ -682,12 +681,12 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
           if (data.length > 0) {
-            if (loaiVthh == '0101' || loaiVthh == '0102') {
-              this.formDataDtl.patchValue({
-                cloaiVthh: data[0].cloaiVthh,
-                // tonKhoCloaiVthh:data[0].slHienThoi
-              });
-            }
+            // if (loaiVthh == '0101' || loaiVthh == '0102') {
+            //   this.formDataDtl.patchValue({
+            //     cloaiVthh: data[0].cloaiVthh,
+            //     // tonKhoCloaiVthh:data[0].slHienThoi
+            //   });
+            // }
             let tonKhoDvi = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
             let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
             if (dataCloai.length == 0) {

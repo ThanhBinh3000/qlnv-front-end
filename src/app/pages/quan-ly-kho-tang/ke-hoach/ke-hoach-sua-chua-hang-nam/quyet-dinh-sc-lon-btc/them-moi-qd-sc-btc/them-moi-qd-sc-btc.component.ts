@@ -71,8 +71,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       ngayTrinhBtc: [null, Validators.required],
       maTh: [null],
       soTt: [null],
-      trangThai: ["00"],
-      tenTrangThai: ["Dự thảo"],
+      trangThai: ["78"],
+      tenTrangThai: ["Đang nhập dữ liệu"],
       type: ["00"]
     });
   }

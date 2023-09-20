@@ -57,7 +57,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <nz-select formControlName="namKh" [nzDisabled]="isViewDetail">
+                    <nz-select formControlName="namKh" [nzDisabled]="isViewDetail" (ngModelChange)="getDmSuaChuaThuongXuyen($event)">
                       <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                   </nz-input-group>
