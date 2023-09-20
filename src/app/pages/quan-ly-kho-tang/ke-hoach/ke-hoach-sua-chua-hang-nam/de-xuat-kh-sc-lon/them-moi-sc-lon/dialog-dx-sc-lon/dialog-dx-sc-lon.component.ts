@@ -24,6 +24,7 @@ export class DialogDxScLonComponent implements OnInit {
   @Input() sum: number;
   @Input() dataTable: any;
   @Input() page: string;
+  @Input()isQd: boolean = false;
   item: KhSuaChuaLonDtl = new KhSuaChuaLonDtl();
   listDmScLon: any[] = [];
   listLoaiDuAn: any[] = [];
@@ -140,6 +141,7 @@ export class DialogDxScLonComponent implements OnInit {
       this.item.soQdPheDuyet = this.dataInput.soQdPheDuyet;
       this.item.ngayQdPd = this.dataInput.ngayQdPd;
       this.item.giaTriPd = this.dataInput.giaTriPd;
+      this.item.luyKeVon = this.dataInput.luyKeVon;
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0;
       this.item.tieuChuan = this.dataInput.tieuChuan;
       this.item.lyDo = this.dataInput.lyDo;

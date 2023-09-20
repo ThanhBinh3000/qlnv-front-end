@@ -108,7 +108,10 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Giá trị quyết toán được duyệt (đ)</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">{{item.giaTriPd ? item.giaTriPd : 0  | number : '1.0-1' : 'vi-VN'}}</span>
+            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.giaTriPd" [nzMin]="0" [nzDisabled]="!isQd"
+                              [nzFormatter]="globals.formatter" class="text-blue"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-item>
       </div>
@@ -116,7 +119,10 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Lũy kế cấp vốn đến thời điểm hiện tại</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">{{item.luyKeVon ? item.luyKeVon : 0  | number : '1.0-1' : 'vi-VN'}}</span>
+            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.luyKeVon" [nzMin]="0" [nzDisabled]="!isQd"
+                             [nzFormatter]="globals.formatter" class="text-blue"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-item>
       </div>

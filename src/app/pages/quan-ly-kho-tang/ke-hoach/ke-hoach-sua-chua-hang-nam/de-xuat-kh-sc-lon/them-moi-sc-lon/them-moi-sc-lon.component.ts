@@ -124,6 +124,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           tenTrangThai: data.tenTrangThai
         });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLy = data.canCuPhapLys;
       this.dataTableRes = data.chiTiets;
       this.dataTableDm = data.listDanhMuc;
       await this.convertListToTree();
@@ -157,6 +158,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     body.maDvi = this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi;
     body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLy;
     this.conVertTreToList();
     body.chiTiets = this.dataTableRes;
     let data = await this.createUpdate(body);
@@ -224,7 +226,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         break;
       }
     }
-    await this.reject(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn từ chối?");
+    await this.approve(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn từ chối?");
   }
 
   sumSoLuong(data: any, row: string, type?: any) {
