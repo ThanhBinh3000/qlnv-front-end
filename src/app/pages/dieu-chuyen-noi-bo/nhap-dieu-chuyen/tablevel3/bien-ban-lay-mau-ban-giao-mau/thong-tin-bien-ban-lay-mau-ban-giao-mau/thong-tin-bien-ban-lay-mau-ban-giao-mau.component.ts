@@ -215,7 +215,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       await this.loadChiTieuChatLuongs(data.cloaiVthh)
 
       if (data.pplayMau) {
-        const dspplayMau = data.pplayMau.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
+        const dspplayMau = data.pplayMau.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1] }))
         this.phuongPhapLayMaus = this.phuongPhapLayMaus.map(pp => {
           return {
             ...pp,
@@ -227,7 +227,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
 
       if (data.chiTieuKiemTra) {
 
-        const dschiTieuKiemTra = data.chiTieuKiemTra.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
+        const dschiTieuKiemTra = data.chiTieuKiemTra.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1] }))
         this.chiTieuChatLuongs = this.chiTieuChatLuongs.map(pp => {
           return {
             ...pp,
@@ -556,8 +556,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
-    body.pplayMau = this.phuongPhapLayMaus.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(",")
-    body.chiTieuKiemTra = this.chiTieuChatLuongs.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(",")
+    body.pplayMau = this.phuongPhapLayMaus.filter(item => item.checked).map(f => `${f.id}+*${f.giaTri}`).join("-*")
+    body.chiTieuKiemTra = this.chiTieuChatLuongs.filter(item => item.checked).map(f => `${f.id}+*${f.giaTri}`).join("-*")
     body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
