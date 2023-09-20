@@ -94,7 +94,7 @@
                   Căn cứ pháp lý
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="fileDinhKem"></file-list>
+                  <file-list [data]="canCuPhapLy"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -230,7 +230,7 @@
                               <td>{{ child1.tgSuaChua }}</td>
                               <td class="text-right">{{ child1.tmdt | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
-                              <td class="text-right">{{ child1.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+                              <td class="text-right">{{ child1.luyKeVon | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ child1.ghiChu }}</td>
                             </tr>
@@ -385,7 +385,7 @@
                               <td>{{ child1.tgSuaChua }}</td>
                               <td class="text-right">{{ child1.tmdt | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
-                              <td class="text-right">{{ child1.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+                              <td class="text-right">{{ child1.luyKeVon | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ child1.ghiChu }}</td>
                             </tr>
@@ -711,7 +711,7 @@
                               <td>{{ child1.tgSuaChua }}</td>
                               <td class="text-right">{{ child1.tmdt | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
-                              <td class="text-right">{{ child1.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+                              <td class="text-right">{{ child1.luyKeVon | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ child1.ghiChu }}</td>
                               <td class="text-center" nzRight *ngIf="!isViewDetail">

@@ -235,6 +235,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : ""
       });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLy = data.canCuPhapLys;
       this.dataTableReq = data.chiTiets;
       let listDx = data.chiTietDxs;
       if (listDx && listDx.length > 0) {
@@ -257,7 +258,9 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     body.maDvi = this.userInfo.MA_DVI;
     body.soQuyetDinh = body.soQuyetDinh + this.maQd;
     body.fileDinhKems = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLy;
     body.chiTiets = this.dataTableReq;
+    console.log(this.dataTableReq,222)
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
