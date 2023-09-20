@@ -345,7 +345,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         dataTable: list && list.dataChild ? list.dataChild : [],
         dataInput: data,
         type: type,
-        page: tmdt
+        page: tmdt,
+        isQd: true
       }
     });
     modalQD.afterClose.subscribe(async (detail) => {
