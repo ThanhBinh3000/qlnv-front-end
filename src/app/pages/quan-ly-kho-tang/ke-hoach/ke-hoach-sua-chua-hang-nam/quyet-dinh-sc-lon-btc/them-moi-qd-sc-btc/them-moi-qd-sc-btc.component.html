@@ -6,7 +6,7 @@
         [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-        <span>QUYẾT ĐỊNH KẾ HOẠCH SỬA CHỮA CỦA BTC</span>
+        <span>Quyết định PD KH sửa chữa lớn hàng năm của - BTC </span>
       </div>
     </div>
     <div class="btn-group">
@@ -554,7 +554,7 @@
                                 <a (click)="themMoiItem(child1,'tren', 'sua', y1, child)">
                                   <i class="fa fa-pencil" title="Sửa"></i>
                                 </a>
-                                <a (click)="deleteItem(idx, y1)">
+                                <a (click)="deleteItem(child1.id)">
                                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                 </a>
                               </td>
@@ -718,7 +718,7 @@
                                 <a (click)="themMoiItem(child1,'duoi', 'sua', y1, child)">
                                   <i class="fa fa-pencil" title="Sửa"></i>
                                 </a>
-                                <a (click)="deleteItem(idx, y1)">
+                                <a (click)="deleteItem(child1.id)">
                                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                 </a>
                               </td>

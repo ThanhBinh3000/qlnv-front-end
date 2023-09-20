@@ -67,7 +67,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       namBatDau: [null],
       namKetThuc: [null],
       loaiDuAn: [null],
-      trangThai: ["00"],
+      trangThai: ["78"],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [null]
     });
@@ -134,7 +134,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   setValidators() {
     this.formData.controls["trichYeu"].setValidators(Validators.required);
     this.formData.controls["namKeHoach"].setValidators(Validators.required);
-    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
       this.formData.controls["ngayTaoDx"].setValidators(Validators.required);
     }
     if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC) {
@@ -170,7 +170,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       if (isOther) {
         let trangThai;
         switch (this.formData.value.trangThai) {
-          case STATUS.DU_THAO :
+          case STATUS.DANG_NHAP_DU_LIEU :
           case STATUS.TU_CHOI_LDV:
           case STATUS.TU_CHOI_TP : {
             trangThai = STATUS.CHO_DUYET_TP;
