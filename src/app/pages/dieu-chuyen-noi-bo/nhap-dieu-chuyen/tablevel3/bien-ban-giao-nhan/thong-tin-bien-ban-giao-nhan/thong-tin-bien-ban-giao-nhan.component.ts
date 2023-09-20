@@ -542,7 +542,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     if (this.idInput) {
       body.id = this.idInput
     }
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
       if (isGuiDuyet) {

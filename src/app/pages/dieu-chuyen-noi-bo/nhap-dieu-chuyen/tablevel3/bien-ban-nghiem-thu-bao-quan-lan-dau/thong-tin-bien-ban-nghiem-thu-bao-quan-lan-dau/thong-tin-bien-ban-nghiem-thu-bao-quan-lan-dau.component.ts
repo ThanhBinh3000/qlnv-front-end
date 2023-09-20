@@ -202,8 +202,8 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
 
   async getTLKD() {
     let body = {
-      maDvi: this.formData.value.maNganKho,
-      capDvi: "6"
+      maDvi: this.formData.value.maLoKho || this.formData.value.maNganKho,
+      capDvi: this.formData.value.maLoKho ? "7" : "6"
     }
     const detail = await this.mangLuoiKhoService.getDetailByMa(body);
     const tichLuongKhaDung = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
@@ -711,6 +711,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
         });
         await this.loadDataBaoQuan(data.cloaiVthh)
         await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)
+        await this.getTLKD()
       }
     });
   }
@@ -771,7 +772,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       body.id = this.idInput
     }
 
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
       if (isGuiDuyet) {

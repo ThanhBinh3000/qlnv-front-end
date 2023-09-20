@@ -594,7 +594,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     console.log('save', body)
 
     await this.spinner.show();
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
       if (isGuiDuyet) {

@@ -568,10 +568,12 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
 
     let res = this.idInput ? await this.bienBanLayMauService.update(body) : await this.bienBanLayMauService.create(body);
     if (res.data) {
+
       this.idInput = res.data.id;
       if (isGuiDuyet) {
         this.guiDuyet();
-      }
+      } else
+        this.notification.success(MESSAGE.NOTIFICATION, res.msg);
     }
     await this.spinner.hide();
   }

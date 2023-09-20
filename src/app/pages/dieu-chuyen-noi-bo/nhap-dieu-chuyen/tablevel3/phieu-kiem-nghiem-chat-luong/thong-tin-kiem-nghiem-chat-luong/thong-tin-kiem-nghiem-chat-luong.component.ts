@@ -610,7 +610,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       });
     }
     let res = this.idInput ? await this.phieuKiemNghiemChatLuongService.update(body) : await this.phieuKiemNghiemChatLuongService.create(body);
-    // let data = await this.createUpdate(body);
+    // let data = await this.createUpdate(body, null, isGuiDuyet);
     if (res.data) {
       this.idInput = res.data.id;
       if (isGuiDuyet) {
