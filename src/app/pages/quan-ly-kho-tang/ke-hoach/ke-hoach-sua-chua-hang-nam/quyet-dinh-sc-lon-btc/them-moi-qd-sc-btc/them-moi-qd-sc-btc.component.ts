@@ -371,7 +371,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     });
   }
 
-  deleteItem(index: any, y: any) {
+  deleteItem(id) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -382,13 +382,13 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          if (this.dataTable && this.dataTable.length > 0 && this.dataTable[index]) {
-            if (this.dataTable[index] && this.dataTable[index].dataChild && this.dataTable[index].dataChild[y]) {
-              this.dataTable[index].dataChild.splice(y, 1);
-            }
-          }
+          const idx = this.dataTableReq.findIndex(it => it.id == id);
+          if (idx) {
+            this.dataTableReq.splice(idx,1);
+            this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
+            this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));          }
         } catch (e) {
-          console.log("error", e);
+;          console.log("error", e);
         }
       }
     });
