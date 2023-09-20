@@ -96,7 +96,7 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             soBienBanSapNhap: [],
             bienBanSapNhapId: [],
             soBaoCao: [],
-            ngayBaoCao: [],
+            ngayBaoCao: [dayjs().format("YYYY-MM-DD")],
             soQuyetDinh: [],
             soQuyetDinhId: [],
             loai: [],
@@ -159,6 +159,7 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
             if (data) {
                 this.idInput = data.id;
                 this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBaoCao: typeof data.soBaoCao === 'string' || data.soBaoCao instanceof String ? data.soBaoCao?.split('/')[0] : "" });
+                this.maBCSN = typeof data.soBaoCao === "string" || data.soBaoCao instanceof String ? "/" + data.soBaoCao.split("/")[1] + "/" + data.soBaoCao.split("/")[2] : "";
                 if (isGuiDuyet) {
                     this.hoanThanh()
                 }
@@ -225,6 +226,7 @@ export class ThongTinBaoCaoKetQuaSapNhapComponent extends Base2Component impleme
                         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
                         this.listFileDinhKem = dataDetail.fileDinhKem;
                         this.formData.patchValue({ soBaoCao: typeof dataDetail.soBaoCao === 'string' || dataDetail.soBaoCao instanceof String ? dataDetail.soBaoCao?.split('/')[0] : "" })
+                        this.maBCSN = typeof dataDetail.soBaoCao === "string" || dataDetail.soBaoCao instanceof String ? "/" + dataDetail.soBaoCao.split("/")[1] + "/" + dataDetail.soBaoCao.split("/")[2] : "";
                         this.baoCaoKetQuaHangDtl = dataDetail.baoCaoKetQuaHangDtl.map(f => ({ ...f, groupBy: f.maDiemKhoDi ? `${f.maChiCucDi}${f.maDiemKhoDi}` : f.maChiCucDi }));
                         this.baoCaoKetQuaCcDtl = dataDetail.baoCaoKetQuaCcDtl.map(f => ({ ...f, groupBy: f.maChiCucDi }));
                         this.baoCaoKetQuaVpDtl = dataDetail.baoCaoKetQuaVpDtl;

@@ -34,7 +34,7 @@
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
-                            Số QĐ của Cục
+                            Số QĐ
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdDC()">
@@ -120,10 +120,12 @@
                                             [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                             style="width: 35px"></td>
                                         <td></td>
-                                        <td class="bold">{{(item.tenChiCucDi? item.tenChiCucDi + " - " : "") +
+                                        <td class="bold">{{(item.tenChiCucDi? item.tenChiCucDi: "") + (item.tenChiCucDi
+                                            && item.tenDiemKhoDi? " - ": "") +
                                             (item.tenDiemKhoDi || "") }}
                                         </td>
-                                        <td class="bold">{{(item.tenChiCucDen? item.tenChiCucDen + " - ": "") +
+                                        <td class="bold">{{(item.tenChiCucDen? item.tenChiCucDen: "") +
+                                            (item.tenChiCucDen && item.tenDiemKhoDen? " - ": "") +
                                             (item.tenDiemKhoDen || "") }}
                                         </td>
                                         <td></td>
@@ -137,10 +139,10 @@
                                                     lv2.tenNganKhoDi +
                                                     " - " : "") + (lv2.tenNhaKhoDi? lv2.tenNhaKhoDi: "") +
                                                     (lv2.tenCloaiVthh)+
-                                                    ": " + lv2.slTon }}</td>
+                                                    ": " + (lv2.slTon||"") }}</td>
                                                 <td>
                                                     <nz-input-group nzAddOnAfterIcon="down"
-                                                        (click)="openModelHangHoa(lv2.maDiemKhoDen, lv2)">
+                                                        (click)="openModelHangHoa(formData.value.loai === 'SN_DIEM_KHO' ? lv2.maDiemKhoDen: lv2.maChiCucDen, lv2)">
                                                         <input nz-input [(ngModel)]="lv2.title" [readOnly]="true" />
                                                     </nz-input-group>
                                                 </td>

@@ -88,20 +88,20 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
         super(httpClient, storageService, notification, spinner, modal, dieuChuyenKhoService);
         this.formData = this.fb.group({
             id: [],
-            maDvi: [],
-            tenDvi: [],
+            maDvi: [, [Validators.required]],
+            tenDvi: [, [Validators.required]],
             nam: [dayjs().get("year"), [Validators.required]],
-            soQuyetDinh: [],
-            soQuyetDinhId: [],
+            soQuyetDinh: [, [Validators.required]],
+            soQuyetDinhId: [, [Validators.required]],
             ngayKy: [],
             lyDoTuChoi: [],
             trichYeu: [],
-            trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+            trangThai: [STATUS.DANG_NHAP_DU_LIEU, [Validators.required]],
             tenTrangThai: [],
             trangThaiSn: [],
             tenTrangThaiSn: [],
             quyetDinhPdDtl: [new Array<ItemXhXkVtquyetDinhPdDtl>()],
-            loai: ["SN_DIEM_KHO"],
+            loai: ["SN_DIEM_KHO", [Validators.required]],
         });
     }
 
@@ -312,7 +312,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                 });
                 let listChiCucDi = []
                 Array.isArray(dataChose.duyetDanhMucKhoDtl) && dataChose.duyetDanhMucKhoDtl.forEach(f => {
-                    if (!listChiCucDi.find(item => item.maChiCucDi === f.maChiCucDi)) {
+                    if (!listChiCucDi.find(item => item.maChiCucDi === f.maChiCucDi && item.maDiemKhoDi === f.maDiemKhoDi && item.maDiemKhoDen === f.maDiemKhoDen)) {
                         listChiCucDi.push({ maCucDi: f.maCucDi, tenCucDi: f.tenCucDi, maCucDen: f.maCucDen, tenCucDen: f.tenCucDen, maChiCucDi: f.maChiCucDi, tenChiCucDi: f.tenChiCucDi, maChiCucDen: f.maChiCucDen, maDiemKhoDi: f.maDiemKhoDi, tenDiemKhoDi: f.tenDiemKhoDi, tenDiemKhoDen: f.tenDiemKhoDen, maDiemKhoDen: f.maDiemKhoDen })
                     }
                 });
@@ -335,7 +335,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                             this.buildView("dataTableHang", "dataViewHang");
                         }
                     }
-                    else if (this.formData.value.loai === "SN_CHI_CUC") {
+                    if (this.formData.value.loai === "SN_CHI_CUC") {
                         let dataCCDC = [];
                         await Promise.all(listChiCucDi.map(f => this.dieuChuyenKhoService.chiTietCCDC({ ...f }).then(res => {
                             if (res.msg === MESSAGE.SUCCESS) {
@@ -395,12 +395,12 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
         this.dataTableVp[index] = { ...this.rowDataVpClone };
     }
 
-    async openModelHangHoa(maDiemKhoDen: string, data: any) {
-        if (!maDiemKhoDen) {
+    async openModelHangHoa(maDiemDen: string, data: any) {
+        if (!maDiemDen) {
             this.lisDsDonVi = [];
             return;
         };
-        await this.loadDsDonVi(maDiemKhoDen);
+        await this.loadDsDonVi(maDiemDen);
         const modalQD = this.modal.create({
             nzTitle: 'DANH SÁCH ĐƠN VỊ',
             // nzContent: DialogTableSelectionComponent,
