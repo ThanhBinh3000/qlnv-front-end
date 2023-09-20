@@ -613,6 +613,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     // let data = await this.createUpdate(body);
     if (res.data) {
       this.idInput = res.data.id;
+      this.formData.patchValue({ id: res.data.id, trangThai: res.data.trangThai, tenTrangThai: res.data.tenTrangThai, soPhieu: res.data.soPhieu })
       if (isGuiDuyet) {
         this.guiDuyet();
       }
