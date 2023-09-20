@@ -277,6 +277,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
               const dataRes = res.data;
               dataRes.idDxHdr = dataRes.id;
               this.danhsachDx.push(dataRes);
+              console.log(this.danhsachDx, 4444)
             }
           })
         };
@@ -359,6 +360,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         })
         this.idSoQdCc = data.idSoQdCc
         this.dataInput = null;
+        console.log(this.danhsachDx, "00000")
         this.dataInputCache = null;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
