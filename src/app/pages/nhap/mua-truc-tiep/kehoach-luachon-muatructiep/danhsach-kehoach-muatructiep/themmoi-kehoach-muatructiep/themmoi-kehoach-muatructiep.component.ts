@@ -64,6 +64,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   listDataGroup: any[] = [];
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
+  tongMucDtVal: any;
 
   constructor(
     httpClient: HttpClient,
@@ -377,6 +378,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     body.tgianMkho = pipe.transform(body.tgianMkho, 'yyyy-MM-dd HH:mm')
     body.fileDinhKemReq = this.fileDinhKem;
     body.children = this.dataTable;
+    body.tongMucDt = this.tongMucDtVal;
     body.ccXdgReq = [...this.canCuKhacList];
     let res = null;
     if (body.id) {
@@ -755,6 +757,8 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         prev += cur.tongThanhTien;
         return prev;
       }, 0);
+      this.formData.value.tongMucDt = sum;
+      this.tongMucDtVal = sum;
       return sum;
     }
   }
