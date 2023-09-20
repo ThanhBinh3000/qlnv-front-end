@@ -111,7 +111,10 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   async handleData() {
     if (!this.data) return
     await this.spinner.show()
-
+    console.log('handleData', this.data)
+    this.formData.patchValue({
+      slDcConLai: this.data.slDcConLai
+    })
     if (this.data.maChiCucNhan) await this.getListDiemKho(this.data.maChiCucNhan)
     if (this.data.maDiemKho) await this.getListNhaKho(this.data.maDiemKho)
     if (this.data.maNhaKho) await this.getListNganKho(this.data.maNhaKho)
@@ -206,6 +209,10 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     return !!check
   }
 
+  getMax() {
+    return (this.formData.value.soLuongDc > this.formData.value.tichLuongKd ? this.formData.value.tichLuongKd : this.formData.value.soLuongDc) || 0
+  }
+
   async getListDiemKho(maDvi) {
     if (maDvi) {
       try {
@@ -294,7 +301,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           maNganKhoNhan: "",
           maLoKhoNhan: "",
           thayDoiThuKho: "",
-          // slDcConLai: "",
           tichLuongKd: "",
           tenNhaKhoNhan: nhaKhoNhan.tenDvi
         })
@@ -496,12 +502,21 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   }
 
   onChangeSLNhapDc(value) {
-    const slDcConLai = Number(this.formData.value.soLuongDc) - Number(value)
-    if (slDcConLai >= 0) {
+    console.log()
+    if (value > 0) {
+      const slDcConLai = Number(this.formData.value.soLuongDc) - Number(value)
+      if (slDcConLai >= 0) {
+        this.formData.patchValue({
+          slDcConLai: slDcConLai
+        })
+      }
+    } else {
       this.formData.patchValue({
-        slDcConLai: slDcConLai
+        slDcConLai: this.data.slDcConLai
+
       })
     }
+
   }
 
 

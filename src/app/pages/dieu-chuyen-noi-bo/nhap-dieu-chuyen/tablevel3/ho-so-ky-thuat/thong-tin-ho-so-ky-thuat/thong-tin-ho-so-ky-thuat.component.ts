@@ -176,7 +176,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
   }
 
   async loadDetail(id) {
-    let res = await this.hoSoKyThuatBdgService.getDetail({ id: id, type: "DCNBX" });
+    let res = await this.hoSoKyThuatBdgService.getDetail({ id: id, type: "DCNBN" });
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.formData.patchValue(data);
@@ -225,7 +225,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
 
   async save() {
     try {
-      this.formData.patchValue({ type: 'DCNBX' });
+      this.formData.patchValue({ type: 'DCNBN' });
       let body = this.formData.value;
       let rs = await this.createUpdate(body);
     } catch (e) {

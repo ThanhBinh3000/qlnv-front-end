@@ -433,7 +433,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     if (this.idInput) {
       body.id = this.idInput
     }
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
       this.formData.patchValue({

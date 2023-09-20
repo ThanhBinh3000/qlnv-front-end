@@ -97,8 +97,8 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       tenCloaiVthh: [],
       tichLuongKhaDung: [],
       donViTinh: [],
-      soBBNtLd: [],
-      bBNtLdId: [],
+      soBBNtLd: [, [Validators.required]],
+      bBNtLdId: [, [Validators.required]],
       tenLoKhoXuat: [],
       maLoKhoXuat: [],
       tenNganKhoXuat: [],
@@ -229,37 +229,37 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`, });
         await this.loadChiTietQdinh(data.qdDcId);
         await this.getDataKho(data.maLoKho || data.maNganKho)
-        await this.dsBBNTBQLD(data.qdDcId, data.soQdinhDc, data.maLoKho, data.maNganKho)
+        // await this.dsBBNTBQLD(data.qdDcId, data.soQdinhDc, data.maLoKho, data.maNganKho)
       }
 
     }
     await this.spinner.hide();
   }
 
-  async dsBBNTBQLD(qdDcId, soQdinhDc, maLoKho, maNganKho) {
-    const body = {
-      trangThai: STATUS.DA_DUYET_LDCC,
-      qdDcId,
-      soQdinhDc,
-      maLoKho,
-      maNganKho,
-      isVatTu: false
-    }
-    let bbNTBQ = ''
-    let bBNtLdId = ''
-    let res = await this.bienBanNghiemThuBaoQuanLanDauService.getDanhSach(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data
-      data.forEach(element => {
-        bbNTBQ = bbNTBQ.concat(`${element.soBban}, `)
-        bBNtLdId = bbNTBQ.concat(`${element.id}, `)
-      });
-      this.formData.patchValue({
-        soBBNtLd: bbNTBQ,
-        bBNtLdId
-      })
-    }
-  }
+  // async dsBBNTBQLD(qdDcId, soQdinhDc, maLoKho, maNganKho) {
+  //   const body = {
+  //     trangThai: STATUS.DA_DUYET_LDCC,
+  //     qdDcId,
+  //     soQdinhDc,
+  //     maLoKho,
+  //     maNganKho,
+  //     isVatTu: false
+  //   }
+  //   let bbNTBQ = ''
+  //   let bBNtLdId = ''
+  //   let res = await this.bienBanNghiemThuBaoQuanLanDauService.getDanhSach(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     const data = res.data
+  //     data.forEach(element => {
+  //       bbNTBQ = bbNTBQ.concat(`${element.soBban}, `)
+  //       bBNtLdId = bbNTBQ.concat(`${element.id}, `)
+  //     });
+  //     this.formData.patchValue({
+  //       soBBNtLd: bbNTBQ,
+  //       bBNtLdId
+  //     })
+  //   }
+  // }
 
   async getPPKTCL() {
     let data = await this.dmService.danhMucChungGetAll("PP_KIEM_TRA_CL");
@@ -439,7 +439,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         }
 
         await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)
-        await this.dsBBNTBQLD(this.formData.value.qdDcId, this.formData.value.soQdinhDc, data.maLoKhoNhan, data.maNganKhoNhan)
+        // await this.dsBBNTBQLD(this.formData.value.qdDcId, this.formData.value.soQdinhDc, data.maLoKhoNhan, data.maNganKhoNhan)
       }
     });
   }
@@ -465,6 +465,49 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       })
 
     }
+  }
+
+  async openDialogBBNTBQLD() {
+    await this.spinner.show();
+    const body = {
+      trangThai: STATUS.DA_DUYET_LDCC,
+      qdDcId: this.formData.value.qdDcId,
+      soQdinhDc: this.formData.value.soQdinhDc,
+      maLoKho: this.formData.value.maLoKho,
+      maNganKho: this.formData.value.maNganKho,
+      isVatTu: false
+    }
+    let dsBB = []
+    let res = await this.bienBanNghiemThuBaoQuanLanDauService.getDanhSach(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      dsBB = res.data
+
+    }
+
+    await this.spinner.hide();
+
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách biên bản nghiệm thu bảo quản lần đầu',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: dsBB,
+        dataHeader: ['Số biên bản'],
+        dataColumn: ['soBban']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.formData.patchValue({
+          soBBNtLd: data.soBban,
+          bBNtLdId: data.id,
+
+        });
+      }
+    });
   }
 
 
@@ -495,7 +538,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       });
     }
 
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soPhieu: data.soPhieu })
