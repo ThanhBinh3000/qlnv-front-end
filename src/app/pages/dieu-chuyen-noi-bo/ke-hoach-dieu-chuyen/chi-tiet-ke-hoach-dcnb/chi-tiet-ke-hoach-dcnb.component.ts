@@ -517,8 +517,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
             donViTinh: res.data.object.dviTinh,
             tonKho: res.data.object.slTon
           });
-          this.listLoKhoBq = [];
-
           this.formDataChiTiet.patchValue({
             thuKho: thuKho,
             thuKhoId: thuKhoId,
