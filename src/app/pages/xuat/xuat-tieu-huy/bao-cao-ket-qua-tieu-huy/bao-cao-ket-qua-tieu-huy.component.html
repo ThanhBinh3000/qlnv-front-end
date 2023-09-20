@@ -144,7 +144,8 @@
               <a *ngIf="userService.isAccessPermisson('XHDTQG_XTH_BCKQ_THEM')" (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a (click)="redirectDetail(data.id, true)">
+              <a *ngIf="userService.isAccessPermisson('XHDTQG_XTH_BCKQ_DUYETTP') || userService.isAccessPermisson('XHDTQG_XTH_BCKQ_DUYETLDC')"
+                (click)="redirectDetail(data.id, true)">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
               </a>
               <a *ngIf="userService.isAccessPermisson('XHDTQG_XTH_BCKQ_XOA')" (click)="delete(data)">
