@@ -115,12 +115,17 @@
                   <td>{{bbNhapDayKho.tenTrangThai}}</td>
                   <td>
                     <a *ngIf="bbNhapDayKho.trangThai == STATUS.DA_DUYET_LDCC"
-                      (click)="redirectToChiTiet(false, bbNhapDayKho.id)">
+                      (click)="redirectToChiTiet(true, bbNhapDayKho.id)">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                     </a>
                     <a *ngIf="bbNhapDayKho.trangThai != STATUS.DA_DUYET_LDCC"
                       (click)="redirectToChiTiet(false, bbNhapDayKho.id)">
                       <i class="fa fa-pencil" title="Sửa"></i>
+                    </a>
+                    <a *ngIf="bbNhapDayKho.trangThai == STATUS.CHO_DUYET_LDCC
+              && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH')"
+                       (click)="redirectToChiTiet(true, bbNhapDayKho.id)">
+                      <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
                     </a>
                     <a *ngIf="bbNhapDayKho.trangThai == STATUS.DU_THAO" (click)="xoaItem(bbNhapDayKho)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

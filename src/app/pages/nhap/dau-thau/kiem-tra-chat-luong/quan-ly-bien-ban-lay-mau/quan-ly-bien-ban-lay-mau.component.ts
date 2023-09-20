@@ -466,4 +466,27 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     }
   }
 
+  hienThiXem(data) {
+    if (this.loaiVthh.startsWith('02')) {
+      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_XEM')) {
+        if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+          return false;
+        } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
+          return false;
+        }
+        return true;
+      }
+      return false;
+    } else {
+      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_XEM')) {
+        if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+          return false;
+        } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
+          return false;
+        }
+        return true;
+      }
+      return false;
+    }
+  }
 }
