@@ -316,7 +316,21 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body = {};
+        let body = {
+          namKeHoach : this.searchFilter.namKeHoach,
+          soQuyetDinh : this.searchFilter.soQuyetDinh,
+          ngayKyTu : this.searchFilter.ngayKyTu,
+          ngayKyDen : this.searchFilter.ngayKyDen,
+          ngayHieuLucTu : this.searchFilter.ngayHieuLucTu,
+          ngayHieuLucDen : this.searchFilter.ngayHieuLucDen,
+          tgKhoiCong : this.searchFilter.tgKhoiCong,
+          tgHoanThanh  : this.searchFilter.tgHoanThanh,
+          maDvi : this.userInfo.MA_DVI,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
+        };
         this.quyetDinhService
           .export(body)
           .subscribe((blob) =>

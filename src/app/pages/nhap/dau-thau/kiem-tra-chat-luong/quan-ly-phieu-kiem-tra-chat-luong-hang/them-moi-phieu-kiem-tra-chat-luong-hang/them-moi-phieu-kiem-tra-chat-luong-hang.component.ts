@@ -17,6 +17,7 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import {formatNumber} from "@angular/common";
 
 
 @Component({
@@ -54,6 +55,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   previewName: string = 'nk_bb_ktra_kt';
   listHinhThucBaoQuan: any[] = [];
   listDanhGia: any[] = [];
+  formattedSlNhapKho: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -284,6 +286,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         hthucBquan: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id))).hthucBquan,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
+      this.formattedSlNhapKho = this.formData.get('soLuongNhapKho') ? formatNumber(this.formData.get('soLuongNhapKho').value * 1000, 'vi_VN', '1.0-99') : '0';
       await this.loadDsHthucBquan();
     }
   }

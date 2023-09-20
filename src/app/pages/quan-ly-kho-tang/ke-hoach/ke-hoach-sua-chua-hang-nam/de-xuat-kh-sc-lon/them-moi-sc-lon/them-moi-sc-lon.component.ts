@@ -382,8 +382,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
 
 
   convertListToTree() {
-    this.tableTren = this.dataTableRes.filter(item => item.tmdt > 5000000000);
-    this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 5000000000);
+    this.tableTren = this.dataTableRes.filter(item => item.tmdt > 15000000000);
+    this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 15000000000);
     if (this.tableTren && this.tableTren.length > 0) {
       this.tableTren = chain(this.tableTren).groupBy("tenKhoi")
         .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))

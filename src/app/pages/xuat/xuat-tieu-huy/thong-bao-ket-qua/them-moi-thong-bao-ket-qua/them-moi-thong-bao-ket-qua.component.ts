@@ -1,17 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "../../../../../services/donvi.service";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
 import * as dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {STATUS} from "../../../../../constants/status";
-import {FileDinhKem} from "../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import {MESSAGE} from "../../../../../constants/message";
+import { Validators } from "@angular/forms";
+import { STATUS } from "../../../../../constants/status";
+import { FileDinhKem } from "../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { MESSAGE } from "../../../../../constants/message";
 import * as uuid from "uuid";
 import {
   QuyetDinhTieuHuyService
@@ -19,6 +19,7 @@ import {
 import {
   ThongBaoKqTieuHuyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/ThongBaoKqTieuHuy.service";
+import { HoSoTieuHuyService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-tieu-huy/HoSoTieuHuy.service';
 
 @Component({
   selector: 'app-th-them-moi-thong-bao-ket-qua',
@@ -47,6 +48,7 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
     private danhMucService: DanhMucService,
     private quyetDinhTieuHuyService: QuyetDinhTieuHuyService,
     private thongBaoKqTieuHuyService: ThongBaoKqTieuHuyService,
+    private hoSoTieuHuyService: HoSoTieuHuyService
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongBaoKqTieuHuyService);
     for (let i = -3; i < 23; i++) {
@@ -56,26 +58,26 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
       });
     }
     this.formData = this.fb.group({
-      id:[],
-      maDvi:[],
-      nam:[dayjs().get("year"), [Validators.required]],
-      soThongBao:['', [Validators.required]],
-      ngayThongBao:['', [Validators.required]],
-      idQd:[],
-      soHoSo:['', [Validators.required]],
-      idHoSo:[],
-      soQd:['', [Validators.required]],
-      ngayKy:['', [Validators.required]],
-      trichYeu:['', [Validators.required]],
-      lyDo:[],
-      trangThai:[STATUS.DU_THAO],
-      ngayPduyet:[],
-      nguoiPduyetId:[],
-      ngayGduyet:[],
-      nguoiGduyetId:[],
-      lyDoTuChoi:[],
-      tenDvi:[],
-      tenTrangThai:['Dự thảo'],
+      id: [],
+      maDvi: [],
+      nam: [dayjs().get("year"), [Validators.required]],
+      soThongBao: ['', [Validators.required]],
+      ngayThongBao: ['', [Validators.required]],
+      idQd: [],
+      soHoSo: [''],
+      idHoSo: [],
+      soQd: [''],
+      ngayKy: ['', [Validators.required]],
+      trichYeu: ['', [Validators.required]],
+      lyDo: [],
+      trangThai: [STATUS.DU_THAO],
+      ngayPduyet: [],
+      nguoiPduyetId: [],
+      ngayGduyet: [],
+      nguoiGduyetId: [],
+      lyDoTuChoi: [],
+      tenDvi: [],
+      tenTrangThai: ['Dự thảo'],
       fileDinhKem: [new Array<FileDinhKem>()],
 
     });
@@ -87,7 +89,8 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
     try {
       this.maHauTo = '/' + this.userInfo.MA_QD;
       await Promise.all([
-        this.loadDsQd(),
+        // this.loadDsQd(),
+        this.loadDsHoSo()
       ]);
       await this.loadChiTiet(this.idInput);
     } catch (e) {
@@ -107,7 +110,7 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
             this.formData.patchValue({
               ...res.data,
               soThongBao: res.data.soThongBao?.split('/')[0] ?? null,
-            }, {emitEvent: false});
+            }, { emitEvent: false });
           }
         })
         .catch((e) => {
@@ -123,9 +126,10 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
     }
 
   }
-  async loadDsQd() {
-    this.quyetDinhTieuHuyService.search({
-      trangThai: STATUS.BAN_HANH,
+
+  async loadDsHoSo() {
+    this.hoSoTieuHuyService.search({
+      trangThai: STATUS.TUCHOI_BTC,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: this.page - 1,
@@ -133,29 +137,51 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        if (data && data.content && data.content.length > 0) {
-          this.listQd = data.content.filter(item => item.soThongBao == null);
+        if (data && data.content && data.content.length > 0 && this.formData.value.idHoSo == null) {
+          this.listHoSo = data.content;
+        } else {
+          this.listHoSo = data.content;
         }
       } else {
-        this.listQd = [];
+        this.listHoSo = [];
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     });
   }
 
+  // async loadDsQd() {
+  //   this.quyetDinhTieuHuyService.search({
+  //     trangThai: STATUS.BAN_HANH,
+  //     paggingReq: {
+  //       limit: this.globals.prop.MAX_INTERGER,
+  //       page: this.page - 1,
+  //     },
+  //   }).then(res => {
+  //     if (res.msg == MESSAGE.SUCCESS) {
+  //       let data = res.data;
+  //       if (data && data.content && data.content.length > 0) {
+  //         this.listQd = data.content.filter(item => item.soThongBao == null);
+  //       }
+  //     } else {
+  //       this.listQd = [];
+  //       this.notification.error(MESSAGE.ERROR, res.msg);
+  //     }
+  //   });
+  // }
+
   async save() {
-    this.formData.disable({emitEvent: false});
+    this.formData.disable({ emitEvent: false });
     let body = {
       ...this.formData.value,
       soThongBao: this.formData.value.soThongBao ? this.formData.value.soThongBao + this.maHauTo : this.maHauTo
     };
     let rs = await this.createUpdate(body);
-    this.formData.enable({emitEvent: false});
-    this.formData.patchValue({id: rs.id})
+    this.formData.enable({ emitEvent: false });
+    this.formData.patchValue({ id: rs.id })
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    body = {...body, soThongBao: this.formData.value.soThongBao + this.maHauTo}
+    body = { ...body, soThongBao: this.formData.value.soThongBao + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -175,7 +201,7 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
                 idHoSo: res.data.idHoSo,
                 soQd: res.data.soQd,
 
-               });
+              });
             }
             console.log(123)
           }

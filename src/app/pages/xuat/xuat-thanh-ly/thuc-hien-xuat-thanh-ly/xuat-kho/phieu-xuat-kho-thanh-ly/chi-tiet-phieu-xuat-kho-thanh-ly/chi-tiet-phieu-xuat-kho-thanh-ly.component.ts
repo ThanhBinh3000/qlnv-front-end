@@ -41,7 +41,7 @@ export class ChiTietPhieuXuatKhoThanhLyComponent extends Base2Component implemen
   listSoQuyetDinh: any = [];
   listDiaDiemXuat: any = [];
   listPhieuXk: any = [];
-
+  templateName = "Phiếu xuất kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

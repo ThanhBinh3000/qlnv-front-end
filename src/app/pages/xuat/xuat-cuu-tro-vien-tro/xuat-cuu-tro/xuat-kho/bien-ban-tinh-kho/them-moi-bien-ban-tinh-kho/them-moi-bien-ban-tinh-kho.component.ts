@@ -165,7 +165,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         thuKho: this.userInfo.TEN_DAY_DU,
         type: "XUAT_CTVT",
         tongSlNhap: "100000",
-        loaiVthh: this.loaiVthh
+        // loaiVthh: this.loaiVthh
       });
     }
 
@@ -178,8 +178,12 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaiVthh,
-      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      // loaiVthh: this.loaiVthh,
+      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      }
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -201,7 +205,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
         dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh'],
+        dataColumn: ['soBbQd', 'ngayKy', 'tenVthh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -219,9 +223,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
-
     });
-    let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+    let dataChiCuc = data.dataDtl.filter(item => item.tenChiCuc == this.userInfo.TEN_DVI);
     if (dataChiCuc) {
       this.listDiaDiemNhap = dataChiCuc;
     }
@@ -269,7 +272,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
         type: "XUAT_CTVT",
-        loaiVthh: this.loaiVthh
+        // loaiVthh: this.loaiVthh
       }
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;

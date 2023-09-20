@@ -138,10 +138,10 @@
                     <td>{{lk.ngayNhapDayKho | date: 'dd/MM/YYYY' }}</td>
                     <td>{{lk.pknghiemClHang?.tenTrangThai}}</td>
                     <td>
-                      <a *ngIf="lk.pknghiemClHang?.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id)">
+                      <a *ngIf="lk.pknghiemClHang?.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id, item)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
-                      <a *ngIf="lk.pknghiemClHang?.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id)">
+                      <a *ngIf="lk.pknghiemClHang?.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id, item)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a *ngIf="lk.pknghiemClHang?.trangThai == STATUS.DU_THAO" (click)="xoaItem(lk.pknghiemClHang)">

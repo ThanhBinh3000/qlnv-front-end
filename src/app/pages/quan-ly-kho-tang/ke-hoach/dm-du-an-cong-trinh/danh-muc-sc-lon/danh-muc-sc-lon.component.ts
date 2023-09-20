@@ -13,7 +13,7 @@ import {ThongTinDmScLonComponent} from "./thong-tin-dm-sc-lon/thong-tin-dm-sc-lo
 import {
   DanhMucSuaChuaService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import {  Router } from "@angular/router";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-danh-muc-sc-lon',
@@ -29,6 +29,7 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
     {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
   ];
+
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -43,8 +44,7 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [null],
-      tenCongTrinh: [null],
-      maDiemKho: [null],
+      soQdPdBcKtkt: [null],
       trangThai: [null],
       tgThucHien: [null],
       tgThucHienTu: [null],
@@ -63,10 +63,11 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     }
     this.spinner.show();
     try {
-      if (this.userService.isTongCuc()) {
-        this.loadDsCuc()
-      } else {
-        this.loadDsDiemKho()
+       this.loadDsCuc()
+      if (this.userService.isCuc()) {
+        this.formData.patchValue({
+          maDvi : this.userInfo.MA_DVI
+        })
       }
       await this.filter()
       this.spinner.hide();
@@ -87,8 +88,8 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
       })
     }
     this.formData.patchValue({
-      maDvi: this.userService.isCuc() ?  this.userInfo.MA_DVI : null,
-      type : "00"
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      type: "00"
     })
     await this.search();
   }
@@ -110,18 +111,6 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     const dsTong = await this.dviService.layTatCaDonViByLevel(2);
     this.dsCuc = dsTong.data
     this.dsCuc = this.dsCuc.filter(item => item.type != "PB")
-  }
-
-  async changeCuc(event) {
-    const dsTong = await this.dviService.layTatCaDonViByLevel(4);
-    this.dsKho = dsTong.data
-    this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(event) && item.type != 'PB')
-  }
-
-  async loadDsDiemKho() {
-    const dsTong = await this.dviService.layTatCaDonViByLevel(4);
-    this.dsKho = dsTong.data
-    this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI) && item.type != 'PB')
   }
 
   openDialog(data: any, isView: boolean) {

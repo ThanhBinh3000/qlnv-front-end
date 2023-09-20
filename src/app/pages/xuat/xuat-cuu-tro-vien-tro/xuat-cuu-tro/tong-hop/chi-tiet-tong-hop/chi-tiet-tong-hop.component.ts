@@ -226,7 +226,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      this.formData.patchValue({loaiNhapXuat: 'Xuất cứu trợ'})
+      this.formData.patchValue({loaiNhapXuat: 'Xuất cứu trợ', kieuNhapXuat: 'Xuất không thu tiền'})
     }
   }
 

@@ -121,6 +121,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         idVirtual: [''],
         id: [],
         idDx: [],
+        idQdPdDtl: [],
         soLuongDx: [],
         soLuongGiao: [],
         loaiNhapXuat: [],
@@ -255,7 +256,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       //
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
       let filterLuongThuc = cloneDeep(listLuongThuc.children.filter(s => s.key == '0101' || s.key == '0102'));
-      let filterVatTu = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '02'));
+      let filterVatTu = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '02' || s.key == '04'));
       this.listLoaiHangHoa = [...filterLuongThuc, ...filterVatTu.children];
     }
   }
@@ -321,6 +322,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
     await this.createUpdate(body);
+    await this.buildTableView();
   }
 
 
@@ -354,10 +356,12 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(data.id);
             let detail = res.data;
             detail.quyetDinhPdDtl.forEach(s => {
-              delete s.id;
+              s.idQdPdDtl = s.id;
               s.soLuongDx = s.soLuong;
               s.soLuong = 0;
+              delete s.id;
             });
+
             this.formData.patchValue({
               idQdPd: detail.id,
               soQdPd: detail.soBbQd,
@@ -366,6 +370,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               tenVthh: detail.tenVthh,
               dataDtl: detail.quyetDinhPdDtl
             })
+            console.log(this.formData.value, 'asdadas')
             await this.buildTableView();
           }
         });
@@ -480,7 +485,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
                   tenChiCuc: tenChiCucRow.tenChiCuc || '',
                   soLuongGiao: tenChiCucRow.soLuongGiao || 0,
                   soLuong: soLuong,
-                  tonKhoDvi: tenLoaiVthhRow.tonKhoDvi || 0,
+                  tonKhoDvi: tenChiCucRow.tonKhoDvi || 0,
+                  tenTrangThai: tenChiCucRow.tenTrangThai || 'Đang thực hiện',
                   childData: v1
                 }
               }).value();
@@ -543,6 +549,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           soLuongDx: baseData.soLuongDx,
           tonKhoDvi: baseData.tonKhoDvi,
           donViTinh: baseData.donViTinh,
+          idQdPdDtl: baseData.idQdPdDtl,
           edit: edit
         });
       } else if (level == 2) {
@@ -559,6 +566,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           donViTinh: baseData.donViTinh,
           tenChiCuc: baseData.tenChiCuc,
           soLuongGiao: baseData.soLuongGiao,
+          idQdPdDtl: baseData.idQdPdDtl,
           edit: edit
         });
       }
@@ -690,7 +698,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               tonKhoDvi: tonKhoDvi,
               tonKhoCloaiVthh: tonKhoCloaiVthh
             });
-            console.log(this.formDataDtl.value, '123213')
           } else {
             this.formDataDtl.patchValue({tonKhoDvi: 0, tonKhoCloaiVthh: 0});
           }

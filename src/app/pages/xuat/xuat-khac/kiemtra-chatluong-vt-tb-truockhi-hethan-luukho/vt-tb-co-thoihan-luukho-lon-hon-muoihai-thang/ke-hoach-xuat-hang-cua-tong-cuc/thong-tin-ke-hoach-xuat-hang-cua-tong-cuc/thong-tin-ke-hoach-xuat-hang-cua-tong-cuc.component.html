@@ -157,9 +157,15 @@
             <div nz-col nzSpan='6'>
               <nz-form-item>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-form-label [nzNoColon]='true' class='label-color-kh'> Mã tổng hợp
+                  <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Mã tổng hợp
                   </nz-form-label>
-                  <input nz-input formControlName='id' [readonly]='true' />
+                  <nz-form-control [nzErrorTip]='error'>
+                    <nz-input-group nzAddOnAfterIcon='folder-open'
+                                    (click)="!isViewDetail  ? openDialogDsTongHop():  'javascript:;'">
+                      <input class='search__input' [readonly]='true' nz-input formControlName='idCanCu'
+                             readonly />
+                    </nz-input-group>
+                  </nz-form-control>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -238,36 +244,37 @@
               </nz-form-item>
               <nz-form-item>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Thời gian đề xuất xuất hàng của Tổng Cục
+                  <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Thời gian đề xuất xuất hàng của
+                    Tổng Cục
                   </nz-form-label>
-                  <nz-range-picker [nzDisabled]='true' formControlName='ngayDxXuatHang'
+                  <nz-range-picker [nzDisabled]='isViewDetail' formControlName='ngayDxXuatHang'
                                    nzFormat='dd/MM/yyyy'></nz-range-picker>
                 </nz-form-control>
               </nz-form-item>
-<!--              <nz-form-item>-->
-<!--                <nz-form-control [nzErrorTip]='error'>-->
-<!--                  <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Bản tổng hợp-->
-<!--                  </nz-form-label>-->
-<!--                  <nz-form-control [nzErrorTip]='error'>-->
-<!--                    <nz-input-group nzAddOnAfterIcon='folder-open'-->
-<!--                                    (click)="!isViewDetail  ? openDialogDsTongHop():  'javascript:;'">-->
-<!--                      <input class='search__input' [readonly]='true' nz-input formControlName='idCanCu'-->
-<!--                             readonly />-->
-<!--                    </nz-input-group>-->
-<!--                  </nz-form-control>-->
-<!--                </nz-form-control>-->
-<!--              </nz-form-item>-->
+              <!--              <nz-form-item>-->
+              <!--                <nz-form-control [nzErrorTip]='error'>-->
+              <!--                  <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Bản tổng hợp-->
+              <!--                  </nz-form-label>-->
+              <!--                  <nz-form-control [nzErrorTip]='error'>-->
+              <!--                    <nz-input-group nzAddOnAfterIcon='folder-open'-->
+              <!--                                    (click)="!isViewDetail  ? openDialogDsTongHop():  'javascript:;'">-->
+              <!--                      <input class='search__input' [readonly]='true' nz-input formControlName='idCanCu'-->
+              <!--                             readonly />-->
+              <!--                    </nz-input-group>-->
+              <!--                  </nz-form-control>-->
+              <!--                </nz-form-control>-->
+              <!--              </nz-form-item>-->
             </div>
-<!--            <div nz-col nzSpan='18'>-->
-<!--              <nz-form-item>-->
-<!--                <nz-form-control [nzErrorTip]='error'>-->
-<!--                  <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Mô tả chi tiết-->
-<!--                  </nz-form-label>-->
-<!--                  <textarea rows='5' nz-input formControlName='moTa' class='search__input'-->
-<!--                            [readonly]='isViewDetail || (dataTongHop && dataTongHop.id > 0)'></textarea>-->
-<!--                </nz-form-control>-->
-<!--              </nz-form-item>-->
-<!--            </div>-->
+            <!--            <div nz-col nzSpan='18'>-->
+            <!--              <nz-form-item>-->
+            <!--                <nz-form-control [nzErrorTip]='error'>-->
+            <!--                  <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Mô tả chi tiết-->
+            <!--                  </nz-form-label>-->
+            <!--                  <textarea rows='5' nz-input formControlName='moTa' class='search__input'-->
+            <!--                            [readonly]='isViewDetail || (dataTongHop && dataTongHop.id > 0)'></textarea>-->
+            <!--                </nz-form-control>-->
+            <!--              </nz-form-item>-->
+            <!--            </div>-->
           </div>
         </form>
         <h3 class='text-uppercase mt-4'>Tổng hợp dữ liệu xuất khác theo cục dtnn kv</h3>
