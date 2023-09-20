@@ -64,7 +64,7 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
       tenLoaiVthh: '',
       tongSoLuongDx: '',
       tongSoLuong: '',
-      soLuongXuaCap: '',
+      soLuongXuatCap: '',
       trichYeu: '',
       tenTrangThai: '',
 
