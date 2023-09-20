@@ -208,7 +208,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}` });
         await this.dsHinhThucBaoQuan(data.cloaiVthh)
         if (data.hinhThucBq) {
-          const dshinhThucBq = data.hinhThucBq.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
+          const dshinhThucBq = data.hinhThucBq.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1] }))
           this.listHinhThucBaoQuan = this.listHinhThucBaoQuan.map(pp => {
             return {
               ...pp,
@@ -598,7 +598,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     let body = this.formData.value;
     body.phieuKNCLDinhKem = this.phieuKNCLDinhKem;
     body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu;
-    body.hinhThucBq = this.listHinhThucBaoQuan.filter(item => item.checked).map(i => `${i.id}-${i.giaTri}`).join(",");
+    body.hinhThucBq = this.listHinhThucBaoQuan.filter(item => item.checked).map(i => `${i.id}+*${i.giaTri}`).join("-*");
     if (this.idInput) {
       body.id = this.idInput
     } else {
