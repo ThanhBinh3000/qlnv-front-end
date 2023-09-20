@@ -530,39 +530,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
   }
 
-  async getChiTietTonKho(body) {
-    if (!body && !body.maDvi && body.maDvi != "") return;
-    try {
-      // lấy thông tin hiện tại của lô
-      const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.length > 0) {
-          if (res.data.length === 1) {
-            this.formDataChiTiet.patchValue({
-              loaiVthh: res.data[0].loaiVthh,
-              tenLoaiVthh: res.data[0].tenLoaiVthh,
-              cloaiVthh: res.data[0].cloaiVthh,
-              tenCloaiVthh: res.data[0].tenCloaiVthh,
-              donViTinh: res.data[0].tenDonViTinh,
-              tonKho: res.data[0].slHienThoi
-            });
-          } else {
-            this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, "Vui lòng khởi tạo dữ liệu đầu kỳ của " + body.tenLoKho);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-      // xử lý thông tin chọn lô
-    } catch (error) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
-  }
-
   expandAll() {
     this.tableView.forEach(s => {
       this.expandSetString.add(s.idVirtual);
