@@ -75,7 +75,6 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       ngayKetThuc: null,
       ngayKetThucTu: null,
       ngayKetThucDen: null,
-      type: null
     })
     this.filterTable = {
       nam: '',

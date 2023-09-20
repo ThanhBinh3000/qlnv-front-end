@@ -64,7 +64,7 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
       tenLoaiVthh: '',
       tongSoLuongDx: '',
       tongSoLuong: '',
-      soLuongXuaCap: '',
+      soLuongXuatCap: '',
       trichYeu: '',
       tenTrangThai: '',
 
