@@ -37,6 +37,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
 import { saveAs } from "file-saver";
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -79,6 +80,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   isChiTiet: boolean = false;
   listTieuChuan: any[] = [];
   isValid = false;
+  dmTieuChuan: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -87,6 +89,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     modal: NzModalService,
     private phieuKiemNghiemChatLuongHangService: QuanLyPhieuKiemNghiemChatLuongHangService,
     private danhMucService: DanhMucService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
   ) {
@@ -416,13 +419,20 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenThuKho: data.bbNhapDayKho.tenNguoiTao
       })
       if (!isChiTiet) {
-        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-        if (dmTieuChuan.data) {
-          this.dataTableChiTieu = dmTieuChuan.data.children;
-          this.dataTableChiTieu.forEach(element => {
-            element.edit = false
-          });
-        }
+        this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh).then(res => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            if (res.data) {
+              this.dataTableChiTieu = res.data
+              this.dataTableChiTieu.forEach(element => {
+                element.edit = false
+              });
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }).catch(err => {
+          this.notification.error(MESSAGE.ERROR, err.msg);
+        });
       }
     }
   }

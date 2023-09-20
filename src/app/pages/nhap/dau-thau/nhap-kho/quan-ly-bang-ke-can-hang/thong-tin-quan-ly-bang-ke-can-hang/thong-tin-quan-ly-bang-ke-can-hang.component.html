@@ -368,7 +368,7 @@
           <th>Trọng lượng bao bì (2)</th>
           <th width="60px">Hành động</th>
         </tr>
-        <tr *ngIf="formData.value.trangThai != STATUS.DA_DUYET_LDCC">
+        <tr *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView">
           <th></th>
           <th>
             <input nz-input [(ngModel)]="rowItem.maCan"/>
@@ -393,18 +393,46 @@
         </thead>
         <tbody>
         <tr *ngFor="let item of dataTable; let i = index">
-          <td>{{i + 1}}</td>
-          <td>{{item.maCan}}</td>
-          <td>{{item.trongLuongBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.trongLuongCaBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>
-            <!--                         <a (click)="editRow(data.id)"> -->
-            <!--                             <i class="fa fa-pencil" title="Sửa"></i> -->
-            <!--                         </a> -->
-            <!--                         <a (click)="deleteRow(data)"> -->
-            <!--                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i> -->
-            <!--                         </a> -->
-          </td>
+          <ng-container *ngIf="!item.edit;else editTemp">
+            <td>{{i + 1}}</td>
+            <td>{{item.maCan}}</td>
+            <td>{{item.trongLuongBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{item.trongLuongCaBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>
+              <a *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView"
+                 (click)="editRow(i)">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView"
+                 (click)="deleteRow(i)">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemp>
+            <td>{{i + 1}}</td>
+            <th>
+              <input nz-input [(ngModel)]="rowItemEdit[i].maCan"/>
+            </th>
+            <th>
+              <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser" [(ngModel)]="rowItemEdit[i].trongLuongBaoBi"></nz-input-number>
+            </th>
+            <th>
+              <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser" [(ngModel)]="rowItemEdit[i].trongLuongCaBaoBi"></nz-input-number>
+            </th>
+            <td>
+              <a *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView"
+                 (click)="saveEdit(i)">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView"
+                 (click)="cancelEdit(i)">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+          </ng-template>
         </tr>
         </tbody>
         <tfoot>
