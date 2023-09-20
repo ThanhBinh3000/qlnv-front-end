@@ -27,6 +27,7 @@ import {
   PhieuKdclVtKtclService,
 } from '../../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service';
 import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-thong-tin-bao-cao-ket-qua-kiem-dinh',
   templateUrl: './thong-tin-bao-cao-ket-qua-kiem-dinh.component.html',
@@ -131,6 +132,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
             this.formData.patchValue({
               id: res.data.id,
               tenDvi: res.data.tenDvi,
+              maDviNhan: res.data.maDviNhan,
               soBaoCao: res.data.soBaoCao,
               ngayBaoCao: res.data.ngayBaoCao,
               tenBaoCao: res.data.tenBaoCao,
@@ -161,7 +163,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_LDC || trangThai == STATUS.DA_DUYET_LDC) {
+    if (trangThai == STATUS.CHO_DUYET_LDC || trangThai == STATUS.CHO_DUYET_TP) {
       return true;
     }
     return false;
@@ -270,8 +272,13 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     let msg = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDC:
-      case STATUS.DU_THAO: {
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
@@ -289,6 +296,10 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     switch (this.formData.value.trangThai) {
       case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
         break;
       }
     }

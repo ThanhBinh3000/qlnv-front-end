@@ -88,8 +88,8 @@
               <th class="text-center">Lô kho</th>
               <th class="text-center">Số BB LM/BGM</th>
               <th class="text-center">Ngày lấy mẫu</th>
-              <th class="text-center">Số BB nhập đầy kho</th>
-              <th class="text-center">Ngày nhập đầy kho</th>
+              <th class="text-center" *ngIf="!isVatTu">Số BB nhập đầy kho</th>
+              <th class="text-center" *ngIf="!isVatTu">Ngày nhập đầy kho</th>
               <th class="text-center">Trạng thái</th>
               <th class="text-center">Hành động</th>
             </tr>
@@ -108,12 +108,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td *ngIf="!isVatTu"></td>
+                <td *ngIf="!isVatTu"></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <!-- <td></td>
-                <td></td> -->
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -128,12 +126,10 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td *ngIf="!isVatTu"></td>
+                    <td *ngIf="!isVatTu"></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <!-- <td></td>
-                    <td></td> -->
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -151,8 +147,8 @@
                         <td>{{(row3.ngayKiemNghiem || "")}}</td> -->
                         <td>{{(row3.soBBLayMau || "")}}</td>
                         <td>{{(row3.ngaylayMau | date: "dd/MM/yyyy")}}</td>
-                        <td>{{(row3.soBBTinhKho || "")}}</td>
-                        <td>{{(row3.ngayXuatDocKho || "")}}</td>
+                        <td *ngIf="!isVatTu">{{(row3.soBBTinhKho || "")}}</td>
+                        <td *ngIf="!isVatTu">{{(row3.ngayXuatDocKho || "")}}</td>
                         <td>{{(row3.tenTrangThai || "")}}</td>
                         <td>
                           <a *ngIf="!row3.soBBLayMau" (click)="add(row3)">
