@@ -13,7 +13,7 @@ import { BaoCaoNghiepVuQlyKhoComponent } from './bao-cao-nghiep-vu-qly-kho/bao-c
   declarations: [
     KhaiThacBaoCaoComponent,
     BaoCaoNhapXuatHangDtqgComponent,
-    BaoCaoNghiepVuQlyKhoComponent,
+    // BaoCaoNghiepVuQlyKhoComponent,
   ],
   imports: [
     CommonModule,
