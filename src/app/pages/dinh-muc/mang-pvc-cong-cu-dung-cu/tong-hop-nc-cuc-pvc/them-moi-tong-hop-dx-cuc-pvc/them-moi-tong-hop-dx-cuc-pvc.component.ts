@@ -1,24 +1,26 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {chain} from 'lodash';
-import {v4 as uuidv4} from 'uuid';
-import {MESSAGE} from "../../../../../constants/message";
-import dayjs from "dayjs";
-import {STATUS} from "../../../../../constants/status";
-import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
-import {PvcDxChiCucCtiet} from "../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../Utility/utils";
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { FormGroup, Validators } from '@angular/forms';
+import { Base2Component } from '../../../../../components/base2/base2.component';
+import { chain } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { MESSAGE } from '../../../../../constants/message';
+import dayjs from 'dayjs';
+import { STATUS } from '../../../../../constants/status';
+import { DxChiCucPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service';
+import {
+  PvcDxChiCucCtiet,
+} from '../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component';
+import { AMOUNT_ONE_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-them-moi-tong-hop-dx-cuc-pvc',
   templateUrl: './them-moi-tong-hop-dx-cuc-pvc.component.html',
-  styleUrls: ['./them-moi-tong-hop-dx-cuc-pvc.component.scss']
+  styleUrls: ['./them-moi-tong-hop-dx-cuc-pvc.component.scss'],
 })
 export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements OnInit {
   @Input() id: number;
@@ -27,7 +29,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   isTongHop: boolean = false;
   rowItem: PvcDxChiCucCtiet = new PvcDxChiCucCtiet();
   dataEdit: { [key: string]: { edit: boolean; data: PvcDxChiCucCtiet } } = {};
-  formDataTongHop: FormGroup
+  formDataTongHop: FormGroup;
   expandSet = new Set<number>();
   amount = AMOUNT_ONE_DECIMAL;
 
@@ -39,8 +41,8 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     modal: NzModalService,
     private dxChiCucService: DxChiCucPvcService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
-    super.ngOnInit()
+    super(httpClient, storageService, notification, spinner, modal, dxChiCucService);
+    super.ngOnInit();
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null],
@@ -58,7 +60,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.formDataTongHop = this.fb.group({
       namKeHoach: [dayjs().get('year'), Validators.required],
       ngayDx: [null],
-      listSoCv: [null]
+      listSoCv: [null],
     });
   }
 
@@ -66,7 +68,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.spinner.show();
     try {
       await this.loadDsDxCc();
-      await this.getCtieuKhTc(this.formData.value.namKeHoach)
+      await this.getCtieuKhTc(this.formData.value.namKeHoach);
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -86,18 +88,18 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     }
     let body = this.formDataTongHop.value;
     if (!body.listSoCv || body.listSoCv.length == 0) {
-      let arr = []
+      let arr = [];
       if (this.listDxChiCuc && this.listDxChiCuc.length > 0) {
         this.listDxChiCuc.forEach(item => {
-          arr.push(item.soCv)
-        })
+          arr.push(item.soCv);
+        });
       }
       body.listSoCv = arr.toString();
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
-    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
-    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null;
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null;
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.dxChiCucService.tongHopDxCc(body);
@@ -106,26 +108,26 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       if (detail && detail.listQlDinhMucPvcDxCcdcDtl) {
         this.formData.patchValue({
           namKeHoach: this.formDataTongHop.value.namKeHoach,
-        })
-        this.dataTable = detail.listQlDinhMucPvcDxCcdcDtl
+        });
+        this.dataTable = detail.listQlDinhMucPvcDxCcdcDtl;
         this.dataTable.forEach(item => {
           let arr = detail.listQlDinhMucPvcDxCcdc;
           if (arr && arr.length > 0) {
             arr.forEach(dtl => {
               if (dtl.id == item.dxPvcCcdcId) {
-                item.maDvi = dtl.maDvi
+                item.maDvi = dtl.maDvi;
               }
-            })
+            });
           }
           item.id = null;
           item.ghiChu = null;
           idVirtual:uuidv4();
-        })
-        this.convertListData()
+        });
+        this.convertListData();
       }
       this.isTongHop = true;
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg)
+      this.notification.error(MESSAGE.ERROR, res.msg);
       return;
     }
   }
@@ -134,18 +136,18 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.spinner.show();
     try {
       let body = {
-        "capDvi": "2",
-        "paggingReq": {
-          "limit": 10,
-          "page": 0
-        }
-      }
+        'capDvi': '2',
+        'paggingReq': {
+          'limit': 10,
+          'page': 0,
+        },
+      };
       let res = await this.dxChiCucService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.listDxChiCuc = data.content;
         if (this.listDxChiCuc) {
-          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
+          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP);
         }
       } else {
         this.listDxChiCuc = [];
@@ -162,20 +164,20 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
 
   async getCtieuKhTc(event) {
     let res = await this.dxChiCucService.getCtieuKhTc({
-      namKeHoach: event
+      namKeHoach: event,
     });
     if (res.data) {
       this.formData.patchValue({
-        soQdGiaoCt: res.data.soQuyetDinh
-      })
+        soQdGiaoCt: res.data.soQuyetDinh,
+      });
     }
   }
 
   async save() {
     this.formData.patchValue({
-      namKeHoach: this.formDataTongHop.value.namKeHoach
-    })
-    this.helperService.markFormGroupTouched(this.formData)
+      namKeHoach: this.formDataTongHop.value.namKeHoach,
+    });
+    this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
     }
@@ -186,11 +188,11 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
-    let res = await this.createUpdate(this.formData.value)
+    let res = await this.createUpdate(this.formData.value);
     if (res) {
-      this.goBack()
+      this.goBack();
     } else {
-      this.convertListData()
+      this.convertListData();
     }
   }
 
@@ -204,11 +206,11 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null
-          })
+            soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null,
+          });
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucPvcDxCcdcDtl;
-          this.convertListData()
+          this.convertListData();
           this.expandAll();
         }
       } else {
@@ -235,25 +237,26 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
         break;
       }
     }
-    await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
+    await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?');
   }
 
   async tuChoi() {
     let trangThai;
     switch (this.formData.value.trangThai) {
       case STATUS.CHO_DUYET_LDTC : {
-        trangThai = STATUS.TU_CHOI_LDTC
+        trangThai = STATUS.TU_CHOI_LDTC;
       }
     }
-    await this.reject(this.id, trangThai, 'Bạn có chắc chắn muốn từ chối?')
+    await this.reject(this.id, trangThai, 'Bạn có chắc chắn muốn từ chối?');
   }
 
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({tenCcdc: key, dataChild: value, idVirtual: uuidv4(),})
-        ).value()
+        .map((value, key) => ({ tenCcdc: key, dataChild: value, idVirtual: uuidv4() }),
+        ).value();
     }
+    console.log(this.dataTable, 'this.dataTable this.dataTable this.dataTable ');
     this.expandAll();
   }
 
@@ -262,11 +265,11 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.dataTable.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
-          arr.push(data)
-        })
+          arr.push(data);
+        });
       }
-    })
-    this.dataTable = arr
+    });
+    this.dataTable = arr;
   }
 
   sumSoLuong(column: string, tenCcdc: string, type?) {
@@ -275,36 +278,36 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.dataTable.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
-          arr.push(data)
-        })
+          arr.push(data);
+        });
       }
-    })
-    arr = arr.filter(item => item.tenCcdc == tenCcdc)
+    });
+    arr = arr.filter(item => item.tenCcdc == tenCcdc);
     if (arr && arr.length > 0) {
       if (!type) {
         const sum = arr.reduce((prev, cur) => {
-          prev += cur[column]
+          prev += cur[column];
           return prev;
-        }, 0)
-        sl = sum
+        }, 0);
+        sl = sum;
       } else {
         const sum = arr.reduce((prev, cur) => {
-          prev += cur.soLuong * cur.donGia
+          prev += cur.soLuong * cur.donGia;
           return prev;
-        }, 0)
-        sl = sum
+        }, 0);
+        sl = sum;
       }
     }
-    return sl
+    return sl;
   }
 
   disableForm() {
     let check = false;
     if (this.isView) {
-      check = true
+      check = true;
     } else {
       if (this.id > 0) {
-        check = true
+        check = true;
       } else {
         check = false;
       }
@@ -316,7 +319,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   expandAll() {
     this.dataTable.forEach(s => {
       this.expandSet.add(s.idVirtual);
-    })
+    });
   }
 
 
