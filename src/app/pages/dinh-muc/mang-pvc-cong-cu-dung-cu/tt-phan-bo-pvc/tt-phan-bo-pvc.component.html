@@ -146,7 +146,7 @@
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai ==STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XOA')" (click)="delete(data)">
+            <a  (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
