@@ -69,6 +69,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     super(httpClient, storageService, notification, spinner, modal, bbNghiemThuBaoQuanLanDauService);
     this.formData = this.fb.group({
       trangThai: [STATUS.DU_THAO],
+      id: [],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year")],
       maDvi: [],
@@ -125,7 +126,8 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       loaiQdinh: [],
       lyDoTuChoi: [],
       thayDoiThuKho: [],
-      keHoachDcDtlId: [, [Validators.required]]
+      keHoachDcDtlId: [, [Validators.required]],
+      soBbNhapDayKho: []
     });
   }
 
@@ -774,6 +776,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({
+        id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBban: data.soBban
+      })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

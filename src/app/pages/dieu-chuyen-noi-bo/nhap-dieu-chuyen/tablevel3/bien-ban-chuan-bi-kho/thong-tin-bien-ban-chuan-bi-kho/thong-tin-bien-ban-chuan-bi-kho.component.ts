@@ -70,6 +70,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanChuanBiKhoService);
     this.formData = this.fb.group({
+      id: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -567,12 +568,11 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     if (this.idInput) {
       body.id = this.idInput
     }
-    console.log('save', body)
-
     await this.spinner.show();
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({ id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBban: data.soBban })
       if (isGuiDuyet) {
         this.guiDuyet();
       }
