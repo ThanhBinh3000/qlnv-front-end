@@ -165,8 +165,8 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soLuongXuaCap"
-                     (input)="filterInTable('soLuongXuaCap',filterTable.soLuongXuaCap)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soLuongXuatCap"
+                     (input)="filterInTable('soLuongXuatCap',filterTable.soLuongXuatCap)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -202,7 +202,7 @@
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tongSoLuongDx |number: '1.0-1' : 'vi_VN' }}</td>
           <td>{{ data.tongSoLuong |number: '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.soLuongXuaCap |number: '1.0-1' : 'vi_VN'}}</td>
+          <td>{{ data.soLuongXuatCap |number: '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
