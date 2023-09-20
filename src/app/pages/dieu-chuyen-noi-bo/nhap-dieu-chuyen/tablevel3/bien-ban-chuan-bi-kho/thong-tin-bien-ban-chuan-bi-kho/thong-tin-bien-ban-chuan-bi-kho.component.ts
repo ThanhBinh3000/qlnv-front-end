@@ -20,6 +20,8 @@ import { StorageService } from "src/app/services/storage.service";
 import { convertTienTobangChu } from "src/app/shared/commonFunction";
 import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import * as uuidv4 from "uuid";
+import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
+import { DANH_MUC_LEVEL } from "src/app/pages/luu-kho/luu-kho.constant";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-chuan-bi-kho',
@@ -66,10 +68,12 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     private bienBanChuanBiKhoService: BienBanChuanBiKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanChuanBiKhoService);
     this.formData = this.fb.group({
+      id: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -189,6 +193,10 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       await this.loadDataBaoQuan(this.data.maChLoaiHangHoa)
       await this.getDataKho(this.data.maLoKho || this.data.maNganKho)
+      if (this.data.maLoKho)
+        await this.loadThuKho(this.data.maLoKho, DANH_MUC_LEVEL.LO_KHO)
+      else
+        await this.loadThuKho(this.data.maNganKho, DANH_MUC_LEVEL.NGAN_KHO)
     }
 
   }
@@ -534,6 +542,23 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     }
   }
 
+  async loadThuKho(ma, cap) {
+    let body = {
+      maDvi: ma,
+      capDvi: cap
+    }
+    const res = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (res.statusCode == 0) {
+      const detail = res.data.object.detailThuKho
+      if (this.formData.value.cloaiVthh) {
+        const tichLuong = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+        this.formData.patchValue({
+          tichLuong
+        })
+      }
+    }
+  }
+
   async loadChiTietQdinh(id: number) {
     let res = await this.quyetDinhDieuChuyenCucService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -567,12 +592,11 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     if (this.idInput) {
       body.id = this.idInput
     }
-    console.log('save', body)
-
     await this.spinner.show();
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({ id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBban: data.soBban })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

@@ -65,6 +65,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanHangService);
     this.formData = this.fb.group({
+      id: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -485,6 +486,9 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({
+        id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBangKe: data.soBangKe
+      })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

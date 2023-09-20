@@ -56,6 +56,7 @@ export class DialogQdMuabubosungTtcpComponent implements OnInit {
   }
 
   onChangeBoNganh(event) {
+    this.dsHangHoa = [];
     const boNganh = this.dsBoNganh.find(item => item.maDvi == event)
     if (boNganh) {
       this.keHoach.tenBoNganh = boNganh.tenDvi;

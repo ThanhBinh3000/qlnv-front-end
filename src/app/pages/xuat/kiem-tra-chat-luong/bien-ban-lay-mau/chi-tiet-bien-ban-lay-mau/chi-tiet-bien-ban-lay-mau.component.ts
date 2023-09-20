@@ -354,7 +354,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          maDiaDiem: data.maLoKho || data.maNganKho || data.maDvi,
+          maDiaDiem: data.maDiaDiem || data.maLoKho || data.maNganKho || data.maDvi,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,

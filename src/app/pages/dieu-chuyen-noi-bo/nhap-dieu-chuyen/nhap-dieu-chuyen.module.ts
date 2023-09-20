@@ -43,6 +43,7 @@ import { ThongTinBangKeNhapVatTuComponent } from './tablevel3/bang-ke-nhap-vat-t
 import { ThongTinBienBanGiaoNhanComponent } from './tablevel3/bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
 import { ThongTinBienBanKetThucNhapKhoComponent } from './tablevel3/bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
 import { DauGiaModule } from "../../xuat/dau-gia/dau-gia.module";
+import { ThongTinBienBanKiemTraComponent } from './tablevel3/ho-so-ky-thuat/thong-tin-bien-ban-kiem-tra/thong-tin-bien-ban-kiem-tra.component';
 
 
 
@@ -80,7 +81,8 @@ import { DauGiaModule } from "../../xuat/dau-gia/dau-gia.module";
     ThongTinBangKeCanHangComponent,
     ThongTinBangKeNhapVatTuComponent,
     ThongTinBienBanGiaoNhanComponent,
-    ThongTinBienBanKetThucNhapKhoComponent
+    ThongTinBienBanKetThucNhapKhoComponent,
+    ThongTinBienBanKiemTraComponent
   ],
   exports: [
     KiemTraChatLuongComponent
