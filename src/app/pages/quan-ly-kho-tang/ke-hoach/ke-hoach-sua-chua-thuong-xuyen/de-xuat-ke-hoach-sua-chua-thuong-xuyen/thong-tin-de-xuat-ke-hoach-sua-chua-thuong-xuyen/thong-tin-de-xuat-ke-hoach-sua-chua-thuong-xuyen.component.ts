@@ -84,7 +84,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     await this.spinner.show();
     try {
       this.getDsKhoi();
-      await this.getDmSuaChuaThuongXuyen();
+      await this.getDmSuaChuaThuongXuyen(dayjs().get('year'));
       if (this.idInput) {
         await this.detail(this.idInput);
       }
@@ -138,11 +138,12 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     }
   }
 
-  async getDmSuaChuaThuongXuyen() {
+  async getDmSuaChuaThuongXuyen(namKh) {
     let body = {
       "type": DM_SC_TYPE.SC_THUONG_XUYEN,
       "maDvi": this.userInfo.MA_DVI,
-      "namKh": this.formData.value.namKh,
+      "namKh": namKh,
+      "trangThai" : STATUS.CHUA_THUC_HIEN,
       "paggingReq": {"limit": 10000, "page": 0}
     }
     let res = await this.danhMucSuaChuaService.search(body);
