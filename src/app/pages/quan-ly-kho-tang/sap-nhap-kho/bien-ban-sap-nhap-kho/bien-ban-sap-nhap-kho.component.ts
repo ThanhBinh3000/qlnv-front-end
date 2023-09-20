@@ -52,11 +52,11 @@ export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit
     children: any = [];
     listTrangThai: any[] = [
         { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
-        { ma: this.STATUS.BAN_HANH, giaTri: "Hoàn thành" },
+        { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Hoàn thành" },
     ];
     ObTrangThai: { [key: string]: string } = {
         [this.STATUS.DU_THAO]: "Dự thảo",
-        [this.STATUS.BAN_HANH]: "Hoàn thành"
+        [this.STATUS.DA_HOAN_THANH]: "Hoàn thành"
     }
     disabledStartNgayKy = (startValue: Date): boolean => {
         if (startValue && this.formData.value.ngayKyDen) {

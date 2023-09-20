@@ -74,6 +74,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanNhapDayKhoService);
     this.formData = this.fb.group({
+      id: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -147,7 +148,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
         soQdDcCuc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayKyQd,
         qdDcCucId: this.data.qdDcCucId,
-        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho || ""}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
         tenNganKho: this.data.tenNganKho,
@@ -186,7 +187,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       this.detailData = data
       this.formData.patchValue({
         ...data,
-        tenLoNganKho: `${data.tenLoKho} - ${data.tenNganKho}`,
+        tenLoNganKho: `${data.tenLoKho || ""} - ${data.tenNganKho || ""}`,
       });
       this.fileDinhKemReq = data.fileDinhKems
       this.danhSach = data.children
@@ -357,7 +358,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan || ""}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
@@ -423,9 +424,10 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       body.id = this.idInput
     }
 
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({ id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBb: data.soBb })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

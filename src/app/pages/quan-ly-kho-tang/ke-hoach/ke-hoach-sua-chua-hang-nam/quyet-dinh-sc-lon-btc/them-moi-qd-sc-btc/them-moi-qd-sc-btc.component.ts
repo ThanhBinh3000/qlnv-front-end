@@ -71,8 +71,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       ngayTrinhBtc: [null, Validators.required],
       maTh: [null],
       soTt: [null],
-      trangThai: ["00"],
-      tenTrangThai: ["Dự thảo"],
+      trangThai: ["78"],
+      tenTrangThai: ["Đang nhập dữ liệu"],
       type: ["00"]
     });
   }
@@ -176,8 +176,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
           const data = res.data;
           this.dataTableReq = data.chiTiets;
           if (this.dataTableReq && this.dataTableReq.length > 0) {
-            this.tablePaTcTren = this.convertListData(this.dataTableReq.filter(item => item.tmdt > 5000000000));
-            this.tablePaTcDuoi = this.convertListData(this.dataTableReq.filter(item => item.tmdt <= 5000000000));
+            this.tablePaTcTren = this.convertListData(this.dataTableReq.filter(item => item.tmdt > 15000000000));
+            this.tablePaTcDuoi = this.convertListData(this.dataTableReq.filter(item => item.tmdt <= 15000000000));
             this.dataTableTren = cloneDeep(this.tablePaTcTren);
             this.dataTableDuoi = cloneDeep(this.tablePaTcDuoi);
           }
@@ -235,14 +235,15 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : ""
       });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLy = data.canCuPhapLys;
       this.dataTableReq = data.chiTiets;
       let listDx = data.chiTietDxs;
       if (listDx && listDx.length > 0) {
-        this.tablePaTcTren = this.convertListData(listDx?.filter(item => item.tmdt > 5000000000));
-        this.tablePaTcDuoi = this.convertListData(listDx?.filter(item => item.tmdt <= 5000000000));
+        this.tablePaTcTren = this.convertListData(listDx?.filter(item => item.tmdt > 15000000000));
+        this.tablePaTcDuoi = this.convertListData(listDx?.filter(item => item.tmdt <= 15000000000));
       }
-      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
-      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
+      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
+      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
     }
   }
 
@@ -257,7 +258,9 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     body.maDvi = this.userInfo.MA_DVI;
     body.soQuyetDinh = body.soQuyetDinh + this.maQd;
     body.fileDinhKems = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLy;
     body.chiTiets = this.dataTableReq;
+    console.log(this.dataTableReq,222)
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -345,7 +348,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         dataTable: list && list.dataChild ? list.dataChild : [],
         dataInput: data,
         type: type,
-        page: tmdt
+        page: tmdt,
+        isQd: true
       }
     });
     modalQD.afterClose.subscribe(async (detail) => {
@@ -367,7 +371,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     });
   }
 
-  deleteItem(index: any, y: any) {
+  deleteItem(id) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -378,13 +382,13 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          if (this.dataTable && this.dataTable.length > 0 && this.dataTable[index]) {
-            if (this.dataTable[index] && this.dataTable[index].dataChild && this.dataTable[index].dataChild[y]) {
-              this.dataTable[index].dataChild.splice(y, 1);
-            }
-          }
+          const idx = this.dataTableReq.findIndex(it => it.id == id);
+          if (idx) {
+            this.dataTableReq.splice(idx,1);
+            this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
+            this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));          }
         } catch (e) {
-          console.log("error", e);
+;          console.log("error", e);
         }
       }
     });

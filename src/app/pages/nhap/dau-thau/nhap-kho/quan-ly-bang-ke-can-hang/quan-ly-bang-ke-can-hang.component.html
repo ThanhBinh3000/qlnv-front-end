@@ -33,7 +33,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách bảng kê</h3>
+      <h3>DANH SÁCH BẢNG KÊ CÂN HÀNG</h3>
       <div class="buttons">
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_EXP')" type="button" class="btn btn-sub"
           (click)="export()">
@@ -41,7 +41,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_THEM')"
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_THEM')"
           (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -57,7 +57,7 @@
             <th width="60px">STT</th>
             <th width="30px"></th>
             <th width="30px"></th>
-            <th>Số QĐ giao nhiệm vụ</th>
+            <th>Số QĐ giao NVNH</th>
             <th>Năm kế hoạch</th>
             <th>Thời gian NH trước ngày</th>
             <th>Điểm kho</th>
@@ -82,7 +82,8 @@
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="8"></td>
               <td>
-                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_THEM')"
+                  (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>

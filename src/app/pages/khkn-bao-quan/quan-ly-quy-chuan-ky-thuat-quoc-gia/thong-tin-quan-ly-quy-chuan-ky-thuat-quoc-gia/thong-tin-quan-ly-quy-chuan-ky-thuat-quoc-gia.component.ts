@@ -341,6 +341,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.formData.patchValue({
         id: res.data.id,
         trangThai: res.data.trangThai,
+        loaiVthh: this.listOfTagOptions.join(',')
       });
       if (isGuiDuyet) {
         await this.guiDuyet();
@@ -513,8 +514,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           this.listOfTagOptions = this.listOfTagOptions.slice(0, this.listOfTagOptions.length - 1);
         },
       });
-    } else {
-
     }
     if (this.listOfTagOptions.length > 0) {
       await this.getDsChiTieu(this.listOfTagOptions);
@@ -585,7 +584,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           this.notification.error(MESSAGE.ERROR, 'Vui lòng nhập tên chỉ tiêu');
         }
       } else {
-        if (this.rowItem.tenChiTieu && this.rowItem.cloaiVthh != null) {
+        if (this.rowItem.maChiTieu && ((this.listCloaiVthh.length > 0 && this.rowItem.cloaiVthh != null) || this.listCloaiVthh.length == 0)) {
           this.sortTableId();
           let item = cloneDeep(this.rowItem);
           // item.stt = this.dataTable.length + 1;
@@ -595,7 +594,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
             ...this.dataTable,
             item,
           ];
-
+          this.dataTableView = cloneDeep(this.dataTable);
           this.rowItem = new QuyChunKyThuatQuocGia();
           this.updateEditCache();
         } else {

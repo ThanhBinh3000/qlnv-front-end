@@ -269,6 +269,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
                 let option = {
                   label: item.tenChiTieu,
                   value: item.id,
+                  chiSoCl: item.mucYeuCauXuat,
+                  phuongPhap: item.phuongPhapXd,
                   checked: true,
                 };
                 this.dsCtChatLuong.push(option);
@@ -352,7 +354,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          maDiaDiem: data.maLoKho || data.maNganKho || data.maDvi,
+          maDiaDiem: data.maDiaDiem || data.maLoKho || data.maNganKho || data.maDvi,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
@@ -370,7 +372,12 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           return {ten: s.label, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU}
         });
         let defaultCt = this.dsCtChatLuong.map(s => {
-          return {ten: s.label, type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG}
+          return {
+            ten: s.label,
+            phuongPhap: s.phuongPhap,
+            chiSoCl: s.chiSoCl,
+            type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
+          }
         });
         filter.push(...defaultPp, ...defaultCt);
         this.formData.patchValue({xhBienBanLayMauDtl: filter})

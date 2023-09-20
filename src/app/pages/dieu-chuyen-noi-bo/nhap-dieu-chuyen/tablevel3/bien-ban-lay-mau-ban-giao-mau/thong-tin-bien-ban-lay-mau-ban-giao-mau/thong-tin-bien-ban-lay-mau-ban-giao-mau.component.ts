@@ -97,6 +97,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       tenLoaiVthh: [],
       cloaiVthh: [],
       tenCloaiVthh: [],
+      donViTinh: [],
       dsBienBan: [],
       soBbNtBqLd: [],
       bbNtBqLdId: [],
@@ -140,7 +141,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     }
 
     if (this.data) {
-      // console.log('data', this.data)
+      console.log('data', this.data)
       this.formData.patchValue({
         soQdinhDcc: this.data.soQdinh,
         ngayQdDcCuc: this.data.ngayHieuLuc,
@@ -196,7 +197,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       this.listDaiDienChiCuc = dsDaiDien.filter(item => item.loaiDaiDien === "01")
       this.formData.patchValue({
         ...data,
-        tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
+        tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}`,
       });
       await this.loadPhuongPhapLayMau(data.cloaiVthh)
       const body = {
@@ -214,7 +215,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       await this.loadChiTieuChatLuongs(data.cloaiVthh)
 
       if (data.pplayMau) {
-        const dspplayMau = data.pplayMau.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
+        const dspplayMau = data.pplayMau.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1] }))
         this.phuongPhapLayMaus = this.phuongPhapLayMaus.map(pp => {
           return {
             ...pp,
@@ -226,7 +227,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
 
       if (data.chiTieuKiemTra) {
 
-        const dschiTieuKiemTra = data.chiTieuKiemTra.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
+        const dschiTieuKiemTra = data.chiTieuKiemTra.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1] }))
         this.chiTieuChatLuongs = this.chiTieuChatLuongs.map(pp => {
           return {
             ...pp,
@@ -433,6 +434,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log('data', data)
         this.formData.patchValue({
           tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
@@ -554,22 +556,24 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
-    body.pplayMau = this.phuongPhapLayMaus.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(",")
-    body.chiTieuKiemTra = this.chiTieuChatLuongs.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(",")
+    body.pplayMau = this.phuongPhapLayMaus.filter(item => item.checked).map(f => `${f.id}+*${f.giaTri}`).join("-*")
+    body.chiTieuKiemTra = this.chiTieuChatLuongs.filter(item => item.checked).map(f => `${f.id}+*${f.giaTri}`).join("-*")
     body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
     if (this.idInput) {
       body.id = this.idInput
     }
-    console.log('save', body, this.phuongPhapLayMaus)
 
     let res = this.idInput ? await this.bienBanLayMauService.update(body) : await this.bienBanLayMauService.create(body);
     if (res.data) {
+
       this.idInput = res.data.id;
+      this.formData.patchValue({ id: res.data.id, trangThai: res.data.trangThai, tenTrangThai: res.data.tenTrangThai, soBbLayMau: res.data.soBbLayMau })
       if (isGuiDuyet) {
         this.guiDuyet();
-      }
+      } else
+        this.notification.success(MESSAGE.NOTIFICATION, res.msg);
     }
     await this.spinner.hide();
   }

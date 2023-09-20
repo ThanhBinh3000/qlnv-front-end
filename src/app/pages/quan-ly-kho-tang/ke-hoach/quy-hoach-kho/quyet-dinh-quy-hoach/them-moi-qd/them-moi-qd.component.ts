@@ -51,8 +51,8 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
       namKeHoach: [dayjs().get('year'), [Validators.required]],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
-      soQuyetDinh: [null, [Validators.required]],
-      soQdBtc: [null, [Validators.required]],
+      soQuyetDinh: ['', [Validators.required]],
+      soQdBtc: ['', [Validators.required]],
       soQdGoc: [null],
       trichYeu: [null],
       ngayKy: [null, [Validators.required]],
@@ -82,8 +82,8 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soQuyetDinh: this.formData.value.soQuyetDinh ? this.formData.value.soQuyetDinh.split('/')[0] : null,
-            soQdBtc: this.formData.value.soQdBtc ? this.formData.value.soQdBtc.split('/')[0] : null
+            soQuyetDinh: this.formData.value.soQuyetDinh ? this.formData.value.soQuyetDinh.split('/')[0] : '',
+            soQdBtc: this.formData.value.soQdBtc ? this.formData.value.soQdBtc.split('/')[0] : ''
           })
           this.fileDinhKem = data.fileDinhKems;
           this.canCuPhapLy = data.canCuPhapLys;
@@ -106,12 +106,17 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
     }
   }
 
+  setValidators() {
+    this.formData.controls["namKeHoach"].setValidators([Validators.required]);
+    this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
+    this.formData.controls["soQdBtc"].setValidators([Validators.required]);
+    this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    this.formData.controls["namBatDau"].setValidators([Validators.required]);
+    this.formData.controls["namKetThuc"].setValidators([Validators.required]);
+  }
+
   async save() {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.spinner.hide();
-      return;
-    }
+    this.helperService.removeValidators(this.formData);
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI;
     body.soQuyetDinh = body.soQuyetDinh + this.maQd;
@@ -123,11 +128,12 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
-      this.formData.patchValue({id : data.id})
+      this.formData.patchValue({id: data.id})
     }
   }
 
   async saveAndSend(status: string, message: string, sucessMessage: string) {
+    this.setValidators();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       await this.spinner.hide();
@@ -158,7 +164,7 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
     }
   }
 
-  openModalCreate(idVirtual : number, type: string) {
+  openModalCreate(idVirtual: number, type: string) {
     let idx;
     let dataInput;
     if (idVirtual) {
@@ -184,7 +190,7 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         type: type,
-        dataInput : idVirtual ? dataInput : null
+        dataInput: idVirtual ? dataInput : null
       },
     });
     modalCreate.afterClose.subscribe((data) => {
@@ -197,12 +203,12 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
             this.tablePhuLucII[idx] = data
           }
         } else {
-            if (type == '00') {
-              this.tablePhuLucI = [...this.tablePhuLucI, data]
-            }
-            if (type == '01') {
-              this.tablePhuLucII = [...this.tablePhuLucII, data]
-            }
+          if (type == '00') {
+            this.tablePhuLucI = [...this.tablePhuLucI, data]
+          }
+          if (type == '01') {
+            this.tablePhuLucII = [...this.tablePhuLucII, data]
+          }
         }
         this.convertTreView(type)
       }
@@ -245,6 +251,7 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
   convertToRoman(number): string {
     return NumberToRoman(number).toString();
   }
+
   xoaData(idx: number, type: string) {
     this.modal.confirm({
       nzClosable: false,
@@ -320,17 +327,17 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
     });
   }
 
-  async loadDsQdGoc(event)  {
+  async loadDsQdGoc(event) {
     await this.spinner.show();
     try {
       let body = {
-        paggingReq : {
+        paggingReq: {
           limit: 999,
           page: 0
         },
-        namKeHoach : event,
-        loai : '00',
-        trangThai : STATUS.BAN_HANH
+        namKeHoach: event,
+        loai: '00',
+        trangThai: STATUS.BAN_HANH
       }
       let res = await this.service.search(body);
       if (res.msg == MESSAGE.SUCCESS) {

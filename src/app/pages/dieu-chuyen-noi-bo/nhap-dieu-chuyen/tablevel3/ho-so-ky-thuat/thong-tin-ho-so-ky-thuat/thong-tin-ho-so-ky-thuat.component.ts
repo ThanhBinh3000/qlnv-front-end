@@ -20,9 +20,7 @@ import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { HoSoKyThuatBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
-import dayjs from 'dayjs';
-import { Validators } from '@angular/forms';
-import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
+import { PREVIEW } from "src/app/constants/fileType";
 import { BienBanLayMauService } from 'src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-lay-mau';
 
 @Component({
@@ -107,6 +105,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
   viewTableHoSo: any[] = [];
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
+  templateName: string = "Hồ sơ kỹ thuật";
 
   constructor(
     httpClient: HttpClient,
@@ -115,22 +114,16 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
     spinner: NgxSpinnerService,
     modal: NzModalService,
     public userService: UserService,
-    private bienBanLayMauService: BienBanLayMauService,
-    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
+    private bbLayMauService: BienBanLayMauService,
     private hoSoKyThuatBdgService: HoSoKyThuatBdgService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatBdgService);
-
+    super.ngOnInit();
     this.formData = this.fb.group({
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự thảo'],
-      nam: [dayjs().get("year"), [Validators.required]],
-      soQdDcCuc: [],
-      ngayQdDcCuc: [],
-      qdDcCucId: [],
+      id: [],
       ngayTao: [],
       nguoiTaoId: [],
-      tenNguoiTao: [],
+      nguoiTao: [],
       ngaySua: [],
       nguoiSuaId: [],
       soHsktNh: [],
@@ -139,18 +132,19 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
       soBbLayMau: [],
       soBbLayMauNh: [],
       soQdGiaoNvNh: [],
-      ngayTaoNh: [dayjs().format('YYYY-MM-DD')],
+      ngayTaoNh: [],
       ngayDuyetNh: [],
       maDvi: [],
       maDiaDiem: [],
       loaiVthh: [],
       cloaiVthh: [],
       lyDo: [],
-      type: ["DCNBN"],
-      loaiDc: ["DCNB"],
+      trangThai: [],
+      type: [],
       kqKiemTra: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
+      tenTrangThai: [],
       tenDvi: [],
       tenCuc: [],
       tenChiCuc: [],
@@ -168,15 +162,6 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      let id = await this.userService.getId('HO_SO_KY_THUAT_SEQ')
-      this.formData.patchValue({
-        soHsktNh: `${id}/${this.formData.get('nam').value}/HSKT-CDTKVVP`,
-        tenDvi: this.userInfo.TEN_DVI,
-        maDvi: this.userInfo.MA_DVI,
-        maQhns: this.userInfo.DON_VI.maQhns,
-        tenNguoiTao: this.userInfo.TEN_DAY_DU,
-      });
-
       await this.spinner.show();
       this.userInfo = this.userService.getUserLogin();
       if (this.id) {
@@ -191,7 +176,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
   }
 
   async loadDetail(id) {
-    let res = await this.hoSoKyThuatBdgService.getDetail({ id: id, type: "DCNBX" });
+    let res = await this.hoSoKyThuatBdgService.getDetail({ id: id, type: "DCNBN" });
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.formData.patchValue(data);
@@ -240,7 +225,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
 
   async save() {
     try {
-      this.formData.patchValue({ type: 'DCNBX' });
+      this.formData.patchValue({ type: 'DCNBN' });
       let body = this.formData.value;
       let rs = await this.createUpdate(body);
     } catch (e) {
@@ -407,102 +392,63 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
     this.formData.patchValue({ kqKiemTra: $event });
   }
 
-  async openDialogQD() {
-    await this.spinner.show();
-    let listDanhSachQuyetDinh = []
+  async openDialogBbLayMauXuat() {
     let body = {
-      trangThai: STATUS.BAN_HANH,
-      // isVatTu: true,
-      // loaiDc: "DCNB",
-      maDvi: this.userInfo.MA_DVI,
-      type: "01"
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      },
+      loaiDc: this.loaiDc,
+      isVatTu: true,
+      type: "00",
+      thayDoiThuKho: true,
+      trangThai: STATUS.DA_DUYET_LDCC,
     }
-    let resSoDX = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
-    if (resSoDX.msg == MESSAGE.SUCCESS) {
-      listDanhSachQuyetDinh = resSoDX.data;
+    // let res = await this.bienBanLayMauBanGiaoMauService.search(body);
+    let res = await this.bbLayMauService.getDanhSach(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listBanGiaoMau = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    await this.spinner.hide();
-
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách quyết định',
+      nzTitle: 'Danh sách biên bản lấy mẫu/bàn giao mẫu',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: listDanhSachQuyetDinh,
-        dataHeader: ['Số quyết định'],
-        dataColumn: ['soQdinh']
+        dataTable: this.listBanGiaoMau,
+        dataHeader: ['Số biên bản', 'Loại hàng hóa'],
+        dataColumn: ['soBBLayMau', 'tenHangHoa'],
       },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
+    })
+    modalQD.afterClose.subscribe(async (dataChose) => {
+      console.log(dataChose, 'dataChose')
+      if (dataChose) {
         this.formData.patchValue({
-          soQdDcCuc: data.soQdinh,
-          ngayQdDcCuc: data.ngayKyQdinh,
-          qdDcCucId: data.id,
-          tenLoKho: "",
-          maLoKho: "",
-          tenNganKho: "",
-          maNganKho: "",
-          tenNhaKho: "",
-          maNhaKho: "",
-          tenDiemKho: "",
-          maDiemKho: "",
-          loaiVthh: "",
-          tenLoaiVthh: "",
-          cloaiVthh: "",
-          tenCloaiVthh: "",
-          tichLuongKhaDung: "",
-          soLuongQdDcCuc: "",
-          dviTinh: "",
+          idBbLayMau: dataChose.id,
+          soBbLayMau: dataChose.soBBLayMau
         });
-        // await this.loadChiTietQdinh(data.id);
       }
     });
-  }
-
-  async openDialogBBLMGBGM() {
-    if (this.isView) return
-    await this.spinner.show();
-    let dsBB = []
-    let body = {
-      trangThai: STATUS.DA_DUYET_LDCC,
-      loaiDc: this.loaiDc,
-      qdccId: this.formData.value.qdccId,
-      maLoKho: this.formData.value.maLoKho,
-      maNganKho: this.formData.value.maNganKho
-    }
-    let res = await this.bienBanLayMauService.getDanhSach(body)
-    if (res.msg == MESSAGE.SUCCESS) {
-      dsBB = res.data;
-    }
-    await this.spinner.hide();
-
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách BB lấy mẫu/bàn giao mẫu',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: dsBB,
-        dataHeader: ['Số BB lấy mẫu/bàn giao mẫu'],
-        dataColumn: ['soBb']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        console.log('openDialogQD', data)
-        this.formData.patchValue({
-          soBbLayMauNh: data.soBb,
-          idBbLayMau: data.id,
-
-        });
+  };
+  async inBienBan(id, type, loai) {
+    await this.hoSoKyThuatBdgService.preview({
+      id: id,
+      type: type,
+      loai: loai
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
       }
     });
   }
 }
-

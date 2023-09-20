@@ -175,6 +175,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
             if (data) {
                 this.idInput = data.id;
                 this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBienBan: typeof data.soBienBan === "string" || data.soBienBan instanceof String ? data.soBienBan?.split('/')[0] : "" });
+                this.maBBSN = typeof data.soBienBan === "string" || data.soBienBan instanceof String ? "/" + data.soBienBan.split("/")[1] + "/" + data.soBienBan.split(2) : "";
                 if (isGuiDuyet) {
                     this.hoanThanh()
                 }
@@ -239,6 +240,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
                     const dataDetail = res.data;
                     this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
                     const soBienBan = typeof dataDetail.soBienBan === "string" || dataDetail.soBienBan instanceof String ? dataDetail.soBienBan.split("/")[0] : "";
+                    this.maBBSN = typeof dataDetail.soBienBan === "string" || dataDetail.soBienBan instanceof String ? "/" + dataDetail.soBienBan.split("/")[1] + "/" + dataDetail.soBienBan.split("/")[2] : "";
                     this.formData.patchValue({ soBienBan });
                     if (dataDetail) {
                         this.fileDinhKem = dataDetail.fileDinhKem;

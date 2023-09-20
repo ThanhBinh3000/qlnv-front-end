@@ -134,7 +134,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
         diaDiem: this.itemDuAn.diaDiem,
         tgKhoiCong: this.itemDuAn.tgKhoiCong,
         tgHoanThanh: this.itemDuAn.tgHoanThanh,
-        vonNsTw: this.itemDuAn.ncKhNstw
+        vonNsTw: this.itemDuAn.ncKhNstw,
       })
     }
   }
@@ -213,6 +213,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
             loaiCapCt: this.itemDuAn.loaiCapCt,
             tgKhoiCong: this.itemDuAn.tgKhoiCong,
             tgHoanThanh: this.itemDuAn.tgHoanThanh,
+            vonNsTw: this.itemDuAn.ncKhNstw,
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {

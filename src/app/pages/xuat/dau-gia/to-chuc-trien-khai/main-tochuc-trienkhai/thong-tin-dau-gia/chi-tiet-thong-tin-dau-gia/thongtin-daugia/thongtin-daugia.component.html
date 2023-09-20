@@ -29,11 +29,19 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="5">
+              <div nz-col [nzSpan]="5" *ngIf="!this.formData.value.soQdDc">
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ trên QĐ PD/ĐC KH BĐG</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input placeholder="" nz-input formControlName="soQdPd" readonly/>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="5" *ngIf="this.formData.value.soQdDc">
+                <nz-form-item>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ trên QĐ PD/ĐC KH BĐG</nz-form-label>
+                  <nz-form-control nz-col [nzErrorTip]="error">
+                    <input placeholder="" nz-input formControlName="soQdDc" readonly/>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -165,10 +173,13 @@
                       <div nz-col [nzSpan]="6">
                         <nz-form-item>
                           <nz-form-label nzRequired [nzNoColon]="true"> Tiền mua hồ sơ (VNĐ/1 hồ sơ /1 đơn vị tài
-                            sản)
-                          </nz-form-label>
+                            sản)</nz-form-label>
                           <nz-form-control nz-col [nzErrorTip]="error">
-                            <input placeholder="" nz-input formControlName="tienMuaHoSo" [readonly]="isView"/>
+                            <nz-input-number formControlName="tienMuaHoSo" nz-input [nzMin]=""
+                                             [nzStep]="1" [nzSize]="'small'"
+                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                             [nzDisabled]="isView">
+                            </nz-input-number>
                           </nz-form-control>
                         </nz-form-item>
                       </div>

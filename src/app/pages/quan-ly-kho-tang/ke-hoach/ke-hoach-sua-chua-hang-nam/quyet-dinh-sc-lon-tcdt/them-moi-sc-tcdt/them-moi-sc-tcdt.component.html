@@ -16,7 +16,7 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
-              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') && !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
+              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') && !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
@@ -36,7 +36,7 @@
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
-              *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') &&  !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
+              *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') &&  !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
               (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -75,11 +75,10 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Giá trị dự toán hoặc khái toán TMĐT
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <nz-radio-group formControlName="loaiTmdt" [nzDisabled]="isViewDetail">
-                <label nz-radio nzValue="ALL">Tất cả</label>
-                <label nz-radio nzValue="DUOI5TY"> <= 5 tỷ </label>
-                <label nz-radio nzValue="TREN5TY"> > 5 tỷ </label>
+                <label nz-radio nzValue="DUOI15TY"> <= 15 tỷ </label>
+                <label nz-radio nzValue="TREN15TY"> > 15 tỷ </label>
               </nz-radio-group>
             </nz-form-control>
           </nz-form-item>
@@ -219,12 +218,12 @@
     <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CẢI TẠO SỬA CHỮA LỚN HÀNG NĂM CỦA DTNN KV'" [nzActive]="true">
       <nz-card class="mg-t-10 flex-card p-lr16">
         <nz-collapse class="pd-15"
-                     *ngIf="(formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'DUOI5TY') && (dataTableDxDuoi && dataTableDxDuoi.length > 0) ">
-          <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="true">
+                     *ngIf="(formData.value.loaiTmdt == 'DUOI15TY') && (dataTableDxDuoi && dataTableDxDuoi.length > 0) ">
+          <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 15 tỷ đồng'" [nzActive]="true">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 5 tỷ đồng: &nbsp; <span
+                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 15 tỷ đồng: &nbsp; <span
                     class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
                 </div>
                 <div nz-col nzSpan="4">
@@ -417,12 +416,12 @@
           </nz-collapse-panel>
         </nz-collapse>
         <nz-collapse class="pd-15"
-                     *ngIf="(formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'TREN5TY') && (dataTableDxTren && dataTableDxTren.length > 0)">
-          <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="true">
+                     *ngIf="(formData.value.loaiTmdt == 'TREN15TY') && (dataTableDxTren && dataTableDxTren.length > 0)">
+          <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 15 tỷ đồng'" [nzActive]="true">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 5 tỷ đồng: &nbsp; <span
+                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 15 tỷ đồng: &nbsp; <span
                     class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
                 </div>
                 <div nz-col nzSpan="4">
@@ -621,12 +620,12 @@
     <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
       <nz-card class="mg-t-10 flex-card p-lr16">
         <nz-collapse class="pd-15"
-                     *ngIf="(formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'DUOI5TY') && (dataTableDuoi && dataTableDuoi.length > 0)">
-          <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="false">
+                     *ngIf="(formData.value.loaiTmdt == 'DUOI15TY') && (dataTableDuoi && dataTableDuoi.length > 0)">
+          <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 15 tỷ đồng'" [nzActive]="false">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 5 tỷ đồng: &nbsp; <span
+                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 15 tỷ đồng: &nbsp; <span
                     class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
                 </div>
                 <div nz-col nzSpan="4">
@@ -696,7 +695,7 @@
                 <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>
                 <th class="text-center">Ghi chú</th>
                 <th class="text-center" nzWidth="120px"
-                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                     nzRight>Hành động
                 </th>
               </tr>
@@ -723,7 +722,7 @@
                   <td></td>
                   <td></td>
                   <td
-                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                     nzRight></td>
                 </tr>
                 <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -748,7 +747,7 @@
                       <td></td>
                       <td></td>
                       <td
-                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                         nzRight></td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(item.idVirtual)">
@@ -773,7 +772,7 @@
                           <td></td>
                           <td></td>
                           <td
-                            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                             nzRight></td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(child.idVirtual)">
@@ -797,7 +796,7 @@
                               <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ child1.ghiChu }}</td>
                               <td class="text-center" nzRight
-                                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                               >
                                 <a (click)="themMoiItem(child1,'tren', 'sua', y1, child)">
                                   <i class="fa fa-pencil" title="Sửa"></i>
@@ -842,12 +841,12 @@
           </nz-collapse-panel>
         </nz-collapse>
         <nz-collapse class="pd-15"
-                     *ngIf="(formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'TREN5TY') && (dataTableTren && dataTableTren.length > 0)">
-          <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="true">
+                     *ngIf="(formData.value.loaiTmdt == 'TREN15TY') && (dataTableTren && dataTableTren.length > 0)">
+          <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 15 tỷ đồng'" [nzActive]="true">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 5 tỷ đồng: &nbsp; <span
+                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 15 tỷ đồng: &nbsp; <span
                     class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
                 </div>
                 <div nz-col nzSpan="4">
@@ -917,7 +916,7 @@
                 <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>
                 <th class="text-center">Ghi chú</th>
                 <th class="text-center" nzWidth="120px"
-                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                     nzRight>Hành động
                 </th>
               </tr>
@@ -944,7 +943,7 @@
                   <td></td>
                   <td></td>
                   <td
-                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                     nzRight></td>
                 </tr>
                 <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -969,7 +968,7 @@
                       <td></td>
                       <td></td>
                       <td
-                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                         nzRight></td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(item.idVirtual)">
@@ -994,7 +993,7 @@
                           <td></td>
                           <td></td>
                           <td
-                            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                             nzRight></td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(child.idVirtual)">
@@ -1018,7 +1017,7 @@
                               <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ child1.ghiChu }}</td>
                               <td class="text-center" nzRight
-                                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                               >
                                 <a (click)="themMoiItem(child1,'tren', 'sua', y1, child)">
                                   <i class="fa fa-pencil" title="Sửa"></i>
@@ -1060,7 +1059,7 @@
                     style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
                 <td
-                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
+                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                   nzRight></td>
               </tr>
               </tfoot>

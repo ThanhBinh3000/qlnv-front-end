@@ -100,6 +100,7 @@ export class SlGiaTriHangDtqgNhapTrongKyComponent extends Base2Component impleme
       body.fileName = "bc_sl_gia_tri_hang_dtqg_nhap_trong_ky_130.jrxml";
       body.tenBaoCao = "Báo cáo số lượng giá trị hàng DTQG nhập trong kỳ";
       body.trangThai = "01";
+      body.loaiNhapXuat = "1";
       await this.thongTu1302018Service.bcSlGtriHangDtqgNhap(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();

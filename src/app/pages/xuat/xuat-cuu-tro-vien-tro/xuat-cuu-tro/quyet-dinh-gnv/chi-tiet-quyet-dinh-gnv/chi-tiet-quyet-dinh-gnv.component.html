@@ -5,12 +5,6 @@
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isCuc()">
-      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH" type="button"
-              class="btn btn-sub xanh-nhat"
-              (click)="updateProcess(STATUS.DA_HOAN_THANH)">
-        <i class="icon htvbdh_duyet"></i>
-        <span>Hoàn thành phân bổ</span>
-      </button>
       <button (click)="reject(idSelected,STATUS.TU_CHOI_LDC)"
               *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
               class="btn btn-sub" type="button">
@@ -62,6 +56,12 @@
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
+      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH" type="button"
+              class="btn btn-sub xanh-nhat"
+              (click)="updateProcess(STATUS.DA_HOAN_THANH)">
+        <i class="icon htvbdh_duyet"></i>
+        <span>Hoàn thành phân bổ</span>
+      </button>
       <button type="button" class="btn btn-main"
               *ngIf="(formData.value.trangThai === STATUS.BAN_HANH)"
               (click)="updateProcess(STATUS.DANG_THUC_HIEN)">
@@ -77,7 +77,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span
-            [ngClass]="(formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDV||formData.value.trangThai == STATUS.DA_TAO_CBV) ? 'status-xanh' : 'status-do'">
+            [ngClass]="(formData.value.trangThai == STATUS.BAN_HANH && formData.value.trangThaiXh == STATUS.DA_HOAN_THANH ) ? 'status-xanh' : 'status-do'">
             {{ formData.value.tenTrangThai }}
           </span>
           <span>Quyết định giao nhiệm vụ xuất hàng cứu trợ, viện trợ</span>
@@ -115,7 +115,7 @@
             </nz-select>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị ra QĐ giao nv xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -123,7 +123,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số QĐ xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -135,7 +135,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Ngày ký QĐ xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -147,7 +147,7 @@
         </div>
       </div>
       <div nz-row [nzGutter]="24">
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label>Căn cứ trên QĐ phê duyệt phương án</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -165,7 +165,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -173,7 +173,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -261,6 +261,7 @@
             <th>SL xuất</th>
             <th>Tồn kho</th>
             <th>ĐVT</th>
+            <th>Trạng thái</th>
           </tr>
           </thead>
           <tbody>
@@ -270,6 +271,7 @@
                   [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
               <td>{{i + 1}}</td>
               <td>{{ item.noiDungDx }}</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -305,6 +307,7 @@
                   <td><strong>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
                   <td></td>
                   <td>{{lv1.donViTinh}}</td>
+                  <td></td>
                   <td>
                     <ng-container *ngIf="userService.isCuc()">
                       <a>
@@ -333,6 +336,7 @@
                       <td><strong>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
                       <td></td>
                       <td></td>
+                      <td>{{lv2.tenTrangThai}}</td>
                       <td>
                         <a *ngIf="userService.isChiCuc()">
                           <i class="fa fa-plus" (click)="themPhuongAn(lv2,2)"></i>
@@ -364,6 +368,7 @@
                           <td>{{lv3.tenDiaDiem}}</td>
                           <td>{{lv3.soLuong|number:globals.numberFormat:globals.locale}}</td>
                           <td>{{lv3.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                          <td></td>
                           <td></td>
                           <td>
                             <ng-container *ngIf="userService.isChiCuc()">
@@ -514,14 +519,14 @@
                   <nz-tree-select #NzTreeSelectComponent [nzNodes]="listDiaDiemKho" [nzShowSearch]="true"
                                   [ngModel]="selectedNode"
                                   [ngModelOptions]="{standalone: true}"
-                  >
+                                  nzVirtualHeight="300px">
                     <ng-template #nzTreeTemplate let-node let-origin="origin">
                       <div class="node-content" [ngClass]="{'disabled-node': !node.isLeaf}"
                            [class.ant-tree-node-selected]="node.isSelected" (click)="selectDiaDiem(node)">
                         {{ node.title }}
                         <ng-container *ngIf="node.isLeaf && (origin.capDvi == 6 || origin.capDvi ==7)">
-                          <strong>{{origin.tenCloaiVthh || origin.tenLoaiVthh}}</strong>
-                          Số lượng: <strong>{{origin.slTon|number:globals.numberFormat:globals.locale}}</strong>
+                          <i>{{origin.tenCloaiVthh || origin.tenLoaiVthh}}</i>
+                          Số lượng: <i>{{origin.slTon|number:globals.numberFormat:globals.locale}}</i>
                         </ng-container>
                       </div>
                     </ng-template>

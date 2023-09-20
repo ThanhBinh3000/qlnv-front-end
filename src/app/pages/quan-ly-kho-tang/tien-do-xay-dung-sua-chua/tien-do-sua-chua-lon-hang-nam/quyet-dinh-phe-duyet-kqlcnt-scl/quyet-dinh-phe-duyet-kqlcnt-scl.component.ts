@@ -79,10 +79,10 @@ export class QuyetDinhPheDuyetKqlcntSclComponent extends Base2Component implemen
   }
 
   openThongTinModal(id?, isView?: boolean) {
-    if (!id && this.trangThaiTtdt) {
-      this.notification.warning(MESSAGE.WARNING, "Tất cả các gói thầu của dự án đã được tạo quyết định phê duyệt kết quả lựa chọn nhà thầu, không thể tạo thêm quyết định!");
-      return;
-    }
+    // if (!id && this.trangThaiTtdt) {
+    //   this.notification.warning(MESSAGE.WARNING, "Tất cả các gói thầu của dự án đã được tạo quyết định phê duyệt kết quả lựa chọn nhà thầu, không thể tạo thêm quyết định!");
+    //   return;
+    // }
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
