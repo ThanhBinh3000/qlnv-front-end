@@ -476,11 +476,14 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           this.addValidateFormChiTiet("tenLoKho");
         }
         if (!coLoKho) {
-          const body = {
-            maDvi: value,
-            tenLoKho: this.formDataChiTiet.value.tenNganKho
-          }
-          this.getChiTietTonKho(body);
+          this.formDataChiTiet.patchValue({
+            loaiVthh: res.data.object.loaiVthh,
+            tenLoaiVthh: res.data.object.tenLoaiVthh,
+            cloaiVthh: res.data.object.cloaiVthh,
+            tenCloaiVthh: res.data.object.tenCloaiVthh,
+            donViTinh: res.data.object.dviTinh,
+            tonKho: res.data.object.slTon
+          });
         }
         this.listLoKhoBq = [];
 
@@ -502,11 +505,28 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     let tenLoKho = (this.listLoKhoBq ? this.listLoKhoBq : []).find(item => item.maDvi === value);
     this.formDataChiTiet.patchValue({tenLoKho: tenLoKho ? tenLoKho.tenDvi : ""});
     if (value) {
-      const body = {
-        maDvi: value,
-        tenLoKho: this.formDataChiTiet.value.tenLoKho
-      }
-      this.getChiTietTonKho(body);
+      this.getDetailMlkByKey(tenLoKho.maDvi, tenLoKho.capDvi).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          let thuKho = res.data.object.detailThuKho?.fullName;
+          let thuKhoId = res.data.object.detailThuKho?.id;
+          this.formDataChiTiet.patchValue({
+            loaiVthh: res.data.object.loaiVthh,
+            tenLoaiVthh: res.data.object.tenLoaiVthh,
+            cloaiVthh: res.data.object.cloaiVthh,
+            tenCloaiVthh: res.data.object.tenCloaiVthh,
+            donViTinh: res.data.object.dviTinh,
+            tonKho: res.data.object.slTon
+          });
+          this.listLoKhoBq = [];
+
+          this.formDataChiTiet.patchValue({
+            thuKho: thuKho,
+            thuKhoId: thuKhoId,
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.error);
+        }
+      })
     }
   }
 
