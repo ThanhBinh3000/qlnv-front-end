@@ -58,6 +58,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanKetThucNhapKhoService);
     this.formData = this.fb.group({
+      id: [],
       type: ["01"],
       loaiDc: ["DCNB"],
       isVatTu: [true],
@@ -169,7 +170,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       let data = await this.detail(id);
       if (data) {
         this.danhSach = data.dcnbBBKetThucNKDtl
-        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}`, });
         this.fileDinhKemReq = data.fileDinhKems
         await this.getDanhSachTT(data.soQdinhDcc, data.maLoKho, data.maNganKho)
       }
@@ -435,6 +436,9 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({
+        id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBb: data.soBb
+      })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

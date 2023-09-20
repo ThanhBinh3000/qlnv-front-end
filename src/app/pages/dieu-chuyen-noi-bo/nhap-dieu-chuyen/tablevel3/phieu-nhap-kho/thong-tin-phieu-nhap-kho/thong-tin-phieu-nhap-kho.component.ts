@@ -62,10 +62,12 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private bienBanChuanBiKhoService: BienBanChuanBiKhoService,
+    private bienBanNghiemThuBaoQuanLanDauService: BienBanNghiemThuBaoQuanLanDauService,
     private phieuNhapKhoService: PhieuNhapKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuNhapKhoService);
     this.formData = this.fb.group({
+      id: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -115,6 +117,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       soLuongQdDcCuc: [],
       donViTinh: [],
       bbNghiemThuBqld: [],
+      bbNghiemThuBqldId: [],
       soBbKetThucNk: [],
       soBangKeCh: [, [Validators.required]],
       soBangKeVt: [, [Validators.required]],
@@ -398,7 +401,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
   async openDialogPKTCL() {
     await this.spinner.show();
-    // Get data tờ trình
+
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
       loaiDc: this.loaiDc,
@@ -604,6 +607,47 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     }
   }
 
+  async openDialogBBNTBQLD() {
+    await this.spinner.show();
+    let dsBBNTBQLD = []
+    let body = {
+      trangThai: STATUS.DA_DUYET_LDCC,
+      loaiDc: this.loaiDc,
+      soQdinhDcc: this.formData.value.soQdDcCuc,
+      qdDcCucId: this.formData.value.qdDcCucId,
+      maLoKho: this.formData.value.maLoKho,
+      maNganKho: this.formData.value.maNganKho,
+    }
+    let res = await this.bienBanNghiemThuBaoQuanLanDauService.getDanhSach(body)
+    if (res.msg == MESSAGE.SUCCESS) {
+      dsBBNTBQLD = res.data;
+    }
+    await this.spinner.hide();
+
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách biên bản nghiệm thu bảo quản lần đầu',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: dsBBNTBQLD,
+        dataHeader: ['Số biên bản nghiệm thu bảo quản lần đầu'],
+        dataColumn: ['soBban']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.formData.patchValue({
+          bbNghiemThuBqldId: data.id,
+          bbNghiemThuBqld: data.soBban,
+        });
+        await this.loadChiTietBBCBK(data.id);
+      }
+    });
+  }
+
   setExpand(parantExpand: boolean = false, children: any = []): void {
     if (parantExpand) {
       return children.map(f => ({ ...f, expand: false }))
@@ -649,6 +693,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({ id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soPhieuNhapKho: data.soPhieuNhapKho })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

@@ -1,17 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import * as dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {STATUS} from "../../../../../constants/status";
-import {FileDinhKem} from "../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import {MESSAGE} from "../../../../../constants/message";
+import { Validators } from "@angular/forms";
+import { STATUS } from "../../../../../constants/status";
+import { FileDinhKem } from "../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { MESSAGE } from "../../../../../constants/message";
 import * as uuid from "uuid";
-import {chain, cloneDeep} from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import {
   QuyetDinhTieuHuyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/QuyetDinhTieuHuyService.service";
@@ -123,7 +123,7 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
               ...res.data,
               soBaoCao: res.data.soBaoCao?.split('/')[0] ?? null,
 
-            }, {emitEvent: false});
+            }, { emitEvent: false });
             this.formData.value.baoCaoKqDtl.forEach(s => {
               s.idVirtual = uuid.v4();
             });
@@ -170,17 +170,17 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
   }
 
   async save() {
-    this.formData.disable({emitEvent: false});
-    this.formData.disable({emitEvent: false});
+    this.formData.disable({ emitEvent: false });
+    this.formData.disable({ emitEvent: false });
     let dt = this.dataTable.flatMap((item) => item.childData);
-    this.formData.patchValue({baoCaoKqDtl: dt})
+    this.formData.patchValue({ baoCaoKqDtl: dt })
     let body = {
       ...this.formData.value,
       soBaoCao: this.formData.value.soBaoCao ? this.formData.value.soBaoCao + this.maHauTo : this.maHauTo
     };
     let rs = await this.createUpdate(body);
-    this.formData.enable({emitEvent: false});
-    this.formData.patchValue({id: rs.id})
+    this.formData.enable({ emitEvent: false });
+    this.formData.patchValue({ id: rs.id })
     this.formData.patchValue({
       id: rs.id,
     })
@@ -189,7 +189,7 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    body = {...body, soBaoCao: this.formData.value.soBaoCao + this.maHauTo}
+    body = { ...body, soBaoCao: this.formData.value.soBaoCao + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -266,4 +266,57 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
     this.isDetail = true;
     this.isView = b;
   }
+
+  showSave() {
+    let trangThai = this.formData.value.trangThai;
+    if (this.userService.isCuc()) {
+      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC) && this.userService.isAccessPermisson('XHDTQG_XTH_BCKQ_THEM');
+    }
+    return false
+  }
+
+  showPheDuyetTuChoi() {
+    let trangThai = this.formData.value.trangThai;
+    if (this.userService.isCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTH_BCKQ_DUYETTP'))
+        || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTH_BCKQ_DUYETLDC'))
+    }
+    return false
+  }
+
+  pheDuyet() {
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      // Approve
+      case STATUS.DU_THAO:
+        trangThai = STATUS.CHO_DUYET_TP;
+        break;
+      case STATUS.CHO_DUYET_TP:
+        trangThai = STATUS.CHO_DUYET_LDC;
+        break;
+      case STATUS.CHO_DUYET_LDC:
+        trangThai = STATUS.DA_DUYET_LDC;
+        break;
+      //Reject
+      case STATUS.TU_CHOI_LDV:
+      case STATUS.TU_CHOI_LDTC:
+        trangThai = STATUS.CHO_DUYET_LDV;
+        break;
+    }
+    this.approve(this.formData.value.id, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
+  }
+
+  tuChoi() {
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TP:
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      case STATUS.CHO_DUYET_LDC:
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+    }
+    this.reject(this.formData.value.id, trangThai);
+  }
+
 }

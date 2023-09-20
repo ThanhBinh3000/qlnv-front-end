@@ -67,7 +67,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       namBatDau: [null],
       namKetThuc: [null],
       loaiDuAn: [null],
-      trangThai: ["00"],
+      trangThai: ["78"],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [null]
     });
@@ -124,6 +124,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           tenTrangThai: data.tenTrangThai
         });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLy = data.canCuPhapLys;
       this.dataTableRes = data.chiTiets;
       this.dataTableDm = data.listDanhMuc;
       await this.convertListToTree();
@@ -133,7 +134,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   setValidators() {
     this.formData.controls["trichYeu"].setValidators(Validators.required);
     this.formData.controls["namKeHoach"].setValidators(Validators.required);
-    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
       this.formData.controls["ngayTaoDx"].setValidators(Validators.required);
     }
     if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC) {
@@ -157,6 +158,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     body.maDvi = this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi;
     body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLy;
     this.conVertTreToList();
     body.chiTiets = this.dataTableRes;
     let data = await this.createUpdate(body);
@@ -168,7 +170,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       if (isOther) {
         let trangThai;
         switch (this.formData.value.trangThai) {
-          case STATUS.DU_THAO :
+          case STATUS.DANG_NHAP_DU_LIEU :
           case STATUS.TU_CHOI_LDV:
           case STATUS.TU_CHOI_TP : {
             trangThai = STATUS.CHO_DUYET_TP;
@@ -224,7 +226,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         break;
       }
     }
-    await this.reject(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn từ chối?");
+    await this.approve(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn từ chối?");
   }
 
   sumSoLuong(data: any, row: string, type?: any) {
@@ -382,8 +384,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
 
 
   convertListToTree() {
-    this.tableTren = this.dataTableRes.filter(item => item.tmdt > 5000000000);
-    this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 5000000000);
+    this.tableTren = this.dataTableRes.filter(item => item.tmdt > 15000000000);
+    this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 15000000000);
     if (this.tableTren && this.tableTren.length > 0) {
       this.tableTren = chain(this.tableTren).groupBy("tenKhoi")
         .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))

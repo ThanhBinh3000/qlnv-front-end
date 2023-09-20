@@ -180,6 +180,7 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
       if (data) {
         this.idInput = data.id;
         this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soQuyetDinh: data.soQuyetDinh?.split('/')[0] });
+        this.maQd = `/${data.soQuyetDinh?.split("/")[1]}`
         if (isGuiDuyet) {
           this.banHanh()
         }
@@ -253,7 +254,8 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
           if (dataDetail) {
             this.formData.patchValue({
               soQuyetDinh: dataDetail.soQuyetDinh?.split('/')[0],
-            })
+            });
+            this.maQd = `/${dataDetail.soQuyetDinh?.split("/")[1]}`
             // this.listFile = dataDetail.fileDinhKems;
             this.dataTable = dataDetail.quyetDinhPdDtl;
             this.updateEditCache();

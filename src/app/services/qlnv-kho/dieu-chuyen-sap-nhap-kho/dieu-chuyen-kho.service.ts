@@ -20,7 +20,7 @@ export class DieuChuyenKhoService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
   chiTietHangSapNhapDiemKho(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-hang?maChiCucDi=${body.maChiCucDi}&maChiCucDen=${body.maChiCucDen}&maDiemKhoDi=${body.maDiemKhoDi}&maDiemKhoDen=${body.maDiemKhoDen}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-hang?maChiCucDi=${body.maChiCucDi}&maChiCucDen=${body.maChiCucDen}${body.maDiemKhoDi && body.maDiemKhoDen ? `maDiemKhoDi=${body.maDiemKhoDi}&maDiemKhoDen=${body.maDiemKhoDen}` : ""}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
   chiTietHangSapNhapChiCuc(body) {

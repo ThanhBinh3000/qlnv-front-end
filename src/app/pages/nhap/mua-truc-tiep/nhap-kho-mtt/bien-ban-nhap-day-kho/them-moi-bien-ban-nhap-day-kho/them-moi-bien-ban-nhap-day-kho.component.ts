@@ -443,7 +443,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: STATUS.TU_CHOI_LDCC,
+            trangThai:  this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ ? STATUS.TU_CHOI_KTVBQ : (this.formData.value.trangThai == STATUS.CHO_DUYET_KT ? STATUS.TU_CHOI_KT : STATUS.CHO_DUYET_LDCC),
           };
           let res =
             await this.bienBanDayKhoMuaTrucTiepService.approve(

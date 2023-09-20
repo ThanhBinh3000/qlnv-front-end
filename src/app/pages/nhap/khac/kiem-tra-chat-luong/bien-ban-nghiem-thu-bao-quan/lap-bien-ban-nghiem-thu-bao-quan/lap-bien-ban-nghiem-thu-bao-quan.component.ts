@@ -34,6 +34,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
   @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
+  @Input() title: string;
   @Input() idQdGiaoNvNh: number;
   @Output() showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = [];

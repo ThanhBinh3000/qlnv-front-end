@@ -461,6 +461,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
         this.listPhieuKdcl = cloneDeep(data)
         this.listPhieuKdcl = this.listPhieuKdcl.filter(f => f.checked);
         this.dataTable = this.listPhieuKdcl;
+        console.log(this.listPhieuKdcl,"this.listPhieuKdcl")
         this.formData.patchValue({
           soCanCu: this.listPhieuKdcl.map(m => m.soPhieu),
           idCanCu: this.listPhieuKdcl.map(m => m.id),

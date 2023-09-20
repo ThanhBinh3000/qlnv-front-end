@@ -122,6 +122,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
         tenTrangThai: data.tenTrangThai
       });
       this.fileDinhKems = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
       let listDx = data.ctRes;
       if (listDx) {
         this.dataTableReq = listDx.ctietList;

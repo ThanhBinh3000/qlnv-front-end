@@ -238,7 +238,12 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   async loadDsQdGnv() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaiVthh,
+      // loaiVthh: this.loaiVthh,
+      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      }
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -272,7 +277,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maQhns: this.userInfo.DON_VI.maQhns,
         type: "XUAT_CTVT",
         thuKho: this.userInfo.TEN_DAY_DU,
-        loaiVthh: this.loaiVthh,
+        // loaiVthh: this.loaiVthh,
       })
     }
 
@@ -553,7 +558,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       nzComponentParams: {
         dataTable: this.dsQdGnv,
         dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh'],
+        dataColumn: ['soBbQd', 'ngayKy', 'tenVthh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -607,7 +612,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         let body = {
           trangThai: STATUS.DA_DUYET_LDCC,
           type: "XUAT_CTVT",
-          loaiVthh: this.loaiVthh,
+          // loaiVthh: this.loaiVthh,
         }
         let res = await this.phieuXuatKhoService.search(body)
         const list = res.data.content;

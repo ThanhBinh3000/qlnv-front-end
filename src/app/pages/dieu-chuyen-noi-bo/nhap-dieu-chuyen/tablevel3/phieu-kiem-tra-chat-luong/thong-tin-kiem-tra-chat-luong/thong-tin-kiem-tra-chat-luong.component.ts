@@ -67,6 +67,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemTraChatLuongService);
     this.formData = this.fb.group({
+      id: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -497,6 +498,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({ id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soPhieu: data.soPhieu })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

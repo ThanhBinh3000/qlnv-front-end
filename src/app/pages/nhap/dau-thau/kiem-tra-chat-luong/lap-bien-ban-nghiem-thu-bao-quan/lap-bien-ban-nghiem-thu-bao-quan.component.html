@@ -170,11 +170,14 @@
                                         <td></td>
                                         <td>{{dataBb.tenTrangThai}}</td>
                                         <td nzRight>
-                                            <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XEM')"
+                                            <a *ngIf="hienThiXem(dataBb)"
                                                 (click)="redirectToChiTiet(true, dataBb.id)">
                                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                                             </a>
-                                            <a *ngIf="(dataBb.trangThai == STATUS.DU_THAO || dataBb.trangThai == STATUS.TU_CHOI_KTVBQ) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
+                                            <a *ngIf="(dataBb.trangThai == STATUS.DU_THAO
+                                            || dataBb.trangThai == STATUS.TU_CHOI_KT
+                                            || dataBb.trangThai == STATUS.TU_CHOI_TK
+                                            || dataBb.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
                                                 (click)="redirectToChiTiet(false, dataBb.id)">
                                                 <i class="fa fa-pencil" title="Sửa"></i>
                                             </a>

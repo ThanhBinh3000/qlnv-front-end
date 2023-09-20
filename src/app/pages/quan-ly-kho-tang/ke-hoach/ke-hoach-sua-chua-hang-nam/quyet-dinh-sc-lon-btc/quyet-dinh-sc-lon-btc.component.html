@@ -150,10 +150,10 @@
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              (click)="redirectToChiTiet(data.id,false)"  *ngIf="( data.trangThai == STATUS.DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')  ">
+              (click)="redirectToChiTiet(data.id,false)"  *ngIf="( data.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')  ">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_XOA')" (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

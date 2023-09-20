@@ -1,21 +1,28 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
-import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { Validators } from '@angular/forms';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+
+import {
+  QuyetDinhGiaoNvCuuTroService
+} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import {Validators} from '@angular/forms';
+import {
+  PhieuKiemNghiemChatLuongService
+} from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service";
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
@@ -39,6 +46,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   listFileDinhKem: any = [];
   templateName = "Phiếu xuất kho";
   templateNameVt = "Phiếu xuất kho";
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -47,7 +55,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
@@ -92,7 +100,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         thucXuat: [],
         donGia: [],
         thanhTien: [],
-        ghiChu:  ['', [Validators.required]],
+        ghiChu: ['', [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         tenDvi: [],
         lyDoTuChoi: [],
@@ -101,9 +109,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         diaChiDvi: [],
         tenLoaiVthh: [],
         tenCloaiVthh: [],
-        tenDiemKho:  ['', [Validators.required]],
-        tenNhaKho:  ['', [Validators.required]],
-        tenNganKho:  ['', [Validators.required]],
+        tenDiemKho: ['', [Validators.required]],
+        tenNhaKho: ['', [Validators.required]],
+        tenNganKho: ['', [Validators.required]],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
 
@@ -158,7 +166,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
         type: "XUAT_CTVT",
-        loaiVthh: this.loaiVthh
+        // loaiVthh: this.loaiVthh
       });
     }
 
@@ -167,11 +175,16 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   quayLai() {
     this.showListEvent.emit();
   }
+
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaiVthh,
-      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      // loaiVthh: this.loaiVthh,
+      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      }
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -193,7 +206,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
         dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh'],
+        dataColumn: ['soBbQd', 'ngayKy', 'tenVthh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -208,17 +221,22 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     let dataRes = await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
-      soQdGiaoNvXh: data.soQd,
+      soQdGiaoNvXh: data.soBbQd,
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
     });
-    let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+    data.dataDtl.forEach(s => {
+      s.maDiemKho = s.maDvi.substring(0, 8);
+      s.maNhaKho = s.maDvi.substring(0, 10);
+      s.maNganKho = s.maDvi.substring(0, 12);
+      s.maLoKho = s.maDvi.substring(0, 14);
+    });
+    let dataChiCuc = data.dataDtl.filter(item => item.tenChiCuc == this.userInfo.TEN_DVI);
     if (dataChiCuc) {
       this.listDiaDiemNhap = dataChiCuc;
     }
     await this.spinner.hide();
   }
-
 
 
   openDialogDdiemNhapHang() {
@@ -254,11 +272,12 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDC,
-        loaiVthh: this.loaiVthh
+        // loaiVthh: this.loaiVthh
+        type: 'CTVT',
       }
       let res = await this.phieuKiemNghiemChatLuongService.search(body)
       const list = res.data.content;
-      this.listPhieuKtraCl = list.filter(item => (item.maDiemKho == data.maDiemKho));
+      this.listPhieuKtraCl = list.filter(item => (item.tenDiemKho == data.tenDiemKho));
     }
   }
 
@@ -273,16 +292,16 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       nzComponentParams: {
         dataTable: this.listPhieuKtraCl,
         dataHeader: ['Số phiếu', 'Ngày giám định'],
-        dataColumn: ['soPhieu', 'ngayKnMau']
+        dataColumn: ['soBbQd', 'ngayKiemNghiem']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
           idPhieuKnCl: data.id,
-          soPhieuKnCl: data.soPhieu,
-          ktvBaoQuan: data.nguoiKn,
-          ngayKn: data.ngayKnMau,
+          soPhieuKnCl: data.soBbQd,
+          ktvBaoQuan: data.ktvBaoQuan,
+          ngayKn: data.ngayKiemNghiem,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
@@ -339,6 +358,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     }
     return false;
   }
+
   clearItemRow(id) {
 
     this.formData.patchValue({
