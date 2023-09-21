@@ -296,6 +296,7 @@
             </ng-container>
             <th [colspan]="2">Cục DTNN KV</th>
             <th [rowspan]="2">SL xuất cứu trợ giao Cục thực hiện</th>
+            <th [rowspan]="2">ĐVT</th>
             <th [rowspan]="2" style="width: 10%">Hành động</th>
           </tr>
           <tr>
@@ -321,6 +322,7 @@
                 <td></td>
                 <td></td>
               </ng-container>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -350,6 +352,7 @@
                   <td></td>
                   <td></td>
                   <td>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                  <td>{{lv1.donViTinh}}</td>
                   <td>
                     <a>
                       <i class="fa fa-plus" *ngIf="!isView" (click)="themPhuongAn(lv1,1)"></i>
@@ -376,6 +379,7 @@
                       <td>{{lv2.tenDvi}}</td>
                       <td>{{lv2.tonKhoLoaiVthh||lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                       <td>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                      <td></td>
                       <td>
                         <a>
                           <i class="fa fa-edit" *ngIf="!isView" (click)="themPhuongAn(lv2,2)"></i>

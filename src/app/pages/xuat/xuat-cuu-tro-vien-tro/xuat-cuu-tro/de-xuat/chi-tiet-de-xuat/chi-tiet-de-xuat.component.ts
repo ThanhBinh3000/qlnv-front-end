@@ -134,6 +134,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
+      this.maHauTo = '/ĐXCTVT-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsDonVi(),
         this.loadDsDiaDanh(),
@@ -169,7 +170,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      this.maHauTo = '/ĐXCTVT-' + this.userInfo.DON_VI.tenVietTat;
+
       this.formData.patchValue({
         tenVthh: 'Gạo tẻ',
         tenDvi: this.userInfo.TEN_DVI,
@@ -319,6 +320,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
                 noiDung: row.noiDung,
                 tonKho: tonKho,
                 soLuong: soLuong,
+                donViTinh:row.donViTinh,
                 childData: v
               }
             }

@@ -82,8 +82,8 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       let body = this.formData.value;
       body.typeFile = "xlsx";
       if (body.loaiBc == '01') {
-        body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
-        body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
+        body.fileName = "bao_cao_cl_nhap_hang_tong_hop.jrxml";
+        body.tenBaoCao = "Báo cáo chất lượng nhập hàng DTQG - Tổng hợp";
       } else {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
@@ -125,8 +125,8 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
-        body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
-        body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
+        body.fileName = "bao_cao_cl_nhap_hang_tong_hop.jrxml";
+        body.tenBaoCao = "Báo cáo chất lượng nhập hàng DTQG - Tổng hợp";
       } else {
           if (body.loaiVthh.startsWith("0101")) {
             body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
