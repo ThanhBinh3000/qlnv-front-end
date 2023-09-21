@@ -142,7 +142,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       loaiQdinh: [, [Validators.required]],
       tenLoaiQdinh: [],
       ngayKyQdinh: [, [Validators.required]],
-      ngayPduyet: [, [Validators.required]],
+      ngayHieuLuc: [, [Validators.required]],
       trichYeu: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
@@ -491,7 +491,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           soCanCuQdTc: data.soQdinh,
           canCuQdTc: data.id,
           soDxuat,
-          ngayTrinhDuyetTc: data.ngayPduyet
+          ngayTrinhDuyetTc: data.ngayHieuLuc
         })
         this.onChangeCanCuQdTc(data.id)
       }
@@ -1065,7 +1065,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenLoKhoNhan: "",
       thuKhoNhan: "",
       thayDoiThuKho: "",
-      slDcConLai: "",
       tichLuongKd: "",
       soLuongPhanBo: "",
     }
@@ -1196,7 +1195,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenLoKhoNhan: "",
       thuKhoNhan: "",
       thayDoiThuKho: "",
-      slDcConLai: "",
       tichLuongKd: "",
       soLuongPhanBo: "",
     }
@@ -1220,7 +1218,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenLoKhoNhan: "",
       thuKhoNhan: "",
       thayDoiThuKho: "",
-      slDcConLai: "",
       tichLuongKd: "",
       soLuongPhanBo: "",
     }
@@ -1381,26 +1378,40 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return
-    await this.spinner.show();
+
     let body = this.formData.value;
     body.canCu = this.canCu;
     body.quyetDinh = this.quyetDinh;
     body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
+
+
+
+
     if (this.idInput) {
       body.id = this.idInput
     }
     console.log('save', body)
     // return
-    let data = await this.createUpdate(body);
+    await this.spinner.show();
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
       if (isGuiDuyet) {
+        body.danhSachQuyetDinh.forEach((item) => {
+          const ds = item.danhSachKeHoach
+          const diemnhap = ds.find((nhap) => !!nhap.maNganKhoNhan)
+          if (!diemnhap) {
+            this.notification.error(MESSAGE.ERROR, "Bạn chưa xác định điểm nhập");
+            return
+          }
+
+        })
         this.guiDuyet();
       }
-      else {
-        // this.quayLai();
-        await this.loadChiTiet(this.idInput)
-      }
+      // else {
+      //   // this.quayLai();
+      //   await this.loadChiTiet(this.idInput)
+      // }
     }
     await this.spinner.hide();
   }

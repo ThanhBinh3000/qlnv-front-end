@@ -168,7 +168,7 @@
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
               <td class="text-right">{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tongMucDt | number: '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ (data.tongMucDt ? data.tongMucDt : (data.tongSoLuong * data.donGiaVat * 1000)) | number: '1.0-1' : 'vi_VN' }}</td>
             </tr>
           </tbody>
         </nz-table>

@@ -17,6 +17,9 @@ import dayjs from 'dayjs';
 import {cloneDeep} from 'lodash';
 import {PREVIEW} from "src/app/constants/fileType";
 import {formatNumber} from "@angular/common";
+import {
+  QuyetDinhDchinhKhBdgService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
 
 @Component({
   selector: 'app-chi-tiet-thong-tin-dau-gia',
@@ -39,6 +42,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     modal: NzModalService,
     private thongTinDauGiaService: ThongTinDauGiaService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
+    private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group(
@@ -48,6 +52,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         maDvi: [],
         idQdPd: [],
         soQdPd: [''],
+        idQdDc: [],
+        soQdDc: [''],
         idQdPdDtl: [],
         soQdPdKqBdg: [''],
         tenDvi: [''],
@@ -103,16 +109,27 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       if (this.dataTable && this.dataTable.length > 0) {
         await this.showFirstRow(event, this.dataTable[0]);
       }
-      const resHdr = await this.quyetDinhPdKhBdgService.getDetail(data.idQdHdr);
-      if (!resHdr || !resHdr.data) {
+      let resQdHdr = null;
+      let reDcHdr = null;
+
+      if (data.isDieuChinh) {
+        reDcHdr = await this.quyetDinhDchinhKhBdgService.getDetail(data.idHdr);
+      } else {
+        resQdHdr = await this.quyetDinhPdKhBdgService.getDetail(data.idHdr);
+      }
+      if ((!data.isDieuChinh && (!resQdHdr || !resQdHdr.data)) ||
+        (data.isDieuChinh && (!reDcHdr || !reDcHdr.data))) {
         console.log('Không tìm thấy dữ liệu');
         return;
       }
-      const dataHdr = resHdr.data;
+      const dataQdHdr = resQdHdr ? resQdHdr.data : null;
+      const dataDcHdr = reDcHdr ? reDcHdr.data : null;
       this.formData.patchValue({
         nam: data.nam,
-        idQdPd: data.idQdHdr,
-        soQdPd: data.soQdPd,
+        idQdPd: dataQdHdr? dataQdHdr.id : dataDcHdr.idQdPd,
+        soQdPd: dataQdHdr? dataQdHdr.soQdPd: dataDcHdr.soQdPd,
+        idQdDc: dataDcHdr?.id,
+        soQdDc: dataDcHdr?.soQdDc,
         idQdPdDtl: data.id,
         soQdPdKqBdg: data.soQdPdKqBdg,
         maDvi: data.maDvi,
@@ -124,11 +141,11 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         tenPthucTtoan: data.tenPthucTtoan,
         tgianGnhan: data.tgianGnhan,
         pthucGnhan: data.pthucGnhan,
-        tenCloaiVthh: dataHdr.tenCloaiVthh,
-        tenLoaiVthh: dataHdr.tenLoaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
         tongSoLuong: data.tongSoLuong,
-        tenLoaiHinhNx: dataHdr.tenLoaiHinhNx,
-        tenKieuNx: dataHdr.tenKieuNx,
+        tenLoaiHinhNx: dataQdHdr ? dataQdHdr.tenLoaiHinhNx : dataDcHdr.tenLoaiHinhNx,
+        tenKieuNx: dataQdHdr ? dataQdHdr.tenKieuNx : dataDcHdr.tenKieuNx,
         donViTinh: data.donViTinh,
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,
@@ -180,7 +197,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
           await this.spinner.show();
           const body = {
             id: this.idInput,
-            trangThai: this.STATUS.HOAN_THANH_CAP_NHAT
+            trangThai: this.STATUS.DA_HOAN_THANH
           };
           const res = await this.quyetDinhPdKhBdgService.approveDtl(body);
           if (res.msg === MESSAGE.SUCCESS) {

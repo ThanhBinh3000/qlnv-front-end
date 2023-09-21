@@ -36,7 +36,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>DANH SÁCH ĐỀ XUẤT MUA SẮM</h3>
+      <h3>DANH SÁCH ĐỀ XUẤT MUA SẮM 11</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_QDMUASAM_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
@@ -47,7 +47,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)"
-                *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_QDMUASAM_THEM')">
+                *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

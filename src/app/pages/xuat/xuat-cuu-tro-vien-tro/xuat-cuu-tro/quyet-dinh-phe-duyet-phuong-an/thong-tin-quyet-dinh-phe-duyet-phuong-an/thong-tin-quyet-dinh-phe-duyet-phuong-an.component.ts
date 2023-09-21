@@ -129,7 +129,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         idXc: [],
         tongSoLuongDx: [],
         tongSoLuong: [],
-        soLuongXuaCap: [],
+        soLuongXuatCap: [],
         loaiVthh: [],
         cloaiVthh: [],
         loaiNhapXuat: [],
@@ -258,7 +258,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             idTongHop: event,
             maTongHop: data.maTongHop,
             tongSoLuongDx: data.tongSlCtVt,
-            soLuongXuaCap: data.tongSlXuatCap,
+            soLuongXuatCap: data.tongSlXuatCap,
             idDx: null,
             soDx: null,
             ngayThop: data.ngayThop,
@@ -319,7 +319,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             idTongHop: null,
             maTongHop: data.maTongHop,
             tongSoLuongDx: data.tongSlCtVt,
-            soLuongXuaCap: data.tongSlXuatCap,
+            soLuongXuatCap: data.tongSlXuatCap,
             idDx: event,
             soDx: data.soDx,
             ngayDx: data.ngayDx,
@@ -814,7 +814,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       })
     }
     this.formData.patchValue({
-      soLuongXuaCap: this.slXuatCap,
+      soLuongXuatCap: this.slXuatCap,
     })
 
   }

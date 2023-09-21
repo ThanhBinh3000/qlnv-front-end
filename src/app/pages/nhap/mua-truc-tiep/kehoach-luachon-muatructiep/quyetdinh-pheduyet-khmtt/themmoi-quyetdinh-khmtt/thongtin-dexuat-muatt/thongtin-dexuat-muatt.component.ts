@@ -88,7 +88,10 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.tgianMkhoChange = this.dataInput.tgianMkho
         this.tgianKthucChange = this.dataInput.tgianKthuc
-        console.log(this.dataInput.children)
+        this.formData.patchValue({
+          tongMucDt: this.dataInput.tongSoLuong * this.dataInput.donGiaVat * 1000
+        })
+        console.log(this.formData.value)
         this.dataTable = this.dataInput.children
         this.calculatorTable();
       } else {

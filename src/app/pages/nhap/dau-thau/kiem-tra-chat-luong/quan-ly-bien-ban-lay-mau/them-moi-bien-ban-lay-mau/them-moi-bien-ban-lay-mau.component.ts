@@ -113,10 +113,10 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
       loaiBienBan: [''],
-      nam: [dayjs().get('year'), [Validators.required]],
-      soBienBan: ['', [Validators.required]],
-      tenDvi: ['', [Validators.required]],
-      maDvi: ['', [Validators.required]],
+      nam: [dayjs().get('year')],
+      soBienBan: [''],
+      tenDvi: [''],
+      maDvi: [''],
       maQhns: [''],
       loaiVthh: [''],
       tenLoaiVthh: [''],
@@ -124,28 +124,28 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
       idDdiemGiaoNvNh: [''],
-      maDiemKho: ['', [Validators.required]],
-      tenDiemKho: ['', [Validators.required]],
-      maNhaKho: ['', [Validators.required]],
-      tenNhaKho: ['', [Validators.required]],
-      maNganKho: ['', [Validators.required]],
-      tenNganKho: ['', [Validators.required]],
+      maDiemKho: [''],
+      tenDiemKho: [''],
+      maNhaKho: [''],
+      tenNhaKho: [''],
+      maNganKho: [''],
+      tenNganKho: [''],
       maLoKho: [''],
       tenLoKho: [''],
-      soQdGiaoNvNh: ['', [Validators.required]],
-      ngayQdGiaoNvNh: ['', [Validators.required]],
-      idQdGiaoNvNh: ['', [Validators.required]],
+      soQdGiaoNvNh: [''],
+      ngayQdGiaoNvNh: [''],
+      idQdGiaoNvNh: [''],
       soHd: [''],
       ngayHd: [''],
-      ngayLayMau: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      dviKiemNghiem: ['', [Validators.required]],
-      soBbNhapDayKho: ['', [Validators.required]],
-      idBbNhapDayKho: ['', [Validators.required]],
-      diaDiemLayMau: ['', [Validators.required]],
+      ngayLayMau: [dayjs().format('YYYY-MM-DD')],
+      dviKiemNghiem: [''],
+      soBbNhapDayKho: [''],
+      idBbNhapDayKho: [''],
+      diaDiemLayMau: [''],
 
-      soLuongMau: ['', [Validators.required]],
+      soLuongMau: [''],
       ppLayMau: [''],
-      chiTieuKiemTra: ['', [Validators.required]],
+      chiTieuKiemTra: [''],
       ketQuaNiemPhong: [''],
       tenNguoiTao: [''],
       soBbGuiHang: [''],
@@ -203,11 +203,28 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
 
   async save(isGuiDuyet?: boolean) {
     this.spinner.show();
-    this.setValidator();
+    this.setValidator(isGuiDuyet);
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) {
       this.spinner.hide();
       return;
+    }
+    if (isGuiDuyet) {
+      if(this.listFileDinhKemBb.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
+        this.spinner.hide();
+        return;
+      }
+      if(this.listFileDinhKemAnh.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, 'File đính kèm ảnh chụp mẫu đã niêm phong không được để trống.');
+        this.spinner.hide();
+        return;
+      }
+      if (this.phuongPhapLayMaus.filter(item => item.checked).length <= 0) {
+        this.notification.error(MESSAGE.ERROR, 'Phương pháp lấy mẫu không được để trống.');
+        this.spinner.hide();
+        return;
+      }
     }
     let body = this.formData.value;
     body.listFileDinhKemBb = this.listFileDinhKemBb;
@@ -230,10 +247,10 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.redirectBienBanLayMau();
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.redirectBienBanLayMau();
+          this.id = res.data.id;
+          this.formData.get('id').setValue(res.data.id);
         }
         this.spinner.hide();
       }
@@ -243,17 +260,29 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
     }
   }
 
-  setValidator() {
-    if (this.loaiVthh.startsWith('02')) {
-      this.formData.controls['soBbNhapDayKho'].clearValidators();
-      this.formData.controls['idBbNhapDayKho'].clearValidators();
-      this.formData.controls['soBbGuiHang'].setValidators([Validators.required]);
-      this.formData.controls['idBbGuiHang'].setValidators([Validators.required]);
+  setValidator(isGuiDuyet) {
+    if(isGuiDuyet) {
+      if (this.loaiVthh.startsWith('02')) {
+        this.formData.controls['soBbNhapDayKho'].clearValidators();
+        this.formData.controls['idBbNhapDayKho'].clearValidators();
+        this.formData.controls['soBbGuiHang'].setValidators([Validators.required]);
+        this.formData.controls['idBbGuiHang'].setValidators([Validators.required]);
+      } else {
+        this.formData.controls['ngayLayMau'].setValidators([Validators.required]);
+        this.formData.controls['soQdGiaoNvNh'].setValidators([Validators.required]);
+        this.formData.controls['soBbNhapDayKho'].setValidators([Validators.required]);
+        this.formData.controls['truongBpKtbq'].setValidators([Validators.required]);
+        this.formData.controls['dviKiemNghiem'].setValidators([Validators.required]);
+        this.formData.controls['diaDiemLayMau'].setValidators([Validators.required]);
+        this.formData.controls['soLuongMau'].setValidators([Validators.required]);
+      }
     } else {
-      this.formData.controls['soBbNhapDayKho'].setValidators([Validators.required]);
-      this.formData.controls['idBbNhapDayKho'].setValidators([Validators.required]);
-      this.formData.controls['soBbGuiHang'].clearValidators();
-      this.formData.controls['idBbGuiHang'].clearValidators();
+      Object.keys(this.formData.controls).forEach(key => {
+        const control = this.formData.controls[key];
+        control.clearValidators();
+        control.updateValueAndValidity();
+      });
+      this.formData.updateValueAndValidity();
     }
   }
 

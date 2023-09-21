@@ -128,7 +128,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         tongSoLuongDx: [],
         tongSoLuong: [],
         thanhTien: [],
-        soLuongXuaCap: [],
+        soLuongXuatCap: [],
         loaiVthh: [],
         cloaiVthh: [],
         tenVthh: [],
@@ -295,6 +295,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             delete data.type;
             delete data.canCu;
             delete data.fileDinhKem;
+            delete data.trichYeu;
             data.ngayThop = data.ngayTao;
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 
@@ -372,6 +373,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             delete data.type;
             delete data.canCu;
             delete data.fileDinhKem;
+            delete data.trichYeu;
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 
             this.formData.patchValue(data);
@@ -556,5 +558,17 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
 
   async tinhTong() {
     this.tongSoLuongDx = this.phuongAnHdrViewCache.reduce((prev, next) => prev + next.soLuongDx, 0);
+  }
+
+  tinhXuatCap(currentRow: any, $event: any) {
+    currentRow.soLuong = $event;
+    let currentDvi = this.formData.value.quyetDinhPdDtl.filter(s => s.maDvi == currentRow.maDvi);
+    let tongSoDaGiao = currentDvi.reduce((prev, next) => prev + next.soLuong, 0);
+    currentDvi.forEach(s => s.soLuongXc = 0);
+    if (tongSoDaGiao > currentRow.tonKhoLoaiVthh) {
+      currentRow.soLuongXc = currentRow.tonKhoLoaiVthh - tongSoDaGiao;
+    } else {
+      currentRow.soLuongXc = 0;
+    }
   }
 }

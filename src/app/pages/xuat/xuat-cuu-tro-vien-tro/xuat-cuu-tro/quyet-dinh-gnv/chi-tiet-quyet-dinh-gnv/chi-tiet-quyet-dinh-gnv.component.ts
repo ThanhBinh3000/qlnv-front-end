@@ -162,6 +162,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   async ngOnInit() {
     try {
       await this.spinner.show();
+      this.maHauTo = '/QĐGNV-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsDonVi(),
         this.loadDsDiaDanh(),
@@ -196,7 +197,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      this.maHauTo = '/QĐGNV-' + this.userInfo.DON_VI.tenVietTat;
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
@@ -460,7 +460,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
         (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
         (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-        (s.tenLoKho ?? '');
+        (s.tenLoKho ?? '') +
+        (s.tenCloaiVthh ? '(' + s.tenCloaiVthh + ')' : '');
       s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
     });
     let data = this.formData.value.dataDtl;
@@ -571,7 +572,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         });
       }
     }
-
     this.listDonVi.forEach(s => {
       s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi));
     })
@@ -631,6 +631,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         data.tenNhaKho = '';
         data.tenNganKho = '';
         data.tenLoKho = '';
+        data.cloaiVthh = '';
+        data.tenCloaiVthh = '';
         this.formData.value.dataDtl = [...this.formData.value.dataDtl, data]
       }
     }
@@ -650,7 +652,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           tenDiemKho: diemKhoNode.origin.tenDvi,
           tenNhaKho: nhaKhoNode.origin.tenDvi,
           tenNganKho: nganKhoNode.origin.tenDvi,
-          tenLoKho: current.tenDvi
+          tenLoKho: current.tenDvi,
+          cloaiVthh: current.cloaiVthh,
+          tenCloaiVthh: current.tenCloaiVthh
         });
       }
       //chon ngan
@@ -659,7 +663,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           maDvi: current.maDvi,
           tenDiemKho: diemKhoNode.origin.tenDvi,
           tenNhaKho: nhaKhoNode.origin.tenDvi,
-          tenNganKho: current.tenDvi
+          tenNganKho: current.tenDvi,
+          cloaiVthh: current.cloaiVthh,
+          tenCloaiVthh: current.tencLoaiVthh
         });
       }
       this.kiemTraTonKho();
@@ -682,12 +688,12 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
           if (data.length > 0) {
-            if (loaiVthh == '0101' || loaiVthh == '0102') {
-              this.formDataDtl.patchValue({
-                cloaiVthh: data[0].cloaiVthh,
-                // tonKhoCloaiVthh:data[0].slHienThoi
-              });
-            }
+            // if (loaiVthh == '0101' || loaiVthh == '0102') {
+            //   this.formDataDtl.patchValue({
+            //     cloaiVthh: data[0].cloaiVthh,
+            //     // tonKhoCloaiVthh:data[0].slHienThoi
+            //   });
+            // }
             let tonKhoDvi = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
             let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
             if (dataCloai.length == 0) {

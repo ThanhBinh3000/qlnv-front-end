@@ -21,6 +21,8 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
+  idQdDc: number = 0;
+  isViewQdDc: boolean = false;
   idDxBdg: number = 0;
   isViewDxBdg: boolean = false;
   idKqBdg: number = 0;
@@ -48,6 +50,8 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       ngayKyQdPdKqBdgTu: null,
       ngayKyQdPdKqBdgDen: null,
       loaiVthh: null,
+      // isDieuChinh: 0,
+
     })
     this.filterTable = {
       nam: '',
@@ -99,15 +103,24 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       await this.spinner.show();
       const body = {
         ...this.formData.value,
-        paggingReq: {
-          limit: this.pageSize,
-          page: this.page - 1,
-        },
       };
       const res = await this.quyetDinhPdKhBdgService.searchDtl(body);
       if (res.msg === MESSAGE.SUCCESS) {
         const data = res.data;
-        this.dataTable = data.content;
+        const soDxuatMap = {};
+        const filteredRecords = [];
+        data.content.forEach(record => {
+          if (!soDxuatMap[record.soDxuat]) {
+            filteredRecords.push(record);
+            soDxuatMap[record.soDxuat] = true;
+          } else if (record.isDieuChinh) {
+            const index = filteredRecords.findIndex(existingRecord => existingRecord.soDxuat === record.soDxuat);
+            if (index !== -1) {
+              filteredRecords[index] = record;
+            }
+          }
+        });
+        this.dataTable = filteredRecords;
         this.totalRecord = data.totalElements;
         this.dataTable?.forEach((item) => (item.checked = false));
         this.dataTableAll = cloneDeep(this.dataTable);
@@ -148,6 +161,10 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
         this.idQdPdKh = id;
         this.isViewQdPdKh = true;
         break;
+      case 'QdPdDc' :
+        this.idQdDc = id;
+        this.isViewQdDc = true;
+        break;
       case 'DxBdg':
         this.idDxBdg = id;
         this.isViewDxBdg = true;
@@ -166,6 +183,10 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       case 'QdPdKh':
         this.idQdPdKh = null;
         this.isViewQdPdKh = false;
+        break;
+      case 'QdPdDc' :
+        this.idQdDc = null;
+        this.isViewQdDc = false;
         break;
       case 'DxBdg':
         this.idDxBdg = null;
