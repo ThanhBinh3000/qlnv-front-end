@@ -27,6 +27,7 @@ import {STATUS} from 'src/app/constants/status';
 import {chain, cloneDeep} from 'lodash';
 import {v4 as uuidv4} from "uuid";
 import {PREVIEW} from "../../../../../../constants/fileType";
+import {TEN_LOAI_VTHH} from "src/app/constants/config";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop',
@@ -126,7 +127,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         loaiNhapXuat: [''],
         loaiVthh: [''],
         cloaiVthh: [''],
-        tenVthh: ['Gạo tẻ', [Validators.required]],
+        tenVthh: [TEN_LOAI_VTHH.GAO, [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         idQdPd: [''],
         soQdPd: [''],

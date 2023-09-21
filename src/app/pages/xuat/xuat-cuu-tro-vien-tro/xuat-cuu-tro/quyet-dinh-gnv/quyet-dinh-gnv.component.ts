@@ -18,12 +18,12 @@ import {CHUC_NANG} from "src/app/constants/status";
 @Component({
   selector: 'app-quyet-dinh-gnv',
   templateUrl: './quyet-dinh-gnv.component.html',
-  styleUrls: ['./quyet-dinh-gnv.component.scss']
+  styleUrls: ['./quyet-dinh-gnv.component.scss'],
+  providers: [CuuTroVienTroComponent]
 })
 export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
-
-
   @Input() loaiVthh: string;
+  @Input() loaiXuat: any;
   isDetail: boolean = false;
 
   isView = false;
@@ -71,6 +71,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
       ngayKyDen: [''],
       loaiVthh: [''],
       trichYeu: [''],
+      type: ['']
     });
     this.filterTable = {
       nam: '',
@@ -105,6 +106,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
+      this.formData.patchValue({type:this.loaiXuat});
       await this.timKiem()
     } catch (e) {
       console.log('error: ', e);

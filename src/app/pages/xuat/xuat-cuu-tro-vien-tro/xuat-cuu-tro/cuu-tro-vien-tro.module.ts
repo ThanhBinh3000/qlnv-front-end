@@ -129,43 +129,45 @@ import {XuatModule} from "src/app/pages/xuat/xuat.module";
     CuuTroVienTroRoutingModule,
     XuatModule,
   ],
-  exports: [
-    CuuTroVienTroComponent,
-    TongHopPhuongAnComponent,
-    ThongTinTongHopPhuongAnComponent,
-    QuyetDinhPheDuyetPhuongAnComponent,
-    ThongTinQuyetDinhPheDuyetPhuongAnComponent,
+    exports: [
+        CuuTroVienTroComponent,
+        TongHopPhuongAnComponent,
+        ThongTinTongHopPhuongAnComponent,
+        QuyetDinhPheDuyetPhuongAnComponent,
+        ThongTinQuyetDinhPheDuyetPhuongAnComponent,
 
 
-    MainComponent,
-    BienBanLayMauBanGiaoMauComponent,
-    ThemMoiBbLayMauBanGiaoMauComponent,
-    ThanhPhanThamGiaComponent,
-    PhieuKiemNghiemChatLuongComponent1,
-    ThemMoiPhieuKnClComponent,
-    KiemTraChatLuongComponent,
-    HoSoKyThuatComponent,
-    ChiTietHoSoKyThuatComponent,
+        MainComponent,
+        BienBanLayMauBanGiaoMauComponent,
+        ThemMoiBbLayMauBanGiaoMauComponent,
+        ThanhPhanThamGiaComponent,
+        PhieuKiemNghiemChatLuongComponent1,
+        ThemMoiPhieuKnClComponent,
+        KiemTraChatLuongComponent,
+        HoSoKyThuatComponent,
+        ChiTietHoSoKyThuatComponent,
 
-    QuyetDinhGnvXuatHangComponent,
-    ThongTinQdGnvXuatHangComponent,
+        QuyetDinhGnvXuatHangComponent,
+        ThongTinQdGnvXuatHangComponent,
 
-    XayDungPhuongAnComponent,
-    ThongTinXayDungPhuongAnComponent,
+        XayDungPhuongAnComponent,
+        ThongTinXayDungPhuongAnComponent,
 
-    MainXuatKhoComponent,
-    PhieuXuatKhoComponent,
-    ThemMoiPhieuXuatKhoComponent,
-    BangKeCanComponent,
-    BienBanTinhKhoComponent,
-    ThemMoiBienBanTinhKhoComponent,
-    BienBanHaoDoiComponent,
-    ThemMoiBienBanHaoDoiComponent,
-    XuatKhoComponent,
+        MainXuatKhoComponent,
+        PhieuXuatKhoComponent,
+        ThemMoiPhieuXuatKhoComponent,
+        BangKeCanComponent,
+        BienBanTinhKhoComponent,
+        ThemMoiBienBanTinhKhoComponent,
+        BienBanHaoDoiComponent,
+        ThemMoiBienBanHaoDoiComponent,
+        XuatKhoComponent,
 
-    ChiTietBangKeCanComponent,
-    ChiTietBienBanKiemTraComponent
-  ]
+        ChiTietBangKeCanComponent,
+        ChiTietBienBanKiemTraComponent,
+        QuyetDinhGnvComponent,
+        QuyetDinhPdComponent
+    ]
 })
 export class CuuTroVienTroModule {
 }
