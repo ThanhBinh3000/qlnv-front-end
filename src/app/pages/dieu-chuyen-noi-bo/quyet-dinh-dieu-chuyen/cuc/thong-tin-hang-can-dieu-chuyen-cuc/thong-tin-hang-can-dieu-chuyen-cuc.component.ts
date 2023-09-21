@@ -112,9 +112,9 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (!this.data) return
     await this.spinner.show()
     console.log('handleData', this.data)
-    this.formData.patchValue({
-      slDcConLai: this.data.slDcConLai
-    })
+    // this.formData.patchValue({
+    //   slDcConLai: this.data.slDcConLai
+    // })
     if (this.data.maChiCucNhan) await this.getListDiemKho(this.data.maChiCucNhan)
     if (this.data.maDiemKho) await this.getListNhaKho(this.data.maDiemKho)
     if (this.data.maNhaKho) await this.getListNganKho(this.data.maNhaKho)
@@ -337,6 +337,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           else {
             this.formData.controls["maLoKho"].clearValidators();
             this.formData.controls["tenLoKho"].clearValidators();
+            this.helperService.markFormGroupTouched(this.formData);
 
             if (detail.data.object.loaiVthh && detail.data.object.tenLoaiVthh && detail.data.object.cloaiVthh && detail.data.object.tenCloaiVthh && detail.data.object.dviTinh) {
               this.formData.patchValue({
@@ -404,11 +405,17 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
   async getListLoKhoNhan(value) {
     if (value) {
+      this.dsLoKhoNhan = []
       const nganKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)
 
       if (nganKhoNhan) {
         this.formData.patchValue({
           maLoKhoNhan: "",
+          tenLoKhoNhan: "",
+          thayDoiThuKho: "",
+          tichLuongKd: 0,
+          slDcConLai: 0,
+          soLuongPhanBo: 0,
           tenNganKhoNhan: nganKhoNhan.tenDvi
         })
         let body = {
@@ -427,20 +434,17 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               thuKhoNhan: detailThuKho.fullName
             })
           }
+
           if (coLoKho) {
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
           } else {
-            if (this.formData.value.cloaiVthh) {
-              const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
-              this.formData.patchValue({
-                tichLuongKd
-              })
-            }
             this.formData.controls["maLoKhoNhan"].clearValidators();
             this.formData.controls["tenLoKhoNhan"].clearValidators();
+            this.helperService.markFormGroupTouched(this.formData);
+
             this.dsLoKhoNhan = []
             if (
-              this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
+              this.formData.value.maThuKho === detailThuKho.id
             ) {
               this.formData.patchValue({
                 thayDoiThuKho: false
@@ -450,6 +454,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
                 thayDoiThuKho: true
               })
             }
+
+            const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+            this.formData.patchValue({
+              tichLuongKd
+            })
+
+
           }
 
         }
@@ -472,26 +483,36 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         }
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
-          if (this.formData.value.cloaiVthh) {
-            const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+
+          const detailThuKho = detail.data.object.detailThuKho
+          if (detailThuKho) {
             this.formData.patchValue({
-              tichLuongKd
+              maThuKhoNhan: detailThuKho.id,
+              thuKhoNhan: detailThuKho.fullName
             })
+            if (
+              this.formData.value.maThuKho === detailThuKho.id
+            ) {
+              this.formData.patchValue({
+                thayDoiThuKho: false
+              })
+            } else {
+              this.formData.patchValue({
+                thayDoiThuKho: true
+              })
+            }
           }
+
+
+
+          const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+          this.formData.patchValue({
+            tichLuongKd
+          })
         }
 
 
-        if (
-          this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
-        ) {
-          this.formData.patchValue({
-            thayDoiThuKho: false
-          })
-        } else {
-          this.formData.patchValue({
-            thayDoiThuKho: true
-          })
-        }
+
       }
     }
 
@@ -516,7 +537,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       }
     } else {
       this.formData.patchValue({
-        slDcConLai: this.data.slDcConLai
+        slDcConLai: 0//this.data.slDcConLai
 
       })
     }
