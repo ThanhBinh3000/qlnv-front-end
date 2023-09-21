@@ -15,12 +15,12 @@
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Duyệt</span>
       </button>
-      <button *ngIf='detail.trangThai == STATUS.DU_THAO' type='button' class='btn btn-sub'
+      <button *ngIf='isTonghop && detail.trangThai == STATUS.DU_THAO' type='button' class='btn btn-sub'
               (click)='save(true) ' [disabled]='!formData.valid'>
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf='detail.trangThai ==STATUS.DU_THAO' type='button' class='btn btn-main'
+      <button *ngIf='detail.trangThai ==STATUS.DU_THAO && isTonghop' type='button' class='btn btn-main'
               (click)='save(false)' [disabled]='!formData.valid'>
         <i class='icon htvbdh_tcdt_save'></i>
         <span>Lưu</span>
@@ -29,7 +29,7 @@
   </nz-affix>
   <div class='bg-trang'>
     <nz-card class='mt16 flex-card p-lr16'>
-      <div class='header mg-t-16'>
+      <div class='header mg-t-16' *ngIf='isTonghop'>
         <div class='header-text'>
           <div class='title-chi-tieu'>
                         <span
@@ -69,7 +69,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]='true'> Ngày tổng hợp</nz-form-label>
                   <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
-                    <nz-date-picker [nzDisabled]='isView' formControlName='ngayTongHop'
+                    <nz-date-picker [nzDisabled]='true' formControlName='ngayTongHop'
                                     nzFormat='dd/MM/YYYY'>
                     </nz-date-picker>
                   </nz-form-control>
@@ -119,7 +119,7 @@
         <ng-template #error let-control>
           <app-template-error #error [control]='control'></app-template-error>
         </ng-template>
-        <div nz-col [nzSpan]='24' *ngIf='!isView'>
+        <div nz-col [nzSpan]='24' *ngIf='!isView && !isTonghop'>
           <div class='tong-hop-button group-button-search text-right mg-t-16'>
             <button class='btn btn-sub btn-sm waves-effect waves-light' (click)='clearFilter()'>
               <i class=' icon htvbdh_nhap-lai1'></i>
@@ -191,9 +191,9 @@
             <tr>
               <th class='text-center'>Loại chi phí</th>
               <th class='text-center'>Năm phát sinh</th>
-              <th class='text-center'>Tổng chi phí</th>
-              <th class='text-center'>Kinh phí đã cấp</th>
-              <th class='text-center'>Yêu cầu cấp thêm</th>
+              <th class='text-center'>Tổng chi phí(đ)</th>
+              <th class='text-center'>Kinh phí đã cấp(đ)</th>
+              <th class='text-center'>Yêu cầu cấp thêm(đ)</th>
             </tr>
             </thead>
             <tbody>
@@ -315,9 +315,9 @@
             <tr>
               <th class='text-center'>Loại chi phí</th>
               <th class='text-center'>Năm phát sinh</th>
-              <th class='text-center'>Tổng chi phí</th>
-              <th class='text-center'>Kinh phí đã cấp</th>
-              <th class='text-center'>Yêu cầu cấp thêm</th>
+              <th class='text-center'>Tổng chi phí(đ)</th>
+              <th class='text-center'>Kinh phí đã cấp(đ)</th>
+              <th class='text-center'>Yêu cầu cấp thêm(đ)</th>
               <th>Hành động</th>
             </tr>
             </thead>

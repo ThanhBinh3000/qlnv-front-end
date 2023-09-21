@@ -41,7 +41,7 @@ export class ThongTinTongHopComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   formData: FormGroup;
   detail: any = {};
-  STATUS =STATUS;
+  STATUS = STATUS;
   pageSize: number = PAGE_SIZE_DEFAULT;
   page: number = 1;
   dataTableAll: any[] = [];
@@ -125,7 +125,7 @@ export class ThongTinTongHopComponent implements OnInit {
     this.formData = this.fb.group({
       'nam': [null, [Validators.required]],
       'maTongHop': [null],
-      'ngayTongHop': [null],
+      'ngayTongHop': [null, [Validators.required]],
       'maToTrinh': [null],
       'noiDung': [null],
       'nameFilePhuongAn': [null],
@@ -135,6 +135,7 @@ export class ThongTinTongHopComponent implements OnInit {
       maDonVi: this.userInfo.MA_DVI,
       capDvi: this.userInfo.CAP_DVI,
       nam: this.yearNow,
+      ngayTongHop: new Date().toDateString(),
     });
   }
 
@@ -207,6 +208,8 @@ export class ThongTinTongHopComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
+    body.ngayTongHop = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop).format(
+      'YYYY-MM-DD') : '';
     body.id = this.idInput;
     body.ct1s = this.ct1s;
     body.cts = this.cts;
@@ -228,14 +231,14 @@ export class ThongTinTongHopComponent implements OnInit {
       } else {
         let res = await this.tongHopDeNghiCapVonService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
+          this.idInput = res.data.id;
+          this.formData.patchValue({
+            id: res.data.id,
+          });
           if (!isGuiDuyet) {
-            this.formData.patchValue({
-              id: res.data.id,
-            });
-            this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
-            this.guiDuyet();
+            this.guiDuyet(res.data.id);
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -256,7 +259,7 @@ export class ThongTinTongHopComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  async guiDuyet() {
+  async guiDuyet(id?) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -267,14 +270,13 @@ export class ThongTinTongHopComponent implements OnInit {
       nzWidth: 350,
       nzOnOk: async () => {
         this.spinner.show();
-        await this.save(true);
+        // await this.save(true);
         try {
           let body = {
-            id: this.idInput,
+            id: id ? id : this.idInput,
             lyDoTuChoi: null,
             trangThai: STATUS.CHO_DUYET_LDV,
           };
-
           let res = await this.tongHopDeNghiCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(

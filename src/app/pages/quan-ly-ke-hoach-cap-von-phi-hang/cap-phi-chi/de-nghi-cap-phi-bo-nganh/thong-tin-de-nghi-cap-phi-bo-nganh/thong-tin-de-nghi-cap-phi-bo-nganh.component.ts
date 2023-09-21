@@ -108,13 +108,13 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
-      this.detail.trangThai = STATUS.DU_THAO
-      this.detail.tenTrangThai = 'Dự Thảo';
+      this.detail.trangThai = STATUS.DANG_NHAP_DU_LIEU;
+      this.detail.tenTrangThai = 'Đang nhập dữ liệu';
       this.initForm();
       Promise.all([this.getListNam(), this.getListBoNganh(), this.loaiVTHHGetAll(), this.getListLoaiCPhi()]);
       this.rowEdit.isView = true;
       if (this.idInput > 0) {
-        this.loadChiTiet(this.idInput);
+        await this.loadChiTiet(this.idInput);
       }
       this.spinner.hide();
     } catch (error) {
@@ -175,7 +175,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     this.listBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listBoNganh = res.data;
+      this.listBoNganh = res.data.filter(item => (item.code != 'BQP' && item.code != 'BCA' && item.code != 'BTC'));
     }
   }
 
@@ -195,7 +195,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -205,14 +205,14 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThaiId: STATUS.DA_HOAN_THANH,
+            trangThaiId: STATUS.HOAN_THANH_CAP_NHAT,
           };
 
           let res = await this.deNghiCapPhiBoNganhService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
               MESSAGE.SUCCESS,
-              MESSAGE.GUI_DUYET_SUCCESS,
+              'Đã hoàn thành cập nhật',
             );
             this.back();
           } else {
@@ -441,15 +441,15 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     });
     row.selected = true;
     this.itemCt1Selected = row;
-    if (this.itemCt1Selected) {
-      let ct2List = this.itemCt1Selected.ct2List;
-      ct2List.forEach(item => {
-        let chiPhi = this.listLoaiChiPhi.filter(cp => cp.ma == item.loaiChiPhi);
-        if (chiPhi && chiPhi.length > 0) {
-          item.tenLoaiChiPhi = chiPhi[0].giaTri;
-        }
-      });
-    }
+    // if (this.itemCt1Selected) {
+    //   let ct2List = this.itemCt1Selected.ct2List;
+    //   ct2List.forEach(item => {
+    //     let chiPhi = this.listLoaiChiPhi.find(cp => cp.ma == item.loaiChiPhi);
+    //     if (chiPhi) {
+    //       item.tenLoaiChiPhi = chiPhi.giaTri;
+    //     }
+    //   });
+    // }
   }
 
   tongBang1(data) {
