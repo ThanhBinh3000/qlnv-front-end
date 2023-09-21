@@ -234,7 +234,9 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                 </nz-form-label>
-                <label nz-checkbox formControlName="capLaiCaLo" [nzDisabled]="isView">Cần cung cấp cả lô hàng</label>
+                <nz-form-control [nzErrorTip]="error">
+                  <label nz-checkbox formControlName="capLaiCaLo" [nzDisabled]="isView">Cần cung cấp cả lô hàng</label>
+                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="12">
@@ -249,8 +251,10 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Lý do cần bảo hành
                 </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
                 <textarea rows="3" [readonly]="isView" nz-input
                           formControlName="lyDo"></textarea>
+                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">

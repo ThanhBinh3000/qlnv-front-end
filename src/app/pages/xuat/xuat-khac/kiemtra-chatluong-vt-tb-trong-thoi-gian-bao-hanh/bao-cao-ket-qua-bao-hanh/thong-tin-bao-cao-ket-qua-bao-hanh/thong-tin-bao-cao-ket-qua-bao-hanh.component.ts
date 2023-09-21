@@ -26,6 +26,8 @@ import {
 import {
   BienBanYeuCauBaoHanhService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BienBanYeuCauBaoHanh.service";
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {DonviService} from "../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-thong-tin-bao-cao-ket-qua-bao-hanh',
@@ -59,12 +61,15 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
   dataPhieuKncl: any;
   maBc: string;
   templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
+  dviNhan: any;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private donviService: DonviService,
     private banYeuCauBaoHanhService: BienBanYeuCauBaoHanhService,
     private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
     private baoCaoKetQuaBaoHanhService: BaoCaoKetQuaBaoHanhService,
@@ -75,14 +80,21 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
       tenDvi: [null, [Validators.required]],
       nam: [dayjs().get("year")],
       maDvi: [, [Validators.required]],
+      maDviNhan: [''],
       tenTrangThai: ['Dự Thảo'],
       trangThai: [STATUS.DU_THAO],
-      tenDviNhan: ['Vụ quản lý hàng dự trữ Tổng cục DTNN'],
+      lyDoTuChoi: [],
+      tenDviNhan: ['',],
       tenBaoCao: [null],
       soBaoCao: [null, [Validators.required]],
       soCanCu: [null, [Validators.required]],
       idCanCu: [null, [Validators.required]],
       ngayBaoCao: [null,],
+      idPhieuKtcl: [null],
+      spPhieuKtcl: [null],
+      idQdGiaoNvXh: [null],
+      soQdGiaoNvXh: [null],
+      fileDinhKems: [new Array<FileDinhKem>()],
       bhBaoCaoKqDtl: [new Array()],
     })
   }
@@ -111,7 +123,8 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
               ...res.data,
               id: res.data.id,
               soBaoCao: res.data.soBaoCao.split("/")[0],
-              soCanCu: res.data?.soCanCu ? res.data.soCanCu.split(",") : []
+              soCanCu: res.data?.soCanCu ? res.data.soCanCu.split(",") : [],
+              tenDviNhan: this.dviNhan.title,
             });
             console.log(this.formData.value, 152)
             this.dataTable = this.formData.value.bhBaoCaoKqDtl
@@ -124,16 +137,27 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
+      let maDviNhan = this.userInfo?.DON_VI?.maDviCha;
+      await this.loadDviNhan(maDviNhan);
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
+        maDviNhan,
+        tenDviNhan: this.dviNhan.title,
       });
+    }
+  }
+
+  async loadDviNhan(event) {
+    let res = await this.donviService.getDonVi({str: event});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dviNhan = res.data;
     }
   }
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_LDC) {
+    if (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC) {
       return true
     }
     return false;
@@ -164,9 +188,15 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
   pheDuyet() {
     let trangThai = '';
     let msg = '';
-    switch (this.formData.value.trangThai) {
+    switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDC:
+      case STATUS.TU_CHOI_TP:
       case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
@@ -182,7 +212,12 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
 
   tuChoi() {
     let trangThai = '';
+
     switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
       case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.TU_CHOI_LDC;
         break;
@@ -286,7 +321,7 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
       idCanCu: this.listSoBaoCao.map(m => m.id),
       bhBaoCaoKqDtl: this.dataTable.map((item) => ({...item, id: null, trangThaiBh: item.trangThai})),
     });
-    console.log(this.formData.value, 5555)
+    console.log(this.dataTable, 5555)
     this.buildTableView(this.dataTable);
   }
 
