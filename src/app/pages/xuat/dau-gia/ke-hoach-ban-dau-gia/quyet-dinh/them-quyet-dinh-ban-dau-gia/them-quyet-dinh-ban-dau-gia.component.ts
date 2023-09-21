@@ -155,6 +155,11 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   async save() {
     try {
+      this.danhsachDx = this.danhsachDx.map(item => ({
+        ...item,
+        lastest: null,
+        isDieuChinh: null
+      }));
       await this.helperService.ignoreRequiredForm(this.formData);
       this.setValidator();
       const body = {
@@ -177,6 +182,11 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       return;
     }
     this.setValidForm();
+    this.danhsachDx = this.danhsachDx.map(item => ({
+      ...item,
+      lastest: null,
+      isDieuChinh: null
+    }));
     const soQdPd = this.formData.value.soQdPd ? `${this.formData.value.soQdPd}${this.maHauTo}` : null;
     const body = {
       ...this.formData.value,

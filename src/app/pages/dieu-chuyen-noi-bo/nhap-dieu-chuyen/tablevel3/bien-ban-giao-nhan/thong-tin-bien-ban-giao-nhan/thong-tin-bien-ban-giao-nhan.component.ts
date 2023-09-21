@@ -79,6 +79,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanGiaoNhanPvcService);
     this.formData = this.fb.group({
+      id: [],
       type: ["01"],
       loaiDc: [this.loaiDc],
       isVatTu: [true],
@@ -196,7 +197,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       if (data) {
         this.detail = data
         this.danhSachDD = data.danhSachDaiDien
-        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`, });
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}`, });
         this.fileCanCuReq = data.fileCanCu
         this.fileDinhKemReq = data.fileDinhKems
         this.loadChiTietQdinh(data.qdDcCucId)
@@ -542,9 +543,12 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     if (this.idInput) {
       body.id = this.idInput
     }
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({
+        id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBb: data.soBb
+      })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

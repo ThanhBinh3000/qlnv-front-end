@@ -197,7 +197,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       this.listDaiDienChiCuc = dsDaiDien.filter(item => item.loaiDaiDien === "01")
       this.formData.patchValue({
         ...data,
-        tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
+        tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}`,
       });
       await this.loadPhuongPhapLayMau(data.cloaiVthh)
       const body = {
@@ -564,14 +564,16 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     if (this.idInput) {
       body.id = this.idInput
     }
-    console.log('save', body, this.phuongPhapLayMaus)
 
     let res = this.idInput ? await this.bienBanLayMauService.update(body) : await this.bienBanLayMauService.create(body);
     if (res.data) {
+
       this.idInput = res.data.id;
+      this.formData.patchValue({ id: res.data.id, trangThai: res.data.trangThai, tenTrangThai: res.data.tenTrangThai, soBbLayMau: res.data.soBbLayMau })
       if (isGuiDuyet) {
         this.guiDuyet();
-      }
+      } else
+        this.notification.success(MESSAGE.NOTIFICATION, res.msg);
     }
     await this.spinner.hide();
   }

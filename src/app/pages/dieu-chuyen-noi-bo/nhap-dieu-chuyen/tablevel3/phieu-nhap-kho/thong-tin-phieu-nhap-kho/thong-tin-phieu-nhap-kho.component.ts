@@ -67,6 +67,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuNhapKhoService);
     this.formData = this.fb.group({
+      id: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
@@ -689,9 +690,10 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       body.id = this.idInput
     }
 
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({ id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soPhieuNhapKho: data.soPhieuNhapKho })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

@@ -452,10 +452,10 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
         } else {
           if (this.formData.get('id').value) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
+            this.id = res.data.id;
+            this.formData.get('id').setValue(res.data.id)
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
           }
           await this.spinner.hide();
         }

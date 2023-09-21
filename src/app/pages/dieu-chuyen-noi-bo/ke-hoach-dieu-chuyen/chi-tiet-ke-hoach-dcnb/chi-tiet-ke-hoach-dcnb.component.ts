@@ -476,11 +476,14 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           this.addValidateFormChiTiet("tenLoKho");
         }
         if (!coLoKho) {
-          const body = {
-            maDvi: value,
-            tenLoKho: this.formDataChiTiet.value.tenNganKho
-          }
-          this.getChiTietTonKho(body);
+          this.formDataChiTiet.patchValue({
+            loaiVthh: res.data.object.loaiVthh,
+            tenLoaiVthh: res.data.object.tenLoaiVthh,
+            cloaiVthh: res.data.object.cloaiVthh,
+            tenCloaiVthh: res.data.object.tenCloaiVthh,
+            donViTinh: res.data.object.dviTinh,
+            tonKho: res.data.object.slTon
+          });
         }
         this.listLoKhoBq = [];
 
@@ -502,44 +505,26 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     let tenLoKho = (this.listLoKhoBq ? this.listLoKhoBq : []).find(item => item.maDvi === value);
     this.formDataChiTiet.patchValue({tenLoKho: tenLoKho ? tenLoKho.tenDvi : ""});
     if (value) {
-      const body = {
-        maDvi: value,
-        tenLoKho: this.formDataChiTiet.value.tenLoKho
-      }
-      this.getChiTietTonKho(body);
-    }
-  }
-
-  async getChiTietTonKho(body) {
-    if (!body && !body.maDvi && body.maDvi != "") return;
-    try {
-      // lấy thông tin hiện tại của lô
-      const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.length > 0) {
-          if (res.data.length === 1) {
-            this.formDataChiTiet.patchValue({
-              loaiVthh: res.data[0].loaiVthh,
-              tenLoaiVthh: res.data[0].tenLoaiVthh,
-              cloaiVthh: res.data[0].cloaiVthh,
-              tenCloaiVthh: res.data[0].tenCloaiVthh,
-              donViTinh: res.data[0].tenDonViTinh,
-              tonKho: res.data[0].slHienThoi
-            });
-          } else {
-            this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
-          }
+      this.getDetailMlkByKey(tenLoKho.maDvi, tenLoKho.capDvi).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          let thuKho = res.data.object.detailThuKho?.fullName;
+          let thuKhoId = res.data.object.detailThuKho?.id;
+          this.formDataChiTiet.patchValue({
+            loaiVthh: res.data.object.loaiVthh,
+            tenLoaiVthh: res.data.object.tenLoaiVthh,
+            cloaiVthh: res.data.object.cloaiVthh,
+            tenCloaiVthh: res.data.object.tenCloaiVthh,
+            donViTinh: res.data.object.dviTinh,
+            tonKho: res.data.object.slTon
+          });
+          this.formDataChiTiet.patchValue({
+            thuKho: thuKho,
+            thuKhoId: thuKhoId,
+          });
         } else {
-          this.notification.error(MESSAGE.ERROR, "Vui lòng khởi tạo dữ liệu đầu kỳ của " + body.tenLoKho);
+          this.notification.error(MESSAGE.ERROR, res.error);
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-      // xử lý thông tin chọn lô
-    } catch (error) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
+      })
     }
   }
 

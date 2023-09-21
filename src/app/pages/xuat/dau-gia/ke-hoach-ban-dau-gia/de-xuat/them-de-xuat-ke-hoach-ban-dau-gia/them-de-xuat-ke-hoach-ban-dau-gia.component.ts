@@ -24,7 +24,6 @@ import {
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
 import {Base2Component} from 'src/app/components/base2/base2.component';
-import {DatePipe} from '@angular/common';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {saveAs} from 'file-saver';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
@@ -158,9 +157,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (changes.idInput && changes.idInput.firstChange) {
       await this.getDetail(this.idInput);
-    }
   }
 
   async getDetail(id: number) {
