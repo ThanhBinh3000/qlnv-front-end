@@ -75,6 +75,7 @@
                                         Số QĐ/CV
                                     </ng-template>
                                 </th>
+                                <th scope="col" nzWidth="175px">Loại phương án</th>
                                 <th scope="col" nzWidth="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định
                                     BTC giao)</th>
                                 <th scope="col" nzWidth="175px">Mã phương án</th>
@@ -88,6 +89,9 @@
                                     <div class="tep_sqd" (click)="downloadFileCv()">
                                         <span>{{soQd?.fileName}}</span>
                                     </div>
+                                </td>
+                                <td>
+                                    Phương án giao dự toán
                                 </td>
                                 <td>
                                     <a (click)="xemCtietPaBTC()" style="color: #1890ff;">

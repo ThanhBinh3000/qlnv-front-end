@@ -68,6 +68,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     trangThai: string;
     namDtoan: number;
     maDviTien: any = "1";
+    maLoaiDan: number;
     newDate = new Date();
     tenDvi: string;
     maLoai = '2';
@@ -149,6 +150,8 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         await this.userService.getUserLogin();
         this.userInfo = this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
+        console.log(this.userInfo);
+
         if (this.id) {
             this.getDetailReport();
         }
@@ -241,6 +244,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
                     this.tenDvi = this.donVis.find(e => e.maDvi == this.maDviTao)?.tenDvi
                     this.isStatus = data.data.trangThai
                     this.maDviTien = data.data.maDviTien
+                    this.maLoaiDan = Number(data.data.maLoaiDan)
                     if (this.isStatus == "1") {
                         this.statusBtnNew = true;
                     } else {
