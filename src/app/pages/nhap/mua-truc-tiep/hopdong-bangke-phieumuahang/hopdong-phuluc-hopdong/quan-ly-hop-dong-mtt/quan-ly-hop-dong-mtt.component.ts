@@ -139,7 +139,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
             this.dataTable.push(...item.listHdong)
             this.tongSlChaoGia += item.listChaoGia.length
           })
-          this.formData.get('canhanTochuc').setValue(this.tongSlChaoGia);
+          this.formData.get('canhanTochuc').setValue(this.dataTable.length);
           // this.showDetail(event, this.danhSachCtiet[0])
           this.showDetailHd(event, this.dataTable[0])
         });

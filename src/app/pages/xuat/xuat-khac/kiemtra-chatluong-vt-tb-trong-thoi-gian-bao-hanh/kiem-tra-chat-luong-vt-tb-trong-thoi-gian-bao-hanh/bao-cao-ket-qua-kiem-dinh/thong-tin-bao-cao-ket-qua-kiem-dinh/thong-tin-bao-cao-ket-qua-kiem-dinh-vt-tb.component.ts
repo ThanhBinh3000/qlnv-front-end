@@ -26,6 +26,7 @@ import {
   PhieuKtclVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuKtclVtTbTrongThoiGianBaoHanh.service";
 import {DonviService} from "../../../../../../../services/donvi.service";
+import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
 
 @Component({
   selector: 'app-thong-tin-bao-cao-ket-qua-kiem-dinh-vt-tb',
@@ -83,6 +84,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
       maDvi: [, [Validators.required]],
       maDviNhan: [''],
       tenTrangThai: ['Dự Thảo'],
+      lyDoTuChoi: [],
       trangThai: [STATUS.DU_THAO],
       tenDviNhan: ['',],
       tenBaoCao: [null],
@@ -91,6 +93,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
       idCanCu: [null, [Validators.required]],
       ngayBaoCao: [null, [Validators.required]],
       baoCaoDtl: [new Array()],
+      fileDinhKems: [new Array<FileDinhKem>()],
     })
   }
 
@@ -339,7 +342,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
         this.listSoQuyetDinh = this.listSoQuyetDinh.filter(f => f.checked);
         this.dataTable = this.listSoQuyetDinh.map(m => {
           return m.qdGiaonvXhDtl
-            .map(dtl => ({...dtl, soQuyetDinh: m.soQuyetDinh, soLanLm: m.soLanLm, tenTrangThaiXh: m.tenTrangThaiXh}));
+            .map(dtl => ({...dtl, soQuyetDinh: m.soQuyetDinh, soLanLm: m.soLanLm, trangThaiXh: m.trangThaiXh}));
         }).flat();
 
         this.formData.patchValue({

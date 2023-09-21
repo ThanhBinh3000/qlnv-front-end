@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Base2Component} from "src/app/components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "src/app/services/storage.service";
@@ -13,6 +13,7 @@ import {UserLogin} from "src/app/models/userlogin";
 import {MESSAGE} from "src/app/constants/message";
 import dayjs from "dayjs";
 import {isEmpty} from 'lodash';
+import {TEN_LOAI_VTHH} from "src/app/constants/config";
 
 @Component({
   selector: 'app-quyet-dinh-pd',
@@ -25,7 +26,11 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
+  @Input() loaiXuat: any;
+  @Input() chuyenXuatCap: Boolean = false;
   @Input() isView = false;
+  @Output() eventTaoQdXc: EventEmitter<any> = new EventEmitter<any>();
+
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
@@ -52,7 +57,8 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
       ngayKetThucDx: null,
       ngayKetThucDxTu: null,
       ngayKetThucDxDen: null,
-      type: null
+      type: null,
+      xuatCap:null
     })
     this.filterTable = {
       soQd: '',
@@ -111,7 +117,11 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.initData()
+      this.formData.patchValue({type: this.loaiXuat, xuatCap: this.chuyenXuatCap});
+      if(this.chuyenXuatCap){
+        this.formData.patchValue({tenVthh:TEN_LOAI_VTHH.GAO});
+      }
+      await this.initData();
       await this.timKiem();
       await this.spinner.hide();
 
@@ -176,5 +186,8 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
   closeThModal() {
     this.idTh = null;
     this.openTh = false;
+  }
+  taoQuyetDinhXc(data) {
+    this.eventTaoQdXc.emit(data);
   }
 }

@@ -39,6 +39,7 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
   @Input() loaiVthh: string;
+  @Input() loaiXuat: any;
   radioValue: any;
   cacheData: any[] = [];
   fileDinhKem: Array<FileDinhKem> = [];
@@ -165,6 +166,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   async ngOnInit() {
     try {
       await this.spinner.show();
+      this.formData.patchValue({type:this.loaiXuat});
       this.maHauTo = '/QĐPDCTVT-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([]);
       await this.loadDetail();

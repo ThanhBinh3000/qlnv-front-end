@@ -21,6 +21,7 @@ import {chain, cloneDeep} from 'lodash';
 import {MESSAGE} from "src/app/constants/message";
 import {v4 as uuidv4} from "uuid";
 import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.service";
+import {TEN_LOAI_VTHH} from "src/app/constants/config";
 
 
 @Component({
@@ -172,7 +173,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     } else {
 
       this.formData.patchValue({
-        tenVthh: 'Gạo tẻ',
+        tenVthh: TEN_LOAI_VTHH.GAO,
         tenDvi: this.userInfo.TEN_DVI,
         kieuNhapXuat: 'Xuất không thu tiền',
         loaiNhapXuat: 'Xuất cứu trợ'
@@ -425,16 +426,16 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   async changeVthh($event) {
     this.listLoaiHangHoa = [];
-    if ($event == 'Thóc tẻ') {
+    if ($event == TEN_LOAI_VTHH.THOC) {
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
       let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == '0101'));
       Object.assign(this.listLoaiHangHoa, filter);
-    } else if ($event == 'Gạo tẻ') {
+    } else if ($event == TEN_LOAI_VTHH.GAO) {
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
       let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == '0102'));
       Object.assign(this.listLoaiHangHoa, filter);
     }
-    else if ($event == 'Muối trắng') {
+    else if ($event == TEN_LOAI_VTHH.MUOI) {
       let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '04'));
       Object.assign(this.listLoaiHangHoa, filter.children);
     }

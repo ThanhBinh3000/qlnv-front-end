@@ -117,7 +117,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayXuat">
+                <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayXuatNhap">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -141,7 +141,7 @@
             </nz-input-number>
           </nz-form-item>
         </div>
-        <div nz-col  *ngIf="this.formData.value.loai == 'XUAT_MAU'||this.formData.value.loai == 'XUAT_BH'"
+        <div nz-col *ngIf="this.formData.value.loai == 'XUAT_MAU'||this.formData.value.loai == 'XUAT_BH'"
              [nzSpan]="(formData.value.loai == 'XUAT_MAU') ? 4 :( (formData.value.loai == 'XUAT_BH') ? 8 : null)">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
@@ -157,7 +157,7 @@
         <div nz-col [nzSpan]="4" *ngIf="this.formData.value.loai == 'XUAT_MAU'">
           <nz-form-item>
             <nz-form-label nzRequired> Số lần lấy mẫu</nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <input nz-input [readonly]="true" formControlName="soLanLm" readonly/>
             </nz-form-control>
           </nz-form-item>
@@ -190,7 +190,7 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label nzRequired> Tồn kho</nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <input nz-input [readonly]="true" formControlName="slTonKho" readonly/>
             </nz-form-control>
           </nz-form-item>

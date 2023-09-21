@@ -14,7 +14,7 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,templateName)">
+        <button type="button" class="btn btn-sub mr-2" (click)="xemTruoc(idInput,templateName)">
           <i class="icon htvbdh_totrinh"></i>
           <span> In/Xem trước </span>
         </button>
@@ -44,7 +44,7 @@
       </div>
     </div>
   </nz-affix>
-  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon nzType="error"
+  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP||formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon nzType="error"
             nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
@@ -127,7 +127,7 @@
                   Số BB yêu cầu bảo hành
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBaoCao()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogBaoCao()">
                     <input class="search__input" [readonly]="isView" nz-input formControlName="soCanCu"
                            readonly/>
                   </nz-input-group>
@@ -210,7 +210,7 @@
               <td>{{lv1.slLayMauL1}}</td>
               <td>{{lv1.slLayMauL2}}</td>
               <td>{{lv1.slBaoHanh}}</td>
-              <td>{{lv1.tenTrangThaiBh}}</td>
+              <td>{{lv1.trangThaiBh=='DA_BH'?"Đã hoàn thành bảo hành":"Đang bảo hành"}}</td>
               <td>{{lv1.tenTrangThaiXh}}</td>
             </tr>
           </ng-container>
