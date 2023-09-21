@@ -1,20 +1,20 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DonviService} from 'src/app/services/donvi.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {DanhMucService} from 'src/app/services/danhmuc.service'
-import {QuanLySoKhoTheKhoService} from 'src/app/services/quan-ly-so-kho-the-kho.service';
-import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {NgxSpinnerService} from "ngx-spinner";
-import {Base2Component} from "../../../../../components/base2/base2.component";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DonviService } from 'src/app/services/donvi.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucService } from 'src/app/services/danhmuc.service'
+import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kho.service';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NgxSpinnerService } from "ngx-spinner";
 import dayjs from "dayjs";
-import {STATUS} from "../../../../../constants/status";
-import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {OldResponseData} from "../../../../../interfaces/response";
-import {AMOUNT} from "../../../../../Utility/utils";
-import {Validators} from "@angular/forms";
+import { Validators } from "@angular/forms";
+import { AMOUNT } from 'src/app/Utility/utils';
+import { STATUS } from 'src/app/constants/status';
+import { OldResponseData } from 'src/app/interfaces/response';
+import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 @Component({
   selector: 'app-them-so-kho-the-kho',
@@ -27,7 +27,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   @Input() loai: string;
   @Input() idInput: number;
   @Input() isView: any;
-  listType = [{"ma": "00", "giaTri": "Sổ kho"}, {"ma": "01", "giaTri": "Thẻ kho"}];
+  listType = [{ "ma": "00", "giaTri": "Sổ kho" }, { "ma": "01", "giaTri": "Thẻ kho" }];
   listDsNhapXuat: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
@@ -36,6 +36,14 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   dsNganKho = [];
   dsLoKho = [];
   amount = AMOUNT;
+  formData: any;
+  fb: any;
+  spinner: any;
+  notification: any;
+  STATUS: any;
+  userInfo: any;
+  modal: any;
+  helperService: any;
 
   constructor(
     private httpClient: HttpClient,
@@ -195,7 +203,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
     this.helperService.removeValidators(this.formData);
     this.setValidators();
     this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI
     })
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
@@ -240,8 +248,8 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO :
-            case STATUS.TU_CHOI_KT : {
+            case STATUS.DU_THAO:
+            case STATUS.TU_CHOI_KT: {
               trangThai = STATUS.CHO_DUYET_KT;
               break;
             }
@@ -284,10 +292,10 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            maDiemKho : data.maDiemKho,
-            maNhaKho : data.maNhaKho,
-            maNganKho : data.maNganKho,
-            maLoKho : data.maLoKho ?  data.maLoKho : null
+            maDiemKho: data.maDiemKho,
+            maNhaKho: data.maNhaKho,
+            maNganKho: data.maNganKho,
+            maLoKho: data.maLoKho ? data.maLoKho : null
           })
         }
       } else {
@@ -312,9 +320,9 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
   async loadDiemKho() {
     let body = {
-      idThuKho : this.userInfo.ID,
-      maDviCha : null,
-      capDvi : "4"
+      idThuKho: this.userInfo.ID,
+      maDviCha: null,
+      capDvi: "4"
     }
     const dsTong = await this.donViService.getDonViTheoIdThuKho(body);
     this.dsDiemKho = dsTong.data
@@ -323,9 +331,9 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   async onChangeDiemKho(event) {
     if (event) {
       let body = {
-        idThuKho : this.userInfo.ID,
-        maDviCha : event,
-        capDvi : "5"
+        idThuKho: this.userInfo.ID,
+        maDviCha: event,
+        capDvi: "5"
       }
       const dsTong = await this.donViService.getDonViTheoIdThuKho(body);
       this.dsNhaKho = dsTong.data
@@ -335,9 +343,9 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   async onChangeNhaKho(event) {
     if (event) {
       let body = {
-        idThuKho : this.userInfo.ID,
-        maDviCha : event,
-        capDvi : "6"
+        idThuKho: this.userInfo.ID,
+        maDviCha: event,
+        capDvi: "6"
       }
       const dsTong = await this.donViService.getDonViTheoIdThuKho(body);
       this.dsNganKho = dsTong.data
@@ -347,9 +355,9 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   async onChangeNganKho(event) {
     if (event) {
       let body = {
-        idThuKho : this.userInfo.ID,
-        maDviCha : event,
-        capDvi : "7"
+        idThuKho: this.userInfo.ID,
+        maDviCha: event,
+        capDvi: "7"
       }
       const dsTong = await this.donViService.getDonViTheoIdThuKho(body);
       this.dsLoKho = dsTong.data;
