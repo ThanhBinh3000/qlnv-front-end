@@ -4,7 +4,7 @@
       <div class='header-text'>
         <div class='title-chi-tieu'>
                     <span
-                      [ngClass]="(detail.trangThai == globals.prop.NHAP_DU_THAO )? 'du-thao-va-lanh-dao-duyet':'da-ban-hanh' ">
+                      [ngClass]="(detail.trangThai == STATUS.DANG_NHAP_DU_LIEU )? 'du-thao-va-lanh-dao-duyet':'da-ban-hanh' ">
                         {{detail.tenTrangThai}}
                     </span>
           <span>Đề nghị cấp phí chi nghiệp vụ dự trữ quốc gia của Bộ/Ngành</span>
@@ -220,7 +220,7 @@
       </td>
       <td>
         <input class='money-input' [min]='0' [disabled]='true' currencyMask [options]='amount'
-               [(ngModel)]='create.tongTien - create.kinhPhiDaCap' />
+               [(ngModel)]='create.tongTien -create.kinhPhiDaCap ' />
       </td>
       <td>
         <input class='money-input' [min]='0' [max]='(create.tongTien ?? 0) - (create.kinhPhiDaCap ?? 0)'

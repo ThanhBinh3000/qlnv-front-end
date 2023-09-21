@@ -102,7 +102,6 @@ import { ChitietThComponent } from './tong-hop-thanh-ly/chitiet-th/chitiet-th.co
     ChiTietThongTinDauGiaThanhLyComponent,
     ThongTinChiTietDauGiaThanhLyComponent,
     HopDongThanhLyComponent,
-
     QuyetDinhPheDuyetKqBdgThanhLyComponent,
     ChiTietQuyetDinhPheDuyetBdgThanhLyComponent,
     QuanLyHopDongThanhLyComponent,

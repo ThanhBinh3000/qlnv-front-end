@@ -1,0 +1,102 @@
+<div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span
+              [ngClass]="formData.value.trangThai == STATUS.DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        {{ formData.value.tenTrangThai }}
+      </span>
+        <span>THÔNG BÁO KHÔNG DUYỆT ĐỀ XUẤT MUA SẮM </span>
+      </div>
+    </div>
+  </div>
+  <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
+    <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Năm</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <nz-select formControlName="nam" nzDisabled>
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="9">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Số thông báo</nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" nz-input formControlName="soThongBao" [readOnly]="isDetail"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="9">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired>Ngày ký
+            </nz-form-label>
+            <nz-form-control>
+              <nz-date-picker [nzDisabled]=isDetail formControlName="ngayKy"
+                              nzFormat="dd/MM/yyyy"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Lý do từ chối</nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" nz-input formControlName="lyDoTuChoi" [readOnly]="isDetail"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24" class="mt-2">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [isViewDetail]=isDetail [data]="fileDinhKem"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-card>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button type="button" class="btn btn-sub" (click)="quayLai()">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        <span>Đóng</span>
+      </button>
+      <button type="button" class="btn btn-sub btn-xoa ml-2" (click)="deleteItem(this.id)"
+              *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && this.id > 0">
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+        <span>Xóa thông báo </span>
+      </button>
+      <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
+              *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && this.id > 0">
+        <i class="icon htvbdh_trinh"></i>
+        <span>Đã ký</span>
+      </button>
+      <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
+              *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU">
+        <i class="fa fa-save"></i>
+        <span>Lưu</span>
+      </button>
+    </div>
+  </div>
+</div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>
