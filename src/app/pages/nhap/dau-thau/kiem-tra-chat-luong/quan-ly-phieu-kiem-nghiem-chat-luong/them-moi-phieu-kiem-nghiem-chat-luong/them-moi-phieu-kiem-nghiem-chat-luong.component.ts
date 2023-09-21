@@ -301,6 +301,17 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   tuChoi() {
+    let trangThai = ''
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -317,7 +328,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: STATUS.TU_CHOI_LDCC,
+            trangThai: trangThai,
           };
           let res =
             await this.phieuKiemNghiemChatLuongHangService.approve(

@@ -164,8 +164,8 @@
             <td></td>
             <td></td>
             <td>
-              <nz-input-number [(ngModel)]="listThongTinDiemKho[i].soLuong" class="text-right" nz-input [nzMin]="1"
-                [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              <nz-input-number [(ngModel)]="listThongTinDiemKho[i].soLuong" class="text-right" [nzMin]="0"
+                [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
             </td>
             <td></td>
@@ -207,7 +207,9 @@
               <td></td>
               <td></td>
               <td>
-                <input nz-input class="w-400" [(ngModel)]="listOfData[i].children[y].soLuongEdit" />
+                <nz-input-number class="text-right w-400" [nzMin]="0"
+                                 [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [(ngModel)]="listOfData[i].children[y].soLuongEdit">
+                </nz-input-number>
               </td>
               <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ itemChild.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
