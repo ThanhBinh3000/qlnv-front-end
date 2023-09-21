@@ -63,6 +63,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   idPhieuXuatKho: number;
   isViewModalBKCH: boolean;
   idBKCH: number;
+  isViewModalBKXVT: boolean;
+  idBKXVT: number;
   fileBbTinhKhoDaKy: FileDinhKem[] = [];
 
   LIST_TRANG_THAI = LIST_TRANG_THAI_BBTK;
@@ -554,6 +556,10 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     this.isViewModalBKCH = true;
     this.idBKCH = id
   }
+  openBKXVTModal(id: number) {
+    this.isViewModalBKXVT = true;
+    this.idBKXVT = id
+  }
   closeModal() {
     this.isViewModalPhieuKNCL = false;
     this.idPhieuKNCL = null;
@@ -561,6 +567,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     this.idPhieuXuatKho = null;
     this.isViewModalBKCH = false;
     this.idBKCH = null;
+    this.isViewModalBKXVT = false;
+    this.idBKXVT = null
   }
   setValidate() {
     if (!this.thayDoiThuKho) {

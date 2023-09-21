@@ -26,6 +26,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   @Input() loaiDc: string;
   @Input() thayDoiThuKho: boolean;
   @Input() type: string;
+  @Input() typeQd: string;
   selectedId: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
@@ -65,6 +66,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
       loaiDc: [''],
       thayDoiThuKho: [''],
       type: [''],
+      typeQd: [],
       trangThai: ['']
     })
 
@@ -92,6 +94,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
         loaiDc: this.loaiDc,
         thayDoiThuKho: this.thayDoiThuKho,
         type: this.type,
+        typeQd: this.typeQd
         // maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
       })
       await this.timKiem();
@@ -161,7 +164,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
 
   resetForm() {
     this.formData.reset();
-    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd })
   }
   clearFilter() {
     this.resetForm();

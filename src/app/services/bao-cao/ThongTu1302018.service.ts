@@ -58,5 +58,10 @@ export class ThongTu1302018Service extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
+  bcSlGtriHangDtqgXuatCapKThuTien(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-sl-gtri-hang-dtqg-xc-khong-thu-tien`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
 
 }

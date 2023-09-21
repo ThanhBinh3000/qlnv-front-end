@@ -80,7 +80,7 @@
             <th>Số đề xuất/tờ trình</th>
             <th *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
             <th class="text-center" style="width: 10%;">Trích yếu</th>
-            <th class="text-center" style="width: 8%;">Phương thức mua trực tiếp</th>
+            <th *ngIf="userService.isTongCuc()" class="text-center" style="width: 8%;">Phương thức mua trực tiếp</th>
             <th>Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
