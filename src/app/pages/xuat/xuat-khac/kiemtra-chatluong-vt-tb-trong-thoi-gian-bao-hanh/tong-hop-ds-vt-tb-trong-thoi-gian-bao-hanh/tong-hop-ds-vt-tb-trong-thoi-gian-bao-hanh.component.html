@@ -91,7 +91,7 @@
               <th>Loại hàng</th>
               <th>Chủng loại</th>
               <th>Điểm kho</th>
-              <th>Ngăn/lô kho</th>
+              <th>Nhà kho/ngăn kho/lô kho</th>
               <th>Ngày nhập kho</th>
               <th>SL hỏng cần BH</th>
               <th class="text-center">Thời gian BH còn lại <br>theo HĐ</th>
@@ -165,8 +165,8 @@
                         <td>{{lv2.tenLoaiVthh}}</td>
                         <td>{{lv2.tenCloaiVthh}}</td>
                         <td>{{lv2.tenDiemKho}}</td>
-                        <td>{{lv2.tenLoKho ? (lv2.tenLoKho + ' ' + lv2.tenNganKho) : lv2.tenNganKho}}</td>
-                        <td>{{lv2.ngayNhapKho}}</td>
+                        <td>{{lv2.tenLoKho + ' ' + lv2.tenNganKho + ' ' + lv2.tenNhaKho}}</td>
+                        <td>{{lv2.ngayNhapKho| date:globals.dateFormat}}</td>
                         <td>{{lv2.slHetHan | date:globals.dateFormat}}</td>
                         <td>{{lv2.thoiHanLk|number:globals.numberFormat}}</td>
                         <td>{{lv2.slTonKho}}</td>

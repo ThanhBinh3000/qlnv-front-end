@@ -254,6 +254,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         idQdGiaoNvXh: data.id,
         ngayQdGiaoNvXh: data.ngayKy,
         soLanLm:data.soLanLm,
+        ngayXuatLayMau:data.thoiHanXuatHang,
       });
       await this.getListBbLayMau(data);
     } catch (e) {
@@ -418,6 +419,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
   async changeValueBienBanLayMau($event) {
     if ($event) {
       let item = this.listBbLayMau.find(it => it.soBienBan == $event);
+      console.log(item,"item")
       if (item) {
         this.formData.patchValue({
           maDiaDiem: item.maDiaDiem,

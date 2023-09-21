@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
@@ -54,7 +54,8 @@ export class XkVtPhieuKiemDinhChatLuongVtTbComponent extends Base2Component impl
   expandSetString = new Set<string>();
   idPhieuKnCl: number = 0;
   openPhieuKnCl = false;
-
+  baoCao = false;
+  @Output() tabFocus = new EventEmitter<object>();
   disabledStartNgayLayMau = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKiemDinhDen) {
       return startValue.getTime() >= this.formData.value.ngayKiemDinhDen.getTime();
@@ -191,5 +192,13 @@ export class XkVtPhieuKiemDinhChatLuongVtTbComponent extends Base2Component impl
   async showList() {
     this.isDetail = false;
     await this.search();
+  }
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
+  openBaoCao($event) {
+    this.baoCao = !this.baoCao;
+    this.emitTab(2);
   }
 }

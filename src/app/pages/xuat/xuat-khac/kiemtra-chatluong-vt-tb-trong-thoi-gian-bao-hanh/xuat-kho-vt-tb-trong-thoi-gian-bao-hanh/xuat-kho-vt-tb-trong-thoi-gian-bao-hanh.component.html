@@ -103,7 +103,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td class="bold">{{ item.soCanCu }}</td>
             <td class="bold">{{ item.namKeHoach }}</td>
-            <td class="bold">{{ item.ngayQdGiaoNvXh | date:globals.dateFormat}}</td>
+            <td class="bold">{{ item.ngayKyCanCu | date:globals.dateFormat}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -170,8 +170,8 @@
                         <td></td>
                         <td class="bold">{{lv3.tenLoaiVthh}}</td>
                         <td class="bold">{{lv3.soPhieu}}</td>
-                        <td >{{lv3.ngayTao| date:globals.dateFormat}}</td>
-                        <td>{{ lv3.loai === 'XUAT_MAU' ? 'Xuất hàng lấy mẫu' : (lv3.loai === 'XUAT_HUY' ? 'Xuất mẫu bị hủy khỏi kho' : '') }}</td>
+                        <td >{{lv3.ngayXuatNhap| date:globals.dateFormat}}</td>
+                        <td>{{ lv3.loai === 'XUAT_MAU' ? 'Xuất hàng lấy mẫu' : (lv3.loai === 'XUAT_HUY' ? 'Xuất mẫu bị hủy khỏi kho' : (lv3.loai === 'XUAT_BH' ? 'Xuất để bảo hành' : '')) }}</td>
                         <td><a *ngIf="lv3.soPhieuKnCl" nzType="link"
                                (click)="openPhieuKnClModal(lv3.idPhieuKnCl)">{{lv3.soPhieuKnCl}}</a></td>
                         <td>{{lv3.soLanLm}}</td>
