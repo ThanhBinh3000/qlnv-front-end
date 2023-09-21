@@ -451,7 +451,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     if (!Array.isArray(this.phuongPhapLayMaus) || this.phuongPhapLayMaus.length <= 0) {
       return this.notification.error(MESSAGE.ERROR, "Chưa có thông tin phương pháp lấy mẫu.")
     } else if (!this.phuongPhapLayMaus.find(f => f.checked)) {
-      return this.notification.error(MESSAGE.ERROR, "Chưa có phương pháp lấy mẫu nào được chon.")
+      return this.notification.error(MESSAGE.ERROR, "Chưa có phương pháp lấy mẫu nào được chọn.")
     }
     if (!Array.isArray(this.chiTieuKiemTra) || this.chiTieuKiemTra.length <= 0) {
       return this.notification.error(MESSAGE.ERROR, "Chưa có thông tin chỉ tiêu kiểm tra.")
