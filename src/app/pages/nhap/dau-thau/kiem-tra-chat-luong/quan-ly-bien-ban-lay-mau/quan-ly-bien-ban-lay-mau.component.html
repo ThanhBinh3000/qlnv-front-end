@@ -93,7 +93,8 @@
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="7"></td>
               <td>
-                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                <a *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_THEM')"
+                   (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>
@@ -116,15 +117,22 @@
                   </td>
                   <td>{{bb.bienBanLayMau?.tenTrangThai}}</td>
                   <td>
-                    <a *ngIf="bb.bienBanLayMau && bb.bienBanLayMau?.trangThai == STATUS.DA_DUYET_LDCC"
-                      (click)="redirectToChiTiet(false, bb.bienBanLayMau?.id)">
+                    <a *ngIf="bb.bienBanLayMau && hienThiXem(bb.bienBanLayMau)"
+                      (click)="redirectToChiTiet(true, bb.bienBanLayMau?.id)">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                     </a>
-                    <a *ngIf="bb.bienBanLayMau && bb.bienBanLayMau?.trangThai != STATUS.DA_DUYET_LDCC"
+                    <a *ngIf="bb.bienBanLayMau && (bb.bienBanLayMau?.trangThai == STATUS.DU_THAO || bb.bienBanLayMau?.trangThai == STATUS.TU_CHOI_LDCC)
+                      && (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_THEM'))"
                       (click)="redirectToChiTiet(false, bb.bienBanLayMau?.id)">
                       <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
-                    <a *ngIf="bb.bienBanLayMau && bb.bienBanLayMau?.trangThai == STATUS.DU_THAO"
+                    <a *ngIf="bb.bienBanLayMau && bb.bienBanLayMau.trangThai == STATUS.CHO_DUYET_LDCC
+              && (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_DUYET_LDCCUC') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_DUYET_LDCCUC'))"
+                       (click)="redirectToChiTiet(true, bb.bienBanLayMau?.id)">
+                      <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
+                    </a>
+                    <a *ngIf="bb.bienBanLayMau && bb.bienBanLayMau?.trangThai == STATUS.DU_THAO
+                      && (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_XOA'))"
                       (click)="xoaItem(bb.bienBanLayMau)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>

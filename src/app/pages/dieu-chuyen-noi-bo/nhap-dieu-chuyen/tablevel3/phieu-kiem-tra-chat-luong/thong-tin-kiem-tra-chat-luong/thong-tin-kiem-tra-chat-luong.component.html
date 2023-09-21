@@ -335,17 +335,20 @@
                 </div> -->
                   <div nz-col nzSpan="12">
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">DS BB nghiệm thu BQLĐ
+                      <nz-form-label [nzNoColon]="true">BB nghiệm thu BQLĐ
                       </nz-form-label>
                       <nz-form-control>
-                        <span class="text-blue">{{formData.value.soBBNtLd}}</span>
+                        <!-- <span class="text-blue">{{formData.value.soBBNtLd}}</span> -->
+                        <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBNTBQLD()">
+                          <input [readonly]="true" nz-input formControlName="soBBNtLd" readonly="true" />
+                        </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                 </div>
 
                 <div nz-row [nzGutter]="24">
-                  <div nz-col [nzSpan]="8">
+                  <div nz-col [nzSpan]="12">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true">
                         SL nhập vào lô kho
@@ -356,7 +359,7 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="8">
+                  <div nz-col [nzSpan]="6">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true">
                         Khối lượng khách hàng khai báo (kg)
@@ -366,7 +369,7 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="8">
+                  <div nz-col [nzSpan]="6">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true">
                         Khối lượng hàng thực tế kiểm tra (kg)

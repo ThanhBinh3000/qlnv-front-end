@@ -95,7 +95,8 @@
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="11"></td>
               <td>
-                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM')"
+                  (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>
@@ -118,13 +119,24 @@
                   <td>{{bb.ngayNhapDayKho | date: 'dd/MM/YYYY' }}</td>
                   <td>{{bb.tenTrangThai}}</td>
                   <td>
-                    <a *ngIf="bb.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, bb.id)">
+                    <a *ngIf="hienThiXem(bb)"
+                       (click)="redirectToChiTiet(true, bb.id)">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                     </a>
-                    <a *ngIf="bb.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, bb.id)">
+                    <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM') && (bb.trangThai == STATUS.DU_THAO
+        || bb.trangThai == STATUS.TU_CHOI_LDC
+      || bb.trangThai == STATUS.TU_CHOI_TP)"
+                       (click)="redirectToChiTiet(false, bb.id)">
                       <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
-                    <a *ngIf="bb.trangThai == STATUS.DU_THAO" (click)="xoaItem(bb)">
+                    <a *ngIf="(this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_TP') && bb.trangThai == STATUS.CHO_DUYET_TP)
+      || (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_LDCUC') && bb.trangThai == STATUS.CHO_DUYET_LDC)"
+                       (click)="redirectToChiTiet(true, bb.id)">
+                      <i class="icon htvbdh_tcdt_pheduyet"></i>
+                    </a>
+                    <a
+                      *ngIf="bb.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_XOA')"
+                      (click)="xoaItem(bb)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>

@@ -141,7 +141,7 @@
                 <nz-form-label [nzNoColon]="true">Số QĐ ĐC của Cục</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
-                    <input [readonly]="true" nz-input formControlName="ngayHieuLuc" readonly="true" />
+                    <input [readonly]="true" nz-input formControlName="soQdinhDc" readonly="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -151,7 +151,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày hiệu lực của QĐ</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker [nzDisabled]="isView" formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy" nzDisabled>
+                  <nz-date-picker [nzDisabled]="true" formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -170,7 +170,7 @@
 
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Số BB lấy mẫu/bàn giao mẫu</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Số BB lấy mẫu/bàn giao mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBLM()">
                     <input [readonly]="true" nz-input formControlName="soBbLayMau" readonly="true" />
@@ -282,10 +282,10 @@
 
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Số BB nhập đầy kho</nz-form-label>
+                      <nz-form-label nzRequired [nzNoColon]="true">Số BB nhập đầy kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBNDK()">
-                          <input [readonly]="true" nz-input formControlName="soBbTinhKho" readonly="true" />
+                          <input [readonly]="true" nz-input formControlName="soNhapDayKho" readonly="true" />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -339,7 +339,7 @@
                   File đính kèm phiếu KNCL đã ký
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="phieuKNCLDinhKem" [disabled]="isView" [isViewDetail]="isView"></file-list>
+                  <file-list [data]="dinhKems" [disabled]="isView" [isViewDetail]="isView"></file-list>
                 </div>
               </nz-form-item>
             </div>

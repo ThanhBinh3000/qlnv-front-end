@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
-import {UserService} from "../../../services/user.service";
-import {Globals} from "../../../shared/globals";
-import {STATUS} from "../../../constants/status";
-import {cloneDeep} from 'lodash';
+import { Component, OnInit } from '@angular/core';
+import { Subject } from "rxjs";
+import { UserService } from "../../../services/user.service";
+import { Globals } from "../../../shared/globals";
+import { STATUS } from "../../../constants/status";
+import { cloneDeep } from 'lodash';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-xuat-thanh-ly',
@@ -12,32 +13,78 @@ import {cloneDeep} from 'lodash';
 })
 export class XuatThanhLyComponent implements OnInit {
 
+  defaultUrl: string = 'xuat/xuat-thanh-ly'
 
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = true;
-
+  routerUrl: string = "";
   constructor(
-    public userService: UserService,
-    public globals: Globals
+    private router: Router,
+    public globals: Globals,
+    public userService: UserService
   ) {
+    router.events.subscribe((val) => {
+      this.routerUrl = this.router.url;
+      console.log(this.routerUrl);
+    })
   }
+
+  routes: any[] = [
+    {
+      url: '/danh-sach',
+      name: 'Toàn bộ danh sách hàng DTQG cần thanh lý',
+      accessPermisson: 'XHDTQG_XTL_DSCTL'
+    },
+    {
+      url: '/tong-hop',
+      name: 'Tổng hợp danh sách hàng DTQG cần thanh lý',
+      accessPermisson: 'XHDTQG_XTL_THDSCTL'
+    },
+    {
+      url: '/trinh-tham-dinh',
+      name: 'Trình và thẩm định hồ sơ thanh lý',
+      accessPermisson: 'XHDTQG_XTL_HSTL'
+    },
+    {
+      url: '/quyet-dinh',
+      name: 'Quyết định thanh lý',
+      accessPermisson: 'XHDTQG_XTL_QDTL'
+    },
+    {
+      url: '/thong-bao-kq',
+      name: 'Thông báo kết quả trình hồ sơ',
+      accessPermisson: 'XHDTQG_XTL_TBKQ'
+    },
+    {
+      url: '/to-chuc-kh',
+      name: 'Tổ chức triển khai KH bán đấu giá thanh lý hàng DTQG',
+      accessPermisson: 'XHDTQG_XTL_TCKHBDG'
+    },
+    {
+      url: '/xuat-tl',
+      name: 'Xuất thanh lý',
+      accessPermisson: 'XHDTQG_XTL_XTL'
+    },
+    {
+      url: '/bao-cao-kq',
+      name: 'Báo cáo kết quả thanh lý',
+      accessPermisson: 'XHDTQG_XTL_BCKQ'
+    }
+  ]
 
   ngOnInit(): void {
-    this.isVisibleChangeTab$.subscribe((value: boolean) => {
-      this.visibleTab = value;
-    });
+    if (this.router.url) {
+      this.routerUrl = this.router.url;
+    }
   }
 
-  tabSelected: number = 0;
-
-  selectTab(tab: number) {
-    this.tabSelected = tab;
+  redirectUrl(url) {
+    console.log(this.defaultUrl + url);
+    this.router.navigate([this.defaultUrl + url]);
   }
 
   checkStatusPermission(data: any, action: any) {
     let mapQuyen = {
       XEM: [
-        STATUS.CHO_DUYET_LDTC, STATUS.DA_DUYET_LDTC, STATUS.TU_CHOI_LDTC,STATUS.CHODUYET_BTC,
+        STATUS.CHO_DUYET_LDTC, STATUS.DA_DUYET_LDTC, STATUS.TU_CHOI_LDTC, STATUS.CHODUYET_BTC,
         STATUS.DU_THAO, STATUS.CHO_DUYET_TP, STATUS.TU_CHOI_TP,
         STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_LDV, STATUS.TU_CHOI_LDV, STATUS.DA_DUYET_LDV,
         STATUS.CHO_DUYET_LDC, STATUS.TU_CHOI_LDC, STATUS.DA_DUYET_LDC,
@@ -59,7 +106,7 @@ export class XuatThanhLyComponent implements OnInit {
       TAO_QD: [STATUS.DA_DUYET_LDV],
 
       XEM_NO: [
-        STATUS.CHO_DUYET_LDTC, STATUS.DA_DUYET_LDTC, STATUS.TU_CHOI_LDTC,STATUS.CHODUYET_BTC,
+        STATUS.CHO_DUYET_LDTC, STATUS.DA_DUYET_LDTC, STATUS.TU_CHOI_LDTC, STATUS.CHODUYET_BTC,
         STATUS.DU_THAO, STATUS.CHO_DUYET_TP, STATUS.TU_CHOI_TP,
         STATUS.CHO_DUYET_LDC, STATUS.TU_CHOI_LDC, STATUS.DA_DUYET_LDC,
         STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_LDV, STATUS.TU_CHOI_LDV, STATUS.DA_DUYET_LDV,

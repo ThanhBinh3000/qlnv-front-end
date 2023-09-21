@@ -367,7 +367,7 @@
               <td>
                 <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaKiemTra" />
               </td>
-              <td>{{data.phuongPhapXd ? data.phuongPhapXd : data.phuongPhap"}}</td>
+              <td>{{data.phuongPhapXd ? data.phuongPhapXd : data.phuongPhap}}</td>
               <td>
                 <nz-select [(ngModel)]=data.danhGia>
                   <nz-option *ngFor="let p of dsDanhGia" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
