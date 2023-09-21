@@ -351,15 +351,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               this.notification.error(MESSAGE.ERROR, "Bạn chưa tạo dữ liệu đầu kỳ của " + nganKho.tenDvi);
             }
 
-            // this.dsLoKho = []
-            // const body = {
-            //   maDvi: value,
-            //   tenLoKho: nganKho.tenDvi
-            // }
-            // const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-            // if (res.statusCode == 0) {
-
-            // }
           }
         }
 
@@ -375,7 +366,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         this.formData.patchValue({
           tenLoKho: loKho.tenDvi
         })
-        //
+
         let body = {
           maDvi: loKho.maDvi,
           capDvi: loKho.capDvi
@@ -449,9 +440,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             this.formData.controls["tenLoKhoNhan"].clearValidators();
             this.dsLoKhoNhan = []
             if (
-              // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-              // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-              // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan
               this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
             ) {
               this.formData.patchValue({
@@ -494,10 +482,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
 
         if (
-          // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-          // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-          // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan &&
-          // this.formData.value.maLoKho === this.formData.value.maLoKhoNhan
           this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
         ) {
           this.formData.patchValue({
