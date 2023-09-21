@@ -1,25 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { XuatThanhLyComponent } from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "src/app/services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "src/app/services/donvi.service";
-import { DanhMucService } from "src/app/services/danhmuc.service";
 import { MESSAGE } from "src/app/constants/message";
-import { Base2Component } from "src/app/components/base2/base2.component";
-import { CHUC_NANG } from 'src/app/constants/status';
-import { chain, isEmpty } from "lodash";
-import { v4 as uuidv4 } from "uuid";
+import { chain } from "lodash";
 import { TongHopThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
-import { FormGroup } from "@angular/forms";
-import { DanhSachThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
-import { NumberToRoman } from 'src/app/shared/commonFunction';
 import { ChitietThComponent } from './chitiet-th/chitiet-th.component';
 import { ThemmoiThComponent } from './themmoi-th/themmoi-th.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TongHopScService } from 'src/app/services/sua-chua/tongHopSc.service';
 import { Base3Component } from 'src/app/components/base3/base3.component';
 
 @Component({
