@@ -16,7 +16,7 @@ import { cloneDeep } from "lodash";
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
-import { LOAI_HANG_DTQG } from "../../../../../constants/config";
+import {LOAI_HANG_DTQG, TEN_LOAI_VTHH} from "../../../../../constants/config";
 
 @Component({
   selector: "app-quyet-dinh-phuong-an",
@@ -53,7 +53,8 @@ export class QuyetDinhPhuongAnComponent extends Base2Component implements OnInit
       ngayKetThucDxDen: null,
       ngayKetThuc: null,
       trangThai: this.globals.prop.NHAP_BAN_HANH,
-      loaiVthh: LOAI_HANG_DTQG.GAO,
+      loaiVthh: null,
+      tenVthh: TEN_LOAI_VTHH.GAO,
       xuatCap: true,
       ngayKy: null,
       ngayKyTu: null,

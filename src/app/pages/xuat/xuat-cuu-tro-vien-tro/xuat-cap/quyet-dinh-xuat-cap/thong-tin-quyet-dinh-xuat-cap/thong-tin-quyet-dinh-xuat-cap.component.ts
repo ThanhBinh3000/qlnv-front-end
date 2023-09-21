@@ -20,6 +20,9 @@ import {Base2Component} from "src/app/components/base2/base2.component";
 import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.service";
 import {TinhTrangKhoHienThoiService} from "src/app/services/tinhTrangKhoHienThoi.service";
 import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import {
+  DialogTableSelectionComponent
+} from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 
 export class QuyetDinhPdDtl {
   idVirtual: string;
@@ -155,7 +158,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         idVirtual: [''],
         noiDungOld: [],
         id: [''],
-        noiDung: ['', [Validators.required]],
+        noiDungDx: ['', [Validators.required]],
         loaiVthh: ['', [Validators.required]],
         cloaiVthh: [''],
         maDvi: [''],
@@ -183,6 +186,13 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         this.loadDsMucDichXuat()
       ]);
       await this.loadDetail();
+      // tao qd tu qd ctvt
+      if (Object.keys(this.dataInit).length > 0) {
+        // this.checkChonPhuongAn();
+        // this.checkXuatGao = true;
+        await this.bindingDataQdPd(this.dataInit);
+        // await this.changeQdPd(this.dataInit.id);
+      }
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -262,7 +272,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
-        this.formDataDtl.patchValue({noiDung: data.noiDung});
+        this.formDataDtl.patchValue({noiDungDx: data.noiDungDx});
       } else if (level == 1) {
         data.edit = level;
         this.formDataDtl.patchValue(data);
@@ -287,14 +297,14 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     let quyetDinhPdDtl = this.formData.value.quyetDinhPdDtl;
     if (row.edit == 0) {
       quyetDinhPdDtl.forEach(s => {
-        if (s.noiDung === row.noiDungOld) {
-          s.noiDung = row.noiDung;
+        if (s.noiDungDx === row.noiDungOld) {
+          s.noiDungDx = row.noiDungDx;
         }
       });
     } else {
       let exist = this.formData.value.quyetDinhPdDtl.find(s => s.idVirtual === row.idVirtual) ||
-        this.formData.value.quyetDinhPdDtl.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === '') ||
-        this.formData.value.quyetDinhPdDtl.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === row.cloaiVthh);
+        this.formData.value.quyetDinhPdDtl.find(s => s.noiDungDx === row.noiDungDx && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === '') ||
+        this.formData.value.quyetDinhPdDtl.find(s => s.noiDungDx === row.noiDungDx && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === row.cloaiVthh);
       if (exist) {
         Object.assign(exist, row);
       } else {
@@ -318,9 +328,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     if (data.idVirtual) {
       quyetDinhPdDtl = quyetDinhPdDtl.filter(s => s.idVirtual != data.idVirtual);
     } else if (dataParent) {
-      quyetDinhPdDtl = quyetDinhPdDtl.filter(s => !(s.tenLoaiVthh === data.tenLoaiVthh && s.noiDung === dataParent.noiDung));
-    } else if (data.noiDung) {
-      quyetDinhPdDtl = quyetDinhPdDtl.filter(s => s.noiDung !== data.noiDung);
+      quyetDinhPdDtl = quyetDinhPdDtl.filter(s => !(s.tenLoaiVthh === data.tenLoaiVthh && s.noiDungDx === dataParent.noiDungDx));
+    } else if (data.noiDungDx) {
+      quyetDinhPdDtl = quyetDinhPdDtl.filter(s => s.noiDungDx !== data.noiDungDx);
     }
     this.formData.patchValue({quyetDinhPdDtl: quyetDinhPdDtl});
     await this.buildTableView();
@@ -328,11 +338,11 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
 
   async buildTableView() {
     let dataView = chain(this.formData.value.quyetDinhPdDtl)
-      .groupBy("noiDung")
+      .groupBy("noiDungDx")
       .map((value, key) => {
         return {
           idVirtual: uuidv4(),
-          noiDung: key,
+          noiDungDx: key,
           soLuong: 0,
           childData: value
         };
@@ -432,5 +442,64 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       trangThai = STATUS.DA_DUYET_LDTC;
     }
     return super.approve(id, trangThai, msg, roles, msgSuccess);
+  }
+
+  async openDialogQdPd() {
+    try {
+      await this.spinner.show();
+      let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
+        trangThai: STATUS.DA_DUYET_LDTC,
+        idQdGnvNull: true,
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0
+        },
+      });
+      if (res.msg == MESSAGE.SUCCESS) {
+        const modalQD = this.modal.create({
+          nzTitle: 'Danh sách quyết định phê duyệt cứu trợ, viện trợ',
+          nzContent: DialogTableSelectionComponent,
+          nzMaskClosable: false,
+          nzClosable: false,
+          nzWidth: '900px',
+          nzFooter: null,
+          nzComponentParams: {
+            dataTable: res.data.content,
+            dataHeader: ['Số quyết định', 'Ngày phê duyệt', 'Trích yếu'],
+            dataColumn: ['soBbQd', 'ngayPduyet', 'trichYeu']
+          },
+        });
+        modalQD.afterClose.subscribe(async (data) => {
+          if (data) {
+            let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(data.id);
+            await this.bindingDataQdPd(res.data);
+            await this.buildTableView();
+          }
+        });
+      }
+    } catch (e) {
+      console.log(e)
+      this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+  async bindingDataQdPd(data:any){
+    data.quyetDinhPdDtl.forEach(s => {
+      if(s.soLuongXc){
+
+      }
+    });
+    /*data.quyetDinhPdDtl.forEach(s => {
+      s.idQdPdDtl = s.id;
+      s.soLuongDx = s.soLuong;
+      s.soLuong = 0;
+      delete s.id;
+    });
+    this.formData.patchValue({
+      idXc: data.id,
+      soXc: data.soBbQd,
+      dataDtl: data.quyetDinhPdDtl
+    })*/
   }
 }

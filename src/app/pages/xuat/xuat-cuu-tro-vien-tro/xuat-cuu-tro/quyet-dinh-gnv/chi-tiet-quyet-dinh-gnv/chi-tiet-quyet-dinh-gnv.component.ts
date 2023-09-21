@@ -38,6 +38,7 @@ import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.ser
 export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnInit {
   @ViewChild('NzTreeSelectComponent', {static: false}) nzTreeSelectComponent!: NzTreeSelectComponent;
   @Input() isView: boolean;
+  @Input() loaiXuat: any;
   formDataDtl: FormGroup;
   modalChiTiet: boolean = false;
   listDiaDanh: any[] = [];
@@ -162,6 +163,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   async ngOnInit() {
     try {
       await this.spinner.show();
+      this.formData.patchValue({type:this.loaiXuat});
       this.maHauTo = '/QĐGNV-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsDonVi(),
@@ -329,14 +331,27 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   async openDialogQdPd() {
     try {
       await this.spinner.show();
-      let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
-        trangThai: STATUS.BAN_HANH,
-        idQdGnvNull: true,
-        paggingReq: {
-          limit: this.globals.prop.MAX_INTERGER,
-          page: 0
-        },
-      });
+      let res
+      if (this.formData.value.type == 'XC') {
+        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
+          trangThai: STATUS.DA_DUYET_LDTC,
+          idQdGnvNull: true,
+          paggingReq: {
+            limit: this.globals.prop.MAX_INTERGER,
+            page: 0
+          },
+        });
+      } else {
+        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
+          trangThai: STATUS.BAN_HANH,
+          idQdGnvNull: true,
+          paggingReq: {
+            limit: this.globals.prop.MAX_INTERGER,
+            page: 0
+          },
+        });
+      }
+
       if (res.msg == MESSAGE.SUCCESS) {
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách quyết định phê duyệt cứu trợ, viện trợ',

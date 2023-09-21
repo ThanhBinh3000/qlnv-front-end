@@ -75,7 +75,9 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách quyết định phê duyệt phương án xuất viện trợ cứu trợ</h3>
+      <h3
+        class="text-uppercase">{{formData.value.type == 'XC' ? 'DANH SÁCH PHƯƠNG ÁN XUẤT CỨU TRỢ, VIỆN TRỢ GẠO ĐƯỢC DUYỆT CHUYỂN SANG XUẤT CẤP' : 'Danh sách quyết định phê duyệt phương án xuất viện trợ cứu trợ'}}
+      </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
                 *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XOA')">
@@ -113,9 +115,9 @@
           <th width="">Số công văn/đề xuất</th>
           <th width="">Ngày đề xuất</th>
           <th width="">Loại hàng hóa</th>
-<!--          <th width="" class="text-center">Tổng SL đề xuất <br> cứu trợ, viện trợ (kg)</th>-->
-<!--          <th width="" class="text-center">Tổng SL xuất kho <br> cứu trợ, viện trợ (kg)</th>-->
-<!--          <th width="" class="text-center">SL xuất CT, VT <br> chuyển sang xuất cấp (kg)</th>-->
+          <!--          <th width="" class="text-center">Tổng SL đề xuất <br> cứu trợ, viện trợ (kg)</th>-->
+          <!--          <th width="" class="text-center">Tổng SL xuất kho <br> cứu trợ, viện trợ (kg)</th>-->
+          <!--          <th width="" class="text-center">SL xuất CT, VT <br> chuyển sang xuất cấp (kg)</th>-->
           <th width="">Trích yếu</th>
           <th width="">Trạng thái</th>
           <th width="90px">Hành động</th>
@@ -135,9 +137,9 @@
           <td><a nz-button nzType="link" (click)="openDxPaModal(data.idDx)"> {{data.soDx}}</a></td>
           <td>{{ data.ngayDx |date:globals.dateFormat}}</td>
           <td>{{ data.tenVthh }}</td>
-<!--          <td>{{ data.tongSoLuongDx |number:globals.numberFormat:globals.locale }}</td>-->
-<!--          <td>{{ data.tongSoLuong |number:globals.numberFormat:globals.locale }}</td>-->
-<!--          <td>{{ data.soLuongXuatCap |number:globals.numberFormat:globals.locale}}</td>-->
+          <!--          <td>{{ data.tongSoLuongDx |number:globals.numberFormat:globals.locale }}</td>-->
+          <!--          <td>{{ data.tongSoLuong |number:globals.numberFormat:globals.locale }}</td>-->
+          <!--          <td>{{ data.soLuongXuatCap |number:globals.numberFormat:globals.locale}}</td>-->
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
@@ -155,6 +157,10 @@
               *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XOA') && (data.trangThai == STATUS.DU_THAO))"
               (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
+            <a *ngIf="!data.idXc"
+               (click)="taoQuyetDinhXc(data)">
+              <i class="icon htvbdh_soanthao"></i>
             </a>
           </td>
         </tr>
