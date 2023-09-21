@@ -28,7 +28,8 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
   @Input() loaiDc: string;
   @Input() thayDoiThuKho: boolean;
   @Input() isVatTu: boolean;
-  @Input() type: string
+  @Input() type: string;
+  @Input() typeQd: string;
   passData: PassDataBienBanTinhKho = {
     soQdinhDcc: '', qdinhDccId: null, tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenLoKho: '', maDiemKho: '',
     maNhaKho: '', maNganKho: '', maLoKho: '', keHoachDcDtlId: null
@@ -61,6 +62,7 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
       isVatTu: [false],
       thayDoiThuKho: [false],
       type: [''],
+      typeQd: [],
 
       tuNgayBdXuat: [''],
       tuNgayKtXuat: [''],
@@ -119,7 +121,7 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd })
   }
 
 
@@ -151,7 +153,7 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
   }
   resetForm() {
     this.formData.reset();
-    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd })
   }
   clearFilter() {
     this.resetForm();

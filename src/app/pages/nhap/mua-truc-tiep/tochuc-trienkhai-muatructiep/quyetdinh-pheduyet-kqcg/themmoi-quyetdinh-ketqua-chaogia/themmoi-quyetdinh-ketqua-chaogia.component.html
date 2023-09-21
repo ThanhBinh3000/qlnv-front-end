@@ -9,7 +9,7 @@
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Xem trước</span>
     </button>
-    <button *ngIf="!isDisabled() && userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_THEM')" type="button" class="btn btn-sub xanh-nhat"
+    <button *ngIf="!isDisabled() && userService.isCuc() && (formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_THEM')" type="button" class="btn btn-sub xanh-nhat"
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
@@ -30,7 +30,7 @@
 <!--      <i class="icon htvbdh_chuyenvanthu"></i>-->
 <!--      <span>Ban hành</span>-->
 <!--    </button>-->
-    <button *ngIf="!isDisabled() && userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_THEM')" type="button" class="btn btn-main" (click)="save()">
+    <button *ngIf="!isDisabled() && (formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_THEM')" type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>

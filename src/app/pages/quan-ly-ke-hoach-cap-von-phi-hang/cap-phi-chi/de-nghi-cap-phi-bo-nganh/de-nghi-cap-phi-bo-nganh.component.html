@@ -162,14 +162,14 @@
           <td class='text-right'>{{ data.ycCapThem | number : '1.0-1' : 'vi-VN' }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class='text-left'>
-            <a *ngIf=' data.trangThai != STATUS.DU_THAO' (click)='viewDetail(data, true)'>
+            <a *ngIf=' data.trangThai != STATUS.DANG_NHAP_DU_LIEU' (click)='viewDetail(data, true)'>
               <i class='fa fa-eye' title='Xem chi tiết'></i>
             </a>
-            <a *ngIf='(data.trangThai==STATUS.DU_THAO) && userService.isTongCuc()'
+            <a *ngIf='(data.trangThai==STATUS.DANG_NHAP_DU_LIEU) && userService.isTongCuc()'
                (click)='viewDetail(data, false)'>
               <i class='fa fa-pencil' title='Sửa'></i>
             </a>
-            <a *ngIf='data.trangThai==STATUS.DU_THAO && userService.isTongCuc()'
+            <a *ngIf='data.trangThai==STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()'
                (click)='xoaItem(data)'>
               <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
             </a>

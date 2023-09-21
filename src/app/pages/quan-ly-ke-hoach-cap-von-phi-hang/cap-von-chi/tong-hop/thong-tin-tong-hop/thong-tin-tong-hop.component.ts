@@ -246,12 +246,8 @@ export class ThongTinTonghopComponent implements OnInit {
       } else {
         let res = await this.tongHopDeNghiCapVonService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          // this.formData.patchValue({
-          //   id: res.data.id,
-          // });
           this.detail.id = res.data.id
           this.idInput = res.data.id;
-          console.log(res.data, 'res.datares.datares.datares.data');
           if (!isGuiDuyet) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {

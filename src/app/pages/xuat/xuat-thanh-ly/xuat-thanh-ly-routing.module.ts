@@ -9,6 +9,7 @@ import { ThongBaoKetQuaComponent } from './thong-bao-ket-qua/thong-bao-ket-qua.c
 import { ChiTietHoSoThanhLyComponent } from './ho-so-thanh-ly/chi-tiet-ho-so-thanh-ly/chi-tiet-ho-so-thanh-ly.component';
 import { ThemMoiQuyetDinhThanhLyComponent } from './quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly.component';
 import { ThemMoiBaoCaoKetQuaThanhLyComponent } from './bao-cao-ket-qua/them-moi-bao-ket-qua-thanh-ly/them-moi-bao-cao-ket-qua-thanh-ly.component';
+import { ThemMoiThongBaoKetQuaComponent } from './thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component';
 
 
 const routes: Routes = [
@@ -63,11 +64,11 @@ const routes: Routes = [
       },
       {
         path: 'thong-bao-kq/them-moi',
-        component: ThemMoiBaoCaoKetQuaThanhLyComponent
+        component: ThemMoiThongBaoKetQuaComponent
       },
       {
         path: 'thong-bao-kq/chi-tiet/:id',
-        component: ThemMoiBaoCaoKetQuaThanhLyComponent
+        component: ThemMoiThongBaoKetQuaComponent
       },
     ]
   },
