@@ -142,7 +142,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       loaiQdinh: [, [Validators.required]],
       tenLoaiQdinh: [],
       ngayKyQdinh: [, [Validators.required]],
-      ngayPduyet: [, [Validators.required]],
+      ngayHieuLuc: [, [Validators.required]],
       trichYeu: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
@@ -491,7 +491,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           soCanCuQdTc: data.soQdinh,
           canCuQdTc: data.id,
           soDxuat,
-          ngayTrinhDuyetTc: data.ngayPduyet
+          ngayTrinhDuyetTc: data.ngayHieuLuc
         })
         this.onChangeCanCuQdTc(data.id)
       }
@@ -1391,7 +1391,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       body.id = this.idInput
     }
     console.log('save', body)
-    return
+    // return
     await this.spinner.show();
     let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
