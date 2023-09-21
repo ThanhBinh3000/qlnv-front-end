@@ -63,7 +63,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   radioValue: any;
   checked: boolean = false;
   canCu: any = [];
-  bienBanLayMauDinhKem: any = [];
+  dinhKems: any = [];
   fileDinhKemChupMauNiemPhong: any = [];
   bienBan: any[] = [];
   dcnbBienBanLayMauDtl: any[] = [];
@@ -130,7 +130,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         tenLoKho: [],
         tenNganLoKho: ['', [Validators.required]],
         nguoiLienQuan: [new Array()],
-        bienBanLayMauDinhKem: [new Array<FileDinhKem>()],
+        dinhKems: [new Array<FileDinhKem>()],
         canCu: [new Array<FileDinhKem>()],
         fileDinhKemChupMauNiemPhong: [new Array<FileDinhKem>()],
 
@@ -184,7 +184,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             this.dcnbBienBanLayMauDtl = cloneDeep(data.dcnbBienBanLayMauDtl),
               this.checked = data.ketQuaNiemPhong;
             // this.daiDienChiCuc = data.nguoiLienQuan;
-            this.bienBanLayMauDinhKem = cloneDeep(data.bienBanLayMauDinhKem);
+            this.dinhKems = cloneDeep(data.dinhKems);
             this.canCu = data.canCu;
             this.fileDinhKemChupMauNiemPhong = cloneDeep(data.fileDinhKemChupMauNiemPhong);
             this.phuongPhapLayMaus = Array.isArray(data?.pplayMau?.split("-*")) ? data.pplayMau.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1], checked: this.booleanParse(f.split("+*")[2]) })) : [];
@@ -462,11 +462,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     body.thayDoiThuKho = this.thayDoiThuKho;
     body.type = this.type;
     body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
-    body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
+    body.dinhKems = this.dinhKems;
     body.canCu = this.canCu;
     body.fileDinhKemChupMauNiemPhong = this.fileDinhKemChupMauNiemPhong;
-    body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}-${f.giaTri}`)?.join("-*");
-    body.pplayMau = this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}-${f.checked}`).join("-*");
+    body.chiTieuKiemTra = this.chiTieuKiemTra.map(f => `${f.id}+*${f.giaTri}`)?.join("-*");
+    body.pplayMau = this.phuongPhapLayMaus.map(f => `${f.id}+*${f.giaTri}+*${f.checked}`).join("-*");
     body.dcnbBienBanLayMauDtl = this.listDaiDienCuc.map(f => ({ ...f, loaiDaiDien: '00', tenDaiDien: f.daiDien })).concat(this.listDaiDienChiCuc.map(f => ({ ...f, loaiDaiDien: '01', tenDaiDien: f.daiDien })))
     let data = await this.createUpdate(body, null, isGuiDuyet);
     if (!data) return;

@@ -58,7 +58,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   @Input() passData: PassDataPKNCL = {
     soQdinhDcc: '', qdinhDccId: null, ngayQDHieuLuc: '', soBBLayMau: '', ngaylayMau: '', soPhieuKnChatLuong: '', phieuKnChatLuongId: null, bblayMauId: null,
     donViTinh: '', maChLoaiHangHoa: '', maHangHoa: '', maDiemKho: '', maNhaKho: '', maNganKho: '', maLoKho: '',
-    tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenLoKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', thuKhoId: null, tenThuKho: '', keHoachDcDtlId: null, ngayHieuLuc: ''
+    tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenLoKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', thuKhoId: null, tenThuKho: '', keHoachDcDtlId: null, ngayHieuLuc: '', ngayQdinhDc: ''
   };
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -82,7 +82,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   dataTableChiTieu: any[] = [];
   id: number;
   listBienBanLayMau: any[] = [];
-  bienBanLayMauDinhKem: any[] = [];
+  dinhKems: any[] = [];
   phuongPhapLayMaus: any[];
 
   phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
@@ -181,7 +181,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       nhanXetKetLuan: ['', [Validators.required]],
       danhGiaCamQuan: ['', [Validators.required]],
       keHoachDcDtlId: [null, [Validators.required]],
-      ngayHieuLuc: [, [Validators.required]]
+      ngayHieuLuc: [, [Validators.required]],
     });
     this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
     this.previewName = this.isVatTu ? "phieu_kiem_nghiem_chat_luong_vt_dieu_chuyen" : "nhap_xuat_lt_phieu_kiem_nghiem_chat_luong_lt"
@@ -247,7 +247,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       thuKhoId: this.passData.thuKhoId,
       tenThuKho: this.passData.tenThuKho,
       keHoachDcDtlId: this.passData.keHoachDcDtlId,
-      ngayHieuLuc: this.passData.ngayHieuLuc
+      ngayHieuLuc: this.passData.ngayHieuLuc,
+      ngayQdinhDc: this.passData.ngayQdinhDc
     });
     if (this.passData.maChLoaiHangHoa) {
       this.getChiTietHangHoa(this.passData.maChLoaiHangHoa)
@@ -296,7 +297,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         this.helperService.bidingDataInFormGroup(this.formData, { ...data, soPhieu: data.soPhieu ? data.soPhieu : data.id ? `${data.id}/${data.nam}/${this.maBb}` : "", tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho });
         // this.bindingDataBbLayMau(data.soBbLayMau.split('/')[0], true);
         this.dataTableChiTieu = data.dcnbPhieuKnChatLuongDtl;
-        this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem;
+        this.dinhKems = data.dinhKems;
         this.listHinhThucBaoQuan = typeof data.hinhThucBq === "string" || data.hinhThucBq instanceof String ? data.hinhThucBq.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1] })) : [];
 
         await this.bindingDataBbLayMau(data.bbLayMauId, true)
@@ -328,8 +329,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       }
       let body = this.formData.value;
       body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu.map(f => ({ ...f, id: f.hdrId ? f.id : undefined }));
-      body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
-      body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}-${i.giaTri}`).join("-*");
+      body.dinhKems = this.dinhKems;
+      body.hinhThucBq = this.listHinhThucBaoQuan.map(i => `${i.id}+*${i.giaTri}`).join("-*");
       // body.pplayMau = this.phuongPhapLayMaus.map(f => `${f.id}-${f.giaTri}-${f.checked}`).join("-*");
       body.loaiDc = this.loaiDc;
       body.isVatTu = this.isVatTu;
@@ -537,11 +538,13 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
           ngayLayMau: '',
           danhGiaCamQuan: '',
           nhanXetKetLuan: '',
-          ngayHieuLuc: ''
+          ngayHieuLuc: '',
+          ngayQdinhDc: ''
+
         })
         // this.listHinhThucBaoQuan = [];
         this.phuongPhapLayMaus = [];
-        this.bienBanLayMauDinhKem = [];
+        this.dinhKems = [];
         this.dataTableChiTieu = [];
         this.bindingDataQd(data.id, false);
       }
@@ -609,7 +612,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         });
         // this.listHinhThucBaoQuan = [];
         this.phuongPhapLayMaus = [];
-        this.bienBanLayMauDinhKem = [];
+        this.dinhKems = [];
         this.dataTableChiTieu = [];
         this.bindingDataBbLayMau(data.id, false);
       }
@@ -642,7 +645,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
           tenThuKho: data.tenThuKho,
           donViTinh: data.donViTinh,
           keHoachDcDtlId: data.keHoachDcDtlId,
-          ngayHieuLuc: data.ngayHieuLucQd
+          // ngayHieuLuc: data.ngayHieuLuc,
+          // ngayQdinhDc: data.ngayQdinhDc
           // moTaHangHoa: data.moTaHangHoa,
           // tenThuKho: data.bbNhapDayKho.tenNguoiTao
         })

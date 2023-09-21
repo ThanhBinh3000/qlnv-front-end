@@ -165,7 +165,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         tichLuongKhaDung: this.data.tichLuongKd,
         donViTinh: this.data.donViTinh,
         keHoachDcDtlId: this.data.keHoachDcDtlId,
-        ngayHieuLuc: this.data.ngayHieuLucQd
+        ngayHieuLuc: this.data.ngayHieuLuc
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.maChLoaiHangHoa);
