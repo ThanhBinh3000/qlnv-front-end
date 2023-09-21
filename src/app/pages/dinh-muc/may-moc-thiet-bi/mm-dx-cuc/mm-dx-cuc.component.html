@@ -119,8 +119,8 @@
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tbTcTc"
-                     (input)="filterInTable('tbTcTc',filterTable.tbTcTc)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTbTuChoi"
+                     (input)="filterInTable('tbTcTc',filterTable.soTbTuChoi)" />
             </nz-input-group>
           </th>
           <th>
@@ -148,7 +148,7 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.soQdGiaoCt }}</td>
           <td>{{ data.soQdGiaoCt }}</td>
-          <td>{{ data.soQdGiaoCt }}</td>
+          <td>{{ data.soTbTuChoi }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DA_DUYET_CBV) && userService.isCuc()) || userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_XEM')">
