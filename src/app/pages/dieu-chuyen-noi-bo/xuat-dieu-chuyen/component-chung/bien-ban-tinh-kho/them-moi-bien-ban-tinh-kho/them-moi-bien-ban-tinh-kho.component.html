@@ -305,8 +305,11 @@
                                 <td><a *ngIf="item.phieuXuatKhoHdrId" nz-button nzType="link"
                                         (click)="openPhieuKXModal(item.phieuXuatKhoHdrId)">{{item.soPhieuXuatKho}}</a>
                                 </td>
-                                <td><a *ngIf="item.bangKeCanHangHdrId" nz-button nzType="link"
+                                <td *ngIf="!isVatTu"><a *ngIf="item.bangKeCanHangHdrId" nz-button nzType="link"
                                         (click)="openBKCHModal(item.bangKeCanHangHdrId)">{{item.soBangKeCanHang}}</a>
+                                </td>
+                                <td *ngIf="isVatTu"><a *ngIf="item.bangKeCanHangHdrId" nz-button nzType="link"
+                                        (click)="openBKXVTModal(item.bangKeCanHangHdrId)">{{item.soBangKeCanHang}}</a>
                                 </td>
                                 <td>{{item.ngayXuatKho}}</td>
                                 <td>{{item.soLuongXuat |number:'1.0-1' : 'vi_VN'}}</td>
@@ -518,6 +521,20 @@
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">
         <app-xdcnb-chi-tiet-bang-ke-can [idInput]="idBKCH" [loaiDc]="loaiDc" [isVatTu]="isVatTu"
             [thayDoiThuKho]="thayDoiThuKho" [type]="type" [isViewOnModal]="true"></app-xdcnb-chi-tiet-bang-ke-can>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModal()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewModalBKXVT"
+    [nzBodyStyle]="{ 'overflow-y': 'auto' }" (nzOnCancel)="closeModal()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-xdcnb-chi-tiet-bang-ke-xuat-vat-tu [idInput]="idBKXVT" [loaiDc]="loaiDc" [isVatTu]="isVatTu"
+            [thayDoiThuKho]="thayDoiThuKho" [type]="type"
+            [isViewOnModal]="true"></app-xdcnb-chi-tiet-bang-ke-xuat-vat-tu>
     </ng-container>
     <div *nzModalFooter>
         <button nz-button (click)="closeModal()" class="modal__button--cancel">
