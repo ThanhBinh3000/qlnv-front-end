@@ -427,12 +427,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
           const coLoKho = detail.data.object.coLoKho
-          if (this.formData.value.cloaiVthh) {
-            const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
-            this.formData.patchValue({
-              tichLuongKd
-            })
-          }
+
 
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {
@@ -444,6 +439,12 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           if (coLoKho) {
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
           } else {
+            if (this.formData.value.cloaiVthh) {
+              const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+              this.formData.patchValue({
+                tichLuongKd
+              })
+            }
             this.formData.controls["maLoKhoNhan"].clearValidators();
             this.formData.controls["tenLoKhoNhan"].clearValidators();
             this.dsLoKhoNhan = []
@@ -477,6 +478,21 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         this.formData.patchValue({
           tenLoKhoNhan: loKhoNhan.tenDvi
         })
+        let body = {
+          maDvi: loKhoNhan.maDvi,
+          capDvi: loKhoNhan.capDvi
+        }
+        const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+        if (detail.statusCode == 0) {
+          if (this.formData.value.cloaiVthh) {
+            const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+            this.formData.patchValue({
+              tichLuongKd
+            })
+          }
+        }
+
+
         if (
           // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
           // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
