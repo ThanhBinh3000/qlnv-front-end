@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span *ngIf="isTongHop"
-              [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+              [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDTC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
         <span *ngIf="!isTongHop"></span>
