@@ -36,6 +36,7 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
     @Input() isVatTu: boolean;
     @Input() thayDoiThuKho: boolean;
     @Input() type: string;
+    @Input() typeQd: string;
     // public vldTrangThai: XuatCuuTroVienTroComponent;
     public CHUC_NANG = CHUC_NANG;
     dsDonvi: any[] = [];
@@ -90,7 +91,8 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
             type: [],
             loaiDc: [],
             isVatTu: [],
-            thayDoiThuKho: []
+            thayDoiThuKho: [],
+            typeQd: []
         })
     }
 
@@ -141,14 +143,15 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
             isVatTu: this.isVatTu,
             loaiDc: this.loaiDc,
             type: this.type,
-            thayDoiThuKho: this.thayDoiThuKho
+            thayDoiThuKho: this.thayDoiThuKho,
+            typeQd: this.typeQd
         });
         await super.search(roles);
         this.buildTableView();
     }
     resetForm() {
         this.formData.reset();
-        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd })
     }
     clearFilter(): void {
         this.resetForm();

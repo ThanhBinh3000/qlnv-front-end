@@ -127,7 +127,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         }
         this.formData = this.fb.group(
             {
-                id: [0],
+                id: [],
                 nam: [dayjs().get("year"), [Validators.required]],
                 maDvi: ['', [Validators.required]],
                 maQhns: ['', [Validators.required]],
@@ -135,7 +135,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 qdinhDccId: ['', Validators.required],
                 soQdinhDcc: ['', [Validators.required]],
                 ngayKyQdinhDcc: ['', [Validators.required]],
-                ngayNhap: ['', [Validators.required]],
+                ngayNhap: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
                 maDiemKho: ['', [Validators.required]],
                 maNhaKho: ['', [Validators.required]],
                 maNganKho: ['', [Validators.required]],
@@ -424,7 +424,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
     async save(isGuiDuyet?: boolean) {
         try {
 
-            this.formData.disable()
+            // this.formData.disable()
             let body = this.formData.value;
             body.loaiDc = this.loaiDc;
             body.isVatTu = this.isVatTu;

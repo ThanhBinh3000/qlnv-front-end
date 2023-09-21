@@ -30,6 +30,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     @Input() isVatTu: boolean;
     @Input() thayDoiThuKho: boolean;
     @Input() type: string;
+    @Input() typeQd: string;
     // @Output() checkPermissonDelete = new EventEmitter<boolean>();
     // @Output() checkPermissonExport = new EventEmitter<boolean>();
     // @Output() checkPermissonAdd = new EventEmitter<boolean>();
@@ -79,7 +80,8 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             loaiDc: [],
             isVatTu: [false],
             thayDoiThuKho: [false],
-            type: []
+            type: [],
+            typeQd: []
         })
         this.filterTable = {
             nam: '',
@@ -99,7 +101,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     async ngOnInit(): Promise<void> {
         try {
             this.spinner.show();
-            this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type });
+            this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd });
             await this.timKiem()
         } catch (error) {
             console.log("e", error);
@@ -131,7 +133,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     }
     resetForm() {
         this.formData.reset();
-        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+        this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd })
     }
     clearFilter() {
         this.resetForm();

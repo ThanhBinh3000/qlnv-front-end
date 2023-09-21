@@ -40,6 +40,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   @Input() isVatTu: boolean;
   @Input() thayDoiThuKho: boolean;
   @Input() type: string;
+  @Input() typeQd: string;
   toDay = new Date();
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
@@ -113,6 +114,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       loaiDc: [null],
       isVatTu: [false],
       thayDoiThuKho: [false],
+      typeQd: [],
       soQdinh: [null],
       soPhieu: [null],
       tuNgay: [null],
@@ -145,7 +147,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       // if (this.typeVthh == 'tat-ca') {
       //   this.isTatCa = true;
       // }
-      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
+      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
       await this.timKiem()
     } catch (e) {
       console.log('error: ', e);
@@ -264,7 +266,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   }
   resetForm() {
     this.formData.reset();
-    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd })
   }
   clearFilter() {
     this.resetForm()
