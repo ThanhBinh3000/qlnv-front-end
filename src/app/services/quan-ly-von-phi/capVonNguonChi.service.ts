@@ -13,7 +13,6 @@ export class CapVonNguonChiService extends BaseService {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
-    urlTest = 'http://localhost:9150';
     urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
 
     //tao  ma de nghi
