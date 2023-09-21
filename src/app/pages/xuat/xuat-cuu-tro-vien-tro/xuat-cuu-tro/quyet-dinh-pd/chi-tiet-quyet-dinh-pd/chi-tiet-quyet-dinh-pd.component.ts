@@ -295,6 +295,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             delete data.type;
             delete data.canCu;
             delete data.fileDinhKem;
+            delete data.trichYeu;
             data.ngayThop = data.ngayTao;
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 
@@ -372,6 +373,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             delete data.type;
             delete data.canCu;
             delete data.fileDinhKem;
+            delete data.trichYeu;
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 
             this.formData.patchValue(data);

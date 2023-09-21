@@ -17,6 +17,9 @@ import {
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-cap/quyet-dinh-xuat-cap.service";
 import {CHUC_NANG} from "src/app/constants/status";
 import {XuatCuuTroVienTroComponent} from "../../xuat-cuu-tro-vien-tro.component";
+import {
+  QuyetDinhPheDuyetPhuongAnCuuTroService
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
 
 @Component({
   selector: 'app-quyet-dinh-xuat-cap',
@@ -34,9 +37,9 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
               modal: NzModalService,
               private datePipe: DatePipe,
               private donviService: DonviService,
-              private quyetDinhXuatCapService: QuyetDinhXuatCapService,
+              private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
               private xuatCuuTroVienTroComponent: XuatCuuTroVienTroComponent) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhXuatCapService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.vldTrangThai = xuatCuuTroVienTroComponent;
     this.formData = this.fb.group({
       nam: null,
@@ -47,6 +50,7 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
       ngayHieuLucTu: null,
       ngayHieuLucDen: null,
       ngayXuatCtvtDen: null,
+      type:'XC'
     });
     this.filterTable = {
       soQdXc: "",
