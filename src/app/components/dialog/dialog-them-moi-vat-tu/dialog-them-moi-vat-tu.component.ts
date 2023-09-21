@@ -430,6 +430,21 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
+  validateSlChiCucEdit(i, y) {
+    const soLuongConLai = this.listOfData[i].soLuongTheoChiTieu - this.listOfData[i].soLuongDaMua
+    let soLuong = 0
+    this.listOfData[i].children.forEach(item => {
+      soLuong = soLuong + item.soLuong
+    });
+    soLuong = soLuong + this.listOfData[i].children[y].soLuongEdit - this.listOfData[i].children[y].soLuong;
+    if (soLuong > soLuongConLai) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu ")
+      return false
+    } else {
+      return true;
+    }
+  }
+
   validateGiaDeXuat() {
     if (this.giaToiDa == null) {
       this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
@@ -498,8 +513,19 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   saveEdit(i, y) {
-    this.listOfData[i].children[y].soLuong = this.listOfData[i].children[y].soLuongEdit;
-    this.listOfData[i].children[y].edit = false;
+    if (this.validateSlChiCucEdit(i, y)) {
+      this.listOfData[i].children[y].soLuong = this.listOfData[i].children[y].soLuongEdit;
+      let soLuong: number = 0;
+      this.listOfData[i].children.forEach(item => {
+        soLuong = soLuong + item.soLuong
+      });
+      this.listOfData[i].soLuong = soLuong;
+      this.formData.patchValue({
+        soLuong: soLuong,
+      })
+      this.calcTong();
+      this.listOfData[i].children[y].edit = false;
+    }
   }
 
   cancelEdit(i, y) {

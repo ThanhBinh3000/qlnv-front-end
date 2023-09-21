@@ -8,8 +8,9 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
-import {UserService} from "../../../../../services/user.service";
 import {MESSAGE} from "../../../../../constants/message";
+import {DauGiaComponent} from "../../dau-gia.component";
+import {CHUC_NANG} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-dieu-chinh',
@@ -17,16 +18,19 @@ import {MESSAGE} from "../../../../../constants/message";
   styleUrls: ['./dieu-chinh.component.scss']
 })
 export class DieuChinhComponent extends Base2Component implements OnInit {
-
   @Input() loaiVthh: string;
-  idQdPdGoc: number = 0;
-  isViewQdPdGoc: boolean = false;
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: DauGiaComponent;
+  isView = false;
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DA_LAP, giaTri: 'Đã lập' },
     { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ Chối - LĐ Vụ' },
     { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ Duyệt - LĐ Vụ' },
-    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã Duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ Chối - LĐ Tổng Cục' },
+    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ Duyệt - LĐ Tổng Cục' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hanh' },
   ];
 
@@ -37,57 +41,76 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
-    public userService: UserService,
+    private dauGiaComponent: DauGiaComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhDchinhKhBdgService);
+    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
-      namKh: null,
+      nam: null,
       soQdDc: null,
       trichYeu: null,
       ngayKyDcTu: null,
       ngayKyDcDen: null,
       loaiVthh: null,
-      trangThai: null,
+      maDvi: null,
     })
 
     this.filterTable = {
       nam: '',
       soQdDc: '',
       ngayKyDc: '',
-      soQdGoc: '',
+      soQdPd: '',
       trichYeu: '',
-      cloaiVthh: '',
       tenCloaiVthh: '',
       slDviTsan: '',
+      slHdongDaKy: '',
+      thoiHanGiaoNhan: '',
+      tenTrangThai: '',
     };
 
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
-      this.timKiem();
-      await this.search();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+      ]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  openModal(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModal() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
+  }
 
   disabledNgayKyQdDcTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayKyDcDen) {
@@ -102,15 +125,4 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayKyDcTu.getTime();
   };
-
-
-  openModalQdPdGoc(id: number) {
-    this.idQdPdGoc = id;
-    this.isViewQdPdGoc = true;
-  }
-
-  closeModalQdPdGoc() {
-    this.idQdPdGoc = null;
-    this.isViewQdPdGoc = false;
-  }
 }

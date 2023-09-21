@@ -53,6 +53,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   listSoPhieuNhapKho: any[] = [];
   rowItem: any = {};
   listFileDinhKem: any[] = [];
+  rowItemEdit: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -536,10 +537,10 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
           } else {
             if (this.formData.get('id').value) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-              this.back();
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.back();
+              this.id = res.data.id;
+              this.formData.get('id').setValue(res.data.id);
             }
             await this.spinner.hide();
           }

@@ -59,6 +59,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       maThongBao: [''],
       idQdPd: [],
       soQdPd: [''],
+      idQdDc: [],
+      soQdDc: [''],
       idQdPdDtl: [],
       trichYeuTbao: [''],
       tenToChuc: [''],
@@ -110,8 +112,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       khoanTienDatTruoc: [],
       thongBaoKhongThanh: [''],
       soDviTsan: [],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự Thảo'],
+      trangThai: [STATUS.DANG_THUC_HIEN],
+      tenTrangThai: ['ĐANG THỰC HIỆN'],
       canCu: [new Array<FileDinhKem>()],
       fileDinhKem: [new Array<FileDinhKem>()],
     })
@@ -141,9 +143,12 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
     const newMaThongBao = idThongBao + "/" + this.formData.value.nam + "/TB-ĐG";
     const newSoBienBan = idThongBao + "/" + this.formData.value.nam + "/BB-ĐG";
+    console.log(this.dataDetail, 999)
     this.formData.patchValue({
       idQdPd: this.dataDetail.idQdPd,
       soQdPd: this.dataDetail.soQdPd,
+      idQdDc: this.dataDetail.idQdDc,
+      soQdDc: this.dataDetail.soQdDc,
       idQdPdDtl: this.dataDetail.idQdPdDtl,
       lanDauGia: this.soLanDauGia + 1,
       maThongBao: newMaThongBao,
@@ -250,7 +255,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       this.dataNguoiTgia = data.listNguoiTgia;
       this.dataNguoiShow = chain(this.dataNguoiTgia)
         .groupBy('loai')
-        .map((value, key) => ({ loai: key, dataChild: value }))
+        .map((value, key) => ({loai: key, dataChild: value}))
         .value();
     } catch (e) {
       console.log('error: ', e);
@@ -302,7 +307,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         ? await this.thongTinDauGiaService.update(body)
         : await this.thongTinDauGiaService.create(body);
       if (result && result.msg == MESSAGE.SUCCESS) {
-        const approvalResult = await this.thongTinDauGiaService.approve({ id: result.data.id, trangThai: STATUS.DA_HOAN_THANH });
+        const approvalResult = await this.thongTinDauGiaService.approve({
+          id: result.data.id,
+          trangThai: STATUS.DA_HOAN_THANH
+        });
         if (approvalResult && approvalResult.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.NOTIFICATION, 'Bạn đã hoàn thành thông tin đấu giá thành công!');
           this.modal.closeAll();
@@ -350,7 +358,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     });
     formData.listNguoiTgia = this.dataNguoiTgia;
     formData.children = this.dataTable;
-    const { ketQua, ketQuaSl, soDviTsan } = this.calculateKetQua();
+    const {ketQua, ketQuaSl, soDviTsan} = this.calculateKetQua();
     formData.ketQua = ketQua;
     formData.ketQuaSl = ketQuaSl;
     formData.soDviTsan = soDviTsan;
@@ -383,16 +391,16 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         ? `${totalMatching}/${totalItems}`
         : `${totalNotMatching}/${totalItems}`;
     const soDviTsan = this.formData.value.ketQua == 1 ? totalMatching : totalNotMatching;
-    return { ketQua, ketQuaSl, soDviTsan };
+    return {ketQua, ketQuaSl, soDviTsan};
   }
 
   addRow(item, name) {
     if (this.validateThanhPhanThamDu(item, name)) {
-      const data = { ...item, loai: name, idVirtual: new Date().getTime() };
+      const data = {...item, loai: name, idVirtual: new Date().getTime()};
       this.dataNguoiTgia.push(data);
       this.dataNguoiShow = _.chain(this.dataNguoiTgia)
         .groupBy('loai')
-        .map((value, key) => ({ loai: key, dataChild: value }))
+        .map((value, key) => ({loai: key, dataChild: value}))
         .value();
       const resetItems = {
         KM: 'rowItemKhach',
@@ -409,14 +417,17 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     if (!this.dataNguoiShow) {
       return null;
     }
-    return this.dataNguoiShow.find(({ loai }) => loai === name) || null;
+    return this.dataNguoiShow.find(({loai}) => loai === name) || null;
   }
 
   validateThanhPhanThamDu(data, name) {
     const requirements = {
-      KM: { fields: ['hoVaTen', 'chucVu', 'diaChi'], errorMessage: "Vui lòng điền đủ thông tin khách mời chứng kiến" },
-      DGV: { fields: ['hoVaTen', 'chucVu', 'diaChi'], errorMessage: "Vui lòng điền đủ thông tin đấu giá viên" },
-      NTG: { fields: ['hoVaTen', 'soCccd', 'diaChi'], errorMessage: "Vui lòng điền đủ thông tin tổ chức cá nhân tham giá đấu giá" }
+      KM: {fields: ['hoVaTen', 'chucVu', 'diaChi'], errorMessage: "Vui lòng điền đủ thông tin khách mời chứng kiến"},
+      DGV: {fields: ['hoVaTen', 'chucVu', 'diaChi'], errorMessage: "Vui lòng điền đủ thông tin đấu giá viên"},
+      NTG: {
+        fields: ['hoVaTen', 'soCccd', 'diaChi'],
+        errorMessage: "Vui lòng điền đủ thông tin tổ chức cá nhân tham giá đấu giá"
+      }
     };
     const requirement = requirements[name];
     if (!requirement) {
@@ -457,7 +468,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
           this.dataNguoiTgia = this.dataNguoiTgia.filter(item => item.idVirtual != idVirtual);
           this.dataNguoiShow = _.chain(this.dataNguoiTgia)
             .groupBy('loai')
-            .map((value, key) => ({ loai: key, dataChild: value }))
+            .map((value, key) => ({loai: key, dataChild: value}))
             .value();
         } catch (e) {
           console.log('error', e);
@@ -472,7 +483,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     currentRow.isEdit = true;
     this.dataNguoiShow = _.chain(this.dataNguoiTgia)
       .groupBy('loai')
-      .map((value, key) => ({ loai: key, dataChild: value }))
+      .map((value, key) => ({loai: key, dataChild: value}))
       .value();
   }
 

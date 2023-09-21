@@ -593,7 +593,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       body.id = this.idInput
     }
     await this.spinner.show();
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBban: data.soBban })

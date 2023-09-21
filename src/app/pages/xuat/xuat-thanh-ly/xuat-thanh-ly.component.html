@@ -1,62 +1,12 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
-  <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)">
-      Toàn bộ DS hàng DTQG cần thanh lý
-    </li>
-    <li nz-menu-item (click)="selectTab(1)">
-      Tổng hợp DS hàng DTQG cần thanh lý
-    </li>
-    <li nz-menu-item (click)="selectTab(2)">
-      Trình và thẩm định HS thanh lý
-    </li>
-    <li nz-menu-item (click)="selectTab(3)">
-      Quyết định thanh lý
-    </li>
-    <li nz-menu-item (click)="selectTab(4)">
-      Thông báo KQ trình hồ sơ
-    </li>
-    <li nz-menu-item (click)="selectTab(5) ">
-      Tổ chức thực hiện thanh lý hàng DTQG
-    </li>
-    <li nz-menu-item (click)="selectTab(6)">
-      Xuất thanh lý
-    </li>
-    <li nz-menu-item (click)="selectTab(7)">
-      Báo cáo kết quả bán thanh lý
-    </li>
+  <ul nz-menu nzMode="horizontal" id="mainTongCuc">
+    <ng-container *ngFor="let route of routes">
+      <li *ngIf="userService.isAccessPermisson(route.accessPermisson)" nz-menu-item
+        [class]="route.url && routerUrl.includes(route.url) ? 'ant-menu-item ng-star-inserted ant-menu-item-selected' : 'ant-menu-item ng-star-inserted'"
+        (click)="redirectUrl(route.url)">
+        {{route.name}}
+      </li>
+    </ng-container>
   </ul>
 </nz-affix>
-<div class="contentBor chi-tieu__body giao-ke-hoach">
-  <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
-      <app-thanh-ly-danh-sach-hang></app-thanh-ly-danh-sach-hang>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
-      <app-tong-hop-thanh-ly></app-tong-hop-thanh-ly>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 2">
-      <app-ho-so-thanh-ly></app-ho-so-thanh-ly>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 3">
-      <app-quyet-dinh-thanh-ly></app-quyet-dinh-thanh-ly>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 4">
-      <app-thong-bao-ket-qua></app-thong-bao-ket-qua>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 5">
-      <app-to-chuc-thuc-hien-thanh-ly></app-to-chuc-thuc-hien-thanh-ly>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 6">
-      <app-thuc-hien-xuat-thanh-ly></app-thuc-hien-xuat-thanh-ly>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 7">
-      <app-bao-cao-ket-qua-thanh-ly></app-bao-cao-ket-qua-thanh-ly>
-    </ng-container>
-  </div>
-</div>
-
-
-
-
-
-
+<router-outlet></router-outlet>

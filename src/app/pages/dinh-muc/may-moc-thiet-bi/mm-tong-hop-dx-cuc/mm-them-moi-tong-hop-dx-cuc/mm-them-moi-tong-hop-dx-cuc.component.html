@@ -224,14 +224,14 @@
         <td></td>
         <td></td>
         <td class="font-weight-bold">{{sumSoLuong(data, 'child')}}</td>
-        <td class="font-weight-bold">{{data.donGiaTd | number: '1.0-1' }}</td>
-        <td class="font-weight-bold">{{sumSoLuong(data,' child')  * data.donGiaTd | number: '1.0-1' }}</td>
+        <td class="font-weight-bold">{{data.donGiaTd | number: '1.0-1': 'vi_VN' }}</td>
+        <td class="font-weight-bold">{{sumSoLuong(data,' child')  * data.donGiaTd | number: '1.0-1': 'vi_VN' }}</td>
         <td></td>
         <td></td>
         <td></td>
-        <td class="font-weight-bold">{{sumSoLuong(data, 'tong')  | number: '1.0-1'}}</td>
-        <td class="font-weight-bold">{{data.donGiaTd | number: '1.0-1' }}</td>
-        <td class="font-weight-bold">{{sumSoLuong(data, 'tong')  * data.donGiaTd | number: '1.0-1' }}</td>
+        <td class="font-weight-bold">{{sumSoLuong(data, 'tong')  | number: '1.0-1' : 'vi_VN' }}</td>
+        <td class="font-weight-bold">{{data.donGiaTd | number: '1.0-1': 'vi_VN' }}</td>
+        <td class="font-weight-bold">{{sumSoLuong(data, 'tong')  * data.donGiaTd | number: '1.0-1': 'vi_VN' }}</td>
         <td></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -240,29 +240,29 @@
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
           <td>{{item.donViTinh}}</td>
-          <td>{{item.slHienCo | number: '1.0-1' }}</td>
-          <td>{{item.slNhapThem | number: '1.0-1' }}</td>
-          <td>{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>
-          <td>{{item.slTieuChuan | number: '1.0-1' }}</td>
-          <td>{{item.chenhLechThieu | number: '1.0-1' }}</td>
-          <td>{{item.chenhLechThua | number: '1.0-1' }}</td>
+          <td>{{item.slHienCo | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.slHienCo + item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.slTieuChuan | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.chenhLechThieu | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.chenhLechThua | number: '1.0-1': 'vi_VN' }}</td>
           <td>
             <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="true"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
-          <td>{{item.donGiaTd  | number: '1.0-1' }}</td>
-          <td>{{item.donGiaTd * item.soLuong   | number: '1.0-1' }}</td>
-          <td>{{item.slTieuChuanTc | number: '1.0-1' }}</td>
-          <td>{{item.chenhLechThieuTc | number: '1.0-1' }}</td>
-          <td>{{item.chenhLechThuaTc | number: '1.0-1' }}</td>
+          <td>{{item.donGiaTd  | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.donGiaTd * item.soLuong   | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.slTieuChuanTc | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.chenhLechThieuTc | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.chenhLechThuaTc | number: '1.0-1': 'vi_VN' }}</td>
           <td>
             <nz-input-number [(ngModel)]="item.soLuongTc" [nzSize]="'small'" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
-          <td>{{item.donGiaTd  | number: '1.0-1' }}</td>
-          <td>{{item.donGiaTd * item.soLuongTc   | number: '1.0-1' }}</td>
+          <td>{{item.donGiaTd  | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{item.donGiaTd * item.soLuongTc   | number: '1.0-1': 'vi_VN' }}</td>
           <td>{{item.ghiChu}}</td>
         </tr>
       </ng-container>

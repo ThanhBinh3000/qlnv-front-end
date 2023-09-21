@@ -268,12 +268,14 @@ export class ChiTietHoSoTieuHuyComponent extends Base2Component implements OnIni
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETTP')) || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDC'));
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETTP'))
+        || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDC'))
+        ;
     }
     if (this.userService.isTongCuc()) {
       return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDV'))
-        || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC')
-          || (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_TRINHDUYETBTC')));
+        || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC'))
+        || (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_TRINHDUYETBTC'))
     }
     return false
   }
