@@ -27,12 +27,5 @@ export const NHAP_ROUTE_LIST = [
     url: `/${NHAP_MAIN_ROUTE}/bao-cao-nghiep-vu-qly-kho`,
     dropdown: 'bao-cao-nghiep-vu-qly-kho',
     idHover: 'bao-cao-nghiep-vu-qly-kho',
-  },
-  {
-    icon: 'htvbdh_tcdt_icon-common',
-    title: 'BC công tác ',
-    url: `/${NHAP_MAIN_ROUTE}/bao-cao-nghiep-vu-qly-kho`,
-    dropdown: 'bao-cao-nghiep-vu-qly-kho',
-    idHover: 'bao-cao-nghiep-vu-qly-kho',
   }
 ];

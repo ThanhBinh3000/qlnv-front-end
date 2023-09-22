@@ -33,6 +33,10 @@
               <span nz-icon nzType="fund"></span>
               <span>Tổng hợp BC số lượng, số lượng máy móc thiết bị chuyên dùng</span>
             </li>
+            <li nz-menu-item  (click)="selectTab(6)">
+              <span nz-icon nzType="fund"></span>
+              <span>BC công tác quản lý định mức kinh tế - kỹ thuật hàng DTQG </span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -56,6 +60,9 @@
         </ng-container>
         <ng-container *ngIf="tabSelected == 5">
           <app-th-bc-so-luong-cl-may-moc-thiet-bi-chuyen-dung></app-th-bc-so-luong-cl-may-moc-thiet-bi-chuyen-dung>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 6">
+          <app-bc-cong-tac-dinhmuc-ktkt></app-bc-cong-tac-dinhmuc-ktkt>
         </ng-container>
       </div>
     </div>
