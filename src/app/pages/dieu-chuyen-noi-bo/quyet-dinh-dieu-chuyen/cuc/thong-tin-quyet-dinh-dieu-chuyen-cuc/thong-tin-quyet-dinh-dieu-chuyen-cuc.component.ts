@@ -516,7 +516,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       dsDX.forEach(element => {
         element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
           this.danhSachQuyetDinh.push({
-            danhSachKeHoach: itemQD.danhSachKeHoach
+            dcnbKeHoachDcHdr: { danhSachHangHoa: itemQD.dcnbKeHoachDcHdr.danhSachHangHoa }
           })
 
         })
@@ -754,9 +754,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (data) {
         if (data.isUpdate) {
           if (this.typeKeHoach === "LO_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => `${kh.maLoKhoNhan}${kh.maNganKhoNhan}` !== `${row.maLoKhoNhan}${row.maNganKhoNhan}`)
-          // if (this.typeKeHoach === "DIEM_KHO_NHAN")
-          //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
+            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => `${kh.maLoKhoNhan}${kh.maNganKhoNhan}${kh.maLoKho}${kh.maNganKho}` !== `${row.maLoKhoNhan}${row.maNganKhoNhan}${row.maLoKho}${row.maNganKho}`)
+
           this.danhSachKeHoach.push({
             ...data,
             maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
@@ -764,10 +763,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
             id: this.typeKeHoach === "LO_KHO_NHAN" ? row.id : undefined
           })
 
-        } else this.danhSachKeHoach.push({
-          ...data,
-          maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
-        })
+        } else
+          this.danhSachKeHoach.push({
+            ...data,
+            maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
+          })
 
         this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
 
@@ -796,7 +796,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
             if (this.typeKeHoach === "ADD") {
               const qd = {
                 maChiCucNhan: data.maChiCucNhan,
-                danhSachKeHoach: [data]
+                dcnbKeHoachDcHdr: { danhSachHangHoa: [data] }
               }
               const dsQuyetDinh = this.formData.value.danhSachQuyetDinh
               dsQuyetDinh.push(qd)
@@ -846,7 +846,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
               if (!qd) return
               const dsHH = qd.danhSachKeHoach.filter(item => item.maNganKhoNhan !== data.maNganKhoNhan)
               dsHH.push(data)
-              qd.danhSachKeHoach = dsHH
+              qd.dcnbKeHoachDcHdr = { danhSachHangHoa: dsHH }
               const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.maChiCucNhan !== data.maChiCucNhan)
               dsQuyetDinh.push(qd)
               this.formData.patchValue({
