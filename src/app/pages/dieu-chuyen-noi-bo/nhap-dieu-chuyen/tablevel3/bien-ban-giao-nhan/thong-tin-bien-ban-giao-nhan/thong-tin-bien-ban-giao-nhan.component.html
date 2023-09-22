@@ -380,27 +380,27 @@
           </div>
 
           <div nz-col [nzSpan]="24">
-            <nz-table #tbldanhSachDD class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="danhSachDD">
+            <nz-table #tbldanhSachDDNhan class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="danhSachDDNhan">
               <thead>
                 <tr>
                   <th style="width: 35px">STT</th>
-                  <th>Tên</th>
-                  <th>Chức vụ</th>
-                  <th>Đơn vị</th>
-                  <th *ngIf="!isView">Hành động</th>
+                  <th style="width: 200px">Tên</th>
+                  <th style="width: 200px">Chức vụ</th>
+                  <th style="width: 200px">Đơn vị</th>
+                  <th *ngIf="!isView" style="width: 35px">Hành động</th>
                 </tr>
                 <tr>
                   <th></th>
                   <th>
                     <form nz-form nzLayout="vertical" [formGroup]="formData">
-                      <input type="text" nz-input class="w-400" formControlName="hoVaTen" />
+                      <input type="text" nz-input formControlName="hoVaTen" />
                     </form>
 
 
                   </th>
                   <th>
                     <form nz-form nzLayout="vertical" [formGroup]="formData">
-                      <input type="text" nz-input class="w-400" formControlName="chucVu" />
+                      <input type="text" nz-input formControlName="chucVu" />
                     </form>
 
                   </th>
@@ -414,25 +414,25 @@
 
                   </th>
                   <th>
-                    <a (click)="them()">
+                    <a (click)="themNhan()">
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr nz-tbody-tr *ngFor="let item of tbldanhSachDD.data, let i = index;">
+                <tr nz-tbody-tr *ngFor="let item of tbldanhSachDDNhan.data, let i = index;">
                   <ng-container *ngIf="!item.edit; else editTemplate">
                     <td>{{i + 1}}</td>
                     <td>{{item.hoVaTen}}</td>
                     <td>{{item.chucVu}}</td>
-                    <td>{{getType(item.type)}}</td>
+                    <td>{{getType(item.donVi)}}</td>
                     <td *ngIf="!isView">
 
-                      <a (click)="sua(i)">
+                      <a (click)="suaNhan(i)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
-                      <a (click)="xoa(item)">
+                      <a (click)="xoaNhan(item)">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
@@ -446,16 +446,16 @@
                       <input type="text" nz-input class="w-400" [(ngModel)]="item.chucVu" />
                     </td>
                     <td>
-                      <nz-select [nzDisabled]="isView" [(ngModel)]="item.type" nzAllowClear>
+                      <nz-select [nzDisabled]="isView" [(ngModel)]="item.donVi" nzAllowClear>
                         <nz-option *ngFor="let p of listDonViDaiDien" [nzValue]="p.type"
                           [nzLabel]="p.title"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <a (click)="saveEdit(i)" class="save">
+                      <a (click)="saveEditNhan(i)" class="save">
                         <i class="fa fa-save"></i>
                       </a>
-                      <a (click)="cancelEdit(i)">
+                      <a (click)="cancelEditNhan(i)">
                         <i class="fa fa-times do"></i>
                       </a>
                     </td>
@@ -479,14 +479,14 @@
           </div>
 
           <div nz-col [nzSpan]="24">
-            <nz-table #tbldanhSachDD class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="danhSachDD">
+            <nz-table #tbldanhSachDDGiao class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="danhSachDDGiao">
               <thead>
                 <tr>
                   <th style="width: 35px">STT</th>
-                  <th>Tên</th>
-                  <th>Chức vụ</th>
-                  <th>Đơn vị</th>
-                  <th *ngIf="!isView">Hành động</th>
+                  <th style="width: 200px">Tên</th>
+                  <th style="width: 200px">Chức vụ</th>
+                  <th style="width: 200px">Đơn vị</th>
+                  <th *ngIf="!isView" style="width: 35px">Hành động</th>
                 </tr>
                 <tr>
                   <th></th>
@@ -513,25 +513,25 @@
 
                   </th>
                   <th>
-                    <a (click)="them()">
+                    <a (click)="themGiao()">
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr nz-tbody-tr *ngFor="let item of tbldanhSachDD.data, let i = index;">
+                <tr nz-tbody-tr *ngFor="let item of tbldanhSachDDGiao.data, let i = index;">
                   <ng-container *ngIf="!item.edit; else editTemplate">
                     <td>{{i + 1}}</td>
                     <td>{{item.hoVaTen}}</td>
                     <td>{{item.chucVu}}</td>
-                    <td>{{getType(item.type)}}</td>
+                    <td>{{getType(item.donVi)}}</td>
                     <td *ngIf="!isView">
 
-                      <a (click)="sua(i)">
+                      <a (click)="suaGiao(i)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
-                      <a (click)="xoa(item)">
+                      <a (click)="xoaGiao(item)">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>
@@ -545,16 +545,16 @@
                       <input type="text" nz-input class="w-400" [(ngModel)]="item.chucVu" />
                     </td>
                     <td>
-                      <nz-select [nzDisabled]="isView" [(ngModel)]="item.type" nzAllowClear>
+                      <nz-select [nzDisabled]="isView" [(ngModel)]="item.donVi" nzAllowClear>
                         <nz-option *ngFor="let p of listDonViDaiDien" [nzValue]="p.type"
                           [nzLabel]="p.title"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <a (click)="saveEdit(i)" class="save">
+                      <a (click)="saveEditGiao(i)" class="save">
                         <i class="fa fa-save"></i>
                       </a>
-                      <a (click)="cancelEdit(i)">
+                      <a (click)="cancelEditGiao(i)">
                         <i class="fa fa-times do"></i>
                       </a>
                     </td>
@@ -574,7 +574,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isView"
-                    formControlName="ghiChu"></textarea>
+                    formControlName="ghiChuNhan"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </form>

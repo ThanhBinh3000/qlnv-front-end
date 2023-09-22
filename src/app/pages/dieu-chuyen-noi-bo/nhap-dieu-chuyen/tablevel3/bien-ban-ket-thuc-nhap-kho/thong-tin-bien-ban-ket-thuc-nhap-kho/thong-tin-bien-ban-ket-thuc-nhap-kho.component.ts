@@ -344,6 +344,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
   }
 
   async openDialogKhoNhap() {
+    if (this.isView) return
     await this.spinner.show();
 
     await this.spinner.hide();
