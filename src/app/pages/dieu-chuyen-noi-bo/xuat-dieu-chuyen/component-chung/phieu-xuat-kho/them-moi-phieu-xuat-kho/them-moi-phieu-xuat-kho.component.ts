@@ -311,8 +311,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
 
           if (data.maDvi == this.userInfo.MA_DVI && Array.isArray(data?.danhSachQuyetDinh)) {
             data.danhSachQuyetDinh.forEach(element => {
-              if (Array.isArray(element.danhSachKeHoach)) {
-                element.danhSachKeHoach.forEach(item => {
+              if (Array.isArray(element?.dcnbKeHoachDcHdr?.danhSachHangHoa)) {
+                element.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(item => {
                   // if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho == item.maNganKho) || (f.maLoKho && f.maLoKho == item.maLoKho))) < 0) {
                   //   dataChiCuc.push(item)
                   // }

@@ -91,6 +91,7 @@ export class BienBanSapNhapKhoComponent extends Base2Component implements OnInit
         this.userInfo = this.userService.getUserLogin();
         this.userdetail.maDvi = this.userInfo.MA_DVI;
         this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+        this.formData.patchValue({ maDvi: this.userInfo.MA_DVI, tenDvi: this.userInfo.TEN_DVI })
     }
 
     async timKiem() {
