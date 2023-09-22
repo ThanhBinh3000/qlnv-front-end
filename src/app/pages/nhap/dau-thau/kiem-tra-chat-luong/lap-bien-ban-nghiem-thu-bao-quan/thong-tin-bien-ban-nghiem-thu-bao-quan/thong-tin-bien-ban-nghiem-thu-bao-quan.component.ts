@@ -73,7 +73,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   typeData: string;
   typeAction: string;
   formattedSlThucNhap: any;
-  previewName: string = 'nk_bb_nghiem_thu_bqld';
+  previewName: string = 'bb_nt_bao_quan_lan_dau_dau_thau_lt';
 
   constructor(
     httpClient: HttpClient,

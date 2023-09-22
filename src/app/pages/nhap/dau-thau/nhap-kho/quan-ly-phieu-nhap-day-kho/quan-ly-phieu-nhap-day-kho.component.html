@@ -34,22 +34,23 @@
       <h3>Danh sách biên bản nhập đầy kho </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_XOA')">
+                *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_EXP')" type="button" class="btn btn-sub"
+        <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_EXP') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_EXP')"
+        type="button" class="btn btn-sub"
           (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="print()"
-          *ngIf="userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_IN')">
+                *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_IN') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_IN')">
           <i class="icon htvbdh_tcdt_print"></i>
           <span>In</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_THEM')">
+          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -92,7 +93,8 @@
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="12"></td>
               <td>
-                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                <a *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')"
+                  (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>
@@ -114,20 +116,21 @@
                   <td colspan="4"></td>
                   <td>{{bbNhapDayKho.tenTrangThai}}</td>
                   <td>
-                    <a *ngIf="bbNhapDayKho.trangThai == STATUS.DA_DUYET_LDCC"
+                    <a *ngIf="hienThiXem(bbNhapDayKho)"
                       (click)="redirectToChiTiet(true, bbNhapDayKho.id)">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                     </a>
-                    <a *ngIf="bbNhapDayKho.trangThai != STATUS.DA_DUYET_LDCC"
+                    <a *ngIf="hienThiSua(bbNhapDayKho)"
                       (click)="redirectToChiTiet(false, bbNhapDayKho.id)">
                       <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
-                    <a *ngIf="bbNhapDayKho.trangThai == STATUS.CHO_DUYET_LDCC
-              && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH')"
+                    <a *ngIf="hienThiDuyet(bbNhapDayKho)"
                        (click)="redirectToChiTiet(true, bbNhapDayKho.id)">
                       <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
                     </a>
-                    <a *ngIf="bbNhapDayKho.trangThai == STATUS.DU_THAO" (click)="xoaItem(bbNhapDayKho)">
+                    <a *ngIf="bbNhapDayKho.trangThai == STATUS.DU_THAO
+                    && (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_XOA'))"
+                       (click)="xoaItem(bbNhapDayKho)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>

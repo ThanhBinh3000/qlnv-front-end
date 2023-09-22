@@ -52,7 +52,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   listDiaDiemNhap: any[] = [];
   listFileDinhKem: any[] = [];
   listFileDinhKemKTCL: any[] = [];
-  previewName: string = 'nk_bb_ktra_kt';
+  previewName: string = 'phieu_ktra_cl_dau_thau_lt';
   listHinhThucBaoQuan: any[] = [];
   listDanhGia: any[] = [];
   formattedSlNhapKho: any;
