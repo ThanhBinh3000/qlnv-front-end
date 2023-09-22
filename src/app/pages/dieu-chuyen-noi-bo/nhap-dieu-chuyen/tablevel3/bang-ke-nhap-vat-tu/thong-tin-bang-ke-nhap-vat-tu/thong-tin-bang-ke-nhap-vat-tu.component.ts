@@ -374,13 +374,10 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     await this.spinner.show();
 
     let body = {
-      // trangThai: STATUS.DA_DUYET_LDCC,
-      // loaiVthh: ['0101', '0102'],
+      trangThai: STATUS.DU_THAO,
       soQdinhDcc: this.formData.value.soQdinhDcc,
       loaiDc: this.loaiDc,
       isVatTu: true
-      // maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let resSoDX = await this.phieuNhapKhoService.getDanhSach(body)
     if (resSoDX.msg == MESSAGE.SUCCESS) {

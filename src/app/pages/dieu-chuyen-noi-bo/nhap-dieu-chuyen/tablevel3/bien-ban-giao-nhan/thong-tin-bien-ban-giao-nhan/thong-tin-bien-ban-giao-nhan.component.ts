@@ -46,7 +46,8 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   allCheckedTT = true;
   indeterminateTT = false;
 
-  danhSachDD: any[] = []
+  danhSachDDNhan: any[] = []
+  danhSachDDGiao: any[] = []
   listDonViDaiDien = [
     {
       type: 'CUC',
@@ -121,6 +122,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       canBo: [],
       lanhDao: [],
       ghiChu: [],
+      ghiChuNhan: [],
       lyDoTuChoi: [],
       hoVaTen: [],
       chucVu: [],
@@ -196,7 +198,8 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       let data = await this.detail(id);
       if (data) {
         this.detail = data
-        this.danhSachDD = data.danhSachDaiDien
+        this.danhSachDDNhan = data.danhSachDaiDien.filter(item => item.type === "NHAN")
+        this.danhSachDDGiao = data.danhSachDaiDien.filter(item => item.type === "GIAO")
         this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}`, });
         this.fileCanCuReq = data.fileCanCu
         this.fileDinhKemReq = data.fileDinhKems
@@ -486,19 +489,20 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     return children
   }
 
-  them() {
+  themNhan() {
     if (!this.formData.value.hoVaTen || !this.formData.value.chucVu || !this.formData.value.dvi) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập đủ thông tin");
       return
     }
-    this.danhSachDD.push({
+    this.danhSachDDNhan.push({
       idVirtual: uuidv4.v4(),
       edit: false,
       hoVaTen: this.formData.value.hoVaTen,
       chucVu: this.formData.value.chucVu,
-      type: this.formData.value.dvi
+      donVi: this.formData.value.dvi,
+      type: "NHAN"
     })
-    this.danhSachDD = cloneDeep(this.danhSachDD)
+    this.danhSachDDNhan = cloneDeep(this.danhSachDDNhan)
 
     this.formData.patchValue({
       hoVaTen: "",
@@ -507,21 +511,58 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     })
   }
 
-  cancelEdit(index: number): void {
-    this.danhSachDD[index].edit = false;
+  cancelEditNhan(index: number): void {
+    this.danhSachDDNhan[index].edit = false;
   }
 
-  saveEdit(index: number): void {
-    this.danhSachDD[index].edit = false;
+  saveEditNhan(index: number): void {
+    this.danhSachDDNhan[index].edit = false;
   }
-  sua(index: number) {
-    this.danhSachDD[index].edit = true;
-    this.danhSachDD = cloneDeep(this.danhSachDD)
-    // console.log('sua', this.dsHangTH)
+  suaNhan(index: number) {
+    this.danhSachDDNhan[index].edit = true;
+    this.danhSachDDNhan = cloneDeep(this.danhSachDDNhan)
   }
 
-  xoa(row) {
-    this.danhSachDD = this.danhSachDD.filter(item => item.idVirtual !== row.idVirtual)
+  xoaNhan(row) {
+    this.danhSachDDNhan = this.danhSachDDNhan.filter(item => item.idVirtual !== row.idVirtual)
+  }
+
+  themGiao() {
+    if (!this.formData.value.hoVaTen || !this.formData.value.chucVu || !this.formData.value.dvi) {
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập đủ thông tin");
+      return
+    }
+    this.danhSachDDGiao.push({
+      idVirtual: uuidv4.v4(),
+      edit: false,
+      hoVaTen: this.formData.value.hoVaTen,
+      chucVu: this.formData.value.chucVu,
+      donVi: this.formData.value.dvi,
+      type: "GIAO"
+    })
+    this.danhSachDDGiao = cloneDeep(this.danhSachDDGiao)
+
+    this.formData.patchValue({
+      hoVaTen: "",
+      chucVu: "",
+      dvi: "",
+    })
+  }
+
+  cancelEditGiao(index: number): void {
+    this.danhSachDDGiao[index].edit = false;
+  }
+
+  saveEditGiao(index: number): void {
+    this.danhSachDDGiao[index].edit = false;
+  }
+  suaGiao(index: number) {
+    this.danhSachDDGiao[index].edit = true;
+    this.danhSachDDGiao = cloneDeep(this.danhSachDDGiao)
+  }
+
+  xoaGiao(row) {
+    this.danhSachDDGiao = this.danhSachDDGiao.filter(item => item.idVirtual !== row.idVirtual)
   }
 
   getType(type): string {
@@ -537,8 +578,13 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     await this.spinner.show();
     let body = this.formData.value;
     body.ngayKtNhap = body.ngayLap
-    body.danhSachBangKe = this.danhSach.filter(item => item.checked)
-    body.danhSachDaiDien = this.danhSachDD
+    body.danhSachBangKe = this.danhSach.filter(item => item.checked).map(bangke => {
+      return {
+        ...bangke,
+        id: undefined
+      }
+    })
+    body.danhSachDaiDien = [...this.danhSachDDNhan, ...this.danhSachDDGiao]
     body.fileCanCuReq = this.fileCanCuReq;
     body.fileDinhKemReq = this.fileDinhKemReq;
 
