@@ -194,16 +194,16 @@
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectToChiTiet(data.id,true)"
-               *ngIf="((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_XEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_XEM') || type == '01'))  && !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)">
+               *ngIf="((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_XEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_XEM') || type == '01'))  && !((data.trangThai == STATUS.DANG_NHAP_DU_LIEU) && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="data.trangThai == STATUS.DU_THAO && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_THEM') && type == '01'))"
+              *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_THEM') && type == '01'))"
               (click)="redirectToChiTiet(data.id,false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
-              *ngIf="userService.isTongCuc() && data.trangThai == STATUS.DU_THAO && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_XOA') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_XOA') && type == '01')) "
+              *ngIf="userService.isTongCuc() && data.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_XOA') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_XOA') && type == '01')) "
               (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
