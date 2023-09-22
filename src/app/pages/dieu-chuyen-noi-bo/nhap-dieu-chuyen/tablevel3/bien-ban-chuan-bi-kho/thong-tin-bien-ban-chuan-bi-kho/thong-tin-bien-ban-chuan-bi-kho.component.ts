@@ -189,6 +189,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         tichLuongKhaDung: this.data.tichLuongKd,
         tichLuong: this.data.tichLuongKd,
         donViTinh: this.data.donViTinh,
+        soLuongQdDcCuc: this.data.soLuongQdDcCuc,
         keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
