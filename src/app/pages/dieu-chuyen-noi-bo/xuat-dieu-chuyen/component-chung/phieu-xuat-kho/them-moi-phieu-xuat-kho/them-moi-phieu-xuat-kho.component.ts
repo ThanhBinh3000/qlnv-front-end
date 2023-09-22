@@ -142,7 +142,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       bangKeChId: [''],
       soBangKeVt: [''],
       bangKeVtId: [''],
-      soLuongCanDc: [0, [Validators.required, Validators.min(0)]],
+      soLuongCanDc: ['', [Validators.required, Validators.min(0)]],
 
       // thanhTien: [],
       // thanhTienBc: [''],
@@ -283,7 +283,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           ktvBaoQuanId: '',
           ktvBaoQuan: '',
 
-          soLuongCanDc: 0,
+          soLuongCanDc: '',
+          donViTinh: '',
           duToanKpDc: 0
         });
         this.dataTable = [];
