@@ -115,6 +115,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     // this.formData.patchValue({
     //   slDcConLai: this.data.slDcConLai
     // })
+
     if (this.data.maChiCucNhan) await this.getListDiemKho(this.data.maChiCucNhan)
     if (this.data.maDiemKho) await this.getListNhaKho(this.data.maDiemKho)
     if (this.data.maNhaKho) await this.getListNganKho(this.data.maNhaKho)
@@ -123,7 +124,14 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (this.data.maDiemKhoNhan) await this.getListNhaKhoNhan(this.data.maDiemKhoNhan)
     if (this.data.maNhaKhoNhan) await this.getListNganKhoNhan(this.data.maNhaKhoNhan)
     if (this.data.maNganKhoNhan) await this.getListLoKhoNhan(this.data.maNganKhoNhan)
-    this.formData.patchValue(this.data)
+
+    await this.formData.patchValue(this.data)
+
+    setTimeout(() => {
+      if (this.data.maLoKhoNhan) this.onChangeLoKhoNhan(this.data.maLoKhoNhan)
+    }, 1000);
+
+
 
     await this.spinner.hide();
   }
@@ -134,7 +142,40 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     this.getListDiemKho(value)
     if (chiCuc) {
       this.formData.patchValue({
-        tenChiCucNhan: chiCuc.tenDvi
+        tenChiCucNhan: chiCuc.tenDvi,
+        maDiemKho: "",
+        tenDiemKho: "",
+        maNhaKho: "",
+        tenNhaKho: "",
+        maNganKho: "",
+        tenNganKho: "",
+        maLoKho: "",
+        tenLoKho: "",
+        maThuKho: "",
+        thuKho: "",
+        loaiVthh: "",
+        tenLoaiVthh: "",
+        cloaiVthh: "",
+        tenCloaiVthh: "",
+        tonKho: "",
+        donViTinh: "",
+        soLuongDc: "",
+        duToanKphi: "",
+        thoiGianDkDc: "",
+        maDiemKhoNhan: "",
+        tenDiemKhoNhan: "",
+        maNhaKhoNhan: "",
+        tenNhaKhoNhan: "",
+        maNganKhoNhan: "",
+        tenNganKhoNhan: "",
+        maLoKhoNhan: "",
+        tenLoKhoNhan: "",
+        maThuKhoNhan: "",
+        thuKhoNhan: "",
+        thayDoiThuKho: "",
+        slDcConLai: "",
+        tichLuongKd: "",
+        soLuongPhanBo: "",
       })
     }
   }
@@ -332,6 +373,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               thuKho: detailThuKho.fullName
             })
           }
+          debugger
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
           else {
@@ -407,7 +449,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (value) {
       this.dsLoKhoNhan = []
       const nganKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)
-
+      debugger
       if (nganKhoNhan) {
         this.formData.patchValue({
           maLoKhoNhan: "",
@@ -455,6 +497,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               })
             }
 
+            if (!this.formData.value.cloaiVthh) return
             const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
             this.formData.patchValue({
               tichLuongKd
@@ -468,9 +511,12 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       }
 
     }
+
+    return this.dsLoKhoNhan
   }
 
   async onChangeLoKhoNhan(value) {
+    debugger
     if (value) {
       const loKhoNhan = this.dsLoKhoNhan.find(f => f.maDvi === value)
       if (loKhoNhan) {
@@ -481,6 +527,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           maDvi: loKhoNhan.maDvi,
           capDvi: loKhoNhan.capDvi
         }
+
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
 
@@ -504,7 +551,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           }
 
 
-
+          if (!this.formData.value.cloaiVthh) return
           const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
           this.formData.patchValue({
             tichLuongKd
