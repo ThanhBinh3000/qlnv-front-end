@@ -77,7 +77,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       ngayKyQdinhDcc: [],
       qdinhDccId: [],
       soHopDong: [],
-      soPhieuNhapKho: [],
+      soPhieuNhapKho: [, [Validators.required]],
       phieuNhapKhoId: [],
       ngayNhapKho: [],
       tenLoNganKho: [, [Validators.required]],
