@@ -425,9 +425,9 @@
                   {{ item.chiMuc }}
                 </td>
                 <td>{{ item.noiDung }}</td>
-                <td>{{ item.giaTri |  number: '1.0-1'  }}</td>
-                <td>{{ item.thueVat | number: '1.0-1' }}</td>
-                <td>{{ item.chiPhiSauThue | number: '1.0-1'  }}</td>
+                <td>{{ item.giaTri |  number: '1.0-1':'vi-VN'  }}</td>
+                <td>{{ item.thueVat | number: '1.0-1':'vi-VN' }}</td>
+                <td>{{ item.chiPhiSauThue | number: '1.0-1' :'vi-VN' }}</td>
                 <td class="text-center" *ngIf="!isViewDetail">
                   <a (click)="themMoiCtiet(item)" *ngIf="item.capChiMuc < 3">
                     <i class="icon htvbdh_dau-cong"></i>
