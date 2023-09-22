@@ -14,6 +14,7 @@ import {STATUS} from "../../../../../constants/status";
 import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
 import {QdMuaSamPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service";
 import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-them-moi-qd-mua-sam-pvc',
@@ -28,6 +29,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   maQd: string
   expandSet = new Set<number>();
   typeQd : string
+  amount = AMOUNT_ONE_DECIMAL;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -298,6 +300,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
         if (res.data) {
           this.dataTable = []
           this.dataTable = res.data.listQlDinhMucPvcDxCcdcDtl
+          console.log(this.dataTable,'this.dataTablethis.dataTablethis.dataTable');
           if (this.dataTable && this.dataTable.length > 0) {
             this.dataTable.forEach(item => {
               item.id = null;
@@ -368,4 +371,6 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       })
     }
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }

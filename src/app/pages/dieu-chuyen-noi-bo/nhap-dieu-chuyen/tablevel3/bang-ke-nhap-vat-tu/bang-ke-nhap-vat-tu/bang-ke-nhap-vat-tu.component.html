@@ -208,7 +208,8 @@
                               <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                             </a>
 
-                            <a *ngIf="row4.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row4.id, false)">
+                            <a *ngIf="row4.trangThai == STATUS.DU_THAO || row4.trangThai == STATUS.TUCHOI_TBP_TVQT || row4.trangThai == STATUS.TU_CHOI_LDCC"
+                              (click)="redirectDetail(row4.id, false)">
                               <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a *ngIf="row4.trangThai == STATUS.DU_THAO" (click)="xoa(row4)">
