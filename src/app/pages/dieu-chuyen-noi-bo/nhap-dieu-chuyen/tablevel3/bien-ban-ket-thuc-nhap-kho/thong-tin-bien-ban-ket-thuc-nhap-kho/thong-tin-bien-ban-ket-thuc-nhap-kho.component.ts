@@ -405,7 +405,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       this.dsKeHoach = []
       if (data.danhSachQuyetDinh.length == 0) return
       data.danhSachQuyetDinh.map(qdinh => {
-        this.dsKeHoach = this.dsKeHoach.concat(qdinh.danhSachKeHoach)
+        this.dsKeHoach = this.dsKeHoach.concat(qdinh.dcnbKeHoachDcHdr.danhSachHangHoa)
       })
 
     }
