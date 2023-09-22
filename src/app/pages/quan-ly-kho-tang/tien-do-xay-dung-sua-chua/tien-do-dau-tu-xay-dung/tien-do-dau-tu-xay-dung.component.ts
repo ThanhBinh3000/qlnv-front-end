@@ -109,6 +109,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       }
       let body = this.formData.value
       let res = await this.ktQdXdHangNamService.getDanhSachDmDuAn(body);
+      console.log(res,"res")
       if (res.msg == MESSAGE.SUCCESS) {
         this.dataTable = this.convertListData(res.data);
         this.dataTableRaw = res.data;
