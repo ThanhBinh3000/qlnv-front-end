@@ -808,7 +808,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
               const dsHH = this.danhSachKeHoach.filter(kh => kh.maDiemKho === data.maDiemKho)
               const qd = {
                 maChiCucNhan: data.maChiCucNhan,
-                danhSachKeHoach: dsHH
+                dcnbKeHoachDcHdr: { danhSachHangHoa: dsHH }
               }
               const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.maChiCucNhan !== data.maChiCucNhan)
               dsQuyetDinh.push(qd)
@@ -820,7 +820,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
               const dsHH = this.danhSachKeHoach.filter(kh => kh.maNganKho === data.maNganKho)
               const qd = {
                 maChiCucNhan: data.maChiCucNhan,
-                danhSachKeHoach: dsHH
+                dcnbKeHoachDcHdr: { danhSachHangHoa: dsHH }
               }
               const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.maChiCucNhan !== data.maChiCucNhan)
               dsQuyetDinh.push(qd)
@@ -833,7 +833,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
               dsHH.push(data)
               const qd = {
                 maChiCucNhan: data.maChiCucNhan,
-                danhSachKeHoach: dsHH
+                dcnbKeHoachDcHdr: { danhSachHangHoa: dsHH }
               }
               const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.maChiCucNhan !== data.maChiCucNhan)
               dsQuyetDinh.push(qd)
