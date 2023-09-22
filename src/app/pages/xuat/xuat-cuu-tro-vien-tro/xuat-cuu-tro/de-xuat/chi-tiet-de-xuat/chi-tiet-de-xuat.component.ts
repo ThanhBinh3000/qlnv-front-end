@@ -21,6 +21,7 @@ import {chain, cloneDeep} from 'lodash';
 import {MESSAGE} from "src/app/constants/message";
 import {v4 as uuidv4} from "uuid";
 import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.service";
+import {LOAI_HANG_DTQG, TEN_LOAI_VTHH} from "src/app/constants/config";
 
 
 @Component({
@@ -121,6 +122,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tonKhoLoaiVthh: [''],
         tonKhoCloaiVthh: [''],
         donViTinh: [''],
+        soLuongNhuCau: [0],
         soLuong: [0, [Validators.required, Validators.min(1)]],
         mapVthh: [''],
         tenLoaiVthh: [''],
@@ -172,7 +174,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     } else {
 
       this.formData.patchValue({
-        tenVthh: 'Gạo tẻ',
+        tenVthh: TEN_LOAI_VTHH.GAO,
         tenDvi: this.userInfo.TEN_DVI,
         kieuNhapXuat: 'Xuất không thu tiền',
         loaiNhapXuat: 'Xuất cứu trợ'
@@ -217,7 +219,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
-        this.formDataDtl.patchValue({noiDung: data.noiDung, noiDungOld: data.noiDung, edit: level});
+        this.formDataDtl.patchValue({noiDung: data.noiDung, edit: level});
       } else if (level == 1) {
         this.formDataDtl.patchValue({
           idVirtual: uuidv4(),
@@ -320,7 +322,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
                 noiDung: row.noiDung,
                 tonKho: tonKho,
                 soLuong: soLuong,
-                donViTinh:row.donViTinh,
+                donViTinh: row.donViTinh,
                 childData: v
               }
             }
@@ -390,7 +392,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
 
   async kiemTraTonKho() {
-    let maDvi = this.formDataDtl.value.maDvi;
+    let maDvi = this.formDataDtl.value.maDvi || this.userInfo.MA_DVI;
     let loaiVthh = this.formDataDtl.value.loaiVthh;
     let cloaiVthh = this.formDataDtl.value.cloaiVthh;
     if (maDvi) {
@@ -425,23 +427,26 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   async changeVthh($event) {
     this.listLoaiHangHoa = [];
-    if ($event == 'Thóc tẻ') {
+    if ($event == TEN_LOAI_VTHH.THOC) {
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
-      let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == '0101'));
+      let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == LOAI_HANG_DTQG.THOC));
       Object.assign(this.listLoaiHangHoa, filter);
-    } else if ($event == 'Gạo tẻ') {
+      this.formDataDtl.patchValue({loaiVthh: LOAI_HANG_DTQG.THOC});
+    } else if ($event == TEN_LOAI_VTHH.GAO) {
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
-      let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == '0102'));
+      let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == LOAI_HANG_DTQG.GAO));
       Object.assign(this.listLoaiHangHoa, filter);
-    }
-    else if ($event == 'Muối trắng') {
-      let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '04'));
+      this.formDataDtl.patchValue({loaiVthh: LOAI_HANG_DTQG.GAO});
+    } else if ($event == TEN_LOAI_VTHH.MUOI) {
+      let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == LOAI_HANG_DTQG.MUOI));
       Object.assign(this.listLoaiHangHoa, filter.children);
-    }
-    else {
-      let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '02'));
+      this.formDataDtl.patchValue({loaiVthh: null});
+    } else {
+      let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == LOAI_HANG_DTQG.VAT_TU));
       Object.assign(this.listLoaiHangHoa, filter.children);
+      this.formDataDtl.patchValue({loaiVthh: null});
     }
+
     await this.kiemTraTonKho();
   }
 

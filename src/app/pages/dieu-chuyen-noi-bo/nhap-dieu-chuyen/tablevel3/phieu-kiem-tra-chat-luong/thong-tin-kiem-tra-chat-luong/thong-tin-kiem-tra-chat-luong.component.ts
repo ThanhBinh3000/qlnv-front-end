@@ -461,7 +461,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       this.dsKeHoach = []
       if (data.danhSachQuyetDinh.length == 0) return
       data.danhSachQuyetDinh.map(qdinh => {
-        this.dsKeHoach = this.dsKeHoach.concat(qdinh.danhSachKeHoach)
+        this.dsKeHoach = this.dsKeHoach.concat(qdinh.dcnbKeHoachDcHdr.danhSachHangHoa)
       })
 
     }

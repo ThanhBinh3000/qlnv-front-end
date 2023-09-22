@@ -77,7 +77,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       ngayKyQdinhDcc: [],
       qdinhDccId: [],
       soHopDong: [],
-      soPhieuNhapKho: [],
+      soPhieuNhapKho: [, [Validators.required]],
       phieuNhapKhoId: [],
       ngayNhapKho: [],
       tenLoNganKho: [, [Validators.required]],
@@ -142,7 +142,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         tenNganKho: this.data.tenNganKho,
         maNganKho: this.data.maNganKho,
         tenNhaKho: this.data.tenNhaKho,
-        maNhaKho: this.data.maNhaKhoNhan,
+        maNhaKho: this.data.maNhaKho,
         tenDiemKho: this.data.tenDiemKho,
         maDiemKho: this.data.maDiemKho,
         loaiVthh: this.data.maHangHoa,
@@ -349,7 +349,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       this.dsKeHoach = []
       if (data.danhSachQuyetDinh.length == 0) return
       data.danhSachQuyetDinh.map(qdinh => {
-        this.dsKeHoach = this.dsKeHoach.concat(qdinh.danhSachKeHoach)
+        this.dsKeHoach = this.dsKeHoach.concat(qdinh.dcnbKeHoachDcHdr.danhSachHangHoa)
       })
 
     }

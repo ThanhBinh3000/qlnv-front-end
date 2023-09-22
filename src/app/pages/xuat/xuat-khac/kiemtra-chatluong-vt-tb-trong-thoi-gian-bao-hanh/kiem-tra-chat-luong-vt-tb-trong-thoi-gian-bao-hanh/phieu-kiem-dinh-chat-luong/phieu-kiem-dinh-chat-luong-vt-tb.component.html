@@ -77,16 +77,16 @@
         <tr>
           <th width="60px" class="text-center">STT</th>
           <th></th>
-          <th width="">Số QĐ giao nhiệm vụ XH</th>
+          <th width="">Số QĐ giao NVXH</th>
           <th width="">Năm</th>
-          <th width="">Thời gian xuất lấy mẫu</th>
+          <th width="">Thời gian xuất LM</th>
           <th width="">Điểm kho</th>
           <th width="">Ngăn/Lô kho</th>
           <th width="">Chủng loại hàng</th>
           <th width="">Số phiếu KĐCL</th>
           <th width="">Ngày kiểm định</th>
           <th width="">Số BB LM/BGM</th>
-          <th width="">Ngày lấy mẫu</th>
+          <th width="">Ngày LM</th>
           <th width="">Trạng thái KĐCL</th>
           <th width="">Lần lấy mẫu</th>
           <th width="">Trạng thái</th>
@@ -113,7 +113,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td>
+              <button type="submit"  class="btn btn-outline-primary" (click)="openBaoCao(item)">Tạo BCKĐ kiểm định mẫu</button></td>
 <!--            <td class="text-left">-->
 <!--              <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">-->
 <!--                <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>-->

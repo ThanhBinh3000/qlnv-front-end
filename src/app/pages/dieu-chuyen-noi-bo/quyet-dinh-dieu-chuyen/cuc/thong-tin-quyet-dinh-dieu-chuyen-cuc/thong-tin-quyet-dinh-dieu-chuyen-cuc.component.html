@@ -21,7 +21,7 @@
         <span>Y/C Chi cục xác định điểm nhập ĐC</span>
       </button>
 
-      <button *ngIf="isLuuVaGD()" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+      <button *ngIf="!isView" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>

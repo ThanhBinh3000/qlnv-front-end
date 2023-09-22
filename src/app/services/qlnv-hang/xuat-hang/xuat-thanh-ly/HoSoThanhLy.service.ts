@@ -20,4 +20,9 @@ export class HoSoThanhLyService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  getHoSoToThongBao(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-thong-bao`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

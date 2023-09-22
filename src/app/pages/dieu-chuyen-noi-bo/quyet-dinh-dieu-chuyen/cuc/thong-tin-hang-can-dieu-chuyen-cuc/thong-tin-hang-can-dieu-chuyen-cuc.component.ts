@@ -112,9 +112,10 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (!this.data) return
     await this.spinner.show()
     console.log('handleData', this.data)
-    this.formData.patchValue({
-      slDcConLai: this.data.slDcConLai
-    })
+    // this.formData.patchValue({
+    //   slDcConLai: this.data.slDcConLai
+    // })
+
     if (this.data.maChiCucNhan) await this.getListDiemKho(this.data.maChiCucNhan)
     if (this.data.maDiemKho) await this.getListNhaKho(this.data.maDiemKho)
     if (this.data.maNhaKho) await this.getListNganKho(this.data.maNhaKho)
@@ -123,7 +124,14 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (this.data.maDiemKhoNhan) await this.getListNhaKhoNhan(this.data.maDiemKhoNhan)
     if (this.data.maNhaKhoNhan) await this.getListNganKhoNhan(this.data.maNhaKhoNhan)
     if (this.data.maNganKhoNhan) await this.getListLoKhoNhan(this.data.maNganKhoNhan)
-    this.formData.patchValue(this.data)
+
+    await this.formData.patchValue(this.data)
+
+    setTimeout(() => {
+      if (this.data.maLoKhoNhan) this.onChangeLoKhoNhan(this.data.maLoKhoNhan)
+    }, 1000);
+
+
 
     await this.spinner.hide();
   }
@@ -134,7 +142,40 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     this.getListDiemKho(value)
     if (chiCuc) {
       this.formData.patchValue({
-        tenChiCucNhan: chiCuc.tenDvi
+        tenChiCucNhan: chiCuc.tenDvi,
+        maDiemKho: "",
+        tenDiemKho: "",
+        maNhaKho: "",
+        tenNhaKho: "",
+        maNganKho: "",
+        tenNganKho: "",
+        maLoKho: "",
+        tenLoKho: "",
+        maThuKho: "",
+        thuKho: "",
+        loaiVthh: "",
+        tenLoaiVthh: "",
+        cloaiVthh: "",
+        tenCloaiVthh: "",
+        tonKho: "",
+        donViTinh: "",
+        soLuongDc: "",
+        duToanKphi: "",
+        thoiGianDkDc: "",
+        maDiemKhoNhan: "",
+        tenDiemKhoNhan: "",
+        maNhaKhoNhan: "",
+        tenNhaKhoNhan: "",
+        maNganKhoNhan: "",
+        tenNganKhoNhan: "",
+        maLoKhoNhan: "",
+        tenLoKhoNhan: "",
+        maThuKhoNhan: "",
+        thuKhoNhan: "",
+        thayDoiThuKho: "",
+        slDcConLai: "",
+        tichLuongKd: "",
+        soLuongPhanBo: "",
       })
     }
   }
@@ -332,11 +373,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               thuKho: detailThuKho.fullName
             })
           }
+
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
           else {
             this.formData.controls["maLoKho"].clearValidators();
             this.formData.controls["tenLoKho"].clearValidators();
+            this.helperService.markFormGroupTouched(this.formData);
 
             if (detail.data.object.loaiVthh && detail.data.object.tenLoaiVthh && detail.data.object.cloaiVthh && detail.data.object.tenCloaiVthh && detail.data.object.dviTinh) {
               this.formData.patchValue({
@@ -351,15 +394,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               this.notification.error(MESSAGE.ERROR, "Bạn chưa tạo dữ liệu đầu kỳ của " + nganKho.tenDvi);
             }
 
-            // this.dsLoKho = []
-            // const body = {
-            //   maDvi: value,
-            //   tenLoKho: nganKho.tenDvi
-            // }
-            // const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-            // if (res.statusCode == 0) {
-
-            // }
           }
         }
 
@@ -375,7 +409,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         this.formData.patchValue({
           tenLoKho: loKho.tenDvi
         })
-        //
+
         let body = {
           maDvi: loKho.maDvi,
           capDvi: loKho.capDvi
@@ -413,11 +447,17 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
   async getListLoKhoNhan(value) {
     if (value) {
+      this.dsLoKhoNhan = []
       const nganKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)
 
       if (nganKhoNhan) {
         this.formData.patchValue({
           maLoKhoNhan: "",
+          tenLoKhoNhan: "",
+          thayDoiThuKho: "",
+          tichLuongKd: 0,
+          slDcConLai: 0,
+          soLuongPhanBo: 0,
           tenNganKhoNhan: nganKhoNhan.tenDvi
         })
         let body = {
@@ -436,23 +476,69 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               thuKhoNhan: detailThuKho.fullName
             })
           }
+
           if (coLoKho) {
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
           } else {
-            if (this.formData.value.cloaiVthh) {
-              const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
-              this.formData.patchValue({
-                tichLuongKd
-              })
-            }
             this.formData.controls["maLoKhoNhan"].clearValidators();
             this.formData.controls["tenLoKhoNhan"].clearValidators();
+            this.helperService.markFormGroupTouched(this.formData);
+
             this.dsLoKhoNhan = []
             if (
-              // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-              // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-              // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan
-              this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
+              this.formData.value.maThuKho === detailThuKho.id
+            ) {
+              this.formData.patchValue({
+                thayDoiThuKho: false
+              })
+            } else {
+              this.formData.patchValue({
+                thayDoiThuKho: true
+              })
+            }
+
+            if (!this.formData.value.cloaiVthh) return
+            const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+            this.formData.patchValue({
+              tichLuongKd
+            })
+
+
+          }
+
+        }
+
+      }
+
+    }
+
+    return this.dsLoKhoNhan
+  }
+
+  async onChangeLoKhoNhan(value) {
+
+    if (value) {
+      const loKhoNhan = this.dsLoKhoNhan.find(f => f.maDvi === value)
+      if (loKhoNhan) {
+        this.formData.patchValue({
+          tenLoKhoNhan: loKhoNhan.tenDvi
+        })
+        let body = {
+          maDvi: loKhoNhan.maDvi,
+          capDvi: loKhoNhan.capDvi
+        }
+
+        const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+        if (detail.statusCode == 0) {
+
+          const detailThuKho = detail.data.object.detailThuKho
+          if (detailThuKho) {
+            this.formData.patchValue({
+              maThuKhoNhan: detailThuKho.id,
+              thuKhoNhan: detailThuKho.fullName
+            })
+            if (
+              this.formData.value.maThuKho === detailThuKho.id
             ) {
               this.formData.patchValue({
                 thayDoiThuKho: false
@@ -464,50 +550,16 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             }
           }
 
-        }
 
-      }
-
-    }
-  }
-
-  async onChangeLoKhoNhan(value) {
-    if (value) {
-      const loKhoNhan = this.dsLoKhoNhan.find(f => f.maDvi === value)
-      if (loKhoNhan) {
-        this.formData.patchValue({
-          tenLoKhoNhan: loKhoNhan.tenDvi
-        })
-        let body = {
-          maDvi: loKhoNhan.maDvi,
-          capDvi: loKhoNhan.capDvi
-        }
-        const detail = await this.mangLuoiKhoService.getDetailByMa(body);
-        if (detail.statusCode == 0) {
-          if (this.formData.value.cloaiVthh) {
-            const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
-            this.formData.patchValue({
-              tichLuongKd
-            })
-          }
-        }
-
-
-        if (
-          // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-          // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-          // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan &&
-          // this.formData.value.maLoKho === this.formData.value.maLoKhoNhan
-          this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
-        ) {
+          if (!this.formData.value.cloaiVthh) return
+          const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
           this.formData.patchValue({
-            thayDoiThuKho: false
-          })
-        } else {
-          this.formData.patchValue({
-            thayDoiThuKho: true
+            tichLuongKd
           })
         }
+
+
+
       }
     }
 
@@ -532,7 +584,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       }
     } else {
       this.formData.patchValue({
-        slDcConLai: this.data.slDcConLai
+        slDcConLai: 0//this.data.slDcConLai
 
       })
     }

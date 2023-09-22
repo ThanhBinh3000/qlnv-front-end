@@ -9,6 +9,7 @@ import { ThongBaoKetQuaComponent } from './thong-bao-ket-qua/thong-bao-ket-qua.c
 import { ChiTietHoSoThanhLyComponent } from './ho-so-thanh-ly/chi-tiet-ho-so-thanh-ly/chi-tiet-ho-so-thanh-ly.component';
 import { ThemMoiQuyetDinhThanhLyComponent } from './quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly.component';
 import { ThemMoiBaoCaoKetQuaThanhLyComponent } from './bao-cao-ket-qua/them-moi-bao-ket-qua-thanh-ly/them-moi-bao-cao-ket-qua-thanh-ly.component';
+import { ThemMoiThongBaoKetQuaComponent } from './thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component';
 
 
 const routes: Routes = [
@@ -63,11 +64,40 @@ const routes: Routes = [
       },
       {
         path: 'thong-bao-kq/them-moi',
-        component: ThemMoiBaoCaoKetQuaThanhLyComponent
+        component: ThemMoiThongBaoKetQuaComponent
       },
       {
         path: 'thong-bao-kq/chi-tiet/:id',
-        component: ThemMoiBaoCaoKetQuaThanhLyComponent
+        component: ThemMoiThongBaoKetQuaComponent
+      },
+      // Region tổ chức thanh lý
+      {
+        path: 'to-chuc',
+        loadChildren: () =>
+          import(
+            '../../xuat/xuat-thanh-ly/xuat-hang-thanh-ly/xuat-hang-thanh-ly.module'
+          ).then((m) => m.XuatHangThanhLyModule),
+      },
+      // Region xuất hàng thanh lý
+      {
+        path: 'xuat-hang',
+        loadChildren: () =>
+          import(
+            '../../xuat/xuat-thanh-ly/xuat-hang-thanh-ly/xuat-hang-thanh-ly.module'
+          ).then((m) => m.XuatHangThanhLyModule),
+      },
+      // Region Thông báo kq
+      {
+        path: 'bao-cao-kq',
+        component: ThongBaoKetQuaComponent
+      },
+      {
+        path: 'bao-cao-kq/them-moi',
+        component: ThemMoiThongBaoKetQuaComponent
+      },
+      {
+        path: 'bao-cao-kq/chi-tiet/:id',
+        component: ThemMoiThongBaoKetQuaComponent
       },
     ]
   },
