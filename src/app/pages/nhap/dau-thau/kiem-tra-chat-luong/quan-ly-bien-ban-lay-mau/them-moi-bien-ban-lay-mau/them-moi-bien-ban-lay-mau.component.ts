@@ -69,7 +69,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
   listNam: any[] = [];
   capCuc: string = '2';
   capChiCuc: string = '3';
-  previewName: string = 'nk_bb_lay_mau';
+  previewName: string = '';
   listHangHoa: any[] = [];
   listDaiDien: any[] = [
     {
@@ -416,9 +416,9 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       if (data.loaiVthh.startsWith('02')) {
-        this.previewName = 'bien_ban_lay_mau.docx'
+        this.previewName = 'bien_ban_lay_mau'
       } else {
-        this.previewName = 'bb_lay_mau_bgiao_mau_dau_thau_lt.docx'
+        this.previewName = 'bb_lay_mau_bgiao_mau_dau_thau_lt'
       }
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
