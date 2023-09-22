@@ -41,6 +41,7 @@ export class PhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Componen
       tenDvi: null,
       maDvi: null,
       nam: null,
+      soCanCu: null,
       soBckqKdm: null,
       soPhieu: null,
       ngayXuatNhapTu: null,

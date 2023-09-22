@@ -41,6 +41,7 @@ export class BienBanKetThucNhapKhoBaoHanhComponent extends Base2Component implem
       tenDvi: null,
       maDvi: null,
       nam: null,
+      soCanCu: null,
       soBckqKdm: null,
       soBienBan: null,
       ngayKetThucNhapKhoTu: null,

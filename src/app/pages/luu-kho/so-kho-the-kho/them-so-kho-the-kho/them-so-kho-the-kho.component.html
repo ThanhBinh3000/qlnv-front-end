@@ -6,7 +6,7 @@
           <nz-form-control>
             <nz-radio-group formControlName="loai" (ngModelChange)="changeLoai()">
               <label nz-radio *ngFor="let item of listType" [nzDisabled]="idInput && idInput >0"
-                     [nzValue]="item.ma">{{item.giaTri}}</label>
+                [nzValue]="item.ma">{{item.giaTri}}</label>
             </nz-radio-group>
           </nz-form-control>
         </nz-form-item>
@@ -19,7 +19,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>Năm</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-select formControlName="nam">
+                <nz-select formControlName="nam" nzDisabled>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-input-group>
@@ -31,7 +31,7 @@
             <nz-form-label [nzNoColon]="true">Người lập sổ</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="nguoiLap" readonly/>
+                <input type="text" nz-input formControlName="nguoiLap" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -41,7 +41,7 @@
             <nz-form-label [nzNoColon]="true">Tên đơn vị</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="tenDvi" readonly/>
+                <input type="text" nz-input formControlName="tenDvi" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -51,7 +51,7 @@
             <nz-form-label [nzNoColon]="true">Kế toán trưởng</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="keToanTruong" readonly/>
+                <input type="text" nz-input formControlName="keToanTruong" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -61,7 +61,7 @@
             <nz-form-label [nzNoColon]="true">Thủ trưởng đơn vị (Lãnh đạo Chi cục)</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="thuTruong" readonly/>
+                <input type="text" nz-input formControlName="thuTruong" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -70,7 +70,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)" [nzDisabled]="idInput > 0">
+              <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)"
+                [nzDisabled]="idInput > 0">
                 <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
@@ -92,7 +93,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngăn kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)" [nzDisabled]="idInput > 0">
+              <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)"
+                [nzDisabled]="idInput > 0">
                 <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
@@ -115,7 +117,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input  nz-input formControlName="tenLoaiVthh" readonly class="text-blue">
+                <input nz-input formControlName="tenLoaiVthh" readonly class="text-blue">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -125,7 +127,7 @@
             <nz-form-label [nzNoColon]="true"> Chủng loại hàng</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input  nz-input formControlName="tenCloaiVthh" readonly class="text-blue">
+                <input nz-input formControlName="tenCloaiVthh" readonly class="text-blue">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -135,7 +137,7 @@
             <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input  nz-input formControlName="donViTinh" readonly class="text-blue">
+                <input nz-input formControlName="donViTinh" readonly class="text-blue">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -155,7 +157,7 @@
             <nz-form-label [nzNoColon]="true"> Tồn kho</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input  nz-input formControlName="slTon" readonly class="money-input" currencyMask [options]="amount">
+                <input nz-input formControlName="slTon" readonly class="money-input" currencyMask [options]="amount">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -165,7 +167,8 @@
             <nz-form-label [nzNoColon]="true"> Tích luợng khả dụng</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input formControlName="tichLuongKd" readonly class="money-input" currencyMask [options]="amount">
+                <input nz-input formControlName="tichLuongKd" readonly class="money-input" currencyMask
+                  [options]="amount">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -175,7 +178,8 @@
             <nz-form-label [nzNoColon]="true"> Tích lượng theo thiết kế</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input  nz-input formControlName="tichLuongTk" readonly class="money-input" currencyMask [options]="amount">
+                <input nz-input formControlName="tichLuongTk" readonly class="money-input" currencyMask
+                  [options]="amount">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -192,7 +196,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>Tên sổ kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input type="text" nz-input formControlName="ten"/>
+                <input type="text" nz-input formControlName="ten" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -212,7 +216,8 @@
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <label class="font-weight-bold" nz-checkbox formControlName="isDongSo" [nzDisabled]="!idInput">Đóng sổ</label>
+                <label class="font-weight-bold" nz-checkbox formControlName="isDongSo" [nzDisabled]="!idInput">Đóng
+                  sổ</label>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -222,8 +227,9 @@
             <nz-form-label [nzNoColon]="true">Ngày đóng sổ</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <nz-date-picker class="search__input" formControlName="ngayDong" [nzDisabled]="!(idInput > 0 && formData.value.isDongSo == true)"
-                                nzFormat="dd/MM/yyyy"></nz-date-picker>
+                <nz-date-picker class="search__input" formControlName="ngayDong"
+                  [nzDisabled]="!(idInput > 0 && formData.value.isDongSo == true)"
+                  nzFormat="dd/MM/yyyy"></nz-date-picker>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -248,7 +254,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)" [nzDisabled]="idInput > 0">
+              <nz-select formControlName="maDiemKho" (ngModelChange)="onChangeDiemKho($event)"
+                [nzDisabled]="idInput > 0">
                 <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
@@ -270,7 +277,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngăn kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)" [nzDisabled]="idInput > 0">
+              <nz-select formControlName="maNganKho" (ngModelChange)="onChangeNganKho($event)"
+                [nzDisabled]="idInput > 0">
                 <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                 </nz-option>
               </nz-select>
@@ -293,7 +301,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>Tên sổ kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input type="text" nz-input formControlName="ten"/>
+                <input type="text" nz-input formControlName="ten" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -313,7 +321,7 @@
             <nz-form-label [nzNoColon]="true">Người lập sổ</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="nguoiLap" readonly/>
+                <input type="text" nz-input formControlName="nguoiLap" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -323,7 +331,7 @@
             <nz-form-label [nzNoColon]="true">Tên đơn vị</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="tenDvi" readonly/>
+                <input type="text" nz-input formControlName="tenDvi" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -333,7 +341,7 @@
             <nz-form-label [nzNoColon]="true">Kế toán trưởng</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="keToanTruong" readonly/>
+                <input type="text" nz-input formControlName="keToanTruong" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -343,7 +351,7 @@
             <nz-form-label [nzNoColon]="true">Thủ trưởng đơn vị (Lãnh đạo Chi cục)</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="thuTruong" readonly/>
+                <input type="text" nz-input formControlName="thuTruong" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -353,7 +361,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="tenLoaiVthh" readonly/>
+                <input type="text" nz-input formControlName="tenLoaiVthh" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -363,7 +371,7 @@
             <nz-form-label [nzNoColon]="true"> Chủng loại hàng</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="tenCloaiVthh" readonly/>
+                <input type="text" nz-input formControlName="tenCloaiVthh" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -373,7 +381,7 @@
             <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" nz-input formControlName="donViTinh" readonly/>
+                <input type="text" nz-input formControlName="donViTinh" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -383,7 +391,7 @@
             <nz-form-label [nzNoColon]="true"> Tồn kho</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input  nz-input formControlName="slTon" readonly class="money-input" currencyMask [options]="amount">
+                <input nz-input formControlName="slTon" readonly class="money-input" currencyMask [options]="amount">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -393,7 +401,8 @@
             <nz-form-label [nzNoColon]="true"> Tích luợng khả dụng</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input  nz-input formControlName="tichLuongKd" readonly class="money-input" currencyMask [options]="amount">
+                <input nz-input formControlName="tichLuongKd" readonly class="money-input" currencyMask
+                  [options]="amount">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -403,7 +412,8 @@
             <nz-form-label [nzNoColon]="true"> Tích lượng theo thiết kế</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input formControlName="tichLuongTk" readonly class="money-input" currencyMask [options]="amount">
+                <input nz-input formControlName="tichLuongTk" readonly class="money-input" currencyMask
+                  [options]="amount">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -420,7 +430,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>Tên thẻ kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input type="text" nz-input formControlName="ten"/>
+                <input type="text" nz-input formControlName="ten" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -432,13 +442,13 @@
               <div nz-row>
                 <div nz-col nzSpan="11">
                   <nz-date-picker nzPlaceHolder="Ngày tạo từ" formControlName="ngayTaoTu" nzFormat="dd/MM/yyyy"
-                                  class="search__input"></nz-date-picker>
+                    class="search__input"></nz-date-picker>
                 </div>
                 <div nz-col nzSpan="1">
                 </div>
                 <div nz-col nzSpan="11">
                   <nz-date-picker nzPlaceHolder="Ngày tạo đến" formControlName="ngayTaoDen" nzFormat="dd/MM/yyyy"
-                                  class="search__input"></nz-date-picker>
+                    class="search__input"></nz-date-picker>
                 </div>
               </div>
             </nz-form-control>
@@ -458,28 +468,24 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         <span>Đóng</span>
       </button>
-      <button type="button" class="btn btn-sub btn-xoa ml-2" (click)="delete(formData.value)"
-              *ngIf="formData.value.trangThai == STATUS.DU_THAO">
-        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-        <span>Xóa</span>
-      </button>
       <button type="button" class="btn btn-sub btn-xoa ml-2" (click)="tuChoi()"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC  ">
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC  ">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC">
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_KT, 'Bạn có chắc chắn muốn gửi duyệt?')"
-              *ngIf="formData.value.trangThai == STATUS.DU_THAO">
+      <button type="button" class="btn btn-sub xanh-nhat ml-2"
+        (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_KT, 'Bạn có chắc chắn muốn gửi duyệt?')"
+        *ngIf="formData.value.trangThai == STATUS.DU_THAO">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
-              *ngIf="formData.value.trangThai == STATUS.DU_THAO">
+        *ngIf="formData.value.trangThai == STATUS.DU_THAO">
         <i class="fa fa-save"></i>
         <span>Lưu</span>
       </button>

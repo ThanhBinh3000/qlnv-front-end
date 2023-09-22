@@ -232,7 +232,9 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
               let result = await this.createUpdate(this.formData.value);
               if (result) {
                 this.selectedItem = cloneDeep(result);
-                await this.buildTableView(result.tongHopDtl);
+                // console.log(this.selectedItem,"file")
+                // await this.buildTableView(result.tongHopDtl);
+                await this.loadDetail(this.selectedItem.id)
                 this.step.emit({step: 2, item: this.selectedItem});
               }
             }

@@ -39,7 +39,8 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)"
           <span>Duyệt</span>
         </button>
         <button class="btn btn-sub xanh  ml-2"
-                *ngIf=" this.userService.isChiCuc()  && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai==STATUS.TU_CHOI_KT) "
+                *ngIf=" this.userService.isChiCuc()  && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai==STATUS.TU_CHOI_KT
+                ||formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
                 (click)="save()">
           <i class="icon  htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -47,7 +48,8 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)"
       </div>
     </div>
   </nz-affix>
-  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai==STATUS.TU_CHOI_KT" nzShowIcon nzType="error"
+  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai==STATUS.TU_CHOI_KT
+            ||formData.value.trangThai == STATUS.TU_CHOI_LDCC" nzShowIcon nzType="error"
             nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 
@@ -249,7 +251,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)"
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nzDisabled formControlName="ngayHetHanLuuKho">
+                <nz-date-picker nzFormat="dd/MM/yyyy" [nzDisabled]="isView" formControlName="ngayHetHanLuuKho">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>

@@ -1,20 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, Validators} from '@angular/forms';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {QuanLySoKhoTheKhoService} from 'src/app/services/quan-ly-so-kho-the-kho.service';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {STATUS} from "../../../../constants/status";
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
-import {Router} from "@angular/router";
-import {ThemSoKhoTheKhoComponent} from "./them-so-kho-the-kho/them-so-kho-the-kho.component";
-import {chain} from "lodash";
-import {v4 as uuidv4} from 'uuid';
-import {DonviService} from "../../../../services/donvi.service";
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kho.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { ThemSoKhoTheKhoComponent } from "./them-so-kho-the-kho/them-so-kho-the-kho.component";
+import { chain } from "lodash";
+import { v4 as uuidv4 } from 'uuid';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { STATUS } from 'src/app/constants/status';
+import { DonviService } from 'src/app/services/donvi.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -119,7 +119,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1000px',
-      nzStyle: {top: '100px'},
+      nzStyle: { top: '100px' },
       nzFooter: null,
       nzComponentParams: {
         idInput: id,
@@ -134,7 +134,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   }
 
   setValidator() {
-    if (!( this.userInfo.POSITION == 'CBTHUKHO')) {
+    if (!(this.userInfo.POSITION == 'CBTHUKHO')) {
       this.formData.controls["nam"].setValidators([Validators.required]);
       this.formData.controls["maDiemKho"].setValidators([Validators.required]);
       if (!this.userService.isChiCuc()) {
@@ -181,33 +181,33 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
           let rs = chain(value)
             .groupBy("tenNhaKho")
             .map((v, k) => {
-                if (v && v.length > 0) {
-                  v.idVirtual = uuidv4();
-                  v.forEach(nganlo => {
-                    nganlo.idVirtual = uuidv4();
-                    if (nganlo.children && nganlo.children.length > 0) {
-                      nganlo.children.forEach(nam => {
-                        nam.idVirtual = uuidv4();
-                        if (nam.children && nam.children.length > 0) {
-                          nam.children.forEach(soKho => {
-                            soKho.idVirtual = uuidv4();
-                            if (soKho.theKhoList && soKho.theKhoList.length > 0) {
-                              soKho.theKhoList.forEach(theKho => {
-                                theKho.idVirtual = uuidv4();
-                              })
-                            }
-                          })
-                        }
-                      })
-                    }
-                  })
-                }
-                return {
-                  idVirtual: uuidv4(),
-                  tenNhaKho: k,
-                  children: v
-                };
+              if (v && v.length > 0) {
+                v.idVirtual = uuidv4();
+                v.forEach(nganlo => {
+                  nganlo.idVirtual = uuidv4();
+                  if (nganlo.children && nganlo.children.length > 0) {
+                    nganlo.children.forEach(nam => {
+                      nam.idVirtual = uuidv4();
+                      if (nam.children && nam.children.length > 0) {
+                        nam.children.forEach(soKho => {
+                          soKho.idVirtual = uuidv4();
+                          if (soKho.theKhoList && soKho.theKhoList.length > 0) {
+                            soKho.theKhoList.forEach(theKho => {
+                              theKho.idVirtual = uuidv4();
+                            })
+                          }
+                        })
+                      }
+                    })
+                  }
+                })
               }
+              return {
+                idVirtual: uuidv4(),
+                tenNhaKho: k,
+                children: v
+              };
+            }
             ).value();
           return {
             idVirtual: uuidv4(),
@@ -257,10 +257,10 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-   clearForm() {
+  clearForm() {
     this.formData.reset();
     if (this.userInfo.POSITION == 'CBTHUKHO') {
-       this.searchPage();
+      this.searchPage();
     }
   }
 

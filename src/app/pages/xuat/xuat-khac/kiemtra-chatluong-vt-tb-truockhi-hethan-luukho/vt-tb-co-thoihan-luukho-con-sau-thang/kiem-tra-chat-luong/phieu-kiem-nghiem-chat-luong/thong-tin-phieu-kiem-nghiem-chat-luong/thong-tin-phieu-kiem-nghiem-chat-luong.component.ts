@@ -359,15 +359,16 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   pheDuyet() {
     let trangThai = '';
     let msg = '';
-    switch (this.formData.value.trangThai) {
+    switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDC:
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
+      case STATUS.TU_CHOI_TP:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.CHO_DUYET_LDC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
@@ -382,17 +383,18 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
 
   tuChoi() {
     let trangThai = '';
+
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_LDC;
-        break;
-      }
       case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.TU_CHOI_TP;
         break;
       }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
     }
-    this.reject(this.idInput, trangThai);
+    this.reject(this.idInput, trangThai)
   }
 
   isDisabled() {
