@@ -22,6 +22,7 @@ import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/
 import * as uuidv4 from "uuid";
 import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
 import { DANH_MUC_LEVEL } from "src/app/pages/luu-kho/luu-kho.constant";
+import { ThongTinHangDtqgComponent } from "../../bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-hang-dtqg/thong-tin-hang-dtqg.component";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-chuan-bi-kho',
@@ -289,140 +290,465 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     }
   }
 
-  async addTH() {
-    if (this.formData.value.soLuongTrongNam)
+  // async addTH() {
+  //   if (this.formData.value.soLuongTrongNam)
+  //     this.dsHangTH.push({
+  //       idVirtual: uuidv4.v4(),
+  //       type: "TH",
+  //       edit: false,
+  //       noiDung: this.formData.value.noiDung,
+  //       dviTinh: this.dviTinh,
+  //       soLuongTrongNam: this.formData.value.soLuongTrongNam,
+  //       donGiaTrongNam: this.formData.value.donGiaTrongNam,
+  //       thanhTienTrongNam: this.thanhTienTrongNam,
+  //       soLuongNamTruoc: this.formData.value.soLuongNamTruoc,
+  //       thanhTienNamTruoc: this.formData.value.thanhTienNamTruoc,
+  //       tongGiaTri: this.tongGiaTri,
+  //     })
+  //   const tongKinhPhiDaTh = this.dsHangTH.reduce((previous, current) => previous + current.tongGiaTri, 0);
+  //   const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
+  //   this.dsHangTH = cloneDeep(this.dsHangTH)
+  //   this.formData.patchValue({
+  //     noiDung: "",
+  //     soLuongTrongNam: "",
+  //     donGiaTrongNam: "",
+  //     soLuongNamTruoc: "",
+  //     thanhTienNamTruoc: "",
+  //     tongKinhPhiDaTh,
+  //     tongKinhPhiDaThBc
+  //   })
+  //   this.dviTinh = ""
+  //   this.thanhTienTrongNam = null
+  //   this.tongGiaTri = null
+  // }
+
+  // isDisableField() {
+  //   return false;
+  // }
+
+  // cancelEdit(index: number): void {
+  //   this.objHangTH = null
+  //   this.iHangTH = null
+  //   this.dsHangTH[index].edit = false;
+  // }
+
+  // saveEdit(index: number): void {
+  //   this.objHangTH = null
+  //   this.iHangTH = null
+  //   this.dsHangTH[index].edit = false;
+  // }
+
+  // deleteRow(data: any) {
+  //   this.dsHangTH = this.dsHangTH.filter(x => x.idVirtual != data.idVirtual);
+  //   const tongKinhPhiDaTh = this.dsHangTH.reduce((previous, current) => previous + current.tongGiaTri, 0);
+  //   const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
+  //   this.dsHangTH = cloneDeep(this.dsHangTH)
+  //   this.formData.patchValue({
+  //     noiDung: "",
+  //     soLuongTrongNam: "",
+  //     donGiaTrongNam: "",
+  //     soLuongNamTruoc: "",
+  //     thanhTienNamTruoc: "",
+  //     tongKinhPhiDaTh,
+  //     tongKinhPhiDaThBc
+  //   })
+  // }
+
+  // editRow(index: number) {
+  //   this.iHangTH = index
+  //   this.objHangTH = this.dsHangTH[index]
+  //   this.dsHangTH[index].edit = true;
+  // }
+
+  // async addPD() {
+  //   if (this.formData.value.soLuongTrongNam)
+  //     this.dsHangPD.push({
+  //       idVirtual: uuidv4.v4(),
+  //       type: "PD",
+  //       edit: false,
+  //       noiDung: this.formData.value.noiDung,
+  //       dviTinh: this.dviTinh,
+  //       soLuongTrongNam: this.formData.value.soLuongTrongNam,
+  //       donGiaTrongNam: this.formData.value.donGiaTrongNam,
+  //       thanhTienTrongNam: this.thanhTienTrongNam,
+  //       soLuongNamTruoc: this.formData.value.soLuongNamTruoc,
+  //       thanhTienNamTruoc: this.formData.value.thanhTienNamTruoc,
+  //       tongGiaTri: this.tongGiaTri,
+  //     })
+
+  //   this.dsHangPD = cloneDeep(this.dsHangPD)
+  //   this.formData.patchValue({
+  //     noiDung: "",
+  //     soLuongTrongNam: "",
+  //     donGiaTrongNam: "",
+  //     soLuongNamTruoc: "",
+  //     thanhTienNamTruoc: "",
+  //   })
+  //   this.dviTinh = ""
+  //   this.thanhTienTrongNam = null
+  //   this.tongGiaTri = null
+  // }
+
+  // cancelEditPD(index: number): void {
+  //   this.objHangPD = null
+  //   this.iHangPD = null
+  //   this.dsHangPD[index].edit = false;
+  // }
+
+  // saveEditPD(index: number): void {
+  //   this.objHangPD = null
+  //   this.iHangPD = null
+  //   this.dsHangPD[index].edit = false;
+  // }
+
+  // deleteRowPD(data: any) {
+  //   this.dsHangPD = this.dsHangPD.filter(x => x.idVirtual != data.idVirtual);
+  //   // const tongKinhPhiDaTh = this.dsHangPD.reduce((previous, current) => previous + current.tongGiaTri, 0);
+  //   // const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
+  //   this.dsHangPD = cloneDeep(this.dsHangPD)
+  //   this.formData.patchValue({
+  //     noiDung: "",
+  //     soLuongTrongNam: "",
+  //     donGiaTrongNam: "",
+  //     soLuongNamTruoc: "",
+  //     thanhTienNamTruoc: "",
+  //     // tongKinhPhiDaTh,
+  //     // tongKinhPhiDaThBc
+  //   })
+  // }
+
+  // editRowPD(index: number) {
+  //   this.iHangPD = index
+  //   this.objHangPD = this.dsHangPD[index]
+  //   this.dsHangPD[index].edit = true;
+  // }
+
+  async addTH(row?: any) {
+    this.typeData = "TH"
+    this.typeAction = "ADD"
+    await this.add(row)
+  }
+
+  async updateTH(row) {
+    this.typeData = "TH"
+    this.typeAction = "UPDATE"
+    await this.add(row)
+  }
+
+  async addRowTH(row?: any) {
+    this.typeData = "TH"
+    this.typeAction = "ADD"
+    await this.add(row, true)
+  }
+
+  async addPD(row?: any) {
+    this.typeData = "PD"
+    this.typeAction = "ADD"
+    await this.add(row)
+  }
+
+  async updatePD(row) {
+    this.typeData = "PD"
+    this.typeAction = "UPDATE"
+    await this.add(row)
+  }
+
+  async addRowPD(row?: any) {
+    this.typeData = "PD"
+    this.typeAction = "ADD"
+    await this.add(row, true)
+  }
+
+  async add(row?: any, isChildren?) {
+    await this.spinner.show();
+
+    await this.spinner.hide();
+
+    if (!row) this.typeAction = "ADD"
+
+    const modalQD = this.modal.create({
+      nzTitle: 'MẶT HÀNG SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DỰ TRỮ QUỐC GIA',
+      nzContent: ThongTinHangDtqgComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {
+        data: row,
+        typeData: this.typeData,
+        typeAction: this.typeAction,
+        isChildren: isChildren
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+
+      if (data) {
+        if (this.typeData === "TH") {
+          if (this.typeAction === "ADD") {
+            if (isChildren) {
+              this.addDataTH({
+                ...row,
+                ...data
+              })
+            } else this.addDataTH(data)
+          } else
+            this.updateDataTH({
+              ...row,
+              ...data
+            })
+        }
+
+        if (this.typeData === "PD") {
+          if (this.typeAction === "ADD") {
+            if (isChildren) {
+              this.addDataPD({
+                ...row,
+                ...data
+              })
+            } else this.addDataPD(data)
+          }
+          else
+            this.updateDataPD({
+              ...row,
+              ...data
+            })
+        }
+
+      }
+    });
+  }
+
+  addDataTH(data) {
+    if (data.isChildren) {
       this.dsHangTH.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
         idVirtual: uuidv4.v4(),
-        type: "TH",
         edit: false,
-        noiDung: this.formData.value.noiDung,
-        dviTinh: this.dviTinh,
-        soLuongTrongNam: this.formData.value.soLuongTrongNam,
-        donGiaTrongNam: this.formData.value.donGiaTrongNam,
-        thanhTienTrongNam: this.thanhTienTrongNam,
-        soLuongNamTruoc: this.formData.value.soLuongNamTruoc,
-        thanhTienNamTruoc: this.formData.value.thanhTienNamTruoc,
-        tongGiaTri: this.tongGiaTri,
+        isParent: false,
+        type: this.typeData
       })
-    const tongKinhPhiDaTh = this.dsHangTH.reduce((previous, current) => previous + current.tongGiaTri, 0);
-    const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
-    this.dsHangTH = cloneDeep(this.dsHangTH)
+      const hangTH = this.dsHangTH.find(item => item.idParent === data.idParent)
+      const index = this.dsHangTH.findIndex(item => item.idParent === data.idParent)
+      const tongGiaTri = Number(hangTH.tongGiaTri) + Number(data.tongGiaTri)
+      this.dsHangTH[index].tongGiaTri = tongGiaTri;
+
+      this.viewTableTH()
+
+      return
+    }
+    if (data.isMatHang) {
+      const parent = {
+        ...data,
+        idVirtual: uuidv4.v4(),
+        type: this.typeData
+      }
+      this.dsHangTH.push({
+        danhMuc: parent.danhMuc,
+        nhomHang: parent.nhomHang,
+        donViTinh: parent.donViTinh,
+        tongGiaTri: parent.tongGiaTri,
+        idVirtual: parent.idVirtual,
+        idParent: parent.idVirtual,
+        isParent: true,
+        edit: false,
+        type: this.typeData
+      })
+      this.dsHangTH.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
+        idParent: parent.idVirtual,
+        idVirtual: uuidv4.v4(),
+        edit: false,
+        type: this.typeData
+      })
+    } else {
+      const uuid = uuidv4.v4()
+      this.dsHangTH.push({
+        ...data,
+        tongGiaTri: data.thanhTienTrongNam,
+        isParent: true,
+        idVirtual: uuid,
+        idParent: uuid,
+        edit: false,
+        type: this.typeData
+      })
+    }
+
+
+
+    this.viewTableTH()
+  }
+
+  updateDataTH(data) {
+    const index = this.dsHangTH.findIndex(item => data.id ? item.id == data.id : item.idVirtual === data.idVirtual)
+    this.dsHangTH[index] = data
+
+    const iParent = this.dsHangTH.findIndex(item => (item.idParent === data.idParent) && item.isParent)
+    const tongGiaTri = this.dsHangTH.filter(item => (item.idParent === data.idParent) && !item.isParent).reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+    this.dsHangTH[iParent].tongGiaTri = tongGiaTri;
+
+    this.viewTableTH()
+
+  }
+
+  viewTableTH() {
+    let tableTHs = []
+    this.dsHangTH.forEach(element => {
+      if (element.isParent) {
+        const dsChildren = this.dsHangTH.filter(item => item.idParent === element.idParent)
+        tableTHs = tableTHs.concat(dsChildren)
+      }
+    });
+    let tongKinhPhiDaTh = this.dsHangTH.filter(item => item.isParent).reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+    let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
     this.formData.patchValue({
-      noiDung: "",
-      soLuongTrongNam: "",
-      donGiaTrongNam: "",
-      soLuongNamTruoc: "",
-      thanhTienNamTruoc: "",
       tongKinhPhiDaTh,
       tongKinhPhiDaThBc
     })
-    this.dviTinh = ""
-    this.thanhTienTrongNam = null
-    this.tongGiaTri = null
-  }
-
-  isDisableField() {
-    return false;
+    this.dsHangTH = cloneDeep(tableTHs)
   }
 
   cancelEdit(index: number): void {
-    this.objHangTH = null
-    this.iHangTH = null
     this.dsHangTH[index].edit = false;
   }
 
   saveEdit(index: number): void {
-    this.objHangTH = null
-    this.iHangTH = null
     this.dsHangTH[index].edit = false;
   }
 
-  deleteRow(data: any) {
-    this.dsHangTH = this.dsHangTH.filter(x => x.idVirtual != data.idVirtual);
-    const tongKinhPhiDaTh = this.dsHangTH.reduce((previous, current) => previous + current.tongGiaTri, 0);
-    const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
-    this.dsHangTH = cloneDeep(this.dsHangTH)
-    this.formData.patchValue({
-      noiDung: "",
-      soLuongTrongNam: "",
-      donGiaTrongNam: "",
-      soLuongNamTruoc: "",
-      thanhTienNamTruoc: "",
-      tongKinhPhiDaTh,
-      tongKinhPhiDaThBc
-    })
-  }
-
-  editRow(index: number) {
-    this.iHangTH = index
-    this.objHangTH = this.dsHangTH[index]
-    this.dsHangTH[index].edit = true;
-  }
-
-  async addPD() {
-    if (this.formData.value.soLuongTrongNam)
+  addDataPD(data) {
+    if (data.isChildren) {
       this.dsHangPD.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
         idVirtual: uuidv4.v4(),
-        type: "PD",
         edit: false,
-        noiDung: this.formData.value.noiDung,
-        dviTinh: this.dviTinh,
-        soLuongTrongNam: this.formData.value.soLuongTrongNam,
-        donGiaTrongNam: this.formData.value.donGiaTrongNam,
-        thanhTienTrongNam: this.thanhTienTrongNam,
-        soLuongNamTruoc: this.formData.value.soLuongNamTruoc,
-        thanhTienNamTruoc: this.formData.value.thanhTienNamTruoc,
-        tongGiaTri: this.tongGiaTri,
+        isParent: false,
+        type: this.typeData
       })
+      const hangPD = this.dsHangPD.find(item => item.idParent === data.idParent)
+      const index = this.dsHangPD.findIndex(item => item.idParent === data.idParent)
+      const tongGiaTri = Number(hangPD.tongGiaTri) + Number(data.tongGiaTri)
+      this.dsHangPD[index].tongGiaTri = tongGiaTri;
 
-    this.dsHangPD = cloneDeep(this.dsHangPD)
-    this.formData.patchValue({
-      noiDung: "",
-      soLuongTrongNam: "",
-      donGiaTrongNam: "",
-      soLuongNamTruoc: "",
-      thanhTienNamTruoc: "",
-    })
-    this.dviTinh = ""
-    this.thanhTienTrongNam = null
-    this.tongGiaTri = null
+      this.viewTablePD()
+
+      return
+    }
+    if (data.isMatHang) {
+      const parent = {
+        ...data,
+        idVirtual: uuidv4.v4(),
+        type: this.typeData
+      }
+      this.dsHangPD.push({
+        danhMuc: parent.danhMuc,
+        nhomHang: parent.nhomHang,
+        donViTinh: parent.donViTinh,
+        tongGiaTri: parent.tongGiaTri,
+        idVirtual: parent.idVirtual,
+        idParent: parent.idVirtual,
+        isParent: true,
+        edit: false,
+        type: this.typeData
+      })
+      this.dsHangPD.push({
+        ...data,
+        danhMuc: "",
+        nhomHang: "",
+        donViTinh: "",
+        idParent: parent.idVirtual,
+        idVirtual: uuidv4.v4(),
+        edit: false,
+        type: this.typeData
+      })
+    } else {
+      const uuid = uuidv4.v4()
+      this.dsHangPD.push({
+        ...data,
+        tongGiaTri: data.thanhTienTrongNam,
+        isParent: true,
+        idVirtual: uuid,
+        idParent: uuid,
+        edit: false,
+        type: this.typeData
+      })
+    }
+    this.viewTablePD()
   }
 
-  cancelEditPD(index: number): void {
-    this.objHangPD = null
-    this.iHangPD = null
-    this.dsHangPD[index].edit = false;
+  updateDataPD(data) {
+    const index = this.dsHangPD.findIndex(item => data.id ? item.id == data.id : item.idVirtual === data.idVirtual)
+    this.dsHangPD[index] = data
+
+    const iParent = this.dsHangPD.findIndex(item => (item.idParent === data.idParent) && item.isParent)
+    const tongGiaTri = this.dsHangPD.filter(item => (item.idParent === data.idParent) && !item.isParent).reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+    this.dsHangPD[iParent].tongGiaTri = tongGiaTri;
+
+    this.viewTablePD()
   }
 
-  saveEditPD(index: number): void {
-    this.objHangPD = null
-    this.iHangPD = null
-    this.dsHangPD[index].edit = false;
-  }
-
-  deleteRowPD(data: any) {
-    this.dsHangPD = this.dsHangPD.filter(x => x.idVirtual != data.idVirtual);
-    // const tongKinhPhiDaTh = this.dsHangPD.reduce((previous, current) => previous + current.tongGiaTri, 0);
-    // const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
-    this.dsHangPD = cloneDeep(this.dsHangPD)
-    this.formData.patchValue({
-      noiDung: "",
-      soLuongTrongNam: "",
-      donGiaTrongNam: "",
-      soLuongNamTruoc: "",
-      thanhTienNamTruoc: "",
-      // tongKinhPhiDaTh,
-      // tongKinhPhiDaThBc
-    })
-  }
-
-  editRowPD(index: number) {
-    this.iHangPD = index
-    this.objHangPD = this.dsHangPD[index]
-    this.dsHangPD[index].edit = true;
+  viewTablePD() {
+    let tablePDs = []
+    this.dsHangPD.forEach(element => {
+      if (element.isParent) {
+        const dsChildren = this.dsHangPD.filter(item => item.idParent === element.idParent)
+        tablePDs = tablePDs.concat(dsChildren)
+      }
+    });
+    this.dsHangPD = cloneDeep(tablePDs)
   }
 
 
+
+  xoa(row, type) {
+    if (type === "TH") {
+      if (row.id)
+        this.dsHangTH = this.dsHangTH.filter(item => item.id !== row.id)
+      else
+        this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
+
+
+      if (row.isParent)
+        this.dsHangTH = this.dsHangTH.filter(item => item.idParent !== row.idParent)
+
+      let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+      if (tongKinhPhiDaTh > 0) {
+        let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
+        this.formData.patchValue({
+          tongKinhPhiDaTh,
+          tongKinhPhiDaThBc
+        })
+      } else {
+        this.formData.patchValue({
+          tongKinhPhiDaTh: "",
+          tongKinhPhiDaThBc: ""
+        })
+      }
+
+      this.dsHangTH = cloneDeep(this.dsHangTH)
+    }
+    if (type === "PD") {
+      if (row.id)
+        this.dsHangPD = this.dsHangPD.filter(item => item.id !== row.id)
+      else
+        this.dsHangPD = this.dsHangPD.filter(item => item.idVirtual !== row.idVirtual)
+
+
+      if (row.isParent)
+        this.dsHangPD = this.dsHangPD.filter(item => item.idParent !== row.idParent)
+
+      this.dsHangPD = cloneDeep(this.dsHangPD)
+    }
+
+  }
 
   async openDialogQD() {
     await this.spinner.show();
