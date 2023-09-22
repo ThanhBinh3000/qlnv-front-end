@@ -71,7 +71,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       tonKho: [, [Validators.required]],
       donViTinh: [, [Validators.required]],
       soLuongDc: [, [Validators.required]],
-      duToanKphi: [],
+      duToanKphi: [0],
       thoiGianDkDc: [, [Validators.required]],
       maDiemKhoNhan: [, [Validators.required]],
       tenDiemKhoNhan: [, [Validators.required]],
