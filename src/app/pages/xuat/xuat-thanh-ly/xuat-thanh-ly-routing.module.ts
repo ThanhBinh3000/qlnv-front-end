@@ -70,6 +70,35 @@ const routes: Routes = [
         path: 'thong-bao-kq/chi-tiet/:id',
         component: ThemMoiThongBaoKetQuaComponent
       },
+      // Region tổ chức thanh lý
+      {
+        path: 'to-chuc',
+        loadChildren: () =>
+          import(
+            '../../xuat/xuat-thanh-ly/xuat-hang-thanh-ly/xuat-hang-thanh-ly.module'
+          ).then((m) => m.XuatHangThanhLyModule),
+      },
+      // Region xuất hàng thanh lý
+      {
+        path: 'xuat-hang',
+        loadChildren: () =>
+          import(
+            '../../xuat/xuat-thanh-ly/xuat-hang-thanh-ly/xuat-hang-thanh-ly.module'
+          ).then((m) => m.XuatHangThanhLyModule),
+      },
+      // Region Thông báo kq
+      {
+        path: 'bao-cao-kq',
+        component: ThongBaoKetQuaComponent
+      },
+      {
+        path: 'bao-cao-kq/them-moi',
+        component: ThemMoiThongBaoKetQuaComponent
+      },
+      {
+        path: 'bao-cao-kq/chi-tiet/:id',
+        component: ThemMoiThongBaoKetQuaComponent
+      },
     ]
   },
 ];
