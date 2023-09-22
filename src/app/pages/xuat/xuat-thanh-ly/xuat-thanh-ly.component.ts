@@ -54,12 +54,12 @@ export class XuatThanhLyComponent implements OnInit {
       accessPermisson: 'XHDTQG_XTL_TBKQ'
     },
     {
-      url: '/to-chuc-kh',
+      url: '/to-chuc',
       name: 'Tổ chức triển khai KH bán đấu giá thanh lý hàng DTQG',
       accessPermisson: 'XHDTQG_XTL_TCKHBDG'
     },
     {
-      url: '/xuat-tl',
+      url: '/xuat-hang',
       name: 'Xuất thanh lý',
       accessPermisson: 'XHDTQG_XTL_XTL'
     },

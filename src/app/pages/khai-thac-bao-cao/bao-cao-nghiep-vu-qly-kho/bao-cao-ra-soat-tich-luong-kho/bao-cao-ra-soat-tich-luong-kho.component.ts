@@ -73,7 +73,7 @@ export class BaoCaoRaSoatTichLuongKho extends Base2Component implements OnInit
     }
 
     downloadPdf() {
-        saveAs(this.pdfBlob, "ra_soat_tich_luong_kho_pdf.pdf");
+        saveAs(this.pdfBlob, "bao_cao_ra_soat_tich_luong_kho.pdf");
     }
 
     closeDlg() {
@@ -98,8 +98,8 @@ export class BaoCaoRaSoatTichLuongKho extends Base2Component implements OnInit
             }
             let body = this.formData.value;
             body.typeFile = "pdf";
-            body.fileName = "ra_soat_tich_luong_kho_pdf.jrxml";
-            body.tenBaoCao = "Rà soát tích lượng kho";
+            body.fileName = "bao_cao_ra_soat_tich_luong_kho.jrxml";
+            body.tenBaoCao = "Báo cáo rà soát tích lượng kho";
             await this.bcNvQuanLyKhoTangService.baoCaoRaSoatTichLuongKho(body).then(async s => {
                 this.pdfBlob = s;
                 this.pdfSrc = await new Response(s).arrayBuffer();
@@ -117,12 +117,12 @@ export class BaoCaoRaSoatTichLuongKho extends Base2Component implements OnInit
             this.spinner.show();
             let body = this.formData.value;
             body.typeFile = "xlsx";
-            body.fileName = "ra_soat_tich_luong_kho_pdf.jrxml";
-            body.tenBaoCao = "Rà soát tích lượng kho";
+            body.fileName = "bao_cao_ra_soat_tich_luong_kho.jrxml";
+            body.tenBaoCao = "Báo cáo rà soát tích lượng kho";
             await this.bcNvQuanLyKhoTangService.baoCaoRaSoatTichLuongKho(body).then(async s => {
                 this.excelBlob = s;
                 this.excelSrc = await new Response(s).arrayBuffer();
-                saveAs(this.excelBlob, "ra_soat_tich_luong_kho_pdf.xlsx");
+                saveAs(this.excelBlob, "bao_cao_ra_soat_tich_luong_kho.xlsx");
             });
             this.showDlgPreview = true;
         } catch (e) {

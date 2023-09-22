@@ -142,14 +142,14 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       bangKeChId: [''],
       soBangKeVt: [''],
       bangKeVtId: [''],
-      soLuongCanDc: ['', [Validators.required]],
+      soLuongCanDc: [0, [Validators.required, Validators.min(0)]],
 
       // thanhTien: [],
       // thanhTienBc: [''],
       // tongSoLuong: [],
       // tongSoLuongBc: [''],
       donViTinh: ['', [Validators.required]],
-      duToanKpDc: ['', [Validators.required]],
+      duToanKpDc: [0, [Validators.required, Validators.min(0)]],
 
       ghiChu: [''],
       trangThai: [STATUS.DU_THAO, [Validators.required]],
@@ -283,8 +283,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           ktvBaoQuanId: '',
           ktvBaoQuan: '',
 
-          soLuongCanDc: '',
-          duToanKpDc: ''
+          soLuongCanDc: 0,
+          duToanKpDc: 0
         });
         this.dataTable = [];
         this.tongSoLuong = 0;
@@ -311,8 +311,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
 
           if (data.maDvi == this.userInfo.MA_DVI && Array.isArray(data?.danhSachQuyetDinh)) {
             data.danhSachQuyetDinh.forEach(element => {
-              if (Array.isArray(element.danhSachKeHoach)) {
-                element.danhSachKeHoach.forEach(item => {
+              if (Array.isArray(element?.dcnbKeHoachDcHdr?.danhSachHangHoa)) {
+                element.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(item => {
                   // if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho == item.maNganKho) || (f.maLoKho && f.maLoKho == item.maLoKho))) < 0) {
                   //   dataChiCuc.push(item)
                   // }
@@ -343,7 +343,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
             if (dataNganLo) {
               this.formData.patchValue({
                 donViTinh: dataNganLo.donViTinh,
-                duToanKpDc: dataNganLo.duToanKphi
+                duToanKpDc: dataNganLo.duToanKphi || 0
               })
             }
             this.dataTable = [];
@@ -430,13 +430,13 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
-          soLuongCanDc: data.soLuongDc,
+          soLuongCanDc: data.soLuongDc || 0,
           donViTinh: data.donViTinh,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
-          duToanKpDc: data.duToanKphi,
+          duToanKpDc: data.duToanKphi || 0,
           keHoachDcDtlId: data.id,
 
           soPhieuKnChatLuong: '',

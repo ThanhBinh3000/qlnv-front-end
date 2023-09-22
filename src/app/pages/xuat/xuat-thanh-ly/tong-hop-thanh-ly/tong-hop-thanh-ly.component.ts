@@ -64,25 +64,21 @@ export class TongHopThanhLyComponent extends Base3Component implements OnInit {
     if (!this.checkPermission(roles)) {
       return
     }
-    if (this.userService.isAccessPermisson('SCHDTQG_THDSCSC_TONGHOP')) {
-      const modalGT = this.modal.create({
-        nzTitle: 'TỔNG HỢP DANH SÁCH HÀNG CẦN SỬA CHỮA',
-        nzContent: ThemmoiThComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-        },
-      });
-      modalGT.afterClose.subscribe((data) => {
-        if (data) {
-          this.searchData()
-        }
-      });
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
-    }
+    const modalGT = this.modal.create({
+      nzTitle: 'TỔNG HỢP DANH SÁCH HÀNG CẦN SỬA CHỮA',
+      nzContent: ThemmoiThComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '700px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+    modalGT.afterClose.subscribe((data) => {
+      if (data) {
+        this.searchData()
+      }
+    });
   }
 
   showDetail(idTh) {

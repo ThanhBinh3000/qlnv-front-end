@@ -110,7 +110,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
         if (this.loaiBc === "CUC") {
           await this.loadListBaoCaoChiCuc();
           this.listBaoCaoChiCuc = this.listBaoCaoChiCuc.map(f => {
-            if (this.idsChiCuc.includes(f.id)) {
+            if (this.idsChiCuc?.includes(f.id)) {
               return {
                 ...f, checked: true
               }
@@ -274,8 +274,8 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
         dataTable: this.listBaoCaoChiCuc,
         // dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
         // dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
-        dataHeader: ['Tên báo cáo', 'Đơn vị gửi'],
-        dataColumn: ['tenBc', 'tenDvi'],
+        dataHeader: ['Số báo cáo', 'Đơn vị gửi'],
+        dataColumn: ['soBc', 'tenDvi'],
         initialAllChecked: this.initialAllChecked,
         allChecked: this.allChecked,
         actionRefresh: true,
@@ -298,7 +298,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       this.formData.patchValue({ listTenBaoCaoSelect: this.listBaoCaoChiCuc.filter(f => f.checked).map(m => this.loaiBc === "CUC" ? m.tenBc : m.ten) });
     };
     this.danhSachKetQua = Array.isArray(this.listBaoCaoChiCuc) ? this.listBaoCaoChiCuc.filter(f => f.checked).reduce((arr, cur) => {
-      const hasId = this.idsChiCuc.includes(cur.id);
+      const hasId = this.idsChiCuc?.includes(cur.id);
       arr = arr.concat(cur.danhSachKetQua.map(f => ({ ...f, id: hasId ? f.id : undefined, hdrId: hasId ? f.hdrId : undefined })));
       return arr
     }, []) : [];
@@ -343,6 +343,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     this.tongKinhPhiXuatDcTt = tongKinhPhiXuatDcTt;
     this.tongKinhPhiNhapDcTt = tongKinhPhiNhapDcTt;
     this.dataView = cloneDeep(dataView);
+    console.log("dataView", this.dataView)
     this.checkThuaThieu(this.danhSachKetQua)
   }
   async save(isGuiDuyet: boolean): Promise<void> {

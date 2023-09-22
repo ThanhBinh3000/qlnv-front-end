@@ -594,4 +594,23 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       return sum * 1000;
     }
   }
+
+  hienThiDuyet() {
+    if (this.loaiVthh.startsWith('02')) {
+      if ((this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_DUYET_LDCCUC') && this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_DUYET_KETOAN') && this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
+        || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_DUYET_KTVBQ') && this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ)
+      ) {
+        return true;
+      }
+    } else {
+      if ((this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_LDCCUC') && this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KETOAN') && this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
+        || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KTVBQ') && this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

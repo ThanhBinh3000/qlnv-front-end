@@ -69,6 +69,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
       soCv: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayDuyet: [null],
+      lyDoTuChoi: [null],
       trangThai: ['00'],
       trangThaiTh: [STATUS.CHUA_TONG_HOP],
       tenTrangThai: ['Dự thảo'],
@@ -238,7 +239,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           id: res.id,
           trangThai: res.trangThai
         });
-        this.guiDuyet();
+        this.duyet();
       } else {
         if (this.idInput > 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -256,55 +257,56 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     }
   }
 
-  guiDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn gửi duyệt?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let trangThai;
-          switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO :
-            case STATUS.TU_CHOI_TP :
-            case STATUS.TU_CHOI_CBV : {
-              trangThai = STATUS.CHO_DUYET_TP;
-              break;
-            }
-            case STATUS.TU_CHOI_LDC : {
-              trangThai = STATUS.CHO_DUYET_LDC;
-              break;
-            }
-          }
-          let body = {
-            id: this.formData.get("id").value,
-            lyDo: null,
-            trangThai: trangThai
-          };
-          let res =
-            await this.deXuatScThuongXuyenService.approve(
-              body
-            );
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.GUI_DUYET_SUCCESS);
-            this.quayLai();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log("error: ", e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      }
-    });
-  }
+  // guiDuyet() {
+  //   this.modal.confirm({
+  //     nzClosable: false,
+  //     nzTitle: "Xác nhận",
+  //     nzContent: "Bạn có chắc chắn muốn gửi duyệt?",
+  //     nzOkText: "Đồng ý",
+  //     nzCancelText: "Không",
+  //     nzOkDanger: true,
+  //     nzWidth: 310,
+  //     nzOnOk: async () => {
+  //       this.spinner.show();
+  //       try {
+  //         let trangThai;
+  //         switch (this.formData.value.trangThai) {
+  //           case STATUS.DU_THAO :
+  //           case STATUS.TU_CHOI_TP :
+  //           case STATUS.TU_CHOI_LDC:
+  //           case STATUS.TU_CHOI_CBV : {
+  //             trangThai = STATUS.CHO_DUYET_TP;
+  //             break;
+  //           }
+  //           case STATUS.TU_CHOI_LDC : {
+  //             trangThai = STATUS.CHO_DUYET_LDC;
+  //             break;
+  //           }
+  //         }
+  //         let body = {
+  //           id: this.formData.get("id").value,
+  //           lyDo: null,
+  //           trangThai: trangThai
+  //         };
+  //         let res =
+  //           await this.deXuatScThuongXuyenService.approve(
+  //             body
+  //           );
+  //         if (res.msg == MESSAGE.SUCCESS) {
+  //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.GUI_DUYET_SUCCESS);
+  //           this.quayLai();
+  //         } else {
+  //           this.notification.error(MESSAGE.ERROR, res.msg);
+  //         }
+  //         this.spinner.hide();
+  //       } catch (e) {
+  //         console.log("error: ", e);
+  //         this.spinner.hide();
+  //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //       }
+  //     }
+  //   });
+  // }
 
   tuChoi() {
     const modalTuChoi = this.modal.create({
@@ -370,7 +372,14 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.CHO_DUYET_TP : {
+            case STATUS.TU_CHOI_TP:
+            case STATUS.TU_CHOI_LDC:
+            case STATUS.TU_CHOI_CBV :
+            case STATUS.DU_THAO: {
+              trangThai = STATUS.CHO_DUYET_TP;
+              break;
+            }
+            case STATUS.CHO_DUYET_TP: {
               trangThai = STATUS.CHO_DUYET_LDC;
               break;
             }

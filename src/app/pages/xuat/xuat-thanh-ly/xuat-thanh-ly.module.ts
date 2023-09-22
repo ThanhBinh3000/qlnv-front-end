@@ -78,6 +78,7 @@ import {
 import { DauGiaModule } from "../dau-gia/dau-gia.module";
 import { ThemmoiThComponent } from './tong-hop-thanh-ly/themmoi-th/themmoi-th.component';
 import { ChitietThComponent } from './tong-hop-thanh-ly/chitiet-th/chitiet-th.component';
+import { XuatHangThanhLyModule } from './xuat-hang-thanh-ly/xuat-hang-thanh-ly.module';
 
 
 @NgModule({
@@ -134,6 +135,7 @@ import { ChitietThComponent } from './tong-hop-thanh-ly/chitiet-th/chitiet-th.co
     HopDongModule,
     XuatModule,
     DauGiaModule,
+    XuatHangThanhLyModule
   ],
   exports: [
     ThanhLyDanhSachHangComponent
