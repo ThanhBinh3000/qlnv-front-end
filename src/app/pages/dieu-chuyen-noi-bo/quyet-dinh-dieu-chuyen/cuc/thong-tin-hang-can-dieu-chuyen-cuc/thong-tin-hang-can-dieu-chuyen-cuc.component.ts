@@ -373,7 +373,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               thuKho: detailThuKho.fullName
             })
           }
-          debugger
+
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
           else {
@@ -449,7 +449,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (value) {
       this.dsLoKhoNhan = []
       const nganKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)
-      debugger
+
       if (nganKhoNhan) {
         this.formData.patchValue({
           maLoKhoNhan: "",
@@ -516,7 +516,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   }
 
   async onChangeLoKhoNhan(value) {
-    debugger
+
     if (value) {
       const loKhoNhan = this.dsLoKhoNhan.find(f => f.maDvi === value)
       if (loKhoNhan) {
