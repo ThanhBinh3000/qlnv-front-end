@@ -199,6 +199,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent extends Base2Component imple
       soQdDcCuc,
       maLoKho,
       maNganKho,
+      trangThai: STATUS.DA_DUYET_LDCC,
       isVatTu: true
     }
     let children = this.danhSach
