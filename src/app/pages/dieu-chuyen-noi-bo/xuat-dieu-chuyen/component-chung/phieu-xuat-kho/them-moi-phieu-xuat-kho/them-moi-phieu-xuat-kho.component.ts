@@ -142,14 +142,14 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
       bangKeChId: [''],
       soBangKeVt: [''],
       bangKeVtId: [''],
-      soLuongCanDc: ['', [Validators.required]],
+      soLuongCanDc: [0, [Validators.required, Validators.min(0)]],
 
       // thanhTien: [],
       // thanhTienBc: [''],
       // tongSoLuong: [],
       // tongSoLuongBc: [''],
       donViTinh: ['', [Validators.required]],
-      duToanKpDc: ['', [Validators.required]],
+      duToanKpDc: [0, [Validators.required, Validators.min(0)]],
 
       ghiChu: [''],
       trangThai: [STATUS.DU_THAO, [Validators.required]],
@@ -283,8 +283,8 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           ktvBaoQuanId: '',
           ktvBaoQuan: '',
 
-          soLuongCanDc: '',
-          duToanKpDc: ''
+          soLuongCanDc: 0,
+          duToanKpDc: 0
         });
         this.dataTable = [];
         this.tongSoLuong = 0;
@@ -343,7 +343,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
             if (dataNganLo) {
               this.formData.patchValue({
                 donViTinh: dataNganLo.donViTinh,
-                duToanKpDc: dataNganLo.duToanKphi
+                duToanKpDc: dataNganLo.duToanKphi || 0
               })
             }
             this.dataTable = [];
@@ -430,13 +430,13 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
-          soLuongCanDc: data.soLuongDc,
+          soLuongCanDc: data.soLuongDc || 0,
           donViTinh: data.donViTinh,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
-          duToanKpDc: data.duToanKphi,
+          duToanKpDc: data.duToanKphi || 0,
           keHoachDcDtlId: data.id,
 
           soPhieuKnChatLuong: '',
