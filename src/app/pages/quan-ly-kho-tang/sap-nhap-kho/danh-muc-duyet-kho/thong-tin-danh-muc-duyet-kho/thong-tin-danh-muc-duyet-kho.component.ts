@@ -225,7 +225,7 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
             });
     }
     checkRoleApprove(trangThai: string) {
-        return trangThai == "78" && this.userService.isAccessPermisson("QLKT_THSDK_DDDM_DUYET") && this.userService.isCuc();
+        return ['03', '78'].includes(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_DDDM_DUYET") && this.userService.isCuc();
     }
 }
 

@@ -9,12 +9,12 @@
                 <li nz-submenu nzOpen="true" nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo nghiệp vụ quản lý kho tàng">
                     <ul>
                         <li nz-menu-item [nzSelected]="tabSelected === 0" (click)="selectTab(0)"
-                            *ngIf="!userService.isAccessPermisson('')">
+                            *ngIf="userService.isAccessPermisson('KTBC_NVQLKT_HTCTSCK')">
                             <span nz-icon nzType="fund"></span>
                             <span>Thông tin về hiện trạng cải tạo, sửa chữa kho</span>
                         </li>
                         <li nz-menu-item [nzSelected]="tabSelected === 1" (click)="selectTab(1)"
-                            *ngIf="!userService.isAccessPermisson('')">
+                            *ngIf="userService.isAccessPermisson('KTBC_NVQLKT_RSTLK')">
                             <span nz-icon nzType="fund"></span>
                             <span>Báo cáo rà soát tích lượng kho</span>
                         </li>
@@ -25,10 +25,10 @@
         </div>
         <div nz-col nzSpan="19">
             <div class="contentDetail">
-                <ng-container *ngIf="tabSelected == 0">
+                <ng-container *ngIf="tabSelected == 0 && userService.isAccessPermisson('KTBC_NVQLKT_HTCTSCK')">
                     <app-thong-tin-hien-trang-cai-tao-sua-chua-kho></app-thong-tin-hien-trang-cai-tao-sua-chua-kho>
                 </ng-container>
-                <ng-container *ngIf="tabSelected == 1">
+                <ng-container *ngIf="tabSelected == 1 && userService.isAccessPermisson('KTBC_NVQLKT_RSTLK')">
                     <app-bao-cao-ra-soat-tich-luong-kho></app-bao-cao-ra-soat-tich-luong-kho>
                 </ng-container>
             </div>

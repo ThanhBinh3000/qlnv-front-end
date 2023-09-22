@@ -76,11 +76,11 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
     super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenService);
     this.formData = this.fb.group({
       id: [],
-      maDvi: [],
-      tenDvi: [],
+      maDvi: [, [Validators.required]],
+      tenDvi: [, [Validators.required]],
       nam: [dayjs().get("year"), [Validators.required]],
-      soQuyetDinh: [],
-      ngayKy: [],
+      soQuyetDinh: [, [Validators.required]],
+      ngayKy: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       lyDoTuChoi: [],
       trichYeu: [],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
@@ -170,6 +170,9 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
       // if (this.listFile && this.listFile.length > 0) {
       //   this.formData.value.fileDinhKems = this.listFile;
       // }
+      if (this.dataTable.length <= 0) {
+        return this.notification.error(MESSAGE.ERROR, "Chưa có đơn vị điều chuyển sáp nhập nào được chọn")
+      }
       let body = this.formData.value;
       body.tenLoai = this.obTenLoai[this.formData.value.loai]
       body.soQuyetDinh = this.formData.value.soQuyetDinh + this.maQd;
