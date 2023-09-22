@@ -202,6 +202,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       soQdDcCuc,
       maLoKho,
       maNganKho,
+      trangThai: STATUS.DA_DUYET_LDCC,
       isVatTu: false
     }
 

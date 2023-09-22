@@ -399,6 +399,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     let body = {
       soQdinhDcc: this.formData.value.soQdinhDcc,
       loaiDc: this.loaiDc,
+      trangThai: STATUS.DU_THAO
     }
     let resSoDX = await this.phieuNhapKhoService.getDanhSach(body)
     if (resSoDX.msg == MESSAGE.SUCCESS) {
