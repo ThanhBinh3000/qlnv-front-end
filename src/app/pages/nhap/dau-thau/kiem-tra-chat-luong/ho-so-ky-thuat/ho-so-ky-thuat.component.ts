@@ -229,7 +229,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.hoSoKyThuatService.delete(item.id).then((res) => {
+          this.hoSoKyThuatService.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
