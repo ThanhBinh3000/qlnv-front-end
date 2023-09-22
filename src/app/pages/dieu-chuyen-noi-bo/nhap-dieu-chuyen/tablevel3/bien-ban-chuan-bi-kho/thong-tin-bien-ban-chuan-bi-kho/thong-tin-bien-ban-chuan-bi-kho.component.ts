@@ -193,6 +193,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
+      await this.getTLKD()
       await this.loadDataBaoQuan(this.data.maChLoaiHangHoa)
       await this.getDataKho(this.data.maLoKho || this.data.maNganKho)
       if (this.data.maLoKho)
@@ -215,6 +216,20 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     if (tien) {
       return convertTienTobangChu(tien);
     }
+  }
+
+  async getTLKD() {
+    let body = {
+      maDvi: this.formData.value.maLoKho || this.formData.value.maNganKho,
+      capDvi: this.formData.value.maLoKho ? "7" : "6"
+    }
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (!this.formData.value.cloaiVthh) return
+    const tichLuongKhaDung = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+    this.formData.patchValue({
+      tichLuongKhaDung,
+      tichLuong: tichLuongKhaDung
+    })
   }
 
   async loadChiTiet(id: number) {
