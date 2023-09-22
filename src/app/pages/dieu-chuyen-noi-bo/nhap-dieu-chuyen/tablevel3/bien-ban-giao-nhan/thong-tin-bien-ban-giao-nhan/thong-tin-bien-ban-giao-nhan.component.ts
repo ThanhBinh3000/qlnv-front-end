@@ -213,6 +213,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       soQdDcCuc,
       maLoKho,
       maNganKho,
+      trangThai: STATUS.DA_DUYET_LDCC,
       isVatTu: true
     }
 
@@ -413,6 +414,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     let body = {
       loaiDc: this.loaiDc,
       type: "01",
+      trangThai: STATUS.DA_DUYET_LDCC,
       maLoKho: this.formData.value.maLoKho,
       maNganKho: this.formData.value.maNganKho,
       soQdinhDcc: this.formData.value.soQdDcCuc,
