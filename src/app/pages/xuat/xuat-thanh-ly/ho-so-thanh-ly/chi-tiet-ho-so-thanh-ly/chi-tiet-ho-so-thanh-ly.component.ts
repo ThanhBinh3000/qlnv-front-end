@@ -248,7 +248,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       case STATUS.TU_CHOI_LDV:
       case STATUS.TU_CHOI_LDTC:
       case STATUS.TU_CHOI_CBV:
-        trangThai = STATUS.DU_THAO;
+        trangThai = STATUS.CHO_DUYET_TP;
         break;
     }
     this.approve(this.formData.value.id, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
