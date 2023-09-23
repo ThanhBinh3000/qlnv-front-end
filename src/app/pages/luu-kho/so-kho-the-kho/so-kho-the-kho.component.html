@@ -116,6 +116,7 @@
             <th nzWidth="" rowSpan="2" class="text-center">Thời gian đóng</th>
             <th nzWidth="" rowSpan="2" class="text-center">Loại hàng DTQG</th>
             <th nzWidth="" rowSpan="2" class="text-center">Chủng loại</th>
+            <th nzWidth="" rowSpan="2" class="text-center">Tên hàng DTQG</th>
             <th nzWidth="" rowSpan="2" class="text-center">Phiếu nhập/xuất</th>
             <th nzWidth="" rowSpan="2" class="text-center">Ngày nhập/xuất</th>
             <th nzWidth="" colSpan="2" class="text-center">Chứng từ</th>
@@ -137,6 +138,7 @@
               <td>{{i + 1}}</td>
               <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(diemKho.idVirtual)"
                 (nzExpandChange)="onExpandChange(diemKho.idVirtual, $event)">{{diemKho.tenDiemKho}}</td>
+              <td class="bg-parent2 font-weight-bold"></td>
               <td class="bg-parent2 font-weight-bold"></td>
               <td class="bg-parent2 font-weight-bold"></td>
               <td class="bg-parent2 font-weight-bold"></td>
@@ -179,6 +181,7 @@
                   <td class="bg-parent2 font-weight-bold"></td>
                   <td class="bg-parent2 font-weight-bold"></td>
                   <td class="bg-parent2 font-weight-bold"></td>
+                  <td class="bg-parent2 font-weight-bold"></td>
                   <td nzRight class="bg-parent2 font-weight-bold"></td>
                 </tr>
                 <ng-container *ngIf="expandSet.has(nhaKho.idVirtual)">
@@ -195,8 +198,9 @@
                       <td class="bg-parent2 font-weight-bold"></td>
                       <td class="bg-parent2 font-weight-bold"></td>
                       <td class="bg-parent2 font-weight-bold"></td>
-                      <td class="bg-parent2 font-weight-bold">{{nganKho.tenLoaiVthh}}</td>
-                      <td class="bg-parent2 font-weight-bold">{{nganKho.tenCloaiVthh}}</td>
+                      <td class="bg-parent2 font-weight-bold"></td>
+                      <td class="bg-parent2 font-weight-bold"></td>
+                      <td class="bg-parent2 font-weight-bold"></td>
                       <td class="bg-parent2 font-weight-bold"></td>
                       <td class="bg-parent2 font-weight-bold"></td>
                       <td class="bg-parent2 font-weight-bold"></td>
@@ -234,6 +238,7 @@
                           <td class="bg-parent2 font-weight-bold"></td>
                           <td class="bg-parent2 font-weight-bold"></td>
                           <td class="bg-parent2 font-weight-bold"></td>
+                          <td class="bg-parent2 font-weight-bold"></td>
                           <td nzRight class="bg-parent2 font-weight-bold"></td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(nam.idVirtual)">
@@ -249,22 +254,26 @@
                               <td class="bg-parent2 font-weight-bold"></td>
                               <td class="bg-parent2 font-weight-bold">{{soKho.ngayMo | date : 'dd/MM/yyyy' }}</td>
                               <td class="bg-parent2 font-weight-bold">{{soKho.ngayDong | date : 'dd/MM/yyyy' }}</td>
+                              <td class="bg-parent2 font-weight-bold">{{soKho.tenLoaiVthh}}</td>
+                              <td class="bg-parent2 font-weight-bold">{{soKho.tenCloaiVthh}}</td>
+                              <td class="bg-parent2 font-weight-bold">{{soKho.tenHangHoa}}</td>
                               <td class="bg-parent2 font-weight-bold"></td>
                               <td class="bg-parent2 font-weight-bold"></td>
                               <td class="bg-parent2 font-weight-bold"></td>
                               <td class="bg-parent2 font-weight-bold"></td>
                               <td class="bg-parent2 font-weight-bold"></td>
                               <td class="bg-parent2 font-weight-bold"></td>
-                              <td class="bg-parent2 font-weight-bold"></td>
-                              <td class="bg-parent2 font-weight-bold"></td>
-                              <td class="bg-parent2 font-weight-bold"></td>
+                              <td class="bg-parent2 font-weight-bold">{{soKho.donViTinh}}</td>
                               <td class="bg-parent2 font-weight-bold">{{soKho.tenTrangThai}}</td>
                               <td class="bg-parent2 font-weight-bold" nzRight>
                                 <a (click)="openModalCreate(soKho.id, true)">
                                   <i class="fa fa-eye"></i>
                                 </a>
-                                <a (click)="openModalCreate(null, false)">
+                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="openModalCreate(soKho.id, false,true)">
                                   <i class="fa fa-plus"></i>
+                                </a>
+                                <a *ngIf="soKho.trangThai == STATUS.DU_THAO" (click)="delete(soKho)">
+                                  <i class="fa fa-trash-o do"></i>
                                 </a>
                               </td>
                             </tr>
@@ -292,6 +301,7 @@
                                   <td class="bg-parent2 font-weight-bold"></td>
                                   <td class="bg-parent2 font-weight-bold"></td>
                                   <td class="bg-parent2 font-weight-bold"></td>
+                                  <td class="bg-parent2 font-weight-bold"></td>
                                   <td class="bg-parent2 font-weight-bold" nzRight>
                                     <a (click)="openModalCreate(theKho.id, true)">
                                       <i class="fa fa-eye"></i>
@@ -309,6 +319,7 @@
                                       <td></td>
                                       <td></td>
                                       <td></td>
+                                      <td class="bg-parent2 font-weight-bold"></td>
                                       <td class="bg-parent2 font-weight-bold"></td>
                                       <td class="bg-parent2 font-weight-bold"></td>
                                       <td class="bg-parent2 font-weight-bold"></td>

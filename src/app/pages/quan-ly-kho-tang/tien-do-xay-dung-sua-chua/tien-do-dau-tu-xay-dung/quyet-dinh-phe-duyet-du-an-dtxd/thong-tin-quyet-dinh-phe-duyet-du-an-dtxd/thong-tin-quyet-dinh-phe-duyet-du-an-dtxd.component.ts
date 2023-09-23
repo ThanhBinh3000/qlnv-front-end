@@ -134,7 +134,8 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
         diaDiem: this.itemDuAn.diaDiem,
         tgKhoiCong: this.itemDuAn.tgKhoiCong,
         tgHoanThanh: this.itemDuAn.tgHoanThanh,
-        vonNsTw: this.itemDuAn.ncKhNstw,
+        vonNsTw: this.itemDuAn.nstwDuKien,
+        tongMucDt: this.itemDuAn.tmdtDuKien,
       })
     }
   }
@@ -213,7 +214,8 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
             loaiCapCt: this.itemDuAn.loaiCapCt,
             tgKhoiCong: this.itemDuAn.tgKhoiCong,
             tgHoanThanh: this.itemDuAn.tgHoanThanh,
-            vonNsTw: this.itemDuAn.ncKhNstw,
+            vonNsTw: this.itemDuAn.nstwDuKien,
+            tongMucDt: this.itemDuAn.tmdtDuKien,
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -370,6 +372,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
 
   async themMoiCtiet(item?) {
     if (item) {
+      console.log(123)
       this.formDataDetail = this.fb.group({
         idVirtual: uuid.v4(),
         chiMuc: [null, Validators.required],
@@ -398,7 +401,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       this.rowItemParent = new TongMucDauTu();
       this.convertListData();
     }
-    this.tinhTongMucDauTu();
+    // this.tinhTongMucDauTu();
   }
 
   async tinhTongMucDauTu() {

@@ -307,6 +307,12 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   }
 
   protected readonly AMOUNT = AMOUNT;
+
+  changeSlTieuChuan(event: number) {
+    if (event) {
+      this.rowItem.nhuCauTb = event - (this.rowItem.slHienCo + this.rowItem.slNhapThem)
+    }
+  }
 }
 
 export class PvcDxChiCucCtiet {

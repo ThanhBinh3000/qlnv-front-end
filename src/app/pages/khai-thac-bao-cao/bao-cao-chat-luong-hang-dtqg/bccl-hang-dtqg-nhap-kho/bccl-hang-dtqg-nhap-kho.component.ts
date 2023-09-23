@@ -125,8 +125,14 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
-        body.fileName = "bao_cao_cl_nhap_hang_tong_hop.jrxml";
-        body.tenBaoCao = "Báo cáo chất lượng nhập hàng DTQG - Tổng hợp";
+        if (body.loaiVthh.startsWith("0101")) {
+          body.fileName = "bao_cao_cl_nhap_gao_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng nhập thóc - Tổng hợp";
+        }
+        if (body.loaiVthh.startsWith("0102")) {
+          body.fileName = "bao_cao_cl_nhap_gao_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng nhập gạo - Tổng hợp";
+        }
       } else {
           if (body.loaiVthh.startsWith("0101")) {
             body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";

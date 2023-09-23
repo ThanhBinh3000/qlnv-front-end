@@ -112,24 +112,23 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-  openModalCreate(id: number, isView: boolean) {
+  openModalCreate(id: number, isView: boolean,isThemTheKho?:boolean) {
     const modalCreate = this.modal.create({
       nzTitle: !id && isView == false ? 'Tạo sổ kho/thẻ kho' : id > 0 && isView == true ? 'Thông tin sổ kho/thẻ kho' : 'Chỉnh sửa sổ kho/thẻ kho',
       nzContent: ThemSoKhoTheKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1000px',
+      nzWidth: '1200px',
       nzStyle: { top: '100px' },
       nzFooter: null,
       nzComponentParams: {
         idInput: id,
-        isView: isView
+        isView: isView,
+        isThemTheKho : isThemTheKho,
       },
     });
     modalCreate.afterClose.subscribe((data) => {
-      if (data) {
-
-      }
+        this.searchPage()
     });
   }
 
@@ -298,5 +297,36 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
         this.dsDiemKho = this.dsDiemKho.filter(item => item.type != "PB" && item.maDvi.startsWith(event))
       }
     }
+  }
+
+  delete(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.id
+          };
+          this.service.delete(body).then(async () => {
+            await this.searchPage();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 }

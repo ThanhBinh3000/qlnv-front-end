@@ -119,6 +119,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       ngayTao: [],
       diaDiemKho: [],
       lhKho: [],
+      trongLuongBaoBi: [],
     })
   }
 
