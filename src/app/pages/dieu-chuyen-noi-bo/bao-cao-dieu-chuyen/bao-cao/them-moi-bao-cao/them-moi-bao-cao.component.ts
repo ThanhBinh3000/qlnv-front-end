@@ -79,7 +79,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       maDvi: [, [Validators.required]],
       maDviNhan: [],
       tenDviNhan: [],
-      tenBc: [],
+      tenBc: [, [Validators.required]],
       soBc: ['', [Validators.required]],
       ngayBc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       soQdDcCuc: [, [Validators.required]],
@@ -379,7 +379,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       if (this.loaiBc === "CUC") {
         body.idsChiCuc = this.allChecked ? this.listBaoCaoChiCuc.map(f => f.id).join(",") : this.listBaoCaoChiCuc.filter(f => f.checked).map(f => f.id).join(",");
       }
-      let data = await this.createUpdate(body);
+      let data = await this.createUpdate(body, null, isGuiDuyet);
       if (!data) return;
       this.formData.patchValue({ id: data.id, soBc: typeof data.soBc === "string" || data.soBc instanceof String ? data.soBc.split("/")[0] : "", trangThai: data.trangThai });
       this.maBc = typeof data.soBc === "string" || data.soBc instanceof String ? "/" + data.soBc.split("/")[1] : "";
@@ -545,10 +545,11 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       soQdDcCuc: this.formData.value.soQdDcCuc,
       qdDcCucId: this.formData.value.qdDcCucId,
       ngayKyQd: this.formData.value.ngayKyQd,
-      soBc: this.formData.value.soBc,
+      soBc: this.formData.value.soBc + this.maBc,
       tenBc: this.formData.value.tenBc,
       ngayBc: this.formData.value.ngayBc,
-      bcKetQuaDcId: this.formData.value.id
+      bcKetQuaDcId: this.formData.value.id,
+      maDviNhan: this.formData.value.maDviNhan,
     };
     this.dataService.changeData(obj);
     this.router.navigate(['dieu-chuyen-noi-bo/bien-ban-thua-thieu']);
