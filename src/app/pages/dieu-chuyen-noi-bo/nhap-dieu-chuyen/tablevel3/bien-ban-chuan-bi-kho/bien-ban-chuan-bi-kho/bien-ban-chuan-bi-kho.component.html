@@ -171,7 +171,7 @@
                         <td class="bold">{{row3.ngayKtNhapKho|date: "dd/MM/yyyy"}}</td> -->
                         <td>{{row3.tenTrangThai}}</td>
                         <td>
-                          <a *ngIf="!row3.soBbChuanBiKho" (click)="add(row2)">
+                          <a *ngIf="!row3.soBbChuanBiKho" (click)="add(row3)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
                           <a *ngIf="row3.soBbChuanBiKho && row3.trangThai === STATUS.DA_DUYET_LDCC"
