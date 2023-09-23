@@ -155,7 +155,7 @@
       </th>
       <th>
         <input class="money-input" currencyMask [options]="amount" [min]="0"
-               [(ngModel)]="rowItem.slTieuChuan"
+               [(ngModel)]="rowItem.slTieuChuan" (ngModelChange)="changeSlTieuChuan($event)"
         />
         <!--        <nz-input-number [(ngModel)]="rowItem.slTieuChuan" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
         <!--                          [nzMin]="0"-->

@@ -49,8 +49,8 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       namKeHoach: [dayjs().get('year'), [Validators.required]],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       soQuyetDinh: ['', [Validators.required]],
       soQdBtc: ['', [Validators.required]],
       soQdGoc: [null],

@@ -40,7 +40,7 @@ export class BcCongTacDinhmucKtktComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, bcCLuongHangDTQGService);
     this.formData = this.fb.group(
       {
-        maCuc: [null, [Validators.required]],
+        maCuc: [null],
       }
     );
   }
@@ -71,11 +71,6 @@ export class BcCongTacDinhmucKtktComponent extends Base2Component implements OnI
   }
 
   async previewBc() {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.spinner.hide();
-      return;
-    }
     try {
       this.spinner.show();
       let body = this.formData.value;
