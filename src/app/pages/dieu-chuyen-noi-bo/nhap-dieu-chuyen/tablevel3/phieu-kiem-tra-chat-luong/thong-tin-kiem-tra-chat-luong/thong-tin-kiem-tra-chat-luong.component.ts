@@ -98,7 +98,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       tichLuongKhaDung: [],
       donViTinh: [],
       soBBNtLd: [, [Validators.required]],
-      bBNtLdId: [, [Validators.required]],
+      bBNtLdId: [],
       tenLoKhoXuat: [],
       maLoKhoXuat: [],
       tenNganKhoXuat: [],
