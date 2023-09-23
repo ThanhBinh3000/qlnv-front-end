@@ -83,9 +83,10 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       maQhns: [],
       soBban: [],
       ngayLap: [dayjs().format('YYYY-MM-DD')],
-      ngayKetThucNt: [],
+      ngayKetThucNt: [, [Validators.required]],
       soQdDcCuc: [],
       ngayQdDcCuc: [],
+      thoiGianNhapMuonNhat: [],
       qdDcCucId: [],
       soLuongQdDcCuc: [],
       ktvBaoQuan: [],
@@ -131,7 +132,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       maDiemKhoXuat: [],
       tongKinhPhiDaTh: [],
       tongKinhPhiDaThBc: [],
-      dcnbBBNTBQDtl: [new Array<any>(),],
+      // dcnbBBNTBQDtl: [new Array<any>(),],
       nhanXet: [],
       type: ["01"],
       loaiDc: ["DCNB"],
@@ -168,11 +169,12 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     }
 
     if (this.data) {
-      // console.log('this.data', this.data)
+      console.log('this.data', this.data)
       this.formData.patchValue({
         soQdDcCuc: this.data.soQdinh,
-        ngayQdDcCuc: this.data.thoiHanDieuChuyen,
+        ngayQdDcCuc: this.data.ngayKyQd,
         qdDcCucId: this.data.qdinhDccId,
+        thoiGianNhapMuonNhat: this.data.thoiGianNhapKhoMuonNhat,
         tenLoNganKho: `${this.data.tenLoKho || ""} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
         maLoKho: this.data.maLoKho,
