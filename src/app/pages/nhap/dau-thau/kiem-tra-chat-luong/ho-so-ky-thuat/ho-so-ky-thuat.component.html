@@ -183,6 +183,11 @@
                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
+              <a  *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+|| (userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)"
+                  (click)="redirectToChiTiet(true, data.id)">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+              </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XOA')"
                 (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

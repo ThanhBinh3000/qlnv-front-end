@@ -195,7 +195,7 @@
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="6">
-            <nz-form-item *ngIf="!formData.value.loaiVthh.startsWith('02')">
+            <nz-form-item *ngIf="!loaiVthh.startsWith('02')">
               <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open">
