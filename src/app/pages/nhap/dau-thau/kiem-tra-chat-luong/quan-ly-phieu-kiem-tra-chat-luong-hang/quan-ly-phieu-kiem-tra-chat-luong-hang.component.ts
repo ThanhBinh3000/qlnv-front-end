@@ -167,17 +167,19 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      console.log(this.dataTable)
       this.dataTable.forEach(item => {
         if (this.userService.isChiCuc()) {
           item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
         } else {
           let data = [];
+          let listBienBanNghiemThuBq = [];
           item.dtlList.forEach(item => {
             data = [...data, ...item.children];
+            listBienBanNghiemThuBq = [...listBienBanNghiemThuBq, ...item.listBienBanNghiemThuBq];
           })
           item.detail = {
-            children: data
+            children: data,
+            listBienBanNghiemThuBq: listBienBanNghiemThuBq
           }
         };
       });
