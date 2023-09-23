@@ -27,6 +27,8 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   @Input() loai: string;
   @Input() idInput: number;
   @Input() isView: any;
+  @Input() isThemTheKho : boolean;
+
   listType = [{ "ma": "00", "giaTri": "Sổ kho" }, { "ma": "01", "giaTri": "Thẻ kho" }];
   listDsNhapXuat: any[] = [];
   listVthh: any[] = [];
@@ -171,6 +173,9 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       case STATUS.CHO_DUYET_LDCC:
         trangThai = STATUS.DA_DUYET_LDCC;
         break;
+      case STATUS.DA_DUYET_LDCC:
+        trangThai = STATUS.DA_DONG;
+        break;
       //Reject
       case STATUS.TU_CHOI_KT:
       case STATUS.TU_CHOI_LDCC:
@@ -204,15 +209,28 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.formData.patchValue({
-            id : data.id,
-            maDiemKho: data.maDiemKho,
-            maNhaKho: data.maNhaKho,
-            maNganKho: data.maNganKho,
-            maLoKho: data.maLoKho ? data.maLoKho : null
-          });
-          console.log(this.formData.value)
+          if(this.isThemTheKho){
+            this.helperService.bidingDataInFormGroup(this.formData, data);
+            this.formData.patchValue({
+              loai : this.isThemTheKho ? '01' : '00',
+              nguoiLap: this.userInfo.TEN_DAY_DU,
+              tenDvi: this.userInfo.TEN_DVI,
+              maDiemKho: data.maDiemKho,
+              maNhaKho: data.maNhaKho,
+              maNganKho: data.maNganKho,
+              maLoKho: data.maLoKho ? data.maLoKho : null,
+            });
+          }else{
+            this.helperService.bidingDataInFormGroup(this.formData, data);
+            this.formData.patchValue({
+              id : data.id,
+              maDiemKho: data.maDiemKho,
+              maNhaKho: data.maNhaKho,
+              maNganKho: data.maNganKho,
+              maLoKho: data.maLoKho ? data.maLoKho : null,
+              trangThai : data.trangThai
+            });
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -228,7 +246,9 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
 
   initForm() {
+    console.log(this.isThemTheKho);
     this.formData.patchValue({
+      loai : this.isThemTheKho ? '01' : '00',
       nguoiLap: this.userInfo.TEN_DAY_DU,
       tenDvi: this.userInfo.TEN_DVI
     })

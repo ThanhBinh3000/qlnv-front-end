@@ -9,7 +9,6 @@ import { OldResponseData } from "../interfaces/response";
   providedIn: 'root'
 })
 export class QuanLySoKhoTheKhoService extends BaseService {
-  GATEWAY = '/qlnv-luukho';
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'so-kho-the-kho', '/qlnv-luukho');
   }
