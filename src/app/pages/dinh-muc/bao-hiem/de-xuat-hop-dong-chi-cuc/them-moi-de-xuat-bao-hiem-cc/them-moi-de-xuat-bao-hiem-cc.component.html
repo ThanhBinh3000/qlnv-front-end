@@ -90,7 +90,7 @@
               <nz-form-label [nzNoColon]="true" >Tổng giá trị bảo hiểm đề xuất
               </nz-form-label>
               <nz-input-group>
-                <span class="text-blue">{{+sumTable(dataTable, 'giaTriBhDx') + +sumTable(tableHangDtqg, 'giaTriBhDx') | number: '1.0-1'}}</span>
+                <span class="text-blue">{{+sumTable(dataTable, 'giaTriBhDx') + +sumTable(tableHangDtqg, 'giaTriBhDx') | number: '1.0-1': 'vi_VN'}}</span>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
