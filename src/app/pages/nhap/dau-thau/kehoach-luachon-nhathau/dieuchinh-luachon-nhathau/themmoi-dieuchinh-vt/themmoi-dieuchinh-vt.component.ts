@@ -400,7 +400,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
 
   checkDisableQdDc() {
     if (this.isViewDetail) {
-      return !(this.formData.get('trangThai').value == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_BANHANH"));
+      return !(this.formData.get('trangThai').value == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU"));
     }
     return true;
   }
