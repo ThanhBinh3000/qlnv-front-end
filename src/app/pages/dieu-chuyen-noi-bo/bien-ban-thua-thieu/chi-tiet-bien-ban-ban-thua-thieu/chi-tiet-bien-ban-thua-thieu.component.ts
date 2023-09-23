@@ -56,6 +56,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             value: "Đại diện Cục DTNN KV", text: "Đại diện Cục DTNN KV"
         }
     ]
+    hasThuaThieu: boolean = false;
     constructor(
         httpClient: HttpClient,
         storageService: StorageService,
@@ -250,6 +251,10 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         const data = await this.baoCaoDieuChuyenService.getDetail(id);
         this.danhSachKetQua = Array.isArray(data?.data?.danhSachKetQua) ? cloneDeep(data.data.danhSachKetQua) : [];
         this.buildTableView();
+        this.checkThuaThieu(this.danhSachKetQua);
+    }
+    checkThuaThieu(list: any[]) {
+        this.hasThuaThieu = list.some(f => f.tinhTrang);
     }
     expandAll() {
         this.dataView.forEach(s => {
@@ -470,7 +475,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         return false
     }
     checkRoleHoanThanh() {
-        if (!this.isViewOnModal && this.formData.value.trangThai === STATUS.DU_THAO) {
+        if (!this.isViewOnModal && this.formData.value.trangThai === STATUS.DU_THAO && this.hasThuaThieu) {
             return true
         }
         return false

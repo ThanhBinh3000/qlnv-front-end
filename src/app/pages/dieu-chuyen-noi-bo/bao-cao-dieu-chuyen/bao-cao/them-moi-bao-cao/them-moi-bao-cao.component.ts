@@ -54,6 +54,11 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   tongKinhPhiNhapDcTt: number = 0;
   duocLapBBThuaThieu: boolean = false;
   maBc: string;
+  ObKetQua: { [key: string]: string } = {
+    [STATUS.CHUA_THUC_HIEN]: "Chưa thực hiện",
+    [STATUS.DANG_THUC_HIEN]: "Đang thực hiện",
+    [STATUS.DA_HOAN_THANH]: "Hoàn thành"
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -229,18 +234,28 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       this.getThongTinhNhapXuatHangHoa(this.formData.value.soQdDcCuc)
     }
   };
+  checkTinhTrangThuaThieu(data: { [key: string]: any }): boolean {
+    if ((data.slXuatTt - data.slDieuChuyenQd) === 0 && (data.slNhapTt - data.slXuatTt) === 0) {
+      return false
+    }
+    return true
+  }
   async getThongTinhNhapXuatHangHoa(soQdinhCuc: string) {
     try {
       this.spinner.show()
       let res;
       if (this.loaiBc === "CHI_CUC") {
         res = await this.baoCaoDieuChuyenService.getThongTinNhapXuatChiCuc({ soQdinhCuc });
+        if (res.msg === MESSAGE.SUCCESS) {
+          this.danhSachKetQua = res.data.map(f => ({ ...f, tinhTrang: this.checkTinhTrangThuaThieu(f) }));
+          this.buildTableView();
+        }
       } else if (this.loaiBc === "CUC") {
         res = await this.baoCaoDieuChuyenService.getThongTinNhapXuatCuc({ soQdinhCuc });
-      }
-      if (res.msg === MESSAGE.SUCCESS) {
-        this.danhSachKetQua = cloneDeep(res.data);
-        this.buildTableView();
+        if (res.msg === MESSAGE.SUCCESS) {
+          this.danhSachKetQua = cloneDeep(res.data);
+          this.buildTableView();
+        }
       }
     } catch (error) {
       console.log("e", error)

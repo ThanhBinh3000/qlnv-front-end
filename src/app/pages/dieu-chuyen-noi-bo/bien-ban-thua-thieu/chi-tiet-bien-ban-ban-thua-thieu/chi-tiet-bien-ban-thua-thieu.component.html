@@ -18,8 +18,8 @@
                         <i class="icon  htvbdh_da-xu-ly" title="Hoàn thành"></i>
                         <span>Hoàn thành</span>
                     </button>
-                    <button *ngIf="!isView && formData.value.trangThai !== STATUS.DA_HOAN_THANH" nz-button type="button"
-                        class="modal__button--save" (click)="save(false)">
+                    <button *ngIf="!isView && formData.value.trangThai !== STATUS.DA_HOAN_THANH && hasThuaThieu"
+                        nz-button type="button" class="modal__button--save" (click)="save(false)">
                         <i class="icon htvbdh_tcdt_save" title="Lưu"></i>
                         <span>Lưu</span>
                     </button>
