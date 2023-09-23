@@ -28,7 +28,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     @Input() isView: boolean;
     @Input() isViewOnModal: boolean;
     @Input() loaiBc: string;
-    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, tenBc: string, ngayBc: string };
+    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, tenBc: string, ngayBc: string, maDviNhan: string };
     @Output()
     showListEvent = new EventEmitter<any>();
     expandSetString = new Set<string>();
@@ -130,6 +130,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
                 ngayKyQdCuc: this.passData.ngayKyQd,
                 bcKetQuaDcId: this.passData.bcKetQuaDcId,
                 tenBaoCao: this.passData.tenBc,
+                maDviNhan: this.passData.maDviNhan
 
             })
             if (this.passData.bcKetQuaDcId) {
