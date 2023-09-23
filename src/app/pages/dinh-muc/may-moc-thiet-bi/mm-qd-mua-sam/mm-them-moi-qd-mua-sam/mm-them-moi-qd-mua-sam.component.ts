@@ -82,6 +82,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
 
 
   async loadDsDxCc() {
+    console.log(1111)
     this.spinner.show();
     try {
       let body = {
@@ -95,9 +96,10 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.listTongHop = data.content;
+        console.log(this.listTongHop,2222)
         if (this.listTongHop) {
           this.listTongHop = this.listTongHop.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && !item.qdMuaSamId)
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDTC && !item.qdMuaSamId)
           )
         }
       } else {
