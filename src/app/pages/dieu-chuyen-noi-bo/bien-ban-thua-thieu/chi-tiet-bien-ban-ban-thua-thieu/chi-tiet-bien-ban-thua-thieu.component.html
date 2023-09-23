@@ -76,7 +76,7 @@
                         <nz-form-label [nzNoColon]="true"> Số biên bản ghi nhận thừa/thiếu</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input formControlName="soBb" readonly />
+                                <input nz-input formControlName="soBb" [readonly]="isView" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>

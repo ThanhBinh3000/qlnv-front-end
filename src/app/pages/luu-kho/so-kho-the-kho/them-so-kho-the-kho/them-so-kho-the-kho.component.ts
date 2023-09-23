@@ -36,14 +36,6 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   dsNganKho = [];
   dsLoKho = [];
   amount = AMOUNT;
-  formData: any;
-  fb: any;
-  spinner: any;
-  notification: any;
-  STATUS: any;
-  userInfo: any;
-  modal: any;
-  helperService: any;
 
   constructor(
     private httpClient: HttpClient,
@@ -80,6 +72,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       tichLuongKd: [null],
       tichLuongTk: [null],
       tenHangHoa: [null],
+      so : [null],
       ten: [null],
       ngayMo: [null],
       ngayDong: [null],
@@ -107,76 +100,6 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-  tuChoi() {
-    let trangThai = '';
-    switch (this.formData.get('trangThai').value) {
-      case STATUS.CHO_DUYET_KT: {
-        trangThai = STATUS.TU_CHOI_KT;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.TU_CHOI_LDCC;
-        break;
-      }
-    }
-    ;
-    this.reject(this.idInput, trangThai);
-  }
-
-  async pheDuyet() {
-    let trangThai = ''
-    let keToanTruong = ''
-    let thuTruong = ''
-    switch (this.formData.value.trangThai) {
-      case this.STATUS.CHO_DUYET_KT: {
-        trangThai = this.STATUS.CHO_DUYET_LDCC;
-        keToanTruong = this.userInfo.TEN_DVI;
-        break;
-      }
-      case this.STATUS.CHO_DUYET_LDCC: {
-        trangThai = this.STATUS.DA_DUYET_LDCC;
-        thuTruong = this.userInfo.TEN_DVI;
-        break;
-      }
-    }
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn phê duyệt?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.idInput,
-            lyDoTuChoi: null,
-            trangThai: trangThai,
-            keToanTruong: trangThai == STATUS.CHO_DUYET_LDCC ? keToanTruong : null,
-            thuTruong: trangThai == STATUS.DA_DUYET_LDCC ? thuTruong : null,
-          };
-          let res =
-            await this.quanLySoKhoTheKhoService.approve(
-              body,
-            );
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.quayLai();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
   setValidators() {
     if (this.formData.value.loai == '00') {
       this.formData.controls["nam"].setValidators([Validators.required]);
@@ -184,31 +107,24 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       this.formData.controls["maNhaKho"].setValidators([Validators.required]);
       this.formData.controls["maNganKho"].setValidators([Validators.required]);
       this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
       this.formData.controls["ten"].setValidators([Validators.required]);
+      this.formData.controls["so"].setValidators([Validators.required]);
       this.formData.controls["ngayMo"].setValidators([Validators.required]);
     } else {
       this.formData.controls["nam"].setValidators([Validators.required]);
       this.formData.controls["maDiemKho"].setValidators([Validators.required]);
       this.formData.controls["maNhaKho"].setValidators([Validators.required]);
       this.formData.controls["maNganKho"].setValidators([Validators.required]);
-      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
       this.formData.controls["ten"].setValidators([Validators.required]);
+      this.formData.controls["so"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoTu"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoDen"].setValidators([Validators.required]);
     }
   }
 
-
-  async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    this.helperService.removeValidators(this.formData);
-    this.setValidators();
-    this.formData.patchValue({
-      maDvi: this.userInfo.MA_DVI
-    })
-    await super.saveAndSend(body, trangThai, msg, msgSuccess);
-  }
-
-  async save() {
+  async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.removeValidators(this.formData);
     this.setValidators();
@@ -223,6 +139,11 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
     if (res) {
       if (this.idInput > 0) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        this.idInput = res.id
+        this.formData.patchValue({
+          id: res.id,
+          trangThai: res.trangThai
+        });
       } else {
         this.idInput = res.id
         this.formData.patchValue({
@@ -231,53 +152,46 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
         });
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
+      if(isGuiDuyet){
+          this.pheDuyet()
+      }
     }
   }
 
-  guiDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn gửi duyệt?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let trangThai;
-          switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO:
-            case STATUS.TU_CHOI_KT: {
-              trangThai = STATUS.CHO_DUYET_KT;
-              break;
-            }
-          }
-          let body = {
-            id: this.formData.get("id").value,
-            lyDo: null,
-            trangThai: trangThai
-          };
-          let res =
-            await this.quanLySoKhoTheKhoService.approve(
-              body
-            );
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.quayLai();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log("error: ", e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      }
-    });
+  pheDuyet() {
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      // Approve
+      case STATUS.DU_THAO:
+        trangThai = STATUS.CHO_DUYET_KT;
+        break;
+      case STATUS.CHO_DUYET_KT:
+        trangThai = STATUS.CHO_DUYET_LDCC;
+        break;
+      case STATUS.CHO_DUYET_LDCC:
+        trangThai = STATUS.DA_DUYET_LDCC;
+        break;
+      //Reject
+      case STATUS.TU_CHOI_KT:
+      case STATUS.TU_CHOI_LDCC:
+        trangThai = STATUS.CHO_DUYET_KT;
+        break;
+    }
+    this.approve(this.idInput, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
   }
 
+  tuChoi() {
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_KT:
+        trangThai = STATUS.TU_CHOI_KT;
+        break;
+      case STATUS.CHO_DUYET_LDCC:
+        trangThai = STATUS.TU_CHOI_LDCC;
+        break;
+    }
+    this.reject(this.idInput, trangThai);
+  }
 
   quayLai() {
     this._modalRef.close();
@@ -292,11 +206,13 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
+            id : data.id,
             maDiemKho: data.maDiemKho,
             maNhaKho: data.maNhaKho,
             maNganKho: data.maNganKho,
             maLoKho: data.maLoKho ? data.maLoKho : null
-          })
+          });
+          console.log(this.formData.value)
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -457,5 +373,36 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       trangThai: '00',
       tenTrangThai: 'Dự thảo',
     })
+  }
+
+  delete(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.id
+          };
+          this.service.delete(body).then(async () => {
+            this.quayLai();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 }

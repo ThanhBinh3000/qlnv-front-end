@@ -69,22 +69,21 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       id: [0],
       nam: [dayjs().get('year'), [Validators.required]],
-      tenDvi: [],
-      maDvi: [],
+      tenDvi: [, [Validators.required]],
+      maDvi: [, [Validators.required]],
       maDviNhan: [],
       tenDviNhan: [],
       tenBc: [],
-      soBc: [''],
+      soBc: ['', [Validators.required]],
       ngayBc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      soQdDcCuc: [],
-      qdDcCucId: [],
-      ngayKyQd: [],
+      soQdDcCuc: [, [Validators.required]],
+      qdDcCucId: [, [Validators.required]],
+      ngayKyQd: [, [Validators.required]],
       trangThai: ['00'],
       lyDoTuChoi: [],
       noiDung: [],
       fileDinhKems: [new Array()],
       listTenBaoCaoSelect: [["Tất cả"]]
-
     })
   }
 

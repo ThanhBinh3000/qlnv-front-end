@@ -280,66 +280,98 @@
       <thead>
       <tr>
         <th width="50px" class="text-center">STT</th>
-        <th width="">Tên hồ sơ tài liệu</th>
-        <th width="100px">Loại tài liệu</th>
+        <th>Tên hồ sơ tài liệu</th>
+        <th width="150px">Loại tài liệu</th>
         <th width="100px">Số lượng</th>
-        <th width="">Ghi chú</th>
-        <th width="">File đính kèm</th>
-        <th width="100px">Hành động</th>
+        <th>Ghi chú</th>
+        <th>File đính kèm</th>
+        <th width="100px"></th>
       </tr>
-      <tr class="search-table">
+      <tr>
         <th></th>
+        <th><input nz-input [(ngModel)]="hoSoRow.tenHoSo"/></th>
         <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" ngDefaultControl size="small"/>
-          </nz-input-group>
+          <nz-select [(ngModel)]="hoSoRow.loaiTaiLieu">
+            <nz-option nzValue="Bản gốc" nzLabel="Bản gốc"></nz-option>
+            <nz-option nzValue="Bản chụp" nzLabel="Bản chụp"></nz-option>
+          </nz-select>
+        </th>
+        <th><input nz-input [(ngModel)]="hoSoRow.soLuong"/></th>
+        <th><input nz-input [(ngModel)]="hoSoRow.ghiChu"/></th>
+        <th>
+            <nz-input-group nzSize="small" [nzAddOnAfter]="suffixIcon">
+              <input placeholder="Chọn file" [(ngModel)]="hoSoRow.fileName" nz-input disabled/>
+            </nz-input-group>
+            <ng-template #suffixIcon>
+              <i class="icon htvbdh_tcdt_tep"></i>
+              <input class="input-file" (change)="getNameFile($event)" type="file"/>
+            </ng-template>
         </th>
         <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" ngDefaultControl size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" ngDefaultControl size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" ngDefaultControl size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" ngDefaultControl size="small"/>
-          </nz-input-group>
-        </th>
-
-        <th>
-          <i class="icon htvbdh_dau-cong"></i>
-          <i class="icon htvbdh_lammoi"></i>
+          <a (click)="themHoSo()">
+            <i class="fa fa-plus" title="Thêm mới"></i>
+          </a>
+          <a (click)="nhapLaiHoSo()">
+            <i class="fa fa-refresh" title="Nhập lại"></i>
+          </a>
         </th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of dataTable">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="text-right">
-          <a>
-            <i class="icon htvbdh_tcdt_import"></i>
-          </a>
-          <a>
-            <i class="fa fa-pencil" title="Sửa"></i>
-          </a>
-          <a>
-            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-          </a>
-        </td>
+      <tr *ngFor="let item of dataTable;let i = index">
+        <ng-container *ngIf="!item.edit">
+          <td class="text-center">{{i + 1}}</td>
+          <td>{{item.tenHoSo}}</td>
+          <td>{{item.loaiTaiLieu}}</td>
+          <td>{{item.soLuong|number:globals.numberFormat}}</td>
+          <td>{{item.ghiChu}}</td>
+          <td>
+            <a nz-button nzType="link"
+               (click)="downloadFile(item.fileDinhKem[0])">
+              {{(item.fileDinhKem && item.fileDinhKem.length > 0) ? item.fileDinhKem[0].fileName : null}}
+            </a>
+          </td>
+          <td>
+            <a (click)="downloadFile(item.fileDinhKem[0])">
+              <i class="fa fa-download" title="Tải tài liệu"></i>
+            </a>
+            <a (click)="suaHoSo(i)">
+              <i class="fa fa-edit" title="Chỉnh sửa"></i>
+            </a>
+            <a (click)="xoaHoSo(i)">
+              <i class="fa fa-trash-o do" title="Xóa"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-container *ngIf="item.edit">
+          <td class="text-center">{{i + 1}}</td>
+          <td><input nz-input [(ngModel)]="hoSoRowEdit[i].tenHoSo"/></td>
+          <td>
+            <nz-select [(ngModel)]="hoSoRowEdit[i].loaiTaiLieu">
+              <nz-option nzValue="Bản gốc" nzLabel="Bản gốc"></nz-option>
+              <nz-option nzValue="Bản chụp" nzLabel="Bản chụp"></nz-option>
+            </nz-select>
+          </td>
+          <td><input nz-input [(ngModel)]="hoSoRowEdit[i].soLuong"/></td>
+          <td><input nz-input [(ngModel)]="hoSoRowEdit[i].ghiChu"/></td>
+          <th>
+            <nz-input-group nzSize="small" [nzAddOnAfter]="suffixIcon">
+              <input placeholder="Chọn file" [(ngModel)]="hoSoRowEdit[i].fileName" nz-input disabled/>
+            </nz-input-group>
+            <ng-template #suffixIcon>
+              <i class="icon htvbdh_tcdt_tep"></i>
+              <input class="input-file" (change)="getNameFileEdit(i, $event)" type="file"/>
+            </ng-template>
+          </th>
+          <td>
+            <a (click)="luuHoSo(i)">
+              <i class="fa fa-save" title="Lưu"></i>
+            </a>
+            <a (click)="huySuaHoSo()">
+              <i class="fa fa-ban do" title="Xóa"></i>
+            </a>
+          </td>
+        </ng-container>
       </tr>
       </tbody>
     </nz-table>
