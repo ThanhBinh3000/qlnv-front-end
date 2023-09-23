@@ -179,7 +179,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <!-- <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
               Số BB tịnh kho
@@ -189,6 +189,16 @@
               <nz-option *ngFor="let p of listBbTinhKho" [nzValue]="p.id" [nzLabel]="p.soBbTinhKho">
               </nz-option>
             </nz-select>
+          </nz-form-item>
+        </div> -->
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Số BB tịnh kho
+            </nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="soBbTinhKho" readonly />
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="4">
