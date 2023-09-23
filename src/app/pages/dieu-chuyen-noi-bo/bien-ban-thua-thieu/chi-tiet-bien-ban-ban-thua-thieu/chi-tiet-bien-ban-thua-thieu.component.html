@@ -197,14 +197,14 @@
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenCloaiVthh}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenDonViTinh}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenDiemKho}}</td>
-                                <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenLokho || ""}}
+                                <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenLoKho || ""}} -
                                     {{lv2.tenNganKho ||
-                                    ""}}
+                                    ""}} -
                                     {{lv2.tenNhaKho || ""}}</td>
 
                                 <td>{{lv2.tenDviNhan}}</td>
                                 <td>{{lv2.tenDiemKhoNhan}}</td>
-                                <td>{{lv2.tenLokhoNhan || ""}} {{lv2.tenNganKhoNhan || ""}}
+                                <td>{{lv2.tenLoKhoNhan || ""}} - {{lv2.tenNganKhoNhan || ""}} -
                                     {{lv2.tenNhaKhoNhan || ""}}</td>
 
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length" class="text-right">

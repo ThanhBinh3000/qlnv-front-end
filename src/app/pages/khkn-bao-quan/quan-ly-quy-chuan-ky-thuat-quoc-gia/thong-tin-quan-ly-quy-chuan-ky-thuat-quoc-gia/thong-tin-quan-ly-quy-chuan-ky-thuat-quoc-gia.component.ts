@@ -685,22 +685,25 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   async changeListVanBan() {
-    let itemVanBanSuaDoi = this.listVanBan.find(item => item.id == this.formData.value.idVanBanSuaDoi);
-    if (itemVanBanSuaDoi) {
-      const data = itemVanBanSuaDoi;
-      this.formData.patchValue({
-        soVanBanSuaDoi: itemVanBanSuaDoi.soVanBan,
-      });
-      if (itemVanBanSuaDoi.loaiVthh) {
-        this.listOfTagOptions = data.loaiVthh.split(',');
+    let res = await this.khCnQuyChuanKyThuat.getDetail(this.formData.value.idVanBanSuaDoi);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let itemVanBanSuaDoi = res.data;
+      if (itemVanBanSuaDoi) {
+        const data = itemVanBanSuaDoi;
+        this.formData.patchValue({
+          soVanBanSuaDoi: itemVanBanSuaDoi.soVanBan,
+        });
+        if (itemVanBanSuaDoi.loaiVthh) {
+          this.listOfTagOptions = data.loaiVthh.split(',');
+        }
+        if (itemVanBanSuaDoi.listTenLoaiVthh) {
+          this.listLoaiVthh = itemVanBanSuaDoi.listTenLoaiVthh.split(',');
+        }
+        this.dataTable = itemVanBanSuaDoi.tieuChuanKyThuat;
+        this.dataTableView = cloneDeep(this.dataTable);
+        this.updateEditCache();
+        await this.getDsChiTieu(this.listOfTagOptions);
       }
-      if (itemVanBanSuaDoi.listTenLoaiVthh) {
-        this.listLoaiVthh = itemVanBanSuaDoi.listTenLoaiVthh.split(',');
-      }
-      this.dataTable = itemVanBanSuaDoi.tieuChuanKyThuat;
-      this.dataTableView = cloneDeep(this.dataTable);
-      this.updateEditCache();
-      await this.getDsChiTieu(this.listOfTagOptions);
     }
   }
 
@@ -715,29 +718,32 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       nzFooter: null,
       nzComponentParams: {},
     });
-    modalQD.afterClose.subscribe((data) => {
+    modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        debugger;
-        this.listOfTagOptions = [];
-        this.listLoaiVthh = [];
-        this.dataTable = [];
-        this.formData.patchValue({
-          soVanBanThayThe: data.map(o => o.soVanBan).join(', '),
-          idVanBanThayThe: data.map(o => o.id).join(', '),
-        });
-        data.forEach(dt => {
-          if (dt.loaiVthh) {
-            this.listOfTagOptions = [...this.listOfTagOptions, ...dt.loaiVthh.split(',')];
-            this.listOfTagOptions = [...new Map(this.listOfTagOptions.map(item => [item, item])).values()];
-          }
-          if (dt.listTenLoaiVthh) {
-            this.listLoaiVthh = [...this.listLoaiVthh, ...dt.listTenLoaiVthh.split(',')];
-          }
-          this.dataTable = [...this.dataTable, ...dt.tieuChuanKyThuat];
-        });
-        this.dataTableView = cloneDeep(this.dataTable);
-        this.getDsChiTieu(this.listOfTagOptions);
-        this.updateEditCache();
+        let res = await this.khCnQuyChuanKyThuat.getDetail(data[0].id);
+        if(res.msg == MESSAGE.SUCCESS) {
+          let detail = [res.data];
+          this.listOfTagOptions = [];
+          this.listLoaiVthh = [];
+          this.dataTable = [];
+          this.formData.patchValue({
+            soVanBanThayThe: detail.map(o => o.soVanBan).join(', '),
+            idVanBanThayThe: detail.map(o => o.id).join(', '),
+          });
+          detail.forEach(dt => {
+            if (dt.loaiVthh) {
+              this.listOfTagOptions = [...this.listOfTagOptions, ...dt.loaiVthh.split(',')];
+              this.listOfTagOptions = [...new Map(this.listOfTagOptions.map(item => [item, item])).values()];
+            }
+            if (dt.listTenLoaiVthh) {
+              this.listLoaiVthh = [...this.listLoaiVthh, ...dt.listTenLoaiVthh.split(',')];
+            }
+            this.dataTable = [...this.dataTable, ...dt.tieuChuanKyThuat];
+          });
+          this.dataTableView = cloneDeep(this.dataTable);
+          this.getDsChiTieu(this.listOfTagOptions);
+          this.updateEditCache();
+        }
       }
     });
 

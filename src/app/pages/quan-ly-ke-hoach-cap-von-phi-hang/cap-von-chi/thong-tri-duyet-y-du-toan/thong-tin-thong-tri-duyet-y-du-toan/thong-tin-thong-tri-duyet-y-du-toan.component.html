@@ -81,7 +81,7 @@
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
               <nz-select formControlName='soDnCapVon' nzAllowClear [nzDisabled]='isView'
                          (ngModelChange)='changeMaTongHop()' nzAllowClear>
-                <nz-option *ngFor='let p of listTongHop' [nzValue]='p.id' [nzLabel]='p.maTongHop'></nz-option>
+                <nz-option *ngFor='let p of listTongHop' [nzValue]='p.id' [nzLabel]='p.id'></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>

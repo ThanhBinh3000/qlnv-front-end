@@ -178,7 +178,7 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
         break;
       }
       case this.STATUS.CHO_DUYET_LDV: {
-        if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_BANHANH")) {
+        if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU")) {
           return false;
         } else if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_XEM")) {
           return true;
