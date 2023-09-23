@@ -205,7 +205,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThaiId: STATUS.HOAN_THANH_CAP_NHAT,
+            trangThaiId: STATUS.DA_HOAN_THANH,
           };
 
           let res = await this.deNghiCapPhiBoNganhService.updateStatus(body);

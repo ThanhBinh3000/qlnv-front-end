@@ -269,7 +269,7 @@
                                 <a (click)="openModalCreate(soKho.id, true)">
                                   <i class="fa fa-eye"></i>
                                 </a>
-                                <a (click)="openModalCreate(null, false)">
+                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="openModalCreate(soKho.id, false,true)">
                                   <i class="fa fa-plus"></i>
                                 </a>
                                 <a *ngIf="soKho.trangThai == STATUS.DU_THAO" (click)="delete(soKho)">

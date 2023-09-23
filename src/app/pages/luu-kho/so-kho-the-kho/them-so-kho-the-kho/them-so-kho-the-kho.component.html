@@ -474,7 +474,7 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <button type="button" class="btn btn-do"
+      <button type="button" class="btn btn-do" *ngIf="formData.value.trangThai == STATUS.DU_THAO"
               (click)="delete(this.formData.value)">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
@@ -496,9 +496,9 @@
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC">
+              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC || formData.value.trangThai == STATUS.DA_DUYET_LDCC">
         <i class="icon htvbdh_dakyduyet"></i>
-        <span>Duyệt</span>
+        <span>{{ formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'Đóng sổ' : 'Duyệt'}}</span>
       </button>
       <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>

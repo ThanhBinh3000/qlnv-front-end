@@ -82,7 +82,9 @@ export enum STATUS {
   DA_LAP = '80',
   CHUATAO_KH = '81',
   DADUTHAO_KH = '82',
-  DAGUIDUYET_KH = '83'
+  DAGUIDUYET_KH = '83',
+
+  DA_DONG = '85'
 }
 
 export enum LoaiTaiLieu {
