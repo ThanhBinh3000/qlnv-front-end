@@ -507,7 +507,8 @@
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC || formData.value.trangThai == STATUS.DA_DUYET_LDCC">
+              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+              || ( formData.value.trangThai == STATUS.DA_DUYET_LDCC && formData.value.loai == '00')">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>{{ formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'Đóng sổ' : 'Duyệt'}}</span>
       </button>
