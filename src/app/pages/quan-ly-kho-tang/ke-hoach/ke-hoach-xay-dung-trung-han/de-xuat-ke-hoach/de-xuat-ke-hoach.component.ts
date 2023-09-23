@@ -181,6 +181,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     try {
       this.page = event;
       this.spinner.hide();
+      await this.search();
     } catch (e) {
       console.log("error: ", e);
       this.spinner.hide();
@@ -224,6 +225,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     try {
       this.pageSize = event;
       this.spinner.hide();
+      await this.search();
     } catch (e) {
       console.log("error: ", e);
       this.spinner.hide();

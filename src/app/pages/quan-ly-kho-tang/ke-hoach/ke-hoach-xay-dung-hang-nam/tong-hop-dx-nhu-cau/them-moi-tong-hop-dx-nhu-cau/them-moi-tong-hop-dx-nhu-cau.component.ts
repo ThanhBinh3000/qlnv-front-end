@@ -77,7 +77,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       namKetThuc: [null],
       ngayTaoTt: [null],
       tgTongHop: [null],
-      namKeHoach: [dayjs().get("year")],
+      namKeHoach: [null],
       noiDung: [null],
       maToTrinh: [null],
       soQuyetDinh: [null],
@@ -125,6 +125,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namBatDau: data.namBatDau,
+        namKeHoach: data.namKeHoach,
         namKetThuc: data.namKetThuc,
         ngayTaoTt: data.ngayTaoTt,
         ngayKyQd: data.ngayKyQd,
