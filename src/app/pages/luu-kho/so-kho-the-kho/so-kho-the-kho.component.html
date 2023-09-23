@@ -269,7 +269,7 @@
                                 <a (click)="openModalCreate(soKho.id, true)">
                                   <i class="fa fa-eye"></i>
                                 </a>
-                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="openModalCreate(soKho.id, false,true)">
+                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="openModalCreate(null, false,true,soKho.id)">
                                   <i class="fa fa-plus"></i>
                                 </a>
                                 <a *ngIf="soKho.trangThai == STATUS.DU_THAO" (click)="delete(soKho)">
@@ -288,8 +288,8 @@
                                   <td></td>
                                   <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(soKho.idVirtual)"
                                     (nzExpandChange)="onExpandChange(theKho.idVirtual, $event)">{{theKho.ten}}</td>
-                                  <td class="bg-parent2 font-weight-bold">{{theKho.ngayMo | date : 'dd/MM/yyyy' }}</td>
-                                  <td class="bg-parent2 font-weight-bold">{{theKho.ngayDong | date : 'dd/MM/yyyy' }}
+                                  <td class="bg-parent2 font-weight-bold">{{theKho.ngayTaoTu | date : 'dd/MM/yyyy' }}</td>
+                                  <td class="bg-parent2 font-weight-bold">{{theKho.ngayTaoDen | date : 'dd/MM/yyyy' }}
                                   </td>
                                   <td class="bg-parent2 font-weight-bold"></td>
                                   <td class="bg-parent2 font-weight-bold"></td>
@@ -301,7 +301,7 @@
                                   <td class="bg-parent2 font-weight-bold"></td>
                                   <td class="bg-parent2 font-weight-bold"></td>
                                   <td class="bg-parent2 font-weight-bold"></td>
-                                  <td class="bg-parent2 font-weight-bold"></td>
+                                  <td class="bg-parent2 font-weight-bold">{{theKho.tenTrangThai}}</td>
                                   <td class="bg-parent2 font-weight-bold" nzRight>
                                     <a (click)="openModalCreate(theKho.id, true)">
                                       <i class="fa fa-eye"></i>
