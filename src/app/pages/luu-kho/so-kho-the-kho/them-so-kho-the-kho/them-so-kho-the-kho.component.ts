@@ -26,6 +26,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   @Output('close') onClose = new EventEmitter<any>();
   @Input() loai: string;
   @Input() idInput: number;
+  @Input() idParentInput: number;
   @Input() isView: any;
   @Input() isThemTheKho : boolean;
 
@@ -37,6 +38,8 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   dsNhaKho = [];
   dsNganKho = [];
   dsLoKho = [];
+
+  dsSoKho = [];
   amount = AMOUNT;
 
   constructor(
@@ -55,6 +58,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
+      idSoKho: [null],
       nam: [dayjs().get('year')],
       nguoiLap: [null],
       maDvi: [null],
@@ -83,7 +87,8 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       ngayTaoDen: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
-      loai: ['00']
+      loai: ['00'],
+      ngayMoSoKho : []
     });
   }
 
@@ -92,7 +97,11 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       await this.loadDiemKho();
       if (this.idInput > 0) {
         await this.getDetail(this.idInput)
-      } else {
+      }
+      else if(this.idParentInput > 0) {
+        await this.getDetailParent(this.idParentInput)
+      }
+      else {
         this.initForm();
       }
     } catch (e) {
@@ -209,28 +218,47 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          if(this.isThemTheKho){
-            this.helperService.bidingDataInFormGroup(this.formData, data);
-            this.formData.patchValue({
-              loai : this.isThemTheKho ? '01' : '00',
-              nguoiLap: this.userInfo.TEN_DAY_DU,
-              tenDvi: this.userInfo.TEN_DVI,
-              maDiemKho: data.maDiemKho,
-              maNhaKho: data.maNhaKho,
-              maNganKho: data.maNganKho,
-              maLoKho: data.maLoKho ? data.maLoKho : null,
-            });
-          }else{
-            this.helperService.bidingDataInFormGroup(this.formData, data);
-            this.formData.patchValue({
-              id : data.id,
-              maDiemKho: data.maDiemKho,
-              maNhaKho: data.maNhaKho,
-              maNganKho: data.maNganKho,
-              maLoKho: data.maLoKho ? data.maLoKho : null,
-              trangThai : data.trangThai
-            });
-          }
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            loai : data.loai,
+            id : data.id,
+            ten : data.ten,
+            maDiemKho: data.maDiemKho,
+            maNhaKho: data.maNhaKho,
+            maNganKho: data.maNganKho,
+            maLoKho: data.maLoKho ? data.maLoKho : null,
+            trangThai : data.trangThai,
+            ngayTaoTu : data.ngayTaoTu,
+            ngayTaoDen : data.ngayTaoDen
+          });
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async getDetailParent(id) {
+    this.spinner.show();
+    try {
+      let res = await this.quanLySoKhoTheKhoService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const data = res.data;
+          this.formData.patchValue({
+            loai : '01',
+            idSoKho : data.id,
+            maDiemKho: data.maDiemKho,
+            maNhaKho: data.maNhaKho,
+            maNganKho: data.maNganKho,
+            maLoKho: data.maLoKho ? data.maLoKho : null,
+          });
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -346,7 +374,26 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
       });
+      if(this.formData.value.loai == '01'){
+        let body = {
+          trangThai : this.STATUS.DA_DUYET_LDCC,
+          maLoKho : this.formData.value.maLoKho,
+          maNganKho : this.formData.value.maNganKho,
+          nam : this.formData.value.nam
+        }
+        this.quanLySoKhoTheKhoService.loadDsSoKho(body).then((res)=>{
+          if(res.data){
+            this.dsSoKho = res.data;
+          }
+        })
+      }
     }
+  }
+
+  onChangeSoKho($event){
+    console.log($event)
+    const dataSoKho = this.dsSoKho.find(item => item.id == $event);
+    console.log(dataSoKho)
   }
 
   async loadDsNhapXuat() {

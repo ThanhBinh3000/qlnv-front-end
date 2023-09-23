@@ -112,7 +112,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-  openModalCreate(id: number, isView: boolean,isThemTheKho?:boolean) {
+  openModalCreate(id: number, isView: boolean,isThemTheKho?:boolean,idParent? : number) {
     const modalCreate = this.modal.create({
       nzTitle: !id && isView == false ? 'Tạo sổ kho/thẻ kho' : id > 0 && isView == true ? 'Thông tin sổ kho/thẻ kho' : 'Chỉnh sửa sổ kho/thẻ kho',
       nzContent: ThemSoKhoTheKhoComponent,
@@ -125,6 +125,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
         idInput: id,
         isView: isView,
         isThemTheKho : isThemTheKho,
+        idParentInput : idParent
       },
     });
     modalCreate.afterClose.subscribe((data) => {
