@@ -154,6 +154,8 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       tenKtvBaoQuan: this.userInfo.TEN_DAY_DU,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự Thảo',
+      ketQuaNiemPhong: true,
+      loaiBienBan: 'LBGM',
     });
   }
 
@@ -220,7 +222,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       }
       this.dataQuyetDinh = data.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
       const modalQD = this.modal.create({
-        nzTitle: 'DANH SÁCH HỢP ĐỒNG BÁN ĐẤU GIÁ',
+        nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
         nzContent: DialogTableSelectionComponent,
         nzMaskClosable: false,
         nzClosable: false,
@@ -327,7 +329,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     this.loadDanhSachBbLm = data;
   }
 
-  openDialogKho() {
+  async openDialogKho() {
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH ĐỊA ĐIỂM XUẤT HÀNG',
       nzContent: DialogTableSelectionComponent,
@@ -346,6 +348,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         this.formData.patchValue({
           maDiemKho: data.maDiemKho,
           tenDiemKho: data.tenDiemKho,
+          diaDiemKho: data.diaDiemKho,
           maNhaKho: data.maNhaKho,
           tenNhaKho: data.tenNhaKho,
           maNganKho: data.maNganKho,
@@ -434,7 +437,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
           value: item.id,
           chiSoCl: item.mucYeuCauXuat,
           phuongPhap: item.phuongPhapXd,
-          checked: false,
+          checked: true,
           type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
         }));
         this.formData.patchValue({

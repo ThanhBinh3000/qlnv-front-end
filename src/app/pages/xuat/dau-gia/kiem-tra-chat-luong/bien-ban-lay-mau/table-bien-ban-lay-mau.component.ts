@@ -81,7 +81,6 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     }
   }
 
-
   async search(): Promise<void> {
     await this.spinner.show();
     this.formData.patchValue({
