@@ -74,24 +74,21 @@
       <h3 class="text-uppercase">DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
-                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
-                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_EXP')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <!--        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"-->
-        <!--                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM') && userService.isChiCuc()">-->
-        <!--          <i class="icon htvbdh_tcdt_tao-qd"></i>-->
-        <!--          <span>Thêm</span>-->
-        <!--        </button>-->
-        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)">
+        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM') && userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
+
       </div>
     </div>
 
@@ -165,21 +162,24 @@
                 <td>{{lv1.tenTrangThai}}</td>
                 <td>
                   <a (click)="redirectDetail(lv1.id, true)"
-                     *ngIf="checkStatusPermission(lv1,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XEM')">
+                     *ngIf="checkStatusPermission(lv1,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM') &&
+                     !(this.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM'))&&
+                     !(this.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCCUC'))
+                  ">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
                   <a
-                    *ngIf="(this.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM'))"
+                    *ngIf="(this.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM'))"
                     (click)="redirectDetail(lv1.id, false)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a
-                    *ngIf="(this.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC'))"
+                    *ngIf="(this.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCCUC'))"
                     (click)="redirectDetail(lv1.id, true)">
                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                   </a>
                   <a
-                    *ngIf="this.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')"
+                    *ngIf="this.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA')"
                     (click)="delete(lv1)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
