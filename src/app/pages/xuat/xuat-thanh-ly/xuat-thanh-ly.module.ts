@@ -24,36 +24,27 @@ import {
 } from "./thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component";
 import { HoSoThanhLyComponent } from './ho-so-thanh-ly/ho-so-thanh-ly.component';
 import { ChiTietHoSoThanhLyComponent } from './ho-so-thanh-ly/chi-tiet-ho-so-thanh-ly/chi-tiet-ho-so-thanh-ly.component';
-import { ToChucThucHienThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/to-chuc-thuc-hien-thanh-ly.component';
-import {
-  ThongTinDauGiaThanhLyComponent
-} from './to-chuc-thuc-hien-thanh-ly/thong-tin-dau-gia-thanh-ly/thong-tin-dau-gia-thanh-ly.component';
+
 import {
   QuyetDinhPheDuyetKqBdgThanhLyComponent
-} from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly.component';
-import {
-  ChiTietThongTinDauGiaThanhLyComponent
-} from "./to-chuc-thuc-hien-thanh-ly/thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly.component";
-import {
-  ThongTinChiTietDauGiaThanhLyComponent
-} from "./to-chuc-thuc-hien-thanh-ly/thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly/thong-tin-dau-gia-thanh-ly/thong-tin-chi-tiet-dau-gia-thanh-ly.component";
-import { HopDongThanhLyComponent } from './to-chuc-thuc-hien-thanh-ly/hop-dong-thanh-ly/hop-dong-thanh-ly.component';
+} from './to-chuc-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly.component';
+import { HopDongThanhLyComponent } from './to-chuc-thanh-ly/hop-dong-thanh-ly/hop-dong-thanh-ly.component';
 import {
   ChiTietQuyetDinhPheDuyetBdgThanhLyComponent
-} from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly/chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly/chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly.component';
+} from './to-chuc-thanh-ly/quyet-dinh-phe-duyet-kq-bdg-thanh-ly/chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly/chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly.component';
 import { HopDongModule } from "../dau-gia/hop-dong/hop-dong.module";
 import {
   QuanLyHopDongThanhLyComponent
-} from './to-chuc-thuc-hien-thanh-ly/hop-dong-thanh-ly/quan-ly-hop-dong-thanh-ly/quan-ly-hop-dong-thanh-ly.component';
+} from './to-chuc-thanh-ly/hop-dong-thanh-ly/quan-ly-hop-dong-thanh-ly/quan-ly-hop-dong-thanh-ly.component';
 import {
   ThongTinHopDongThanhLyComponent
-} from './to-chuc-thuc-hien-thanh-ly/hop-dong-thanh-ly/thong-tin-hop-dong-thanh-ly/thong-tin-hop-dong-thanh-ly.component';
+} from './to-chuc-thanh-ly/hop-dong-thanh-ly/thong-tin-hop-dong-thanh-ly/thong-tin-hop-dong-thanh-ly.component';
 import {
   QuyetDinhGiaoNhiemVuThanhLyComponent
-} from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly.component';
+} from './to-chuc-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly.component';
 import {
   ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent
-} from './to-chuc-thuc-hien-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component';
+} from './to-chuc-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component';
 import { ThucHienXuatThanhLyComponent } from './thuc-hien-xuat-thanh-ly/thuc-hien-xuat-thanh-ly.component';
 import { KiemTraChatLuongComponent } from './thuc-hien-xuat-thanh-ly/kiem-tra-chat-luong/kiem-tra-chat-luong.component';
 import { XuatKhoComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/xuat-kho.component';
@@ -97,11 +88,7 @@ import { XuatHangThanhLyModule } from './xuat-hang-thanh-ly/xuat-hang-thanh-ly.m
     ThemMoiThongBaoKetQuaComponent,
     HoSoThanhLyComponent,
     ChiTietHoSoThanhLyComponent,
-    ToChucThucHienThanhLyComponent,
-    ThongTinDauGiaThanhLyComponent,
     QuyetDinhPheDuyetKqBdgThanhLyComponent,
-    ChiTietThongTinDauGiaThanhLyComponent,
-    ThongTinChiTietDauGiaThanhLyComponent,
     HopDongThanhLyComponent,
     QuyetDinhPheDuyetKqBdgThanhLyComponent,
     ChiTietQuyetDinhPheDuyetBdgThanhLyComponent,

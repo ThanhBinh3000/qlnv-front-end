@@ -18,9 +18,6 @@ import {
 import {
   BaoCaoKqTieuHuyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/BaoCaoKqTieuHuy.service";
-import {
-  BaoCaoKqDtl
-} from "../../../xuat-thanh-ly/bao-cao-ket-qua/them-moi-bao-ket-qua-thanh-ly/them-moi-bao-cao-ket-qua-thanh-ly.component";
 
 export class QuyetDinhDtl {
   idVirtual: string;
@@ -92,7 +89,7 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base2Component implemen
       tenDvi: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKem: [new Array<FileDinhKem>()],
-      baoCaoKqDtl: [new Array<BaoCaoKqDtl>()],
+      baoCaoKqDtl: [],
     });
 
   }

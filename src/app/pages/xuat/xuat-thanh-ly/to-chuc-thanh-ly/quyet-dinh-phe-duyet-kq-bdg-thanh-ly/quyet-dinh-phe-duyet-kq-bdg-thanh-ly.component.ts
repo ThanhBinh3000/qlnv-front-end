@@ -1,29 +1,30 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
+import {StorageService} from "src/app/services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../services/danhmuc.service";
-import {MESSAGE} from "../../../../constants/message";
+import {MESSAGE} from 'src/app/constants/message';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {
+  QuyetDinhPheDuyetKetQuaService
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhPheDuyetKetQua.service";
+import {XuatThanhLyComponent} from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
+import {CHUC_NANG} from "src/app/constants/status";
 import dayjs from "dayjs";
-import {XuatThanhLyComponent} from "../xuat-thanh-ly.component";
-import {CHUC_NANG} from "../../../../constants/status";
-import {BaoCaoKqThanhLyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BaoCaoKqThanhLy.service";
+import {Base3Component} from "../../../../../components/base3/base3.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {
-  ThongBaoKqThanhLyService
-} from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/ThongBaoKqThanhLy.service";
-import {Base3Component} from "../../../../components/base3/base3.component";
+  QuyetDinhThanhLyService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
 
 @Component({
-  selector: 'app-bao-cao-ket-qua-thanh-ly',
-  templateUrl: './bao-cao-ket-qua-thanh-ly.component.html',
-  styleUrls: ['./bao-cao-ket-qua-thanh-ly.component.scss']
+  selector: 'app-quyet-dinh-phe-duyet-kq-bdg-thanh-ly',
+  templateUrl: './quyet-dinh-phe-duyet-kq-bdg-thanh-ly.component.html',
+  styleUrls: ['./quyet-dinh-phe-duyet-kq-bdg-thanh-ly.component.scss']
 })
-export class BaoCaoKetQuaThanhLyComponent extends Base3Component implements OnInit {
-  listTrangThai: any[] = [];
+export class QuyetDinhPheDuyetKqBdgThanhLyComponent extends Base3Component implements OnInit {
 
   constructor(
     httpClient: HttpClient,
@@ -33,10 +34,10 @@ export class BaoCaoKetQuaThanhLyComponent extends Base3Component implements OnIn
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private _service: BaoCaoKqThanhLyService,
+    private _service: QuyetDinhPheDuyetKetQuaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
-    this.defaultURL = 'xuat/xuat-thanh-ly/bao-cao-kq'
+    this.defaultURL = '/xuat/xuat-thanh-ly/to-chuc/qd-pd-kq'
     this.formData = this.fb.group({
       nam: null,
       maSc: null,
@@ -83,4 +84,5 @@ export class BaoCaoKetQuaThanhLyComponent extends Base3Component implements OnIn
   ngOnInit(): void {
     this.search();
   }
+
 }

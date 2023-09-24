@@ -8,50 +8,41 @@ const routes: Routes = [
     path: '',
     component: XuatHangThanhLyComponent,
     children: [
-      // {
-      //   path: '',
-      //   redirectTo: 'giao-nv-xh',
-      //   pathMatch: 'full',
-      // },
-      // //Region quyết định giao nv xuất hàng
-      // {
-      //   path: 'giao-nv-xh',
-      //   component: QuyetDinhXhComponent
-      // },
-      // {
-      //   path: 'giao-nv-xh/them-moi',
-      //   component: ThemMoiQdxhComponent
-      // },
-      // {
-      //   path: 'giao-nv-xh/chi-tiet/:id',
-      //   component: ThemMoiQdxhComponent
-      // },
-      // // Region Phiếu xuất kho
-      // {
-      //   path: 'phieu-xuat-kho',
-      //   component: PhieuXuatKhoComponent
-      // },
-      // {
-      //   path: 'phieu-xuat-kho/them-moi',
-      //   component: ThemMoiPxkComponent
-      // },
-      // {
-      //   path: 'phieu-xuat-kho/chi-tiet/:id',
-      //   component: ThemMoiPxkComponent
-      // },
-      // // Region Bảng kê
-      // {
-      //   path: 'bang-ke',
-      //   component: BangKeComponent
-      // },
-      // {
-      //   path: 'bang-ke/them-moi',
-      //   component: ThemMoiBkComponent
-      // },
-      // {
-      //   path: 'bang-ke/chi-tiet/:id',
-      //   component: ThemMoiBkComponent
-      // },
+      {
+        path: '',
+        redirectTo: 'kiem-tra-lt',
+        pathMatch: 'full',
+      },
+      // Region tổ chức thanh lý
+      {
+        path: 'kiem-tra-lt',
+        loadChildren: () =>
+          import(
+            '../xuat-hang-thanh-ly/kiem-tra/kiem-tra.module'
+            ).then((m) => m.KiemTraModule),
+      },
+      {
+        path: 'kiem-tra-vt',
+        loadChildren: () =>
+          import(
+            '../xuat-hang-thanh-ly/kiem-tra/kiem-tra.module'
+            ).then((m) => m.KiemTraModule),
+      },
+      // Region xuất hàng thanh lý
+      {
+        path: 'xuat-kho-lt',
+        loadChildren: () =>
+          import(
+            '../xuat-hang-thanh-ly/xuat-kho/xuat-kho.module'
+            ).then((m) => m.XuatKhoModule),
+      },
+      {
+        path: 'xuat-kho-vt',
+        loadChildren: () =>
+          import(
+            '../xuat-hang-thanh-ly/xuat-kho/xuat-kho.module'
+            ).then((m) => m.XuatKhoModule),
+      },
     ]
   }
 ];

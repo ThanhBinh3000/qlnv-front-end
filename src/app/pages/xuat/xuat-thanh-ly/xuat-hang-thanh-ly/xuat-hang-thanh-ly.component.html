@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level1">
   <ul nz-menu nzMode="horizontal" id="mainTongCuc">
     <ng-container *ngFor="let route of routes">
       <li *ngIf="userService.isAccessPermisson(route.accessPermisson)" nz-menu-item
