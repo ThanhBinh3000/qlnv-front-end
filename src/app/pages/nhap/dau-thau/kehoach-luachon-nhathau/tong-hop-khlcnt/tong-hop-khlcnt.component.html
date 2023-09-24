@@ -207,7 +207,11 @@
                 (click)="taoQdinh(data)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
-              <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'))"
+              <a *ngIf=" ( data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai == STATUS.DA_BAN_HANH_QD ) && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')"
+                 (click)="redirectQd(data)">
+                <i class="icon htvbdh_tcdt_tao-qd"></i>
+              </a>
+              <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD || data.trangThai== STATUS.DA_DU_THAO_QD) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'))"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>

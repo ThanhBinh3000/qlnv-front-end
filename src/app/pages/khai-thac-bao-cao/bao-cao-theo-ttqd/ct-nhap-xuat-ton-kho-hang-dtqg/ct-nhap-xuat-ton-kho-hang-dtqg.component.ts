@@ -105,7 +105,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
       body.fileName = "bc_ct_nhap_xuat_ton_kho_hang_dtqg_145.jrxml";
       body.tenBaoCao = "Báo cáo chi tiết nhập, xuất, tồn kho hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.nhapXuatTonCt(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -126,7 +126,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
       body.fileName = "bc_ct_nhap_xuat_ton_kho_hang_dtqg_145.jrxml";
       body.tenBaoCao = "Báo cáo chi tiết nhập, xuất, tồn kho hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.nhapXuatTonCt(body).then(async s => {
         this.excelBlob = s;
         saveAs(this.excelBlob, "bc_ct_nhap_xuat_ton_kho_hang_dtqg_145.xlsx");
       });

@@ -90,7 +90,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
       body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.khTongHopNhapXuat(body).then(async s => {
         this.excelBlob = s;
         saveAs(this.excelBlob, "bc_kh_tong_hop_nhap_xuat_hang_dtqg.xlsx");
       });
@@ -114,7 +114,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
       body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.khTongHopNhapXuat(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
