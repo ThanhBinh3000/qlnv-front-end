@@ -241,7 +241,7 @@
                     <td>{{lv2.tenTrangThai}}</td>
                     <td>
                       <a (click)="redirectDetail(lv2.id, true)"
-                         *ngIf="(checkStatusPermission(lv2,CHUC_NANG.XEM) &&
+                         *ngIf="checkStatusPermission(lv2,CHUC_NANG.XEM) &&
                           !(this.checkStatusPermission(lv2,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM'))&&
                           !(this.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC')) &&
                           userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_VT_BBBGM_XEM')">
