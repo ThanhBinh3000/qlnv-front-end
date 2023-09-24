@@ -53,6 +53,12 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
   tongKinhPhiXuatDcTt: number = 0;
   tongKinhPhiNhapDcTt: number = 0;
   duocLapBBThuaThieu: boolean = false;
+  maBc: string;
+  ObKetQua: { [key: string]: string } = {
+    [STATUS.CHUA_THUC_HIEN]: "Chưa thực hiện",
+    [STATUS.DANG_THUC_HIEN]: "Đang thực hiện",
+    [STATUS.DA_HOAN_THANH]: "Hoàn thành"
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -73,7 +79,7 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       maDvi: [, [Validators.required]],
       maDviNhan: [],
       tenDviNhan: [],
-      tenBc: [],
+      tenBc: [, [Validators.required]],
       soBc: ['', [Validators.required]],
       ngayBc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       soQdDcCuc: [, [Validators.required]],
@@ -84,11 +90,17 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       noiDung: [],
       fileDinhKems: [new Array()],
       listTenBaoCaoSelect: [["Tất cả"]]
-    })
+    });
+    this.maBc = "/BC-" + this.userInfo.DON_VI.tenVietTat;
   }
 
   async ngOnInit(): Promise<void> {
     try {
+      if (this.loaiBc !== "CHI_CUC") {
+        this.formData.controls["soQdDcCuc"].clearValidators();
+        this.formData.controls["qdDcCucId"].clearValidators();
+        this.formData.controls["ngayKyQd"].clearValidators();
+      }
       this.spinner.show();
       await this.loadDetail(this.idInput)
     } catch (error) {
@@ -103,7 +115,8 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       this.allChecked = false;
       const res = await this.baoCaoDieuChuyenService.getDetail(id);
       if (res.msg === MESSAGE.SUCCESS) {
-        this.formData.patchValue({ ...res.data });
+        this.formData.patchValue({ ...res.data, soBc: typeof res.data.soBc === "string" || res.data.soBc instanceof String ? res.data.soBc.split("/")[0] : "" });
+        this.maBc = typeof res.data.soBc === "string" || res.data.soBc instanceof String ? "/" + res.data.soBc.split("/")[1] : "";
         this.danhSachKetQua = res.data.danhSachKetQua;
         this.idsChiCuc = res.data.idsChiCuc && Array.isArray(res.data.idsChiCuc.split(",")) ? res.data.idsChiCuc.split(",").map(f => Number(f)) : []
         if (this.loaiBc === "CUC") {
@@ -221,18 +234,28 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       this.getThongTinhNhapXuatHangHoa(this.formData.value.soQdDcCuc)
     }
   };
+  checkTinhTrangThuaThieu(data: { [key: string]: any }): boolean {
+    if ((data.slXuatTt - data.slDieuChuyenQd) === 0 && (data.slNhapTt - data.slXuatTt) === 0) {
+      return false
+    }
+    return true
+  }
   async getThongTinhNhapXuatHangHoa(soQdinhCuc: string) {
     try {
       this.spinner.show()
       let res;
       if (this.loaiBc === "CHI_CUC") {
         res = await this.baoCaoDieuChuyenService.getThongTinNhapXuatChiCuc({ soQdinhCuc });
+        if (res.msg === MESSAGE.SUCCESS) {
+          this.danhSachKetQua = res.data.map(f => ({ ...f, tinhTrang: this.checkTinhTrangThuaThieu(f) }));
+          this.buildTableView();
+        }
       } else if (this.loaiBc === "CUC") {
         res = await this.baoCaoDieuChuyenService.getThongTinNhapXuatCuc({ soQdinhCuc });
-      }
-      if (res.msg === MESSAGE.SUCCESS) {
-        this.danhSachKetQua = cloneDeep(res.data);
-        this.buildTableView();
+        if (res.msg === MESSAGE.SUCCESS) {
+          this.danhSachKetQua = cloneDeep(res.data);
+          this.buildTableView();
+        }
       }
     } catch (error) {
       console.log("e", error)
@@ -342,7 +365,6 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
     this.tongKinhPhiXuatDcTt = tongKinhPhiXuatDcTt;
     this.tongKinhPhiNhapDcTt = tongKinhPhiNhapDcTt;
     this.dataView = cloneDeep(dataView);
-    console.log("dataView", this.dataView)
     this.checkThuaThieu(this.danhSachKetQua)
   }
   async save(isGuiDuyet: boolean): Promise<void> {
@@ -353,12 +375,14 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       body.danhSachKetQua = this.danhSachKetQua;
       body.listTenBaoCaoSelect = undefined;
       body.type = this.loaiBc;
+      body.soBc = this.formData.value.soBc + this.maBc;
       if (this.loaiBc === "CUC") {
         body.idsChiCuc = this.allChecked ? this.listBaoCaoChiCuc.map(f => f.id).join(",") : this.listBaoCaoChiCuc.filter(f => f.checked).map(f => f.id).join(",");
       }
-      let data = await this.createUpdate(body);
+      let data = await this.createUpdate(body, null, isGuiDuyet);
       if (!data) return;
-      this.formData.patchValue({ id: data.id, soBc: data.soBc, trangThai: data.trangThai });
+      this.formData.patchValue({ id: data.id, soBc: typeof data.soBc === "string" || data.soBc instanceof String ? data.soBc.split("/")[0] : "", trangThai: data.trangThai });
+      this.maBc = typeof data.soBc === "string" || data.soBc instanceof String ? "/" + data.soBc.split("/")[1] : "";
       this.idsChiCuc = data.idsChiCuc && Array.isArray(data.idsChiCuc.split(",")) ? data.idsChiCuc.split(",").map(f => Number(f)) : [];
       if (isGuiDuyet) {
         if (this.loaiBc === 'CUC') {
@@ -521,10 +545,11 @@ export class ThemMoiBaoCaoComponent extends Base2Component implements OnInit {
       soQdDcCuc: this.formData.value.soQdDcCuc,
       qdDcCucId: this.formData.value.qdDcCucId,
       ngayKyQd: this.formData.value.ngayKyQd,
-      soBc: this.formData.value.soBc,
+      soBc: this.formData.value.soBc + this.maBc,
       tenBc: this.formData.value.tenBc,
       ngayBc: this.formData.value.ngayBc,
-      bcKetQuaDcId: this.formData.value.id
+      bcKetQuaDcId: this.formData.value.id,
+      maDviNhan: this.formData.value.maDviNhan,
     };
     this.dataService.changeData(obj);
     this.router.navigate(['dieu-chuyen-noi-bo/bien-ban-thua-thieu']);

@@ -4,15 +4,14 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
-  selector: 'app-nhap-hang',
-  templateUrl: './nhap-hang.component.html',
-  styleUrls: ['./nhap-hang.component.scss']
+  selector: 'app-to-chuc-thanh-ly',
+  templateUrl: './to-chuc-thanh-ly.component.html',
+  styleUrls: ['./to-chuc-thanh-ly.component.scss']
 })
-export class NhapHangComponent implements OnInit {
+export class ToChucThanhLyComponent implements OnInit {
 
-  defaultUrl: string = 'sua-chua/nhap-hang'
+  defaultUrl: string = 'xuat/xuat-thanh-ly/to-chuc'
   routerUrl: string = "";
-
   routes: any[] = [
     {
       url: '/thong-tin-dau-gia',
@@ -20,7 +19,7 @@ export class NhapHangComponent implements OnInit {
       accessPermisson: 'XHDTQG_XTL_TCKHBDG_TBBDG'
     },
     {
-      url: '/quyet-dinh-pd-kq',
+      url: '/qd-pd-kq',
       name: 'Quyết định phê duyệt kết quả bán đấu giá thanh lý hàng DTQG',
       accessPermisson: 'XHDTQG_XTL_TCKHBDG_QDKQDG'
     },

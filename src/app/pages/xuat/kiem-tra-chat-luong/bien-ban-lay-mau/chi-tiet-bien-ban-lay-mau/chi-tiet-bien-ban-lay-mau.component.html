@@ -10,13 +10,13 @@
         <span> In/Xem trước </span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_DUYET_LDCCUC')"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC')"
         type="button" class="btn btn-sub" (click)="reject(idSelected,STATUS.TU_CHOI_LDCC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_DUYET_LDCCUC')"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC')"
         type="button" class="btn btn-sub"
         (click)="approve(idSelected,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>

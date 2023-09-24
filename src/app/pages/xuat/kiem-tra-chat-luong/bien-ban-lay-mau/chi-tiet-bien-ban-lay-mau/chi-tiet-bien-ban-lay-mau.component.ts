@@ -271,6 +271,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
                   value: item.id,
                   chiSoCl: item.mucYeuCauXuat,
                   phuongPhap: item.phuongPhapXd,
+                  type: item.maChiTieu,
                   checked: true,
                 };
                 this.dsCtChatLuong.push(option);

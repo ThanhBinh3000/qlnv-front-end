@@ -9,7 +9,7 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./xuat-hang-thanh-ly.component.scss']
 })
 export class XuatHangThanhLyComponent implements OnInit {
-  defaultUrl: string = 'sua-chua/xuat-hang'
+  defaultUrl: string = 'xuat/xuat-thanh-ly/xuat-hang'
 
   routerUrl: string = "";
   constructor(
@@ -21,24 +21,27 @@ export class XuatHangThanhLyComponent implements OnInit {
       this.routerUrl = this.router.url;
     })
   }
-
   routes: any[] = [
     {
-      url: '/giao-nv-xh',
-      name: 'Quyết định giao nhiệm vụ xuất hàng',
-      accessPermisson: 'SCHDTQG_XH_QDGNVXH'
+      url: '/kiem-tra-lt',
+      name: 'Kiểm tra chất lượng lương thực',
+      accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
     },
     {
-      url: '/phieu-xuat-kho',
-      name: 'Phiếu xuất kho',
-      accessPermisson: 'SCHDTQG_XH_PXK'
+      url: '/kiem-tra-vt',
+      name: 'Kiểm tra chất lượng vật tư',
+      accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
     },
     {
-      url: '/bang-ke',
-      name: 'Bảng kê xuất vật tư',
-      accessPermisson: 'SCHDTQG_XH_BKXVT'
-
-    }
+      url: '/xuat-kho-lt',
+      name: 'Xuất kho lương thực',
+      accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+    },
+    {
+      url: '/xuat-kho-vt',
+      name: 'Xuất kho vật tư',
+      accessPermisson: 'XHDTQG_XTL_XTL_XK_VT'
+    },
   ]
 
   ngOnInit(): void {

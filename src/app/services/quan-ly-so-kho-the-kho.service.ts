@@ -23,4 +23,9 @@ export class QuanLySoKhoTheKhoService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  loadDsSoKho(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-so-kho`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

@@ -10,6 +10,7 @@ import { ChiTietHoSoThanhLyComponent } from './ho-so-thanh-ly/chi-tiet-ho-so-tha
 import { ThemMoiQuyetDinhThanhLyComponent } from './quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly.component';
 import { ThemMoiBaoCaoKetQuaThanhLyComponent } from './bao-cao-ket-qua/them-moi-bao-ket-qua-thanh-ly/them-moi-bao-cao-ket-qua-thanh-ly.component';
 import { ThemMoiThongBaoKetQuaComponent } from './thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component';
+import {BaoCaoKetQuaThanhLyComponent} from "./bao-cao-ket-qua/bao-cao-ket-qua-thanh-ly.component";
 
 
 const routes: Routes = [
@@ -75,8 +76,8 @@ const routes: Routes = [
         path: 'to-chuc',
         loadChildren: () =>
           import(
-            '../../xuat/xuat-thanh-ly/xuat-hang-thanh-ly/xuat-hang-thanh-ly.module'
-          ).then((m) => m.XuatHangThanhLyModule),
+            '../../xuat/xuat-thanh-ly/to-chuc-thanh-ly/to-chuc-thanh-ly.module'
+          ).then((m) => m.ToChucThanhLyModule),
       },
       // Region xuất hàng thanh lý
       {
@@ -89,15 +90,15 @@ const routes: Routes = [
       // Region Thông báo kq
       {
         path: 'bao-cao-kq',
-        component: ThongBaoKetQuaComponent
+        component: BaoCaoKetQuaThanhLyComponent
       },
       {
         path: 'bao-cao-kq/them-moi',
-        component: ThemMoiThongBaoKetQuaComponent
+        component: ThemMoiBaoCaoKetQuaThanhLyComponent
       },
       {
         path: 'bao-cao-kq/chi-tiet/:id',
-        component: ThemMoiThongBaoKetQuaComponent
+        component: ThemMoiBaoCaoKetQuaThanhLyComponent
       },
     ]
   },

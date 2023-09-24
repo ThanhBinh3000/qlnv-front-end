@@ -276,7 +276,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          const data = res.data;
+          const  data= res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
@@ -287,7 +287,15 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
             loaiCapCt: this.itemQdPdTktcTdt.loaiCapCt,
             diaDiem: this.itemQdPdTktcTdt.diaDiem,
           })
-          this.fileDinhKem = data.fileDinhKems;
+          if (data.fileDinhKems && data.fileDinhKems.length > 0) {
+            data.fileDinhKems.forEach(item => {
+              if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+                this.listFileDinhKem.push(item)
+              } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+                this.listCcPhapLy.push(item)
+              }
+            })
+          }
           this.dataCongViecDaTh = data.listKtTdxdQuyetDinhPdKhlcntCvDaTh ? data.listKtTdxdQuyetDinhPdKhlcntCvDaTh : [];
           this.dataCongViecKad = data.listKtTdxdQuyetDinhPdKhlcntCvKad ? data.listKtTdxdQuyetDinhPdKhlcntCvKad : [];
           this.dataCongViecKh = data.listKtTdxdQuyetDinhPdKhlcntCvKh ? data.listKtTdxdQuyetDinhPdKhlcntCvKh : [];

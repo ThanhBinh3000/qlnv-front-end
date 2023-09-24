@@ -157,7 +157,7 @@
                     <td class="bold">{{ row2.tenLoKhoXuat || ""}} - {{ row2.tenNganKhoXuat || ""}} -
                       {{row2.tenNhaKhoXuat}} - {{row2.tenDiemKhoXuat}}
                     </td>
-                    <td class="bold"></td>
+                    <td>{{row2.tenTrangThaiXuat}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -200,8 +200,9 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td class="bold">{{row4.tenLoKhoNhan}} - {{row4.tenNganKhoNhan}} - {{row4.tenNhaKhoNhan}}</td>
-                          <td class="bold"></td>
+                          <td class="bold">{{row4.tenLoKhoNhan || ""}} - {{row4.tenNganKhoNhan}} -
+                            {{row4.tenNhaKhoNhan}}</td>
+                          <td>{{row4.tenTrangThaiNhan}}</td>
                           <td></td>
                           <td></td>
                           <td></td>

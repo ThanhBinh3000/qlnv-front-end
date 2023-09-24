@@ -1,24 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { NhapHangRoutingModule } from './to-chuc-thanh-ly-routing.module';
-import { NhapHangComponent } from './to-chuc-thanh-ly.component';
 import { ComponentsModule } from 'src/app/components/components.module';
+import {ToChucThanhLyRoutingModule} from "./to-chuc-thanh-ly-routing.module";
+import {ToChucThanhLyComponent} from "./to-chuc-thanh-ly.component";
+import {ThongTinDauGiaThanhLyComponent} from "./thong-tin-dau-gia-thanh-ly/thong-tin-dau-gia-thanh-ly.component";
+import {
+  ChiTietThongTinDauGiaThanhLyComponent
+} from "./thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly.component";
+import {
+  ThongTinChiTietDauGiaThanhLyComponent
+} from "./thong-tin-dau-gia-thanh-ly/chi-tiet-thong-tin-dau-gia-thanh-ly/thong-tin-dau-gia-thanh-ly/thong-tin-chi-tiet-dau-gia-thanh-ly.component";
 
 
 
 @NgModule({
   declarations: [
-    NhapHangComponent,
-
+    ToChucThanhLyComponent,
+    ThongTinDauGiaThanhLyComponent,
+    ChiTietThongTinDauGiaThanhLyComponent,
+    ThongTinChiTietDauGiaThanhLyComponent
   ],
   imports: [
     CommonModule,
-    NhapHangRoutingModule,
+    ToChucThanhLyRoutingModule,
     ComponentsModule
   ],
   exports: [
-    NhapHangComponent,
+    ToChucThanhLyComponent,
   ]
 })
 export class ToChucThanhLyModule { }

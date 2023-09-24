@@ -28,7 +28,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     @Input() isView: boolean;
     @Input() isViewOnModal: boolean;
     @Input() loaiBc: string;
-    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, tenBc: string, ngayBc: string };
+    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, tenBc: string, ngayBc: string, maDviNhan: string };
     @Output()
     showListEvent = new EventEmitter<any>();
     expandSetString = new Set<string>();
@@ -56,6 +56,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             value: "Đại diện Cục DTNN KV", text: "Đại diện Cục DTNN KV"
         }
     ]
+    hasThuaThieu: boolean = false;
     constructor(
         httpClient: HttpClient,
         storageService: StorageService,
@@ -129,6 +130,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
                 ngayKyQdCuc: this.passData.ngayKyQd,
                 bcKetQuaDcId: this.passData.bcKetQuaDcId,
                 tenBaoCao: this.passData.tenBc,
+                maDviNhan: this.passData.maDviNhan
 
             })
             if (this.passData.bcKetQuaDcId) {
@@ -250,6 +252,10 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         const data = await this.baoCaoDieuChuyenService.getDetail(id);
         this.danhSachKetQua = Array.isArray(data?.data?.danhSachKetQua) ? cloneDeep(data.data.danhSachKetQua) : [];
         this.buildTableView();
+        this.checkThuaThieu(this.danhSachKetQua);
+    }
+    checkThuaThieu(list: any[]) {
+        this.hasThuaThieu = list.some(f => f.tinhTrang);
     }
     expandAll() {
         this.dataView.forEach(s => {
@@ -470,7 +476,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         return false
     }
     checkRoleHoanThanh() {
-        if (!this.isViewOnModal && this.formData.value.trangThai === STATUS.DU_THAO) {
+        if (!this.isViewOnModal && this.formData.value.trangThai === STATUS.DU_THAO && this.hasThuaThieu) {
             return true
         }
         return false

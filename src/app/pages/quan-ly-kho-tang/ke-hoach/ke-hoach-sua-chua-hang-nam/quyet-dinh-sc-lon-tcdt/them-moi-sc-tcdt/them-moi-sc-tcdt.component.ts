@@ -72,7 +72,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       id: [null],
       ngayTaoTt: [null],
       tgTongHop: [null],
-      namKeHoach: [dayjs().get("year")],
+      namKeHoach: [null],
       noiDung: [null],
       maToTrinh: [null],
       soQuyetDinh: [null],

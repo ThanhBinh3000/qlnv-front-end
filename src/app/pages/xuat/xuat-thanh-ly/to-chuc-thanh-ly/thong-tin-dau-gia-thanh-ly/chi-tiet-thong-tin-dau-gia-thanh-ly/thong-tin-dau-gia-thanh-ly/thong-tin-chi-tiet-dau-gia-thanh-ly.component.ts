@@ -31,7 +31,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
 
   isModal = false;
   idQdTl: number
-  idQdTlDtl: number;
   soQdTl: string;
   dataDetail: any;
   soLanDauGia: number;
@@ -66,7 +65,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       lanDauGia: [],
       maThongBao: [''],
       idQdTl: [],
-      idQdTlDtl: [],
       soQdTl: [''],
       trichYeuTbao: [''],
       tenToChuc: [''],
@@ -87,7 +85,7 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
       tienMuaHoSo: [''],
       buocGia: [''],
       ghiChuBuocGia: [''],
-      khoanTienDatTruoc: [, [Validators.required]],
+      khoanTienDatTruoc: [],
       tgianXem: [''],
       tgianXemTu: [''],
       tgianXemDen: [''],
@@ -152,9 +150,7 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
           this.formData.patchValue({
             maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
             idQdTl: this.idQdTl,
-            idQdTlDtl: this.idQdTlDtl,
             soQdTl: this.soQdTl,
-            soBienBan: idThongBao + "/" + this.formData.value.nam + "/BB-ĐG",
             lanDauGia: this.soLanDauGia + 1
           });
           this.spinner.hide();
@@ -244,41 +240,42 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base2Component implem
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data
+            console.log(data);
             // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
-            if (this.idQdTlDtl) {
-              let dataDtl = data.quyetDinhDtl.filter(s => s.id == this.idQdTlDtl);
-              for (const item of dataDtl) {
-                if (item.xhTlToChucHdr && item.xhTlToChucHdr.length > 0) {
-                  let dataToChuc = item.xhTlToChucHdr.pop();
-                  let tTinDthau = await this.toChucThucHienThanhLyService.getDetail(dataToChuc.id);
-                  tTinDthau.data?.toChucDtl.forEach(s => {
-                    s.idVirtual = uuid.v4();
-                  });
-                  this.buildTableView(tTinDthau.data.toChucDtl);
-                  this.dataDauGia = tTinDthau.data.toChucDtl;
-                } else {
-                  data.quyetDinhDtl.forEach(s => {
-                    s.idVirtual = uuid.v4();
-                  });
-                  let dt = data.quyetDinhDtl.filter(s => s.maDiaDiem.substring(0, 6) === this.userInfo.MA_DVI)
-                  this.buildTableView(dt);
-                  this.calculatorTable();
-                }
-              }
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-            // ( filter table sẽ không hiển thị mã đơn vị tàn sản của lần đấu giá trước;
-            this.dataTable.forEach((item) => {
-              item.childData.forEach((child) => {
-                if (child.soLanTraGia) {
-                  item.childData = item.childData.filter(x => x.soLanTraGia == null && x.maDviTsan == null && x.toChucCaNhan == null);
-                }
-              })
-              if (item.childData.length == 0) {
-                this.dataTable = this.dataTable.filter(x => x.id != item.id);
-              }
-            });
+            // if (this.idQdTlDtl) {
+            //   let dataDtl = data.quyetDinhDtl.filter(s => s.id == this.idQdTlDtl);
+            //   for (const item of dataDtl) {
+            //     if (item.xhTlToChucHdr && item.xhTlToChucHdr.length > 0) {
+            //       let dataToChuc = item.xhTlToChucHdr.pop();
+            //       let tTinDthau = await this.toChucThucHienThanhLyService.getDetail(dataToChuc.id);
+            //       tTinDthau.data?.toChucDtl.forEach(s => {
+            //         s.idVirtual = uuid.v4();
+            //       });
+            //       this.buildTableView(tTinDthau.data.toChucDtl);
+            //       this.dataDauGia = tTinDthau.data.toChucDtl;
+            //     } else {
+            //       data.quyetDinhDtl.forEach(s => {
+            //         s.idVirtual = uuid.v4();
+            //       });
+            //       let dt = data.quyetDinhDtl.filter(s => s.maDiaDiem.substring(0, 6) === this.userInfo.MA_DVI)
+            //       this.buildTableView(dt);
+            //       this.calculatorTable();
+            //     }
+            //   }
+            // } else {
+            //   this.notification.error(MESSAGE.ERROR, res.msg);
+            // }
+            // // ( filter table sẽ không hiển thị mã đơn vị tàn sản của lần đấu giá trước;
+            // this.dataTable.forEach((item) => {
+            //   item.childData.forEach((child) => {
+            //     if (child.soLanTraGia) {
+            //       item.childData = item.childData.filter(x => x.soLanTraGia == null && x.maDviTsan == null && x.toChucCaNhan == null);
+            //     }
+            //   })
+            //   if (item.childData.length == 0) {
+            //     this.dataTable = this.dataTable.filter(x => x.id != item.id);
+            //   }
+            // });
           }
         }).catch((e) => {
           console.log('error: ', e);
