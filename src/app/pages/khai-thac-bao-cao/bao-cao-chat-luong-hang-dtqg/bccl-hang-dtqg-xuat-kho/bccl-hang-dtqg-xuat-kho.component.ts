@@ -54,7 +54,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
         maCuc: null,
         maChiCuc: null,
         loaiVthh: [null, [Validators.required]],
-        cloaiVthh: [null, [Validators.required]],
+        cloaiVthh: [null],
         loaiBc: [null, [Validators.required]],
       }
     );
@@ -115,8 +115,27 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
       let body = this.formData.value;
       body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
-      body.fileName = "bccl_cong_tac_bao_quan_gao.jrxml";
-      body.tenBaoCao = "Báo cáo chất lượng công tác quản lý gạo DTQG";
+      if (body.loaiBc == '01') {
+        if (body.loaiVthh.startsWith("0101")) {
+          body.fileName = "bao_cao_cl_xuat_thoc_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng xuất thóc - Tổng hợp";
+        }
+        if (body.loaiVthh.startsWith("0102")) {
+          body.fileName = "bao_cao_cl_xuat_gao_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng xuất gạo - Tổng hợp";
+        }
+      } else {
+        if (body.loaiVthh.startsWith("0101")) {
+          body.fileName = "bc_chat_luong_thoc_xuat_kho.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng thóc xuất kho";
+        }
+        if (body.loaiVthh.startsWith("0102")) {
+          body.fileName = "bc_chat_luong_gao_xuat_kho.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng gạo xuất kho";
+        }
+        // body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
+        // body.tenBaoCao = "Báo cáo chất lượng gạo xuất kho";
+      }
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclXuatHangDtqg(body).then(async s => {
         this.pdfBlob = s;

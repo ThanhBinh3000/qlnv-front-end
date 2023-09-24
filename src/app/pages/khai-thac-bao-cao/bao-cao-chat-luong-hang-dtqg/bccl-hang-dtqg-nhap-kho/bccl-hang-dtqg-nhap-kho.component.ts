@@ -52,7 +52,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
         maCuc: null,
         maChiCuc: null,
         loaiVthh: [null, [Validators.required]],
-        cloaiVthh: [null, [Validators.required]],
+        cloaiVthh: [null],
         loaiBc: [null, [Validators.required]],
       }
     );
@@ -126,7 +126,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bao_cao_cl_nhap_gao_tong_hop.jrxml";
+          body.fileName = "bao_cao_cl_nhap_thoc_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng nhập thóc - Tổng hợp";
         }
         if (body.loaiVthh.startsWith("0102")) {
