@@ -123,6 +123,10 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
   }
 
   async preView() {
+    this.formData.controls["maCuc"].clearValidators();
+    if (this.formData.value.loaiBc = '02') {
+      this.formData.controls["maCuc"].setValidators(Validators.required);
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
