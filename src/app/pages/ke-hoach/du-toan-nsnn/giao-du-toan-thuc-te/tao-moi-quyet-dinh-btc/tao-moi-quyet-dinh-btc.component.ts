@@ -73,7 +73,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     maLoai = '2';
     //danh muc
     lstCtietBcao: ItemData[] = [];
-    donVis: any[] = [];
+    // donVis: any[] = [];
     noiDungs: any[] = [];
     donViTiens: any[] = Utils.DVI_TIEN;
     trangThais: any[] = Status.TRANG_THAI_FULL;
@@ -203,18 +203,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
         this.maDonViTao = this.userInfo?.MA_DVI;
-        await this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
         if (this.id) {
             await this.getDetailReport();
         } else {

@@ -150,7 +150,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         await this.userService.getUserLogin();
         this.userInfo = this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
-        console.log(this.userInfo);
 
         if (this.id) {
             this.getDetailReport();
@@ -170,7 +169,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
             data => {
                 if (data.statusCode == 0) {
                     this.lstDvi = data.data;
-                    this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+                    this.donVis = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

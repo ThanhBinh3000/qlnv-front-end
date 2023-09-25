@@ -244,19 +244,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		this.maDonViTao = this.userInfo?.MA_DVI;
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
-		console.log(this.userInfo);
-
-		await this.danhMuc.dMDonVi().toPromise().then(
-			(data) => {
-				if (data.statusCode === 0) {
-					this.donVis1 = data?.data;
-					this.capDvi = this.donVis1.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
-				} else {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
-				}
-			}
-		);
-
 		// set năm tạo PA
 		this.namPa = this.newDate.getFullYear();
 		await this.giaoDuToanChiService.maPhuongAnGiao('1').toPromise().then(
@@ -298,12 +285,11 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		}
 		await this.getChildUnit();
 
-
-		if ((this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("CNTT") || this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("_VP")) && this.lstDvi.length == 0) {
+		if ((this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) && this.lstDvi.length == 0) {
 			this.lstDvi.push(
 				{
 					maDvi: this.maDvi,
-					tenDvi: this.donVis1.find(e => e.maDvi == this.maDvi).tenDvi
+					tenDvi: this.userInfo.DON_VI.tenDvi
 				}
 			)
 		}
@@ -814,7 +800,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 
 
-		const dVi = this.donVis1.find(e => e.maDvi == this.maDonViTao);
+		const dVi = this.lstDvi.find(e => e.maDvi == this.maDonViTao);
 		let checkParent = false;
 		if (dVi && dVi?.maDviCha == this.userInfo.MA_DVI) {
 			checkParent = true;
