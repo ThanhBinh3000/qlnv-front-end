@@ -85,7 +85,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
         hoVaTen: "",
         type: "03"
     }
-    tableHeader: Array<{ [key: string]: string }> = [{ title: "Họ và tên", value: "hoVaTen" }, { title: "Chức vụ", value: "chucVu" }];
+    tableHeader: Array<{ [key: string]: string | boolean }> = [{ title: "Họ và tên", value: "hoVaTen", edit: true, dataType: "string" }, { title: "Chức vụ", value: "chucVu", edit: true, dataType: "string" }];
     bienBanSapNhapHangDtl: any[] = [];
     bienBanSapNhapCcDtl: any[] = [];
     bienBanSapNhapVpDtl: any[] = [];

@@ -43,7 +43,7 @@
             <div nz-row [nzGutter]="24">
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">Đơn vị
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Đơn vị
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -54,7 +54,8 @@
                 </div>
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">Mã QHNS (mã quan hệ ngân sách)
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Mã QHNS (mã quan hệ ngân
+                            sách)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -138,7 +139,7 @@
                 </div>
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">Nhà kho
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Nhà kho
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -149,7 +150,7 @@
                 </div>
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">Điểm kho
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Điểm kho
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -161,7 +162,7 @@
 
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">Loại hàng hóa
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Loại hàng hóa
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -172,7 +173,7 @@
                 </div>
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">Chủng loại hàng hóa
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Chủng loại hàng hóa
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -183,7 +184,7 @@
                 </div>
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">Cán bộ lập phiếu
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Cán bộ lập phiếu
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -194,7 +195,7 @@
                 </div>
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">Lãnh đạo chi cục
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Lãnh đạo chi cục
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -205,7 +206,7 @@
                 </div>
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">KTV bảo quản
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">KTV bảo quản
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -216,7 +217,7 @@
                 </div>
                 <div nz-col nzSpan="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh">Kế toán trưởng
+                        <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Kế toán trưởng
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -230,7 +231,7 @@
     </nz-card>
 
     <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-        <nz-table nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
+        <!-- <nz-table nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
             [nzShowPagination]="false">
             <thead>
                 <tr>
@@ -239,13 +240,8 @@
                     <th rowSpan="2">Mã số</th>
                     <th rowSpan="2">Đơn vị tính</th>
                     <th rowSpan="2">Số lượng</th>
-                    <!-- <th rowSpan="2">Thành tiền</th> -->
                     <th rowSpan="2" *ngIf="!isView">Hành động</th>
                 </tr>
-                <!-- <tr>
-                    <th class="text-center">Dự toán kinh phí theo QĐ<br /> (Triệu đồng) (1)</th>
-                    <th>Kinh phí thực tế (2)</th>
-                </tr> -->
                 <tr>
                 </tr>
             </thead>
@@ -262,11 +258,6 @@
                             [nzSize]="'small'" [(ngModel)]="item.soLuong" [nzDisabled]="isView"
                             (ngModelChange)="handleChangeSoLuong($event)"></nz-input-number>
                     </td>
-                    <!-- <td>
-                        <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                            [nzSize]="'small'" [(ngModel)]="item.soTien" [nzDisabled]="isView"
-                            (ngModelChange)="handleChangeThanhTien($event)"></nz-input-number>
-                    </td> -->
                     <td *ngIf="!isView">
                         <a *ngIf="i==dataTable.length-1" (click)="addItemRow()">
                             <i class="fa fa-plus"></i>
@@ -277,7 +268,10 @@
                     </td>
                 </tr>
             </tbody>
-        </nz-table>
+        </nz-table> -->
+        <app-edit-table [dataTable]="dataTable" [rowInitial]="rowInitial" [dataHeader]="tableHeader"
+            (saveAction)="tinhTongSoLuong()" (deleteAction)="tinhTongSoLuong()" (addAction)="tinhTongSoLuong()"
+            [isEdit]="!isView"></app-edit-table>
     </nz-card>
     <form nz-form nzLayout="vertical" [formGroup]="formData">
         <div nz-col nzSpan="24">
