@@ -175,7 +175,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
 
   cancelEdit (i, y){
     this.dataTable[i].children[y].edit = false;
-    this.rowItemEdit = new ThongTinDiaDiemNhap();
+    this.rowItemEdit = this.dataTable[i].children[y];
   }
 
   initForm() {
@@ -237,8 +237,9 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
             ngayKyHd: data.ngayKy,
             trichYeu: data.trichYeu
           })
-          console.log(data, "darta")
           this.dataTable = data.children
+          console.log(this.dataTable, "this.dataTable")
+          this.calcTong();
         }
         else {
           this.notification.error(MESSAGE.ERROR, res.msg)
@@ -323,6 +324,8 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
           })
           if (data.children.length > 0 || data.children2.length > 0) {
             this.dataTable = data.children.length > 0 ? data.children : data.children2
+            console.log(this.dataTable, "this.dataTable")
+            this.calcTong();
           }
         }
         else {
@@ -515,10 +518,14 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data;
           console.log(data, "hello");
-          const sum = data.hhQdGiaoNvNhangDtlList.reduce((prev, cur) => {
-            prev += cur.soLuong;
-            return prev;
-          }, 0);
+          // let sum = 0;
+          // data.hhQdGiaoNvNhangDtlList.forEach(item =>{
+          //   sum = item.children.reduce((prev, cur) => {
+          //     prev += cur.soLuong;
+          //     return prev;
+          //   }, 0);
+          // })
+
           this.formData.patchValue({
             id: data.id,
             namNhap: data.namNhap,
@@ -538,7 +545,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
             tenTrangThai: data.tenTrangThai,
             lyDoTuChoi: data.ldoTuchoi,
             idHd: data.idHd,
-            soLuong: this.userService.isChiCuc() ? data.hhQdGiaoNvNhangDtlList.find(x => x.maDvi.includes(this.userInfo.MA_DVI)).soLuong : sum,
+            // soLuong: this.userService.isChiCuc() ? data.hhQdGiaoNvNhangDtlList.find(x => x.maDvi.includes(this.userInfo.MA_DVI)).soLuong : sum,
             donViTinh: data.donViTinh,
             soHd: data.soHd,
             tenHd: data.tenHd,
@@ -554,6 +561,8 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
           } else {
             this.dataTable = data.hhQdGiaoNvNhangDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI));
           }
+          this.calcTong();
+          console.log(this.dataTable, "this.dataTable")
           if (data.fileDinhKems.length > 0) {
             data.fileDinhKems.forEach(item => {
               if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -744,18 +753,17 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     return true
   }
 
-  calcTong(index?) {
-    if (this.dataTable && index != null) {
-      const sum = this.dataTable[index].children.reduce((prev, cur) => {
-        prev += cur.soLuong;
-        return prev;
-      }, 0);
-      return sum;
-    } else if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur.soLuong;
-        return prev;
-      }, 0);
+  calcTong() {
+    if (this.dataTable) {
+      let sum = 0;
+      this.dataTable.forEach(item =>{
+        item.children.forEach(x =>{
+          sum += x.soLuong
+        })
+      })
+      this.formData.patchValue({
+        soLuong: sum
+      })
       return sum;
     }
   }
@@ -935,6 +943,9 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   }
 
   async saveDdiemNhap(statusSave, hoanThanh?) {
+    if(!this.validatorDdiemNhap(0, true)){
+      return;
+    }
     let checkTable = false;
     let msg = '';
     this.dataTable.forEach(item => {
@@ -1046,6 +1057,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
       })
       this.dataTable = listChildren.filter((value, index, self) => self.indexOf(value) === index);
       console.log(this.dataTable, 3333)
+      this.calcTong();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
     }
