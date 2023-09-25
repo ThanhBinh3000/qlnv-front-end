@@ -169,8 +169,10 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       if (rs.msg == MESSAGE.SUCCESS) {
         dataQdPdKqlcnt = rs.data;
       }
+      console.log(dataQdPdKqlcnt,"dataQdPdKqlcnt")
       if (dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.length) {
         goiThau = dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
+        console.log(goiThau,"goiThau")
       }
       console.log(this.itemGoiThau, 'this.itemGoiThau this.itemGoiThau ')
       this.formData.patchValue({

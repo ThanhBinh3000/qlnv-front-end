@@ -152,9 +152,8 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.maDuAn == item.maDuAn) {
+        if (it.maDm == item) {
           rs = true;
-          return;
         }
       });
     }
