@@ -25,7 +25,7 @@ export class QuyetdinhpheduyetKhlcntService extends BaseService {
   }
 
   saveDsNhaThau(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-nha-thau/them-moi`;
+    const url = `http://192.168.5.184:1702/tien-do-xdsc/xay-dung/quyetdinh-pd-khlcnt/ds-nha-thau/them-moi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

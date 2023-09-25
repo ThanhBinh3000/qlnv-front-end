@@ -22,6 +22,7 @@ import {
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
+import {log} from "ng-zorro-antd/core/logger";
 
 @Component({
   selector: "app-them-moi-sc-tcdt",
@@ -120,6 +121,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
         this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
         this.formData.patchValue({
           id: data.id,
+          namKeHoach: data.namKeHoach,
           namBatDau: data.namBatDau,
           namKetThuc: data.namKetThuc,
           ngayTaoTt: data.ngayTaoTt,
