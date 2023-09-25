@@ -1,58 +1,25 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="goBack()">
+    <button type="button" class="btn btn-sub" (click)="redirectDefault()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isCuc()">
-      <button (click)="reject(idSelected,STATUS.TU_CHOI_LDC)"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
-              class="btn btn-sub" type="button">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
-      </button>
-      <button (click)="approve(idSelected,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
-              class="btn btn-sub" type="button">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button (click)="approve(idSelected,STATUS.BAN_HANH,'Bạn có muốn ban hành quyết định này')"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.DA_DUYET_LDC)"
-              class="btn btn-sub" type="button">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Ban hành</span>
-      </button>
-      <button (click)="reject(idSelected,STATUS.TU_CHOI_TP)"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
-              class="btn btn-sub" type="button">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
-      </button>
-      <button (click)="approve(idSelected,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
-              class="btn btn-sub" type="button">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <!-- <button (click)="approve(idSelected,STATUS.BAN_HANH,'Bạn có muốn ban hành quyết định này')"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.DA_DUYET_LDC)"
-        class="btn btn-sub" type="button">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Ban Hành</span>
-      </button> -->
-      <!--    end cap truong phong-->
       <button
-        (click)="saveAndSend(STATUS.CHO_DUYET_TP,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
-        || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
-        class="btn btn-sub" type="button">
+        *ngIf="showPheDuyetTuChoi()"
+        type="button" class="btn btn-sub do ml-2" (click)="tuChoi()">
+        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+        <span>Từ chối</span>
+      </button>
+      <button *ngIf="showPheDuyetTuChoi()" type="button" class="btn btn-sub xanh-nhat " (click)="pheDuyet()">
+        <i class="icon htvbdh_tcdt_pheduyet "></i>
+        <span>Duyệt</span>
+      </button>
+      <button *ngIf="showSave()" type="button" class="btn btn-sub xanh-nhat " (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button (click)="save()" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
-        || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
-              class="btn btn-main" type="button">
+      <button *ngIf="showSave()" type="button" class="btn btn-main " (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
