@@ -108,7 +108,7 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
       body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.keHoachGiam(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -132,7 +132,7 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
       body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.keHoachGiam(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bc_kh_giam_hang_du_tru_quoc_gia.xlsx");

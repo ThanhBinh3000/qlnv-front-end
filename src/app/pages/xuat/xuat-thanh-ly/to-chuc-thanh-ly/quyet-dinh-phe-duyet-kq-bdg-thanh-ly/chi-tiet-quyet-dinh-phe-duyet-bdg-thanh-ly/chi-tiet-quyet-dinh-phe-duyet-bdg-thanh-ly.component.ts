@@ -22,18 +22,19 @@ import {v4 as uuidv4} from "uuid";
 import {
   ToChucThucHienThanhLyService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/ToChucThucHienThanhLy.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Base3Component} from "../../../../../../components/base3/base3.component";
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly',
   templateUrl: './chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly.component.html',
   styleUrls: ['./chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly.component.scss']
 })
-export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component implements OnInit {
+export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component implements OnInit {
   @Input() isView: boolean;
   @Input() idSelected: number;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
-  public dsToChucThanhLy: any;
   expandSetString = new Set<string>();
   quyetDinhDtlView: any[] = [];
   maHauTo: any;
@@ -45,12 +46,14 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
     private danhMucService: DanhMucService,
     private donViService: DonviService,
-    private quyetDinhPheDuyetKetQuaService: QuyetDinhPheDuyetKetQuaService,
+    private _service: QuyetDinhPheDuyetKetQuaService,
     private toChucThucHienThanhLyService: ToChucThucHienThanhLyService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKetQuaService);
+    super(httpClient, storageService, notification, spinner, modal,route,router, _service);
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
@@ -120,7 +123,7 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component 
 
   async loadDetail(idInput: number) {
     if (idInput > 0) {
-      await this.quyetDinhPheDuyetKetQuaService.getDetail(idInput)
+      await this._service.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.soQd) {
@@ -161,25 +164,7 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component 
   }
 
   async loadDsToChucThanhLy() {
-    this.toChucThucHienThanhLyService.search({
-      trangThai: STATUS.DA_HOAN_THANH,
-      nam: this.formData.get('nam').value,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: this.page - 1,
-      },
-    }).then(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        if (data && data.content && data.content.length > 0) {
-          this.dsToChucThanhLy = data.content.filter(item => item.soQdPdKq == null);
-          this.dsToChucThanhLy = this.dsToChucThanhLy.filter(s => s.maDvi.substring(0, 6) === this.userInfo.MA_DVI);
-        }
-      } else {
-        this.dsToChucThanhLy = [];
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    });
+
   }
 
   async save() {
@@ -211,6 +196,15 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component 
   }
 
   async openDialogToChucThanhLy() {
+    const data = []
+    this.toChucThucHienThanhLyService.getDsTaoQuyetDinhPdKq({
+      trangThai: STATUS.DA_HOAN_THANH,
+    }).then(res => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        console.log(res)
+      }
+    });
+
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách Thông tin đấu giá thanh lý hàng DTQG',
       nzContent: DialogTableSelectionComponent,
@@ -219,7 +213,7 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base2Component 
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.dsToChucThanhLy,
+        dataTable: data,
         dataHeader: ['Mã thông báo', 'Số biên bản', 'TB bán đấu giá không thành', 'Ngày tạo'],
         dataColumn: ['maThongBao', 'soBienBan', 'thongBaoKhongThanh', 'ngayTao'],
       },

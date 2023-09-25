@@ -584,7 +584,7 @@
                   </tbody>
                 </nz-table>
                 <label nz-checkbox *ngIf="this.formData.value.tenVthh=='Gạo tẻ'" [nzDisabled]="isView"
-                       [(ngModel)]="this.formData.value.xuatCap">
+                       [(ngModel)]="!!this.formData.value.xuatCap">
                   Đồng ý duyệt xuất cấp
                 </label>
               </div>

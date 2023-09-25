@@ -1,9 +1,9 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level1">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level2">
   <ul nz-menu nzMode="horizontal" id="mainTongCuc">
     <ng-container *ngFor="let route of routes">
       <li *ngIf="userService.isAccessPermisson(route.accessPermisson)" nz-menu-item
-        [class]="route.url && routerUrl.includes(route.url) ? 'ant-menu-item ng-star-inserted ant-menu-item-selected' : 'ant-menu-item ng-star-inserted'"
-        (click)="redirectUrl(route.url)">
+          [class]="route.url && routerUrl.includes(route.url) ? 'ant-menu-item ng-star-inserted ant-menu-item-selected' : 'ant-menu-item ng-star-inserted'"
+          (click)="redirectUrl(route.url)">
         {{route.name}}
       </li>
     </ng-container>

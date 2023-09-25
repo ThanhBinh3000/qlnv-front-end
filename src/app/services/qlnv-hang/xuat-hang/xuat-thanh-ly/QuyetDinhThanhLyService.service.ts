@@ -18,4 +18,10 @@ export class QuyetDinhThanhLyService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dtl-chi-tiet/phe-duyet`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+
+  getQuyetDinhToBaoCao(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-tao-bao-cao`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

@@ -90,7 +90,7 @@ export class ThongTu1452013Component implements OnInit {
       body.fileName = "bc_nhap_xuat_ton_kho_hang_dtnn.jrxml";
       body.tenBaoCao = "Báo cáo nhập, xuất, tồn kho hàng dự trữ nhà nước";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
+      await this.thongTu1452013Service.nhapXuatTon(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -112,7 +112,7 @@ export class ThongTu1452013Component implements OnInit {
       body.fileName = "bc_nhap_xuat_ton_kho_hang_dtnn.jrxml";
       body.tenBaoCao = "Báo cáo nhập, xuất, tồn kho hàng dự trữ nhà nước";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
+      await this.thongTu1452013Service.nhapXuatTon(body).then(async s => {
         this.excelBlob = s;
         saveAs(this.excelBlob, "bc_nhap_xuat_ton_kho_hang_dtnn.xlsx");
       });

@@ -305,6 +305,8 @@
               <th [colspan]="2">Cục DTNN KV</th>
             </ng-container>
             <th [rowspan]="2">{{userService.isTongCuc() ? 'SL xuất cứu trợ giao Cục thực hiện' : 'SL xuất cứu trợ Cục đề xuất'}}</th>
+            <th [rowspan]="2">Nhu cầu xuất cứu trợ</th>
+            <th [rowspan]="2">Sl gạo cần chuyển cấp thóc</th>
             <th [rowspan]="2">ĐVT</th>
             <th [rowspan]="2" style="width: 10%">Hành động</th>
           </tr>
@@ -336,6 +338,8 @@
               </ng-container>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
               <td>
                 <a>
                   <i class="fa fa-plus" *ngIf="!isView" (click)="themPhuongAn(item,0)"></i>
@@ -362,6 +366,8 @@
                     <td></td>
                   </ng-container>
                   <td>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                  <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                  <td>{{lv1.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                   <td>{{lv1.donViTinh}}</td>
                   <td>
                     <a>
@@ -389,7 +395,9 @@
                         <td>{{lv2.tonKhoLoaiVthh || lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                       </ng-container>
                       <td>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
-                      <td></td>
+                      <td>{{lv2.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                      <td>{{lv2.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
+                      <td>{{lv2.donViTinh}}</td>
                       <td>
                         <a>
                           <i class="fa fa-edit" *ngIf="!isView" (click)="themPhuongAn(lv2,2)"></i>
@@ -497,7 +505,29 @@
                 <div nz-col [nzSpan]="16">
                   <nz-input-number formControlName="soLuong" [nzMax]="999999999999" [nzStep]="1"
                                    nzPlaceHolder="Nhập số lượng"
+                                   (ngModelChange)="soLuongNhuCauXuatChange($event)"
                                    [nzDisabled]="isView"
+                                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                  </nz-input-number>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <p style="font-size: 13px;font-weight: 500">Đơn vị tính:
+                    <span>{{formDataDtl.value.donViTinh}}</span>
+                  </p>
+                </div>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item *ngIf="userService.isCuc() && isVthhGao()">
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true"
+                           [nzXs]="7">Nhu cầu xuất cứu trợ</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <div nz-row [nzGutter]="48">
+                <div nz-col [nzSpan]="16">
+                  <nz-input-number formControlName="soLuongNhuCauXuat" [nzMax]="999999999999" [nzStep]="1"
+                                   nzPlaceHolder="Nhập số lượng"
+                                   [nzDisabled]="isView"
+                                   (ngModelChange)="soLuongNhuCauXuatChange($event)"
                                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                   </nz-input-number>
                 </div>

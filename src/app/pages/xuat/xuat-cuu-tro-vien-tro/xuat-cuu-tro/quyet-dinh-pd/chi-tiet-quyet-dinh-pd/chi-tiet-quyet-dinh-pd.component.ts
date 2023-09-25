@@ -91,8 +91,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   tongThanhTien: any;
   tongSoLuong: any;
   tongSoLuongDx: any;
-  tongSoLuongXuatCap: any;
-  listVatTuHangHoa: any[] = [];
   quyetDinhPdDtlCache: any[] = [];
   maHauTo: any;
   templateName = "Quyết định phê duyệt phương án";
@@ -235,11 +233,13 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
     // this.formData.controls.soQdGnv.setValidators([Validators.required]);
+    let xuatCap = this.formData.value.xuatCap;
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
     await this.createUpdate(body);
+    this.formData.patchValue({xuatCap:xuatCap});
     await this.helperService.restoreRequiredForm(this.formData);
   }
 
@@ -572,5 +572,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     } else {
       currentRow.soLuongXc = 0;
     }
+  }
+
+  xuatCapTest($event: any) {
+    console.log($event);
   }
 }

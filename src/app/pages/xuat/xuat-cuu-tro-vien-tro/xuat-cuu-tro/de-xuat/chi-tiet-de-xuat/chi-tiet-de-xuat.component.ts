@@ -122,14 +122,16 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tonKhoLoaiVthh: [''],
         tonKhoCloaiVthh: [''],
         donViTinh: [''],
-        soLuongNhuCau: [0],
         soLuong: [0, [Validators.required, Validators.min(1)]],
         mapVthh: [''],
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
         mapDmucDvi: [''],
         tenDvi: [''],
-        edit: []
+        edit: [],
+        soLuongNhuCauXuat: [0],
+        soLuongConThieu: [0],
+        soLuongChuyenCapThoc: [0],
       });
   }
 
@@ -446,7 +448,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       Object.assign(this.listLoaiHangHoa, filter.children);
       this.formDataDtl.patchValue({loaiVthh: null});
     }
-
+    this.formData.patchValue({deXuatPhuongAn: []});
     await this.kiemTraTonKho();
   }
 
@@ -489,5 +491,25 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       });
     }
     await this.kiemTraTonKho();
+  }
+
+  soLuongNhuCauXuatChange($event) {
+    // (tính soLuongConThieu = nếu (Nhu cầu xuất cứu trợ  - sl xuất cứu trợ đề xuất ) > 0 thì (Nhu cầu xuất cứu trợ  - sl xuất cứu trợ đề xuất ) ngược lại  = 0 )
+    let soLuongConThieu = this.formDataDtl.value.soLuongNhuCauXuat - this.formDataDtl.value.soLuong;
+    if (soLuongConThieu < 0) {
+      soLuongConThieu = 0;
+    }
+    this.formDataDtl.patchValue({
+      soLuongConThieu: soLuongConThieu,
+      soLuongChuyenCapThoc: soLuongConThieu * 2
+    });
+    console.log('soLuongConThieu: '+soLuongConThieu);
+  }
+
+  isVthhGao() {
+    if(this.formData.value.tenVthh == "Gạo tẻ"){
+      return true;
+    }
+    return false;
   }
 }

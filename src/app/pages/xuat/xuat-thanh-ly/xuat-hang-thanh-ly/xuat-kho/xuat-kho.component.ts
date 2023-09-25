@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {Router} from "@angular/router";
+import {Globals} from "../../../../../shared/globals";
+import {UserService} from "../../../../../services/user.service";
 
 @Component({
-  selector: 'app-xuat-hang-thanh-ly',
-  templateUrl: './xuat-hang-thanh-ly.component.html',
-  styleUrls: ['./xuat-hang-thanh-ly.component.scss']
+  selector: 'app-xuat-kho',
+  templateUrl: './xuat-kho.component.html',
+  styleUrls: ['./xuat-kho.component.scss']
 })
-export class XuatHangThanhLyComponent implements OnInit {
+export class XuatKhoComponent implements OnInit {
+
   defaultUrl: string = 'xuat/xuat-thanh-ly/xuat-hang'
 
   routerUrl: string = "";
@@ -21,26 +22,27 @@ export class XuatHangThanhLyComponent implements OnInit {
       this.routerUrl = this.router.url;
     })
   }
+
   routes: any[] = [
     {
-      url: '/kiem-tra-lt',
-      name: 'Kiểm tra chất lượng lương thực',
+      url: '/phieu-xuat-kho',
+      name: 'Phiếu xuất kho',
       accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
     },
     {
-      url: '/kiem-tra-vt',
-      name: 'Kiểm tra chất lượng vật tư',
+      url: '/bang-ke-can-hang',
+      name: 'Bảng kê cân hàng',
       accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
     },
     {
-      url: '/xuat-kho-lt',
-      name: 'Xuất kho lương thực',
+      url: '/bien-ban-tinh-kho',
+      name: 'Biên bản tịnh khó',
       accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
     },
     {
-      url: '/xuat-kho-vt',
-      name: 'Xuất kho vật tư',
-      accessPermisson: 'XHDTQG_XTL_XTL_XK_VT'
+      url: '/bien-ban-hao-doi',
+      name: 'Biên bản hao dôi',
+      accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
     },
   ]
 
