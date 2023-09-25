@@ -368,14 +368,14 @@ export class NopTienThuaComponent implements OnInit {
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị cấp dưới' },
             { t: 4, b: 4, l: 2, r: 4, val: 'Số đã nộp Đơn vị cấp trên' },
-            { t: 5, b: 5, l: 2, r: 2, val: 'Vốn ứng' },
-            { t: 5, b: 5, l: 3, r: 3, val: 'Vốn cấp' },
-            { t: 5, b: 5, l: 4, r: 4, val: 'Tổng vốn' },
+            { t: 5, b: 5, l: 2, r: 2, val: 'Nộp vốn' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'Nợp hoàn ứng' },
+            { t: 5, b: 5, l: 4, r: 4, val: 'Tổng nộp' },
             { t: 4, b: 4, l: 5, r: 8, val: 'Nộp đợt ' + this.baoCao.dot.toString() },
             { t: 5, b: 5, l: 5, r: 5, val: 'Ủy nhiệm chi ngày' },
-            { t: 5, b: 5, l: 6, r: 6, val: 'Vốn ứng' },
-            { t: 5, b: 5, l: 7, r: 7, val: 'Vốn cấp' },
-            { t: 5, b: 5, l: 8, r: 8, val: 'Tổng vốn nộp lần này' },
+            { t: 5, b: 5, l: 6, r: 6, val: 'Nộp vốn' },
+            { t: 5, b: 5, l: 7, r: 7, val: 'Nợp hoàn ứng' },
+            { t: 5, b: 5, l: 8, r: 8, val: 'Tổng nộp nộp lần này' },
         ]
         const fieldOrder = ['stt', 'tenHangDtqg', 'daNopVonUng', 'daNopVonCap', 'daNopTong', 'nopUncNgay', 'nopVonUng', 'nopVonCap', 'nopTong'];
         const calHeader = ['A', 'B', '1', '2', '3=1+2', '4', '5', '6', '7=5+6'];

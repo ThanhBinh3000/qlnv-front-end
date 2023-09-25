@@ -44,7 +44,7 @@ export class Cvmb {
     static readonly CAN_CU_GIA = [
         {
             id: Cvmb.HOP_DONG,
-            tenDm: "Hợp đồng trúng thầu",
+            tenDm: "Hợp đồng đấu giá",
         },
         {
             id: Cvmb.DON_GIA,
@@ -177,9 +177,9 @@ export class ThanhToan {
             this.lkCap = Operator.sum([data.lkCap, this.cap, -data.cap]);
             this.lkCong = Operator.sum([this.lkUng, this.lkCap]);
         }
-        this.soConDcTt = is ? Operator.sum([this.gtThucHien, -this.lkCong, -this.phatViPham]) : Operator.sum([this.gtKeHoach, -this.lkCong]);
+        this.soConDcTt = is ? Operator.sum([this.gtThucHien, -this.lkCong]) : Operator.sum([this.gtKeHoach, -this.lkCong]);
         this.lkSauLanNay = Operator.sum([this.lkCong, this.cong]);
-        this.soConPhaiNop = is ? Operator.sum([this.gtThucHien, -this.lkSauLanNay, -this.phatViPham]) : Operator.sum([this.gtHopDong, -this.lkSauLanNay]);
+        this.soConPhaiNop = is ? Operator.sum([this.gtThucHien, -this.lkSauLanNay]) : Operator.sum([this.gtHopDong, -this.lkSauLanNay]);
     }
 
     upperBound() {
@@ -193,7 +193,7 @@ export class ThanhToan {
             }
         })
     }
-
+    rrrr
     sum(data: ThanhToan) {
         Object.keys(data).forEach(key => {
             if ((key != 'dot' && key != 'level') && (typeof this[key] == 'number' || typeof data[key] == 'number')) {

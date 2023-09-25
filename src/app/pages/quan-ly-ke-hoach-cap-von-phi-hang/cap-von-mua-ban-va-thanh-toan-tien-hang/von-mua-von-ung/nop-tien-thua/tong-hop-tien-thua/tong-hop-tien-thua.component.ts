@@ -316,9 +316,9 @@ export class TongHopTienThuaComponent implements OnInit {
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị cấp dưới' },
             { t: 4, b: 4, l: 2, r: 4, val: 'Tổng nhận từ Đơn vị cấp dưới đến thời điểm này' },
-            { t: 5, b: 5, l: 2, r: 2, val: 'Tổng ứng' },
-            { t: 5, b: 5, l: 3, r: 3, val: 'Tổng cấp' },
-            { t: 5, b: 5, l: 4, r: 4, val: 'Tổng vốn' },
+            { t: 5, b: 5, l: 2, r: 2, val: 'Nộp vốn' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'Nộp hoàn ứng' },
+            { t: 5, b: 5, l: 4, r: 4, val: 'Tổng nộp' },
             { t: 4, b: 5, l: 5, r: 5, val: 'Đợt (của Đơn vị cấp dưới)' },
         ]
         const fieldOrder = ['stt', 'tenHangDtqg', 'daNopVonUng', 'daNopVonCap', 'daNopTong', 'dot'];
