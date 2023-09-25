@@ -53,7 +53,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
         maChiCuc: null,
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null],
-        loaiBc: [null, [Validators.required]],
+        loaiBc: ['02', [Validators.required]],
       }
     );
   }
@@ -81,9 +81,17 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
+      body.trangThai = "01";
+      body.maDvi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
       if (body.loaiBc == '01') {
-        body.fileName = "bao_cao_cl_nhap_hang_tong_hop.jrxml";
-        body.tenBaoCao = "Báo cáo chất lượng nhập hàng DTQG - Tổng hợp";
+        if (body.loaiVthh.startsWith("0101")) {
+          body.fileName = "bao_cao_cl_nhap_thoc_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng nhập thóc - Tổng hợp";
+        }
+        if (body.loaiVthh.startsWith("0102")) {
+          body.fileName = "bao_cao_cl_nhap_gao_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng nhập gạo - Tổng hợp";
+        }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
@@ -142,8 +150,6 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
             body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
             body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
           }
-        // body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
-        // body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
       }
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclNhapHangDtqg(body).then(async s => {
@@ -186,6 +192,9 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
 
   async changeLoaiVthh(event) {
     if (event) {
+      this.formData.patchValue({
+        cloaiVthh : null
+      })
       let res = await this.danhMucSv.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
