@@ -281,31 +281,27 @@ export class BaoCaoTongHopComponent implements OnInit {
 
         // set năm tạo PA
         this.namPa = this.newDate.getFullYear();
-
+        this.capDvi = this.userInfo?.DON_VI.capDvi;
         // lấy danh sách đơn vị
-        await this.danhMuc.dMDonVi().toPromise().then(
-            (data) => {
-                if (data.statusCode === 0) {
-                    this.donVis = data?.data;
-                    this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
+        this.spinner.show();
+        const request = {
+            maDviCha: this.maDonViTao,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.lstDvi = data.data;
+                    this.donVis = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
                 } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
-        );
-
-        // await this.giaoDuToanChiService.maPhuongAnGiao('1').toPromise().then(
-        //   (res) => {
-        //     if (res.statusCode == 0) {
-        //       this.maGiao = res.data;
-        //     } else {
-        //       this.notification.error(MESSAGE.ERROR, res?.msg);
-        //     }
-        //   },
-        //   (err) => {
-        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //   },
-        // );
+        )
+        this.spinner.hide();
 
         // check trường hợp tạo mới/ cập nhật/ tổng hợp
         if (this.id) {
