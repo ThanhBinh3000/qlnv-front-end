@@ -13,6 +13,7 @@ import {isEmpty} from 'lodash';
 import {DonviService} from 'src/app/services/donvi.service';
 import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 import {CHUC_NANG} from "../../../../../constants/status";
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-thong-tin-ban-truc-tiep',
@@ -26,10 +27,17 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   dsDonvi: any[] = [];
   userdetail: any = {};
   isView: boolean = false;
+
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
+  idQdPdDc: number = 0;
+  isViewQdPdDc: boolean = false;
+  idDxKh: number = 0;
+  isViewDxKh: boolean = false;
   idQdPdKq: number = 0;
   isViewQdPdKq: boolean = false;
+
+
   listTrangThai: any[] = [
     {ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật'},
     {ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật'},
@@ -73,7 +81,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       await this.spinner.show();
       await Promise.all([
         this.timKiem(),
-        this.search(),
+        this.searchThongTin(),
         this.initData()
       ]);
     } catch (e) {
@@ -106,7 +114,51 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   async clearFilter() {
     this.formData.reset();
     await this.timKiem();
-    await this.search();
+    await this.searchThongTin();
+  }
+
+  async searchThongTin() {
+    try {
+      await this.spinner.show();
+      const body = {
+        ...this.formData.value,
+      };
+      const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const data = res.data;
+        const soDxuatMap = {};
+        const filteredRecords = [];
+        data.content.forEach(record => {
+          if (!soDxuatMap[record.soDxuat]) {
+            filteredRecords.push(record);
+            soDxuatMap[record.soDxuat] = true;
+          } else if (record.isDieuChinh) {
+            const index = filteredRecords.findIndex(existingRecord => existingRecord.soDxuat === record.soDxuat);
+            if (index !== -1) {
+              filteredRecords[index] = record;
+            }
+          }
+        });
+        this.dataTable = filteredRecords;
+        this.totalRecord = data.totalElements;
+        this.dataTable?.forEach((item) => (item.checked = false));
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async showListThongTin() {
+    this.isDetail = false;
+    await this.searchThongTin();
+    this.showListEvent.emit();
   }
 
   redirectDetail(id, isView: boolean) {
@@ -117,11 +169,19 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
 
   openModal(id: number, modalType: string) {
     switch (modalType) {
-      case 'QdPdKh':
+      case 'QdKh':
         this.idQdPdKh = id;
         this.isViewQdPdKh = true;
         break;
-      case 'QdPdKq':
+      case 'QdDc':
+        this.idQdPdDc = id;
+        this.isViewQdPdDc = true;
+        break;
+      case 'DxKh':
+        this.idDxKh = id;
+        this.isViewDxKh = true;
+        break;
+      case 'QdKq':
         this.idQdPdKq = id;
         this.isViewQdPdKq = true;
         break;
@@ -132,11 +192,19 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
 
   closeModal(modalType: string) {
     switch (modalType) {
-      case 'QdPdKh':
+      case 'QdKh':
         this.idQdPdKh = null;
         this.isViewQdPdKh = false;
         break;
-      case 'QdPdKq':
+      case 'QdDc':
+        this.idQdPdDc = null;
+        this.isViewQdPdDc = false;
+        break;
+      case 'DxKh':
+        this.idDxKh = null;
+        this.isViewDxKh = false;
+        break;
+      case 'QdKq':
         this.idQdPdKq = null;
         this.isViewQdPdKq = false;
         break;
