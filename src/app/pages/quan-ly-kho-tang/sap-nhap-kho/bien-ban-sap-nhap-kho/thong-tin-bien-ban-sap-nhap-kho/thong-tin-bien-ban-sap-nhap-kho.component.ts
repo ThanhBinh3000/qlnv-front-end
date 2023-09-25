@@ -85,7 +85,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
         hoVaTen: "",
         type: "03"
     }
-    tableHeader: Array<{ [key: string]: string }> = [{ title: "Họ và tên", value: "hoVaTen" }, { title: "Chức vụ", value: "chucVu" }];
+    tableHeader: Array<{ [key: string]: string | boolean }> = [{ title: "Họ và tên", value: "hoVaTen", edit: true, dataType: "string" }, { title: "Chức vụ", value: "chucVu", edit: true, dataType: "string" }];
     bienBanSapNhapHangDtl: any[] = [];
     bienBanSapNhapCcDtl: any[] = [];
     bienBanSapNhapVpDtl: any[] = [];
@@ -175,7 +175,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
             if (data) {
                 this.idInput = data.id;
                 this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBienBan: typeof data.soBienBan === "string" || data.soBienBan instanceof String ? data.soBienBan?.split('/')[0] : "" });
-                this.maBBSN = typeof data.soBienBan === "string" || data.soBienBan instanceof String ? "/" + data.soBienBan.split("/")[1] + "/" + data.soBienBan.split(2) : "";
+                this.maBBSN = typeof data.soBienBan === "string" || data.soBienBan instanceof String ? "/" + data.soBienBan.split("/")[1] + "/" + data.soBienBan.split("/")[2] : "";
                 if (isGuiDuyet) {
                     this.hoanThanh()
                 }

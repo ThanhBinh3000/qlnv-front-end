@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
@@ -13,14 +13,16 @@ import { cloneDeep } from 'lodash';
     templateUrl: './edit-table.component.html',
     styleUrls: ['./edit-table.component.scss'],
 })
-export class EditTableComponent implements OnInit {
+export class EditTableComponent implements OnInit, OnChanges {
     @Input() rowInitial: any = {};
     @Input() trangThai: string;
     @Input() isEdit: boolean;
     @Input() dataHeader: any[] = [];
     @Input() dataColumn: any[] = []
     @Input() dataTable: any[] = [];
-
+    @Output() addAction = new EventEmitter<any>();
+    @Output() saveAction = new EventEmitter<any>();
+    @Output() deleteAction = new EventEmitter<any>();
     rowItem: any = {};
     fileAdd: any = {};
     disabledAdd: boolean = false;
@@ -42,7 +44,11 @@ export class EditTableComponent implements OnInit {
             })
         }
     }
-
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.rowInitial) {
+            this.rowItem = cloneDeep(changes.rowInitial.currentValue);
+        }
+    }
     addRow() {
 
         if (!this.dataTable) {
@@ -50,20 +56,20 @@ export class EditTableComponent implements OnInit {
         };
         this.dataTable.push(this.rowItem);
         this.clearAdd();
+        this.addAction.emit();
     }
 
     clearAdd() {
         this.rowItem = cloneDeep(this.rowInitial);
     }
     editRow(index: number) {
-        this.dataTable = this.dataTable.map((f, i) => {
+        this.dataTable.forEach((f, i) => {
             if (f.edit) {
-                return { ...this.rowDataClone, edit: false }
+                this.dataTable[i] = { ...this.rowDataClone, edit: false }
             }
-            return { ...f, edit: false }
         });
         this.dataTable[index].edit = true;
-        this.rowDataClone = { ...this.dataTable[index] }
+        this.rowDataClone = { ...this.dataTable[index] };
         this.clearAdd();
         this.disabledAdd = true;
     }
@@ -79,6 +85,7 @@ export class EditTableComponent implements OnInit {
                 nzWidth: 310,
                 nzOnOk: async () => {
                     this.dataTable.splice(index, 1);
+                    this.deleteAction.emit();
                 }
             });
             // this.data = this.data.filter(x => x.idVirtual != item.idVirtual);
@@ -89,6 +96,7 @@ export class EditTableComponent implements OnInit {
         this.rowDataClone = {};
         this.dataTable[index].edit = false;
         this.disabledAdd = false;
+        this.saveAction.emit();
     }
     cancleEdit(index: number) {
         this.dataTable[index] = { ...this.rowDataClone };
