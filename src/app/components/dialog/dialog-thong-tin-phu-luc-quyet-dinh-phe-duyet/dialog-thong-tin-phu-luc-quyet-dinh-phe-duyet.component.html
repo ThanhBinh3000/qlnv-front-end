@@ -108,7 +108,7 @@
         <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
           <td>{{ data.maDiemKho }}</td>
           <td>{{ data.diaDiemNhap }}</td>
-          <td>{{ data.soLuong | number: '1.0-1' }}</td>
+          <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
           <td>
             <a (click)="startEdit(i)">
               <i class="fa fa-pencil" title="Sửa"></i>
