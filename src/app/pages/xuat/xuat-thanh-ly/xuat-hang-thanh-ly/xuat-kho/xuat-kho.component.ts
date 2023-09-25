@@ -20,27 +20,29 @@ export class XuatKhoComponent implements OnInit {
   ) {
     router.events.subscribe((val) => {
       this.routerUrl = this.router.url;
+      const urlList = this.routerUrl.split("/");
+      this.defaultUrl  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[urlList.length-2];
     })
   }
 
   routes: any[] = [
     {
-      url: '/phieu-xuat-kho',
+      url: '/xtl-phieu-xk',
       name: 'Phiếu xuất kho',
       accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
     },
     {
-      url: '/bang-ke-can-hang',
+      url: '/xtl-bang-ke-ch',
       name: 'Bảng kê cân hàng',
       accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
     },
     {
-      url: '/bien-ban-tinh-kho',
+      url: '/xtl-bb-tinh-kho',
       name: 'Biên bản tịnh khó',
       accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
     },
     {
-      url: '/bien-ban-hao-doi',
+      url: '/xtl-bb-hao-doi',
       name: 'Biên bản hao dôi',
       accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
     },

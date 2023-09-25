@@ -24,6 +24,7 @@ import {
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/ToChucThucHienThanhLy.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Base3Component} from "../../../../../../components/base3/base3.component";
+import {Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly',
@@ -54,21 +55,22 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
     private toChucThucHienThanhLyService: ToChucThucHienThanhLyService
   ) {
     super(httpClient, storageService, notification, spinner, modal,route,router, _service);
+    this.defaultURL = '/xuat/xuat-thanh-ly/to-chuc/qd-pd-kq'
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
       tenDvi: [''],
       nam: [dayjs().get('year')],
-      soQd: [''],
-      trichYeu: [''],
+      soQd: ['',[Validators.required]],
+      trichYeu: ['',[Validators.required]],
       ngayKy: [''],
       ngayHieuLuc: [''],
-      loaiHinhNhapXuat: [''],
-      tenLoaiHinhNx: [''],
-      kieuNhapXuat: [''],
-      tenKieuNx: [''],
-      idThongBao: [],
-      maThongBao: [''],
+      loaiHinhNhapXuat: ['89'],
+      tenLoaiHinhNx: ['Xuất bán đấu giá'],
+      kieuNhapXuat: ['03'],
+      tenKieuNx: ['Xuất bán'],
+      idThongBao: ['',[Validators.required]],
+      maThongBao: ['',[Validators.required]],
       soBienBan: [''],
       thongBaoKhongThanh: [''],
       loaiVthh: [''],
@@ -102,8 +104,9 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
       await Promise.all([
         this.loadDsToChucThanhLy(),
         this.loadDataComboBox(),
+        this.getId(),
+        this.initForm()
       ])
-      await this.loadDetail(this.idSelected)
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -112,18 +115,9 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
     await this.spinner.hide();
   }
 
-  async loadDataComboBox() {
-    //   Phương thức giao nhận
-    this.listPhuongThucGiaoNhanBDG = [];
-    let resPtGnBdg = await this.danhMucService.danhMucChungGetAll('PT_GIAO_HANG');
-    if (resPtGnBdg.msg == MESSAGE.SUCCESS) {
-      this.listPhuongThucGiaoNhanBDG = resPtGnBdg.data
-    }
-  }
-
-  async loadDetail(idInput: number) {
-    if (idInput > 0) {
-      await this._service.getDetail(idInput)
+  async initForm(){
+    if (this.id > 0) {
+      await this._service.getDetail(this.id)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.soQd) {
@@ -142,6 +136,15 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
+    }
+  }
+
+  async loadDataComboBox() {
+    //   Phương thức giao nhận
+    this.listPhuongThucGiaoNhanBDG = [];
+    let resPtGnBdg = await this.danhMucService.danhMucChungGetAll('PT_GIAO_HANG');
+    if (resPtGnBdg.msg == MESSAGE.SUCCESS) {
+      this.listPhuongThucGiaoNhanBDG = resPtGnBdg.data
     }
   }
 
@@ -167,13 +170,6 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
 
   }
 
-  async save() {
-    await this.helperService.ignoreRequiredForm(this.formData);
-    let body = {...this.formData.value, soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : null}
-    await this.createUpdate(body);
-    await this.helperService.restoreRequiredForm(this.formData);
-  }
-
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     let body = {...this.formData.value, soQd: this.formData.value.soQd + this.maHauTo}
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
@@ -196,12 +192,13 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
   }
 
   async openDialogToChucThanhLy() {
-    const data = []
-    this.toChucThucHienThanhLyService.getDsTaoQuyetDinhPdKq({
+    let data = []
+    await this.toChucThucHienThanhLyService.getDsTaoQuyetDinhPdKq({
       trangThai: STATUS.DA_HOAN_THANH,
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         console.log(res)
+        data = res.data;
       }
     });
 
@@ -250,5 +247,82 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
     } else {
       return false;
     }
+  }
+
+  showSave() {
+    let trangThai = this.formData.value.trangThai;
+    return trangThai == STATUS.DU_THAO;
+  }
+
+  save(isGuiDuyet?) {
+    this.spinner.show();
+    let body = this.formData.value;
+    body.fileDinhKemReq = this.fileDinhKem;
+    if (this.formData.value.soQd) {
+      body.soQd = this.formData.value.soQd + this.maHauTo
+    }
+    this.createUpdate(body).then((res) => {
+      if (res) {
+        if (isGuiDuyet) {
+          this.id = res.id;
+          this.pheDuyet();
+        } else {
+          this.redirectDefault();
+        }
+      }
+    })
+  }
+
+  disabled() {
+    return this.formData.value.trangThai != STATUS.DU_THAO;
+  }
+
+  showPheDuyetTuChoi() {
+    let trangThai = this.formData.value.trangThai;
+    if (this.userService.isCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETTP'))
+        || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDC'));
+    }
+    if (this.userService.isTongCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDV'))
+        || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC'))
+        || (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETBTC'));
+    }
+    return false
+  }
+
+  pheDuyet() {
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      // Approve
+      case STATUS.DU_THAO:
+        trangThai = STATUS.CHO_DUYET_TP;
+        break;
+      case STATUS.CHO_DUYET_TP:
+        trangThai = STATUS.CHO_DUYET_LDC;
+        break;
+      case STATUS.CHO_DUYET_LDC:
+        trangThai = STATUS.BAN_HANH;
+        break;
+      //Reject
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+        trangThai = STATUS.CHO_DUYET_TP;
+        break;
+    }
+    this.approve(this.formData.value.id, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
+  }
+
+  tuChoi() {
+    let trangThai
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TP:
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      case STATUS.CHO_DUYET_LDC:
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+    }
+    this.reject(this.formData.value.id, trangThai);
   }
 }

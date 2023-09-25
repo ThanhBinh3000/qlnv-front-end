@@ -10,7 +10,7 @@ import {UserService} from "../../../../../services/user.service";
 })
 export class KiemTraComponent implements OnInit {
 
-  defaultUrl: string = 'xuat/xuat-thanh-ly/xuat-hang'
+  defaultUrl: string = 'xuat/xuat-thanh-ly/xuat-hang/'
 
   routerUrl: string = "";
   constructor(
@@ -20,24 +20,26 @@ export class KiemTraComponent implements OnInit {
   ) {
     router.events.subscribe((val) => {
       this.routerUrl = this.router.url;
+      const urlList = this.routerUrl.split("/");
+      this.defaultUrl  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4];
     })
   }
   routes: any[] = [
     {
-      url: '/kiem-tra-lt',
+      url: '/xtl-bb-lm',
       name: 'Biên bản lấy mẫu/bàn giao mẫu',
       accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
     },
     {
-      url: '/kiem-tra-vt',
+      url: '/xtl-phieu-ktra-cl',
       name: 'Phiếu kiểm nghiệm chất lượng',
       accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
     },
-    {
-      url: '/ho-so-ky-thuat',
-      name: 'Hồ sơ kỹ thật',
-      accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
-    },
+    // {
+    //   url: '/xtl-hs-kt',
+    //   name: 'Hồ sơ kỹ thật',
+    //   accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+    // },
   ]
 
   ngOnInit(): void {
