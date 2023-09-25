@@ -12,8 +12,9 @@
                     [(ngModel)]="searchFilter.namDnghi"></nz-input-number>
             </div>
             <div nz-col nzSpan="3">
-                <label class="search__label">Loại</label>
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại" [(ngModel)]="searchFilter.loaiDnghi">
+                <label class="search__label">Loại mặt hàng</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn Loại mặt hàng"
+                    [(ngModel)]="searchFilter.loaiDnghi">
                     <nz-option *ngFor="let item of Cvmb.LOAI_DE_NGHI" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
@@ -83,7 +84,7 @@
                     <th scope="col" nzWidth="60px" class="text-center">STT</th>
                     <th scope="col">Mã cấp ứng</th>
                     <th scope="col">Năm</th>
-                    <th scope="col">Loại</th>
+                    <th scope="col">Loại mặt hàng</th>
                     <th scope="col">Căn cứ về giá</th>
                     <th scope="col">Quyết định</th>
                     <th scope="col">Đợt</th>

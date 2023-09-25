@@ -9,8 +9,8 @@
             </nz-select>
         </div>
         <div nz-col nzSpan="6">
-            <label class="search__label">Loại đề nghị</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị" [(ngModel)]="response.loaiDnghi"
+            <label class="search__label">Loại mặt hàng</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn Loại mặt hàng" [(ngModel)]="response.loaiDnghi"
                 [class]="response.loaiDnghi ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
                 <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
