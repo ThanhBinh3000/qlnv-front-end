@@ -113,7 +113,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.maDvi = this.userInfo.MA_DVI;
+      body.maDvi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
