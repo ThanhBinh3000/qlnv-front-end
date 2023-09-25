@@ -206,7 +206,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          this.changeSoQdMs(data.soQdpdKhMuaSam);
+          await this.changeSoQdMs(data.soQdpdKhMuaSam);
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soHopDong : this.formData.value.soHopDong ?  this.formData.value.soHopDong.split('/')[0] : null
@@ -215,8 +215,9 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
           this.dataTable = data.listQlDinhMucPvcHdLoaiHh;
           this.listPhuLuc = data.listPhuLuc
           this.listDiaDiem = data.listQlDinhMucPvcHdDiaDiemNh;
-          this.buildDiaDiemTc()
-          this.updateEditCache()
+          console.log(1111)
+          await this.buildDiaDiemTc()
+          await this.updateEditCache()
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -315,7 +316,8 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
     return msgRequired;
   }
 
-  updateEditCache() {
+  async updateEditCache() {
+    console.log(this.dataTable)
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
@@ -500,7 +502,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
     }
   }
 
-  buildDiaDiemTc() {
+  async buildDiaDiemTc() {
     if (this.listDiaDiem && this.listDiaDiem.length > 0) {
       this.listDiaDiem = chain(this.listDiaDiem)
         .groupBy("tenCcdc")
