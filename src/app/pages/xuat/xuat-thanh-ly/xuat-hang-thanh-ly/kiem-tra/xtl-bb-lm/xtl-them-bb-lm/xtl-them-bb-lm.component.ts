@@ -39,7 +39,7 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
-      loaiBienBan: [''],
+      loaiBienBan: ['LBGM'],
       nam: [dayjs().get('year')],
       soBienBan: [''],
       tenDvi: [''],
@@ -91,7 +91,7 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
     })
   }
 
-  async OnInit() {
+  async ngOnInit() {
     this.spinner.show();
     await Promise.all([
       this.loadLoaiBienBan(),
@@ -101,11 +101,20 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
     this.spinner.hide();
   }
 
-  initForm(){
+  async initForm(){
     if(this.id){
 
     }else{
-
+      await this.userService.getId("SC_BIEN_BAN_KT_HDR_SEQ").then((res) => {
+        this.formData.patchValue({
+          soBienBan: res + '/' + this.formData.value.nam + '/BBNĐK',
+          maQhns: this.userInfo.DON_VI.maQhns,
+          tenDvi: this.userInfo.TEN_DVI,
+          ngayLap: dayjs().format('YYYY-MM-DD'),
+          ngayKetThuc: dayjs().format('YYYY-MM-DD'),
+          tenThuKho: this.userInfo.TEN_DAY_DU
+        })
+      });
     }
   }
 
