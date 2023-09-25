@@ -28,6 +28,7 @@ import * as uuidv4 from "uuid";
 })
 
 export class ThongTinKiemTraChatLuongComponent extends Base2Component implements OnInit {
+  @Input() isViewOnModal: boolean;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() data: any;
@@ -98,7 +99,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       tichLuongKhaDung: [],
       donViTinh: [],
       soBBNtLd: [, [Validators.required]],
-      bBNtLdId: [],
+      bbNtLdId: [],
       tenLoKhoXuat: [],
       maLoKhoXuat: [],
       tenNganKhoXuat: [],
@@ -163,7 +164,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         soQdinhDc: this.data.soQdinh,
         ngayQdinhDcc: this.data.ngayHieuLucQd,
         qdDcId: this.data.qdinhDccId,
-        tenLoNganKho: `${this.data.tenLoKhoNhan} ${this.data.tenNganKhoNhan}`,
+        tenLoNganKho: `${this.data.tenLoKhoNhan || ""} ${this.data.tenNganKhoNhan}`,
         tenLoKho: this.data.tenLoKhoNhan,
         maLoKho: this.data.maLoKhoNhan,
         tenNganKho: this.data.tenNganKhoNhan,
@@ -226,7 +227,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         this.bienBanLayMauDinhKem = data.bienBanLayMauDinhKem
         this.phieuKTCLDinhKem = data.phieuKTCLDinhKem
 
-        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`, });
+        this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
         await this.loadChiTietQdinh(data.qdDcId);
         await this.getDataKho(data.maLoKho || data.maNganKho)
         // await this.dsBBNTBQLD(data.qdDcId, data.soQdinhDc, data.maLoKho, data.maNganKho)
@@ -236,30 +237,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     await this.spinner.hide();
   }
 
-  // async dsBBNTBQLD(qdDcId, soQdinhDc, maLoKho, maNganKho) {
-  //   const body = {
-  //     trangThai: STATUS.DA_DUYET_LDCC,
-  //     qdDcId,
-  //     soQdinhDc,
-  //     maLoKho,
-  //     maNganKho,
-  //     isVatTu: false
-  //   }
-  //   let bbNTBQ = ''
-  //   let bBNtLdId = ''
-  //   let res = await this.bienBanNghiemThuBaoQuanLanDauService.getDanhSach(body);
-  //   if (res.msg == MESSAGE.SUCCESS) {
-  //     const data = res.data
-  //     data.forEach(element => {
-  //       bbNTBQ = bbNTBQ.concat(`${element.soBban}, `)
-  //       bBNtLdId = bbNTBQ.concat(`${element.id}, `)
-  //     });
-  //     this.formData.patchValue({
-  //       soBBNtLd: bbNTBQ,
-  //       bBNtLdId
-  //     })
-  //   }
-  // }
 
   async getPPKTCL() {
     let data = await this.dmService.danhMucChungGetAll("PP_KIEM_TRA_CL");
@@ -317,7 +294,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      // loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
       type: this.formData.value.type
@@ -503,7 +479,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       if (data) {
         this.formData.patchValue({
           soBBNtLd: data.soBban,
-          bBNtLdId: data.id,
+          bbNtLdId: data.id,
 
         });
       }

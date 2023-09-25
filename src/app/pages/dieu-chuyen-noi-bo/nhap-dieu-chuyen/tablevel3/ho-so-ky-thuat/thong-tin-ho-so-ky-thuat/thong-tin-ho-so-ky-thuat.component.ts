@@ -207,7 +207,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
       maDvi: this.userInfo.MA_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
       tenNguoiTao: this.userInfo.TEN_DAY_DU,
-      trangThai: "00",
+      trangThai: "01",
       tenTrangThai: "Dự Thảo"
     });
 
@@ -400,7 +400,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
       },
       loaiDc: this.loaiDc,
       isVatTu: true,
-      type: "00",
+      type: "01",
       thayDoiThuKho: true,
       trangThai: STATUS.DA_DUYET_LDCC,
     }

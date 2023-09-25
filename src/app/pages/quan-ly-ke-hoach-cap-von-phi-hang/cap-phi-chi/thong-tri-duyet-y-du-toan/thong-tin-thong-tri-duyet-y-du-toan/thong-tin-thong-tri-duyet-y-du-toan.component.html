@@ -219,7 +219,7 @@
             <td>{{idx + 1}}</td>
             <td>{{item.muc}}</td>
             <td>{{item.tieuMuc}}</td>
-            <td class="text-right">{{item.soTien | number : '1.0-1'}}</td>
+            <td class="text-right">{{item.soTien | number : '1.0-1' : 'vi_VN'}}</td>
             <td>{{item.chuThich}}</td>
             <td>
               <a (click)="showEditItem(idx, 'show')">

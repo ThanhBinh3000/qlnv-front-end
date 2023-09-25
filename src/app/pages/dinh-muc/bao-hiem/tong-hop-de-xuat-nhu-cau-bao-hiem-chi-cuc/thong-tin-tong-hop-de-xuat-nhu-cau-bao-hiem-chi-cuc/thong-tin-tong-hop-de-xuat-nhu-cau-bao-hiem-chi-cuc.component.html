@@ -181,10 +181,10 @@
           <td></td>
           <td>{{item.tenDiemKho}}</td>
           <td>{{item.tenNhaKho}}</td>
-          <td class="text-right">{{item.tichLuong | number: '1.0-1' }}</td>
-          <td class="text-right">{{item.dienTich | number: '1.0-1' }}</td>
-          <td class="text-right">{{item.giaTriHt | number: '1.0-1' }}</td>
-          <td class="text-right">{{item.giaTriDk | number: '1.0-1' }}</td>
+          <td class="text-right">{{item.tichLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.dienTich | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.giaTriHt | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.giaTriDk | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">
             <nz-input-number [(ngModel)]="item.giaTriBhDx" [nzSize]="'small'" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter"
@@ -312,10 +312,10 @@
                     <td>{{i3 + 1}}</td>
                     <td>{{lv3.tenDonVi}}</td>
                     <td>{{lv3.donViTinh}}</td>
-                    <td class="text-right">{{lv3.soLuongHt | number: '1.0-1' }}</td>
-                    <td class="text-right">{{lv3.giaTriHt | number: '1.0-1' }}</td>
-                    <td class="text-right">{{lv3.soLuongDk | number: '1.0-1' }}</td>
-                    <td class="text-right">{{lv3.giaTriDk | number: '1.0-1' }}</td>
+                    <td class="text-right">{{lv3.soLuongHt | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{lv3.giaTriHt | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{lv3.soLuongDk | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{lv3.giaTriDk | number : '1.0-1' : 'vi_VN'}}</td>
                     <td>
                       <nz-input-number [(ngModel)]="lv3.giaTriBhDx" [nzSize]="'small'" [nzDisabled]="isView"
                                        [nzFormatter]="globals.formatter"

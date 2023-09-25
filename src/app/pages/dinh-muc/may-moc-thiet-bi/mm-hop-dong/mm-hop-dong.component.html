@@ -148,7 +148,7 @@
           <td>{{ data.banTenDvi }}</td>
           <td>{{ data.muaTenDvi }}</td>
           <td>{{ data.soQdpdKhMuaSam }}</td>
-          <td>{{ data.giaTri | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{ data.giaTri | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(data.trangThai == STATUS.DA_KY || data.capDvi != userInfo.CAP_DVI) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_XEM')">

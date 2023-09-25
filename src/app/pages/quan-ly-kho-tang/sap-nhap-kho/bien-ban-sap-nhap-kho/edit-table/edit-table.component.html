@@ -10,10 +10,17 @@
         <tr *ngIf="isEdit">
             <td></td>
             <td *ngFor="let item of dataHeader">
-                <nz-input-group>
-                    <input nz-input [(ngModel)]='rowItem[item.value]' [ngModelOptions]='{standalone: true}'
-                        [readOnly]="disabledAdd" />
+                <nz-input-group *ngIf="item.edit; else content">
+                    <input *ngIf="item.dataType === 'string'" nz-input [(ngModel)]='rowItem[item.value]'
+                        [ngModelOptions]='{standalone: true}' [readOnly]="disabledAdd" />
+                    <nz-input-number *ngIf="item.dataType === 'number'" [nzFormatter]="globals.formatter"
+                        [nzParser]="globals.parserInput" [nzMin]="0" [(ngModel)]='rowItem[item.value]'
+                        [ngModelOptions]='{standalone: true}' [nzDisabled]="disabledAdd"></nz-input-number>
                 </nz-input-group>
+                <ng-template #content>
+                    <span *ngIf="item.dataType === 'string'">{{rowItem[item.value]}}</span>
+                    <span *ngIf="item.dataType === 'number'">{{+rowItem[item.value] | number: '1.0-1': 'vi_VN'}}</span>
+                </ng-template>
             </td>
             <td>
                 <a [ngClass]="{'disabled': disabledAdd}" (click)='addRow()'>
@@ -27,7 +34,10 @@
         <tr *ngFor="let item of dataTable; let idx = index">
             <ng-container *ngIf="!item.edit; else editTemplate">
                 <td>{{ idx + 1 }}</td>
-                <td *ngFor="let i of dataHeader">{{ item[i.value] }}</td>
+                <ng-container *ngFor="let i of dataHeader">
+                    <td *ngIf="i.dataType==='string'">{{ item[i.value] }}</td>
+                    <td *ngIf="i.dataType === 'number'">{{+item[i.value] | number: '1.0-1': 'vi_VN'}}</td>
+                </ng-container>
                 <td *ngIf="isEdit">
                     <a (click)="editRow(idx)">
                         <i class="fa fa-pencil" title="Sửa"></i>
@@ -40,10 +50,17 @@
             <ng-template #editTemplate>
                 <td></td>
                 <td *ngFor="let i of dataHeader">
-                    <nz-input-group>
-                        <input nz-input [(ngModel)]='item[i.value]' [ngModelOptions]='{standalone: true}'
-                            [readonly]="!isEdit" />
+                    <nz-input-group *ngIf="i.edit; else content">
+                        <input *ngIf="i.dataType === 'string'" nz-input [(ngModel)]='item[i.value]'
+                            [ngModelOptions]='{standalone: true}' [readonly]="!isEdit" />
+                        <nz-input-number *ngIf="i.dataType === 'number'" [nzFormatter]="globals.formatter"
+                            [nzParser]="globals.parserInput" [nzMin]="0" [(ngModel)]='item[i.value]'
+                            [ngModelOptions]='{standalone: true}' [nzDisabled]="!isEdit"></nz-input-number>
                     </nz-input-group>
+                    <ng-template #content>
+                        <span *ngIf="i.dataType==='string'">{{item[i.value]}}</span>
+                        <span *ngIf="i.dataType === 'number'">{{+item[i.value] | number: '1.0-1': 'vi_VN'}}</span>
+                    </ng-template>
                 </td>
                 <td class="text-center">
                     <a (click)="saveEdit(idx)" class="save">

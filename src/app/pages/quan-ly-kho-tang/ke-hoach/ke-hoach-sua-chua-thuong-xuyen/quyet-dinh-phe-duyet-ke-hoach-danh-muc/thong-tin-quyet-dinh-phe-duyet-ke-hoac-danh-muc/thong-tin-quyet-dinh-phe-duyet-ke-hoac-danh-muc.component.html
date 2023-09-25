@@ -42,7 +42,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <nz-select nzAllowClear formControlName="namKh" [nzDisabled]="isViewDetail">
+                <nz-select nzAllowClear formControlName="namKh" (ngModelChange)="changeNam($event)" [nzDisabled]="isViewDetail">
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-input-group>
