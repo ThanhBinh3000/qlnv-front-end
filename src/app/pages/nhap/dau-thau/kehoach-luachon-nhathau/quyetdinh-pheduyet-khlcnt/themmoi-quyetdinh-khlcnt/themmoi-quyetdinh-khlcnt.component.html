@@ -195,7 +195,7 @@
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="6">
-            <nz-form-item *ngIf="!formData.value.loaiVthh.startsWith('02')">
+            <nz-form-item *ngIf="!loaiVthh.startsWith('02')">
               <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open">
@@ -235,8 +235,8 @@
               <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
-              <td>{{ data.soLuong | number: '1.0-1' }}</td>
-              <td>{{ data.tongTien | number: '1.0-1' }}</td>
+              <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN'}}</td>
             </tr>
           </tbody>
         </nz-table>

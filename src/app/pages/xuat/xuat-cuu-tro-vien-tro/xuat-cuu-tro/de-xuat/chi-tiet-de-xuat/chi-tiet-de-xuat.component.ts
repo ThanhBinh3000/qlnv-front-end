@@ -122,14 +122,16 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tonKhoLoaiVthh: [''],
         tonKhoCloaiVthh: [''],
         donViTinh: [''],
-        soLuongNhuCau: [0],
         soLuong: [0, [Validators.required, Validators.min(1)]],
         mapVthh: [''],
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
         mapDmucDvi: [''],
         tenDvi: [''],
-        edit: []
+        edit: [],
+        soLuongNhuCauXuat: [0],
+        soLuongConThieu: [0],
+        soLuongChuyenCapThoc: [0],
       });
   }
 
@@ -219,7 +221,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
-        this.formDataDtl.patchValue({noiDung: data.noiDung, edit: level});
+        this.formDataDtl.patchValue({noiDung: data.noiDung});
       } else if (level == 1) {
         this.formDataDtl.patchValue({
           idVirtual: uuidv4(),
@@ -290,15 +292,16 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
 
 
-  async xoaPhuongAn(data: any, dataParent?: any) {
+  async xoaPhuongAn(data: any, dataParent?: any, level?: any) {
     let deXuatPhuongAn = this.formData.value.deXuatPhuongAn;
-    if (data.idVirtual) {
+    if (level == 3) {
       deXuatPhuongAn = deXuatPhuongAn.filter(s => s.idVirtual != data.idVirtual);
-    } else if (dataParent) {
+    } else if (level == 2) {
       deXuatPhuongAn = deXuatPhuongAn.filter(s => !(s.tenLoaiVthh === data.tenLoaiVthh && s.noiDung === dataParent.noiDung));
-    } else if (data.noiDung) {
+    } else if (level == 1) {
       deXuatPhuongAn = deXuatPhuongAn.filter(s => s.noiDung !== data.noiDung);
     }
+
     this.formData.patchValue({deXuatPhuongAn: deXuatPhuongAn});
     await this.buildTableView();
   }
@@ -446,7 +449,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       Object.assign(this.listLoaiHangHoa, filter.children);
       this.formDataDtl.patchValue({loaiVthh: null});
     }
-
+    this.formData.patchValue({deXuatPhuongAn: []});
     await this.kiemTraTonKho();
   }
 
@@ -489,5 +492,27 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       });
     }
     await this.kiemTraTonKho();
+  }
+
+  soLuongNhuCauXuatChange($event) {
+    // (tính soLuongConThieu = nếu (Nhu cầu xuất cứu trợ  - sl xuất cứu trợ đề xuất ) > 0 thì (Nhu cầu xuất cứu trợ  - sl xuất cứu trợ đề xuất ) ngược lại  = 0 )
+    if( this.formDataDtl.value.soLuong > this.formDataDtl.value.tonKhoLoaiVthh){
+      let soLuongConThieu = this.formDataDtl.value.tonKhoLoaiVthh - this.formDataDtl.value.soLuong;
+      if (soLuongConThieu < 0) {
+        soLuongConThieu = 0;
+      }
+      this.formDataDtl.patchValue({
+        soLuongConThieu: soLuongConThieu,
+        soLuongChuyenCapThoc: soLuongConThieu
+      });
+      console.log('soLuongConThieu: ' + soLuongConThieu);
+    }
+  }
+
+  isVthhGao() {
+    if (this.formData.value.tenVthh == "Gạo tẻ") {
+      return true;
+    }
+    return false;
   }
 }

@@ -19,23 +19,17 @@ import { cloneDeep } from 'lodash';
 import {
   ThongTinChiTietDauGiaThanhLyComponent
 } from "./thong-tin-dau-gia-thanh-ly/thong-tin-chi-tiet-dau-gia-thanh-ly.component";
+import {Base3Component} from "../../../../../../components/base3/base3.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-chi-tiet-thong-tin-dau-gia-thanh-ly',
   templateUrl: './chi-tiet-thong-tin-dau-gia-thanh-ly.component.html',
   styleUrls: ['./chi-tiet-thong-tin-dau-gia-thanh-ly.component.scss']
 })
-export class ChiTietThongTinDauGiaThanhLyComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
-  @Input() idInput: number;
-  @Input() isView: boolean;
-  @Output()
-  showListEvent = new EventEmitter<any>();
-
-  fileDinhKem: any[] = [];
+export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implements OnInit {
   dataDetail: any;
   selected: boolean = false;
-
   dsQuyetDinhTl: any[] = [];
 
   constructor(
@@ -44,17 +38,19 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base2Component implem
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
+    private _service: QuyetDinhThanhLyService,
     private toChucThucHienThanhLyService: ToChucThucHienThanhLyService,
-    private quyetDinhThanhLyService: QuyetDinhThanhLyService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, toChucThucHienThanhLyService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group(
       {
         id: [],
         nam: [],
-        idQdTl: [],
-        soQdTl: [''],
-        soHoSoTl: [''],
+        idQd: [],
+        soQd: [''],
+        soHoSo: [''],
         tenDvi: [''],
         tongTienGiaKhoiDiem: [],
         thoiGianTlDuocDuyet: [],
@@ -73,34 +69,33 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base2Component implem
   }
 
   async ngOnInit() {
-    await this.spinner.show();
-    try {
-      await this.loadDsQuyetDinhThanhLy();
-    } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    await this.spinner.hide();
+    this.spinner.show();
+    await Promise.all([
+      await this.getId(),
+      await this.initForm()
+    ])
+    this.spinner.hide();
   }
 
-  async loadDsQuyetDinhThanhLy() {
-    let body = {
-      trangThai: STATUS.BAN_HANH
-    }
-    let res = await this.quyetDinhThanhLyService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data.content;
-      if (data && data.length > 0) {
-        this.dsQuyetDinhTl = data
-        this.dsQuyetDinhTl = this.dsQuyetDinhTl.filter(item => item.quyetDinhDtl.some(child => child.id == this.idInput))
-        if (this.dsQuyetDinhTl) {
-          await this.detailQuyetDinhThanhLy(this.dsQuyetDinhTl[0].id)
+  async initForm() {
+    if (this.id) {
+      await this.detail(this.id).then((res) => {
+        if (res) {
+          this.loadThongTinDauGia();
         }
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      })
     }
+  }
+
+  async loadThongTinDauGia() {
+    let body = {
+      idQdTl : this.id
+    }
+    await this.toChucThucHienThanhLyService.getAll(body).then((res)=>{
+      console.log(res)
+      this.dataTable = res.data;
+
+    })
   }
 
   hoanThanhCapNhat() {
@@ -126,14 +121,14 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base2Component implem
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.id,
             trangThai: this.STATUS.HOAN_THANH_CAP_NHAT
           }
-          let res = await this.quyetDinhThanhLyService.approveDtl(body);
+          let res = await this._service.approveDtl(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.loadThongTinDauGia()
             this.spinner.hide();
-            this.loadDsQuyetDinhThanhLy();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
@@ -152,11 +147,11 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base2Component implem
   async detailQuyetDinhThanhLy(id) {
     await this.spinner.show();
     if (id > 0) {
-      await this.quyetDinhThanhLyService.getDetail(id)
+      await this._service.getDetail(id)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data
-            const dataDtl = data.quyetDinhDtl.filter(item => item.id == this.idInput)[0];
+            const dataDtl = data.quyetDinhDtl.filter(item => item.id == this.id)[0];
             this.formData.patchValue({
               trangThai: dataDtl.trangThaiThucHien,
               tenTrangThai: dataDtl.tenTrangThaiThucHien,
@@ -215,7 +210,7 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base2Component implem
             id: data.id
           };
           this.toChucThucHienThanhLyService.delete(body).then(async () => {
-            this.loadDsQuyetDinhThanhLy();
+            this.loadThongTinDauGia();
             this.spinner.hide();
           });
         } catch (e) {
@@ -247,15 +242,14 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base2Component implem
       nzBodyStyle: { 'overflow-y': 'auto' },
       nzComponentParams: {
         isModal: true,
-        idQdTl: this.formData.value.idQdTl,
-        soQdTl: this.formData.value.soQdTl,
-        idQdTlDtl: this.idInput,
+        idQdTl: this.id,
+        soQdTl: this.formData.value.soQd,
         dataDetail: data,
         soLanDauGia: this.dataTable.length
       },
     });
     modalQD.afterClose.subscribe((data) => {
-      this.loadDsQuyetDinhThanhLy()
+      this.loadThongTinDauGia()
     });
   }
 

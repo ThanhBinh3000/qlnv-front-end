@@ -279,9 +279,9 @@
               <td>{{ idx + 1 }}</td>
               <td>{{ data.tenHangHoa}}</td>
               <td>{{ data.donViTinh }}</td>
-              <td>{{ data.soLuong  | number: '1.0-1'  }}</td>
-              <td>{{ data.donGia }}</td>
-              <td>{{ data.donGia *  data.soLuong   | number: '1.0-1'  }}</td>
+              <td class="text-right">{{ data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.donGia *  data.soLuong   | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-center" *ngIf="!isView">
                 <a (click)="editRow(idx)">
                   <i class="fa fa-pencil" title="Sửa"></i>

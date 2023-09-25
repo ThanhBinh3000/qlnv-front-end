@@ -99,7 +99,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
       body.fileName = "bc_thuc_hien_kh_hoach_nhap_xuat_ct_vt_bao_quan_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo thực hiện KH hoạch nhập, xuất, ct, vt, bảo quản hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.thucHienKeHoach(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -123,7 +123,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
       body.fileName = "bc_thuc_hien_kh_hoach_nhap_xuat_ct_vt_bao_quan_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo thực hiện KH hoạch nhập, xuất, ct, vt, bảo quản hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.thucHienKeHoach(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bc_thuc_hien_kh_hoach_nhap_xuat_ct_vt_bao_quan_hang_dtqg.xlsx");

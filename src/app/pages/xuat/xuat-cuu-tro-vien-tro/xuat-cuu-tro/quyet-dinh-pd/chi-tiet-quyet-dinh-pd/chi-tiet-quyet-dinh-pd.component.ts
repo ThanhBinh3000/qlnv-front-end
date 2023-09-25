@@ -91,8 +91,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   tongThanhTien: any;
   tongSoLuong: any;
   tongSoLuongDx: any;
-  tongSoLuongXuatCap: any;
-  listVatTuHangHoa: any[] = [];
   quyetDinhPdDtlCache: any[] = [];
   maHauTo: any;
   templateName = "Quyết định phê duyệt phương án";
@@ -235,11 +233,13 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
     // this.formData.controls.soQdGnv.setValidators([Validators.required]);
+    let xuatCap = this.formData.value.xuatCap;
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
     await this.createUpdate(body);
+    this.formData.patchValue({xuatCap:xuatCap});
     await this.helperService.restoreRequiredForm(this.formData);
   }
 
@@ -352,6 +352,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           if (data) {
             let res = await this.deXuatPhuongAnCuuTroService.getDetail(data.id);
             let detail = res.data;
+            console.log(detail);
             detail.deXuatPhuongAn.forEach(s => {
               s.noiDungDx = s.noiDung;
               s.soDx = detail.soDx;
@@ -362,6 +363,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               s.kieuNhapXuat = detail.kieuNhapXuat;
               s.mucDichXuat = detail.mucDichXuat;
               s.tenVthh = detail.tenVthh;
+              s.soLuongXc = s.soLuongChuyenCapThoc;
             });
             this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatPhuongAn);
             if (!this.formData.value.id) {
@@ -568,7 +570,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     let tongSoDaGiao = currentDvi.reduce((prev, next) => prev + next.soLuong, 0);
     currentDvi.forEach(s => s.soLuongXc = 0);
     if (tongSoDaGiao > currentRow.tonKhoLoaiVthh) {
-      currentRow.soLuongXc = currentRow.tonKhoLoaiVthh - tongSoDaGiao;
+      currentRow.soLuongXc = (tongSoDaGiao - currentRow.tonKhoLoaiVthh) > 0 ? (tongSoDaGiao - currentRow.tonKhoLoaiVthh) : 0;
     } else {
       currentRow.soLuongXc = 0;
     }

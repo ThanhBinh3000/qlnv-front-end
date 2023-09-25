@@ -309,138 +309,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     }
   }
 
-  // async addTH() {
-  //   if (this.formData.value.soLuongTrongNam)
-  //     this.dsHangTH.push({
-  //       idVirtual: uuidv4.v4(),
-  //       type: "TH",
-  //       edit: false,
-  //       noiDung: this.formData.value.noiDung,
-  //       dviTinh: this.dviTinh,
-  //       soLuongTrongNam: this.formData.value.soLuongTrongNam,
-  //       donGiaTrongNam: this.formData.value.donGiaTrongNam,
-  //       thanhTienTrongNam: this.thanhTienTrongNam,
-  //       soLuongNamTruoc: this.formData.value.soLuongNamTruoc,
-  //       thanhTienNamTruoc: this.formData.value.thanhTienNamTruoc,
-  //       tongGiaTri: this.tongGiaTri,
-  //     })
-  //   const tongKinhPhiDaTh = this.dsHangTH.reduce((previous, current) => previous + current.tongGiaTri, 0);
-  //   const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
-  //   this.dsHangTH = cloneDeep(this.dsHangTH)
-  //   this.formData.patchValue({
-  //     noiDung: "",
-  //     soLuongTrongNam: "",
-  //     donGiaTrongNam: "",
-  //     soLuongNamTruoc: "",
-  //     thanhTienNamTruoc: "",
-  //     tongKinhPhiDaTh,
-  //     tongKinhPhiDaThBc
-  //   })
-  //   this.dviTinh = ""
-  //   this.thanhTienTrongNam = null
-  //   this.tongGiaTri = null
-  // }
 
-  // isDisableField() {
-  //   return false;
-  // }
-
-  // cancelEdit(index: number): void {
-  //   this.objHangTH = null
-  //   this.iHangTH = null
-  //   this.dsHangTH[index].edit = false;
-  // }
-
-  // saveEdit(index: number): void {
-  //   this.objHangTH = null
-  //   this.iHangTH = null
-  //   this.dsHangTH[index].edit = false;
-  // }
-
-  // deleteRow(data: any) {
-  //   this.dsHangTH = this.dsHangTH.filter(x => x.idVirtual != data.idVirtual);
-  //   const tongKinhPhiDaTh = this.dsHangTH.reduce((previous, current) => previous + current.tongGiaTri, 0);
-  //   const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
-  //   this.dsHangTH = cloneDeep(this.dsHangTH)
-  //   this.formData.patchValue({
-  //     noiDung: "",
-  //     soLuongTrongNam: "",
-  //     donGiaTrongNam: "",
-  //     soLuongNamTruoc: "",
-  //     thanhTienNamTruoc: "",
-  //     tongKinhPhiDaTh,
-  //     tongKinhPhiDaThBc
-  //   })
-  // }
-
-  // editRow(index: number) {
-  //   this.iHangTH = index
-  //   this.objHangTH = this.dsHangTH[index]
-  //   this.dsHangTH[index].edit = true;
-  // }
-
-  // async addPD() {
-  //   if (this.formData.value.soLuongTrongNam)
-  //     this.dsHangPD.push({
-  //       idVirtual: uuidv4.v4(),
-  //       type: "PD",
-  //       edit: false,
-  //       noiDung: this.formData.value.noiDung,
-  //       dviTinh: this.dviTinh,
-  //       soLuongTrongNam: this.formData.value.soLuongTrongNam,
-  //       donGiaTrongNam: this.formData.value.donGiaTrongNam,
-  //       thanhTienTrongNam: this.thanhTienTrongNam,
-  //       soLuongNamTruoc: this.formData.value.soLuongNamTruoc,
-  //       thanhTienNamTruoc: this.formData.value.thanhTienNamTruoc,
-  //       tongGiaTri: this.tongGiaTri,
-  //     })
-
-  //   this.dsHangPD = cloneDeep(this.dsHangPD)
-  //   this.formData.patchValue({
-  //     noiDung: "",
-  //     soLuongTrongNam: "",
-  //     donGiaTrongNam: "",
-  //     soLuongNamTruoc: "",
-  //     thanhTienNamTruoc: "",
-  //   })
-  //   this.dviTinh = ""
-  //   this.thanhTienTrongNam = null
-  //   this.tongGiaTri = null
-  // }
-
-  // cancelEditPD(index: number): void {
-  //   this.objHangPD = null
-  //   this.iHangPD = null
-  //   this.dsHangPD[index].edit = false;
-  // }
-
-  // saveEditPD(index: number): void {
-  //   this.objHangPD = null
-  //   this.iHangPD = null
-  //   this.dsHangPD[index].edit = false;
-  // }
-
-  // deleteRowPD(data: any) {
-  //   this.dsHangPD = this.dsHangPD.filter(x => x.idVirtual != data.idVirtual);
-  //   // const tongKinhPhiDaTh = this.dsHangPD.reduce((previous, current) => previous + current.tongGiaTri, 0);
-  //   // const tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh)
-  //   this.dsHangPD = cloneDeep(this.dsHangPD)
-  //   this.formData.patchValue({
-  //     noiDung: "",
-  //     soLuongTrongNam: "",
-  //     donGiaTrongNam: "",
-  //     soLuongNamTruoc: "",
-  //     thanhTienNamTruoc: "",
-  //     // tongKinhPhiDaTh,
-  //     // tongKinhPhiDaThBc
-  //   })
-  // }
-
-  // editRowPD(index: number) {
-  //   this.iHangPD = index
-  //   this.objHangPD = this.dsHangPD[index]
-  //   this.dsHangPD[index].edit = true;
-  // }
 
   async addTH(row?: any) {
     this.typeData = "TH"
@@ -804,6 +673,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         this.formData.patchValue({
           soQdDcCuc: data.soQdinh,
           ngayQdDcCuc: data.ngayKyQdinh,
+          thoiGianNhapMuonNhat: data.ngayHieuLuc,
           qdDcCucId: data.id,
           tenLoNganKho: "",
           tenLoKho: "",

@@ -478,8 +478,8 @@
               <td>{{ data.soGthau }}</td>
               <td>{{ data.soDxuat }}</td>
               <td>{{ data.ngayDxuat | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.soLuong | number: '1.0-1' }}</td>
-              <td>{{ data.tongTien | number: '1.0-1' }}</td>
+              <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-center">
                 <a (click)="openDialogDeXuat(i)">
                   <i class="fa fa-pencil" title="Sửa"></i>

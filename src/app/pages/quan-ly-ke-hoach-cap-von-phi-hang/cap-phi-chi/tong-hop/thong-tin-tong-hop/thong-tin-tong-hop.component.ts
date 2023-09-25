@@ -64,7 +64,7 @@ export class ThongTinTongHopComponent implements OnInit {
   yearNow: number;
   itemSelectedInfo: any = {};
   itemSelectedEdit: any = {};
-  filePhuongAn: any = {};
+  filePhuongAn: any[] = [];
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
 
@@ -128,12 +128,13 @@ export class ThongTinTongHopComponent implements OnInit {
       'ngayTongHop': [null, [Validators.required]],
       'maToTrinh': [null],
       'noiDung': [null],
-      'nameFilePhuongAn': [null],
+      'capDvi': [null],
+      'maDvi': [null],
+      'lyDoTuChoi': [null],
+      // 'nameFilePhuongAn': [null],
     });
     this.formData.patchValue({
       id: this.idInput,
-      maDonVi: this.userInfo.MA_DVI,
-      capDvi: this.userInfo.CAP_DVI,
       nam: this.yearNow,
       ngayTongHop: new Date().toDateString(),
     });
@@ -181,7 +182,7 @@ export class ThongTinTongHopComponent implements OnInit {
         let data = res.data;
         if (data) {
           this.detail = res.data;
-          this.filePhuongAn = res.data.fileDinhKem;
+          this.filePhuongAn = res.data.fileDinhKems;
           this.formData.patchValue({
             'nam': res.data.nam,
             'nguonTongHop': data.nguonTongHop,
@@ -189,7 +190,9 @@ export class ThongTinTongHopComponent implements OnInit {
             'ngayTongHop': data.ngayTongHop,
             'maToTrinh': data.maToTrinh,
             'noiDung': data.noiDung,
-            nameFilePhuongAn: data.fileDinhKem.fileName,
+            'maDvi': data.maDvi,
+            'capDvi': data.capDvi,
+            'lyDoTuChoi': data.lyDoTuChoi,
           });
           this.cts = [...data.cts];
           this.ct1s = [...data.ct1s];
@@ -213,8 +216,9 @@ export class ThongTinTongHopComponent implements OnInit {
     body.id = this.idInput;
     body.ct1s = this.ct1s;
     body.cts = this.cts;
-    body.fileDinhKem = this.filePhuongAn;
-    // return ;
+    body.fileDinhKems = this.filePhuongAn;
+    // console.log(body, 'bodybodybody');
+    // return;
     this.spinner.show();
     try {
       if (this.idInput > 0) {
@@ -479,16 +483,21 @@ export class ThongTinTongHopComponent implements OnInit {
     item.edit = false;
   }
 
-  saveEdit(item, type) {
+  saveEdit(item, type, index) {
     item.edit = false;
-    if (type === 'ct1s') {
-      item.maVatTuCha = this.rowEdit.maVatTuCha;
-      item.maVatTu = this.rowEdit.maVatTu;
-      item.tenHangHoa = this.rowEdit.tenHangHoa;
-      item.ct2s = cloneDeep(this.rowEdit.ct2s);
-      item.ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
-      this.rowEdit.isView = true;
-    }
+    this.rowEdit.ct2s[index] = item;
+    this.ct1s.find(it => it.selected).ct2s = this.rowEdit.ct2s;
+    // if (type === 'ct2s') {
+    //   // item.maVatTuCha = this.rowEdit.maVatTuCha;
+    //   // item.maVatTu = this.rowEdit.maVatTu;
+    //   // item.tenHangHoa = this.rowEdit.tenHangHoa;
+    //   item.ct2s = cloneDeep(this.rowEdit.ct2s);
+    //   console.log(this.ct1s, 'this.ct1sthis.ct1sthis.ct1s');
+    //   this.rowEdit.ct2s = cloneDeep(this.rowEdit.ct2s);
+    //   // console.log(this.rowEdit.ct2s,'this.rowEdit.ct2sthis.rowEdit.ct2s');
+    //   item.ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
+    //   // this.rowEdit.isView = true;
+    // }
   }
 
   deleteRow(item: any, type) {
@@ -524,10 +533,12 @@ export class ThongTinTongHopComponent implements OnInit {
     this.sortTableId('ct2s');
     let item = cloneDeep(this.create);
     item.stt = this.rowEdit.ct2s.length + 1;
+    item.tenLoaiChiPhi = this.listLoaiChiPhi.find(chiphi => chiphi.ma ==item.loaiChiPhi)?.giaTri;
     this.rowEdit.ct2s = [
       ...this.rowEdit.ct2s,
       item,
     ];
+    this.ct1s.find(it => it.selected).ct2s = this.rowEdit.ct2s;
     this.clearItemRow();
   }
 
@@ -535,28 +546,28 @@ export class ThongTinTongHopComponent implements OnInit {
     this.create = {};
   }
 
-  getNameFile(event?: any, item?: FileDinhKem) {
-    const element = event.currentTarget as HTMLInputElement;
-    const fileList: FileList | null = element.files;
-    if (fileList) {
-      const itemFile = {
-        name: fileList[0].name,
-        file: event.target.files[0] as File,
-      };
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
-        .then((resUpload) => {
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          this.formData.patchValue({
-            nameFilePhuongAn: resUpload.filename,
-          });
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
-          this.filePhuongAn = fileDinhKem;
-        });
-    }
-  }
+  // getNameFile(event?: any, item?: FileDinhKem) {
+  //   const element = event.currentTarget as HTMLInputElement;
+  //   const fileList: FileList | null = element.files;
+  //   if (fileList) {
+  //     const itemFile = {
+  //       name: fileList[0].name,
+  //       file: event.target.files[0] as File,
+  //     };
+  //     this.uploadFileService
+  //       .uploadFile(itemFile.file, itemFile.name)
+  //       .then((resUpload) => {
+  //         const fileDinhKem = new FileDinhKem();
+  //         fileDinhKem.fileName = resUpload.filename;
+  //         this.formData.patchValue({
+  //           nameFilePhuongAn: resUpload.filename,
+  //         });
+  //         fileDinhKem.fileSize = resUpload.size;
+  //         fileDinhKem.fileUrl = resUpload.url;
+  //         this.filePhuongAn = fileDinhKem;
+  //       });
+  //   }
+  // }
 
   async loadThongTinChiTiet() {
     this.isTonghop = true;
@@ -636,7 +647,6 @@ export class ThongTinTongHopComponent implements OnInit {
         this.itemSelectedInfo = cloneDeep(row);
         if (this.itemSelectedInfo) {
           let ct2List = this.itemSelectedInfo.ct2s;
-          console.log(ct2List, 'ct2Listct2Listct2Listct2Listct2List');
           ct2List.forEach(item => {
             let chiPhi = this.listLoaiChiPhi.find(cp => cp.ma == item.loaiChiPhi);
             if (chiPhi) {

@@ -63,6 +63,12 @@
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
     <form nz-form nzLayout="vertical" [formGroup]="formData">
+      <nz-form-label [nzNoColon]="true">
+        <label nz-checkbox [nzDisabled]="isView"
+               formControlName="paXuatGaoChuyenXc">
+          Phương án xuất gạo chuyển xuất cấp
+        </label>
+      </nz-form-label>
       <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="2">
           <nz-form-item>
@@ -102,6 +108,16 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayHluc" [nzFormat]="globals.dateFormat" [nzDisabled]="isView">
               </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4" *ngIf="this.formData.value.paXuatGaoChuyenXc">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Chọn Số công văn/đề xuất</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTrQdPaXuatCapChange()">
+                <input [readonly]="true" nz-input formControlName="qdPaXuatCap" readonly="true"/>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -173,7 +189,7 @@
           <span>Chi tiết phương án xuất cứu trợ, viện trợ</span>
         </div>
         <div>
-          <button type="button" class="btn btn-main" (click)="themPhuongAn(null,0)" *ngIf="!isView">
+          <button type="button" class="btn btn-main" (click)="themPhuongAn(null,0)" *ngIf="!isView && !this.formData.value.paXuatGaoChuyenXc">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -226,7 +242,7 @@
               <td></td>
               <td>
                 <a>
-                  <i class="fa fa-plus" *ngIf="!isView" (click)="themPhuongAn(item,0)"></i>
+                  <i class="fa fa-plus" *ngIf="!isView && !this.formData.value.paXuatGaoChuyenXc" (click)="themPhuongAn(item,0)"></i>
                 </a>
                 <!--<a>
                   <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
@@ -247,10 +263,10 @@
                   <td>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
                   <td>
                     <a>
-                      <i class="fa fa-edit" *ngIf="!isView" (click)="themPhuongAn(lv1,1)"></i>
+                      <i class="fa fa-edit" *ngIf="!isView && !this.formData.value.paXuatGaoChuyenXc" (click)="themPhuongAn(lv1,1)"></i>
                     </a>
                     <a>
-                      <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm
+                      <i class="fa fa-trash-o do" *ngIf="!isView && !this.formData.value.paXuatGaoChuyenXc" nz-popconfirm
                          nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                          (nzOnConfirm)="xoaPhuongAn(lv1,item)"></i>
                     </a>

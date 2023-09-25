@@ -267,6 +267,16 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
     this.isQuyetDinh = true;
   }
 
+  redirectQd(data: any) {
+    this.isQdPdKhlcntId = data.qdPdKhlcntId;
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = true;
+  }
+
 
   showTongHop() {
     this.search();
