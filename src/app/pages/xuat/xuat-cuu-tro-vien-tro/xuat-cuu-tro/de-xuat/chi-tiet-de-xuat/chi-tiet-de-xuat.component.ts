@@ -221,7 +221,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
-        this.formDataDtl.patchValue({noiDung: data.noiDung, edit: level});
+        this.formDataDtl.patchValue({noiDung: data.noiDung});
       } else if (level == 1) {
         this.formDataDtl.patchValue({
           idVirtual: uuidv4(),
@@ -292,15 +292,16 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
 
 
-  async xoaPhuongAn(data: any, dataParent?: any) {
+  async xoaPhuongAn(data: any, dataParent?: any, level?: any) {
     let deXuatPhuongAn = this.formData.value.deXuatPhuongAn;
-    if (data.idVirtual) {
+    if (level == 3) {
       deXuatPhuongAn = deXuatPhuongAn.filter(s => s.idVirtual != data.idVirtual);
-    } else if (dataParent) {
+    } else if (level == 2) {
       deXuatPhuongAn = deXuatPhuongAn.filter(s => !(s.tenLoaiVthh === data.tenLoaiVthh && s.noiDung === dataParent.noiDung));
-    } else if (data.noiDung) {
+    } else if (level == 1) {
       deXuatPhuongAn = deXuatPhuongAn.filter(s => s.noiDung !== data.noiDung);
     }
+
     this.formData.patchValue({deXuatPhuongAn: deXuatPhuongAn});
     await this.buildTableView();
   }
@@ -503,11 +504,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       soLuongConThieu: soLuongConThieu,
       soLuongChuyenCapThoc: soLuongConThieu * 2
     });
-    console.log('soLuongConThieu: '+soLuongConThieu);
+    console.log('soLuongConThieu: ' + soLuongConThieu);
   }
 
   isVthhGao() {
-    if(this.formData.value.tenVthh == "Gạo tẻ"){
+    if (this.formData.value.tenVthh == "Gạo tẻ") {
       return true;
     }
     return false;
