@@ -27,7 +27,7 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthhCache: string;
   @Input() loaiXuat: any;
-  @Input() chuyenXuatCap: Boolean = false;
+  @Input() chuyenXuatCap: Boolean = null;
   @Input() isView = false;
   @Output() eventTaoQdXc: EventEmitter<any> = new EventEmitter<any>();
 
@@ -58,7 +58,8 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
       ngayKetThucDxTu: null,
       ngayKetThucDxDen: null,
       type: null,
-      xuatCap:null
+      xuatCap:null,
+      trangThai:null
     })
     this.filterTable = {
       soQd: '',
@@ -117,7 +118,7 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({type: this.loaiXuat, xuatCap: this.chuyenXuatCap});
+      this.formData.patchValue({type: this.loaiXuat, xuatCap: this.chuyenXuatCap, trangThai: (!!!this.chuyenXuatCap) ? null: '29' });
       if(this.chuyenXuatCap){
         this.formData.patchValue({tenVthh:TEN_LOAI_VTHH.GAO});
       }

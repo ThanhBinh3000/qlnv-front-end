@@ -109,8 +109,8 @@
         <ng-container *ngIf=" !dataEdit[i].edit ; else editTemplate ">
           <td class="text-center">{{i + 1}}</td>
           <td>{{ data.tenLoaiGiaoDich }}</td>
-          <td>{{ data.slTang | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.slGiam | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slTang | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slGiam | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ data.ngayGd | date : 'dd/MM/yyyy' }}</td>
           <td>{{ data.soPhieu }}</td>
           <td>{{ data.tenDonViChuyen }}</td>
