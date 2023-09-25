@@ -92,7 +92,7 @@
               <th class="text-center">Số phiếu KTCL</th>
               <th class="text-center">Ngày giám định</th>
               <th class="text-center">Trạng thái</th>
-              <th class="text-center">Hành động</th>
+              <th class="text-center" *ngIf="isChiCuc()">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -113,7 +113,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td *ngIf="isChiCuc()"></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -132,7 +132,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td *ngIf="isChiCuc()"></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -151,7 +151,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>
+                        <td *ngIf="isChiCuc()">
                           <a (click)="add(row3)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
@@ -172,7 +172,7 @@
                           <td class="bold">{{row4.soPhieuKiemTraCl || ""}}</td>
                           <td class="bold">{{row4.ngayGiamDinh|date: "dd/MM/yyyy"}}</td>
                           <td class="bold">{{row4.tenTrangThai || ""}}</td>
-                          <td>
+                          <td *ngIf="isChiCuc()">
                             <a *ngIf="row4.trangThai === STATUS.DA_DUYET_LDCC" (click)="redirectDetail(row4.id, true)">
                               <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>

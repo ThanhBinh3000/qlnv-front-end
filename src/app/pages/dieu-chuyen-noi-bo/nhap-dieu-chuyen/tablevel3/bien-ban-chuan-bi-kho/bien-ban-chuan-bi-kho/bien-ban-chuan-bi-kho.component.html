@@ -108,7 +108,7 @@
               <th class="text-center">BB giao nhận</th>
               <th class="text-center">Ngày kết thúc nhập kho</th> -->
               <th class="text-center">Trạng thái</th>
-              <th class="text-center">Hành động</th>
+              <th class="text-center" *ngIf="isChiCuc()">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -130,7 +130,7 @@
                 <td></td>
                 <td></td> -->
                 <td></td>
-                <td></td>
+                <td *ngIf="isChiCuc()"></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -150,7 +150,7 @@
                     <td></td>
                     <td></td> -->
                     <td></td>
-                    <td></td>
+                    <td *ngIf="isChiCuc()"></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -170,7 +170,7 @@
                         <td class="bold">{{row3.soBbGiaoNhan || ""}}</td>
                         <td class="bold">{{row3.ngayKtNhapKho|date: "dd/MM/yyyy"}}</td> -->
                         <td>{{row3.tenTrangThai}}</td>
-                        <td>
+                        <td *ngIf="isChiCuc()">
                           <a *ngIf="!row3.soBbChuanBiKho" (click)="add(row3)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
