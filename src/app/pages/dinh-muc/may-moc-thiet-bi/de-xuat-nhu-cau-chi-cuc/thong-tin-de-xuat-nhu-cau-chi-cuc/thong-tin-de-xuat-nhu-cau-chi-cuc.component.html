@@ -229,15 +229,15 @@
         <td>{{idx + 1}}</td>
         <td>{{data.tenTaiSan}}</td>
         <td>{{data.donViTinh}}</td>
-        <td class="text-right">{{data.slHienCo | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.slNhapThem | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.slHienCo + data.slNhapThem | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.slTieuChuan | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.chenhLechThieu | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.chenhLechThua | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.soLuong  | number: '1.0-1'  }}</td>
-        <td class="text-right">{{data.donGiaTd  | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.soLuong * data.donGiaTd    | number: '1.0-1' }}</td>
+        <td class="text-right">{{data.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.slHienCo + data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.slTieuChuan | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.chenhLechThieu | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.chenhLechThua | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.donGiaTd  | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.soLuong * data.donGiaTd    | number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{data.ghiChu}}</td>
         <td class="text-center" *ngIf="!isView">
           <a (click)="editRow(idx)">

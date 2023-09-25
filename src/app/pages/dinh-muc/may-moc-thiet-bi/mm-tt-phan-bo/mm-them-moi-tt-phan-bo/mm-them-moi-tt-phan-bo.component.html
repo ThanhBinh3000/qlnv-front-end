@@ -136,9 +136,9 @@
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
           <td>{{item.donViTinh}}</td>
-          <td>{{item.slHienCo | number: '1.0-1' }}</td>
-          <td>{{item.slNhapThem | number: '1.0-1' }}</td>
-          <td>{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>
+          <td>{{item.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{item.slHienCo + item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{item.soLuong}}</td>
           <td>{{item.ghiChu}}</td>
           <td class="text-center" *ngIf="!isView">

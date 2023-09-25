@@ -63,7 +63,7 @@
                 <td class="text-center">{{i+1}}</td>
                 <td>{{ data.maKhoNganLo }}</td>
                 <td>{{ data.tenKhoNganLo }}</td>
-                <td>{{ data.soLuong | number: '1.0-1' }}</td>
+                <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{ data.thuKhoPhuTrach }}</td>
                 <td>
                   <a (click)="editRow(data.id)">

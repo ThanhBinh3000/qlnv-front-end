@@ -760,8 +760,8 @@
                   <td>{{ (page - 1) * pageSize + i + 1 }}</td>
                   <td>{{dataMuoi.tenDonVi}}</td>
                   <td class="text-right">{{dataMuoi?.tonKhoDauNam ?? 0 | number: '1.0-1'}}</td>
-                  <td class="text-right">{{dataMuoi.nhapTrongNam ?? 0 | number: '1.0-1' }}</td>
-                  <td class="text-right">{{dataMuoi.xuatTrongNamMuoi ?? 0 | number: '1.0-1' }}</td>
+                  <td class="text-right">{{dataMuoi.nhapTrongNam ?? 0 | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{dataMuoi.xuatTrongNamMuoi ?? 0 | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right">
                     <!--                    {{(dataMuoi.tonKhoCuoiNam ? dataMuoi.tonKhoCuoiNam : 0) | number: '1.0-1' }}-->
                     {{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi) | number: '1.0-1' }}
