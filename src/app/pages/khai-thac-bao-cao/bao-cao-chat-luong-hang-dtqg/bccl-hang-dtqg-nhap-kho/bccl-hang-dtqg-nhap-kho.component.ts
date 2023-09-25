@@ -82,7 +82,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       let body = this.formData.value;
       body.typeFile = "xlsx";
       body.trangThai = "01";
-      body.maDvi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
+      body.maDonVi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bao_cao_cl_nhap_thoc_tong_hop.jrxml";
@@ -130,7 +130,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.maDvi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
+      body.maDonVi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
