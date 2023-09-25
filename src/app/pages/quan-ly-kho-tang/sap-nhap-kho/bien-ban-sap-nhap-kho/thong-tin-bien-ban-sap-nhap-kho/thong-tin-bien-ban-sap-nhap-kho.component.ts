@@ -175,7 +175,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
             if (data) {
                 this.idInput = data.id;
                 this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBienBan: typeof data.soBienBan === "string" || data.soBienBan instanceof String ? data.soBienBan?.split('/')[0] : "" });
-                this.maBBSN = typeof data.soBienBan === "string" || data.soBienBan instanceof String ? "/" + data.soBienBan.split("/")[1] + "/" + data.soBienBan.split(2) : "";
+                this.maBBSN = typeof data.soBienBan === "string" || data.soBienBan instanceof String ? "/" + data.soBienBan.split("/")[1] + "/" + data.soBienBan.split("/")[2] : "";
                 if (isGuiDuyet) {
                     this.hoanThanh()
                 }
