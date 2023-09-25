@@ -190,19 +190,19 @@
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
           <td>{{item.donViTinh}}</td>
-          <td>{{item.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.slHienCo + item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.slTieuChuan | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.chenhLechThieu | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.chenhLechThua | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.slHienCo + item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.slTieuChuan | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.chenhLechThieu | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.chenhLechThua | number : '1.0-1' : 'vi_VN'}}</td>
           <td>
             <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
-          <td>{{item.donGiaTd  | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.donGiaTd * item.soLuong   | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.donGiaTd  | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.donGiaTd * item.soLuong   | number : '1.0-1' : 'vi_VN'}}</td>
           <td><input nz-input [(ngModel)]="item.ghiChu"></td>
         </tr>
       </ng-container>

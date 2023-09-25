@@ -293,20 +293,20 @@
           <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả '}}</td>
           <td>{{data.donViTinh}}</td>
           <td *ngIf='capDvi == 2'>{{data.tongDinhMucTc}}</td>
-          <td>{{(data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc + data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv) | number : '1.0-1' : 'vi_VN'}}</td>
-          <td
+          <td class="text-right">{{(data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc + data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv) | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right"
             *ngIf='capDvi == 2'>{{(data.nvChuyenMonTc + data.ttCaNhanTc + data.nvChuyenMonKv + data.ttCaNhanKv) | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{(data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc) | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{(data.nvChuyenMonTc + data.ttCaNhanTc)| number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{data.nvChuyenMonTc | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.ttCaNhanTc | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.tcDieuHanhTc | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.nvChuyenMonKv + data.ttCaNhanKv  | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.nvChuyenMonKv | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.ttCaNhanKv | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.tcDieuHanhKv | number : '1.0-1' : 'vi_VN'}}</td>
-          <td *ngIf='capDvi == 2'>{{data.tcTongCucDieuHanhKv | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{(data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc) | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{(data.nvChuyenMonTc + data.ttCaNhanTc)| number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{data.nvChuyenMonTc | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{data.ttCaNhanTc | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{data.tcDieuHanhTc | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{data.nvChuyenMonKv + data.ttCaNhanKv  | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{data.nvChuyenMonKv | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{data.ttCaNhanKv | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{data.tcDieuHanhKv | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf='capDvi == 2'>{{data.tcTongCucDieuHanhKv | number : '1.0-1' : 'vi_VN'}}</td>
           <td *ngIf='!isViewDetail'>
             <a (click)='editRow(idx)'>
               <i class='fa fa-pencil' title='Sửa'></i>
