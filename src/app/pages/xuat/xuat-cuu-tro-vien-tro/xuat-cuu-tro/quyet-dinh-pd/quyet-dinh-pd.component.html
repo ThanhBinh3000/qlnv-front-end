@@ -90,7 +90,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM')
-          && userService.isTongCuc()">
+          && userService.isTongCuc() && !!!this.chuyenXuatCap">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo quyết định</span>
         </button>

@@ -69,9 +69,9 @@
                 <td class="text-center">{{i+1}}</td>
                 <td>{{ data.goiThau }}</td>
                 <td>{{ data.diaDiemNhap }}</td>
-                <td>{{ data.soLuong | number: '1.0-1' }}</td>
-                <td>{{ data.donGia | number: '1.0-1' }}</td>
-                <td>{{ data.thanhTien | number: '1.0-1' }}</td>
+                <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.thanhTien | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>
                   <a (click)="editRow(data.stt)">
                     <i class="fa fa-pencil" title="Sửa"></i>

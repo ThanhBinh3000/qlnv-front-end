@@ -252,9 +252,9 @@
             <td *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03')">
               {{rowItemTtc.vat}}
             </td>
-            <td *ngIf="type=='GCT'" class="text-right">{{rowItemTtc.giaQdBtc | number : '1.0-1'}}</td>
+            <td *ngIf="type=='GCT'" class="text-right">{{rowItemTtc.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
             <td *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')"  class="text-right">
-              {{rowItemTtc.giaQdBtcVat | number : '1.0-1'}}
+              {{rowItemTtc.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}
             </td>
             <td>
               <nz-input-group>
@@ -286,8 +286,8 @@
               <td class="text-right">{{ data.soLuong | number : '1.0-1' }}</td>
               <td>{{ data.donViTinh }}</td>
               <td class="text-right" *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{ data.vat * 100 + '%' }}</td>
-              <td class="text-right" *ngIf="type=='GCT'">{{data.giaQdBtc | number : '1.0-1'}}</td>
-              <td  class="text-right"*ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{data.giaQdBtcVat | number : '1.0-1'}}</td>
+              <td class="text-right" *ngIf="type=='GCT'">{{data.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
+              <td  class="text-right"*ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{data.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right">{{ data.giaDn | number : '1.0-1'  }}</td>
               <td class="text-right"
                 *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{ data.vat ? (data.giaDn + data.giaDn * data.vat | number : '1.0-1' : 'vi-VN') : 0   }}</td>
