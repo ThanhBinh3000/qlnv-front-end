@@ -163,7 +163,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         soQdinhDc: this.data.soQdinh,
         ngayQdinhDcc: this.data.ngayHieuLucQd,
         qdDcId: this.data.qdinhDccId,
-        tenLoNganKho: `${this.data.tenLoKhoNhan} ${this.data.tenNganKhoNhan}`,
+        tenLoNganKho: `${this.data.tenLoKhoNhan || ""} ${this.data.tenNganKhoNhan}`,
         tenLoKho: this.data.tenLoKhoNhan,
         maLoKho: this.data.maLoKhoNhan,
         tenNganKho: this.data.tenNganKhoNhan,

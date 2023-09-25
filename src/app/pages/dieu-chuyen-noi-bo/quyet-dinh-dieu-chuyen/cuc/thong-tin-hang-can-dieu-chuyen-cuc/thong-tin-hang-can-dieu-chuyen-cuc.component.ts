@@ -11,6 +11,7 @@ import { HttpClient } from "@angular/common/http";
 import { StorageService } from "src/app/services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { Base2Component } from "src/app/components/base2/base2.component";
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 @Component({
   selector: 'app-thong-tin-hang-can-dieu-chuyen-cuc',
@@ -37,6 +38,20 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   dsNhaKhoNhan: any[] = [];
   dsNganKhoNhan: any[] = [];
   dsLoKhoNhan: any[] = [];
+
+  AMOUNT = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 100000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(
     httpClient: HttpClient,
@@ -379,7 +394,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           else {
             this.formData.controls["maLoKho"].clearValidators();
             this.formData.controls["tenLoKho"].clearValidators();
-            this.helperService.markFormGroupTouched(this.formData);
 
             if (detail.data.object.loaiVthh && detail.data.object.tenLoaiVthh && detail.data.object.cloaiVthh && detail.data.object.tenCloaiVthh && detail.data.object.dviTinh) {
               this.formData.patchValue({
@@ -482,7 +496,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           } else {
             this.formData.controls["maLoKhoNhan"].clearValidators();
             this.formData.controls["tenLoKhoNhan"].clearValidators();
-            this.helperService.markFormGroupTouched(this.formData);
 
             this.dsLoKhoNhan = []
             if (

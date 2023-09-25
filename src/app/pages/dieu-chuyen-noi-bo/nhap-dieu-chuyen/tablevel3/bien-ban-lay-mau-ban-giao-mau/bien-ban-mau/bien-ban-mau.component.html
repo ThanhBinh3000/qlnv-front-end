@@ -91,7 +91,7 @@
               <th class="text-center" *ngIf="!isVatTu">Số BB nhập đầy kho</th>
               <th class="text-center" *ngIf="!isVatTu">Ngày nhập đầy kho</th>
               <th class="text-center">Trạng thái</th>
-              <th class="text-center">Hành động</th>
+              <th class="text-center" *ngIf="isChiCuc()">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -111,7 +111,7 @@
                 <td *ngIf="!isVatTu"></td>
                 <td *ngIf="!isVatTu"></td>
                 <td></td>
-                <td></td>
+                <td *ngIf="isChiCuc()"></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -129,7 +129,7 @@
                     <td *ngIf="!isVatTu"></td>
                     <td *ngIf="!isVatTu"></td>
                     <td></td>
-                    <td></td>
+                    <td *ngIf="isChiCuc()"></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -150,8 +150,8 @@
                         <td *ngIf="!isVatTu">{{(row3.soBBTinhKho || "")}}</td>
                         <td *ngIf="!isVatTu">{{(row3.ngayXuatDocKho || "")}}</td>
                         <td>{{(row3.tenTrangThai || "")}}</td>
-                        <td>
-                          <a *ngIf="!row3.soBBLayMau" (click)="add(row3)">
+                        <td *ngIf="isChiCuc()">
+                          <a *ngIf="!row3.soBBLayMau && isChiCuc()" (click)="add(row3)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
                           <a *ngIf="row3.soBBLayMau && row3.trangThai === STATUS.DA_DUYET_LDCC"

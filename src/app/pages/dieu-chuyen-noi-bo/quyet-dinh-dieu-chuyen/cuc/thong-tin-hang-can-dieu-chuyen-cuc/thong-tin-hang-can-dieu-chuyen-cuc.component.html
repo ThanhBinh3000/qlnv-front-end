@@ -143,15 +143,16 @@
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
               <div nz-col nzSpan="10">
-                <span>Dự toán kinh phí(triệu đồng)</span>
+                <span>Dự toán kinh phí (triệu đồng)</span>
               </div>
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-input-number [nzDisabled]="this.data && !!this.data.duToanKphi" formControlName="duToanKphi"
+                    <input class="money-input" currencyMask formControlName="duToanKphi" [options]="AMOUNT" />
+                    <!-- <nz-input-number [nzDisabled]="this.data && !!this.data.duToanKphi" formControlName="duToanKphi"
                       [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'"
                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
+                    </nz-input-number> -->
                   </nz-form-control>
                 </nz-form-item>
               </div>
