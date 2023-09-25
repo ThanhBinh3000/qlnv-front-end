@@ -352,6 +352,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           if (data) {
             let res = await this.deXuatPhuongAnCuuTroService.getDetail(data.id);
             let detail = res.data;
+            console.log(detail);
             detail.deXuatPhuongAn.forEach(s => {
               s.noiDungDx = s.noiDung;
               s.soDx = detail.soDx;
@@ -362,6 +363,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               s.kieuNhapXuat = detail.kieuNhapXuat;
               s.mucDichXuat = detail.mucDichXuat;
               s.tenVthh = detail.tenVthh;
+              s.soLuongXc = s.soLuongChuyenCapThoc;
             });
             this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatPhuongAn);
             if (!this.formData.value.id) {
@@ -568,13 +570,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     let tongSoDaGiao = currentDvi.reduce((prev, next) => prev + next.soLuong, 0);
     currentDvi.forEach(s => s.soLuongXc = 0);
     if (tongSoDaGiao > currentRow.tonKhoLoaiVthh) {
-      currentRow.soLuongXc = currentRow.tonKhoLoaiVthh - tongSoDaGiao;
+      currentRow.soLuongXc = (tongSoDaGiao - currentRow.tonKhoLoaiVthh) > 0 ? (tongSoDaGiao - currentRow.tonKhoLoaiVthh) : 0;
     } else {
       currentRow.soLuongXc = 0;
     }
-  }
-
-  xuatCapTest($event: any) {
-    console.log($event);
   }
 }
