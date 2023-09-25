@@ -153,23 +153,34 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
         //lay danh sach danh muc
-        await this.danhMucService.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
+        await this.getChildUnit();
 
         if (this.id) {
             this.getDetailReport();
         }
         this.sortByIndex()
+        this.spinner.hide();
+    };
+
+    async getChildUnit() {
+        this.spinner.show();
+        const request = {
+            maDviCha: this.maDviTao,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.lstDvi = data.data;
+                    this.donVis = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
         this.spinner.hide();
     }
 
