@@ -4,7 +4,7 @@
       <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
         <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="2">
-            <nz-form-label nzRequired>Năm</nz-form-label>
+            <nz-form-label >Năm</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="nam">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
@@ -36,13 +36,13 @@
             </nz-form-control>
           </div>
           <div nz-col nzSpan="5" *ngIf="isThuKho">
-            <nz-form-label class="search__label">Tên thẻ kho</nz-form-label>
+            <nz-form-label class="search__label">Tên sổ kho</nz-form-label>
             <nz-form-control>
               <input type="text" nz-input formControlName="tenTheKho" />
             </nz-form-control>
           </div>
           <div nz-col nzSpan="4">
-            <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
+            <nz-form-label nzFor="loai-hang-hoa">Loại hàng DTQG</nz-form-label>
             <nz-form-control>
               <nz-select nzShowSearch formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
                 <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
@@ -51,7 +51,7 @@
             </nz-form-control>
           </div>
           <div nz-col nzSpan="4">
-            <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
+            <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control>
               <nz-select nzShowSearch formControlName="cloaiVthh">
                 <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
@@ -60,7 +60,7 @@
             </nz-form-control>
           </div>
           <div nz-col nzSpan="5">
-            <nz-form-label nzFor="chung-loai-hang-hoa">Ngày tạo</nz-form-label>
+            <nz-form-label nzFor="chung-loai-hang-hoa">Ngày tạo sổ kho</nz-form-label>
             <div nz-row>
               <div nz-col nzSpan="11">
                 <nz-date-picker nzPlaceHolder="Ngày tạo từ" formControlName="ngayTaoTu" nzFormat="dd/MM/yyyy"
@@ -110,7 +110,7 @@
             <th nzWidth="" rowSpan="2" class="text-center">Nhà kho</th>
             <th nzWidth="" rowSpan="2" class="text-center">Ngăn/lô kho</th>
             <th nzWidth="" rowSpan="2" class="text-center">Năm nhập</th>
-            <th nzWidth="" rowSpan="2" class="text-center">Sổ kho</th>
+            <th nzWidth="" rowSpan="2" class="text-center">Số sổ kho</th>
             <th nzWidth="" rowSpan="2" class="text-center">Thẻ kho</th>
             <th nzWidth="" rowSpan="2" class="text-center">Thời gian tạo</th>
             <th nzWidth="" rowSpan="2" class="text-center">Thời gian đóng</th>

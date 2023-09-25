@@ -104,6 +104,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       else {
         this.initForm();
       }
+      console.log(this.formData.value)
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -165,33 +166,47 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       }
       if(isGuiDuyet){
           this.pheDuyet()
+      }else{
+        this.goBack();
       }
     }
   }
 
   pheDuyet() {
     let trangThai
+    let msgConfirm;
+    let msgSucess;
     switch (this.formData.value.trangThai) {
+      // Reject
+      case STATUS.TU_CHOI_KT:
+      case STATUS.TU_CHOI_LDCC:
       // Approve
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_KT;
+        msgConfirm = "Bạn có muốn gửi duyệt ?";
+        msgSucess = "Gửi duyệt thành công"
         break;
       case STATUS.CHO_DUYET_KT:
         trangThai = STATUS.CHO_DUYET_LDCC;
+        msgConfirm = "Bạn có muốn phê duyệt ?";
+        msgSucess = "Phê duyệt thành công"
         break;
       case STATUS.CHO_DUYET_LDCC:
         trangThai = STATUS.DA_DUYET_LDCC;
+        msgConfirm = "Bạn có muốn phê duyệt ?";
+        msgSucess = "Phê duyệt thành công"
         break;
       case STATUS.DA_DUYET_LDCC:
         trangThai = STATUS.DA_DONG;
-        break;
-      //Reject
-      case STATUS.TU_CHOI_KT:
-      case STATUS.TU_CHOI_LDCC:
-        trangThai = STATUS.CHO_DUYET_KT;
+        msgConfirm = "Bạn có muốn đóng sổ ?";
+        msgSucess = "Đóng sổ thành công"
         break;
     }
-    this.approve(this.idInput, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
+    this.approve(this.idInput, trangThai, msgConfirm, null, msgSucess);
+  }
+
+  goBack() {
+    this._modalRef.close();
   }
 
   tuChoi() {
@@ -214,28 +229,15 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   async getDetail(id) {
     this.spinner.show();
     try {
-      let res = await this.quanLySoKhoTheKhoService.getDetail(id);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          const data = res.data;
-          this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.formData.patchValue({
-            loai : data.loai,
-            id : data.id,
-            ten : data.ten,
-            maDiemKho: data.maDiemKho,
-            maNhaKho: data.maNhaKho,
-            maNganKho: data.maNganKho,
-            maLoKho: data.maLoKho ? data.maLoKho : null,
-            trangThai : data.trangThai,
-            ngayTaoTu : data.ngayTaoTu,
-            ngayTaoDen : data.ngayTaoDen
-          });
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-        this.spinner.hide();
-      }
+      let data = await this.detail(id);
+      this.formData.patchValue({
+        id : data.id,
+        maDiemKho: data.maDiemKho,
+        maNhaKho: data.maNhaKho,
+        maNganKho: data.maNganKho,
+        maLoKho: data.maLoKho ? data.maLoKho : null,
+        trangThai : data.trangThai
+      });
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e);
       this.spinner.hide();
@@ -254,10 +256,13 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
           this.formData.patchValue({
             loai : '01',
             idSoKho : data.id,
+            ngayMoSoKho : data.ngayMo,
             maDiemKho: data.maDiemKho,
             maNhaKho: data.maNhaKho,
             maNganKho: data.maNganKho,
             maLoKho: data.maLoKho ? data.maLoKho : null,
+            nguoiLap: this.userInfo.TEN_DAY_DU,
+            tenDvi: this.userInfo.TEN_DVI
           });
         }
       } else {
@@ -274,7 +279,6 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
 
   initForm() {
-    console.log(this.isThemTheKho);
     this.formData.patchValue({
       loai : this.isThemTheKho ? '01' : '00',
       nguoiLap: this.userInfo.TEN_DAY_DU,
@@ -471,5 +475,18 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
         }
       },
     });
+  }
+
+  showSave(){
+    let trangThai = this.formData.value.trangThai
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC) && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_THEM')
+  }
+
+  showPheDuyetTuChoi() {
+    let trangThai = this.formData.value.trangThai;
+    // && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_KT')
+  // && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_LDCCUC')
+    return (trangThai == STATUS.CHO_DUYET_KT )
+      || (trangThai == STATUS.CHO_DUYET_LDCC)
   }
 }
