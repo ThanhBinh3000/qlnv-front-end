@@ -63,6 +63,8 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
     isDisabledThemMoi: boolean = false;
     danhSachQuyetDinh: any[] = [];
     danhSachNganLo: any[] = [];
+    tableHeader: Array<{ [key: string]: string | boolean }> = [{ title: "Tên, nhãn hiệu, quy cách phẩm chất hàng hóa", value: "ten", edit: false, dataType: "string" }, { title: "Mã số", value: "maSo", edit: true, dataType: "string" }, { title: "Đơn vị tính", value: "donViTinh", edit: false, dataType: "string" }, { title: "Số lượng", value: "soLuong", edit: true, dataType: "number" }];
+    rowInitial: { [key: string]: any } = { ten: "", maSo: "", donViTinh: "", soLuong: "" };
 
     constructor(httpClient: HttpClient,
         storageService: StorageService,
@@ -80,42 +82,42 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
         super(httpClient, storageService, notification, spinner, modal, phieuNhapHangSapNhapService);
         this.formData = this.fb.group({
             id: [],
-            maDvi: [],
-            tenDvi: [],
+            maDvi: [, [Validators.required]],
+            tenDvi: [, [Validators.required]],
             nam: [dayjs().get("year"), [Validators.required]],
             soPhieu: [],
-            maQhns: [],
-            ngayNhapKho: [dayjs().format("YYYY-MM-DD")],
-            no: [],
-            co: [],
-            soQuyetDinh: [],
-            soQuyetDinhId: [],
+            maQhns: [, [Validators.required]],
+            ngayNhapKho: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
+            no: [0],
+            co: [0],
+            soQuyetDinh: [, [Validators.required]],
+            soQuyetDinhId: [, [Validators.required]],
             maLoKho: [],
-            maNganKho: [],
-            maNhaKho: [],
-            maDiemKho: [],
-            maNganLo: [],
+            maNganKho: [, [Validators.required]],
+            maNhaKho: [, [Validators.required]],
+            maDiemKho: [, [Validators.required]],
+            maNganLo: [, [Validators.required]],
             tenLoKho: [],
-            tenNganKho: [],
-            tenNhaKho: [],
-            tenDiemKho: [],
-            tenNganLo: [],
-            loaiVthh: [],
-            tenLoaiVthh: [],
-            cloaiVthh: [],
-            tenCloaiVthh: [],
-            tenCanBoLap: [],
-            tenLanhDao: [],
-            tenKtv: [],
-            tenKtt: [],
+            tenNganKho: [, [Validators.required]],
+            tenNhaKho: [, [Validators.required]],
+            tenDiemKho: [, [Validators.required]],
+            tenNganLo: [, [Validators.required]],
+            loaiVthh: [, [Validators.required]],
+            tenLoaiVthh: [, [Validators.required]],
+            cloaiVthh: [, [Validators.required]],
+            tenCloaiVthh: [, [Validators.required]],
+            tenCanBoLap: [, [Validators.required]],
+            tenLanhDao: [, [Validators.required]],
+            tenKtv: [, [Validators.required]],
+            tenKtt: [, [Validators.required]],
             donViTinh: [],
-            tongSoLuong: [],
-            tongSoLuongBc: [],
-            tongSoTien: [],
-            tongSoTienBc: [],
+            tongSoLuong: [0],
+            tongSoLuongBc: [0],
+            tongSoTien: [0],
+            tongSoTienBc: [''],
             ghiChu: [],
             lyDoTuChoi: [],
-            trangThai: [STATUS.DU_THAO],
+            trangThai: [STATUS.DU_THAO, [Validators.required]],
             tenTrangThai: [this.ObTrangThai[STATUS.DU_THAO]],
         });
 
@@ -254,7 +256,7 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
                             tenLanhDao: dataDetail.tenLanhDao,
                             tenKtv: dataDetail.tenKtv,
                             tenKtt: dataDetail.tenKtt,
-                            donViTinh: dataDetail.donViTinh,
+                            donViTinh: dataDetail.phieuNhapHangDtl[0]?.donViTinh,
                             tongSoLuong: dataDetail.tongSoLuong,
                             tongSoLuongBc: dataDetail.tongSoLuongBc,
                             tongSoTien: dataDetail.tongSoTien,
@@ -267,7 +269,13 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
                         this.formData.controls["soQuyetDinh"].setValue(dataDetail.soQuyetDinh, { emitEvent: false });
                         this.formData.controls["tenNganLo"].setValue(tenNganLo, { emitEvent: false });
                         this.listFileDinhKem = dataDetail.fileDinhKem;
-                        this.dataTable = dataDetail.phieuNhapHangDtl;
+                        this.dataTable = cloneDeep(dataDetail.phieuNhapHangDtl);
+                        this.rowInitial = {
+                            maSo: "",
+                            donViTinh: dataDetail.phieuNhapHangDtl[0]?.donViTinh,
+                            ten: dataDetail.phieuNhapHangDtl[0]?.ten,
+                            soLuong: "",
+                        }
                     }
                 }
             })
@@ -317,7 +325,7 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
     };
     openDialogNganLoKho() {
         const modalQD = this.modal.create({
-            nzTitle: 'DANH SÁCH ĐỊA ĐIỂM XUẤT HÀNG',
+            nzTitle: 'DANH SÁCH ĐỊA ĐIỂM NHẬP HÀNG',
             nzContent: DialogTableSelectionComponent,
             nzMaskClosable: false,
             nzClosable: false,
@@ -326,7 +334,7 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
             nzComponentParams: {
                 dataTable: this.danhSachNganLo,
                 dataHeader: ['Tên lô kho', 'Tên Ngăn kho', 'Tên nhà kho', 'Tên điểm kho'],
-                dataColumn: ['tenLoKhoDi', 'tenNganKhoDi', 'tenNhaKhoDi', 'tenDiemKhoDi'],
+                dataColumn: ['tenLoKhoDen', 'tenNganKhoDen', 'tenNhaKhoDen', 'tenDiemKhoDen'],
             },
         })
         modalQD.afterClose.subscribe(async (dataChose) => {
@@ -354,7 +362,17 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
             tenCloaiVthh: data.tenCloaiVthh,
             donViTinh: data.donViTinh
         });
-        this.addItemRow();
+        // this.addItemRow();
+        this.dataTable = [];
+        this.setRowInitialTable({ donViTinh: data.donViTinh, ten: data.tenCloaiVthh })
+    }
+    setRowInitialTable(data: { donViTinh: string, ten: string }) {
+        this.rowInitial = {
+            maSo: "",
+            donViTinh: data.donViTinh,
+            ten: data.ten,
+            soLuong: "",
+        }
     }
     addItemRow() {
         this.dataTable.push({
@@ -368,8 +386,13 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
     deleteItemRow(i) {
         this.dataTable.splice(i, 1)
     }
-    handleChangeSoLuong(value) {
-        const tongSoLuong = this.dataTable.reduce((sum, cur) => sum += !isNaN(cur.soLuong) ? cur.soLuong : 0, 0);
+    // handleChangeSoLuong(value) {
+    //     const tongSoLuong = this.dataTable.reduce((sum, cur) => sum += !isNaN(cur.soLuong) ? cur.soLuong : 0, 0);
+    //     const tongSoLuongBc = this.convertTien(tongSoLuong, this.formData.value.donViTinh);
+    //     this.formData.patchValue({ tongSoLuong, tongSoLuongBc })
+    // }
+    tinhTongSoLuong() {
+        const tongSoLuong = this.dataTable.reduce((sum, cur) => sum += !isNaN(cur.soLuong) ? +cur.soLuong : 0, 0);
         const tongSoLuongBc = this.convertTien(tongSoLuong, this.formData.value.donViTinh);
         this.formData.patchValue({ tongSoLuong, tongSoLuongBc })
     }
