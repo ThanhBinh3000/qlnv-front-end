@@ -30,6 +30,7 @@ import * as uuidv4 from "uuid";
   styleUrls: ['./thong-tin-phieu-nhap-kho.component.scss']
 })
 export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnInit {
+  @Input() isViewOnModal: boolean;
   @Input() loaiDc: string;
   @Input() isVatTu: boolean;
   @Input() idInput: number;

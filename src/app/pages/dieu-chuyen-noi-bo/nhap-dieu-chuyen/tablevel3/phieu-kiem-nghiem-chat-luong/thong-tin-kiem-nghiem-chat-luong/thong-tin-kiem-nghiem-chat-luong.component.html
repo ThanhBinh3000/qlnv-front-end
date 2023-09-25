@@ -299,7 +299,7 @@
                     </nz-form-item>
                   </div>
 
-                  <div nz-col [nzSpan]="4">
+                  <!-- <div nz-col [nzSpan]="4">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true">
                         Hình thức bảo quản
@@ -310,6 +310,18 @@
                             nz-checkbox *ngFor="let item of listHinhThucBaoQuan" class="text-bold"> {{item.giaTri}}
                           </label>
                         </div>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div> -->
+                  <div nz-col nzSpan="4">
+                    <nz-form-item>
+                      <nz-form-label [nzNoColon]="true">Hình thức kê lót/bảo quản
+                      </nz-form-label>
+                      <nz-form-control nz-col [nzErrorTip]="error">
+                        <nz-select [nzDisabled]="isView" formControlName="hinhThucBq" nzAllowClear>
+                          <nz-option *ngFor="let p of listHinhThucBaoQuan" [nzValue]="p.ma"
+                            [nzLabel]="p.giaTri"></nz-option>
+                        </nz-select>
                       </nz-form-control>
                     </nz-form-item>
                   </div>

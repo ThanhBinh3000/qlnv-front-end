@@ -39,6 +39,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   dsNganKhoNhan: any[] = [];
   dsLoKhoNhan: any[] = [];
 
+  max: number = 0
+
   AMOUNT = {
     allowZero: true,
     allowNegative: false,
@@ -127,9 +129,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (!this.data) return
     await this.spinner.show()
     console.log('handleData', this.data)
-    // this.formData.patchValue({
-    //   slDcConLai: this.data.slDcConLai
-    // })
 
     if (this.data.maChiCucNhan) await this.getListDiemKho(this.data.maChiCucNhan)
     if (this.data.maDiemKho) await this.getListNhaKho(this.data.maDiemKho)
@@ -188,7 +187,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         maThuKhoNhan: "",
         thuKhoNhan: "",
         thayDoiThuKho: "",
-        slDcConLai: "",
+        // slDcConLai: "",
         tichLuongKd: "",
         soLuongPhanBo: "",
       })
@@ -266,7 +265,12 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   }
 
   getMax() {
-    return (this.formData.value.soLuongDc > this.formData.value.tichLuongKd ? this.formData.value.tichLuongKd : this.formData.value.soLuongDc) || 0
+    let max = this.formData.value.soLuongDc
+    if (this.formData.value.soLuongDc > this.formData.value.tichLuongKd) max = this.formData.value.tichLuongKd
+    if (this.data.slDcConLai) {
+      if (max > this.data.slDcConLai) max = this.data.slDcConLai
+    }
+    return max
   }
 
   async getListDiemKho(maDvi) {
@@ -470,7 +474,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           tenLoKhoNhan: "",
           thayDoiThuKho: "",
           tichLuongKd: 0,
-          slDcConLai: 0,
           soLuongPhanBo: 0,
           tenNganKhoNhan: nganKhoNhan.tenDvi
         })
@@ -569,6 +572,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           this.formData.patchValue({
             tichLuongKd
           })
+          this.max = this.formData.value.soLuongDc
+          if (this.formData.value.soLuongDc > tichLuongKd) this.max = tichLuongKd
+
+          if (this.formData.value.slDcConLai) {
+            if (this.max > this.formData.value.slDcConLai) this.max = this.formData.value.slDcConLai
+          }
+
         }
 
 
@@ -582,25 +592,25 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   onChangSLDC(value) {
     this.formData.patchValue({
       soLuongPhanBo: "",
-      slDcConLai: ""
+      // slDcConLai: ""
     })
   }
 
   onChangeSLNhapDc(value) {
-    console.log()
     if (value > 0) {
       const slDcConLai = Number(this.formData.value.soLuongDc) - Number(value)
       if (slDcConLai >= 0) {
         this.formData.patchValue({
-          slDcConLai: slDcConLai
+          slDcConLai
         })
       }
-    } else {
-      this.formData.patchValue({
-        slDcConLai: 0//this.data.slDcConLai
-
-      })
     }
+    // else {
+    //   this.formData.patchValue({
+    //     slDcConLai: (this.data.slDcConLai || 0)
+
+    //   })
+    // }
 
   }
 

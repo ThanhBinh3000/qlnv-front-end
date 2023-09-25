@@ -35,6 +35,9 @@ import * as uuid from "uuid";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
 import { BienBanNhapDayKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nhap-day-kho";
 import { PhieuNhapKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-nhap-kho";
+import { ThongTinKiemTraChatLuongComponent } from "../../phieu-kiem-tra-chat-luong/thong-tin-kiem-tra-chat-luong/thong-tin-kiem-tra-chat-luong.component";
+import { ThongTinPhieuNhapKhoComponent } from "../../phieu-nhap-kho/thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component";
+import { ThongTinBangKeCanHangComponent } from "../../bang-ke-can-hang/thong-tin-bang-ke-can-hang/thong-tin-bang-ke-can-hang.component";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nhap-day-du',
@@ -396,6 +399,57 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       })
 
     }
+  }
+
+  async openDialogKTCL(row) {
+    this.modal.create({
+      nzTitle: 'Thông tin phiếu kiểm tra chất lượng',
+      nzContent: ThongTinKiemTraChatLuongComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
+      nzWidth: '95%',
+      nzFooter: null,
+      nzComponentParams: {
+        isViewOnModal: true,
+        isView: true,
+        idInput: row.phieuKiemTraClId
+      },
+    });
+  }
+
+  async openDialogPNK(row) {
+    this.modal.create({
+      nzTitle: 'Thông tin phiếu nhập kho',
+      nzContent: ThongTinPhieuNhapKhoComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
+      nzWidth: '95%',
+      nzFooter: null,
+      nzComponentParams: {
+        isViewOnModal: true,
+        isView: true,
+        idInput: row.phieuNhapKhoId
+      },
+    });
+  }
+
+  async openDialogBKCH(row) {
+    this.modal.create({
+      nzTitle: 'Thông tin bảng kê cân hàng',
+      nzContent: ThongTinBangKeCanHangComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzBodyStyle: { overflowY: 'auto' },//maxHeight: 'calc(100vh - 200px)'
+      nzWidth: '95%',
+      nzFooter: null,
+      nzComponentParams: {
+        isViewOnModal: true,
+        isView: true,
+        idInput: row.bangKeCanHangId
+      },
+    });
   }
 
 
