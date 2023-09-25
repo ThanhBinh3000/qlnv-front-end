@@ -278,7 +278,7 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1" [nzMax]="getMax()" [nzStep]="1"
+                    <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1" [nzMax]="max" [nzStep]="1"
                       [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                       (ngModelChange)="onChangeSLNhapDc($event)">
                     </nz-input-number>

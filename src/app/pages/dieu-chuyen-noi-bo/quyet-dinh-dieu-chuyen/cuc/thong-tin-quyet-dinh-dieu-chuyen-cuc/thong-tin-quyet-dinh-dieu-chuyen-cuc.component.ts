@@ -631,26 +631,29 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
                 const rsxx = (groupBy === "maChiCucNhan") ? chain(vs).groupBy("maDiemKhoNhan")?.map((n, inx) => {
 
                   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+                  let soLuongNhap = n?.reduce((prev, cur) => prev + cur.soLuongPhanBo, 0);
+
                   return {
                     ...maDiemKhoNhan,
+                    soLuongNhap,
                     children: n
                   }
                 }).value() : chain(vs).groupBy("maChiCucNhan")?.map((m, im) => {
 
                   const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
-                  // const hasMaDiemKhoNhan = m.some(f => f.maDiemKhoNhan);
-                  // if (!hasMaDiemKhoNhan) return {
-                  //   ...maChiCucNhan
-                  // }
 
                   const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
 
                     const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+                    let soLuongNhap = n?.reduce((prev, cur) => prev + cur.soLuongPhanBo, 0);
+
                     return {
                       ...maDiemKhoNhan,
+                      soLuongNhap,
                       children: n
                     }
                   }).value()
+
                   return {
                     ...maChiCucNhan,
                     children: rssx
@@ -660,13 +663,12 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-                let soLuongDc = vs?.reduce((prev, cur) => prev + cur.soLuongDc, 0);
+
                 return {
                   ...maLoKho,
                   idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
                   children: rsxx,
                   duToanKphi,
-                  soLuongDc
                 }
               }
               ).value();
@@ -685,6 +687,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           ).value();
 
         let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+
+
         let rowChiCuc = value?.find(s => s[groupBy] === key);
         return {
           ...rowChiCuc,
