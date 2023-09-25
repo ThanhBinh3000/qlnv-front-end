@@ -35,6 +35,10 @@ export class SlGiaTriHangDtqgXuatCapKhongThuTienTrongKyComponent extends Base2Co
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
+  dsLoaiBc: any[] = [
+    {text: 'Báo cáo Quý', value: 1},
+    {text: 'Báo cáo Năm', value: 2}
+  ]
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -54,6 +58,7 @@ export class SlGiaTriHangDtqgXuatCapKhongThuTienTrongKyComponent extends Base2Co
         bieuSo: null,
         dviBaoCao: null,
         dviNhanBaoCao: null,
+        dsLoaiBc: null,
       }
     );
   }
