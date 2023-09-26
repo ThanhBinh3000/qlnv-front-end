@@ -314,6 +314,11 @@ import { TreeSelectSapNhapComponent } from './sap-nhap-kho/dieu-chuyen-kho/tree-
 import {
   CapNhatThongTinDauThauSctxComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/thong-tin-dau-thau-sctx/cap-nhat-thong-tin-dau-thau-sctx/cap-nhat-thong-tin-dau-thau-sctx.component";
+import { QuyHoachKhoBkComponent } from './ke-hoach/quy-hoach-kho-bk/quy-hoach-kho-bk.component';
+import { QuyetDinhDieuChinhQuyHoachBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-dieu-chinh-quy-hoach-bk/quyet-dinh-dieu-chinh-quy-hoach-bk.component';
+import { QuyetDinhQuyHoachBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-quy-hoach-bk/quyet-dinh-quy-hoach-bk.component';
+import { ThemMoiQdBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-quy-hoach-bk/them-moi-qd-bk/them-moi-qd-bk.component';
+import { ThemMoiQdDcBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-dieu-chinh-quy-hoach-bk/them-moi-qd-dc-bk/them-moi-qd-dc-bk.component';
 @NgModule({
   declarations: [
     QuanLyKhoTangComponent,
@@ -442,7 +447,12 @@ import {
     BaoCaoKetQuaSapNhapComponent,
     ThongTinBaoCaoKetQuaSapNhapComponent,
     TreeSelectSapNhapComponent,
-    CapNhatThongTinDauThauSctxComponent
+    CapNhatThongTinDauThauSctxComponent,
+    QuyHoachKhoBkComponent,
+    QuyetDinhDieuChinhQuyHoachBkComponent,
+    QuyetDinhQuyHoachBkComponent,
+    ThemMoiQdBkComponent,
+    ThemMoiQdDcBkComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, KiemtraChatluongVtTbTrongThbhComponentModule],
 })
