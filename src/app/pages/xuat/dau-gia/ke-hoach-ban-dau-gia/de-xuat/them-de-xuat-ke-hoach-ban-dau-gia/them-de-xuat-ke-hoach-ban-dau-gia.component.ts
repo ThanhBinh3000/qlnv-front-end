@@ -400,13 +400,14 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       item.tongGiaKdiemDd = 0;
       item.tongTienDtruocDd = 0;
       item.tongTienDatTruocDx = 0;
+      let donGiaDuocDuyet = 0;
       if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
-        let donGiaDuocDuyet;
         if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
           donGiaDuocDuyet = this.dataDonGiaDuocDuyet.map(s => s.giaQdTcdt);
         } else {
           donGiaDuocDuyet = this.dataDonGiaDuocDuyet.filter(s => s.maChiCuc === item.maDvi).map(s => s.giaQdTcdt);
         }
+      }
         item.children.forEach((child) => {
           child.donGiaDuocDuyet = donGiaDuocDuyet[0];
           child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
@@ -416,7 +417,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           item.tongTienDtruocDd += child.soTienDtruocDd;
           item.tongTienDatTruocDx += child.soTienDtruocDx;
         });
-      }
     });
     this.formData.patchValue({
       tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.tongSlXuatBanDx, 0),

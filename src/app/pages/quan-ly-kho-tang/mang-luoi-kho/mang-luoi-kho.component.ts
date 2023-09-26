@@ -116,6 +116,8 @@ export class MangLuoiKhoComponent implements OnInit {
       nhakhoId: [""],
       loaiVthh: [null],
       cloaiVthh: [null],
+      tenLoaiVthh: [null],
+      tenCloaiVthh: [null],
       trangThai: [true],
       diaDiem: [""],
       type: [true],
@@ -322,12 +324,12 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   async getAllLoaiVthh() {
-      let res = await this.danhMucService.getAllVthhByCap("2");
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.listVthh = res.data
-        }
+    let res = await this.danhMucService.getAllVthhByCap("2");
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listVthh = res.data
       }
+    }
   }
 
   async onChangeLoaiVthh(event) {
@@ -458,6 +460,8 @@ export class MangLuoiKhoComponent implements OnInit {
         chatluongId: dataNode.chatluongId,
         loaiVthh: dataNode.loaiVthh ? dataNode.loaiVthh : null,
         cloaiVthh: dataNode.cloaiVthh ? dataNode.cloaiVthh : null,
+        tenLoaiVthh: dataNode.tenLoaiVthh ?? null,
+        tenCloaiVthh: dataNode.tenCloaiVthh ?? null,
         slTon: dataNode.slTon ? dataNode.slTon : 0,
         dviTinh: dataNode.dviTinh ? dataNode.dviTinh : null,
         ngayNhapDay: dataNode.ngayNhapDay ? dataNode.ngayNhapDay : null,
@@ -472,7 +476,8 @@ export class MangLuoiKhoComponent implements OnInit {
           tenNgankho: dataNode.tenNgankho,
           tenNhakho: dataNode.tenNhakho,
           tenDiemkho: dataNode.tenDiemkho,
-          tenTongKho: dataNode.tenTongKho
+          tenTongKho: dataNode.tenTongKho,
+          namNhap: dataNode.namNhap ?? null,
         });
       }
       if (this.levelNode == 6) {
@@ -484,7 +489,8 @@ export class MangLuoiKhoComponent implements OnInit {
           tenDiemkho: dataNode.tenDiemkho,
           tenTongKho: dataNode.tenTongKho,
           soLokho: dataNode.soLokho,
-          coLoKho: dataNode.coLoKho
+          coLoKho: dataNode.coLoKho,
+          namNhap: dataNode.namNhap ?? null,
         });
       }
       if (this.levelNode == 5) {
@@ -765,7 +771,7 @@ export class MangLuoiKhoComponent implements OnInit {
       nzComponentParams: {
         detail: this.detailDonVi.value,
         levelNode: this.levelNode,
-        loaiHang : this.loaiHangHoa
+        loaiHang: this.loaiHangHoa
       }
     });
     modalQD.afterClose.subscribe((data) => {
