@@ -330,19 +330,28 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       this.spinner.show();
       try {
 
+        if (this.formData.value.ngayNhapKhoTu) {
+          this.formData.value.ngayNhapKhoTu = dayjs(this.formData.value.ngayNhapKhoTu).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.ngayNhapKhoDen) {
+          this.formData.value.ngayNhapKhoDen = dayjs(this.formData.value.ngayNhapKhoDen).format('YYYY-MM-DD')
+        }
+
         let body = this.formData.value;
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
-        this.quyetDinhDieuChuyenTCService
+        // if (this.formData.value.ngayDuyetTc) {
+        //   body.ngayDuyetTcTu = body.ngayDuyetTc[0];
+        //   body.ngayDuyetTcDen = body.ngayDuyetTc[1];
+        // }
+        // if (this.formData.value.ngayHieuLuc) {
+        //   body.ngayHieuLucTu = body.ngayHieuLuc[0];
+        //   body.ngayHieuLucDen = body.ngayHieuLuc[1];
+        // }
+
+
+        this.bangKeCanHangService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
+            saveAs(blob, 'dcnb-bang-ke-can-hang.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

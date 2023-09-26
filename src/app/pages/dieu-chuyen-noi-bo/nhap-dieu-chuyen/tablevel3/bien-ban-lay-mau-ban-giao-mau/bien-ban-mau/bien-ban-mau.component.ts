@@ -270,19 +270,27 @@ export class BienBanMauComponent extends Base2Component implements OnInit {
       this.spinner.show();
       try {
 
+        if (this.formData.value.tuNgayLayMau) {
+          this.formData.value.tuNgayLayMau = dayjs(this.formData.value.tuNgayLayMau).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayLayMau) {
+          this.formData.value.denNgayLayMau = dayjs(this.formData.value.denNgayLayMau).format('YYYY-MM-DD')
+        }
+
         let body = this.formData.value;
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
+        // if (this.formData.value.ngayDuyetTc) {
+        //   body.ngayDuyetTcTu = body.ngayDuyetTc[0];
+        //   body.ngayDuyetTcDen = body.ngayDuyetTc[1];
+        // }
+        // if (this.formData.value.ngayHieuLuc) {
+        //   body.ngayHieuLucTu = body.ngayHieuLuc[0];
+        //   body.ngayHieuLucDen = body.ngayHieuLuc[1];
+        // }
+
         this.bbLayMauService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
+            saveAs(blob, 'dcnb-bien-ban-lay-mau-ban-giao-mau.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
