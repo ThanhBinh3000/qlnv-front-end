@@ -355,45 +355,49 @@ export class ThemMoiQdDcBkComponent implements OnInit {
   }
 
   selectSoQdGoc() {
-    const modal = this.modal.create({
-      nzTitle: "Danh sách quyết định quy hoạch kho",
-      nzContent: DialogSoQuyetDinhQlyKhoTangComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: "900px",
-      nzFooter: null,
-      nzComponentParams: {
-        dsQdGoc: this.dsQdGoc
-      }
-    });
-    modal.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.formData.patchValue({
-          soQdGoc: data.soQuyetDinh ? data.soQuyetDinh : null,
-          trichYeu: data.trichYeu ? data.trichYeu : null,
-          ngayKy: data.ngayKy ? data.ngayKy : null,
-          namBatDau: data.namBatDau ? data.namBatDau : null,
-          namKetThuc: data.namKetThuc ? data.namKetThuc : null,
-          moTa: data.moTa ? data.moTa : null
-        });
-        this.fileDinhKems = data.fileDinhKems;
-        this.dataTable = data.quyetDinhQuyHoachCTiets;
-        if (this.dataTable) {
-          this.dataTableDTM = this.dataTable.filter(item => item.phuongAnQuyHoach == "ĐT");
-          this.dataTableTL = this.dataTable.filter(item => item.phuongAnQuyHoach != "ĐT");
+    if (!this.isViewDetail) {
+      const modal = this.modal.create({
+        nzTitle: "Danh sách quyết định quy hoạch kho",
+        nzContent: DialogSoQuyetDinhQlyKhoTangComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: "900px",
+        nzFooter: null,
+        nzComponentParams: {
+          dsQdGoc: this.dsQdGoc
         }
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.dataTable.forEach(item => {
-            let arr = this.danhSachPhuongAn.filter(a => a.ma == item.phuongAnQuyHoach);
-            if (arr && arr.length > 0) {
-              item.tenPhuongAn = arr[0].giaTri;
-            }
+      });
+      modal.afterClose.subscribe(async (response) => {
+        if (response) {
+          let res = await this.quyHoachKhoService.getDetail(response.id);
+          const data = res.data;
+          this.formData.patchValue({
+            soQdGoc: data.soQuyetDinh ? data.soQuyetDinh : null,
+            trichYeu: data.trichYeu ? data.trichYeu : null,
+            ngayKy: data.ngayKy ? data.ngayKy : null,
+            namBatDau: data.namBatDau ? data.namBatDau : null,
+            namKetThuc: data.namKetThuc ? data.namKetThuc : null,
+            moTa: data.moTa ? data.moTa : null
           });
+          this.fileDinhKems = data.fileDinhKems;
+          this.dataTable = data.quyetDinhQuyHoachCTiets;
+          if (this.dataTable) {
+            this.dataTableDTM = this.dataTable.filter(item => item.phuongAnQuyHoach == "ĐT");
+            this.dataTableTL = this.dataTable.filter(item => item.phuongAnQuyHoach != "ĐT");
+          }
+          if (this.dataTable && this.dataTable.length > 0) {
+            this.dataTable.forEach(item => {
+              let arr = this.danhSachPhuongAn.filter(a => a.ma == item.phuongAnQuyHoach);
+              if (arr && arr.length > 0) {
+                item.tenPhuongAn = arr[0].giaTri;
+              }
+            });
+          }
+          this.updateEditCache("TL");
+          this.updateEditCache("DTM");
         }
-        this.updateEditCache("TL");
-        this.updateEditCache("DTM");
-      }
-    });
+      });
+    }
   }
 
   async getDataDetail(id) {
@@ -451,7 +455,7 @@ export class ThemMoiQdDcBkComponent implements OnInit {
     }
     let body = this.formData.value;
     body.soQuyetDinh = body.soQuyetDinh + this.maQd;
-    body.quyetDinhQuyHoachCTietReqs = this.dataTable;
+    body.quyetDinhQuyHoachCTietReqsBk = this.dataTable;
     body.maDvi = this.userInfo.MA_DVI;
     body.type = this.type;
     if (this.fileDinhKems && this.fileDinhKems.length > 0) {
