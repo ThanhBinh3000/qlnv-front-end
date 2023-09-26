@@ -227,7 +227,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ["Số quyết định gốc", "Loại hàng hóa", "Chủng loại hàng hóa"],
+        dataHeader: ["Số quyết định gốc", "Loại hàng DTQG", "Chủng loại hàng DTQG"],
         dataColumn: ["soQd", "tenLoaiVthh", "tenCloaiVthh"]
       }
     });

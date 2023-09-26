@@ -189,7 +189,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listHopDong,
-        dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Ngày ký', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Ngày ký', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soHd', 'tenHd', 'ngayKy', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
