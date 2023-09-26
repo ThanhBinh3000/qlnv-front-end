@@ -115,13 +115,24 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="6" *ngIf="!this.formData.value.soQdDc">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ thông tin chào giá</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open"
                                   (click)="isDisabledQD() ? null : openThongtinChaoGia()">
                     <input [readonly]="true" nz-input formControlName="soQdPd" readonly/>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6" *ngIf="this.formData.value.soQdDc">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ thông tin chào giá</nz-form-label>
+                <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfterIcon="folder-open"
+                                  (click)="isDisabledQD() ? null : openThongtinChaoGia()">
+                    <input [readonly]="true" nz-input formControlName="soQdDc" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
