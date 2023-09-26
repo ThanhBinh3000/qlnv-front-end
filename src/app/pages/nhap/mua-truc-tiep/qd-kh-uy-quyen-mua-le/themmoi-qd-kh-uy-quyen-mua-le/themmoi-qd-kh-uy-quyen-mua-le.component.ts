@@ -87,7 +87,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
     this.formData = this.fb.group({
       id: [],
       idQdDtl: [],
-      namKh: [dayjs().get("year"), [Validators.required]],
+      namKh: ['',[Validators.required]],
       soQd: ['', [Validators.required]],
       maDvi: [''],
       tenDvi: ['', [Validators.required]],
@@ -172,7 +172,8 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
             tgianMkho: dataDtl.tgianMkho,
             tgianKthuc: dataDtl.tgianKthuc,
             thueGtgt: dataDtl.thueGtgt,
-            ghiChu: dataDtl.ghiChu
+            ghiChu: dataDtl.ghiChu,
+            namKh: dataDtl.namKh
           })
           this.idQdGnvu = dataDtl.hhQdPheduyetKhMttHdr.idQdGnvu
           this.canCuKhacList = dataDtl.hhQdPheduyetKhMttHdr.fileDinhKems

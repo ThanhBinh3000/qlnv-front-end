@@ -332,6 +332,7 @@
                     <th [rowspan]="2" style="width: 35px"></th>
                     <th [rowspan]="2" style="width: 35px">STT</th>
                     <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+                    <th [rowspan]="2">Nhu cầu cứu trợ</th>
                     <th [rowspan]="2">Loại hàng DTQG</th>
                     <th [colspan]="3">Chủng loại hàng DTQG</th>
                     <th [rowspan]="2">Số lượng giao Cục thực hiện</th>
@@ -351,6 +352,7 @@
                       </td>
                       <td>{{i + 1}}</td>
                       <td>{{ item.noiDungDx }}</td>
+                      <td>{{ item.soLuongNhuCauXuat }}</td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -364,6 +366,7 @@
                           <td></td>
                           <td></td>
                           <td></td>
+                          <td>{{ lv1.soLuongNhuCauXuat }}</td>
                           <td>{{lv1.tenLoaiVthh}}</td>
                           <td></td>
                           <td></td>
@@ -377,6 +380,7 @@
                               <td></td>
                               <td></td>
                               <td></td>
+                              <td>{{ lv2.soLuongNhuCauXuat }}</td>
                               <td></td>
                               <td>{{lv2.tenCloaiVthh}}</td>
                               <td>{{lv2.donViTinh}}</td>
