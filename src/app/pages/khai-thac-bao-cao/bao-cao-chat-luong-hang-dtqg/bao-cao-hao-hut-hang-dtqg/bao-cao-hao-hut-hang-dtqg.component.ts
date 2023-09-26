@@ -84,13 +84,13 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.fileName = "bc_hao_hut_hang_dtqg.jrxml";
-      body.tenBaoCao = "Báo cáo hao hụt hàng DTQG";
+      body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
+      body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclHangHaoHut(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
+        saveAs(this.excelBlob, "bc_hao_hut_hang_dtqg_chi_tiet.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -113,11 +113,14 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     // }
     try {
       this.spinner.show();
+      this.formData.value.namNhap = this.formData.value.namNhap && this.formData.value.namNhap.length > 0 ? this.formData.value.namNhap.toString() : ""
+      this.formData.value.namXuat = this.formData.value.namXuat && this.formData.value.namXuat.length > 0 ? this.formData.value.namNhap.toString() : ""
       let body = this.formData.value;
       body.maDvi = this.userInfo.MA_DVI;
+      body.nam  = 2023;
       body.typeFile = "pdf";
-      body.fileName = "bc_hao_hut_hang_dtqg.jrxml";
-      body.tenBaoCao = "Báo cáo hao hụt hàng DTQG";
+      body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
+      body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclHangHaoHut(body).then(async s => {
         this.pdfBlob = s;

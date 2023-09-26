@@ -31,6 +31,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   isView: boolean
   isEditHopDong: boolean
   selected: boolean = false;
+  loadDanhSachHdongDaKy: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -70,7 +71,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     if (this.idInput) {
       await this.spinner.show();
       try {
-        if (this.idInput){
+        if (this.idInput) {
           await this.getDetail();
         }
       } catch (e) {
@@ -93,6 +94,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         throw new Error('Response error');
       }
       const data = res.data;
+      await this.loadDanhDachHopDong();
       this.formData.patchValue({
         namKh: data.namKh,
         soQdPd: data.soQdPd,
@@ -106,10 +108,16 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         vat: '5 %',
         tongSlXuatBanQdKh: data.tongSoLuong,
         tongGiaTriHdong: data.tongGiaTriHdong,
-        tongSlDaKyHdong: data.tongSlDaKyHdong,
         tongSlChuaKyHdong: data.tongSlChuaKyHdong,
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
+      });
+      const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idQdKq === data.id);
+      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuongBanTrucTiep, 0);
+      const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
+      this.formData.patchValue({
+        tongSlDaKyHdong: tongSlDaKyHdong,
+        tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
       this.dataTable = data.listHopDongBtt;
       if (this.dataTable && this.dataTable.length > 0) {
@@ -130,6 +138,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         throw new Error('Response error');
       }
       const data = res.data;
+      await this.loadDanhDachHopDong();
       const formDataValues = {
         namKh: data.namKh,
         soQdPd: data.soQdPd,
@@ -141,12 +150,17 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tenKieuNx: data.tenKieuNx,
         tongSlXuatBanQdKh: data.tongSoLuong,
         tongGiaTriHdong: data.tongGiaTriHdong,
-        tongSlDaKyHdong: data.tongSlDaKyHdong,
-        tongSlChuaKyHdong: data.tongSlChuaKyHdong,
         vat: '5 %',
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
       };
+      const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idChaoGia === data.id);
+      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuongBanTrucTiep, 0);
+      const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
+      this.formData.patchValue({
+        tongSlDaKyHdong:tongSlDaKyHdong,
+        tongSlChuaKyHdong: tongSlChuaKyHdong,
+      });
       this.formData.patchValue(formDataValues);
       this.dataTable = data.listHopDongBtt;
       if (this.dataTable && this.dataTable.length > 0) {
@@ -158,6 +172,24 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async loadDanhDachHopDong() {
+    let body = {
+      namKh: this.formData.value.namKh,
+      loaiVthh: this.loaiVthh,
+      trangThai: STATUS.DA_KY,
+    };
+    const res = await this.hopDongBttService.search(body);
+    if (res.msg !== MESSAGE.SUCCESS) {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
+    }
+    const data = res.data.content;
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.loadDanhSachHdongDaKy = data;
   }
 
   async showFirstRow($event, id: any) {

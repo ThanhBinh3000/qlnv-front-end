@@ -401,6 +401,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       .map((value, key) => {
         let row = value.find(s => s.soDx === key);
         let soLuongDx = value.reduce((prev, next) => prev + next.soLuongDx, 0);
+        let soLuongNhuCauXuat = value.reduce((prev, next) => prev + next.soLuongNhuCauXuat, 0);
         let rs = chain(value)
           .groupBy("noiDungDx")
           .map((v, k) => {
@@ -417,6 +418,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                   donViTinh: row2.donViTinh,
                   soLuong: row2.soLuong,
                   soLuongDx: row2.soLuongDx,
+                  soLuongNhuCauXuat: row2.soLuongNhuCauXuat,
                   tonKho: row2.tonKhoLoaiVthh || tonKhoCloaiVthh,
                   tenCloaiVthh: row2.tenCloaiVthh,
                   childData: v1
@@ -440,6 +442,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           ngayKyDx: row.ngayKyDx,
           thoiGian: row.ngayKyDx,
           soLuongDx: soLuongDx,
+          soLuongNhuCauXuat: soLuongNhuCauXuat,
           childData: rs
         };
       }).value();
@@ -569,8 +572,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     let currentDvi = this.formData.value.quyetDinhPdDtl.filter(s => s.maDvi == currentRow.maDvi);
     let tongSoDaGiao = currentDvi.reduce((prev, next) => prev + next.soLuong, 0);
     currentDvi.forEach(s => s.soLuongXc = 0);
-    if (tongSoDaGiao > currentRow.tonKhoLoaiVthh) {
-      currentRow.soLuongXc = (tongSoDaGiao - currentRow.tonKhoLoaiVthh) > 0 ? (tongSoDaGiao - currentRow.tonKhoLoaiVthh) : 0;
+    if (tongSoDaGiao < currentRow.soLuongNhuCauXuat) {
+      currentRow.soLuongXc = (currentRow.soLuongNhuCauXuat - tongSoDaGiao) > 0 ? (currentRow.soLuongNhuCauXuat- tongSoDaGiao) : 0;
     } else {
       currentRow.soLuongXc = 0;
     }
