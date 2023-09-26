@@ -18,17 +18,17 @@
         <span>Quay lại</span>
       </button>
       <button type='button' class='btn btn-info ml-2' (click)='banHanh(formData.value.id,STATUS.BAN_HANH)'
-              *ngIf='formData.value.trangThai == STATUS.DU_THAO && formData.value.id > 0'>
+              *ngIf="formData.value.trangThai == STATUS.DU_THAO && formData.value.id > 0 && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_THEM') || userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_SUA'))">
         <i class='icon htvbdh_chuyenvanthu'></i>
         <span>Ban hành</span>
       </button>
       <button type='button' class='btn btn-outline-danger ml-2'
               (click)='ngungHieuLuc(formData.value.id,STATUS.HET_HIEU_LUC)'
-              *ngIf='formData.value.trangThai == STATUS.BAN_HANH && formData.value.id > 0'>
+              *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.id > 0 && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_THEM') || userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_SUA'))">
         <i class='icon htvbdh_chuyenvanthu'></i>
         <span>Ngừng hiệu lực văn bản </span>
       </button>
-      <button *ngIf='!isViewDetail'
+      <button *ngIf=" !isViewDetail && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_THEM') || userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_SUA'))"
               type='button' class='btn btn-main ml-2' (click)='save()'>
         <i class='icon htvbdh_tcdt_save'></i>
         <span>Lưu</span>
