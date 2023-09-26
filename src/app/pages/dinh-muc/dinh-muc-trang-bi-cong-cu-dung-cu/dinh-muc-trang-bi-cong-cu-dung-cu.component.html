@@ -80,7 +80,7 @@
           <th width="175px">Ngày hiệu lực</th>
           <th width="175px">Ngày hết hiệu lực</th>
           <th width="175px">Trạng thái</th>
-          <th width="130px" *ngIf="userService.isTongCuc()">Hành động</th>
+          <th width="130px" >Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -123,7 +123,7 @@
                      (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)"/>
             </nz-input-group>
           </td>
-          <td *ngIf="userService.isTongCuc()">
+          <td >
           </td>
         </tr>
         <tr *ngFor="let data of basicTable.data; let i = index">
@@ -138,7 +138,7 @@
           <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
-          <td class="text-center" *ngIf="userService.isTongCuc()">
+          <td class="text-center">
             <a *ngIf="userService.isAccessPermisson('QLĐMNXBQ_ĐMTBCCDC_XEM') && !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID  )" (click)="redirectToChiTiet(data.id,true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
