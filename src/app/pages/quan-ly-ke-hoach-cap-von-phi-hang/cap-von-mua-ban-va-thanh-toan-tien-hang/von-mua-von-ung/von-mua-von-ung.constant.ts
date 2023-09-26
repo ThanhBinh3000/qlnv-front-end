@@ -50,7 +50,7 @@ export class Tab {
             isSelected: false,
         },
         {
-            name: 'Tổng hợp tiền thừa DVCD',
+            name: 'Tổng hợp tiền thừa ĐVCD',
             code: Tab.DS_TH_TT,
             status: true,
             role: Roles.CVMB.VIEW_TH_NTT,

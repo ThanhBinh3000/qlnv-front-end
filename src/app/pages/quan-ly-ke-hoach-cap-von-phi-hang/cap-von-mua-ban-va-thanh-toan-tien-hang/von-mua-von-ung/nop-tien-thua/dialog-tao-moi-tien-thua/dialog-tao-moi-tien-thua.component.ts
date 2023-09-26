@@ -112,6 +112,7 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                         data.data.lstCtiets.forEach(item => {
                             const temp = new TienThua({
                                 ...item,
+                                id: uuid.v4() + 'FE',
                                 daNopVonUng: Operator.sum([item.daNopVonUng, item.nopVonUng]),
                                 daNopVonCap: Operator.sum([item.daNopVonCap, item.nopVonCap]),
                                 nopUncNgay: null,

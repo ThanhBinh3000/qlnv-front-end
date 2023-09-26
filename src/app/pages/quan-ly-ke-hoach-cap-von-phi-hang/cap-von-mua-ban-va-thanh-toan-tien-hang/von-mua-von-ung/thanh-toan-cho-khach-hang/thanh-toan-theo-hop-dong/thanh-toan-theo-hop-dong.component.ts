@@ -134,6 +134,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         } else {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtiets = this.baoCao.lstCtiets;
+            this.lstCtiets = Table.sortByIndex(this.lstCtiets);
         }
         this.updateEditCache();
         this.getStatusButton();
