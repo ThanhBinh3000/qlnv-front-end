@@ -10,13 +10,13 @@
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
-            <label class="search__label"> Loại hàng hóa </label>
+            <label class="search__label"> Loại hàng DTQG </label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith('02')">
-            <label class="search__label"> Loại hàng hóa </label>
+            <label class="search__label"> Loại hàng DTQG </label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
             </nz-select>
@@ -176,10 +176,10 @@
             <a
               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')"
               (click)="taoQdinh(data)">
-              <i class="icon htvbdh_soanthao"></i>
+              <i class="icon htvbdh_tcdt_tao-qd"></i>
             </a>
             <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XOA')"
+              *ngIf=" data.trangThai == STATUS.CHUA_TAO_QD && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XOA')"
               (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
