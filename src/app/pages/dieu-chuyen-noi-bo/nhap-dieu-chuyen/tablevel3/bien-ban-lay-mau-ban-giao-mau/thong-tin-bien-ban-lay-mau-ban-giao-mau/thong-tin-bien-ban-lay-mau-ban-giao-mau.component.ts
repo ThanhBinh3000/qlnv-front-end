@@ -81,7 +81,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       ngayLayMau: [dayjs().format('YYYY-MM-DD')],
       soQdinhDcc: [],
       qdccId: [],
-      soBbNhapDayKho: [],
+      soBbNhapDayKho: [, [Validators.required]],
       ngayNhapDayKho: [],
       bbnhapDayKhoId: [],
       tenLoNganKho: [, [Validators.required]],
@@ -571,6 +571,12 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       this.idInput = res.data.id;
       this.formData.patchValue({ id: res.data.id, trangThai: res.data.trangThai, tenTrangThai: res.data.tenTrangThai, soBbLayMau: res.data.soBbLayMau })
       if (isGuiDuyet) {
+        if (this.isVatTu) {
+          this.formData.controls["soBbNhapDayKho"].clearValidators();
+        } else {
+          this.formData.controls["soBbNhapDayKho"].setValidators([Validators.required]);
+        }
+
         this.guiDuyet();
       } else
         this.notification.success(MESSAGE.NOTIFICATION, res.msg);

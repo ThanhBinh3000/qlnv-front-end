@@ -183,7 +183,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     if (id) {
       let data = await this.detail(id);
       this.dsHangTH = data.dcnbBangKeCanHangDtl
-      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho} - ${data.tenNganKho}`, });
+      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} - ${data.tenNganKho}`, });
       this.fileDinhKemReq = data.fileDinhKems
       // await this.layDonViCon(data.maDiemKho)
     }

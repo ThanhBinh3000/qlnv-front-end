@@ -87,6 +87,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       tenCloaiVthh: [, [Validators.required]],
       tonKho: [, [Validators.required]],
       donViTinh: [, [Validators.required]],
+      donViTinhNhap: [, [Validators.required]],
       soLuongDc: [, [Validators.required]],
       duToanKphi: [0],
       thoiGianDkDc: [, [Validators.required]],
@@ -376,7 +377,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       if (nganKho) {
         this.formData.patchValue({
           maLoKho: "",
-          tenNganKho: nganKho.tenDvi
+          tenNganKho: nganKho.tenDvi,
+          loaiVthh: "",
+          tenLoaiVthh: "",
+          cloaiVthh: "",
+          tenCloaiVthh: "",
+          tonKho: "",
+          donViTinh: "",
         })
         let body = {
           maDvi: nganKho.maDvi,
@@ -385,19 +392,22 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
           const coLoKho = detail.data.object.coLoKho
-          const detailThuKho = detail.data.object.detailThuKho
-          if (detailThuKho) {
-            this.formData.patchValue({
-              maThuKho: detailThuKho.id,
-              thuKho: detailThuKho.fullName
-            })
-          }
+
 
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
           else {
+            this.dsLoKho = []
             this.formData.controls["maLoKho"].clearValidators();
             this.formData.controls["tenLoKho"].clearValidators();
+
+            const detailThuKho = detail.data.object.detailThuKho
+            if (detailThuKho) {
+              this.formData.patchValue({
+                maThuKho: detailThuKho.id,
+                thuKho: detailThuKho.fullName
+              })
+            }
 
             if (detail.data.object.loaiVthh && detail.data.object.tenLoaiVthh && detail.data.object.cloaiVthh && detail.data.object.tenCloaiVthh && detail.data.object.dviTinh) {
               this.formData.patchValue({
@@ -434,6 +444,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         }
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
+          const detailThuKho = detail.data.object.detailThuKho
+          if (detailThuKho) {
+            this.formData.patchValue({
+              maThuKho: detailThuKho.id,
+              thuKho: detailThuKho.fullName
+            })
+          }
           if (detail.data.object.loaiVthh && detail.data.object.tenLoaiVthh && detail.data.object.cloaiVthh && detail.data.object.tenCloaiVthh && detail.data.object.dviTinh) {
             this.formData.patchValue({
               loaiVthh: detail.data.object.loaiVthh,
@@ -485,22 +502,21 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         if (detail.statusCode == 0) {
           const coLoKho = detail.data.object.coLoKho
 
-
-          const detailThuKho = detail.data.object.detailThuKho
-          if (detailThuKho) {
-            this.formData.patchValue({
-              maThuKhoNhan: detailThuKho.id,
-              thuKhoNhan: detailThuKho.fullName
-            })
-          }
-
           if (coLoKho) {
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
           } else {
             this.formData.controls["maLoKhoNhan"].clearValidators();
             this.formData.controls["tenLoKhoNhan"].clearValidators();
-
             this.dsLoKhoNhan = []
+
+            const detailThuKho = detail.data.object.detailThuKho
+            if (detailThuKho) {
+              this.formData.patchValue({
+                maThuKhoNhan: detailThuKho.id,
+                thuKhoNhan: detailThuKho.fullName
+              })
+            }
+
             if (
               this.formData.value.maThuKho === detailThuKho.id
             ) {
@@ -516,8 +532,16 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             if (!this.formData.value.cloaiVthh) return
             const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
             this.formData.patchValue({
-              tichLuongKd
+              tichLuongKd,
+              donViTinhNhap: detail.data.object.dviTinh
             })
+
+            this.max = this.formData.value.soLuongDc
+            if (this.formData.value.soLuongDc > tichLuongKd) this.max = tichLuongKd
+
+            if (this.formData.value.slDcConLai) {
+              if (this.max > this.formData.value.slDcConLai) this.max = this.formData.value.slDcConLai
+            }
 
 
           }
@@ -570,7 +594,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           if (!this.formData.value.cloaiVthh) return
           const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
           this.formData.patchValue({
-            tichLuongKd
+            tichLuongKd,
+            donViTinhNhap: detail.data.object.dviTinh
           })
           this.max = this.formData.value.soLuongDc
           if (this.formData.value.soLuongDc > tichLuongKd) this.max = tichLuongKd
@@ -594,16 +619,25 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       soLuongPhanBo: "",
       // slDcConLai: ""
     })
+    this.max = value
+    if (value > this.formData.value.tichLuongKd) this.max = this.formData.value.tichLuongKd
+
+    if (this.formData.value.slDcConLai) {
+      if (this.max > this.formData.value.slDcConLai) this.max = this.formData.value.slDcConLai
+    }
   }
 
   onChangeSLNhapDc(value) {
+    console.log('onChangeSLNhapDc', value, this.max, this.formData.value.soLuongDc, this.formData.value.tichLuongKd, this.formData.value.slDcConLai)
     if (value > 0) {
       const slDcConLai = Number(this.formData.value.soLuongDc) - Number(value)
+      console.log('slDcConLai', slDcConLai)
       if (slDcConLai >= 0) {
         this.formData.patchValue({
           slDcConLai
         })
       }
+
     }
     // else {
     //   this.formData.patchValue({

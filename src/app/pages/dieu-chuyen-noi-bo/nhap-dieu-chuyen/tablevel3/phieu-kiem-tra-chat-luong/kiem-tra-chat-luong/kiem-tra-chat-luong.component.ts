@@ -332,19 +332,32 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
       this.spinner.show();
       try {
 
+        if (this.formData.value.tuNgayLapPhieu) {
+          this.formData.value.tuNgayLapPhieu = dayjs(this.formData.value.tuNgayLapPhieu).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayLapPhieu) {
+          this.formData.value.denNgayLapPhieu = dayjs(this.formData.value.denNgayLapPhieu).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.tuNgayGiamDinh) {
+          this.formData.value.tuNgayGiamDinh = dayjs(this.formData.value.tuNgayGiamDinh).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayGiamDinh) {
+          this.formData.value.denNgayGiamDinh = dayjs(this.formData.value.denNgayGiamDinh).format('YYYY-MM-DD')
+        }
+
         let body = this.formData.value;
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
+        // if (this.formData.value.ngayDuyetTc) {
+        //   body.ngayDuyetTcTu = body.ngayDuyetTc[0];
+        //   body.ngayDuyetTcDen = body.ngayDuyetTc[1];
+        // }
+        // if (this.formData.value.ngayHieuLuc) {
+        //   body.ngayHieuLucTu = body.ngayHieuLuc[0];
+        //   body.ngayHieuLucDen = body.ngayHieuLuc[1];
+        // }
         this.phieuKiemTraChatLuongService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'phieu-kiem-tra-chat-luong.xlsx'),
+            saveAs(blob, 'dcnb-phieu-kiem-tra-chat-luong.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
