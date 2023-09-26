@@ -372,7 +372,6 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
 
   async themMoiCtiet(item?) {
     if (item) {
-      console.log(123)
       this.formDataDetail = this.fb.group({
         idVirtual: uuid.v4(),
         chiMuc: [null, Validators.required],
