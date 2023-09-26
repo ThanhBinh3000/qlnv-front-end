@@ -413,9 +413,8 @@
                             Tổng trọng lượng bao bì
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-input-number nz-input nzSize="small" readonly [ngModel]="calcTong('soBaoBi')"
-                                [ngModelOptions]="{standalone: true}" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" nzDisabled></nz-input-number>
+                            <nz-input-number nz-input nzSize="small" formControlName="soBaoBi" [nzFormatter]="globals.formatter"
+                                [nzParser]="globals.parser"></nz-input-number>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -426,7 +425,7 @@
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
                             <nz-input-number nz-input nzSize="small" readonly
-                                [ngModel]="calcTong('trongLuongCaBi') - calcTong('soBaoBi')"
+                                [ngModel]="calcTong('trongLuongCaBi') - formData.value.soBaoBi"
                                 [ngModelOptions]="{standalone: true}" [nzFormatter]="globals.formatter"
                                 [nzParser]="globals.parser" nzDisabled></nz-input-number>
                         </nz-form-control>
@@ -438,7 +437,7 @@
                             Tổng trọng lượng hàng đã trừ bì (bằng chữ)
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <input nz-input [ngModel]="convertTien(calcTong('trongLuongCaBi') - calcTong('soBaoBi')) "
+                            <input nz-input [ngModel]="convertTien(calcTong('trongLuongCaBi') - formData.value.soBaoBi) "
                                 [ngModelOptions]="{standalone: true}" readonly />
                         </nz-form-control>
                     </nz-form-item>
