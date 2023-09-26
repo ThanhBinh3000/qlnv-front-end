@@ -442,6 +442,8 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         await this.loadThuKho(data.maLoKho, DANH_MUC_LEVEL.LO_KHO)
       else
         await this.loadThuKho(data.maNganKho, DANH_MUC_LEVEL.NGAN_KHO)
+
+      await this.openDialogBBNDK()
     }
   }
 
@@ -463,6 +465,29 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
   }
 
   async openDialogBBNDK() {
+    // let body = {
+    //   trangThai: STATUS.DA_DUYET_LDCC,
+    //   loaiDc: this.loaiDc,
+    //   maLoKho: this.formData.value.maLoKho,
+    //   maNganKho: this.formData.value.maNganKho,
+    //   soQdinhDcc: this.formData.value.soQdinhDc,
+    // }
+    // let res = await this.bienBanNhapDayKhoService.getDanhSach(body);
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   const dsNDK = res.data
+    //   if (dsNDK && dsNDK.length > 0) {
+    //     const bbNDK = dsNDK[0]
+    //     if (bbNDK) {
+    //       this.formData.patchValue({
+    //         soNhapDayKho: bbNDK.soBb,
+    //         bbNhapDayKhoId: bbNDK.id,
+    //         ngayNhapDayKho: bbNDK.ngayKtNhap,
+    //         slHangBQ: bbNDK.soLuongQdDcCuc
+    //       });
+    //     }
+    //   }
+    // }
+
     await this.spinner.show();
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
@@ -602,7 +627,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     let body = this.formData.value;
     body.dinhKems = this.dinhKems;
     body.dcnbPhieuKnChatLuongDtl = this.dataTableChiTieu;
-    body.hinhThucBq = this.listHinhThucBaoQuan.filter(item => item.checked).map(i => `${i.id}+*${i.giaTri}`).join("-*");
+    // body.hinhThucBq = this.listHinhThucBaoQuan.filter(item => item.checked).map(i => `${i.id}+*${i.giaTri}`).join("-*");
     if (this.idInput) {
       body.id = this.idInput
     } else {

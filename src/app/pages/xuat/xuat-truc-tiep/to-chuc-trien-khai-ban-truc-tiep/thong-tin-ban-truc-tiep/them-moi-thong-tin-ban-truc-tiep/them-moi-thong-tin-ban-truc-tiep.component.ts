@@ -29,7 +29,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   @Input() idInput: number;
   @Output() showListEvent = new EventEmitter<any>();
   @Output() dataTableChange = new EventEmitter<any>();
-
   listOfData: any[] = [];
   showFromTT: boolean;
   listLoaiHinhNx: any[] = [];
@@ -38,8 +37,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   soLuongDeXuat: number;
   donGiaDuocDuyet: number;
   idDviDtl: number;
-
-
   fileUyQuyen: any[] = [];
   fileBanLe: any[] = [];
   isBothFalse: boolean = true;
@@ -60,6 +57,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         idDtl: [],
         namKh: [],
         soQdPd: [''],
+        soQdDc: [''],
         maDvi: [''],
         tenDvi: [''],
         pthucBanTrucTiep: ['01'],
@@ -127,6 +125,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       const formDataValue = {
         idDtl: data.id,
         soQdPd: data.soQdPd,
+        soQdDc: data.soQdDc,
         maDvi: data.maDvi,
         tenDvi: data.tenDvi,
         diaDiemChaoGia: data.diaDiemChaoGia,
@@ -213,10 +212,10 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       } else if (this.isBothFalse) {
         this.notification.error(MESSAGE.WARNING, 'Ở mỗi mã đơn vị tài sản bạn phải chọn ít nhất một tổ chức cá nhân chào giá.');
       } else {
-        await this.approve(this.idInput, STATUS.HOAN_THANH_CAP_NHAT, 'Văn bản sẵn sàng hoàn thành cập nhập ?');
+        await this.approve(this.idInput, STATUS.DA_HOAN_THANH, 'Văn bản sẵn sàng hoàn thành cập nhập ?');
       }
     } else {
-      await this.approve(this.idInput, STATUS.HOAN_THANH_CAP_NHAT, 'Văn bản sẵn sàng hoàn thành cập nhập ?');
+      await this.approve(this.idInput, STATUS.DA_HOAN_THANH, 'Văn bản sẵn sàng hoàn thành cập nhập ?');
     }
   }
 

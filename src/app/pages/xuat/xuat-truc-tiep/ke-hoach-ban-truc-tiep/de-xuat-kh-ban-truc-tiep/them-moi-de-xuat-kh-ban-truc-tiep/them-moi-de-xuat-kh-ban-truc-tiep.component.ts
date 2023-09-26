@@ -147,9 +147,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (changes.idInput && changes.idInput.firstChange) {
       await this.getDetail(this.idInput);
-    }
   }
 
   async getDetail(id: number) {

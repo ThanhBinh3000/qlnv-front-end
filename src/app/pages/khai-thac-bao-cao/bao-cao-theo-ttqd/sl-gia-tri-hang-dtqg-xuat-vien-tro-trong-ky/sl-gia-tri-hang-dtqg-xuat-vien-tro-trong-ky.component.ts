@@ -34,6 +34,10 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
+  dsLoaiBc: any[] = [
+    {text: 'Báo cáo Quý', value: 1},
+    {text: 'Báo cáo Năm', value: 2}
+  ]
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -53,6 +57,7 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
         bieuSo: null,
         dviBaoCao: null,
         dviNhanBaoCao: null,
+        loaiBc: null,
       }
     );
   }
@@ -102,6 +107,7 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
       body.fileName = "bc_sl_gtri_hang_dtqg_xuat_vt_trong_ky_130.jrxml";
       body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dữ trữ quốc gia xuất viện trợ trong kỳ TT 130";
       body.trangThai = "01";
+      // body.loaiNhapXuat = "-1";
       await this.thongTu1302018Service.bcSlGtriHangDtqgXuatVtTrongKy(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
@@ -122,6 +128,7 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
       body.fileName = "bc_sl_gtri_hang_dtqg_xuat_vt_trong_ky_130.jrxml";
       body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dữ trữ quốc gia xuất viện trợ trong kỳ TT 130";
       body.trangThai = "01";
+      // body.loaiNhapXuat = "-1";
       await this.thongTu1302018Service.bcSlGtriHangDtqgXuatVtTrongKy(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();

@@ -276,9 +276,9 @@
                     [nzDisabled]="isView"></label>
                 </td>
                 <td class="text-center">{{i + 1}}</td>
-                <td>{{item.soPhieuKiemTraCl}}</td>
-                <td>{{item.soPhieuNhapKho}}</td>
-                <td>{{item.soBangKeCanHang}}</td>
+                <td class="bold text-blue" (click)="openDialogKTCL(item)">{{item.soPhieuKiemTraCl}}</td>
+                <td class="bold text-blue" (click)="openDialogPNK(item)">{{item.soPhieuNhapKho}}</td>
+                <td class="bold text-blue" (click)="openDialogBKCH(item)">{{item.soBangKeCanHang}}</td>
                 <td>{{item.ngayNhapKho|date: "dd/MM/yyyy"}}</td>
                 <td>{{item.soLuong|number:'1.0-1':'vi_VN'}}</td>
 
