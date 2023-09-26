@@ -482,9 +482,9 @@
               <td>{{i + 1}} </td>
               <td>{{data.tenCongViec }}</td>
               <td>{{data.donViTinh }}</td>
-              <td class="text-right">{{data.khoiLuong  | number}}</td>
-              <td class="text-right">{{data.donGia  | number}}</td>
-              <td class="text-right">{{data.thanhTien  | number}}</td>
+              <td class="text-right">{{data.khoiLuong  | number : '1.0-1' : 'vi-VN'}}</td>
+              <td class="text-right">{{data.donGia  | number : '1.0-1' : 'vi-VN'}}</td>
+              <td class="text-right">{{data.thanhTien  | number : '1.0-1' : 'vi-VN'}}</td>
               <td>{{data.ghiChu}}</td>
               <td class="text-center" *ngIf="!isViewDetail">
                 <a  (click)="editDataKlCongViec(i)">

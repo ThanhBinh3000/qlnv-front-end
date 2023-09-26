@@ -492,23 +492,22 @@
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
         (click)="save(true)"
-        *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC">
+        *ngIf="showSave()">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
-        *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC">
+        *ngIf="showSave()">
         <i class="fa fa-save"></i>
         <span>Lưu</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa ml-2" (click)="tuChoi()"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC">
+              *ngIf="showPheDuyetTuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_KT || formData.value.trangThai == STATUS.CHO_DUYET_LDCC
-              || ( formData.value.trangThai == STATUS.DA_DUYET_LDCC && formData.value.loai == '00')">
+              *ngIf="showPheDuyetTuChoi() || (formData.value.trangThai == STATUS.DA_DUYET_LDCC && formData.value.loai == '00')">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>{{ formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'Đóng sổ' : 'Duyệt'}}</span>
       </button>
