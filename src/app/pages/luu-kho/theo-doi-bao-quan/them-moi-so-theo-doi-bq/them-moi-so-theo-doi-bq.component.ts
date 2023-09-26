@@ -256,7 +256,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO;
+    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC ;
   }
 
   save(isGuiDuyet?) {
@@ -279,6 +279,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   pheDuyet() {
     let trangThai
     switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_KT :
+      case STATUS.TU_CHOI_LDCC :
       case STATUS.DU_THAO :
         trangThai = STATUS.CHO_DUYET_KT;
         break;
@@ -306,7 +308,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   }
 
   disabled() {
-    return this.formData.value.trangThai != STATUS.DU_THAO;
+    return this.formData.value.trangThai != STATUS.DU_THAO && this.formData.value.trangThai != STATUS.TU_CHOI_KT && this.formData.value.trangThai != STATUS.TU_CHOI_LDCC;
   }
 
   isShowEditDelete(item) {
@@ -317,7 +319,6 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
     let trangThai = this.formData.value.trangThai;
     return trangThai == STATUS.CHO_DUYET_KT || trangThai == STATUS.CHO_DUYET_LDCC;
   }
-
   addRow() {
 
   }

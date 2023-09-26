@@ -28,6 +28,7 @@ import * as uuidv4 from "uuid";
   styleUrls: ['./thong-tin-bang-ke-can-hang.component.scss']
 })
 export class ThongTinBangKeCanHangComponent extends Base2Component implements OnInit {
+  @Input() isViewOnModal: boolean;
   @Input() loaiDc: string;
   @Input() idInput: number;
   @Input() isView: boolean;

@@ -22,7 +22,9 @@ import {ThongTu1302018Service} from "../../../../services/bao-cao/ThongTu1302018
 })
 export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -32,7 +34,10 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
-
+  dsLoaiBc: any[] = [
+    {text: 'Báo cáo Quý', value: 1},
+    {text: 'Báo cáo Năm', value: 2}
+  ]
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -51,6 +56,7 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
         bieuSo: null,
         dviBaoCao: null,
         dviNhanBaoCao: null,
+        loaiBc: null,
       }
     );
   }
@@ -110,6 +116,28 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_sl_gia_tri_hang_dtqg_130.jrxml";
+      body.tenBaoCao = "Báo cáo số lượng giá trị hàng DTQG";
+      body.trangThai = "01";
+      await this.thongTu1302018Service.bcKhMuaHangDtqg(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bc_sl_gia_tri_hang_dtqg_130.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
   async loadDsDonVi() {

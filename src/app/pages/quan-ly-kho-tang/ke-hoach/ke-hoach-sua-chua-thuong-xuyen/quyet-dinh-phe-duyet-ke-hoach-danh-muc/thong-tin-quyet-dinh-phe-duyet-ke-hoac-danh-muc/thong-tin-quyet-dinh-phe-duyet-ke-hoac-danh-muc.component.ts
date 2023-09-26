@@ -87,7 +87,6 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     this.maQd = "/QĐ-BTC";
     this.redirectQd();
     this.loadDsNam();
-    this.loadDsToTrinh();
     await this.getDetail(this.idInput);
   }
 
@@ -243,6 +242,11 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
 
   }
 
+  changeNam(event){
+    this.formData.patchValue({
+      namKh: event,
+    })
+  }
   async loadDsToTrinh() {
     let body = {
       "namKh" : this.formData.value.namKh,
@@ -256,13 +260,16 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listToTrinh = data.content;
+      console.log(this.listToTrinh,"this.listToTrinh")
       if (this.listToTrinh && this.listToTrinh.length >0 ) {
         this.listToTrinh  = this.listToTrinh.filter(item => item.trangThai == STATUS.DA_DUYET_LDTC && !item.soQdPdKhDm)
+        console.log(this.listToTrinh,"this.listToTrinh123")
       }
     }
   }
 
   async openDialogToTrinh() {
+    await this.loadDsToTrinh();
     if (!this.isViewDetail) {
       const modal = this.modal.create({
         nzTitle: "Danh sách Phương án của Tổng cục",

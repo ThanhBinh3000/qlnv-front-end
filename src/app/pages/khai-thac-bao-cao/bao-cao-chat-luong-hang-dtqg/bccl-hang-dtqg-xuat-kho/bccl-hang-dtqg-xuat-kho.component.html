@@ -35,7 +35,7 @@
           <div nz-col [nzSpan]="6" *ngIf="formData.value.loaiBc == '02'" >
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
-              <nz-form-control nz-col >
+              <nz-form-control [nzErrorTip]="error" >
                 <nz-select nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear>
                   <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>

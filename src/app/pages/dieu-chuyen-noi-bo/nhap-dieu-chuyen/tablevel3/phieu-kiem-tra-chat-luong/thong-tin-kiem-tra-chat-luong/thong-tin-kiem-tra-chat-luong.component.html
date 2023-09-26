@@ -1,5 +1,5 @@
 <ng-container>
-  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isViewOnModal">
     <div class="btn-group">
 
       <button type="button" class="btn btn-sub" (click)="quayLai()">
@@ -656,15 +656,15 @@
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="printPreview()" class="modal__button--save">
+    <button nz-button (click)="printPreview()" class="modal__button--save" *ngIf="!isViewOnModal">
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save" *ngIf="!isViewOnModal">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save" *ngIf="!isViewOnModal">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>
