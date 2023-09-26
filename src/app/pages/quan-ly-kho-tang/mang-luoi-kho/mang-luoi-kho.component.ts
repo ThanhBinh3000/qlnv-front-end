@@ -324,7 +324,7 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   async getAllLoaiVthh() {
-    let res = await this.danhMucService.getAllVthhByCap("1");
+    let res = await this.danhMucService.getAllVthhByCap("2");
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listVthh = res.data
