@@ -5,14 +5,11 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {Globals} from "../../../../shared/globals";
-import {HelperService} from "../../../../services/helper.service";
 import {STATUS} from "../../../../constants/status";
 import dayjs from "dayjs";
 import {UserLogin} from "../../../../models/userlogin";
 import {MESSAGE} from "../../../../constants/message";
 import {DANH_MUC_LEVEL} from "../../luu-kho.constant";
-import {saveAs} from 'file-saver';
 import {DonviService} from "../../../../services/donvi.service";
 import {TheoDoiBqService} from "../../../../services/luu-kho/theo-doi-bq.service";
 import {DialogTuChoiComponent} from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
@@ -46,7 +43,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   listPhuongThucBaoQuan : any[] = []
   listHinhThucBaoQuan : any[] = []
   monthFormat = 'MM/yyyy'
-  monthSelect = new Date();
+  monthSelect = new Date().getDate() >= 25 ? new Date(new Date().getFullYear(),new Date().getMonth()+1,new Date().getDate()) : new Date();
 
   constructor(
     httpClient: HttpClient,
