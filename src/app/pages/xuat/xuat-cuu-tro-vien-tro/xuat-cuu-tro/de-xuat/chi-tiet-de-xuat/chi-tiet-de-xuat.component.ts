@@ -496,15 +496,17 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   soLuongNhuCauXuatChange($event) {
     // (tính soLuongConThieu = nếu (Nhu cầu xuất cứu trợ  - sl xuất cứu trợ đề xuất ) > 0 thì (Nhu cầu xuất cứu trợ  - sl xuất cứu trợ đề xuất ) ngược lại  = 0 )
-    let soLuongConThieu = this.formDataDtl.value.soLuongNhuCauXuat - this.formDataDtl.value.soLuong;
-    if (soLuongConThieu < 0) {
-      soLuongConThieu = 0;
+    if( this.formDataDtl.value.soLuong > this.formDataDtl.value.tonKhoLoaiVthh){
+      let soLuongConThieu = this.formDataDtl.value.tonKhoLoaiVthh - this.formDataDtl.value.soLuong;
+      if (soLuongConThieu < 0) {
+        soLuongConThieu = 0;
+      }
+      this.formDataDtl.patchValue({
+        soLuongConThieu: soLuongConThieu,
+        soLuongChuyenCapThoc: soLuongConThieu
+      });
+      console.log('soLuongConThieu: ' + soLuongConThieu);
     }
-    this.formDataDtl.patchValue({
-      soLuongConThieu: soLuongConThieu,
-      soLuongChuyenCapThoc: soLuongConThieu * 2
-    });
-    console.log('soLuongConThieu: ' + soLuongConThieu);
   }
 
   isVthhGao() {

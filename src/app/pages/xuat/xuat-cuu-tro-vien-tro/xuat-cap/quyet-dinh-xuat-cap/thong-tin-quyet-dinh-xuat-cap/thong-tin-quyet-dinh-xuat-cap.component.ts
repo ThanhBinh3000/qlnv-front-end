@@ -149,7 +149,10 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         tenTrangThai: ['Dự thảo'],
         quyetDinhPdDtl: [new Array()],
         fileDinhKem: [new Array<FileDinhKem>()],
-        canCu: [new Array<FileDinhKem>()]
+        canCu: [new Array<FileDinhKem>()],
+        qdPaXuatCapId: [],
+        paXuatGaoChuyenXc:[false],
+        qdPaXuatCap:[]
       }
     );
 
@@ -501,5 +504,88 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       soXc: data.soBbQd,
       dataDtl: data.quyetDinhPdDtl
     })*/
+  }
+
+  async openDialogTrQdPaXuatCapChange() {
+    await this.spinner.show();
+    // Get data tờ trình
+    try {
+      let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
+        xuatCap: true,
+        trangThai: "29",
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0
+        },
+      });
+      if (res.msg == MESSAGE.SUCCESS) {
+        const modalQD = this.modal.create({
+          nzTitle: 'Danh sách quyết định phương án đồng ý xuất cấp',
+          nzContent: DialogTableSelectionComponent,
+          nzMaskClosable: false,
+          nzClosable: false,
+          nzWidth: '900px',
+          nzFooter: null,
+          nzComponentParams: {
+            dataTable: res.data.content,
+            dataHeader: ['Số quyết định', 'Ngày ký quyết định', 'Trích yếu'],
+            dataColumn: ['soBbQd', 'ngayKy', 'trichYeu']
+          },
+        });
+        modalQD.afterClose.subscribe(async (data) => {
+          if (data) {
+            let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(data.id);
+            let detail = res.data;
+            detail.quyetDinhPdDtl = detail.quyetDinhPdDtl.filter(item => item.soLuongXc > 0);
+            detail.quyetDinhPdDtl.forEach(s => {
+              s.soDx = detail.soDx;
+              s.idDx = detail.idDx;
+              s.ngayKyDx = detail.ngayDx;
+              s.trichYeuDx = detail.trichYeu;
+              s.soLuong = s.soLuongXc;
+              s.loaiNhapXuat = detail.loaiNhapXuat;
+              s.kieuNhapXuat = detail.kieuNhapXuat;
+              s.mucDichXuat = detail.mucDichXuat;
+              s.tenVthh = detail.tenVthh;
+            });
+            if (!this.formData.value.id) {
+              this.formData.patchValue({quyetDinhPdDtl: detail.quyetDinhPdDtl});
+            }
+
+            data.idDx = data.id;
+            data.paXuatGaoChuyenXc = true;
+            data.qdPaXuatCap = res.data.soBbQd;
+            data.qdPaXuatCapId = res.data.id;
+            delete data.id;
+            delete data.soBbQd;
+            delete data.ngayHluc;
+            delete data.tenVthh;
+            delete data.loaiNhapXuat;
+            delete data.kieuNhapXuat;
+            delete data.idDx;
+            delete data.soDx;
+            delete data.ngayKy;
+            delete data.trangThai;
+            delete data.tenTrangThai;
+            delete data.type;
+            delete data.canCu;
+            delete data.fileDinhKem;
+            delete data.trichYeu;
+            delete data.quyetDinhPdDtl;
+
+            this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
+
+            this.formData.patchValue(data);
+            await this.buildTableView();
+            await this.expandAll();
+          }
+        });
+      }
+    } catch (e) {
+      console.log(e)
+      this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
+    } finally {
+      await this.spinner.hide();
+    }
   }
 }

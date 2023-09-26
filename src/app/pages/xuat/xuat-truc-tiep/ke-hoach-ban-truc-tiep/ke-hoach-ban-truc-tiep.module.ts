@@ -52,6 +52,7 @@ import {KeHoachBanDauGiaModule} from "../../dau-gia/ke-hoach-ban-dau-gia/ke-hoac
     MainKeHoachBanTrucTiepComponent,
     ThemMoiQdPheDuyetKhBanTrucTiepComponent,
     ThemMoiDeXuatKhBanTrucTiepComponent,
+    ChiTietDieuChinhBanTrucTiepComponent,
   ],
   imports: [
     CommonModule,
