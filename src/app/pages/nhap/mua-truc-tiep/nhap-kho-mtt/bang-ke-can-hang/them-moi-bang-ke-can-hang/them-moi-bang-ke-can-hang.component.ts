@@ -101,6 +101,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       tenNganLoKho: [''],
       lyDoTuChoi: [''],
       soPhieuKtraCluong: [''],
+      soBaoBi: [''],
     })
   }
 

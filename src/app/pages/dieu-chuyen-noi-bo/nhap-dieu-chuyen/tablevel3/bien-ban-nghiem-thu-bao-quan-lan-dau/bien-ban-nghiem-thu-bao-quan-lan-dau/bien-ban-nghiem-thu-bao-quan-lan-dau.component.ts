@@ -276,15 +276,28 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       this.spinner.show();
       try {
 
+        if (this.formData.value.tuNgayLap) {
+          this.formData.value.tuNgayLap = dayjs(this.formData.value.tuNgayLap).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayLap) {
+          this.formData.value.denNgayLap = dayjs(this.formData.value.denNgayLap).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.tuNgayKtnt) {
+          this.formData.value.tuNgayKtnt = dayjs(this.formData.value.tuNgayKtnt).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayKtnt) {
+          this.formData.value.denNgayKtnt = dayjs(this.formData.value.denNgayKtnt).format('YYYY-MM-DD')
+        }
+
         let body = this.formData.value;
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
+        // if (this.formData.value.ngayDuyetTc) {
+        //   body.ngayDuyetTcTu = body.ngayDuyetTc[0];
+        //   body.ngayDuyetTcDen = body.ngayDuyetTc[1];
+        // }
+        // if (this.formData.value.ngayHieuLuc) {
+        //   body.ngayHieuLucTu = body.ngayHieuLuc[0];
+        //   body.ngayHieuLucDen = body.ngayHieuLuc[1];
+        // }
         this.bbNghiemThuBaoQuanLanDauService
           .export(body)
           .subscribe((blob) =>

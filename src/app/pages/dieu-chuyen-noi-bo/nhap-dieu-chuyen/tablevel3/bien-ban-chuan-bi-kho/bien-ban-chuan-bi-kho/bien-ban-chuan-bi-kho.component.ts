@@ -287,6 +287,19 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       this.spinner.show();
       try {
 
+        if (this.formData.value.tuNgayLapBb) {
+          this.formData.value.tuNgayLapBb = dayjs(this.formData.value.tuNgayLapBb).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayLapBb) {
+          this.formData.value.denNgayLapBb = dayjs(this.formData.value.denNgayLapBb).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.tuNgayKtnk) {
+          this.formData.value.tuNgayKtnk = dayjs(this.formData.value.tuNgayKtnk).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayKtnk) {
+          this.formData.value.denNgayKtnk = dayjs(this.formData.value.denNgayKtnk).format('YYYY-MM-DD')
+        }
+
         let body = this.formData.value;
         // if (this.formData.value.ngayDuyetTc) {
         //   body.ngayDuyetTcTu = body.ngayDuyetTc[0];
@@ -299,7 +312,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
         this.bbChuanBiKhoService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx'),
+            saveAs(blob, 'dcnb-bien-ban-chuan-bi-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

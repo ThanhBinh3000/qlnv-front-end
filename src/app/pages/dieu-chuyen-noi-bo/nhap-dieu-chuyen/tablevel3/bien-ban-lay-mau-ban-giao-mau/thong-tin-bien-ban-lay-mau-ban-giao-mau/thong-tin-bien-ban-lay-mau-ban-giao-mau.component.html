@@ -243,7 +243,7 @@
 
                   <div nz-col [nzSpan]="8" *ngIf="!isVatTu">
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Số BB nhập đầy kho</nz-form-label>
+                      <nz-form-label nzRequired [nzNoColon]="true">Số BB nhập đầy kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBBNDK()">
                           <input [readonly]="true" nz-input formControlName="soBbNhapDayKho" readonly="true" />

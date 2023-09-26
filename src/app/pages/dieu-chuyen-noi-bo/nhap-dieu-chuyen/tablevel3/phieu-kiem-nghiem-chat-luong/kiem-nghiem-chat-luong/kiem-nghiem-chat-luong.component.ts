@@ -260,15 +260,19 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       this.spinner.show();
       try {
 
-        let body = this.formData.value;
-        if (this.formData.value.ngay) {
-          body.tuNgay = body.ngay[0];
-          body.denNgay = body.ngay[1];
+        if (this.formData.value.tuNgayLapPhieu) {
+          this.formData.value.tuNgayLapPhieu = dayjs(this.formData.value.tuNgayLapPhieu).format('YYYY-MM-DD')
         }
-        this.quyetDinhDieuChuyenTCService
+        if (this.formData.value.denNgayLapPhieu) {
+          this.formData.value.denNgayLapPhieu = dayjs(this.formData.value.denNgayLapPhieu).format('YYYY-MM-DD')
+        }
+
+        let body = this.formData.value;
+
+        this.phieuKiemNghiemChatLuongService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
+            saveAs(blob, 'dcnb-phieu-kiem-nghiem-chat-luong.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
