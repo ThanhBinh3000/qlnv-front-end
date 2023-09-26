@@ -11,6 +11,8 @@ import {MESSAGE} from "../../../../../../../constants/message";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
 import {STATUS} from "../../../../../../../constants/status";
+import { cloneDeep } from 'lodash';
+import {KhCnQuyChuanKyThuat} from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 
 @Component({
   selector: 'app-xtl-them-bb-lm',
@@ -20,6 +22,14 @@ import {STATUS} from "../../../../../../../constants/status";
 export class XtlThemBbLmComponent extends Base3Component implements OnInit {
 
   listBienBan : any[]
+
+  itemRow :any = {}
+
+  listDaiDien : any[];
+
+  ppLayMau : any[];
+
+  chiTieuChatLuong : any[];
 
   fileCanCu : any[]
   constructor(
@@ -31,7 +41,8 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
     route: ActivatedRoute,
     router: Router,
     private _service: KiemTraChatLuongScService,
-    private danhMucService : DanhMucService
+    private danhMucService : DanhMucService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group({
@@ -88,13 +99,24 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
       let routerUrl = this.router.url;
       const urlList = routerUrl.split("/");
       this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-bb-lm';
-    })
+    });
+    this.listDaiDien =
+      [
+        {
+          value : 'CUC',
+          label : 'Đại diện Cục DTNN KV'
+        },
+        {
+          value : 'CHI_CUC',
+          label : 'Đại diện Chi cục DTNN KV'
+        }
+      ]
   }
 
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
-      this.loadLoaiBienBan(),
+      this.loadDanhMuc(),
       this.getId(),
       await this.initForm()
     ]);
@@ -116,9 +138,10 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
         })
       });
     }
+
   }
 
-  async loadLoaiBienBan() {
+  async loadDanhMuc() {
     await this.danhMucService.danhMucChungGetAll("LOAI_BIEN_BAN").then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.listBienBan = res.data.filter(item => item.ma == 'LBGM');
@@ -129,6 +152,24 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
     }).catch(err => {
       this.notification.error(MESSAGE.ERROR, err.msg);
     })
+    await this.danhMucService.danhMucChungGetAll("PP_LAY_MAU").then(res => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.ppLayMau = res.data;
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }).catch(err => {
+      this.notification.error(MESSAGE.ERROR, err.msg);
+    })
+  }
+
+  async getDanhMucTieuChuan(cloaiVthh) {
+    let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(cloaiVthh);
+    if (dmTieuChuan.data) {
+      this.dataTable = dmTieuChuan.data;
+      console.log(this.dataTable);
+    }
   }
 
   openDialogSoQd(){
@@ -137,6 +178,38 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
 
   openDialogDdiemNhapHang(){
 
+  }
+
+  addRow(){
+    let item = cloneDeep(this.itemRow);
+    this.dataTable = [
+      ...this.dataTable,
+      item,
+    ]
+    this.clearRow()
+  }
+
+  clearRow(){
+    this.itemRow = {};
+  }
+
+  deleteRow(i){
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable = this.dataTable.filter((x, index) => index != i);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
 }
