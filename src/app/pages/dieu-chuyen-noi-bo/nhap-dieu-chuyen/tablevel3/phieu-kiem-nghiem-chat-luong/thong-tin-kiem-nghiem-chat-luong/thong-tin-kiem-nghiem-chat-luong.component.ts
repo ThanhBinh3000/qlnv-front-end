@@ -503,7 +503,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách quyết định',
+      nzTitle: 'Danh sách biên bản nhập đầy kho',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
