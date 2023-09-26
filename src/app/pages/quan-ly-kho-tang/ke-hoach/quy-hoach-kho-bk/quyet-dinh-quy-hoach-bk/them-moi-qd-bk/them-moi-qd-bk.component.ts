@@ -88,12 +88,10 @@ export class ThemMoiQdBkComponent implements OnInit {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maQd = '/QĐ-BTC',
-      await Promise.all([
-        await this.loadListPa(),
-        await this.loadDsNam(),
-        await this.loadDsCuc(this.userInfo.MA_DVI),
-        await this.getDataDetail(this.idInput)
-      ])
+      this.loadListPa(),
+      this.loadDsNam(),
+      this.loadDsCuc(this.userInfo.MA_DVI),
+      this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
@@ -202,7 +200,7 @@ export class ThemMoiQdBkComponent implements OnInit {
     this.dataTable = [...this.dataTableDTM, ...this.dataTableTL]
     let body = this.formData.value;
     body.soQuyetDinh = body.soQuyetDinh + this.maQd;
-    body.quyetDinhQuyHoachCTietReqs = this.dataTable
+    body.quyetDinhQuyHoachCTietReqsBk = this.dataTable
     body.maDvi = this.userInfo.MA_DVI;
     body.type = this.type;
     body.fileDinhKems = this.fileDinhKems;
@@ -454,7 +452,7 @@ export class ThemMoiQdBkComponent implements OnInit {
         } else {
           this.rowItemTL.tenDiemKho = diemKho[0].tenDvi
           this.rowItemTL.diaDiem = diemKho[0].diaChi
-          this.rowItemTL.dienTich =res.dienTichDat ? res.dienTichDat : 0
+          this.rowItemTL.dienTich = res.dienTichDat ? res.dienTichDat : 0
         }
       }
     } else {
@@ -478,14 +476,14 @@ export class ThemMoiQdBkComponent implements OnInit {
   }
 
 
-  checkValidators(rowItem : QuyHoachKho) {
+  checkValidators(rowItem: QuyHoachKho) {
     let arr = [];
     let check = true;
     arr.push(
       rowItem.maCuc, rowItem.maChiCuc, rowItem.maDiemKho, rowItem.diaDiem, rowItem.dienTich, rowItem.tongTichLuong, rowItem.phuongAnQuyHoach, rowItem.ghiChu
     )
     if (arr && arr.length > 0) {
-      for (let  i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
         if (arr[i] == '' || arr[i] == null || arr[i] == undefined) {
           check = false;
           break;
@@ -495,7 +493,7 @@ export class ThemMoiQdBkComponent implements OnInit {
     return check;
   }
 
-  exportCt(type : string) {
+  exportCt(type: string) {
     this.spinner.show();
     try {
       if (this.dataTable && this.dataTable.length > 0) {
