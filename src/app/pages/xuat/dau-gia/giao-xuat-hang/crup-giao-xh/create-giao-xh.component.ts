@@ -29,7 +29,6 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() isView: boolean;
   @Input() idInput: number;
-  @Input() showFromTH: boolean;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   maHauTo: any;

@@ -21,6 +21,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
   @Input() title;
   @Input() dataInput;
   @Input() isView;
+  @Input() isCache;
   formData: FormGroup
   dataTable: any[] = [];
 

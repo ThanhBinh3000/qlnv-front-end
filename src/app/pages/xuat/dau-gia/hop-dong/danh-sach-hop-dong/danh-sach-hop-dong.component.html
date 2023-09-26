@@ -75,22 +75,22 @@
                 [nzShowPagination]="false">
         <thead>
         <tr>
-          <th width="60px">STT</th>
-          <th width="100px">Năm KH</th>
-          <th width="130px">QĐ PD KHBĐG</th>
-          <th width="175px">QĐ PD KQBĐG</th>
-          <th width="175px" class="wrap">Tổng số ĐV tài sản</th>
-          <th width="175px" class="wrap">Tổng số ĐVTS ĐG thành công</th>
-          <th width="175px" class="wrap">SL HĐ đã ký</th>
-          <th width="175px" class="wrap">Thời hạn thanh toán</th>
-          <th width="175px">Loại hàng hóa</th>
-          <th width="175px">Chủng loại hàng hóa</th>
-          <th width="175px">ĐV thực hiện</th>
-          <th width="175px" class="wrap">Tổng SL xuất bán {{loaiVthh == '02' ? null : '(kg)'}}</th>
-          <th width="90px">Thành tiền (đ)</th>
-          <th width="90px">Trạng thái HĐ</th>
-          <th width="90px">Trạng thái XH</th>
-          <th width="120px">Hành động</th>
+          <th class="text-center" width="60px">STT</th>
+          <th class="text-left" width="100px">Năm KH</th>
+          <th class="text-left" width="130px">QĐ PD KHBĐG</th>
+          <th class="text-left" width="175px">QĐ PD KQBĐG</th>
+          <th class="text-center" width="175px" class="wrap">Tổng số ĐV tài sản</th>
+          <th class="text-center" width="175px" class="wrap">Tổng số ĐVTS ĐG thành công</th>
+          <th class="text-center" width="175px" class="wrap">SL HĐ đã ký</th>
+          <th class="text-left" width="175px" class="wrap">Thời hạn thanh toán</th>
+          <th class="text-left" width="175px">Loại hàng hóa</th>
+          <th class="text-left" width="175px">Chủng loại hàng hóa</th>
+          <th class="text-left" width="175px">ĐV thực hiện</th>
+          <th class="text-right" width="175px" class="wrap">Tổng SL xuất bán {{loaiVthh == '02' ? null : '(kg)'}}</th>
+          <th class="text-right" width="90px">Thành tiền (đ)</th>
+          <th class="text-left" width="90px">Trạng thái HĐ</th>
+          <th class="text-left" width="90px">Trạng thái XH</th>
+          <th class="text-center" width="120px">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -193,27 +193,27 @@
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.nam }}</td>
-          <td>
+          <td class="text-left">{{ data.nam }}</td>
+          <td class="text-left">
             <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link" (click)="openModal(data.idQdPd, 'QdPd')">{{
               data.soQdPd}}</a>
           </td>
-          <td>
+          <td class="text-left">
             <a *ngIf="data.soQdKq && data.id" nz-button nzType="link" (click)="openModal(data.id, 'QdPdKq')">{{
               data.soQdKq}}</a>
           </td>
-          <td>{{ data.tongDviTsan }}</td>
-          <td>{{ data.slDviTsanThanhCong }}</td>
-          <td>{{ data.slHopDongDaKy }}</td>
-          <td>{{ data.ngayKy|date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.tenLoaiVthh }}</td>
-          <td>{{ data.tenCloaiVthh }}</td>
-          <td>{{ data.tenDvi }}</td>
-          <td>{{ data.tongSlXuat|number:globals.numberFormat:globals.locale }}</td>
-          <td>{{ data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
-          <td>{{ data.tenTrangThaiHd }}</td>
-          <td>{{ data.tenTrangThaiXh }}</td>
-          <td class="text-left">
+          <td class="text-center">{{ data.tongDviTsan }}</td>
+          <td class="text-center">{{ data.slDviTsanThanhCong }}</td>
+          <td class="text-center">{{ data.slHopDongDaKy }}</td>
+          <td class="text-left">{{ data.ngayKy|date: 'dd/MM/YYYY' }}</td>
+          <td class="text-left">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left">{{ data.tenCloaiVthh }}</td>
+          <td class="text-left">{{ data.tenDvi }}</td>
+          <td class="text-right">{{ data.tongSlXuat|number:globals.numberFormat:globals.locale }}</td>
+          <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
+          <td class="text-left">{{ data.tenTrangThaiHd }}</td>
+          <td class="text-left">{{ data.tenTrangThaiXh }}</td>
+          <td class="text-center">
             <a *ngIf="(data.trangThaiHd == STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
@@ -250,10 +250,6 @@
   <app-quanly-hopdong *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-quanly-hopdong>
 </ng-container>
-
-
-
-
 
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('QdPd')">

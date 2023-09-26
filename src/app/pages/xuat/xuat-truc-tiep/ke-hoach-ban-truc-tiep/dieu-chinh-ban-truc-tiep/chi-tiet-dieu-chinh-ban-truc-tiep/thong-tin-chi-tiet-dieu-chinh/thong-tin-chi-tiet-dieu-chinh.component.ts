@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Globals} from "../../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
@@ -18,19 +18,14 @@ import {
   templateUrl: './thong-tin-chi-tiet-dieu-chinh.component.html',
   styleUrls: ['./thong-tin-chi-tiet-dieu-chinh.component.scss']
 })
-export class ThongTinChiTietDieuChinhComponent implements OnInit {
+export class ThongTinChiTietDieuChinhComponent implements OnChanges {
   @Input() title;
   @Input() dataInput;
-  @Output() soLuongChange = new EventEmitter<number>();
   @Input() isView;
-  @Input() isCache: boolean = false;
+  @Input() isCaChe;
 
   formData: FormGroup
-  listNguonVon: any[] = [];
-  listDataGroup: any[] = [];
   dataTable: any[] = [];
-  dataChiTieu: any;
-  listPhuongThucThanhToan: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -44,55 +39,40 @@ export class ThongTinChiTietDieuChinhComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [],
-      maDvi: [''],
-      tenDvi: [''],
-      tgianBdauTchuc: [''],
+      thoiGianDuKien: [''],
       tgianDkienTu: [''],
       tgianDkienDen: [''],
       tgianTtoan: [],
       tgianTtoanGhiChu: [''],
       pthucTtoan: [''],
+      tenPthucTtoan: [''],
       tgianGnhan: [],
       tgianGnhanGhiChu: [''],
       pthucGnhan: [''],
-      thongBaoKh: [''],
-      tongSoLuong: [''],
-      diaChi: [''],
-      soDxuat: [''],
-      thoiGianDuKien: [''],
-      donGiaVat: []
+      thongBao: [],
+      tongSoLuong: [],
+      donViTinh: [''],
     });
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    await this.spinner.show()
-    if (changes) {
-      if (this.dataInput) {
-        this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
+    if (changes.dataInput) {
+      await this.spinner.show();
+      const dataInput = changes.dataInput.currentValue;
+      if (dataInput) {
+        this.helperService.bidingDataInFormGroup(this.formData, dataInput);
+        const hasValidTime = dataInput.tgianDkienTu && dataInput.tgianDkienDen;
         this.formData.patchValue({
-          tgianBdauTchuc: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
-        })
-        this.dataTable = this.dataInput.children
-        await this.ptThanhToan(this.dataInput)
+          thoiGianDuKien: hasValidTime ? [dataInput.tgianDkienTu, dataInput.tgianDkienDen] : null
+        });
+        this.dataTable = dataInput.children;
+        if (this.dataTable && this.dataTable.length > 0) {
+          await this.calculatorTable();
+        }
       } else {
         this.formData.reset();
       }
-    }
-    await this.spinner.hide()
-  }
-
-
-  async ngOnInit() {
-  }
-
-
-  expandSet = new Set<number>();
-
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
+      await this.spinner.hide();
     }
   }
 
@@ -108,45 +88,50 @@ export class ThongTinChiTietDieuChinhComponent implements OnInit {
         dataEdit: data,
       },
     });
-    modalGT.afterClose.subscribe((data) => {
-      if (!data) {
-        return;
+    modalGT.afterClose.subscribe(async (updatedData) => {
+      if (updatedData && index >= 0) {
+        this.dataTable[index] = updatedData;
+        await this.calculatorTable();
       }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-        console.log(data, 999)
-      }
-      this.calculatorTable();
-    });
-  };
-
-  calculatorTable() {
-    let tongSoLuong: number = 0;
-    this.dataTable.forEach((item) => {
-      tongSoLuong += item.soLuongChiCuc;
-    });
-    this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
     });
   }
 
+  deleteRow(i: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable = this.dataTable.filter((item, index) => index != i);
+          await this.calculatorTable();
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
 
+  calculatorTable() {
+    this.dataTable.forEach(item => {
+      item.soLuongChiCuc = item.children.reduce((acc, child) => acc + child.soLuongDeXuat, 0);
+    });
+    this.formData.patchValue({
+      tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.soLuongChiCuc, 0),
+    });
+  }
 
-  async ptThanhToan(data) {
-    if (data.pthucTtoan == '1') {
-      this.listPhuongThucThanhToan = [
-        {
-          ma: '1',
-          giaTri: 'Tiền mặt',
-        },
-      ];
+  expandSet = new Set<number>();
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
     } else {
-      this.listPhuongThucThanhToan = [
-        {
-          ma: '2',
-          giaTri: 'Chuyển khoản',
-        },
-      ];
+      this.expandSet.delete(id);
     }
   }
 }

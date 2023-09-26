@@ -18,7 +18,7 @@ import {
   QdPdKetQuaBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import {STATUS} from 'src/app/constants/status';
-import {chain, cloneDeep} from 'lodash';
+import {cloneDeep} from 'lodash';
 import {Validators} from '@angular/forms';
 import {
   QuyetDinhNvXuatBttService
@@ -49,7 +49,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   objHopDongHdr: any = {};
   listHangHoaAll: any[] = [];
   listTccnChaoGia: any[] = [];
-  listHdDaKy: any[] = [];
+  loadDanhSachHdong: any[] = [];
   listDviTsanFilter: any[] = [];
   listDviTsan: any[] = [];
   listAllDviTsan: any[] = [];
@@ -127,8 +127,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         thanhTien: [],
         ghiChu: [''],
         tongSlXuatBanQdKh: [],
-        tongSlDaKyHdong: [],
-        tongSlChuaKyHdong: [],
+        tongSlBanttQdkhDakyHd: [],
+        tongSlBanttQdkhChuakyHd: [],
         trangThai: [STATUS.DU_THAO],
         idQdNv: [],
         soQdNv: [''],
@@ -287,7 +287,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           )
         );
         await Promise.all([
-          this.loadDsHd(data.soQdKq),
+          this.loadDanhDachHopDong(),
           this.setListDviTsanCuc(data.children),
         ]);
         this.formData.patchValue({
@@ -308,9 +308,14 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           tenCloaiVthh: data.tenCloaiVthh,
           moTaHangHoa: data.moTaHangHoa,
           tongSlXuatBanQdKh: data.tongSoLuong,
-          tongSlDaKyHdong: data.tongSlDaKyHdong,
-          tongSlChuaKyHdong: data.tongSoLuong - data.tongSlDaKyHdong,
           donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh,
+        });
+        const filteredItems = this.loadDanhSachHdong.filter(item => item.idQdKq === data.id && item.trangThai === STATUS.DA_KY);
+        const tongSlBanttQdkhDakyHd = filteredItems.reduce((acc, item) => acc + item.soLuongBanTrucTiep, 0);
+        const tongSlBanttQdkhChuakyHd = data.tongSoLuong - tongSlBanttQdkhDakyHd;
+        this.formData.patchValue({
+          tongSlBanttQdkhDakyHd: tongSlBanttQdkhDakyHd,
+          tongSlBanttQdkhChuakyHd: tongSlBanttQdkhChuakyHd,
         });
         this.listTccnChaoGia = childrenFlat;
       } else {
@@ -419,7 +424,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   async maDviTsanCuc(event) {
     this.listDviTsanFilter = this.idHopDong ? this.listDviTsan.filter(s => s.tochucCanhan === event) : this.listDviTsan.filter(s => {
       return s.tochucCanhan === event &&
-        !this.listHdDaKy.some(s1 =>
+        !this.loadDanhSachHdong.some(s1 =>
           s1.maDviTsan.split(',').includes(s.maDviTsan) &&
           s1.tenDviMua.split(',').includes(s.tochucCanhan)
         );
@@ -549,7 +554,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(id);
       if (res.msg !== MESSAGE.SUCCESS) throw new Error(res.msg);
       const data = res.data;
-      await this.loadDsHd(data.soQdNv);
+      await this.loadDanhDachHopDong();
       const loaiVthhItem = this.listHangHoaAll.find(s => s.ma == data.loaiVthh);
       const formDataPatchValue = {
         idChaoGia: data.id,
@@ -569,11 +574,20 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
         tongSlXuatBanQdKh: data.children.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
-        tongSlDaKyHdong: data.tongSlDaKyHdong,
-        tongSlChuaKyHdong: data.tongSlChuaKyHdong,
         donViTinh: loaiVthhItem?.maDviTinh,
       };
+      const filteredItems = this.loadDanhSachHdong.filter(item => item.idChaoGia === data.id && item.trangThai === STATUS.DA_KY);
+      const tongSlBanttQdkhDakyHd = filteredItems.reduce((acc, item) => acc + item.soLuongBanTrucTiep, 0);
+      const tongSlBanttQdkhChuakyHd = data.tongSoLuong - tongSlBanttQdkhDakyHd;
+      this.formData.patchValue({
+        tongSlBanttQdkhDakyHd: tongSlBanttQdkhDakyHd,
+        tongSlBanttQdkhChuakyHd: tongSlBanttQdkhChuakyHd,
+      });
       this.formData.patchValue(formDataPatchValue);
+      if (!data.idQdNv) {
+        console.error('Hiện chưa có quyết định giao nhệm vụ!');
+        return;
+      }
       const resQdNv = await this.quyetDinhNvXuatBttService.getDetail(data.idQdNv);
       if (resQdNv.msg === MESSAGE.SUCCESS && resQdNv.data) {
         const dataQdNv = resQdNv.data;
@@ -600,7 +614,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     inputTable.forEach((item) => {
       this.listDviTsan.push(...item.children.filter(child => child.maDviTsan));
     });
-    this.listAllDviTsan = this.idHopDong ? this.listDviTsan : this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 => s1.maDviTsan.split(',').includes(s.maDviTsan)));
+    this.listAllDviTsan = this.idHopDong ? this.listDviTsan : this.listDviTsan.filter(s => !this.loadDanhSachHdong.some(s1 => s1.maDviTsan.split(',').includes(s.maDviTsan)));
   }
 
   async selectMaDviTsanChiCuc() {
@@ -615,18 +629,21 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  async loadDsHd(event) {
+  async loadDanhDachHopDong() {
     const body = {
-      soQd: event,
       loaiVthh: this.loaiVthh,
       namHd: this.formData.value.namHd,
     };
-    const res = await this.hopDongBttService.search(this.userService.isCuc() ? body : {...body, soQdNv: event});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listHdDaKy = res.data.content;
-    } else {
+    const res = await this.hopDongBttService.search(body);
+    if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
+    const data = res.data.content;
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.loadDanhSachHdong = data;
   }
 
   async deletePhuLuc(data) {

@@ -67,6 +67,8 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       ngayHluc: [''],
       idQdPd: [],
       soQdPd: [''],
+      idQdDc: [],
+      soQdDc: [''],
       idChaoGia: [],
       loaiHinhNx: [''],
       kieuNx: [''],
@@ -143,7 +145,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
 
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
-    this.setValidator();
+    this.formData.controls["soQdKq"].setValidators([Validators.required]);
     const soQdKq = this.formData.value.soQdKq;
     const body = {
       ...this.formData.value,
@@ -171,7 +173,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       const body = {
         namKh: this.formData.value.namKh,
         loaiVthh: this.loaiVthh,
-        trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+        trangThai: STATUS.DA_HOAN_THANH,
         pthucBanTrucTiep: ['01'],
       };
       await this.loadQdNvXuatHang();
@@ -182,6 +184,10 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       const data = res.data.content;
       const set = new Set(this.loadQuyetDinhKetQua.map(item => item.idChaoGia));
       this.dataThongTinChaoGia = data.filter(item => !set.has(item.id));
+      this.dataThongTinChaoGia = this.dataThongTinChaoGia.map(item => {
+        item.soQd = item.soQdDc !== null ? item.soQdDc : item.soQdPd;
+        return item;
+      });
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH THÔNG TIN CHÀO GIÁ',
         nzContent: DialogTableSelectionComponent,
@@ -191,8 +197,8 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.dataThongTinChaoGia,
-          dataHeader: ['Số quyết định phê duyệt KH BTT', 'Số Đề xuất kế hoạch bán trực tiếp', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-          dataColumn: ['soQdPd', 'soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
+          dataHeader: ['Số QĐ phê duyệt/điều chỉnh KH BTT', 'Số Đề xuất KH BTT', 'Loại hàng hóa'],
+          dataColumn: ['soQd', 'soDxuat', 'tenLoaiVthh']
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
@@ -244,8 +250,10 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       }
       const data = res.data;
       this.formData.patchValue({
-        idQdPd: data.idHdr,
+        idQdPd: data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr,
         soQdPd: data.soQdPd,
+        idQdDc: data.xhQdDchinhKhBttHdr ? data.idHdr : '',
+        soQdDc: data.soQdDc,
         idChaoGia: data.id,
         tenDvi: data.tenDvi,
         diaDiemChaoGia: data.diaDiemChaoGia,
@@ -376,9 +384,6 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
-  setValidator() {
-    this.formData.controls["soQdPd"].setValidators([Validators.required]);
-  }
 
   setValidForm() {
     this.formData.controls["namKh"].setValidators([Validators.required]);

@@ -21,16 +21,15 @@ import {
   styleUrls: ['./thong-tin-quyet-dinh-uy-quyen-ban-le.component.scss']
 })
 export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component implements OnInit {
-  @Input() loaiVthh: String;
+  @Input() loaiVthh: string;
+  @Input() isView: boolean;
   @Input() idInput: number;
-  maQd: string = null;
+  @Output() showListEvent = new EventEmitter<any>();
+  maHauTo: any;
   listOfData: any[] = [];
   fileUyQuyen: any[] = [];
   fileBanLe: any[] = [];
   listPthucBanTt: any[] = [];
-
-  @Output()
-  showListEvent = new EventEmitter<any>();
 
   constructor(
     httpClient: HttpClient,
@@ -47,6 +46,7 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       {
         namKh: [''],
         soQdPd: [''],
+        soQdDc: [''],
         ngayKyQd: [''],
         ngayHluc: [''],
         loaiVthh: [''],
@@ -66,7 +66,7 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
 
   async ngOnInit() {
     try {
-      this.maQd = this.userInfo.MA_QD;
+      this.maHauTo = this.userInfo.MA_QD;
       if (this.idInput) {
         await Promise.all([
           this.loadDetail(this.idInput),
@@ -113,13 +113,14 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       }
       this.formData.patchValue({
         namKh: data.namKh,
-        soQdPd: data.soQdPd,
-        ngayKyQd: data.xhQdPdKhBttHdr.ngayKyQd,
-        ngayHluc: data.xhQdPdKhBttHdr.ngayHluc,
-        loaiVthh: data.xhQdPdKhBttHdr.loaiVthh,
+        soQdPd: data.soQdPd?.split('/')[0],
+        soQdDc: data.soQdDc?.split('/')[0],
+        ngayKyQd: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.ngayKyQd : data.xhQdDchinhKhBttHdr.ngayKyDc,
+        ngayHluc: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.ngayHluc : data.xhQdDchinhKhBttHdr.ngayHlucDc,
+        loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         pthucBanTrucTiep: data.pthucBanTrucTiep,
-        trichYeu: data.xhQdPdKhBttHdr.trichYeu,
+        trichYeu: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.trichYeu : data.xhQdDchinhKhBttHdr.trichYeu,
         thoiGianDeXuatBtt: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null,
         thoiGianPdBtt: (data.ngayMkho && data.ngayKthuc) ? [data.ngayMkho, data.ngayKthuc] : null,
       });
