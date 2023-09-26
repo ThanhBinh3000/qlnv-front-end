@@ -53,13 +53,13 @@ export class ThongTinTonghopComponent implements OnInit {
   listNguonTongHop: any[] = [];
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   userInfo: UserLogin;
-  listFileDinhKem: any[] = [];
+  // listFileDinhKem: any[] = [];
   listThongTinChiTiet: any[] = [];
   totalRecord: number = 0;
   isTonghop: boolean = false;
   dayNow: string;
   yearNow: number;
-  filePhuongAn: any = {};
+  filePhuongAn: any[] = [];
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
   STATUS = STATUS;
@@ -127,7 +127,6 @@ export class ThongTinTonghopComponent implements OnInit {
       'maToTrinh': [null],
       'noiDung': [null],
       'khDnCapVonIds': [null],
-      'nameFilePhuongAn': [null],
     });
     this.formData.patchValue({
       id: this.idInput,
@@ -150,7 +149,7 @@ export class ThongTinTonghopComponent implements OnInit {
           this.detail = res.data;
           this.detail.trangThai = data.trangThai;
           this.detail.tenTrangThai = data.tenTrangThai;
-          this.filePhuongAn = res.data.fileDinhKem;
+          this.filePhuongAn = data.fileDinhKems;
           this.formData.patchValue({
             'nam': res.data.nam,
             'nguonTongHop': data.nguonTongHop,
@@ -158,15 +157,12 @@ export class ThongTinTonghopComponent implements OnInit {
             'ngayTongHop': data.ngayTongHop,
             'maToTrinh': data.maToTrinh,
             'noiDung': data.noiDung,
-            nameFilePhuongAn: data.fileDinhKem.fileName,
+            // nameFilePhuongAn: data.fileDinhKem.fileName,
             khDnCapVonIds: data.ct1s.map(s => s.khDnCapVonId),
           });
-          this.listFileDinhKem = [data.fileDinhKem];
+          // this.listFileDinhKem = [data.fileDinhKem];
           this.listThongTinChiTiet = [...data.ct1s];
           this.detail.tCThem = [...data.ct1s];
-          // this.detail.tCThem.forEach(dt => {
-          //   dt.tcCapThem = dt.ycCapThem;
-          // });
           this.updateEditCache();
           let phuongAnList = [];
           this.detail.ct1s.forEach(pa => {
@@ -175,8 +171,6 @@ export class ThongTinTonghopComponent implements OnInit {
             phuongAn.tcCapThem = pa.tcCapThem;
             phuongAnList = [...phuongAnList, phuongAn];
           });
-          /*  this.khDnCapVonIds = res.data.cts.map(item => item.id);
-            this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds});*/
         }
       }
     }
@@ -213,7 +207,7 @@ export class ThongTinTonghopComponent implements OnInit {
       id: this.detail.id,
       'capDvi': this.userInfo.CAP_DVI,
       'ct1s': phuongAnList,
-      'fileDinhKem': this.filePhuongAn,
+      'fileDinhKems': this.filePhuongAn,
       'khDnCapVonIds': this.formData.value.khDnCapVonIds,
       'maDvi': this.userInfo.MA_DVI,
       'maToTrinh': this.formData.value.maToTrinh,
@@ -457,7 +451,7 @@ export class ThongTinTonghopComponent implements OnInit {
       'khDnCapVonIds': [null],
       'ct1s': [null],
     });
-    this.listFileDinhKem = [];
+    // this.listFileDinhKem = [];
   }
 
   cancelEdit(stt: number): void {
@@ -539,29 +533,6 @@ export class ThongTinTonghopComponent implements OnInit {
         item.id = getSoDeNghi[0].id;
         item.kinhPhiDaCap = getSoDeNghi[0].kinhPhiDaCap;
       }
-    }
-  }
-
-  getNameFile(event?: any, item?: FileDinhKem) {
-    const element = event.currentTarget as HTMLInputElement;
-    const fileList: FileList | null = element.files;
-    if (fileList) {
-      const itemFile = {
-        name: fileList[0].name,
-        file: event.target.files[0] as File,
-      };
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
-        .then((resUpload) => {
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          this.formData.patchValue({
-            nameFilePhuongAn: resUpload.filename,
-          });
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
-          this.filePhuongAn = fileDinhKem;
-        });
     }
   }
 
