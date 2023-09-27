@@ -176,7 +176,7 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {(this.itemQdPdKhLcnt, 'this item')
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntDsnt;
+            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
             if (this.listHopDong && this.listHopDong.length > 0) {
               this.selectRow(this.listHopDong[0]);
             }
