@@ -150,6 +150,7 @@ export class ThongTinDeXuatNhuCauCuaCacCucComponent implements OnInit {
         },
         [],
       ],
+      trangThaiTh: [],
       soBienBan: [
         {
           value: this.detail
