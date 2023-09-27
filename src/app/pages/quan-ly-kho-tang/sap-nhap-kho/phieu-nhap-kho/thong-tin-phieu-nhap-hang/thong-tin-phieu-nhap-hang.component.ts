@@ -13,7 +13,7 @@ import { DonviService } from "../../../../../services/donvi.service";
 import { DanhMucService } from "../../../../../services/danhmuc.service";
 import { STATUS } from "../../../../../constants/status";
 import { MESSAGE } from "../../../../../constants/message";
-import { chain, cloneDeep } from 'lodash';
+import { chain, cloneDeep, includes } from 'lodash';
 import { FILETYPE } from "../../../../../constants/fileType";
 import { DataService } from 'src/app/services/data.service';
 import {
@@ -161,7 +161,7 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
             let data = await this.createUpdate(body, null, isGuiDuyet);
             if (data) {
                 this.idInput = data.id;
-                this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soQuyetDinh: data.soQuyetDinh?.split('/')[0] });
+                this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soQuyetDinh: data.soQuyetDinh?.split('/')[0], soPhieu: data.soPhieu });
                 if (isGuiDuyet) {
                     this.hoanThanh()
                 }
@@ -317,7 +317,8 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
                 this.formData.patchValue({ soQuyetDinh: dataChose.soQuyetDinh, soQuyetDinhId: dataChose.soQuyetDinhId })
                 const res = await this.dieuChuyenKhoService.getDetail(dataChose.id);
                 const dieuChuyenKhoHangDtl = Array.isArray(res?.data?.dieuChuyenKhoHangDtl) ? res?.data?.dieuChuyenKhoHangDtl : [];
-                this.danhSachNganLo = dieuChuyenKhoHangDtl.filter(f => f.maChiCucDi === this.formData.value.maDvi && f.thayDoiThuKho);
+                // this.danhSachNganLo = dieuChuyenKhoHangDtl.filter(f => f.maChiCucDen === this.formData.value.maDvi && f.thayDoiThuKho);
+                this.danhSachNganLo = dieuChuyenKhoHangDtl.filter(f => f.maChiCucDen.includes(this.formData.value.maDvi));
                 this.dataTable = [];
                 // await this.bindingDataQd(dataChose.id, false);
             }
@@ -346,16 +347,16 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
     };
     bindingDiaDiem(data) {
         this.formData.patchValue({
-            maLoKho: data.maLoKhoDi,
-            maNganKho: data.maNganKhoDi,
-            maNhaKho: data.maNhaKhoDi,
-            maDiemKho: data.maDiemKhoDi,
-            maNganLo: data.maLoKhoDi ? `${data.maLoKhoDi}${data.maNganKhoDi}` : data.maNganKhoDi,
-            tenLoKho: data.tenLoKhoDi,
-            tenNganKho: data.tenNganKhoDi,
-            tenNhaKho: data.tenNhaKhoDi,
-            tenDiemKho: data.tenDiemKhoDi,
-            tenNganLo: data.tenLoKhoDi ? `${data.tenLoKhoDi} - ${data.tenNganKhoDi}` : data.tenNganKhoDi,
+            maLoKho: data.maLoKhoDen,
+            maNganKho: data.maNganKhoDen,
+            maNhaKho: data.maNhaKhoDen,
+            maDiemKho: data.maDiemKhoDen,
+            maNganLo: data.maLoKhoDen ? `${data.maLoKhoDen}${data.maNganKhoDen}` : data.maNganKhoDen,
+            tenLoKho: data.tenLoKhoDen,
+            tenNganKho: data.tenNganKhoDen,
+            tenNhaKho: data.tenNhaKhoDen,
+            tenDiemKho: data.tenDiemKhoDen,
+            tenNganLo: data.tenLoKhoDen ? `${data.tenLoKhoDen} - ${data.tenNganKhoDen}` : data.tenNganKhoDen,
             loaiVthh: data.loaiVthh,
             tenLoaiVthh: data.tenLoaiVthh,
             cloaiVthh: data.cloaiVthh,
