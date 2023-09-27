@@ -157,7 +157,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-      await this.getDetail(this.idInput);
+    await this.getDetail(this.idInput);
   }
 
   async getDetail(id: number) {
@@ -310,7 +310,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       loaiVthh: loaiVthh,
       cloaiVthh: cloaiVthh,
       trangThai: STATUS.BAN_HANH,
-      maDvi: this.userInfo.MA_DVI,
+      maDvi: '0101',
       loaiGia: 'LG04'
     };
     const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
@@ -400,23 +400,22 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       item.tongGiaKdiemDd = 0;
       item.tongTienDtruocDd = 0;
       item.tongTienDatTruocDx = 0;
-      let donGiaDuocDuyet = 0;
+      const donGiaMap = new Map();
       if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
-        if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-          donGiaDuocDuyet = this.dataDonGiaDuocDuyet.map(s => s.giaQdTcdt);
-        } else {
-          donGiaDuocDuyet = this.dataDonGiaDuocDuyet.filter(s => s.maChiCuc === item.maDvi).map(s => s.giaQdTcdt);
-        }
-      }
-        item.children.forEach((child) => {
-          child.donGiaDuocDuyet = donGiaDuocDuyet[0];
-          child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
-          child.soTienDtruocDd = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
-          item.tongGiaKdiemDx += child.giaKhoiDiemDx;
-          item.tongGiaKdiemDd += child.giaKhoiDiemDd;
-          item.tongTienDtruocDd += child.soTienDtruocDd;
-          item.tongTienDatTruocDx += child.soTienDtruocDx;
+        this.dataDonGiaDuocDuyet.forEach((item) => {
+          donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
         });
+      }
+      const donGiaDuocDuyet =this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(item.maDvi);
+      item.children.forEach((child) => {
+        child.donGiaDuocDuyet = donGiaDuocDuyet || null;
+        child.giaKhoiDiemDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0);
+        child.soTienDtruocDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0) * this.formData.value.khoanTienDatTruoc / 100;
+      });
+      item.tongGiaKdiemDx = item.children.map(child => child.giaKhoiDiemDx).reduce((prev, cur) => prev + cur, 0);
+      item.tongGiaKdiemDd = item.children.map(child => child.giaKhoiDiemDd).reduce((prev, cur) => prev + cur, 0);
+      item.tongTienDtruocDd = item.children.map(child => child.soTienDtruocDd).reduce((prev, cur) => prev + cur, 0);
+      item.tongTienDatTruocDx = item.children.map(child => child.soTienDtruocDx).reduce((prev, cur) => prev + cur, 0);
     });
     this.formData.patchValue({
       tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.tongSlXuatBanDx, 0),
@@ -447,27 +446,27 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   async save() {
-      try {
-        await this.helperService.ignoreRequiredForm(this.formData);
-        if (!this.validateNgay()) return;
-        this.formData.controls["soDxuat"].setValidators([Validators.required]);
-        const body = {
-          ...this.formData.value,
-          soDxuat: this.formData.value.soDxuat ? this.formData.value.soDxuat + this.maHauTo : null,
-          tgianDkienTu: null,
-          tgianDkienDen: null,
-          children: this.dataTable
-        };
-        const thoiGianDuKienValue = this.formData.get('thoiGianDuKien').value;
-        if (thoiGianDuKienValue) {
-          body.tgianDkienTu = this.formatDate(thoiGianDuKienValue, 0);
-          body.tgianDkienDen = this.formatDate(thoiGianDuKienValue, 1);
-        }
-        await this.createUpdate(body);
-        await this.helperService.restoreRequiredForm(this.formData);
-      } catch (e) {
-        console.log('error', e);
+    try {
+      await this.helperService.ignoreRequiredForm(this.formData);
+      if (!this.validateNgay()) return;
+      this.formData.controls["soDxuat"].setValidators([Validators.required]);
+      const body = {
+        ...this.formData.value,
+        soDxuat: this.formData.value.soDxuat ? this.formData.value.soDxuat + this.maHauTo : null,
+        tgianDkienTu: null,
+        tgianDkienDen: null,
+        children: this.dataTable
+      };
+      const thoiGianDuKienValue = this.formData.get('thoiGianDuKien').value;
+      if (thoiGianDuKienValue) {
+        body.tgianDkienTu = this.formatDate(thoiGianDuKienValue, 0);
+        body.tgianDkienDen = this.formatDate(thoiGianDuKienValue, 1);
       }
+      await this.createUpdate(body);
+      await this.helperService.restoreRequiredForm(this.formData);
+    } catch (e) {
+      console.log('error', e);
+    }
   }
 
   formatDate(dateRange, index) {
@@ -508,9 +507,9 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) && Array.isArray(this.dataChiTieu.khVatTuXuat) && this.dataChiTieu.khVatTuXuat.length > 0) {
       const uniqueVatTuCha = this.dataChiTieu.khVatTuXuat
         .filter((item, index, self) => item.maVatTuCha !== null && index === self.findIndex(x => x.maVatTuCha === item.maVatTuCha))
-        .map(item => ({ maVatTuCha: item.maVatTuCha, tenVatTuCha: item.tenVatTuCha }));
+        .map(item => ({maVatTuCha: item.maVatTuCha, tenVatTuCha: item.tenVatTuCha}));
       this.listVatTuCha = uniqueVatTuCha;
-    }else {
+    } else {
       this.listVatTuCha = [];
     }
   }
@@ -535,7 +534,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   validateNgay() {
-    const { ngayTao, ngayPduyet } = this.formData.value;
+    const {ngayTao, ngayPduyet} = this.formData.value;
     if (ngayPduyet && new Date(ngayTao) > new Date(ngayPduyet)) {
       this.notification.error(MESSAGE.ERROR, "Ngày tạo không được vượt quá ngày phê duyệt");
       return false;
