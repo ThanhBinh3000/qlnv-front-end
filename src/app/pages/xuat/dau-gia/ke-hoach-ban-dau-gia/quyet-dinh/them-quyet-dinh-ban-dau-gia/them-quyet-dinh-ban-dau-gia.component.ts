@@ -56,6 +56,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   pdfSrc: any;
   wordSrc: any;
   templateName = "quyet-dinh-ke-hoach-ban-dau-gia";
+  dataDonGiaDuocDuyet: any;
 
   constructor(
     httpClient: HttpClient,
@@ -178,7 +179,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     if (!(await this.validateBanHanhQd(this.danhsachDx))) {
-      this.notification.error(MESSAGE.ERROR, 'Hiện chưa có giá bán cụ thể được duyệt cho loại hàng hóa này.');
       return;
     }
     this.setValidForm();
@@ -199,11 +199,18 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async validateBanHanhQd(data) {
-    return data.some(item =>
-      item.children.some(child =>
-        child.children.some(s => s.donGiaDuocDuyet)
-      )
-    );
+    let isValid = true;
+    data.forEach(item => {
+      item.children.forEach(child => {
+        child.children.forEach(s => {
+          if (s.donGiaDuocDuyet === null || s.donGiaDuocDuyet === '' || typeof s.donGiaDuocDuyet === 'undefined') {
+            this.notification.error(MESSAGE.WARNING, `Hiện chưa có giá bán cụ thể được duyệt cho số tờ trình ${item.soDxuat} !`);
+            isValid = false;
+          }
+        });
+      });
+    });
+    return isValid;
   }
 
   async loadChiTiet(id: number) {
@@ -225,36 +232,40 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async calculatorTable() {
-    const namKhValue = this.formData.get('namKh').value;
-    const loaiVthhValue = this.formData.get('loaiVthh').value;
-    const cloaiVthhValue = this.formData.get('cloaiVthh').value;
-    const trangThai = STATUS.BAN_HANH;
-    const loaiGia = 'LG04';
-    await Promise.all(this.danhsachDx.map(async (item) => {
-      await Promise.all(item.children.map(async (child) => {
-        const maDvi = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : child.maDvi;
-        const bodyPag = {
-          namKeHoach: namKhValue,
-          loaiVthh: loaiVthhValue,
-          cloaiVthh: cloaiVthhValue,
-          trangThai,
-          maDvi,
-          loaiGia
-        };
-        await Promise.all(child.children.map(async (s) => {
-          const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
-          s.donGiaDuocDuyet = pag.msg === MESSAGE.SUCCESS ? (pag.data ? pag.data[0].giaQdTcdt : null) : null;
-          s.giaKhoiDiemDd = s.soLuongDeXuat * s.donGiaDuocDuyet;
-          s.soTienDtruocDd = s.giaKhoiDiemDd * item.khoanTienDatTruoc / 100;
-          child.tongGiaKdiemDd += s.giaKhoiDiemDd;
-          child.tongTienDtruocDd += s.soTienDtruocDd;
-        }));
-      }));
-    }));
-    this.danhsachDx.forEach((item) => {
-      item.tongTienGiaKdTheoDgiaDd = item.children.reduce((acc, child) => acc + child.tongGiaKdiemDd, 0);
-      item.tongKhoanTienDtTheoDgiaDd = item.children.reduce((acc, child) => acc + child.tongTienDtruocDd, 0);
-    });
+    let bodyPag = {
+      namKeHoach: this.formData.value.nam,
+      loaiVthh: this.formData.value.loaiVthh,
+      cloaiVthh: this.formData.value.cloaiVthh,
+      trangThai: STATUS.BAN_HANH,
+      maDvi: '0101',
+      loaiGia: 'LG04'
+    };
+    const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
+    if (pag.msg !== MESSAGE.SUCCESS) {
+      return;
+    }
+    this.dataDonGiaDuocDuyet = pag.data || null;
+    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+      const donGiaMap = new Map();
+      this.dataDonGiaDuocDuyet.forEach((item) => {
+        donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
+      });
+      this.danhsachDx.forEach(danhSachDxItem => {
+        danhSachDxItem.children.forEach(childItem => {
+          const maChiCuc = childItem.maDvi;
+          const donGiaDuocDuyet = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(maChiCuc);
+          childItem.children.forEach(subItem => {
+            subItem.donGiaDuocDuyet = donGiaDuocDuyet || null;
+            subItem.giaKhoiDiemDd = subItem.soLuongDeXuat * (donGiaDuocDuyet || 0);
+            subItem.soTienDtruocDd = subItem.soLuongDeXuat * (donGiaDuocDuyet || 0) * danhSachDxItem.khoanTienDatTruoc / 100;
+          });
+          childItem.tongGiaKdiemDd = childItem.children.map(child => child.giaKhoiDiemDd).reduce((prev, cur) => prev + cur, 0);
+          childItem.tongTienDtruocDd = childItem.children.map(child => child.soTienDtruocDd).reduce((prev, cur) => prev + cur, 0);
+        });
+        danhSachDxItem.tongTienGiaKdTheoDgiaDd = danhSachDxItem.children.map(item => item.tongGiaKdiemDd).reduce((prev, cur) => prev + cur, 0);
+        danhSachDxItem.tongKhoanTienDtTheoDgiaDd = danhSachDxItem.children.map(item => item.tongTienDtruocDd).reduce((prev, cur) => prev + cur, 0);
+      });
+    }
   }
 
   async openDialogTh() {
@@ -544,21 +555,18 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   setValidator() {
     const thHdrValidators = this.formData.get('phanLoai').value === 'TH' ? [Validators.required] : [];
     const trHdrValidators = this.formData.get('phanLoai').value === 'TTr' ? [Validators.required] : [];
-
     this.formData.controls["idThHdr"].setValidators(thHdrValidators);
     this.formData.controls["idThHdr"].updateValueAndValidity();
-
     this.formData.controls["idTrHdr"].setValidators(trHdrValidators);
     this.formData.controls["idTrHdr"].updateValueAndValidity();
-
     this.formData.controls["soTrHdr"].setValidators(trHdrValidators);
     this.formData.controls["soTrHdr"].updateValueAndValidity();
+    this.formData.controls["soQdPd"].setValidators([Validators.required]);
   }
 
   setValidForm() {
     const requiredFields = [
       "namKh",
-      "soQdPd",
       "ngayKyQd",
       "ngayHluc",
       "trichYeu",
