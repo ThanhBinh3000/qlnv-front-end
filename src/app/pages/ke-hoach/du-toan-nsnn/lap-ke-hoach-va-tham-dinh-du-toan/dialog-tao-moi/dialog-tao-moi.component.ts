@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -38,10 +37,6 @@ export class DialogTaoMoiComponent implements OnInit {
         this.response.maDvi = this.userInfo.MA_DVI;
 
         this.lstNam = Utils.getListYear(5, 5);
-        // const thisYear = dayjs().get('year');
-        // for (let i = -5; i < 10; i++) {
-        //     this.lstNam.push(thisYear + i);
-        // }
     }
 
     async checkReport() {
@@ -52,6 +47,9 @@ export class DialogTaoMoiComponent implements OnInit {
         this.listAppendix.forEach(e => {
             e.tenDm = Utils.getName(this.response.namBcao, e.tenDm);
         })
+        if (this.userService.isChiCuc()) {
+            this.listAppendix = this.listAppendix.filter(e => e.id != 'TT342_06');
+        }
         this.response = {
             ...new Report(),
             namBcao: this.response.namBcao,
@@ -132,10 +130,11 @@ export class DialogTaoMoiComponent implements OnInit {
                                     item.id = uuid.v4() + 'FE';
                                 }
                                 item.maDviTien = '1';
-                                item.trangThai = '3';
+                                item.trangThai = Status.NEW;
                                 const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
                                 item.tenPl = pl.tenPl;
                                 item.tenDm = pl.tenDm;
+                                item.nguoiBcao = this.userInfo?.sub;
                             })
                         } else {
                             this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -155,7 +154,8 @@ export class DialogTaoMoiComponent implements OnInit {
                         maBieuMau: item.id,
                         tenPl: item.tenPl,
                         tenDm: item.tenDm,
-                        trangThai: '3',
+                        trangThai: Status.NEW,
+                        nguoiBcao: this.userInfo?.sub,
                         lstCtietLapThamDinhs: [],
                     })
                 })

@@ -28,16 +28,16 @@
                     <nz-table nzBordered class="table__body">
                         <thead>
                             <tr>
-                                <th rowspan="2" nzWidth="100px">STT</th>
-                                <th rowspan="2" nzWidth="300px">Nhóm</th>
-                                <th rowspan="2">Số trần chi đơn vị cấp trên giao</th>
-                                <th rowspan="2">Tổng cộng</th>
+                                <th scope="col" rowspan="2" nzWidth="100px">STT</th>
+                                <th scope="col" rowspan="2" nzWidth="300px">Nhóm</th>
+                                <th scope="col" rowspan="2">Số trần chi đơn vị cấp trên giao</th>
+                                <th scope="col" rowspan="2">Tổng cộng</th>
 
-                                <th colspan="{{lstDvi.length}}">Danh sách đơn vị</th>
-                                <th rowspan="2" colspan="3" *ngIf="status.general"></th>
+                                <th scope="colgroup" colspan="{{lstDvi.length}}">Danh sách đơn vị</th>
+                                <th scope="colgroup" rowspan="2" colspan="3" *ngIf="status.general"></th>
                             </tr>
                             <tr>
-                                <th *ngFor="let item of lstDvi">
+                                <th scope="col" *ngFor="let item of lstDvi">
                                     {{item.tenDvi}}
                                 </th>
                             </tr>
@@ -48,20 +48,8 @@
                                 <td>Tổng cộng</td>
                                 <td>{{Op.fmtVal(total.dtoanGiao)}}</td>
                                 <td>{{Op.fmtVal(total.tongCong)}}</td>
-                                <!-- <td *ngFor="let item of lstDvi">
-                                    <div *ngFor="let data of lstCtietBcaos;">
-                                        <div *ngFor="let e of data.lstCtietDvis;">
-                                        </div>
-                                    </div>
-                                </td> -->
                                 <ng-container *ngFor="let item of total.lstCtietDvis">
                                     <td>{{Op.fmtVal(item.soTranChi)}}</td>
-                                    <!-- <th></th>
-                                    <th>{{Op.fmtVal(item.gtTrenGtBh)}}</th>
-                                    <th>{{Op.fmtVal(item.gtDuoiGt)}}</th>
-                                    <th></th>
-                                    <th>{{Op.fmtVal(item.gtDuoiGtBh)}}</th>
-                                    <th>{{Op.fmtVal(item.tong)}}</th> -->
                                 </ng-container>
                                 <td *ngIf="status.general"></td>
                             </tr>
@@ -153,9 +141,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

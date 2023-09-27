@@ -28,6 +28,7 @@ import { FileDinhKem } from "../../../../../models/FileDinhKem";
 })
 export class ChiTietTongHopTieuHuyComponent extends Base2Component implements OnInit {
   @Input() loaiVthhInput: string;
+  @Input() idInput: number;
   @Input() selectedItem: any = {};
   @Input() isView: boolean;
   @Input() eventOk: boolean;
@@ -80,7 +81,7 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
       nguoiGduyetId: [],
       ngayPduyet: [],
       nguoiPduyetId: [],
-      ngayTao: [],
+      ngayTao:[dayjs().format('YYYY-MM-DD HH:mm:ss')],
       lyDoTuChoi: [],
       tongSlHienTai: [],
       tongSlDeXuat: [],
@@ -103,7 +104,7 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
            this.loadDsVthh()
          ]);*/
       // this.formData.patchValue(this.selectedItem)
-      // await this.loadDetail(this.selectedItem);
+      await this.loadDetail(this.idInput);
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -118,14 +119,15 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
       await this.tongHopTieuHuyService.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.maHauTo = '/' + res.data.maDanhSach.split("/")[1];
-            res.data.maDanhSach = res.data.maDanhSach.split("/")[0];
+            // this.maHauTo = '/' + res.data.maDanhSach.split("/")[1];
+            // res.data.maDanhSach = res.data.maDanhSach.split("/")[0];
+            this.selectedItem=res.data;
             this.formData.patchValue(res.data);
             this.formData.value.tongHopDtl.forEach(s => {
               s.idVirtual = uuidv4();
               this.expandSetString.add(s.idVirtual);
             });
-            await this.buildTableView();
+            await this.buildTableView(this.formData.value.tongHopDtl);
           }
         })
         .catch((e) => {
@@ -202,8 +204,6 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
         }
       }
       ).value();
-    console.log(data, 'raw');
-    console.log(this.selectedItem, 'view');
   }
 
   onExpandStringChange(id: string, checked: boolean) {

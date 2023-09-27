@@ -153,12 +153,12 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
             if (this.lstCtiets.length > 1) {
                 this.sum('0.1')
             }
+            this.updateEditCache();
         }
         this.capDvi = parseInt(this.userInfo.CAP_DVI, 10);
         if (this.userInfo.MA_DVI == this.baoCao.maDviCha) {
             this.capDvi += 1;
         }
-        this.updateEditCache();
         this.getStatusButton();
     }
 
@@ -184,7 +184,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_VB);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB);
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB);
-        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent);
+        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent) && !(!this.baoCao.id);
 
         this.isReceive = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.isParent);
         this.scrollX = this.status.save ? Table.tableWidth(350, 13, 1, 60) : Table.tableWidth(350, 13, 1, 0);
@@ -270,11 +270,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                 this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -471,14 +467,14 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                 { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị theo kế hoạch' },
                 { t: 4, b: 5, l: 6, r: 6, val: 'Giá trị thực hiện' },
                 { t: 4, b: 4, l: 7, r: 9, val: 'Số đã nộp đơn vị cấp trên (lũy kế)' },
-                { t: 5, b: 5, l: 7, r: 7, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 8, r: 8, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Cộng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Nộp vốn' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Nộp hoàn ứng' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Tổng nộp' },
                 { t: 4, b: 4, l: 10, r: 13, val: 'Nộp lần này' },
                 { t: 5, b: 5, l: 10, r: 10, val: 'Ngày' },
-                { t: 5, b: 5, l: 11, r: 11, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 12, r: 12, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 13, r: 13, val: 'Cộng' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Nộp vốn' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Nộp hoàn ứng' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Tổng nộp' },
                 { t: 4, b: 5, l: 14, r: 14, val: 'Lũy kế sau lần nộp này' },
                 { t: 4, b: 5, l: 15, r: 15, val: 'Số còn phải nộp' },
                 { t: 4, b: 5, l: 16, r: 16, val: 'Ghi chú' },
@@ -502,6 +498,13 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', 'B', '1', '2', '3', '4=1x3', '5=2x3', '6', '7', '8=6+7', '', '9', '10', '11=9+10', '12=8+11', '13=5-12', 'C'];
+            let cal = {};
+            fieldOrder.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterData.unshift(cal);
         } else {
             header = [
                 { t: 0, b: 5, l: 0, r: 15, val: null },
@@ -515,13 +518,13 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                 { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị theo kế hoạch' },
                 { t: 4, b: 5, l: 6, r: 6, val: 'Giá trị thực hiện' },
                 { t: 4, b: 4, l: 7, r: 9, val: 'Số đã nộp đơn vị cấp trên (lũy kế)' },
-                { t: 5, b: 5, l: 7, r: 7, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 8, r: 8, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Cộng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Nộp vốn' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Nộp hoàn ứng' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Tổng nộp' },
                 { t: 4, b: 4, l: 10, r: 12, val: 'Nộp lần này' },
-                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 11, r: 11, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 12, r: 12, val: 'Cộng' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Nộp vốn' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Nộp hoàn ứng' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Tổng nộp' },
                 { t: 4, b: 5, l: 13, r: 13, val: 'Lũy kế sau lần nộp này' },
                 { t: 4, b: 5, l: 14, r: 14, val: 'Số còn phải nộp' },
                 { t: 4, b: 5, l: 15, r: 15, val: 'Ghi chú' },
@@ -535,6 +538,13 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', 'B', '1', '2', '3', '4=1x3', '5=2x3', '6', '7', '8=6+7', '9', '10', '11=9+10', '12=8+11', '13=5-12', 'C'];
+            let cal = {};
+            fieldOrder.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterData.unshift(cal);
         }
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

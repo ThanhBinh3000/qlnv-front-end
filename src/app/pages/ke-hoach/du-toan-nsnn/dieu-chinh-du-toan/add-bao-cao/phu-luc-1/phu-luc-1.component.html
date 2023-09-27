@@ -27,48 +27,39 @@
 					<nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowSpan="2" nzWidth="100px" nzLeft>STT</th>
-								<th rowSpan="2" nzWidth="300px" nzLeft>Nội dung</th>
-								<th colSpan="3">Dự toán, kinh phí được sử dụng trong năm</th>
-								<th rowSpan="2">Tổng nhu cầu dự toán trong năm</th>
-								<th rowSpan="2">Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)</th>
-								<th rowSpan="2" *ngIf="status.viewAppVal">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)
-								</th>
-								<th *ngIf="status.viewAppVal" rowSpan="2">
-									Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)
-								</th>
-								<th rowspan="2" class="text-col" *ngIf="status.viewAppVal">
-									Ý kiến của đơn vị cấp trên
-								</th>
-								<th rowspan="2" class="text-col">
-									Ghi chú
-								</th>
-								<th rowSpan="2" *ngIf="status.general || status.editAppVal"></th>
+								<th scope="col" rowSpan="2" nzWidth="100px" nzLeft>STT</th>
+								<th scope="col" rowSpan="2" nzWidth="300px" nzLeft>Nội dung</th>
+								<th scope="colgroup" colSpan="3">Dự toán, kinh phí được sử dụng trong năm</th>
+								<th scope="col" rowSpan="2">Tổng nhu cầu dự toán trong năm</th>
+								<th scope="col" rowSpan="2">Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)</th>
+								<th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Dự toán Vụ TVQT đề nghị (+ tăng)
+									(- giảm)</th>
+								<th scope="colgroup" *ngIf="status.viewAppVal" rowSpan="2">Dự toán chênh lệch giữa Vụ
+									TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)</th>
+								<th scope="col" rowspan="2" class="text-col" *ngIf="status.viewAppVal">Ý kiến của đơn vị
+									cấp trên</th>
+								<th scope="col" rowspan="2" class="text-col">Ghi chú</th>
+								<th scope="col" rowSpan="2" *ngIf="status.general || status.editAppVal"></th>
 							</tr>
 							<tr>
-								<th>Dự toán năm trước chuyển sang <br> được cho phép sử dụng cho năm nay</th>
-								<th>Dự toán, kinh phí đã giao trong năm</th>
-								<th>Cộng</th>
+								<th scope="col">Dự toán năm trước chuyển sang <br> được cho phép sử dụng cho năm nay
+								</th>
+								<th scope="col">Dự toán, kinh phí đã giao trong năm</th>
+								<th scope="col">Cộng</th>
 							</tr>
 							<tr>
-								<th nzLeft>A</th>
-								<th nzLeft>B</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3 = 2 + 1</th>
-								<th>4</th>
-								<th>5 = 4 - 3</th>
-								<th *ngIf="status.viewAppVal">6</th>
-								<th *ngIf="status.viewAppVal">
-									7 = 6 -5
-								</th>
-								<th *ngIf="status.viewAppVal">
-									8
-								</th>
-								<th>
-									9
-								</th>
-								<th *ngIf="status.general || status.editAppVal"></th>
+								<th scope="col" nzLeft>A</th>
+								<th scope="col" nzLeft>B</th>
+								<th scope="col">1</th>
+								<th scope="col">2</th>
+								<th scope="col">3 = 2 + 1</th>
+								<th scope="col">4</th>
+								<th scope="col">5 = 4 - 3</th>
+								<th scope="col" *ngIf="status.viewAppVal">6</th>
+								<th scope="col" *ngIf="status.viewAppVal">7 = 6 -5</th>
+								<th scope="col" *ngIf="status.viewAppVal">8</th>
+								<th scope="col">9</th>
+								<th scope="col" *ngIf="status.general || status.editAppVal"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -255,9 +246,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -289,10 +280,6 @@
 					<span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
 					<span>Xuất</span>
 				</button>
-				<!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
-				</button> -->
 				<button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
 					<i nz-icon nzType="check" nzTheme="outline"></i>
 					<span>Hoàn tất nhập liệu</span>

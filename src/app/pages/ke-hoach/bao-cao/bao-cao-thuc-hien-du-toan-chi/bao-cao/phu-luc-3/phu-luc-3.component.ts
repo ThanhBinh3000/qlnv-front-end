@@ -733,7 +733,16 @@ export class PhuLucIIIComponent implements OnInit {
         fieldOrder.forEach(field => {
             row[field] = field == 'tenDan' ? 'Tổng cộng' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
         })
-        filterData.unshift(row)
+        filterData.unshift(row);
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', 'B', '1', '2', '3', '4', '5=6+6a+6b+6c', '6', '6a', '6b', '6c', '7', '8', '9', '10=10a+10b', '10a', '10b', '11=12+12a+12b+12c',
+            '12', '12a', '12b', '12c', '13', '13a', '14=16+16a+16b+16c', '15=14/11', '16', '16a', '16b', '16c', '17=16/12', '17a=16a/12a', '17b=16b/12b',
+            '17c=16c/12c', '18=20+20a+20b+20c', '19=18/11', '20', '20a', '20b', '20c', '21=20/12', '21a=20a/12a', '21b=20b/12b', '21c=20c/12c', '22', '23', '24', '25'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

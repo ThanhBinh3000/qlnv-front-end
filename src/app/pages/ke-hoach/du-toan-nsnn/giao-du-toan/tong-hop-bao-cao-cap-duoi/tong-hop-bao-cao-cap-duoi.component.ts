@@ -36,7 +36,6 @@ export const TRANG_THAI_TIM_KIEM_GIAO = [
 @Component({
     selector: 'app-tong-hop-bao-cao-cap-duoi',
     templateUrl: './tong-hop-bao-cao-cap-duoi.component.html',
-    styleUrls: ['./tong-hop-bao-cao-cap-duoi.component.scss']
 })
 export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
@@ -56,13 +55,11 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
         ngayTaoDen: null,
         maBcao: "",
         donViTao: "",
-        // trangThai: "",
         paggingReq: {
             limit: 10,
             page: 1
         },
         trangThais: [],
-        // trangThaiGiaos: [],
     };
 
     filterTable: any = {
@@ -247,21 +244,11 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     }
 
     xemChiTiet(id: string, maLoaiDan: string) {
-        // if (maLoaiDan == "3") {
-        //     const obj = {
-        //         id: id,
-        //         tabSelected: 'addBaoCao',
-        //     }
-        //     this.dataChange.emit(obj);
-        // } else if (maLoaiDan == "3") {
         const obj = {
             id: id,
             tabSelected: 'addBaoCao',
         }
         this.dataChange.emit(obj);
-        // } else {
-        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-        // }
     }
 
     getStatusName(trangThai: string) {

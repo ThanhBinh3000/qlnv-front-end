@@ -6,8 +6,9 @@ export class Cvmb {
     static readonly THANH_TOAN = '3';
     static readonly TIEN_THUA = '4';
     static readonly VON_BAN = '5';
-    static readonly HOP_DONG_VON_BAN = '6';
+    static readonly QUAN_LY_VON_BAN = '6';
     static readonly QUAN_LY_THU_CHI = '7';
+    static readonly TONG_HOP_TIEN_THUA = '8';
 
     static readonly THOC = "0";
     static readonly GAO = "1";
@@ -43,7 +44,7 @@ export class Cvmb {
     static readonly CAN_CU_GIA = [
         {
             id: Cvmb.HOP_DONG,
-            tenDm: "Hợp đồng trúng thầu",
+            tenDm: "Hợp đồng đấu giá",
         },
         {
             id: Cvmb.DON_GIA,
@@ -131,6 +132,8 @@ export class ThanhToan {
     level: number;
     tenKhachHang: string;
     qdPheDuyet: string;
+    maHangDtqg: string;
+    tenHangDtqg: string;
     maDvi: string;
     tenDvi: string;
     slKeHoach: number;
@@ -157,6 +160,7 @@ export class ThanhToan {
     soConPhaiNop: number;
     dot: number;
     congVan: string;
+    nopNsnn: number;
     ghiChu: string;
 
     constructor(data: Partial<Pick<ThanhToan, keyof ThanhToan>>) {
@@ -173,9 +177,9 @@ export class ThanhToan {
             this.lkCap = Operator.sum([data.lkCap, this.cap, -data.cap]);
             this.lkCong = Operator.sum([this.lkUng, this.lkCap]);
         }
-        this.soConDcTt = is ? Operator.sum([this.gtThucHien, -this.lkCong, -this.phatViPham]) : Operator.sum([this.gtKeHoach, -this.lkCong]);
+        this.soConDcTt = is ? Operator.sum([this.gtThucHien, -this.lkCong]) : Operator.sum([this.gtKeHoach, -this.lkCong]);
         this.lkSauLanNay = Operator.sum([this.lkCong, this.cong]);
-        this.soConPhaiNop = is ? Operator.sum([this.gtThucHien, -this.lkSauLanNay, -this.phatViPham]) : Operator.sum([this.gtHopDong, -this.lkSauLanNay]);
+        this.soConPhaiNop = is ? Operator.sum([this.gtThucHien, -this.lkSauLanNay]) : Operator.sum([this.gtHopDong, -this.lkSauLanNay]);
     }
 
     upperBound() {
@@ -189,7 +193,7 @@ export class ThanhToan {
             }
         })
     }
-
+    rrrr
     sum(data: ThanhToan) {
         Object.keys(data).forEach(key => {
             if ((key != 'dot' && key != 'level') && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
@@ -215,6 +219,9 @@ export class TienThua {
     nhanVonUng: number;
     nhanVonCap: number;
     nhanTong: number;
+    nhanTtUng: number;
+    nhanTtCap: number;
+    nhanTtTong: number;
     giaoCapUng: number;
     giaoCapVon: number;
     giaoTong: number;
@@ -233,6 +240,8 @@ export class TienThua {
     nopTong: number;
     lkSauLanNay: number;
     soConPhaiNop: number;
+    dot: number;
+    idCapDuoi: string;
     ghiChu: string;
 
     constructor(data: Partial<Pick<TienThua, keyof TienThua>>) {
@@ -241,8 +250,8 @@ export class TienThua {
 
     changeModel() {
         this.nopTong = Operator.sum([this.nopVonUng, this.nopVonCap]);
-        this.lkSauLanNay = Operator.sum([this.daNopTong, this.nopTong]);
-        this.soConPhaiNop = Operator.sum([this.duTong, -this.lkSauLanNay]);
+        // this.lkSauLanNay = Operator.sum([this.daNopTong, this.nopTong]);
+        // this.soConPhaiNop = Operator.sum([this.duTong, -this.lkSauLanNay]);
     }
 
     upperBound() {
@@ -277,10 +286,6 @@ export class Report {
     ngayPheDuyet: string;
     ngayTraKq: string;
     trangThai: string = Status.TT_01;
-    ngayTrinhDvct: string;
-    ngayDuyetDvct: string;
-    ngayPheDuyetDvct: string;
-    trangThaiDvct: string = Status.TT_01;
     trangThaiThop: string;
     maDviTien: string;
     lyDoTuChoi: string;
@@ -316,11 +321,11 @@ export class Search {
     loaiDnghi: string;
     namDnghi: number;
     canCuVeGia: string;
+    quyetDinh: string;
     ngayTaoDen: any;
     ngayTaoTu: any;
     paggingReq: Pagging = new Pagging();
     trangThai: string = Status.TT_01;
-    trangThaiDvct: string;
 
     request() {
         return {
@@ -331,12 +336,12 @@ export class Search {
             maDvi: this.maDvi,
             loaiDnghi: this.loaiDnghi,
             namDnghi: this.namDnghi,
+            quyetDinh: this.quyetDinh,
             canCuVeGia: this.canCuVeGia,
             ngayTaoTu: this.ngayTaoTu ? Utils.fmtDate(this.ngayTaoTu) : null,
             ngayTaoDen: this.ngayTaoDen ? Utils.fmtDate(this.ngayTaoDen) : null,
             paggingReq: this.paggingReq,
             trangThai: this.trangThai,
-            trangThaiDvct: this.trangThaiDvct,
         }
     }
 
@@ -345,10 +350,10 @@ export class Search {
         this.maCapUng = null;
         this.loaiDnghi = null;
         this.namDnghi = null;
+        this.quyetDinh = null;
         this.canCuVeGia = null;
         this.ngayTaoTu = null;
         this.ngayTaoDen = null;
         this.trangThai = null;
-        this.trangThaiDvct = null;
     }
 }

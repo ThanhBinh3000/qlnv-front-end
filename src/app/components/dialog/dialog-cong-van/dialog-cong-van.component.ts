@@ -10,8 +10,10 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
     styleUrls: ['./dialog-cong-van.component.scss'],
 })
 export class DialogCongVanComponent implements OnInit {
-    soCv: string;
-    ngayCv: any;
+    @Input() soCv?: string;
+    @Input() ngayCv?: string;
+    // soCv: string;
+    // ngayCv: any;
 
     constructor(
         private _modalRef: NzModalRef,

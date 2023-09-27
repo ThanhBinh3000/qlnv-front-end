@@ -370,9 +370,7 @@ export class BieuMau133Component implements OnInit {
 	}
 
 	checkEdit(stt: string) {
-		const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-		return lstTemp.every(e => !e.stt.startsWith(stt));
-
+		return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
 	}
 
 	checkAdd(data: ItemData) {
@@ -462,6 +460,13 @@ export class BieuMau133Component implements OnInit {
 			row[field] = field == 'tenDmuc' ? 'Tổng cộng' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
 		})
 		filterData.push(row)
+		// thêm công thức tính cho biểu mẫu
+		const calHeader = ['A', 'B', '1', '2', '3', '4=5+6', '5', '6', '7=9+10', '8', '9', '10', '11=12+13', '12', '13', '14=15+16', '15', '16', '17'];
+		let cal = {};
+		fieldOrder.forEach((field, index) => {
+			cal[field] = calHeader[index];
+		})
+		filterData.unshift(cal);
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

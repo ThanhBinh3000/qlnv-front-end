@@ -39,7 +39,6 @@ export const TRANG_THAI_TIM_KIEM_GIAO = [
 @Component({
     selector: 'app-tong-hop-bao-cao-cap-duoi',
     templateUrl: './tong-hop-bao-cao-cap-duoi.component.html',
-    styleUrls: ['./tong-hop-bao-cao-cap-duoi.component.scss']
 })
 export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
@@ -202,7 +201,6 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
         } else {
             searchFilterTemp.trangThais = [Status.TT_07, Status.TT_08, Status.TT_09, Status.TT_KT]
         }
-        // searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
         await this.giaoDuToanChiService.timPhuongAnGiao(searchFilterTemp).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
@@ -320,7 +318,6 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
             if (res) {
                 const obj = {
                     ...res,
-                    // id: null,
                     tabSelected: 'addBaoCao',
                     isSynthetic: true,
                 }

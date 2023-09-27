@@ -27,6 +27,7 @@ export class DialogTongHopCapVonComponent implements OnInit {
     loaiDns: any[] = [];
     donVis: any[];
     lstNam: number[] = [];
+    lstQuyetDinh: string[] = [];
 
     constructor(
         private _modalRef: NzModalRef,
@@ -52,6 +53,7 @@ export class DialogTongHopCapVonComponent implements OnInit {
     changeModel() {
         if (this.response.canCuVeGia == Cvnc.DON_GIA) {
             this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.THOC);
+            this.getSoQdChiTieu();
         } else {
             this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.GAO || e.id == Cvnc.MUOI);
             this.response.soQdChiTieu = null;
@@ -59,7 +61,8 @@ export class DialogTongHopCapVonComponent implements OnInit {
     }
 
     async checkReport() {
-        if (!this.response.namDnghi || !this.response.canCuVeGia) {
+        if (!this.response.namDnghi || !this.response.canCuVeGia ||
+            (this.response.canCuVeGia == Cvnc.DON_GIA && !this.response.soQdChiTieu)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -68,6 +71,7 @@ export class DialogTongHopCapVonComponent implements OnInit {
         this.request.namDnghi = this.response.namDnghi;
         this.request.canCuVeGia = this.response.canCuVeGia;
         this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.soQdChiTieu = this.response.soQdChiTieu;
         this.request.maLoai = Cvnc.CAP_VON;
         this.request.trangThai = null;
         this.spinner.show();
@@ -114,10 +118,7 @@ export class DialogTongHopCapVonComponent implements OnInit {
         this.response.maLoai = Cvnc.CAP_VON;
         this.response.nguoiTao = this.userInfo.sub;
         await this.getMaDnghi();
-        if (this.response.canCuVeGia == Cvnc.DON_GIA) {
-            this.getSoQdChiTieu();
-        }
-        this.callSynthetic();
+        await this.callSynthetic();
         if (id) {
             await this.capVonNguonChiService.ctietDeNghi(id).toPromise().then(
                 async (data) => {
@@ -161,6 +162,10 @@ export class DialogTongHopCapVonComponent implements OnInit {
 
     //neu la de nghi theo don gia mua can lay ra so quyet dinh chi tieu;
     getSoQdChiTieu() {
+        if (!this.response.namDnghi) {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm');
+            this.response.canCuVeGia = null;
+        }
         const request = {
             namKHoach: this.response.namDnghi,
             maDvi: this.userInfo?.MA_DVI,
@@ -169,19 +174,15 @@ export class DialogTongHopCapVonComponent implements OnInit {
         this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
-                    this.response.soQdChiTieu = data.data[0];
-                    if (!this.response.soQdChiTieu) {
-                        this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy số quyết định chỉ tiêu cho năm ' + this.response.namDnghi);
-                        this.response.loaiDnghi = null;
-                    }
+                    this.lstQuyetDinh = data.data;
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
-                    this.response.loaiDnghi = null;
+                    this.response.canCuVeGia = null;
                 }
             },
             err => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                this.response.loaiDnghi = null;
+                this.response.canCuVeGia = null;
             }
         )
         this.spinner.hide();
@@ -224,7 +225,8 @@ export class DialogTongHopCapVonComponent implements OnInit {
     }
 
     handleOk() {
-        if (!this.response.namDnghi || !this.response.canCuVeGia || !this.response.loaiDnghi) {
+        if (!this.response.namDnghi || !this.response.canCuVeGia || !this.response.loaiDnghi ||
+            (this.response.canCuVeGia == Cvnc.DON_GIA && !this.response.soQdChiTieu)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }

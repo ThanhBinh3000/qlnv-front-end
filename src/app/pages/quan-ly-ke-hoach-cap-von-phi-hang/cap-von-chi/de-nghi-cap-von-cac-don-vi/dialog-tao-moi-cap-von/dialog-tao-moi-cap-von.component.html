@@ -11,8 +11,16 @@
         <div nz-col nzSpan="6">
             <label class="search__label">Căn cứ về giá</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ về giá" [(ngModel)]="response.canCuVeGia"
-                [class]="response.canCuVeGia ?'' : 'input-error-validate'">
+                [class]="response.canCuVeGia ?'' : 'input-error-validate'" (ngModelChange)="getSoQdChiTieu()">
                 <nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div *ngIf="response.canCuVeGia == Cvnc.DON_GIA" nz-col nzSpan="6">
+            <label class="search__label">Quyết định chỉ tiêu</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định" [(ngModel)]="response.soQdChiTieu"
+                [class]="response.soQdChiTieu ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of lstQuyetDinh" [nzValue]="item" [nzLabel]="item">
                 </nz-option>
             </nz-select>
         </div>

@@ -169,21 +169,6 @@ export class PhuLuc01NhapComponent implements OnInit {
             this.scrollX = Table.tableWidth(250, 7, 1, 0);
         }
 
-        // this.lstCtietBcaos.forEach(item => {
-        //     if (!item.tenDanhMuc) {
-        //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
-        //         item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-        //         item.namDtDmuc = dinhMuc?.tongDmuc;
-        //         item.maDviTinh = dinhMuc?.donViTinh;
-        //         item.namDtTtien = Operator.mul(item.namDtDmuc, item.namDtSluong);
-        //     } else {
-        //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
-        //         item.namDtDmuc = dinhMuc?.tongDmuc;
-        //         item.maDviTinh = dinhMuc?.donViTinh;
-        //         item.namDtTtien = Operator.mul(item.namDtDmuc, item.namDtSluong);
-        //     }
-        // })
-
         if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
             this.lstCtietBcaos.forEach(item => {
                 const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
@@ -647,10 +632,6 @@ export class PhuLuc01NhapComponent implements OnInit {
         WindowPrt.close();
     }
 
-    // displayValue(num: number): string {
-    //     num = exchangeMoney(num, '1', this.maDviTien);
-    //     return displayNumber(num);
-    // }
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
@@ -677,7 +658,7 @@ export class PhuLuc01NhapComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 6, l: 0, r: 5, val: null },
+            { t: 0, b: 7, l: 0, r: 5, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -692,6 +673,12 @@ export class PhuLuc01NhapComponent implements OnInit {
             { t: 6, b: 6, l: 4, r: 4, val: 'Định mức' },
             { t: 6, b: 6, l: 5, r: 5, val: 'Thành tiền' },
 
+            { t: 7, b: 7, l: 0, r: 0, val: 'A' },
+            { t: 7, b: 7, l: 1, r: 1, val: 'B' },
+            { t: 7, b: 7, l: 2, r: 2, val: 'C' },
+            { t: 7, b: 7, l: 3, r: 3, val: '1' },
+            { t: 7, b: 7, l: 4, r: 4, val: '2' },
+            { t: 7, b: 7, l: 5, r: 5, val: '3 = 1 x 2' },
         ]
         const fieldOrder = [
             // "danhMuc",
@@ -710,6 +697,20 @@ export class PhuLuc01NhapComponent implements OnInit {
             })
             return row;
         })
+
+        let row: any = {};
+        fieldOrder.forEach(field => {
+            if (field == 'tenDanhMuc') {
+                row[field] = 'Tổng cộng'
+            } else {
+                if (!['namDtSluong', 'namDtDmuc'].includes(field)) {
+                    row[field] = (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+                } else {
+                    row[field] = '';
+                }
+            }
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

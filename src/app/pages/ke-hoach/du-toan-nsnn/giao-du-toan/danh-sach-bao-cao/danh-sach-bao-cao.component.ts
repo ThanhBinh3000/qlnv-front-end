@@ -58,7 +58,6 @@ export const TRANG_THAI_TIM_KIEM = [
 @Component({
     selector: 'app-danh-sach-bao-cao',
     templateUrl: './danh-sach-bao-cao.component.html',
-    styleUrls: ['./danh-sach-bao-cao.component.scss']
 })
 export class DanhSachBaoCaoComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
@@ -149,10 +148,6 @@ export class DanhSachBaoCaoComponent implements OnInit {
         let requestReport
         if (this.userInfo.CAP_DVI == "3") {
             requestReport = {
-                // loaiTimKiem: "3",
-                // maPhanGiao: "3",
-                // maLoai: "2",
-                // maLoaiDan: [3],
                 maPa: null,
                 maBcao: this.searchFilter.maBaoCao,
                 maDvi: this.searchFilter.donViTao,

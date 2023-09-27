@@ -20,7 +20,6 @@ import { Roles } from './../../../../Utility/utils';
 @Component({
     selector: 'app-bao-cao-quyet-toan',
     templateUrl: './bao-cao-quyet-toan.component.html',
-    styleUrls: ['./bao-cao-quyet-toan.component.scss']
 })
 export class BaoCaoQuyetToanComponent implements OnInit {
     @Input() data
@@ -247,6 +246,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
                     maPhanBcao: res.maPhanBcao,
                     namQtoan: res.namQtoan,
                     quyQtoan: res.quyQtoan,
+                    preTab: 'danhsachqt'
                 }
                 await this.quyetToanVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(
                     (data) => {
@@ -267,9 +267,13 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     };
 
     viewDetail(data: any) {
+        const request = {
+            preTab: 'danhsachqt'
+        }
         this.isAddNew = true;
         this.idSelected = data?.id;
         this.isStatus = data?.trangThai;
+        this.dataThemMoi = request;
     };
 
     getStatusName(trangThai: string) {
@@ -316,26 +320,6 @@ export class BaoCaoQuyetToanComponent implements OnInit {
             },
         });
 
-        // let request = [];
-        // if (!id) {
-        //   request = this.listIdDelete;
-        // } else {
-        //   request = [id];
-        // }
-        // this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
-        //   data => {
-        //     if (data.statusCode == 0) {
-        //       this.listIdDelete = [];
-        //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-        //       this.onSubmit();
-        //     } else {
-        //       this.notification.error(MESSAGE.ERROR, data?.msg);
-        //     }
-        //   },
-        //   err => {
-        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //   }
-        // )
     }
 
     updateSingleChecked(): void {

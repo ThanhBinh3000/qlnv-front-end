@@ -6,7 +6,6 @@ import { TAB_LIST } from './giao-du-toan-thuc-te.constant';
 @Component({
     selector: 'app-giao-du-toan-thuc-te',
     templateUrl: './giao-du-toan-thuc-te.component.html',
-    styleUrls: ['./giao-du-toan-thuc-te.component.scss']
 })
 export class GiaoDuToanThucTeComponent implements OnInit {
     tabSelected: string;

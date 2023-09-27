@@ -131,6 +131,9 @@ export class PhuLuc1Component implements OnInit {
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
     total: ItemData = new ItemData({});
+    tongDcTang: ItemData = new ItemData({});
+    tongDcGiam: ItemData = new ItemData({});
+    chiMoi: ItemData = new ItemData({});
     maDviTien: string = '1';
     namBcao: number;
     tongDieuChinhTang: number;
@@ -191,7 +194,6 @@ export class PhuLuc1Component implements OnInit {
     async initialization() {
         this.spinner.show();
         const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL1');
-        // this.userInfo = this.userService.getUserLogin();
         if (category) {
             this.noiDungs = category.data;
         }
@@ -199,10 +201,6 @@ export class PhuLuc1Component implements OnInit {
         await this.getFormDetail();
         this.namBcao = this.dataInfo?.namBcao;
         if (this.status.general) {
-            // const category = await this.danhMucService.danhMucChungGetAll('LTD_TT342_BM131');
-            // if (category) {
-            //     this.chiTieus = category.data;
-            // }
             this.scrollX = Table.tableWidth(350, 11, 1, 60);
         } else {
             if (this.status.editAppVal) {
@@ -213,88 +211,6 @@ export class PhuLuc1Component implements OnInit {
                 this.scrollX = Table.tableWidth(350, 11, 1, 0);
             }
         }
-
-        // if (this.lstCtietBcao.length == 0) {
-        //     this.noiDungs.forEach(e => {
-        //         this.lstCtietBcao.push(new ItemData({
-        //             id: uuid.v4() + 'FE',
-        //             stt: e.ma,
-        //             maNoiDung: e.ma,
-        //             noiDung: e.tenDm,
-        //             dtoanDnghiDchinh: 0,
-        //             dtoanVuTvqtDnghi: 0,
-        //             tong: 0,
-        //             dtoanKphiNamNay: 0,
-        //             dtoanKphiNamTruoc: 0,
-        //             tongDtoanTrongNam: 0,
-        //         }))
-        //     })
-        // }
-
-        // if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-        //     this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNoiDung);
-        //     this.dataInfo.extraData.forEach(item => {
-        //         if (this.isSynthetic == true) {
-        //             if (item.maNdung) {
-        //                 const index = this.lstCtietBcao.findIndex(e => e.maNoiDung == item.maNdung);
-        //                 this.lstCtietBcao[index].dtoanKphiNamTruoc = item?.dtoanKphiNamTruoc ? item?.dtoanKphiNamTruoc : 0;
-        //                 this.lstCtietBcao[index].dtoanKphiNamNay = item?.dtoanKphiNamNay ? item?.dtoanKphiNamNay : 0;
-        //                 this.lstCtietBcao[index].tong = item?.tong ? item?.tong : 0;
-        //                 this.lstCtietBcao[index].tongDtoanTrongNam = item.tongDtoanTrongNam ? item.tongDtoanTrongNam : 0;
-        //                 if (item?.dtoanDnghiDchinh) {
-        //                     this.lstCtietBcao[index].dtoanDnghiDchinh = item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0;
-        //                 } else {
-        //                     this.lstCtietBcao[index].dtoanDnghiDchinh = 0;
-        //                 }
-        //                 this.lstCtietBcao[index].dtoanVuTvqtDnghi = item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0;
-        //             } else {
-        //                 this.lstCtietBcao.push({
-        //                     ...new ItemData(),
-        //                     id: uuid.v4(),
-        //                     stt: item.stt,
-        //                     noiDung: item.noiDung,
-        //                     dtoanKphiNamTruoc: item.dtoanKphiNamTruoc,
-        //                     dtoanKphiNamNay: item.dtoanKphiNamNay,
-        //                     tong: item.tong,
-        //                     tongDtoanTrongNam: item.tongDtoanTrongNam,
-        //                     dtoanDnghiDchinh: item?.dtoanDnghiDchinh,
-        //                     dtoanVuTvqtDnghi: item?.dtoanVuTvqtDnghi,
-        //                 })
-        //             }
-        //             this.sum(item.stt);
-        //         } else {
-        //             if (item.maNdung) {
-        //                 const index = this.lstCtietBcao.findIndex(e => e.maNoiDung == item.maNdung);
-        //                 this.lstCtietBcao[index].dtoanKphiNamTruoc = item?.dtoanKphiNamTruoc ? item?.dtoanKphiNamTruoc : 0;
-        //                 this.lstCtietBcao[index].dtoanKphiNamNay = item?.dtoanKphiNamNay ? item?.dtoanKphiNamNay : 0;
-        //                 this.lstCtietBcao[index].tong = item?.tong ? item?.tong : 0;
-        //                 this.lstCtietBcao[index].tongDtoanTrongNam = item.tongDtoanTrongNam ? item.tongDtoanTrongNam : 0;
-        //                 if (item?.dtoanDnghiDchinh) {
-        //                     this.lstCtietBcao[index].dtoanDnghiDchinh = item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0;
-        //                 } else {
-        //                     this.lstCtietBcao[index].dtoanDnghiDchinh = 0;
-        //                 }
-        //                 this.lstCtietBcao[index].dtoanVuTvqtDnghi = item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0;
-        //             } else {
-        //                 this.lstCtietBcao.push({
-        //                     ...new ItemData(),
-        //                     id: uuid.v4(),
-        //                     stt: item.stt,
-        //                     noiDung: item.noiDung,
-        //                     dtoanKphiNamTruoc: item.dtoanKphiNamTruoc,
-        //                     dtoanKphiNamNay: item.dtoanKphiNamNay,
-        //                     tong: item.tong,
-        //                     tongDtoanTrongNam: item.tongDtoanTrongNam,
-        //                     dtoanDnghiDchinh: item?.dtoanDnghiDchinh,
-        //                     dtoanVuTvqtDnghi: item?.dtoanVuTvqtDnghi,
-        //                 })
-        //             }
-        //             this.sum(item.stt);
-        //         }
-        //     })
-        // }
-
-
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         console.log(
             this.status.editAppVal
@@ -305,6 +221,7 @@ export class PhuLuc1Component implements OnInit {
 
         this.tinhTong();
         this.getTotal();
+        this.getInTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -345,109 +262,10 @@ export class PhuLuc1Component implements OnInit {
         return false;
     };
 
-    // updateSingleChecked(): void {
-    //     if (this.lstCtietBcao.every(item => item.checked || item.level != 0)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
-    //         this.allChecked = true;
-    //     } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
-    //         this.allChecked = false;
-    //     }
-    // };
-
-    // getChiMuc(str: string): string {
-    //     str = str.substring(str.indexOf('.') + 1, str.length);
-    //     let xau = "";
-    //     const chiSo: string[] = str.split('.');
-    //     const n: number = chiSo.length - 1;
-    //     let k: number = parseInt(chiSo[n], 10);
-    //     if (n == 0) {
-    //         for (var i = 0; i < this.soLaMa.length; i++) {
-    //             while (k >= this.soLaMa[i].gTri) {
-    //                 xau += this.soLaMa[i].kyTu;
-    //                 k -= this.soLaMa[i].gTri;
-    //             }
-    //         }
-    //     };
-    //     if (n == 1) {
-    //         xau = chiSo[n];
-    //     };
-    //     if (n == 2) {
-    //         xau = String.fromCharCode(k + 96);
-    //     }
-    //     if (n == 3) {
-    //         xau = "";
-    //     }
-    //     return xau;
-    // }
-
-
-
     checkEdit(stt: string) {
         const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
         return lstTemp.every(e => !e.stt.startsWith(stt))
-
-        // if (this.status.general == true) {
-        //     return lstTemp.every(e => !e.stt.startsWith(stt))
-        // }
-        // if (this.status.editAppVal == true) {
-        //     if (
-        //         (
-        //             stt == "0.1.2.1" ||
-        //             stt == "0.1.2.2.1" ||
-        //             stt == "0.1.2.2.2" ||
-        //             stt == "0.1.2.2.3" ||
-        //             stt == "0.1.2.2.4" ||
-        //             stt == "0.1.2.3" ||
-        //             stt == "0.1.2.4.1" ||
-        //             stt == "0.1.2.1.1" ||
-        //             stt == "0.1.2.1.2" ||
-        //             stt == "0.1.3.2.1" ||
-        //             stt == "0.4.2" ||
-        //             stt == "0.5.2") && lstTemp.every(e => !e.stt.startsWith(stt)
-        //             )
-        //     ) {
-        //         return false;
-        //     } else {
-        //         return true
-        //     }
-        // }
-
     };
-
-    // // xoa tat ca cac dong duoc check
-    // deleteAllChecked() {
-    //     const lstId: any[] = [];
-    //     this.lstCtietBcao.forEach(item => {
-    //         if (item.checked) {
-    //             lstId.push(item.id);
-    //         }
-    //     })
-    //     lstId.forEach(item => {
-    //         if (this.lstCtietBcao.findIndex(e => e.id == item) != -1) {
-    //             this.deleteLine(item);
-    //         }
-    //     })
-    // };
-
-    // deleteLine(id: any) {
-    //     const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-    //     const nho: string = this.lstCtietBcao[index].stt;
-    //     const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-    //     const stt: string = this.lstCtietBcao[index].stt;
-    //     //xóa phần tử và con của nó
-    //     this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
-    //     //update lại số thức tự cho các phần tử cần thiết
-    //     const lstIndex: number[] = [];
-    //     for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
-    //         if (this.getHead(this.lstCtietBcao[i].stt) == head) {
-    //             lstIndex.push(i);
-    //         }
-    //     }
-    //     this.replaceIndex(lstIndex, -1);
-    //     this.tinhTong();
-    //     this.sum(stt);
-    //     this.updateEditCache();
-    // };
-
 
     tinhTong() {
         this.tongDieuChinhGiam = 0;
@@ -508,12 +326,6 @@ export class PhuLuc1Component implements OnInit {
         });
     }
 
-    // changeModel(id: string): void {
-    //     this.editCache[id].data.tong = sumNumber([this.editCache[id].data.dtoanKphiNamTruoc, this.editCache[id].data.dtoanKphiNamNay]);
-    //     // this.editCache[id].data.tongDtoanTrongNam = sumNumber([this.editCache[id].data.dtoanDaThien, this.editCache[id].data.dtoanUocThien]);
-    //     this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.tongDtoanTrongNam - this.editCache[id].data.tong
-    // };
-
     startEdit(id: string): void {
         if (this.lstCtietBcao.every(e => !this.editCache[e.id].edit)) {
             this.editCache[id].edit = true;
@@ -529,6 +341,7 @@ export class PhuLuc1Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.sum(this.lstCtietBcao[index].stt);
         this.tinhTong();
+        this.getInTotal();
         this.updateEditCache();
     };
 
@@ -541,28 +354,6 @@ export class PhuLuc1Component implements OnInit {
             edit: false
         };
     }
-
-    // getHead(str: string): string {
-    //     return str.substring(0, str.lastIndexOf('.'));
-    // };
-    // // lấy phần đuôi của stt
-    // getTail(str: string): number {
-    //     return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
-    // };
-
-    // replaceIndex(lstIndex: number[], heSo: number) {
-    //     if (heSo == -1) {
-    //         lstIndex.reverse();
-    //     }
-    //     //thay doi lai stt cac vi tri vua tim duoc
-    //     lstIndex.forEach(item => {
-    //         const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
-    //         const nho = this.lstCtietBcao[item].stt;
-    //         this.lstCtietBcao.forEach(item => {
-    //             item.stt = item.stt.replace(nho, str);
-    //         })
-    //     })
-    // };
 
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
@@ -665,56 +456,129 @@ export class PhuLuc1Component implements OnInit {
         await this.quanLyVonPhiService.downFile(file, doc);
     }
 
+    getInTotal() {
+        this.tongDcTang.clear()
+        this.tongDcGiam.clear()
+        this.lstCtietBcao.forEach(item => {
+            const str = item.stt
+            if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
+                if (item.dtoanVuTvqtDnghi < 0) {
+                    this.tongDcGiam.sum(item);
+                }
+                else {
+                    this.tongDcTang.sum(item);
+                }
+            }
+        })
+        console.log(this.tongDcGiam);
+        console.log(this.tongDcTang);
+
+    }
+
     exportToExcel() {
         if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        const header = [
-            { t: 0, b: 7, l: 0, r: 10, val: null },
-            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-            { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
-            { t: 4, b: 5, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-            { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán trong năm' },
-            { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh(+ tăng)(- giảm)' },
-            { t: 4, b: 6, l: 7, r: 7, val: 'Dự toán Vụ TVQT đề nghị(+ tăng)(- giảm)' },
-            { t: 4, b: 6, l: 8, r: 8, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị(+ tăng)(- giảm)' },
-            { t: 4, b: 6, l: 9, r: 9, val: 'Ý kiến của đơn vị cấp trên' },
-            { t: 4, b: 6, l: 10, r: 10, val: 'Ghi chú' },
+        let header = [];
+        let fieldOrder = [];
 
-            { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang < br > được cho phép sử dụng cho năm nay' },
-            { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán, kinh phí đã giao trong năm' },
-            { t: 6, b: 6, l: 4, r: 4, val: 'Cộng' },
+        if (this.status.viewAppVal) {
+            header = [
+                { t: 0, b: 7, l: 0, r: 10, val: null },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-            { t: 7, b: 7, l: 0, r: 0, val: 'A' },
-            { t: 7, b: 7, l: 1, r: 1, val: 'B' },
-            { t: 7, b: 7, l: 2, r: 2, val: '1' },
-            { t: 7, b: 7, l: 3, r: 3, val: '2' },
-            { t: 7, b: 7, l: 4, r: 4, val: '3 = 2 + 1' },
-            { t: 7, b: 7, l: 5, r: 5, val: '4' },
-            { t: 7, b: 7, l: 6, r: 6, val: '5 = 4 - 3' },
-            { t: 7, b: 7, l: 7, r: 7, val: '6' },
-            { t: 7, b: 7, l: 8, r: 8, val: '7 = 6 - 5' },
-            { t: 7, b: 7, l: 9, r: 9, val: '8' },
-            { t: 7, b: 7, l: 10, r: 10, val: '9' },
-        ]
-        const fieldOrder = [
-            'stt',
-            'noiDung',
-            'dtoanKphiNamTruoc',
-            'dtoanKphiNamNay',
-            'tong',
-            'tongDtoanTrongNam',
-            'dtoanDnghiDchinh',
-            'dtoanVuTvqtDnghi',
-            'chenhLech',
-            'ykienDviCtren',
-            'ghiChu',
-        ]
+                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 5, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán trong năm' },
+                { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh(+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 7, r: 7, val: 'Dự toán Vụ TVQT đề nghị(+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 8, r: 8, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị(+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 9, r: 9, val: 'Ý kiến của đơn vị cấp trên' },
+                { t: 4, b: 6, l: 10, r: 10, val: 'Ghi chú' },
+
+                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang < br > được cho phép sử dụng cho năm nay' },
+                { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán, kinh phí đã giao trong năm' },
+                { t: 6, b: 6, l: 4, r: 4, val: 'Cộng' },
+
+                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
+                { t: 7, b: 7, l: 1, r: 1, val: 'B' },
+                { t: 7, b: 7, l: 2, r: 2, val: '1' },
+                { t: 7, b: 7, l: 3, r: 3, val: '2' },
+                { t: 7, b: 7, l: 4, r: 4, val: '3 = 2 + 1' },
+                { t: 7, b: 7, l: 5, r: 5, val: '4' },
+                { t: 7, b: 7, l: 6, r: 6, val: '5 = 4 - 3' },
+                { t: 7, b: 7, l: 7, r: 7, val: '6' },
+                { t: 7, b: 7, l: 8, r: 8, val: '7 = 6 - 5' },
+                { t: 7, b: 7, l: 9, r: 9, val: '8' },
+                { t: 7, b: 7, l: 10, r: 10, val: '9' },
+            ]
+            fieldOrder = [
+                'stt',
+                'noiDung',
+                'dtoanKphiNamTruoc',
+                'dtoanKphiNamNay',
+                'tong',
+                'tongDtoanTrongNam',
+                'dtoanDnghiDchinh',
+                'dtoanVuTvqtDnghi',
+                'chenhLech',
+                'ykienDviCtren',
+                'ghiChu',
+            ]
+        } else {
+            header = [
+                { t: 0, b: 7, l: 0, r: 10, val: null },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 5, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán trong năm' },
+                { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh(+ tăng)(- giảm)' },
+                // { t: 4, b: 6, l: 7, r: 7, val: 'Dự toán Vụ TVQT đề nghị(+ tăng)(- giảm)' },
+                // { t: 4, b: 6, l: 8, r: 8, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị(+ tăng)(- giảm)' },
+                // { t: 4, b: 6, l: 9, r: 9, val: 'Ý kiến của đơn vị cấp trên' },
+                // { t: 4, b: 6, l: 10, r: 10, val: 'Ghi chú' },
+
+                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang < br > được cho phép sử dụng cho năm nay' },
+                { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán, kinh phí đã giao trong năm' },
+                { t: 6, b: 6, l: 4, r: 4, val: 'Cộng' },
+
+                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
+                { t: 7, b: 7, l: 1, r: 1, val: 'B' },
+                { t: 7, b: 7, l: 2, r: 2, val: '1' },
+                { t: 7, b: 7, l: 3, r: 3, val: '2' },
+                { t: 7, b: 7, l: 4, r: 4, val: '3 = 2 + 1' },
+                { t: 7, b: 7, l: 5, r: 5, val: '4' },
+                { t: 7, b: 7, l: 6, r: 6, val: '5 = 4 - 3' },
+                // { t: 7, b: 7, l: 7, r: 7, val: '6' },
+                // { t: 7, b: 7, l: 8, r: 8, val: '7 = 6 - 5' },
+                // { t: 7, b: 7, l: 9, r: 9, val: '8' },
+                // { t: 7, b: 7, l: 10, r: 10, val: '9' },
+            ]
+            fieldOrder = [
+                'stt',
+                'noiDung',
+                'dtoanKphiNamTruoc',
+                'dtoanKphiNamNay',
+                'tong',
+                'tongDtoanTrongNam',
+                'dtoanDnghiDchinh',
+                // 'dtoanVuTvqtDnghi',
+                // 'chenhLech',
+                // 'ykienDviCtren',
+                // 'ghiChu',
+            ]
+        }
+
+
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
@@ -722,6 +586,53 @@ export class PhuLuc1Component implements OnInit {
             })
             return row;
         })
+
+        let row: any = {};
+
+
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'noiDung') {
+                row[field] = 'Phát sinh điều chỉnh giảm'
+            } else {
+                if (![
+                    'tongDtoanTrongNam',
+                    'dtoanKphiNamTruoc',
+                    'dtoanKphiNamNay',
+                    'tong',
+                ].includes(field)) {
+                    row[field] = (!this.tongDcGiam[field] && this.tongDcGiam[field] !== 0) ? '' : this.tongDcGiam[field];
+                } else {
+                    row[field] = '';
+                }
+            }
+        })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'noiDung') {
+                row[field] = 'Phát sinh điều chỉnh tăng'
+            } else {
+                if (![
+                    'tongDtoanTrongNam',
+                    'dtoanKphiNamTruoc',
+                    'dtoanKphiNamNay',
+                    'tong',
+                ].includes(field)) {
+                    row[field] = (!this.tongDcTang[field] && this.tongDcTang[field] !== 0) ? '' : this.tongDcTang[field];
+                } else {
+                    row[field] = '';
+                }
+            }
+        })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'noiDung' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

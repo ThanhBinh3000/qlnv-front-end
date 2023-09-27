@@ -4,7 +4,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 @Component({
   selector: 'dialog-them-khoan-muc',
   templateUrl: './dialog-them-khoan-muc.component.html',
-  styleUrls: ['./dialog-them-khoan-muc.component.scss'],
+  // styleUrls: ['./dialog-them-khoan-muc.component.scss'],
 })
 export class DialogThemKhoanMucComponent implements OnInit {
   @Input() obj: any;

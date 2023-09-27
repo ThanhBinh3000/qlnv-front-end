@@ -25,28 +25,28 @@
                 <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                     <thead>
                         <tr>
-                            <th nzWidth="50px" nzLeft>
+                            <th scope="col" nzWidth="50px" nzLeft>
                                 STT
                             </th>
-                            <th nzWidth="500px" nzLeft>
+                            <th scope="col" nzWidth="500px" nzLeft>
                                 Nội dung
                             </th>
-                            <th>
+                            <th scope="col">
                                 Thực hiên năm hiện hành {{namBcao -1}}
                             </th>
-                            <th>
+                            <th scope="col">
                                 Nhu cầu năm dự toán {{namBcao}}
                             </th>
-                            <th>
+                            <th scope="col">
                                 Nhu cầu năm {{namBcao + 1}}
                             </th>
-                            <th>
+                            <th scope="col">
                                 Nhu cầu năm {{namBcao + 2}}
                             </th>
-                            <th class="text-col">
+                            <th scope="col" class="text-col">
                                 Ghi chú
                             </th>
-                            <th style="width: 60px;" *ngIf="status.general" nzRight></th>
+                            <th scope="col" style="width: 60px;" *ngIf="status.general" nzRight></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -136,9 +136,9 @@
                     <nz-table nzBordered class="table__body">
                         <thead>
                             <tr>
-                                <th nzWidth="7%">STT</th>
-                                <th>Tên file</th>
-                                <th nzWidth="15%"></th>
+                                <th scope="col" nzWidth="7%">STT</th>
+                                <th scope="col">Tên file</th>
+                                <th scope="col" nzWidth="15%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -164,10 +164,6 @@
 <div class="modal-footer">
     <div class="nut">
         <div class="cantrai">
-            <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
-                <i nz-icon nzType="printer" nzTheme="outline"></i>
-                <span>In</span>
-            </button> -->
             <button type="button" class="btn btn-main" *ngIf="status.export" (click)="exportToExcel()">
                 <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                 <span>Xuất</span>

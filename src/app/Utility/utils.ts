@@ -5,6 +5,25 @@ import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 
 export class Status {
+
+  static notiMessage(trangThai: string) {
+    if (Status.check('reject', trangThai)) {
+      return 'Từ chối thành công';
+    }
+    switch (trangThai) {
+      case Status.TT_02:
+        return 'Trình duyệt thành công';
+      case Status.TT_04:
+        return 'Duyệt thành công';
+      case Status.TT_07:
+        return 'Phê duyệt thành công';
+      case Status.TT_09:
+        return 'Tiếp nhận thành công';
+      default:
+        return '';
+    }
+  }
+
   //cac ma trang thai cua bao cao
   static readonly TT_KT = '-1';
   static readonly TT_00 = '0';
@@ -1187,7 +1206,6 @@ export class Roles {
     PRINT_GNV: 'VONPHIHANG_VONMBANTT_IN_BC_GNV',
     EXPORT_GNV: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV',
     //hop dong von ban
-
     //ghi nhan von ban hang
     // ADD_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV_BH',
     // APPROVE_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV_BH',
@@ -1211,15 +1229,14 @@ export class Roles {
     PRINT_NTT: 'VONPHIHANG_VONMBANTT_IN_BC_NTV_TH',
     EXPORT_NTT: 'VONPHIHANG_VONMBANTT_XUAT_BC_NTV_TH',
     //ghi nhan tien von thua
-    // ADD_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV_TH',
-    SUBMIT_NTT_GN: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV_TH',
-    // EDIT_NTT_GN: 'VONPHIHANG_VONMBANTT_SUA_BC_GNV_TH',
-    COPY_NTT_GN: 'VONPHIHANG_VONMBANTT_COPY_BC_GNV_TH',
-    PASS_NTT_GN: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_GNV_TH',
-    APPROVE_NTT_GN: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_BC_GNV_TH',
-    VIEW_NTT_GN: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV_TH',
-    PRINT_NTT_GN: 'VONPHIHANG_VONMBANTT_IN_BC_GNV_TH',
-    EXPORT_NTT_GN: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV_TH',
+    SYNTH_NTT: 'VONPHIHANG_VONMBANTT_TONGHOP_NTV_TH',
+    VIEW_TH_NTT: 'VONPHIHANG_VONMBANTT_XEM_TONGHOP_NTV_TH',
+    EDIT_TH_NTT: 'VONPHIHANG_VONMBANTT_SUA_TONGHOP_NTV_TH',
+    DEL_TH_NTT: 'VONPHIHANG_VONMBANTT_XOA_TONGHOP_NTV_TH',
+    EXPORT_TH_NTT: 'VONPHIHANG_VONMBANTT_XUAT_TONGHOP_NTV_TH',
+    SUBMIT_TH_NTT: 'VONPHIHANG_VONMBANTT_TONGHOP_NTV_TH',
+    PASS_TH_NTT: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOI_BC_NTV_TH',
+    APPROVE_TH_NTT: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOI_BC_NTV_TH',
   };
 
   static readonly CVNC = {

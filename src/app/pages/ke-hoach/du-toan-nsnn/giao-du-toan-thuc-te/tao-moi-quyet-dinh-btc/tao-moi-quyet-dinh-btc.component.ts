@@ -73,7 +73,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     maLoai = '2';
     //danh muc
     lstCtietBcao: ItemData[] = [];
-    donVis: any[] = [];
+    // donVis: any[] = [];
     noiDungs: any[] = [];
     donViTiens: any[] = Utils.DVI_TIEN;
     trangThais: any[] = Status.TRANG_THAI_FULL;
@@ -203,25 +203,11 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
         this.maDonViTao = this.userInfo?.MA_DVI;
-        await this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
         if (this.id) {
             await this.getDetailReport();
         } else {
             this.isStatus = this.data.isStatus;
             this.maDonViTao = this.userInfo?.MA_DVI;
-            // this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-            // this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.maDviTien = '1';
             this.spinner.show();
@@ -781,14 +767,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         );
     }
 
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.isStatus)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // };
-
     getStatusName(status: string) {
         return this.trangThais.find(e => e.id == status)?.tenDm;
     };
@@ -1196,13 +1174,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     };
 
     saveEdit(id: string): void {
-        // if (
-        //     (!this.editCache[id].data.nguonKhac) ||
-        //     (!this.editCache[id].data.nguonNsnn)
-        // ) {
-        //     this.notification.warning(MESSAGE.WARNING, "không được để trống")
-        //     return;
-        // }
         if (this.editCache[id].data.nguonKhac < 0 ||
             this.editCache[id].data.nguonNsnn < 0) {
             this.notification.warning(MESSAGE.WARNING, "Giá trị nhập không được âm")

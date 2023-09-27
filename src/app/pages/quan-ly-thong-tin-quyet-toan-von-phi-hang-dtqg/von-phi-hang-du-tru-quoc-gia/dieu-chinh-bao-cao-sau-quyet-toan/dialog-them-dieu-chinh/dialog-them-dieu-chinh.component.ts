@@ -7,7 +7,6 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 @Component({
     selector: 'app-dialog-them-dieu-chinh',
     templateUrl: './dialog-them-dieu-chinh.component.html',
-    styleUrls: ['./dialog-them-dieu-chinh.component.scss']
 })
 
 export class DialogThemDieuChinhComponent implements OnInit {

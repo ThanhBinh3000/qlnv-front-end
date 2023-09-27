@@ -5,15 +5,17 @@ export class Tab {
     static readonly DS_CV = 'ds-cv';
     static readonly DS_TT = 'ds-tt';
     static readonly DS_GN_TT = 'ds-gn-tt';
+    static readonly DS_TH_TT = 'ds-th-tt';
     static readonly DS_TTKH = 'ds-ttkh';
     static readonly CUV = 'cuv';
     static readonly TIEN_THUA = 'tienthua';
+    static readonly TH_TIEN_THUA = 'th_tienthua';
     static readonly THANH_TOAN_HOP_DONG = 'hopdong';
     static readonly THANH_TOAN_DON_GIA = 'dongia';
     static readonly THU_CHI = 'thu-chi';
     static readonly TAB_LIST = [
         {
-            name: 'Ghi nhận cấp ứng vốn từ đơn vị cấp trên',
+            name: 'Ghi nhận vốn từ đơn vị cấp trên',
             code: Tab.DS_GNV,
             status: true,
             role: Roles.CVMB.VIEW_GNV,
@@ -34,21 +36,28 @@ export class Tab {
             isSelected: false,
         },
         {
-            name: 'Tiền thừa nộp lên đơn vị cấp trên',
+            name: 'Tiền thừa nộp đơn vị cấp trên',
             code: Tab.DS_TT,
             status: true,
             role: Roles.CVMB.VIEW_NTT,
             isSelected: false,
         },
         {
-            name: 'Tiền thừa từ đơn vị cấp dưới',
+            name: 'Tiền thừa đơn vị cấp dưới',
             code: Tab.DS_GN_TT,
             status: true,
-            role: Roles.CVMB.VIEW_NTT_GN,
+            role: Roles.CVMB.ACCEPT_NTT,
             isSelected: false,
         },
         {
-            name: 'Thanh toán cho khách hàng',
+            name: 'Tổng hợp tiền thừa ĐVCD',
+            code: Tab.DS_TH_TT,
+            status: true,
+            role: Roles.CVMB.VIEW_TH_NTT,
+            isSelected: false,
+        },
+        {
+            name: 'Thanh toán khách hàng',
             code: Tab.DS_TTKH,
             status: true,
             role: Roles.CVMB.VIEW_TTKH,

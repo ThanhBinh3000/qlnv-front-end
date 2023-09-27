@@ -278,8 +278,8 @@ export class PhuLuc04Component implements OnInit {
                 item.tongMucDuToanTd = item.tongMucDuToan;
                 item.duToanKhNamNCbDauTuTd = item.duToanKhNamNCbDauTu;
                 item.duToanKhNamNThDauTuTd = item.duToanKhNamNThDauTu;
-                item.chenhLechCbDautu = 0;
-                item.chenhLechThDauTu = 0;
+                item.chenhLechCbDautu = Operator.sum([item.duToanKhNamNCbDauTuTd, -item.duToanKhNamNCbDauTu]);
+                item.chenhLechThDauTu = Operator.sum([item.duToanKhNamNThDauTuTd, -item.duToanKhNamNThDauTu]);
             })
         }
 
@@ -405,8 +405,7 @@ export class PhuLuc04Component implements OnInit {
     }
 
     checkEdit(stt: string) {
-        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-        return lstTemp.every(e => !e.stt.startsWith(stt));
+        return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
     }
 
     checkAdd(data: ItemData) {
@@ -449,45 +448,83 @@ export class PhuLuc04Component implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        const header = [
-            { t: 0, b: 5, l: 0, r: 21, val: null },
-            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
-            { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
-            { t: 5, b: 5, l: 2, r: 2, val: 'Nhu cầu của đơn vị' },
-            { t: 5, b: 5, l: 3, r: 3, val: 'Thẩm định' },
-            { t: 4, b: 4, l: 4, r: 5, val: 'Tổng mức dự toán' },
-            { t: 5, b: 5, l: 4, r: 4, val: 'Nhu cầu của đơn vị' },
-            { t: 5, b: 5, l: 5, r: 5, val: 'Thẩm định' },
-            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán được bố trí đến hết năm ' + (this.namBcao - 2).toString() },
-            { t: 4, b: 4, l: 7, r: 8, val: 'Dự toán năm thực hiện ' + (this.namBcao - 1).toString() },
-            { t: 5, b: 5, l: 7, r: 7, val: 'DMDT ' + (this.namBcao - 1).toString() },
-            { t: 5, b: 5, l: 8, r: 8, val: 'Ước thực hiện' },
-            { t: 4, b: 4, l: 9, r: 10, val: 'Dự toán năm kế hoạch ' + (this.namBcao).toString() },
-            { t: 5, b: 5, l: 9, r: 9, val: 'CB đầu tư' },
-            { t: 5, b: 5, l: 10, r: 10, val: 'TH đầu tư' },
-            { t: 4, b: 4, l: 11, r: 12, val: 'Thẩm định' },
-            { t: 5, b: 5, l: 11, r: 11, val: 'CB đầu tư' },
-            { t: 5, b: 5, l: 12, r: 12, val: 'TH đầu tư' },
-            { t: 4, b: 4, l: 13, r: 14, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-            { t: 5, b: 5, l: 13, r: 13, val: 'CB đầu tư' },
-            { t: 5, b: 5, l: 14, r: 14, val: 'TH đầu tư' },
-            { t: 4, b: 4, l: 15, r: 16, val: 'Dự toán năm tiếp theo ' + (this.namBcao + 1).toString() },
-            { t: 5, b: 5, l: 15, r: 15, val: 'CB đầu tư' },
-            { t: 5, b: 5, l: 16, r: 16, val: 'TH đầu tư' },
-            { t: 4, b: 4, l: 17, r: 18, val: 'Dự toán năm tiếp theo ' + (this.namBcao + 2).toString() },
-            { t: 5, b: 5, l: 17, r: 17, val: 'CB đầu tư' },
-            { t: 5, b: 5, l: 18, r: 18, val: 'TH đầu tư' },
-            { t: 4, b: 5, l: 19, r: 19, val: 'Các năm tiếp theo' },
-            { t: 4, b: 5, l: 20, r: 20, val: 'Ghi chú' },
-            { t: 4, b: 5, l: 21, r: 21, val: 'Ý kiến của đơn vị cấp trên' },
-        ]
-        const fieldOrder = ['stt', 'tenNoiDung', 'soLuong', 'soLuongTd', 'tongMucDuToan', 'tongMucDuToanTd', 'duToanDaBoTriNamN2', 'duToanNamN1Dmdt', 'duToanNamN1UocTh',
-            'duToanKhNamNCbDauTu', 'duToanKhNamNThDauTu', 'duToanKhNamNCbDauTuTd', 'duToanKhNamNThDauTuTd', 'chenhLechCbDautu', 'chenhLechThDauTu',
-            'duToanNamTiepTheoN1CbDauTu', 'duToanNamTiepTheoN1ThDauTu', 'duToanNamTiepTheoN2CbDauTu', 'duToanNamTiepTheoN2ThDauTu', 'cacNamTiepTheo', 'ghiChu', 'ykienDviCtren']
+        let header = [];
+        let fieldOrder = [];
+        let calHeader = [];
+        if (this.status.viewAppVal) {
+            header = [
+                { t: 0, b: 5, l: 0, r: 21, val: null },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Nhu cầu của đơn vị' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Thẩm định' },
+                { t: 4, b: 4, l: 4, r: 5, val: 'Tổng mức dự toán' },
+                { t: 5, b: 5, l: 4, r: 4, val: 'Nhu cầu của đơn vị' },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Thẩm định' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán được bố trí đến hết năm ' + (this.namBcao - 2).toString() },
+                { t: 4, b: 4, l: 7, r: 8, val: 'Dự toán năm thực hiện ' + (this.namBcao - 1).toString() },
+                { t: 5, b: 5, l: 7, r: 7, val: 'DMDT ' + (this.namBcao - 1).toString() },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Ước thực hiện' },
+                { t: 4, b: 4, l: 9, r: 10, val: 'Dự toán năm kế hoạch ' + (this.namBcao).toString() },
+                { t: 5, b: 5, l: 9, r: 9, val: 'CB đầu tư' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'TH đầu tư' },
+                { t: 4, b: 4, l: 11, r: 12, val: 'Thẩm định' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'CB đầu tư' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'TH đầu tư' },
+                { t: 4, b: 4, l: 13, r: 14, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'CB đầu tư' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'TH đầu tư' },
+                { t: 4, b: 4, l: 15, r: 16, val: 'Dự toán năm tiếp theo ' + (this.namBcao + 1).toString() },
+                { t: 5, b: 5, l: 15, r: 15, val: 'CB đầu tư' },
+                { t: 5, b: 5, l: 16, r: 16, val: 'TH đầu tư' },
+                { t: 4, b: 4, l: 17, r: 18, val: 'Dự toán năm tiếp theo ' + (this.namBcao + 2).toString() },
+                { t: 5, b: 5, l: 17, r: 17, val: 'CB đầu tư' },
+                { t: 5, b: 5, l: 18, r: 18, val: 'TH đầu tư' },
+                { t: 4, b: 5, l: 19, r: 19, val: 'Các năm tiếp theo' },
+                { t: 4, b: 5, l: 20, r: 20, val: 'Ghi chú' },
+                { t: 4, b: 5, l: 21, r: 21, val: 'Ý kiến của đơn vị cấp trên' },
+            ]
+            fieldOrder = ['stt', 'tenNoiDung', 'soLuong', 'soLuongTd', 'tongMucDuToan', 'tongMucDuToanTd', 'duToanDaBoTriNamN2', 'duToanNamN1Dmdt', 'duToanNamN1UocTh',
+                'duToanKhNamNCbDauTu', 'duToanKhNamNThDauTu', 'duToanKhNamNCbDauTuTd', 'duToanKhNamNThDauTuTd', 'chenhLechCbDautu', 'chenhLechThDauTu',
+                'duToanNamTiepTheoN1CbDauTu', 'duToanNamTiepTheoN1ThDauTu', 'duToanNamTiepTheoN2CbDauTu', 'duToanNamTiepTheoN2ThDauTu', 'cacNamTiepTheo', 'ghiChu', 'ykienDviCtren']
+            calHeader = ['1', '2', '3', '3A', '4=5+6+7+8+9+10+...+14', '4A=5+6+7+8A+9A+10+...+14', '5', '6', '7', '8', '9', '8A', '9A', '8B=8A-8', '9B=9A-9', '10', '11', '12', '13', '14', '15', '16'];
+        } else {
+            header = [
+                { t: 0, b: 5, l: 0, r: 14, val: null },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 4, l: 2, r: 2, val: 'Số lượng' },
+                { t: 5, b: 5, l: 2, r: 2, val: 'Nhu cầu của đơn vị' },
+                { t: 4, b: 4, l: 3, r: 3, val: 'Tổng mức dự toán' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Nhu cầu của đơn vị' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Dự toán được bố trí đến hết năm ' + (this.namBcao - 2).toString() },
+                { t: 4, b: 4, l: 5, r: 6, val: 'Dự toán năm thực hiện ' + (this.namBcao - 1).toString() },
+                { t: 5, b: 5, l: 5, r: 5, val: 'DMDT ' + (this.namBcao - 1).toString() },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Ước thực hiện' },
+                { t: 4, b: 4, l: 7, r: 8, val: 'Dự toán năm kế hoạch ' + (this.namBcao).toString() },
+                { t: 5, b: 5, l: 7, r: 7, val: 'CB đầu tư' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'TH đầu tư' },
+                { t: 4, b: 4, l: 9, r: 10, val: 'Dự toán năm tiếp theo ' + (this.namBcao + 1).toString() },
+                { t: 5, b: 5, l: 9, r: 9, val: 'CB đầu tư' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'TH đầu tư' },
+                { t: 4, b: 4, l: 11, r: 12, val: 'Dự toán năm tiếp theo ' + (this.namBcao + 2).toString() },
+                { t: 5, b: 5, l: 11, r: 11, val: 'CB đầu tư' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'TH đầu tư' },
+                { t: 4, b: 5, l: 13, r: 13, val: 'Các năm tiếp theo' },
+                { t: 4, b: 5, l: 14, r: 14, val: 'Ghi chú' },
+            ]
+            fieldOrder = ['stt', 'tenNoiDung', 'soLuong', 'tongMucDuToan', 'duToanDaBoTriNamN2', 'duToanNamN1Dmdt', 'duToanNamN1UocTh',
+                'duToanKhNamNCbDauTu', 'duToanKhNamNThDauTu', 'duToanNamTiepTheoN1CbDauTu', 'duToanNamTiepTheoN1ThDauTu', 'duToanNamTiepTheoN2CbDauTu',
+                'duToanNamTiepTheoN2ThDauTu', 'cacNamTiepTheo', 'ghiChu'];
+            calHeader = ['1', '2', '3', '4=5+6+7+8+9+10+...+14', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
+        }
 
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
@@ -500,7 +537,13 @@ export class PhuLuc04Component implements OnInit {
         fieldOrder.forEach(field => {
             row[field] = field == 'tenNoiDung' ? 'Tổng cộng A + B' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
         })
-        filterData.unshift(row)
+        filterData.unshift(row);
+        // thêm công thức tính cho biểu mẫu
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

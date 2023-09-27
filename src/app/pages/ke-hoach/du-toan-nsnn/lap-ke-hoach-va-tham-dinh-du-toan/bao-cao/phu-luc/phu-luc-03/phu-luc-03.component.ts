@@ -41,8 +41,10 @@ export class ItemData {
 	}
 
 	changeModel() {
-		this.ttienNamDtoan = Operator.mul(this.dmucNamDtoan, this.sluongNamDtoan);
-		this.ttienNamN1Td = Operator.mul(this.dmucNamDtoan, this.sluongNamN1Td);
+		if (this.dmucNamDtoan) {
+			this.ttienNamDtoan = Operator.mul(this.dmucNamDtoan, this.sluongNamDtoan);
+			this.ttienNamN1Td = Operator.mul(this.dmucNamDtoan, this.sluongNamN1Td);
+		}
 		this.chenhLech = Operator.sum([this.ttienNamN1Td, -this.ttienNamDtoan]);
 	}
 
@@ -248,8 +250,7 @@ export class PhuLuc03Component implements OnInit {
 			lstCtietBcaoTemp?.forEach(item => {
 				item.sluongNamN1Td = item.sluongNamDtoan;
 				item.ttienNamN1Td = item.ttienNamDtoan;
-				item.chenhLech = 0;
-
+				item.chenhLech = Operator.sum([item.ttienNamN1Td, -item.ttienNamDtoan]);
 			})
 		}
 
@@ -375,8 +376,7 @@ export class PhuLuc03Component implements OnInit {
 	}
 
 	checkEdit(stt: string) {
-		const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-		return lstTemp.every(e => !e.stt.startsWith(stt));
+		return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
 	}
 
 	checkDelete(stt: string) {
@@ -518,31 +518,59 @@ export class PhuLuc03Component implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
-		const header = [
-			{ t: 0, b: 5, l: 0, r: 13, val: null },
-			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-			{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-			{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-			{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-			{ t: 4, b: 5, l: 1, r: 1, val: 'Mặt hàng' },
-			{ t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
-			{ t: 4, b: 5, l: 3, r: 3, val: 'Thực hiện năm trước' },
-			{ t: 4, b: 4, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
-			{ t: 5, b: 5, l: 4, r: 4, val: 'Dự toán' },
-			{ t: 5, b: 5, l: 5, r: 5, val: 'Ước thực hiện' },
-			{ t: 4, b: 4, l: 6, r: 8, val: 'Năm dự toán' },
-			{ t: 5, b: 5, l: 6, r: 6, val: 'Định mức' },
-			{ t: 5, b: 5, l: 7, r: 7, val: 'Số lượng bảo quản' },
-			{ t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
-			{ t: 4, b: 4, l: 9, r: 10, val: 'Thẩm định' },
-			{ t: 5, b: 5, l: 9, r: 9, val: 'Số lượng bảo quản' },
-			{ t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền' },
-			{ t: 4, b: 5, l: 11, r: 11, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
-			{ t: 4, b: 5, l: 12, r: 12, val: 'Ghi chú' },
-			{ t: 4, b: 5, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
-		]
-		const fieldOrder = ['stt', 'tenMatHang', 'dviTinh', 'thucHienNamTruoc', 'dtoanNamHtai', 'uocThNamHtai', 'dmucNamDtoan', 'sluongNamDtoan', 'ttienNamDtoan',
-			'sluongNamN1Td', 'ttienNamN1Td', 'chenhLech', 'ghiChu', 'ykienDviCtren']
+		let header = [];
+		let fieldOrder = [];
+		let calHeader = [];
+		if (this.status.viewAppVal) {
+			header = [
+				{ t: 0, b: 5, l: 0, r: 13, val: null },
+				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+				{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+				{ t: 4, b: 5, l: 1, r: 1, val: 'Mặt hàng' },
+				{ t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
+				{ t: 4, b: 5, l: 3, r: 3, val: 'Thực hiện năm trước' },
+				{ t: 4, b: 4, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
+				{ t: 5, b: 5, l: 4, r: 4, val: 'Dự toán' },
+				{ t: 5, b: 5, l: 5, r: 5, val: 'Ước thực hiện' },
+				{ t: 4, b: 4, l: 6, r: 8, val: 'Năm dự toán' },
+				{ t: 5, b: 5, l: 6, r: 6, val: 'Định mức' },
+				{ t: 5, b: 5, l: 7, r: 7, val: 'Số lượng bảo quản' },
+				{ t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
+				{ t: 4, b: 4, l: 9, r: 10, val: 'Thẩm định' },
+				{ t: 5, b: 5, l: 9, r: 9, val: 'Số lượng bảo quản' },
+				{ t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền' },
+				{ t: 4, b: 5, l: 11, r: 11, val: 'Chênh lệch giữa thẩm định của DVCT và nhu cầu của DVCD' },
+				{ t: 4, b: 5, l: 12, r: 12, val: 'Ghi chú' },
+				{ t: 4, b: 5, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
+			]
+			fieldOrder = ['stt', 'tenMatHang', 'dvTinh', 'thucHienNamTruoc', 'dtoanNamHtai', 'uocThNamHtai', 'dmucNamDtoan', 'sluongNamDtoan', 'ttienNamDtoan',
+				'sluongNamN1Td', 'ttienNamN1Td', 'chenhLech', 'ghiChu', 'ykienDviCtren'];
+			calHeader = ['A', 'B', 'C', '1', '2', '3', '4', '5', '6=4*5', '5A', '6A=4*5A', '7', '8', '9'];
+		} else {
+			header = [
+				{ t: 0, b: 5, l: 0, r: 9, val: null },
+				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+				{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+				{ t: 4, b: 5, l: 1, r: 1, val: 'Mặt hàng' },
+				{ t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
+				{ t: 4, b: 5, l: 3, r: 3, val: 'Thực hiện năm trước' },
+				{ t: 4, b: 4, l: 4, r: 5, val: 'Năm ' + (this.namBcao - 1).toString() },
+				{ t: 5, b: 5, l: 4, r: 4, val: 'Dự toán' },
+				{ t: 5, b: 5, l: 5, r: 5, val: 'Ước thực hiện' },
+				{ t: 4, b: 4, l: 6, r: 8, val: 'Năm dự toán' },
+				{ t: 5, b: 5, l: 6, r: 6, val: 'Định mức' },
+				{ t: 5, b: 5, l: 7, r: 7, val: 'Số lượng bảo quản' },
+				{ t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
+				{ t: 4, b: 5, l: 9, r: 9, val: 'Ghi chú' },
+			]
+			fieldOrder = ['stt', 'tenMatHang', 'dvTinh', 'thucHienNamTruoc', 'dtoanNamHtai', 'uocThNamHtai', 'dmucNamDtoan', 'sluongNamDtoan', 'ttienNamDtoan',
+				'ghiChu'];
+			calHeader = ['A', 'B', 'C', '1', '2', '3', '4', '5', '6=4*5', '7'];
+		}
 
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};
@@ -564,6 +592,12 @@ export class PhuLuc03Component implements OnInit {
 			}
 		})
 		filterData.unshift(row);
+		// thêm công thức tính cho biểu mẫu
+		let cal = {};
+		fieldOrder.forEach((field, index) => {
+			cal[field] = calHeader[index];
+		})
+		filterData.unshift(cal);
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

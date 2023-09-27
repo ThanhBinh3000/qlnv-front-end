@@ -163,14 +163,14 @@ export class CapUngVonComponent implements OnInit {
             this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_CV);
             this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_CV);
             this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_CV);
-            this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_CV);
+            this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_CV) && !(!this.baoCao.id);
             this.scrollX = this.status.save ? Table.tableWidth(350, 6, 6, 60) : Table.tableWidth(350, 6, 6, 0);
         } else {
             this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_GNV);
             this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_GNV);
             this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_GNV);
             this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_GNV);
-            this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_GNV);
+            this.status.export = this.status.export && this.userService.isAccessPermisson(Roles.CVMB.EXPORT_GNV) && !(!this.baoCao.id);
             this.scrollX = Table.tableWidth(350, 6, 6, 0);
         }
     }
@@ -241,11 +241,7 @@ export class CapUngVonComponent implements OnInit {
                 this.baoCao.ngayDuyet = data.data.ngayDuyet;
                 this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -437,7 +433,13 @@ export class CapUngVonComponent implements OnInit {
             })
             return row;
         })
-
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', 'B', 'C', 'D', 'E', 'F', 'G', '1', '2', '3=1+2', '4', '5', '6=4+5', ''];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

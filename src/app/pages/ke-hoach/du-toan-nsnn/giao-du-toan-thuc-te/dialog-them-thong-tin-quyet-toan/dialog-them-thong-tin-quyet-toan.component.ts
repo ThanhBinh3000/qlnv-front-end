@@ -21,7 +21,6 @@ export class ItemCongVan {
 @Component({
     selector: 'app-dialog-them-thong-tin-quyet-toan',
     templateUrl: './dialog-them-thong-tin-quyet-toan.component.html',
-    styleUrls: ['./dialog-them-thong-tin-quyet-toan.component.scss']
 })
 export class DialogThemThongTinQuyetToanComponent implements OnInit {
     @Input() tab: string;
@@ -53,7 +52,6 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
-    //beforeUpload: any;
     listIdFilesDelete: string[] = [];                        // id file luc call chi tiet
 
     // before uploaf file
@@ -240,15 +238,6 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
 
         //get file cong van url
         const file: any = this.fileDetail;
-        // if (file) {
-        //   if (file.size > Utils.FILE_SIZE) {
-        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-        //     return;
-        //   } else {
-        //     request.soQd = await this.uploadFile(file);
-        //   }
-        // }
-
         if (!request.soQd) {
             this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập số quyết định công văn");
             return;
@@ -298,39 +287,6 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
                 limit: 10,
                 page: 1
             },
-
-            // loaiTimKiem: "0",
-            // maPhanGiao: "2",
-            // maLoai: "2",
-            // namPa: null,
-            // ngayTaoTu: null,
-            // ngayTaoDen: null,
-            // donViTao: "0101",
-            // loai: null,
-            // trangThais: [
-            //   "1",
-            //   "2",
-            //   "3",
-            //   "4",
-            //   "5",
-            //   "6",
-            //   "7",
-            //   "8",
-            //   "9"
-            // ],
-            // maPa: null,
-            // maLoaiDan: null,
-            // soQd: "",
-            // trangThaiGiaos: [
-            //   "0",
-            //   "1",
-            //   "2"
-            // ],
-            // paggingReq: {
-            //   limit: 10,
-            //   page: 1
-            // }
-
         };
         this.spinner.show();
         await this.GiaoDuToanChiService.timPhuongAnGiao(requestReport).toPromise().then(

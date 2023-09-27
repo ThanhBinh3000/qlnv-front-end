@@ -5,7 +5,6 @@ import { Dtc } from './bao-cao-thuc-hien-du-toan-chi.constant';
 @Component({
     selector: 'app-bao-cao-thuc-hien-du-toan-chi',
     templateUrl: './bao-cao-thuc-hien-du-toan-chi.component.html',
-    styleUrls: ['./bao-cao-thuc-hien-du-toan-chi.component.scss']
 })
 export class BaoCaoThucHienDuToanChiComponent implements OnInit {
     Dtc = Dtc;

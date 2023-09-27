@@ -648,7 +648,15 @@ export class PhuLucIIComponent implements OnInit {
         fieldOrder.forEach(field => {
             row[field] = field == 'tenNdung' ? 'Tổng cộng' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
         })
-        filterData.unshift(row)
+        filterData.unshift(row);
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', 'B', '1=2+3+4', '2', '3', '4', '5=7+9+11', '6=5/1', '7', '8=7/2', '9', '10=9/3', '11', '12=11/4', '13=15+17+19',
+            '14=13/1', '15', '16=15/2', '17', '18=17/3', '19', '20=19/4'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

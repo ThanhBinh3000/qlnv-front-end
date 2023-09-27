@@ -161,10 +161,6 @@ export class PhuLucTaiSanComponent implements OnInit {
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
 		if (this.status.general) {
-			// const category = await this.danhMucService.danhMucChungGetAll('LTD_PL6');
-			// if (category) {
-			//     this.listVtu = category.data;
-			// }
 			this.scrollX = Table.tableWidth(350, 8, 1, 360);
 		} else {
 			if (this.status.editAppVal) {
@@ -175,19 +171,6 @@ export class PhuLucTaiSanComponent implements OnInit {
 				this.scrollX = Table.tableWidth(350, 8, 1, 0);
 			}
 		}
-
-		// if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
-		// 	this.lstCtietBcaos.forEach(item => {
-		// 		const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
-		// 		if (!item.tenDanhMuc) {
-		// 			item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-		// 		}
-		// 		item.dmucNamDtoan = dinhMuc?.tongDmuc;
-		// 		item.dviTinh = dinhMuc?.donViTinh;
-		// 		item.ttienNamDtoan = this.numFunc.mul(item.dmucNamDtoan, item.sluongNamDtoan);
-		// 		item.ttienTd = this.numFunc.mul(item.dmucNamDtoan, item.sluongTd);
-		// 	})
-		// }
 		if (!this.lstCtietBcaos[0]?.stt) {
 			let sttItem = 1
 			this.lstCtietBcaos.forEach(item => {
@@ -368,7 +351,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 		if (this.editCache[id].data.sluongDtoan > (this.editCache[id].data.sluongDmuc - this.editCache[id].data.sluongCong)) {
 			this.notification.warning(
 				MESSAGE.WARNING,
-				"Dự toán số lượng đề nghị trang bị không được lớn hơn hiệu của tiêu chuẩn định mức và tổng số lượng tài sản hiện có"
+				"Số lượng dự toán đề nghị  không vượt quá hiệu của số lượng tiêu chuẩn định mức tối đa và tổng tài sản hiện có (cột 6 <= cột 5 - cột 4)"
 			).onClose.subscribe(() => {
 				this.statusCanhBao = false
 			})
@@ -432,20 +415,6 @@ export class PhuLucTaiSanComponent implements OnInit {
 						dviTinh: data.dviTinh,
 						level: 0,
 					}))
-					// const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
-					// for (let i = 1; i <= lstTemp.length; i++) {
-					// 	this.lstCtietBcaos.push({
-					// 		...new ItemData(),
-					// 		id: uuid.v4() + 'FE',
-					// 		stt: stt + '.' + i.toString(),
-					// 		danhMuc: data.maTaiSan,
-					// 		maDmuc: lstTemp[i - 1].loaiDinhMuc,
-					// 		tenDanhMuc: lstTemp[i - 1].tenTaiSan,
-					// 		dviTinh: lstTemp[i - 1].donViTinh,
-					// 		level: 1,
-					// 		dmucNamDtoan: lstTemp[i - 1].tongDmuc,
-					// 	})
-					// }
 					this.updateEditCache();
 				}
 			}
@@ -497,7 +466,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 			return;
 		}
 		const header = [
-			{ t: 0, b: 1, l: 0, r: 10, val: null },
+			{ t: 0, b: 6, l: 0, r: 10, val: null },
 
 			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
 			{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -511,13 +480,25 @@ export class PhuLucTaiSanComponent implements OnInit {
 
 			{ t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
 			{ t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
-			{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm (N -1)' },
+			{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm' + + (this.namBcao - 2).toString() },
 			{ t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
 
 			{ t: 5, b: 5, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
 			{ t: 5, b: 5, l: 8, r: 8, val: 'Số lượng ' },
 			{ t: 5, b: 5, l: 9, r: 9, val: 'Mức giá' },
 			{ t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
+
+			{ t: 6, b: 6, l: 0, r: 0, val: 'A' },
+			{ t: 6, b: 6, l: 1, r: 1, val: 'B' },
+			{ t: 6, b: 6, l: 2, r: 2, val: 'C' },
+			{ t: 6, b: 6, l: 3, r: 3, val: '1' },
+			{ t: 6, b: 6, l: 4, r: 4, val: '2' },
+			{ t: 6, b: 6, l: 5, r: 5, val: '3' },
+			{ t: 6, b: 6, l: 6, r: 6, val: '4 = 1 + 2 + 3 ' },
+			{ t: 6, b: 6, l: 7, r: 7, val: '5' },
+			{ t: 6, b: 6, l: 8, r: 8, val: '6' },
+			{ t: 6, b: 6, l: 9, r: 9, val: '7' },
+			{ t: 6, b: 6, l: 10, r: 10, val: '8 = 6 x 7' },
 		]
 		const fieldOrder = [
 			'tenDanhMuc',
@@ -540,6 +521,13 @@ export class PhuLucTaiSanComponent implements OnInit {
 			})
 			return row;
 		})
+
+		let row: any = {};
+		row = {}
+		fieldOrder.forEach(field => {
+			row[field] = field == 'tenDanhMuc' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+		})
+		filterData.unshift(row)
 
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
