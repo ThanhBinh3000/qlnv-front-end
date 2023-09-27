@@ -40,7 +40,7 @@
 
 
     <div class="group-button">
-      <h3>Danh sách lập và ký phiếu kiểm nghiệm chất lượng</h3>
+      <h3>DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG</h3>
       <div class="buttons">
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_XOA')" type="button" class="btn btn-do"
           (click)="deleteSelect()">
@@ -69,14 +69,12 @@
             <th width="30px">STT</th>
             <th width="30px"></th>
             <th>Số QĐ giao NV NH</th>
-            <th>Năm kế hoạch</th>
-            <th>Thời hạn NH trước ngày</th>
+            <th>Năm KH</th>
+            <th>Thời hạn NH</th>
+            <th>Điểm kho</th>
+            <th>Ngăn/Lô kho </th>
             <th>Số phiếu KNCL</th>
             <th>Ngày kiểm nghiệm</th>
-            <th>Điểm kho</th>
-            <th>Nhà kho </th>
-            <th>Ngăn kho </th>
-            <th>Lô kho </th>
             <th>Số BB LM/BGM</th>
             <th>Ngày lấy mẫu</th>
             <th>Số BB nhập đầy kho </th>
@@ -93,7 +91,7 @@
               <td class="link bold">{{ item.soQd }}</td>
               <td class="bold">{{ item.namNhap }}</td>
               <td class="bold">{{ item.tgianNkho }}</td>
-              <td colspan="11"></td>
+              <td colspan="9"></td>
               <td>
                 <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM')"
                   (click)="redirectToChiTiet(false, 0,item.id)">
@@ -107,12 +105,10 @@
                   <td></td>
                   <td></td>
                   <td colspan="3"></td>
+                  <td>{{bb.tenDiemKho}}</td>
+                  <td>{{bb.tenLoKho ? bb.tenLoKho + ' - ' + bb.tenNganKho : bb.tenNganKho}}</td>
                   <td>{{bb.soPhieuKiemNghiemCl}}</td>
                   <td>{{bb.ngayKnghiem | date: 'dd/MM/YYYY' }}</td>
-                  <td>{{bb.tenDiemKho}}</td>
-                  <td>{{bb.tenNhaKho}}</td>
-                  <td>{{bb.tenNganKho}}</td>
-                  <td>{{bb.tenLoKho}}</td>
                   <td>{{bb.soBbLayMau}}</td>
                   <td>{{bb.ngayLayMau | date: 'dd/MM/YYYY'}}</td>
                   <td>{{bb.soBbNhapDayKho}}</td>

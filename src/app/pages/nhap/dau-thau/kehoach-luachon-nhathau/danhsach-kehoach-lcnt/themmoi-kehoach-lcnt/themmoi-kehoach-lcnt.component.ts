@@ -421,7 +421,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       onlyLuongThuc: true
     }
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'Danh sách hàng DTQG',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -482,7 +482,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
   themMoiCuc(goiThau?: string) {
     if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng DTQG');
       return;
     }
     let data = [];

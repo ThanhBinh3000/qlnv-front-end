@@ -198,7 +198,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh'],
       },
     })

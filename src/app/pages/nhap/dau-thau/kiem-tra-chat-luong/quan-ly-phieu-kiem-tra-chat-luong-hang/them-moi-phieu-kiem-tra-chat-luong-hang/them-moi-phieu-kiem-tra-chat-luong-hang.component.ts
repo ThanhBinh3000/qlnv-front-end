@@ -204,7 +204,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh'],
       },
     })

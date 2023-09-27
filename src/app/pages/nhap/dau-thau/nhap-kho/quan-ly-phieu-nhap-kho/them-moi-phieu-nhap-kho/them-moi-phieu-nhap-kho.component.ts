@@ -191,7 +191,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh'],
       },
     })
