@@ -433,7 +433,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == '78') {
             item.checked = true;
           }
         });
