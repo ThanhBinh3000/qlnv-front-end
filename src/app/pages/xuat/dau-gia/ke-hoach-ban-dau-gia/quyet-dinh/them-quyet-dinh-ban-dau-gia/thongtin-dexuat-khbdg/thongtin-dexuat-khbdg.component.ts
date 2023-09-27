@@ -36,8 +36,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   formData: FormGroup
   dataTable: any[] = [];
   listNguonVon: any[] = [];
-  dataChiTieu: any;
-  listPhuongThucThanhToan: any[] = [];
+  dataDonGiaDuocDuyet: any;
 
   constructor(
     private fb: FormBuilder,
@@ -88,7 +87,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
           thoiGianDuKien: hasValidTime ? [dataInput.tgianDkienTu, dataInput.tgianDkienDen] : null
         });
         this.dataTable = dataInput.children;
-        await this.calculatorTable(dataInput);
+        await this.calculatorTable();
       } else {
         this.formData.reset();
       }
@@ -118,44 +117,49 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
     });
     modalGT.afterClose.subscribe(async (updatedData) => {
       if (updatedData && index >= 0) {
+        console.log(123)
         this.dataTable[index] = updatedData;
-        await this.calculatorTable();
+        this.calculatorTable();
       }
     });
   }
 
-  async calculatorTable(data?) {
-    for (const item of this.dataTable) {
-      item.tongGiaKdiemDd = 0;
-      item.tongTienDtruocDd = 0;
-      for (const child of item.children) {
-        let bodyPag = {
-          namKeHoach: data.namKh,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          trangThai: STATUS.BAN_HANH,
-          maDvi: data.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : item.maDvi,
-          loaiGia: 'LG04'
-        }
-        let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-        if (pag.msg == MESSAGE.SUCCESS) {
-          if (pag.data) {
-            pag.data.forEach(s => {
-              child.donGiaDuocDuyet = s.giaQdTcdt;
-            })
-          } else {
-            child.donGiaDuocDuyet = null;
-          }
-        }
-        child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
-        child.soTienDtruocDd = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
-        item.tongGiaKdiemDd += child.giaKhoiDiemDd;
-        item.tongTienDtruocDd += child.soTienDtruocDd;
-      }
+  async calculatorTable() {
+    let bodyPag = {
+      namKeHoach: this.dataInput.namKh ? this.dataInput.namKh : this.dataInput.nam,
+      loaiVthh: this.dataInput.loaiVthh,
+      cloaiVthh: this.dataInput.cloaiVthh,
+      trangThai: STATUS.BAN_HANH,
+      maDvi: '0101',
+      loaiGia: 'LG04',
+    };
+    const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
+    if (pag.msg !== MESSAGE.SUCCESS) {
+      return;
+    }
+    this.dataDonGiaDuocDuyet = pag.data || null;
+    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+      const donGiaMap = new Map();
+      this.dataDonGiaDuocDuyet.forEach((item) => {
+        donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
+      });
+      this.dataTable.forEach((item) => {
+        item.tongGiaKdiemDd = 0;
+        item.tongTienDtruocDd = 0;
+        const donGiaDuocDuyet = this.dataInput.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(item.maDvi);
+        item.children.forEach((child) => {
+          child.donGiaDuocDuyet = donGiaDuocDuyet || null;
+          child.giaKhoiDiemDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0);
+          child.soTienDtruocDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0) * this.formData.value.khoanTienDatTruoc / 100;
+        });
+        item.tongGiaKdiemDd = item.children.reduce((acc, child) => acc + child.giaKhoiDiemDd, 0);
+        item.tongTienDtruocDd = item.children.reduce((acc, child) => acc + child.soTienDtruocDd, 0);
+      });
     }
     this.formData.patchValue({
-      tongTienGiaKdTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.tongGiaKdiemDd, 0),
-      tongKhoanTienDtTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.tongTienDtruocDd, 0),
+      tongTienGiaKdTheoDgiaDd: this.dataTable.reduce((acc, item) => acc + item.tongGiaKdiemDd, 0),
+      tongKhoanTienDtTheoDgiaDd: this.dataTable.reduce((acc, item) => acc + item.tongTienDtruocDd, 0),
+      tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.tongSlXuatBanDx, 0),
     });
   }
 

@@ -401,6 +401,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td class="font-weight-bold text-right"
                     style="color: blue">{{sumSoLuong(null, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
@@ -826,14 +828,16 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong(false, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'giaTriPd', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong(false, 'giaTriPd', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'luyKeVon', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong(false, 'luyKeVon', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong(false, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
               </tr>
               </tfoot>
@@ -1049,14 +1053,16 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong(true, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'giaTriPd', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong(true, 'giaTriPd', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'luyKeVon', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong(true, 'luyKeVon', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong(true, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
                 <td
                   *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"

@@ -341,6 +341,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
         goiThau.tenTrangThai = 'Thành công'
         goiThau.nhaThauTrung = nhaThauTrung.tenNhaThau;
         goiThau.giaTrungThau = nhaThauTrung.giaDuThau;
+        goiThau.idNhaThauTrung = nhaThauTrung.id;
       } else {
         goiThau.tenTrangThai = 'Thất bại'
         goiThau.nhaThauTrung = null;
