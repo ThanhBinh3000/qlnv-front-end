@@ -260,9 +260,16 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
             benGiaoHang: data.banTenDvi
           })
           this.listHangHoa = data.listQlDinhMucPvcHdLoaiHh;
+          const ddNh : any[] = data.listQlDinhMucPvcHdDiaDiemNh;
           if (this.listHangHoa && this.listHangHoa.length > 0) {
             this.listHangHoa.forEach(item => {
               item.id = null;
+              if (ddNh && ddNh.length > 0) {
+                let detailDdnh = ddNh.find(data => data.maDvi == this.userInfo.MA_DVI);
+                if (detailDdnh) {
+                  item.soLuong  = detailDdnh.soLuong
+                }
+              }
             })
           }
         }
