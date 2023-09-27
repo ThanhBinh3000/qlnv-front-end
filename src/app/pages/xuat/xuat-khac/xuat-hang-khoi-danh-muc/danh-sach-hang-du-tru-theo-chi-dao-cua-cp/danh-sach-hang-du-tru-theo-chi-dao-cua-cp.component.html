@@ -190,7 +190,7 @@
 
 <nz-modal [nzWidth]="modalWidth" [nzVisible]="isVisibleModal" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()"
           [nzClosable]="false" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true"
-          nzTitle="CẬP NHẬT DANH SÁCH HÀNG DỮ TRỮ THEO CHỈ ĐẠO CỦA CHÍNH PHỦ">
+          nzTitle="CẬP NHẬT DANH SÁCH HÀNG DỰ TRỮ THEO CHỈ ĐẠO CỦA CHÍNH PHỦ">
   <ng-container *nzModalContent>
     <app-cap-nhat-danh-sach-hang-dtqg-theo-chi-dao-cp [selectedItem]="selectedItem" (step)="changeStep($event)"
                                                       [eventOk]="clickOk"
