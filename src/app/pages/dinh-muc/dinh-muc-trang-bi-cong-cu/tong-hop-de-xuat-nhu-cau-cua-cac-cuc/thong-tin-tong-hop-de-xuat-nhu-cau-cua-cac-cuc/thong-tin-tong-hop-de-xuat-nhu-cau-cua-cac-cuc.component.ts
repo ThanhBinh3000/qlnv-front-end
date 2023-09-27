@@ -454,6 +454,7 @@ export class ThongTinTongHopDeXuatNhuCauCuaCacCucComponent implements OnInit {
         },
         [],
       ],
+      trangThaiTh: [],
       soHopDong: [
         {
           value: this.detail

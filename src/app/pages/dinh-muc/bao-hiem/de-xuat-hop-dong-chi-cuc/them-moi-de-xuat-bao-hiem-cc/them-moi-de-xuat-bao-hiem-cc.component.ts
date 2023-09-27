@@ -62,6 +62,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       giaTriDx: [null,],
       trichYeu: [null,],
       trangThai: ['00'],
+      trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],

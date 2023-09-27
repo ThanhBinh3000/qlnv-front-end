@@ -57,6 +57,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       ngayKy: [null, Validators.required],
       soQdGiaoCt: [null],
       trangThai: ['00'],
+      trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
