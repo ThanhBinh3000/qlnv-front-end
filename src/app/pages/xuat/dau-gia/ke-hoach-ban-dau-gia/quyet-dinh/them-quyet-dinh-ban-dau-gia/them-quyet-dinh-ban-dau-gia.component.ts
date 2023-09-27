@@ -225,46 +225,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileDinhKem = data.fileDinhKem;
     this.danhsachDx = children;
-    await this.calculatorTable();
     if (this.danhsachDx && this.danhsachDx.length > 0) {
       await this.showFirstRow(event, this.danhsachDx[0]);
-    }
-  }
-
-  async calculatorTable() {
-    let bodyPag = {
-      namKeHoach: this.formData.value.nam,
-      loaiVthh: this.formData.value.loaiVthh,
-      cloaiVthh: this.formData.value.cloaiVthh,
-      trangThai: STATUS.BAN_HANH,
-      maDvi: '0101',
-      loaiGia: 'LG04'
-    };
-    const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
-    if (pag.msg !== MESSAGE.SUCCESS) {
-      return;
-    }
-    this.dataDonGiaDuocDuyet = pag.data || null;
-    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
-      const donGiaMap = new Map();
-      this.dataDonGiaDuocDuyet.forEach((item) => {
-        donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
-      });
-      this.danhsachDx.forEach(danhSachDxItem => {
-        danhSachDxItem.children.forEach(childItem => {
-          const maChiCuc = childItem.maDvi;
-          const donGiaDuocDuyet = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(maChiCuc);
-          childItem.children.forEach(subItem => {
-            subItem.donGiaDuocDuyet = donGiaDuocDuyet || null;
-            subItem.giaKhoiDiemDd = subItem.soLuongDeXuat * (donGiaDuocDuyet || 0);
-            subItem.soTienDtruocDd = subItem.soLuongDeXuat * (donGiaDuocDuyet || 0) * danhSachDxItem.khoanTienDatTruoc / 100;
-          });
-          childItem.tongGiaKdiemDd = childItem.children.map(child => child.giaKhoiDiemDd).reduce((prev, cur) => prev + cur, 0);
-          childItem.tongTienDtruocDd = childItem.children.map(child => child.soTienDtruocDd).reduce((prev, cur) => prev + cur, 0);
-        });
-        danhSachDxItem.tongTienGiaKdTheoDgiaDd = danhSachDxItem.children.map(item => item.tongGiaKdiemDd).reduce((prev, cur) => prev + cur, 0);
-        danhSachDxItem.tongKhoanTienDtTheoDgiaDd = danhSachDxItem.children.map(item => item.tongTienDtruocDd).reduce((prev, cur) => prev + cur, 0);
-      });
     }
   }
 

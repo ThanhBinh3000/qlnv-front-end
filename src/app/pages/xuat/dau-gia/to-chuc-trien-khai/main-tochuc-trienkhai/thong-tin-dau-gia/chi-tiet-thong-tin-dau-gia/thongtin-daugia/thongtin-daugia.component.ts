@@ -54,7 +54,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
-      nam: [dayjs().get("year")],
+      nam: [],
       lanDauGia: [],
       maThongBao: [''],
       idQdPd: [],
@@ -141,10 +141,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
 
   async initForm() {
     let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
-    const newMaThongBao = idThongBao + "/" + this.formData.value.nam + "/TB-ĐG";
-    const newSoBienBan = idThongBao + "/" + this.formData.value.nam + "/BB-ĐG";
-    console.log(this.dataDetail, 999)
+    const newMaThongBao = idThongBao + "/" + this.dataDetail.nam + "/TB-ĐG";
+    const newSoBienBan = idThongBao + "/" + this.dataDetail.nam + "/BB-ĐG";
     this.formData.patchValue({
+      nam: this.dataDetail.nam,
       idQdPd: this.dataDetail.idQdPd,
       soQdPd: this.dataDetail.soQdPd,
       idQdDc: this.dataDetail.idQdDc,
