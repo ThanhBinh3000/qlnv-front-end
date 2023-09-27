@@ -49,8 +49,8 @@
         <th>Chi cục DTNN KV</th>
         <th>Điểm kho</th>
         <th>Ngăn/Lô kho</th>
-        <th>Chủng loại hàng hóa</th>
-        <th>SL tốn kho</th>
+        <th>Chủng loại hàng DTQG</th>
+        <th>SL tồn kho</th>
         <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">SL hao dôi theo định mức</th>
         <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">SL dôi thừa</th>
         <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">SL tồn kho thực tế</th>
@@ -304,13 +304,13 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Loại hàng hóa</nz-form-label>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Loại hàng DTQG</nz-form-label>
         <nz-form-control>
           <span>{{rowThemMoi.tenLoaiVthh}}</span>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng DTQG</nz-form-label>
         <nz-form-control>
           <span>{{rowThemMoi.tenCloaiVthh}}</span>
         </nz-form-control>
@@ -327,7 +327,18 @@
           <span class="text-blue">{{rowThemMoi.slTonKho | number : '1.0-1' : 'vi_VN'}}</span>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
+      <nz-form-item *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                            || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_KHAC
+                            || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+">
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng nhập</nz-form-label>
+        <nz-form-control>
+          <nz-input-number [(ngModel)]="rowThemMoi.slNhap" [nzMin]="1" [nzStep]="0.1"
+                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">
         <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng hao dôi theo định mức</nz-form-label>
         <nz-form-control>
           <nz-input-number [(ngModel)]="rowThemMoi.slHaoDoiDinhMuc" [nzMin]="1" [nzStep]="0.1"
@@ -335,7 +346,7 @@
           </nz-input-number>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
+      <nz-form-item *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">
         <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng dôi thừa</nz-form-label>
         <nz-form-control>
           <nz-input-number [(ngModel)]="rowThemMoi.slDoiThua" [nzMin]="1" [nzStep]="0.1"

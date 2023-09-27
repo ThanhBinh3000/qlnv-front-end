@@ -211,7 +211,7 @@ export class GiamHangDtqgComponent extends Base2Component implements OnInit {
       body.idHdr = id;
       body.typeFile = "xlsx";
       body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dữ trữ quốc gia";
+      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
       body.trangThai = "01";
       await this.bcBnTt145Service.ketXuat(body).then(async s => {
         this.excelBlob = s;
@@ -238,7 +238,7 @@ export class GiamHangDtqgComponent extends Base2Component implements OnInit {
       body.idHdr = id;
       body.typeFile = "pdf";
       body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dữ trữ quốc gia";
+      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
       body.trangThai = "01";
       await this.bcBnTt145Service.ketXuat(body).then(async s => {
         this.pdfBlob = s;

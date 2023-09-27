@@ -50,6 +50,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
       trichYeu: [null,],
       ghiChu: [null,],
       trangThai: ['00'],
+      trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],

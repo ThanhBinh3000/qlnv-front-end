@@ -230,7 +230,7 @@ export class BaoCao04aComponent implements OnInit {
         }
         this.luyKes = this.dataInfo.luyKes?.lstCtietBcaos;
         // nếu là báo cáo văn phòng thì lấy ra các dòng số lượng của nó
-        if (this.dataInfo.isOffice && this.formDetail.trangThai == Status.NEW) {
+        if (!this.dataInfo.isHistory && this.dataInfo.isOffice && this.formDetail.trangThai == Status.NEW) {
             this.slTheoQd = this.lstCtietBcao.find(e => e.maNdungChi == this.para.slQd);
             this.slThNamTruoc = this.lstCtietBcao.find(e => e.maNdungChi == this.para.slNamTruoc);
             this.slThNamNay = this.lstCtietBcao.find(e => e.maNdungChi == this.para.slNamNay);
@@ -967,14 +967,16 @@ export class BaoCao04aComponent implements OnInit {
             const row = 6 + index;
             header.push({ t: row, b: row, l: 0, r: 0, val: item.index() })
             header.push({ t: row, b: row, l: 1, r: 1, val: item.tenNdungChi })
-            header.push({ t: row, b: row, l: 2, r: 2, val: item.trongDotTcong?.toString() })
-            header.push({ t: row, b: row, l: 3 + num, r: 3 + num, val: item.luyKeTcong?.toString() })
-            header.push({ t: row, b: row, l: 4 + 2 * num, r: 4 + 2 * num, val: item.ghiChu })
-            this.lstCol.forEach((e, ind) => {
-                const sl = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiDm == e.loaiDm);
-                header.push({ t: row, b: row, l: 3 + ind, r: 3 + ind, val: sl.gtri?.toString() })
-                header.push({ t: row, b: row, l: 4 + ind + num, r: 4 + ind + num, val: sl.lkGtri?.toString() })
-            })
+            if (item.maNdungChi != '0.1') {
+                header.push({ t: row, b: row, l: 2, r: 2, val: item.trongDotTcong })
+                header.push({ t: row, b: row, l: 3 + num, r: 3 + num, val: item.luyKeTcong })
+                header.push({ t: row, b: row, l: 4 + 2 * num, r: 4 + 2 * num, val: item.ghiChu })
+                this.lstCol.forEach((e, ind) => {
+                    const sl = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiDm == e.loaiDm);
+                    header.push({ t: row, b: row, l: 3 + ind, r: 3 + ind, val: sl.gtri })
+                    header.push({ t: row, b: row, l: 4 + ind + num, r: 4 + ind + num, val: sl.lkGtri })
+                })
+            }
         })
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

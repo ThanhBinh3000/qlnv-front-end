@@ -41,6 +41,35 @@ export class ItemData {
     chenhLech: number;
     ghiChu: string;
     ykienDviCtren: string;
+
+    constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+        Object.assign(this, data);
+    }
+
+    clear() {
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number' && key != 'level') {
+                this[key] = null;
+            }
+        })
+    }
+
+    sum(data: ItemData) {
+        Object.keys(data).forEach(key => {
+            if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+                this[key] = Operator.sum([this[key], data[key]]);
+            }
+        })
+    }
+
+    request() {
+        const temp = Object.assign({}, this);
+        if (this.id?.length == 38) {
+            temp.id = null;
+        }
+        return temp;
+    }
+
 }
 
 export const amount1 = {
@@ -68,7 +97,9 @@ export class PhuLuc8Component implements OnInit {
     amount1 = amount1;
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
-    total: ItemData = new ItemData();
+    total: ItemData = new ItemData({});
+    tongDcTang: ItemData = new ItemData({});
+    tongDcGiam: ItemData = new ItemData({});
     maDviTien: string = '1';
     namBcao: number;
     tongDieuChinhTang: number;
@@ -153,20 +184,6 @@ export class PhuLuc8Component implements OnInit {
         }
 
         await this.getDinhMuc();
-        // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
-        //     this.lstCtietBcao.forEach(item => {
-        //         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maMatHang && e.loaiBaoQuan == item.maDmuc);
-        //         if (!item.matHang) {
-        //             item.matHang = dinhMuc?.tenDinhMuc;
-        //         }
-        //         item.dinhMuc = dinhMuc?.tongDmuc;
-        //         item.maDviTinh = dinhMuc?.donViTinh;
-        //         item.luongSlBquanTcong = Operator.sum([item.luongSlBquanTte, item.luongSlBquanUocThien])
-        //         item.tongNcauDtoan = mulNumber(item.dinhMuc, item.luongSlBquanTcong);
-        //         item.dtoanDchinhDnghi = item.tongNcauDtoan - item.kphiCong
-        //         item.dtoanVuTvqtDnghi = item.tongNcauDtoan - item.kphiCong
-        //     })
-        // }
 
         this.lstCtietBcao.forEach(item => {
             if (item.kphiCong == null) {
@@ -206,7 +223,9 @@ export class PhuLuc8Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
-                    this.lstCtietBcao = this.formDetail.lstCtietDchinh;
+                    this.formDetail.lstCtietDchinh.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item))
+                    })
                     this.formDetail.listIdDeleteFiles = [];
                     this.listFile = [];
                     this.getStatusButton();
@@ -283,10 +302,7 @@ export class PhuLuc8Component implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            lstCtietBcaoTemp.push({
-                ...item,
-                id: item.id?.length == 38 ? null : item.id,
-            })
+            lstCtietBcaoTemp.push(item.request())
         })
 
         if (this.status.general) {
@@ -359,7 +375,7 @@ export class PhuLuc8Component implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.lstCtietBcao[index] },
+            data: new ItemData(this.lstCtietBcao[index]),
             edit: false
         };
         this.tinhTong();
@@ -433,7 +449,7 @@ export class PhuLuc8Component implements OnInit {
         this.lstCtietBcao.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
-                data: { ...item }
+                data: new ItemData(item)
             };
         });
     };
@@ -458,13 +474,11 @@ export class PhuLuc8Component implements OnInit {
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
             const data = this.lstCtietBcao[index];
-            this.lstCtietBcao[index] = {
-                ...new ItemData(),
+            this.lstCtietBcao[index] = new ItemData({
                 id: data.id,
                 stt: data.stt,
                 matHang: data.matHang,
                 level: data.level,
-                // ttienTd: data.ttienTd,
                 maDviTinh: data.maDviTinh,
                 slBquanKh: data.slBquanKh,
                 luongSlBquanTte: data.luongSlBquanTte,
@@ -473,7 +487,7 @@ export class PhuLuc8Component implements OnInit {
                 dinhMuc: data.dinhMuc,
                 maDmuc: data.maDmuc,
                 maMatHang: data.maMatHang,
-            }
+            })
             this.lstCtietBcao.forEach(item => {
                 if (Table.preIndex(item.stt) == stt) {
                     this.keys.forEach(key => {
@@ -578,18 +592,16 @@ export class PhuLuc8Component implements OnInit {
                         })
                         const stt = '0.' + index.toString();
                         //them vat tu moi vao bang
-                        this.lstCtietBcao.push({
-                            ... new ItemData(),
+                        this.lstCtietBcao.push(new ItemData({
                             id: uuid.v4() + 'FE',
                             stt: stt,
                             maMatHang: data.ma,
                             matHang: data.ten,
                             level: 0,
-                        })
+                        }))
                         const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
                         for (let i = 1; i <= lstTemp.length; i++) {
-                            this.lstCtietBcao.push({
-                                ...new ItemData(),
+                            this.lstCtietBcao.push(new ItemData({
                                 id: uuid.v4() + 'FE',
                                 stt: stt + '.' + i.toString(),
                                 maMatHang: data.ma,
@@ -598,7 +610,7 @@ export class PhuLuc8Component implements OnInit {
                                 maDviTinh: lstTemp[i - 1].donViTinh,
                                 level: 1,
                                 dinhMuc: lstTemp[i - 1].tongDmuc,
-                            })
+                            }))
                         }
                         this.updateEditCache();
                     }
@@ -608,7 +620,7 @@ export class PhuLuc8Component implements OnInit {
     };
 
     getTotal() {
-        this.total = new ItemData();
+        this.total = new ItemData({});
         this.lstCtietBcao.forEach(item => {
             if (item.level == 0) {
                 this.keys.forEach(key => {
@@ -617,20 +629,6 @@ export class PhuLuc8Component implements OnInit {
             }
         })
     };
-
-    updateAllChecked(): void {
-        if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-            this.lstCtietBcao = this.lstCtietBcao.map(item => ({
-                ...item,
-                checked: true
-            }));
-        } else {
-            this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-                ...item,
-                checked: false
-            }));
-        }
-    }
 
 
     // xoa file trong bang file
@@ -644,6 +642,24 @@ export class PhuLuc8Component implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.formDetail.lstFiles.find(element => element?.id == id);
         await this.quanLyVonPhiService.downFile(file, doc);
+    };
+
+
+    getInTotal() {
+        this.tongDcTang.clear()
+        this.tongDcGiam.clear()
+        this.lstCtietBcao.forEach(item => {
+            const str = item.stt
+            if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
+                if (item.dtoanDchinhDnghi < 0) {
+                    this.tongDcGiam.sum(item);
+                }
+                else {
+                    this.tongDcTang.sum(item);
+                }
+            }
+        })
+
     }
 
     exportToExcel() {
@@ -651,56 +667,141 @@ export class PhuLuc8Component implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        const header = [
-            { t: 0, b: 6, l: 0, r: 17, val: null },
 
-            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+        let header = [];
+        let fieldOrder = [];
 
-            { t: 4, b: 6, l: 0, r: 0, val: "STT" },
-            { t: 4, b: 6, l: 1, r: 1, val: "Mặt hàng" },
-            { t: 4, b: 6, l: 2, r: 2, val: "ĐVT" },
-            { t: 4, b: 6, l: 3, r: 3, val: "Số lượng bảo quản theo KH được giao" },
-            { t: 4, b: 4, l: 4, r: 6, val: "Lượng hàng thực hiện" },
-            { t: 4, b: 6, l: 7, r: 7, val: "ĐỊNH MỨC" },
-            { t: 4, b: 6, l: 8, r: 8, val: "Tổng nhu cầu dự toán năm" + this.namBcao },
-            { t: 4, b: 4, l: 9, r: 11, val: "Kinh phí được sử dụng năm " + this.namBcao },
-            { t: 4, b: 6, l: 12, r: 12, val: "Dự toán điều chỉnh đề nghị(+ Tăng)(- Giảm)" },
-            { t: 4, b: 6, l: 13, r: 13, val: "Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)" },
-            { t: 4, b: 6, l: 14, r: 14, val: "Dự toán phí bảo quản thiếu năm 2020" },
-            { t: 4, b: 6, l: 15, r: 15, val: "Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị" },
-            { t: 4, b: 6, l: 16, r: 16, val: "Ý kiến của đơn vị cấp trên" },
-            { t: 4, b: 6, l: 17, r: 17, val: "Ghi chú" },
+        if (this.status.viewAppVal) {
+            header = [
+                { t: 0, b: 7, l: 0, r: 17, val: null },
 
-            { t: 5, b: 6, l: 4, r: 4, val: "Số lượng bảo quản thực tế đã thực hiện đến thời điểm báo cáo" },
-            { t: 5, b: 6, l: 5, r: 5, val: "Số lượng bảo quản ước thực hiện từ thời điểm báo cáo đến cuối năm" },
-            { t: 5, b: 6, l: 6, r: 6, val: "Cộng" },
-            { t: 5, b: 6, l: 9, r: 9, val: "Cộng" },
-            { t: 5, b: 6, l: 10, r: 10, val: "Dự toán năm trước chuyển sang được phép sử dụng cho năm nay" },
-            { t: 5, b: 6, l: 11, r: 11, val: "Dự toán đã giao trong năm" },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-        ]
-        const fieldOrder = [
-            'stt',
-            'matHang',
-            'maDviTinh',
-            'slBquanKh',
-            'luongSlBquanTte',
-            'luongSlBquanUocThien',
-            'luongSlBquanTcong',
-            'dinhMuc',
-            'tongNcauDtoan',
-            'kphiCong',
-            'kphiDtoanNtruoc',
-            'kphiDtoanGiaoTnam',
-            'dtoanDchinhDnghi',
-            'dtoanVuTvqtDnghi',
-            'dtoanPhiBquanThieu',
-            'chenhLech',
-            'ghiChu',
-            'ykienDviCtren',
-        ]
+                { t: 4, b: 6, l: 0, r: 0, val: "STT" },
+                { t: 4, b: 6, l: 1, r: 1, val: "Mặt hàng" },
+                { t: 4, b: 6, l: 2, r: 2, val: "ĐVT" },
+                { t: 4, b: 6, l: 3, r: 3, val: "Số lượng bảo quản theo KH được giao" },
+                { t: 4, b: 4, l: 4, r: 6, val: "Lượng hàng thực hiện" },
+                { t: 4, b: 6, l: 7, r: 7, val: "ĐỊNH MỨC" },
+                { t: 4, b: 6, l: 8, r: 8, val: "Tổng nhu cầu dự toán năm" + this.namBcao },
+                { t: 4, b: 4, l: 9, r: 11, val: "Kinh phí được sử dụng năm " + this.namBcao },
+                { t: 4, b: 6, l: 12, r: 12, val: "Dự toán điều chỉnh đề nghị(+ Tăng)(- Giảm)" },
+                { t: 4, b: 6, l: 13, r: 13, val: "Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)" },
+                { t: 4, b: 6, l: 14, r: 14, val: "Dự toán phí bảo quản thiếu năm 2020" },
+                { t: 4, b: 6, l: 15, r: 15, val: "Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị" },
+                { t: 4, b: 6, l: 16, r: 16, val: "Ý kiến của đơn vị cấp trên" },
+                { t: 4, b: 6, l: 17, r: 17, val: "Ghi chú" },
+
+                { t: 5, b: 6, l: 4, r: 4, val: "Số lượng bảo quản thực tế đã thực hiện đến thời điểm báo cáo" },
+                { t: 5, b: 6, l: 5, r: 5, val: "Số lượng bảo quản ước thực hiện từ thời điểm báo cáo đến cuối năm" },
+                { t: 5, b: 6, l: 6, r: 6, val: "Cộng" },
+                { t: 5, b: 6, l: 9, r: 9, val: "Cộng" },
+                { t: 5, b: 6, l: 10, r: 10, val: "Dự toán năm trước chuyển sang được phép sử dụng cho năm nay" },
+                { t: 5, b: 6, l: 11, r: 11, val: "Dự toán đã giao trong năm" },
+
+                { t: 7, b: 7, l: 0, r: 0, val: "A" },
+                { t: 7, b: 7, l: 1, r: 1, val: "B" },
+                { t: 7, b: 7, l: 2, r: 2, val: "C" },
+                { t: 7, b: 7, l: 3, r: 3, val: "1" },
+                { t: 7, b: 7, l: 4, r: 4, val: "2" },
+                { t: 7, b: 7, l: 5, r: 5, val: "3" },
+                { t: 7, b: 7, l: 6, r: 6, val: "4 = 2 + 3" },
+                { t: 7, b: 7, l: 7, r: 7, val: "5" },
+                { t: 7, b: 7, l: 8, r: 8, val: "6 = 4 x 5" },
+                { t: 7, b: 7, l: 9, r: 9, val: "7 = 8 + 9" },
+                { t: 7, b: 7, l: 10, r: 10, val: "8" },
+                { t: 7, b: 7, l: 11, r: 11, val: "9" },
+                { t: 7, b: 7, l: 12, r: 12, val: "10 = 6 - 7" },
+                { t: 7, b: 7, l: 13, r: 13, val: "11" },
+                { t: 7, b: 7, l: 14, r: 14, val: "12" },
+                { t: 7, b: 7, l: 15, r: 15, val: "13 = 11 - 10" },
+                { t: 7, b: 7, l: 16, r: 16, val: "14" },
+                { t: 7, b: 7, l: 17, r: 17, val: "15" },
+            ]
+            fieldOrder = [
+                'stt',
+                'matHang',
+                'maDviTinh',
+                'slBquanKh',
+                'luongSlBquanTte',
+                'luongSlBquanUocThien',
+                'luongSlBquanTcong',
+                'dinhMuc',
+                'tongNcauDtoan',
+                'kphiCong',
+                'kphiDtoanNtruoc',
+                'kphiDtoanGiaoTnam',
+                'dtoanDchinhDnghi',
+                'dtoanVuTvqtDnghi',
+                'dtoanPhiBquanThieu',
+                'chenhLech',
+                'ykienDviCtren',
+                'ghiChu',
+            ]
+        } else {
+            header = [
+                { t: 0, b: 7, l: 0, r: 17, val: null },
+
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+                { t: 4, b: 6, l: 0, r: 0, val: "STT" },
+                { t: 4, b: 6, l: 1, r: 1, val: "Mặt hàng" },
+                { t: 4, b: 6, l: 2, r: 2, val: "ĐVT" },
+                { t: 4, b: 6, l: 3, r: 3, val: "Số lượng bảo quản theo KH được giao" },
+                { t: 4, b: 4, l: 4, r: 6, val: "Lượng hàng thực hiện" },
+                { t: 4, b: 6, l: 7, r: 7, val: "ĐỊNH MỨC" },
+                { t: 4, b: 6, l: 8, r: 8, val: "Tổng nhu cầu dự toán năm" + this.namBcao },
+                { t: 4, b: 4, l: 9, r: 11, val: "Kinh phí được sử dụng năm " + this.namBcao },
+                { t: 4, b: 6, l: 12, r: 12, val: "Dự toán điều chỉnh đề nghị(+ Tăng)(- Giảm)" },
+                { t: 4, b: 6, l: 13, r: 13, val: "Dự toán phí bảo quản thiếu năm 2020" },
+                { t: 4, b: 6, l: 14, r: 14, val: "Ghi chú" },
+
+                { t: 5, b: 6, l: 4, r: 4, val: "Số lượng bảo quản thực tế đã thực hiện đến thời điểm báo cáo" },
+                { t: 5, b: 6, l: 5, r: 5, val: "Số lượng bảo quản ước thực hiện từ thời điểm báo cáo đến cuối năm" },
+                { t: 5, b: 6, l: 6, r: 6, val: "Cộng" },
+                { t: 5, b: 6, l: 9, r: 9, val: "Cộng" },
+                { t: 5, b: 6, l: 10, r: 10, val: "Dự toán năm trước chuyển sang được phép sử dụng cho năm nay" },
+                { t: 5, b: 6, l: 11, r: 11, val: "Dự toán đã giao trong năm" },
+
+                { t: 7, b: 7, l: 0, r: 0, val: "A" },
+                { t: 7, b: 7, l: 1, r: 1, val: "B" },
+                { t: 7, b: 7, l: 2, r: 2, val: "C" },
+                { t: 7, b: 7, l: 3, r: 3, val: "1" },
+                { t: 7, b: 7, l: 4, r: 4, val: "2" },
+                { t: 7, b: 7, l: 5, r: 5, val: "3" },
+                { t: 7, b: 7, l: 6, r: 6, val: "4 = 2 + 3" },
+                { t: 7, b: 7, l: 7, r: 7, val: "5" },
+                { t: 7, b: 7, l: 8, r: 8, val: "6 = 4 x 5" },
+                { t: 7, b: 7, l: 9, r: 9, val: "7 = 8 + 9" },
+                { t: 7, b: 7, l: 10, r: 10, val: "8" },
+                { t: 7, b: 7, l: 11, r: 11, val: "9" },
+                { t: 7, b: 7, l: 12, r: 12, val: "10 = 6 - 7" },
+                { t: 7, b: 7, l: 13, r: 13, val: "12" },
+                { t: 7, b: 7, l: 14, r: 14, val: "15" },
+            ]
+            fieldOrder = [
+                'stt',
+                'matHang',
+                'maDviTinh',
+                'slBquanKh',
+                'luongSlBquanTte',
+                'luongSlBquanUocThien',
+                'luongSlBquanTcong',
+                'dinhMuc',
+                'tongNcauDtoan',
+                'kphiCong',
+                'kphiDtoanNtruoc',
+                'kphiDtoanGiaoTnam',
+                'dtoanDchinhDnghi',
+                'dtoanPhiBquanThieu',
+                'ghiChu',
+            ]
+        }
+
 
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
@@ -715,7 +816,68 @@ export class PhuLuc8Component implements OnInit {
             for (let i = 0; i < level; i++) {
                 item.stt = '   ' + item.stt;
             }
+        });
+
+
+
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'matHang') {
+                row[field] = 'Phát sinh điều chỉnh giảm'
+            } else {
+                if (![
+                    'slBquanKh',
+                    'luongSlBquanTte',
+                    'luongSlBquanUocThien',
+                    'luongSlBquanTcong',
+                    'dinhMuc',
+                    'tongNcauDtoan',
+                    'kphiCong',
+                    'kphiDtoanNtruoc',
+                    'kphiDtoanGiaoTnam',
+                    'dtoanPhiBquanThieu',
+                ].includes(field)) {
+                    row[field] = (!this.tongDcGiam[field] && this.tongDcGiam[field] !== 0) ? '' : this.tongDcGiam[field];
+                } else {
+                    row[field] = '';
+                }
+            }
         })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'matHang') {
+                row[field] = 'Phát sinh điều chỉnh tăng'
+            } else {
+                if (![
+                    'slBquanKh',
+                    'luongSlBquanTte',
+                    'luongSlBquanUocThien',
+                    'luongSlBquanTcong',
+                    'dinhMuc',
+                    'tongNcauDtoan',
+                    'kphiCong',
+                    'kphiDtoanNtruoc',
+                    'kphiDtoanGiaoTnam',
+                    'dtoanPhiBquanThieu',
+                ].includes(field)) {
+                    row[field] = (!this.tongDcTang[field] && this.tongDcTang[field] !== 0) ? '' : this.tongDcTang[field];
+                } else {
+                    row[field] = '';
+                }
+            }
+        })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'matHang' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
+
+
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

@@ -8,9 +8,17 @@ export class Tab {
     static readonly VB_DON_GIA_1 = 'vb-dongia-1';
     static readonly VB_HOP_DONG = 'vb-hopdong';
     static readonly VB_HOP_DONG_1 = 'vb-hopdong-1';
+    static readonly THU_CHI = 'thu-chi';
     static readonly TAB_LIST = [
         {
-            name: 'Vốn bán từ đơn vị cấp dưới',
+            name: 'Quản lý vốn bán',
+            code: Tab.THU_CHI,
+            status: true,
+            role: Roles.CVMB.VIEW_VB,
+            isSelected: false,
+        },
+        {
+            name: 'Vốn bán đơn vị cấp dưới',
             code: Tab.DS_VON_BAN_TU_DVCD,
             status: true,
             role: Roles.CVMB.VIEW_VB_GN,
@@ -24,7 +32,7 @@ export class Tab {
         //     isSelected: false,
         // },
         {
-            name: 'Vốn bán nộp lên đơn vị cấp trên',
+            name: 'Vốn bán nộp đơn vị cấp trên',
             code: Tab.DS_VON_BAN_NOP_DVCT,
             status: true,
             role: Roles.CVMB.VIEW_VB,

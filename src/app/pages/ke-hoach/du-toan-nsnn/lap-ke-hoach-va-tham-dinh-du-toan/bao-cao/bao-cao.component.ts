@@ -39,6 +39,8 @@ import { BieuMau14Component } from './thong-tu-69/bieu-mau-14/bieu-mau-14.compon
 import { BieuMau16Component } from './thong-tu-69/bieu-mau-16/bieu-mau-16.component';
 import { BieuMau17Component } from './thong-tu-69/bieu-mau-17/bieu-mau-17.component';
 import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.component';
+import { BieuMau05Component } from './thong-tu-342/bieu-mau-05/bieu-mau-05.component';
+import { BieuMau06Component } from './thong-tu-342/bieu-mau-06/bieu-mau-06.component';
 
 @Component({
     selector: 'app-bao-cao',
@@ -82,11 +84,11 @@ export class BaoCaoComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
+                soCv: this.baoCao.congVan?.fileName,
+                ngayCv: this.baoCao.ngayCongVan,
             },
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
@@ -96,9 +98,9 @@ export class BaoCaoComponent implements OnInit {
                     ...new Doc(),
                     fileName: res.soCongVan,
                 };
+                this.fileDetail = file;
             }
         });
-        this.fileDetail = file;
         return false;
     };
 
@@ -207,6 +209,9 @@ export class BaoCaoComponent implements OnInit {
                     tenDm: Utils.getName(this.baoCao.namBcao, e.tenDm),
                 })
             })
+            if (this.userService.isChiCuc()) {
+                this.listAppendix = this.listAppendix.filter(e => e.id != 'TT342_06');
+            }
         }
 
         this.path = this.baoCao.maDvi + '/' + this.baoCao.maBcao;
@@ -351,12 +356,12 @@ export class BaoCaoComponent implements OnInit {
         await this.lapThamDinhService.approveThamDinh(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
+                this.baoCao.ngayTrinh = data.data.ngayTrinh;
+                this.baoCao.ngayDuyet = data.data.ngayDuyet;
+                this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
+                this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -420,7 +425,7 @@ export class BaoCaoComponent implements OnInit {
             } else {
                 baoCaoTemp.congVan = {
                     ...await this.quanLyVonPhiService.upFile(file, this.path),
-                    fileName: this.baoCao.congVan.fileName,
+                    fileName: this.baoCao.congVan?.fileName,
                 }
             }
         }
@@ -576,7 +581,7 @@ export class BaoCaoComponent implements OnInit {
             maBieuMau: bieuMau.maBieuMau,
             maBcao: this.baoCao.maBcao,
             maDvi: this.baoCao.maDvi,
-            capDvi: this.userInfo.capDvi,
+            capDvi: this.userInfo.CAP_DVI,
             tenDvi: this.baoCao.tenDvi,
             namBcao: this.baoCao.namBcao,
             tenPl: bieuMau.tenPl,
@@ -589,6 +594,7 @@ export class BaoCaoComponent implements OnInit {
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.nguoiBcao);
+        dataInfo.status.finish = dataInfo.status.finish && (this.userInfo?.sub == bieuMau.nguoiBcao);
 
         let nzContent: ComponentType<any>;
         switch (bieuMau.maBieuMau) {
@@ -650,6 +656,12 @@ export class BaoCaoComponent implements OnInit {
                 break;
             case 'TT342_16':
                 nzContent = BieuMau160Component;
+                break;
+            case 'TT342_05':
+                nzContent = BieuMau05Component;
+                break;
+            case 'TT342_06':
+                nzContent = BieuMau06Component;
                 break;
             // thong tu 69
             case 'TT69_13':

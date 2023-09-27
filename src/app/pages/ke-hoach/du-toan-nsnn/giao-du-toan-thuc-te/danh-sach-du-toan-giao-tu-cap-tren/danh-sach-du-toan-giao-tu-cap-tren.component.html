@@ -57,47 +57,13 @@
             [nzShowPagination]="false" nzBordered>
             <thead>
                 <tr>
-                    <th width="60px">STT</th>
-                    <th>Mã phương án</th>
-                    <th>Ngày lập</th>
-                    <th>Năm dự toán</th>
-                    <th>Trạng thái</th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPa"
-                                (input)="filterInTable('maPa',filterTable.maPa, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTao"
-                            (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao, true)">
-                        </nz-date-picker>
-                    </th>
-                    <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namDtoan"
-                                (input)="filterInTable('namDtoan',filterTable.namDtoan, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
-                            [(ngModel)]="filterTable.trangThai"
-                            (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, false)">
-                            <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                            </nz-option>
-                        </nz-select>
-                    </th>
-                    <th></th>
+                    <th scope="col" nzWidth="60px">STT</th>
+                    <th scope="col">Mã phương án</th>
+                    <th scope="col">Loại phương án</th>
+                    <th scope="col">Ngày lập</th>
+                    <th scope="col">Năm dự toán</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
 
@@ -107,6 +73,16 @@
                     <td>
                         {{ item.maPa}}
                     </td>
+                    <ng-container *ngIf="item.maLoaiDan == 1; else viewLoai">
+                        <td>
+                            Phương án giao dự toán
+                        </td>
+                    </ng-container>
+                    <ng-template #viewLoai>
+                        <td>
+                            Phương án giao điều chỉnh dự toán
+                        </td>
+                    </ng-template>
                     <td>
                         {{item.ngayTao}}
                     </td>

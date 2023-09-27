@@ -15,7 +15,7 @@ import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.componen
 @Component({
     selector: 'app-danh-sach-bao-cao-thuc-hien-von-phi',
     templateUrl: './danh-sach-bao-cao-thuc-hien-von-phi.component.html',
-    styleUrls: ['./danh-sach-bao-cao-thuc-hien-von-phi.component.scss'],
+    // styleUrls: ['./danh-sach-bao-cao-thuc-hien-von-phi.component.scss'],
 })
 export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
     @Input() data;

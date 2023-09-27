@@ -1,0 +1,74 @@
+<div class="bg-trang">
+    <nz-card class="mt16 flex-card p-lr16">
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="6">
+                <label class="search__label">Năm</label>
+                <nz-select nzShowSearch nzPlaceHolder="Chọn năm" [(ngModel)]="namDnghi"
+                    [class]="namDnghi ?'' : 'input-error-validate'" (ngModelChange)="search()">
+                    <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+    </nz-card>
+    <div class="group-button">
+        <h3 class="text-uppercase">Quản lý vốn bán</h3>
+    </div>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
+            <thead>
+                <tr>
+                    <th scope="col" rowspan="2" nzWidth="50px" nzLeft>STT</th>
+                    <th scope="col" rowspan="2" nzWidth="150px" nzLeft>Hàng DTQG</th>
+                    <th scope="col" rowspan="2">Giá trị theo Hợp đồng / Kế hoạch</th>
+                    <th scope="col" rowspan="2">Giá trị thực hiện</th>
+                    <th scope="colgroup" colspan="3">Số đã nộp Đơn vị cấp trên</th>
+                    <th scope="col" rowspan="2">Số còn phải nộp</th>
+                </tr>
+                <tr>
+                    <th scope="col">Nộp vốn</th>
+                    <th scope="col">Nộp hoàn ứng</th>
+                    <th scope="col">Tổng nộp</th>
+                </tr>
+                <tr>
+                    <th scope="col" nzLeft>A</th>
+                    <th scope="col" nzLeft>B</th>
+                    <th scope="col">1</th>
+                    <th scope="col">2</th>
+                    <th scope="col">3</th>
+                    <th scope="col">4</th>
+                    <th scope="col">5=3+4</th>
+                    <th scope="col">6</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of lstCtiets; let i = index">
+                    <td nzLeft>
+                        {{ (i + 1) }}
+                    </td>
+                    <td nzLeft>
+                        {{ data.tenHangDtqg }}
+                    </td>
+                    <td>
+                        {{ Op.fmtNum(data.gtKeHoach) }}
+                    </td>
+                    <td>
+                        {{ Op.fmtNum(data.gtThucHien) }}
+                    </td>
+                    <td>
+                        {{ Op.fmtNum(data.lkUng) }}
+                    </td>
+                    <td>
+                        {{ Op.fmtNum(data.lkCap) }}
+                    </td>
+                    <td>
+                        {{ Op.fmtNum(data.lkCong) }}
+                    </td>
+                    <td>
+                        {{ Op.fmtNum(data.soConPhaiNop) }}
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+</div>

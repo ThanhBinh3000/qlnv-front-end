@@ -42,6 +42,8 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   listPhieuKtraCl: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
+  chungTuKemTheo: any[] = [];
+  fileDinhKems: any[] = [];
   dataTable: any[] = [];
   previewName: string;
   constructor(
@@ -315,6 +317,8 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         const data = res.data;
+        this.fileDinhKems = data.fileDinhKems;
+        this.chungTuKemTheo = data.chungTuKemTheo;
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.formData.patchValue({
           soBangKeCanHang: data.bangKeCanHang?.soBangKe
@@ -437,7 +441,9 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       let pipe = new DatePipe('en-US');
       let body = this.formData.value;
       body.hangHoaList = this.dataTable;
-      body.thoiGianGiaoNhan = pipe.transform(this.formData.value.thoiGianGiaoNhan, 'yyyy-MM-dd HH:mm')
+      body.thoiGianGiaoNhan = pipe.transform(this.formData.value.thoiGianGiaoNhan, 'yyyy-MM-dd HH:mm');
+      body.fileDinhKems = this.fileDinhKems;
+      body.chungTuKemTheo = this.chungTuKemTheo;
       let res;
       if (this.formData.get('id').value > 0) {
         res = await this.quanLyPhieuNhapKhoService.update(body);

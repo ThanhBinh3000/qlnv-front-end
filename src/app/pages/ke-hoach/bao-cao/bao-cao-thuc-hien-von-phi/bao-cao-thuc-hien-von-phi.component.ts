@@ -6,7 +6,7 @@ import { Vp } from './bao-cao-thuc-hien-von-phi.constant';
 @Component({
     selector: 'app-bao-cao-thuc-hien-von-phi',
     templateUrl: './bao-cao-thuc-hien-von-phi.component.html',
-    styleUrls: ['./bao-cao-thuc-hien-von-phi.component.scss']
+    // styleUrls: ['./bao-cao-thuc-hien-von-phi.component.scss']
 })
 export class BaoCaoThucHienVonPhiComponent implements OnInit {
     Vp = Vp;

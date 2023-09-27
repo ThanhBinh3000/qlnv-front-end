@@ -1,5 +1,4 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
-    <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
         <ng-container *ngIf="viewBaoCaoQuyetToan">
             <li nz-menu-item nzSelected (click)="selectTab('baoCaoQuyetToan')">
@@ -16,11 +15,6 @@
                 Phê duyệt và tổng hợp quyết toán
             </li>
         </ng-container>
-        <!-- <ng-container *ngIf="viewPheDuyet">
-      <li nz-menu-item (click)="selectTab(2)">
-        Phê duyệt báo cáo
-      </li>
-    </ng-container> -->
     </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">`
@@ -36,9 +30,5 @@
             <app-phe-duyet-tong-hop (dataChange)="changeTab($event)">
             </app-phe-duyet-tong-hop>
         </ng-container>
-        <!-- <ng-container *ngIf="tabSelected == 2">
-      <app-duyet-phe-duyet-bao-cao>
-      </app-duyet-phe-duyet-bao-cao>
-    </ng-container> -->
     </div>
 </div>

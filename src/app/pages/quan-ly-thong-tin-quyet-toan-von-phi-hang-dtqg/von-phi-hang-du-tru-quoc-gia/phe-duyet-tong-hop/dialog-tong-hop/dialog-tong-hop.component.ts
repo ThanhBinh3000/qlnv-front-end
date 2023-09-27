@@ -8,7 +8,6 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 @Component({
     selector: 'app-dialog-tong-hop',
     templateUrl: './dialog-tong-hop.component.html',
-    styleUrls: ['./dialog-tong-hop.component.css']
 })
 
 export class DialogTongHopComponent implements OnInit {
@@ -64,10 +63,6 @@ export class DialogTongHopComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
             return;
         }
-        // if (this.response.thangBcao < 1 || this.response.thangBcao > 12) {
-        //     this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập tháng đúng định dạng số từ 1 đến 12");
-        //     return;
-        // }
         this._modalRef.close(this.response);
     }
 

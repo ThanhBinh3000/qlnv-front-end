@@ -23,10 +23,6 @@
                             </div>
                         </div>
                         <div class="canphai">
-                            <!-- <button *ngIf="status.save" type="button" class="btn btn-do" (click)="deleteAllChecked()">
-                                <i class="fa fa-trash-o"></i>
-                                <span>Xóa</span>
-                            </button> -->
                             <button *ngIf="status.save" type="button" class="btn btn-sub" (click)="addLine()">
                                 <i class="icon htvbdh_dau-cong"></i>
                                 <span>Thêm</span>
@@ -36,324 +32,313 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{ x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="4" nzWidth="50px" nzLeft> STT </th>
-                                <th rowspan="4" nzWidth="300px" nzLeft>Danh mục Dự án</th>
-                                <th rowspan="4" class="text-col">Địa điểm XD</th>
-                                <th colspan="3">Quyết định đầu tư</th>
-                                <th colspan="5">Lũy kế vốn đã bố trí đến hết năm trước năm kế hoạch</th>
-                                <th colspan="3">
+                                <th scope="col" rowspan="4" nzWidth="50px" nzLeft> STT </th>
+                                <th scope="col" rowspan="4" nzWidth="300px" nzLeft>Danh mục Dự án</th>
+                                <th scope="col" rowspan="4" class="text-col">Địa điểm XD</th>
+                                <th scope="colgroup" colspan="3">Quyết định đầu tư</th>
+                                <th scope="colgroup" colspan="5">Lũy kế vốn đã bố trí đến hết năm trước năm kế hoạch
+                                </th>
+                                <th scope="colgroup" colspan="3">
                                     Lũy kế giải ngân vốn đã bố trí đến hết năm trước năm kế hoạch
                                 </th>
-                                <th colspan="3" rowspan="2">
+                                <th scope="colgroup" colspan="3" rowspan="2">
                                     Kế hoạch vốn đầu tư phát triển nguồn NSNN năm
                                     trước được cấp có thẩm quyền cho phép kéo dài sang năm KH(nếu có)
                                 </th>
-                                <th colspan="5">Kế hoạch năm kế hoạch</th>
-                                <th rowspan="2" colspan="2">
+                                <th scope="colgroup" colspan="5">Kế hoạch năm kế hoạch</th>
+                                <th scope="colgroup" rowspan="2" colspan="2">
                                     Khối lượng thực hiện từ đầu năm đến ngày 15 của tháng báo cáo
                                 </th>
-                                <th colspan="10">Giải ngân tháng báo cáo</th>
-                                <th colspan="10">
+                                <th scope="colgroup" colspan="10">Giải ngân tháng báo cáo</th>
+                                <th scope="colgroup" colspan="10">
                                     Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo tháng
                                     (đến hết thời gian chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với báo cáo
                                     năm)
                                 </th>
-                                <th colspan="3" style="width: 750px;" rowspan="1">Tình hình thực hiện dự án</th>
-                                <th rowspan="4" class="text-col">Ghi chú</th>
-                                <th style="width: 50px;" rowspan="4" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
-                                <th style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
-                                <!-- <th style="width: 40px;" rowspan="4" *ngIf="status.save" nzRight>
-                                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
-                                    </label>
-                                </th> -->
+                                <th scope="colgroup" colspan="3" style="width: 750px;" rowspan="1">Tình hình thực hiện
+                                    dự án</th>
+                                <th scope="col" rowspan="4" class="text-col">Ghi chú</th>
+                                <th scope="col" style="width: 50px;" rowspan="4" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
+                                <th scope="col" style="width: 60px;" rowspan="4" *ngIf="status.save" nzRight></th>
                             </tr>
                             <tr class="text-title">
-                                <th rowspan="3" class="text-col">
+                                <th scope="col" rowspan="3" class="text-col">
                                     Số quyết định ngày, tháng, năm ban hành
                                 </th>
-                                <th colspan="2">
+                                <th scope="colgroup" colspan="2">
                                     TMDT
                                 </th>
-                                <th rowspan="3">
+                                <th scope="col" rowspan="3">
                                     Tổng số
                                 </th>
-                                <th colspan="4">
+                                <th scope="colgroup" colspan="4">
                                     Trong đó
                                 </th>
-                                <th rowspan="3">
+                                <th scope="col" rowspan="3">
                                     Tổng số
                                 </th>
-                                <th colspan="2">
+                                <th scope="colgroup" colspan="2">
                                     Trong đó: NSNN
                                 </th>
 
-                                <th rowspan="3">
+                                <th scope="col" rowspan="3">
                                     Tổng số
                                 </th>
-                                <th colspan="4">
+                                <th scope="colgroup" colspan="4">
                                     Trong đó
                                 </th>
-                                <th colspan="2" rowspan="2">
+                                <th scope="colgroup" colspan="2" rowspan="2">
                                     Tổng số
                                 </th>
-                                <th colspan="4">
+                                <th scope="colgroup" colspan="4">
                                     Trong đó
                                 </th>
-                                <th colspan="4">
+                                <th scope="colgroup" colspan="4">
                                     Tỷ lệ giải ngân
                                 </th>
-                                <th colspan="2" rowspan="2">
+                                <th scope="colgroup" colspan="2" rowspan="2">
                                     Tổng số
                                 </th>
-                                <th colspan="4">
+                                <th scope="colgroup" colspan="4">
                                     Trong đó
                                 </th>
-                                <th colspan="4">
+                                <th scope="colgroup" colspan="4">
                                     Tỷ lệ giải ngân
                                 </th>
-                                <th rowspan="3" class="text-col">
+                                <th scope="col" rowspan="3" class="text-col">
                                     Nội dung các công việc chủ yếu đã hoàn thành đến cuối tháng báo cáo
                                 </th>
-                                <th rowspan="3" class="text-col">
+                                <th scope="col" rowspan="3" class="text-col">
                                     Nội dung các công việc chủ yếu đang thực hiện dở dang
                                 </th>
-                                <th rowspan="3" class="text-col">
+                                <th scope="col" rowspan="3" class="text-col">
                                     Kế hoạch thực hiện các nội dung công việc chủ yếu các tháng còn lại của
                                     năm
                                 </th>
                             </tr>
-                            <!-- dong3 -->
                             <tr>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Tổng số
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Trong đó:vốn NSNN
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Vốn NSNN
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Vốn ngành DT
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Vốn ngành Thuế
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Vốn SCL
                                 </th>
-                                <!--  -->
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Tổng số
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Trong đó: riêng năm trước năm KH
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Tổng số
                                 </th>
-                                <th colspan="2">
+                                <th scope="colgroup" colspan="2">
                                     Trong đó
                                 </th>
-                                <!--  -->
-
-                                <!--  -->
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Vốn ĐTPT nguồn NSNN
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Vốn ngành DT
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Vốn ngành thuế
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Vốn SCL
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Tổng số
                                 </th>
-                                <th rowspan="2">
+                                <th scope="col" rowspan="2">
                                     Riêng tháng báo cáo
                                 </th>
-                                <!--  -->
-                                <th>
+                                <th scope="col">
                                     Vốn NSNN
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn ngành DT
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn ngành Thuế
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn SCL
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn NSNN
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn ngành DT
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn ngành Thuế
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn SCL
                                 </th>
-                                <!--  -->
-                                <th>
+                                <th scope="col">
                                     Vốn NSNN
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn ngành DT
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn ngành Thuế
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn SCL
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn NSNN
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn ngành DT
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn ngành Thuế
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Vốn SCL
                                 </th>
-                                <!--  -->
                             </tr>
                             <tr>
-                                <th rowspan="1">
+                                <th scope="col">
                                     Vốn ĐTPT
                                 </th>
-                                <th rowspan="1">
+                                <th scope="col">
                                     Vốn khác
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
 
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Số tiền
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
-                                <th>
+                                <th scope="col">
                                     Tỷ lệ(%)
                                 </th>
+                            </tr>
+                            <tr>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5 = 6 + 6a + 6b + 6c</th>
+                                <th scope="col">6</th>
+                                <th scope="col">6a</th>
+                                <th scope="col">6b</th>
+                                <th scope="col">6c</th>
+                                <th scope="col">7</th>
+                                <th scope="col">8</th>
+                                <th scope="col">9</th>
+                                <th scope="col">10 = 10a + 10b</th>
+                                <th scope="col">10a</th>
+                                <th scope="col">10b</th>
+                                <th scope="col">11 = 12 + 12a + 12b + 12c</th>
+                                <th scope="col">12</th>
+                                <th scope="col">12a</th>
+                                <th scope="col">12b</th>
+                                <th scope="col">12c</th>
+                                <th scope="col">13</th>
+                                <th scope="col">13a</th>
+                                <th scope="col">14 = 16 + 16a + 16b + 16c</th>
+                                <th scope="col">15=14/11</th>
+                                <th scope="col">16</th>
+                                <th scope="col">16a</th>
+                                <th scope="col">16b</th>
+                                <th scope="col">16c</th>
+                                <th scope="col">17=16/12</th>
+                                <th scope="col">17a=16a/12a</th>
+                                <th scope="col">17b=16b/12b</th>
+                                <th scope="col">17c=16c/12c</th>
+                                <th scope="col">18 = 20 + 20a + 20b + 20c</th>
+                                <th scope="col">19=18/11</th>
+                                <th scope="col">20</th>
+                                <th scope="col">20a</th>
+                                <th scope="col">20b</th>
+                                <th scope="col">20c</th>
+                                <th scope="col">21=20/12</th>
+                                <th scope="col">21a=20a/12a</th>
+                                <th scope="col">21b=20b/12b</th>
+                                <th scope="col">21c=20c/12c</th>
+                                <th scope="col">22</th>
+                                <th scope="col">23</th>
+                                <th scope="col">24</th>
+                                <th scope="col">25</th>
+                                <th scope="col" *ngIf="status.save" nzRight></th>
+                                <th scope="col" *ngIf="status.save" nzRight></th>
+                                <th scope="col" *ngIf="status.save" nzRight></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td nzLeft>A</td>
-                                <td nzLeft>B</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5 = 6 + 6a + 6b + 6c</td>
-                                <td>6</td>
-                                <td>6a</td>
-                                <td>6b</td>
-                                <td>6c</td>
-                                <td>7</td>
-                                <td>8</td>
-                                <td>9</td>
-                                <td>10 = 10a + 10b</td>
-                                <td>10a</td>
-                                <td>10b</td>
-                                <td>11 = 12 + 12a + 12b + 12c</td>
-                                <td>12</td>
-                                <td>12a</td>
-                                <td>12b</td>
-                                <td>12c</td>
-                                <td>13</td>
-                                <td>13a</td>
-                                <td>14 = 16 + 16a + 16b + 16c</td>
-                                <td>15=14/11</td>
-                                <td>16</td>
-                                <td>16a</td>
-                                <td>16b</td>
-                                <td>16c</td>
-                                <td>17=16/12</td>
-                                <td>17a=16a/12a</td>
-                                <td>17b=16b/12b</td>
-                                <td>17c=16c/12c</td>
-                                <td>18 = 20 + 20a + 20b + 20c</td>
-                                <td>19=18/11</td>
-                                <td>20</td>
-                                <td>20a</td>
-                                <td>20b</td>
-                                <td>20c</td>
-                                <td>21=20/12</td>
-                                <td>21a=20a/12a</td>
-                                <td>21b=20b/12b</td>
-                                <td>21c=20c/12c</td>
-                                <td>22</td>
-                                <td>23</td>
-                                <td>24</td>
-                                <td>25</td>
-                                <td *ngIf="status.save" nzRight></td>
-                                <td *ngIf="status.save" nzRight></td>
-                                <td *ngIf="status.save" nzRight></td>
-                                <!-- <td *ngIf="status.save" nzRight></td> -->
-                            </tr>
                             <tr>
                                 <td nzLeft></td>
                                 <td nzLeft>TỔNG SỐ (A+B)</td>
@@ -406,7 +391,6 @@
                                 <td *ngIf="status.save" nzRight></td>
                                 <td *ngIf="status.save" nzRight></td>
                                 <td *ngIf="status.save" nzRight></td>
-                                <!-- <td *ngIf="status.save" nzRight></td> -->
                             </tr>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
@@ -482,12 +466,6 @@
                                     <td *ngIf="status.save" nzRight>
                                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <ng-container *ngIf="!getDeleteStatus(data)">
-                                            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                (ngModelChange)="updateChecked(data.id)"></label>
-                                        </ng-container>
-                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td nzLeft>
@@ -702,12 +680,6 @@
                                             Hủy
                                         </a>
                                     </td>
-                                    <!-- <td *ngIf="status.save" nzRight>
-                                        <ng-container *ngIf="!getDeleteStatus(data)">
-                                            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                (ngModelChange)="updateChecked(data.id)"></label>
-                                        </ng-container>
-                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>
@@ -739,9 +711,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -771,10 +743,6 @@
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
                 </button>
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="gen.doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
-                </button> -->
                 <button type="button" class="btn btn-sub" (click)="save('5')" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>

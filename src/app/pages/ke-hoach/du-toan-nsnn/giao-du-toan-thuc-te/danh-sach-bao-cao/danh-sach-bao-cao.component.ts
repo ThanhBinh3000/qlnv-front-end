@@ -14,7 +14,6 @@ import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.componen
 @Component({
     selector: 'app-danh-sach-bao-cao',
     templateUrl: './danh-sach-bao-cao.component.html',
-    styleUrls: ['./danh-sach-bao-cao.component.scss']
 })
 export class DanhSachBaoCaoComponent implements OnInit {
     @Output() dataChange = new EventEmitter();

@@ -130,7 +130,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       loaiVthh: this.dataInput.loaiVthh,
       cloaiVthh: this.dataInput.cloaiVthh,
       trangThai: STATUS.BAN_HANH,
-      maDvi: '0101',
+      maDvi: this.dataInput.maDvi.substring(0,6),
       loaiGia: 'LG04',
     };
     const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);

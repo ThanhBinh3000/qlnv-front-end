@@ -31,7 +31,7 @@ export class QuanLyThuChiComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.scrollX = this.userService.isChiCuc() ? Table.tableWidth(200, 9, 1, 0) : Table.tableWidth(200, 12, 1, 0);
+        this.scrollX = this.userService.isChiCuc() ? Table.tableWidth(200, 12, 0, 0) : Table.tableWidth(200, 18, 0, 0);
         this.namDnghi = dayjs().get('year');
         for (let i = -5; i < 10; i++) {
             this.lstNam.push(this.namDnghi + i);
@@ -41,7 +41,7 @@ export class QuanLyThuChiComponent implements OnInit {
 
     async search() {
         this.spinner.show();
-        await this.capVonMuaBanTtthService.ctietThuChi(this.namDnghi).toPromise().then(
+        await this.capVonMuaBanTtthService.ctietThuChi(this.namDnghi, Cvmb.QUAN_LY_THU_CHI).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.lstCtiets = [];

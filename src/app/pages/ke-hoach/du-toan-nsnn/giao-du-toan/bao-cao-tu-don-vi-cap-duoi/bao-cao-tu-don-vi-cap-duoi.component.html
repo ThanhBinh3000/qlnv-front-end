@@ -62,49 +62,14 @@
             [nzShowPagination]="false" nzBordered>
             <thead>
                 <tr>
-                    <th nzWidth="50px">STT</th>
-                    <th nzWidth="100px">Đơn vị tạo</th>
-                    <th nzWidth="150px">Mã báo cáo</th>
-                    <th nzWidth="150px">Ngày tạo</th>
-                    <th nzWidth="150px">Năm dự toán</th>
-                    <th nzWidth="150px" style="text-align:center;">Trạng thái</th>
-                    <th nzWidth="50px" class="text-center"></th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPa"
-                                (input)="filterInTable('maPa',filterTable.maPa, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTao"
-                            (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao, true)">
-                        </nz-date-picker>
-                    </th>
-                    <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namBcao"
-                                (input)="filterInTable('namBcao',filterTable.namBcao, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
-                            [(ngModel)]="filterTable.trangThai"
-                            (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, false)">
-                            <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                            </nz-option>
-                        </nz-select>
-                    </th>
-                    <th></th>
+                    <th scope="col" nzWidth="50px">STT</th>
+                    <th scope="col" nzWidth="100px">Đơn vị tạo</th>
+                    <th scope="col" nzWidth="100px">Mã phương án</th>
+                    <th scope="col" nzWidth="150px">Mã báo cáo</th>
+                    <th scope="col" nzWidth="150px">Ngày tạo</th>
+                    <th scope="col" nzWidth="150px">Năm dự toán</th>
+                    <th scope="col" nzWidth="150px" style="text-align:center;">Trạng thái</th>
+                    <th scope="col" nzWidth="50px" class="text-center"></th>
                 </tr>
             </thead>
             <tbody>
@@ -113,6 +78,7 @@
                     <td>
                         {{getUnitName(item.maDvi)}}
                     </td>
+                    <td>{{item.maPa}}</td>
                     <td>{{item.maBcao}}</td>
                     <td>{{item.ngayTao}}</td>
                     <td>

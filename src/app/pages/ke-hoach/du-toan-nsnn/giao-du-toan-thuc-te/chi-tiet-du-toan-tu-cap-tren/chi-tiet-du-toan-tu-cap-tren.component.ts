@@ -68,6 +68,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     trangThai: string;
     namDtoan: number;
     maDviTien: any = "1";
+    maLoaiDan: number;
     newDate = new Date();
     tenDvi: string;
     maLoai = '2';
@@ -149,6 +150,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         await this.userService.getUserLogin();
         this.userInfo = this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
+
         if (this.id) {
             this.getDetailReport();
         }
@@ -167,7 +169,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
             data => {
                 if (data.statusCode == 0) {
                     this.lstDvi = data.data;
-                    this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+                    this.donVis = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -241,15 +243,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
                     this.tenDvi = this.donVis.find(e => e.maDvi == this.maDviTao)?.tenDvi
                     this.isStatus = data.data.trangThai
                     this.maDviTien = data.data.maDviTien
-                    // if ((this.userInfo.DON_VI.tenVietTat.includes("CCDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
-                    // if (this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT)) {
-                    //     this.statusBtnNew = false;
-                    // }
-                    // if (this.isStatus == "2") {
-                    //     this.statusBtnCreateReport = false;
-                    // }
-                    // }
-
+                    this.maLoaiDan = Number(data.data.maLoaiDan)
                     if (this.isStatus == "1") {
                         this.statusBtnNew = true;
                     } else {
@@ -390,7 +384,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRANG_THAI_TIEP_NHAN);
                     await this.getDetailReport();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

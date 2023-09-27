@@ -222,20 +222,10 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
 
   }
 
-  async goDetail(id: number, roles?: any) {
-    if(roles != 'NHDTQG_PTDT_KHLCNT_TONGHOP_XEM'){
-      if (!this.checkPermission(roles)) {
-        return
-      }
-      this.idSelected = id;
-      this.isDetail = true;
-      this.isView = false
-    }else{
-      // await this.detail(id, roles);
-      this.idSelected = id;
-      this.isDetail = true;
-      this.isView = true
-    }
+  async goDetail(id: number, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView
   }
 
   // disabledTuNgayQd = (startValue: Date): boolean => {
@@ -363,6 +353,17 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
           item.checked = false;
         });
       }
+    }
+  }
+
+  hienThiXem(data) {
+    if (this.userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XEM')) {
+      if (data.trangThai == STATUS.CHUA_TAO_QD && this.userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')) {
+        return false
+      }
+      return true
+    } else {
+      return false
     }
   }
 }

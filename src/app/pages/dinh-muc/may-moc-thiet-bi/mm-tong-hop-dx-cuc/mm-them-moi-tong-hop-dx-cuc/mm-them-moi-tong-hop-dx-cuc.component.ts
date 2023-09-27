@@ -57,6 +57,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       ngayKy: [null, Validators.required],
       soQdGiaoCt: [null],
       trangThai: ['00'],
+      trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
@@ -119,6 +120,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
+    body.MA_DVI = this.userInfo.MA_DVI;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;

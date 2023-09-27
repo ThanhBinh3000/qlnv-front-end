@@ -219,41 +219,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileDinhKem = data.fileDinhKem;
     this.danhsachDx = children;
-    await this.calculatorTable();
     if (this.danhsachDx && this.danhsachDx.length > 0) {
       await this.showFirstRow(event, this.danhsachDx[0]);
-    }
-  }
-
-  async calculatorTable() {
-    let bodyPag = {
-      namKeHoach: this.formData.value.nam,
-      loaiVthh: this.formData.value.loaiVthh,
-      cloaiVthh: this.formData.value.cloaiVthh,
-      trangThai: STATUS.BAN_HANH,
-      maDvi: '0101',
-      loaiGia: 'LG04'
-    };
-    const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
-    if (pag.msg !== MESSAGE.SUCCESS) {
-      return;
-    }
-    this.dataDonGiaDuocDuyet = pag.data || null;
-    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
-      const donGiaMap = new Map();
-      this.dataDonGiaDuocDuyet.forEach((item) => {
-        donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
-      });
-      this.danhsachDx.forEach(danhSachDxItem => {
-        danhSachDxItem.children.forEach(childItem => {
-          const maChiCuc = childItem.maDvi;
-          const donGiaDuocDuyet = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(maChiCuc);
-          childItem.children.forEach(subItem => {
-            subItem.donGiaDuocDuyet = donGiaDuocDuyet || null;
-            subItem.thanhTienDuocDuyet = subItem.soLuongDeXuat * (donGiaDuocDuyet || 0);
-          });
-        });
-      });
     }
   }
 

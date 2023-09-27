@@ -922,25 +922,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        // if (this.id && this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
-        //   this.status = false;
-        // } else {
-        //   this.status = true;
-        // }
-        // if (
-        //   this.trangThaiBanGhi == Utils.TT_BC_1 ||
-        //   this.trangThaiBanGhi == Utils.TT_BC_3 ||
-        //   this.trangThaiBanGhi == Utils.TT_BC_5 ||
-        //   this.trangThaiBanGhi == Utils.TT_BC_8
-        // ) {
-        //   if (this.id && this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
-        //     this.status = true;
-        //   } else {
-        //     this.status = false;
-        //   }
-        // } else {
-        //   this.status = true;
-        // }
         if (Status.TT_01 == this.trangThaiBanGhi && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
             this.status = false;
         } else {
@@ -978,10 +959,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
             this.statusBtnGiao = true;
             this.statusGiaoToanBo = true;
         }
-
-        // if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT || GDT.TRINHDUYET_PA_TONGHOP_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
-        //   this.statusBtnGuiDVCT = false;
-        // }
         if (this.userService.isAccessPermisson(Roles.GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
             this.statusBtnGuiDVCT = false;
         }
@@ -1010,10 +987,20 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.trangThaiBanGhi = mcn;
                     this.getStatusButton();
-                    if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+                    if (Status.check('reject', mcn)) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                     } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                        if (mcn == Status.TT_02) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUBMIT_SUCCESS);
+                        } else if (mcn == Status.TT_04) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                        } else if (mcn == Status.TT_06) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
+                        } else if (mcn == Status.TT_07) {
+                            this.notification.success(MESSAGE.SUCCESS, "Gửi đơn vị cấp trên thành công");
+                        } else if (mcn == Status.TT_09) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRANG_THAI_TIEP_NHAN);
+                        }
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -1496,6 +1483,9 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     // call api giao số liệu trong cột được chọn
     giaoSoTranChi(maDviNhan: any) {
         this.spinner.show();
+        if (maDviNhan == null) {
+            this.statusGiaoToanBo = !this.statusGiaoToanBo
+        }
         const lstGiao: any[] = [];
         if (maDviNhan) {
             const lstCtiet: any[] = [];

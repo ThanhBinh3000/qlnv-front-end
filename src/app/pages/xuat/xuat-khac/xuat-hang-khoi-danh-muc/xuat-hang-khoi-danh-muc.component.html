@@ -2,12 +2,12 @@
   <ul nz-menu nzMode='horizontal'>
     <li nz-menu-item *ngIf="userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSHDTQG') "
         [nzSelected]='tabSelected==0' (click)='selectTab(0)'>
-      Danh sách hàng dữ trữ theo chỉ đạo của chính phủ
+      Danh sách hàng dự trữ theo chỉ đạo của chính phủ
     </li>
     <li [nzSelected]='tabSelected==1'
         *ngIf="userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSHNDM')" nz-menu-item
         (click)='selectTab(1)'>
-      Danh sách hàng dữ trữ trong kho ngoài danh mục
+      Danh sách hàng dự trữ trong kho ngoài danh mục
     </li>
     <li [nzSelected]='tabSelected==2'
         *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_QDXH')" nz-menu-item

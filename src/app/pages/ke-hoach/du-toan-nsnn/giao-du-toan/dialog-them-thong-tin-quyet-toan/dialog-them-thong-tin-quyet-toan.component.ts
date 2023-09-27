@@ -21,7 +21,6 @@ export class ItemCongVan {
 @Component({
     selector: 'app-dialog-them-thong-tin-quyet-toan',
     templateUrl: './dialog-them-thong-tin-quyet-toan.component.html',
-    styleUrls: ['./dialog-them-thong-tin-quyet-toan.component.scss']
 })
 export class DialogThemThongTinQuyetToanComponent implements OnInit {
     @Input() tab: string;
@@ -121,7 +120,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
 
     async getPhuongAn() {
         this.spinner.show()
-        await this.GiaoDuToanChiService.timKiemMaPaGiaoNSNN().toPromise().then(
+        await this.GiaoDuToanChiService.timKiemMaPaGiaoNSNN1().toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.phuongAns = data.data;

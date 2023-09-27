@@ -186,10 +186,10 @@
             <a
               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP')"
               (click)="taoQdinh(data)">
-              <i class="icon htvbdh_soanthao"></i>
+              <i class="icon htvbdh_tcdt_tao-qd"></i>
             </a>
             <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XOA')"
+              *ngIf=" data.trangThai == STATUS.CHUA_TAO_QD && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XOA')"
               (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>

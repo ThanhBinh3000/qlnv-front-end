@@ -386,8 +386,7 @@ export class PhuLucDuAnComponent implements OnInit {
     }
 
     checkEdit(stt: string) {
-        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-        return lstTemp.every(e => !e.stt.startsWith(stt));
+        return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
     }
 
     checkAdd(data: ItemData) {
@@ -497,7 +496,15 @@ export class PhuLucDuAnComponent implements OnInit {
         fieldOrder.forEach(field => {
             row[field] = field == 'tenDanhMuc' ? 'Tổng số' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
         })
-        filterData.unshift(row)
+        filterData.unshift(row);
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['1', '2', '', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22',
+            '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

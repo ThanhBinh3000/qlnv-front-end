@@ -38,35 +38,6 @@ import { PhuLucTongHopComponent } from './phu-luc-tong-hop/phu-luc-tong-hop.comp
     styleUrls: ['./add-bao-cao.component.scss']
 })
 export class AddBaoCaoComponent implements OnInit {
-    // @Input() data;
-    // @Output() dataChange = new EventEmitter();
-    // userInfo: any;
-    // trangThais: any[] = TRANG_THAI_TIM_KIEM;
-    // canBos: any[];
-    // // isDataAvailable = false;
-    // status = false;
-    // saveStatus = true;
-    // submitStatus = true;
-    // passStatus = true;
-    // approveStatus = true;
-    // acceptStatus = true;
-    // copyStatus = true;
-    // printStatus = true;
-    // okStatus = true;
-    // finishStatus = true;
-    // viewRecommendedValue: boolean;
-
-    // baoCao: BaoCao = new BaoCao();
-    // listAppendix: any[] = [];
-
-    // fileDetail: NzUploadFile;
-    // fileList: NzUploadFile[] = [];
-    // listFile: File[] = [];
-    // childUnit: any[] = [];
-    // selectedIndex = 0;
-    // dataVp: any[] = [];
-    // bien moi
-
     @Input() data;
     @Output() dataChange = new EventEmitter();
     Utils = Utils;
@@ -105,11 +76,11 @@ export class AddBaoCaoComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
+                soCv: this.baoCao.congVan?.fileName,
+                ngayCv: this.baoCao.ngayCongVan,
             },
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
@@ -119,9 +90,9 @@ export class AddBaoCaoComponent implements OnInit {
                     ...new Doc(),
                     fileName: res.soCongVan,
                 };
+                this.fileDetail = file;
             }
         });
-        this.fileDetail = file;
         return false;
     };
     // them file vao danh sach
@@ -136,7 +107,6 @@ export class AddBaoCaoComponent implements OnInit {
 
     constructor(
         private spinner: NgxSpinnerService,
-        private datePipe: DatePipe,
         private userService: UserService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -220,7 +190,8 @@ export class AddBaoCaoComponent implements OnInit {
 
             this.baoCao = this.data.baoCao;
         }
-        if (this.userInfo.CAP_DVI == "1") {
+        const isSynthetic = this.baoCao.lstDviTrucThuoc && this.baoCao.lstDviTrucThuoc.length != 0;
+        if (this.userInfo.CAP_DVI == "1" && isSynthetic == true) {
             this.listAppendix = Dcdt.PHU_LUC_TH
         } else {
             this.listAppendix = Dcdt.PHU_LUC
@@ -231,7 +202,7 @@ export class AddBaoCaoComponent implements OnInit {
             this.listAppendix.forEach(e => {
                 e.tenDm = Utils.getName(this.baoCao.namBcao, e.tenDm);
             })
-            this.baoCao.lstDchinh.forEach(item => {
+            this.baoCao?.lstDchinh.forEach(item => {
                 const appendix = this.listAppendix.find(e => e.id == item.maLoai);
                 item.tenPl = appendix.tenPl;
                 item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
@@ -284,6 +255,9 @@ export class AddBaoCaoComponent implements OnInit {
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && checkAccept && this.isParent;
         // this.status.print = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && this.isChild;
         this.status.export = checkExport && (this.isChild || this.isParent);
+        console.log(this.userService.isAccessPermisson(Roles.DCDT.EXPORT_SYNTHETIC_REPORT));
+        console.log(this.userService.isAccessPermisson(Roles.DCDT.EXPORT_REPORT));
+
         this.status.ok = this.status.accept || this.status.approve || this.status.pass
         this.status.finish = this.status.general;
         this.status.editAppVal = this.status.accept;
@@ -382,13 +356,13 @@ export class AddBaoCaoComponent implements OnInit {
             } else {
                 baoCaoTemp.congVan = {
                     ...await this.quanLyVonPhiService.upFile(file, this.path),
-                    fileName: this.baoCao.congVan.fileName,
+                    fileName: this.baoCao?.congVan?.fileName,
                 }
             }
             this.fileDetail = null;
         }
 
-        if (!baoCaoTemp.congVan.fileUrl) {
+        if (!baoCaoTemp.congVan || !baoCaoTemp.congVan?.fileUrl) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -453,22 +427,16 @@ export class AddBaoCaoComponent implements OnInit {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
                 return;
             }
-            if (!this.baoCao.lstDchinh.every(e => e.trangThai == '5')) {
+            if (!this.baoCao.lstDchinh.every(e => e.trangThai == Status.COMPLETE)) {
                 this.notification.warning(MESSAGE.ERROR, MESSAGE.FINISH_FORM);
                 return;
             }
         } else {
-            let check = true;
             if (mcn == Status.TT_04 || mcn == Status.TT_07 || mcn == Status.TT_09) {
-                this.baoCao.lstDchinh.forEach(item => {
-                    if (item.trangThai == '2') {
-                        check = false;
-                    }
-                })
-            }
-            if (!check) {
-                this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
-                return;
+                if (this.baoCao.lstDchinh.some(e => e.trangThai == Status.NOT_RATE)) {
+                    this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
+                    return;
+                }
             }
         }
         const requestGroupButtons = {
@@ -479,18 +447,18 @@ export class AddBaoCaoComponent implements OnInit {
         await this.dieuChinhDuToanService.approveDieuChinh(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
-                // this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                 this.baoCao.ngayTrinh = data.data.ngayTrinh;
                 this.baoCao.ngayDuyet = data.data.ngayDuyet;
                 this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
-                if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                if (mcn == Status.TT_02) {
+                    this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
+                } else if (mcn == Status.TT_07) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
+                } else if (mcn == Status.TT_09) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRANG_THAI_TIEP_NHAN);
                 }
-                // this.tabs = [];
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -527,35 +495,6 @@ export class AddBaoCaoComponent implements OnInit {
             this.dataChange.emit(obj);
         }
     }
-
-
-    // getStatusName(status: string) {
-    //   const statusMoi = status == Utils.TT_06 || status == Utils.TT_07;
-    //   const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
-    //   if (statusMoi && this.userInfo.MA_DVI == maDviCha) {
-    //     return "Mới";
-    //   } else {
-    //     return this.trangThais.find(e => e.id == status)?.tenDm;
-    //   }
-    // };
-
-    //download file về máy tính
-    // async downloadFileCv() {
-    //     if (this.baoCao.congVan?.fileUrl) {
-    //         await this.quanLyVonPhiService.downloadFile(this.baoCao.congVan?.fileUrl).toPromise().then(
-    //             (data) => {
-    //                 fileSaver.saveAs(data, this.baoCao.congVan?.fileName);
-    //             },
-    //             err => {
-    //                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //             },
-    //         );
-    //     } else {
-    //         const file: any = this.fileDetail;
-    //         const blob = new Blob([file], { type: "application/octet-stream" });
-    //         fileSaver.saveAs(blob, file.name);
-    //     }
-    // };
 
     getIndex(maBieuMau: string) {
         let header = '';
@@ -600,6 +539,7 @@ export class AddBaoCaoComponent implements OnInit {
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.giaoCho);
+        dataInfo.status.finish = dataInfo.status.finish && (this.userInfo?.sub == bieuMau.giaoCho);
 
         let nzContent: ComponentType<any>;
         switch (bieuMau.maLoai) {
@@ -663,6 +603,8 @@ export class AddBaoCaoComponent implements OnInit {
         modalAppendix.afterClose.toPromise().then(async (res) => {
             if (res) {
                 bieuMau.trangThai = res?.trangThai;
+                bieuMau.lyDoTuChoi = res?.lyDoTuChoi;
+                bieuMau.thuyetMinh = res?.thuyetMinh;
             }
         });
     };
@@ -767,14 +709,6 @@ export class AddBaoCaoComponent implements OnInit {
         await this.dieuChinhDuToanService.addHistory(this.baoCao.id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    // Object.assign(this.baoCao, data.data);
-                    // this.baoCao.lstDchinh.forEach(item => {
-                    //     const appendix = this.listAppendix.find(e => e.id == item.maLoai);
-                    //     item.tenPl = appendix.tenPl;
-                    //     item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
-                    // })
-                    // this.getStatusButton();
-                    // this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
                     this.notification.success(MESSAGE.SUCCESS, 'Tạo mới thành công.');
                     this.back()
                 } else {

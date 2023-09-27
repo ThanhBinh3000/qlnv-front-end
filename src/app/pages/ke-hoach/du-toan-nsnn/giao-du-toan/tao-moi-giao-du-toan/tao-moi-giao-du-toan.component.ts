@@ -874,10 +874,20 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.trangThaiBanGhi = mcn;
                         this.getStatusButton();
-                        if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+                        if (Status.check('reject', mcn)) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                         } else {
-                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                            if (mcn == Status.TT_02) {
+                                this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUBMIT_SUCCESS);
+                            } else if (mcn == Status.TT_04) {
+                                this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                            } else if (mcn == Status.TT_06) {
+                                this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
+                            } else if (mcn == Status.TT_07) {
+                                this.notification.success(MESSAGE.SUCCESS, "Gửi đơn vị cấp trên thành công");
+                            } else if (mcn == Status.TT_09) {
+                                this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRANG_THAI_TIEP_NHAN);
+                            }
                         }
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -887,27 +897,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                 });
                 this.spinner.hide();
             }
-
-
-            // 
-
-            // this.spinner.show();
-            // await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
-            //     if (data.statusCode == 0) {
-            //         this.trangThaiBanGhi = mcn;
-            //         this.getStatusButton();
-            //         if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-            //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-            //         } else {
-            //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-            //         }
-            //     } else {
-            //         this.notification.error(MESSAGE.ERROR, data?.msg);
-            //     }
-            // }, err => {
-            //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            // });
-            // this.spinner.hide();
         } else {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
         }
@@ -1084,7 +1073,9 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
     // call api giao số liệu trong cột được chọn
     giaoSoTranChi(maDviNhan: any) {
-
+        if (maDviNhan == null) {
+            this.statusGiaoToanBo = !this.statusGiaoToanBo
+        }
         const lstGiao: any[] = [];
         if (maDviNhan) {
             const lstCtiet: any[] = [];
@@ -1128,7 +1119,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                     ngayTao: this.ngayTao,
                 });
             }
-
         } else {
             if (this.lstCtietBcao.length > 0) {
                 this.lstCtietBcao[0].lstCtietDvis.forEach(item => {
@@ -1386,15 +1376,5 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         })
         return check;
     };
-
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.trangThaiBanGhi)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // };
-
-
 }
 

@@ -29,7 +29,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import {
   QuanLyNghiemThuKeLotService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service";
-
+import {cloneDeep} from 'lodash';
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
   templateUrl: './thong-tin-quan-ly-bang-ke-can-hang.component.html',
@@ -363,18 +363,20 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
     return convertTienTobangChu(tien);
   }
 
-  deleteRow(data: any) {
-
+  deleteRow(i: any) {
+    this.dataTable.splice(i, 1)
   }
 
-  editRow(stt: number) {
+  editRow(i: number) {
+    this.dataTable[i].edit = true;
+    this.rowItemEdit[i] = cloneDeep(this.dataTable[i])
   }
 
   addRow() {
-    if (this.validateDataRow()) {
+    // if (this.validateDataRow()) {
       this.dataTable = [...this.dataTable, this.rowItem];
       this.rowItem = {};
-    }
+    // }
   }
 
   validateDataRow() {
@@ -391,12 +393,13 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
     }
   }
 
-  cancelEdit(stt: number): void {
-
+  cancelEdit(i: number): void {
+    this.dataTable[i].edit = false;
   }
 
-  saveEdit(stt: number): void {
-
+  saveEdit(i: number): void {
+    this.dataTable[i] = cloneDeep(this.rowItemEdit[i])
+    this.dataTable[i].edit = false;
   }
 
   clearItemRow() {
@@ -559,7 +562,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
   validateSave() {
-    let tongTrongLuong = this.calcTong('trongLuongCaBaoBi');
+    let tongTrongLuong = this.calcTong('trongLuongCaBaoBi') - this.formData.value.trongLuongBaoBi;
     if (tongTrongLuong != this.formData.value.soLuongNhapKho) {
       this.notification.error(MESSAGE.ERROR, "Tổng trọng lượng bao bì của bảng kê đang không đủ số lượng nhập kho")
       return false;

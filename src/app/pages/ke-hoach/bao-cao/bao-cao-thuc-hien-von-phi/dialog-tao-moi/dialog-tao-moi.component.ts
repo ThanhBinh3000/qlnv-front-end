@@ -95,7 +95,7 @@ export class DialogTaoMoiComponent implements OnInit {
         // this.response.listIdDeleteFiles = [];
         await this.getMaBcao();
         if (this.isSynth || this.isOffice) {
-            this.callSynthtic();
+            await this.callSynthtic();
         } else {
             Vp.PHU_LUC.forEach(item => {
                 this.response.lstBcaos.push({

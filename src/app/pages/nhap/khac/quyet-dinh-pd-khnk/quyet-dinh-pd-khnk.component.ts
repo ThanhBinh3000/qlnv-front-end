@@ -120,9 +120,6 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
-        window.location.href = '/error/401'
-      }
       this.userInfo = this.userService.getUserLogin();
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
         this.visibleTab = value;
@@ -148,7 +145,7 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
   }
 
   insert() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_NK_QDNH_THEM")) {
       return;
     }
     this.isDetail = true;
@@ -162,7 +159,7 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
   }
 
   async goDetail(id: number, roles?: any) {
-    if (roles != 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') {
+    if (roles != 'NHDTQG_NK_QDNH_XEM') {
       if (!this.checkPermission(roles)) {
         return
       }
@@ -178,7 +175,7 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
   }
 
   delete(data?) {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_NK_QDNH_XOA")) {
       return;
     }
     this.modal.confirm({
@@ -302,7 +299,7 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
   }
 
   exportData() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_EXP")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_NK_QDNH_EXP")) {
       return;
     }
     if (this.totalRecord > 0) {
@@ -337,7 +334,7 @@ export class QuyetDinhPdKhnkComponent extends Base2Component implements OnInit {
   }
 
   deleteSelect() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_NK_QDNH_XOA")) {
       return;
     }
     let dataDelete = [];
