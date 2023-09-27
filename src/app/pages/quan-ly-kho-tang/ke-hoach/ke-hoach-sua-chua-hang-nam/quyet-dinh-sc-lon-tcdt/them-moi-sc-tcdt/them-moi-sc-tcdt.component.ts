@@ -436,13 +436,21 @@ export class ThemMoiScTcdtComponent implements OnInit {
         sl = sum;
       }
     } else {
-      if (this.dataTableTren && this.dataTableTren.length > 0) {
-        let sum = 0;
-        this.dataTableTren.forEach(item => {
-          sum += this.sumSoLuong(item, row);
+      let sum = 0;
+      if(data==true){
+          this.dataTableReq?.filter(item => item.tmdt > 15000000000)
+          this.dataTableReq.forEach(item => {
+            sum += item[row];
+          });
+          sl = sum;
+        }else {
+        this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
+        this.dataTableReq.forEach(item => {
+          sum += item[row];
         });
         sl = sum;
       }
+
     }
     return sl;
   }
