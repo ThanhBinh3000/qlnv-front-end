@@ -30,7 +30,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   dataTable: any[] = [];
   listNguonVon: any[] = [];
   dataChiTieu: any;
-  listPhuongThucThanhToan: any[] = [];
+  dataDonGiaDuocDuyet: any;
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +40,6 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
     private modal: NzModalService,
     private notification: NzNotificationService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
-
   ) {
     this.formData = this.fb.group({
       id: [],
@@ -71,7 +70,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
           thoiGianDuKien: hasValidTime ? [dataInput.tgianDkienTu, dataInput.tgianDkienDen] : null
         });
         this.dataTable = dataInput.children;
-        await this.calculatorTable(dataInput);
+        await this.calculatorTable();
       } else {
         this.formData.reset();
       }
@@ -80,6 +79,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   }
 
   expandSet = new Set<number>();
+
   onExpandChange(id: number, checked: boolean): void {
     checked ? this.expandSet.add(id) : this.expandSet.delete(id);
   }
@@ -106,31 +106,36 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
     });
   }
 
-  async calculatorTable(data?) {
-    for (const item of this.dataTable) {
-      for (const child of item.children) {
-        const isVatTuDtqg = data.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU);
-        const maDvi = isVatTuDtqg ? '' : item.maDvi;
-        const bodyPag = {
-          namKeHoach: data.namKh,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          trangThai: STATUS.BAN_HANH,
-          maDvi: maDvi,
-          loaiGia: 'LG04'
-        };
-        const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
-        if (pag.msg === MESSAGE.SUCCESS) {
-          child.donGiaDuocDuyet = pag.data ? pag.data[0].giaQdTcdt : null;
-        } else {
-          child.donGiaDuocDuyet = null;
-        }
-        child.thanhTien = child.donGiaDuocDuyet !== null ? child.donGiaDuocDuyet * child.soLuongDeXuat : null;
-      }
+  async calculatorTable() {
+    let bodyPag = {
+      namKeHoach: this.dataInput.namKh ? this.dataInput.namKh : this.dataInput.nam,
+      loaiVthh: this.dataInput.loaiVthh,
+      cloaiVthh: this.dataInput.cloaiVthh,
+      trangThai: STATUS.BAN_HANH,
+      maDvi: '0101',
+      loaiGia: 'LG04',
+    };
+    const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
+    if (pag.msg !== MESSAGE.SUCCESS) {
+      return;
     }
-    this.formData.patchValue({
-      tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
-    });
+    this.dataDonGiaDuocDuyet = pag.data || null;
+    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+      const donGiaMap = new Map();
+      this.dataDonGiaDuocDuyet.forEach((item) => {
+        donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
+      });
+      this.dataTable.forEach((item) => {
+        const donGiaDuocDuyet = this.dataInput.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(item.maDvi);
+        item.children.forEach((child) => {
+          child.donGiaDuocDuyet = donGiaDuocDuyet || null;
+          child.thanhTien = child.soLuongDeXuat * (donGiaDuocDuyet || 0);
+        });
+      });
+      this.formData.patchValue({
+        tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
+      });
+    }
   }
 
   isDisable() {

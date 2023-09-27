@@ -57,6 +57,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   dataInputCache: any;
   isTongHop: boolean
   selected: boolean = false;
+  dataDonGiaDuocDuyet: any;
 
   constructor(
     httpClient: HttpClient,
@@ -177,7 +178,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     if (!(await this.validateBanHanhQd(this.danhsachDx))) {
-      this.notification.error(MESSAGE.ERROR, 'Hiện chưa có giá bán cụ thể được duyệt cho loại hàng hóa này.');
       return;
     }
     this.setValidForm();
@@ -193,11 +193,18 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async validateBanHanhQd(data) {
-    return data.some(item =>
-      item.children.some(child =>
-        child.children.some(s => s.donGiaDuocDuyet)
-      )
-    );
+    let isValid = true;
+    data.forEach(item => {
+      item.children.forEach(child => {
+        child.children.forEach(s => {
+          if (s.donGiaDuocDuyet === null || s.donGiaDuocDuyet === '' || typeof s.donGiaDuocDuyet === 'undefined') {
+            this.notification.error(MESSAGE.WARNING, `Hiện chưa có giá bán cụ thể được duyệt cho số tờ trình ${item.soDxuat} !`);
+            isValid = false;
+          }
+        });
+      });
+    });
+    return isValid;
   }
 
   async loadChiTiet(id: number) {
@@ -219,24 +226,35 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async calculatorTable() {
-    const {value: namKeHoach} = this.formData.get('namKh');
-    const {value: loaiVthh} = this.formData.get('loaiVthh');
-    const {value: cloaiVthh} = this.formData.get('cloaiVthh');
-    const trangThai = STATUS.BAN_HANH;
-    const loaiGia = 'LG04';
-    await Promise.all(
-      this.danhsachDx.map(async (item) => {
-        const maDvi = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : item.maDvi;
-        const bodyPag = {namKeHoach, loaiVthh, cloaiVthh, trangThai, maDvi, loaiGia};
-        const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
-        item.children.forEach((child) => {
-          child.children.forEach((s) => {
-            s.donGiaDuocDuyet = pag.msg === MESSAGE.SUCCESS && pag.data ? pag.data[0].giaQdTcdt : null;
-            s.thanhTienDuocDuyet = s.donGiaDuocDuyet !== null ? s.donGiaDuocDuyet * s.soLuongDeXuat : null;
+    let bodyPag = {
+      namKeHoach: this.formData.value.nam,
+      loaiVthh: this.formData.value.loaiVthh,
+      cloaiVthh: this.formData.value.cloaiVthh,
+      trangThai: STATUS.BAN_HANH,
+      maDvi: '0101',
+      loaiGia: 'LG04'
+    };
+    const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
+    if (pag.msg !== MESSAGE.SUCCESS) {
+      return;
+    }
+    this.dataDonGiaDuocDuyet = pag.data || null;
+    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+      const donGiaMap = new Map();
+      this.dataDonGiaDuocDuyet.forEach((item) => {
+        donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
+      });
+      this.danhsachDx.forEach(danhSachDxItem => {
+        danhSachDxItem.children.forEach(childItem => {
+          const maChiCuc = childItem.maDvi;
+          const donGiaDuocDuyet = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(maChiCuc);
+          childItem.children.forEach(subItem => {
+            subItem.donGiaDuocDuyet = donGiaDuocDuyet || null;
+            subItem.thanhTienDuocDuyet = subItem.soLuongDeXuat * (donGiaDuocDuyet || 0);
           });
         });
-      })
-    );
+      });
+    }
   }
 
   async openDialogTh() {
