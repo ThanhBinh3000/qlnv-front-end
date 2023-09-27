@@ -101,7 +101,9 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       tenNganLoKho: [''],
       lyDoTuChoi: [''],
       soPhieuKtraCluong: [''],
-      soBaoBi: [''],
+      tongSlBaoBi: [''],
+      tongSlCaBaoBi: [''],
+      tongSlDaTruBaoBi: [''],
     })
   }
 
@@ -545,6 +547,9 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         prev += cur[columnName];
         return prev;
       }, 0);
+      this.formData.patchValue({
+        tongSlCaBaoBi: sum
+      })
       return sum;
     }
   }
