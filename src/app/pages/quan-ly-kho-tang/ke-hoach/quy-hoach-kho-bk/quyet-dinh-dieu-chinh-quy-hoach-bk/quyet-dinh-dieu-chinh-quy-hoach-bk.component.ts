@@ -21,6 +21,7 @@ import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {DonviService} from "../../../../../services/donvi.service";
 import {literal} from "@angular/compiler/src/output/output_ast";
 import { Router } from "@angular/router";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-quyet-dinh-dieu-chinh-quy-hoach-bk',
@@ -72,6 +73,7 @@ export class QuyetDinhDieuChinhQuyHoachBkComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   userInfo: UserLogin;
+  status = STATUS
 
   constructor(
     private spinner: NgxSpinnerService,

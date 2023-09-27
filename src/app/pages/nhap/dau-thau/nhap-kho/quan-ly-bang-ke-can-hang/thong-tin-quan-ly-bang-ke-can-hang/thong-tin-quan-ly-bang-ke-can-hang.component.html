@@ -427,11 +427,11 @@
             <td>
               <a *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView"
                  (click)="saveEdit(i)">
-                <i class="fa fa-pencil" title="Sửa"></i>
+                <i class="fa fa-save" title="Sửa"></i>
               </a>
               <a *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView"
                  (click)="cancelEdit(i)">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                <i class="fa fa-times do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </ng-template>

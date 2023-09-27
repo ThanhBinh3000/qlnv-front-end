@@ -177,13 +177,13 @@
           <td>{{data.soQdGoc}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left" >
-            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_XEM')">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_XEM')  && !((data.trangThai == status.DANG_NHAP_DU_LIEU) && data.nguoiTaoId == userInfo.ID )">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="userService.isTongCuc() && (data.trangThai == globals.prop.NHAP_DU_THAO) && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_SUA')" (click)="redirectToChiTiet(data.id, false)">
+            <a *ngIf="userService.isTongCuc() && (data.trangThai == status.DANG_NHAP_DU_LIEU) && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_SUA')" (click)="redirectToChiTiet(data.id, false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="userService.isTongCuc() && (data.trangThai == globals.prop.NHAP_DU_THAO) && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_XOA') " (click)="xoaItem(data)">
+            <a *ngIf="userService.isTongCuc() && (data.trangThai == status.DANG_NHAP_DU_LIEU) && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_XOA') " (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

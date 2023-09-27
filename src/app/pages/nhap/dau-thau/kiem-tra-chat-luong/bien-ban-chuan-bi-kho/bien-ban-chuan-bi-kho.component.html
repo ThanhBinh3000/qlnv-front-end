@@ -100,7 +100,7 @@
                 <td></td>
                 <td></td>
                 <td>{{bb.tenDiemKho}}</td>
-                <td>{{bb.tenLoKho + ' - ' + bb.tenNganKho}}</td>
+                <td>{{bb.tenLoKho? bb.tenLoKho + ' - ' + bb.tenNganKho : bb.tenNganKho}}</td>
                 <td>{{bb.bienBanChuanBiKho?.soBienBan}}</td>
                 <td>{{bb.bienBanChuanBiKho?.ngayTao | date : 'dd/MM/yyyy' }}</td>
                 <td>{{bb.bienBanChuanBiKho?.tenTrangThai}}</td>

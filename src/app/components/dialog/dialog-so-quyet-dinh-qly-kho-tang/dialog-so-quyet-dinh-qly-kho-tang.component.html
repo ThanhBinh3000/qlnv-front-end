@@ -14,7 +14,6 @@
     <tbody>
     <tr *ngFor="let data of basicTable.data; let i = index">
       <td class="text-center">{{i+1}}</td>
-      <td  >{{ data.id}}</td>
       <td  >{{ data.soQuyetDinh}}</td>
       <td  >{{ data.ngayKy | date : 'dd/MM/yyyy'}}</td>
       <td  >{{ data.namBatDau}}</td>
