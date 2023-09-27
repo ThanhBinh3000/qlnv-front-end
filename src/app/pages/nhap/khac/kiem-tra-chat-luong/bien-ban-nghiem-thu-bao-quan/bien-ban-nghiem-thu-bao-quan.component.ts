@@ -183,7 +183,7 @@ export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements 
                 MESSAGE.SUCCESS,
                 MESSAGE.DELETE_SUCCESS,
               );
-              this.search();
+              this.timKiem();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
