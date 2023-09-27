@@ -162,6 +162,10 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     }
   }
 
+  async onChangeNam(event) {
+    this.maHopDongSuffix = `/${event}/HĐMB`;
+  }
+
   async ngOnChanges(changes: SimpleChanges) {
     const {idInput, idHopDong} = this;
     if (idInput) {
@@ -296,6 +300,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       await this.setListDviTsan(dataponse.children);
       const loaiVthhItem = this.listHangHoaAll.find(s => s.ma == data.loaiVthh);
       this.formData.patchValue({
+        nam: data.nam,
         loaiHinhNx: data.loaiHinhNx,
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         kieuNhapXuat: data.kieuNhapXuat,
