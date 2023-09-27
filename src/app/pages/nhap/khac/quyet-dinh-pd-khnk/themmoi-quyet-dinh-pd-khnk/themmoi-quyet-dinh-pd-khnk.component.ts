@@ -662,8 +662,8 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsDxTaoQd,
-        dataHeader: ['Số công văn tờ trình', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
-        dataColumn: ['soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataHeader: ['Số công văn tờ trình', 'Loại hàng DTQG', 'Ngày phê duyệt'],
+        dataColumn: ['soDxuat', 'tenLoaiVthh', 'ngayPduyet']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

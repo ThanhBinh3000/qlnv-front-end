@@ -134,7 +134,7 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item *ngIf="this.idInput != 0">
-              <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
+              <label nz-radio nzValue="TTr">Chọn số công văn tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTr()">
                   <input [readonly]="true" nz-input formControlName="soDxuat" readonly="true" />

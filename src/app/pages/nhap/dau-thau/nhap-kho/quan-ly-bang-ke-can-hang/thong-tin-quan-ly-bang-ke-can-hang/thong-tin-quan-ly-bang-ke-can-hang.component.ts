@@ -562,7 +562,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
   validateSave() {
-    let tongTrongLuong = this.calcTong('trongLuongCaBaoBi');
+    let tongTrongLuong = this.calcTong('trongLuongCaBaoBi') - this.formData.value.trongLuongBaoBi;
     if (tongTrongLuong != this.formData.value.soLuongNhapKho) {
       this.notification.error(MESSAGE.ERROR, "Tổng trọng lượng bao bì của bảng kê đang không đủ số lượng nhập kho")
       return false;
