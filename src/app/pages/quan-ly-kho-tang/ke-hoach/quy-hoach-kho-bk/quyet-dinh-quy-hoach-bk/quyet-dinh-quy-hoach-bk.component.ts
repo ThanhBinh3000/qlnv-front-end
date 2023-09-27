@@ -20,6 +20,7 @@ import {DonviService} from "../../../../../services/donvi.service";
 import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import { Router } from "@angular/router";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-quyet-dinh-quy-hoach-bk',
@@ -71,6 +72,7 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
   danhSachChiCuc: any[] = [];
   danhSachCuc: any[] = [];
   danhSachDiemKho: any[] = [];
+  status = STATUS
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -241,7 +243,7 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == '78') {
             item.checked = true;
           }
         });
