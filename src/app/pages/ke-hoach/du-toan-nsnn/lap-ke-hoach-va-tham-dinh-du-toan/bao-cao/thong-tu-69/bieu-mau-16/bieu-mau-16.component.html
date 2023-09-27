@@ -26,190 +26,190 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="2" nzWidth="50px" nzLeft>
+								<th scope="col" rowspan="2" nzWidth="50px" nzLeft>
 									STT
 								</th>
-								<th rowspan="2" nzWidth="300px" nzLeft>
+								<th scope="col" rowspan="2" nzWidth="300px" nzLeft>
 									Nội Dung
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Thực hiện năm hiện hành {{namBcao - 1}}
 								</th>
-								<th colspan="3">
+								<th scope="colgroup" colspan="3">
 									Dự toán năm {{namBcao}}
 								</th>
-								<th colspan="3">
+								<th scope="colgroup" colspan="3">
 									Năm {{namBcao + 1}}
 								</th>
-								<th colspan="3">
+								<th scope="colgroup" colspan="3">
 									Năm {{namBcao + 2}}
 								</th>
-								<th rowspan="2" class="text-col">
+								<th scope="col" rowspan="2" class="text-col">
 									Ghi Chú
 								</th>
-								<th rowspan="2" style="width: 60px;" *ngIf="status.general" nzRight></th>
+								<th scope="col" rowspan="2" style="width: 60px;" *ngIf="status.general" nzRight></th>
 							</tr>
 							<tr>
-								<th>
+								<th scope="col">
 									Trần chi được thông báo
 								</th>
-								<th>
+								<th scope="col">
 									Nhu cầu của đơn vị
 								</th>
-								<th>
+								<th scope="col">
 									Chênh lệch trần chi - nhu cầu
 								</th>
-								<th>
+								<th scope="col">
 									Trần chi được thông báo
 								</th>
-								<th>
+								<th scope="col">
 									Nhu cầu của đơn vị
 								</th>
-								<th>
+								<th scope="col">
 									Chênh lệch trần chi - nhu cầu
 								</th>
-								<th>
+								<th scope="col">
 									Trần chi được thông báo
 								</th>
-								<th>
+								<th scope="col">
 									Nhu cầu của đơn vị
 								</th>
-								<th>
+								<th scope="col">
 									Chênh lệch trần chi - nhu cầu
 								</th>
 							</tr>
 							<tr>
-								<th nzLeft></th>
-								<th nzLeft></th>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
-								<th>4=2-3</th>
-								<th>5</th>
-								<th>6</th>
-								<th>7=5-6</th>
-								<th>8</th>
-								<th>9</th>
-								<th>10=8-9</th>
-								<th>11</th>
-								<th *ngIf="status.general" nzRight></th>
-							</tr>
-							<tr>
-								<th nzLeft></th>
-								<th nzLeft>
-									TỔNG NHU CẦU
-								</th>
-								<th>
-									{{ Op.fmtVal(total.thNamHienHanhN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.tranChiN) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.ncauChiN) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.clechTranChiVsNcauChiN) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.tranChiN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.ncauChiN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.clechTranChiVsNcauChiN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.tranChiN2) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.ncauChiN2) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(total.clechTranChiVsNcauChiN2) }}
-								</th>
-								<th></th>
-								<th *ngIf="status.general" nzRight></th>
-							</tr>
-							<tr>
-								<th nzLeft></th>
-								<th nzLeft>
-									Trong đó - Chi thường xuyên cơ sở
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.thNamHienHanhN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.tranChiN) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.ncauChiN) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.tranChiN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.ncauChiN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.tranChiN2) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.ncauChiN2) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN2) }}
-								</th>
-								<th></th>
-								<th *ngIf="status.general" nzRight></th>
-							</tr>
-							<tr>
-								<th nzLeft></th>
-								<th nzLeft>
-									&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.thNamHienHanhN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.tranChiN) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.ncauChiN) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.tranChiN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.ncauChiN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN1) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.tranChiN2) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.ncauChiN2) }}
-								</th>
-								<th>
-									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN2) }}
-								</th>
-								<th> </th>
-								<th *ngIf="status.general" nzRight></th>
+								<th scope="col" nzLeft></th>
+								<th scope="col" nzLeft></th>
+								<th scope="col">1</th>
+								<th scope="col">2</th>
+								<th scope="col">3</th>
+								<th scope="col">4=2-3</th>
+								<th scope="col">5</th>
+								<th scope="col">6</th>
+								<th scope="col">7=5-6</th>
+								<th scope="col">8</th>
+								<th scope="col">9</th>
+								<th scope="col">10=8-9</th>
+								<th scope="col">11</th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
+							<tr>
+								<td nzLeft></td>
+								<td nzLeft>
+									TỔNG NHU CẦU
+								</td>
+								<td>
+									{{ Op.fmtVal(total.thNamHienHanhN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.tranChiN) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.ncauChiN) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.clechTranChiVsNcauChiN) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.tranChiN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.ncauChiN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.clechTranChiVsNcauChiN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.tranChiN2) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.ncauChiN2) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(total.clechTranChiVsNcauChiN2) }}
+								</td>
+								<td></td>
+								<td *ngIf="status.general" nzRight></td>
+							</tr>
+							<tr>
+								<td nzLeft></td>
+								<td nzLeft>
+									Trong đó - Chi thường xuyên cơ sở
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.thNamHienHanhN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.tranChiN) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.ncauChiN) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.tranChiN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.ncauChiN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.tranChiN2) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.ncauChiN2) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiCoSo.clechTranChiVsNcauChiN2) }}
+								</td>
+								<td></td>
+								<td *ngIf="status.general" nzRight></td>
+							</tr>
+							<tr>
+								<td nzLeft></td>
+								<td nzLeft>
+									&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.thNamHienHanhN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.tranChiN) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.ncauChiN) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.tranChiN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.ncauChiN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN1) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.tranChiN2) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.ncauChiN2) }}
+								</td>
+								<td>
+									{{ Op.fmtVal(chiMoi.clechTranChiVsNcauChiN2) }}
+								</td>
+								<td> </td>
+								<td *ngIf="status.general" nzRight></td>
+							</tr>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
 								<td nzLeft>
 									{{ data.index() }}
@@ -342,9 +342,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -370,10 +370,6 @@
 	<div class="modal-footer">
 		<div class="nut">
 			<div class="cantrai">
-				<!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
-				</button> -->
 				<button type="button" class="btn btn-main" *ngIf="status.export" (click)="exportToExcel()">
 					<span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
 					<span>Xuất</span>

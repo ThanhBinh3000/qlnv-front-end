@@ -150,14 +150,15 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtiets = this.baoCao.lstCtiets;
             this.lstCtiets = Table.sortByIndex(this.lstCtiets)
+            console.log(this.lstCtiets);
             this.setLevel()
-            this.sum('0.1')
+            this.sum('0.1');
+            this.updateEditCache();
         }
         this.capDvi = parseInt(this.userInfo.CAP_DVI, 10);
         if (this.userInfo.MA_DVI == this.baoCao.maDviCha) {
             this.capDvi += 1;
         }
-        this.updateEditCache();
         this.getStatusButton();
     }
 
@@ -177,7 +178,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVMB.PASS_VB);
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_VB);
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVMB.ACCEPT_VB);
-        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent);
+        this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_VB) && (isChild || this.isParent) && !(!this.baoCao.id);
         this.isReceive = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && this.isParent);
         if (this.capDvi == 1) {
             this.scrollHD = Table.tableWidth(700, 9, 1, 0);
@@ -270,12 +271,12 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
+                this.baoCao.ngayTrinh = data.data.ngayTrinh;
+                this.baoCao.ngayDuyet = data.data.ngayDuyet;
+                this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
+                this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -490,6 +491,13 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHeaderHd = ['', 'A', 'B', '1', '2', '3', '4', '5=2x4', '6=2x4', '7', '8', '9', '10'];
+        let calHd = {};
+        fieldHD.forEach((field, index) => {
+            calHd[field] = calHeaderHd[index];
+        })
+        filterHD.unshift(calHd);
         const workbook = XLSX.utils.book_new();
         const worksheetHD = Table.initExcel(head);
         XLSX.utils.sheet_add_json(worksheetHD, filterHD, { skipHeader: true, origin: Table.coo(head[0].l, head[0].b + 1) })
@@ -513,14 +521,14 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
                 { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
                 { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
                 { t: 4, b: 4, l: 9, r: 11, val: 'Số đã nộp lên đơn vị cấp trên (lũy kế)' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 11, r: 11, val: 'Tổng vốn' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Nộp vốn' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Nộp hoàn ứng' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Tổng nộp' },
                 { t: 4, b: 4, l: 12, r: 15, val: 'Số nộp lần này' },
                 { t: 5, b: 5, l: 12, r: 12, val: 'Ngày' },
-                { t: 5, b: 5, l: 13, r: 13, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 14, r: 14, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 15, r: 15, val: 'Tổng vốn' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Nộp vốn' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Nộp hoàn ứng' },
+                { t: 5, b: 5, l: 15, r: 15, val: 'Tổng nộp' },
                 { t: 4, b: 5, l: 16, r: 16, val: 'Lũy kế sau lần nộp này' },
                 { t: 4, b: 5, l: 17, r: 17, val: 'Số còn phải nộp' },
                 { t: 4, b: 5, l: 18, r: 18, val: 'Ghi chú' },
@@ -534,6 +542,13 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11=9+10', '', '12', '13', '14=12+13', '15=11+14', '16=5-6-12', 'E'];
+            let cal = {};
+            fieldOrder.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterData.unshift(cal);
         } else {
             header = [
                 { t: 0, b: 5, l: 0, r: 17, val: null },
@@ -550,13 +565,13 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
                 { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
                 { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
                 { t: 4, b: 4, l: 9, r: 11, val: 'Số đã nộp lên đơn vị cấp trên (lũy kế)' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 11, r: 11, val: 'Tổng vốn' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Nộp vốn' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Nộp hoàn ứng' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Tổng nộp' },
                 { t: 4, b: 4, l: 12, r: 14, val: 'Số nộp lần này' },
-                { t: 5, b: 5, l: 12, r: 12, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 13, r: 13, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 14, r: 14, val: 'Tổng vốn' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Nộp vốn' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Nộp hoàn ứng' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Tổng nộp' },
                 { t: 4, b: 5, l: 15, r: 15, val: 'Lũy kế sau lần nộp này' },
                 { t: 4, b: 5, l: 16, r: 16, val: 'Số còn phải nộp' },
                 { t: 4, b: 5, l: 17, r: 17, val: 'Ghi chú' },
@@ -570,6 +585,13 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11=9+10', '12', '13', '14=12+13', '15=11+14', '16=5-6-12', 'E'];
+            let cal = {};
+            fieldOrder.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterData.unshift(cal);
         }
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

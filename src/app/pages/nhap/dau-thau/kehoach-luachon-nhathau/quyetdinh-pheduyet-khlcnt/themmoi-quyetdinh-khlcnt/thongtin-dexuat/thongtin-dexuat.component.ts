@@ -31,6 +31,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 })
 export class ThongtinDexuatComponent implements OnInit, OnChanges {
   @Input() title;
+  @Input() titlePl;
   @Input() dataInput;
   @Output() soLuongChange = new EventEmitter<number>();
   @Output() donGiaTamTinhOut = new EventEmitter<number>();
@@ -304,7 +305,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     }
   }
 
-  themMoiCuc(goiThau?: string) {
+  themMoiCuc($event: any, goiThau?: string) {
+    $event.stopPropagation();
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
       return;

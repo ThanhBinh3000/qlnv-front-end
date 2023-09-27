@@ -12,15 +12,19 @@ import { DialogTaoMoiTienThuaComponent } from './nop-tien-thua/dialog-tao-moi-ti
 import { DialogTaoMoiThanhToanComponent } from './thanh-toan-cho-khach-hang/dialog-tao-moi-thanh-toan/dialog-tao-moi-thanh-toan.component';
 import { ThanhToanTheoDonGiaComponent } from './thanh-toan-cho-khach-hang/thanh-toan-theo-don-gia/thanh-toan-theo-don-gia.component';
 import { ThanhToanTheoHopDongComponent } from './thanh-toan-cho-khach-hang/thanh-toan-theo-hop-dong/thanh-toan-theo-hop-dong.component';
+import { DanhSachTienThuaTuDvcdComponent } from './danh-sach-tien-thua-tu-dvcd/danh-sach-tien-thua-tu-dvcd.component';
+import { TongHopTienThuaComponent } from './nop-tien-thua/tong-hop-tien-thua/tong-hop-tien-thua.component';
 
 @NgModule({
     declarations: [
         VonMuaVonUngComponent,
         DanhSachVonMuaVonUngComponent,
+        DanhSachTienThuaTuDvcdComponent,
         CapUngVonComponent,
         DialogTaoMoiCapUngVonComponent,
         QuanLyThuChiComponent,
         NopTienThuaComponent,
+        TongHopTienThuaComponent,
         DialogTaoMoiTienThuaComponent,
         DialogTaoMoiThanhToanComponent,
         ThanhToanTheoDonGiaComponent,

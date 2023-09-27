@@ -38,66 +38,71 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowSpan="2" class="text-center" nzWidth="50px" nzLeft>STT</th>
-                                <th rowSpan="2" nzWidth="300px" nzLeft>Tên tài sản <br> (theo danh mục được phê duyệt
+                                <th scope="col" rowSpan="2" class="text-center" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" rowSpan="2" nzWidth="300px" nzLeft>Tên tài sản <br> (theo danh mục được
+                                    phê duyệt
                                     tại <br>
                                     Quyết
                                     định số
                                     149/QĐ-TCDT)
                                 </th>
-                                <th rowSpan="2">ĐVT</th>
-                                <th colSpan="5">Số lượng tài sản, máy móc, thiết bị hiện có</th>
-                                <th colSpan="3">Dự toán đề nghị trang bị năm {{namBcao}}</th>
-                                <th colSpan="3">Dự toán, kinh phí được sử dụng trong năm </th>
-                                <th rowSpan="2">Dự toán đề nghị điều chỉnh <br> (+ tăng) (- giảm)</th>
-                                <th rowSpan="2" *ngIf="status.viewAppVal">Dự toán vụ TVQT <br> đề nghị <br> (+ tăng)
+                                <th scope="col" rowSpan="2">ĐVT</th>
+                                <th scope="colgroup" colSpan="5">Số lượng tài sản, máy móc, thiết bị hiện có</th>
+                                <th scope="colgroup" colSpan="3">Dự toán đề nghị trang bị năm {{namBcao}}</th>
+                                <th scope="colgroup" colSpan="3">Dự toán, kinh phí được sử dụng trong năm </th>
+                                <th scope="col" rowSpan="2">Dự toán đề nghị điều chỉnh <br> (+ tăng) (- giảm)</th>
+                                <th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Dự toán vụ TVQT <br> đề nghị <br>
+                                    (+ tăng)
                                     (- giảm)</th>
-                                <th rowSpan="2">Thuyết minh</th>
-                                <th rowSpan="2">Ghi chú</th>
-                                <th rowSpan="2" *ngIf="status.viewAppVal">Dự toán chênh lệch <br> giữa Vụ TVQT
+                                <th scope="col" rowSpan="2">Thuyết minh</th>
+                                <th scope="col" rowSpan="2">Ghi chú</th>
+                                <th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Dự toán chênh lệch <br> giữa
+                                    Vụ TVQT
                                     điều
                                     chỉnh <br> và đơn vị đề nghị <br>
                                     (+ tăng) (- giảm)</th>
-                                <th rowSpan="2" *ngIf="status.viewAppVal">Ý kiến của đơn vị cấp trên</th>
-                                <th rowspan="2" *ngIf="status.general"></th>
-                                <th rowspan="2" *ngIf="status.general "></th>
+                                <th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Ý kiến của đơn vị cấp trên
+                                </th>
+                                <th scope="col" rowspan="2" *ngIf="status.general"></th>
+                                <th scope="col" rowspan="2" *ngIf="status.general "></th>
                             </tr>
                             <tr>
-                                <th>Số lượng đến thời điểm <br> báo cáo</th>
-                                <th>Số lượng đã nhận chưa có <br> QĐ điều chuyển</th>
-                                <th>Số lượng đã được <br> phê duyệt <br> mua sắm năm {{namBcao - 1}}</th>
-                                <th>Cộng</th>
-                                <th>Tiêu chuẩn định mức tối đa <br> được phê duyệt</th>
-                                <th>Số lượng</th>
-                                <th>Mức giá</th>
-                                <th>Thành tiền <br>(Tổng nhu cầu năm nay)</th>
-                                <th>Dự toán năm trước <br> chuyển sang <br> được phép sử dụng <br> cho năm nay</th>
-                                <th>Dự toán, kinh phí đã giao</th>
-                                <th>Cộng</th>
+                                <th scope="col">Số lượng đến thời điểm <br> báo cáo</th>
+                                <th scope="col">Số lượng đã nhận chưa có <br> QĐ điều chuyển</th>
+                                <th scope="col">Số lượng đã được <br> phê duyệt <br> mua sắm năm {{namBcao - 1}}</th>
+                                <th scope="col">Cộng</th>
+                                <th scope="col">Tiêu chuẩn định mức tối đa <br> được phê duyệt</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Mức giá</th>
+                                <th scope="col">Thành tiền <br>(Tổng nhu cầu năm nay)</th>
+                                <th scope="col">Dự toán năm trước <br> chuyển sang <br> được phép sử dụng <br> cho năm
+                                    nay</th>
+                                <th scope="col">Dự toán, kinh phí đã giao</th>
+                                <th scope="col">Cộng</th>
                             </tr>
                             <tr>
-                                <th nzLeft>A</th>
-                                <th nzLeft>B</th>
-                                <th>C</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4 = 1 + 2 + 3</th>
-                                <th>5</th>
-                                <th>6</th>
-                                <th>7</th>
-                                <th>8=6x7</th>
-                                <th>9</th>
-                                <th>10</th>
-                                <th>11=9+10</th>
-                                <th>12=8-11</th>
-                                <th *ngIf="status.viewAppVal">13</th>
-                                <th>14</th>
-                                <th>15</th>
-                                <th *ngIf="status.viewAppVal">16=13-12</th>
-                                <th *ngIf="status.viewAppVal">17</th>
-                                <th rowspan="2" *ngIf="status.general"></th>
-                                <th rowspan="2" *ngIf="status.general "></th>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col">C</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4 = 1 + 2 + 3</th>
+                                <th scope="col">5</th>
+                                <th scope="col">6</th>
+                                <th scope="col">7</th>
+                                <th scope="col">8=6x7</th>
+                                <th scope="col">9</th>
+                                <th scope="col">10</th>
+                                <th scope="col">11=9+10</th>
+                                <th scope="col">12=8-11</th>
+                                <th scope="col" *ngIf="status.viewAppVal">13</th>
+                                <th scope="col">14</th>
+                                <th scope="col">15</th>
+                                <th scope="col" *ngIf="status.viewAppVal">16=13-12</th>
+                                <th scope="col" *ngIf="status.viewAppVal">17</th>
+                                <th scope="col" rowspan="2" *ngIf="status.general"></th>
+                                <th scope="col" rowspan="2" *ngIf="status.general "></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -360,9 +365,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

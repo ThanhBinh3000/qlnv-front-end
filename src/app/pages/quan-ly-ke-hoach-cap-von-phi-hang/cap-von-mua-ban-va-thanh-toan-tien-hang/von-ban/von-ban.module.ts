@@ -9,6 +9,7 @@ import { VonBanTheoHopDongTrungThauComponent } from './von-ban-theo-hop-dong-tru
 import { VonBanTheoDonGiaMuaComponent } from './von-ban-theo-don-gia-mua/von-ban-theo-don-gia-mua.component';
 import { DanhSachVonBanTuDvcdComponent } from './danh-sach-von-ban-tu-dvcd/danh-sach-von-ban-tu-dvcd.component';
 import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.component';
+import { QuanLyVonBanComponent } from './quan-ly-von-ban/quan-ly-von-ban.component';
 
 @NgModule({
     declarations: [
@@ -19,6 +20,7 @@ import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.compon
         VonBanTheoHopDongTrungThauComponent,
         VonBanTheoDonGiaMuaComponent,
         DanhSachVonBanTuDvcdComponent,
+        QuanLyVonBanComponent,
     ],
     imports: [
         CommonModule,

@@ -461,8 +461,7 @@ export class KhoComponent implements OnInit {
     }
 
     checkEdit(stt: string) {
-        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-        return lstTemp.every(e => !e.stt.startsWith(stt));
+        return this.lstCtietBcao.every(e => Table.preIndex(e.stt) != stt);
     }
 
     // xoa file trong bang file
@@ -484,7 +483,7 @@ export class KhoComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 8 + this.lstCtietBcao.length, l: 0, r: 15, val: null },
+            { t: 0, b: 9 + this.lstCtietBcao.length, l: 0, r: 15, val: null },
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
@@ -509,19 +508,35 @@ export class KhoComponent implements OnInit {
             { t: 6, b: 6, l: 13, r: 13, val: 'Kho hết khấu hao' },
             { t: 6, b: 6, l: 14, r: 14, val: 'Tổng giá trị kho dưới 5000m3' },
             { t: 5, b: 6, l: 15, r: 15, val: 'Tổng' },
-            { t: 7, b: 7, l: 1, r: 1, val: 'Tổng cộng' },
-            { t: 7, b: 7, l: 6, r: 6, val: this.total?.slTren },
-            { t: 7, b: 7, l: 7, r: 7, val: this.total?.slDuoi },
-            { t: 7, b: 7, l: 8, r: 8, val: this.total?.slTong },
-            { t: 7, b: 7, l: 9, r: 9, val: this.total?.gtTrenGtConLai },
-            { t: 7, b: 7, l: 10, r: 10, val: this.total?.gtTrenHetKhauHao },
-            { t: 7, b: 7, l: 11, r: 11, val: this.total?.gtTrenTong },
-            { t: 7, b: 7, l: 12, r: 12, val: this.total?.gtDuoiGtConLai },
-            { t: 7, b: 7, l: 13, r: 13, val: this.total?.gtDuoiHetKhauHao },
-            { t: 7, b: 7, l: 14, r: 14, val: this.total?.gtDuoiTong },
-            { t: 7, b: 7, l: 15, r: 15, val: this.total?.tong },
+            { t: 7, b: 7, l: 0, r: 0, val: 'A' },
+            { t: 7, b: 7, l: 1, r: 1, val: 'B' },
+            { t: 7, b: 7, l: 2, r: 2, val: 'C' },
+            { t: 7, b: 7, l: 3, r: 3, val: 'D' },
+            { t: 7, b: 7, l: 4, r: 4, val: '1' },
+            { t: 7, b: 7, l: 5, r: 5, val: '2' },
+            { t: 7, b: 7, l: 6, r: 6, val: '3' },
+            { t: 7, b: 7, l: 7, r: 7, val: '4' },
+            { t: 7, b: 7, l: 8, r: 8, val: '5=3+4' },
+            { t: 7, b: 7, l: 9, r: 9, val: '6' },
+            { t: 7, b: 7, l: 10, r: 10, val: '7' },
+            { t: 7, b: 7, l: 11, r: 11, val: '8=6+7' },
+            { t: 7, b: 7, l: 12, r: 12, val: '9' },
+            { t: 7, b: 7, l: 13, r: 13, val: '10' },
+            { t: 7, b: 7, l: 14, r: 14, val: '11=9+10' },
+            { t: 7, b: 7, l: 15, r: 15, val: '12=8+11' },
+            { t: 8, b: 8, l: 1, r: 1, val: 'Tổng cộng' },
+            { t: 8, b: 8, l: 6, r: 6, val: this.total?.slTren },
+            { t: 8, b: 8, l: 7, r: 7, val: this.total?.slDuoi },
+            { t: 8, b: 8, l: 8, r: 8, val: this.total?.slTong },
+            { t: 8, b: 8, l: 9, r: 9, val: this.total?.gtTrenGtConLai },
+            { t: 8, b: 8, l: 10, r: 10, val: this.total?.gtTrenHetKhauHao },
+            { t: 8, b: 8, l: 11, r: 11, val: this.total?.gtTrenTong },
+            { t: 8, b: 8, l: 12, r: 12, val: this.total?.gtDuoiGtConLai },
+            { t: 8, b: 8, l: 13, r: 13, val: this.total?.gtDuoiHetKhauHao },
+            { t: 8, b: 8, l: 14, r: 14, val: this.total?.gtDuoiTong },
+            { t: 8, b: 8, l: 15, r: 15, val: this.total?.tong },
         ]
-        const headerBot = 8;
+        const headerBot = 9;
         this.lstCtietBcao.forEach((item, index) => {
             if (item.unitSpan) {
                 header.push({ t: headerBot + index, b: headerBot + index + item.unitSpan - 1, l: 0, r: 0, val: this.getIndex(item.stt) })

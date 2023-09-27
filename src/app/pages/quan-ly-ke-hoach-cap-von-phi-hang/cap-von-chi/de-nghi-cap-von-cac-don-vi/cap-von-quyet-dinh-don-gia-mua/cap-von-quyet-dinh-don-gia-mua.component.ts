@@ -57,11 +57,11 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
+                soCv: this.baoCao.congVan?.fileName,
+                ngayCv: this.baoCao.ngayCongVan,
             },
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
@@ -71,9 +71,9 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                     ...new Doc(),
                     fileName: res.soCongVan,
                 };
+                this.fileDetail = file;
             }
         });
-        this.fileDetail = file;
         return false;
     };
 
@@ -188,7 +188,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.PASS_CV);
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_CV);
         // this.status.export = this.baoCao.trangThai == Status.TT_07 && this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
-        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild;
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_CV) && isChild && !(!this.baoCao.id);
         this.scrollDN = Table.tableWidth(350, 11, 0, 0);
         this.scrollCV = this.status.save ? Table.tableWidth(300, 15, 1, 60) : Table.tableWidth(300, 15, 1, 0);
     }
@@ -259,11 +259,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 this.baoCao.ngayDuyet = data.data.ngayDuyet;
                 this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -498,7 +494,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 { t: 5, b: 5, l: 8, r: 8, val: 'Tổng cấp vốn' },
                 { t: 5, b: 5, l: 9, r: 9, val: 'Tổng cộng' },
                 { t: 4, b: 5, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp' },
-                { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+                { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này' },
             ]
             const fieldHD = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtThucHien', 'dtoanDaGiao', 'lkUng', 'lkCap',
                 'lkCong', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];
@@ -509,6 +505,13 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 })
                 return row;
             })
+            // thêm công thức tính cho biểu mẫu
+            const calHeader = ['A', 'B', '1', '2', '3', '4=2x3', '5', '6', '7', '8=6+7', '9=5+8', '10=4-9'];
+            let cal = {};
+            fieldHD.forEach((field, index) => {
+                cal[field] = calHeader[index];
+            })
+            filterHD.unshift(cal);
             const worksheetHD = Table.initExcel(head);
             XLSX.utils.sheet_add_json(worksheetHD, filterHD, { skipHeader: true, origin: Table.coo(head[0].l, head[0].b + 1) })
             XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Đề nghị cấp vốn từ DVCD');
@@ -530,7 +533,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             { t: 5, b: 5, l: 7, r: 7, val: 'Tổng cấp vốn' },
             { t: 5, b: 5, l: 8, r: 8, val: 'Tổng cộng' },
             { t: 4, b: 5, l: 9, r: 9, val: 'Tổng vốn và dự toán đã cấp' },
-            { t: 4, b: 5, l: 10, r: 10, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+            { t: 4, b: 5, l: 10, r: 10, val: 'Vốn đề nghị cấp lần này' },
             { t: 4, b: 4, l: 11, r: 13, val: 'Vốn duyệt cấp lần này' },
             { t: 5, b: 5, l: 11, r: 11, val: 'Cấp ứng' },
             { t: 5, b: 5, l: 12, r: 12, val: 'Cấp vốn' },
@@ -548,6 +551,13 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', '1', '2', '3', '4=2x3', '5', '6', '7', '8=6+7', '9=5+8', '10=4-9', '11', '12', '13=11+12', '14=9+13', '15=4-14', 'C'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Cấp vốn');

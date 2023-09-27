@@ -16,7 +16,6 @@ import { Dcdt } from '../dieu-chinh-du-toan.constant';
 @Component({
     selector: 'app-tong-hop-bao-cao',
     templateUrl: './tong-hop-bao-cao.component.html',
-    styleUrls: ['./tong-hop-bao-cao.component.scss']
 })
 export class TongHopBaoCaoComponent implements OnInit {
     @Output() dataChange = new EventEmitter();

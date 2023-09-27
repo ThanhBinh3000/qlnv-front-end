@@ -281,31 +281,27 @@ export class BaoCaoTongHopComponent implements OnInit {
 
         // set năm tạo PA
         this.namPa = this.newDate.getFullYear();
-
+        this.capDvi = this.userInfo?.DON_VI.capDvi;
         // lấy danh sách đơn vị
-        await this.danhMuc.dMDonVi().toPromise().then(
-            (data) => {
-                if (data.statusCode === 0) {
-                    this.donVis = data?.data;
-                    this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
+        this.spinner.show();
+        const request = {
+            maDviCha: this.maDonViTao,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.lstDvi = data.data;
+                    this.donVis = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
                 } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
-        );
-
-        // await this.giaoDuToanChiService.maPhuongAnGiao('1').toPromise().then(
-        //   (res) => {
-        //     if (res.statusCode == 0) {
-        //       this.maGiao = res.data;
-        //     } else {
-        //       this.notification.error(MESSAGE.ERROR, res?.msg);
-        //     }
-        //   },
-        //   (err) => {
-        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //   },
-        // );
+        )
+        this.spinner.hide();
 
         // check trường hợp tạo mới/ cập nhật/ tổng hợp
         if (this.id) {
@@ -644,12 +640,6 @@ export class BaoCaoTongHopComponent implements OnInit {
             return;
         }
 
-        // lstCtietBcaoTemp.forEach(item => {
-        //   if (item.id?.length == 38) {
-        //     item.id = null;
-        //   }
-        // });
-
         //get list file url
         let checkFile = true;
         for (const iterator of this.listFile) {
@@ -770,11 +760,6 @@ export class BaoCaoTongHopComponent implements OnInit {
                 },
             );
         }
-        // this.lstCtietBcao.filter(item => {
-        //   if (!item.id) {
-        //     item.id = uuid.v4() + 'FE';
-        //   }
-        // });
         this.spinner.hide();
     };
 
@@ -799,16 +784,6 @@ export class BaoCaoTongHopComponent implements OnInit {
         );
         return temp;
     }
-
-    // xem chi tiết bản ghi
-    // xemChiTiet(id: string) {
-    //   const obj = {
-    //     id: id,
-    //     preData: this.data,
-    //     tabSelected: 'next' + this.data?.tabSelected,
-    //   }
-    //   this.dataChange.emit(obj);
-    // }
 
     xemChiTiet(id: string, maLoaiDan: string) {
         if (maLoaiDan == "1") {
@@ -937,10 +912,14 @@ export class BaoCaoTongHopComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.trangThaiBanGhi = mcn;
                     this.getStatusButton();
-                    if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    if (mcn == Status.TT_02) {
+                        this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
+                    } else if (mcn == Status.TT_06) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
+                    } else if (mcn == Status.TT_07) {
+                        this.notification.success(MESSAGE.SUCCESS, "Gửi đơn vị cấp trên thành công");
+                    } else if (mcn == Status.TT_09) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRANG_THAI_TIEP_NHAN);
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -1355,15 +1334,6 @@ export class BaoCaoTongHopComponent implements OnInit {
         })
         return check;
     };
-
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.trangThaiBanGhi)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // };
-
 
 }
 

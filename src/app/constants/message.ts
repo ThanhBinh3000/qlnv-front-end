@@ -23,6 +23,7 @@ export const MESSAGE = {
   IMPORT_NUMBER_SUCCESS_2: 'Lưu dữ liệu thành công',
   SEND_SUCCESS: 'Trình văn bản thành công',
   RELEASE_SUCCESS: 'Phát hành thành công',
+  SUBMIT_SUCCESS: 'Trình duyệt thành công',
   APPROVE_SUCCESS: 'Duyệt thành công',
   KY_THAY: 'Chuyển ký thay thành công',
   KY_THUALENH: 'Chuyển ký thừa lệnh thành công',

@@ -66,11 +66,11 @@ export class BaoCaoComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
+                soCv: this.baoCao.congVan?.fileName,
+                ngayCv: this.baoCao.ngayCongVan,
             },
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
@@ -80,9 +80,9 @@ export class BaoCaoComponent implements OnInit {
                     ...new Doc(),
                     fileName: res.soCongVan,
                 };
+                this.fileDetail = file;
             }
         });
-        this.fileDetail = file;
         return false;
     };
 
@@ -338,11 +338,7 @@ export class BaoCaoComponent implements OnInit {
                 this.baoCao.ngayDuyet = data.data.ngayDuyet;
                 this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.baoCao.ngayTraKq = data.data.ngayTraKq;
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
                 this.getStatusButton();
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -532,9 +528,11 @@ export class BaoCaoComponent implements OnInit {
             luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
             isOffice: this.isOffice,
             isSynth: this.baoCao.lstBcaoDviTrucThuocs.length > 0,
+            isHistory: this.baoCao.lichSu?.length > 0,
         }
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.save = dataInfo.status.save && (this.userInfo?.sub == bieuMau.nguoiBcao);
+        dataInfo.status.finish = dataInfo.status.finish && (this.userInfo?.sub == bieuMau.nguoiBcao);
 
         let nzContent: ComponentType<any>;
         switch (bieuMau.maLoai) {

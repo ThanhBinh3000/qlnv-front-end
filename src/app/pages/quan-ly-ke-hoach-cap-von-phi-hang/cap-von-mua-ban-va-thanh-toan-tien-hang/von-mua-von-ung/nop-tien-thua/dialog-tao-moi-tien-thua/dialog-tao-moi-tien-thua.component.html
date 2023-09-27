@@ -3,8 +3,16 @@
         <div nz-col nzSpan="6">
             <label class="search__label">Năm</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm" [(ngModel)]="response.namDnghi"
-                [class]="response.namDnghi ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
+                [class]="response.namDnghi ?'' : 'input-error-validate'">
                 <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="6">
+            <label class="search__label">Loại mặt hàng</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn Loại mặt hàng" [(ngModel)]="response.loaiDnghi"
+                [class]="response.loaiDnghi ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
+                <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
             </nz-select>
         </div>

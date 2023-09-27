@@ -50,6 +50,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       klLtXuat: [0, Validators.required],
       trichYeu: [null,],
       trangThai: ['00'],
+      trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],

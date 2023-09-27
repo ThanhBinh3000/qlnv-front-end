@@ -32,7 +32,6 @@ export class DialogThemKhoanMucComponent implements OnInit {
         if (!this.maKhoanMuc) {
             this.maKhoanMuc = this.lstKhoanMuc.find(e => e.level == 0).maVtu;
             this.loaiDmuc = this.lstKhoanMuc.find(e => e.level == 0).loaiDmuc;
-            // this.maVtu = this.lstKhoanMuc.find(e => e.level == 0).maVtu;
             this.lstParent = this.lstKhoanMuc.filter(e => e.level == 0);
         } else {
             var idCha: number = this.lstKhoanMuc.find(e => e.id == this.maKhoanMuc).maCha;

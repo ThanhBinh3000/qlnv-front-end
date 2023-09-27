@@ -34,6 +34,34 @@ export class ItemData {
 	chenhLech: number;
 	ghiChu: string;
 	ykienDviCtren: string;
+
+	constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+		Object.assign(this, data);
+	}
+
+	clear() {
+		Object.keys(this).forEach(key => {
+			if (typeof this[key] === 'number' && key != 'level') {
+				this[key] = null;
+			}
+		})
+	}
+
+	sum(data: ItemData) {
+		Object.keys(data).forEach(key => {
+			if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+				this[key] = Operator.sum([this[key], data[key]]);
+			}
+		})
+	}
+
+	request() {
+		const temp = Object.assign({}, this);
+		if (this.id?.length == 38) {
+			temp.id = null;
+		}
+		return temp;
+	}
 }
 
 export const amount1 = {
@@ -60,7 +88,9 @@ export class PhuLuc12Component implements OnInit {
 	amount1 = amount1;
 	//thong tin chi tiet cua bieu mau
 	formDetail: Form = new Form();
-	total: ItemData = new ItemData();
+	total: ItemData = new ItemData({});
+	tongDcTang: ItemData = new ItemData({});
+	tongDcGiam: ItemData = new ItemData({});
 	maDviTien: string = '1';
 	namBcao: number;
 	tongDieuChinhGiam: number;
@@ -133,11 +163,8 @@ export class PhuLuc12Component implements OnInit {
 		Object.assign(this.status, this.dataInfo.status);
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
+
 		if (this.status.general) {
-			// const category = await this.danhMucService.danhMucChungGetAll('LTD_PL2');
-			// if (category) {
-			// 	this.linhVucChis = category.data;
-			// }
 			this.scrollX = Table.tableWidth(350, 10, 1, 110);
 		} else {
 			if (this.status.editAppVal) {
@@ -150,18 +177,14 @@ export class PhuLuc12Component implements OnInit {
 		}
 		if (this.lstCtietBcao.length == 0) {
 			this.noiDungs.forEach(e => {
-				this.lstCtietBcao.push({
-					...new ItemData(),
+				this.lstCtietBcao.push(new ItemData({
 					id: uuid.v4() + 'FE',
 					stt: e.ma,
 					tenNoiDung: e.giaTri,
 					maNoiDung: e.ma,
-				})
+				}))
 			})
 			this.setLevel();
-			// this.lstCtietBcao.forEach(item => {
-			// 	item.tenNoiDung += Utils.getName(item.level, item.maNoiDung);
-			// })
 		} else if (!this.lstCtietBcao[0]?.stt) {
 			this.lstCtietBcao.forEach(item => {
 				item.stt = item.maNoiDung;
@@ -177,12 +200,9 @@ export class PhuLuc12Component implements OnInit {
 			}
 		}
 
-		// this.lstCtietBcao.forEach(item => {
-		// 	item.tenNoiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
-		// })
-
 		this.tinhTong();
 		this.getTotal();
+		this.getInTotal();
 		this.updateEditCache();
 		this.getStatusButton();
 
@@ -195,7 +215,9 @@ export class PhuLuc12Component implements OnInit {
 				if (data.statusCode == 0) {
 					this.formDetail = data.data;
 					this.formDetail.maDviTien = '1';
-					this.lstCtietBcao = this.formDetail.lstCtietDchinh;
+					this.formDetail.lstCtietDchinh.forEach(item => {
+						this.lstCtietBcao.push(new ItemData(item))
+					})
 					this.listFile = [];
 					this.formDetail.listIdDeleteFiles = [];
 					this.getStatusButton();
@@ -247,7 +269,7 @@ export class PhuLuc12Component implements OnInit {
 		this.lstCtietBcao.forEach(item => {
 			this.editCache[item.id] = {
 				edit: false,
-				data: { ...item }
+				data: new ItemData(item)
 			};
 		});
 	};
@@ -265,10 +287,7 @@ export class PhuLuc12Component implements OnInit {
 
 		const lstCtietBcaoTemp: ItemData[] = [];
 		this.lstCtietBcao.forEach(item => {
-			lstCtietBcaoTemp.push({
-				...item,
-				id: item.id?.length == 38 ? null : item.id,
-			})
+			lstCtietBcaoTemp.push(item.request())
 		})
 
 		if (this.status.general) {
@@ -338,14 +357,13 @@ export class PhuLuc12Component implements OnInit {
 		while (stt != '0') {
 			const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
 			const data = this.lstCtietBcao[index];
-			this.lstCtietBcao[index] = {
-				...new ItemData(),
+			this.lstCtietBcao[index] = new ItemData({
 				id: data.id,
 				stt: data.stt,
 				tenNoiDung: data.tenNoiDung,
 				level: data.level,
 				maNoiDung: data.maNoiDung,
-			}
+			})
 			this.lstCtietBcao.forEach(item => {
 				if (Table.preIndex(item.stt) == stt) {
 					this.keys.forEach(key => {
@@ -361,13 +379,12 @@ export class PhuLuc12Component implements OnInit {
 
 	addLine(data: any) {
 		let parentItem: ItemData = this.lstCtietBcao.find(e => Table.preIndex(e.stt) == data.stt);
-		parentItem = {
-			...new ItemData(),
+		parentItem = new ItemData({
 			id: uuid.v4() + 'FE',
 			maNoiDung: "",
 			level: data.level + 1,
 			tenNoiDung: "",
-		}
+		})
 		this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
 		this.lstCtietBcao.forEach(item => {
 			item.maNoiDung = item.stt
@@ -419,12 +436,17 @@ export class PhuLuc12Component implements OnInit {
 	};
 
 	saveEdit(id: string): void {
+		if (!this.editCache[id].data.tenNoiDung) {
+			this.notification.warning(MESSAGE.WARNING, "Chưa nhập Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN");
+			return;
+		}
 		const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
 		Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
 		this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
 		this.sum(this.lstCtietBcao[index].stt);
 		this.tinhTong()
 		this.getTotal()
+		this.getInTotal();
 		this.updateEditCache();
 	};
 
@@ -432,7 +454,7 @@ export class PhuLuc12Component implements OnInit {
 		const index = this.lstCtietBcao.findIndex(item => item.id === id);
 		// lay vi tri hang minh sua
 		this.editCache[id] = {
-			data: { ...this.lstCtietBcao[index] },
+			data: new ItemData(this.lstCtietBcao[index]),
 			edit: false
 		};
 	};
@@ -446,7 +468,7 @@ export class PhuLuc12Component implements OnInit {
 	};
 
 	getTotal() {
-		this.total = new ItemData();
+		this.total = new ItemData({});
 		this.lstCtietBcao.forEach(item => {
 			if (item.level == 0) {
 				this.keys.forEach(key => {
@@ -497,66 +519,135 @@ export class PhuLuc12Component implements OnInit {
 		await this.quanLyVonPhiService.downFile(file, doc);
 	}
 
+	getInTotal() {
+		this.tongDcTang.clear()
+		this.tongDcGiam.clear()
+		this.lstCtietBcao.forEach(item => {
+			const str = item.stt
+			if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
+				if (item.dtoanDnghiDchinh < 0) {
+					this.tongDcGiam.sum(item);
+				}
+				else {
+					this.tongDcTang.sum(item);
+				}
+			}
+		})
+
+	}
+
 	exportToExcel() {
 		if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
-		const header = [
-			{ t: 0, b: 7, l: 0, r: 13, val: null },
+		let header = [];
+		let fieldOrder = [];
+		if (this.status.viewAppVal) {
+			header = [
+				{ t: 0, b: 7, l: 0, r: 13, val: null },
 
-			{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-			{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-			{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-			{ t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-			{ t: 4, b: 6, l: 1, r: 1, val: 'Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN' },
-			{ t: 4, b: 6, l: 2, r: 2, val: 'Cơ quan chủ trì' },
-			{ t: 4, b: 6, l: 3, r: 3, val: 'Thời gian thực hiện' },
-			{ t: 4, b: 6, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
-			{ t: 4, b: 6, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-			{ t: 4, b: 6, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
-			{ t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
-			{ t: 4, b: 6, l: 10, r: 10, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
-			{ t: 4, b: 6, l: 11, r: 11, val: 'Ghi chú' },
-			{ t: 4, b: 6, l: 12, r: 12, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+tăng) (- giảm)' },
-			{ t: 4, b: 6, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
+				{ t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+				{ t: 4, b: 6, l: 1, r: 1, val: 'Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN' },
+				{ t: 4, b: 6, l: 2, r: 2, val: 'Cơ quan chủ trì' },
+				{ t: 4, b: 6, l: 3, r: 3, val: 'Thời gian thực hiện' },
+				{ t: 4, b: 6, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
+				{ t: 4, b: 6, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+				{ t: 4, b: 6, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
+				{ t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
+				{ t: 4, b: 6, l: 10, r: 10, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+				{ t: 4, b: 6, l: 11, r: 11, val: 'Ghi chú' },
+				{ t: 4, b: 6, l: 12, r: 12, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+tăng) (- giảm)' },
+				{ t: 4, b: 6, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
 
-			{ t: 6, b: 6, l: 5, r: 5, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
-			{ t: 6, b: 6, l: 6, r: 6, val: 'Dự toán, kinh phí đã giao trong năm' },
-			{ t: 6, b: 6, l: 7, r: 7, val: 'Tổng số' },
+				{ t: 6, b: 6, l: 5, r: 5, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
+				{ t: 6, b: 6, l: 6, r: 6, val: 'Dự toán, kinh phí đã giao trong năm' },
+				{ t: 6, b: 6, l: 7, r: 7, val: 'Tổng số' },
 
-			{ t: 7, b: 7, l: 0, r: 0, val: 'A' },
-			{ t: 7, b: 7, l: 1, r: 1, val: 'B' },
-			{ t: 7, b: 7, l: 2, r: 2, val: 'C' },
-			{ t: 7, b: 7, l: 3, r: 3, val: 'D' },
-			{ t: 7, b: 7, l: 4, r: 4, val: 'E' },
-			{ t: 7, b: 7, l: 5, r: 5, val: '1' },
-			{ t: 7, b: 7, l: 6, r: 6, val: '2=1+2' },
-			{ t: 7, b: 7, l: 7, r: 7, val: '3 = 1 + 2' },
-			{ t: 7, b: 7, l: 8, r: 8, val: '4' },
-			{ t: 7, b: 7, l: 9, r: 9, val: '5 = 4 - 3 ' },
-			{ t: 7, b: 7, l: 10, r: 10, val: '6' },
-			{ t: 7, b: 7, l: 11, r: 11, val: '7' },
-			{ t: 7, b: 7, l: 12, r: 12, val: '8 = 6 - 5' },
-			{ t: 7, b: 7, l: 13, r: 13, val: '9' },
-		]
-		const fieldOrder = [
-			'stt',
-			'tenNoiDung',
-			'coQuan',
-			'thoiGian',
-			'qdinhPheDuyet',
-			'dtoanNamTruoc',
-			'dtoanDaGiao',
-			'dtoanTongSo',
-			'tongNcauDtoan',
-			'dtoanDnghiDchinh',
-			'dtoanVuTvqtDnghi',
-			'chenhLech',
-			'ghiChu',
-			'ykienDviCtren',
-		]
+				{ t: 7, b: 7, l: 0, r: 0, val: 'A' },
+				{ t: 7, b: 7, l: 1, r: 1, val: 'B' },
+				{ t: 7, b: 7, l: 2, r: 2, val: 'C' },
+				{ t: 7, b: 7, l: 3, r: 3, val: 'D' },
+				{ t: 7, b: 7, l: 4, r: 4, val: 'E' },
+				{ t: 7, b: 7, l: 5, r: 5, val: '1' },
+				{ t: 7, b: 7, l: 6, r: 6, val: '2=1+2' },
+				{ t: 7, b: 7, l: 7, r: 7, val: '3 = 1 + 2' },
+				{ t: 7, b: 7, l: 8, r: 8, val: '4' },
+				{ t: 7, b: 7, l: 9, r: 9, val: '5 = 4 - 3 ' },
+				{ t: 7, b: 7, l: 10, r: 10, val: '6' },
+				{ t: 7, b: 7, l: 11, r: 11, val: '7' },
+				{ t: 7, b: 7, l: 12, r: 12, val: '8 = 6 - 5' },
+				{ t: 7, b: 7, l: 13, r: 13, val: '9' },
+			]
+			fieldOrder = [
+				'stt',
+				'tenNoiDung',
+				'coQuan',
+				'thoiGian',
+				'qdinhPheDuyet',
+				'dtoanNamTruoc',
+				'dtoanDaGiao',
+				'dtoanTongSo',
+				'tongNcauDtoan',
+				'dtoanDnghiDchinh',
+				'dtoanVuTvqtDnghi',
+				'ghiChu',
+				'chenhLech',
+				'ykienDviCtren',
+			]
+		} else {
+			header = [
+				{ t: 0, b: 7, l: 0, r: 13, val: null },
+
+				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+				{ t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+				{ t: 4, b: 6, l: 1, r: 1, val: 'Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN' },
+				{ t: 4, b: 6, l: 2, r: 2, val: 'Cơ quan chủ trì' },
+				{ t: 4, b: 6, l: 3, r: 3, val: 'Thời gian thực hiện' },
+				{ t: 4, b: 6, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
+				{ t: 4, b: 6, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+				{ t: 4, b: 6, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
+				{ t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
+				{ t: 4, b: 6, l: 10, r: 10, val: 'Ghi chú' },
+
+				{ t: 6, b: 6, l: 5, r: 5, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
+				{ t: 6, b: 6, l: 6, r: 6, val: 'Dự toán, kinh phí đã giao trong năm' },
+				{ t: 6, b: 6, l: 7, r: 7, val: 'Tổng số' },
+
+				{ t: 7, b: 7, l: 0, r: 0, val: 'A' },
+				{ t: 7, b: 7, l: 1, r: 1, val: 'B' },
+				{ t: 7, b: 7, l: 2, r: 2, val: 'C' },
+				{ t: 7, b: 7, l: 3, r: 3, val: 'D' },
+				{ t: 7, b: 7, l: 4, r: 4, val: 'E' },
+				{ t: 7, b: 7, l: 5, r: 5, val: '1' },
+				{ t: 7, b: 7, l: 6, r: 6, val: '2=1+2' },
+				{ t: 7, b: 7, l: 7, r: 7, val: '3 = 1 + 2' },
+				{ t: 7, b: 7, l: 8, r: 8, val: '4' },
+				{ t: 7, b: 7, l: 9, r: 9, val: '5 = 4 - 3 ' },
+				{ t: 7, b: 7, l: 10, r: 10, val: '6' },
+			]
+			fieldOrder = [
+				'stt',
+				'tenNoiDung',
+				'coQuan',
+				'thoiGian',
+				'qdinhPheDuyet',
+				'dtoanNamTruoc',
+				'dtoanDaGiao',
+				'dtoanTongSo',
+				'tongNcauDtoan',
+				'dtoanDnghiDchinh',
+				'ghiChu',
+			]
+		}
+
 
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};
@@ -572,6 +663,54 @@ export class PhuLuc12Component implements OnInit {
 				item.stt = '   ' + item.stt;
 			}
 		})
+
+		let row: any = {};
+		row = {}
+		fieldOrder.forEach(field => {
+			if (field == 'tenNoiDung') {
+				row[field] = 'Phát sinh điều chỉnh giảm'
+			} else {
+				if (![
+					'qdinhPheDuyet',
+					'dtoanNamTruoc',
+					'dtoanDaGiao',
+					'dtoanTongSo',
+					'tongNcauDtoan',
+
+				].includes(field)) {
+					row[field] = (!this.tongDcGiam[field] && this.tongDcGiam[field] !== 0) ? '' : this.tongDcGiam[field];
+				} else {
+					row[field] = '';
+				}
+			}
+		})
+		filterData.unshift(row)
+
+		row = {}
+		fieldOrder.forEach(field => {
+			if (field == 'tenNoiDung') {
+				row[field] = 'Phát sinh điều chỉnh tăng'
+			} else {
+				if (![
+					'qdinhPheDuyet',
+					'dtoanNamTruoc',
+					'dtoanDaGiao',
+					'dtoanTongSo',
+					'tongNcauDtoan',
+				].includes(field)) {
+					row[field] = (!this.tongDcTang[field] && this.tongDcTang[field] !== 0) ? '' : this.tongDcTang[field];
+				} else {
+					row[field] = '';
+				}
+			}
+		})
+		filterData.unshift(row)
+
+		row = {}
+		fieldOrder.forEach(field => {
+			row[field] = field == 'tenNoiDung' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+		})
+		filterData.unshift(row)
 
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);

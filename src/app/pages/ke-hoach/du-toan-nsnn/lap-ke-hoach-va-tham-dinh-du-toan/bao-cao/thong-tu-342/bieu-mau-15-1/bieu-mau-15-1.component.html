@@ -26,154 +26,154 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="3" class="text-center" nzWidth="50px" nzLeft>
+								<th scope="col" rowspan="3" class="text-center" nzWidth="50px" nzLeft>
 									STT
 								</th>
-								<th rowspan="3" nzWidth="300px" nzLeft>
+								<th scope="col" rowspan="3" nzWidth="300px" nzLeft>
 									LĨNH VỰC / TÊN ĐƠN VỊ
 								</th>
-								<th colspan="7">
+								<th scope="colgroup" colspan="7">
 									Thực hiện năm {{namBcao - 2}} (năm trước)
 								</th>
-								<th colspan="6">
+								<th scope="colgroup" colspan="6">
 									Dự toán năm {{namBcao -1}} (năm hiện hành)
 								</th>
-								<th colspan="7">
+								<th scope="colgroup" colspan="7">
 									Ước thực hiện năm {{namBcao -1}} (năm hiện hành)
 								</th>
-								<th colspan="6">
+								<th scope="colgroup" colspan="6">
 									Dự toán năm {{namBcao}} (năm kế hoạch)
 								</th>
-								<th rowspan="3" class="text-col">
+								<th scope="col" rowspan="3" class="text-col">
 									Ghi chú
 								</th>
-								<th rowspan="3" *ngIf="status.general" style="width: 60px;" nzRight></th>
+								<th scope="col" rowspan="3" *ngIf="status.general" style="width: 60px;" nzRight></th>
 							</tr>
 							<tr>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số biên chế được cấp có thẩm quyền giao (Người)
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số biên chế có mặt thời điểm 31/12 (Người)
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương theo biên chế có mặt 31/12
 								</th>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Trong đó:
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số biên chế được cấp có thẩm quyền giao (Người)
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương (Người)
 								</th>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Trong đó:
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số biên chế được cấp có thẩm quyền giao (Người)
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số biên chế có mặt thời điểm 31/12 (Người)
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương theo biên chế có mặt 31/12
 								</th>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Trong đó:
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số biên chế được cấp có thẩm quyền giao (Người)
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Quỹ lương, phụ cấp và các khoản đóng góp theo lương
 								</th>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Trong đó:
 								</th>
 							</tr>
 							<tr>
-								<th>
+								<th scope="col">
 									Lương theo ngạch, bậc
 								</th>
-								<th>
+								<th scope="col">
 									Phụ cấp theo lương
 								</th>
-								<th>
+								<th scope="col">
 									Các khoản đóng góp
 								</th>
-								<th>
+								<th scope="col">
 									Khác
 								</th>
-								<th>
+								<th scope="col">
 									Lương theo ngạch, bậc
 								</th>
-								<th>
+								<th scope="col">
 									Phụ cấp theo lương
 								</th>
-								<th>
+								<th scope="col">
 									Các khoản đóng góp
 								</th>
-								<th>
+								<th scope="col">
 									Khác
 								</th>
-								<th>
+								<th scope="col">
 									Lương theo ngạch, bậc
 								</th>
-								<th>
+								<th scope="col">
 									Phụ cấp theo lương
 								</th>
-								<th>
+								<th scope="col">
 									Các khoản đóng góp
 								</th>
-								<th>
+								<th scope="col">
 									Khác
 								</th>
-								<th>
+								<th scope="col">
 									Lương theo ngạch, bậc
 								</th>
-								<th>
+								<th scope="col">
 									Phụ cấp theo lương
 								</th>
-								<th>
+								<th scope="col">
 									Các khoản đóng góp
 								</th>
-								<th>
+								<th scope="col">
 									Khác
 								</th>
 							</tr>
 							<tr>
-								<th nzLeft>A</th>
-								<th nzLeft>B</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3=4+5+6(+Khác)</th>
-								<th>4</th>
-								<th>5</th>
-								<th>6</th>
-								<th></th>
-								<th>7</th>
-								<th>8=9+10+11(+Khác)</th>
-								<th>9</th>
-								<th>10</th>
-								<th>11</th>
-								<th></th>
-								<th>12</th>
-								<th>13</th>
-								<th>14=15+16+17(+Khác)</th>
-								<th>15</th>
-								<th>16</th>
-								<th>17</th>
-								<th></th>
-								<th>18</th>
-								<th>19=20+21+22(+Khác)</th>
-								<th>20</th>
-								<th>21</th>
-								<th>22</th>
-								<th></th>
-								<th></th>
-								<th *ngIf="status.general" nzRight></th>
+								<th scope="col" nzLeft>A</th>
+								<th scope="col" nzLeft>B</th>
+								<th scope="col">1</th>
+								<th scope="col">2</th>
+								<th scope="col">3=4+5+6(+Khác)</th>
+								<th scope="col">4</th>
+								<th scope="col">5</th>
+								<th scope="col">6</th>
+								<th scope="col"></th>
+								<th scope="col">7</th>
+								<th scope="col">8=9+10+11(+Khác)</th>
+								<th scope="col">9</th>
+								<th scope="col">10</th>
+								<th scope="col">11</th>
+								<th scope="col"></th>
+								<th scope="col">12</th>
+								<th scope="col">13</th>
+								<th scope="col">14=15+16+17(+Khác)</th>
+								<th scope="col">15</th>
+								<th scope="col">16</th>
+								<th scope="col">17</th>
+								<th scope="col"></th>
+								<th scope="col">18</th>
+								<th scope="col">19=20+21+22(+Khác)</th>
+								<th scope="col">20</th>
+								<th scope="col">21</th>
+								<th scope="col">22</th>
+								<th scope="col"></th>
+								<th scope="col"></th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -474,9 +474,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -506,10 +506,6 @@
 					<span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
 					<span>Xuất</span>
 				</button>
-				<!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
-				</button> -->
 				<button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
 					<i nz-icon nzType="check" nzTheme="outline"></i>
 					<span>Hoàn tất nhập liệu</span>

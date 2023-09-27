@@ -37,14 +37,6 @@
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Tiếp nhận</span>
             </button>
-            <button class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
-                <i nz-icon nzType="copy" nzTheme="outline"></i>
-                <span>Copy</span>
-            </button>
-            <button class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
-                <i nz-icon nzType="printer" nzTheme="outline"></i>
-                <span>In</span>
-            </button>
         </div>
     </nz-affix>
     <div class="bg-trang">
@@ -60,36 +52,15 @@
                     <nz-table class="nowrap mt-16 table-chi-tiet">
                         <thead>
                             <tr>
-                                <!-- <th>
-                  <ng-container *ngIf="statusDeleteCv(); else view">
-                    <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa quyết định công văn?" style="color:black"
-                      (nzOnConfirm)="deleteQdCv()">Số QĐ/CV
-                    </a>
-                  </ng-container>
-                  <ng-template #view>
-                    Số QĐ/CV
-                  </ng-template>
-                </th> -->
-                                <!-- <th width="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định BTC giao)</th> -->
-                                <th width="175px">Mã phương án</th>
-                                <th width="175px">Năm phương án</th>
-                                <th width="175px">Ngày tạo</th>
-                                <th width="175px">Nơi tạo</th>
-                                <th width="175px">Trạng thái</th>
+                                <th scope="col" nzWidth="175px">Mã phương án</th>
+                                <th scope="col" nzWidth="175px">Năm phương án</th>
+                                <th scope="col" nzWidth="175px">Ngày tạo</th>
+                                <th scope="col" nzWidth="175px">Nơi tạo</th>
+                                <th scope="col" nzWidth="175px">Trạng thái</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <!-- <td>
-                  <div class="tep_sqd" (click)="downloadFileCv()">
-                    <span>{{soQd?.fileName}}</span>
-                  </div>
-                </td>
-                <td>
-                  <a (click)="xemCtietPaBTC()" style="color: #1890ff;">
-                    {{maPaCha}}
-                  </a>
-                </td> -->
                                 <td>{{maPa}}</td>
                                 <td>{{namPa}}</td>
                                 <td>{{ngayTao}}</td>
@@ -125,12 +96,11 @@
                     <nz-table #fixedTable class="nowrap mt-16 table-chi-tiet" nzBordered>
                         <thead>
                             <tr>
-                                <th nzWidth="150px">STT</th>
-                                <th nzWidth="700px">Nhóm</th>
-                                <th>Tổng số</th>
-                                <th>Đơn vị cấp dưới đã thực hiện</th>
-                                <th>Chênh lệch</th>
-                                <!-- <th [hidden]="status"></th> -->
+                                <th scope="col" nzWidth="150px">STT</th>
+                                <th scope="col" nzWidth="700px">Nhóm</th>
+                                <th scope="col">Tổng số</th>
+                                <th scope="col">Đơn vị cấp dưới đã thực hiện</th>
+                                <th scope="col">Chênh lệch</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -166,16 +136,18 @@
                                 <nz-table [nzData]="lstDviTrucThuoc" nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th nzWidth="50px">STT</th>
-                                            <th nzWidth="200px">Đơn vị lập</th>
-                                            <th nzWidth="150px">Mã báo cáo</th>
-                                            <th nzWidth="150px">Năm báo cáo</th>
-                                            <th nzWidth="150px">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới gửi
+                                            <th scope="col" nzWidth="50px">STT</th>
+                                            <th scope="col" nzWidth="200px">Đơn vị lập</th>
+                                            <th scope="col" nzWidth="150px">Mã báo cáo</th>
+                                            <th scope="col" nzWidth="150px">Năm báo cáo</th>
+                                            <th scope="col" nzWidth="150px">Ngày trình duyệt <br /> (Ngày đơn vị cấp
+                                                dưới gửi
                                                 báo cáo)</th>
-                                            <th nzWidth="150px">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
+                                            <th scope="col" nzWidth="150px">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt
+                                                báo
                                                 cáo)
                                             </th>
-                                            <th nzWidth="150px">Trạng thái</th>
+                                            <th scope="col" nzWidth="150px">Trạng thái</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -212,7 +184,7 @@
                                 [hidden]="status">
                                 <button nz-button>
                                     <i nz-icon nzType="upload"></i>
-                                    Select File
+                                    Chọn tệp
                                 </button>
                             </nz-upload>
                             <button nz-button [nzType]="'primary'" (click)="handleUpload()"
@@ -227,10 +199,10 @@
                             <nz-table nzBordered class="table__body">
                                 <thead>
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Tên file</th>
-                                        <th></th>
-                                        <th class="th" [hidden]="status"></th>
+                                        <th scope="col">STT</th>
+                                        <th scope="col">Tên file</th>
+                                        <th scope="col"></th>
+                                        <th scope="col" class="th" [hidden]="status"></th>
                                     </tr>
                                 </thead>
                                 <tbody>

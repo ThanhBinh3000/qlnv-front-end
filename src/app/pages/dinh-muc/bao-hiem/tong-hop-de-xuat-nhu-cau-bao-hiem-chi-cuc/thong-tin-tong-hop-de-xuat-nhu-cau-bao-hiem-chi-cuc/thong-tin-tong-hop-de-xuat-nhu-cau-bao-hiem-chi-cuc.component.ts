@@ -53,6 +53,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: ['00'],
+      trangThaiTh: [],
       giaTriDx: [null],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],

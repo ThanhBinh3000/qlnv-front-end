@@ -24,111 +24,111 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="4" nzWidth="50px" nzLeft>
+								<th scope="col" rowspan="4" nzWidth="50px" nzLeft>
 									STT
 								</th>
-								<th rowspan="4" nzWidth="300px" nzLeft>
+								<th scope="col" rowspan="4" nzWidth="300px" nzLeft>
 									Chương trình/Đề tài/Dự án/Nhiệm vụ KH&CN <em>(Nêu cụ thể tên từng đề tài, dự án khoa
 										học thuộc các nhóm nhiệm vụ)</em>
 								</th>
-								<th rowspan="4" class="text-col">
+								<th scope="col" rowspan="4" class="text-col">
 									Cơ quan chủ trì
 								</th>
-								<th rowspan="4" class="text-col">
+								<th scope="col" rowspan="4" class="text-col">
 									Thời gian thực hiện
 								</th>
-								<th rowspan="4" class="text-col">
+								<th scope="col" rowspan="4" class="text-col">
 									Quyết định phê duyệt của cấp có thẩm quyền <em>(Nêu cụ thể số, ngày, tháng, năm và
 										tên cơ quan ra quyết định)</em>
 								</th>
-								<th colspan="3" rowspan="2">Kinh phí được phê duyệt</th>
-								<th colspan="10">Kinh phí thực hiện</th>
-								<th rowspan="4" class="text-col">Ghi chú</th>
-								<th rowspan="4" *ngIf="status.general" style="width: 60px;" nzRight></th>
-								<th rowspan="4" *ngIf="status.general" style="width: 50px;" nzRight></th>
+								<th scope="colgroup" colspan="3" rowspan="2">Kinh phí được phê duyệt</th>
+								<th scope="colgroup" colspan="10">Kinh phí thực hiện</th>
+								<th scope="col" rowspan="4" class="text-col">Ghi chú</th>
+								<th scope="col" rowspan="4" *ngIf="status.general" style="width: 60px;" nzRight></th>
+								<th scope="col" rowspan="4" *ngIf="status.general" style="width: 50px;" nzRight></th>
 							</tr>
 							<tr>
-								<th colspan="4">
+								<th scope="colgroup" colspan="4">
 									Năm {{namBcao - 1}} (năm hiện hành)
 								</th>
-								<th colspan="3">
+								<th scope="colgroup" colspan="3">
 									Lũy kế số kinh phí đã bố trí đến hết năm {{namBcao - 1}} (năm hiện hành)
 								</th>
-								<th colspan="3">
+								<th scope="colgroup" colspan="3">
 									Dự toán bố trí năm {{namBcao}} (năm kế hoạch)
 								</th>
 							</tr>
 							<tr>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số
 								</th>
-								<th colspan="2">
+								<th scope="colgroup" colspan="2">
 									Trong đó
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số
 								</th>
-								<th colspan="2">
+								<th scope="colgroup" colspan="2">
 									Kinh phí bố trí từ NSNN
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Kinh phí thực hiện từ nguồn khác
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn NSNN
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn khác
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Tổng số
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn NSNN
 								</th>
-								<th rowspan="2">
+								<th scope="col" rowspan="2">
 									Nguồn khác
 								</th>
 							</tr>
 							<tr>
-								<th>
+								<th scope="col">
 									Nguồn NSNN
 								</th>
-								<th>
+								<th scope="col">
 									Nguồn khác
 								</th>
-								<th>
+								<th scope="col">
 									Dự toán
 								</th>
-								<th>
+								<th scope="col">
 									Ước thực hiện đến hết năm {{namBcao - 1}} (năm hiện hành)
 								</th>
 							</tr>
 							<tr>
-								<th nzLeft>A</th>
-								<th nzLeft>B</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
-								<th>4=5+6</th>
-								<th>5</th>
-								<th>6</th>
-								<th>7=9+10</th>
-								<th>8</th>
-								<th>9</th>
-								<th>10</th>
-								<th>11=12+13</th>
-								<th>12</th>
-								<th>13</th>
-								<th>14=15+16</th>
-								<th>15</th>
-								<th>16</th>
-								<th>17</th>
-								<th *ngIf="status.general" nzRight></th>
-								<th *ngIf="status.general" nzRight></th>
+								<th scope="col" nzLeft>A</th>
+								<th scope="col" nzLeft>B</th>
+								<th scope="col">1</th>
+								<th scope="col">2</th>
+								<th scope="col">3</th>
+								<th scope="col">4=5+6</th>
+								<th scope="col">5</th>
+								<th scope="col">6</th>
+								<th scope="col">7=9+10</th>
+								<th scope="col">8</th>
+								<th scope="col">9</th>
+								<th scope="col">10</th>
+								<th scope="col">11=12+13</th>
+								<th scope="col">12</th>
+								<th scope="col">13</th>
+								<th scope="col">14=15+16</th>
+								<th scope="col">15</th>
+								<th scope="col">16</th>
+								<th scope="col">17</th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
+								<th scope="col" *ngIf="status.general" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -376,9 +376,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -408,10 +408,6 @@
 					<span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
 					<span>Xuất</span>
 				</button>
-				<!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
-				</button> -->
 				<button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
 					<i nz-icon nzType="check" nzTheme="outline"></i>
 					<span>Hoàn tất nhập liệu</span>

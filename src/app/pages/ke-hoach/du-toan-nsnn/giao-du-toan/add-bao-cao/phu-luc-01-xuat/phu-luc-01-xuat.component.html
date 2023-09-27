@@ -35,17 +35,17 @@
                     <nz-table nzBordered class="table__body">
                         <thead>
                             <tr>
-                                <th rowspan="2" class="text-center" nzWidth="50px" nzLeft>STT</th>
-                                <th rowspan="2" nzWidth="300px" style="width: 300px;" nzLeft>DANH MỤC</th>
-                                <th rowspan="2">Đơn vị tính</th>
-                                <th colspan="3">Năm dự toán {{namBaoCao}}</th>
-                                <th rowspan="2" *ngIf="status.general"></th>
-                                <th rowspan="2" *ngIf="status.general"></th>
+                                <th scope="col" rowspan="2" class="text-center" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" rowspan="2" nzWidth="300px" style="width: 300px;" nzLeft>DANH MỤC</th>
+                                <th scope="col" rowspan="2">Đơn vị tính</th>
+                                <th scope="colgroup" colspan="3">Năm dự toán {{namBaoCao}}</th>
+                                <th scope="col" rowspan="2" *ngIf="status.general"></th>
+                                <th scope="col" rowspan="2" *ngIf="status.general"></th>
                             </tr>
                             <tr>
-                                <th>Số lượng</th>
-                                <th>Định mức</th>
-                                <th>Thành tiền</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Định mức</th>
+                                <th scope="col">Thành tiền</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -140,9 +140,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -164,13 +164,6 @@
                 </div>
             </nz-tab>
         </nz-tabset>
-
-        <!-- <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-            <div nz-col nzSpan="24">
-                <label class="search__label">Thuyết minh</label>
-                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
-            </div>
-        </div> -->
     </div>
     <div class="modal-footer">
         <div class="nut">
@@ -179,10 +172,6 @@
                     <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                     <span>Xuất</span>
                 </button>
-                <!-- <button type="button" class="btn btn-main" *ngIf="status.print" (click)="genFunc.doPrint()">
-                    <i nz-icon nzType="printer" nzTheme="outline"></i>
-                    <span>In</span>
-                </button> -->
                 <button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>

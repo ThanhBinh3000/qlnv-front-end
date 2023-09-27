@@ -137,38 +137,7 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         });
         this.fileList = [];
     };
-
-
-
-    // isDataAvailable = false;
-    // editMoneyUnit = false;
-    // status = false;
-    // donViTiens: any[] = DON_VI_TIEN;
-    // maDviTien: string = '1';
-    // scrollX: string;
-    // editRecommendedValue: boolean;
-    // viewRecommendedValue: boolean;
-    // userInfo: any;
-    // formDetail: any;
-    // maDviTao: any;
-    // thuyetMinh: string;
-    // namBcao: number;
-    // statusBtnOk: boolean;
-    // statusBtnFinish: boolean;
-    // statusPrint: boolean;
-    // // noiDungs: any[] = [];
-    // lstCtietBcaos: ItemData[] = [];
-    // editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     noiDungs: any[] = DANH_MUC;
-    // BOX_NUMBER_WIDTH = 300;
-    // soLaMa: any[] = LA_MA;
-    // amount = AMOUNT;
-    // amount1 = AMOUNT1;
-    // total: ItemData = new ItemData();
-    // tongDieuChinhTang: number;
-    // tongDieuChinhGiam: number;
-    // dToanVuTang: number;
-    // dToanVuGiam: number;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -186,20 +155,6 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         })
     }
     async initialization() {
-
-        // const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL10');
-        // if (category) {
-        //   category.data.forEach(
-        //     item => {
-        //       this.noiDungs.push({
-        //         ...item,
-        //         level: item.ma?.split('.').length - 2,
-        //         giaTri: getName(this.namBcao, item.giaTri),
-        //       })
-        //     }
-        //   )
-        // }
-
         this.spinner.show();
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
@@ -227,15 +182,6 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
             })
         }
 
-        // if (this.lstCtietBcaos.length > 0) {
-        //     if (!this.lstCtietBcaos[0]?.stt) {
-        //         this.setIndex();
-        //         // this.lstCtietBcaos = Table.sortWithoutIndex(this.lstCtietBcaos, 'maNoiDung');
-        //     } else {
-        //     }
-        // }
-
-
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
         this.getTotal();
         this.updateEditCache();
@@ -256,9 +202,6 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
                 this.lstCtietBcaos[ind].stt = stt + '.' + (j + 1).toString();
             }
         }
-        // lstVtuTemp.forEach(item => {
-        //     this.sum(item.stt + '.1');
-        // })
     }
 
     async getFormDetail() {
@@ -435,6 +378,10 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
     };
 
     saveEdit(id: string): void {
+        if (!this.editCache[id].data.tenNoiDung) {
+            this.notification.warning(MESSAGE.WARNING, "Chưa nhập chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN");
+            return;
+        }
         const index = this.lstCtietBcaos.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
@@ -490,7 +437,7 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 5, l: 0, r: 5, val: null },
+            { t: 0, b: 6, l: 0, r: 5, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -502,6 +449,14 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
             { t: 4, b: 5, l: 3, r: 3, val: 'Thời gian thực hiện' },
             { t: 4, b: 5, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
             { t: 4, b: 5, l: 5, r: 5, val: 'Tổng nhu cầu dự toán' },
+
+            { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+            { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+            { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+            { t: 6, b: 6, l: 3, r: 3, val: 'D' },
+            { t: 6, b: 6, l: 4, r: 4, val: 'E' },
+            { t: 6, b: 6, l: 5, r: 5, val: '1' },
+
         ]
         const fieldOrder = [
             "stt",
@@ -519,6 +474,13 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
             })
             return row;
         })
+
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenTaiSan' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

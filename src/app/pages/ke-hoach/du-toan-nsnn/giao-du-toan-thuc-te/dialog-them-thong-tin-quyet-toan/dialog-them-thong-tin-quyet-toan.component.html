@@ -2,9 +2,9 @@
     <nz-table #basicTable class="nowrap">
         <thead>
             <tr>
-                <th nzWidth="20%">Ngày tạo QĐ/CV</th>
-                <th nzWidth="30%">Số QĐ/CV</th>
-                <th nzWidth="30%">Mã PA</th>
+                <th scope="col" nzWidth="20%">Ngày tạo QĐ/CV</th>
+                <th scope="col" nzWidth="30%">Số QĐ/CV</th>
+                <th scope="col" nzWidth="30%">Mã PA</th>
             </tr>
         </thead>
         <tbody>
@@ -14,7 +14,7 @@
                     <nz-upload [nzBeforeUpload]="beforeUploadCV">
                         <button nz-button>
                             <i nz-icon nzType="upload"></i>
-                            Select File
+                            Chọn tệp
                         </button>
                     </nz-upload>
                     <div class="tep__sqd" (click)="downloadFileCv()">
@@ -41,7 +41,7 @@
             <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
                 <button nz-button>
                     <i nz-icon nzType="upload"></i>
-                    Select File
+                    Chọn tệp
                 </button>
             </nz-upload>
             <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
@@ -55,9 +55,9 @@
             <nz-table nzBordered class="table__body">
                 <thead>
                     <tr>
-                        <th nzWidth="7%">STT</th>
-                        <th>Tên file</th>
-                        <th nzWidth="10%"></th>
+                        <th scope="col" nzWidth="7%">STT</th>
+                        <th scope="col">Tên file</th>
+                        <th scope="col" nzWidth="10%"></th>
                     </tr>
                 </thead>
                 <tbody>

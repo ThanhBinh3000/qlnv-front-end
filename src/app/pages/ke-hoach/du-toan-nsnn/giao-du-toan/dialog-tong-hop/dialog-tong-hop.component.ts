@@ -12,7 +12,6 @@ import * as uuid from "uuid";
 @Component({
     selector: 'app-dialog-tong-hop',
     templateUrl: './dialog-tong-hop.component.html',
-    styleUrls: ['./dialog-tong-hop.component.scss']
 })
 
 export class DialogTongHopComponent implements OnInit {
@@ -109,9 +108,6 @@ export class DialogTongHopComponent implements OnInit {
     async getListPA() {
         this.spinner.show()
         const requestReport = {
-            // maDvi: this.obj.maDvi,
-            // namPa: this.response.namHienTai
-
             donViTao: "",
             loaiTimKiem: "1",
             maBcao: "",
@@ -128,7 +124,6 @@ export class DialogTongHopComponent implements OnInit {
         await this.giaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.lstPa = res.data.content;
-                // this.lstPa = this.lstPa.filter(item => item.listTtCtiet.every(e => e.trangThai == '1'));
                 let lstPaTemp = []
                 lstPaTemp = this.lstPa.filter(s => s.namBcao == this.response.namHienTai);
                 if (this.userInfo.CAP_DVI == "1") {

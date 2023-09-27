@@ -46,17 +46,17 @@ export class ItemData {
     }
 
     sum(data: ItemData) {
-        if (this.level == 1) {
-            this.khSoLuong = Operator.sum([this.khSoLuong, data.khSoLuong]);
-            this.thSoLuong = Operator.sum([this.thSoLuong, data.thSoLuong]);
-        }
-        this.khTtien = Operator.sum([this.khTtien, data.khTtien])
-        // this.thSoLuong = Operator.sum([this.thSoLuong, data.thSoLuong]);
-        this.thTtien = Operator.sum([this.thTtien, data.thTtien]);
-        // if (this.level == 0) {
+        // if (this.level == 1) {
         //     this.khSoLuong = Operator.sum([this.khSoLuong, data.khSoLuong]);
-        //     this.khTtien = Operator.sum([this.khTtien, data.khTtien])
+        //     this.thSoLuong = Operator.sum([this.thSoLuong, data.thSoLuong]);
         // }
+        // this.khTtien = Operator.sum([this.khTtien, data.khTtien])
+        this.thSoLuong = Operator.sum([this.thSoLuong, data.thSoLuong]);
+        this.thTtien = Operator.sum([this.thTtien, data.thTtien]);
+        if (this.level == 0) {
+            this.khSoLuong = Operator.sum([this.khSoLuong, data.khSoLuong]);
+            this.khTtien = Operator.sum([this.khTtien, data.khTtien])
+        }
     }
 
     clearKeHoach() {
@@ -197,6 +197,7 @@ export class BaoCao02Component implements OnInit {
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
         this.updateEditCache();
         this.getStatusButton();
+        this.getTotal();
         this.spinner.hide();
     }
 
@@ -428,64 +429,6 @@ export class BaoCao02Component implements OnInit {
         this.updateEditCache();
     }
 
-    // updateChecked(id: string) {
-    //     const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
-    //     //đặt các phần tử con có cùng trạng thái với nó
-    //     this.lstCtietBcao.forEach(item => {
-    //         if (item.stt.startsWith(data.stt)) {
-    //             item.checked = data.checked;
-    //         }
-    //     })
-    //     //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-    //     let index: number = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(data.stt));
-    //     if (index == -1) {
-    //         this.allChecked = this.checkAllChild('0');
-    //     } else {
-    //         let nho: boolean = this.lstCtietBcao[index].checked;
-    //         while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
-    //             this.lstCtietBcao[index].checked = !nho;
-    //             index = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(this.lstCtietBcao[index].stt));
-    //             if (index == -1) {
-    //                 this.allChecked = this.checkAllChild('0');
-    //                 break;
-    //             }
-    //             nho = this.lstCtietBcao[index].checked;
-    //         }
-    //     }
-    // }
-
-    // //kiểm tra các phần tử con có cùng được đánh dấu hay ko
-    // checkAllChild(str: string): boolean {
-    //     let nho = true;
-    //     this.lstCtietBcao.forEach(item => {
-    //         if ((Table.preIndex(item.stt) == str) && (!item.checked)) {
-    //             nho = item.checked;
-    //         }
-    //     })
-    //     return nho;
-    // }
-
-
-    // updateAllChecked() {
-    //     this.lstCtietBcao.forEach(item => {
-    //         item.checked = this.allChecked;
-    //     })
-    // }
-
-    // deleteAllChecked() {
-    //     const lstId: string[] = [];
-    //     this.lstCtietBcao.forEach(item => {
-    //         if (item.checked) {
-    //             lstId.push(item.id);
-    //         }
-    //     })
-    //     lstId.forEach(item => {
-    //         if (this.lstCtietBcao.findIndex(e => e.id == item) != -1) {
-    //             this.deleteLine(item);
-    //         }
-    //     })
-    // }
-
     // start edit
     startEdit(id: string): void {
         this.editCache[id].edit = true;
@@ -514,7 +457,7 @@ export class BaoCao02Component implements OnInit {
         stt = Table.preIndex(stt);
         while (stt != '0') {
             const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-            this.lstCtietBcao[index].clearKeHoach();
+            // this.lstCtietBcao[index].clearKeHoach();
             this.lstCtietBcao[index].clearThucHien();
             if (this.lstCtietBcao[index].level == 0) {
                 this.lstCtietBcao[index].clearKeHoach();
@@ -538,6 +481,10 @@ export class BaoCao02Component implements OnInit {
                 this.total.sum(item);
             }
         })
+    }
+
+    isEdit(level: number) {
+        return level == 2 || (level == 1 && this.dataInfo.dotBcao)
     }
 
     exportToExcel() {
@@ -585,6 +532,13 @@ export class BaoCao02Component implements OnInit {
             }
         })
         filterData.push(row);
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', 'B', 'C', '1', '2', '3', '4=2*3', '5', '6', '7=5*6', 'D'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

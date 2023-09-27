@@ -22,10 +22,6 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Tạo phương án</span>
             </button>
-            <button *ngIf="!statusBtnCopy" type="button" class="btn btn-sub" (click)="showDialogCopy()">
-                <i nz-icon nzType="copy" nzTheme="outline"></i>
-                <span>Copy</span>
-            </button>
         </div>
     </nz-affix>
     <div class="bg-trang">
@@ -41,10 +37,10 @@
                     <nz-table class="nowrap mt-16 table-chi-tiet">
                         <thead>
                             <tr>
-                                <th nzWidth="500px">Số QĐ</th>
-                                <th>Mã phương án</th>
-                                <th>Năm phương án</th>
-                                <th>Ngày tạo</th>
+                                <th scope="col" nzWidth="500px">Số QĐ</th>
+                                <th scope="col">Mã phương án</th>
+                                <th scope="col">Năm phương án</th>
+                                <th scope="col">Ngày tạo</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,7 +49,7 @@
                                     <nz-upload [nzBeforeUpload]="beforeUploadSoQuyetDinh" [hidden]="status">
                                         <button nz-button>
                                             <i nz-icon nzType="upload"></i>
-                                            Select File
+                                            Chọn tệp
                                         </button>
                                     </nz-upload>
                                     <div class="tep__sqd" (click)="downloadFileCv()">
@@ -64,13 +60,9 @@
                                     {{maPa}}
                                 </td>
                                 <td>
-                                    <!-- <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="namPa"
-                                  [hidden]="status" [class]="namPa && namPa < 3000 && namPa > 999 ?'' : 'input-error-validate' ">
-                                </nz-input-number> -->
                                     {{namPa}}
                                 </td>
                                 <td>
-                                    <!-- <nz-date-picker class="search__input" [(ngModel)]="ngayTao" nzFormat="dd/MM/yyyy"></nz-date-picker> -->
                                     {{ngayTao}}
                                 </td>
                             </tr>
@@ -104,21 +96,17 @@
                     <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
                         <thead>
                             <tr>
-                                <th rowspan="2" nzWidth="150px">STT</th>
-                                <th rowspan="2" nzWidth="400px">Nội dung</th>
-                                <th rowspan="2" nzWidth="300px">Tổng cộng</th>
-                                <th colspan="2" nzWidth="200px">Trong đó</th>
-                                <th rowspan="2" [hidden]="status"></th>
-                                <!-- <th rowspan="2" [hidden]="status">
-                                    <label nz-checkbox [(ngModel)]="allChecked"
-                                        (ngModelChange)="updateAllChecked()"></label>
-                                </th> -->
+                                <th scope="col" rowspan="2" nzWidth="150px">STT</th>
+                                <th scope="col" rowspan="2" nzWidth="400px">Nội dung</th>
+                                <th scope="col" rowspan="2" nzWidth="300px">Tổng cộng</th>
+                                <th scope="col" colspan="2" nzWidth="200px">Trong đó</th>
+                                <th scope="col" rowspan="2" [hidden]="status"></th>
                             </tr>
                             <tr>
-                                <th style="width: 50%">
+                                <th scope="col" style="width: 50%">
                                     Nguồn NSNN
                                 </th>
-                                <th style="width: 50%">
+                                <th scope="col" style="width: 50%">
                                     Nguồn khác
                                 </th>
                             </tr>
@@ -144,13 +132,6 @@
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                         </ng-container>
                                     </td>
-                                    <!-- <td [hidden]="status">
-                                        <i class="fa fa-plus" (click)="addLine(data.id)"></i>
-                                    </td> -->
-                                    <!-- <td [hidden]="status">
-                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                            (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td>
@@ -176,9 +157,6 @@
                                             [(ngModel)]="editCache[data.id].data.nguonKhac"
                                             (ngModelChange)="changeModel(data.id)" [options]="amount" />
                                     </td>
-                                    <!-- <td [hidden]="status">
-                                        <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-                                    </td> -->
                                     <td [hidden]="status">
                                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -186,10 +164,6 @@
                                             Hủy
                                         </a>
                                     </td>
-                                    <!-- <td [hidden]="status">
-                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                            (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>
@@ -216,7 +190,7 @@
                             [hidden]="status">
                             <button nz-button>
                                 <i nz-icon nzType="upload"></i>
-                                Select File
+                                Chọn tệp
                             </button>
                         </nz-upload>
                         <button nz-button [nzType]="'primary'" (click)="handleUpload()"
@@ -230,9 +204,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="10%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="10%"></th>
                                 </tr>
                             </thead>
                             <tbody>

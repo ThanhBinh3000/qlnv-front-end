@@ -147,7 +147,7 @@ export class ThanhToanTheoDonGiaComponent implements OnInit {
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && isChild;
         // this.status.export = this.baoCao.trangThai == Status.TT_07 && isChild;
-        this.status.export = isChild;
+        this.status.export = isChild && !(!this.baoCao.id);
 
         this.status.save = this.status.save && this.userService.isAccessPermisson(Roles.CVMB.EDIT_TTKH);
         this.status.submit = this.status.submit && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_TTKH);
@@ -213,12 +213,11 @@ export class ThanhToanTheoDonGiaComponent implements OnInit {
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
+                this.baoCao.ngayTrinh = data.data.ngayTrinh;
+                this.baoCao.ngayDuyet = data.data.ngayDuyet;
+                this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -398,7 +397,13 @@ export class ThanhToanTheoDonGiaComponent implements OnInit {
             })
             return row;
         })
-
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', 'B', '1', '2', '3=1x2', '4', '5', '6=4+5', '7=3-6', '8', '9', '10', '11', '12', '13=11+12', 'C'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

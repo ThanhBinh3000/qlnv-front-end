@@ -245,14 +245,17 @@
         <div nz-col [nzSpan]="12">
           <nz-card class="mg-t-10 flex-card p-lr16 ">
             <app-thongtin-dexuat [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
-              [isView]="true" [isCache]="true" [isTongHop]="isTongHop">
+                                 [titlePl]="'Phụ lục đề xuất KH LCNT của Cục DTNN KV'"
+                                 [isView]="true" [isCache]="true" [isTongHop]="isTongHop">
             </app-thongtin-dexuat>
           </nz-card>
         </div>
         <div nz-col [nzSpan]="12">
           <nz-card class="mg-t-10 flex-card p-lr16 ">
             <app-thongtin-dexuat #thongtinDexuatComponent
-                                 [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
+                                 [title]="'Quyết định của Tổng cục DTNN'"
+                                 [titlePl]="'Phụ lục kế hoạch lựa chọn nhà thầu'"
+                                 [dataInput]="dataInput"
                                  [dataChiTieu]="dataChiTieu" [maDvi]="maDviSelected"
                                  [trangThaiQd]="formData.value.trangThai"
                                  [isView]="formData.value.trangThai == STATUS.BAN_HANH"

@@ -50,6 +50,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: ['00'],
+      trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       ghiChu: [null],

@@ -41,8 +41,8 @@ export class PhieuNhapHangSapNhapComponent extends Base2Component implements OnI
             nam: [],
             soPhieu: [],
             soQuyetDinh: [],
-            ngayNhapKhoTu: [],
-            ngayNhapKhoDen: [],
+            ngayNhapTu: [],
+            ngayNhapDen: [],
             trangThai: [],
         })
     }
@@ -73,17 +73,17 @@ export class PhieuNhapHangSapNhapComponent extends Base2Component implements OnI
         [this.STATUS.DA_HOAN_THANH]: "Hoàn thành"
     }
     disabledStartNgayKy = (startValue: Date): boolean => {
-        if (startValue && this.formData.value.ngayNhapKhoDen) {
-            return startValue.getTime() >= this.formData.value.ngayNhapKhoDen.getTime();
+        if (startValue && this.formData.value.ngayNhapDen) {
+            return startValue.getTime() >= this.formData.value.ngayNhapDen.getTime();
         }
         return false;
     };
 
     disabledEndNgayKy = (endValue: Date): boolean => {
-        if (!endValue || !this.formData.value.ngayNhapKhoTu) {
+        if (!endValue || !this.formData.value.ngayNhapTu) {
             return false;
         }
-        return endValue.getTime() <= this.formData.value.ngayNhapKhoTu.getTime();
+        return endValue.getTime() <= this.formData.value.ngayNhapTu.getTime();
     };
 
     ngOnInit(): void {

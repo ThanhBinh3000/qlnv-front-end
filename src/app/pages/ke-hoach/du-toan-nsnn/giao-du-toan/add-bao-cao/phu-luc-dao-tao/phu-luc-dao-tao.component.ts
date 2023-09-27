@@ -15,6 +15,7 @@ import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
 import { DANH_MUC } from './phu-luc-dao-tao.constant';
+
 export class ItemData {
     level: any;
     id: string;
@@ -64,7 +65,7 @@ export class ItemData {
 
     sum(data: ItemData) {
         Object.keys(data).forEach(key => {
-            if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+            if (!['level', 'kinhPhiHoTro'].includes(key) && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
                 this[key] = Operator.sum([this[key], data[key]]);
             }
         })
@@ -131,7 +132,7 @@ export class PhuLucDaoTaoComponent implements OnInit {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
             this.formDetail.lstFiles.push({
-                ... new Doc(),
+                ...new Doc(),
                 id: id,
                 fileName: file?.name
             });
@@ -148,27 +149,16 @@ export class PhuLucDaoTaoComponent implements OnInit {
         private notification: NzNotificationService,
         private giaoDuToanService: GiaoDuToanChiService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-    ) { }
+    ) {
+    }
 
     ngOnInit() {
         this.initialization().then(() => {
             this.isDataAvailable = true;
         })
     }
-    async initialization() {
-        // const category = await this.danhMucService.danhMucChungGetAll('BC_DC_PL10');
-        // if (category) {
-        //   category.data.forEach(
-        //     item => {
-        //       this.noiDungs.push({
-        //         ...item,
-        //         level: item.ma?.split('.').length - 2,
-        //         giaTri: getName(this.namBcao, item.giaTri),
-        //       })
-        //     }
-        //   )
-        // }
 
+    async initialization() {
         this.spinner.show();
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
@@ -208,7 +198,6 @@ export class PhuLucDaoTaoComponent implements OnInit {
                 this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
             }
         }
-
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
@@ -390,6 +379,10 @@ export class PhuLucDaoTaoComponent implements OnInit {
     };
 
     saveEdit(id: string): void {
+        if (!this.editCache[id].data.tenNoiDung) {
+            this.notification.warning(MESSAGE.WARNING, "Chưa nhập nội dung đào tạo, bồi dưỡng");
+            return;
+        }
         const index = this.lstCtietBcaos.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
@@ -409,6 +402,7 @@ export class PhuLucDaoTaoComponent implements OnInit {
             edit: false
         };
     };
+
     checkAdd(stt: string) {
         if (
             stt == "0.1" ||
@@ -448,7 +442,7 @@ export class PhuLucDaoTaoComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 5, l: 0, r: 8, val: null },
+            { t: 0, b: 6, l: 0, r: 8, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -465,6 +459,18 @@ export class PhuLucDaoTaoComponent implements OnInit {
             { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng' },
             { t: 5, b: 5, l: 5, r: 5, val: 'Định mức' },
             { t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
+
+
+            { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+            { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+            { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+            { t: 6, b: 6, l: 3, r: 3, val: 'D' },
+            { t: 6, b: 6, l: 4, r: 4, val: '1' },
+            { t: 6, b: 6, l: 5, r: 5, val: '2' },
+            { t: 6, b: 6, l: 6, r: 6, val: '3 = 1 + 2' },
+            { t: 6, b: 6, l: 7, r: 7, val: '4' },
+            { t: 6, b: 6, l: 8, r: 8, val: '5 = 3 x 4' },
+
 
         ]
         const fieldOrder = [
@@ -486,10 +492,19 @@ export class PhuLucDaoTaoComponent implements OnInit {
             })
             return row;
         })
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenTaiSan' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
-        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.sheet_add_json(worksheet, filterData, {
+            skipHeader: true,
+            origin: Table.coo(header[0].l, header[0].b + 1)
+        })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
         excelName = excelName + '_GSTC_PL07.xlsx'
