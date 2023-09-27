@@ -291,7 +291,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       });
     }
   }
-
   async donGiaDuocDuyet() {
     const {namKh, loaiVthh, cloaiVthh} = this.formData.value;
     const bodyPag = {
@@ -299,7 +298,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       loaiVthh: loaiVthh,
       cloaiVthh: cloaiVthh,
       trangThai: STATUS.BAN_HANH,
-      maDvi: this.userInfo.MA_DVI,
+      maDvi: this.formData.value.maDvi.substring(0,6),
       loaiGia: 'LG04'
     };
     const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);

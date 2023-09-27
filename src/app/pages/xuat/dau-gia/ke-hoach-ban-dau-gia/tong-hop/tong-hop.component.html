@@ -153,7 +153,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai == STATUS.DA_BAN_HANH_QD "></label>
+                   [nzDisabled]="data.trangThai != STATUS.CHUA_TAO_QD "></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.id }}</td>

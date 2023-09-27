@@ -310,7 +310,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       loaiVthh: loaiVthh,
       cloaiVthh: cloaiVthh,
       trangThai: STATUS.BAN_HANH,
-      maDvi: '0101',
+      maDvi: this.formData.value.maDvi.substring(0,6),
       loaiGia: 'LG04'
     };
     const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
