@@ -12,6 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CoeffIns, Insurance } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-he-so-bao-hiem',
@@ -148,6 +149,7 @@ export class HeSoBaoHiemComponent implements OnInit {
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && isChild;
         this.status.approve = Status.check('approve', this.baoCao.trangThai) && checkApprove && isChild;
+        this.status.export = this.userService.isAccessPermisson(Roles.LTD.EXPORT_COEF_INS) && !(!this.baoCao.id);
         if (this.status.general) {
             this.scrollX = Table.tableWidth(400, 3, 1, 60);
         } else {
@@ -369,5 +371,36 @@ export class HeSoBaoHiemComponent implements OnInit {
         let file: any = this.listFile.find(element => element?.lastModified.toString() == id);
         let doc: any = this.baoCao.lstFiles.find(element => element?.id == id);
         await this.quanLyVonPhiService.downFile(file, doc);
+    }
+
+    exportToExcel() {
+        if (this.baoCao.lstCtiets.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+        const header = [
+            { t: 0, b: 5, l: 0, r: 5, val: null },
+            { t: 0, b: 0, l: 0, r: 5, val: 'Hệ số bảo hiểm' },
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Danh mục' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị' },
+            { t: 4, b: 4, l: 3, r: 4, val: 'Tỷ lệ (%)' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'Kho dưới ' + this.baoCao.khoiTich.toString() + ' m3' },
+            { t: 5, b: 5, l: 4, r: 4, val: 'Kho trên ' + this.baoCao.khoiTich.toString() + ' m3' },
+            { t: 4, b: 5, l: 5, r: 5, val: 'Ghi chú' },
+        ]
+        const fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'tyLeKhoDuoi', 'tyLeKhoTren', 'ghiChu']
+        const filterData = this.baoCao.lstCtiets.map(item => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                row[field] = field == 'stt' ? this.getChiMuc(item[field]) : ((!item[field] && item[field] !== 0) ? '' : item[field]);
+            })
+            return row;
+        })
+        const workbook = XLSX.utils.book_new();
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        XLSX.writeFile(workbook, 'HSBH_' + this.baoCao.nam.toString() + '.xlsx');
     }
 }
