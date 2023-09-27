@@ -161,14 +161,18 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
 
   async bindingData() {
     if (this.itemGoiThau && this.itemQdPdKhlcnt) {
+      console.log(this.itemGoiThau,"this.itemGoiThau")
+      console.log(this.itemQdPdKhlcnt,"this.itemQdPdKhlcnt")
       let rs = await this.quyetdinhpheduyetKqLcntService.getDetail(this.itemGoiThau.idQdPdKqlcnt);
       let dataQdPdKqlcnt;
       let goiThau;
       if (rs.msg == MESSAGE.SUCCESS) {
         dataQdPdKqlcnt = rs.data;
       }
+      console.log(dataQdPdKqlcnt,"dataQdPdKqlcnt")
       if (dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.length) {
         goiThau = dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
+        console.log(goiThau,"goiThau")
       }
       console.log(this.itemGoiThau, 'this.itemGoiThau this.itemGoiThau ')
       this.formData.patchValue({
@@ -178,7 +182,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
         idQdPdKhlcnt: this.itemQdPdKhlcnt.id,
         idDuAn: this.itemQdPdKhlcnt.idDuAn,
         tenDuAn: this.itemQdPdKhlcnt.tenDuAn,
-        soQdPdKqlcnt: this.itemGoiThau.soQdPdKqlcnt,
+        soQdPdKqlcnt: this.itemQdPdKhlcnt.soQdPdKqlcnt,
         idGoiThau: this.itemGoiThau.id,
         tenGoiThau: this.itemGoiThau.noiDung,
         ngayKyKqlcnt: dataQdPdKqlcnt ? dataQdPdKqlcnt.ngayKy : null,

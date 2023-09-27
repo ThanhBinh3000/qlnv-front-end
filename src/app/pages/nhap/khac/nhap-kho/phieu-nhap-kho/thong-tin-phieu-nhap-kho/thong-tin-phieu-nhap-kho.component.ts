@@ -21,9 +21,11 @@ import { PhieuKtraCluongService } from "src/app/services/qlnv-hang/nhap-hang/nha
 import { QuyetDinhGiaoNhapHangKhacService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhGiaoNhapHangKhac.service";
 import { StorageService } from "src/app/services/storage.service";
 import { convertTienTobangChu } from "src/app/shared/commonFunction";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 import { DanhMucDungChungService } from "src/app/services/danh-muc-dung-chung.service";
 import { KIEU_NHAP_XUAT } from "src/app/constants/config";
+import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
+import moment from "moment";
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho',
@@ -49,6 +51,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   dviTinh: string;
   donGia: string;
   thanhTien: number;
+  previewName: string = 'nk_phieu_nhap_kho';
 
   constructor(
     httpClient: HttpClient,
@@ -61,6 +64,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     private dmService: DanhMucDungChungService,
     private phieuKiemTraChatLuongService: PhieuKtraCluongService,
     private quyetDinhGiaoNhapHangKhacService: QuyetDinhGiaoNhapHangKhacService,
+    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
     private phieuNhapKhoService: PhieuNhapKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuNhapKhoService);
@@ -147,7 +151,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       console.log('data', this.data)
       this.formData.patchValue({
         soQdGiaoNv: this.data.soQdPdNk,
-        ngayQdGiaoNv: "2023-31-07",//ngayKyQdinh
+        ngayQdGiaoNv: moment(this.data.ngayKyQdinh, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD'),
         qdGiaoNvId: this.data.idQdPdNk,
         tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
@@ -236,7 +240,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   }
 
   async add(row?: any) {
-    if (!this.formData.value.qdGiaoNvId || !this.formData.value.soPhieuKtraCluong || !this.formData.value.maSo || !this.formData.value.soLuongNhap || !this.formData.value.soLuongNhapTt) {
+    if (!this.formData.value.qdGiaoNvId || !this.formData.value.maSo || !this.formData.value.soLuongNhap || !this.formData.value.soLuongNhapTt) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập đủ thông tin");
       return
     }
@@ -468,6 +472,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           donViTinh: data.dvt,
           tenDonViTinh: data.dvt,
         });
+        this.noiDung = data.tenCloaiVthh
         this.dviTinh = data.dvt
         this.donGia = data.donGia
 
@@ -476,7 +481,8 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
           maLoKho: this.formData.value.maLoKho,
           idQdGiaoNvnh: this.formData.value.qdGiaoNvId,
         }
-        this.getPhieuKTCL(body)
+        await this.getPhieuKTCL(body)
+        await this.loadDsBbnt()
       }
     });
   }
@@ -494,6 +500,27 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
         cloaiVthh: phieuKTCL.cloaiVthh,
         tenCloaiVthh: phieuKTCL.tenCloaiVthh,
       })
+    }
+  }
+
+  async loadDsBbnt() {
+    let body = {
+      idQdGiaoNvnh: this.formData.get('qdGiaoNvId').value,
+      maLoKho: this.formData.get('maLoKho').value,
+      maNganKho: this.formData.get('maNganKho').value,
+    }
+    let res = await this.bbNghiemThuBaoQuanService.timKiemBbtheoMaNganLo(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data;
+      let bbNTBQ = ''
+      data.forEach(element => {
+        bbNTBQ = bbNTBQ.concat(`${element.soBbNtBq}, `)
+      });
+      this.formData.patchValue({
+        bbNghiemThuBqld: bbNTBQ
+      })
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 

@@ -10,12 +10,12 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button class="btn btn-sub btn-sm waves-effect waves-light"
-            *ngIf="khBanDauGia.trangThai == STATUS.CHO_DUYET_LDV ||
-             khBanDauGia.trangThai == STATUS.DA_DUYET_LDV" (click)="pheDuyet()">
+            *ngIf="itemThongTri.trangThai == STATUS.CHO_DUYET_LDV ||
+             itemThongTri.trangThai == STATUS.DA_DUYET_LDV" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub" *ngIf="khBanDauGia.trangThai ==  STATUS.CHO_DUYET_LDV"
+    <button type="button" class="btn btn-sub" *ngIf="itemThongTri.trangThai ==  STATUS.CHO_DUYET_LDV"
             (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
@@ -32,11 +32,11 @@
     <div class="header mg-t-16">
       <div class="header-text">
         <div class="title-chi-tieu">
-                    <span *ngIf="!khBanDauGia.id" class="du-thao-va-lanh-dao-duyet">
+                    <span *ngIf="!itemThongTri.id" class="du-thao-va-lanh-dao-duyet">
                         Dự Thảo
                     </span>
-          <span *ngIf="khBanDauGia.id"
-                [ngClass]="thongTinTrangThai(khBanDauGia.trangThai)">{{khBanDauGia.tenTrangThai}}</span>
+          <span *ngIf="itemThongTri.id"
+                [ngClass]="thongTinTrangThai(itemThongTri.trangThai)">{{itemThongTri.tenTrangThai}}</span>
           <span>Thông tri duyệt y dự toán</span>
         </div>
       </div>
@@ -150,6 +150,14 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Lý do chi</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <input nz-input formControlName="lyDoChi" [readonly]="isView"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
       <ng-template #error let-control>
         <app-template-error #error [control]="control"></app-template-error>
@@ -181,12 +189,14 @@
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group>
-              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTien"
-                               [nzFormatter]="globals.formatter"
-                               [nzParser]="globals.parser">
-              </nz-input-number>
-            </nz-input-group>
+            <input class='money-input' [min]='0' currencyMask [options]='amount'
+                   [(ngModel)]='rowItem.soTien'   />
+<!--            <nz-input-group>-->
+<!--              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTien"-->
+<!--                               [nzFormatter]="globals.formatter"-->
+<!--                               [nzParser]="globals.parser">-->
+<!--              </nz-input-number>-->
+<!--            </nz-input-group>-->
           </th>
           <th>
             <nz-input-group>
@@ -209,7 +219,7 @@
             <td>{{idx + 1}}</td>
             <td>{{item.muc}}</td>
             <td>{{item.tieuMuc}}</td>
-            <td class="text-right">{{item.soTien | number : '1.0-1'}}</td>
+            <td class="text-right">{{item.soTien | number : '1.0-1' : 'vi_VN'}}</td>
             <td>{{item.chuThich}}</td>
             <td>
               <a (click)="showEditItem(idx, 'show')">

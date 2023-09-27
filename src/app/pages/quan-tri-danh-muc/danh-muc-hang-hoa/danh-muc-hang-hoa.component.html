@@ -168,8 +168,8 @@
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
-                <nz-form-label>Loại hình bảo quản</nz-form-label>
-                <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="item.checked" [nzDisabled]="!isEditData" nz-checkbox *ngFor="let item of listLhbq"  >  {{item.giaTri}}
+                <nz-form-label>Hình thức bảo quản</nz-form-label>
+                <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="item.checked" [nzDisabled]="!isEditData" nz-checkbox *ngFor="let item of listHtbq"  >  {{item.giaTri}}
                 </label>
               </nz-form-item>
             </div>
@@ -182,8 +182,8 @@
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
-                <nz-form-label>Hình thức bảo quản</nz-form-label>
-                <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="item.checked" [nzDisabled]="!isEditData" nz-checkbox *ngFor="let item of listHtbq"  >  {{item.giaTri}}
+                <nz-form-label>Loại hình bảo quản</nz-form-label>
+                <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="item.checked" [nzDisabled]="!isEditData" nz-checkbox *ngFor="let item of listLhbq"  >  {{item.giaTri}}
                 </label>
               </nz-form-item>
             </div>

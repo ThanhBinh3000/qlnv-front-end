@@ -6,13 +6,17 @@
                 <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-          <span>Quyết định xuất giảm vật tư</span>
+          <span>Biên bản yêu cầu nhà cung cấp bảo hành</span>
         </div>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-sm ml-2" (click)="goBack()">
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
+        </button>
+        <button type="button" class="btn btn-sub ml-2" (click)="xemTruoc(idInput,templateName)">
+          <i class="icon htvbdh_totrinh"></i>
+          <span> In/Xem trước </span>
         </button>
         <button
           *ngIf="formData.value.trangThai == STATUS.DU_THAO "
@@ -33,7 +37,7 @@
   <nz-card class="mt16 flex-card p-lr16">
     <!-- Thông tin chung -->
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="2">
@@ -230,7 +234,9 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                 </nz-form-label>
-                <label nz-checkbox formControlName="capLaiCaLo" [nzDisabled]="isView">Cần cung cấp cả lô hàng</label>
+                <nz-form-control [nzErrorTip]="error">
+                  <label nz-checkbox formControlName="capLaiCaLo" [nzDisabled]="isView">Cần cung cấp cả lô hàng</label>
+                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="12">
@@ -245,8 +251,10 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Lý do cần bảo hành
                 </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
                 <textarea rows="3" [readonly]="isView" nz-input
                           formControlName="lyDo"></textarea>
+                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
@@ -292,3 +300,32 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord( templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+

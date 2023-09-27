@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
@@ -7,33 +6,21 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
 import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
-import { QuanLyBienBanBanGiaoService } from 'src/app/services/quanLyBienBanBanGiao.service';
-import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { BaseComponent } from "../../../../../../components/base/base.component";
-import { FormBuilder, Validators } from '@angular/forms';
-import { PAGE_SIZE_DEFAULT } from '../../../../../../constants/config';
-import { HelperService } from '../../../../../../services/helper.service';
-import { DatePipe } from '@angular/common';
-import { LOAI_BIEN_BAN, STATUS } from 'src/app/constants/status';
+import {HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS} from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {saveAs} from 'file-saver';
+import {v4 as uuidv4} from "uuid";
 @Component({
   selector: 'app-them-moi-ho-so-ky-thuat',
   templateUrl: './them-moi-ho-so-ky-thuat.component.html',
@@ -50,6 +37,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   isBienBan: boolean = false;
   idBienBan: number;
   loaiBienBan: string;
+  previewNameBienBan: string;
 
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
@@ -86,6 +74,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_NGOAI_QUAN,
+      previewName: 'bien_ban_kiem_tra_ngoai_quan.docx'
     },
     {
       id: null,
@@ -93,7 +82,8 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       trangThai: "00",
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
-      loai: LOAI_BIEN_BAN.BB_KTRA_VAN_HANH
+      loai: LOAI_BIEN_BAN.BB_KTRA_VAN_HANH,
+      previewName: 'bien_ban_kiem_tra_van_hanh.docx'
     },
     {
       id: null,
@@ -101,36 +91,56 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       trangThai: "00",
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
-      loai: LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT
+      loai: LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT,
+      previewName: 'bien_ban_kiem_tra_hskt.docx'
     }
   ];
-
+  previewName: string = 'ho_so_ky_thuat';
+  hoSoRow: any = {};
+  hoSoRowEdit:any[] = [];
+  viewTableHoSo: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     public userService: UserService,
     private hoSoKyThuatService: HoSoKyThuatService,
     private bienBanLayMauService: QuanLyBienBanLayMauService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
-    super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
-      maDvi: ['', [Validators.required]],
-      tenDvi: ['', [Validators.required]],
-      nam: [dayjs().get('year'), [Validators.required]],
+      maDvi: [''],
+      tenDvi: [''],
+      tenNguoiTao: [''],
+      nam: [dayjs().get('year')],
       ngayTao: [dayjs().format('YYYY-MM-DD')],
-      soBbLayMau: [null, [Validators.required]],
-      soHoSoKyThuat: [null, [Validators.required]],
-      idQdGiaoNvNh: [null, [Validators.required]],
-      soQdGiaoNvNh: [null, [Validators.required]],
-      soHd: [null, [Validators.required]],
+      soBbLayMau: [null],
+      soHoSoKyThuat: [null],
+      idQdGiaoNvNh: [null],
+      soQdGiaoNvNh: [null],
+      soHd: [null],
       ldoTuchoi: [],
       trangThai: [],
       tenTrangThai: [],
+      ngayPduyet: [],
+      ngayKyHd: [],
+      tenNganLoKho: [],
+      tenNhaKho: [],
+      tenDiemKho: [],
+      diaDiemKho: [],
+      tenLoaiVthh: [],
+      tenCloaiVthh: [],
+      soLuong: [],
+      dvt: [],
+      tenChiCuc: [],
+      lanhDaoChiCuc: [],
+      truongPhong: [],
+      lanhDaoCuc: [],
+      dviCungCap: [],
     });
   }
 
@@ -157,17 +167,16 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        this.dataTable = data.children;
         if (data.listHoSoBienBan) {
           this.dataTableBienBan.forEach(item => {
             let bb = data.listHoSoBienBan.filter(x => x.loaiBb == item.loai);
-            console.log(data.listHoSoBienBan, bb);
             if (bb.length > 0) {
               item.id = bb[0].id
               item.trangThai = bb[0].trangThai
               item.tenTrangThai = bb[0].tenTrangThai
             }
           });
-          console.log(this.dataTableBienBan);
         }
       }
     }
@@ -198,23 +207,6 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   }
 
   async openDialogBbLayMau() {
-    let body = {
-      "maDvi": this.userInfo.MA_DVI,
-      "loaiVthh": this.loaiVthh,
-      "paggingReq": {
-        "limit": this.globals.prop.MAX_INTERGER,
-        "page": 0
-      },
-      "trangThai": STATUS.BAN_HANH,
-      "namNhap": this.formData.get('nam').value
-    }
-    let res = await this.bienBanLayMauService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listBanGiaoMau = data.content;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách biên bản lấy mẫu/bàn giao mẫu',
       nzContent: DialogTableSelectionComponent,
@@ -224,8 +216,8 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listBanGiaoMau,
-        dataHeader: ['Số biên bản', 'Loại hàng hóa'],
-        dataColumn: ['soBienBan', 'tenLoaiVthh'],
+        dataHeader: ['Số biên bản', 'Ngăn/Lô kho', 'Nhà Kho', 'Điểm kho'],
+        dataColumn: ['soBienBan', 'tenNganLoKho', 'tenNhaKho', 'tenDiemKho'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
@@ -234,7 +226,11 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
           soBbLayMau: dataChose.soBienBan,
           soHd: dataChose.soHd,
           soQdGiaoNvNh: dataChose.soQdGiaoNvNh,
-          idQdGiaoNvNh: dataChose.idQdGiaoNvNh
+          idQdGiaoNvNh: dataChose.idQdGiaoNvNh,
+          tenNganLoKho: dataChose.tenNganLoKho,
+          tenNhaKho: dataChose.tenNhaKho,
+          tenDiemKho: dataChose.tenDiemKho,
+          tenChiCuc: dataChose.tenDvi,
         });
       }
     });
@@ -257,7 +253,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: this.detail.trangThai == STATUS.CHO_DUYET_TP ? STATUS.TU_CHOI_TP : STATUS.TU_CHOI_LDC,
           };
           let res =
             await this.hoSoKyThuatService.approve(
@@ -286,6 +282,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     }
     let body = this.formData.value;
     body.fileDinhkems = this.fileDinhKem;
+    body.children = this.dataTable;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.hoSoKyThuatService.update(body);
@@ -299,10 +296,10 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.quayLai();
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.quayLai();
+          this.id = res.data.id;
+          this.formData.get('id').setValue(res.data.id);
         }
       }
     } else {
@@ -366,6 +363,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     this.idBienBan = data.id;
     this.loaiBienBan = data.loai;
     this.isBienBan = true;
+    this.previewNameBienBan = data.previewName;
   }
 
   async backMain() {
@@ -373,4 +371,140 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     this.ngOnInit();
   }
 
+  async openDialogSoQd() {
+    let body = {
+      "loaiVthh": this.loaiVthh,
+      "trangThai": this.STATUS.BAN_HANH,
+    }
+    let res = await this.quyetDinhGiaoNhapHangService.layTatCaQdGiaoNvNh(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listSoQuyetDinh = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listSoQuyetDinh,
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG', ' Chủng loại hàng DTQG'],
+        dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh', 'tenCloaiVthh'],
+      },
+    })
+    modalQD.afterClose.subscribe(async (dataChose) => {
+      if (dataChose) {
+        this.formData.patchValue({
+          soHd: dataChose.hopDong?.soHd,
+          ngayKyHd: dataChose.hopDong?.ngayKy,
+          dviCungCap: dataChose.hopDong?.tenNhaThau,
+          soQdGiaoNvNh: dataChose.soQd,
+          idQdGiaoNvNh: dataChose.id,
+          tenLoaiVthh: dataChose.tenLoaiVthh,
+          tenCloaiVthh: dataChose.tenCloaiVthh,
+          dvt: dataChose.donViTinh,
+        });
+        this.listBanGiaoMau = dataChose.listBienBanLayMau;
+      }
+    });
+  };
+
+  async getNameFile(event?: any) {
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList) {
+      this.hoSoRow.fileName = fileList[0].name
+      const itemFile = {
+        name: fileList[0].name,
+        file: event.target.files[0] as File,
+      };
+      this.uploadFileService
+        .uploadFile(itemFile.file, itemFile.name)
+        .then((resUpload) => {
+          let fileDinhKem = new FileDinhKem();
+          fileDinhKem.fileName = resUpload.filename;
+          fileDinhKem.fileSize = resUpload.size;
+          fileDinhKem.fileUrl = resUpload.url;
+          fileDinhKem.idVirtual = new Date().getTime();
+          this.hoSoRow.fileDinhKem = [...[], fileDinhKem]
+          this.hoSoRow.fileName = resUpload.filename;
+        });
+    }
+  }
+
+  async getNameFileEdit(i:number, event?: any) {
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList) {
+      this.hoSoRowEdit[i].fileName = fileList[0].name
+      const itemFile = {
+        name: fileList[0].name,
+        file: event.target.files[0] as File,
+      };
+      this.uploadFileService
+        .uploadFile(itemFile.file, itemFile.name)
+        .then((resUpload) => {
+          let fileDinhKem = new FileDinhKem();
+          fileDinhKem.fileName = resUpload.filename;
+          fileDinhKem.fileSize = resUpload.size;
+          fileDinhKem.fileUrl = resUpload.url;
+          fileDinhKem.idVirtual = new Date().getTime();
+          this.hoSoRowEdit[i].fileDinhKem = [...[], fileDinhKem]
+          this.hoSoRowEdit[i].fileName = resUpload.filename;
+        });
+    }
+  }
+
+  async downloadFile(item: FileDinhKem) {
+    try {
+      if (item) {
+        this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+          saveAs(blob, item.fileName);
+        });
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'File không tồn tại');
+      }
+    } catch (e) {
+      console.log(e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async themHoSo() {
+    if (this.hoSoRow.tenHoSo
+      && this.hoSoRow.loaiTaiLieu
+      && this.hoSoRow.soLuong
+      && this.hoSoRow.fileName) {
+      this.dataTable = [...this.dataTable, this.hoSoRow]
+      this.hoSoRow = {};
+    } else {
+      this.notification.error(MESSAGE.ERROR, 'Không được bỏ trống các trường có dấu *');
+    }
+  }
+
+  async nhapLaiHoSo() {
+    this.hoSoRow = {};
+  }
+
+  async suaHoSo(i) {
+    this.dataTable.forEach(s => s.edit = false);
+    this.dataTable[i].edit = true;
+    this.hoSoRowEdit[i] = cloneDeep(this.dataTable[i]);
+  }
+
+  async luuHoSo(i) {
+    this.hoSoRowEdit[i].edit = false;
+    this.dataTable.splice(i, 1, this.hoSoRowEdit[i]);
+  }
+
+  async huySuaHoSo() {
+    this.dataTable.forEach(s => s.edit = false);
+  }
+
+  async xoaHoSo(i) {
+    this.dataTable.splice(i, 1);
+  }
 }

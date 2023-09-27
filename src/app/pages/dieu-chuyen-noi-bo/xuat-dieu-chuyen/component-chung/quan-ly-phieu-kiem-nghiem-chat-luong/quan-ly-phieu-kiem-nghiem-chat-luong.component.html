@@ -85,7 +85,7 @@
             <th>Số BB LM/BGM</th>
             <th>Ngày lấy mẫu</th>
             <th>Số BB tịnh kho</th>
-            <th>Ngày xuất dốc kho</th>
+            <th>Ngày lập BB tịnh kho</th>
             <th>Trạng thái</th>
             <th style="width: 10%">Hành động</th>
           </tr>
@@ -154,11 +154,11 @@
                       </td>
                       <td>{{lv2.ngaylayMau | date: 'dd/MM/YYYY'}}</td>
                       <td>{{lv2.soBBTinhKho}}</td>
-                      <td>{{lv2.ngayXuatDocKho}}</td>
+                      <td>{{lv2.ngayLapBbTinhKho| date: 'dd/MM/YYYY'}}</td>
                       <td>{{LIST_TRANG_THAI[lv2.trangThai]}}</td>
                       <td class="text-left">
-                        <a (click)="redirectToChiTiet(lv2, false, item.bblayMauId)"
-                          *ngIf="item.bblayMauId && checkRoleAdd(lv2.trangThai)">
+                        <a (click)="redirectToChiTiet(lv2, false, lv2.bblayMauId)"
+                          *ngIf="lv2.bblayMauId && checkRoleAdd(lv2.trangThai)">
                           <i class="fa fa-plus"></i>
                         </a>
                         <a *ngIf="checkRoleView(lv2.trangThai)" (click)="redirectToChiTiet(lv2, true, null)">

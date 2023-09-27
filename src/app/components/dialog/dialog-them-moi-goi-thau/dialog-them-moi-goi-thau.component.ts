@@ -135,9 +135,9 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       soLuong: 0
     })
     this.listCuc = [];
-    this.loadListDonVi();
+    this.dataTable = [];
+    await this.loadListDonVi();
     this.thongTinCuc = new DanhSachGoiThau();
-    this.dataTable = []
   }
 
   async loadListDonVi() {

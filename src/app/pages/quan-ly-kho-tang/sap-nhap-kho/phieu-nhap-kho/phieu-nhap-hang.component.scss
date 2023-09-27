@@ -1,0 +1,21 @@
+.bg-selected td {
+    background-color: #ebedff;
+    //background-color: red;
+}
+
+.disabled-tab {
+    pointer-events: none; //This makes it not clickable
+    opacity: 0.6; //This grays it out to look disabled
+}
+
+.bg-parent td {
+    background-color: #D9D9D9;
+}
+
+.bg-parent1 {
+    background-color: #EAEAEA;
+}
+
+.bg-parent2 {
+    background-color: #F3F3F3;
+}

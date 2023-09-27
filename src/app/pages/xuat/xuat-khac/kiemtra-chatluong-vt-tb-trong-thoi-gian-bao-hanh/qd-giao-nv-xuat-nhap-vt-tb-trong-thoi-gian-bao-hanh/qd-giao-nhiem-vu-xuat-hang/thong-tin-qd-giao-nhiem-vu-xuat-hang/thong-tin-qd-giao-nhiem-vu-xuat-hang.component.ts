@@ -215,13 +215,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
     this.formData.value.soQuyetDinh = this.formData.value.soQuyetDinh + this.maQd;
     if (this.formData.value.loai == "XUAT_MAU") {
       if (this.formData.value.loaiCanCu == "TONG_HOP") {
-        if (this.dataTh && this.dataThEdit) {
-          this.dataTh.forEach(item => {
-            item.maDviTsan = this.dataThEdit[item.id]?.maDviTsan ? this.dataThEdit[item.id].maDviTsan : null;
-            item.slLayMau = this.dataThEdit[item.id]?.slLayMau ? this.dataThEdit[item.id]?.slLayMau : 0;
-          })
-        }
-        this.formData.value.qdGiaonvXhDtl = this.dataTh;
+        this.formData.value.qdGiaonvXhDtl = this.conVertTreeToList(this.dataThTree);
       } else if (this.formData.value.loaiCanCu == "PHIEU_KDCL") {
         let body = this.formData.value;
         if (body.soCanCu && isArray(body.soCanCu)) {
@@ -276,10 +270,16 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO:
-      case STATUS.TU_CHOI_LDC: {
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        mess = 'Bạn có muối gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
-        mess = 'Bạn có muối gửi duyệt?'
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDC: {
@@ -339,8 +339,12 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
         try {
           let trangThai;
           switch (this.formData.get('trangThai').value) {
+            case STATUS.CHO_DUYET_TP: {
+              trangThai = STATUS.TU_CHOI_TP;
+              break;
+            }
             case STATUS.CHO_DUYET_LDC: {
-              trangThai = STATUS.TU_CHOI_LDC
+              trangThai = STATUS.TU_CHOI_LDC;
               break;
             }
           }
@@ -430,6 +434,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
           soCanCu: data.maDanhSach
         });
         console.log(data.tongHopDtl, ' data.tongHopDtl data.tongHopDtl')
+        this.dataTh=[],
         data.tongHopDtl.forEach(item => {
           let it = new ItemXhXkVtQdGiaonvXhDtl();
           it.id = item.id;
@@ -456,6 +461,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
         this.listPhieuKdcl = cloneDeep(data)
         this.listPhieuKdcl = this.listPhieuKdcl.filter(f => f.checked);
         this.dataTable = this.listPhieuKdcl;
+        console.log(this.listPhieuKdcl,"this.listPhieuKdcl")
         this.formData.patchValue({
           soCanCu: this.listPhieuKdcl.map(m => m.soPhieu),
           idCanCu: this.listPhieuKdcl.map(m => m.id),

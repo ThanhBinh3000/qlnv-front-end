@@ -3,6 +3,7 @@ export const MESSAGE = {
   TITLE_CONFIRM_LOGOUT: 'Bạn có chắc chắn muốn đăng xuất',
   SYSTEM_ERROR: 'Lỗi hệ thống',
   FORM_REQUIRED_ERROR: "Vui lòng điền đủ thông tin",
+  TEMPLATE_NULL: "Không tìm thấy file mẫu báo cáo",
   ERROR: 'Lỗi!!!',
   WARNING: 'Chú ý!!',
   NOTIFICATION: 'Thông báo',

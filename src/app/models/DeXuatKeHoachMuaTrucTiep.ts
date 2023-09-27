@@ -18,6 +18,7 @@ export class DanhSachMuaTrucTiep {
   tongThanhTienVat: number;
   tongSoLuong: number;
   tongThanhTien: number;
+  tongSoLuongChuaTh: number;
   thanhTienVat: number;
   tongDonGia: number;
   loaiVthh: string;

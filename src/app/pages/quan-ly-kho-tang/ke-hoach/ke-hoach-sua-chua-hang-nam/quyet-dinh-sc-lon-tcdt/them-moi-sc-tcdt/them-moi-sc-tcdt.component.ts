@@ -22,6 +22,7 @@ import {
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
+import {log} from "ng-zorro-antd/core/logger";
 
 @Component({
   selector: "app-them-moi-sc-tcdt",
@@ -72,15 +73,15 @@ export class ThemMoiScTcdtComponent implements OnInit {
       id: [null],
       ngayTaoTt: [null],
       tgTongHop: [null],
-      namKeHoach: [dayjs().get("year")],
+      namKeHoach: [null],
       noiDung: [null],
       maToTrinh: [null],
       soQuyetDinh: [null],
       ngayKyQd: [null],
-      trangThai: ["00"],
-      tenTrangThai: ["Dự thảo"],
+      trangThai: ["78"],
+      tenTrangThai: ["Đang nhập dữ liệu"],
       lyDoTuChoi: [],
-      loaiTmdt: []
+      loaiTmdt: ['DUOI15TY']
     });
   }
 
@@ -120,6 +121,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
         this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
         this.formData.patchValue({
           id: data.id,
+          namKeHoach: data.namKeHoach,
           namBatDau: data.namBatDau,
           namKetThuc: data.namKetThuc,
           ngayTaoTt: data.ngayTaoTt,
@@ -140,11 +142,11 @@ export class ThemMoiScTcdtComponent implements OnInit {
       this.dataTableReq = data.chiTiets;
       let resultDx = data.chiTietDxs
       if (resultDx && resultDx.length > 0) {
-        this.dataTableDxDuoi = this.convertListData(resultDx?.filter(item => item.tmdt <= 5000000000));
-        this.dataTableDxTren = this.convertListData(resultDx?.filter(item => item.tmdt > 5000000000));
+        this.dataTableDxDuoi = this.convertListData(resultDx?.filter(item => item.tmdt <= 15000000000));
+        this.dataTableDxTren = this.convertListData(resultDx?.filter(item => item.tmdt > 15000000000));
       }
-      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
-      this.dataTableDuoi= this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
+      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
+      this.dataTableDuoi= this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
     }
   }
 
@@ -232,7 +234,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DANG_NHAP_DU_LIEU : {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
@@ -348,8 +350,8 @@ export class ThemMoiScTcdtComponent implements OnInit {
         this.isTongHop = true;
         this.dataTableReq = list.listDxCuc;
         this.dataTableDxReq = cloneDeep(this.dataTableReq);
-        this.dataTableDxDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
-        this.dataTableDxTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
+        this.dataTableDxDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
+        this.dataTableDxTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
         this.dataTableTren = cloneDeep(this.dataTableDxTren);
         this.dataTableDuoi= cloneDeep(this.dataTableDxDuoi);
       } else {
@@ -434,13 +436,21 @@ export class ThemMoiScTcdtComponent implements OnInit {
         sl = sum;
       }
     } else {
-      if (this.dataTableTren && this.dataTableTren.length > 0) {
-        let sum = 0;
-        this.dataTableTren.forEach(item => {
-          sum += this.sumSoLuong(item, row);
+      let sum = 0;
+      if(data==true){
+          this.dataTableReq?.filter(item => item.tmdt > 15000000000)
+          this.dataTableReq.forEach(item => {
+            sum += item[row];
+          });
+          sl = sum;
+        }else {
+        this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
+        this.dataTableReq.forEach(item => {
+          sum += item[row];
         });
         sl = sum;
       }
+
     }
     return sl;
   }

@@ -47,7 +47,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)"
-                *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_QDMUASAM_THEM')">
+                *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -144,13 +144,13 @@
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.tongGiaTri | number : '1.0-1' }}</td>
+          <td>{{ data.tongGiaTri | number: '1.0-1': 'vi_VN'}}</td>
           <td>{{ data.maTh }}</td>
           <td>{{ data.maDx }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_QDMUASAM_XEM') &&
-                 !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDTC) && data.maDvi == userInfo.MA_DVI)">
+                 !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDTC) && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM') && ((data.trangThai == STATUS.TU_CHOI_LDTC || data.trangThai == STATUS.DU_THAO) && userService.isTongCuc())"

@@ -58,6 +58,8 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
   bbNghiemThuBaoQuans: any[] = [];
+  previewName: string = 'bien_ban_ket_thuc_nhap_kho';
+  listFileDinhKemBb: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -115,6 +117,12 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       tenTrangThai: [],
       lyDoTuChoi: [],
       donGiaHd: [],
+      dvt: [],
+      hinhThucBaoQuan: [],
+      tenNganLoKho: [],
+      diaDiemKho: [],
+      ngayHetHanNk: [],
+      thanLuuKho: [],
     })
 
   }
@@ -126,6 +134,11 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
       ]);
+      if (!this.loaiVthh.startsWith('02')) {
+        this.formData.patchValue({
+          dvt: 'kg'
+        });
+      }
       if (this.id > 0) {
         this.loadPhieuNhapDayKho();
       } else {
@@ -284,10 +297,11 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
-      soLuongNhapKho: this.loaiVthh == '02' ? data.soLuong : data.soLuong * 1000,
+      soLuongNhapKho: this.loaiVthh == '02' ? data.soLuong : data.soLuong,
       soLuong: data.soLuong,
       bienBanChuanBiKho: data.bienBanChuanBiKho?.soBienBan,
-      bienBanLayMau: data.bienBanLayMau?.soBienBan
+      bienBanLayMau: data.bienBanLayMau?.soBienBan,
+      tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
     });
   }
 
@@ -307,7 +321,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   async save(isGuiDuyet?: boolean) {
-    if (this.validateSave()) {
+    // if (this.validateSave()) {
       this.spinner.show();
       try {
         this.helperService.markFormGroupTouched(this.formData);
@@ -315,8 +329,16 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
           await this.spinner.hide();
           return;
         }
+        if (isGuiDuyet) {
+          if(this.listFileDinhKemBb.length <= 0) {
+            this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
+            this.spinner.hide();
+            return;
+          }
+        }
         let body = this.formData.value;
         body.chiTiets = this.dataTable;
+        body.fileDinhKems = this.listFileDinhKemBb;
         let res;
         if (this.formData.get('id').value > 0) {
           res = await this.quanLyPhieuNhapDayKhoService.update(body);
@@ -350,7 +372,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       } finally {
         this.spinner.hide();
       };
-    }
+    // }
 
   }
 
@@ -489,7 +511,9 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       .getDetail(this.id)
       .then(async (res) => {
         if (res.msg == MESSAGE.SUCCESS) {
+          debugger
           const data = res.data;
+          this.listFileDinhKemBb = data.fileDinhKems;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.dataTable = data.chiTiets;
           await this.bindingDataQd(data.idQdGiaoNvNh);
@@ -567,7 +591,26 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
         prev += cur.soLuong;
         return prev;
       }, 0);
-      return sum;
+      return sum * 1000;
     }
+  }
+
+  hienThiDuyet() {
+    if (this.loaiVthh.startsWith('02')) {
+      if ((this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_DUYET_LDCCUC') && this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_DUYET_KETOAN') && this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
+        || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_DUYET_KTVBQ') && this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ)
+      ) {
+        return true;
+      }
+    } else {
+      if ((this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_LDCCUC') && this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+        || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KETOAN') && this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
+        || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KTVBQ') && this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ)
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 }

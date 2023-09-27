@@ -341,9 +341,11 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
     if (goiThau) {
       if (this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU).length > 0) {
         let nhaThauTrung = this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU)[0];
+        console.log(nhaThauTrung,"nhaThauTrung");
         goiThau.tenTrangThai = 'Thành công'
         goiThau.nhaThauTrung = nhaThauTrung.tenNhaThau;
         goiThau.giaTrungThau = nhaThauTrung.giaDuThau;
+        goiThau.idNhaThauTrung = nhaThauTrung.id;
       } else {
         goiThau.tenTrangThai = 'Thất bại'
         goiThau.nhaThauTrung = null;

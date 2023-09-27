@@ -1,13 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MESSAGE } from "../../../../../constants/message";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { StorageService } from 'src/app/services/storage.service';
-import { HttpClient } from '@angular/common/http';
-import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
-import { STATUS } from 'src/app/constants/status';
+import {Component, Input, OnInit} from '@angular/core';
+import {MESSAGE} from "../../../../../constants/message";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {StorageService} from 'src/app/services/storage.service';
+import {HttpClient} from '@angular/common/http';
+import {
+  QuyetDinhNvXuatBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
+import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
+import {CHUC_NANG} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-qd-giao-nv-xuat-btt',
@@ -16,26 +21,27 @@ import { STATUS } from 'src/app/constants/status';
 })
 export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
-  @Input()
-  listVthh: any[] = [];
-  idQdPdDtl: number = 0;
+  @Input() listVthh: any[] = [];
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: XuatTrucTiepComponent
+  listClVthh: any[] = [];
+  isView = false;
   idHd: number = 0;
   isViewHd: boolean = false;
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành'},
   ];
 
   listTrangThaiXh: any[] = [
-    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
+    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
+    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
+    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
   ];
 
   constructor(
@@ -44,19 +50,19 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
+    private xuatTrucTiepComponent: XuatTrucTiepComponent,
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
+    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       soQdNv: null,
       loaiVthh: null,
       trichYeu: null,
-      maDvi: null,
-      maChiCuc: null,
       ngayTaoTu: null,
       ngayTaoDen: null,
-      trangThai: null,
     })
 
     this.filterTable = {
@@ -64,9 +70,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       soQdNv: '',
       ngayTao: '',
       soHd: '',
-      loaiVthh: '',
       tenLoaiVthh: '',
-      cloaiVthh: '',
       tenCloaiVthh: '',
       tgianGnhan: '',
       trichYeu: '',
@@ -75,43 +79,48 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       tenTrangThai: '',
       tenTrangThaiXh: '',
     };
-
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
-      this.timKiem();
-      await this.search();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+      ]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.userService.isChiCuc() ? STATUS.BAN_HANH : null,
     })
-  }
-
-  clearFilter() {
-    this.formData.reset();
-    this.timKiem();
-    this.search();
-  }
-
-  async redirectHopDong(id: number, idQdPdDtl: number, roles?: any) {
-    if (!this.checkPermission(roles)) {
-      return
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+     await this.loadDsVthh();
     }
+  }
+
+  async clearFilter() {
+    this.formData.reset();
+    await Promise.all([this.timKiem(), this.search()]);
+  }
+
+  async loadDsVthh() {
+    const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listClVthh = res.data?.filter(x => x.ma.length === 4) || [];
+    }
+  }
+
+  redirectDetail(id, isView: boolean) {
     this.idSelected = id;
-    this.idQdPdDtl = idQdPdDtl
     this.isDetail = true;
+    this.isView = isView;
   }
 
   disabledNgayTaoTu = (startValue: Date): boolean => {

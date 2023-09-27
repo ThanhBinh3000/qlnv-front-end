@@ -4,25 +4,47 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-sub xanh-nhat" type="button"
-            (click)="save(true)">
+    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO
+        || formData.value.trangThai == STATUS.TU_CHOI_TK
+        || formData.value.trangThai == STATUS.TU_CHOI_KT
+        || formData.value.trangThai == STATUS.TU_CHOI_LDCC)
+        && (userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM') || userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM'))" class="btn btn-sub xanh-nhat"
+      type="button" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub do"
-            (click)="tuChoi()">
+    <button
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_THUKHO')
+        || formData.value.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_KETOAN')
+        || formData.value.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_LDCCUC')
+        || formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_THUKHO')
+        || formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC')"
+      type="button" class="btn btn-sub do" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat"
-            (click)="pheDuyet()">
+    <button
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_THUKHO')
+        || formData.value.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_KETOAN')
+        || formData.value.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_LDCCUC')
+        || formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_THUKHO')
+        || formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC')"
+      class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
-    <button class="btn btn-sub xanh"
-            (click)="save(false)">
+    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO
+        || formData.value.trangThai == STATUS.TU_CHOI_TK
+        || formData.value.trangThai == STATUS.TU_CHOI_KT
+        || formData.value.trangThai == STATUS.TU_CHOI_LDCC)
+        && (userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM') || userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM'))" class="btn btn-sub xanh"
+      (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
+    </button>
+    <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+      <i class=" icon htvbdh_tcdt_print"></i>
+      <span>In/xem trước</span>
     </button>
   </div>
 </nz-affix>
@@ -32,12 +54,12 @@
       <div class="title-chi-tieu">
         <span
           [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do' ">{{formData.value.tenTrangThai}}</span>
-        <span class="title-form">Biên bản nghiệm thu bảo quản lần đầu</span>
+        <span class="title-form">{{title}}</span>
       </div>
     </div>
   </div>
   <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
-            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+    nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <nz-collapse>
@@ -64,7 +86,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenDvi" readonly/>
+                    <input nz-input formControlName="tenDvi" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -76,7 +98,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="maQhns" readonly/>
+                    <input nz-input formControlName="maQhns" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -88,7 +110,7 @@
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogSoQd()">
-                    <input nz-input [readonly]="true" formControlName="soQdGiaoNvNh"/>
+                    <input nz-input [readonly]="true" formControlName="soQdGiaoNvNh" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -114,9 +136,8 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
                     <nz-input-number type="text" nz-input [nzSize]="'small'" placeholder="Nhập khối lượng theo hợp đồng"
-                                     formControlName="soLuongQdGiaoNvNh" [nzFormatter]="globals.formatter"
-                                     [nzParser]="globals.parser"
-                                     [nzDisabled]="true">
+                      formControlName="soLuongQdGiaoNvNh" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                      [nzDisabled]="true">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -129,7 +150,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="soBbNtBq" readonly/>
+                    <input nz-input formControlName="soBbNtBq" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -167,7 +188,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenNguoiTao" readonly/>
+                    <input nz-input formControlName="tenNguoiTao" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -179,7 +200,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenThuKho" readonly/>
+                    <input nz-input formControlName="tenThuKho" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -191,7 +212,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenKeToan" readonly/>
+                    <input nz-input formControlName="tenKeToan" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -203,7 +224,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenNguoiPduyet" readonly/>
+                    <input nz-input formControlName="tenNguoiPduyet" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -212,30 +233,30 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" > Lô kho/Ngăn kho</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Lô kho/Ngăn kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogDdiemNhapHang()">
-                    <input [readonly]="true" nz-input formControlName="tenNganLoKho"/>
+                    <input [readonly]="true" nz-input formControlName="tenNganLoKho" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" > Nhà kho</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogDdiemNhapHang()">
-                    <input [readonly]="true" nz-input formControlName="tenNhaKho"/>
+                    <input [readonly]="true" nz-input formControlName="tenNhaKho" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" > Điểm kho</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Điểm kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogDdiemNhapHang()">
-                    <input [readonly]="true" nz-input formControlName="tenDiemKho"/>
+                    <input [readonly]="true" nz-input formControlName="tenDiemKho" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -244,7 +265,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Loại hình kho</nz-form-label>
                 <nz-form-control>
-                  <input [readonly]="true" nz-input formControlName="loaiHinhKho" readonly/>
+                  <input [readonly]="true" nz-input formControlName="loaiHinhKho" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -255,7 +276,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenLoaiVthh" readonly/>
+                    <input nz-input formControlName="tenLoaiVthh" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -267,7 +288,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenCloaiVthh" readonly/>
+                    <input nz-input formControlName="tenCloaiVthh" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -276,7 +297,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Tích lượng</nz-form-label>
                 <nz-form-control>
-                  <input [readonly]="true" nz-input formControlName="tichLuong" readonly/>
+                  <input [readonly]="true" nz-input formControlName="tichLuong" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -284,7 +305,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> DS phiếu nhập kho</nz-form-label>
                 <nz-form-control>
-                  <input [readonly]="true" nz-input formControlName="soPhieuNhapKho" readonly/>
+                  <input [readonly]="true" nz-input formControlName="soPhieuNhapKho" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -292,7 +313,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Thực nhập</nz-form-label>
                 <nz-form-control>
-                  <input [readonly]="true" nz-input formControlName="soLuongPhieuNhapKho" readonly/>
+                  <input [readonly]="true" nz-input formControlName="soLuongPhieuNhapKho" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -322,7 +343,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Định mức được giao</nz-form-label>
                 <nz-form-control>
-                  <input [readonly]="true" nz-input formControlName="dinhMucGiao" readonly/>
+                  <input [readonly]="true" nz-input formControlName="dinhMucGiao" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -330,7 +351,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Định mức thực tế thực hiện</nz-form-label>
                 <nz-form-control>
-                  <input [readonly]="true" nz-input formControlName="dinhMucThucTe" readonly/>
+                  <input [readonly]="true" nz-input formControlName="dinhMucThucTe" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -354,155 +375,159 @@
       <nz-collapse-panel [nzActive]="true" nzHeader="ĐƠN VỊ CHỦ ĐỘNG THỰC HIỆN" class="mg-t-10">
         <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
-          <tr>
-            <th rowSpan="2" width="60px" class="text-center">STT<br/>(A)</th>
-            <th rowSpan="2" width="500px" class="text-center">Nội dung<br/>(B)</th>
-            <th rowSpan="2" class="text-center">Đơn vị tính<br/>(C)</th>
-            <th colSpan="3" class="text-center">Kê lót/Bảo quản trong năm</th>
-            <th colSpan="3" class="text-center">Khối lượng đã quyết toán năm trước</th>
-            <th rowSpan="2" class="text-center">TỔNG GIÁ TRỊ<br/>(7) = (3) + (6)</th>
-            <th rowSpan="2" width="140px" class="text-center" *ngIf="!isView">
-              HÀNH ĐỘNG
-            </th>
-          </tr>
-          <tr>
-            <th class="text-center">Số lượng<br/>(1)</th>
-            <th class="text-center">Đơn giá<br/>(2)</th>
-            <th class="text-center">Thành tiền<br/>(3) = (1) x (2)</th>
-            <th class="text-center">Số lượng<br/>(4)</th>
-            <th class="text-center">Đơn giá<br/>(5)</th>
-            <th class="text-center">Thành tiền<br/>(6) = (4) x (5)</th>
-          </tr>
+            <tr>
+              <th rowSpan="2" width="60px" class="text-center">STT<br />(A)</th>
+              <th rowSpan="2" width="500px" class="text-center">Nội dung<br />(B)</th>
+              <th rowSpan="2" class="text-center">Đơn vị tính<br />(C)</th>
+              <th colSpan="3" class="text-center">Kê lót/Bảo quản trong năm</th>
+              <th colSpan="3" class="text-center">Khối lượng đã quyết toán năm trước</th>
+              <th rowSpan="2" class="text-center">TỔNG GIÁ TRỊ<br />(7) = (3) + (6)</th>
+              <th rowSpan="2" width="140px" class="text-center" *ngIf="!isView">
+                HÀNH ĐỘNG
+              </th>
+            </tr>
+            <tr>
+              <th class="text-center">Số lượng<br />(1)</th>
+              <th class="text-center">Đơn giá<br />(2)</th>
+              <th class="text-center">Thành tiền<br />(3) = (1) x (2)</th>
+              <th class="text-center">Số lượng<br />(4)</th>
+              <th class="text-center">Đơn giá<br />(5)</th>
+              <th class="text-center">Thành tiền<br />(6) = (4) x (5)</th>
+            </tr>
           </thead>
           <tbody>
-          <tr *ngIf="!isView">
-            <td></td>
-            <td>
-              <nz-select [(ngModel)]="create.noiDung" (ngModelChange)="changeCcdc(false)" nzAllowClear="true" nzShowSearch>
-                <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
-                </nz-option>
-              </nz-select>
-            </td>
-            <td>
-              <input [readonly]="true" nz-input type="string" [(ngModel)]="create.dvt"/>
-            </td>
-            <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongTn"
-                     (input)="caculatorSoLuong(create)" maxlength="18"/>
-            </td>
-            <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.donGiaTn"
-                     (input)="caculatorSoLuong(create)" maxlength="18"/>
-            </td>
-            <td class="bg-gray">{{create.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-            <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongQt"
-                     (input)="caculatorSoLuong(create)" maxlength="18"/>
-            </td>
-            <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.donGiaQt"
-                     (input)="caculatorSoLuong(create)" maxlength="18"/>
-            </td>
-            <td class="bg-gray">
-              {{create.thanhTienQt ?? 0 | number: '1.0-1'}}
-            </td>
-            <td>{{create.tongGtri ?? 0 | number: '1.0-1'}}</td>
-            <td>
-              <a (click)="addRow()"
-                 [class.disabled]="!create.noiDung || !create.dvt || create.noiDung == '' || create.dvt == ''">
-                <i class="fa fa-plus"></i>
-              </a>
-              <a (click)="clearItemRow()">
-                <i class="icon  htvbdh_nhap-lai1"></i>
-              </a>
-            </td>
-          </tr>
-          <tr *ngFor="let data of listDviChuDongTh; let i = index">
-            <ng-container *ngIf="!listDviChuDongTh[i]?.edit; else editTemplate">
-              <td class="text-center">{{i + 1}}</td>
-              <td>{{convertMaCcdc(data.noiDung)}}</td>
-              <td>{{data.dvt}}</td>
-              <td class="text-right">{{data.soLuongTn ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.donGiaTn ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.donGiaQt ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-              <td *ngIf="!isView">
-                <a (click)="startEdit(i)">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-                <a (click)="deleteRow(i)">
-                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-template #editTemplate>
+            <tr *ngIf="!isView">
               <td></td>
               <td>
-                <nz-select [(ngModel)]="createRowUpdate.noiDung" (ngModelChange)="changeCcdc(true)" nzAllowClear="true" nzShowSearch>
+                <nz-select [(ngModel)]="create.noiDung" (ngModelChange)="changeCcdc(false)" nzAllowClear="true"
+                  nzShowSearch>
                   <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
                   </nz-option>
                 </nz-select>
               </td>
               <td>
-                {{createRowUpdate.dvt}}
+                <input [readonly]="true" nz-input type="string" [(ngModel)]="create.dvt" />
               </td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createRowUpdate.soLuongTn"
-                       (input)="caculatorSoLuong(createRowUpdate)" maxlength="18"/>
-              </td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createRowUpdate.donGiaTn"
-                       (input)="caculatorSoLuong(createRowUpdate)" maxlength="18"/>
-              </td>
-              <td class="text-right">{{createRowUpdate.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createRowUpdate.soLuongQt"
-                       (input)="caculatorSoLuong(createRowUpdate)" maxlength="18"/>
-              </td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createRowUpdate.donGiaQt"
-                       (input)="caculatorSoLuong(createRowUpdate)" maxlength="18"/>
-              </td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly
-                       [(ngModel)]="createRowUpdate.thanhTienQt" (input)="caculatorSoLuong(createRowUpdate)"
-                       maxlength="18"/>
-              </td>
-              <td class="text-right">{{createRowUpdate.tongGtri ?? 0 | number: '1.0-1'}}</td>
               <td>
-                <a (click)="saveEdit(createRowUpdate,i)" class="save"
-                   [class.disabled]="!createRowUpdate.noiDung || !createRowUpdate.dvt || createRowUpdate.noiDung == '' || createRowUpdate.dvt == ''">
-                  <i class="fa fa-save"></i>
+                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongTn"
+                  (input)="caculatorSoLuong(create)" maxlength="18" />
+              </td>
+              <td>
+                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.donGiaTn"
+                  (input)="caculatorSoLuong(create)" maxlength="18" />
+              </td>
+              <td class="bg-gray">{{create.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
+              <td>
+                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongQt"
+                  (input)="caculatorSoLuong(create)" maxlength="18" />
+              </td>
+              <td>
+                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.donGiaQt"
+                  (input)="caculatorSoLuong(create)" maxlength="18" />
+              </td>
+              <td class="bg-gray">
+                {{create.thanhTienQt ?? 0 | number: '1.0-1'}}
+              </td>
+              <td>{{create.tongGtri ?? 0 | number: '1.0-1'}}</td>
+              <td>
+                <a (click)="addRow()"
+                  [class.disabled]="!create.noiDung || !create.dvt || create.noiDung == '' || create.dvt == ''">
+                  <i class="fa fa-plus"></i>
                 </a>
-                <a (click)="cancelEdit(createRowUpdate.stt)">
-                  <i class="fa fa-times do"></i>
+                <a (click)="clearItemRow()">
+                  <i class="icon  htvbdh_nhap-lai1"></i>
                 </a>
               </td>
-            </ng-template>
-          </tr>
+            </tr>
+            <tr *ngFor="let data of listDviChuDongTh; let i = index">
+              <ng-container *ngIf="!listDviChuDongTh[i]?.edit; else editTemplate">
+                <td class="text-center">{{i + 1}}</td>
+                <td>{{convertMaCcdc(data.noiDung)}}</td>
+                <td>{{data.dvt}}</td>
+                <td class="text-right">{{data.soLuongTn ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.donGiaTn ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.donGiaQt ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
+                <td *ngIf="!isView">
+                  <a (click)="startEdit(i)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a (click)="deleteRow(i)">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplate>
+                <td></td>
+                <td>
+                  <nz-select [(ngModel)]="createRowUpdate.noiDung" (ngModelChange)="changeCcdc(true)"
+                    nzAllowClear="true" nzShowSearch>
+                    <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
+                    </nz-option>
+                  </nz-select>
+                </td>
+                <td>
+                  {{createRowUpdate.dvt}}
+                </td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly
+                    [(ngModel)]="createRowUpdate.soLuongTn" (input)="caculatorSoLuong(createRowUpdate)"
+                    maxlength="18" />
+                </td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createRowUpdate.donGiaTn"
+                    (input)="caculatorSoLuong(createRowUpdate)" maxlength="18" />
+                </td>
+                <td class="text-right">{{createRowUpdate.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly
+                    [(ngModel)]="createRowUpdate.soLuongQt" (input)="caculatorSoLuong(createRowUpdate)"
+                    maxlength="18" />
+                </td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createRowUpdate.donGiaQt"
+                    (input)="caculatorSoLuong(createRowUpdate)" maxlength="18" />
+                </td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly
+                    [(ngModel)]="createRowUpdate.thanhTienQt" (input)="caculatorSoLuong(createRowUpdate)"
+                    maxlength="18" />
+                </td>
+                <td class="text-right">{{createRowUpdate.tongGtri ?? 0 | number: '1.0-1'}}</td>
+                <td>
+                  <a (click)="saveEdit(createRowUpdate,i)" class="save"
+                    [class.disabled]="!createRowUpdate.noiDung || !createRowUpdate.dvt || createRowUpdate.noiDung == '' || createRowUpdate.dvt == ''">
+                    <i class="fa fa-save"></i>
+                  </a>
+                  <a (click)="cancelEdit(createRowUpdate.stt)">
+                    <i class="fa fa-times do"></i>
+                  </a>
+                </td>
+              </ng-template>
+            </tr>
           </tbody>
           <tfoot>
-          <tr>
-            <td></td>
-            <td class="text-blue">Tổng</td>
-            <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslKho('soLuongTn', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslKho('thanhTienTn', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td class="text-blue" style="text-align: right;">{{sumslKho('soLuongQt', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslKho('thanhTienQt', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td class="text-blue" style="text-align: right;">{{sumslKho('tongGtri', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td></td>
-          </tr>
+            <tr>
+              <td></td>
+              <td class="text-blue">Tổng</td>
+              <td></td>
+              <td class="text-blue" style="text-align: right;">{{sumslKho('soLuongTn', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td></td>
+              <td class="text-blue" style="text-align: right;">{{sumslKho('thanhTienTn', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td class="text-blue" style="text-align: right;">{{sumslKho('soLuongQt', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td></td>
+              <td class="text-blue" style="text-align: right;">{{sumslKho('thanhTienQt', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td class="text-blue" style="text-align: right;">{{sumslKho('tongGtri', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td></td>
+            </tr>
           </tfoot>
         </nz-table>
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
@@ -514,7 +539,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input [value]="tongKphi | number: '1.0-3'" readonly/>
+                    <input nz-input [value]="tongKphi | number: '1.0-3'" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -526,7 +551,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input [value]="convertSoToChu(tongKphi)" readonly/>
+                    <input nz-input [value]="convertSoToChu(tongKphi)" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -541,155 +566,161 @@
       <nz-collapse-panel [nzActive]="true" nzHeader="ĐỊNH MỨC TỔNG CỤC PHÊ DUYỆT TRƯỚC KHI THỰC HIỆN" class="mg-t-10">
         <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
-          <tr>
-            <th rowSpan="2" width="60px" class="text-center">STT<br/>(A)</th>
-            <th rowSpan="2" width="500px" class="text-center">Nội dung<br/>(B)</th>
-            <th rowSpan="2" class="text-center">Đơn vị tính<br/>(C)</th>
-            <th colSpan="3" class="text-center">Kê lót/bảo quản trong năm</th>
-            <th colSpan="3" class="text-center">Khối lượng đã quyết toán năm trước</th>
-            <th rowSpan="2" class="text-center">TỔNG GIÁ TRỊ<br/>(7) = (3) + (6)</th>
-            <th rowSpan="2" width="140px" class="text-center" *ngIf="!isView">
-              HÀNH ĐỘNG
-            </th>
-          </tr>
-          <tr>
-            <th class="text-center">Số lượng<br/>(1)</th>
-            <th class="text-center">Đơn giá<br/>(2)</th>
-            <th class="text-center">Thành tiền<br/>(3) = (1) x (2)</th>
-            <th class="text-center">Số lượng<br/>(4)</th>
-            <th class="text-center">Đơn giá<br/>(5)</th>
-            <th class="text-center">Thành tiền<br/>(6) = (4) x (5)</th>
-          </tr>
+            <tr>
+              <th rowSpan="2" width="60px" class="text-center">STT<br />(A)</th>
+              <th rowSpan="2" width="500px" class="text-center">Nội dung<br />(B)</th>
+              <th rowSpan="2" class="text-center">Đơn vị tính<br />(C)</th>
+              <th colSpan="3" class="text-center">Kê lót/bảo quản trong năm</th>
+              <th colSpan="3" class="text-center">Khối lượng đã quyết toán năm trước</th>
+              <th rowSpan="2" class="text-center">TỔNG GIÁ TRỊ<br />(7) = (3) + (6)</th>
+              <th rowSpan="2" width="140px" class="text-center" *ngIf="!isView">
+                HÀNH ĐỘNG
+              </th>
+            </tr>
+            <tr>
+              <th class="text-center">Số lượng<br />(1)</th>
+              <th class="text-center">Đơn giá<br />(2)</th>
+              <th class="text-center">Thành tiền<br />(3) = (1) x (2)</th>
+              <th class="text-center">Số lượng<br />(4)</th>
+              <th class="text-center">Đơn giá<br />(5)</th>
+              <th class="text-center">Thành tiền<br />(6) = (4) x (5)</th>
+            </tr>
           </thead>
           <tbody>
-          <tr *ngIf="!isView">
-            <td></td>
-            <td>
-              <nz-select [(ngModel)]="createTc.noiDung" (ngModelChange)="changeCcdcTc(false)" nzAllowClear="true" nzShowSearch>
-                <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
-                </nz-option>
-              </nz-select>
-            </td>
-            <td>
-              <input [readonly]="true" nz-input type="string" [(ngModel)]="createTc.dvt"/>
-            </td>
-            <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTc.soLuongTn"
-                     (input)="caculatorSoLuong(createTc)" maxlength="18"/>
-            </td>
-            <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTc.donGiaTn"
-                     (input)="caculatorSoLuong(createTc)" maxlength="18"/>
-            </td>
-            <td class="bg-gray">{{createTc.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-            <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTc.soLuongQt"
-                     (input)="caculatorSoLuong(createTc)" maxlength="18"/>
-            </td>
-            <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTc.donGiaQt"
-                     (input)="caculatorSoLuong(createTc)" maxlength="18"/>
-            </td>
-            <td class="bg-gray">
-              {{createTc.thanhTienQt ?? 0 | number: '1.0-1'}}
-            </td>
-            <td>{{createTc.tongGtri ?? 0 | number: '1.0-1'}}</td>
-            <td>
-              <a (click)="addRow('PDT')"
-                 [class.disabled]="!createTc.noiDung || !createTc.dvt || createTc.noiDung == '' || createTc.dvt == ''">
-                <i class="fa fa-plus"></i>
-              </a>
-              <a (click)="clearItemRow('PDT')">
-                <i class="icon  htvbdh_nhap-lai1"></i>
-              </a>
-            </td>
-          </tr>
-          <tr *ngFor="let data of listTongCucPdTh; let i = index">
-            <ng-container *ngIf="!listTongCucPdTh[i]?.edit; else editTemplate">
-              <td class="text-center">{{i + 1}}</td>
-              <td>{{convertMaCcdc(data.noiDung)}}</td>
-              <td>{{data.dvt}}</td>
-              <td class="text-right">{{data.soLuongTn ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.donGiaTn ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.donGiaQt ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-              <td *ngIf="!isView">
-                <a (click)="startEdit(i)">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-                <a (click)="deleteRow(i, 'PDT')">
-                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-template #editTemplate>
+            <tr *ngIf="!isView">
               <td></td>
               <td>
-                <nz-select [(ngModel)]="createTcRowUpdate.noiDung" (ngModelChange)="changeCcdc(true)" nzAllowClear="true" nzShowSearch>
+                <nz-select [(ngModel)]="createTc.noiDung" (ngModelChange)="changeCcdcTc(false)" nzAllowClear="true"
+                  nzShowSearch>
                   <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
                   </nz-option>
                 </nz-select>
               </td>
               <td>
-                {{createTcRowUpdate.dvt}}
+                <input [readonly]="true" nz-input type="string" [(ngModel)]="createTc.dvt" />
               </td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTcRowUpdate.soLuongTn"
-                       (input)="caculatorSoLuong(createTcRowUpdate)" maxlength="18"/>
-              </td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTcRowUpdate.donGiaTn"
-                       (input)="caculatorSoLuong(createTcRowUpdate)" maxlength="18"/>
-              </td>
-              <td class="text-right">{{createTcRowUpdate.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTcRowUpdate.soLuongQt"
-                       (input)="caculatorSoLuong(createTcRowUpdate)" maxlength="18"/>
-              </td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTcRowUpdate.donGiaQt"
-                       (input)="caculatorSoLuong(createTcRowUpdate)" maxlength="18"/>
-              </td>
-              <td class="text-right">
-                <input [readonly]="isView" nz-input type="string" appNumberOnly
-                       [(ngModel)]="createTcRowUpdate.thanhTienQt" (input)="caculatorSoLuong(createTcRowUpdate)"
-                       maxlength="18"/>
-              </td>
-              <td class="text-right">{{createTcRowUpdate.tongGtri ?? 0 | number: '1.0-1'}}</td>
               <td>
-                <a (click)="saveEdit(createTcRowUpdate,i)" class="save"
-                   [class.disabled]="!createTcRowUpdate.noiDung || !createTcRowUpdate.dvt || createTcRowUpdate.noiDung == '' || createTcRowUpdate.dvt == ''">
-                  <i class="fa fa-save"></i>
+                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTc.soLuongTn"
+                  (input)="caculatorSoLuong(createTc)" maxlength="18" />
+              </td>
+              <td>
+                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTc.donGiaTn"
+                  (input)="caculatorSoLuong(createTc)" maxlength="18" />
+              </td>
+              <td class="bg-gray">{{createTc.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
+              <td>
+                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTc.soLuongQt"
+                  (input)="caculatorSoLuong(createTc)" maxlength="18" />
+              </td>
+              <td>
+                <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="createTc.donGiaQt"
+                  (input)="caculatorSoLuong(createTc)" maxlength="18" />
+              </td>
+              <td class="bg-gray">
+                {{createTc.thanhTienQt ?? 0 | number: '1.0-1'}}
+              </td>
+              <td>{{createTc.tongGtri ?? 0 | number: '1.0-1'}}</td>
+              <td>
+                <a (click)="addRow('PDT')"
+                  [class.disabled]="!createTc.noiDung || !createTc.dvt || createTc.noiDung == '' || createTc.dvt == ''">
+                  <i class="fa fa-plus"></i>
                 </a>
-                <a (click)="cancelEdit(createTcRowUpdate.stt)">
-                  <i class="fa fa-times do"></i>
+                <a (click)="clearItemRow('PDT')">
+                  <i class="icon  htvbdh_nhap-lai1"></i>
                 </a>
               </td>
-            </ng-template>
-          </tr>
+            </tr>
+            <tr *ngFor="let data of listTongCucPdTh; let i = index">
+              <ng-container *ngIf="!listTongCucPdTh[i]?.edit; else editTemplate">
+                <td class="text-center">{{i + 1}}</td>
+                <td>{{convertMaCcdc(data.noiDung)}}</td>
+                <td>{{data.dvt}}</td>
+                <td class="text-right">{{data.soLuongTn ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.donGiaTn ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.donGiaQt ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
+                <td *ngIf="!isView">
+                  <a (click)="startEdit(i)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a (click)="deleteRow(i, 'PDT')">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplate>
+                <td></td>
+                <td>
+                  <nz-select [(ngModel)]="createTcRowUpdate.noiDung" (ngModelChange)="changeCcdc(true)"
+                    nzAllowClear="true" nzShowSearch>
+                    <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
+                    </nz-option>
+                  </nz-select>
+                </td>
+                <td>
+                  {{createTcRowUpdate.dvt}}
+                </td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly
+                    [(ngModel)]="createTcRowUpdate.soLuongTn" (input)="caculatorSoLuong(createTcRowUpdate)"
+                    maxlength="18" />
+                </td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly
+                    [(ngModel)]="createTcRowUpdate.donGiaTn" (input)="caculatorSoLuong(createTcRowUpdate)"
+                    maxlength="18" />
+                </td>
+                <td class="text-right">{{createTcRowUpdate.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly
+                    [(ngModel)]="createTcRowUpdate.soLuongQt" (input)="caculatorSoLuong(createTcRowUpdate)"
+                    maxlength="18" />
+                </td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly
+                    [(ngModel)]="createTcRowUpdate.donGiaQt" (input)="caculatorSoLuong(createTcRowUpdate)"
+                    maxlength="18" />
+                </td>
+                <td class="text-right">
+                  <input [readonly]="isView" nz-input type="string" appNumberOnly
+                    [(ngModel)]="createTcRowUpdate.thanhTienQt" (input)="caculatorSoLuong(createTcRowUpdate)"
+                    maxlength="18" />
+                </td>
+                <td class="text-right">{{createTcRowUpdate.tongGtri ?? 0 | number: '1.0-1'}}</td>
+                <td>
+                  <a (click)="saveEdit(createTcRowUpdate,i)" class="save"
+                    [class.disabled]="!createTcRowUpdate.noiDung || !createTcRowUpdate.dvt || createTcRowUpdate.noiDung == '' || createTcRowUpdate.dvt == ''">
+                    <i class="fa fa-save"></i>
+                  </a>
+                  <a (click)="cancelEdit(createTcRowUpdate.stt)">
+                    <i class="fa fa-times do"></i>
+                  </a>
+                </td>
+              </ng-template>
+            </tr>
           </tbody>
           <tfoot>
-          <tr>
-            <td></td>
-            <td class="text-blue">Tổng</td>
-            <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslKhoTc('soLuongTn', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslKhoTc('thanhTienTn', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td class="text-blue" style="text-align: right;">{{sumslKhoTc('soLuongQt', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslKhoTc('thanhTienQt', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td class="text-blue" style="text-align: right;">{{sumslKhoTc('tongGtri', null, 'tong') |
-              number: '1.0-3'}}</td>
-            <td></td>
-          </tr>
+            <tr>
+              <td></td>
+              <td class="text-blue">Tổng</td>
+              <td></td>
+              <td class="text-blue" style="text-align: right;">{{sumslKhoTc('soLuongTn', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td></td>
+              <td class="text-blue" style="text-align: right;">{{sumslKhoTc('thanhTienTn', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td class="text-blue" style="text-align: right;">{{sumslKhoTc('soLuongQt', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td></td>
+              <td class="text-blue" style="text-align: right;">{{sumslKhoTc('thanhTienQt', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td class="text-blue" style="text-align: right;">{{sumslKhoTc('tongGtri', null, 'tong') |
+                number: '1.0-3'}}</td>
+              <td></td>
+            </tr>
           </tfoot>
         </nz-table>
       </nz-collapse-panel>
@@ -713,3 +744,26 @@
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="BIÊN BẢN CHUẨN BỊ KHO" nzWidth="100%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()" class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

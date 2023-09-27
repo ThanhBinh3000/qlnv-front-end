@@ -13,6 +13,12 @@ import {
 } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
+import {STATUS} from "../../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../../constants/message";
+import {
+  QuyetDinhGiaTCDTNNService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
 
 @Component({
   selector: 'app-thongtin-dexuat-khbdg',
@@ -30,8 +36,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   formData: FormGroup
   dataTable: any[] = [];
   listNguonVon: any[] = [];
-  dataChiTieu: any;
-  listPhuongThucThanhToan: any[] = [];
+  dataDonGiaDuocDuyet: any;
 
   constructor(
     private fb: FormBuilder,
@@ -42,6 +47,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
     private helperService: HelperService,
     private modal: NzModalService,
     private notification: NzNotificationService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     this.formData = this.fb.group({
       id: [],
@@ -71,33 +77,31 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    await this.spinner.show()
-    if (changes) {
-      if (this.dataInput) {
-        this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
+    if (changes.dataInput) {
+      await this.spinner.show();
+      const dataInput = changes.dataInput.currentValue;
+      if (dataInput) {
+        this.helperService.bidingDataInFormGroup(this.formData, dataInput);
+        const hasValidTime = dataInput.tgianDkienTu && dataInput.tgianDkienDen;
         this.formData.patchValue({
-          thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
-        })
-        this.dataTable = this.dataInput.children
-        this.calculatorTable();
+          thoiGianDuKien: hasValidTime ? [dataInput.tgianDkienTu, dataInput.tgianDkienDen] : null
+        });
+        this.dataTable = dataInput.children;
+        await this.calculatorTable();
       } else {
         this.formData.reset();
       }
+      await this.spinner.hide();
     }
-    await this.spinner.hide()
   }
 
   expandSet = new Set<number>();
 
   onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
+    checked ? this.expandSet.add(id) : this.expandSet.delete(id);
   }
 
-  themMoiBangPhanLoTaiSan(data?: any, index?: number) {
+  async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm giao nhận hàng',
       nzContent: DialogThemDiaDiemPhanLoComponent,
@@ -107,34 +111,55 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
+        loaiVthh: this.dataInput.loaiVthh,
+        cloaiVthh: this.dataInput.cloaiVthh,
       },
     });
-    modalGT.afterClose.subscribe((data) => {
-      if (!data) {
-        return;
+    modalGT.afterClose.subscribe(async (updatedData) => {
+      if (updatedData && index >= 0) {
+        console.log(123)
+        this.dataTable[index] = updatedData;
+        this.calculatorTable();
       }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      }
-      this.calculatorTable();
     });
   }
 
-  calculatorTable() {
-    this.dataTable.forEach((item) => {
-      item.tongGiaKdiemDd = 0;
-      item.tongTienDtruocDd = 0;
-      item.children.forEach((child) => {
-        child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
-        child.soTienDtruocDd = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
-        item.tongGiaKdiemDd += child.giaKhoiDiemDd;
-        item.tongTienDtruocDd += child.soTienDtruocDd;
-      })
-    })
+  async calculatorTable() {
+    let bodyPag = {
+      namKeHoach: this.dataInput.namKh ? this.dataInput.namKh : this.dataInput.nam,
+      loaiVthh: this.dataInput.loaiVthh,
+      cloaiVthh: this.dataInput.cloaiVthh,
+      trangThai: STATUS.BAN_HANH,
+      maDvi: '0101',
+      loaiGia: 'LG04',
+    };
+    const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
+    if (pag.msg !== MESSAGE.SUCCESS) {
+      return;
+    }
+    this.dataDonGiaDuocDuyet = pag.data || null;
+    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+      const donGiaMap = new Map();
+      this.dataDonGiaDuocDuyet.forEach((item) => {
+        donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
+      });
+      this.dataTable.forEach((item) => {
+        item.tongGiaKdiemDd = 0;
+        item.tongTienDtruocDd = 0;
+        const donGiaDuocDuyet = this.dataInput.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(item.maDvi);
+        item.children.forEach((child) => {
+          child.donGiaDuocDuyet = donGiaDuocDuyet || null;
+          child.giaKhoiDiemDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0);
+          child.soTienDtruocDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0) * this.formData.value.khoanTienDatTruoc / 100;
+        });
+        item.tongGiaKdiemDd = item.children.reduce((acc, child) => acc + child.giaKhoiDiemDd, 0);
+        item.tongTienDtruocDd = item.children.reduce((acc, child) => acc + child.soTienDtruocDd, 0);
+      });
+    }
     this.formData.patchValue({
-      tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.tongSlXuatBanDx, 0),
-      tongTienGiaKdTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.tongGiaKdiemDd, 0),
-      tongKhoanTienDtTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.tongTienDtruocDd, 0),
+      tongTienGiaKdTheoDgiaDd: this.dataTable.reduce((acc, item) => acc + item.tongGiaKdiemDd, 0),
+      tongKhoanTienDtTheoDgiaDd: this.dataTable.reduce((acc, item) => acc + item.tongTienDtruocDd, 0),
+      tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.tongSlXuatBanDx, 0),
     });
   }
 

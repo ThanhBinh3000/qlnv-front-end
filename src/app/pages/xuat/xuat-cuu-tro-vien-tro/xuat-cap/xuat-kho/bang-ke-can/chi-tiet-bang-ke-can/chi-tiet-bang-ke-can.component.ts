@@ -90,7 +90,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   listSoLuong: any;
   flagInit: Boolean = true;
   listDiaDiemKho: any[] = [];
-
+  templateName = "Bảng kê cân hàng";
 
   constructor(
     httpClient: HttpClient,

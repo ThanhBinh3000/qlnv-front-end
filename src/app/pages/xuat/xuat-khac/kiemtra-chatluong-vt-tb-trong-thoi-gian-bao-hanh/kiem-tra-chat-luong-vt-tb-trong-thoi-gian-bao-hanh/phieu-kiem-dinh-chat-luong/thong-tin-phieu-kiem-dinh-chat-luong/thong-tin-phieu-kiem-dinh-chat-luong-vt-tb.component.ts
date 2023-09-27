@@ -64,6 +64,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
     {value: 1, label: "Đạt"}
   ]
   dataTableChiTieu: any[] = [];
+  phieuKd: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -126,6 +127,8 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         tpKtbq: [null],
         thuKho: [null],
         ngayLayMau: [null],
+        soLuongMau : [null],
+        slTonKho: [null],
         phieuKdclDtl: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
       }
@@ -251,6 +254,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         idQdGiaoNvXh: data.id,
         ngayQdGiaoNvXh: data.ngayKy,
         soLanLm:data.soLanLm,
+        ngayXuatLayMau:data.thoiHanXuatHang,
       });
       await this.getListBbLayMau(data);
     } catch (e) {
@@ -272,6 +276,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
       if (res.msg == MESSAGE.SUCCESS) {
         this.listBbLayMau = res.data.content;
       }
+      await this.listPhieuKd(itemQdGnvXh.soQuyetDinh);
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {
@@ -279,64 +284,23 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
     }
   }
 
-  async listBienBan(item) {
+  async listPhieuKd(item) {
     await this.spinner.show();
     let body = {
       soQdGiaoNvXh: item,
     }
-    let res = await this.bienBanLayMauVtTbTrongThoiGianBaoHanhService.search(body)
+    let res = await this.phieuKdclVtTbTrongThoiGianBaoHanhService.search(body)
     const data = res.data;
-    this.bienBan = data.content;
-    const listDd = [
-      ...this.listDiaDiemNhap.filter((e) => {
-        return !this.bienBan.some((bb) => {
-          if (bb.maLoKho.length > 0 && e.maLoKho.length > 0) {
-            return e.maLoKho === bb.maLoKho;
-          } else {
-            return e.maNganKho === bb.maNganKho;
-          }
+    this.phieuKd = data.content;
+    let bienBan = [
+      ...this.listBbLayMau.filter((e) => {
+        return !this.phieuKd.some((bb) => {
+          return e.soBienBan === bb.soBbLayMau;
         });
       }),
     ];
-    this.listDiaDiemNhap = listDd;
+    this.listBbLayMau = bienBan;
   }
-
-  openDialogDdiemNhapHang() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách địa điểm xuất hàng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDiaDiemNhap,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      this.bindingDataDdNhap(data);
-    });
-  }
-
-  async bindingDataDdNhap(data) {
-    if (data) {
-      this.formData.patchValue({
-        maDiemKho: data.maDiemKho,
-        tenDiemKho: data.tenDiemKho,
-        maNhaKho: data.maNhaKho,
-        tenNhaKho: data.tenNhaKho,
-        maNganKho: data.maNganKho,
-        tenNganKho: data.tenNganKho,
-        maLoKho: data.maLoKho,
-        tenLoKho: data.tenLoKho,
-        cloaiVthh: data.cloaiVthh,
-        tenCloaiVthh: data.tenCloaiVthh,
-      })
-    }
-  }
-
   async save(isGuiDuyet?) {
     let body = this.formData.value;
     if (this.fileDinhKems && this.fileDinhKems.length > 0) {
@@ -455,6 +419,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
   async changeValueBienBanLayMau($event) {
     if ($event) {
       let item = this.listBbLayMau.find(it => it.soBienBan == $event);
+      console.log(item,"item")
       if (item) {
         this.formData.patchValue({
           maDiaDiem: item.maDiaDiem,
@@ -467,7 +432,8 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
           cloaiVthh: item.cloaiVthh,
           tenCloaiVthh: item.tenCloaiVthh,
           ngayLayMau: item.ngayLayMau,
-          soLuongLm:item.soLuongLm,
+          soLuongMau:item.soLuongMau,
+          slTonKho:item.slTonKho,
           donViTinh:item.donViTinh,
         });
         await this.loadPhuongPhapLayMau(item.cloaiVthh);

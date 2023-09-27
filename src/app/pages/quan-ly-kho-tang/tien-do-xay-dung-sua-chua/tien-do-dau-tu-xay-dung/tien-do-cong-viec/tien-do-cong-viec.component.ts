@@ -388,6 +388,7 @@ export class TienDoXayDungCt {
   ktGoiThauId: number = 0;
   namKh: number = 0;
   quy: string;
+  thang: string;
   tenCongViec: string;
   idVirtual : any;
   loai : string;

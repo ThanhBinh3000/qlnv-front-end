@@ -119,10 +119,10 @@
         <td class="font-weight-bold">{{idx + 1}}</td>
         <td class="font-weight-bold">{{data.tenCcdc}}</td>
         <td></td>
-        <td>{{data.slHienCo | number: '1.0-1' }}</td>
-        <td>{{data.slNhapThem | number: '1.0-1' }}</td>
-        <td>{{data.slHienCo + data.slNhapThem | number: '1.0-1' }}</td>
-        <td>{{data.soLuongTc}}</td>
+        <td class="text-right">{{data.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.slHienCo + data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.soLuongTc  | number : '1.0-1' : 'vi_VN'}}</td>
         <td></td>
         <td class="text-center" *ngIf="!isView">
           <a (click)="openModalCt(data, 'them', idx, dataTable[idx])">
@@ -136,10 +136,10 @@
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
           <td>{{item.donViTinh}}</td>
-          <td>{{item.slHienCo | number: '1.0-1' }}</td>
-          <td>{{item.slNhapThem | number: '1.0-1' }}</td>
-          <td>{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>
-          <td>{{item.soLuong}}</td>
+          <td class="text-right">{{item.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.slHienCo + item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right">{{item.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{item.ghiChu}}</td>
           <td class="text-center" *ngIf="!isView">
             <a (click)="openModalCt(item, 'sua', y, dataTable[idx])">

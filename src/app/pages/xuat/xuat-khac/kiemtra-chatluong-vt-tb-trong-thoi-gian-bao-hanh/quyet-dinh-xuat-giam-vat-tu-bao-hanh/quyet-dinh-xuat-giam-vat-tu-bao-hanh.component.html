@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="[24]">
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Năm báo cáo</nz-form-label>
+              <nz-form-label>Năm xuất</nz-form-label>
               <nz-select formControlName="namKeHoach">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
@@ -55,7 +55,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách báo cáo kết quả kiểm định mẫu</h3>
+      <h3 class="text-uppercase">Danh sách quyết định xuất giảm vật tư</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -85,7 +85,7 @@
           <th class="text-left">Thời hạn xuất giảm VT</th>
           <th class="text-left">Trích yếu quyết định</th>
           <th class="text-left">Đơn vị nhận quyết định</th>
-          <!--          <th class="text-left">Số QĐ giao NVXH của Cục</th>-->
+          <th class="text-left">Số QĐ giao NVXH của Cục</th>
           <th class="text-left">Trạng thái</th>
           <th class="text-center" width="120px">Hành động</th>
         </tr>
@@ -103,15 +103,21 @@
           <td>{{ data.thoiHanXuatGiam | date: 'dd/MM/YYYY'}}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenDviNhan }}</td>
+          <td>{{ data.listSoQdGiaoNvXh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a *ngIf="data.trangThai ==STATUS.BAN_HANH" (click)="redirectDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="data.trangThai ==STATUS.DU_THAO"
+              *ngIf="data.trangThai ==STATUS.DU_THAO  ||data.trangThai ==STATUS.TU_CHOI_LDV||  data.trangThai== STATUS.TU_CHOI_LDTC"
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a
+              *ngIf="data.trangThai== STATUS.CHO_DUYET_LDV  || data.trangThai == STATUS.CHO_DUYET_LDTC"
+              (click)="redirectDetail(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a *ngIf="data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

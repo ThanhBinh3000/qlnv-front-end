@@ -108,15 +108,17 @@
           <th class="text-center" nzWidth="150px">Số tờ trình</th>
           <th class="text-center" nzWidth="">Trích yếu</th>
           <th class="text-center" nzWidth="100px">Trạng thái</th>
-          <th class="text-center" nzWidth="150px">Hành động</th>
+          <th class="text-center" nzWidth="100px">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
           <th></th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
-                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
+              <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                         (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th>
@@ -179,8 +181,8 @@
           <td> <a nz-button nzType="link" (click)="openModalCttongHop(data)">{{ data.phuongAnTc }}</a></td>
           <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td class="text-center">
-            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD_XEM')">
+          <td class="text-left">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD_XEM') && !(data.trangThai == STATUS.DU_THAO && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a

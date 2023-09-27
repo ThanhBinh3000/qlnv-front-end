@@ -90,30 +90,32 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
+      idDuAn: [null],
       namKeHoach: [null],
       maDvi: [this.userInfo.MA_DVI],
-      idQdPdKqlcnt: [null, Validators.required],
-      soQdPdKqlcnt: [null, Validators.required],
+      idQdPdKqlcnt: [null],
+      soQdPdKqlcnt: [null],
       ngayKyKqlcnt: [],
-      idQdPdKhlcnt: [null, Validators.required],
-      soQdPdKhlcnt: [null, Validators.required],
-      tenGoiThau: [null, Validators.required],
-      idGoiThau: [null, Validators.required],
-      soHd: [null, Validators.required],
-      tenHd: [null, Validators.required],
-      ngayHieuLuc: [null, Validators.required],
+      idQdPdKhlcnt: [null],
+      soQdPdKhlcnt: [null],
+      tenGoiThau: [null],
+      idGoiThau: [null],
+      soHd: [null],
+      tenHd: [null],
+      ngayHieuLuc: [null],
       ghiChuHieuLuc: [],
-      loaiHopDong: [null, Validators.required],
+      loaiHopDong: [null],
       tenLoaiHopDong: [],
       ghiChuLoaiHd: [],
-      thoiGianThHd: [null, Validators.required],
+      thoiGianThHd: [null],
       thoiGianBh: [],
       loai: ['00'],
+      page: ['00'],
       loaiSuaChua : [null],
-      ghiChu: [null, Validators.required],
+      ghiChu: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
-      cdtTen: [null, Validators.required],
+      cdtTen: [null],
       cdtDiaChi: [null],
       cdtMst: [null],
       cdtNguoiDaiDien: [null],
@@ -136,10 +138,9 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
       dvccMoTai: [null],
       thanhTien: [],
       tenDuAn: [null],
-      idDuAn: [null],
       thanhTienBangChu: [],
       fileDinhKems: [null],
-      listKtTdscHopDongKlcv: [[]]
+      listKtTdscHopDongKlcv: [[]],
     });
   }
 
@@ -162,6 +163,7 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
 
   async bindingData() {
     if (this.itemGoiThau && this.itemQdPdKhlcnt) {
+      console.log(this.itemGoiThau,211111)
       let rs = await this.quyetdinhpheduyetKqLcntService.getDetail(this.itemGoiThau.idQdPdKqlcnt);
       let dataQdPdKqlcnt;
       let goiThau;
@@ -229,10 +231,12 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
       return;
     }
     this.formData.value.soHd = this.formData.value.soHd + this.hauToSoHd;
+    this.formData.value.idDuAn = this.itemDuAn.id
+    this.formData.value.tenDuAn = this.itemDuAn.tenCongTrinh
     if (this.dataKlcv && this.dataKlcv.length > 0) {
       this.formData.value.listKtTdscHopDongKlcv = this.dataKlcv;
     } else {
-      this.notification.success(MESSAGE.ERROR, "Danh sách khối lượng công việc không được để trống.");
+      this.notification.error(MESSAGE.ERROR, "Danh sách khối lượng công việc không được để trống.");
       return;
     }
     if (this.listFileDinhKem && this.listFileDinhKem.length > 0) {

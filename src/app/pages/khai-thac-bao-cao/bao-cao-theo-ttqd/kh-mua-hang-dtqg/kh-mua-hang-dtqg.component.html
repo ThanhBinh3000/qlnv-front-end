@@ -1,6 +1,6 @@
 <div class="luong-thuc__danh-sach">
   <div class="bg-trang">
-    <h3 class="text-uppercase">Kế hoạch mua hàng DTQG</h3>
+    <h3 class="text-uppercase">BÁO CÁO KẾ HOẠCH MUA HÀNG DỰ TRỮ QUỐC GIA</h3>
     <nz-card class="mt16 flex-card p-lr16">
       <form nzLayout="vertical" nz-form [formGroup]="formData">
         <ng-template #error let-control>
@@ -16,28 +16,10 @@
               </nz-select>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Quý
-              </nz-form-label>
-              <nz-select formControlName="quy">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
+
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label [nzXs]="7">Biểu số</nz-form-label>
-              <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="bieuSo">
-                  <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-                </nz-select>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đơn vị báo cáo
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Cục DTNN KV
               </nz-form-label>
               <nz-select formControlName="dviBaoCao">
                 <nz-option *ngFor="let p of dsDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
@@ -46,7 +28,7 @@
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đơn vị nhận báo cáo
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Chi cục DTNN
               </nz-form-label>
               <nz-select formControlName="dviNhanBaoCao">
                 <nz-option *ngFor="let p of dsDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
@@ -55,26 +37,26 @@
           </div>
         </div>
       </form>
-      <form nzLayout="vertical" nz-form>
-        <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>
-              <nz-select (change)="changeLoaiVthh($event)">
-                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="18">
-            <nz-form-item>
-              <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
-              <nz-select (change)="changeCloaiVthh($event)">
-                <nz-option *ngFor="let p of listCloaiVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-        </div>
-      </form>
+<!--      <form nzLayout="vertical" nz-form>-->
+<!--        <div nz-row [nzGutter]="24">-->
+<!--          <div nz-col [nzSpan]="6">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>-->
+<!--              <nz-select (change)="changeLoaiVthh($event)">-->
+<!--                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col [nzSpan]="18">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>-->
+<!--              <nz-select (change)="changeCloaiVthh($event)">-->
+<!--                <nz-option *ngFor="let p of listCloaiVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </form>-->
     </nz-card>
     <div class="group-button">
       <button type="button" class="btn btn-sub" (click)="preView()"
@@ -93,10 +75,13 @@
     </pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()"
-            class="modal__button--save">
+    <button nz-button (click)="downloadPdf()" class="modal__button--save">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       Tải báo cáo
+    </button>
+    <button nz-button (click)="downloadExcel()" class="modal__button--save">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      Tải báo cáo Excel
     </button>
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>

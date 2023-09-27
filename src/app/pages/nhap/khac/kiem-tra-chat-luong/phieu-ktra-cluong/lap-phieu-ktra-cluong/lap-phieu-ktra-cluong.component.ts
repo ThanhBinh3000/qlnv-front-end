@@ -1,29 +1,29 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {PhieuKtraCluongService} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/phieuKtraCluong.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { PhieuKtraCluongService } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/phieuKtraCluong.service";
 import dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {FileDinhKem} from "../../../../../../models/CuuTro";
-import {MESSAGE} from "../../../../../../constants/message";
+import { Validators } from "@angular/forms";
+import { FileDinhKem } from "../../../../../../models/CuuTro";
+import { MESSAGE } from "../../../../../../constants/message";
 import {
   QuyetDinhGiaoNhapHangKhacService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhGiaoNhapHangKhac.service";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {cloneDeep} from 'lodash';
-import {DanhMucTieuChuanService} from "../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
-import {STATUS} from "../../../../../../constants/status";
+import { cloneDeep } from 'lodash';
+import { DanhMucTieuChuanService } from "../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
+import { STATUS } from "../../../../../../constants/status";
 import {
   BbNghiemThuBaoQuanService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
-import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
 @Component({
   selector: 'app-lap-phieu-ktra-cluong',
   templateUrl: './lap-phieu-ktra-cluong.component.html',
@@ -45,10 +45,11 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
     ma: 'Đạt',
     giaTri: 'Đạt',
   },
-    {
-      ma: 'Không Đạt',
-      giaTri: 'Không Đạt',
-    },];
+  {
+    ma: 'Không Đạt',
+    giaTri: 'Không Đạt',
+  },];
+  previewName: string = 'nk_phieu_ktra_cl';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -85,9 +86,9 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
         soLuongKhKhaiBao: [null,],
         soLuongTtKtra: [null,],
         idBbNtBq: [null,],
-        soBbNtBq: [null,],
+        soBbNtBq: [null, [Validators.required]],
 
-        idDdiemGiaoNvNh: [, [Validators.required]],
+        idDdiemGiaoNvNh: [],
         maDiemKho: ['', [Validators.required]],
         tenDiemKho: ['', [Validators.required]],
         maNhaKho: ['', [Validators.required]],
@@ -162,12 +163,12 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
   async save(isGuiDuyet: boolean) {
     // if (this.validateSave()) {
     try {
-      this.spinner.show();
-      //     this.helperService.markFormGroupTouched(this.formData);
-      //     if (this.formData.invalid) {
-      //       await this.spinner.hide();
-      //       return;
-      //     }
+      await this.spinner.show();
+      await this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        await this.spinner.hide();
+        return;
+      }
       let body = this.formData.value;
       body.fileDinhKemCtgd = this.fileDinhKemCtgd;
       body.fileDinhKemKtcl = this.fileDinhKemKtcl;
@@ -198,10 +199,10 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
       }
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
     // }
   }
@@ -435,6 +436,7 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
       maNganKho: this.formData.get('maNganKho').value,
     }
     let res = await this.bbNghiemThuBaoQuanService.timKiemBbtheoMaNganLo(body);
+    console.log(res.data, "loadDsBbnt")
     if (res.msg == MESSAGE.SUCCESS) {
       this.listBbNtbqld = res.data;
     } else {

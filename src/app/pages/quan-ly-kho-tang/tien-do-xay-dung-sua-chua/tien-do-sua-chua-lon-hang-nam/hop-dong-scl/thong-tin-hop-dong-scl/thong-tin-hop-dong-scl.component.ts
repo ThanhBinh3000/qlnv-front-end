@@ -32,9 +32,9 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
   @Input('isViewDetail') isViewDetail: boolean;
   tongMucDt: number = 0;
   @Input() flagThemMoi: string;
-  @Input() itemDuAn: string;
-  @Input()
-  itemQdPdKhLcnt: any;
+  @Input() itemDuAn: any;
+  @Input() itemQdPdKhLcnt: any;
+  @Input() itemQdPdKtkt: any;
   listHopDong: any[] = []
   itemSelected: any;
   openPopThemMoiHd = false;
@@ -94,7 +94,8 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
       loaiSuaChua : [null],
       listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtTdscQuyetDinhPdKhlcntCvKad: null,
-      listKtTdscQuyetDinhPdKhlcntCvKh: null
+      listKtTdscQuyetDinhPdKhlcntCvKh: null,
+      loai: ['00']
     });
     super.ngOnInit()
   }
@@ -154,8 +155,11 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
     try {
       if (this.itemQdPdKhLcnt && !isBackFromHd) {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
+        this.formData.patchValue({
+          tenDuAn : this.itemDuAn.tenCongTrinh,
+          tenNguonVon : this.itemQdPdKhLcnt.nguonVonDt
+        })
         this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
-        console.log(this.itemQdPdKhLcnt, ' this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt');
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
         }
@@ -164,14 +168,15 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
         let body = {
           "namKh": this.itemQdPdKhLcnt.namKh,
           "idDuAn": this.itemQdPdKhLcnt.idDuAn,
-          "idQdPdDaDtxd": this.itemQdPdKhLcnt.idQdPdDaDtxd,
+          "idQdPdKtkt": this.itemQdPdKtkt.id,
           "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
+          "loai": '00'
         }
         let res = await this.hopdongService.detailQdPdKhLcnt(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {(this.itemQdPdKhLcnt, 'this item')
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
+            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntDsnt;
             if (this.listHopDong && this.listHopDong.length > 0) {
               this.selectRow(this.listHopDong[0]);
             }
@@ -241,7 +246,11 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
             id: item.id
           };
           this.hopdongService.delete(body).then(async () => {
-            let resp = await this.hopdongService.danhSachHdTheoKhlcnt(this.idInput);
+            let body = {
+              idQdPdKhlcnt : this.itemQdPdKhLcnt.id,
+              loai: "00"
+            }
+            let resp = await this.hopdongService.danhSachHdTheoKhlcnt(body);
             if (resp.msg == MESSAGE.SUCCESS) {
               this.listHopDong = resp.data;
             }

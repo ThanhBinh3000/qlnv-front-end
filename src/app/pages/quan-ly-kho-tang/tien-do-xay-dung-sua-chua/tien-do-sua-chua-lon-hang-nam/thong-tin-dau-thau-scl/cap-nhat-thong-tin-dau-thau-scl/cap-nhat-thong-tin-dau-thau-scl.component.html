@@ -15,13 +15,13 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
+        <button *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_TTDT_THEM')"
                 type="button" class="btn btn-sub xanh-nhat  ml-2" (click)="save(true)">
           <i class="icon htvbdh_checkfile2"></i>
           <span>Hoàn thành</span>
         </button>
         <button
-          *ngIf="idGoiThau > 0 && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT_THEM')"
+          *ngIf="idGoiThau > 0 && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_TTDT_THEM')"
           class="btn btn-main btn-sm waves-effect waves-light  ml-2" (click)="save(false)">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -62,6 +62,14 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
+                <div nz-col nzSpan="24">
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true"> Loại công trình</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="loaiCongTrinh" readonly/>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
               </div>
             </div>
             <div nz-col nzSpan="12">
@@ -94,16 +102,6 @@
                     <nz-form-control>
                       <nz-input-group>
                         <input nz-input formControlName="tongSoGtTc" readonly/>
-                      </nz-input-group>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="24">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số gói thầu thất bại</nz-form-label>
-                    <nz-form-control>
-                      <nz-input-group>
-                        <input nz-input formControlName="tongSoGcTb" readonly/>
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>

@@ -44,7 +44,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   listDiaDiemNhap: any[] = [];
   listSoPhieuNhapKho: any[] = [];
   rowItem: any = {};
-
+  previewName: string = 'ntt_bang_ke_can_hang';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -101,6 +101,9 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       tenNganLoKho: [''],
       lyDoTuChoi: [''],
       soPhieuKtraCluong: [''],
+      tongSlBaoBi: [''],
+      tongSlCaBaoBi: [''],
+      tongSlDaTruBaoBi: [''],
     })
   }
 
@@ -222,7 +225,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       soHdong: data.soHd,
       ngayKiHdong: data.ngayKyHd,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
@@ -544,6 +547,9 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         prev += cur[columnName];
         return prev;
       }, 0);
+      this.formData.patchValue({
+        tongSlCaBaoBi: sum
+      })
       return sum;
     }
   }

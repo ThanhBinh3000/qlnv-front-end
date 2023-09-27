@@ -254,7 +254,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -546,9 +546,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let tongMucDtDx: number = 0;
     let tongSlChiTieu: number = 0;
     this.listOfData.forEach((item) => {
-      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
+      tongMucDt = tongMucDt + (item.soLuong * (item.donGiaVat?item.donGiaVat:0) *1000);
       tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
-      tongSlChiTieu += item.soLuongTheoChiTieu
+      tongSlChiTieu += item.soLuongChiTieu
     });
     this.formData.patchValue({
       tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),

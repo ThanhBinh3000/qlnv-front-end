@@ -169,12 +169,10 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     }
     if (this.formData.get('phanLoai').value == 'TH') {
       this.formData.controls["idTh"].setValidators([Validators.required]);
-      this.formData.controls["idDx"].clearValidators();
       this.formData.controls["soDxuat"].clearValidators();
     }
     if (this.formData.get('phanLoai').value == 'TTr') {
       this.formData.controls["idTh"].clearValidators();
-      this.formData.controls["idDx"].setValidators([Validators.required]);
       this.formData.controls["soDxuat"].setValidators([Validators.required]);
     }
   }
@@ -221,8 +219,6 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      console.log(this.isViewOnModal)
-      console.log(this.isQuyetDinh)
       this.userInfo = this.userService.getUserLogin();
       this.maQd = this.userInfo.MA_QD;
       for (let i = -3; i < 23; i++) {
@@ -283,7 +279,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -375,6 +371,11 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
           this.formData.get('id').setValue(res.data.id);
+          if (this.formData.get('phanLoai').value == 'TH') {
+            this.formData.get('idTh').setValue(res.data.idTh);
+          } else {
+            this.formData.get('idDx').setValue(res.data.idDx);
+          }
           this.idInput = res.data.id;
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
@@ -437,6 +438,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     let trangThai = ''
     let mesg = ''
     switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_LDV:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDV;
         mesg = 'Văn bản sẵn sàng gửi duyệt ?'
@@ -517,7 +519,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       let res = await this.quyetDinhPheDuyetKeHoachNhapKhacService.getDetail(id);
       this.listDanhSachTongHop = [];
       const data = res.data;
-      if (data.fileDinhKems.length > 0) {
+      if (data?.fileDinhKems?.length > 0) {
         data.fileDinhKems.forEach(item => {
           if (item.fileType == FILETYPE.FILE_DINH_KEM) {
             this.listFileDinhKem.push(item)
@@ -646,12 +648,13 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     let res = await this.dxKhNhapKhacService.dsDxDuocTaoQDinhPDuyet();
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsDxTaoQd = res.data;
+      console.log(this.dsDxTaoQd, "this.dsDxTaoQd")
     }
     await this.spinner.hide();
 
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu',
+      nzTitle: 'Danh sách đề xuất kế hoạch nhập khác',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -659,7 +662,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsDxTaoQd,
-        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số công văn tờ trình', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });

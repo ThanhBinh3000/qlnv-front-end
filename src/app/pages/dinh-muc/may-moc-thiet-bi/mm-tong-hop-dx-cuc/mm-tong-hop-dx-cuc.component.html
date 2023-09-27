@@ -72,6 +72,7 @@
           <th>Trích yếu</th>
           <th width="130px">Số QĐ giao chỉ tiêu</th>
           <th width="130px">Số QĐ mua sắm của TC</th>
+          <th width="130px">Số thông báo từ chối </th>
           <th width="130px">Trạng thái</th>
           <th width="120px">Hành động</th>
         </tr>
@@ -119,6 +120,12 @@
             </nz-input-group>
           </th>
           <th>
+            <nz-input-group >
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTbTuChoi"
+                     (input)="filterInTable('soTbTuChoi',filterTable.soTbTuChoi)" />
+            </nz-input-group>
+          </th>
+          <th>
             <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
                          (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
@@ -143,14 +150,19 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.soQdGiaoCt }}</td>
           <td>{{ data.soQdMuaSam }}</td>
+          <td>{{ data.soTbTuChoi }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_XEM')">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(data.trangThai == STATUS.DA_DUYET_LDTC || data.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_XEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_SUA')"
+            <a *ngIf="((data.trangThai == STATUS.DU_THAO  || data.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_SUA')"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_SUA')"
+               (click)="openDialogThongBao(data.id)">
+              <i class="icon htvbdh_bullhorn" title="Thông báo"></i>
             </a>
             <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

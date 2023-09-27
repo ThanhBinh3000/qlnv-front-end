@@ -178,7 +178,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
-    if (isGuiDuyet && this.idInput > 0) {
+    this.helperService.removeValidators(this.formData);
+    if (isGuiDuyet) {
       this.setValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);

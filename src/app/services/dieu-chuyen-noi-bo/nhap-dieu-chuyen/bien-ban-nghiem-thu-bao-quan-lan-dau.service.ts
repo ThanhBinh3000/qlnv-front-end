@@ -12,4 +12,9 @@ export class BienBanNghiemThuBaoQuanLanDauService extends BaseService {
     super(httpClient, 'dieu-chuyen-noi-bo/bb-nghiem-thu-bao-quan-lan-dau', '/qlnv-hang');
   }
 
+  getDanhSach(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

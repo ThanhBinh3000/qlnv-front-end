@@ -65,11 +65,12 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách phiếu kiểm định chất lượng hàng DTQG sau khi sửa chữa</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData()">
+      <button type="button" class="btn btn-sub" (click)="exportData('SCHDTQG_KTCL_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="this.userService.isCuc()" (click)="redirectCreate()">
+      <button type="button" class="btn btn-main" *ngIf="this.userService.isCuc()"
+        (click)="redirectCreate('SCHDTQG_KTCL_THEM')">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -131,14 +132,15 @@
                   <td>{{pxk.ngayKiemDinh | date: 'dd/MM/YYYY'}}</td>
                   <td>{{pxk.tenTrangThai}}</td>
                   <td>
-                    <a (click)="redirectDetail(pxk.id)">
+                    <a (click)="redirectDetail(pxk.id,'SCHDTQG_KTCL_XEM')">
                       <span class="icon htvbdh_eye"></span>
                     </a>
                     <a *ngIf="this.userService.isCuc() && pxk.trangThai == STATUS.DU_THAO"
-                      (click)="redirectDetail(pxk.id)">
+                      (click)="redirectDetail(pxk.id,'SCHDTQG_KTCL_THEM')">
                       <span class="fa fa-pencil"></span>
                     </a>
-                    <a *ngIf="this.userService.isCuc() && pxk.trangThai == STATUS.DU_THAO" (click)="delete(pxk)">
+                    <a *ngIf="this.userService.isCuc() && pxk.trangThai == STATUS.DU_THAO"
+                      (click)="delete(pxk,'SCHDTQG_KTCL_XOA')">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>

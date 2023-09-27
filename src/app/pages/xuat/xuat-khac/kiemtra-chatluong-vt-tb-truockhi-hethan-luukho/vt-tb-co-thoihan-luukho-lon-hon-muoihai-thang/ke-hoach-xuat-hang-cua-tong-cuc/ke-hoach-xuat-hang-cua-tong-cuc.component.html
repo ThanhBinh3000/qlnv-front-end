@@ -127,10 +127,10 @@
           <th class="text-left">Năm KH</th>
           <th class="text-left">Số công văn/tờ trình</th>
           <th class="text-left">Ngày lập KH</th>
-          <th class="text-left">Ngày duyệt KH</th>
+          <th class="text-left">Ngày duyệt KH của TC</th>
           <th class="text-left">Ngày duyệt của BTC</th>
           <th class="text-left">Trích yếu</th>
-          <th class="text-left">Số ĐV tài sản</th>
+<!--          <th class="text-left">Số ĐV tài sản</th>-->
           <th class="text-left">Trạng thái</th>
           <th class="text-center" width="120px">Hành động</th>
         </tr>
@@ -173,12 +173,12 @@
                      (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDviTaiSan"
-                     (input)="filterInTable('soDviTaiSan',filterTable.soDviTaiSan)" size="small"/>
-            </nz-input-group>
-          </th>
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDviTaiSan"-->
+<!--                     (input)="filterInTable('soDviTaiSan',filterTable.soDviTaiSan)" size="small"/>-->
+<!--            </nz-input-group>-->
+<!--          </th>-->
           <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
@@ -200,7 +200,7 @@
           <td>{{ data.ngayDuyetKeHoach | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.ngayDuyetKeHoachBtc | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.soDviTaiSan }}</td>
+<!--          <td>{{ data.soDviTaiSan }}</td>-->
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a

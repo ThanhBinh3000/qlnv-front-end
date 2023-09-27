@@ -122,7 +122,7 @@
               </div>
               <div nz-col nzSpan="14">
                 <span class="text-blue">{{formData.value.tonKho | number:'1.0-1':'vi_VN'}}</span>
-                <span *ngIf="!!formData.value.tenDonViTinh">({{formData.value.tenDonViTinh}})</span>
+                <span *ngIf="!!formData.value.donViTinh"> ({{formData.value.donViTinh}})</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
@@ -143,15 +143,16 @@
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
               <div nz-col nzSpan="10">
-                <span>Dự toán kinh phí(triệu đồng)</span>
+                <span>Dự toán kinh phí (triệu đồng)</span>
               </div>
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-input-number [nzDisabled]="this.data && !!this.data.duToanKphi" formControlName="duToanKphi"
+                    <input class="money-input" currencyMask formControlName="duToanKphi" [options]="AMOUNT" />
+                    <!-- <nz-input-number [nzDisabled]="this.data && !!this.data.duToanKphi" formControlName="duToanKphi"
                       [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'"
                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
+                    </nz-input-number> -->
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -260,14 +261,16 @@
               </div>
               <div nz-col nzSpan="14">
                 <span>{{formData.value.slDcConLai | number:'1.0-1':'vi_VN'}}</span>
+                <span *ngIf="formData.value.slDcConLai"> ({{formData.value.donViTinhNhap}})</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
               <div nz-col nzSpan="10">
                 <span>Tích lượng khả dụng</span>
               </div>
-              <div nz-col nzSpan="14">
+              <div nz-col nzSpan="14" *ngIf="formData.value.tichLuongKd">
                 <span>{{formData.value.tichLuongKd | number: '1.0-1':'vi_VN'}}</span>
+                <span> ({{formData.value.donViTinhNhap}})</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
@@ -277,9 +280,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1"
-                      [nzMax]="(formData.value.soLuongDc > formData.value.tichLuongKd ? formData.value.tichLuongKd : formData.value.soLuongDc) || 0"
-                      [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                    <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1" [nzMax]="max" [nzStep]="1"
+                      [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                       (ngModelChange)="onChangeSLNhapDc($event)">
                     </nz-input-number>
                   </nz-form-control>

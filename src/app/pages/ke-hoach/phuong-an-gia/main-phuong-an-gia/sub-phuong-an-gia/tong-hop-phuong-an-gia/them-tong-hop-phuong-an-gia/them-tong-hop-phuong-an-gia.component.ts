@@ -19,6 +19,7 @@ import {v4 as uuidv4} from "uuid";
 import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
 import {saveAs} from 'file-saver';
 import {PREVIEW} from "../../../../../../../constants/fileType";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-them-tong-hop-phuong-an-gia',
@@ -65,7 +66,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   pdfSrc: any;
   wordSrc: any;
   excelSrc: any;
-  isPrint: boolean = false;
+  printSrc: any;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -421,6 +422,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       await this.tongHopPhuongAnGiaService.preview(body).then(async s => {
         this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
         this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.printSrc = s.data.pdfSrc;
         this.showDlgPreview = true;
         this
       });
@@ -437,21 +439,15 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   doPrint() {
-    const WindowPrt = window.open(
-      '',
-      '',
-      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-    );
-    let printContent = '';
-    printContent = printContent + '<div>';
-    printContent =
-      printContent + document.getElementById('modal').innerHTML;
-    printContent = printContent + '</div>';
-    WindowPrt.document.write(printContent);
-    WindowPrt.document.close();
-    WindowPrt.focus();
-    WindowPrt.print();
-    WindowPrt.close();
+    printJS({printable: this.printSrc, type: 'pdf', base64: true});
+  }
+
+  downloadWord() {
+    if (this.type == 'GCT') {
+      saveAs(this.wordSrc, "tong_hop_phuong_an_gia_gct.docx");
+    } else {
+      saveAs(this.wordSrc, "tong_hop_phuong_an_gia_gmtdbtt.docx");
+    }
   }
 }
 

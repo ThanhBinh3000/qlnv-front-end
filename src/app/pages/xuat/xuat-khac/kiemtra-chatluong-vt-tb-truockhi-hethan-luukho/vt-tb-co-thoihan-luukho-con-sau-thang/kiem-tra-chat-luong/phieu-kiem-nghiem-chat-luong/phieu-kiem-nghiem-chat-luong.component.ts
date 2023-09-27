@@ -1,27 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {chain} from 'lodash';
-import * as uuid from "uuid";
+import { Component, OnInit } from '@angular/core';
+import { Base2Component } from '../../../../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { chain } from 'lodash';
+import * as uuid from 'uuid';
 import {
-  BienBanLayMauVtKtclService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BienBanLayMauVtKtcl.service";
-import {UserLogin} from "../../../../../../../models/userlogin";
-import {MESSAGE} from "../../../../../../../constants/message";
-import dayjs from "dayjs";
-import {CHUC_NANG} from "../../../../../../../constants/status";
+  BienBanLayMauVtKtclService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BienBanLayMauVtKtcl.service';
+import { UserLogin } from '../../../../../../../models/userlogin';
+import { MESSAGE } from '../../../../../../../constants/message';
+import dayjs from 'dayjs';
+import { CHUC_NANG } from '../../../../../../../constants/status';
 import {
-  PhieuKdclVtKtclService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service";
+  PhieuKdclVtKtclService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service';
 
 @Component({
   selector: 'app-xk-vt-phieu-kiem-nghiem-chat-luong',
   templateUrl: './phieu-kiem-nghiem-chat-luong.component.html',
-  styleUrls: ['./phieu-kiem-nghiem-chat-luong.component.scss']
+  styleUrls: ['./phieu-kiem-nghiem-chat-luong.component.scss'],
 })
 export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
@@ -44,7 +44,7 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
       soPhieu: [],
       ngayKiemDinhTu: [],
       ngayKiemDinhDen: [],
-    })
+    });
   }
 
   userInfo: UserLogin;
@@ -74,10 +74,10 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
 
   ngOnInit(): void {
     try {
-      this.initData()
+      this.initData();
       this.timKiem();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -107,48 +107,51 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
     await this.spinner.show();
     try {
       if (this.formData.value.ngayXuatKho) {
-        this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
+        this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD');
+        this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD');
+      }
+      if (this.userService.isChiCuc()) {
+        this.formData.value.maDvi = this.userInfo.MA_DVI.substr(0, 6);
       }
       await this.search();
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
     await this.spinner.hide();
   }
 
   buildTableView() {
     let dataView = chain(this.dataTable)
-      .groupBy("soQdGiaoNvXh")
+      .groupBy('soQdGiaoNvXh')
       .map((value, key) => {
-        let parent = value.find(f => f.soQdGiaoNvXh === key)
+        let parent = value.find(f => f.soQdGiaoNvXh === key);
         let rs = chain(value)
-          .groupBy("tenDiemKho")
+          .groupBy('tenDiemKho')
           .map((v, k) => {
               // let bb = v.find(s => s.tenDiemKho === k)
               return {
                 idVirtual: uuid.v4(),
-                tenDiemKho: k != "null" ? k : '',
+                tenDiemKho: k != 'null' ? k : '',
                 childData: v,
               };
-            }
+            },
           ).value();
         return {
           idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key != "null" ? key : '',
+          soQdGiaoNvXh: key != 'null' ? key : '',
           nam: parent ? parent.nam : null,
           ngayXuatLayMau: parent ? parent.ngayXuatLayMau : null,
-          childData: rs
+          childData: rs,
         };
       }).value();
-    this.children = dataView
-    this.expandAll()
+    this.children = dataView;
+    this.expandAll();
   }
 
   expandAll() {
     this.children.forEach(s => {
       this.expandSetString.add(s.idVirtual);
-    })
+    });
   }
 
   onExpandStringChange(id: string, checked: boolean): void {

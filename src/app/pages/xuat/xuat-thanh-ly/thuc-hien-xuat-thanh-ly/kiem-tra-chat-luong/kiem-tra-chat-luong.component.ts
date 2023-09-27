@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {UserService} from "src/app/services/user.service";
 import {
   BienBanLayMauService
@@ -16,6 +16,7 @@ import {
   styleUrls: ['./kiem-tra-chat-luong.component.scss']
 })
 export class KiemTraChatLuongComponent implements OnInit {
+  @Input() loaiVthh: string;
 
   constructor(
     public bienBanLayMauService: BienBanLayMauService,

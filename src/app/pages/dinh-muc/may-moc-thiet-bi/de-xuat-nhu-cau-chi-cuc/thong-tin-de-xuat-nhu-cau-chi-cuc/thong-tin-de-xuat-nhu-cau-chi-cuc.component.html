@@ -146,21 +146,21 @@
       <th rowSpan="2" nzWidth="40px">STT</th>
       <th rowSpan="2" nzWidth="200px">Tên tài sản</th>
       <th rowSpan="2" nzWidth="100px">Đơn vị tính</th>
-      <th rowSpan="2" nzWidth="100px">Số lượng hiện có(1)</th>
+      <th rowSpan="2" nzWidth="100px">Số lượng hiện có (1)</th>
       <th rowSpan="2" nzWidth="100px">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach -1 }}(2)</th>
-      <th rowSpan="2" nzWidth="100px">Tổng cộng(3=1+2)</th>
-      <th rowSpan="2" nzWidth="100px">SL theo tiêu chuẩn <br> định mức(4)</th>
+      <th rowSpan="2" nzWidth="100px">Tổng cộng (3=1+2)</th>
+      <th rowSpan="2" nzWidth="100px">SL theo tiêu chuẩn <br> định mức (4)</th>
       <th colSpan="2" nzWidth="150px">Chênh lệch</th>
       <th colSpan="3" nzWidth="200px">Nhu cầu trang bị năm {{formData.value.namKeHoach}}</th>
       <th rowSpan="2" nzWidth="200px">Ghi chú</th>
       <th rowSpan="2" nzWidth="140px" *ngIf="!isView">Hành động</th>
     </tr>
     <tr>
-      <th nzWidth="75px">Còn thiếu(5=4-3)</th>
-      <th nzWidth="75px">Thừa(6=3-4)</th>
-      <th nzWidth="100px">Số lượng(7)</th>
-      <th nzWidth="100px">Đơn giá(8)</th>
-      <th nzWidth="100px">Thành tiền(9=7*8)</th>
+      <th nzWidth="75px">Còn thiếu (5=4-3)</th>
+      <th nzWidth="75px">Thừa (6=3-4)</th>
+      <th nzWidth="100px">Số lượng (7)</th>
+      <th nzWidth="100px">Đơn giá (8)</th>
+      <th nzWidth="100px">Thành tiền (9=7*8)</th>
     </tr>
     <tr *ngIf="!isView">
       <th></th>
@@ -229,15 +229,15 @@
         <td>{{idx + 1}}</td>
         <td>{{data.tenTaiSan}}</td>
         <td>{{data.donViTinh}}</td>
-        <td class="text-right">{{data.slHienCo | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.slNhapThem | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.slHienCo + data.slNhapThem | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.slTieuChuan | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.chenhLechThieu | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.chenhLechThua | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.soLuong  | number: '1.0-1'  }}</td>
-        <td class="text-right">{{data.donGiaTd  | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.soLuong * data.donGiaTd    | number: '1.0-1' }}</td>
+        <td class="text-right">{{data.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.slHienCo + data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.slTieuChuan | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.chenhLechThieu | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.chenhLechThua | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.donGiaTd  | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.soLuong * data.donGiaTd    | number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{data.ghiChu}}</td>
         <td class="text-center" *ngIf="!isView">
           <a (click)="editRow(idx)">

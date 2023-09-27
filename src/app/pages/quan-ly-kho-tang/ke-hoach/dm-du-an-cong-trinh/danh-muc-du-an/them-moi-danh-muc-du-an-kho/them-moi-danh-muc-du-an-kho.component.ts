@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
@@ -9,12 +9,8 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {DonviService} from "../../../../../../services/donvi.service";
 import {Validators} from "@angular/forms";
-import {
-  DanhMucSuaChuaService
-} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import dayjs from "dayjs";
-import { DanhMucKhoService } from "../../../../../../services/danh-muc-kho.service";
-import { STATUS } from "../../../../../../constants/status";
+import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-danh-muc-du-an-kho',
@@ -65,9 +61,9 @@ export class ThemMoiDanhMucDuAnKhoComponent extends Base2Component implements On
       nstwDuKien: [null , Validators.required],
       tmdtDuyet: [null , Validators.required],
       nstwDuyet: [null , Validators.required],
-      soQdPd: [null , Validators.required],
-      ngayQdPd: [null , Validators.required],
-      soQdDc: [null],
+      soQdPd: [null ],
+      ngayQdPd: [null ],
+      soQdDcPd: [null],
       ngayQdDc: [null],
       soQdPdDtxd: [null],
       tongSoLuyKe: [null],

@@ -1,287 +1,111 @@
-import {Component, OnInit} from '@angular/core';
-import {XuatThanhLyComponent} from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {MESSAGE} from "src/app/constants/message";
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {CHUC_NANG} from 'src/app/constants/status';
-import {chain, isEmpty} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {TongHopThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
-import {FormGroup} from "@angular/forms";
-import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
-import {NumberToRoman} from 'src/app/shared/commonFunction';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { MESSAGE } from "src/app/constants/message";
+import { chain } from "lodash";
+import { TongHopThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
+import { ChitietThComponent } from './chitiet-th/chitiet-th.component';
+import { ThemmoiThComponent } from './themmoi-th/themmoi-th.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Base3Component } from 'src/app/components/base3/base3.component';
 
 @Component({
   selector: 'app-tong-hop-thanh-ly',
   templateUrl: './tong-hop-thanh-ly.component.html',
   styleUrls: ['./tong-hop-thanh-ly.component.scss']
 })
-export class TongHopThanhLyComponent extends Base2Component implements OnInit {
+export class TongHopThanhLyComponent extends Base3Component implements OnInit {
 
-  CHUC_NANG = CHUC_NANG;
-  dsDonvi: any[] = [];
-  dsLoaiVthh: any[] = [];
-  dsCloaiVthh: any[] = [];
-  dataTableView: any = [];
-  expandSetString = new Set<string>();
-  stepModal: any = '50%';
-  isVisibleModal = false;
-  formDataDetail: FormGroup;
-  public vldTrangThai: XuatThanhLyComponent;
-  clickOk = false;
-  clickCancel = false;
-  flatDataTable: any;
-  numberToRoman = NumberToRoman;
-  selectedItem: any;
-  modalWidth: any;
-  step: any = 1;
-
-  constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private tongHopThanhLyService: TongHopThanhLyService,
-              private danhSachThanhLyService: DanhSachThanhLyService,
-              private xuatThanhLyComponent: XuatThanhLyComponent) {
-    super(httpClient, storageService, notification, spinner, modal, tongHopThanhLyService);
-    this.vldTrangThai = xuatThanhLyComponent;
+  constructor(
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
+    private tongHopThanhLyService: TongHopThanhLyService,
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, route, router, tongHopThanhLyService);
     this.formData = this.fb.group({
-      nam: [],
-      maDanhSach: [],
-      maCuc: [],
-      maChiCuc: [],
-      ngayTao: [],
-      ngayTaoTu: [],
-      ngayTaoDen: [],
-    })
-    this.formDataDetail = this.fb.group({
-      id: [],
-      nam: [],
-      maDvi: [],
-      maDanhSach: [],
-      thoiGianTlTu: [],
-      thoiGianTlDen: [],
-      trangThai: [],
-      idHoSo: [],
-      soHoSo: [],
-      idQdPd: [],
-      soQdPd: [],
-      ngayKyQd: [],
-      ngayGduyet: [],
-      nguoiGduyetId: [],
-      ngayPduyet: [],
-      nguoiPduyetId: [],
-      lyDoTuChoi: [],
-      tongSlHienTai: [],
-      tongSlDeXuat: [],
-      tongSlDaDuyet: [],
-      tenTrangThai: [],
-      tenDvi: [],
-      tongHopDtl: [new Array()]
+      nam: null,
+      maSc: null,
+      maCc: null,
+      ngayTu: null,
+      ngayDen: null,
     })
   }
 
-  async ngOnInit(): Promise<void> {
-    try {
-      await this.spinner.show();
-      await Promise.all([
-        this.loadDsDonVi(),
-        this.loadDsVthh()
-      ]);
-      await this.timKiem();
-    } catch (e) {
-      console.log('error: ', e)
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.spinner.hide();
+  async ngOnInit() {
+    await this.spinner.show();
+    await Promise.all([
+      this.search(),
+    ])
+    this.buildTableView()
+    await this.spinner.hide();
+
+  }
+
+  async buildTableView() {
+    await this.dataTable.forEach(item => {
+      item.expandSet = true;
+      item.groupChiCuc = chain(item.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+        tenDonVi: key,
+        children: value,
+      })
+      ).value()
+    })
+  }
+
+  openDialogDs(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
     }
-  }
-
-  disabledNgayTaoTu = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.NgayTaoTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.NgayTaoTu.getTime();
-  };
-
-  disabledNgayTaoDen = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.NgayTaoDen) {
-      return startValue.getTime() > this.formData.value.NgayTaoDen.getTime();
-    }
-    return false;
-  };
-
-
-  flattenTree(tree) {
-    return tree.flatMap((item) => {
-      return item.tongHopDtl ? this.flattenTree(item.tongHopDtl) : item;
-    });
-  }
-
-  async timKiem() {
-    /*    if (this.formData.value.ngayDx) {
-          this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-        }
-        if (this.formData.value.ngayKetThuc) {
-          this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-        }*/
-    await this.search();
-
-    this.flatDataTable = this.dataTable.flatMap(s => {
-      if (s.tongHopDtl && s.tongHopDtl.length > 0) {
-        return s.tongHopDtl.map(s1 => {
-          delete s.tongHopDtl;
-          s.idVirtual = uuidv4();
-          s.header = s.nam + s.maDanhSach + s.tenDanhSach;
-          this.expandSetString.add(s.idVirtual);
-          return Object.assign(s1, s);
-        })
-      } else return s;
-
-    });
-    this.buildTableView();
-  }
-
-  async loadDsDonVi() {
-    const dsTong = await this.donviService.layDonViCon();
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
-      /* if (this.userService.isTongCuc()) {
-         this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
-       } else {
-         this.dsDonvi = dsTong.data.filter(s => s.type === 'PB');
-       }*/
-    }
-  }
-
-  async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
-    }
-  }
-
-  async changeHangHoa(event: any) {
-    this.formData.patchValue({cloaiVthh: null})
-    if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.dsCloaiVthh = res.data;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
-  }
-
-  buildTableView() {
-    this.dataTableView = chain(this.flatDataTable)
-      .groupBy("header")
-      .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("tenChiCuc")
-          .map((v, k) => {
-              let rowItem = v.find(s => s.tenChiCuc === k);
-              let idVirtual = uuidv4();
-              this.expandSetString.add(idVirtual);
-              return {
-                idVirtual: idVirtual,
-                tenChiCuc: k,
-                tenCuc: rowItem?.tenCuc,
-                maDiaDiem: rowItem?.maDiaDiem,
-                tenCloaiVthh: rowItem?.tenCloaiVthh,
-                childData: v
-              }
-            }
-          ).value();
-        let rowItem = value.find(s => s.header === key);
-        let idVirtual = uuidv4();
-        this.expandSetString.add(idVirtual);
-        return {
-          idVirtual: idVirtual,
-          id: rowItem.id,
-          nam: rowItem.nam,
-          tenCuc: rowItem.tenCuc,
-          maDanhSach: rowItem.maDanhSach,
-          tenDanhSach: rowItem.tenDanhSach,
-          trangThai: rowItem.trangThai,
-          tenTrangThai: rowItem.tenTrangThai,
-          ngayTao: rowItem.ngayTao,
-          childData: rs
-        };
-      }).value();
-  }
-
-  onExpandStringChange(id: string, checked: boolean) {
-    if (checked) {
-      this.expandSetString.add(id);
-    } else {
-      this.expandSetString.delete(id);
-    }
-  }
-
-  handleOk() {
-    this.clickOk = !this.clickOk;
-  }
-
-  handleCancel() {
-    this.showModal(false);
-  }
-
-  showModal(isVisibleModal: boolean, item?: any) {
-    this.isVisibleModal = isVisibleModal;
-    this.selectedItem = item;
-    this.modalWidth = item ? '100vw' : '30vw';
-    // this.step = item ? '1' : '2';
-  }
-
-  async changeStep($event: any) {
-    //0=dong 1=guiduyet 2=luu(chuyen tiep sang trang2)
-    if ($event.step == 0 || $event.step == 1) {
-      this.showModal(false);
-    } else if ($event.step == 2) {
-      this.showModal(true, $event.item);
-    }
-    this.timKiem();
-  }
-
-  async delete(item: any, roles?) {
-    this.modal.confirm({
+    const modalGT = this.modal.create({
+      nzTitle: 'TỔNG HỢP DANH SÁCH HÀNG CẦN SỬA CHỮA',
+      nzContent: ThemmoiThComponent,
+      nzMaskClosable: false,
       nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: item.id
-          };
-          this.tongHopThanhLyService.delete(body).then(async () => {
-            await this.timKiem();
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-          });
-
-        } catch (e) {
-          console.log('error: ', e);
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
+      nzWidth: '700px',
+      nzFooter: null,
+      nzComponentParams: {
       },
     });
+    modalGT.afterClose.subscribe((data) => {
+      if (data) {
+        this.searchData()
+      }
+    });
+  }
+
+  showDetail(idTh) {
+    if (idTh) {
+      const modalGT = this.modal.create({
+        nzTitle: 'TỔNG HỢP DANH SÁCH CẦN SỬA CHỮA',
+        nzContent: ChitietThComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '1500px',
+        nzFooter: null,
+        nzComponentParams: {
+          id: idTh
+        },
+      });
+      modalGT.afterClose.subscribe((data) => {
+        if (data) {
+          this.searchData()
+        }
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+    }
+  }
+
+  async searchData() {
+    await this.search();
+    await this.buildTableView()
   }
 }

@@ -55,7 +55,7 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
   listNganLoKho: any = [];
   dataPhieuNhapKho: any = [];
   listPhieuNhapKho: any = [];
-
+  templateName = "Biên bản kết thúc nhập kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -101,8 +101,8 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
         tenTrangThai: ['Dự Thảo'],
         tenLoaiVthh: [],
         tenCloaiVthh: [],
-        tenDiemKho: [],
-        tenNhaKho: [],
+        tenDiemKho: [null, [Validators.required]],
+        tenNhaKho: [null, [Validators.required]],
         tenNganKho: [],
         tenLoKho: [],
         soBbLayMau: [],
@@ -299,11 +299,9 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
 
   async save() {
     try {
-      this.formData.disable()
       let body = this.formData.value;
       body.fileDinhKems = this.fileDinhKems;
       await this.createUpdate(body);
-      this.formData.enable();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {

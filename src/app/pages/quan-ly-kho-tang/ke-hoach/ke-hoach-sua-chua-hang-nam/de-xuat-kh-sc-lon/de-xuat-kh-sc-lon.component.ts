@@ -29,7 +29,7 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
 
   idTongHop: number = 0;
 
-  listTrangThai = [{ "ma": "00", "giaTri": "Dự thảo" },
+  listTrangThai = [{ "ma": STATUS.DANG_NHAP_DU_LIEU, "giaTri": "Đang nhập dữ liệu" },
     { "ma": STATUS.CHO_DUYET_TP, "giaTri": "Chờ duyệt TP" },
     { "ma": STATUS.TU_CHOI_TP, "giaTri": "Từ chối TP" },
     { "ma": STATUS.CHO_DUYET_LDC, "giaTri": "Chờ duyệt LĐ Cục" },

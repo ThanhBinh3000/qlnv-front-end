@@ -272,12 +272,12 @@
         <td class="text-right">{{ data.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.soQdPd }}</td>
         <td>{{ data.soQdDcPd }}</td>
-        <td>{{ data.soQdPdDtxd }}</td>
+        <td>{{ data.soQdPdDtxd}}</td>
         <td class="text-right">{{ data.tmdtDuyet | number : '1.0-1' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.nstwDuyet | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.tenTrangThai }}</td>
         <td class="text-left" nzRight>
-          <a (click)="openDialog(data, true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_XEM')">
+          <a (click)="openDialog(data, true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_XEM') && !((data.trangThai == STATUS.CHUA_THUC_HIEN) && data.nguoiTaoId == userInfo.ID)">
             <i class="fa fa-eye" title="Xem chi tiết"></i>
           </a>
           <a *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_THEM')" (click)="openDialog(data, false)">

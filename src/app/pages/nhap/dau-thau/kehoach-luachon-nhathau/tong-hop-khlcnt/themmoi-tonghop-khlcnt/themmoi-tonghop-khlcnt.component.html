@@ -14,7 +14,7 @@
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định</span>
     </button>
-    <button *ngIf="(!formData.value.trangThai && isTongHop)" type="button" class="btn btn-main" (click)="save()">
+    <button *ngIf="((!formData.value.trangThai || formData.value.trangThai == STATUS.CHUA_TAO_QD) && isTongHop && !isView)" type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -24,10 +24,11 @@
   <div class="header header-green-background ">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span
+        <span *ngIf="formData.value.trangThai != '' && formData.value.trangThai != null"
           [ngClass]="(formData.value.trangThai == STATUS.CHUA_TAO_QD ? 'chua-tao-qd' : '') || formData.value.trangThai == STATUS.DA_DU_THAO_QD  ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
           {{ convertTrangThai(formData.value.trangThai) }}
         </span>
+        <span *ngIf="formData.value.trangThai == '' || formData.value.trangThai == null"></span>
         <span>Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu</span>
       </div>
     </div>
@@ -48,7 +49,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : selectHangHoa()">
                 <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true"/>
@@ -58,22 +59,11 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : selectHangHoa()">
                 <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true"/>
               </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="4">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Phương thức lựa chọn nhà thầu</nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isView" formControlName="pthucLcnt" nzPlaceHolder="">
-                <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                </nz-option>
-              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -83,6 +73,17 @@
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select [nzDisabled]="isView" formControlName="hthucLcnt" nzPlaceHolder="">
                 <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Phương thức lựa chọn nhà thầu</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-select [nzDisabled]="isView" formControlName="pthucLcnt" nzPlaceHolder="">
+                <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -158,7 +159,7 @@
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <textarea formControlName="noiDung" nz-input [rows]="3"
-                        [readonly]="isView || formData.value.trangThai == '00'"></textarea>
+                        [readonly]="isView"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -270,6 +271,11 @@
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
     <button nz-button (click)="downloadPdf()"
             class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>

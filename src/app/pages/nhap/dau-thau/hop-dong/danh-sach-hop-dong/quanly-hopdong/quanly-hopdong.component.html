@@ -156,16 +156,16 @@
                         <div nz-row [nzGutter]="24" class="label-50 mg-t-10 ">
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
                                     <nz-form-control>
                                         <input nz-input formControlName="tenLoaiVthh" readonly="true"
                                             class="blue-text" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="24" *ngIf="loaiVthh.startsWith('02')">
+                            <div nz-col nzSpan="24" *ngIf="!loaiVthh.startsWith('02')">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
                                     <nz-form-control>
                                         <input nz-input formControlName="tenCloaiVthh" readonly="true"
                                             class="blue-text" />
@@ -274,6 +274,10 @@
                             <td></td>
                             <td></td>
                             <td>
+                              <a *ngIf="data.hopDong?.id > 0"
+                                (click)="preview(data.hopDong?.id)">
+                                <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
+                              </a>
                                 <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO ||
                                     (data.hopDong?.trangThai == STATUS.DA_KY && formData.value.trangThaiHd != STATUS.DA_HOAN_THANH)" (click)="redirectHopDong(true,data.hopDong.id)">
                                     <i class="fa fa-pencil" title="Sửa"></i>
@@ -299,7 +303,8 @@
                     </tr>
                 </nz-table>
             </nz-card>
-            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isView]="true" [isQuanLy]="true" (showListEvent)="redirectHopDong(false,null)">
+            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isView]="true" [isQuanLy]="true" (showListEvent)="redirectHopDong(false,idHopDong)"
+                           [dataBinding]="formData.value">
             </app-thong-tin>
         </nz-card>
     </div>
@@ -309,3 +314,30 @@
         [dataBinding]="formData.value">
     </app-thong-tin>
 </ng-template>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="THÔNG TIN HỢP ĐỒNG" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 650px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

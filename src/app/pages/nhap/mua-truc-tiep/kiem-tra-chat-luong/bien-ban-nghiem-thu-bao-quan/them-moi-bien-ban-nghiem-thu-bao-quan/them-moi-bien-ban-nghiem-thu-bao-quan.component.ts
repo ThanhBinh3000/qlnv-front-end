@@ -78,7 +78,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   dsHangPD = []
   typeData: string;
   typeAction: string;
-
+  previewName: string = 'ntt_bien_ban_ntbq_lan_dau';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -108,9 +108,9 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         ngayNghiemThu: [''],
         slCanNhap: [''],
         nguoiTao: [''],
-        tenThuKho: [''],
-        tenKeToan: [''],
-        tenNguoiPduyet: [''],
+        thuKho: [''],
+        keToan: [''],
+        nguoiPduyet: [''],
         tenNganLoKho: [''],
 
         loaiVthh: ['',],
@@ -239,7 +239,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     console.log(dataChiCuc)
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
@@ -269,7 +269,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
 
   async bindingDataDdNhap(data) {
     if (data) {
-      console.log(data)
+      console.log(data, "kho kho kho")
       if (data.listPhieuNhapKho) {
         this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter(item => item.trangThai == STATUS.DA_DUYET_LDCC);
         this.listSoPhieuNhapKho.forEach(item => {
@@ -289,8 +289,9 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+        // soPhieuNhapKho: data?.hhPhieuNhapKhoHdr.find(x => x.maLoKho == data.maLoKho).soPhieuNhapKho,
       })
-      this.loadLoaiKho()
+      // this.loadLoaiKho()
     }
   }
 
@@ -361,6 +362,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        console.log(data)
         await this.bindingDataQd(res.data?.idQdGiaoNvNh);
         let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
         this.bindingDataDdNhap(dataDdNhap);

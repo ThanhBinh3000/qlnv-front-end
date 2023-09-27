@@ -23,4 +23,29 @@ export class BcCLuongHangDTQGService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
+  baoCaoCongTacBqHangDtqg(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bccl-ct-bq-hangdtqg`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  bcclNhapHangDtqg(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-cl-hang-dtqg-nhap-kho`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  bcclXuatHangDtqg(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-cl-hang-dtqg-xuat-kho`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  bcclHangHaoHut(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-cl-hao-hut-hang-dtqg`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  bcCongTacKtkt(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-congtac-qly-ktkt`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
 }

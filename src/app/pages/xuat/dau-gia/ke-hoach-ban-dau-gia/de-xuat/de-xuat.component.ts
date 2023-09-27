@@ -83,15 +83,17 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
-      await this.timKiem()
-      await this.search();
-      await this.spinner.hide();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+      ]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -104,8 +106,7 @@ export class DeXuatComponent extends Base2Component implements OnInit {
 
   async clearFilter() {
     this.formData.reset();
-    await this.timKiem()
-    await this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -114,34 +115,42 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     this.isView = isView;
   }
 
-  openModalTh(id: number) {
-    this.idThop = id;
-    this.isViewThop = true;
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'Thop':
+        this.idThop = id;
+        this.isViewThop = true;
+        break;
+      case 'ChiTieu':
+        this.idChiTieu = id;
+        this.isViewChiTieu = true;
+        break;
+      case 'QdPd':
+        this.idQdPd = id;
+        this.isViewQdPd = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closeModalTh() {
-    this.idThop = null;
-    this.isViewThop = false;
-  }
-
-  openModalChiTieu(id: number) {
-    this.idChiTieu = id;
-    this.isViewChiTieu = true;
-  }
-
-  closeModalChiTieu() {
-    this.idChiTieu = null;
-    this.isViewChiTieu = false;
-  }
-
-  openModalQdPd(id: number) {
-    this.idQdPd = id;
-    this.isViewQdPd = true;
-  }
-
-  closeModalQdPd() {
-    this.idQdPd = null;
-    this.isViewQdPd = false;
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'Thop':
+        this.idThop = null;
+        this.isViewThop = false;
+        break;
+      case 'ChiTieu':
+        this.idChiTieu = null;
+        this.isViewChiTieu = false;
+        break;
+      case 'QdPd':
+        this.idQdPd = null;
+        this.isViewQdPd = false;
+        break;
+      default:
+        break;
+    }
   }
 
   disabledNgayTaoTu = (startValue: Date): boolean => {

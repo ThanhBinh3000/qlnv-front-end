@@ -4,7 +4,6 @@ import { StorageService } from "../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
 import { UserService } from "../../../../services/user.service";
 import { DonviService } from "../../../../services/donvi.service";
 import { DanhMucService } from "../../../../services/danhmuc.service";
@@ -14,6 +13,7 @@ import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
+import {ThongTu1302018Service} from "../../../../services/bao-cao/ThongTu1302018.service";
 
 @Component({
   selector: 'app-sl-gia-tri-hang-dtqg-nhap-trong-ky',
@@ -22,7 +22,9 @@ import { saveAs } from "file-saver";
 })
 export class SlGiaTriHangDtqgNhapTrongKyComponent extends Base2Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -32,18 +34,22 @@ export class SlGiaTriHangDtqgNhapTrongKyComponent extends Base2Component impleme
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
+  dsLoaiBc: any[] = [
+    {text: 'Báo cáo Quý', value: 1},
+    {text: 'Báo cáo Năm', value: 2}
+  ]
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
               spinner: NgxSpinnerService,
               modal: NzModalService,
-              private thongTu1452013Service: ThongTu1452013Service,
+              private thongTu1302018Service: ThongTu1302018Service,
               public userService: UserService,
               private donViService: DonviService,
               private danhMucService: DanhMucService,
               public globals: Globals) {
-    super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
+    super(httpClient, storageService, notification, spinner, modal, thongTu1302018Service);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
@@ -51,6 +57,7 @@ export class SlGiaTriHangDtqgNhapTrongKyComponent extends Base2Component impleme
         bieuSo: null,
         dviBaoCao: null,
         dviNhanBaoCao: null,
+        dsLoaiBc: null,
       }
     );
   }
@@ -77,7 +84,7 @@ export class SlGiaTriHangDtqgNhapTrongKyComponent extends Base2Component impleme
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_giam_hang_du_tru_quoc_gia.pdf");
+    saveAs(this.pdfBlob, "bc_sl_gia_tri_hang_dtqg_nhap_trong_ky_130.pdf");
   }
 
   closeDlg() {
@@ -97,10 +104,11 @@ export class SlGiaTriHangDtqgNhapTrongKyComponent extends Base2Component impleme
       }
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
+      body.fileName = "bc_sl_gia_tri_hang_dtqg_nhap_trong_ky_130.jrxml";
+      body.tenBaoCao = "Báo cáo số lượng giá trị hàng DTQG nhập trong kỳ";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      body.loaiNhapXuat = "1";
+      await this.thongTu1302018Service.bcSlGtriHangDtqgNhap(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -110,6 +118,28 @@ export class SlGiaTriHangDtqgNhapTrongKyComponent extends Base2Component impleme
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_sl_gia_tri_hang_dtqg_130.jrxml";
+      body.tenBaoCao = "Báo cáo số lượng giá trị hàng DTQG";
+      body.trangThai = "01";
+      await this.thongTu1302018Service.bcSlGtriHangDtqgNhap(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bc_sl_gia_tri_hang_dtqg_130.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
   async loadDsDonVi() {

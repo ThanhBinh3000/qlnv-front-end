@@ -16,7 +16,7 @@ import { LIST_TRANG_THAI_BBTK } from './them-moi-bien-ban-tinh-kho/them-moi-bien
 
 export interface PassDataBienBanTinhKho {
   soQdinhDcc: string, qdinhDccId: number, tenDiemKho: string, tenNhaKho: string, tenNganKho: string, tenLoKho: string,
-  maDiemKho: string, maNhaKho: string, maNganKho: string, maLoKho: string
+  maDiemKho: string, maNhaKho: string, maNganKho: string, maLoKho: string, keHoachDcDtlId: number
 }
 @Component({
   selector: 'app-xuat-dcnb-bien-ban-tinh-kho',
@@ -28,16 +28,20 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
   @Input() loaiDc: string;
   @Input() thayDoiThuKho: boolean;
   @Input() isVatTu: boolean;
-  @Input() type: string
+  @Input() type: string;
+  @Input() typeQd: string;
   passData: PassDataBienBanTinhKho = {
     soQdinhDcc: '', qdinhDccId: null, tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenLoKho: '', maDiemKho: '',
-    maNhaKho: '', maNganKho: '', maLoKho: ''
+    maNhaKho: '', maNganKho: '', maLoKho: '', keHoachDcDtlId: null
   }
   LIST_TRANG_THAI = LIST_TRANG_THAI_BBTK;
   openQdDC: boolean = false;
   idQdDcModal: number;
   idPhieuXk: number;
   openPhieuXk: boolean;
+  bangKeId: number;
+  openBangKeCanHang: boolean = false;
+  openBangKeXuatVt: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -58,6 +62,7 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
       isVatTu: [false],
       thayDoiThuKho: [false],
       type: [''],
+      typeQd: [],
 
       tuNgayBdXuat: [''],
       tuNgayKtXuat: [''],
@@ -116,7 +121,7 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd })
   }
 
 
@@ -148,7 +153,7 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
   }
   resetForm() {
     this.formData.reset();
-    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd })
   }
   clearFilter() {
     this.resetForm();
@@ -276,6 +281,15 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     this.idPhieuXk = null;
     this.openPhieuXk = false
   }
+  openBangKeModal(id: number) {
+    this.bangKeId = id;
+    this.openBangKeXuatVt = this.isVatTu;
+    this.openBangKeCanHang = !this.isVatTu
+  }
+  closeBangKeModal() {
+    this.openBangKeCanHang = false;
+    this.openBangKeXuatVt = false;
+  }
   checkRoleView(data: any): boolean {
     return data.trangThai && !this.checkRoleAdd(data) && !this.checkRoleEdit(data) && !this.checkRoleApprove(data) && !this.checkRoleDetele(data)
   }
@@ -298,12 +312,11 @@ export class BienBanTinhKhoDieuChuyenComponent extends Base2Component implements
     this.isView = b;
     this.passData = data ? {
       soQdinhDcc: data.soQdinh, qdinhDccId: data.qdinhDcId, tenDiemKho: data.tenDiemKho, tenNhaKho: data.tenNhaKho, tenNganKho: data.tenNganKho,
-      tenLoKho: data.tenLoKho, maDiemKho: data.maDiemKho, maNhaKho: data.maNhaKho, maNganKho: data.maNganKho, maLoKho: data.maLoKho
+      tenLoKho: data.tenLoKho, maDiemKho: data.maDiemKho, maNhaKho: data.maNhaKho, maNganKho: data.maNganKho, maLoKho: data.maLoKho, keHoachDcDtlId: data.keHoachDcDtlId
     } : {
-      soQdinhDcc: '', qdinhDccId: '', tenDiemKho: '', tenNhaKho: '', tenNganKho: '',
-      tenLoKho: '', maDiemKho: '', maNhaKho: '', maNganKho: '', maLoKho: ''
+      soQdinhDcc: '', qdinhDccId: null, tenDiemKho: '', tenNhaKho: '', tenNganKho: '',
+      tenLoKho: '', maDiemKho: '', maNhaKho: '', maNganKho: '', maLoKho: '', keHoachDcDtlId: null
     };
-    console.log("data", this.passData)
     // this.isViewDetail = isView ?? false;
   }
 }

@@ -110,26 +110,30 @@
         <ng-container *ngFor="let item of dataTable , let i = index">
           <tr class="level-1">
             <td>{{(page - 1) * pageSize + i + 1}}</td>
-            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td [nzExpand]="item.expand"
+                (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.dtlList)">
             <td class="link bold">{{ item.soQd }}</td>
             <td class="bold">{{ item.nam }}</td>
             <td class="bold">{{ item.tgianNkMnhat }}</td>
             <td colspan="9"></td>
-            <td></td>
+            <td>
+              <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_THEM')"
+                 (click)="redirectToChiTiet(false, 0,item.id)">
+                <i class="fa fa-plus"></i>
+              </a>
+            </td>
           </tr>
-          <ng-container *ngIf="expandSet.has(i)">
+          <ng-container *ngIf="item.expand">
             <ng-container *ngFor="let dataDdiem of item.dtlList, let y = index">
               <tr class="level-2">
                 <td></td>
                 <td></td>
-                <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)">
-                </td>
+                <td></td>
                 <td colspan="2"></td>
                 <td>{{dataDdiem.tenDiemKho}}</td>
                 <td>{{dataDdiem.tenLoKho}} - {{dataDdiem.tenNganKho}}</td>
                 <td colspan="8"></td>
               </tr>
-              <ng-container *ngIf="expandSet2.has(y)">
                 <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.bbNghiemThuNhapKhacList">
                   <td colspan="7"></td>
                   <td class="bold">{{dataPhieu.soBbNtBq}}</td>
@@ -140,18 +144,24 @@
                   <td></td>
                   <td>{{dataPhieu.phieuKtcl?.tenTrangThai}}</td>
                   <td>
-                    <a *ngIf="dataPhieu.phieuKtcl" (click)="redirectToChiTiet(true, dataPhieu.phieuKtcl?.id)">
+                    <a *ngIf="hienThiXem(dataPhieu.phieuKtcl)"
+                       (click)="redirectToChiTiet(true, dataPhieu.phieuKtcl?.id)">
                       <i class="fa fa-eye"></i>
                     </a>
-                    <a *ngIf="dataPhieu.phieuKtcl" (click)="redirectToChiTiet(false, dataPhieu.phieuKtcl?.id)">
+                    <a *ngIf="dataPhieu.phieuKtcl && userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_THEM')
+                          && (dataPhieu.phieuKtcl?.trangThai == STATUS.DU_THAO || dataPhieu.phieuKtcl?.trangThai == STATUS.TU_CHOI_LDCC )"
+                       (click)="redirectToChiTiet(false, dataPhieu.phieuKtcl?.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a *ngIf="dataPhieu.phieuKtcl" (click)="xoaItem(dataPhieu.phieuKtcl)">
+                    <a  *ngIf="dataPhieu.phieuKtcl && userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_DUYET_LDCCUC') && dataPhieu.phieuKtcl?.trangThai == STATUS.CHO_DUYET_LDCC"
+                        (click)="redirectToChiTiet(true, dataPhieu.phieuKtcl?.id)">
+                      <i class="icon htvbdh_tcdt_pheduyet"></i>
+                    </a>
+                    <a *ngIf="dataPhieu.phieuKtcl && dataPhieu.phieuKtcl?.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_XOA')" (click)="xoaItem(dataPhieu.phieuKtcl)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
                 </tr>
-              </ng-container>
             </ng-container>
           </ng-container>
         </ng-container>

@@ -26,6 +26,18 @@ const routes: Routes = [{
         import('./bao-cao-chat-luong-hang-dtqg/bao-cao-chat-luong-hang-dtqg.module').then((m) => m.BaoCaoChatLuongHangDtqgModule),
       canActivate: [AuthGuard],
     },
+    {
+      path: 'bao-cao-nhap-xuat-hang-dtqg',
+      loadChildren: () =>
+        import('./bao-cao-nhap-xuat-hang-dtqg/bao-cao-nhap-xuat-hang-dtqg.module').then((m) => m.BaoCaoNhapXuatHangDtqgModule),
+      canActivate: [AuthGuard],
+    },
+    {
+      path: 'bao-cao-nghiep-vu-qly-kho',
+      loadChildren: () =>
+        import('./bao-cao-nghiep-vu-qly-kho/bao-cao-nghiep-vu-qly-kho.module').then((m) => m.BaoCaoNghiepVuQlyKhoModule),
+      canActivate: [AuthGuard],
+    }
   ],
 },];
 

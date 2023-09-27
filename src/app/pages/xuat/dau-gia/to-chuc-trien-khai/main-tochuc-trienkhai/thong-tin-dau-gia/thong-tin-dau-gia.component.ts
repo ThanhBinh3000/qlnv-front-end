@@ -18,18 +18,20 @@ import {saveAs} from 'file-saver';
   styleUrls: ['./thong-tin-dau-gia.component.scss']
 })
 export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
-
-  @Input()
-  loaiVthh: string;
-
+  @Input() loaiVthh: string;
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
-
+  idQdDc: number = 0;
+  isViewQdDc: boolean = false;
   idDxBdg: number = 0;
   isViewDxBdg: boolean = false;
-
   idKqBdg: number = 0;
   isViewKqBdg: boolean = false;
+  listTrangThai: any[] = [
+    {ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật'},
+    {ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật'},
+    {ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật'},
+  ];
 
   constructor(
     httpClient: HttpClient,
@@ -48,68 +50,79 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       ngayKyQdPdKqBdgTu: null,
       ngayKyQdPdKqBdgDen: null,
       loaiVthh: null,
-      lastest: 1,
-      maDvi: null
+      // isDieuChinh: 0,
 
     })
     this.filterTable = {
-      namKh: '',
+      nam: '',
       soQdPd: '',
-      ngayKyQd: '',
-      trichYeu: '',
-      soTrHdr: '',
-      idThHdr: '',
-      tenLoaiVthh: '',
+      soQdDcBdg: '',
+      soQdPdKqBdg: '',
+      soDxuat: '',
+      ngayKyQdPdKqBdg: '',
+      slDviTsan: '',
+      soDviTsanThanhCong: '',
+      soDviTsanKhongThanh: '',
       tenCloaiVthh: '',
-      soDviTsan: '',
-      slHdDaKy: '',
       tenTrangThai: '',
+      ketQuaDauGia: '',
     };
   }
 
   async ngOnInit() {
     try {
-      this.timKiem()
-      await this.searchDtl();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.searchDtl()
+      ]);
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      lastest: 1,
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem()
-    this.searchDtl();
+    await Promise.all([
+      this.timKiem(),
+      this.search()
+    ]);
   }
 
   async searchDtl() {
-    await this.spinner.show();
     try {
-      let body = this.formData.value
-      body.paggingReq = {
-        limit: this.pageSize,
-        page: this.page - 1
-      }
-      let res = await this.quyetDinhPdKhBdgService.searchDtl(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.dataTable = data.content;
+      await this.spinner.show();
+      const body = {
+        ...this.formData.value,
+      };
+      const res = await this.quyetDinhPdKhBdgService.searchDtl(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const data = res.data;
+        const soDxuatMap = {};
+        const filteredRecords = [];
+        data.content.forEach(record => {
+          if (!soDxuatMap[record.soDxuat]) {
+            filteredRecords.push(record);
+            soDxuatMap[record.soDxuat] = true;
+          } else if (record.isDieuChinh) {
+            const index = filteredRecords.findIndex(existingRecord => existingRecord.soDxuat === record.soDxuat);
+            if (index !== -1) {
+              filteredRecords[index] = record;
+            }
+          }
+        });
+        this.dataTable = filteredRecords;
         this.totalRecord = data.totalElements;
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.dataTable.forEach((item) => {
-            item.checked = false;
-          });
-        }
+        this.dataTable?.forEach((item) => (item.checked = false));
         this.dataTableAll = cloneDeep(this.dataTable);
       } else {
         this.dataTable = [];
@@ -126,56 +139,71 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
   exportDataDtl(fileName?: string) {
     if (this.totalRecord > 0) {
       this.spinner.show();
-      try {
-        this.quyetDinhPdKhBdgService
-          .exportDtl(this.formData.value)
-          .subscribe((blob) =>
-            saveAs(blob, fileName ? fileName : 'data.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
+      this.quyetDinhPdKhBdgService.exportDtl(this.formData.value).subscribe(
+        (blob) => {
+          saveAs(blob, fileName ? fileName : 'data.xlsx');
+          this.spinner.hide();
+        },
+        (error) => {
+          console.log('error: ', error);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      );
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
 
-  openModalQdPdKh(id: number) {
-    this.idQdPdKh = id;
-    this.isViewQdPdKh = true;
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'QdPdKh':
+        this.idQdPdKh = id;
+        this.isViewQdPdKh = true;
+        break;
+      case 'QdPdDc' :
+        this.idQdDc = id;
+        this.isViewQdDc = true;
+        break;
+      case 'DxBdg':
+        this.idDxBdg = id;
+        this.isViewDxBdg = true;
+        break;
+      case 'KqBdg':
+        this.idKqBdg = id;
+        this.isViewKqBdg = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closeModalQdPdKh() {
-    this.idQdPdKh = null;
-    this.isViewQdPdKh = false;
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'QdPdKh':
+        this.idQdPdKh = null;
+        this.isViewQdPdKh = false;
+        break;
+      case 'QdPdDc' :
+        this.idQdDc = null;
+        this.isViewQdDc = false;
+        break;
+      case 'DxBdg':
+        this.idDxBdg = null;
+        this.isViewDxBdg = false;
+        break;
+      case 'KqBdg':
+        this.idKqBdg = null;
+        this.isViewKqBdg = false;
+        break;
+      default:
+        break;
+    }
   }
 
-  openModalDxBdg(id: number) {
-    this.idDxBdg = id;
-    this.isViewDxBdg = true;
-  }
-
-  closeModalDxBdg() {
-    this.idDxBdg = null;
-    this.isViewDxBdg = false;
-  }
-
-  openModalKqBdg(id: number) {
-    this.idKqBdg = id;
-    this.isViewKqBdg = true;
-  }
-
-  closeModalKqBdg() {
-    this.idKqBdg = null;
-    this.isViewKqBdg = false;
-  }
-
-  showListDtl() {
+  async showListDtl() {
     this.isDetail = false;
-    this.searchDtl();
+    await this.searchDtl();
     this.showListEvent.emit();
   }
 

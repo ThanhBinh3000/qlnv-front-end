@@ -59,6 +59,7 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
   listFileDinhKem: any[] = [];
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
+  previewName: string = 'bien_ban_gui_hang';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -157,9 +158,10 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
   }
 
   async initForm() {
+    let maBb = 'BBGH-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("BIEN_BAN_GUI_HANG_SEQ");
     this.formData.patchValue({
-      soBienBanGuiHang: `${res}/${this.formData.get('nam').value}/BBGH-CCDTVT`,
+      soBienBanGuiHang: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,

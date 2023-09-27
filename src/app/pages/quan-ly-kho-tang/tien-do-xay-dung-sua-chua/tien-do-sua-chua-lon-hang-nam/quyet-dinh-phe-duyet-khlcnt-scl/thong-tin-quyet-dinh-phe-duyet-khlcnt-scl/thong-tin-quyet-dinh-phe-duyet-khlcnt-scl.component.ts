@@ -17,7 +17,6 @@ import {
 import {
   QdPheDuyetBaoCaoKtktService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-bao-cao-ktkt.service";
-import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-khlcnt-scl',
@@ -90,6 +89,8 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
       tongMucDt: [0],
       nguonVonDt: [null],
       trangThai: ['00'],
+      trangThaiDt: [],
+      trangThaiHd: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
@@ -97,7 +98,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
       listKtTdscQuyetDinhPdKhlcntCvKh: null,
       khoi: [null],
       loaiCapCt: [null],
-      loai : ['01']
+      loai : ['00']
     });
   }
 

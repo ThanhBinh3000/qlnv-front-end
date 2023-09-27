@@ -13,11 +13,39 @@ import {cloneDeep} from 'lodash';
 export class XuatCuuTroVienTroComponent implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
+  defaultTabCtvt: any = 0;
+  defaultTabXc: any = 0;
 
   constructor(
     public userService: UserService,
     public globals: Globals
   ) {
+    if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA')) {
+      this.defaultTabCtvt = 0;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA')) {
+      this.defaultTabCtvt = 1;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA')) {
+      this.defaultTabCtvt = 2;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH')) {
+      this.defaultTabCtvt = 3;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL')) {
+      this.defaultTabCtvt = 4;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK')) {
+      this.defaultTabCtvt = 5;
+    }
+
+
+    if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPACHUYENXC') && userService.isTongCuc()) {
+      this.defaultTabXc = 0;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC')) {
+      this.defaultTabXc = 1;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDGNVXH')) {
+      this.defaultTabXc = 2;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL')) {
+      this.defaultTabXc = 3;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK')) {
+      this.defaultTabXc = 4;
+    }
   }
 
   ngOnInit(): void {

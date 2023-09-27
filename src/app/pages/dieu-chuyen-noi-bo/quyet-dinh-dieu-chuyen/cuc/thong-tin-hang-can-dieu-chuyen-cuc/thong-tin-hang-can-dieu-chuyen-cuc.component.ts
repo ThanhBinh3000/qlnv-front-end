@@ -11,6 +11,7 @@ import { HttpClient } from "@angular/common/http";
 import { StorageService } from "src/app/services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { Base2Component } from "src/app/components/base2/base2.component";
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 @Component({
   selector: 'app-thong-tin-hang-can-dieu-chuyen-cuc',
@@ -37,6 +38,22 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   dsNhaKhoNhan: any[] = [];
   dsNganKhoNhan: any[] = [];
   dsLoKhoNhan: any[] = [];
+
+  max: number = 0
+
+  AMOUNT = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 100000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(
     httpClient: HttpClient,
@@ -69,9 +86,10 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       cloaiVthh: [, [Validators.required]],
       tenCloaiVthh: [, [Validators.required]],
       tonKho: [, [Validators.required]],
-      tenDonViTinh: [, [Validators.required]],
+      donViTinh: [, [Validators.required]],
+      donViTinhNhap: [, [Validators.required]],
       soLuongDc: [, [Validators.required]],
-      duToanKphi: [],
+      duToanKphi: [0],
       thoiGianDkDc: [, [Validators.required]],
       maDiemKhoNhan: [, [Validators.required]],
       tenDiemKhoNhan: [, [Validators.required]],
@@ -111,6 +129,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   async handleData() {
     if (!this.data) return
     await this.spinner.show()
+    console.log('handleData', this.data)
 
     if (this.data.maChiCucNhan) await this.getListDiemKho(this.data.maChiCucNhan)
     if (this.data.maDiemKho) await this.getListNhaKho(this.data.maDiemKho)
@@ -120,7 +139,14 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (this.data.maDiemKhoNhan) await this.getListNhaKhoNhan(this.data.maDiemKhoNhan)
     if (this.data.maNhaKhoNhan) await this.getListNganKhoNhan(this.data.maNhaKhoNhan)
     if (this.data.maNganKhoNhan) await this.getListLoKhoNhan(this.data.maNganKhoNhan)
-    this.formData.patchValue(this.data)
+
+    await this.formData.patchValue(this.data)
+
+    setTimeout(() => {
+      if (this.data.maLoKhoNhan) this.onChangeLoKhoNhan(this.data.maLoKhoNhan)
+    }, 1000);
+
+
 
     await this.spinner.hide();
   }
@@ -131,7 +157,40 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     this.getListDiemKho(value)
     if (chiCuc) {
       this.formData.patchValue({
-        tenChiCucNhan: chiCuc.tenDvi
+        tenChiCucNhan: chiCuc.tenDvi,
+        maDiemKho: "",
+        tenDiemKho: "",
+        maNhaKho: "",
+        tenNhaKho: "",
+        maNganKho: "",
+        tenNganKho: "",
+        maLoKho: "",
+        tenLoKho: "",
+        maThuKho: "",
+        thuKho: "",
+        loaiVthh: "",
+        tenLoaiVthh: "",
+        cloaiVthh: "",
+        tenCloaiVthh: "",
+        tonKho: "",
+        donViTinh: "",
+        soLuongDc: "",
+        duToanKphi: "",
+        thoiGianDkDc: "",
+        maDiemKhoNhan: "",
+        tenDiemKhoNhan: "",
+        maNhaKhoNhan: "",
+        tenNhaKhoNhan: "",
+        maNganKhoNhan: "",
+        tenNganKhoNhan: "",
+        maLoKhoNhan: "",
+        tenLoKhoNhan: "",
+        maThuKhoNhan: "",
+        thuKhoNhan: "",
+        thayDoiThuKho: "",
+        // slDcConLai: "",
+        tichLuongKd: "",
+        soLuongPhanBo: "",
       })
     }
   }
@@ -204,6 +263,15 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     }
 
     return !!check
+  }
+
+  getMax() {
+    let max = this.formData.value.soLuongDc
+    if (this.formData.value.soLuongDc > this.formData.value.tichLuongKd) max = this.formData.value.tichLuongKd
+    if (this.data.slDcConLai) {
+      if (max > this.data.slDcConLai) max = this.data.slDcConLai
+    }
+    return max
   }
 
   async getListDiemKho(maDvi) {
@@ -294,7 +362,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           maNganKhoNhan: "",
           maLoKhoNhan: "",
           thayDoiThuKho: "",
-          // slDcConLai: "",
           tichLuongKd: "",
           tenNhaKhoNhan: nhaKhoNhan.tenDvi
         })
@@ -310,7 +377,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       if (nganKho) {
         this.formData.patchValue({
           maLoKho: "",
-          tenNganKho: nganKho.tenDvi
+          tenNganKho: nganKho.tenDvi,
+          loaiVthh: "",
+          tenLoaiVthh: "",
+          cloaiVthh: "",
+          tenCloaiVthh: "",
+          tonKho: "",
+          donViTinh: "",
         })
         let body = {
           maDvi: nganKho.maDvi,
@@ -319,38 +392,36 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
           const coLoKho = detail.data.object.coLoKho
-          const detailThuKho = detail.data.object.detailThuKho
-          if (detailThuKho) {
-            this.formData.patchValue({
-              maThuKho: detailThuKho.id,
-              thuKho: detailThuKho.fullName
-            })
-          }
+
+
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
           else {
+            this.dsLoKho = []
             this.formData.controls["maLoKho"].clearValidators();
             this.formData.controls["tenLoKho"].clearValidators();
-            this.dsLoKho = []
-            const body = {
-              maDvi: value,
-              tenLoKho: nganKho.tenDvi
+
+            const detailThuKho = detail.data.object.detailThuKho
+            if (detailThuKho) {
+              this.formData.patchValue({
+                maThuKho: detailThuKho.id,
+                thuKho: detailThuKho.fullName
+              })
             }
-            const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-            if (res.statusCode == 0) {
-              if (res.data.length === 1) {
-                this.formData.patchValue({
-                  loaiVthh: res.data[0].loaiVthh,
-                  tenLoaiVthh: res.data[0].tenLoaiVthh,
-                  cloaiVthh: res.data[0].cloaiVthh,
-                  tenCloaiVthh: res.data[0].tenCloaiVthh,
-                  tonKho: res.data[0].slHienThoi,
-                  tenDonViTinh: res.data[0].tenDonViTinh,
-                })
-              } else {
-                this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
-              }
+
+            if (detail.data.object.loaiVthh && detail.data.object.tenLoaiVthh && detail.data.object.cloaiVthh && detail.data.object.tenCloaiVthh && detail.data.object.dviTinh) {
+              this.formData.patchValue({
+                loaiVthh: detail.data.object.loaiVthh,
+                tenLoaiVthh: detail.data.object.tenLoaiVthh,
+                cloaiVthh: detail.data.object.cloaiVthh,
+                tenCloaiVthh: detail.data.object.tenCloaiVthh,
+                tonKho: detail.data.object.slTon,
+                donViTinh: detail.data.object.dviTinh,
+              })
+            } else {
+              this.notification.error(MESSAGE.ERROR, "Bạn chưa tạo dữ liệu đầu kỳ của " + nganKho.tenDvi);
             }
+
           }
         }
 
@@ -366,23 +437,31 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         this.formData.patchValue({
           tenLoKho: loKho.tenDvi
         })
-        const body = {
-          maDvi: value,
-          tenLoKho: loKho.tenDvi
+
+        let body = {
+          maDvi: loKho.maDvi,
+          capDvi: loKho.capDvi
         }
-        const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-        if (res.statusCode == 0) {
-          if (res.data.length === 1) {
+        const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+        if (detail.statusCode == 0) {
+          const detailThuKho = detail.data.object.detailThuKho
+          if (detailThuKho) {
             this.formData.patchValue({
-              loaiVthh: res.data[0].loaiVthh,
-              tenLoaiVthh: res.data[0].tenLoaiVthh,
-              cloaiVthh: res.data[0].cloaiVthh,
-              tenCloaiVthh: res.data[0].tenCloaiVthh,
-              tonKho: res.data[0].slHienThoi,
-              tenDonViTinh: res.data[0].tenDonViTinh,
+              maThuKho: detailThuKho.id,
+              thuKho: detailThuKho.fullName
+            })
+          }
+          if (detail.data.object.loaiVthh && detail.data.object.tenLoaiVthh && detail.data.object.cloaiVthh && detail.data.object.tenCloaiVthh && detail.data.object.dviTinh) {
+            this.formData.patchValue({
+              loaiVthh: detail.data.object.loaiVthh,
+              tenLoaiVthh: detail.data.object.tenLoaiVthh,
+              cloaiVthh: detail.data.object.cloaiVthh,
+              tenCloaiVthh: detail.data.object.tenCloaiVthh,
+              tonKho: detail.data.object.slTon,
+              donViTinh: detail.data.object.dviTinh,
             })
           } else {
-            this.notification.error(MESSAGE.ERROR, "Tìm thấy nhiều hơn 1 lô kho!" + body.tenLoKho);
+            this.notification.error(MESSAGE.ERROR, "Bạn chưa tạo dữ liệu đầu kỳ của " + loKho.tenDvi);
           }
         } else {
           this.formData.patchValue({
@@ -391,7 +470,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             cloaiVthh: "",
             tenCloaiVthh: "",
             tonKho: "",
-            tenDonViTinh: "",
+            donViTinh: "",
           })
         }
 
@@ -403,11 +482,16 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
   async getListLoKhoNhan(value) {
     if (value) {
+      this.dsLoKhoNhan = []
       const nganKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)
 
       if (nganKhoNhan) {
         this.formData.patchValue({
           maLoKhoNhan: "",
+          tenLoKhoNhan: "",
+          thayDoiThuKho: "",
+          tichLuongKd: 0,
+          soLuongPhanBo: 0,
           tenNganKhoNhan: nganKhoNhan.tenDvi
         })
         let body = {
@@ -417,12 +501,75 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
           const coLoKho = detail.data.object.coLoKho
-          if (this.formData.value.cloaiVthh) {
+
+          if (coLoKho) {
+            this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
+          } else {
+            this.formData.controls["maLoKhoNhan"].clearValidators();
+            this.formData.controls["tenLoKhoNhan"].clearValidators();
+            this.dsLoKhoNhan = []
+
+            const detailThuKho = detail.data.object.detailThuKho
+            if (detailThuKho) {
+              this.formData.patchValue({
+                maThuKhoNhan: detailThuKho.id,
+                thuKhoNhan: detailThuKho.fullName
+              })
+            }
+
+            if (
+              this.formData.value.maThuKho === detailThuKho.id
+            ) {
+              this.formData.patchValue({
+                thayDoiThuKho: false
+              })
+            } else {
+              this.formData.patchValue({
+                thayDoiThuKho: true
+              })
+            }
+
+            if (!this.formData.value.cloaiVthh) return
             const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
             this.formData.patchValue({
-              tichLuongKd
+              tichLuongKd,
+              donViTinhNhap: detail.data.object.dviTinh
             })
+
+            this.max = this.formData.value.soLuongDc
+            if (this.formData.value.soLuongDc > tichLuongKd) this.max = tichLuongKd
+
+            if (this.formData.value.slDcConLai) {
+              if (this.max > this.formData.value.slDcConLai) this.max = this.formData.value.slDcConLai
+            }
+
+
           }
+
+        }
+
+      }
+
+    }
+
+    return this.dsLoKhoNhan
+  }
+
+  async onChangeLoKhoNhan(value) {
+
+    if (value) {
+      const loKhoNhan = this.dsLoKhoNhan.find(f => f.maDvi === value)
+      if (loKhoNhan) {
+        this.formData.patchValue({
+          tenLoKhoNhan: loKhoNhan.tenDvi
+        })
+        let body = {
+          maDvi: loKhoNhan.maDvi,
+          capDvi: loKhoNhan.capDvi
+        }
+
+        const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+        if (detail.statusCode == 0) {
 
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {
@@ -430,18 +577,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               maThuKhoNhan: detailThuKho.id,
               thuKhoNhan: detailThuKho.fullName
             })
-          }
-          if (coLoKho) {
-            this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
-          } else {
-            this.formData.controls["maLoKhoNhan"].clearValidators();
-            this.formData.controls["tenLoKhoNhan"].clearValidators();
-            this.dsLoKhoNhan = []
             if (
-              // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-              // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-              // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan
-              this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
+              this.formData.value.maThuKho === detailThuKho.id
             ) {
               this.formData.patchValue({
                 thayDoiThuKho: false
@@ -453,35 +590,24 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             }
           }
 
+
+          if (!this.formData.value.cloaiVthh) return
+          const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
+          this.formData.patchValue({
+            tichLuongKd,
+            donViTinhNhap: detail.data.object.dviTinh
+          })
+          this.max = this.formData.value.soLuongDc
+          if (this.formData.value.soLuongDc > tichLuongKd) this.max = tichLuongKd
+
+          if (this.formData.value.slDcConLai) {
+            if (this.max > this.formData.value.slDcConLai) this.max = this.formData.value.slDcConLai
+          }
+
         }
 
-      }
 
-    }
-  }
 
-  async onChangeLoKhoNhan(value) {
-    if (value) {
-      const loKhoNhan = this.dsLoKhoNhan.find(f => f.maDvi === value)
-      if (loKhoNhan) {
-        this.formData.patchValue({
-          tenLoKhoNhan: loKhoNhan.tenDvi
-        })
-        if (
-          // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-          // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-          // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan &&
-          // this.formData.value.maLoKho === this.formData.value.maLoKhoNhan
-          this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
-        ) {
-          this.formData.patchValue({
-            thayDoiThuKho: false
-          })
-        } else {
-          this.formData.patchValue({
-            thayDoiThuKho: true
-          })
-        }
       }
     }
 
@@ -491,17 +617,35 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   onChangSLDC(value) {
     this.formData.patchValue({
       soLuongPhanBo: "",
-      slDcConLai: ""
+      // slDcConLai: ""
     })
+    this.max = value
+    if (value > this.formData.value.tichLuongKd) this.max = this.formData.value.tichLuongKd
+
+    if (this.formData.value.slDcConLai) {
+      if (this.max > this.formData.value.slDcConLai) this.max = this.formData.value.slDcConLai
+    }
   }
 
   onChangeSLNhapDc(value) {
-    const slDcConLai = Number(this.formData.value.soLuongDc) - Number(value)
-    if (slDcConLai >= 0) {
-      this.formData.patchValue({
-        slDcConLai: slDcConLai
-      })
+    console.log('onChangeSLNhapDc', value, this.max, this.formData.value.soLuongDc, this.formData.value.tichLuongKd, this.formData.value.slDcConLai)
+    if (value > 0) {
+      const slDcConLai = Number(this.formData.value.soLuongDc) - Number(value)
+      console.log('slDcConLai', slDcConLai)
+      if (slDcConLai >= 0) {
+        this.formData.patchValue({
+          slDcConLai
+        })
+      }
+
     }
+    // else {
+    //   this.formData.patchValue({
+    //     slDcConLai: (this.data.slDcConLai || 0)
+
+    //   })
+    // }
+
   }
 
 

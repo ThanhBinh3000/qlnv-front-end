@@ -64,6 +64,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   listDataGroup: any[] = [];
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
+  tongMucDtVal: any;
 
   constructor(
     httpClient: HttpClient,
@@ -170,6 +171,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
           soDxuat: data.soDxuat?.split('/')[0],
         })
         this.dataTable = data.children;
+        console.log(this.dataTable)
         this.fileDinhKem = data.fileDinhKems;
         this.bindingCanCu(data.ccXdgDtlList);
         this.calculatorTable();
@@ -268,7 +270,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       return;
     }
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm mới số lượng, địa điểm mua trực tiếp',
+      nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -279,6 +281,8 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         dataChiTieu: this.dataChiTieu,
         namKh: this.formData.get('namKh').value,
         loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
+        tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         donGiaVat: this.formData.value.donGiaVat,
       },
     });
@@ -313,11 +317,14 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     let tongSoLuong: number = 0;
     this.dataTable.forEach((item) => {
       let soLuongChiCuc = 0;
-      item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong;
-        tongMucDt += child.soLuong * child.donGia * 1000
-      })
+      if(item.children.length > 0){
+        item.children.forEach(child => {
+          soLuongChiCuc += child.soLuong;
+          tongSoLuong += child.soLuong;
+          tongMucDt += child.soLuong * child.donGia * 1000
+        })
+      }
+      tongSoLuong += item.tongSoLuong
       item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({
@@ -371,6 +378,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     body.tgianMkho = pipe.transform(body.tgianMkho, 'yyyy-MM-dd HH:mm')
     body.fileDinhKemReq = this.fileDinhKem;
     body.children = this.dataTable;
+    body.tongMucDt = this.tongMucDtVal;
     body.ccXdgReq = [...this.canCuKhacList];
     let res = null;
     if (body.id) {
@@ -749,6 +757,8 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         prev += cur.tongThanhTien;
         return prev;
       }, 0);
+      this.formData.value.tongMucDt = sum;
+      this.tongMucDtVal = sum;
       return sum;
     }
   }

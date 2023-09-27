@@ -43,7 +43,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
 
   dsHangTH = []
   tongSL: number
-
+  previewName: string = "nhap_vt_bang_ke_nhap_vat_tu"
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -59,6 +59,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeNhapVatTuService);
     this.formData = this.fb.group({
+      id: [],
       type: ["01"],
       loaiDc: ["DCNB"],
       loaiQdinh: [],
@@ -76,7 +77,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       ngayKyQdinhDcc: [],
       qdinhDccId: [],
       soHopDong: [],
-      soPhieuNhapKho: [],
+      soPhieuNhapKho: [, [Validators.required]],
       phieuNhapKhoId: [],
       ngayNhapKho: [],
       tenLoNganKho: [, [Validators.required]],
@@ -88,7 +89,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       maNhaKho: [],
       tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
-      diaDiemKho: [],
+      diaDaDiemKho: [],
       tenThuKho: [],
       thuKhoId: [],
       tenPhuTrach: [],
@@ -107,6 +108,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       lyDoTuChoi: [],
       soSerial: [],
       soBaoBi: [],
+      keHoachDcDtlId: [, [Validators.required]]
     });
   }
 
@@ -129,7 +131,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     }
 
     if (this.data) {
-      console.log('this.data', this.data)
+      // console.log('this.data', this.data)
       this.formData.patchValue({
         soQdinhDcc: this.data.soQdinh,
         ngayKyQdinhDcc: this.data.ngayKyQd,
@@ -140,7 +142,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         tenNganKho: this.data.tenNganKho,
         maNganKho: this.data.maNganKho,
         tenNhaKho: this.data.tenNhaKho,
-        maNhaKho: this.data.maNhaKhoNhan,
+        maNhaKho: this.data.maNhaKho,
         tenDiemKho: this.data.tenDiemKho,
         maDiemKho: this.data.maDiemKho,
         loaiVthh: this.data.maHangHoa,
@@ -148,7 +150,8 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         cloaiVthh: this.data.maChLoaiHangHoa,
         tenCloaiVthh: this.data.tenChLoaiHangHoa,
         soLuongQdDcCuc: this.data.soLuongDc,
-        donViTinh: this.data.tenDonViTinh,
+        donViTinh: this.data.donViTinh,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDcId);
       await this.layDonViCon(this.data.maDiemKho)
@@ -171,7 +174,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     if (id) {
       let data = await this.detail(id);
       this.dsHangTH = data.dcnbBangKeNhapVTDtl
-      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
+      this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho || ""}`, });
       this.fileDinhKemReq = data.fileDinhKems
     }
     await this.spinner.hide();
@@ -285,7 +288,8 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
           cloaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
+          keHoachDcDtlId: ""
         });
 
         await this.loadChiTietQdinh(data.id);
@@ -308,28 +312,28 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       nzComponentParams: {
         dataTable: this.dsKeHoach,
         dataHeader: ['Lô kho nhập', 'Ngăn kho nhập', 'Nhà kho nhập', 'Điểm kho nhập'],
-        dataColumn: ['tenLoKho', 'tenNganKho', 'tenNhaKho', 'tenDiemKho']
+        dataColumn: ['tenLoKhoNhan', 'tenNganKhoNhan', 'tenNhaKhoNhan', 'tenDiemKhoNhan']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`,
-          tenLoKho: data.tenLoKho,
-          maLoKho: data.maLoKho,
-          tenNganKho: data.tenNganKho,
-          maNganKho: data.maNganKho,
-          tenNhaKho: data.tenNhaKho,
-          maNhaKho: data.maNhaKho,
-          tenDiemKho: data.tenDiemKho,
-          maDiemKho: data.maDiemKho,
+          tenLoNganKho: `${data.tenLoKhoNhan || ""} ${data.tenNganKhoNhan}`,
+          tenLoKho: data.tenLoKhoNhan,
+          maLoKho: data.maLoKhoNhan,
+          tenNganKho: data.tenNganKhoNhan,
+          maNganKho: data.maNganKhoNhan,
+          tenNhaKho: data.tenNhaKhoNhan,
+          maNhaKho: data.maNhaKhoNhan,
+          tenDiemKho: data.tenDiemKhoNhan,
+          maDiemKho: data.maDiemKhoNhan,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          donViTinh: data.tenDonViTinh,
-
+          donViTinh: data.donViTinh,
+          keHoachDcDtlId: data.id
         });
 
         await this.layDonViCon(data.maDiemKho)
@@ -345,7 +349,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       this.dsKeHoach = []
       if (data.danhSachQuyetDinh.length == 0) return
       data.danhSachQuyetDinh.map(qdinh => {
-        this.dsKeHoach = this.dsKeHoach.concat(qdinh.danhSachKeHoach)
+        this.dsKeHoach = this.dsKeHoach.concat(qdinh.dcnbKeHoachDcHdr.danhSachHangHoa)
       })
 
     }
@@ -358,7 +362,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       const dataDiemKho = res.data.find(f => f.maDvi === maDiemKho);
       if (dataDiemKho) {
         this.formData.patchValue({
-          diaDiemKho: dataDiemKho.diaChi
+          diaDaDiemKho: dataDiemKho.diaChi
         })
       }
     }
@@ -370,12 +374,10 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     await this.spinner.show();
 
     let body = {
-      // trangThai: STATUS.BAN_HANH,
-      // loaiVthh: ['0101', '0102'],
+      trangThai: STATUS.DU_THAO,
       soQdinhDcc: this.formData.value.soQdinhDcc,
       loaiDc: this.loaiDc,
-      // maDvi: this.userInfo.MA_DVI
-      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      isVatTu: true
     }
     let resSoDX = await this.phieuNhapKhoService.getDanhSach(body)
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -445,9 +447,12 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     if (this.idInput) {
       body.id = this.idInput
     }
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({
+        id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBangKe: data.soBangKe
+      })
       if (isGuiDuyet) {
         this.guiDuyet();
       }

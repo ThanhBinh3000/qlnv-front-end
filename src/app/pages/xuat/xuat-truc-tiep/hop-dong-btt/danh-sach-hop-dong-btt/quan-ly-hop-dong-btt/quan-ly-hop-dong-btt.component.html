@@ -33,9 +33,9 @@
         </div>
       </div>
       <form nzLayout="horizontal" [formGroup]="formData" nz-form>
-        <div nz-row [nzGutter]="[24]">
+        <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="8">
-            <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
+            <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
@@ -79,12 +79,12 @@
             </div>
           </div>
           <div nz-col [nzSpan]="8">
-            <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
+            <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
                   <nz-form-control>
-                    <nz-input-number [nzSize]="'small'" formControlName="thanhTien"
+                    <nz-input-number [nzSize]="'small'" formControlName="tongGiaTriHdong"
                                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                     </nz-input-number>
                   </nz-form-control>
@@ -104,7 +104,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán TT đã ký HĐ</nz-form-label>
                   <nz-form-control>
-                    <nz-input-number [nzSize]="'small'" formControlName="tongSlBanttQdkhDakyHd"
+                    <nz-input-number [nzSize]="'small'" formControlName="tongSlDaKyHdong"
                                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                     </nz-input-number>
                   </nz-form-control>
@@ -114,7 +114,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán TT chưa Ký HĐ</nz-form-label>
                   <nz-form-control>
-                    <nz-input-number [nzSize]="'small'" formControlName="tongSlBanttQdkhChuakyHd"
+                    <nz-input-number [nzSize]="'small'" formControlName="tongSlChuaKyHdong"
                                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                     </nz-input-number>
                   </nz-form-control>
@@ -132,7 +132,7 @@
             </div>
           </div>
           <div nz-col [nzSpan]="8">
-            <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 ">
+            <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
@@ -169,7 +169,7 @@
                   <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
                   <nz-form-control>
                     <nz-input-group>
-                      <input nz-input formControlName="loaiHinhNx" readonly/>
+                      <input nz-input formControlName="tenLoaiHinhNx" readonly/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -179,7 +179,7 @@
                   <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
                   <nz-form-control>
                     <nz-input-group>
-                      <input nz-input formControlName="kieuNx" readonly/>
+                      <input nz-input formControlName="tenKieuNx" readonly/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -199,7 +199,7 @@
         </div>
         <div class="buttons"
              *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !userService.isTongCuc()">
-          <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
+          <button type="button" class="btn btn-main" (click)="redirectHopDong(0,false, true)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -210,18 +210,18 @@
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th>STT</th>
-            <th>Số hợp đồng</th>
-            <th>Tên hợp đồng</th>
-            <th>Ngày ký hợp đồng</th>
-            <th>Đơn vị cung cấp được chọn</th>
-            <th>Số lượng (Kg)</th>
-            <th>Đơn giá</th>
-            <th>Thành tiền đã bao gồm thuế VAT (đ)</th>
-            <th>Trạng thái HĐ</th>
-            <th>Số QĐ giao NV XH</th>
-            <th>Trạng thái XH</th>
-            <th>Hành động</th>
+            <th> STT</th>
+            <th> Số hợp đồng</th>
+            <th> Tên hợp đồng</th>
+            <th> Ngày ký hợp đồng</th>
+            <th> Đơn vị cung cấp được chọn</th>
+            <th> Số lượng (Kg)</th>
+            <th> Đơn giá</th>
+            <th> Thành tiền đã bao gồm thuế VAT (đ)</th>
+            <th> Trạng thái HĐ</th>
+            <th> Số QĐ giao NV XH</th>
+            <th> Trạng thái XH</th>
+            <th *ngIf="!userService.isTongCuc()"> Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -230,22 +230,20 @@
             <td>{{ i + 1}}</td>
             <td>{{data.soHd}}</td>
             <td>{{data.tenHd}}</td>
-            <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+            <td>{{data.ngayPduyet|date: 'dd/MM/YYYY' }}</td>
             <td>{{data.tenDviMua }}</td>
-            <td>{{data.soLuongBanTrucTiep | number : '1.0-1' : 'vi_VN' }}</td>
-            <td>{{data.donGiaBanTrucTiep| number : '1.0-1' : 'vi_VN' }}
-            </td>
-            <td>{{data.soLuongBanTrucTiep * data.donGiaBanTrucTiep | number : '1.0-1' :
-              'vi_VN' }}</td>
+            <td>{{data.soLuongBanTrucTiep|number:globals.numberFormat:globals.locale }}</td>
+            <td>{{data.donGiaBanTrucTiep|number:globals.numberFormat:globals.locale }}</td>
+            <td>{{data.soLuongBanTrucTiep * data.donGiaBanTrucTiep|number:globals.numberFormat:globals.locale }}</td>
             <td>{{data.tenTrangThai}}</td>
             <td>{{data.soQdNv}}</td>
             <td>{{data.tenTrangThaiXh}}</td>
-            <td>
-              <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="redirectHopDong(true,data.id) ">
+            <td *ngIf="!userService.isTongCuc()">
+              <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="redirectHopDong(data.id, true, true) ">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
-                 (click)="redirectHopDong(true,data.id) ">
+                 (click)="redirectHopDong(data.id, false, true) ">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
@@ -255,31 +253,29 @@
             </td>
           </tr>
           </tbody>
-          <tfoot>
-          <tr *ngIf="dataTable.length > 0">
+          <tfoot *ngIf="dataTable.length > 0">
+          <tr>
             <th colspan="5" style="color: blue ;font-weight: bold;"> Tổng</th>
-            <th style="color: blue ;font-weight: bold;"> {{ calcTong('soLuongBanTrucTiep') | number
-              :
-                '1.0-1' : 'vi_VN' }}
-            </th>
+            <th
+              style="color: blue ;font-weight: bold;"> {{ calcTong('soLuongBanTrucTiep')|number:globals.numberFormat:globals.locale }}</th>
             <th></th>
             <th></th>
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
+            <th *ngIf="!userService.isTongCuc()"></th>
           </tr>
           </tfoot>
         </nz-table>
       </nz-card>
-      <app-thong-tin-hop-dong-btt [idBtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"
-                                  [isQuanLy]="true">
+      <app-thong-tin-hop-dong-btt  *ngIf="idHopDong" [idInput]="idInput" [loaiVthh]="loaiVthh" [idHopDong]="idHopDong"
+                                  [isQuanLy]="true" [isView]="true">
       </app-thong-tin-hop-dong-btt>
     </nz-card>
   </div>
 </ng-container>
 <ng-template #tempHopDong>
-  <app-thong-tin-hop-dong-btt [idBtt]="id" [id]="idHopDong" [loaiVthh]="loaiVthh"
-                              (showListEvent)="redirectHopDong(false,null)">
+  <app-thong-tin-hop-dong-btt [idInput]="idInput" [idHopDong]="idHopDong" [loaiVthh]="loaiVthh" [isView]="isView"
+                              (showListEvent)="redirectHopDong(0, true, false)">
   </app-thong-tin-hop-dong-btt>
 </ng-template>

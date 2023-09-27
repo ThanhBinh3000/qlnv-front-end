@@ -21,16 +21,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="6">
-            <nz-form-item>
-              <nz-form-label>Cục DTNN KV</nz-form-label>
-              <nz-form-control>
-                <nz-select formControlName="maCuc" nzShowSearch nzAllowClear>
-                  <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
-                </nz-select>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
+
           <div nz-col nzSpan="6">
             <nz-form-item>
               <nz-form-label>Chi cục DTNN KV</nz-form-label>
@@ -88,11 +79,16 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách phương án xuất cứu trợ, viện trợ</h3>
-      <button type="button" class="btn btn-main" (click)="showModal(true)">
-        <i class="icon htvbdh_tcdt_tao-qd"></i>
-        <span>Tổng hợp danh sách hàng cần thanh lý</span>
-      </button>
+      <h3 class="text-uppercase"> TỔNG HỢP DANH SÁCH HÀNG DTQG CẦN TIÊU HỦY</h3>
+      <div>
+        <a (click)="danhSach()" style="color: blue">
+          Xem toàn bộ danh sách
+        </a>
+        <button type="button" class="btn btn-main" (click)="showModal(true)">
+          <i class="icon htvbdh_tcdt_tao-qd"></i>
+          <span>Tổng hợp danh sách hàng cần thanh lý</span>
+        </button>
+      </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <ng-container>
@@ -248,7 +244,7 @@
           [nzClosable]="false"
           [nzBodyStyle]="{ 'overflow-y': 'auto' }"
           nzMaskClosable="true"
-          nzTitle="TỔNG HỢP DANH SÁCH HÀNG CẦN THANH LÝ">
+          nzTitle="TỔNG HỢP DANH SÁCH HÀNG CẦN TIÊU HỦY">
   <ng-container *nzModalContent>
     <app-chi-tiet-tong-hop-tieu-huy [selectedItem]="selectedItem" (step)="changeStep($event)"
                                     [eventOk]="clickOk">
@@ -266,7 +262,7 @@
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button class="btn btn-main" *ngIf="this.selectedItem && this.selectedItem.trangThai != STATUS.DA_TONG_HOP"
+      <button class="btn btn-main" *ngIf="this.selectedItem && this.selectedItem.trangThai != STATUS.GUI_DUYET"
               (click)="handleOk()">
         <i class="icon htvbdh_trinh"></i>
         <span>Gửi duyệt</span>

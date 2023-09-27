@@ -226,13 +226,13 @@
           <td class="font-weight-bold">{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold">{{data.soLuongDuToan  | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold">{{data.donGia  | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold">{{data.tongTien | number: '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-danger">{{data.tongTien | number: '1.0-1' : 'vi_VN'}}</td>
         </ng-container>
         <ng-container *ngIf="data.dataChild && data.dataChild.length > 0">
           <td class="font-weight-bold">{{sumSoLuong(data, 'soLuong') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold">{{sumSoLuong(data, 'soLuongDuToan') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold">{{sumSoLuong(data, 'donGia') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold">{{sumSoLuong(data, 'tongTien') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold font-weight-bold text-danger">{{sumSoLuong(data, 'tongTien') | number : '1.0-1' : 'vi_VN'}}</td>
         </ng-container>
         <td class="font-weight-bold text-left" nzRight *ngIf="isView">
           <a *ngIf="!data.dataChild || data.dataChild.length == 0" (click)="themMoiMuaTang(data, 'sua', idx)">
@@ -258,7 +258,7 @@
           <td>
             {{item.donGia | number : '1.0-1' : 'vi_VN'}}
           </td>
-          <td>
+          <td class='bold text-danger'>
             {{item.tongTien | number : '1.0-1' : 'vi_VN'}}
           </td>
           <td class="text-left" nzRight *ngIf="isView">

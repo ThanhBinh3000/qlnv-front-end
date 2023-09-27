@@ -84,11 +84,12 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách biên bản giao nhận sau khi kết thúc nhập kho hàng đã sửa chữa</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData()">
+      <button type="button" class="btn btn-sub" (click)="exportData('SCHDTQG_NH_BBGN_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc()" (click)="redirectCreate()">
+      <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc()"
+        (click)="redirectCreate('SCHDTQG_NH_BBGN_THEM')">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -150,10 +151,11 @@
                     <span class="icon htvbdh_eye"></span>
                   </a>
                   <a *ngIf="this.userService.isChiCuc() && bbKt.trangThai == STATUS.DU_THAO"
-                    (click)="redirectDetail(bbKt.id)">
+                    (click)="redirectDetail(bbKt.id,'SCHDTQG_NH_BBGN_THEM')">
                     <span class="fa fa-pencil"></span>
                   </a>
-                  <a *ngIf="this.userService.isChiCuc() && bbKt.trangThai == STATUS.DU_THAO" (click)="delete(bbKt)">
+                  <a *ngIf="this.userService.isChiCuc() && bbKt.trangThai == STATUS.DU_THAO"
+                    (click)="delete(bbKt,'SCHDTQG_NH_BBGN_XOA')">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>

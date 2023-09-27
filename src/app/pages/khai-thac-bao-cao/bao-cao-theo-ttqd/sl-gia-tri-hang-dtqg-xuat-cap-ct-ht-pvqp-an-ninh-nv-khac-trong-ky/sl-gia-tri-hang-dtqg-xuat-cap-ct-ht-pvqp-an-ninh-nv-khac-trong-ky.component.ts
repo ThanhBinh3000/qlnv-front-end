@@ -14,6 +14,7 @@ import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
+import {ThongTu1302018Service} from "../../../../services/bao-cao/ThongTu1302018.service";
 
 @Component({
   selector: 'app-sl-gia-tri-hang-dtqg-xuat-cap-ct-ht-pvqp-an-ninh-nv-khac-trong-ky',
@@ -22,7 +23,9 @@ import { saveAs } from "file-saver";
 })
 export class SlGiaTriHangDtqgXuatCapCtHtPvqpAnNinhNvKhacTrongKyComponent extends Base2Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -32,18 +35,22 @@ export class SlGiaTriHangDtqgXuatCapCtHtPvqpAnNinhNvKhacTrongKyComponent extends
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
+  dsLoaiBc: any[] = [
+    {text: 'Báo cáo Quý', value: 1},
+    {text: 'Báo cáo Năm', value: 2}
+  ]
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
               spinner: NgxSpinnerService,
               modal: NzModalService,
-              private thongTu1452013Service: ThongTu1452013Service,
+              private thongTu1302018Service: ThongTu1302018Service,
               public userService: UserService,
               private donViService: DonviService,
               private danhMucService: DanhMucService,
               public globals: Globals) {
-    super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
+    super(httpClient, storageService, notification, spinner, modal, thongTu1302018Service);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
@@ -51,6 +58,7 @@ export class SlGiaTriHangDtqgXuatCapCtHtPvqpAnNinhNvKhacTrongKyComponent extends
         bieuSo: null,
         dviBaoCao: null,
         dviNhanBaoCao: null,
+        loaiBc: null,
       }
     );
   }
@@ -77,7 +85,7 @@ export class SlGiaTriHangDtqgXuatCapCtHtPvqpAnNinhNvKhacTrongKyComponent extends
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_giam_hang_du_tru_quoc_gia.pdf");
+    saveAs(this.pdfBlob, "bc_sl_gtri_hang_dtqg_xuat_cap_ct_130.pdf");
   }
 
   closeDlg() {
@@ -97,10 +105,11 @@ export class SlGiaTriHangDtqgXuatCapCtHtPvqpAnNinhNvKhacTrongKyComponent extends
       }
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
+      body.fileName = "bc_sl_gtri_hang_dtqg_xuat_cap_ct_130.jrxml";
+      body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dự trữ xuất cấp cứu trợ, hỗ trợ, phục vụ QP, AN và nhiệm vụ khác trong kỳ TT 130";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      body.loaiNhapXuat = "-1";
+      await this.thongTu1302018Service.bcGtHangXuatCtHtQphongAnTrongKy(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -110,6 +119,29 @@ export class SlGiaTriHangDtqgXuatCapCtHtPvqpAnNinhNvKhacTrongKyComponent extends
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_sl_gtri_hang_dtqg_xuat_cap_ct_130.jrxml";
+      body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dự trữ xuất cấp cứu trợ, hỗ trợ, phục vụ QP, AN và nhiệm vụ khác trong kỳ TT 130";
+      body.trangThai = "01";
+      body.loaiNhapXuat = "-1";
+      await this.thongTu1302018Service.bcGtHangXuatCtHtQphongAnTrongKy(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bc_sl_gtri_hang_dtqg_xuat_cap_ct_130.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
   async loadDsDonVi() {

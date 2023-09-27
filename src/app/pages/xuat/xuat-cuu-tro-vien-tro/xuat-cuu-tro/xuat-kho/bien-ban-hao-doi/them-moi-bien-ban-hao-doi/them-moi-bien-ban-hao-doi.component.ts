@@ -49,7 +49,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   openPhieuXk = false;
   idBangKe: number = 0;
   openBangKe = false;
-
+  templateName = "Biên bản hao dôi";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -88,7 +88,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tongSlNhap: [],
         ngayKtNhap: [],
         tongSlXuat: [],
-        ngayKtXuat: [],
         slHaoThucTe: [],
         tiLeHaoThucTe: [],
         slHaoThanhLy: [],
@@ -169,7 +168,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
         type: "XUAT_CTVT",
-        loaiVThh:this.loaiVthh
+        // loaiVThh:this.loaiVthh
 
       });
     }
@@ -183,8 +182,12 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaiVthh,
-      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      // loaiVthh: this.loaiVthh,
+      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      }
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -199,7 +202,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
       type: "XUAT_CTVT",
-      loaiVthh: this.loaiVthh
+      // loaiVthh: this.loaiVthh
     }
     let res = await this.bienBanTinhKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -221,7 +224,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
         dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh'],
+        dataColumn: ['soBbQd', 'ngayKy', 'tenVthh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -239,11 +242,10 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
-
     });
-    let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+    let dataChiCuc = data.dataDtl.filter(item => item.tenChiCuc == this.userInfo.TEN_DVI);
     if (dataChiCuc) {
-      this.listDiaDiemNhap = dataChiCuc
+      this.listDiaDiemNhap = dataChiCuc;
     }
     await this.spinner.hide();
   }
@@ -297,9 +299,12 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       this.dataTable = bienBan.listPhieuXuatKho
     }
     this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
+    let slHaoHut= this.formData.value.tongSlNhap*this.formData.value.dinhMucHaoHut;
     this.formData.patchValue({
       ngayKetThucXuat: this.dataTable[0].ngayXuatKho,
       ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
+      tongSlXuat:this.tongSoLuongXk,
+      sLHaoHutTheoDm: slHaoHut,
     })
   }
 

@@ -46,7 +46,7 @@
   <nz-card class="mt16 flex-card p-lr16">
     <!-- Thông tin chung -->
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="2">
@@ -155,6 +155,16 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item class="form-item">
+                <nz-form-label [nzNoColon]="true" nzRequired>
+                  Thủ kho
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <input nz-input readonly formControlName="thuKho"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
@@ -183,19 +193,9 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true" nzRequired>
-                  Thủ kho
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <input nz-input readonly formControlName="thuKho"/>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Loại hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="tenLoaiVthh" readonly="true"/>
                 </nz-form-control>
@@ -203,7 +203,7 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Chủng loại hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="tenCloaiVthh" readonly="true"/>
                 </nz-form-control>
@@ -221,7 +221,7 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Đơn vị kiểm nghiệm</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Đơn vị kiểm định</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="dviKiemDinh" [disabled]="isView"/>
                 </nz-form-control>

@@ -38,7 +38,6 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
-  suffixCv: string = "/" + this.userInfo.MA_TCKT;
   listCcPhapLy: any[] = [];
   listFileDinhKem: any[] = [];
   rowItem: KeHoachDmChiTiet = new KeHoachDmChiTiet();
@@ -47,7 +46,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   listDmSuaChua: any[] = [];
   dataTableRes: any[] = [];
   listFile: any[] = []
-
+  suffixCv : string
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -56,8 +55,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     modal: NzModalService,
     private deXuatScThuongXuyenService: DeXuatScThuongXuyenService,
     private danhMucService: DanhMucService,
-    private danhMucSuaChuaService: DanhMucSuaChuaService,
-    private donviService: DonviService,
+    private danhMucSuaChuaService: DanhMucSuaChuaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatScThuongXuyenService)
     super.ngOnInit()
@@ -71,6 +69,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
       soCv: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayDuyet: [null],
+      lyDoTuChoi: [null],
       trangThai: ['00'],
       trangThaiTh: [STATUS.CHUA_TONG_HOP],
       tenTrangThai: ['Dự thảo'],
@@ -81,10 +80,12 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
 
 
   async ngOnInit() {
+    console.log(this.userInfo,1211)
+    this.suffixCv = "/" + this.userInfo.MA_TCKT;
     await this.spinner.show();
     try {
       this.getDsKhoi();
-      await this.getDmSuaChuaThuongXuyen();
+      await this.getDmSuaChuaThuongXuyen(dayjs().get('year'));
       if (this.idInput) {
         await this.detail(this.idInput);
       }
@@ -138,11 +139,12 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     }
   }
 
-  async getDmSuaChuaThuongXuyen() {
+  async getDmSuaChuaThuongXuyen(namKh) {
     let body = {
       "type": DM_SC_TYPE.SC_THUONG_XUYEN,
       "maDvi": this.userInfo.MA_DVI,
-      "namKh": this.formData.value.namKh,
+      "namKh": namKh,
+      "trangThai" : STATUS.CHUA_THUC_HIEN,
       "paggingReq": {"limit": 10000, "page": 0}
     }
     let res = await this.danhMucSuaChuaService.search(body);
@@ -237,7 +239,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           id: res.id,
           trangThai: res.trangThai
         });
-        this.guiDuyet();
+        this.duyet();
       } else {
         if (this.idInput > 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -255,55 +257,56 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     }
   }
 
-  guiDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn gửi duyệt?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let trangThai;
-          switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO :
-            case STATUS.TU_CHOI_TP :
-            case STATUS.TU_CHOI_CBV : {
-              trangThai = STATUS.CHO_DUYET_TP;
-              break;
-            }
-            case STATUS.TU_CHOI_LDC : {
-              trangThai = STATUS.CHO_DUYET_LDC;
-              break;
-            }
-          }
-          let body = {
-            id: this.formData.get("id").value,
-            lyDo: null,
-            trangThai: trangThai
-          };
-          let res =
-            await this.deXuatScThuongXuyenService.approve(
-              body
-            );
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.GUI_DUYET_SUCCESS);
-            this.quayLai();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log("error: ", e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      }
-    });
-  }
+  // guiDuyet() {
+  //   this.modal.confirm({
+  //     nzClosable: false,
+  //     nzTitle: "Xác nhận",
+  //     nzContent: "Bạn có chắc chắn muốn gửi duyệt?",
+  //     nzOkText: "Đồng ý",
+  //     nzCancelText: "Không",
+  //     nzOkDanger: true,
+  //     nzWidth: 310,
+  //     nzOnOk: async () => {
+  //       this.spinner.show();
+  //       try {
+  //         let trangThai;
+  //         switch (this.formData.value.trangThai) {
+  //           case STATUS.DU_THAO :
+  //           case STATUS.TU_CHOI_TP :
+  //           case STATUS.TU_CHOI_LDC:
+  //           case STATUS.TU_CHOI_CBV : {
+  //             trangThai = STATUS.CHO_DUYET_TP;
+  //             break;
+  //           }
+  //           case STATUS.TU_CHOI_LDC : {
+  //             trangThai = STATUS.CHO_DUYET_LDC;
+  //             break;
+  //           }
+  //         }
+  //         let body = {
+  //           id: this.formData.get("id").value,
+  //           lyDo: null,
+  //           trangThai: trangThai
+  //         };
+  //         let res =
+  //           await this.deXuatScThuongXuyenService.approve(
+  //             body
+  //           );
+  //         if (res.msg == MESSAGE.SUCCESS) {
+  //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.GUI_DUYET_SUCCESS);
+  //           this.quayLai();
+  //         } else {
+  //           this.notification.error(MESSAGE.ERROR, res.msg);
+  //         }
+  //         this.spinner.hide();
+  //       } catch (e) {
+  //         console.log("error: ", e);
+  //         this.spinner.hide();
+  //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //       }
+  //     }
+  //   });
+  // }
 
   tuChoi() {
     const modalTuChoi = this.modal.create({
@@ -369,7 +372,14 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.CHO_DUYET_TP : {
+            case STATUS.TU_CHOI_TP:
+            case STATUS.TU_CHOI_LDC:
+            case STATUS.TU_CHOI_CBV :
+            case STATUS.DU_THAO: {
+              trangThai = STATUS.CHO_DUYET_TP;
+              break;
+            }
+            case STATUS.CHO_DUYET_TP: {
               trangThai = STATUS.CHO_DUYET_LDC;
               break;
             }

@@ -82,7 +82,9 @@ export enum STATUS {
   DA_LAP = '80',
   CHUATAO_KH = '81',
   DADUTHAO_KH = '82',
-  DAGUIDUYET_KH = '83'
+  DAGUIDUYET_KH = '83',
+
+  DA_DONG = '87'
 }
 
 export enum LoaiTaiLieu {
@@ -145,6 +147,9 @@ export enum CHUC_NANG {
   DUYET_KTVBQ = 'DUYET_KTVBQ',
   DUYET_KT = 'DUYET_KT',
   TAO_QD = 'TAO_QD',
+  BAN_HANH = 'BAN_HANH',
+  CHUA_TAO_QD = 'CHUA_TAO_QD',
+  DA_DU_THAO_QD = 'DA_DU_THAO_QD'
 }
 
 
@@ -157,9 +162,21 @@ export enum HSKT_LOAI_DOI_TUONG {
   HO_SO = "HS",
   NGUOI_LIEN_QUAN = "NLQ"
 }
+
 export enum LOAI_DOI_TUONG {
   HO_SO = "HS",
   NGUOI_LIEN_QUAN = "NLQ",
   PHUONG_PHAP_LAY_MAU = "PPLM",
   KET_QUA_PHAN_TICH = "KKPT"
+}
+
+export enum LOAI_CHOT {
+  CHOT_GIA = "CHOT_GIA",
+  CHOT_NHAP_XUAT = "CHOT_NHAP_XUAT",
+}
+
+export enum BBLM_LOAI_DOI_TUONG {
+  NGUOI_LIEN_QUAN = "NLQ",
+  PHUONG_PHAP_LAY_MAU = "PPLM",
+  CHI_TIEU_CHAT_LUONG = "CTCL"
 }

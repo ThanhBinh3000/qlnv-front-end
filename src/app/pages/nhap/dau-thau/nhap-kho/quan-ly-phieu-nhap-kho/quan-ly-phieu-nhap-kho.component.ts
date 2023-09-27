@@ -295,4 +295,16 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       this.expandSet2.delete(id);
     }
   }
+
+  hienThiXem(data){
+    if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XEM') && data != null) {
+      if(this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+        return false;
+      } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_DUYET') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
 }

@@ -49,11 +49,17 @@
         <th>Chi cục DTNN KV</th>
         <th>Điểm kho</th>
         <th>Ngăn/Lô kho</th>
-        <th>Chủng loại hàng hóa</th>
-        <th>SL tốn kho</th>
-        <th>SL hao dôi theo định mức</th>
-        <th>SL dôi thừa</th>
+        <th>Chủng loại hàng DTQG</th>
+        <th>SL tồn kho</th>
+        <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">SL hao dôi theo định mức</th>
+        <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">SL dôi thừa</th>
+        <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">SL tồn kho thực tế</th>
+        <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">SL tăng</th>
+        <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_KHAC ">Số lượng</th>
         <th>Đơn giá</th>
+        <th>ĐVT</th>
         <th>Thành tiền (đ)</th>
         <th *ngIf="!isView">Hành động</th>
       </tr>
@@ -68,6 +74,9 @@
           <td class="text-right red-text"></td>
           <td class="text-right red-text"></td>
           <td class="text-right bold-700"></td>
+          <td *ngIf="formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_KHAC "></td>
           <td></td>
           <td class="text-right bold-700"></td>
           <td></td>
@@ -83,6 +92,9 @@
             <td></td>
             <td></td>
             <td></td>
+            <td *ngIf="formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_KHAC "></td>
             <td></td>
             <td></td>
             <td></td>
@@ -98,6 +110,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td *ngIf="formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_KHAC "></td>
               <td></td>
               <td></td>
               <td></td>
@@ -112,10 +127,20 @@
                 <td>{{nganLo.tenNganLoKho}}</td>
                 <td>{{nganLo.tenCloaiVthh}}</td>
                 <td>{{nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{nganLo.slHaoDoiDinhMuc | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{nganLo.slDoiThua * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">{{nganLo.slHaoDoiDinhMuc | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">{{nganLo.slTonKhoThucTe | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">{{nganLo.slTonKhoThucTe - nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_KHAC ">{{nganLo.slNhap | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-center">{{nganLo.dvt}}</td>
+                <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">{{nganLo.slDoiThua * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">{{(nganLo.slTonKhoThucTe - nganLo.slTonKho) * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_KHAC">{{nganLo.slNhap * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                 <td *ngIf="!isView">
                   <a (click)="themMoi(nganLo)">
                     <i class="fa fa-pencil" title="Sửa"></i>
@@ -140,6 +165,9 @@
             <td></td>
             <td></td>
             <td></td>
+            <td *ngIf="formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_KHAC "></td>
             <td></td>
             <td></td>
             <td></td>
@@ -159,6 +187,9 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td *ngIf="formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        && formData.value.loaiHinhNx != loaiHinhNhapXuat.NHAP_KHAC "></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -178,10 +209,20 @@
                     <td>{{nganLo.tenNganLoKho}}</td>
                     <td>{{nganLo.tenCloaiVthh}}</td>
                     <td>{{nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{nganLo.slHaoDoiDinhMuc | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{nganLo.slDoiThua * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">{{nganLo.slHaoDoiDinhMuc | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">{{nganLo.slTonKhoThucTe | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">{{nganLo.slTonKhoThucTe - nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_KHAC ">{{nganLo.slNhap | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-center">{{nganLo.dvt}}</td>
+                    <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">{{nganLo.slDoiThua * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">{{(nganLo.slTonKhoThucTe - nganLo.slTonKho) * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_KHAC">{{nganLo.slNhap * nganLo.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                     <td *ngIf="!isView">
                       <a (click)="themMoi(nganLo)">
                         <i class="fa fa-pencil" title="Sửa"></i>
@@ -263,13 +304,13 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Loại hàng hóa</nz-form-label>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Loại hàng DTQG</nz-form-label>
         <nz-form-control>
           <span>{{rowThemMoi.tenLoaiVthh}}</span>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng DTQG</nz-form-label>
         <nz-form-control>
           <span>{{rowThemMoi.tenCloaiVthh}}</span>
         </nz-form-control>

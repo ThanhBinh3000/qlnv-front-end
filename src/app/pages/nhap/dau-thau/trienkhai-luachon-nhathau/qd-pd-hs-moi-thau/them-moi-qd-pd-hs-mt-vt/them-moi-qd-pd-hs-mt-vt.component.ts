@@ -95,7 +95,8 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
     let bodyToTrinh = {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: this.loaiVthh,
-      namKhoach: this.formData.get('namKhoach').value
+      namKhoach: this.formData.get('namKhoach').value,
+      lastest: 0
     };
     let resToTrinh = await this.quyetDinhPheDuyetKeHoachLCNTService.getAll(bodyToTrinh);
     let listQdPdKhlcnt = [];
@@ -248,11 +249,43 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
         tenLoaiVthh: data.qdKhlcntHdr.tenLoaiVthh,
         loaiVthh: data.qdKhlcntHdr.loaiVthh,
         tchuanCluong: data.qdKhlcntHdr.dxKhlcntHdr.tchuanCluong,
-        quy: data.qdKhlcntHdr.dxKhlcntHdr.quy,
+        quy: data.qdKhlcntHdr.dxKhlcntHdr?.quy,
         tgianBdauTchuc: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tgianBdauTchuc : data.qdKhlcntHdr.tgianBdauTchuc,
       });
       this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
       this.listCcPhapLy = data.listCcPhapLy;
+    }
+  }
+
+  async onChangeNamKh() {
+    this.initListQuy();
+  }
+
+  calcTongSl() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum;
+    }
+  }
+
+  calcTongThanhTien() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * item.donGiaVat;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum;
     }
   }
 }

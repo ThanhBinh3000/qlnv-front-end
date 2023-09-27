@@ -5,14 +5,18 @@
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isChiCuc">
+      <button *ngIf='idSelected' type="button" class="btn btn-sub" (click)="preview(idSelected)">
+        <i class="icon htvbdh_totrinh"></i>
+        <span> In/Xem trước </span>
+      </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_DUYET_LDCCUC')"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCCUC')"
         type="button" class="btn btn-sub" (click)="reject(idSelected,STATUS.TU_CHOI_LDCC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_DUYET_LDCCUC')"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCCUC')"
         type="button" class="btn btn-sub"
         (click)="approve(idSelected,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -39,7 +43,7 @@
                 <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-        <span>Biên bản lấy mẫu/bàn giao mẫu</span>
+        <span>Phiếu kiểm nghiệm chất luợng</span>
       </div>
     </div>
   </div>
@@ -246,14 +250,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onChangePpLayMau($event)">
-                    <div nz-row>
-                      <ng-container *ngFor="let item of dsPpLayMau">
-                        <div nz-col nzSpan="24"><label nz-checkbox [nzChecked]="item.selected"
-                                                       [nzValue]="item.giaTri">{{item.giaTri}}</label></div>
-                      </ng-container>
-                    </div>
-                  </nz-checkbox-wrapper>
+                  <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -297,8 +294,7 @@
   </nz-collapse>
   <nz-collapse>
     <nz-collapse-panel nzHeader="Kết quả phân tích chỉ tiêu chất lượng" nzActive="true">
-      <form nzLayout="vertical" nz-form [formGroup]="formData">
-        <nz-table class="nowrap pd-t-16" #basicTable [nzData]="viewTableDaiDien" nzBordered>
+        <nz-table class="nowrap pd-t-16" #basicTable [nzData]="viewCtChatLuong" nzBordered>
           <thead>
           <tr>
             <th class="text-center" nzWidth="50px">STT</th>
@@ -314,53 +310,21 @@
           <tr *ngFor="let data of basicTable.data;let i = index">
             <ng-container *ngIf="!data.edit">
               <td class="text-center">{{i + 1}}</td>
-              <td>{{data.chiTieuCl}}</td>
-              <td>{{data.chiSoCl}}</td>
-              <td>{{data.ketQua}}</td>
-              <td>{{data.phuongPhap}}</td>
-              <td>{{data.danhGia}}</td>
-              <td>
-                <a (click)="suaDaiDien(data)">
-                  <i class="fa fa-edit"></i>
-                </a>
-                <a>
-                  <i class="fa fa-trash-o do" nz-popconfirm nz-button
-                     nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
-                     (nzOnConfirm)="xoaDaiDien(data)"></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-container *ngIf="data.edit">
-              <td class="text-center">{{i + 1}}</td>
-              <td>{{data.chiTieuCl}}</td>
+              <td>{{data.ten}}</td>
               <td>{{data.chiSoCl}}</td>
               <td><input nz-input [(ngModel)]="data.ketQua"/></td>
-              <td>
-                <nz-select [(ngModel)]="data.phuongPhap">
-                  <nz-option nzValue="{{item.ten}}" nzLabel="{{item.ten}}" *ngFor="let item of dsPpKiemTra">
-                  </nz-option>
-                </nz-select>
-              </td>
+              <td>{{data.phuongPhap}}</td>
               <td>
                 <nz-select [(ngModel)]="data.danhGia">
                   <nz-option nzValue="Đạt" nzLabel="Đạt"></nz-option>
                   <nz-option nzValue="Không đạt" nzLabel="Không đạt"></nz-option>
                 </nz-select>
               </td>
-              <td>
-                <a>
-                  <i class="fa fa-save" nz-popconfirm nz-button
-                     nzPopconfirmTitle="Bạn có chắc muốn lưu thay đổi ?"
-                     (nzOnConfirm)="luuDaiDien(data)"></i>
-                </a>
-                <a (click)="huySuaDaiDien()">
-                  <i class="fa fa-ban do"></i>
-                </a>
-              </td>
             </ng-container>
           </tr>
           </tbody>
         </nz-table>
+      <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label>Nhận xét kết luận</nz-form-label>
@@ -373,3 +337,30 @@
     </nz-collapse-panel>
   </nz-collapse>
 </div>
+<nz-modal [(nzVisible)]='showDlgPreview' nzTitle='THÔNG TIN PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG' nzWidth='100%'
+          (nzOnCancel)='closeDlg()'>
+  <div *nzModalContent class='modal__content'>
+    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)='printPreview()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_printer'></i>
+      In
+    </button>
+    <button nz-button (click)='downloadPdf()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-pdf'></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)='downloadWord()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-word'></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+      <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

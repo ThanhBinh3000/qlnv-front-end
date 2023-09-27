@@ -236,7 +236,7 @@
                 || ( type == typeConst.GIA_CU_THE && pagType == 'LT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_DEXUAT_XEM'))
                 || ( type == typeConst.GIA_MUA_TOI_DA && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_DEXUAT_XEM'))
                 || ( type == typeConst.GIA_CU_THE && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT_XEM'))) &&
-                 !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_CBV) && data.maDvi == userInfo.MA_DVI  ) ">
+                 !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_CBV) && data.nguoiTaoId == userInfo.ID  ) ">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a (click)="viewDetail(data.id, false)" *ngIf="( type == typeConst.GIA_MUA_TOI_DA && pagType == 'LT'  && (userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_DEXUAT_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_CBV ))

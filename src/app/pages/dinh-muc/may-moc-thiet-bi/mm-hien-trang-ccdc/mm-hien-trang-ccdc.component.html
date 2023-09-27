@@ -98,11 +98,11 @@
           <td class="text-right">{{ data.slCanThanhLy | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right">{{ data.slTon | number : '1.0-1' : 'vi_VN' }}</td>
           <td nzRight>
-            <a  (click)="openDialog(data, true)"  *ngIf="(data.trangThai == statusMm.DA_CHOT || !userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_XEM')" >
+            <a  (click)="openDialog(data, true)"  *ngIf="(data.trangThai == statusMm.DA_CHOT) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_XEM')" >
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              (click)="openDialog(data, false)" *ngIf="(data.trangThai == statusMm.CHUA_CHOT && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_SUA') ">
+              (click)="openDialog(data, false)" *ngIf="(data.trangThai == statusMm.CHUA_CHOT) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_SUA') ">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
           </td>

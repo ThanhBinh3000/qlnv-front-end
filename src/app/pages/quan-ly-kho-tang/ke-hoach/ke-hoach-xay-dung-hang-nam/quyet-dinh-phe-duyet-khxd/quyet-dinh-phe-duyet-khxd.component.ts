@@ -7,17 +7,14 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {UserLogin} from 'src/app/models/userlogin';
-import {
-  DanhSachDauThauService
-} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import {UserService} from 'src/app/services/user.service';
 import {convertTrangThai} from 'src/app/shared/commonFunction';
 import {Globals} from 'src/app/shared/globals';
 import {saveAs} from 'file-saver';
 import {STATUS} from "../../../../../constants/status";
-import { KtQdXdHangNamService } from "../../../../../services/kt-qd-xd-hang-nam.service";
-import { KtTongHopXdHnService } from "../../../../../services/kt-tong-hop-xd-hn.service";
-import { Router } from "@angular/router";
+import {KtQdXdHangNamService} from "../../../../../services/kt-qd-xd-hang-nam.service";
+import {KtTongHopXdHnService} from "../../../../../services/kt-tong-hop-xd-hn.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-khxd',
@@ -297,7 +294,18 @@ export class QuyetDinhPheDuyetKhxdComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body = {};
+        let body = {
+          namKeHoach : this.searchFilter.namKeHoach,
+          soQuyetDinh : this.searchFilter.soQuyetDinh,
+          ngayKyTu : this.searchFilter.ngayKyTu,
+          ngayKyDen : this.searchFilter.ngayKyDen,
+          trichYeu : this.searchFilter.trichYeu,
+          maDvi : this.userInfo.MA_DVI,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
+        };
         this.quyetDinhService
           .export(body)
           .subscribe((blob) =>

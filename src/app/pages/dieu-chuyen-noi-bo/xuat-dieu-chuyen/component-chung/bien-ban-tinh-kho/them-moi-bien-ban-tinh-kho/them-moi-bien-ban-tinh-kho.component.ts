@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -22,6 +23,7 @@ import { BienBanTinhKhoDieuChuyenService } from '../../services/dcnb-bien-ban-ti
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { PhieuXuatKhoDieuChuyenService } from '../../services/dcnb-xuat-kho.service';
 import { PassDataBienBanTinhKho } from '../bien-ban-tinh-kho.component';
+import { PREVIEW } from 'src/app/constants/fileType';
 
 export const LIST_TRANG_THAI_BBTK = {
   [STATUS.DU_THAO]: "Dự thảo",
@@ -61,9 +63,12 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   idPhieuXuatKho: number;
   isViewModalBKCH: boolean;
   idBKCH: number;
+  isViewModalBKXVT: boolean;
+  idBKXVT: number;
   fileBbTinhKhoDaKy: FileDinhKem[] = [];
 
   LIST_TRANG_THAI = LIST_TRANG_THAI_BBTK;
+  previewName: string = "bien_ban_tinh_kho_lt_xuat_dieu_chuyen";
 
   constructor(
     httpClient: HttpClient,
@@ -81,35 +86,35 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     this.formData = this.fb.group(
       {
         id: [],
-        nam: [dayjs().get("year")],
-        maDvi: [],
-        maQhns: [],
+        nam: [dayjs().get("year"), [Validators.required]],
+        maDvi: [, [Validators.required]],
+        maQhns: [, [Validators.required]],
         soBbTinhKho: [],
-        ngayTaoBb: [],
-        qdinhDccId: [],
+        ngayLap: [, [Validators.required]],
+        qdinhDccId: [, [Validators.required]],
         soQdinhDcc: ['', [Validators.required]],
-        ngayKyQdDcc: [''],
+        ngayKyQdDcc: ['', [Validators.required]],
         maDiemKho: ['', [Validators.required]],
         maNhaKho: ['', [Validators.required]],
         maNganKho: ['', [Validators.required]],
         maLoKho: [],
-        loaiVthh: [],
-        cloaiVthh: [],
+        loaiVthh: [, [Validators.required]],
+        cloaiVthh: [, [Validators.required]],
         moTaHangHoa: [],
-        ngayBatDauXuat: [],
-        ngayKetThucXuat: [],
-        tonKhoBanDau: [],
-        tongSlXuatTheoQd: [],
-        tongSlXuatTheoTt: [],
-        slConLaiTheoSs: [],
-        slConLaiTheoTt: [],
+        ngayBatDauXuat: [, [Validators.required]],
+        ngayKetThucXuat: [, [Validators.required]],
+        tonKhoBanDau: [0],
+        tongSlXuatTheoQd: [0],
+        tongSlXuatTheoTt: [0],
+        slConLaiTheoSs: [0],
+        slConLaiTheoTt: [0],
         chenhLechSlConLai: [],
-        slThua: [],
-        slThieu: [],
-        nguyenNhan: [''],
-        kienNghi: [''],
-        ghiChu: [''],
-        thuKho: [],
+        slThua: [0],
+        slThieu: [0],
+        nguyenNhan: ['', [Validators.required]],
+        kienNghi: ['', [Validators.required]],
+        ghiChu: ['', [Validators.required]],
+        thuKho: ['', [Validators.required]],
         ktvBaoQuan: [],
         ktvBaoQuanId: [],
         keToan: [],
@@ -119,16 +124,20 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
         diaChiDvi: [],
-        tenDvi: [],
-        tenCloaiVthh: [],
-        tenLoaiVthh: [],
-        tenTrangThai: ['Dự Thảo'],
+        tenDvi: [, [Validators.required]],
+        tenCloaiVthh: [, [Validators.required]],
+        tenLoaiVthh: [, [Validators.required]],
+        tenTrangThai: ['Dự Thảo', [Validators.required]],
         tenNhaKho: ['', [Validators.required]],
         tenDiemKho: ['', [Validators.required]],
         tenLoKho: [],
         tenNganKho: [],
         tenNganLoKho: ['', [Validators.required]],
-        dcnbBienBanTinhKhoDtl: [new Array()]
+        dcnbBienBanTinhKhoDtl: [new Array(), [Validators.required, Validators.minLength(1)]],
+        donViTinh: ['', [Validators.required]],
+        soPhieuKnChatLuong: ['', [Validators.required]],
+        phieuKnChatLuongHdrId: ['', [Validators.required]],
+        keHoachDcDtlId: [, [Validators.required]]
       }
     );
     this.maBb = '-BBTK';
@@ -141,6 +150,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       if (this.isViewOnModal) {
         this.isView = true;
       }
+      this.setValidate();
       await this.loadDetail(this.idInput)
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -172,7 +182,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
         // soBbTinhKho: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-        ngayTaoBb: dayjs().format('YYYY-MM-DD'),
+        ngayLap: dayjs().format('YYYY-MM-DD'),
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
         ...this.passData,
@@ -227,8 +237,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQdinh', 'ngayKyQdinh', 'tenLoaiVthh'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định'],
+        dataColumn: ['soQdinh', 'ngayKyQdinh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -265,16 +275,19 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
         if (data.maDvi === this.userInfo.MA_DVI && Array.isArray(data?.danhSachQuyetDinh)) {
           data.danhSachQuyetDinh.forEach(element => {
-            if (Array.isArray(element.danhSachKeHoach)) {
-              element.danhSachKeHoach.forEach(item => {
-                if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho === item.maNganKho) || (f.maLoKho && f.maLoKho === item.maLoKho))) < 0) {
+            if (Array.isArray(element?.dcnbKeHoachDcHdr?.danhSachHangHoa)) {
+              element.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(item => {
+                // if (dataChiCuc.findIndex(f => ((!f.maLoKho && !item.maLoKho && item.maNganKho && f.maNganKho === item.maNganKho) || (f.maLoKho && f.maLoKho === item.maLoKho))) < 0) {
+                // }
+                // dataChiCuc.push(item)
+                if (item.thayDoiThuKho === this.thayDoiThuKho) {
                   dataChiCuc.push(item)
                 }
               });
             }
           });
         }
-        this.listDiaDiemNhap = cloneDeep(dataChiCuc);
+        this.listDiaDiemNhap = dataChiCuc.map(f => ({ ...f, noiNhan: `${f.tenDiemKhoNhan || ""} - ${f.tenNhaKhoNhan || ""} - ${f.tenNganKhoNhan || ""} - ${f.tenLoKhoNhan || ""}` }));
       }
     } catch (error) {
       console.log("e", error);
@@ -286,18 +299,18 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
 
 
-  openDialogDdiemNhapHang() {
+  openDialogDdiemXuatHang() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDiaDiemNhap,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataHeader: ['Điểm kho xuất', 'Nhà kho xuất', 'Ngăn kho xuất', 'Lô kho xuất', "Nơi nhận"],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'noiNhan']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -327,9 +340,12 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
 
+        keHoachDcDtlId: data.id,
+
         tongSlXuatTheoQd: data.soLuongDc || 0,
         tonKhoBanDau: data.tonKho || 0,
-        slConLaiTheoSs: data.tonKho - data.soLuongDc
+        slConLaiTheoSs: data.tonKho - data.soLuongDc,
+        donViTinh: data.donViTinh
 
       })
       let body = {
@@ -342,33 +358,33 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         maLoKho: this.formData.value.maLoKho,
         maNganKho: this.formData.value.maNganKho
       }
-      let res = await this.phieuXuatKhoDieuChuyenService.getThongTinChungPhieuXuatKho(body)
-      const list = res.data;
-      // this.listPhieuXuatKho = list.filter(item => ((this.formData.value.maLoKho && this.formData.value.maLoKho === item.maloKho) ||
-      //   (!this.formData.value.maLoKho && this.formData.value.maNganKho && this.formData.value.maNganKho === item.maNganKho)));
-      const dataTable = Array.isArray(list) ? list.map(f => ({
-        bangKeCanHangHdrId: f.bangKeCanHangId,
-        hdrId: null,
-        id: null,
-        ngayXuatKho: f.ngayXuatKho,
-        phieuKtChatLuongHdrId: f.phieuKiemNghiemClId,
-        phieuXuatKhoHdrId: f.id,
-        soPhieuKtChatLuong: f.soPhieuKiemNghiemCl,
-        soPhieuXuatKho: f.soPhieuXuatKho,
-        soBangKeCanHang: f.soBangKeCanHang,
-        soLuongXuat: f.soLuong
-      })) : [];
-      const tongSlXuat = dataTable.reduce((sum, cur) => sum += cur.soLuongXuat, 0);
-      this.formData.patchValue({ tongSlXuatTheoTt: tongSlXuat, dcnbBienBanTinhKhoDtl: dataTable })
+      let res = await this.phieuXuatKhoDieuChuyenService.getThongTinChungPhieuXuatKho(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const list = res.data;
+        // this.listPhieuXuatKho = list.filter(item => ((this.formData.value.maLoKho && this.formData.value.maLoKho === item.maloKho) ||
+        //   (!this.formData.value.maLoKho && this.formData.value.maNganKho && this.formData.value.maNganKho === item.maNganKho)));
+        const dataTable = Array.isArray(list) ? list.map(f => ({
+          bangKeCanHangHdrId: this.isVatTu ? f.bangKeXuatVtId : f.bangKeCanHangId,
+          hdrId: null,
+          id: null,
+          ngayXuatKho: f.ngayXuatKho,
+          phieuXuatKhoHdrId: f.id,
+          soPhieuXuatKho: f.soPhieuXuatKho,
+          soBangKeCanHang: this.isVatTu ? f.soBangKeXuatVt : f.soBangKeCanHang,
+          soLuongXuat: f.soLuong
+        })) : [];
+        const tongSlXuat = dataTable.reduce((sum, cur) => sum += cur.soLuongXuat, 0);
+        this.formData.patchValue({ tongSlXuatTheoTt: tongSlXuat, dcnbBienBanTinhKhoDtl: dataTable, soPhieuKnChatLuong: list[0]?.soPhieuKiemNghiemCl, phieuKnChatLuongHdrId: list[0]?.phieuKiemNghiemClId })
 
-      if (this.formData.value.dcnbBienBanTinhKhoDtl && this.formData.value.dcnbBienBanTinhKhoDtl.length > 0) {
-        const maxDate = new Date(Math.min.apply(null, this.formData.value.dcnbBienBanTinhKhoDtl.map(function (e) {
-          return new Date(e.ngayXuatKho);
-        })));
-        const minDateString = maxDate.toISOString().slice(0, 10);
-        this.formData.patchValue({
-          ngayBatDauXuat: minDateString
-        })
+        if (this.formData.value.dcnbBienBanTinhKhoDtl && this.formData.value.dcnbBienBanTinhKhoDtl.length > 0) {
+          const maxDate = new Date(Math.min.apply(null, this.formData.value.dcnbBienBanTinhKhoDtl.map(function (e) {
+            return new Date(e.ngayXuatKho);
+          })));
+          const minDateString = maxDate.toISOString().slice(0, 10);
+          this.formData.patchValue({
+            ngayBatDauXuat: minDateString
+          })
+        }
       }
     }
   }
@@ -395,7 +411,8 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       slConLaiTheoSs: 0,
       tongSlXuatTheoTt: 0,
       dcnbBienBanTinhKhoDtl: [],
-      ngayBatDauXuat: ''
+      ngayBatDauXuat: '',
+      keHoachDcDtlId: ''
 
     })
   }
@@ -423,6 +440,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
+    body.ngayKetThucXuat = this.formData.value.ngayLap;
     body.fileBbTinhKhoDaKy = this.fileBbTinhKhoDaKy;
     body.loaiDc = this.loaiDc;
     body.isVatTu = this.isVatTu;
@@ -432,7 +450,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     // if (this.formData.value.tongSlXuatTheoQd > this.formData.value.tongSlXuatTheoTt) {
     //   return this.notification.error(MESSAGE.ERROR, "Số lượng xuất thực tế nhỏ hơn số lượng xuất theo quyết định")
     // }
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBbTinhKho: data.soBbTinhKho ? data.soBbTinhKho : this.genSoBienBanTinhKho(data.id) })
       if (isGuiDuyet) {
@@ -444,6 +462,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   pheDuyet() {
     let trangThai = '';
     let msg = '';
+    let MSG = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.TU_CHOI_KT:
@@ -451,25 +470,29 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.GUI_DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_KT;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.DUYET_SUCCESS
         break;
       }
       case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.DA_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.PHE_DUYET_SUCCESS
         break;
       }
     }
-    this.approve(this.formData.value.id, trangThai, msg);
+    this.approve(this.formData.value.id, trangThai, msg, null, MSG);
   }
 
   tuChoi() {
@@ -488,7 +511,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
         break;
       }
     }
-    this.reject(this.idInput, trangThai)
+    this.reject(this.formData.value.id, trangThai)
   }
 
   isDisabled() {
@@ -533,6 +556,10 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     this.isViewModalBKCH = true;
     this.idBKCH = id
   }
+  openBKXVTModal(id: number) {
+    this.isViewModalBKXVT = true;
+    this.idBKXVT = id
+  }
   closeModal() {
     this.isViewModalPhieuKNCL = false;
     this.idPhieuKNCL = null;
@@ -540,5 +567,13 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
     this.idPhieuXuatKho = null;
     this.isViewModalBKCH = false;
     this.idBKCH = null;
+    this.isViewModalBKXVT = false;
+    this.idBKXVT = null
+  }
+  setValidate() {
+    if (!this.thayDoiThuKho) {
+      this.formData.controls["soPhieuKnChatLuong"].clearValidators();
+      this.formData.controls["phieuKnChatLuongHdrId"].clearValidators();
+    }
   }
 }

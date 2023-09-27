@@ -33,12 +33,11 @@ export class HoSoTieuHuyComponent extends Base2Component implements OnInit {
     {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
     {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
     {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
-  listTrangThaiXh: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'}
+  listTrangThaiTc: any[] = [
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
+    {ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ TC'},
+    {ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ TC'}
   ];
   idQdPd: number = 0;
   openQdPd = false;

@@ -122,6 +122,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
         tenTrangThai: data.tenTrangThai
       });
       this.fileDinhKems = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
       let listDx = data.ctRes;
       if (listDx) {
         this.dataTableReq = listDx.ctietList;
@@ -315,7 +316,8 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
                 return {
                   idVirtual: uuidv4(),
                   tenKhoi: k,
-                  dataChild: v
+                  dataChild: v,
+                  khoi : v && v[0] && v[0].khoi ? v[0].khoi : null
                 };
               }
             ).value();

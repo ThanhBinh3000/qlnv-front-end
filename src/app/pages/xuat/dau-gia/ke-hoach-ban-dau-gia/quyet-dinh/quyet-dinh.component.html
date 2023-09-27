@@ -2,7 +2,7 @@
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-        <div nz-row [nzGutter]="[20]">
+        <div nz-row [nzGutter]="20">
           <div nz-col [nzSpan]="2">
             <label> Năm kế hoạch </label>
             <nz-select formControlName="nam">
@@ -82,17 +82,17 @@
           </th>
           <th class="text-center" style="width: 2%;"> STT</th>
           <th class="text-center" style="width: 10%;"> Năm kế hoạch</th>
-          <th class="text-center" style="width: 10%;"> Số QĐ PD KH BĐG</th>
+          <th class="text-right" style="width: 10%;"> Số QĐ PD KH BĐG</th>
           <th class="text-center" style="width: 10%;"> Ngày ký QĐ</th>
-          <th class="text-center" style="width: 35%;"> Trích yếu</th>
-          <th class="text-center"> Số KH/tờ trình</th>
-          <th class="text-center"> Mã tổng hợp</th>
-          <th class="text-center" style="width: 12%;" *ngIf="loaiVthh.startsWith('02')"> Loại hàng hóa</th>
-          <th class="text-center" style="width: 12%;"> Chủng loại hàng hóa</th>
-          <th class="text-center" style="width: 8%;"> Số đơn vị tài sản</th>
-          <th class="text-center" style="width: 8%;"> SL HĐ đã ký</th>
-          <th> Trạng thái</th>
-          <th width="90px"> Hành động</th>
+          <th class="text-left" style="width: 35%;"> Trích yếu</th>
+          <th class="text-right"> Số KH/tờ trình</th>
+          <th class="text-left"> Mã tổng hợp</th>
+          <th class="text-left" style="width: 12%;" *ngIf="loaiVthh.startsWith('02')"> Loại hàng hóa</th>
+          <th class="text-left" style="width: 12%;"> Chủng loại hàng hóa</th>
+          <th class="text-right" style="width: 8%;"> Số đơn vị tài sản</th>
+          <th class="text-right" style="width: 8%;"> SL HĐ đã ký</th>
+          <th class="text-left"> Trạng thái</th>
+          <th class="text-center" width="90px"> Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -179,27 +179,27 @@
                    [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.nam }}</td>
-          <td>{{ data.soQdPd }}</td>
-          <td>{{ data.ngayKyQd|date:'dd/MM/YYYY' }}</td>
-          <td>{{ data.trichYeu }}</td>
-          <td>
+          <td class="text-center">{{ data.nam }}</td>
+          <td class="text-right">{{ data.soQdPd }}</td>
+          <td class="text-center">{{ data.ngayKyQd|date:'dd/MM/YYYY' }}</td>
+          <td class="text-left">{{ data.trichYeu }}</td>
+          <td class="text-right">
             <a *ngIf="data.soTrHdr && data.idTrHdr" nz-button nzType="link"
-               (click)="openModalDxKh(data.idTrHdr)">
+               (click)="openModal(data.idTrHdr, 'DxKh')">
               {{ data.soTrHdr }}
             </a>
           </td>
-          <td>
-            <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModalTh(data.idThHdr)">
+          <td class="text-left">
+            <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModal(data.idThHdr, 'Thop')">
               {{data.idThHdr}}
             </a>
           </td>
-          <td *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>
-          <td>{{ data.tenCloaiVthh }}</td>
-          <td>{{ data.slDviTsan }}</td>
-          <td>{{ data.slHdDaKy }}</td>
-          <td>{{ data.tenTrangThai }}</td>
-          <td class="text-left">
+          <td class="text-left" *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left">{{ data.tenCloaiVthh }}</td>
+          <td class="text-right">{{ data.slDviTsan }}</td>
+          <td class="text-right">{{ data.slHdDaKy }}</td>
+          <td class="text-left">{{ data.tenTrangThai }}</td>
+          <td class="text-center">
             <a *ngIf="(!userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XEM'))
               || (userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XEM') && (data.trangThai == STATUS.BAN_HANH))"
                (click)="redirectDetail(data.id,true)">
@@ -245,25 +245,25 @@
   </app-them-quyet-dinh-ban-dau-gia>
 </div>
 <!--xem -->
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModal('Thop')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [id]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [idInput]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
     </app-them-moi-tong-hop-ke-hoach-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalTh()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('Thop')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxKh" (nzOnCancel)="closeModalDxKh()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxKh" (nzOnCancel)="closeModal('DxKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-de-xuat-ke-hoach-ban-dau-gia [idInput]="idDxKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-de-xuat-ke-hoach-ban-dau-gia [idInput]="idDxKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
     </app-them-de-xuat-ke-hoach-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalDxKh()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('DxKh')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

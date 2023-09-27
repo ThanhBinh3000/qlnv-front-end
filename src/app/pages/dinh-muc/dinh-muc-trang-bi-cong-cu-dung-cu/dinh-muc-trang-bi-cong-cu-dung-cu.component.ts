@@ -58,10 +58,6 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
-    if (!this.userService.isTongCuc()) {
-      this.notification.error(MESSAGE.ERROR, "Bạn không có quyền thực hiện chức năng này.");
-      return;
-    }
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;

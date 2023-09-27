@@ -24,6 +24,9 @@ import {
 import {
   PhieuXuatKhoService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-bdg-them-moi-phieu-xuat-kho',
@@ -93,7 +96,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         moTaHangHoa: [],
         canBoLapPhieu: [],
         tenNguoiPduyet: [],
-        idKtv:[],
+        idKtv: [],
         tenKtv: [],
         keToanTruong: [],
         nguoiGiaoHang: [],
@@ -130,9 +133,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async ngOnInit() {
     try {
       this.spinner.show();
-      if(this.idInput){
+      if (this.idInput) {
         await this.loadDetail(this.idInput);
-      }else {
+      } else {
         await this.initForm();
       }
       await Promise.all([
@@ -176,7 +179,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
     });
-    if(this.idQdNv){
+    if (this.idQdNv) {
       await this.bindingDataQd(this.idQdNv);
     }
   }
@@ -196,13 +199,13 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       trangThai: this.STATUS.BAN_HANH,
     }
     let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
-    if (res.msg == MESSAGE.SUCCESS){
+    if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data.content;
-      if(data && data.length > 0){
+      if (data && data.length > 0) {
         this.listSoQuyetDinh = data;
         this.listSoQuyetDinh = this.listSoQuyetDinh.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
       }
-    }else {
+    } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     const modalQD = this.modal.create({
@@ -269,7 +272,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   async bindingDataQd(id) {
     await this.spinner.show();
-    if(id >0){
+    if (id > 0) {
       await this.quyetDinhGiaoNvXuatHangService.getDetail(id)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -326,7 +329,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     let res = await this.phieuXuatKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if(data && data.content && data.content.length >0) {
+      if (data && data.content && data.content.length > 0) {
         this.listPhieuXk = data.content;
       }
     } else {
@@ -420,9 +423,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    if(this.formData.value.soBangKeCh){
+    if (this.formData.value.soBangKeCh) {
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    }else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Phiếu xuất kho chưa có bảng kê cân hàng");
     }
   }
@@ -480,5 +483,37 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   convertTien(tien: number): string {
     return convertTienTobangChu(tien);
+  }
+
+  async preview(id) {
+    await this.phieuXuatKhoService.preview({
+      tenBaoCao: 'Phiếu xuất kho kế hoạch bán đấu giá',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  // downloadPdf() {
+  //   saveAs(this.pdfSrc, "phieu-xuat-kho-ke-hoach-ban-dau-gia.pdf");
+  // }
+  //
+  // downloadWord() {
+  //   saveAs(this.wordSrc, "phieu-xuat-kho-ke-hoach-ban-dau-gia.docx");
+  // }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }

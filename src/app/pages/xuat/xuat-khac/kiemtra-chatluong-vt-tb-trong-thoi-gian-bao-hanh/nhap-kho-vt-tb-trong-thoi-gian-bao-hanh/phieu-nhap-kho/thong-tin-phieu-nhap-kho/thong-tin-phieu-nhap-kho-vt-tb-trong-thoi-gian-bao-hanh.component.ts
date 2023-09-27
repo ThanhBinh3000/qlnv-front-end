@@ -56,7 +56,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
   checked: boolean = false;
   listFileDinhKem: any = [];
   listNganLoKho: any = [];
-
+  templateName = "Phiếu nhập kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -85,6 +85,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
         duCo: [],
         idCanCu: [],
         soCanCu: [],
+        ngayKyCanCu: [],
         maDiaDiem: [null, [Validators.required]],
         ngayQdGiaoNvXh: [],
         maNhaKho: [],
@@ -245,10 +246,16 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
     });
 
     modalQD.afterClose.subscribe(async (data) => {
+      this.formData.patchValue({
+        tenDiemKho: null,
+        tenNhaKho: null,
+        tenNganKho: null,
+        tenLoKho: null,
+      });
       if (data) {
-        await this.bindingDataQd(data.id);
-        await this.phieuKdcl(data);
-        await this.phieuKtcl(data);
+         this.bindingDataQd(data.id);
+         this.phieuKdcl(data);
+         this.phieuKtcl(data);
       }
     });
   };
@@ -261,6 +268,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
     this.formData.patchValue({
       soCanCu: data.soQuyetDinh,
       idCanCu: data.id,
+      ngayKyCanCu:data.ngayKy,
     });
     let diaDiem = data.qdGiaonvXhDtl.filter(item =>
       item.maDiaDiem.substring(0, 8) == this.userInfo.MA_DVI
@@ -314,7 +322,6 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
   }
 
   async phieuKdcl(item) {
-    await this.spinner.show();
     let body = {
       soQdGiaoNvNh: item.soQuyetDinh,
       paggingReq: {
@@ -346,7 +353,6 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
 
 
   async phieuKtcl(item) {
-    await this.spinner.show();
     let body = {
       soQdGiaoNvNh: item.soQuyetDinh,
       paggingReq: {
@@ -432,7 +438,6 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
   clearItemRow() {
     this.formData.patchValue({
       maSo: null,
-      slLayMau: null,
       slThucTe: null,
     })
   }

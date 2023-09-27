@@ -69,7 +69,11 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
 
   async getDSMatHang() {
     const body = {
-      nhomCcdc: 1
+      nhomCcdc: [1,2],
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0,
+      },
     }
     this.listMatHang = []
     let res = await this.danhMucService.getDSMatHang(body);

@@ -68,7 +68,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
   formData: FormGroup;
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
-
+  previewName: string = 'phieu_nhap_kho_tam_gui';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

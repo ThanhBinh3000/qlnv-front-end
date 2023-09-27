@@ -1,13 +1,16 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ComponentsModule } from "../../../../components/components.module";
-import { MainModule } from "../../../../layout/main/main.module";
-import { MainTochucTrienkhiBantructiepComponent } from './main-tochuc-trienkhi-bantructiep/main-tochuc-trienkhi-bantructiep.component';
-import { ThongTinBanTrucTiepComponent } from './thong-tin-ban-truc-tiep/thong-tin-ban-truc-tiep.component';
-import { ThemMoiThongTinBanTrucTiepComponent } from './thong-tin-ban-truc-tiep/them-moi-thong-tin-ban-truc-tiep/them-moi-thong-tin-ban-truc-tiep.component';
-import { QdPdKetQuaBttComponent } from './qd-pd-ket-qua-btt/qd-pd-ket-qua-btt.component';
-import { ThemQdPdKetQuaBttComponent } from './qd-pd-ket-qua-btt/them-qd-pd-ket-qua-btt/them-qd-pd-ket-qua-btt.component';
-import { KeHoachBanTrucTiepModule } from '../ke-hoach-ban-truc-tiep/ke-hoach-ban-truc-tiep.module';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ComponentsModule} from "../../../../components/components.module";
+import {MainModule} from "../../../../layout/main/main.module";
+import {
+  MainTochucTrienkhiBantructiepComponent
+} from './main-tochuc-trienkhi-bantructiep/main-tochuc-trienkhi-bantructiep.component';
+import {ThongTinBanTrucTiepComponent} from './thong-tin-ban-truc-tiep/thong-tin-ban-truc-tiep.component';
+import {
+  ThemMoiThongTinBanTrucTiepComponent
+} from './thong-tin-ban-truc-tiep/them-moi-thong-tin-ban-truc-tiep/them-moi-thong-tin-ban-truc-tiep.component';
+import {KeHoachBanTrucTiepModule} from '../ke-hoach-ban-truc-tiep/ke-hoach-ban-truc-tiep.module';
+import {QuyetDinhChaogiaBttModule} from "../quyet-dinh-chaogia-btt/quyet-dinh-chaogia-btt.module";
 
 
 @NgModule({
@@ -15,8 +18,6 @@ import { KeHoachBanTrucTiepModule } from '../ke-hoach-ban-truc-tiep/ke-hoach-ban
     MainTochucTrienkhiBantructiepComponent,
     ThongTinBanTrucTiepComponent,
     ThemMoiThongTinBanTrucTiepComponent,
-    QdPdKetQuaBttComponent,
-    ThemQdPdKetQuaBttComponent,
   ],
   exports: [
     MainTochucTrienkhiBantructiepComponent
@@ -25,7 +26,8 @@ import { KeHoachBanTrucTiepModule } from '../ke-hoach-ban-truc-tiep/ke-hoach-ban
     CommonModule,
     ComponentsModule,
     MainModule,
-    KeHoachBanTrucTiepModule
+    KeHoachBanTrucTiepModule,
+    QuyetDinhChaogiaBttModule
   ]
 })
 export class ToChucTrienKhaiBanTrucTiepModule {

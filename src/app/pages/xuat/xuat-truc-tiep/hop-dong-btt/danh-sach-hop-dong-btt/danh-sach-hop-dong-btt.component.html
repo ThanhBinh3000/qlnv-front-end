@@ -54,11 +54,11 @@
     <div class="group-button">
       <h3> QUẢN LÝ KÝ HỢP ĐỒNG BÁN HÀNG DTQG THEO PHƯƠNG THỨC TRỤC TIẾP </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData('Danh-sach-hop-dong-ban-truc-tiep.xlsx')">
+        <button type="button" class="btn btn-sub" (click)="exportDataHopDong('Danh-sach-hop-dong-ban-truc-tiep.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)"
+        <button type="button" class="btn btn-main" (click)="goDetail(0,false)"
                 *ngIf="!userService.isTongCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm hợp đồng</span>
@@ -184,17 +184,17 @@
           <td>{{ data.soQdKq }}</td>
           <td>{{ data.slHdChuaKy }}</td>
           <td>{{ data.slHdDaKy }}</td>
-          <td>{{ data.ngayMkho | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayMkho|date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
-          <td></td>
+          <td>{{ data.tongGiaTriHdong|number:globals.numberFormat:globals.locale}}</td>
           <td>{{ data.tenTrangThaiHd }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-left">
-            <a *ngIf="(data.trangThaiHd == STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id,null,true)">
+            <a *ngIf="(data.trangThaiHd == STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="(data.trangThaiHd != STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id,null,true)">
+            <a *ngIf="(data.trangThaiHd != STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id, true)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
           </td>
@@ -219,9 +219,9 @@
     </nz-card>
   </div>
 </ng-container>
-<ng-container *ngIf="isDetail">
-  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
+<ng-container class="chi-tiet" *ngIf="isDetail">
+  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-thong-tin-hop-dong-btt>
-  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
+  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-quan-ly-hop-dong-btt>
 </ng-container>

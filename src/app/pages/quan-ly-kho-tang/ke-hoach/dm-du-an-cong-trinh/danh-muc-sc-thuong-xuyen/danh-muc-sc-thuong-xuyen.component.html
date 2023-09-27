@@ -9,33 +9,8 @@
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="4" *ngIf="userService.isTongCuc()">
-            <label class="search__label">Cục DTNN KV</label>
-            <nz-select nzShowSearch nzAllowClear formControlName="maDvi">
-              <nz-option *ngFor="let p of dsCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
-              </nz-option>
-            </nz-select>
-          </div>
-          <div nz-col [nzSpan]="userService.isCuc() ? 10 : 6">
-            <label class="search__label">Tên công trình</label>
-            <input formControlName="tenCongTrinh" class="search__input" placeholder="Nhập text" nz-input />
-          </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Điểm kho</label>
-            <nz-select nzShowSearch nzAllowClear formControlName="maDiemKho">
-              <nz-option *ngFor="let p of dsKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
-              </nz-option>
-            </nz-select>
-          </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Trạng thái</label>
-            <nz-select nzAllowClear formControlName="trangThai">
-              <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-              </nz-option>
-            </nz-select>
-          </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Năm thực hiện</label>
+            <label class="search__label">Năm thực hiện sửa chữa dự kiến</label>
             <div nz-row>
               <div nz-col nzSpan="11">
                 <nz-select nzPlaceHolder="Từ năm" nzSpan="2" nzAllowClear formControlName="tgThucHienTu">
@@ -54,7 +29,26 @@
               </div>
             </div>
           </div>
-
+          <div nz-col nzSpan="6">
+            <label class="search__label">Năm thực hiện sửa chữa thực tế</label>
+            <div nz-row>
+              <div nz-col nzSpan="11">
+                <nz-select nzPlaceHolder="Từ năm" nzSpan="2" nzAllowClear formControlName="tgThucHienTu">
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                  </nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="2" class="text-center">
+                <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48"></i>
+              </div>
+              <div nz-col nzSpan="11">
+                <nz-select nzPlaceHolder="Đến năm" nzSpan="2" nzAllowClear formControlName="tgThucHienDen">
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                  </nz-option>
+                </nz-select>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="cangiua group-button-search">
           <button nz-button class="search__button--clear" (click)="clearForm()">
@@ -211,7 +205,7 @@
           <td>{{ data.tenChiCuc}}</td>
           <td>{{ data.tenDiemKho }}</td>
           <td class="text-center">{{ data.tgThucHien }}</td>
-          <td class="text-right">{{ data.tmdt  | number : '1.0-1'}}</td>
+          <td class="text-right">{{ data.tmdt  | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{ data.keHoachCaiTao  | number : '1.0-1' }}</td>
           <td>{{ data.soQdPheDuyet  }}</td>
           <td>{{ data.tenTrangThai }}</td>

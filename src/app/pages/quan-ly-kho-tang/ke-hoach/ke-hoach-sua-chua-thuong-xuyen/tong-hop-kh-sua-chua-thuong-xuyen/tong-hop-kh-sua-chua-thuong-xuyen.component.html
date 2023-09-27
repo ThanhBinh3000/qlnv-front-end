@@ -28,7 +28,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" *ngIf="userService.isTongCuc()" (click)="clearForm()">
+        <button nz-button class="search__button--clear" (click)="clearForm({loai : formData.value.loai})">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -70,77 +70,77 @@
           <th width="150px">Trạng thái</th>
           <th width="130px" class="text-center" *ngIf="userService.isTongCuc">Hành động</th>
         </tr>
-        </thead>
-        <tbody>
         <tr class="search-table">
-          <td></td>
-          <td>
+          <th></th>
+          <th>
             <nz-input-group>
               <nz-select nzPlaceHolder="Chọn năm" nzAllowClear [(ngModel)]="filterTable.namKh"
                          (ngModelChange)="filterInTable('namKh',filterTable.namKh)">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soToTrinh"
                      (input)="filterInTable('soToTrinh',filterTable.soToTrinh)"/>
             </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
                               [(ngModel)]="filterTable.ngayTaoTt"
                               (ngModelChange)="filterInTable('ngayTaoTt', convertDateToString(filterTable.ngayTaoTt))"
               ></nz-date-picker>
             </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
                      (input)="filterInTable('id',filterTable.maTongHop)"/>
             </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày tổng hợp"
                               [(ngModel)]="filterTable.thoiGianTh"
                               (ngModelChange)="filterInTable('thoiGianTh', convertDateToString(filterTable.thoiGianTh))"
               ></nz-date-picker>
             </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.noiDungTh"
                      (input)="filterInTable('noiDungTh',filterTable.noiDungTh)"/>
             </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdKhDm"
                      (input)="filterInTable('soQdPdKhDm',filterTable.soQdPdKhDm)"/>
             </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
                               [(ngModel)]="filterTable.ngayKyQd"
                               (ngModelChange)="filterInTable('ngayKyQd', convertDateToString(filterTable.ngayKyQd))"
               ></nz-date-picker>
             </nz-input-group>
-          </td>
-          <td>
+          </th>
+          <th>
             <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
                          (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
                 <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-input-group>
-          </td>
-          <td>
-          </td>
+          </th>
+          <th>
+          </th>
         </tr>
+        </thead>
+        <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td>{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.namKh }}</td>

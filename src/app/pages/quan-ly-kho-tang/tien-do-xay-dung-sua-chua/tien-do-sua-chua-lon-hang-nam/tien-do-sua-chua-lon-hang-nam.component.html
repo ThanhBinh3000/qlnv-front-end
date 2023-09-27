@@ -179,7 +179,7 @@
                             <td class="text-right">{{itemDetail.giaTriPd | number : '1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right">{{itemDetail.luyKeVon | number : '1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right">{{itemDetail.vonDauTu | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td nzRight>{{itemDetail.tenTrangThai}}</td>
+                            <td nzRight>{{itemDetail.tenTrangThaiTd}}</td>
                           </tr>
                         </ng-container>
                       </ng-container>
@@ -201,14 +201,14 @@
         <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
           <ul nz-menu nzMode="horizontal">
             <li nz-menu-item [nzSelected]="tabSelected == '01'" (click)="selectTab('01')"
-                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">
+                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDBCKTKT')">
               Quyết định phê duyệt báo cáo KTKT
               <img *ngIf="itemQdPdKtkt && itemQdPdKtkt.trangThai == STATUS.BAN_HANH" class="ml-1"
               src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
               <img *ngIf="!itemQdPdKtkt || itemQdPdKtkt.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item
+            <li nz-menu-item *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKHLCNT')"
                 [ngClass]="{'disabled-tab': !itemQdPdKtkt || itemQdPdKtkt.trangThai != STATUS.BAN_HANH}"
                 [nzSelected]="tabSelected == '02'" (click)="selectTab('02')">
               Quyết định phê duyệt KHLCNT
@@ -217,7 +217,7 @@
               <img *ngIf="itemQdPdKhLcnt && itemQdPdKhLcnt.trangThai == STATUS.BAN_HANH" class="ml-1"
                    src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item
+            <li nz-menu-item *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_TTDT')"
                 [ngClass]="{'disabled-tab': !itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai != STATUS.BAN_HANH}"
                 [nzSelected]="tabSelected == '03'" (click)="selectTab('03')">
               Thông tin đấu thầu
@@ -228,7 +228,7 @@
               <img *ngIf="itemTtdt && itemTtdt.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT" class="ml-1"
                    src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item
+            <li nz-menu-item *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT')"
                 [ngClass]="{'disabled-tab': !itemTtdt || itemTtdt.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT}"
                 [nzSelected]="tabSelected == '04'" (click)="selectTab('04')">
               Quyết định PD KQ lựa chọn nhà thầu
@@ -239,7 +239,7 @@
               <img *ngIf="trangThaiQdPdKqLcnt" class="ml-1"
                    src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item
+            <li nz-menu-item *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_HD')"
                 [ngClass]="{'disabled-tab': !trangThaiQdPdKqLcnt}"
                 [nzSelected]="tabSelected == '05'" (click)="selectTab('05')">
               Hợp đồng và PL hợp đồng
@@ -248,23 +248,24 @@
               <img *ngIf="trangThaiHopDong" class="ml-1"
                    src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item
+            <li nz-menu-item *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_TDCV')"
                 [ngClass]="{'disabled-tab': !trangThaiHopDong}"
                 [nzSelected]="tabSelected == '06'" (click)="selectTab('06')">
               Tiến độ công việc
-              <!--              <img *ngIf="!trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
-              <!--              <img *ngIf="trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
+                            <img *ngIf="!trangThaiTienDoCv" class="ml-1"
+                                 src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+                            <img *ngIf="trangThaiTienDoCv" class="ml-1"
+                                 src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item
+            <li nz-menu-item *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_BBNT')"
+                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')"
                 [ngClass]="{'disabled-tab': !trangThaiTienDoCv}"
-                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')">
+            >
               Biên bản nghiệm thu
-              <!--              <img *ngIf="!trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
-              <!--              <img *ngIf="trangThaiHopDong" class="ml-1"-->
-              <!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
+                            <img *ngIf="!trangThaiBb" class="ml-1"
+                                 src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+                            <img *ngIf="trangThaiBb" class="ml-1"
+                                 src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
           </ul>
         </nz-affix>
@@ -279,12 +280,12 @@
         </ng-container>
         <ng-container *ngIf="tabSelected == '03'">
           <app-cap-nhat-thong-tin-dau-thau-scl [idInput]="itemQdPdKhLcnt.id" [itemDuAn]="itemSelected"
-                                           (dataItemTtdt)="receivedData($event,'04')">
+                                           (dataItemTtdt)="receivedData($event,'03')">
           </app-cap-nhat-thong-tin-dau-thau-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '04'">
           <app-quyet-dinh-phe-duyet-kqlcnt-scl [itemTtdt]="itemTtdt"
-                                               [itemDuAn]="itemSelected">
+                                               [itemDuAn]="itemSelected" >
           </app-quyet-dinh-phe-duyet-kqlcnt-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '05'">
@@ -293,10 +294,10 @@
           </app-hop-dong-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '06'">
-          <app-tien-do-cong-viec-scl [itemQdPdKhLcnt]="itemQdPdKhLcnt"></app-tien-do-cong-viec-scl>
+          <app-tien-do-cong-viec-scl  [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemQdPdKtkt]="itemQdPdKtkt" [itemDuAn]="itemSelected"></app-tien-do-cong-viec-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '07'">
-          <app-bien-ban-nghiem-thu-scl></app-bien-ban-nghiem-thu-scl>
+          <app-bien-ban-nghiem-thu-scl [itemDuAn]="itemSelected" [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemQdPdKtkt]="itemQdPdKtkt" (dataBbnt)="receivedData($event,'07')"></app-bien-ban-nghiem-thu-scl>
         </ng-container>
       </nz-card>
     </div>

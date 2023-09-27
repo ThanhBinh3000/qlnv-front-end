@@ -77,6 +77,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
       soQdPdKhlcnt: [null],
       tenCongTrinh: [null],
       chuDauTu: [null],
+      loaiCongTrinh: [null],
       trangThaiDt: [null],
       tongMucDt: [],
       tongSoGt: [],
@@ -115,6 +116,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
           this.formData.patchValue({
             soQdPdKhlcnt: data.soQd,
             tenCongTrinh: this.itemDuAn.tenCongTrinh,
+            loaiCongTrinh: this.itemDuAn.tenLoaiCongTrinh,
             tongMucDt: data.tongTien,
             chuDauTu: data.chuDauTu,
             trangThaiDt: data.trangThaiDt,
@@ -339,6 +341,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
         goiThau.tenTrangThai = 'Thành công'
         goiThau.nhaThauTrung = nhaThauTrung.tenNhaThau;
         goiThau.giaTrungThau = nhaThauTrung.giaDuThau;
+        goiThau.idNhaThauTrung = nhaThauTrung.id;
       } else {
         goiThau.tenTrangThai = 'Thất bại'
         goiThau.nhaThauTrung = null;

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -53,7 +53,7 @@ export class BaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component implements
   children: any = [];
   idPhieuKnCl: number = 0;
   openPhieuKnCl = false;
-
+  @Output() tabFocus = new EventEmitter<object>();
   disabledStartNgayBaoCao = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayBaoCaoDen) {
       return startValue.getTime() >= this.formData.value.ngayBaoCaoDen.getTime();
