@@ -4,22 +4,22 @@ import {
   OnInit,
 } from '@angular/core';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { saveAs } from 'file-saver';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {convertTrangThai} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {saveAs} from 'file-saver';
 import {QuyHoachKhoService} from "../../../../../services/quy-hoach-kho.service";
 import {DonviService} from "../../../../../services/donvi.service";
 import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
-import { Router } from "@angular/router";
+import {Router} from "@angular/router";
 import {STATUS} from "../../../../../constants/status";
 
 @Component({
@@ -84,7 +84,8 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     if (!this.userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH')) {
@@ -163,6 +164,7 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
     this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
   }
+
   async loadDanhSachDiemKho() {
     const body = {
       maDviCha: this.userInfo.MA_DVI,
@@ -173,7 +175,6 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
     this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
   }
-
 
 
   async onChangChiCuc(event) {
@@ -187,18 +188,17 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
   }
 
 
-
   async search() {
     this.spinner.show();
     let body = {
-      maDvi : this.userInfo.MA_DVI,
       ngayKyTu: this.searchFilter.ngayKy[0],
       ngayKyDen: this.searchFilter.ngayKy[1],
       soQuyetDinh: this.searchFilter.soQuyetDinh,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
-      maCuc: this.searchFilter.maCuc,
-      maChiCuc: this.searchFilter.maChiCuc,
+      maDvi: this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
+      maCuc: this.userService.isCuc() ? this.userInfo.MA_DVI : this.searchFilter.maCuc,
+      maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : this.searchFilter.maChiCuc,
       maDiemKho: this.searchFilter.maDiemKho,
       phuongAnQuyHoach: this.searchFilter.phuongAnQuyHoach,
       type: this.type,
@@ -344,9 +344,9 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "maChiCuc": this.searchFilter.maChiCuc,
-          "maDvi": this.userInfo.MA_DVI,
-          "maCuc": this.searchFilter.maCuc,
+          "maDvi": this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
+          "maCuc": this.userService.isCuc() ? this.userInfo.MA_DVI : this.searchFilter.maCuc,
+          "maChiCuc": this.userService.isChiCuc() ? this.userInfo.MA_DVI : this.searchFilter.maChiCuc,
           "maDiemKho": this.searchFilter.maDiemKho,
           "namBatDau": this.searchFilter.namBatDau,
           "ngayKyDen": this.searchFilter.ngayKy[1],
@@ -388,8 +388,7 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -419,7 +418,7 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyHoachKhoService.deleteMuti({ ids: dataDelete });
+            let res = await this.quyHoachKhoService.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -435,12 +434,10 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
-
 
 
 }
