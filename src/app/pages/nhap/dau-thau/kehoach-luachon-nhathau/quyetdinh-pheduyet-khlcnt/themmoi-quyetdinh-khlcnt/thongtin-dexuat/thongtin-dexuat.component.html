@@ -1,12 +1,5 @@
-<div class="header header-green-background mg-t-10">
-  <div class="header-text">
-    <div class="title-chi-tieu">
-      <span>
-      </span>
-      <span> {{title}} </span>
-    </div>
-  </div>
-</div>
+<nz-collapse nzAccordion>
+  <nz-collapse-panel nzActive="true" nzHeader="{{title}}">
 <!--START NỘI DUNG-->
 <form nzLayout="vertical" nz-form [formGroup]="formData">
   <div nz-row [nzGutter]="24">
@@ -236,24 +229,20 @@
     </div>
   </div>
 </form>
+  </nz-collapse-panel>
+</nz-collapse>
 <!--END NỘI DUNG-->
 
 <!--START TABLE-->
-<div class="header header-green-background mg-t-10">
-  <div class="header-text">
-    <div class="title-chi-tieu">
-      <span>
-      </span>
-      <span> Phụ lục đề xuất </span>
-    </div>
-  </div>
-  <div class="buttons" *ngIf="!isCache && formData.value.trangThai != STATUS.BAN_HANH">
-    <button type="button" class="btn btn-main" (click)="themMoiCuc()">
-      <i class="icon htvbdh_dau-cong"></i>
-      <span>Thêm</span>
-    </button>
-  </div>
-</div>
+<nz-collapse nzAccordion>
+  <nz-collapse-panel nzActive="true" [nzExtra]="themMoiPl"
+                     nzHeader="{{titlePl}}">
+    <ng-template #themMoiPl>
+      <button type="button" class="btn btn-sub xanh" (click)="themMoiCuc($event)" *ngIf="!isCache && formData.value.trangThai != STATUS.BAN_HANH">
+        <i class="icon htvbdh_dau-cong"></i>
+        <span>Thêm</span>
+      </button>
+    </ng-template>
 <nz-card class="mg-t-16 flex-card p-lr16 table-card">
   <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>
     <thead>
@@ -360,6 +349,8 @@
     </tr>
   </nz-table>
 </nz-card>
+  </nz-collapse-panel>
+</nz-collapse>
 <!--END TABLE-->
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
