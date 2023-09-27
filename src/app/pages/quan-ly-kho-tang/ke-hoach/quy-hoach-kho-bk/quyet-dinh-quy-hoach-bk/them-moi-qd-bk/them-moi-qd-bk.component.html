@@ -2,7 +2,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-          <span [ngClass]=" formData.value.trangThai == globals.prop.NHAP_BAN_HANH  ? 'status-xanh' : 'status-do' ">
+          <span [ngClass]=" formData.value.trangThai == STATUS.BAN_HANH  ? 'status-xanh' : 'status-do' ">
                     {{formData.value.tenTrangThai}}
                 </span>
         <span>QUYẾT ĐỊNH QUY HOẠCH</span>
@@ -14,13 +14,13 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub btn-xanh  ml-2"
-              *ngIf="!isViewDetail && formData.value.trangThai == globals.prop.NHAP_DU_THAO && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM')"
+              *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM')"
               (click)="save(true)">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
       <button type="button" class="btn btn-sub btn-xanh  ml-2"
-              *ngIf="!isViewDetail && formData.value.trangThai == globals.prop.NHAP_DU_THAO && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM')" (click)="save()">
+              *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM')" (click)="save()">
         <i class="fa fa-save"></i>
         <span>Lưu</span>
       </button>
@@ -52,26 +52,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="16">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input [readOnly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input/>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-item class="form-item">
-            <nz-form-control [nzErrorTip]="error">
-              <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
-              <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy"
-                              nzFormat="dd/MM/yyyy"></nz-date-picker>
-            </nz-form-control>
-
-          </nz-form-item>
-        </div>
         <div nz-col nzSpan="8">
           <nz-form-label [nzNoColon]="true" nzRequired>Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</nz-form-label>
           <div nz-row>
@@ -100,12 +80,43 @@
             </div>
           </div>
         </div>
-        <div nz-col nzSpan="16">
+        <div nz-col nzSpan="4">
+          <nz-form-item class="form-item">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
+              <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy"
+                              nzFormat="dd/MM/yyyy"></nz-date-picker>
+            </nz-form-control>
+
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input [readOnly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
           <nz-form-item class="form-item">
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true" nzRequired> Mô tả thông tin quy hoạch
               </nz-form-label>
-              <input [readOnly]="isViewDetail" class="search__input" formControlName="moTa" nz-input/>
+              <textarea [readonly]="isViewDetail" formControlName="moTa" rows="3" class="search__input"
+                        nz-input></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item class="form-item">
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label [nzNoColon]="true"> Phương án quy hoạch
+              </nz-form-label>
+              <textarea [readonly]="isViewDetail" formControlName="phuongAnQuyHoach" rows="3" class="search__input"
+                        nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>

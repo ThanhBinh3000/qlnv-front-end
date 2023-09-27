@@ -56,6 +56,7 @@ export class ThemMoiQdDcBkComponent implements OnInit {
   fileDinhKems: any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
+  status = STATUS
 
   constructor(
     private router: Router,
@@ -72,15 +73,16 @@ export class ThemMoiQdDcBkComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      trangThai: ["00"],
-      tenTrangThai: ["Dự thảo"],
+      trangThai: ["78"],
+      tenTrangThai: ["Đang nhập dữ liệu"],
       soQuyetDinh: [null, [Validators.required]],
       trichYeu: [null, [Validators.required]],
       ngayKy: [null, [Validators.required]],
       namBatDau: [null, [Validators.required]],
       namKetThuc: [null, [Validators.required]],
       moTa: [null, [Validators.required]],
-      soQdGoc: [null, [Validators.required]]
+      soQdGoc: [null, [Validators.required]],
+      phuongAnQuyHoach: [null]
     });
   }
 
@@ -377,7 +379,8 @@ export class ThemMoiQdDcBkComponent implements OnInit {
             ngayKy: data.ngayKy ? data.ngayKy : null,
             namBatDau: data.namBatDau ? data.namBatDau : null,
             namKetThuc: data.namKetThuc ? data.namKetThuc : null,
-            moTa: data.moTa ? data.moTa : null
+            moTa: data.moTa ? data.moTa : null,
+            phuongAnQuyHoach: data.phuongAnQuyHoach ? data.phuongAnQuyHoach : null
           });
           this.fileDinhKems = data.fileDinhKems;
           this.dataTable = data.quyetDinhQuyHoachCTiets;
@@ -414,7 +417,8 @@ export class ThemMoiQdDcBkComponent implements OnInit {
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
         moTa: data.moTa,
-        soQdGoc: data.soQdGoc
+        soQdGoc: data.soQdGoc,
+        phuongAnQuyHoach: data.phuongAnQuyHoach
       });
       this.dataTable = data.quyetDinhQuyHoachCTiets;
       if (this.dataTable) {

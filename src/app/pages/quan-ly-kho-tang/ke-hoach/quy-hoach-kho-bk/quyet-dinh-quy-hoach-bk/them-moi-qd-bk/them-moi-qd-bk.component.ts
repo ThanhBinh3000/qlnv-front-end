@@ -73,14 +73,15 @@ export class ThemMoiQdBkComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: ['78'],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       soQuyetDinh: [null, [Validators.required]],
       trichYeu: [null, [Validators.required]],
       ngayKy: [null, [Validators.required]],
       namBatDau: [null, [Validators.required]],
       namKetThuc: [null, [Validators.required]],
-      moTa: [null, [Validators.required]]
+      moTa: [null, [Validators.required]],
+      phuongAnQuyHoach: [null]
     });
   }
 
@@ -292,7 +293,8 @@ export class ThemMoiQdBkComponent implements OnInit {
         ngayKy: data.ngayKy,
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
-        moTa: data.moTa
+        moTa: data.moTa,
+        phuongAnQuyHoach: data.phuongAnQuyHoach
       });
       this.fileDinhKems = data.fileDinhKems;
       this.dataTable = data.quyetDinhQuyHoachCTiets;
@@ -517,4 +519,6 @@ export class ThemMoiQdBkComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
+  protected readonly status = status;
 }
