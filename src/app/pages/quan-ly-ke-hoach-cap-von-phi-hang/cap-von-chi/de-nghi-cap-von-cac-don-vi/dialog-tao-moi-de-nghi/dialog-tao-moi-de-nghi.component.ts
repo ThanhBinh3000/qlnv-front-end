@@ -26,6 +26,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
     loaiDns: any[] = [];
     donVis: any[];
     lstNam: number[] = [];
+    lstQuyetDinh: string[] = [];
 
     constructor(
         private _modalRef: NzModalRef,
@@ -54,6 +55,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
     changeModel() {
         if (this.response.canCuVeGia == Cvnc.DON_GIA) {
             this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.THOC);
+            this.getSoQdChiTieu();
         } else {
             if (this.userService.isCuc()) {
                 this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id == Cvnc.GAO || e.id == Cvnc.MUOI);
@@ -65,13 +67,15 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
     }
 
     async checkReport() {
-        if (!this.response.namDnghi || !this.response.canCuVeGia) {
+        if (!this.response.namDnghi || !this.response.canCuVeGia ||
+            (this.response.canCuVeGia == Cvnc.DON_GIA && !this.response.soQdChiTieu)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
         this.request.namDnghi = this.response.namDnghi;
         this.request.canCuVeGia = this.response.canCuVeGia;
         this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.soQdChiTieu = this.response.soQdChiTieu;
         this.request.trangThai = null;
         this.spinner.show();
         await this.capVonNguonChiService.timKiemDeNghi(this.request.request()).toPromise().then(
@@ -109,6 +113,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
         this.response.nguoiTao = this.userInfo.sub;
         this.response.lstCtiets = [];
         this.request.maLoai = Cvnc.CAP_VON;
+        this.request.trangThai = Status.TT_07
         let id = null;
         await this.getMaDnghi();
         await this.capVonNguonChiService.timKiemDeNghi(this.request.request()).toPromise().then(
@@ -118,11 +123,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
                         lstBcao.sort((a, b) => b.soLan - a.soLan);
-
-                        const index = lstBcao.findIndex(e => !Status.check('reject', e.trangThai));
-                        if (index != -1) {
-                            id = lstBcao[index].id;
-                        }
+                        id = lstBcao[0].id;
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -157,9 +158,9 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
                                 })
                                 temp.tongVonVaDtoanDaCap = Operator.sum([temp.lkCong, temp.dtoanDaGiao]);
                                 if (this.response.loaiDnghi == Cvnc.THOC || this.response.loaiDnghi == Cvnc.VTU) {
-                                    temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien, -temp.tongVonVaDtoanDaCap]);
+                                    temp.vonDnCapLanNay = Operator.sum([temp.gtThucHien - temp.tongVonVaDtoanDaCap]);
                                 } else {
-                                    temp.vonDnCapLanNay = Operator.sum([temp.gtHopDong, -temp.tongVonVaDtoanDaCap]);
+                                    temp.vonDnCapLanNay = Operator.sum([temp.gtHopDong - temp.tongVonVaDtoanDaCap]);
                                 }
                                 this.response.lstCtiets.push(temp);
                             } else {
@@ -199,8 +200,37 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
         this.spinner.hide();
     }
 
+    //neu la de nghi theo don gia mua can lay ra so quyet dinh chi tieu;
+    getSoQdChiTieu() {
+        if (!this.response.namDnghi) {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm');
+            this.response.canCuVeGia = null;
+        }
+        const request = {
+            namKHoach: this.response.namDnghi,
+            maDvi: this.userInfo?.MA_DVI,
+        }
+        this.spinner.show();
+        this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.lstQuyetDinh = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.response.canCuVeGia = null;
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                this.response.canCuVeGia = null;
+            }
+        )
+        this.spinner.hide();
+    }
+
     handleOk() {
-        if (!this.response.namDnghi || !this.response.canCuVeGia || !this.response.loaiDnghi) {
+        if (!this.response.namDnghi || !this.response.canCuVeGia || !this.response.loaiDnghi ||
+            (this.response.canCuVeGia == Cvnc.DON_GIA && !this.response.soQdChiTieu)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }

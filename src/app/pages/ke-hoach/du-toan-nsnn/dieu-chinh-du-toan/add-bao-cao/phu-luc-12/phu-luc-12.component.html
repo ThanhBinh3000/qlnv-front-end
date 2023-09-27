@@ -30,71 +30,72 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x:scrollX}">
                         <thead>
                             <tr>
-                                <th nzLeft nzWidth="50px" rowSpan="2" nzLeft>
+                                <th scope="col" nzLeft nzWidth="50px" rowSpan="2" nzLeft>
                                     STT
                                 </th>
-                                <th nzLeft nzWidth="300px" rowSpan="2" nzLeft>
+                                <th scope="col" nzLeft nzWidth="300px" rowSpan="2" nzLeft>
                                     Chương Trình/ Đề tài/ <br> Dự án/ Nhiệm vụ HK&CN
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Cơ quan chủ trì
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Thời gian thực hiện
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Quyết định phê duyệt của cấp có
                                     <br> thẩm quyền
                                 </th>
-                                <th colSpan="3">
+                                <th scope="colgroup" colSpan="3">
                                     Dự toán, kinh phí được sử dụng trong năm
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Tổng nhu cầu dự toán
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Dự toán đề nghị điều chỉnh <br> (+ tăng )(- giảm)
                                 </th>
-                                <th rowSpan="2" *ngIf="status.viewAppVal">
+                                <th scope="col" rowSpan="2" *ngIf="status.viewAppVal">
                                     Dự toán Vụ TVQT đề nghị <br> (+ tăng) (- giảm)
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Ghi chú
                                 </th>
-                                <th rowSpan="2" *ngIf="status.viewAppVal">
+                                <th scope="col" rowSpan="2" *ngIf="status.viewAppVal">
                                     Dự toán chênh lệch <br> giữa Vụ TVQT điều <br> chỉnh và đơn vị <br> đề nghị <br> (+
                                     tăng) (- giảm)
                                 </th>
-                                <th rowSpan="2" *ngIf="status.viewAppVal">
+                                <th scope="col" rowSpan="2" *ngIf="status.viewAppVal">
                                     Ý kiến của <br> đơn vị cấp trên
                                 </th>
-                                <th rowSpan="2" *ngIf="status.general"></th>
-                                <th rowSpan="2" *ngIf="status.general "></th>
-                                <th rowSpan="2" *ngIf="status.general || status.editAppVal"></th>
+                                <th scope="col" rowSpan="2" *ngIf="status.general"></th>
+                                <th scope="col" rowSpan="2" *ngIf="status.general "></th>
+                                <th scope="col" rowSpan="2" *ngIf="status.general || status.editAppVal"></th>
                             </tr>
                             <tr>
-                                <th>Dự toán năm trước chuyển sang được <br> phép sử dụng cho năm nay</th>
-                                <th>Dự toán, kinh phí đã giao trong năm</th>
-                                <th>Tổng số</th>
+                                <th scope="col">Dự toán năm trước chuyển sang được <br> phép sử dụng cho năm nay
+                                </th>
+                                <th scope="col">Dự toán, kinh phí đã giao trong năm</th>
+                                <th scope="col">Tổng số</th>
                             </tr>
                             <tr>
-                                <th nzLeft>A</th>
-                                <th nzLeft>B</th>
-                                <th>C</th>
-                                <th>D</th>
-                                <th>E</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3 = 1 + 2</th>
-                                <th>4</th>
-                                <th>5 = 4 - 3 </th>
-                                <th *ngIf="status.viewAppVal">6</th>
-                                <th>7</th>
-                                <th *ngIf="status.viewAppVal">8 = 6 - 5</th>
-                                <th *ngIf="status.viewAppVal">9</th>
-                                <th *ngIf="status.general"></th>
-                                <th *ngIf="status.general "></th>
-                                <th *ngIf="status.general || status.editAppVal"></th>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col">C</th>
+                                <th scope="col">D</th>
+                                <th scope="col">E</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3 = 1 + 2</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5 = 4 - 3 </th>
+                                <th scope="col" *ngIf="status.viewAppVal">6</th>
+                                <th scope="col">7</th>
+                                <th scope="col" *ngIf="status.viewAppVal">8 = 6 - 5</th>
+                                <th scope="col" *ngIf="status.viewAppVal">9</th>
+                                <th scope="col" *ngIf="status.general"></th>
+                                <th scope="col" *ngIf="status.general "></th>
+                                <th scope="col" *ngIf="status.general || status.editAppVal"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -211,8 +212,7 @@
                                     </td>
                                     <ng-container *ngIf="!status.viewAppVal else viewAppVal">
                                         <td nzLeft>
-                                            <!-- <input nz-input class="search__input"
-                                                [(ngModel)]="editCache[data.id].data.tenNoiDung" /> -->
+
                                             <ng-container *ngIf="editCache[data.id].data.level == 3 else viewTen">
                                                 <input nz-input class="search__input"
                                                     [(ngModel)]="editCache[data.id].data.tenNoiDung" />
@@ -328,9 +328,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

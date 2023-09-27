@@ -169,8 +169,6 @@ export class PhuLucSuaChuaComponent implements OnInit {
         } else {
             this.scrollX = Table.tableWidth(350, 8, 1, 0);
         }
-
-        // this.sortByIndex();
         this.tinhTong();
         this.updateEditCache();
         this.getStatusButton();
@@ -311,6 +309,10 @@ export class PhuLucSuaChuaComponent implements OnInit {
     };
 
     saveEdit(id: string): void {
+        if (!this.editCache[id].data.tenCongTrinh) {
+            this.notification.warning(MESSAGE.WARNING, "Chưa nhập tên công trình");
+            return;
+        }
         const index = this.lstCtietBcaos.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcaos[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
@@ -340,7 +342,6 @@ export class PhuLucSuaChuaComponent implements OnInit {
     addLine(): void {
         const item = new ItemData({
             id: uuid.v4(),
-            // stt: "0.1",
             tenCongTrinh: "",
             khVon: 0,
             dtoanDaGiaoLuyKe: 0,
@@ -348,9 +349,6 @@ export class PhuLucSuaChuaComponent implements OnInit {
             khDieuChinh: 0,
             dtoanNam: 0,
         });
-
-        // this.lstCtietBcaos.splice(id, 0, item);
-
         if (this.lstCtietBcaos.length == 0) {
             this.lstCtietBcaos = Table.addHead(item, this.lstCtietBcaos);
 
@@ -367,9 +365,6 @@ export class PhuLucSuaChuaComponent implements OnInit {
     addSame(id: string, initItem: ItemData) {
         this.lstCtietBcaos = Table.addParent(id, initItem, this.lstCtietBcaos);
         const data = this.lstCtietBcaos.find(e => e.tenCongTrinh == initItem.tenCongTrinh);
-        // if (data.maNdung == this.data.extraDataPL2?.maNdung || data.maNdung == this.data.extraDataPL3?.maNdung) {
-        //     this.linkData(data.maNdung)
-        // }
         this.sum(data.stt);
     }
 
@@ -407,19 +402,27 @@ export class PhuLucSuaChuaComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 5, l: 0, r: 13, val: null },
+            { t: 0, b: 6, l: 0, r: 13, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Tên công trình (Ghi chính xác theo danh mục kế hoạch năm ...)' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Tên công trình (Ghi chính xác theo danh mục kế hoạch năm ' + (this.namBcao - 1).toString() + ' )' },
             { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn năm ' + (this.namBcao - 1).toString() },
             { t: 4, b: 5, l: 3, r: 3, val: 'Dự toán đã giao lũy kế đến thời điểm báo cáo' },
             { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị công trình (Ghi giá trị quyết toán; giá trị dự toán hoặc tổng mức đầu tư nếu chưa phê duyệt quyết toán)' },
             { t: 4, b: 5, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ Tăng)(- Giảm)' },
-            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán năm N sau điều chỉnh' },
+            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán năm' + (this.namBcao - 1).toString() + 'sau điều chỉnh' },
+
+            { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+            { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+            { t: 6, b: 6, l: 2, r: 2, val: '1' },
+            { t: 6, b: 6, l: 3, r: 3, val: '2' },
+            { t: 6, b: 6, l: 4, r: 4, val: '3' },
+            { t: 6, b: 6, l: 5, r: 5, val: '4' },
+            { t: 6, b: 6, l: 6, r: 6, val: '5 = 1 + 4' },
         ]
         const fieldOrder = [
             "stt",
@@ -438,6 +441,13 @@ export class PhuLucSuaChuaComponent implements OnInit {
             })
             return row;
         })
+
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenCongTrinh' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

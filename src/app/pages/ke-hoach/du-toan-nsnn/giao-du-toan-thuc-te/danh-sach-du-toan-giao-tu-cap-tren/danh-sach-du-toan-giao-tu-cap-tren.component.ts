@@ -30,7 +30,6 @@ export const TRANG_THAI_GIAO_DU_TOAN = [
 @Component({
     selector: 'app-danh-sach-du-toan-giao-tu-cap-tren',
     templateUrl: './danh-sach-du-toan-giao-tu-cap-tren.component.html',
-    styleUrls: ['./danh-sach-du-toan-giao-tu-cap-tren.component.scss']
 })
 export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     @Output() dataChange = new EventEmitter();

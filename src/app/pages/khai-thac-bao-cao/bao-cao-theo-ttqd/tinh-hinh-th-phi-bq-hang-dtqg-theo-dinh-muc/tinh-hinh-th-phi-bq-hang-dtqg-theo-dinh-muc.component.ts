@@ -76,8 +76,6 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
       }
       await Promise.all([
         this.loadDsDonVi(),
-        this.loadDsVthh(),
-        this.getListBoNganh()
       ]);
     } catch (e) {
       console.log("error: ", e);
@@ -155,15 +153,6 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
     }
   }
 
-  async getListBoNganh() {
-    this.dsBoNganh = [];
-    let res = await this.donviService.layTatCaDonViByLevel(0);
-    // let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsBoNganh = res.data;
-    }
-  }
-
   async changeCuc(event: any) {
     if (event) {
       let body = {
@@ -178,39 +167,5 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
-  }
-
-  async loadDsVthh() {
-    this.listVthh = [];
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data.filter(item => item.ma != "02");
-    }
-  }
-
-  async changeLoaiVthh(event) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listCloaiVthh = res.data;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  changeCloaiVthh(event) {
-
-  }
-
-  changeNuocSX(event) {
-
-  }
-  addRow () {
-    this.rows.push({})
-  }
-
-  deleteRow(index: number) {
-    this.rows.splice(index, 1)
   }
 }

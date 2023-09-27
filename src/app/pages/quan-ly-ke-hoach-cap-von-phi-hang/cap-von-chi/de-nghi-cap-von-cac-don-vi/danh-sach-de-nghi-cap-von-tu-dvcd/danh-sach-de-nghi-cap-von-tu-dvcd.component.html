@@ -85,19 +85,19 @@
             [nzShowPagination]="false" nzBordered>
             <thead>
                 <tr>
-                    <th width="60px" class="text-center">STT</th>
-                    <th>Đơn vị</th>
-                    <th>Mã cấp ứng</th>
-                    <th>Năm</th>
-                    <th>Loại</th>
-                    <th>Căn cứ về giá</th>
-                    <th>Số quyết định chỉ tiêu</th>
-                    <th>Số lần</th>
-                    <th>Ngày trình duyệt</th>
-                    <th>Ngày trả kết quả</th>
-                    <th>Trạng thái</th>
-                    <th>Trạng thái tổng hợp</th>
-                    <th>Hành động</th>
+                    <th scope="col" nzWidth="60px" class="text-center">STT</th>
+                    <th scope="col">Đơn vị</th>
+                    <th scope="col">Mã cấp ứng</th>
+                    <th scope="col">Năm</th>
+                    <th scope="col">Số quyết định chỉ tiêu</th>
+                    <th scope="col">Căn cứ về giá</th>
+                    <th scope="col">Loại</th>
+                    <th scope="col">Số lần</th>
+                    <th scope="col">Ngày trình duyệt</th>
+                    <th scope="col">Ngày trả kết quả</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Trạng thái tổng hợp</th>
+                    <th scope="col">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,13 +115,13 @@
                         {{ data.namDnghi }}
                     </td>
                     <td>
-                        {{ Cvnc.suggestionName(data.loaiDnghi)}}
+                        {{ data.soQdChiTieu }}
                     </td>
                     <td>
                         {{ Cvnc.priceBasisName(data.canCuVeGia) }}
                     </td>
                     <td>
-                        {{ data.soQdChiTieu }}
+                        {{ Cvnc.suggestionName(data.loaiDnghi)}}
                     </td>
                     <td>
                         {{ data.soLan }}

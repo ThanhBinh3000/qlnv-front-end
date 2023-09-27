@@ -315,7 +315,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
                         loai: res.data.loai,
                         tenLoai: this.obTenLoai[res.data.loai]
                     });
-                    this.bienBanSapNhapHangDtl = Array.isArray(res.data.dieuChuyenKhoHangDtl) ? res.data.dieuChuyenKhoHangDtl.map(f => ({ ...f, groupBy: f.maDiemKhoDi ? `${f.maChiCucDi}${f.maDiemKhoDi}` : f.maChiCucDi })) : [];
+                    this.bienBanSapNhapHangDtl = Array.isArray(res.data.dieuChuyenKhoHangDtl) ? res.data.dieuChuyenKhoHangDtl.map(f => ({ ...f, groupBy: f.maDiemKhoDi ? `${f.maChiCucDi}${f.maDiemKhoDi}` : f.maChiCucDi, slThucTe: f.slTon, slHaoHut: f.slHaoHut || 0 })) : [];
                     this.bienBanSapNhapCcDtl = Array.isArray(res.data.dieuChuyenKhoCcDtl) ? res.data.dieuChuyenKhoCcDtl.map(f => ({ ...f, groupBy: f.maChiCucDi })) : [];
                     this.bienBanSapNhapVpDtl = Array.isArray(res.data.dieuChuyenKhoVpDtl) ? res.data.dieuChuyenKhoVpDtl : [];
                     this.buidView("dataViewHang", "bienBanSapNhapHangDtl");

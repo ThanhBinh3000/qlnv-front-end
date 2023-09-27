@@ -272,6 +272,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
     this.dataTable = chain(this.dataTableReq).groupBy("quy")
       .map((value, key) => ({ quy: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
+    console.log(this.dataTable,"this.dataTable")
   }
 
   sumSoLuong(data: any, row: string, type?: any) {
@@ -374,6 +375,29 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
       });
     }
   }
+  editRow(index: number) {
+    this.dataTable.forEach(f=>{
+      f.dataChild[index].edit= true
+    })
+  }
+  cancelEdit(index: number): void {
+    this.dataTable.forEach(f=>{
+      f.dataChild[index].edit= false
+    })
+  }
+
+  saveEdit(index: number): void {
+    this.dataTable.forEach(f=>{
+      f.dataChild[index].edit= false
+    })
+  }
+
+  deleteRow(data: any) {
+    this.dataTable.forEach(f=>{
+      f.dataChild=f.dataChild.filter(x => x.id != data.id);
+    })
+  }
+
 }
 
 export class TienDoXayDungCt {

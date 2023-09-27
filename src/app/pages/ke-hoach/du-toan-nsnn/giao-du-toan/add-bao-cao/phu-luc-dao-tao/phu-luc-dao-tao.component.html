@@ -38,49 +38,49 @@
                     <nz-table nzBordered class="table__body" [nzScroll]="{x:scrollX}">
                         <thead>
                             <tr>
-                                <th nzLeft nzWidth="50px" rowSpan="2">
+                                <th scope="col" nzLeft nzWidth="50px" rowSpan="2">
                                     STT
                                 </th>
-                                <th nzLeft nzWidth="300px" rowSpan="2">
+                                <th scope="col" nzLeft nzWidth="300px" rowSpan="2">
                                     Nội dung đào tạo, bồi dưỡng
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Đối tượng
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Thời gian học
                                 </th>
-                                <th colSpan="3">
+                                <th scope="colgroup" colSpan="3">
                                     Số lượng
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Kinh phí hỗ trợ <br> (đồng/người)
                                 </th>
-                                <th rowSpan="2">
+                                <th scope="col" rowSpan="2">
                                     Tổng nhu cầu dự toán, kinh phí
                                 </th>
-                                <th rowSpan="2" *ngIf="status.general"></th>
-                                <th rowSpan="2" *ngIf="status.general"></th>
-                                <th rowSpan="2" *ngIf="status.general"></th>
+                                <th scope="col" rowSpan="2" *ngIf="status.general"></th>
+                                <th scope="col" rowSpan="2" *ngIf="status.general"></th>
+                                <th scope="col" rowSpan="2" *ngIf="status.general"></th>
                             </tr>
                             <tr>
-                                <th>Trong nước</th>
-                                <th>Ngoài nước</th>
-                                <th>Tổng số</th>
+                                <th scope="col">Trong nước</th>
+                                <th scope="col">Ngoài nước</th>
+                                <th scope="col">Tổng số</th>
                             </tr>
                             <tr>
-                                <th nzLeft>A</th>
-                                <th nzLeft>B</th>
-                                <th>C</th>
-                                <th>D</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3=1+2</th>
-                                <th>4</th>
-                                <th>5=3x4</th>
-                                <th *ngIf="status.general"></th>
-                                <th *ngIf="status.general"></th>
-                                <th *ngIf="status.general"></th>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col">C</th>
+                                <th scope="col">D</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3=1+2</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5=3x4</th>
+                                <th scope="col" *ngIf="status.general"></th>
+                                <th scope="col" *ngIf="status.general"></th>
+                                <th scope="col" *ngIf="status.general"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -222,9 +222,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="15%"></th>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>

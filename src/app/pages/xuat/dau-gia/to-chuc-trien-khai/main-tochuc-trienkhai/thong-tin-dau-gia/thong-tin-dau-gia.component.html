@@ -174,36 +174,36 @@
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.nam }}</td>
-          <td>
+          <td class="text-center">{{ data.nam }}</td>
+          <td class="text-left">
             <a *ngIf="data.soQdPd && data.isDieuChinh == true ? data.xhQdDchinhKhBdgHdr.idQdPd : data.idHdr" nz-button
                nzType="link"
                (click)="openModal(data.isDieuChinh == true ? data.xhQdDchinhKhBdgHdr.idQdPd : data.idHdr, 'QdPdKh')">
               {{ data.soQdPd }}</a>
           </td>
-          <td>
+          <td class="text-left">
             <a *ngIf="data.soQdDc && data.isDieuChinh == true ? data.idHdr : null" nz-button nzType="link"
                (click)="openModal(data.isDieuChinh == true ? data.idHdr : null, 'QdPdDc')">
               {{ data.soQdDc }}</a>
           </td>
-          <td>
+          <td class="text-left">
             <a *ngIf="data.soQdPdKqBdg && data.idQdPdKqBdg" nz-button nzType="link"
                (click)="openModal(data.idQdPdKqBdg, 'KqBdg')">
               {{ data.soQdPdKqBdg }}</a>
           </td>
-          <td>
+          <td class="text-left">
             <a *ngIf="data.soDxuat && data.idDxHdr" nz-button nzType="link" (click)="openModal(data.idDxHdr, 'DxBdg')">
               {{ data.soDxuat }}</a>
 
           </td>
-          <td>{{ data.ngayKyQdPdKqBdg }}</td>
-          <td>{{ data.slDviTsan }}</td>
-          <td>{{ data.soDviTsanThanhCong }}</td>
-          <td>{{ data.soDviTsanKhongThanh }}</td>
+          <td class="text-left">{{ data.ngayKyQdPdKqBdg }}</td>
+          <td class="text-center">{{ data.slDviTsan }}</td>
+          <td class="text-center">{{ data.soDviTsanThanhCong }}</td>
+          <td class="text-center">{{ data.soDviTsanKhongThanh }}</td>
           <td></td>
-          <td>{{ data.tenCloaiVthh }}</td>
-          <td>{{ data.tenTrangThai }}</td>
-          <td>{{ data.ketQuaDauGia }}</td>
+          <td class="text-left">{{ data.tenCloaiVthh }}</td>
+          <td class="text-left">{{ data.tenTrangThai }}</td>
+          <td class="text-center">{{ data.ketQuaDauGia }}</td>
           <td class="text-center">
             <a *ngIf="loaiVthh.startsWith('02') ? data.trangThai == STATUS.DA_HOAN_THANH && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_TBBDG_XEM'):
             data.trangThai == STATUS.DA_HOAN_THANH && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_TBBDG_XEM')"

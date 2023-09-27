@@ -13,17 +13,11 @@ import { Dcdt } from '../dieu-chinh-du-toan.constant';
 @Component({
     selector: 'app-danh-sach-bao-cao-dieu-chinh',
     templateUrl: './danh-sach-bao-cao-dieu-chinh.component.html',
-    styleUrls: ['./danh-sach-bao-cao-dieu-chinh.component.scss']
 })
 export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
     Utils = Utils;
     Status = Status;
-
-    // statusNewReport = true;
-    // statusDelete = true;
-    // dviGuiKq: boolean;
-    // allChecked = false;
 
     searchFilter = {
         dotBcao: null,
@@ -41,7 +35,6 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
     }
 
     userInfo: any;
-    // trangThais: any = Status.TRANG_THAI_FULL;
     dataTable: any[] = [];
     dataTableAll: any[] = [];
     totalElements = 0;
@@ -180,7 +173,6 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
             trangThais: trangThais,
         };
         this.spinner.show();
-        //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
         await this.dieuChinhService.timKiemDieuChinh(requestReport).toPromise().then(
 
             (res) => {
@@ -233,10 +225,6 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
             this.allChecked = true;
         }
     };
-
-    // getStatusName(trangThai: string) {
-    //     return this.trangThais.find(e => e.id == trangThai)?.tenDm;
-    // };
 
     //xem chi tiet bao cao
     viewDetail(data: any) {

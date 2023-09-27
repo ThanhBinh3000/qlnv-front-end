@@ -55,3 +55,25 @@
         font-weight: 500;
     }
 }
+
+.label-wrapper {
+    display: flex;
+    flex-direction: column !important;
+    flex-wrap: wrap;
+}
+
+.min-h-24 {
+    min-height: 24px;
+}
+
+.f-size-13 {
+    font-size: 13px;
+}
+
+.text-black {
+    color: black;
+}
+
+.text-bold {
+    font-weight: bold;
+}

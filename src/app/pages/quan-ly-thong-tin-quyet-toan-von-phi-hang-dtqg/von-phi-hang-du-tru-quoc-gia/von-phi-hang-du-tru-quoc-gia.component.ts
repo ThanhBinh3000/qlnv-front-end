@@ -6,7 +6,6 @@ import { Globals } from 'src/app/shared/globals';
 @Component({
     selector: 'app-von-phi-hang-du-tru-quoc-gia',
     templateUrl: './von-phi-hang-du-tru-quoc-gia.component.html',
-    styleUrls: ['./von-phi-hang-du-tru-quoc-gia.component.scss']
 })
 export class VonPhiHangDuTruQuocGiaComponent implements OnInit {
     isVisibleChangeTab$ = new Subject();

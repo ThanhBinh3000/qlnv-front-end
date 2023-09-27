@@ -48,12 +48,12 @@
                 <nz-table class="nowrap mt-16 table-chi-tiet">
                     <thead>
                         <tr>
-                            <th>Năm</th>
-                            <th>Ngày tạo</th>
-                            <th>Người tạo</th>
-                            <th>Ngày trình duyệt</th>
-                            <th>Ngày duyệt</th>
-                            <th>Ngày phê duyệt</th>
+                            <th scope="col">Năm</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Người tạo</th>
+                            <th scope="col">Ngày trình duyệt</th>
+                            <th scope="col">Ngày duyệt</th>
+                            <th scope="col">Ngày phê duyệt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,16 +90,17 @@
                         <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                             <thead>
                                 <tr>
-                                    <th nzWidth="50px" rowspan="2" nzLeft>STT</th>
-                                    <th nzWidth="350px" rowspan="2" nzLeft>Danh mục</th>
-                                    <th rowspan="2">Đơn vị</th>
-                                    <th colspan="2">Tỷ lệ (%)</th>
-                                    <th rowspan="2" class="text-col">Ghi chú</th>
-                                    <th rowspan="2" *ngIf="status.general" style="width: 60px;" nzRight></th>
+                                    <th scope="col" nzWidth="50px" rowspan="2" nzLeft>STT</th>
+                                    <th scope="col" nzWidth="350px" rowspan="2" nzLeft>Danh mục</th>
+                                    <th scope="col" rowspan="2">Đơn vị</th>
+                                    <th scope="colgroup" colspan="2">Tỷ lệ (%)</th>
+                                    <th scope="col" rowspan="2" class="text-col">Ghi chú</th>
+                                    <th scope="col" rowspan="2" *ngIf="status.general" style="width: 60px;" nzRight>
+                                    </th>
                                 </tr>
                                 <tr>
-                                    <th>Kho dưới {{baoCao.khoiTich}} m3</th>
-                                    <th>Kho trên {{baoCao.khoiTich}} m3</th>
+                                    <th scope="col">Kho dưới {{baoCao.khoiTich}} m3</th>
+                                    <th scope="col">Kho trên {{baoCao.khoiTich}} m3</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -182,9 +183,9 @@
                                 <nz-table nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th nzWidth="15%">STT</th>
-                                            <th>Tên file</th>
-                                            <th nzWidth="15%"></th>
+                                            <th scope="col" nzWidth="15%">STT</th>
+                                            <th scope="col">Tên file</th>
+                                            <th scope="col" nzWidth="15%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -5,7 +5,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Operator, Roles, Status, Utils } from 'src/app/Utility/utils';
+import { Operator, Roles, Status, Table, Utils } from 'src/app/Utility/utils';
+import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from 'src/app/components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
@@ -18,10 +19,10 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from "uuid";
+import * as XLSX from "xlsx";
+import { Doc } from '../../von-phi-hang-du-tru-quoc-gia.constant';
 import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { NOI_DUNG } from './add-dieu-chinh-quyet-toan.constant';
-import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
-import { Doc } from '../../von-phi-hang-du-tru-quoc-gia.constant';
 export class ItemData {
     id!: any;
     stt!: string;
@@ -168,11 +169,11 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
+                soCv: this.congVan?.fileName,
+                ngayCv: this.ngayCongVan,
             },
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
@@ -182,11 +183,9 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                     ...new Doc(),
                     fileName: res.soCongVan,
                 };
+                this.fileDetail = file;
             }
         });
-        this.fileDetail = file;
-        console.log(this.fileDetail);
-
         return false;
     };
 
@@ -446,10 +445,10 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                         }
                     );
-                    if (mcn == Status.TT_08 || mcn == Status.TT_05 || mcn == Status.TT_03) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    if (mcn == Status.TT_02) {
+                        this.notification.success(MESSAGE.SUCCESS, mcn == Status.TT_02 ? MESSAGE.SUBMIT_SUCCESS : MESSAGE.APPROVE_SUCCESS);
+                    } else if (mcn == Status.TT_06) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -522,22 +521,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
     async save() {
 
         let checkSaveEdit;
-        // if (!this.maDviTien) {
-        //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-        //   return;
-        // }
-        // if (this.thongBao == null) {
-        //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-        //   return;
-        // }
-        //check xem tat ca cac dong du lieu da luu chua?
-        //chua luu thi bao loi, luu roi thi cho di
-        // for (const itm of this.lstCtietBcao) {
-        //   if (!itm.maDviTinh && !itm.soLuong && !itm.donGiaMua && !itm.thanhTien) {
-        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-        //     return;
-        //   }
-        // }
         this.lstCtietBcao.forEach(element => {
             if (this.editCache[element.id].edit === true) {
                 checkSaveEdit = false
@@ -605,7 +588,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             lstCtietBcaoTemp.congVan = this.congVan;
         }
 
-        if (!lstCtietBcaoTemp.congVan) {
+        if (!lstCtietBcaoTemp?.congVan || !this.congVan?.fileName) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
@@ -628,24 +611,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
             thongBao: this.thongBao,
             maDchinh: this.maDchinh,
         }));
-        // //get file cong van url
-        // const file: any = this.fileDetail;
-        // if (file) {
-        //     if (file.size > Utils.FILE_SIZE) {
-        //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-        //         return;
-        //     } else {
-        //         request.congVan = await this.uploadFile(file);
-        //     }
-        // }
-        // if (file) {
-        //     request.congVan = await this.uploadFile(file);
-        // }
-        // if (!request.congVan.fileName) {
-        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-        //     return;
-        // }
-
         if (listFile.length > 0) {
             this.lstFiles = this.lstFiles.filter(item => item.fileUrl !== undefined)
             request.fileDinhKems = this.lstFiles.concat(listFile);
@@ -741,85 +706,18 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         } else {
             this.status = true;
         }
-        // let checkParent = false;
-        // let checkChirld = false;
-        // const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        // if (dVi && dVi.maDvi == this.userInfo?.MA_DVI) {
-        //     checkChirld = true;
-        // }
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        // if (checkParent) {
-        //     const index: number = this.trangThais.findIndex(e => e.id == Status.TT_07);
-        //     this.trangThais[index].tenDm = "Mới";
-        // }
         this.saveStatus = this.getBtnStatus([Status.TT_01], Roles.QTVP.ADD_REPORT, checkChirld);
         this.submitStatus = this.getBtnStatus([Status.TT_01], Roles.QTVP.APPROVE_REPORT, checkChirld);
         this.passStatus = this.getBtnStatus([Status.TT_02], Roles.QTVP.DUYET_QUYET_TOAN_REPORT, checkChirld);
         this.approveStatus = this.getBtnStatus([Status.TT_04], Roles.QTVP.PHE_DUYET_QUYET_TOAN_REPORT, checkChirld);
         this.copyStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.COPY_REPORT, checkChirld);
         this.printStatus = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.QTVP.PRINT_REPORT, checkChirld);
-        this.newStatus = Status.check('reject', this.isStatus) && this.userService.isAccessPermisson(Roles.QTVP.ADD_REPORT) && checkChirld;
-        // const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-
-        // const checkSave = this.userService.isAccessPermisson(Roles.QTVP.EDIT_REPORT);
-        // const checkSubmit = this.userService.isAccessPermisson(Roles.QTVP.APPROVE_REPORT);
-        // const checkPass = this.userService.isAccessPermisson(Roles.QTVP.DUYET_QUYET_TOAN_REPORT);
-        // const checkApprove = this.userService.isAccessPermisson(Roles.QTVP.PHE_DUYET_QUYET_TOAN_REPORT);
-        // const checkCopy = this.userService.isAccessPermisson(Roles.QTVP.COPY_REPORT);
-        // const checkPrint = this.userService.isAccessPermisson(Roles.QTVP.PRINT_REPORT);
-
-        // if (Utils.statusSave.includes(this.isStatus) && checkSave) {
-        //     this.status = false;
-        // } else {
-        //     this.status = true;
-        // }
-
-        // this.saveStatus = Utils.statusSave.includes(this.isStatus) && checkSave && checkChirld;
-        // this.submitStatus = Utils.statusSave.includes(this.isStatus) && checkSubmit && checkChirld;
-        // this.passStatus = Utils.statusSave.includes(this.isStatus) && checkPass && checkChirld;
-        // this.approveStatus = Utils.statusSave.includes(this.isStatus) && checkApprove && checkChirld;
-        // this.copyStatus = Utils.statusSave.includes(this.isStatus) && checkCopy && checkChirld;
-        // this.printStatus = Utils.statusSave.includes(this.isStatus) && checkPrint && checkChirld;
-
+        this.newStatus = Status.check('reject', this.isStatus) && this.userService.isAccessPermisson(Roles.QTVP.ADD_REPORT) && checkChirld && this.data.preTab == 'danhsachDieuChinh';
     }
     getBtnStatus(status: string[], role: string, check: boolean) {
         return !(status.includes(this.isStatus) && this.userService.isAccessPermisson(role) && check);
     }
-    // sortByIndex() {
-    //   this.setDetail();
-    //   this.lstCtietBcao.sort((item1, item2) => {
-    //     if (item1.level > item2.level) {
-    //       return 1;
-    //     }
-    //     if (item1.level < item2.level) {
-    //       return -1;
-    //     }
-    //     if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-    //       return -1;
-    //     }
-    //     if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-    //       return 1;
-    //     }
-    //     return 0;
-    //   });
-    //   const lstTemp: any[] = [];
-    //   this.lstCtietBcao.forEach(item => {
-    //     const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-    //     if (index == -1) {
-    //       lstTemp.splice(0, 0, item);
-    //     } else {
-    //       lstTemp.splice(index + 1, 0, item);
-    //     }
-    //   })
-
-    //   this.lstCtietBcao = lstTemp;
-    // };
-
-    // setDetail() {
-    //   this.lstCtietBcao.forEach(item => {
-    //     item.level = this.noiDungs.find(e => e.id == item.maLoaiHang)?.level;
-    //   })
-    // };
 
     sortByIndex() {
         this.setLevel();
@@ -953,15 +851,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
     getMoneyUnit() {
         return this.maDviTiens.find(e => e.id == this.maDviTien)?.tenDm;
     };
-
-    // statusClass() {
-    //     if (Utils.statusSave.includes(this.isStatus)) {
-    //         return 'du-thao-va-lanh-dao-duyet';
-    //     } else {
-    //         return 'da-ban-hanh';
-    //     }
-    // };
-
     //download file công văn về máy tính
     async downloadFileCv() {
         if (this.congVan?.fileUrl) {
@@ -1001,9 +890,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         if (n == 2) {
             xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
         }
-        // if (n == 3) {
-        //   xau = String.fromCharCode(k + 96);
-        // }
         if (n == 3) {
             xau = "-";
         }
@@ -1679,14 +1565,6 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         await this.quyetToanVonPhiService.restoreReport(this.idInput, id).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    // Object.assign(this.baoCao, data.data);
-                    // this.baoCao.lstDchinh.forEach(item => {
-                    //     const appendix = this.listAppendix.find(e => e.id == item.maLoai);
-                    //     item.tenPl = appendix.tenPl;
-                    //     item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
-                    // })
-                    // this.getStatusButton();
-                    // this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
                     this.action('detail')
                     this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, 'Khôi phục thành công.');
@@ -1706,6 +1584,7 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
         this.idInput = id
         await this.getDetailReport();
         this.sortByIndex();
+        this.data.preTab = "addQtInfo"
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -1732,6 +1611,74 @@ export class AddDieuChinhQuyetToanComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
         );
+    }
+
+    exportToExcel() {
+        if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+        const date = new Date()
+        const dateExcel = this.datePipe.transform(date, Utils.FORMAT_DATE_STR)
+
+        const header = [
+            { t: 0, b: 5, l: 0, r: 8, val: null },
+
+            { t: 0, b: 0, l: 0, r: 1, val: `Báo cáo điều chỉnh quyết toán vốn phí hàng DTQG quý ${this.quyQtoan}, năm ${this.namQtoan}` },
+            { t: 1, b: 1, l: 0, r: 1, val: `Kèm theo công văn số ${this.congVan.fileName}/TCDT, ngày ${dateExcel} của ${this.userInfo.TEN_DVI} ` },
+
+            { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 4, l: 1, r: 1, val: 'Tên hàng dự trữ quốc gia' },
+            { t: 4, b: 4, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 4, b: 4, l: 3, r: 3, val: 'Số lượng' },
+            { t: 4, b: 4, l: 4, r: 4, val: 'Đơn giá' },
+            { t: 4, b: 4, l: 5, r: 5, val: 'Thành tiền' },
+
+            { t: 5, b: 5, l: 0, r: 0, val: 'A' },
+            { t: 5, b: 5, l: 1, r: 1, val: 'B' },
+            { t: 5, b: 5, l: 2, r: 2, val: 'C' },
+            { t: 5, b: 5, l: 3, r: 3, val: '1' },
+            { t: 5, b: 5, l: 4, r: 4, val: '2' },
+            { t: 5, b: 5, l: 5, r: 5, val: '3 = 1 x 2' },
+
+        ]
+        const fieldOrder = [
+            "stt",
+            "tenHang",
+            "maDviTinh",
+            "soLuong",
+            "donGiaMua",
+            "thanhTien",
+        ]
+        const filterData = this.lstCtietBcao.map(item => {
+            const row: any = {};
+            fieldOrder.forEach(field => {
+                row[field] = item[field]
+            })
+            return row;
+        })
+        filterData.forEach(item => {
+            const level = item.stt.split('.').length - 2;
+            item.stt = this.getChiMuc(item.stt);
+            for (let i = 0; i < level; i++) {
+                item.stt = '   ' + item.stt;
+            }
+        })
+
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenHang' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = Table.initExcel(header);
+        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+        let excelName = "DC_BC_QTVP_DTQG";
+        excelName = excelName + '_BCQTVP_DTQG.xlsx'
+        XLSX.writeFile(workbook, excelName);
     }
 
 };

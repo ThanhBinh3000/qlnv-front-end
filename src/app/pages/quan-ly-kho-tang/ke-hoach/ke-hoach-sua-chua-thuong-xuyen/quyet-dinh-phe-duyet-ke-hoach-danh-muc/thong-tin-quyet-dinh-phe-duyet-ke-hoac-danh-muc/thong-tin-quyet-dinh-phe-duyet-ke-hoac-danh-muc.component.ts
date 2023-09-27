@@ -1,23 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { UserService } from "../../../../../../services/user.service";
-import { Globals } from "../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { HelperService } from "../../../../../../services/helper.service";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {UserService} from "../../../../../../services/user.service";
+import {Globals} from "../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {HelperService} from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
 import {
   DialogQdXdTrungHanComponent
 } from "../../../../../../components/dialog/dialog-qd-xd-trung-han/dialog-qd-xd-trung-han.component";
-import { MESSAGE } from "../../../../../../constants/message";
-import { STATUS } from "../../../../../../constants/status";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh-trung-han.service";
+import {MESSAGE} from "../../../../../../constants/message";
+import {STATUS} from "../../../../../../constants/status";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {TongHopKhTrungHanService} from "../../../../../../services/tong-hop-kh-trung-han.service";
 import {
   DialogThemMoiKehoachDanhmucChitietComponent
 } from "../../de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component";
@@ -119,10 +119,10 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
       this.listDx = data.listDx;
-        this.dataTableReq = data.listKtKhThkhScThuongXuyenDtl
-        if (this.listDx && this.listDx.length > 0) {
-          this.selectRow(this.listDx[0]);
-        }
+      this.dataTableReq = data.listKtKhThkhScThuongXuyenDtl
+      if (this.listDx && this.listDx.length > 0) {
+        this.selectRow(this.listDx[0]);
+      }
     }
   }
 
@@ -153,7 +153,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soQuyetDinh = body.soQuyetDinh + this.maQd;
+    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.maQd : null;
     body.listKtKhThkhScThuongXuyenDtl = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;
@@ -242,15 +242,16 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
 
   }
 
-  changeNam(event){
+  changeNam(event) {
     this.formData.patchValue({
       namKh: event,
     })
   }
+
   async loadDsToTrinh() {
     let body = {
-      "namKh" : this.formData.value.namKh,
-      "loai" : "00",
+      "namKh": this.formData.value.namKh,
+      "loai": "00",
       "paggingReq": {
         "limit": 1000,
         "page": 0
@@ -260,10 +261,10 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listToTrinh = data.content;
-      console.log(this.listToTrinh,"this.listToTrinh")
-      if (this.listToTrinh && this.listToTrinh.length >0 ) {
-        this.listToTrinh  = this.listToTrinh.filter(item => item.trangThai == STATUS.DA_DUYET_LDTC && !item.soQdPdKhDm)
-        console.log(this.listToTrinh,"this.listToTrinh123")
+      console.log(this.listToTrinh, "this.listToTrinh")
+      if (this.listToTrinh && this.listToTrinh.length > 0) {
+        this.listToTrinh = this.listToTrinh.filter(item => item.trangThai == STATUS.DA_DUYET_LDTC && !item.soQdPdKhDm)
+        console.log(this.listToTrinh, "this.listToTrinh123")
       }
     }
   }
@@ -286,7 +287,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
       modal.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            soToTrinh : data.soToTrinh
+            soToTrinh: data.soToTrinh
           });
           await this.loadDsChiTiet(data.id);
         }

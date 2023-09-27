@@ -27,6 +27,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
     loaiDns: any[] = [];
     donVis: any[];
     lstNam: number[] = [];
+    lstQuyetDinh: string[] = [];
 
     constructor(
         private _modalRef: NzModalRef,
@@ -52,7 +53,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         this.lstNam = Utils.getListYear(5, 10);
     }
 
-    changeModel() {
+    async changeModel() {
         if (this.userService.isCuc()) {
             this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU);
             if (this.response.canCuVeGia == Cvmb.DON_GIA) {
@@ -63,6 +64,8 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         }
         if (this.response.canCuVeGia == Cvmb.HOP_DONG) {
             this.response.quyetDinh = null;
+        } else {
+            await this.getSoQdChiTieu();
         }
     }
 
@@ -74,6 +77,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         this.request.namDnghi = this.response.namDnghi;
         this.request.canCuVeGia = this.response.canCuVeGia;
         this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.quyetDinh = this.response.quyetDinh;
         this.request.trangThai = null;
         this.spinner.show();
         await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request.request()).toPromise().then(
@@ -172,6 +176,34 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+        this.spinner.hide();
+    }
+
+    //neu la de nghi theo don gia mua can lay ra so quyet dinh chi tieu;
+    getSoQdChiTieu() {
+        if (!this.response.namDnghi) {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm');
+            this.response.canCuVeGia = null;
+        }
+        const request = {
+            namKHoach: this.response.namDnghi,
+            maDvi: this.userInfo?.MA_DVI,
+        }
+        this.spinner.show();
+        this.capVonMuaBanTtthService.soQdChiTieu(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.lstQuyetDinh = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.response.canCuVeGia = null;
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                this.response.canCuVeGia = null;
+            }
+        )
         this.spinner.hide();
     }
 

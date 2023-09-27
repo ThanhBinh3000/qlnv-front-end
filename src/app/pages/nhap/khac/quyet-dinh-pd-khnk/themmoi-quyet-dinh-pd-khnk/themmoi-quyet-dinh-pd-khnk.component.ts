@@ -438,6 +438,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     let trangThai = ''
     let mesg = ''
     switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_LDV:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDV;
         mesg = 'Văn bản sẵn sàng gửi duyệt ?'
@@ -647,13 +648,13 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     let res = await this.dxKhNhapKhacService.dsDxDuocTaoQDinhPDuyet();
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsDxTaoQd = res.data;
-      console.log(this.dsDxTaoQd)
+      console.log(this.dsDxTaoQd, "this.dsDxTaoQd")
     }
     await this.spinner.hide();
 
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu',
+      nzTitle: 'Danh sách đề xuất kế hoạch nhập khác',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -661,7 +662,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsDxTaoQd,
-        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số công văn tờ trình', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });

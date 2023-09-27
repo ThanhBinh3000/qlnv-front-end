@@ -1,0 +1,195 @@
+<ng-container *ngIf="isDataAvailable">
+    <div class="modal__content">
+        <nz-tabset>
+            <nz-tab nzTitle="Dữ liệu">
+                <div id="tablePrint">
+                    <div class="nut" style="margin-top: 10px;">
+                        <div class="cantrai">
+                            <div> Đơn vị: </div>
+                            <div style="margin-left: 10px;">
+                                <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
+                                    <span (click)="editMoneyUnit=true">
+                                        {{ Utils.moneyUnitName(maDviTien) }}
+                                    </span>
+                                </ng-container>
+                                <ng-template #editMoney>
+                                    <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                        (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
+                                        <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
+                                            [nzLabel]="item.tenDm">
+                                        </nz-option>
+                                    </nz-select>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
+                        <thead>
+                            <tr>
+                                <th scope="col" rowspan="3" nzWidth="50px" nzLeft>
+                                    STT
+                                </th>
+                                <th scope="col" rowspan="3" nzWidth="300px" nzLeft>
+                                    Chi tiêu
+                                </th>
+                                <th scope="colgroup" colspan="3" rowspan="2">
+                                    Tổng số
+                                </th>
+                                <th scope="colgroup" colspan="{{lstDvi.length * 3}}">
+                                    Chi tiết đơn vị báo cáo
+                                </th>
+                            </tr>
+                            <tr>
+                                <ng-container *ngFor="let unit of lstDvi">
+                                    <th scope="colgroup" colspan="3">
+                                        {{unit.tenDvi}}
+                                    </th>
+                                </ng-container>
+                            </tr>
+                            <tr>
+                                <th scope="col">
+                                    Ước thực hiện năm {{dataInfo.namBcao - 1}} (năm hiện hành)
+                                </th>
+                                <th scope="col">
+                                    Dự toán năm {{dataInfo.namBcao}} (năm kế hoạch)
+                                </th>
+                                <th scope="col">
+                                    Thẩm định dự toán năm {{dataInfo.namBcao}} (năm kế hoạch)
+                                </th>
+                                <ng-container *ngFor="let unit of lstDvi">
+                                    <th scope="col">
+                                        Ước thực hiện năm {{dataInfo.namBcao - 1}} (năm hiện hành)
+                                    </th>
+                                    <th scope="col">
+                                        Dự toán năm {{dataInfo.namBcao}} (năm kế hoạch)
+                                    </th>
+                                    <th scope="col">
+                                        Thẩm định dự toán năm {{dataInfo.namBcao}} (năm kế hoạch)
+                                    </th>
+                                </ng-container>
+                            </tr>
+                            <tr>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <ng-container *ngFor="let unit of lstDvi">
+                                    <th scope="col">(1)</th>
+                                    <th scope="col">(2)</th>
+                                    <th scope="col">(3)</th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of lstCtietBcao; let i = index">
+                                <td nzLeft>
+                                    {{ data.getIndex() }}
+                                </td>
+                                <td nzLeft>
+                                    {{ data.tenChiTieu }}
+                                </td>
+                                <td>
+                                    {{ Op.fmtVal(data.uocThNam) }}
+                                </td>
+                                <td>
+                                    {{ Op.fmtVal(data.namKh) }}
+                                </td>
+                                <td>
+                                    {{ Op.fmtVal(data.thamDinh) }}
+                                </td>
+                                <ng-container *ngFor="let unit of data.lstDvi">
+                                    <td>
+                                        {{ Op.fmtVal(unit.uocThNam) }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(unit.namKh) }}
+                                    </td>
+                                    <td>
+                                        {{ Op.fmtVal(unit.thamDinh) }}
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-tab>
+            <nz-tab nzTitle="Thuyết minh">
+                <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
+                    [disabled]="!status.general"></textarea>
+            </nz-tab>
+            <nz-tab nzTitle="Tài liệu đính kèm">
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="3">
+                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                            *ngIf="status.general">
+                            <button nz-button>
+                                <i nz-icon nzType="upload"></i>
+                                Chọn tài liệu đính kèm
+                            </button>
+                        </nz-upload>
+                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                            [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
+                            Thêm vào danh sách
+                        </button>
+                    </div>
+                </div>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="13">
+                        <nz-table nzBordered class="table__body">
+                            <thead>
+                                <tr>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of formDetail.lstFiles; let i = index">
+                                    <td>{{ i + 1 }} </td>
+                                    <td>{{ data.fileName }}</td>
+                                    <td>
+                                        <a (click)="downloadFile(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="status.general" (click)="deleteFile(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+    <div class="modal-footer">
+        <div class="nut">
+            <div class="cantrai">
+                <button type="button" class="btn btn-main" *ngIf="status.export" (click)="exportToExcel()">
+                    <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                    <span>Xuất</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
+                    <i nz-icon nzType="check" nzTheme="outline"></i>
+                    <span>Hoàn tất nhập liệu</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)="save('4', null)" *ngIf="status.finish">
+                    <i class="icon htvbdh_tcdt_save"></i>
+                    <span>Lưu</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)="save('1', null)" *ngIf="status.ok">
+                    <i nz-icon nzType="check" nzTheme="outline"></i>
+                    <span>Chấp nhận</span>
+                </button>
+            </div>
+            <div class="canphai">
+                <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
+                    <i nz-icon nzType="close" nzTheme="outline"></i>
+                    <span>Không chấp nhận</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-container>

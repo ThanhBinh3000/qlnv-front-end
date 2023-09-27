@@ -841,10 +841,20 @@
                             Chứng từ kèm theo
                         </nz-form-label>
                         <div class="list-file">
-                            <file-list></file-list>
+                            <file-list [data]="chungTuKemTheo" [isViewDetail]="isView"></file-list>
                         </div>
                     </nz-form-item>
                 </div>
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
+                    File đính kèm phiếu nhập kho đã ký
+                  </nz-form-label>
+                  <div class="list-file">
+                    <file-list [data]="fileDinhKems" [isViewDetail]="isView"></file-list>
+                  </div>
+                </nz-form-item>
+              </div>
                 <div nz-col [nzSpan]="24">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>

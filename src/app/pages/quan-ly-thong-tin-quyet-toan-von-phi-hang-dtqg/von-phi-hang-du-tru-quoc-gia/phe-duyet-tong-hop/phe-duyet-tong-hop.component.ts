@@ -32,7 +32,6 @@ export const TRANG_THAI_TIM_KIEM = [
 @Component({
     selector: 'app-phe-duyet-tong-hop',
     templateUrl: './phe-duyet-tong-hop.component.html',
-    styleUrls: ['./phe-duyet-tong-hop.component.css']
 })
 export class PheDuyetTongHopComponent implements OnInit {
     @Input() data
@@ -262,6 +261,7 @@ export class PheDuyetTongHopComponent implements OnInit {
                     namQtoan: res.namQtoan,
                     quyQtoan: res.quyQtoan,
                     isSythen: true,
+                    preTab: 'danhsachTH'
                 }
                 await this.quyetToanVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(
                     (data) => {
@@ -282,9 +282,13 @@ export class PheDuyetTongHopComponent implements OnInit {
     };
 
     viewDetail(data: any) {
+        const request = {
+            preTab: 'danhsachqt'
+        }
         this.isAddNew = true;
         this.idSelected = data?.id;
         this.isStatus = data?.trangThai;
+        this.dataThemMoi = request;
     };
 
     getStatusName(trangThai: string) {
@@ -330,27 +334,6 @@ export class PheDuyetTongHopComponent implements OnInit {
                 this.spinner.hide();
             },
         });
-
-        // let request = [];
-        // if (!id) {
-        //   request = this.listIdDelete;
-        // } else {
-        //   request = [id];
-        // }
-        // this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
-        //   data => {
-        //     if (data.statusCode == 0) {
-        //       this.listIdDelete = [];
-        //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-        //       this.onSubmit();
-        //     } else {
-        //       this.notification.error(MESSAGE.ERROR, data?.msg);
-        //     }
-        //   },
-        //   err => {
-        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //   }
-        // )
     }
 
     updateSingleChecked(): void {

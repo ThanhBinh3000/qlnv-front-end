@@ -63,6 +63,34 @@ export class ItemData {
     chenhLech: number;
     ghiChu: string;
     ykienDviCtren: string;
+
+    constructor(data: Partial<Pick<ItemData, keyof ItemData>>) {
+        Object.assign(this, data);
+    }
+
+    clear() {
+        Object.keys(this).forEach(key => {
+            if (typeof this[key] === 'number' && key != 'level') {
+                this[key] = null;
+            }
+        })
+    }
+
+    sum(data: ItemData) {
+        Object.keys(data).forEach(key => {
+            if (key != 'level' && (typeof this[key] == 'number' || typeof data[key] == 'number')) {
+                this[key] = Operator.sum([this[key], data[key]]);
+            }
+        })
+    }
+
+    request() {
+        const temp = Object.assign({}, this);
+        if (this.id?.length == 38) {
+            temp.id = null;
+        }
+        return temp;
+    }
 }
 
 export const amount1 = {
@@ -97,7 +125,9 @@ export class PhuLuc9Component implements OnInit {
     dToanVuGiam: number;
     //thong tin chi tiet cua bieu mau
     formDetail: Form = new Form();
-    total: ItemData = new ItemData();
+    total: ItemData = new ItemData({});
+    tongDcGiam: ItemData = new ItemData({});
+    tongDcTang: ItemData = new ItemData({});
     maDviTien: string = '1';
     namBcao: number;
     //danh muc
@@ -215,14 +245,13 @@ export class PhuLuc9Component implements OnInit {
         }
 
         if (this.lstCtietBcao.length == 0) {
-            this.lstCtietBcao.push({
-                ...new ItemData(),
+            this.lstCtietBcao.push(new ItemData({
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
                 maDvi: this.dataInfo.maDvi,
                 tenDvi: this.dataInfo.tenDvi,
                 dtoanDnghiDchinh: 0,
-            })
+            }))
         }
         else if (!this.lstCtietBcao[0]?.stt) {
             let sttItem = 1
@@ -235,6 +264,7 @@ export class PhuLuc9Component implements OnInit {
 
         this.tinhTong();
         this.getTotal();
+        this.getInTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -246,7 +276,9 @@ export class PhuLuc9Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.formDetail = data.data;
                     this.formDetail.maDviTien = '1';
-                    this.lstCtietBcao = this.formDetail.lstCtietDchinh;
+                    this.formDetail.lstCtietDchinh.forEach(item => {
+                        this.lstCtietBcao.push(new ItemData(item))
+                    })
                     this.listFile = [];
                     this.formDetail.listIdDeleteFiles = [];
                     this.getStatusButton();
@@ -267,7 +299,7 @@ export class PhuLuc9Component implements OnInit {
 
 
     getTotal() {
-        this.total = new ItemData();
+        this.total = new ItemData({});
         this.lstCtietBcao.forEach(item => {
             // if (item.level == 0) {
             this.keys.forEach(key => {
@@ -329,7 +361,7 @@ export class PhuLuc9Component implements OnInit {
         this.lstCtietBcao.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
-                data: { ...item }
+                data: new ItemData(item)
             };
         });
     };
@@ -349,10 +381,7 @@ export class PhuLuc9Component implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            lstCtietBcaoTemp.push({
-                ...item,
-                id: item.id?.length == 38 ? null : item.id,
-            })
+            lstCtietBcaoTemp.push(item.request())
         })
 
         if (this.status.general) {
@@ -472,6 +501,7 @@ export class PhuLuc9Component implements OnInit {
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.getTotal();
+        this.getInTotal();
         this.tinhTong();
         this.updateEditCache();
     };
@@ -482,7 +512,7 @@ export class PhuLuc9Component implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.lstCtietBcao[index] },
+            data: new ItemData(this.lstCtietBcao[index]),
             edit: false
         };
         this.tinhTong();
@@ -501,163 +531,332 @@ export class PhuLuc9Component implements OnInit {
         await this.quanLyVonPhiService.downFile(file, doc);
     }
 
+    getInTotal() {
+        this.tongDcTang.clear()
+        this.tongDcGiam.clear()
+        this.lstCtietBcao.forEach(item => {
+            const str = item.stt
+            if (!(this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str) != -1)) {
+                if (item.dtoanDnghiDchinh < 0) {
+                    this.tongDcGiam.sum(item);
+                }
+                else {
+                    this.tongDcTang.sum(item);
+                }
+            }
+        })
+
+    }
+
     exportToExcel() {
         if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
-        const header = [
-            { t: 0, b: 12, l: 0, r: 41, val: null },
 
-            { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
-            { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
-            { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+        let header = [];
+        let fieldOrder = [];
 
-            { t: 4, b: 12, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 12, l: 1, r: 1, val: 'Tên đơn vị(Biên chế thực tế có mặt)' },
-            { t: 4, b: 12, l: 2, r: 2, val: 'Biên chế' + this.namBcao.toString() + 'được giao' },
-            { t: 4, b: 12, l: 3, r: 3, val: 'Biên chế có mặt' },
-            { t: 4, b: 12, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
-            { t: 4, b: 5, l: 5, r: 16, val: 'Hệ số lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() },
-            { t: 4, b: 5, l: 17, r: 28, val: 'Tổng quỹ lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() + ' (tính đến 31/12/' + (this.namBcao - 1).toString() + '(không tính HĐ 68))' },
-            { t: 4, b: 12, l: 29, r: 29, val: 'Các khoản lương khác theo chế độ' },
-            { t: 4, b: 12, l: 30, r: 33, val: 'Bao gồm' },
-            { t: 4, b: 12, l: 34, r: 36, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-            { t: 4, b: 12, l: 37, r: 37, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
-            { t: 4, b: 12, l: 38, r: 38, val: 'Dự toán Vụ TVQT đề nghị (+ tăng)(- giảm)' },
-            { t: 4, b: 12, l: 39, r: 39, val: 'Ghi chú' },
-            { t: 4, b: 12, l: 40, r: 40, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng)(- giảm)' },
-            { t: 4, b: 12, l: 41, r: 41, val: 'Ý kiến của đơn vị cấp trên' },
+        if (this.status.viewAppVal) {
+            header = [
+                { t: 0, b: 12, l: 0, r: 41, val: null },
 
-            { t: 6, b: 11, l: 5, r: 5, val: 'Tổng số' },
-            { t: 6, b: 7, l: 6, r: 16, val: 'Bao gồm' },
-            { t: 6, b: 11, l: 17, r: 17, val: 'Tổng số' },
-            { t: 6, b: 7, l: 18, r: 28, val: 'Bao gồm' },
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
 
-            { t: 6, b: 11, l: 30, r: 30, val: 'Tiền lương biên chế thực tế có mặt' },
-            { t: 6, b: 11, l: 31, r: 31, val: 'Các khoản đóng góp theo lương của biên chế thực tế' },
-            { t: 6, b: 11, l: 32, r: 32, val: 'Lương CBCC chưa tuyển dụng' },
-            { t: 6, b: 11, l: 33, r: 33, val: 'Lương điều hòa chung' },
-            { t: 6, b: 11, l: 34, r: 34, val: 'Các khoản lương khác theo chế độ' },
-            { t: 6, b: 11, l: 35, r: 35, val: 'Dự toán, kinh phí đã giao trong năm' },
-            { t: 6, b: 11, l: 36, r: 36, val: 'Cộng' },
+                { t: 4, b: 12, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 12, l: 1, r: 1, val: 'Tên đơn vị(Biên chế thực tế có mặt)' },
+                { t: 4, b: 12, l: 2, r: 2, val: 'Biên chế' + this.namBcao.toString() + 'được giao' },
+                { t: 4, b: 12, l: 3, r: 3, val: 'Biên chế có mặt' },
+                { t: 4, b: 12, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
+                { t: 4, b: 5, l: 5, r: 16, val: 'Hệ số lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() },
+                { t: 4, b: 5, l: 17, r: 28, val: 'Tổng quỹ lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() + ' (tính đến 31/12/' + (this.namBcao - 1).toString() + '(không tính HĐ 68))' },
+                { t: 4, b: 12, l: 29, r: 29, val: 'Các khoản lương khác theo chế độ' },
+                { t: 4, b: 12, l: 30, r: 33, val: 'Bao gồm' },
+                { t: 4, b: 12, l: 34, r: 36, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 12, l: 37, r: 37, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 12, l: 38, r: 38, val: 'Dự toán Vụ TVQT đề nghị (+ tăng)(- giảm)' },
+                { t: 4, b: 12, l: 39, r: 39, val: 'Ghi chú' },
+                { t: 4, b: 12, l: 40, r: 40, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng)(- giảm)' },
+                { t: 4, b: 12, l: 41, r: 41, val: 'Ý kiến của đơn vị cấp trên' },
 
+                { t: 6, b: 11, l: 5, r: 5, val: 'Tổng số' },
+                { t: 6, b: 7, l: 6, r: 16, val: 'Bao gồm' },
+                { t: 6, b: 11, l: 17, r: 17, val: 'Tổng số' },
+                { t: 6, b: 7, l: 18, r: 28, val: 'Bao gồm' },
 
-            { t: 6, b: 11, l: 6, r: 6, val: 'Hệ số lương' },
-            { t: 6, b: 9, l: 7, r: 16, val: 'Hệ số các loại phụ cấp' },
-            { t: 6, b: 11, l: 18, r: 18, val: 'Tiền lương' },
-            { t: 6, b: 9, l: 19, r: 28, val: 'Tiền phụ cấp lương' },
-
-            { t: 10, b: 11, l: 7, r: 7, val: 'Tổng' },
-            { t: 10, b: 11, l: 8, r: 8, val: 'PC chức vụ' },
-            { t: 10, b: 11, l: 9, r: 9, val: 'PC trách nhiệm' },
-            { t: 10, b: 11, l: 10, r: 10, val: 'PC thâm niên vượt khung' },
-            { t: 10, b: 11, l: 11, r: 11, val: 'HSBL' },
-            { t: 10, b: 11, l: 12, r: 12, val: 'Phụ cấp công vụ ' },
-            { t: 10, b: 11, l: 13, r: 13, val: 'Phụ cấp thâm niên' },
-            { t: 10, b: 11, l: 14, r: 14, val: 'Phụ cấp ưu đãi nghề' },
-            { t: 10, b: 11, l: 15, r: 15, val: 'PC khu vực' },
-            { t: 10, b: 11, l: 16, r: 16, val: 'PC khác' },
-            { t: 10, b: 11, l: 19, r: 19, val: 'Tổng' },
-            { t: 10, b: 11, l: 20, r: 20, val: 'PC chức vụ' },
-            { t: 10, b: 11, l: 21, r: 21, val: 'PC trách nhiệm' },
-            { t: 10, b: 11, l: 22, r: 22, val: 'PC thâm niên vượt khung' },
-            { t: 10, b: 11, l: 23, r: 23, val: 'HSBL' },
-            { t: 10, b: 11, l: 24, r: 24, val: 'Phụ cấp công vụ ' },
-            { t: 10, b: 11, l: 25, r: 25, val: 'Phụ cấp thâm niên' },
-            { t: 10, b: 11, l: 26, r: 26, val: 'Phụ cấp ưu đãi nghề' },
-            { t: 10, b: 11, l: 27, r: 27, val: 'PC khu vực' },
-            { t: 10, b: 11, l: 28, r: 28, val: 'PC khác' },
+                { t: 6, b: 11, l: 30, r: 30, val: 'Tiền lương biên chế thực tế có mặt' },
+                { t: 6, b: 11, l: 31, r: 31, val: 'Các khoản đóng góp theo lương của biên chế thực tế' },
+                { t: 6, b: 11, l: 32, r: 32, val: 'Lương CBCC chưa tuyển dụng' },
+                { t: 6, b: 11, l: 33, r: 33, val: 'Lương điều hòa chung' },
+                { t: 6, b: 11, l: 34, r: 34, val: 'Các khoản lương khác theo chế độ' },
+                { t: 6, b: 11, l: 35, r: 35, val: 'Dự toán, kinh phí đã giao trong năm' },
+                { t: 6, b: 11, l: 36, r: 36, val: 'Cộng' },
 
 
-            { t: 12, b: 12, l: 0, r: 0, val: 'A' },
-            { t: 12, b: 12, l: 1, r: 1, val: 'B' },
-            { t: 12, b: 12, l: 2, r: 2, val: '1 = 2 + 3' },
-            { t: 12, b: 12, l: 3, r: 3, val: '2' },
-            { t: 12, b: 12, l: 4, r: 4, val: '3' },
-            { t: 12, b: 12, l: 5, r: 5, val: '4 = 5 + 6' },
-            { t: 12, b: 12, l: 6, r: 6, val: '5' },
-            { t: 12, b: 12, l: 7, r: 7, val: '6 = 7 + ... + 15' },
-            { t: 12, b: 12, l: 8, r: 8, val: '7' },
-            { t: 12, b: 12, l: 9, r: 9, val: '8' },
-            { t: 12, b: 12, l: 10, r: 10, val: '9' },
-            { t: 12, b: 12, l: 11, r: 11, val: '10' },
-            { t: 12, b: 12, l: 12, r: 12, val: '11' },
-            { t: 12, b: 12, l: 13, r: 13, val: '12' },
-            { t: 12, b: 12, l: 14, r: 14, val: '13' },
-            { t: 12, b: 12, l: 15, r: 15, val: '14' },
-            { t: 12, b: 12, l: 16, r: 16, val: '15' },
-            { t: 12, b: 12, l: 17, r: 17, val: '16 = 17 + 18' },
-            { t: 12, b: 12, l: 18, r: 18, val: '17 ' },
-            { t: 12, b: 12, l: 19, r: 19, val: '18 = 19 + ... + 27' },
-            { t: 12, b: 12, l: 20, r: 20, val: '19' },
-            { t: 12, b: 12, l: 21, r: 21, val: '20' },
-            { t: 12, b: 12, l: 22, r: 22, val: '21' },
-            { t: 12, b: 12, l: 23, r: 23, val: '22' },
-            { t: 12, b: 12, l: 24, r: 24, val: '23' },
-            { t: 12, b: 12, l: 25, r: 25, val: '24' },
-            { t: 12, b: 12, l: 26, r: 26, val: '25' },
-            { t: 12, b: 12, l: 27, r: 27, val: '26' },
-            { t: 12, b: 12, l: 28, r: 28, val: '27' },
-            { t: 12, b: 12, l: 29, r: 29, val: '28 = 29 + 30 + 31 + 32' },
-            { t: 12, b: 12, l: 30, r: 30, val: '29' },
-            { t: 12, b: 12, l: 31, r: 31, val: '30' },
-            { t: 12, b: 12, l: 32, r: 32, val: '31' },
-            { t: 12, b: 12, l: 33, r: 33, val: '32' },
-            { t: 12, b: 12, l: 34, r: 34, val: '33' },
-            { t: 12, b: 12, l: 35, r: 35, val: '34' },
-            { t: 12, b: 12, l: 36, r: 36, val: '35 = 34 + 33' },
-            { t: 12, b: 12, l: 37, r: 37, val: '36 = 28 - 35' },
-            { t: 12, b: 12, l: 38, r: 38, val: '37' },
-            { t: 12, b: 12, l: 39, r: 39, val: '38' },
-            { t: 12, b: 12, l: 40, r: 40, val: '39 = 47 - 36' },
-            { t: 12, b: 12, l: 41, r: 41, val: '40' },
+                { t: 6, b: 11, l: 6, r: 6, val: 'Hệ số lương' },
+                { t: 6, b: 9, l: 7, r: 16, val: 'Hệ số các loại phụ cấp' },
+                { t: 6, b: 11, l: 18, r: 18, val: 'Tiền lương' },
+                { t: 6, b: 9, l: 19, r: 28, val: 'Tiền phụ cấp lương' },
 
-        ]
-        const fieldOrder = [
-            'stt',
-            'tenDvi',
-            'bcheGiao2021',
-            'bcheCoMat',
-            'bcheChuaTuyen',
-            'hslPcapTso',
-            'hslPcapHsl',
-            'hslPcapTong',
-            'hslPcapChucVu',
-            'hslPcapTnhiem',
-            'hslPcapTnienVkhung',
-            'hslPcapHsbl',
-            'hslPcapCongVu',
-            'hslPcapTnien',
-            'hslPcapUdai',
-            'hslPcapKvuc',
-            'hslPcapKhac',
-            'tqtlPcapTso',
-            'tqtlPcapTluong',
-            'tqtlPcapTong',
-            'tqtlPcapChucVu',
-            'tqtlPcapTniem',
-            'tqtlPcapTnienVkhung',
-            'tqtlPcapHsbl',
-            'tqtlPcapCongVu',
-            'tqtlPcapTnien',
-            'tqtlPcapUdai',
-            'tqtlPcapKvuc',
-            'tqtlPcapKhac',
-            'tongNcauTluong',
-            'baoGomTluongBche',
-            'baoGomKhoanDgop',
-            'baoGomLuongCbcc',
-            'baoGomLuongTheoCheDo',
-            'dtoanKphiDtoanNtruoc',
-            'dtoanKphiDaGiao',
-            'dtoanKphiCong',
-            'dtoanDnghiDchinh',
-            'dtoanVuTvqtDnghi',
-            'chenhLech',
-            'ghiChu',
-            'ykienDviCtren',
-        ]
+                { t: 10, b: 11, l: 7, r: 7, val: 'Tổng' },
+                { t: 10, b: 11, l: 8, r: 8, val: 'PC chức vụ' },
+                { t: 10, b: 11, l: 9, r: 9, val: 'PC trách nhiệm' },
+                { t: 10, b: 11, l: 10, r: 10, val: 'PC thâm niên vượt khung' },
+                { t: 10, b: 11, l: 11, r: 11, val: 'HSBL' },
+                { t: 10, b: 11, l: 12, r: 12, val: 'Phụ cấp công vụ ' },
+                { t: 10, b: 11, l: 13, r: 13, val: 'Phụ cấp thâm niên' },
+                { t: 10, b: 11, l: 14, r: 14, val: 'Phụ cấp ưu đãi nghề' },
+                { t: 10, b: 11, l: 15, r: 15, val: 'PC khu vực' },
+                { t: 10, b: 11, l: 16, r: 16, val: 'PC khác' },
+                { t: 10, b: 11, l: 19, r: 19, val: 'Tổng' },
+                { t: 10, b: 11, l: 20, r: 20, val: 'PC chức vụ' },
+                { t: 10, b: 11, l: 21, r: 21, val: 'PC trách nhiệm' },
+                { t: 10, b: 11, l: 22, r: 22, val: 'PC thâm niên vượt khung' },
+                { t: 10, b: 11, l: 23, r: 23, val: 'HSBL' },
+                { t: 10, b: 11, l: 24, r: 24, val: 'Phụ cấp công vụ ' },
+                { t: 10, b: 11, l: 25, r: 25, val: 'Phụ cấp thâm niên' },
+                { t: 10, b: 11, l: 26, r: 26, val: 'Phụ cấp ưu đãi nghề' },
+                { t: 10, b: 11, l: 27, r: 27, val: 'PC khu vực' },
+                { t: 10, b: 11, l: 28, r: 28, val: 'PC khác' },
+
+
+                { t: 12, b: 12, l: 0, r: 0, val: 'A' },
+                { t: 12, b: 12, l: 1, r: 1, val: 'B' },
+                { t: 12, b: 12, l: 2, r: 2, val: '1 = 2 + 3' },
+                { t: 12, b: 12, l: 3, r: 3, val: '2' },
+                { t: 12, b: 12, l: 4, r: 4, val: '3' },
+                { t: 12, b: 12, l: 5, r: 5, val: '4 = 5 + 6' },
+                { t: 12, b: 12, l: 6, r: 6, val: '5' },
+                { t: 12, b: 12, l: 7, r: 7, val: '6 = 7 + ... + 15' },
+                { t: 12, b: 12, l: 8, r: 8, val: '7' },
+                { t: 12, b: 12, l: 9, r: 9, val: '8' },
+                { t: 12, b: 12, l: 10, r: 10, val: '9' },
+                { t: 12, b: 12, l: 11, r: 11, val: '10' },
+                { t: 12, b: 12, l: 12, r: 12, val: '11' },
+                { t: 12, b: 12, l: 13, r: 13, val: '12' },
+                { t: 12, b: 12, l: 14, r: 14, val: '13' },
+                { t: 12, b: 12, l: 15, r: 15, val: '14' },
+                { t: 12, b: 12, l: 16, r: 16, val: '15' },
+                { t: 12, b: 12, l: 17, r: 17, val: '16 = 17 + 18' },
+                { t: 12, b: 12, l: 18, r: 18, val: '17 ' },
+                { t: 12, b: 12, l: 19, r: 19, val: '18 = 19 + ... + 27' },
+                { t: 12, b: 12, l: 20, r: 20, val: '19' },
+                { t: 12, b: 12, l: 21, r: 21, val: '20' },
+                { t: 12, b: 12, l: 22, r: 22, val: '21' },
+                { t: 12, b: 12, l: 23, r: 23, val: '22' },
+                { t: 12, b: 12, l: 24, r: 24, val: '23' },
+                { t: 12, b: 12, l: 25, r: 25, val: '24' },
+                { t: 12, b: 12, l: 26, r: 26, val: '25' },
+                { t: 12, b: 12, l: 27, r: 27, val: '26' },
+                { t: 12, b: 12, l: 28, r: 28, val: '27' },
+                { t: 12, b: 12, l: 29, r: 29, val: '28 = 29 + 30 + 31 + 32' },
+                { t: 12, b: 12, l: 30, r: 30, val: '29' },
+                { t: 12, b: 12, l: 31, r: 31, val: '30' },
+                { t: 12, b: 12, l: 32, r: 32, val: '31' },
+                { t: 12, b: 12, l: 33, r: 33, val: '32' },
+                { t: 12, b: 12, l: 34, r: 34, val: '33' },
+                { t: 12, b: 12, l: 35, r: 35, val: '34' },
+                { t: 12, b: 12, l: 36, r: 36, val: '35 = 34 + 33' },
+                { t: 12, b: 12, l: 37, r: 37, val: '36 = 28 - 35' },
+                { t: 12, b: 12, l: 38, r: 38, val: '37' },
+                { t: 12, b: 12, l: 39, r: 39, val: '38' },
+                { t: 12, b: 12, l: 40, r: 40, val: '39 = 47 - 36' },
+                { t: 12, b: 12, l: 41, r: 41, val: '40' },
+
+            ]
+            fieldOrder = [
+                'stt',
+                'tenDvi',
+                'bcheGiao2021',
+                'bcheCoMat',
+                'bcheChuaTuyen',
+                'hslPcapTso',
+                'hslPcapHsl',
+                'hslPcapTong',
+                'hslPcapChucVu',
+                'hslPcapTnhiem',
+                'hslPcapTnienVkhung',
+                'hslPcapHsbl',
+                'hslPcapCongVu',
+                'hslPcapTnien',
+                'hslPcapUdai',
+                'hslPcapKvuc',
+                'hslPcapKhac',
+                'tqtlPcapTso',
+                'tqtlPcapTluong',
+                'tqtlPcapTong',
+                'tqtlPcapChucVu',
+                'tqtlPcapTniem',
+                'tqtlPcapTnienVkhung',
+                'tqtlPcapHsbl',
+                'tqtlPcapCongVu',
+                'tqtlPcapTnien',
+                'tqtlPcapUdai',
+                'tqtlPcapKvuc',
+                'tqtlPcapKhac',
+                'tongNcauTluong',
+                'baoGomTluongBche',
+                'baoGomKhoanDgop',
+                'baoGomLuongCbcc',
+                'baoGomLuongTheoCheDo',
+                'dtoanKphiDtoanNtruoc',
+                'dtoanKphiDaGiao',
+                'dtoanKphiCong',
+                'dtoanDnghiDchinh',
+                'dtoanVuTvqtDnghi',
+                'ghiChu',
+                'chenhLech',
+                'ykienDviCtren',
+            ]
+
+        } else {
+            header = [
+                { t: 0, b: 12, l: 0, r: 38, val: null },
+
+                { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+                { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+                { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+                { t: 4, b: 12, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 12, l: 1, r: 1, val: 'Tên đơn vị(Biên chế thực tế có mặt)' },
+                { t: 4, b: 12, l: 2, r: 2, val: 'Biên chế' + this.namBcao.toString() + 'được giao' },
+                { t: 4, b: 12, l: 3, r: 3, val: 'Biên chế có mặt' },
+                { t: 4, b: 12, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
+                { t: 4, b: 5, l: 5, r: 16, val: 'Hệ số lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() },
+                { t: 4, b: 5, l: 17, r: 28, val: 'Tổng quỹ lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() + ' (tính đến 31/12/' + (this.namBcao - 1).toString() + '(không tính HĐ 68))' },
+                { t: 4, b: 12, l: 29, r: 29, val: 'Các khoản lương khác theo chế độ' },
+                { t: 4, b: 12, l: 30, r: 33, val: 'Bao gồm' },
+                { t: 4, b: 12, l: 34, r: 36, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 12, l: 37, r: 37, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 12, l: 38, r: 38, val: 'Ghi chú' },
+
+                { t: 6, b: 11, l: 5, r: 5, val: 'Tổng số' },
+                { t: 6, b: 7, l: 6, r: 16, val: 'Bao gồm' },
+                { t: 6, b: 11, l: 17, r: 17, val: 'Tổng số' },
+                { t: 6, b: 7, l: 18, r: 28, val: 'Bao gồm' },
+
+                { t: 6, b: 11, l: 30, r: 30, val: 'Tiền lương biên chế thực tế có mặt' },
+                { t: 6, b: 11, l: 31, r: 31, val: 'Các khoản đóng góp theo lương của biên chế thực tế' },
+                { t: 6, b: 11, l: 32, r: 32, val: 'Lương CBCC chưa tuyển dụng' },
+                { t: 6, b: 11, l: 33, r: 33, val: 'Lương điều hòa chung' },
+                { t: 6, b: 11, l: 34, r: 34, val: 'Các khoản lương khác theo chế độ' },
+                { t: 6, b: 11, l: 35, r: 35, val: 'Dự toán, kinh phí đã giao trong năm' },
+                { t: 6, b: 11, l: 36, r: 36, val: 'Cộng' },
+
+
+                { t: 6, b: 11, l: 6, r: 6, val: 'Hệ số lương' },
+                { t: 6, b: 9, l: 7, r: 16, val: 'Hệ số các loại phụ cấp' },
+                { t: 6, b: 11, l: 18, r: 18, val: 'Tiền lương' },
+                { t: 6, b: 9, l: 19, r: 28, val: 'Tiền phụ cấp lương' },
+
+                { t: 10, b: 11, l: 7, r: 7, val: 'Tổng' },
+                { t: 10, b: 11, l: 8, r: 8, val: 'PC chức vụ' },
+                { t: 10, b: 11, l: 9, r: 9, val: 'PC trách nhiệm' },
+                { t: 10, b: 11, l: 10, r: 10, val: 'PC thâm niên vượt khung' },
+                { t: 10, b: 11, l: 11, r: 11, val: 'HSBL' },
+                { t: 10, b: 11, l: 12, r: 12, val: 'Phụ cấp công vụ ' },
+                { t: 10, b: 11, l: 13, r: 13, val: 'Phụ cấp thâm niên' },
+                { t: 10, b: 11, l: 14, r: 14, val: 'Phụ cấp ưu đãi nghề' },
+                { t: 10, b: 11, l: 15, r: 15, val: 'PC khu vực' },
+                { t: 10, b: 11, l: 16, r: 16, val: 'PC khác' },
+                { t: 10, b: 11, l: 19, r: 19, val: 'Tổng' },
+                { t: 10, b: 11, l: 20, r: 20, val: 'PC chức vụ' },
+                { t: 10, b: 11, l: 21, r: 21, val: 'PC trách nhiệm' },
+                { t: 10, b: 11, l: 22, r: 22, val: 'PC thâm niên vượt khung' },
+                { t: 10, b: 11, l: 23, r: 23, val: 'HSBL' },
+                { t: 10, b: 11, l: 24, r: 24, val: 'Phụ cấp công vụ ' },
+                { t: 10, b: 11, l: 25, r: 25, val: 'Phụ cấp thâm niên' },
+                { t: 10, b: 11, l: 26, r: 26, val: 'Phụ cấp ưu đãi nghề' },
+                { t: 10, b: 11, l: 27, r: 27, val: 'PC khu vực' },
+                { t: 10, b: 11, l: 28, r: 28, val: 'PC khác' },
+
+
+                { t: 12, b: 12, l: 0, r: 0, val: 'A' },
+                { t: 12, b: 12, l: 1, r: 1, val: 'B' },
+                { t: 12, b: 12, l: 2, r: 2, val: '1 = 2 + 3' },
+                { t: 12, b: 12, l: 3, r: 3, val: '2' },
+                { t: 12, b: 12, l: 4, r: 4, val: '3' },
+                { t: 12, b: 12, l: 5, r: 5, val: '4 = 5 + 6' },
+                { t: 12, b: 12, l: 6, r: 6, val: '5' },
+                { t: 12, b: 12, l: 7, r: 7, val: '6 = 7 + ... + 15' },
+                { t: 12, b: 12, l: 8, r: 8, val: '7' },
+                { t: 12, b: 12, l: 9, r: 9, val: '8' },
+                { t: 12, b: 12, l: 10, r: 10, val: '9' },
+                { t: 12, b: 12, l: 11, r: 11, val: '10' },
+                { t: 12, b: 12, l: 12, r: 12, val: '11' },
+                { t: 12, b: 12, l: 13, r: 13, val: '12' },
+                { t: 12, b: 12, l: 14, r: 14, val: '13' },
+                { t: 12, b: 12, l: 15, r: 15, val: '14' },
+                { t: 12, b: 12, l: 16, r: 16, val: '15' },
+                { t: 12, b: 12, l: 17, r: 17, val: '16 = 17 + 18' },
+                { t: 12, b: 12, l: 18, r: 18, val: '17 ' },
+                { t: 12, b: 12, l: 19, r: 19, val: '18 = 19 + ... + 27' },
+                { t: 12, b: 12, l: 20, r: 20, val: '19' },
+                { t: 12, b: 12, l: 21, r: 21, val: '20' },
+                { t: 12, b: 12, l: 22, r: 22, val: '21' },
+                { t: 12, b: 12, l: 23, r: 23, val: '22' },
+                { t: 12, b: 12, l: 24, r: 24, val: '23' },
+                { t: 12, b: 12, l: 25, r: 25, val: '24' },
+                { t: 12, b: 12, l: 26, r: 26, val: '25' },
+                { t: 12, b: 12, l: 27, r: 27, val: '26' },
+                { t: 12, b: 12, l: 28, r: 28, val: '27' },
+                { t: 12, b: 12, l: 29, r: 29, val: '28 = 29 + 30 + 31 + 32' },
+                { t: 12, b: 12, l: 30, r: 30, val: '29' },
+                { t: 12, b: 12, l: 31, r: 31, val: '30' },
+                { t: 12, b: 12, l: 32, r: 32, val: '31' },
+                { t: 12, b: 12, l: 33, r: 33, val: '32' },
+                { t: 12, b: 12, l: 34, r: 34, val: '33' },
+                { t: 12, b: 12, l: 35, r: 35, val: '34' },
+                { t: 12, b: 12, l: 36, r: 36, val: '35 = 34 + 33' },
+                { t: 12, b: 12, l: 37, r: 37, val: '36 = 28 - 35' },
+                { t: 12, b: 12, l: 38, r: 38, val: '37' },
+
+            ]
+            fieldOrder = [
+                'stt',
+                'tenDvi',
+                'bcheGiao2021',
+                'bcheCoMat',
+                'bcheChuaTuyen',
+                'hslPcapTso',
+                'hslPcapHsl',
+                'hslPcapTong',
+                'hslPcapChucVu',
+                'hslPcapTnhiem',
+                'hslPcapTnienVkhung',
+                'hslPcapHsbl',
+                'hslPcapCongVu',
+                'hslPcapTnien',
+                'hslPcapUdai',
+                'hslPcapKvuc',
+                'hslPcapKhac',
+                'tqtlPcapTso',
+                'tqtlPcapTluong',
+                'tqtlPcapTong',
+                'tqtlPcapChucVu',
+                'tqtlPcapTniem',
+                'tqtlPcapTnienVkhung',
+                'tqtlPcapHsbl',
+                'tqtlPcapCongVu',
+                'tqtlPcapTnien',
+                'tqtlPcapUdai',
+                'tqtlPcapKvuc',
+                'tqtlPcapKhac',
+                'tongNcauTluong',
+                'baoGomTluongBche',
+                'baoGomKhoanDgop',
+                'baoGomLuongCbcc',
+                'baoGomLuongTheoCheDo',
+                'dtoanKphiDtoanNtruoc',
+                'dtoanKphiDaGiao',
+                'dtoanKphiCong',
+                'dtoanDnghiDchinh',
+                'ghiChu',
+            ]
+        }
+
 
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
@@ -672,7 +871,108 @@ export class PhuLuc9Component implements OnInit {
             for (let i = 0; i < level; i++) {
                 item.stt = '   ' + item.stt;
             }
+        });
+
+        let row: any = {};
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'tenDvi') {
+                row[field] = 'Phát sinh điều chỉnh giảm'
+            } else {
+                if (![
+                    'hslPcapTso',
+                    'hslPcapHsl',
+                    'hslPcapTong',
+                    'hslPcapChucVu',
+                    'hslPcapTnhiem',
+                    'hslPcapTnienVkhung',
+                    'hslPcapHsbl',
+                    'hslPcapCongVu',
+                    'hslPcapTnien',
+                    'hslPcapUdai',
+                    'hslPcapKvuc',
+                    'hslPcapKhac',
+                    'tqtlPcapTso',
+                    'tqtlPcapTluong',
+                    'tqtlPcapTong',
+                    'tqtlPcapChucVu',
+                    'tqtlPcapTniem',
+                    'tqtlPcapTnienVkhung',
+                    'tqtlPcapHsbl',
+                    'tqtlPcapCongVu',
+                    'tqtlPcapTnien',
+                    'tqtlPcapUdai',
+                    'tqtlPcapKvuc',
+                    'tqtlPcapKhac',
+                    'tongNcauTluong',
+                    'baoGomTluongBche',
+                    'baoGomKhoanDgop',
+                    'baoGomLuongCbcc',
+                    'baoGomLuongTheoCheDo',
+                    'dtoanKphiDtoanNtruoc',
+                    'dtoanKphiDaGiao',
+                    'dtoanKphiCong',
+                ].includes(field)) {
+                    row[field] = (!this.tongDcGiam[field] && this.tongDcGiam[field] !== 0) ? '' : this.tongDcGiam[field];
+                } else {
+                    row[field] = '';
+                }
+            }
         })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            if (field == 'tenDvi') {
+                row[field] = 'Phát sinh điều chỉnh tăng'
+            } else {
+                if (![
+                    'hslPcapTso',
+                    'hslPcapHsl',
+                    'hslPcapTong',
+                    'hslPcapChucVu',
+                    'hslPcapTnhiem',
+                    'hslPcapTnienVkhung',
+                    'hslPcapHsbl',
+                    'hslPcapCongVu',
+                    'hslPcapTnien',
+                    'hslPcapUdai',
+                    'hslPcapKvuc',
+                    'hslPcapKhac',
+                    'tqtlPcapTso',
+                    'tqtlPcapTluong',
+                    'tqtlPcapTong',
+                    'tqtlPcapChucVu',
+                    'tqtlPcapTniem',
+                    'tqtlPcapTnienVkhung',
+                    'tqtlPcapHsbl',
+                    'tqtlPcapCongVu',
+                    'tqtlPcapTnien',
+                    'tqtlPcapUdai',
+                    'tqtlPcapKvuc',
+                    'tqtlPcapKhac',
+                    'tongNcauTluong',
+                    'baoGomTluongBche',
+                    'baoGomKhoanDgop',
+                    'baoGomLuongCbcc',
+                    'baoGomLuongTheoCheDo',
+                    'dtoanKphiDtoanNtruoc',
+                    'dtoanKphiDaGiao',
+                    'dtoanKphiCong',
+                ].includes(field)) {
+                    row[field] = (!this.tongDcTang[field] && this.tongDcTang[field] !== 0) ? '' : this.tongDcTang[field];
+                } else {
+                    row[field] = '';
+                }
+            }
+        })
+        filterData.unshift(row)
+
+        row = {}
+        fieldOrder.forEach(field => {
+            row[field] = field == 'tenDvi' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+        })
+        filterData.unshift(row)
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);

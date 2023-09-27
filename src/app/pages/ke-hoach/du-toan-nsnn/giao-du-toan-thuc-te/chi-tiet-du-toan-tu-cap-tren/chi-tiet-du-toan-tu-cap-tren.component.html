@@ -9,22 +9,31 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Tiếp nhận</span>
             </button>
-
-            <div [hidden]="statusBtnNew">
-                <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án"
-                    [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click">
-                    <i class="icon htvbdh_tcdt_save"></i>
-                    <span>Tạo phương án</span>
-                </button>
-                <ng-template #contentTemplate>
-                    <div class="contentTemplate_chonpa">
-                        <a (click)="taoMoiPhuongAn(1)" class="contentTemplate_chonpa__con">1. Phương
-                            án phân bổ giao dự toán chi</a>
-                        <a (click)="taoMoiPhuongAn(2)" class="contentTemplate_chonpa__con">2. Phương
-                            án giao, điều chỉnh dự toán chi</a>
-                    </div>
-                </ng-template>
-            </div>
+            <ng-container *ngIf=" userInfo.CAP_DVI == 2; else viewLoai">
+                <div [hidden]="statusBtnNew">
+                    <button type="button" class="btn btn-main" (click)="taoMoiPhuongAn(maLoaiDan)">
+                        <i class="icon htvbdh_tcdt_save"></i>
+                        <span>Tạo phương án</span>
+                    </button>
+                </div>
+            </ng-container>
+            <ng-template #viewLoai>
+                <div [hidden]="statusBtnNew">
+                    <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án"
+                        [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click">
+                        <i class="icon htvbdh_tcdt_save"></i>
+                        <span>Tạo phương án</span>
+                    </button>
+                    <ng-template #contentTemplate>
+                        <div class="contentTemplate_chonpa">
+                            <a (click)="taoMoiPhuongAn(1)" class="contentTemplate_chonpa__con">1. Phương
+                                án phân bổ giao dự toán chi</a>
+                            <a (click)="taoMoiPhuongAn(2)" class="contentTemplate_chonpa__con">2. Phương
+                                án giao, điều chỉnh dự toán chi</a>
+                        </div>
+                    </ng-template>
+                </div>
+            </ng-template>
         </div>
     </nz-affix>
 
@@ -41,20 +50,19 @@
                     <nz-table class="nowrap mt-16 table-chi-tiet">
                         <thead>
                             <tr>
-                                <th width="175px">Số QĐ/CV</th>
-                                <th width="175px">Mã phương án</th>
-                                <th width="175px">Mã giao</th>
-                                <th width="175px">Năm dự toán</th>
-                                <th width="175px">Ngày tạo</th>
-                                <th width="175px">Nơi tạo</th>
-                                <th width="175px">Trạng thái</th>
+                                <th scope="col" nzWidth="175px">Số QĐ/CV</th>
+                                <th scope="col" nzWidth="175px">Mã phương án</th>
+                                <th scope="col" nzWidth="175px">Mã giao</th>
+                                <th scope="col" nzWidth="175px">Năm dự toán</th>
+                                <th scope="col" nzWidth="175px">Ngày tạo</th>
+                                <th scope="col" nzWidth="175px">Nơi tạo</th>
+                                <th scope="col" nzWidth="175px">Trạng thái</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
                                     <div class="tep" (click)="downloadFileCv()">
-                                        <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
                                         <span>{{soQd?.fileName}}</span>
                                     </div>
                                 </td>
@@ -72,7 +80,6 @@
         </div>
 
 
-        <!-- 123123 -->
         <div class="mt16 flex-card p-lr16">
             <nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Nội dung báo cáo"
                 [nzExtra]="">
@@ -97,9 +104,9 @@
                     <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
                         <thead>
                             <tr>
-                                <th nzWidth="10%">STT</th>
-                                <th nzWidth="65%">Nội dung</th>
-                                <th nzWidth="25%">Số tiền</th>
+                                <th scope="col" nzWidth="10%">STT</th>
+                                <th scope="col" nzWidth="65%">Nội dung</th>
+                                <th scope="col" nzWidth="25%">Số tiền</th>
                             </tr>
                         </thead>
                         <tbody>

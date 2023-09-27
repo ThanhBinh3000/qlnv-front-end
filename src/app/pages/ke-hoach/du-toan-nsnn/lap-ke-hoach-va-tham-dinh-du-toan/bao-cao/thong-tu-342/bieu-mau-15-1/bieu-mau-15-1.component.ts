@@ -12,6 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
+import { ScriptTarget } from 'typescript';
 
 export class ItemData {
 	id: string;
@@ -158,29 +159,30 @@ export class BieuMau151Component implements OnInit {
 		Object.assign(this.status, this.dataInfo.status);
 		await this.getFormDetail();
 		this.namBcao = this.dataInfo.namBcao;
-		if (this.status) {
+		if (this.status.general) {
 			this.scrollX = Table.tableWidth(350, 26, 1, 60);
 		} else {
 			this.scrollX = Table.tableWidth(350, 26, 1, 0);
 		}
-		const reqGetDonViCon = {
-			maDviCha: this.dataInfo.maDvi,
-			trangThai: '01',
-		}
-		await this.quanLyVonPhiService.dmDviCon(reqGetDonViCon).toPromise().then(res => {
-			if (res.statusCode == 0) {
-				if (this.dataInfo.capDvi == "1") {
-					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
-				} else if (this.dataInfo.capDvi == "2") {
-					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CCDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
-				}
-			} else {
-				this.notification.error(MESSAGE.ERROR, res?.msg);
+
+		if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
+			const reqGetDonViCon = {
+				maDviCha: this.dataInfo.maDvi,
+				trangThai: '01',
 			}
-		}, err => {
-			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		})
-		if (this.dataInfo?.isSynthetic) {
+			await this.quanLyVonPhiService.dmDviCon(reqGetDonViCon).toPromise().then(res => {
+				if (res.statusCode == 0) {
+					if (this.dataInfo.capDvi == "1") {
+						this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
+					} else if (this.dataInfo.capDvi == "2") {
+						this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CCDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
+					}
+				} else {
+					this.notification.error(MESSAGE.ERROR, res?.msg);
+				}
+			}, err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			})
 			this.donVis.forEach(item => {
 				if (this.lstCtietBcao.findIndex(e => e.maLvuc == item.maDvi) == -1) {
 					this.lstCtietBcao.push(new ItemData({
@@ -349,31 +351,6 @@ export class BieuMau151Component implements OnInit {
 		})
 	}
 
-	addLine(id: number): void {
-		const item: ItemData = new ItemData({
-			id: uuid.v4() + 'FE',
-			checked: false,
-		});
-
-		this.lstCtietBcao.splice(id + 1, 0, item);
-		this.editCache[item.id] = {
-			edit: true,
-			data: new ItemData(item)
-		};
-	}
-
-	// xoa theo id
-	deleteById(id: any): void {
-		this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
-	}
-
-	checkDelete(maDa: string) {
-		if (!maDa) {
-			return true;
-		}
-		return false;
-	}
-
 	// xoa file trong bang file
 	deleteFile(id: string): void {
 		this.formDetail.lstFiles = this.formDetail.lstFiles.filter((a: any) => a.id !== id);
@@ -455,6 +432,14 @@ export class BieuMau151Component implements OnInit {
 			row[field] = field == 'tenDmuc' ? 'Tổng số' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
 		})
 		filterData.push(row)
+		// thêm công thức tính cho biểu mẫu
+		const calHeader = ['A', 'B', '1', '2', '3=4+5+6+khác', '4', '5', '6', '', '7', '8=9+10+11+khác', '9', '10', '11', '', '12',
+			'13', '14=15+16+17+khác', '15', '16', '17', '', '18', '19=20+21+22+khác', '20', '21', '22', '', ''];
+		let cal = {};
+		fieldOrder.forEach((field, index) => {
+			cal[field] = calHeader[index];
+		})
+		filterData.unshift(cal);
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })

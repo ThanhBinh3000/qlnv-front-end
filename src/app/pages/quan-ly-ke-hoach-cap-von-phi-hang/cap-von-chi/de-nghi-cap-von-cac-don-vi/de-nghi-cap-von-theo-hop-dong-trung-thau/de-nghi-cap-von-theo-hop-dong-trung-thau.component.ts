@@ -57,11 +57,11 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
+                soCv: this.baoCao.congVan?.fileName,
+                ngayCv: this.baoCao.ngayCongVan,
             },
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
@@ -71,9 +71,9 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
                     ...new Doc(),
                     fileName: res.soCongVan,
                 };
+                this.fileDetail = file;
             }
         });
-        this.fileDetail = file;
         return false;
     };
 
@@ -197,7 +197,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         this.status.pass = this.status.pass && this.userService.isAccessPermisson(Roles.CVNC.PASS_DN) && isChild;
         this.status.approve = this.status.approve && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN) && isChild;
         this.status.accept = this.status.accept && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_DN);
-        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent) && !(!this.baoCao.id);
 
         this.isSynth = isChild && this.userService.isTongCuc() && this.baoCao.loaiDnghi != Cvnc.VTU;
         if (this.baoCao.loaiDnghi != Cvnc.VTU) {
@@ -281,11 +281,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
                 this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -441,6 +437,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         // export sheet hợp đồng
         let headerHD = [];
         let fieldHD = []
+        let calHeaderHd = [];
         if (this.baoCao.loaiDnghi == Cvnc.VTU) {
             headerHD = [
                 { t: 0, b: 5, l: 0, r: 10, val: null },
@@ -462,6 +459,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
             ]
             fieldHD = ['tenKhachHang', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'slThucHien', 'donGia', 'gtHopDong', 'gtThucHien', 'phatViPham',
                 'tlSoluong', 'tlThanhTien'];
+            calHeaderHd = ['B', 'C', '1', '2', '3', '4', '5=2x4', '6=3x4', '7', '8', '9'];
         } else {
             headerHD = [
                 { t: 0, b: 5, l: 0, r: 8, val: null },
@@ -481,6 +479,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
             ]
             fieldHD = ['tenDvi', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'donGia', 'gtHopDong', 'phatViPham',
                 'tlSoluong', 'tlThanhTien', 'congVan'];
+            calHeaderHd = ['A', 'C', '1', '2', '4', '5=2x4', '7', '8', '9'];
         }
         const filterDataHD = this.lstCtiets.filter(e => e.level > (this.isSynth ? 1 : 0)).map(item => {
             const row: any = {};
@@ -489,12 +488,19 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHd = {};
+        fieldHD.forEach((field, index) => {
+            calHd[field] = calHeaderHd[index];
+        })
+        filterDataHD.unshift(calHd);
         const worksheetHD = Table.initExcel(headerHD);
         XLSX.utils.sheet_add_json(worksheetHD, filterDataHD, { skipHeader: true, origin: Table.coo(headerHD[0].l, headerHD[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Hợp đồng');
         // export sheet cap von
         let header = [];
         let fieldOrder = [];
+        let calHeader = [];
         if (this.baoCao.loaiDnghi == Cvnc.VTU) {
             header = [
                 { t: 0, b: 5, l: 0, r: 14, val: null },
@@ -507,20 +513,21 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
                 { t: 5, b: 5, l: 3, r: 3, val: 'Thực hiện' },
                 { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị hợp đồng (đã bao gồm VAT) (đồng)' },
                 { t: 4, b: 5, l: 5, r: 5, val: 'Giá trị thực hiện' },
-                { t: 4, b: 5, l: 6, r: 6, val: 'Vi phạm hợp đồng' },
-                { t: 4, b: 4, l: 7, r: 8, val: 'Thanh lý hợp đồng' },
-                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng' },
-                { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
-                { t: 4, b: 4, l: 9, r: 11, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 10, r: 10, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 11, r: 11, val: 'Cộng' },
-                { t: 4, b: 5, l: 12, r: 12, val: 'Dự toán đã giao' },
-                { t: 4, b: 5, l: 13, r: 13, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
-                { t: 4, b: 5, l: 14, r: 14, val: 'Vốn đề nghị cấp lần này' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán đã giao' },
+                { t: 4, b: 4, l: 7, r: 9, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Cộng' },
+                { t: 4, b: 5, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
+                { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này' },
+                { t: 4, b: 5, l: 12, r: 12, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 13, r: 14, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Số lượng' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Thành tiền' },
             ]
-            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'slThucHien', 'gtHopDong', 'gtThucHien', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'lkUng', 'lkCap', 'lkCong',
-                'dtoanDaGiao', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];
+            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'slThucHien', 'gtHopDong', 'gtThucHien', 'dtoanDaGiao', 'lkUng', 'lkCap', 'lkCong',
+                'tongVonVaDtoanDaCap', 'vonDnCapLanNay', 'phatViPham', 'tlSoluong', 'tlThanhTien'];
+            calHeader = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9=7+8', '10=6+9', '11=5-10', '12', '13', '14'];
         } else {
             header = [
                 { t: 0, b: 5, l: 0, r: 12, val: null },
@@ -531,20 +538,21 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
                 { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
                 { t: 5, b: 5, l: 2, r: 2, val: 'Hợp đồng' },
                 { t: 4, b: 5, l: 3, r: 3, val: 'Giá trị hợp đồng (đã bao gồm VAT) (đồng)' },
-                { t: 4, b: 5, l: 4, r: 4, val: 'Vi phạm hợp đồng' },
-                { t: 4, b: 4, l: 5, r: 6, val: 'Thanh lý hợp đồng' },
-                { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng' },
-                { t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
-                { t: 4, b: 4, l: 7, r: 9, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
-                { t: 5, b: 5, l: 7, r: 7, val: 'Vốn ứng' },
-                { t: 5, b: 5, l: 8, r: 8, val: 'Vốn cấp' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Cộng' },
-                { t: 4, b: 5, l: 10, r: 10, val: 'Dự toán đã giao' },
-                { t: 4, b: 5, l: 11, r: 11, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
-                { t: 4, b: 5, l: 12, r: 12, val: 'Vốn đề nghị cấp lần này' },
+                { t: 4, b: 5, l: 4, r: 4, val: 'Dự toán đã giao' },
+                { t: 4, b: 4, l: 5, r: 7, val: 'Lũy kế vốn cấp đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Vốn ứng' },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Vốn cấp' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Cộng' },
+                { t: 4, b: 5, l: 8, r: 8, val: 'Tổng vốn và dự toán đã cấp đến thời điểm báo cáo' },
+                { t: 4, b: 5, l: 9, r: 9, val: 'Vốn đề nghị cấp lần này' },
+                { t: 4, b: 5, l: 10, r: 10, val: 'Vi phạm hợp đồng' },
+                { t: 4, b: 4, l: 11, r: 12, val: 'Thanh lý hợp đồng' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Số lượng' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Thành tiền' },
             ]
-            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'gtHopDong', 'phatViPham', 'tlSoluong', 'tlThanhTien', 'lkUng', 'lkCap', 'lkCong',
-                'dtoanDaGiao', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];
+            fieldOrder = ['tenDvi', 'slKeHoach', 'slHopDong', 'gtHopDong', 'dtoanDaGiao', 'lkUng', 'lkCap', 'lkCong',
+                'tongVonVaDtoanDaCap', 'vonDnCapLanNay', 'phatViPham', 'tlSoluong', 'tlThanhTien'];
+            calHeader = ['A', '1', '2', '4', '6', '7', '8', '9=7+8', '10=6+9', '11=4-10', '12', '13', '14'];
         }
         const filterData = this.lstCtiets.filter(e => e.level < (this.isSynth ? 2 : 1)).map(item => {
             const row: any = {};
@@ -553,6 +561,12 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Đề nghị cấp vốn');

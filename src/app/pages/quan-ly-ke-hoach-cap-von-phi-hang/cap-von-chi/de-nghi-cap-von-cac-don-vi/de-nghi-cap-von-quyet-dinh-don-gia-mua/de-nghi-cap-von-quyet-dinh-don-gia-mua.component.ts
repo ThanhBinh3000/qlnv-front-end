@@ -55,11 +55,11 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: 'Thêm mới công văn',
             nzContent: DialogCongVanComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
-            nzMaskClosable: false,
             nzWidth: '60%',
             nzFooter: null,
             nzComponentParams: {
+                soCv: this.baoCao.congVan?.fileName,
+                ngayCv: this.baoCao.ngayCongVan,
             },
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
@@ -69,9 +69,9 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                     ...new Doc(),
                     fileName: res.soCongVan,
                 };
+                this.fileDetail = file;
             }
         });
-        this.fileDetail = file;
         return false;
     };
 
@@ -191,7 +191,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.status.approve = this.status.approve && isChild && this.userService.isAccessPermisson(Roles.CVNC.APPROVE_DN);
         this.status.accept = Status.check('accept', this.baoCao.trangThai) && this.isParent && this.userService.isAccessPermisson(Roles.CVNC.ACCEPT_DN);
         // this.status.export = this.baoCao.trangThai == Status.TT_09 || (this.baoCao.trangThai == Status.TT_07 && isChild && this.userService.isTongCuc());
-        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent);
+        this.status.export = this.userService.isAccessPermisson(Roles.CVNC.EXPORT_DN) && (isChild || this.isParent) && !(!this.baoCao.id);
         this.scrollX = Table.tableWidth(350, 10, 0, 0);
     }
 
@@ -275,11 +275,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
                 this.baoCao.ngayTraKq = data.data.ngayTraKq;
                 this.getStatusButton();
-                if (Status.check('reject', mcn)) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
+                this.notification.success(MESSAGE.SUCCESS, Status.notiMessage(mcn));
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -413,7 +409,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             { t: 5, b: 5, l: 8, r: 8, val: 'Tổng cấp vốn' },
             { t: 5, b: 5, l: 9, r: 9, val: 'Tổng cộng' },
             { t: 4, b: 5, l: 10, r: 10, val: 'Tổng vốn và dự toán đã cấp' },
-            { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này = Giá trị theo kế hoạch - Lũy kế vốn cấp' },
+            { t: 4, b: 5, l: 11, r: 11, val: 'Vốn đề nghị cấp lần này' },
         ]
         const fieldOrder = ['stt', 'tenDvi', 'slKeHoach', 'slThucHien', 'donGia', 'gtThucHien', 'dtoanDaGiao', 'lkUng', 'lkCap',
             'lkCong', 'tongVonVaDtoanDaCap', 'vonDnCapLanNay'];
@@ -424,6 +420,13 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             })
             return row;
         })
+        // thêm công thức tính cho biểu mẫu
+        const calHeader = ['A', 'B', '1', '2', '3', '4=2x3', '5', '6', '7', '8=6+7', '9=5+8', '10=4-9'];
+        let cal = {};
+        fieldOrder.forEach((field, index) => {
+            cal[field] = calHeader[index];
+        })
+        filterData.unshift(cal);
         const worksheetHD = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheetHD, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Đề nghị cấp vốn');

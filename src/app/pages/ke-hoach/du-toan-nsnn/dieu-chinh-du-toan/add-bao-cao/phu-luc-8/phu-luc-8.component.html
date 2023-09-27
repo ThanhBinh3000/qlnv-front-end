@@ -23,11 +23,7 @@
 							</div>
 						</div>
 						<div class="canphai">
-							<!-- <button type="button" class="btn btn-main" (click)="deleteAllChecked()"
-								*ngIf="status.general">
-								<i class="fa fa-trash-o"></i>
-								<span>Xóa</span>
-							</button> -->
+
 							<button type="button" class="btn btn-sub" (click)="selectGoods()" *ngIf="status.general">
 								<i class="icon htvbdh_dau-cong"></i>
 								<span>Thêm</span>
@@ -38,66 +34,67 @@
 					<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<!-- <th rowspan="2" *ngIf="status.general" class="text-center" nzWidth="50px">
-									<label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-										style="margin-right: 0;">
-									</label>
-								</th> -->
-								<th rowSpan="2" nzWidth="50px" nzLeft>STT</th>
-								<th nzWidth="300px" rowSpan="2" nzLeft>Mặt hàng</th>
-								<th rowSpan="2">ĐVT</th>
-								<th rowSpan="2">Số lượng bảo quản theo KH được giao</th>
-								<th colSpan="3">Lượng hàng thực hiện</th>
-								<th rowSpan="2">Định mức</th>
-								<th rowSpan="2">Tổng nhu cầu dự toán năm {{namBcao}} </th>
-								<th colSpan="3">Kinh phí được sử dụng năm {{namBcao}} </th>
-								<th rowSpan="2">Dự toán điều chỉnh <br> (+ tăng) (- giảm)</th>
-								<th rowSpan="2" *ngIf="status.viewAppVal">Dự toán Vụ TVQT <br> đề nghị (+ tăng) (-
+
+								<th scope="col" rowSpan="2" nzWidth="50px" nzLeft>STT</th>
+								<th scope="col" nzWidth="300px" rowSpan="2" nzLeft>Mặt hàng</th>
+								<th scope="col" rowSpan="2">ĐVT</th>
+								<th scope="col" rowSpan="2">Số lượng bảo quản theo KH được giao</th>
+								<th scope="colgroup" colSpan="3">Lượng hàng thực hiện</th>
+								<th scope="col" rowSpan="2">Định mức</th>
+								<th scope="col" rowSpan="2">Tổng nhu cầu dự toán năm {{namBcao}} </th>
+								<th scope="colgroup" colSpan="3">Kinh phí được sử dụng năm {{namBcao}} </th>
+								<th scope="col" rowSpan="2">Dự toán điều chỉnh <br> (+ tăng) (- giảm)</th>
+								<th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Dự toán Vụ TVQT <br> đề nghị (+
+									tăng) (-
 									giảm)</th>
-								<th rowSpan="2">Dự toán phí bảo quản thiếu năm 2020
+								<th scope="col" rowSpan="2">Dự toán phí bảo quản thiếu năm 2020
 								</th>
-								<th rowSpan="2" *ngIf="status.viewAppVal">Dự toán chênh lệch giữa <br> Vụ TVQT
+								<th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Dự toán chênh lệch giữa <br>
+									Vụ TVQT
 									điều chỉnh <br> và đơn vị đề nghị <br>(+ tăng)(- giảm)</th>
-								<th rowSpan="2" *ngIf="status.viewAppVal">ý kiến của đơn vị cấp trên</th>
-								<th rowSpan="2">Ghi chú</th>
-								<th rowspan="2" *ngIf="status.general"></th>
-								<th rowspan="2" *ngIf="status.general || status.editAppVal"></th>
+								<th scope="col" rowSpan="2" *ngIf="status.viewAppVal">ý kiến của đơn vị cấp trên
+								</th>
+								<th scope="col" rowSpan="2">Ghi chú</th>
+								<th scope="col" rowspan="2" *ngIf="status.general"></th>
+								<th scope="col" rowspan="2" *ngIf="status.general || status.editAppVal"></th>
 							</tr>
 							<tr>
-								<th>Số lượng bảo quản thực tế <br> đã thực hiện đến <br> thời điểm báo cáo </th>
-								<th>Số lượng bảo quản ước thực hiện <br> từ thời điểm báo cáo đến cuối năm</th>
-								<th>Cộng</th>
-								<th>Cộng</th>
-								<th>Dự toán năm trước <br> chuyển sang được phép <br> sử dụng cho năm nay</th>
-								<th>Dự toán đã giao trong năm</th>
+								<th scope="col">Số lượng bảo quản thực tế <br> đã thực hiện đến <br> thời điểm báo cáo
+								</th>
+								<th scope="col">Số lượng bảo quản ước thực hiện <br> từ thời điểm báo cáo đến cuối năm
+								</th>
+								<th scope="col">Cộng</th>
+								<th scope="col">Cộng</th>
+								<th scope="col">Dự toán năm trước <br> chuyển sang được phép <br> sử dụng cho năm nay
+								</th>
+								<th scope="col">Dự toán đã giao trong năm</th>
 							</tr>
 							<tr>
-								<!-- <th *ngIf="status.general"></th> -->
-								<th nzLeft>A</th>
-								<th nzLeft>B</th>
-								<th>C</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
-								<th>4 = 3 + 2</th>
-								<th>5</th>
-								<th>6 = 5 * 4</th>
-								<th>7 = 8 + 9</th>
-								<th>8</th>
-								<th>9</th>
-								<th>10 = 6 - 7</th>
-								<th *ngIf="status.viewAppVal">11</th>
-								<th>12</th>
-								<th *ngIf="status.viewAppVal">13 = 11 -10</th>
-								<th *ngIf="status.viewAppVal">14</th>
-								<th>15</th>
-								<th *ngIf="status.general"></th>
-								<th *ngIf="status.general || status.editAppVal"></th>
+
+								<th scope="col" nzLeft>A</th>
+								<th scope="col" nzLeft>B</th>
+								<th scope="col">C</th>
+								<th scope="col">1</th>
+								<th scope="col">2</th>
+								<th scope="col">3</th>
+								<th scope="col">4 = 3 + 2</th>
+								<th scope="col">5</th>
+								<th scope="col">6 = 5 * 4</th>
+								<th scope="col">7 = 8 + 9</th>
+								<th scope="col">8</th>
+								<th scope="col">9</th>
+								<th scope="col">10 = 6 - 7</th>
+								<th scope="col" *ngIf="status.viewAppVal">11</th>
+								<th scope="col">12</th>
+								<th scope="col" *ngIf="status.viewAppVal">13 = 11 -10</th>
+								<th scope="col" *ngIf="status.viewAppVal">14</th>
+								<th scope="col">15</th>
+								<th scope="col" *ngIf="status.general"></th>
+								<th scope="col" *ngIf="status.general || status.editAppVal"></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<!-- <td *ngIf="status.general"></td> -->
 								<td nzLeft></td>
 								<td nzLeft>Tổng cộng</td>
 								<td></td>
@@ -120,7 +117,6 @@
 								<td *ngIf="status.general || status.editAppVal"></td>
 							</tr>
 							<tr>
-								<!-- <td *ngIf="status.general"></td> -->
 								<td nzLeft></td>
 								<td nzLeft>Phát sinh điều chỉnh tăng</td>
 								<td></td>
@@ -143,7 +139,7 @@
 								<td *ngIf="status.general || status.editAppVal"></td>
 							</tr>
 							<tr>
-								<!-- <td *ngIf="status.general"></td> -->
+
 								<td nzLeft></td>
 								<td nzLeft>Phát sinh điều chỉnh giảm</td>
 								<td></td>
@@ -167,10 +163,7 @@
 							</tr>
 							<tr *ngFor="let data of lstCtietBcao; let i = index">
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-									<!-- <td [hidden]="status " class="text-center">
-										<label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
-											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-									</td> -->
+
 									<td class="text-center" nzLeft>
 										{{getChiMuc(data.stt)}}
 									</td>
@@ -214,10 +207,7 @@
 
 								</ng-container>
 								<ng-template #editTemplate>
-									<!-- <td *ngIf="status.general" class="text-center">
-										<label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
-											[(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-									</td> -->
+
 									<td class="text-center" nzLeft>
 										{{getChiMuc(editCache[data.id].data.stt)}}
 									</td>
@@ -351,9 +341,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th nzWidth="7%">STT</th>
-									<th>Tên file</th>
-									<th nzWidth="15%"></th>
+									<th scope="col" nzWidth="7%">STT</th>
+									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
 							<tbody>
