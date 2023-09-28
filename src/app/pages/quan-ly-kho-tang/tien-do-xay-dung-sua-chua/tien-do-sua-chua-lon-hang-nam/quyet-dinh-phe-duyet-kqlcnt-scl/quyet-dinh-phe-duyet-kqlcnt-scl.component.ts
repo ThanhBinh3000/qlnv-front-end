@@ -48,6 +48,7 @@ export class QuyetDinhPheDuyetKqlcntSclComponent extends Base2Component implemen
   }
 
   async ngOnInit() {
+    console.log(this.itemTtdt,"this.itemTtdt")
     this.checkTrangThaiTtdt();
     this.formData = this.fb.group({
       soQd: [''],
@@ -70,6 +71,7 @@ export class QuyetDinhPheDuyetKqlcntSclComponent extends Base2Component implemen
     }
     this.checkTrangThaiTtdt();
     this.search();
+    console.log(this.dataTable,"5555")
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
@@ -106,6 +108,7 @@ export class QuyetDinhPheDuyetKqlcntSclComponent extends Base2Component implemen
         },
       };
       let res = await this.quyetdinhpheduyetKhlcntService.search(body);
+      console.log(res,"res")
       if (res.msg == MESSAGE.SUCCESS) {
         if (!res.data || !res.data.content || res.data.content.length == 0) {
           this.trangThaiTtdt = true;
