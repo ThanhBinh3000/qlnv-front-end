@@ -278,7 +278,7 @@
         <td></td>
         <td></td>
         <td class="text-right" *ngIf="!isView">
-          <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
+          <a *ngIf="!isDisbleForm()" (click)="themMoiCuc($event, dtGoiThau.goiThau)">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
           <a *ngIf="!isDisbleForm()" (click)="deleteGoiThau(i)">
@@ -319,7 +319,7 @@
                 <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-99' : 'vi_VN'}}</td>
                 <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-99' : 'vi_VN'}}</td>
                 <td class="text-right" *ngIf="!isView">
-                  <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
+                  <a *ngIf="!isDisbleForm()" (click)="themMoiCuc($event, dtGoiThau.goiThau)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a *ngIf="!isDisbleForm()" (click)="deleteDiemKho(i, y, z)">

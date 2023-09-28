@@ -116,7 +116,7 @@
                         (click)="redirectToChiTiet(true, dataPhieu.id)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
-                      <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')"
+                      <a *ngIf="(dataPhieu.trangThai == STATUS.DU_THAO || dataPhieu.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')"
                          (click)="redirectToChiTiet(false, dataPhieu.id)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
