@@ -240,7 +240,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     // this.formData.controls.soQdGnv.setValidators([Validators.required]);
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return;
-    if (this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
+    if (!this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
       return this.notification.error(MESSAGE.ERROR, "Thông tin chi tiết đề xuất cứu trợ, viện trợ của các đơn vị không tồn tại.")
     }
     let xuatCap = this.formData.value.xuatCap;
@@ -611,8 +611,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                   soLuongDx,
                   tonKhoCloaiVthh,
                   childData: row1 ? v : [],
-                  isParentLeafs: true
-
                 }
               }).value();
             let soLuongDx = rs.reduce((prev, next) => prev += next.soLuongDx, 0);
@@ -655,7 +653,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soLuongNhuCauXuat,
               soLuongXc,
               childData: row ? value : [],
-              isParentLeafs: true
             };
           }).value();
       }
@@ -684,7 +681,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                   tonKhoCloaiVthh,
                   tonKhoLoaiVthh,
                   childData: row1 ? v : [],
-                  isParentLeafs: true
                 }
               }).value();
             let soLuongDx = rs.reduce((prev, next) => prev += next.soLuongDx, 0);
@@ -730,14 +726,13 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soLuongNhuCauXuat,
               soLuongXc,
               childData: row ? value : [],
-              isParentLeafs: true
             };
           }).value();
       }
     };
     if (this.formData.value.type !== "TH") {
-      this.phuongAnView = cloneDeep(this.phuongAnHdrView);
-      this.phuongAnViewCache = cloneDeep(this.phuongAnHdrViewCache);
+      this.phuongAnView = this.phuongAnHdrView;
+      this.phuongAnViewCache = this.phuongAnHdrViewCache;
       await this.tinhTong();
     };
     // await this.tinhTong();
