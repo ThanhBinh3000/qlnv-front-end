@@ -84,14 +84,15 @@ export class LoginComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, permission.msg);
           }
           this.storageService.set(STORAGE_KEY.PERMISSION, jsonData);
+          this.router.navigate([this.setDefultModule(allRoles)]);
+          if (allRoles) {
+            this.router.navigate([this.setDefultModule(allRoles)]);
+          } else {
+            this.notification.warning(MESSAGE.WARNING, 'Không có quyền truy cập.');
+            return;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-        if (allRoles) {
-          this.router.navigate([this.setDefultModule(allRoles)]);
-        } else {
-          this.notification.warning(MESSAGE.WARNING, 'Không có quyền truy cập.');
-          return;
         }
         this.spinner.hide();
       });
