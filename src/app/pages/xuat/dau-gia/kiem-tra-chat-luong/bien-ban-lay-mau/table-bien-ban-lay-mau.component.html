@@ -168,8 +168,7 @@
                          (click)="redirectDetail(lv2.id,true)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                       </a>
-                      <a *ngIf="loaiVthh.startsWith('02') ? vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XOA)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_XOA'):
-                         vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XOA)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_XOA')"
+                      <a *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_XOA')"
                          (click)="delete(lv2)">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>

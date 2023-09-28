@@ -160,6 +160,11 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   async save() {
     try {
+      this.danhsachDx = this.danhsachDx.map(item => ({
+        ...item,
+        lastest: null,
+        isDieuChinh: null
+      }));
       await this.helperService.ignoreRequiredForm(this.formData);
       this.setValidator();
       const body = {
@@ -181,6 +186,11 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       return;
     }
     this.setValidForm();
+    this.danhsachDx = this.danhsachDx.map(item => ({
+      ...item,
+      lastest: null,
+      isDieuChinh: null
+    }));
     const soQdPd = this.formData.value.soQdPd ? `${this.formData.value.soQdPd}${this.maHauTo}` : null;
     const body = {
       ...this.formData.value,
