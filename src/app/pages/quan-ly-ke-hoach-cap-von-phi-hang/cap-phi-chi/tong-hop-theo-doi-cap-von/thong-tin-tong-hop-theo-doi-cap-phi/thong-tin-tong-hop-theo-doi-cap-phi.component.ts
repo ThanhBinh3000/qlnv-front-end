@@ -21,6 +21,7 @@ import { Globals } from 'src/app/shared/globals';
 import { ThongTriDuyetYCapVonService } from '../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
 import { ThongTriDuyetYCapPhiService } from '../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
 import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
+import { STATUS } from '../../../../../constants/status';
 
 @Component({
   selector: 'app-thong-tin-tong-hop-theo-doi-cap-phi',
@@ -44,7 +45,7 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
   titleButtonDuyet: string = '';
   iconButtonDuyet: string = '';
   styleStatus: string = 'du-thao-va-lanh-dao-duyet';
-
+  STATUS = STATUS;
   userInfo: UserLogin;
   listFileDinhKem: any[] = [];
   itemTongHopTd: any = {};
@@ -70,8 +71,8 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.itemTongHopTd.trangThai = this.globals.prop.NHAP_DU_THAO;
-    this.itemTongHopTd.tenTrangThai = 'Dự thảo';
+    this.itemTongHopTd.trangThai = STATUS.DANG_THUC_HIEN;
+    this.itemTongHopTd.tenTrangThai = 'Đang thực hiện';
     await Promise.all([
       this.initForm(),
       this.getListBoNganh(),
