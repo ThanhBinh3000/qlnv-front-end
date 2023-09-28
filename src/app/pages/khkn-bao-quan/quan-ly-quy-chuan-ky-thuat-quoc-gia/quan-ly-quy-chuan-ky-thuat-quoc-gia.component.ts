@@ -85,7 +85,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       trichYeu: null,
       tenLoaiVthh: null,
       tenCloaiVthh: null,
-
+      maBn: null,
     })
     this.filterTable = {
       soVanBan: '',
@@ -186,9 +186,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
     this.dsBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsBoNganh = res.data.filter(s => s.tenDvi);
-      let boTaiChinh = res.data.find(s => s.code === 'BTC');
-      Object.assign(this.dsBoNganh, boTaiChinh)
+      this.dsBoNganh = res.data;
     }
   }
 
