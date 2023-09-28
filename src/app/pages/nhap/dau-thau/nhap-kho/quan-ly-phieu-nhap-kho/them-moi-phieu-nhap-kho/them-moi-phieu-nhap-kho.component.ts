@@ -342,7 +342,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDCC;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
