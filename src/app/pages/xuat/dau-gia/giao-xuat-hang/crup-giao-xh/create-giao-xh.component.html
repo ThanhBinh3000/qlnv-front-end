@@ -150,7 +150,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open">
                     <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly/>
@@ -160,7 +160,7 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open">
                     <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly/>
@@ -170,7 +170,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Tên hàng DTQG</nz-form-label>
                 <nz-form-control nz-col>
                   <input placeholder="" nz-input formControlName="tenHangHoa" readonly/>
                 </nz-form-control>
@@ -220,7 +220,7 @@
             </div>
             <div nz-col [nzSpan]="8">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Lãnh đạo cục</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Lãnh đạo Cục</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <input placeholder="" nz-input formControlName="tenLanhDaoCuc" readonly/>
                 </nz-form-control>
@@ -261,7 +261,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG HÓA'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG DTQG'" [nzActive]="true">
         <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                   [nzShowPagination]="false">
           <thead>
@@ -272,8 +272,8 @@
             <th class="text-left"> Nhà kho</th>
             <th class="text-left"> Ngăn/Lô kho</th>
             <th class="text-center"> Mã ĐVTS</th>
-            <th class="text-right"> Tồn kho</th>
-            <th class="text-right"> Số lượng xuất</th>
+            <th class="text-center"> Tồn kho</th>
+            <th class="text-center"> Số lượng xuất</th>
           </tr>
           </thead>
           <tbody>

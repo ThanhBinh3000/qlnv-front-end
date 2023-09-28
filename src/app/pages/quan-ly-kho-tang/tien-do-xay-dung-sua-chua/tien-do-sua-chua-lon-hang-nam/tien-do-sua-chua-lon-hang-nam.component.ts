@@ -108,6 +108,9 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       if (res.msg == MESSAGE.SUCCESS) {
         this.dataTable = this.convertListData(res.data);
         this.dataTableRaw = res.data;
+        if (this.dataTableRaw && this.dataTableRaw.length > 0) {
+          this.selectRow(this.dataTableRaw[0]);
+        }
         this.expandAll(this.dataTable);
       } else {
         this.dataTable = [];
@@ -409,6 +412,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       });
     }
     data.selected = true;
+    this.itemSelected = data;
     await this.loadQdPdDaDtxdByDuAn(data);
     this.selectTab("01");
   }

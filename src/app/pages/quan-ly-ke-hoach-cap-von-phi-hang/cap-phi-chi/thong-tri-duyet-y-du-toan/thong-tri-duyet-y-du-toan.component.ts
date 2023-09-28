@@ -83,11 +83,6 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
   isView = false;
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐC'},
-    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Từ chối - LĐC'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Đã duyệt - LĐC'},
     {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
     {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ Vụ'},
     {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ'},
@@ -406,4 +401,5 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     }
     return result;
   }
+
 }

@@ -421,6 +421,12 @@ export class ThemMoiQdDcBkComponent implements OnInit {
         phuongAnQuyHoach: data.phuongAnQuyHoach
       });
       this.dataTable = data.quyetDinhQuyHoachCTiets;
+      if (this.userService.isCuc()) {
+        this.dataTable = this.dataTable.filter(item => item.maCuc == this.userInfo.MA_DVI)
+      }
+      if (this.userService.isChiCuc()) {
+        this.dataTable = this.dataTable.filter(item => item.maChiCuc == this.userInfo.MA_DVI)
+      }
       if (this.dataTable) {
         this.dataTableDTM = this.dataTable.filter(item => item.phuongAnQuyHoach == "ĐT");
         this.dataTableTL = this.dataTable.filter(item => item.phuongAnQuyHoach != "ĐT");

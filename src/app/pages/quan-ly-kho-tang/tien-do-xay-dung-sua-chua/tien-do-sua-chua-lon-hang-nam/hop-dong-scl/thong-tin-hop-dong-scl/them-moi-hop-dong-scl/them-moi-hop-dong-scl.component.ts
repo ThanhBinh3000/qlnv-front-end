@@ -230,7 +230,7 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
     if (this.formData.invalid) {
       return;
     }
-    this.formData.value.soHd = this.formData.value.soHd + this.hauToSoHd;
+    this.formData.value.soHd = this.formData.value.soHd? this.formData.value.soHd+ this.hauToSoHd:null;
     this.formData.value.idDuAn = this.itemDuAn.id
     this.formData.value.tenDuAn = this.itemDuAn.tenCongTrinh
     if (this.dataKlcv && this.dataKlcv.length > 0) {

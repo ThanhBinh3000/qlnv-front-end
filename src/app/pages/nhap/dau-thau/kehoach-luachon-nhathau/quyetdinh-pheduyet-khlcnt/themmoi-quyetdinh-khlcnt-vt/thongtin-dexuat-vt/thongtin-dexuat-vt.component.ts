@@ -227,7 +227,7 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
   themMoiGoiThau($event: any, data?: DanhSachGoiThau, index?: number) {
     $event.stopPropagation();
     if (this.formData.get("loaiVthh").value == null) {
-      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
+      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng DTQG");
       return;
     }
     let listGoiThau = [];

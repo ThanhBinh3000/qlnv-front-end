@@ -211,7 +211,7 @@
                                      (click)="openModal(data.idQdNv)">{{ data.soQdNv }}</a></td>
             <td>{{ data.tenTrangThaiXh}}</td>
             <td>
-              <a
+              <a *ngIf="data.trangThai == STATUS.DA_KY"
                 (click)="redirectHopDong(data.id, true, true) ">
                 <i class="fa fa-eye" title="Xem"></i>
               </a>

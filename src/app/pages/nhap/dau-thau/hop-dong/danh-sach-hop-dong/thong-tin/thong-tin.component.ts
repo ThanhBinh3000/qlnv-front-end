@@ -578,7 +578,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 nzFooter: null,
                 nzComponentParams: {
                     dataTable: this.listGoiThau,
-                    dataHeader: ['Tên gói thầu', 'Loại hàng hóa', 'Số lượng', 'Đơn giá Vat'],
+                    dataHeader: ['Tên gói thầu', 'Loại hàng DTQG', 'Số lượng', 'Đơn giá Vat'],
                     dataColumn: ['goiThau', 'tenLoaiVthh', 'soLuong', 'donGiaNhaThau'],
                 },
             });
@@ -592,7 +592,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 nzFooter: null,
                 nzComponentParams: {
                     dataTable: this.listGoiThau,
-                    dataHeader: ['Tên gói thầu', 'Chủng loại hàng hóa', 'Số lượng', 'Đơn giá Vat'],
+                    dataHeader: ['Tên gói thầu', 'Chủng loại hàng DTQG', 'Số lượng', 'Đơn giá Vat'],
                     dataColumn: ['goiThau', 'tenCloaiVthh', 'soLuong', 'donGiaNhaThau'],
                 },
             });

@@ -163,6 +163,10 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
+  async onChangeNam(event) {
+    this.maHopDongSuffix = `/${event}/HĐMB`;
+  }
+
   async ngOnChanges(changes: SimpleChanges) {
     const {idInput, idHopDong} = this;
     if (idInput) {
@@ -291,6 +295,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           this.setListDviTsanCuc(data.children),
         ]);
         this.formData.patchValue({
+          namKh: data.namKh,
           idQdKq: data.id,
           soQdKq: data.soQdKq,
           ngayKyQdKq: data.ngayKy,
@@ -557,6 +562,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       await this.loadDanhDachHopDong();
       const loaiVthhItem = this.listHangHoaAll.find(s => s.ma == data.loaiVthh);
       const formDataPatchValue = {
+        namKh : data.namKh,
         idChaoGia: data.id,
         idQdPd: data.idHdr,
         soQdPd: data.soQdPd,

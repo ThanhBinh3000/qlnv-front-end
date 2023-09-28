@@ -48,7 +48,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
       id: [],
-      namKh: [''],
+      namKh: [],
       soQdKq: [],
       soQdPd: [],
       tenHd: [],

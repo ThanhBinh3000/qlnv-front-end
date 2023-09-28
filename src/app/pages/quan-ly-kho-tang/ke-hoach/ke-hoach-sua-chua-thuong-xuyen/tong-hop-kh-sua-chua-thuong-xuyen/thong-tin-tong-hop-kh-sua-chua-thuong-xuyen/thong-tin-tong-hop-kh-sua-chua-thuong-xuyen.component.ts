@@ -93,7 +93,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       noiDungTh: [null],
       soToTrinh: [null, Validators.required],
       soQuyetDinh: [null],
-      ngayKyQd: [null],
+      ngayKy: [null],
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
       loai: ["00", Validators.required],
@@ -181,7 +181,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     }
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) {
       this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
-      this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
     }
   }
 
