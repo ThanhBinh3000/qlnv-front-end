@@ -21,7 +21,7 @@ export class XuatKhoComponent implements OnInit {
     router.events.subscribe((val) => {
       this.routerUrl = this.router.url;
       const urlList = this.routerUrl.split("/");
-      this.defaultUrl  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[urlList.length-2];
+      this.defaultUrl  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4];
     })
   }
 

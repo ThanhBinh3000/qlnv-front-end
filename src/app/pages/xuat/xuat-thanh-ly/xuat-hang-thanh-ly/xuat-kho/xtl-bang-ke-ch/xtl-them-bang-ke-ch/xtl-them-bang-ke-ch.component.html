@@ -5,7 +5,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Bảng kê xuất vật tư</span>
+        <span>Bảng kê cân hàng</span>
       </div>
     </div>
     <div class="btn-group">
@@ -56,7 +56,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="10">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Đơn vị</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -72,7 +72,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Số bảng kê</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -80,7 +80,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Ngày nhập bảng kê</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -89,7 +89,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao NV xuất hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -99,7 +99,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày ký QĐ giao NV xuất hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -108,7 +108,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Số phiếu xuất kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -158,7 +158,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="9">
+            <div nz-col [nzSpan]="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Địa điểm kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -168,11 +168,25 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Thời gian giao,nhận hàng</nz-form-label>
+                <nz-form-label [nzNoColon]="true">Đơn vị/Công ty (của người giao hàng)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="thoiGianGiaoNhan" nzShowTime nzFormat="dd/MM/yyyy HH:mm:ss"
-                                  nzDisabled>
-                  </nz-date-picker>
+                  <input nz-input formControlName="dviNguoiGiaoHang" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Thủ kho</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <input nz-input formControlName="tenThuKho" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Lãnh đạo chi cục</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <input nz-input formControlName="tenLanhDaoCc" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -192,7 +206,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Đơn vị/Công ty (của người giao hàng)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -200,11 +214,21 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Địa chỉ Đơn vị/Công ty (người giao hàng)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="diaChi" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Thời gian giao,nhận hàng</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-date-picker formControlName="thoiGianGiaoNhan" nzShowTime nzFormat="dd/MM/yyyy HH:mm:ss"
+                                  nzDisabled>
+                  </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -229,22 +253,6 @@
                 <nz-form-label [nzNoColon]="true">Đơn vị tính</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="donViTinh" readonly />
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="6">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Lãnh đạo chi cục</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenLanhDaoCc" readonly />
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="6">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Thủ kho</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenThuKho" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>

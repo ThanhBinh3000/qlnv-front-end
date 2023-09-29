@@ -102,9 +102,9 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Ngày hiệu lực của QĐ</nz-form-label>
+                <nz-form-label [nzNoColon]="true">Ngày hiệu lực của QĐ</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayLap" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()">
+                  <nz-date-picker formControlName="ngayQdXh" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -113,8 +113,8 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Số BB lấy mẫu/ bàn giao mẫu </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDanhSach()">
-                    <input nz-input [readonly]="true" formControlName="soQdXh" />
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBienBanLm()">
+                    <input nz-input [readonly]="true" formControlName="soBbLayMau" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -123,16 +123,16 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Ngày lấy mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayLap" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()">
+                  <nz-date-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Ngày lập phiếu</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Ngày kiểm nghiệm mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayLap" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()">
+                  <nz-date-picker formControlName="ngayKnghiem" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -182,7 +182,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Người kiểm nghiệm (Cán bộ lập phiếu)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenNguoiTao" readonly />
+                  <input nz-input formControlName="tenNguoiKnghiem" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -208,7 +208,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Lãnh đạp Cục</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenTruongPhongKtbq" readonly />
+                  <input nz-input formControlName="tenLdc" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -232,7 +232,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Đơn vị tính</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenCloaiVthh" readonly />
+                  <input nz-input formControlName="dviTinh" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>

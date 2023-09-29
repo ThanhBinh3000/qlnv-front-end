@@ -31,10 +31,14 @@ export class XtlPhieuKtraClComponent extends Base3Component implements OnInit {
       soPhieuKtcl: null,
       ngayTu: null,
       ngayDen: null,
+      phanLoai : null,
     })
     router.events.subscribe((val) => {
       let routerUrl = this.router.url;
       const urlList = routerUrl.split("/");
+      this.formData.patchValue({
+        phanLoai : urlList[4] == 'kiem-tra-lt' ? 'LT' : 'VT'
+      })
       this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-phieu-ktra-cl';
       console.log(this.defaultURL)
     })
