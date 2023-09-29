@@ -9,8 +9,7 @@ import {StorageService} from 'src/app/services/storage.service';
 import {
   TongHopKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
-import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
-import {CHUC_NANG} from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 import {LOAI_HANG_DTQG} from "../../../../../constants/config";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 
@@ -23,19 +22,13 @@ import {DanhMucService} from "../../../../../services/danhmuc.service";
 export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() listVthh: any[] = [];
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: XuatTrucTiepComponent
   isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   isQuyetDinh: boolean = false;
   listLoaiHangHoa: any[] = [];
   dataTongHop: any;
-  listTrangThai: any[] = [
-    {ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ'},
-    {ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ'},
-    {ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ'},
-  ];
+  listTrangThai: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -45,10 +38,8 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
-    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
-    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       loaiVthh: null,
@@ -56,17 +47,30 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       ngayThopTu: null,
       ngayThopDen: null,
     })
-  }
-
-  filterTable: any = {
-    namKh: '',
-    id: '',
-    ngayTao: '',
-    noiDungThop: '',
-    soQdPd: '',
-    tenLoaiVthh: '',
-    tenCloaiVthh: '',
-    tenTrangThai: '',
+    this.filterTable = {
+      namKh: '',
+      id: '',
+      ngayTao: '',
+      noiDungThop: '',
+      soQdPd: '',
+      tenLoaiVthh: '',
+      tenCloaiVthh: '',
+      tenTrangThai: '',
+    }
+    this.listTrangThai = [
+      {
+        value: this.STATUS.CHUA_TAO_QD,
+        text: 'Chưa Tạo QĐ'
+      },
+      {
+        value: this.STATUS.DA_DU_THAO_QD,
+        text: 'Đã Dự Thảo QĐ'
+      },
+      {
+        value: this.STATUS.DA_BAN_HANH_QD,
+        text: 'Đã Ban Hành QĐ'
+      },
+    ]
   }
 
   async ngOnInit() {
@@ -128,18 +132,18 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     await this.search();
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayThopTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayThopDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayThopDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayThopDen, 'ngayThop');
   };
 
   disabledNgayThopDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayThopTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayThopTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayThopTu, 'ngayThop');
   };
 
   openModalQdPd(id: number) {
@@ -153,6 +157,11 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   private updateQdPd(id: number | null, isView: boolean) {
     this.idQdPd = id;
     this.isViewQdPd = isView;
+  }
+
+  isActionAllowed(data): boolean {
+    return this.userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XEM') &&
+      (data.trangThai !== STATUS.CHUA_TAO_QD || !this.userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP'));
   }
 }
 

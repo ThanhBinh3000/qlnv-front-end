@@ -10,8 +10,7 @@ import {
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/dieuchinh-kehoach-bantt/quyet-dinh-dc-bantt.service";
 import {UserService} from "../../../../../services/user.service";
 import {MESSAGE} from "../../../../../constants/message";
-import {CHUC_NANG} from "../../../../../constants/status";
-import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-dieu-chinh-ban-truc-tiep',
@@ -20,20 +19,10 @@ import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 })
 export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: XuatTrucTiepComponent
   isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
-
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DA_LAP, giaTri: 'Đã lập' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ Chối - LĐ Vụ' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ Duyệt - LĐ Vụ' },
-    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ Chối - LĐ Tổng Cục' },
-    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ Duyệt - LĐ Tổng Cục' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hanh' },
-  ];
+  listTrangThai: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -42,11 +31,9 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhDcBanttService: QuyetDinhDcBanttService,
-    private xuatTrucTiepComponent: XuatTrucTiepComponent,
     public userService: UserService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhDcBanttService);
-    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       soQdDc: null,
@@ -66,6 +53,33 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
       tenCloaiVthh: '',
       tenTrangThai: '',
     };
+
+    this.listTrangThai = [
+      {
+        value: this.STATUS.DA_LAP,
+        text: 'Đã lập'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDV,
+        text: 'Chờ Duyệt - LĐ Vụ'
+      },
+      {
+        value: this.STATUS.TU_CHOI_LDV,
+        text: 'Từ Chối - LĐ Vụ'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDTC,
+        text: 'Chờ Duyệt - LĐ Tổng Cục'
+      },
+      {
+        value: this.STATUS.TU_CHOI_LDTC,
+        text: 'Từ Chối - LĐ Tổng Cục'
+      },
+      {
+        value: this.STATUS.BAN_HANH,
+        text: 'Ban Hanh'
+      },
+    ]
   }
 
   async ngOnInit() {
@@ -110,17 +124,56 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
     this.isViewQdPd = false;
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayKyQdDcTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyDcDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyDcDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyDcDen, 'ngayKyDc');
   };
 
   disabledNgayKyQdDcDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyDcTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyDcTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyDcTu, 'ngayKyDc');
   };
+
+  isActionAllowed(action: string, data: any): boolean {
+    const permissionMapping = {
+      XEM: 'XHDTQG_PTTT_DCKHBTT_XEM',
+      THEM: 'XHDTQG_PTTT_DCKHBTT_THEM',
+      BAN_HANH: 'XHDTQG_PTTT_DCKHBTT_BANHANH',
+      XOA: 'XHDTQG_PTTT_DCKHBTT_XOA',
+    };
+    switch (action) {
+      case 'XEM':
+        return this.userService.isAccessPermisson(permissionMapping.XEM) &&
+          (data.trangThai !== STATUS.DA_LAP &&
+            data.trangThai !== STATUS.TU_CHOI_LDV &&
+            data.trangThai !== STATUS.TU_CHOI_LDTC);
+      case 'SUA':
+        return (
+          (data.trangThai === STATUS.DA_LAP ||
+            data.trangThai === STATUS.TU_CHOI_LDV ||
+            data.trangThai === STATUS.TU_CHOI_LDTC) &&
+          this.userService.isAccessPermisson(permissionMapping.THEM)
+        );
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissionMapping.THEM) &&
+            data.trangThai === STATUS.CHO_DUYET_TP) ||
+          (this.userService.isAccessPermisson(permissionMapping.THEM) &&
+            data.trangThai === STATUS.CHO_DUYET_LDV) ||
+          (this.userService.isAccessPermisson(permissionMapping.BAN_HANH) &&
+            data.trangThai === STATUS.CHO_DUYET_LDTC)
+        );
+      case 'XOA':
+        return (
+          data.trangThai === STATUS.DA_LAP &&
+          this.userService.isAccessPermisson(permissionMapping.XOA)
+        );
+      default:
+        return false;
+    }
+  }
 }
