@@ -310,8 +310,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       body.chiTietList = this.chiTietList;
       body.fileDinhKems = this.listFileDinhKem;
       body.id = this.idInput;
-      // console.log(body, 'aaaaaaa');
-      // return ;
       if (this.idInput > 0) {
         let res = await this.thongTriDuyetYCapPhiService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
