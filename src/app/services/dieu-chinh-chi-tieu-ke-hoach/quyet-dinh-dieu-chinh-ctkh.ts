@@ -7,9 +7,9 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class DeXuatDieuChinhCTKHService extends BaseService {
+export class QuyetDinhDieuChinhCTKHService extends BaseService {
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'de-xuat-dieu-chinh-ke-hoach-nam', '/qlnv-khoach');
+    super(httpClient, 'quyet-dinh-dieu-chinh-ke-hoach-nam', '/qlnv-khoach');
   }
 
   // traCuu(body): Promise<OldResponseData> {

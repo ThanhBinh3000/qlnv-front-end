@@ -128,7 +128,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   dataVatTuCon: any[] = [];
   dataVatTuConClone: any[] = [];
   lastBreadcrumb: string;
-  taiLieuDinhKemList: any[] = [];
+  fileDinhKems: any[] = [];
   listCcPhapLy: any[] = [];
   listFile: any[] = [];
   page: number = 1;
@@ -203,7 +203,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     if (this.userInfo) {
       this.qdTCDT = this.userInfo.MA_QD;
       this.formData.patchValue({
-        tenDonVi: this.userInfo.TEN_DVI
+        tenDonVi: this.userInfo.TEN_DVI,
+        cap: this.userInfo.CAP_DVI
       })
     }
     if (this.userService.isTongCuc()) {
@@ -572,6 +573,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
+      id: [],
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
       tenDonVi: [],
@@ -596,6 +598,11 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       noiDung: [, [Validators.required],
       ],
       ghiChu: [],
+      type: ["00"],
+      cap: [],
+      dcKeHoachNamLtDtl: [],
+      dcKeHoachNamMuoiDtl: [],
+      dcKeHoachNamVatTuDtl: []
       // loaiCanCu: [
       //   this.thongTinChiTieuKeHoachNam
       //     ? this.thongTinChiTieuKeHoachNam.loaiCanCu
@@ -873,61 +880,99 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   loadThongTinChiTieuKeHoachNam(id: number) {
-    this.chiTieuKeHoachNamService
-      .loadThongTinChiTieuKeHoachNam(id)
+    this.deXuatDieuChinhCTKHService
+      .getDetail(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
+          const data = res.data
+          console.log('data', data)
+          this.formData.patchValue(data)
           this.thongTinChiTieuKeHoachNam = res.data;
-          this.thongTinChiTieuKeHoachNam.fileDinhKemReqs =
-            res.data.fileDinhKems;
-          this.thongTinChiTieuKeHoachNam.fileDinhKemReqs.forEach(item => {
-            if (item.fileType == FILETYPE.FILE_DINH_KEM) {
-              this.taiLieuDinhKemList.push(item)
-            } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
-              this.listCcPhapLy.push(item)
-            }
-          })
-          this.dsKeHoachLuongThucClone = cloneDeep(
-            this.thongTinChiTieuKeHoachNam.khLuongThuc,
-          );
+          this.fileDinhKems = data.fileDinhKems
+          // let khLuongThuc = this.thongTinChiTieuKeHoachNam.dcKeHoachNamLtDtl.map((lt)=>{
+          //   return {
+          //       stt": 1,
+          //       donViId": 28,
+          //       maDonVi": "01010201",
+          //       tenDonvi": "Chi cục Dự trữ Nhà nước Việt Trì",
+          //       donViTinh": "Tấn",
+          //       tkdnTongSoQuyThoc": 1871.0,
+          //       tkdnTongThoc": 751.0,
+          //       tkdnTongGao": 560.0,
+
+
+          //       tkcnTongSoQuyThoc": 3351.0,
+          //       tkcnTongThoc": 751.0,
+          //       tkcnTongGao": 1300.0,
+          //       ntnTongSoQuyThoc": 2250.0,
+          //       ntnThoc": 250.0,
+          //       ntnGao": 1000.0,
+          //       xtnTongSoQuyThoc": 770.0,
+          //       xtnTongThoc": 250.0,
+          //       xtnTongGao": 260.0,
+
+
+          //       "tdcNtnTongSoQuyThoc": null,
+          //       "tdcNtnThoc": null,
+          //       "tdcNtnGao": null,
+          //       "dcNtnThoc": null,
+          //       "dcNtnGao": null,
+          //       "sdcNtnTongSoQuyThoc": null,
+          //       "sdcNtnThoc": null,
+          //       "sdcNtnGao": null,
+          //       "tdcXtnTongSoQuyThoc": null,
+          //       "tdcXtnTongThoc": null,
+          //       "tdcXtnTongGao": null,
+          //       "tdcXtnThoc": [],
+          //       "tdcXtnGao": [],
+          //       "dcXtnThoc": [],
+          //       "dcXtnGao": [],
+          //       "sdcXtnTongSoQuyThoc": null,
+          //       "sdcXtnTongThoc": null,
+          //       "sdcXtnTongGao": null,
+          //       "sdcXtnThoc": [],
+          //       "sdcXtnGao": []
+          //   }
+          // })
+          // this.dsKeHoachLuongThucClone = cloneDeep(
+          //   khLuongThuc
+          // );
           this.dsMuoiClone = cloneDeep(
-            this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
+            this.thongTinChiTieuKeHoachNam.dcKeHoachNamMuoiDtl,
           );
-          if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
-            this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
-          }
+          // if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
+          //   this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
+          // }
           // Xử lý vật tư to tree
-          this.dataVatTuNhap = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTuNhap);
-          this.dataVatTuXuat = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTuXuat);
+          this.dataVatTuNhap = cloneDeep(this.thongTinChiTieuKeHoachNam.dcKeHoachNamVatTuDtl);
+          this.dataVatTuXuat = cloneDeep(this.thongTinChiTieuKeHoachNam.dcKeHoachNamVatTuDtl);
           this.convertListDataVatTuNhap(this.dataVatTuNhap);
           this.convertListDataVatTuXuat(this.dataVatTuXuat);
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
-          if (this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV) {
-            this.formData.controls['ngayKy'].setValidators([Validators.required])
-            this.formData.controls['ngayHieuLuc'].setValidators([Validators.required])
-            this.formData.controls['soQuyetDinh'].setValidators([Validators.required])
-          } else {
-            this.formData.controls['ngayKy'].setValidators([])
-            this.formData.controls['ngayHieuLuc'].setValidators([])
-            this.formData.controls['soQuyetDinh'].setValidators([])
-          }
-          this.formData.patchValue({
-            id: this.thongTinChiTieuKeHoachNam.id,
-            loaiCanCu: this.thongTinChiTieuKeHoachNam.loaiCanCu,
-            namKeHoach: this.thongTinChiTieuKeHoachNam.namKeHoach,
-            canCu: this.thongTinChiTieuKeHoachNam.canCu,
-            trichYeu: this.thongTinChiTieuKeHoachNam.trichYeu,
-            soQuyetDinh: this.thongTinChiTieuKeHoachNam.soQuyetDinh ? this.thongTinChiTieuKeHoachNam.soQuyetDinh : null,
-            ngayKy: this.thongTinChiTieuKeHoachNam.ngayKy,
-            ngayHieuLuc: this.thongTinChiTieuKeHoachNam.ngayHieuLuc,
-            chiTieuId: this.thongTinChiTieuKeHoachNam.qdGocId
-          })
-          this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
-          this.loadData();
+          // if (this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV) {
+          //   this.formData.controls['ngayKy'].setValidators([Validators.required])
+          //   this.formData.controls['ngayHieuLuc'].setValidators([Validators.required])
+          //   this.formData.controls['soQuyetDinh'].setValidators([Validators.required])
+          // } else {
+          //   this.formData.controls['ngayKy'].setValidators([])
+          //   this.formData.controls['ngayHieuLuc'].setValidators([])
+          //   this.formData.controls['soQuyetDinh'].setValidators([])
+          // }
           // this.formData.patchValue({
-          //   soQD: this.formData.get('soQuyetDinh').value,
-          // });
+          //   id: this.thongTinChiTieuKeHoachNam.id,
+          //   loaiCanCu: this.thongTinChiTieuKeHoachNam.loaiCanCu,
+          //   namKeHoach: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          //   canCu: this.thongTinChiTieuKeHoachNam.canCu,
+          //   trichYeu: this.thongTinChiTieuKeHoachNam.trichYeu,
+          //   soQuyetDinh: this.thongTinChiTieuKeHoachNam.soQuyetDinh ? this.thongTinChiTieuKeHoachNam.soQuyetDinh : null,
+          //   ngayKy: this.thongTinChiTieuKeHoachNam.ngayKy,
+          //   ngayHieuLuc: this.thongTinChiTieuKeHoachNam.ngayHieuLuc,
+          //   chiTieuId: this.thongTinChiTieuKeHoachNam.qdGocId
+          // })
+
+          this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
+          // this.loadData();
           this.sumRowDetailMuoi();
           this.sumRowDetailLuongThuc();
         } else {
@@ -1411,7 +1456,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             id: this.id,
             trangThai: trangThai,
           };
-          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+          const res = await this.deXuatDieuChinhCTKHService.duyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
             this.redirectChiTieuKeHoachNam();
@@ -1594,16 +1639,196 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     // this.thongTinChiTieuKeHoachNamInput.khVatTuNhap = this.dataVatTuNhap;
     // this.thongTinChiTieuKeHoachNamInput.khVatTuXuat = this.dataVatTuXuat;
     let body = this.formData.value
-    body.khLuongThuc = this.thongTinChiTieuKeHoachNam.khLuongThuc
-    body.khMuoi = this.thongTinChiTieuKeHoachNam.khMuoiDuTru
-    body.khVatTuNhap = this.dataVatTuNhap;
-    body.dataVatTuXuat = this.dataVatTuXuat;
-    console.log("thongTinChiTieuKeHoachNamInput", body)
-    // return
+    console.log('thongTinChiTieuKeHoachNam', this.thongTinChiTieuKeHoachNam, this.dataVatTuNhap, this.dataVatTuNhapTree, this.dataVatTuXuatTree, this.dataVatTuXuat)
+
+    let dcKeHoachNamLtDtl = body.dcKeHoachNamLtDtl || []
+    if (this.thongTinChiTieuKeHoachNam.khLuongThuc) {
+      dcKeHoachNamLtDtl = this.thongTinChiTieuKeHoachNam.khLuongThuc.map((lt) => {
+        const tkdnGao = lt.tkdnGao.map((tonGao) => {
+          return {
+            namKeHoach: tonGao.nam,
+            soLuong: tonGao.soLuong,
+            type: "01",
+          }
+        })
+        const tkdnThoc = lt.tkdnThoc.map((tonThoc) => {
+          return {
+            namKeHoach: tonThoc.nam,
+            soLuong: tonThoc.soLuong,
+            type: "00",
+          }
+        })
+        const ntnGao = [{
+          namKeHoach: "",
+          soLuong: lt.ntnGao,
+          type: "11",
+        }]
+        const ntnThoc = [
+          {
+            namKeHoach: "",
+            soLuong: lt.ntnThoc,
+            type: "10",
+          }
+        ]
+        const xtnGao = lt.xtnGao.map((xuatGao) => {
+          return {
+            namKeHoach: xuatGao.nam,
+            soLuong: xuatGao.soLuong,
+            type: "21",
+          }
+        })
+        const xtnThoc = lt.xtnThoc.map((xuatThoc) => {
+          return {
+            namKeHoach: xuatThoc.nam,
+            soLuong: xuatThoc.soLuong,
+            type: "20",
+          }
+        })
+        const tkcnGao = [{
+          namKeHoach: "",
+          soLuong: lt.tkcnTongGao,
+          type: "31",
+        }]
+        const tkcnThoc = [
+          {
+            namKeHoach: "",
+            soLuong: lt.tkcnTongThoc,
+            type: "30",
+          }
+        ]
+        const dcKeHoachNamLtTtDtl = [...tkdnGao, ...tkdnThoc, ...ntnGao, ...ntnThoc, ...xtnGao, ...xtnThoc, ...tkcnGao, ...tkcnThoc]
+        return {
+          donViTinh: lt.donViTinh,
+          maDvi: lt.maDvi,
+          tenDvi: lt.tenDonvi,
+          tongSoTon: lt.tkdnTongSoQuyThoc,
+          tongSoCuoiNam: lt.tkcnTongSoQuyThoc,
+          tongGaoTon: lt.tkdnTongGao,
+          tongThocTon: lt.tkdnTongThoc,
+          tongSoXuat: lt.xtnTongSoQuyThoc,
+          tongGaoXuat: lt.xtnTongGao,
+          tongThocXuat: lt.xtnTongThoc,
+          tongSoNhap: lt.ntnTongSoQuyThoc,
+          dcKeHoachNamLtTtDtl
+        }
+      })
+    }
+
+    let dcKeHoachNamMuoiDtl = body.dcKeHoachNamMuoiDtl || []
+    if (this.thongTinChiTieuKeHoachNam.khMuoiDuTru) {
+      dcKeHoachNamMuoiDtl = this.thongTinChiTieuKeHoachNam.khMuoiDuTru.map((muoi) => {
+        return {
+          donViTinh: muoi.donViTinh,
+          maDvi: muoi.maDvi,
+          soLuongNhap: muoi.nhapTrongNam,
+          soLuongXuat: muoi.xuatTrongNamMuoi,
+          stt: muoi.stt,
+          tenDvi: muoi.tenDonVi,
+          tonKhoCuoiNam: muoi.tonKhoCuoiNam,
+          tonKhoDauNam: muoi.tonKhoDauNam,
+        }
+      })
+    }
+
+
+    let vatTuNhap = []
+    if (this.thongTinChiTieuKeHoachNam.khVatTuNhap) {
+      vatTuNhap = this.thongTinChiTieuKeHoachNam.khVatTuNhap.map((vtNhap) => {
+        return {
+          donViId: vtNhap.donViId,
+          donViTinh: vtNhap.donViTinh,
+          kyHieu: vtNhap.kyHieu,
+          loai: "NHAP",
+          maDvi: vtNhap.maDvi,
+          maHang: vtNhap.maHang,
+          maVatTu: vtNhap.maVatTu,
+          maVatTuCha: vtNhap.maVatTuCha,
+          namNhap: vtNhap.namNhap,
+          soLuongChuyenSang: vtNhap.soLuongChuyenSang,
+          soLuongNhap: vtNhap.soLuongNhap,
+          soLuongXuat: vtNhap.soLuongXuat,
+          sttVatTu: vtNhap.sttDonVi,
+          vatTuChaId: vtNhap.vatTuChaId,
+          vatTuId: vtNhap.vatTuId,
+        }
+      })
+    } else {
+      vatTuNhap = this.dataVatTuNhapTree.map((vtNhap) => {
+        return {
+          donViId: vtNhap.donViId,
+          donViTinh: vtNhap.donViTinh,
+          kyHieu: vtNhap.kyHieu,
+          loai: "NHAP",
+          maDvi: vtNhap.maDvi,
+          maHang: vtNhap.maHang,
+          maVatTu: vtNhap.maVatTu,
+          maVatTuCha: vtNhap.maVatTuCha,
+          namNhap: vtNhap.namNhap,
+          soLuongChuyenSang: vtNhap.soLuongChuyenSang,
+          soLuongNhap: vtNhap.soLuongNhap,
+          soLuongXuat: vtNhap.soLuongXuat,
+          sttVatTu: vtNhap.sttDonVi,
+          vatTuChaId: vtNhap.vatTuChaId,
+          vatTuId: vtNhap.vatTuId,
+        }
+      })
+    }
+
+    let vatTuXuat = []
+    if (this.thongTinChiTieuKeHoachNam.dataVatTuXuat) {
+      vatTuXuat = this.thongTinChiTieuKeHoachNam.dataVatTuXuat.map((vtXuat) => {
+        return {
+          donViId: vtXuat.donViId,
+          donViTinh: vtXuat.donViTinh,
+          kyHieu: vtXuat.kyHieu,
+          loai: "XUAT",
+          maDvi: vtXuat.maDvi,
+          maHang: vtXuat.maHang,
+          maVatTu: vtXuat.maVatTu,
+          maVatTuCha: vtXuat.maVatTuCha,
+          namNhap: vtXuat.namNhap,
+          soLuongChuyenSang: vtXuat.soLuongChuyenSang,
+          soLuongNhap: vtXuat.soLuongNhap,
+          soLuongXuat: vtXuat.soLuongXuat,
+          sttVatTu: vtXuat.sttDonVi,
+          vatTuChaId: vtXuat.vatTuChaId,
+          vatTuId: vtXuat.vatTuId,
+        }
+      })
+    } else {
+      vatTuXuat = this.dataVatTuXuatTree.map((vtXuat) => {
+        return {
+          donViId: vtXuat.donViId,
+          donViTinh: vtXuat.donViTinh,
+          kyHieu: vtXuat.kyHieu,
+          loai: "XUAT",
+          maDvi: vtXuat.maDvi,
+          maHang: vtXuat.maHang,
+          maVatTu: vtXuat.maVatTu,
+          maVatTuCha: vtXuat.maVatTuCha,
+          namNhap: vtXuat.namNhap,
+          soLuongChuyenSang: vtXuat.soLuongChuyenSang,
+          soLuongNhap: vtXuat.soLuongNhap,
+          soLuongXuat: vtXuat.soLuongXuat,
+          sttVatTu: vtXuat.sttDonVi,
+          vatTuChaId: vtXuat.vatTuChaId,
+          vatTuId: vtXuat.vatTuId,
+        }
+      })
+    }
+
+    let dcKeHoachNamVatTuDtl = body.id ? body.dcKeHoachNamVatTuDtl : [...vatTuNhap, ...vatTuXuat]
+
+    body.dcKeHoachNamLtDtl = dcKeHoachNamLtDtl
+    body.dcKeHoachNamMuoiDtl = dcKeHoachNamMuoiDtl
+    body.dcKeHoachNamVatTuDtl = dcKeHoachNamVatTuDtl;
+    body.fileDinhKems = this.fileDinhKems
+
+
     this.spinner.show();
     if (this.thongTinChiTieuKeHoachNam.id > 0) {
-      this.chiTieuKeHoachNamService
-        .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
+      this.deXuatDieuChinhCTKHService
+        .update(body)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
@@ -1640,7 +1865,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
                 id: res.data.id,
                 trangThai: trangThai
               };
-              this.chiTieuKeHoachNamService.updateStatus(body)
+              this.deXuatDieuChinhCTKHService.duyet(body)
                 .then((resp) => {
                   if (resp.msg == MESSAGE.SUCCESS) {
                     if (res.msg == MESSAGE.SUCCESS) {
@@ -1672,8 +1897,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
         });
     } else {
       this.deXuatDieuChinhCTKHService
-        .themMoi(body)
+        .create(body)
         .then((res) => {
+          console.log('themMoi', res)
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
               let body;
@@ -1689,22 +1915,22 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
                   trangThai: STATUS.CHO_DUYET_TP,
                 };
               }
-              // this.chiTieuKeHoachNamService.updateStatus(body)
-              //   .then((resp) => {
-              //     if (resp.msg == MESSAGE.SUCCESS) {
-              //       if (res.msg == MESSAGE.SUCCESS) {
-              //         this.notification.success(
-              //           MESSAGE.SUCCESS,
-              //           MESSAGE.ADD_SUCCESS,
-              //         );
-              //         this.redirectChiTieuKeHoachNam()
-              //       } else {
-              //         this.notification.error(MESSAGE.ERROR, res.msg);
-              //       }
-              //     } else {
-              //       this.notification.error(MESSAGE.ERROR, resp.msg);
-              //     }
-              //   })
+              this.deXuatDieuChinhCTKHService.duyet(body)
+                .then((resp) => {
+                  if (resp.msg == MESSAGE.SUCCESS) {
+                    if (res.msg == MESSAGE.SUCCESS) {
+                      this.notification.success(
+                        MESSAGE.SUCCESS,
+                        MESSAGE.ADD_SUCCESS,
+                      );
+                      this.redirectChiTieuKeHoachNam()
+                    } else {
+                      this.notification.error(MESSAGE.ERROR, res.msg);
+                    }
+                  } else {
+                    this.notification.error(MESSAGE.ERROR, resp.msg);
+                  }
+                })
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             }
