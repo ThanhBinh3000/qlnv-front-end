@@ -28,6 +28,7 @@ import {v4 as uuidv4} from 'uuid';
 import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-create-bien-ban-lay-mau',
@@ -50,6 +51,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   danhSachCtieuCluong: any[] = [];
   flagInit: Boolean = false;
   children: any[] = [];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
 
   constructor(
     httpClient: HttpClient,

@@ -26,6 +26,7 @@ import {
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-bdg-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -45,6 +46,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   danhSachQuyetDinh: any[] = [];
   danhSachBbLayMau: any[] = [];
   loadDanhSachKnghiemCluong: any[] = [];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
 
 
   constructor(

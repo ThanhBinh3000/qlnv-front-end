@@ -5,33 +5,33 @@
       <span>Quay lại</span>
     </button>
     <ng-container>
-      <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_DUYET_LDCCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC):
-        userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET') && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)"
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && isView
+               && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_DUYET_LDCCUC') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET'))"
               type="button" class="btn btn-sub do"
               (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
-      <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_DUYET_LDCCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC):
-        userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET') && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)"
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && isView
+               && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_DUYET_LDCCUC') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET'))"
               type="button" class="btn btn-sub xanh-nhat"
               (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
-      <button *ngIf=" loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
-        || (formData.value.trangThai===STATUS.TU_CHOI_LDCC)):
-        userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_THEM')&&((formData.value.trangThai===STATUS.DU_THAO)
-        || (formData.value.trangThai===STATUS.TU_CHOI_LDCC))"
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView
+              && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_THEM'))"
               type="button" class="btn btn-sub xanh-nhat"
               (click)="saveAndSend(STATUS.CHO_DUYET_LDCC, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span> Lưu và gửi duyệt </span>
+        <span>Lưu và gửi duyệt</span>
       </button>
-      <button
-              type="button" class="btn btn-main" (click)="save()">
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)  && !isView
+              && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_THEM'))"
+              type="button" class="btn btn-main"
+              (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
-        <span> Lưu </span>
+        <span>Lưu</span>
       </button>
     </ng-container>
   </div>
@@ -312,7 +312,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="9">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị/Công ty (của người giao hàng)</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -320,7 +320,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="9">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Địa chỉ</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -374,16 +374,17 @@
             </td>
             <td>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-input-number formControlName="theoChungTu" nz-input [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                                 [nzStep]="1" [nzSize]="'small'" nzDisabled>
+                <nz-input-number formControlName="theoChungTu" nz-input [nzMin]=""
+                                 [nzStep]="1" [nzSize]="'small'"
+                                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                 </nz-input-number>
               </nz-form-control>
             </td>
             <td>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-input-number formControlName="thucXuat" (ngModelChange)="onChangeTien($event)" nz-input [nzMin]="0"
-                                 [nzMax]="globals.prop.MAX_INPUT"
-                                 [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
+                <nz-input-number formControlName="thucXuat" (ngModelChange)="onChangeTien($event)" nz-input [nzMin]=""
+                                 [nzStep]="1" [nzSize]="'small'"
+                                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
                 </nz-input-number>
               </nz-form-control>
             </td>
@@ -411,7 +412,7 @@
         </div>
         <div nz-col [nzSpan]="12">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">  Tổng số tiền (viết bằng chữ)</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Tổng số tiền (viết bằng chữ)</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue">{{ convertTienTobangChu(formData.value.thanhTien) }}</span>
             </nz-form-control>

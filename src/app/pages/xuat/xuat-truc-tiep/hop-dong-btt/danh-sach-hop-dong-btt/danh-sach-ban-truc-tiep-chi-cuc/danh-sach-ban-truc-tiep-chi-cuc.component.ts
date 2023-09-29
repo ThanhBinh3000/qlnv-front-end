@@ -11,6 +11,7 @@ import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 import {saveAs} from 'file-saver';
+import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-danh-sach-ban-truc-tiep-chi-cuc',
@@ -21,12 +22,9 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
-
-  listTrangThai: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
-  ];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
+  listTrangThaiHd: any = [];
+  listTrangThaiXh: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -59,6 +57,34 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
       tenCloaiVthh: '',
       tenTrangThaiHd: '',
     }
+    this.listTrangThaiHd = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
+    this.listTrangThaiXh = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
   }
 
   async ngOnInit() {
@@ -117,17 +143,17 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
     );
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayPduyetTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayPduyetDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayPduyetDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayPduyetDen, 'ngayPduyet');
   };
 
   disabledNgayPduyetDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayPduyetTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayPduyetTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayPduyetTu, 'ngayPduyet');
   };
 }
