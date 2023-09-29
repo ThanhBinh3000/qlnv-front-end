@@ -24,6 +24,7 @@ import {
 import {
   PhieuXuatKhoService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-bdg-them-moi-phieu-xuat-kho',
@@ -34,8 +35,10 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   @Input() loaiVthh: string;
   @Input() isView: boolean;
   @Input() idInput: number;
+  @Input() idQdGnv: number;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maHauTo: any;
   flagInit: Boolean = false;
   dataQuyetDinh: any[] = [];
@@ -152,6 +155,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự Thảo',
     });
+    if (this.idQdGnv > 0) {
+      await this.onChange(this.idQdGnv);
+    }
   }
 
   async getDetail(id: number) {
@@ -197,21 +203,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           await this.onChange(data.id);
-          const resLm = await this.xhPhieuKnghiemCluongService.search({
-            nam: data.nam,
-            soQdNv: data.soQdNv,
-            loaiVthh: data.loaiVthh,
-            trangThai: STATUS.DA_DUYET_LDC,
-          })
-          if (resLm.msg !== MESSAGE.SUCCESS) {
-            this.notification.error(MESSAGE.ERROR, resLm.msg);
-            return;
-          }
-          const dataLm = resLm.data.content;
-          if (!dataLm || dataLm.length === 0) {
-            return;
-          }
-          this.danhSachKghiemCluong = dataLm
         }
       });
     } catch (e) {
@@ -276,6 +267,21 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
           this.dataTable.push(child);
         });
       });
+      const resLm = await this.xhPhieuKnghiemCluongService.search({
+        nam: data.nam,
+        soQdNv: data.soQdNv,
+        loaiVthh: data.loaiVthh,
+        trangThai: STATUS.DA_DUYET_LDC,
+      })
+      if (resLm.msg !== MESSAGE.SUCCESS) {
+        this.notification.error(MESSAGE.ERROR, resLm.msg);
+        return;
+      }
+      const dataLm = resLm.data.content;
+      if (!dataLm || dataLm.length === 0) {
+        return;
+      }
+      this.danhSachKghiemCluong = dataLm
       await this.loadPhieuXuatKho(data.soQdNv);
     } catch (e) {
       console.error('Error: ', e);
@@ -334,7 +340,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         tenHangHoa: data.tenHangHoa,
-        donViTinh : data.donViTinh,
+        donViTinh: data.donViTinh,
         idKtvBaoQuan: data.idTruongPhongKtvbq,
         tenKtvBaoQuan: data.tenTruongPhongKtvbq,
       });

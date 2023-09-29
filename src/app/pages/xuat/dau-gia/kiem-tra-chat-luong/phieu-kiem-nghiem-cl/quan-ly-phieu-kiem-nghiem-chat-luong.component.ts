@@ -10,9 +10,9 @@ import {
   XhPhieuKnghiemCluongService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
 import * as uuid from "uuid";
-import {CHUC_NANG} from "../../../../../constants/status";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import _ from 'lodash';
-import {DauGiaComponent} from "../../dau-gia.component";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -21,8 +21,7 @@ import {DauGiaComponent} from "../../dau-gia.component";
 })
 export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: DauGiaComponent;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isView: boolean = false;
   tableDataView: any = [];
   expandSetString = new Set<string>();
@@ -32,18 +31,15 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
   isViewLayMau: boolean = false;
   idTinhKho: number = 0;
   isViewTinhKho: boolean = false;
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dauGiaComponent: DauGiaComponent,
     private xhPhieuKnghiemCluongService: XhPhieuKnghiemCluongService
   ) {
     super(httpClient, storageService, notification, spinner, modal, xhPhieuKnghiemCluongService);
-    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
       nam: null,
       soQdNv: null,
@@ -175,17 +171,65 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
     }
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledStartngayKnghiem = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKiemNghiemMauTu) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKiemNghiemMauDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKiemNghiemMauDen, 'ngayKiemNghiemMau');
   };
 
   disabledEndngayKnghiem = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKiemNghiemMauTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKiemNghiemMauDen.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKiemNghiemMauDen, 'ngayKiemNghiemMau');
   };
+
+  isActionAllowed(action: string, data: any): boolean {
+    const permissionMapping = {
+      VT: {
+        XEM: 'XHDTQG_PTDG_KTCL_VT_KNCL_XEM',
+        THEM: 'XHDTQG_PTDG_KTCL_VT_KNCL_THEM',
+        XOA: 'XHDTQG_PTDG_KTCL_VT_KNCL_XOA',
+        DUYET_TP: 'XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_TP',
+        DUYET_LDCUC: 'XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_LDCUC',
+      },
+      LT: {
+        XEM: 'XHDTQG_PTDG_KTCL_LT_KNCL_XEM',
+        THEM: 'XHDTQG_PTDG_KTCL_LT_KNCL_THEM',
+        XOA: 'XHDTQG_PTDG_KTCL_LT_KNCL_XOA',
+        DUYET_TP: 'XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP',
+        DUYET_LDCUC: 'XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC',
+      },
+    };
+    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    switch (action) {
+      case 'XEM':
+        return this.userService.isAccessPermisson(permissions.XEM) &&
+          (data.trangThai !== STATUS.DU_THAO &&
+            data.trangThai !== STATUS.TU_CHOI_TP &&
+            data.trangThai !== STATUS.TU_CHOI_LDC);
+      case 'SUA':
+        return (
+          (data.trangThai === STATUS.DU_THAO ||
+            data.trangThai === STATUS.TU_CHOI_TP ||
+            data.trangThai === STATUS.TU_CHOI_LDC) &&
+          this.userService.isAccessPermisson(permissions.THEM)
+        );
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissions.DUYET_TP) &&
+            data.trangThai === STATUS.CHO_DUYET_TP) ||
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCUC) &&
+            data.trangThai === STATUS.CHO_DUYET_LDC)
+        );
+      case 'XOA':
+        return (
+          data.trangThai === STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA)
+        );
+      default:
+        return false;
+    }
+  }
 }

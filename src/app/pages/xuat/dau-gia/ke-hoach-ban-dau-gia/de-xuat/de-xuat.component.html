@@ -190,9 +190,10 @@
           </th>
           <th *ngIf="userService.isTongCuc() ">
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" ngDefaultControl
-                     [(ngModel)]="filterTable.tenTrangThaiTh"
-                     (input)="filterInTable('tenTrangThaiTh',filterTable.tenTrangThaiTh)" size="small"/>
+              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiTh"
+                         (ngModelChange)="filterInTable('trangThaiTh',filterTable.trangThaiTh)">
+                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th></th>

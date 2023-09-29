@@ -8,9 +8,9 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {MESSAGE} from 'src/app/constants/message';
 import * as uuid from "uuid";
 import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
-import {CHUC_NANG} from "../../../../../constants/status";
-import {DauGiaComponent} from "../../dau-gia.component";
 import _ from 'lodash';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-bdg-phieu-xuat-kho',
@@ -19,8 +19,7 @@ import _ from 'lodash';
 })
 export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: DauGiaComponent;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isView: boolean = false;
   tableDataView: any = [];
   expandSetString = new Set<string>();
@@ -39,31 +38,28 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private phieuXuatKhoService: PhieuXuatKhoService,
-    private dauGiaComponent: DauGiaComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
-    this.vldTrangThai = dauGiaComponent;
     this.formData = this.fb.group({
-      tenDvi: null,
-      maDvi: null,
       nam: null,
-      soQdGiaoNvXh: null,
+      soQdNv: null,
       soPhieuXuatKho: null,
-      ngayXuatKho: null,
-      ngayXuatKhoTu: null,
-      ngayXuatKhoDen: null,
+      ngayLapPhieuTu: null,
+      ngayLapPhieuDen: null,
       loaiVthh: null,
-      type: null
     })
     this.filterTable = {
-      soQdGiaoNvXh: '',
+      soQdNv: '',
       nam: '',
-      ngayQdGiaoNvXh: '',
+      ngayKyQdNv: '',
       tenDiemKho: '',
+      tenNganKho: '',
+      tenLoKho: '',
+      soPhieuKiemNghiem: '',
+      ngayKiemNghiemMau: '',
       soPhieuXuatKho: '',
-      ngayXuatKho: '',
-      soPhieuKnCl: '',
-      ngayKn: '',
+      soBangKeHang: '',
+      ngayLapPhieu: '',
       tenTrangThai: '',
     };
   }
@@ -144,10 +140,11 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-  redirectDetail(id, isView: boolean) {
+  redirectDetail(id, isView: boolean, idQdGnx) {
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;
+    this.idQdNv = idQdGnx
   }
 
   openModal(id: number, modalType: string) {
@@ -188,19 +185,60 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     }
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledStartNgayXk = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyQdDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayLapPhieuTu, 'ngayLapPhieu');
   };
 
   disabledEndNgayXk = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyQdTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayLapPhieuDen, 'ngayLapPhieu');
   };
 
+  isActionAllowed(action: string, data: any): boolean {
+    const permissionMapping = {
+      VT: {
+        XEM: 'XHDTQG_PTDG_XK_VT_PXK_XEM',
+        THEM: 'XHDTQG_PTDG_XK_VT_PXK_THEM',
+        XOA: 'XHDTQG_PTDG_XK_VT_PXK_XOA',
+        DUYET_LDCHICUC: 'XHDTQG_PTDG_XK_VT_PXK_DUYET_LDCCUC',
+      },
+      LT: {
+        XEM: 'XHDTQG_PTDG_XK_LT_PXK_XEM',
+        THEM: 'XHDTQG_PTDG_XK_LT_PXK_THEM',
+        XOA: 'XHDTQG_PTDG_XK_LT_PXK_XOA',
+        DUYET_LDCHICUC: 'XHDTQG_PTDG_XK_LT_PXK_DUYET',
+      },
+    };
+    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    switch (action) {
+      case 'XEM':
+        return this.userService.isAccessPermisson(permissions.XEM) &&
+          (data.trangThai !== STATUS.DU_THAO &&
+            data.trangThai !== STATUS.TU_CHOI_LDCC);
+      case 'SUA':
+        return (
+          (data.trangThai === STATUS.DU_THAO ||
+            data.trangThai === STATUS.TU_CHOI_LDCC) &&
+          this.userService.isAccessPermisson(permissions.THEM)
+        );
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC) &&
+            data.trangThai === STATUS.CHO_DUYET_LDCC)
+        );
+      case 'XOA':
+        return (
+          data.trangThai === STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA)
+        );
+      default:
+        return false;
+    }
+  }
 }
 

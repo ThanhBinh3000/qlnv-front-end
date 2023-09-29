@@ -10,9 +10,9 @@ import * as uuid from "uuid";
 import {
   BienBanLayMauXhService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
-import {DauGiaComponent} from "../../dau-gia.component";
-import {CHUC_NANG} from "../../../../../constants/status";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import _ from 'lodash';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-table-bien-ban-lay-mau',
@@ -21,8 +21,7 @@ import _ from 'lodash';
 })
 export class TableBienBanLayMauComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: DauGiaComponent;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isView: boolean = false;
   tableDataView: any = [];
   expandSetString = new Set<string>();
@@ -40,10 +39,8 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private bienBanLayMauXhService: BienBanLayMauXhService,
-    private dauGiaComponent: DauGiaComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanLayMauXhService);
-    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
       soBbLayMau: null,
       soQdNv: null,
@@ -172,17 +169,59 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     }
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayLayMauTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyQdDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQd, 'ngayKyQd');
   };
 
   disabledNgayLayMauDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyQdTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdTu, 'ngayKyQd');
   };
+
+  isActionAllowed(action: string, data: any): boolean {
+    const permissionMapping = {
+      VT: {
+        XEM: 'XHDTQG_PTDG_KTCL_VT_BBBGM_XEM',
+        THEM: 'XHDTQG_PTDG_KTCL_VT_BBBGM_THEM',
+        XOA: 'XHDTQG_PTDG_KTCL_VT_BBBGM_XOA',
+        DUYET_LDCHICUC: 'XHDTQG_PTDG_KTCL_VT_BBBGM_DUYET_LDCCUC',
+      },
+      LT: {
+        XEM: 'XHDTQG_PTDG_KTCL_LT_BBLM_XEM',
+        THEM: 'XHDTQG_PTDG_KTCL_LT_BBLM_THEM',
+        XOA: 'XHDTQG_PTDG_KTCL_LT_BBLM_XOA',
+        DUYET_LDCHICUC: 'XHDTQG_PTDG_KTCL_LT_BBLM_DUYET_LDCCUC',
+      },
+    };
+    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    switch (action) {
+      case 'XEM':
+        return this.userService.isAccessPermisson(permissions.XEM) &&
+          (data.trangThai !== STATUS.DU_THAO &&
+            data.trangThai !== STATUS.TU_CHOI_LDCC);
+      case 'SUA':
+        return (
+          (data.trangThai === STATUS.DU_THAO ||
+            data.trangThai === STATUS.TU_CHOI_LDCC) &&
+          this.userService.isAccessPermisson(permissions.THEM)
+        );
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC) &&
+            data.trangThai === STATUS.CHO_DUYET_LDCC)
+        );
+      case 'XOA':
+        return (
+          data.trangThai === STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA)
+        );
+      default:
+        return false;
+    }
+  }
 }

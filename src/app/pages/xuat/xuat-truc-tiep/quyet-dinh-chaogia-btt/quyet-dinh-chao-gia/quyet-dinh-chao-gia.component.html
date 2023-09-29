@@ -3,13 +3,13 @@
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="3">
-          <label> Năm kế hoạch </label>
+          <label class="search__label"> Năm kế hoạch </label>
           <nz-select formControlName="namKh">
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
         <div nz-col [nzSpan]="4">
-          <label> Ngày chào giá </label>
+          <label class="search__label"> Ngày chào giá </label>
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledNgayChaoGiaTu" nzFormat="dd/MM/yyyy"

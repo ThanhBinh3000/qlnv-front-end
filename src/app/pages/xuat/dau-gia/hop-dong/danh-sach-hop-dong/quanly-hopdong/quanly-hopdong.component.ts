@@ -15,6 +15,7 @@ import {
 import {StorageService} from 'src/app/services/storage.service';
 import {formatNumber} from "@angular/common";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-quanly-hopdong',
@@ -25,7 +26,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() loaiVthh: string;
   @Output() showListEvent = new EventEmitter<any>();
-
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
   isView: boolean
