@@ -176,7 +176,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       }
       console.log(this.itemGoiThau, 'this.itemGoiThau this.itemGoiThau ')
       this.formData.patchValue({
-        namKeHoach: this.itemQdPdKhlcnt.namKeHoach,
+        namKeHoach: this.itemQdPdKhlcnt.namKh,
         idQdPdKqlcnt: this.itemGoiThau.idQdPdKqlcnt,
         soQdPdKhlcnt: this.itemQdPdKhlcnt.soQd,
         idQdPdKhlcnt: this.itemQdPdKhlcnt.id,

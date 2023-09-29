@@ -14,13 +14,13 @@
             <input placeholder="Nhập số quyết định" nz-input formControlName="soQdNv"/>
           </div>
           <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
-            <label>Loại hàng hóa</label>
+            <label>Loại hàng DTQG</label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let item of listVthh" [nzValue]="item.ma" [nzLabel]="item.giaTri"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith('02')">
-            <label>Loại hàng hóa</label>
+            <label>Loại hàng DTQG</label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let item of listClVthh" [nzValue]="item.ma" [nzLabel]="item.ten"></nz-option>
             </nz-select>

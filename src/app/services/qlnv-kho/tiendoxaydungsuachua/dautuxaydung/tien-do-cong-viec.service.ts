@@ -15,7 +15,7 @@ export class TienDoCongViecService extends BaseService{
   }
 
   hoanThanh(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/hoan-thanh`;
+    const url = `http://192.168.5.184:1702/tien-do-xdsc/xay-dung/tien-do-cong-viec/hoan-thanh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

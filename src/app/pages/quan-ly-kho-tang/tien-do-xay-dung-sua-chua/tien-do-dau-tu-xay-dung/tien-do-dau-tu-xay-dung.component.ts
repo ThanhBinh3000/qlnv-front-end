@@ -208,7 +208,6 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      console.log(e, 'aaaaaaaaaaaaaa')
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();

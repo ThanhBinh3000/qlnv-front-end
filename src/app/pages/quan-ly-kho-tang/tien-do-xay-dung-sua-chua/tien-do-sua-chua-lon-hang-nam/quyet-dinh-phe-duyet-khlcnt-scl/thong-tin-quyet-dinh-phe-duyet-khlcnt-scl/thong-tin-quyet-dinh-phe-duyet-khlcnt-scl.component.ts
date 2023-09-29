@@ -277,7 +277,15 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : '',
           })
-          this.fileDinhKem = data.fileDinhKems;
+          if (data.fileDinhKems && data.fileDinhKems.length > 0) {
+            data.fileDinhKems.forEach(item => {
+              if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+                this.listFileDinhKem.push(item)
+              } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+                this.listCcPhapLy.push(item)
+              }
+            })
+          }
           this.dataCongViecDaTh = data.listKtTdscQuyetDinhPdKhlcntCvDaTh ? data.listKtTdscQuyetDinhPdKhlcntCvDaTh : [];
           this.dataCongViecKad = data.listKtTdscQuyetDinhPdKhlcntCvKad ? data.listKtTdscQuyetDinhPdKhlcntCvKad : [];
           this.dataCongViecKh = data.listKtTdscQuyetDinhPdKhlcntCvKh ? data.listKtTdscQuyetDinhPdKhlcntCvKh : [];
