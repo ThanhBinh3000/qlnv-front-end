@@ -233,6 +233,11 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     });
     this.dataTable.forEach(item => {
       item.detail.children.forEach(ddNhap => {
+        let soBbNtbqld = []
+        ddNhap.listBbNtbqld.forEach(z => {
+          soBbNtbqld.push(z.soBbNtBq)
+        })
+        ddNhap.soBbNtbqld = soBbNtbqld.join(', ')
         ddNhap.listPhieuNhapKho.forEach(x => {
           x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
           x.bienBanGuiHang = ddNhap.bienBanGuiHang

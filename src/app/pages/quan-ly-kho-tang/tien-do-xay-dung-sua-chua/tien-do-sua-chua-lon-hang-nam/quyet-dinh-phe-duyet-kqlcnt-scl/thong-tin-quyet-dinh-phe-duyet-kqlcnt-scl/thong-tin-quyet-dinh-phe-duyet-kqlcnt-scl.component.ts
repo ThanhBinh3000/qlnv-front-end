@@ -68,7 +68,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
-      namKh: [dayjs().get('year')],
+      namKh: [null],
       maDvi: [this.userInfo.MA_DVI],
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
@@ -112,6 +112,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
   async bindingData() {
     if (this.itemQdPdKhLcnt) {
       this.formData.patchValue({
+        namKh: this.itemQdPdKhLcnt.namKh,
         idQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.id ? this.itemQdPdKhLcnt.id : null  ,
         soQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.soQd ?this.itemQdPdKhLcnt.soQd : null,
         chuDauTu: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.chuDauTu ? this.itemQdPdKhLcnt.chuDauTu : null,

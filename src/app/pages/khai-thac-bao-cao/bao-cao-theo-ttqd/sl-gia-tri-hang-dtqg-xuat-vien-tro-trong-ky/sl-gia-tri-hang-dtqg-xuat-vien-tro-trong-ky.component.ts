@@ -105,7 +105,7 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
       let body = this.formData.value;
       body.typeFile = "pdf";
       body.fileName = "bc_sl_gtri_hang_dtqg_xuat_vt_trong_ky_130.jrxml";
-      body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dữ trữ quốc gia xuất viện trợ trong kỳ TT 130";
+      body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dự trữ quốc gia xuất viện trợ trong kỳ TT 130";
       body.trangThai = "01";
       // body.loaiNhapXuat = "-1";
       await this.thongTu1302018Service.bcSlGtriHangDtqgXuatVtTrongKy(body).then(async s => {
@@ -126,7 +126,7 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
       let body = this.formData.value;
       body.typeFile = "xlsx";
       body.fileName = "bc_sl_gtri_hang_dtqg_xuat_vt_trong_ky_130.jrxml";
-      body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dữ trữ quốc gia xuất viện trợ trong kỳ TT 130";
+      body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dự trữ quốc gia xuất viện trợ trong kỳ TT 130";
       body.trangThai = "01";
       // body.loaiNhapXuat = "-1";
       await this.thongTu1302018Service.bcSlGtriHangDtqgXuatVtTrongKy(body).then(async s => {

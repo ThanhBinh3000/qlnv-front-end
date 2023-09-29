@@ -44,7 +44,7 @@
             </nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="4" *ngIf=" userService.isCuc() || userService.isTongCuc()">
+        <div nz-col nzSpan="4" *ngIf="! userService.isChiCuc()">
           <label class="search__label" >Chi cục</label>
           <nz-select  nzAllowClear [(ngModel)]="searchFilter.maChiCuc"  (ngModelChange)="onChangChiCuc($event)">
             <nz-option *ngFor="let p of danhSachChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">

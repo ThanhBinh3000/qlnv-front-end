@@ -1,20 +1,20 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {FormGroup, Validators} from "@angular/forms";
-import {FileDinhKem} from "src/app/models/DeXuatKeHoachuaChonNhaThau";
-import {UserLogin} from "src/app/models/userlogin";
-import {DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan} from "src/app/models/KeHoachBanDauGia";
-import {DatePipe} from "@angular/common";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {DeXuatKeHoachBanDauGiaService} from "src/app/services/deXuatKeHoachBanDauGia.service";
-import {DonviService} from "src/app/services/donvi.service";
-import {TinhTrangKhoHienThoiService} from "src/app/services/tinhTrangKhoHienThoi.service";
-import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { FormGroup, Validators } from "@angular/forms";
+import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
+import { UserLogin } from "src/app/models/userlogin";
+import { DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan } from "src/app/models/KeHoachBanDauGia";
+import { DatePipe } from "@angular/common";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { DeXuatKeHoachBanDauGiaService } from "src/app/services/deXuatKeHoachBanDauGia.service";
+import { DonviService } from "src/app/services/donvi.service";
+import { TinhTrangKhoHienThoiService } from "src/app/services/tinhTrangKhoHienThoi.service";
+import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
@@ -22,12 +22,12 @@ import {
   TongHopPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service";
 import * as dayjs from "dayjs";
-import {MESSAGE} from "src/app/constants/message";
-import {STATUS} from 'src/app/constants/status';
-import {chain, cloneDeep} from 'lodash';
-import {v4 as uuidv4} from "uuid";
-import {PREVIEW} from "../../../../../../constants/fileType";
-import {TEN_LOAI_VTHH} from "src/app/constants/config";
+import { MESSAGE } from "src/app/constants/message";
+import { STATUS } from 'src/app/constants/status';
+import { chain, cloneDeep } from 'lodash';
+import { v4 as uuidv4 } from "uuid";
+import { PREVIEW } from "../../../../../../constants/fileType";
+import { TEN_LOAI_VTHH } from "src/app/constants/config";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop',
@@ -98,7 +98,11 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   listVatTuHangHoa: any[] = [];
   templateName = "Tổng hợp phương an cứu trợ";
   templateNameVt = "Tổng hợp phương an cứu trợ vật tư";
-
+  tongSoLuongChuyenCapThoc: number = 0;
+  tongSoLuongNhuCauXuat: number = 0;
+  tongSoLuongDx: number = 0;
+  mucDichXuat: string;
+  thoiGian: string;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -125,6 +129,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         ngayThop: [''],
         noiDungThop: ['', [Validators.required]],
         loaiNhapXuat: [''],
+        kieuNhapXuat: [''],
         loaiVthh: [''],
         cloaiVthh: [''],
         tenVthh: [TEN_LOAI_VTHH.GAO, [Validators.required]],
@@ -143,7 +148,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         tenCloaiVthh: [''],
         tenTrangThai: ['Dự Thảo'],
         tenDvi: [''],
-        donViTinh: [''],
+        donViTinh: ['kg'],
         ngayTao: ['', [Validators.required]],
         deXuatCuuTro: [new Array()]
       }
@@ -227,7 +232,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      this.formData.patchValue({loaiNhapXuat: 'Xuất cứu trợ', kieuNhapXuat: 'Xuất không thu tiền'})
+      this.formData.patchValue({ loaiNhapXuat: 'Xuất cứu trợ', kieuNhapXuat: 'Xuất không thu tiền' })
     }
   }
 
@@ -249,7 +254,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         await this.tongHopPhuongAnCuuTroService.tonghop(body).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             res.data.deXuatCuuTro.forEach(s => s.idVirtual = uuidv4());
-            this.formData.patchValue({deXuatCuuTro: res.data.deXuatCuuTro});
+            this.formData.patchValue({ deXuatCuuTro: res.data.deXuatCuuTro });
             await this.buildTableView();
             if (this.phuongAnHdrView) {
               await this.selectRow(this.phuongAnHdrView[0])
@@ -274,7 +279,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
       this.listLoaiHinhNhapXuat = res.data.filter(item =>
         item.phanLoai == 'XUAT_CTVT'
       )
-      ;
+        ;
     }
   }
 
@@ -344,7 +349,12 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
       this.phuongAnHdrView.forEach(i => i.selected = false);
       item.selected = true;
       let currentCuc = this.phuongAnHdrView.find(s => s.idVirtual == item.idVirtual);
-      this.phuongAnView = currentCuc.childData;
+      this.phuongAnView = currentCuc?.childData;
+      this.tongSoLuongDx = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongDx ? cur.soLuongDx : 0, 0) : 0;
+      this.tongSoLuongChuyenCapThoc = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongChuyenCapThoc ? cur.soLuongChuyenCapThoc : 0, 0) : 0;
+      this.tongSoLuongNhuCauXuat = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0, 0) : 0;
+      this.mucDichXuat = currentCuc?.mucDichXuat ? currentCuc.mucDichXuat : "";
+      this.thoiGian = currentCuc?.thoiGian ? currentCuc.thoiGian : ""
     }
   }
 
@@ -433,56 +443,87 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   }
 
   async buildTableView() {
-    let dataView = chain(this.formData.value.deXuatCuuTro)
-      .groupBy("soDx")
-      .map((value, key) => {
-        let row = value.find(s => s.soDx === key);
-        let rs = chain(value)
-          .groupBy("noiDungDx")
-          .map((v, k) => {
-            let row1 = v.find(s => s.noiDungDx === k);
-            let rs = chain(v)
-              .groupBy("loaiVthh")
-              .map((v1, k1) => {
-                let row2 = v1.find(s => s.loaiVthh === k1);
-                let tonKhoCloaiVthh = v.reduce((prev, next) => prev + next.tonKhoCloaiVthh, 0);
-                return {
-                  idVirtual: uuidv4(),
-                  loaiVthh: k1,
-                  tenLoaiVthh: row2.tenLoaiVthh,
-                  donViTinh: row2.donViTinh,
-                  soLuong: row2.soLuong,
-                  soLuongDx: row2.soLuongDx,
-                  tonKho: row2.tonKhoLoaiVthh || tonKhoCloaiVthh,
-                  tenCloaiVthh: row2.tenCloaiVthh,
-                  childData: v1
-                }
-              }).value();
-            return {
-              idVirtual: uuidv4(),
-              noiDungDx: k,
-              soLuong: 0,
-              soLuongDx: 0,
-              childData: rs
-            }
-          }).value();
-        return {
-          idVirtual: uuidv4(),
-          tenDvi: row.tenDvi,
-          maDvi: row.maDvi,
-          soDx: row.soDx,
-          trichYeuDx: row.trichYeuDx,
-          mucDichXuat: row.mucDichXuat,
-          ngayKyDx: row.ngayKyDx,
-          thoiGian: row.ngayKyDx,
-          childData: rs
-        };
-      }).value();
-    this.phuongAnHdrView = dataView
+    let dataView = [];
+    if (this.formData.value.tenVthh == "Vật tư thiết bị") {
+      dataView = chain(this.formData.value.deXuatCuuTro)
+        .groupBy("soDx")
+        .map((value, key) => {
+          let row = value.find(s => s.soDx === key);
+          let rs = chain(value)
+            .groupBy("noiDungDx")
+            .map((v, k) => {
+              let row1 = v.find(s => s.noiDungDx === k);
+              let rs = chain(v)
+                .groupBy("loaiVthh")
+                .map((v1, k1) => {
+                  let row2 = v1.find(s => s.loaiVthh === k1);
+                  let tonKhoCloaiVthh = v.reduce((prev, next) => prev + next.tonKhoCloaiVthh, 0);
+                  let soLuong = v.reduce((prev, next) => prev += next.soLuong ? next.soLuong : 0, 0);
+                  let soLuongDx = v.reduce((prev, next) => prev += next.soLuongDx ? next.soLuongDx : 0, 0);
+                  return {
+                    idVirtual: uuidv4(),
+                    loaiVthh: k1,
+                    tenLoaiVthh: row2.tenLoaiVthh,
+                    donViTinh: row2.donViTinh,
+                    // soLuong: row2.soLuong,
+                    // soLuongDx: row2.soLuongDx,
+                    soLuong: soLuong,
+                    soLuongDx: soLuongDx,
+                    tonKho: tonKhoCloaiVthh || row2.tonKhoLoaiVthh,
+                    tenCloaiVthh: row2.tenCloaiVthh,
+                    childData: v1
+                  }
+                }).value();
+              return {
+                idVirtual: uuidv4(),
+                noiDungDx: k,
+                soLuongDx: row1 ? rs.reduce((sum, cur) => sum += cur.soLuongDx ? cur.soLuongDx : 0) : 0,
+                soLuong: 0,
+                childData: row1 ? rs : []
+              }
+            }).value();
+          return {
+            idVirtual: uuidv4(),
+            tenDvi: row.tenDvi,
+            maDvi: row.maDvi,
+            soDx: row.soDx,
+            trichYeuDx: row.trichYeuDx,
+            mucDichXuat: row.mucDichXuat,
+            ngayKyDx: row.ngayKyDx,
+            thoiGian: row.ngayKyDx,
+            childData: rs
+          };
+        }).value();
+    } else {
+      dataView = chain(this.formData.value.deXuatCuuTro)
+        .groupBy("soDx")
+        .map((value, key) => {
+          let row = value.find(s => s.soDx === key);
+          return {
+            idVirtual: uuidv4(),
+            tenDvi: row.tenDvi,
+            maDvi: row.maDvi,
+            soDx: row.soDx,
+            trichYeuDx: row.trichYeuDx,
+            mucDichXuat: row.mucDichXuat,
+            ngayKyDx: row.ngayKyDx,
+            thoiGian: row.ngayKyDx,
+            childData: row ? value : [],
+          };
+        }).value();
+    }
+    this.phuongAnHdrView = dataView;
     this.expandAll();
   }
 
   async changeVthh($event: any) {
+    this.phuongAnHdrView = [];
+    this.phuongAnView = [];
+    this.tongSoLuongDx = 0;
+    this.tongSoLuongNhuCauXuat = 0;
+    this.tongSoLuongChuyenCapThoc = 0;
+    this.mucDichXuat = '';
+    this.thoiGian = '';
 
   }
 
@@ -501,5 +542,17 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
       }
     });
+  }
+  isVthhGao() {
+    if (this.formData.value.tenVthh == "Gạo tẻ") {
+      return true;
+    }
+    return false;
+  }
+  isVthhVatuThietBi() {
+    if (this.formData.value.tenVthh == "Vật tư thiết bị") {
+      return true;
+    }
+    return false
   }
 }

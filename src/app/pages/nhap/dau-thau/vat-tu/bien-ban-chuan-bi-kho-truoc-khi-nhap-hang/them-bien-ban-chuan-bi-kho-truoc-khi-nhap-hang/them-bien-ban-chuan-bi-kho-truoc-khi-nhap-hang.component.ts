@@ -92,7 +92,7 @@ export class ThemBienBanChuanBiKhoTruocKhiNhapHangComponent implements OnInit {
   }
   selectHangHoa() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'Danh sách hàng DTQG',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,

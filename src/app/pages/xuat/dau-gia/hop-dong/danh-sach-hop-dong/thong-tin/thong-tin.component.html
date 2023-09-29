@@ -129,7 +129,7 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Số Hợp đồng</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Số hợp đồng</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfter="{{maHopDongSuffix}}">
                       <nz-input-number formControlName="soHopDong" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
@@ -295,7 +295,7 @@
                   </div>
                   <div nz-col [nzSpan]="8">
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true"> Thời gian bảo đản thực hiện hợp đồng</nz-form-label>
+                      <nz-form-label [nzNoColon]="true"> Thời gian bảo đảm thực hiện hợp đồng</nz-form-label>
                       <nz-form-control nz-col [nzErrorTip]="error">
                         <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="tgianBaoDamHdong" [nzDisabled]="isView">
                         </nz-date-picker>
@@ -522,7 +522,7 @@
             <div nz-row [nzGutter]="24">
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open">
                       <input [readonly]="true" nz-input formControlName="tenLoaiVthh"
@@ -533,7 +533,7 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open">
                       <input [readonly]="true" nz-input formControlName="tenCloaiVthh"
@@ -594,7 +594,7 @@
               </div>
               <div nz-col [nzSpan]="12">
                 <nz-form-item class="form-item display-block">
-                  <nz-form-label nzRequired [nzNoColon]="true"> Mô tả hàng hóa</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Mô tả hàng DTQG</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <textarea nz-input [rows]="3" formControlName="moTaHangHoa" [readonly]="isView"></textarea>
                   </nz-form-control>
@@ -613,7 +613,7 @@
         </nz-collapse-panel>
       </nz-collapse>
       <nz-collapse nzAccordion>
-        <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG HÓA'" [nzActive]="true">
+        <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG DTQG'" [nzActive]="true">
           <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                     [nzShowPagination]="false">
             <thead>

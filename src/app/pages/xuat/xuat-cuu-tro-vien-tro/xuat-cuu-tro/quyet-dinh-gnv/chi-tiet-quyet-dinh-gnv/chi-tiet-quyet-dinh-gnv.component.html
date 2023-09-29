@@ -6,14 +6,14 @@
     </button>
     <ng-container *ngIf="userService.isCuc()">
       <button (click)="reject(idSelected,STATUS.TU_CHOI_LDC)"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
-              class="btn btn-sub" type="button">
+        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
+        class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button (click)="approve(idSelected,STATUS.BAN_HANH,'Bạn có muốn duyệt quyết định này')"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
-              class="btn btn-sub" type="button">
+        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
+        class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -21,14 +21,14 @@
       <!--    cap truong phong-->
 
       <button (click)="reject(idSelected,STATUS.TU_CHOI_TP)"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
-              class="btn btn-sub" type="button">
+        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
+        class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button (click)="approve(idSelected,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
-              class="btn btn-sub" type="button">
+        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
+        class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -49,22 +49,20 @@
       </button>
       <button (click)="save()" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
         || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
-              class="btn btn-main" type="button">
+        class="btn btn-main" type="button">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH" type="button"
-              class="btn btn-sub xanh-nhat"
-              (click)="updateProcess(STATUS.DA_HOAN_THANH)">
+      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH" type="button" class="btn btn-sub xanh-nhat"
+        (click)="updateProcess(STATUS.DA_HOAN_THANH)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành phân bổ</span>
       </button>
-      <button type="button" class="btn btn-main"
-              *ngIf="(formData.value.trangThai === STATUS.BAN_HANH)"
-              (click)="updateProcess(STATUS.DANG_THUC_HIEN)">
+      <button type="button" class="btn btn-main" *ngIf="(formData.value.trangThai === STATUS.BAN_HANH)"
+        (click)="updateProcess(STATUS.DANG_THUC_HIEN)">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -86,8 +84,8 @@
     </div>
   </div>
   <nz-alert class="mg-t-16 mb-2"
-            *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC "
-            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC "
+    nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -119,7 +117,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị ra QĐ giao nv xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <input nz-input formControlName="tenDvi" [readonly]="true"/>
+              <input nz-input formControlName="tenDvi" [readonly]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -129,7 +127,7 @@
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-group nzAddOnAfter="{{maHauTo}}">
                 <nz-input-number formControlName="soBbQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                                 [nzSize]="'small'" [nzDisabled]="isView">
+                  [nzSize]="'small'" [nzDisabled]="isView">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -140,7 +138,7 @@
             <nz-form-label [nzNoColon]="true">Ngày ký QĐ xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-date-picker class="search__input" formControlName="ngayKy" [nzDisabled]="isView"
-                              [nzFormat]="globals.dateFormat">
+                [nzFormat]="globals.dateFormat">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -152,7 +150,7 @@
             <nz-form-label>Căn cứ trên QĐ phê duyệt phương án</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQdPd()">
-                <input [readonly]="true" nz-input formControlName="soQdPd" readonly="true"/>
+                <input [readonly]="true" nz-input formControlName="soQdPd" readonly="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -161,7 +159,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <input [readonly]="true" nz-input formControlName="tenVthh" readonly="true"/>
+              <input [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -169,7 +167,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <input nz-input [readonly]="true" formControlName="loaiNhapXuat"/>
+              <input nz-input [readonly]="true" formControlName="loaiNhapXuat" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -177,7 +175,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <input nz-input [readonly]="true" formControlName="kieuNhapXuat"/>
+              <input nz-input [readonly]="true" formControlName="kieuNhapXuat" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -188,7 +186,7 @@
             <nz-form-label [nzNoColon]="true">Trích yếu</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <textarea rows="3" class="search__input" nz-input formControlName="trichYeu"
-                        [readOnly]="isView"></textarea>
+                [readOnly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -243,46 +241,46 @@
       <div class="mt-16">
         <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
           <thead>
-          <tr>
-            <th [rowspan]="2"></th>
-            <th [rowspan]="2" style="width: 35px">STT</th>
-            <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
-            <th [rowspan]="2">Loại/Chủng loại hàng DTQG</th>
-            <th [rowspan]="2">SL phê duyệt</th>
-            <th [colspan]="3">Chi cục DTNN KV</th>
-            <th [colspan]="5">Thông tin phân bổ xuất cứu trợ viện trợ</th>
-            <th [rowspan]="2" style="width: 10%">Hành động</th>
-          </tr>
-          <tr>
-            <th>Tên chi cục</th>
-            <th>SL giao cứu trợ, viện trợ</th>
-            <th>Tồn kho</th>
-            <th>Địa điểm xuất</th>
-            <th>SL xuất</th>
-            <th>Tồn kho</th>
-            <th>ĐVT</th>
-            <th>Trạng thái</th>
-          </tr>
+            <tr>
+              <th [rowspan]="2"></th>
+              <th [rowspan]="2" style="width: 35px">STT</th>
+              <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+              <th [rowspan]="2">Loại/Chủng loại hàng DTQG</th>
+              <th [rowspan]="2">SL phê duyệt</th>
+              <th [colspan]="3">Chi cục DTNN KV</th>
+              <th [colspan]="5">Thông tin phân bổ xuất cứu trợ viện trợ</th>
+              <th [rowspan]="2" style="width: 10%">Hành động</th>
+            </tr>
+            <tr>
+              <th>Tên chi cục</th>
+              <th>SL giao cứu trợ, viện trợ</th>
+              <th>Tồn kho</th>
+              <th>Địa điểm xuất</th>
+              <th>SL xuất</th>
+              <th>Tồn kho</th>
+              <th>ĐVT</th>
+              <th>Trạng thái</th>
+            </tr>
           </thead>
           <tbody>
-          <ng-container *ngFor="let item of tblData.data, let i = index;">
-            <tr>
-              <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+            <ng-container *ngFor="let item of tblData.data, let i = index;">
+              <tr>
+                <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                   [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
-              <td>{{i + 1}}</td>
-              <td>{{ item.noiDungDx }}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <!--<a>
+                <td>{{i + 1}}</td>
+                <td>{{ item.noiDungDx }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                  <!--<a>
                   <i class="fa fa-edit" *ngIf="!isView" (click)="themPhuongAn(item,0)"></i>
                 </a>
                 <a>
@@ -290,102 +288,99 @@
                      nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                      (nzOnConfirm)="xoaPhuongAn(item)"></i>
                 </a>-->
-              </td>
-            </tr>
-            <ng-container *ngIf="expandSetString.has(item.idVirtual) && item.childData[0].tenHang">
-              <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>{{lv1.tenHang}}</td>
-                  <td>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
-                  <td></td>
-                  <td><strong>{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</strong></td>
-                  <td></td>
-                  <td>{{lv1.tonKho|number:globals.numberFormat:globals.locale}}</td>
-                  <td><strong>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
-                  <td></td>
-                  <td>{{lv1.donViTinh}}</td>
-                  <td></td>
-                  <td>
-                    <ng-container *ngIf="userService.isCuc()">
-                      <a>
-                        <i class="fa fa-plus" (click)="themPhuongAn(lv1,1)"></i>
-                      </a>
-                      <!--  <a>
+                </td>
+              </tr>
+              <ng-container *ngIf="expandSetString.has(item.idVirtual) && item.childData[0].tenHang">
+                <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{lv1.tenHang}}</td>
+                    <td>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                    <td></td>
+                    <td><strong>{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</strong></td>
+                    <td></td>
+                    <td>{{lv1.tonKho|number:globals.numberFormat:globals.locale}}</td>
+                    <td><strong>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
+                    <td></td>
+                    <td>{{lv1.donViTinh}}</td>
+                    <td></td>
+                    <td>
+                      <ng-container *ngIf="userService.isCuc()">
+                        <a>
+                          <i class="fa fa-plus" (click)="themPhuongAn(lv1,1)"></i>
+                        </a>
+                        <!--  <a>
                           <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm
                              nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                              (nzOnConfirm)="xoaPhuongAn(lv1,item)"></i>
                         </a>-->
-                    </ng-container>
-                  </td>
-                </tr>
-                <ng-container *ngIf="expandSetString.has(item.idVirtual) && lv1.childData[0].tenChiCuc">
-                  <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{lv2.tenChiCuc}}</td>
-                      <td>{{lv2.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
-                      <td>{{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
-                      <td></td>
-                      <td><strong>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{lv2.tenTrangThai}}</td>
-                      <td>
-                        <a *ngIf="userService.isChiCuc()">
-                          <i class="fa fa-plus" (click)="themPhuongAn(lv2,2)"></i>
-                        </a>
-                        <!-- <a>
+                      </ng-container>
+                    </td>
+                  </tr>
+                  <ng-container *ngIf="expandSetString.has(item.idVirtual) && lv1.childData[0].tenChiCuc">
+                    <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{lv2.tenChiCuc}}</td>
+                        <td>{{lv2.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
+                        <td>{{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                        <td></td>
+                        <td><strong>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{lv2.tenTrangThai}}</td>
+                        <td>
+                          <a *ngIf="userService.isCuc()">
+                            <i class="fa fa-pencil" (click)="themPhuongAn(lv2,2)"></i>
+                          </a>
+                          <!-- <a>
                            <i class="fa fa-edit" *ngIf="!isView" (click)="themPhuongAn(lv2,2)"></i>
                          </a>
                          -->
-                        <a *ngIf="userService.isCuc()">
-                          <i class="fa fa-trash-o do" *ngIf="!isView"
-                             nz-popconfirm nz-button
-                             nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
-                             (nzOnConfirm)="xoaPhuongAn(lv2,lv1,2)"></i>
-                        </a>
-                      </td>
+                          <a *ngIf="userService.isCuc()">
+                            <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
+                              nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaPhuongAn(lv2,lv1,2)"></i>
+                          </a>
+                        </td>
 
-                    </tr>
-                    <ng-container *ngIf="expandSetString.has(item.idVirtual) && lv2.childData[0].tenDiaDiem">
-                      <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>{{lv3.tenDiaDiem}}</td>
-                          <td>{{lv3.soLuong|number:globals.numberFormat:globals.locale}}</td>
-                          <td>{{lv3.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
-                          <td></td>
-                          <td></td>
-                          <td>
-                            <ng-container *ngIf="userService.isChiCuc()">
-                              <!-- <a>
+                      </tr>
+                      <ng-container *ngIf="expandSetString.has(item.idVirtual) && lv2.childData[0].tenDiaDiem">
+                        <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{lv3.tenDiaDiem}}</td>
+                            <td>{{lv3.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                            <td>{{lv3.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <ng-container *ngIf="userService.isChiCuc()">
+                                <!-- <a>
                                  <i class="fa fa-plus" (click)="themPhuongAn(lv3,3)"></i>
                                </a>-->
-                              <a>
-                                <i class="fa fa-trash-o do"
-                                   nz-popconfirm nz-button
-                                   nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
-                                   (nzOnConfirm)="xoaPhuongAn(lv3,lv2,3)"></i>
-                              </a>
+                                <a>
+                                  <i class="fa fa-trash-o do" nz-popconfirm nz-button
+                                    nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                                    (nzOnConfirm)="xoaPhuongAn(lv3,lv2,3)"></i>
+                                </a>
 
-                            </ng-container>
-                          </td>
-                        </tr>
-                        <!--<ng-container *ngIf="expandSetString.has(item.idVirtual) && lv3.childData[0].tenDiaDiem">
+                              </ng-container>
+                            </td>
+                          </tr>
+                          <!--<ng-container *ngIf="expandSetString.has(item.idVirtual) && lv3.childData[0].tenDiaDiem">
                           <ng-container *ngFor="let lv4 of lv3.childData,let i4=index">
                             <tr>
                               <td></td>
@@ -417,13 +412,13 @@
                             </tr>
                           </ng-container>
                         </ng-container>-->
+                        </ng-container>
                       </ng-container>
                     </ng-container>
                   </ng-container>
                 </ng-container>
               </ng-container>
             </ng-container>
-          </ng-container>
           </tbody>
         </nz-table>
       </div>
@@ -433,8 +428,7 @@
 
 <!--popup them sua-->
 <nz-modal [nzWidth]="'70%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
-
-          nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
+  nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="formDataDtl">
       <div class="modal-card">
@@ -443,8 +437,8 @@
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương/cơ quan/đơn vị nhận cứu trợ
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'">
-              <nz-select nzAllowClear formControlName="noiDungDx" [nzDisabled]="true"
-                         nzPlaceHolder="Chọn địa danh" nzShowSearch>
+              <nz-select nzAllowClear formControlName="noiDungDx" [nzDisabled]="true" nzPlaceHolder="Chọn địa danh"
+                nzShowSearch>
                 <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -459,7 +453,7 @@
                     <!--                      <input [readonly]="true" nz-input formControlName="tenVthh" readonly="true"/>-->
                     <!--                    </nz-input-group>-->
                     <nz-select nzAllowClear formControlName="loaiVthh" [nzDisabled]="true"
-                               nzPlaceHolder="Chọn loại hàng" nzShowSearch>
+                      nzPlaceHolder="Chọn loại hàng" nzShowSearch>
                       <nz-option *ngFor="let p of listLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
                     </nz-select>
                   </div>
@@ -476,9 +470,8 @@
               <nz-form-control [nzErrorTip]="'Vui lòng nhập chủng loại hàng'">
                 <div nz-row [nzGutter]="48">
                   <div nz-col [nzSpan]="16">
-                    <nz-select nzAllowClear formControlName="cloaiVthh"
-                               nzPlaceHolder="Chọn chủng loại hàng" nzShowSearch
-                               [nzDisabled]="true">
+                    <nz-select nzAllowClear formControlName="cloaiVthh" nzPlaceHolder="Chọn chủng loại hàng"
+                      nzShowSearch [nzDisabled]="true">
                       <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
                     </nz-select>
                   </div>
@@ -496,16 +489,15 @@
             <nz-form-control [nzErrorTip]="'Vui lòng nhập đơn vị'">
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
-                  <nz-select nzAllowClear formControlName="maDvi"
-                             nzPlaceHolder="Chọn đơn vị" nzShowSearch
-                             (ngModelChange)="kiemTraTonKho()">
+                  <nz-select nzAllowClear formControlName="maDvi" nzPlaceHolder="Chọn đơn vị" nzShowSearch
+                    (ngModelChange)="kiemTraTonKho()">
                     <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"
-                               [nzDisabled]="p.disable"></nz-option>
+                      [nzDisabled]="p.disable"></nz-option>
                   </nz-select>
                 </div>
                 <div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                    style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span>
+                      style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span>
                   </p>
                 </div>
               </div>
@@ -517,12 +509,10 @@
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
                   <nz-tree-select #NzTreeSelectComponent [nzNodes]="listDiaDiemKho" [nzShowSearch]="true"
-                                  [ngModel]="selectedNode"
-                                  [ngModelOptions]="{standalone: true}"
-                                  nzVirtualHeight="300px">
+                    [ngModel]="selectedNode" [ngModelOptions]="{standalone: true}" nzVirtualHeight="300px">
                     <ng-template #nzTreeTemplate let-node let-origin="origin">
                       <div class="node-content" [ngClass]="{'disabled-node': !node.isLeaf}"
-                           [class.ant-tree-node-selected]="node.isSelected" (click)="selectDiaDiem(node)">
+                        [class.ant-tree-node-selected]="node.isSelected" (click)="selectDiaDiem(node)">
                         {{ node.title }}
                         <ng-container *ngIf="node.isLeaf && (origin.capDvi == 6 || origin.capDvi ==7)">
                           <i>{{origin.tenCloaiVthh || origin.tenLoaiVthh}}</i>
@@ -534,7 +524,7 @@
                 </div>
                 <div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                    style="color: #001CFF">{{formDataDtl.value.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</span>
+                      style="color: #001CFF">{{formDataDtl.value.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</span>
                   </p>
                 </div>
               </div>
@@ -544,8 +534,8 @@
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao Chi cục</nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'">
               <nz-input-number formControlName="soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                               [nzDisabled]="!userService.isCuc()"
-                               [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                [nzDisabled]="!userService.isCuc()" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                [nzParser]="globals.parser">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -553,7 +543,7 @@
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'">
               <nz-input-number formControlName="soLuong" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                               [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>

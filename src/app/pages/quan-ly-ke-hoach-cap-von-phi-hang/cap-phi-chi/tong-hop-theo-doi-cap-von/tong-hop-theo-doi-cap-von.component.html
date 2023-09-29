@@ -115,15 +115,15 @@
                 <td>{{lv1.dviThuHuong}}</td>
                 <td>{{lv1.tenTrangThai}}</td>
                 <td>
-                  <a (click)="detail(lv1, true)" *ngIf="lv1.trangThai !== STATUS.DU_THAO">
+                  <a (click)="detail(lv1, true)" *ngIf="lv1.trangThai !== STATUS.DANG_THUC_HIEN">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
                   <a
-                    *ngIf="(lv1.trangThai==STATUS.DU_THAO) && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_SUA')"
+                    *ngIf="(lv1.trangThai==STATUS.DANG_THUC_HIEN) && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_SUA')"
                     (click)="detail(lv1, false)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a *ngIf="lv1.trangThai== STATUS.DU_THAO" (click)="xoaItem(lv1.id)">
+                  <a *ngIf="lv1.trangThai== STATUS.DANG_THUC_HIEN" (click)="xoaItem(lv1.id)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>

@@ -174,6 +174,11 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
       //   };
       // });
       this.dataTableAll = cloneDeep(this.dataTable);
+      for (let i = 0; i < this.dataTable.length; i++) {
+        if (this.dataTable[i].listPhieuKiemNghiemCl !=null && this.dataTable[i].listPhieuKiemNghiemCl.length > 0) {
+          this.expandSet.add(i);
+        }
+      }
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

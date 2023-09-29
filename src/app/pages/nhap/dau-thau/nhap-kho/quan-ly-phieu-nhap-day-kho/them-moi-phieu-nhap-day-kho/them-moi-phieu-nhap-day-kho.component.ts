@@ -198,7 +198,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh'],
       },
     })
@@ -321,7 +321,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   async save(isGuiDuyet?: boolean) {
-    // if (this.validateSave()) {
+    if (this.validateSave()) {
       this.spinner.show();
       try {
         this.helperService.markFormGroupTouched(this.formData);
@@ -372,7 +372,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       } finally {
         this.spinner.hide();
       };
-    // }
+    }
 
   }
 
@@ -511,7 +511,6 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       .getDetail(this.id)
       .then(async (res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          debugger
           const data = res.data;
           this.listFileDinhKemBb = data.fileDinhKems;
           this.helperService.bidingDataInFormGroup(this.formData, data);

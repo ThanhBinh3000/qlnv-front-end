@@ -114,7 +114,7 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
       let res = await this.hopdongService.listHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        this.listHopDong = data;
+        this.listHopDong = data.filter(i=>i.trangThaiTd==STATUS.DA_HOAN_THANH);
       }
       this.spinner.hide();
     } catch (e) {

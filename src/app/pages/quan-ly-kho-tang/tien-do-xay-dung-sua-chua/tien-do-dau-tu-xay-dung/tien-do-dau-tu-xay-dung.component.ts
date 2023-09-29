@@ -208,7 +208,6 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      console.log(e, 'aaaaaaaaaaaaaa')
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
@@ -259,6 +258,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       let res = await this.hopdongService.danhSachHdTheoKhlcnt(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data && res.data.length > 0) {
+          this.itemHopDong = res.data;
           if (res.data.filter(item => item.trangThai == STATUS.DA_KY).length > 0) {
             this.trangThaiHopDong = true;
           }
@@ -308,7 +308,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          let listGoiThau = res.data.listKtTdscQuyetDinhPdKhlcntCvKh;
+          let listGoiThau = res.data.listKtTdxdQuyetDinhPdKhlcntCvKh;
           if (listGoiThau && listGoiThau.length > 0) {
             listGoiThau.forEach(item => {
               if (item.trangThaiTd == STATUS.DA_HOAN_THANH) {
@@ -426,9 +426,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         }
       });
     }
-    await this.loadQdPdDaDtxdByDuAn(data);
     data.selected = true;
     this.itemSelected = data;
+    await this.loadQdPdDaDtxdByDuAn(data);
     this.selectTab("01");
   }
 
