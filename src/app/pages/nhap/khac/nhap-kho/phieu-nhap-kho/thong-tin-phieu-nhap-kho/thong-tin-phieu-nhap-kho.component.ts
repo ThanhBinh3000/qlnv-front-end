@@ -49,7 +49,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
   dsKeHoach: any[] = []
   noiDung: string;
   dviTinh: string;
-  donGia: string;
+  donGia: any;
   thanhTien: number;
   previewName: string = 'nk_phieu_nhap_kho';
 
@@ -172,7 +172,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       });
       await this.loadChiTietQdinh(this.data.idQdPdNk);
       this.dviTinh = this.data.donViTinh
-      this.donGia = this.data.donGia
+      // this.donGia = this.data.donGia
 
       let body = {
         maNganKho: this.data.maNganKho,
@@ -456,6 +456,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
+      console.log(data, "0000000")
       if (data) {
         this.formData.patchValue({
           tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`,
@@ -530,6 +531,10 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
     if (res.msg == MESSAGE.SUCCESS) {
 
       const data = res.data
+      let dtlList = data.dtlList.find(x => x.maLoKho.includes(this.formData.value.maLoKho))
+      console.log(data.dtlList.find(x => x.maLoKho.includes(this.formData.value.maLoKho).slTonKho), "888888")
+      this.donGia = dtlList.donGia;
+      console.log(this.donGia)
       this.dsKeHoach = []
       if (data.dtlList.length == 0) return
       this.dsKeHoach = this.dsKeHoach.concat(data.dtlList)
