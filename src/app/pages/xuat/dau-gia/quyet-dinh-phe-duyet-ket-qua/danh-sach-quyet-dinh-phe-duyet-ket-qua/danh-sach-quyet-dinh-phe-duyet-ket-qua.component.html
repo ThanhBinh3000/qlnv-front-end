@@ -59,28 +59,27 @@
   <div class="group-button">
     <h3 class="text-uppercase">DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ BÁN ĐẤU GIÁ</h3>
     <div class="buttons">
-      <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_XOA'):
-           userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_XOA')"
-              type="button" class="btn btn-do" (click)="deleteMulti()">
+      <button
+        *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_XOA') : userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_XOA')"
+        type="button" class="btn btn-do" (click)="deleteMulti()">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-        <span> Xóa </span>
+        <span>Xóa</span>
       </button>
-      <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_EXP'):
-           userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_EXP')"
-              type="button" class="btn btn-sub"
-              (click)="exportData('Danh-sach-quyet-dinh-phe-duyet-ket-qua-ban-dau-gia.xlsx')">
+      <button
+        *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_EXP'): userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_EXP')"
+        type="button" class="btn btn-sub"
+        (click)="exportData('Danh-sach-quyet-dinh-phe-duyet-ket-qua-ban-dau-gia.xlsx')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
-        <span> Xuất file </span>
+        <span>Xuất file</span>
       </button>
-      <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_THEM'):
-           userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_THEM')"
-              type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
+      <button
+        *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_THEM')"
+        type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
         <i class=" icon htvbdh_dau-cong"></i>
-        <span> Thêm </span>
+        <span>Thêm</span>
       </button>
     </div>
   </div>
-
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
@@ -180,9 +179,9 @@
         </th>
         <th>
           <nz-input-group>
-            <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThai"
-                       (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)">
-              <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
+            <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                       (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+              <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </nz-input-group>
         </th>
@@ -220,33 +219,17 @@
             {{ data.soBienBan }}</a>
         </td>
         <td>{{ data.tenTrangThai }}</td>
-        <td class="text-left">
-          <a *ngIf="loaiVthh.startsWith('02') ? vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_XEM')&&
-               !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_THEM'))&&
-               !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP) && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_TP'))&&
-               !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC) && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_LDC')):
-               vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_XEM')&&
-               !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_THEM'))&&
-               !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP) && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_TP'))&&
-               !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC) && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_LDC'))"
-             (click)="redirectDetail(data.id,true)">
+        <td class="text-center">
+          <a *ngIf="isActionAllowed('XEM', data)" (click)="redirectDetail(data.id, true)">
             <i class="fa fa-eye" title="Xem chi tiết"></i>
           </a>
-          <a *ngIf="loaiVthh.startsWith('02') ? (vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)&&userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_THEM')):
-             (vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)&&userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_THEM'))"
-             (click)="redirectDetail(data.id,false)">
+          <a *ngIf="isActionAllowed('SUA', data)" (click)="redirectDetail(data.id, false)">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
-          <a *ngIf="loaiVthh.startsWith('02') ? (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP)&&userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_TP'))||
-              (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC)&&userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_LDC')):
-              (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP)&&userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_TP'))||
-              (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC)&&userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_LDC'))"
-             (click)="redirectDetail(data.id,true)">
+          <a *ngIf="isActionAllowed('PHEDUYET', data)" (click)="redirectDetail(data.id, true)">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
           </a>
-          <a (click)="delete(data)"
-             *ngIf="loaiVthh.startsWith('02') ? vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA)&&userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_XOA'):
-               vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA)&&userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_XOA')">
+          <a *ngIf="isActionAllowed('XOA', data)" (click)="delete(data)">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           </a>
         </td>
@@ -293,8 +276,8 @@
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThongTin"
           (nzOnCancel)="closeModal('MaThongBao')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-<!--    <app-thongtin-daugia [idInput]="idThongTin" [isView]="true">-->
-<!--    </app-thongtin-daugia>-->
+    <!--    <app-thongtin-daugia [idInput]="idThongTin" [isView]="true">-->
+    <!--    </app-thongtin-daugia>-->
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('MaThongBao')" class="modal__button--cancel">

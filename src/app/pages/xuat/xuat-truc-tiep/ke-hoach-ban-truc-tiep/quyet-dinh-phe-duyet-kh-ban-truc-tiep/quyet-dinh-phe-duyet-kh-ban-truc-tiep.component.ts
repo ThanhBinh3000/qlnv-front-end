@@ -6,11 +6,9 @@ import {MESSAGE} from 'src/app/constants/message';
 import {Base2Component} from 'src/app/components/base2/base2.component';
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
-import {CHUC_NANG} from "../../../../../constants/status";
 import {
   QuyetDinhPdKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kh-ban-truc-tiep',
@@ -20,8 +18,6 @@ import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 
 export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: XuatTrucTiepComponent
   isView = false;
   idThop: number = 0;
   isViewThop: boolean = false;
@@ -39,10 +35,8 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
-    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
-    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       soQdPd: null,
@@ -125,17 +119,17 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     }
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayKyQdTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyQdDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdDen, 'ngayKyQd');
   };
 
   disabledNgayKyQdDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyQdTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdTu, 'ngayKyQd');
   };
 }

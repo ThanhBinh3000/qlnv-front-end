@@ -9,8 +9,7 @@ import {
 import {Base2Component} from 'src/app/components/base2/base2.component';
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
-import {CHUC_NANG} from "../../../../../constants/status";
-import {DauGiaComponent} from "../../dau-gia.component";
+
 @Component({
   selector: 'app-quyet-dinh',
   templateUrl: './quyet-dinh.component.html',
@@ -19,17 +18,12 @@ import {DauGiaComponent} from "../../dau-gia.component";
 
 export class QuyetDinhComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: DauGiaComponent;
   isView = false;
   idThop: number = 0;
   isViewThop: boolean = false;
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
-  listTrangThai: any[] = [
-    {ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
-  ];
+  listTrangThai: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -38,10 +32,8 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-    private dauGiaComponent: DauGiaComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
-    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
       nam: null,
       soQdPd: null,
@@ -51,7 +43,7 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       ngayKyQdDen: null,
       soTrHdr: null,
       lastest: null,
-    })
+    });
 
     this.filterTable = {
       namKh: '',
@@ -66,6 +58,17 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       slHdDaKy: '',
       tenTrangThai: '',
     };
+
+    this.listTrangThai = [
+      {
+        value: this.STATUS.DANG_NHAP_DU_LIEU,
+        text: 'Đang nhập dữ liệu'
+      },
+      {
+        value: this.STATUS.BAN_HANH,
+        text: 'Ban hành'
+      },
+    ]
   }
 
   async ngOnInit() {
@@ -121,17 +124,17 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     }
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayKyQdTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyQdDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdDen, 'ngayKyQd');
   };
 
   disabledNgayKyQdDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyQdTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdTu, 'ngayKyQd');
   };
 }

@@ -255,11 +255,11 @@
                  (click)="themMoiPhienDauGia($event,true,data)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DANG_THUC_HIEN"
+              <a *ngIf="data.trangThai == STATUS.DANG_THUC_HIEN && userService.isCuc()"
                  (click)="themMoiPhienDauGia($event,false,data)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DANG_THUC_HIEN"
+              <a *ngIf="data.trangThai == STATUS.DANG_THUC_HIEN && userService.isCuc()"
                  (click)="deleteThongTin(data)">
                 <i class="fa fa-trash do"></i>
               </a>

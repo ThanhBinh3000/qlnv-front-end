@@ -11,9 +11,8 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 import {isEmpty} from 'lodash';
 import {DonviService} from 'src/app/services/donvi.service';
-import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
-import {CHUC_NANG} from "../../../../../constants/status";
 import {cloneDeep} from 'lodash';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-thong-tin-ban-truc-tiep',
@@ -22,12 +21,10 @@ import {cloneDeep} from 'lodash';
 })
 export class ThongTinBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: XuatTrucTiepComponent
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   dsDonvi: any[] = [];
   userdetail: any = {};
   isView: boolean = false;
-
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
   idQdPdDc: number = 0;
@@ -36,13 +33,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   isViewDxKh: boolean = false;
   idQdPdKq: number = 0;
   isViewQdPdKq: boolean = false;
-
-
-  listTrangThai: any[] = [
-    {ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật'},
-    {ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật'},
-    {ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật'},
-  ];
+  listTrangThai: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -52,10 +43,8 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     modal: NzModalService,
     private donviService: DonviService,
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
-    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
-    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       ngayCgiaTu: null,
@@ -64,7 +53,6 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       maChiCuc: null,
       loaiVthh: null,
     })
-
     this.filterTable = {
       soQdPd: '',
       pthucBanTrucTiep: '',
@@ -74,6 +62,20 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       tenCloaiVthh: '',
       tenTrangThai: '',
     };
+    this.listTrangThai = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
   }
 
   async ngOnInit() {
@@ -213,17 +215,17 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     }
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayChaoGiaTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayCgiaDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayCgiaDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayCgiaDen, 'ngayCgia');
   };
 
   disabledNgayChaoGiaDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayCgiaTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayCgiaTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayCgiaTu, 'ngayCgia');
   };
 }
