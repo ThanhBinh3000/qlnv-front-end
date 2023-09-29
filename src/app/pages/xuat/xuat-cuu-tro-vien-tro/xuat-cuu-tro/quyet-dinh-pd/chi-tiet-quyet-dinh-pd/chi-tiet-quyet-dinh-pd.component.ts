@@ -488,9 +488,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             //       // childData: row1 ? v : []
             //     }
             //   }).value() : [];
+            console.log("value", value)
             let soLuongDx = value.reduce((prev, next) => prev += next.soLuongDx, 0);
             let soLuong = value.reduce((prev, next) => prev += next.soLuong, 0);
-            let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.next.soLuongNhuCauXuat : 0, 0);
+            let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
             return {
               idVirtual: uuidv4(),
               tenDvi: row.tenDvi,
