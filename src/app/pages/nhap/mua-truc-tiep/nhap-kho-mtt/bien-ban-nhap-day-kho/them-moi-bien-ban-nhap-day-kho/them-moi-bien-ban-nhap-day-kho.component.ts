@@ -209,7 +209,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       soQuyetDinhNhap: data.soQd,
       soHdong: data.soHd,
       ngayKiHdong: data.hopDongMttHdrs[0]?.ngayPduyet,
-      soLuong: data.hopDongMttHdrs[0]?.soLuong,
+      // soLuong: data.hopDongMttHdrs[0]?.soLuong,
       donGiaHd: data.hopDongMttHdrs[0]?.donGiaGomThue,
       thanhTien: data.hopDongMttHdrs[0]?.soLuong * data.hopDongMttHdrs[0]?.donGiaGomThue,
     });
@@ -245,24 +245,26 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   bindingDataDdNhap(data, isDetail?: boolean) {
     if (!isDetail) {
       this.dataTable = data.listPhieuKtraCl.filter(x => x.trangThai == STATUS.DA_DUYET_LDCC);
+      console.log(this.dataTable, "datatable")
       this.dataTable.forEach(item => {
         item.soPhieuKtraCl = item.soPhieu;
-        item.soPhieuNhapKho = item.phieuNhapKhoHdr.soPhieuNhapKho;
-        item.soBangKeCanHang = item.bcanKeHangHdr.soBangKeCanHang;
-        item.ngayNkho = item.phieuNhapKhoHdr.ngayTao;
-        item.maDiemKho = item.bcanKeHangHdr.maDiemKho;
-        item.maNhaKho = item.bcanKeHangHdr.maNhaKho;
-        item.maNganKho = item.bcanKeHangHdr.maNganKho;
-        item.maLoKho = item.bcanKeHangHdr.maLoKho;
-        item.soLuong = item.soLuongNhapKho;
+        // item.soPhieuNhapKho = item.phieuNhapKhoHdr.soPhieuNhapKho;
+        // item.soBangKeCanHang = item.bcanKeHangHdr.soBangKeCanHang;
+        // item.ngayNkho = item.phieuNhapKhoHdr.ngayTao;
+        // item.maDiemKho = item.bcanKeHangHdr.maDiemKho;
+        // item.maNhaKho = item.bcanKeHangHdr.maNhaKho;
+        // item.maNganKho = item.bcanKeHangHdr.maNganKho;
+        // item.maLoKho = item.bcanKeHangHdr.maLoKho;
+        // item.soLuong = item.soLuongNhapKho;
         this.formData.patchValue({
           ktvBanQuan: item.ktvBaoQuan,
-          keToanTruong: item.phieuNhapKhoHdr.keToanTruong,
-          idPhieuNhapKho: item.phieuNhapKhoHdr.id,
-          idBangCanKeHang: item.bcanKeHangHdr.id,
-          soPhieuNhapKho: item.phieuNhapKhoHdr.soPhieuNhapKho,
-          soBangKeCanHang: item.bcanKeHangHdr.soBangKeCanHang,
-          ngayNkho: item.phieuNhapKhoHdr.ngayTao,
+          // keToanTruong: item.phieuNhapKhoHdr.keToanTruong,
+          // idPhieuNhapKho: item.phieuNhapKhoHdr.id,
+          // idBangCanKeHang: item.bcanKeHangHdr.id,
+          // soPhieuNhapKho: item.phieuNhapKhoHdr.soPhieuNhapKho,
+          // soBangKeCanHang: item.bcanKeHangHdr.soBangKeCanHang,
+          // soLuong: item.bcanKeHangHdr.tongSlCaBaoBi - item.bcanKeHangHdr.tongSlBaoBi,
+          // ngayNkho: item.phieuNhapKhoHdr.ngayTao,
           tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         })
       })
@@ -550,11 +552,20 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
 
   calcTong() {
     if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur.soLuong;
-        return prev;
-      }, 0);
+      let sum = 0;
+      this.dataTable.forEach(item =>{
+        sum = item.bcanKeHangHdr.reduce((prev, cur) => {
+          prev += cur.tongSlCaBaoBi - cur.tongSlBaoBi;
+          return prev;
+        }, 0);
+      })
+      this.formData.value.soLuong = sum;
       return sum;
+      // const sum = this.dataTable.reduce((prev, cur) => {
+      //   prev += cur.soLuong;
+      //   return prev;
+      // }, 0);
+      // return sum;
     }
   }
 
