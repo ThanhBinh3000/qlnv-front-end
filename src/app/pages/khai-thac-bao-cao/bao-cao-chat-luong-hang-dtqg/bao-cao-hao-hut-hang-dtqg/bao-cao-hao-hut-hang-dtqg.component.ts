@@ -50,13 +50,12 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, bcCLuongHangDTQGService);
     this.formData = this.fb.group(
       {
-        namNhap: [[]],
-        namXuat: [[]],
+        namNhap: [[], [Validators.required]],
+        namXuat: [[], [Validators.required]],
         maCuc: null,
         maChiCuc: null,
         loaiVthh: [null, [Validators.required]],
-        cloaiVthh: [null, [Validators.required]],
-        loaiBc: [null, [Validators.required]],
+        loaiBc: ['02', [Validators.required]],
       }
     );
   }
@@ -82,10 +81,24 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
   async downloadExcel() {
     try {
       this.spinner.show();
+      this.formData.value.namNhap = this.formData.value.namNhap && this.formData.value.namNhap.length > 0 ? this.formData.value.namNhap.toString() : ""
+      this.formData.value.namXuat = this.formData.value.namXuat && this.formData.value.namXuat.length > 0 ? this.formData.value.namNhap.toString() : ""
       let body = this.formData.value;
-      body.typeFile = "xlsx";
-      body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
-      body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
+      body.maDvi = this.userInfo.MA_DVI;
+      body.nam  = 2023;
+      body.typeFile = "pdf";
+      if (body.loaiBc == '01') {
+        if (body.loaiVthh.startsWith("0101")) {
+          body.fileName = "bc_hao_hut_thoc_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo hao hụt thóc tổng hợp";
+        } else {
+          body.fileName = "bc_hao_hut_gao_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo hao hụt gạo tổng hợp";
+        }
+      } else {
+        body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
+        body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
+      }
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclHangHaoHut(body).then(async s => {
         this.excelBlob = s;
@@ -106,11 +119,15 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
   }
 
   async preView() {
-    // this.helperService.markFormGroupTouched(this.formData);
-    // if (this.formData.invalid) {
-    //   this.spinner.hide();
-    //   return;
-    // }
+    this.formData.controls["maCuc"].clearValidators();
+    if (this.formData.value.loaiBc == '02') {
+      this.formData.controls["maCuc"].setValidators(Validators.required);
+    }
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      return;
+    }
     try {
       this.spinner.show();
       this.formData.value.namNhap = this.formData.value.namNhap && this.formData.value.namNhap.length > 0 ? this.formData.value.namNhap.toString() : ""
@@ -119,8 +136,18 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       body.maDvi = this.userInfo.MA_DVI;
       body.nam  = 2023;
       body.typeFile = "pdf";
-      body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
-      body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
+      if (body.loaiBc == '01') {
+        if (body.loaiVthh.startsWith("0101")) {
+          body.fileName = "bc_hao_hut_thoc_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo hao hụt thóc tổng hợp";
+        } else {
+          body.fileName = "bc_hao_hut_gao_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo hao hụt gạo tổng hợp";
+        }
+      } else {
+        body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
+        body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
+      }
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclHangHaoHut(body).then(async s => {
         this.pdfBlob = s;
@@ -170,8 +197,5 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
 
   async clearFilter() {
     this.formData.reset();
-    this.formData.patchValue({
-      nam: dayjs().get('year')
-    })
   }
 }

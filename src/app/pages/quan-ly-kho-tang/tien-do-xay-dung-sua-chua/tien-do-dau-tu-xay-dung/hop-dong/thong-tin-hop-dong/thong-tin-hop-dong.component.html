@@ -79,7 +79,7 @@
                 <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <input nz-input currencyMask [options]="AMOUNT" formControlName="tongTien" readonly/>
+                    <input nz-input currencyMask [options]="AMOUNT" formControlName="tongMucDt" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -168,7 +168,7 @@
         <td>{{ data.hopDong?.soHd }}</td>
         <td>{{ data.hopDong?.tenHd }}</td>
         <td>{{ data.hopDong?.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
-        <td>{{ data.hopDong?.thanhTien | number }}</td>
+        <td>{{ data.hopDong?.thanhTien | number : '1.0-1' : 'vi-VN'}}</td>
         <td class="text-left">{{  data.hopDong?.tenTrangThai  }}</td>
         <td class="text-center">
           <a (click)="openThemMoiHd(data.idHopDong,true)"
@@ -182,6 +182,14 @@
         </td>
       </tr>
       </tbody>
+      <tfoot>
+      <tr class="text-blue">
+        <td colspan="5" class="text-center">Tổng</td>
+        <td>{{this.tongTien | number : '1.0-1' : 'vi-VN'}}</td>
+        <td></td>
+        <td></td>
+      </tr>
+      </tfoot>
     </nz-table>
   </nz-card>
 </div>

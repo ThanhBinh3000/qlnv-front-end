@@ -26,6 +26,7 @@ import {Validators} from "@angular/forms";
 import {saveAs} from 'file-saver';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-chao-gia',
@@ -38,6 +39,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maHauTo: any;
   listOfData: any[] = [];
   showFromTT: boolean;

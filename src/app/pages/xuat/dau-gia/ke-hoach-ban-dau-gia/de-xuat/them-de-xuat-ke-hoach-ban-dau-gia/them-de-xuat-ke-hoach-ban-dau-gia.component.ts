@@ -55,6 +55,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   pdfSrc: any;
   wordSrc: any;
   dataDonGiaDuocDuyet: any;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
 
   constructor(
     httpClient: HttpClient,

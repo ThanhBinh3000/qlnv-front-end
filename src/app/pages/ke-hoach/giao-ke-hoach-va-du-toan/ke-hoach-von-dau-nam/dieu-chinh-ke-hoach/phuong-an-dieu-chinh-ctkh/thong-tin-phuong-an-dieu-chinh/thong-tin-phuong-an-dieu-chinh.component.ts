@@ -66,17 +66,13 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { FILETYPE } from "../../../../../../../constants/fileType";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { DeXuatDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/de-xuat-dieu-chinh-ctkh';
-
-
 
 @Component({
-  selector: 'app-thong-tin-de-xuat-dieu-chinh',
-  templateUrl: './thong-tin-de-xuat-dieu-chinh.component.html',
-  styleUrls: ['./thong-tin-de-xuat-dieu-chinh.component.scss']
+  selector: 'app-thong-tin-phuong-an-dieu-chinh',
+  templateUrl: './thong-tin-phuong-an-dieu-chinh.component.html',
+  styleUrls: ['./thong-tin-phuong-an-dieu-chinh.component.scss']
 })
-export class ThongTinDeXuatDieuChinhComponent implements OnInit {
+export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   @Input() id: number;
   @Input() isViewDetail: boolean;
   @Input() isViewOnModal: boolean;
@@ -185,7 +181,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     public quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
     private quyetDinhTtcpService: QuyetDinhTtcpService,
     public quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-    public deXuatDieuChinhCTKHService: DeXuatDieuChinhCTKHService
   ) {
     this.initForm();
   }
@@ -202,9 +197,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     this.maQd = '/QĐ-BTC'
     if (this.userInfo) {
       this.qdTCDT = this.userInfo.MA_QD;
-      this.formData.patchValue({
-        tenDonVi: this.userInfo.TEN_DVI
-      })
     }
     if (this.userService.isTongCuc()) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
@@ -1593,13 +1585,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     // //convert to flat object
     // this.thongTinChiTieuKeHoachNamInput.khVatTuNhap = this.dataVatTuNhap;
     // this.thongTinChiTieuKeHoachNamInput.khVatTuXuat = this.dataVatTuXuat;
-    let body = this.formData.value
-    body.khLuongThuc = this.thongTinChiTieuKeHoachNam.khLuongThuc
-    body.khMuoi = this.thongTinChiTieuKeHoachNam.khMuoiDuTru
-    body.khVatTuNhap = this.dataVatTuNhap;
-    body.dataVatTuXuat = this.dataVatTuXuat;
-    console.log("thongTinChiTieuKeHoachNamInput", body)
-    // return
+    console.log("thongTinChiTieuKeHoachNamInput", this.formData.value, this.thongTinChiTieuKeHoachNam, this.thongTinChiTieuKeHoachNamInput)
+    return
     this.spinner.show();
     if (this.thongTinChiTieuKeHoachNam.id > 0) {
       this.chiTieuKeHoachNamService
@@ -1671,8 +1658,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
-      this.deXuatDieuChinhCTKHService
-        .themMoi(body)
+      this.chiTieuKeHoachNamService
+        .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
@@ -1689,22 +1676,22 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
                   trangThai: STATUS.CHO_DUYET_TP,
                 };
               }
-              // this.chiTieuKeHoachNamService.updateStatus(body)
-              //   .then((resp) => {
-              //     if (resp.msg == MESSAGE.SUCCESS) {
-              //       if (res.msg == MESSAGE.SUCCESS) {
-              //         this.notification.success(
-              //           MESSAGE.SUCCESS,
-              //           MESSAGE.ADD_SUCCESS,
-              //         );
-              //         this.redirectChiTieuKeHoachNam()
-              //       } else {
-              //         this.notification.error(MESSAGE.ERROR, res.msg);
-              //       }
-              //     } else {
-              //       this.notification.error(MESSAGE.ERROR, resp.msg);
-              //     }
-              //   })
+              this.chiTieuKeHoachNamService.updateStatus(body)
+                .then((resp) => {
+                  if (resp.msg == MESSAGE.SUCCESS) {
+                    if (res.msg == MESSAGE.SUCCESS) {
+                      this.notification.success(
+                        MESSAGE.SUCCESS,
+                        MESSAGE.ADD_SUCCESS,
+                      );
+                      this.redirectChiTieuKeHoachNam()
+                    } else {
+                      this.notification.error(MESSAGE.ERROR, res.msg);
+                    }
+                  } else {
+                    this.notification.error(MESSAGE.ERROR, resp.msg);
+                  }
+                })
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             }
@@ -2553,3 +2540,4 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
 
 }
+

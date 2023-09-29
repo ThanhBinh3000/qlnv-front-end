@@ -40,7 +40,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   @Input() showFromTH: boolean;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
-
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   listPhuongThucThanhToan: any[] = [];
@@ -50,6 +49,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   listVatTuCha: any[] = [];
   listVatTu = [];
   dataDonGiaDuocDuyet: any;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

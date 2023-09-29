@@ -152,6 +152,7 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
       limit: this.pageSize,
       page: this.page - 1
     }
+    body.trangThai = STATUS.BAN_HANH
     let res = await this.phieuNhapKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.totalRecord = res.data.totalElements;

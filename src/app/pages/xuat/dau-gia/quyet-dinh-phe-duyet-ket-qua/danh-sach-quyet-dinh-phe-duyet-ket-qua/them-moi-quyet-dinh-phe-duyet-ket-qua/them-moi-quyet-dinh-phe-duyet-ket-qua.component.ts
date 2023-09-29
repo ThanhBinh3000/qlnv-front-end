@@ -26,6 +26,7 @@ import {cloneDeep} from 'lodash';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {saveAs} from 'file-saver';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-them-moi-quyet-dinh-phe-duyet-ket-qua',
@@ -37,6 +38,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   fileDinhKems: any[] = []
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];

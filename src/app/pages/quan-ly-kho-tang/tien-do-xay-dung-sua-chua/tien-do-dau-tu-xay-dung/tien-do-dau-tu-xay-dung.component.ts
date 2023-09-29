@@ -109,7 +109,6 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       }
       let body = this.formData.value
       let res = await this.ktQdXdHangNamService.getDanhSachDmDuAn(body);
-      console.log(res,"res")
       if (res.msg == MESSAGE.SUCCESS) {
         this.dataTable = this.convertListData(res.data);
         this.dataTableRaw = res.data;
@@ -193,6 +192,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       let res = await this.quyetdinhpheduyetduandtxdService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+        console.log(this.itemQdPdDaDtxd,"this.itemQdPdDaDtxd")
         //Check tiếp quyết định phê duyệt bản vẽ
         if (this.itemQdPdDaDtxd) {
           await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
@@ -407,6 +407,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   }
 
   async selectRow(data) {
+    this.itemSelected = data;
     if (this.itemSelected) {
       this.tabSelected = null;
       this.itemSelected = null;

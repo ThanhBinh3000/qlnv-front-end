@@ -11,6 +11,7 @@ import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import {saveAs} from 'file-saver';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-thong-tin-dau-gia',
@@ -19,6 +20,7 @@ import {saveAs} from 'file-saver';
 })
 export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
   idQdDc: number = 0;
@@ -27,11 +29,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
   isViewDxBdg: boolean = false;
   idKqBdg: number = 0;
   isViewKqBdg: boolean = false;
-  listTrangThai: any[] = [
-    {ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật'},
-    {ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật'},
-    {ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật'},
-  ];
+  listTrangThai: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -50,8 +48,6 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       ngayKyQdPdKqBdgTu: null,
       ngayKyQdPdKqBdgDen: null,
       loaiVthh: null,
-      // isDieuChinh: 0,
-
     })
     this.filterTable = {
       nam: '',
@@ -67,6 +63,20 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       tenTrangThai: '',
       ketQuaDauGia: '',
     };
+    this.listTrangThai = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
   }
 
   async ngOnInit() {
@@ -207,17 +217,17 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
     this.showListEvent.emit();
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayPduyetKqTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyQdPdKqBdgDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyQdPdKqBdgDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdPdKqBdgDen, 'ngayKyQdPdKqBdg');
   };
 
   disabledNgayPduyetKqDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyQdPdKqBdgTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyQdPdKqBdgTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdPdKqBdgTu, 'ngayKyQdPdKqBdg');
   };
 }
