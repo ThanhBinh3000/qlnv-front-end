@@ -129,7 +129,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async ngOnInit() {
     try {
       await this.spinner.show();
-      this.maHauTo = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
+      this.maHauTo = '/PXK-' + this.userInfo.DON_VI.tenVietTat;
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
