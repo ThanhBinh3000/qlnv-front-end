@@ -346,8 +346,10 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
             return {
               idVirtual: uuidv4(),
               noiDung: key,
-              soLuong: 0,
-              childData: rs ? value : []
+              soLuong: rs ? value.reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0) : 0,
+              childData: rs ? value : [],
+              soLuongNhuCauXuat: rs ? value.reduce((sum, cur) => sum += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0, 0) : 0,
+              soLuongChuyenCapThoc: rs ? value.reduce((sum, cur) => sum += cur.soLuongChuyenCapThoc ? cur.soLuongChuyenCapThoc : 0, 0) : 0,
             };
           }).value();
       }
@@ -373,8 +375,6 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
                 tonKho: tonKho,
                 soLuong: soLuong,
                 donViTinh: row?.donViTinh,
-                soLuongNhuCauXuat: row?.soLuongNhuCauXuat,
-                soLuongChuyenCapThoc: row?.soLuongChuyenCapThoc,
                 tonKhoLoaiVthh,
                 childData: v
               }
@@ -563,5 +563,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       return true;
     }
     return false;
+  }
+  genCuuTroVienTro() {
+    if (this.formData.value.loaiNhapXuat === 'Xuất viện trợ') {
+      return "viện trợ"
+    } else {
+      return "cứu trợ"
+    }
   }
 }
