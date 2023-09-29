@@ -294,6 +294,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
       //   item.soLuongThucNhap = phieuKtraCL ? phieuKtraCL.soLuongNhapKho : 0
       // })
       await this.getNganKho(data.maLoKho ? data.maLoKho : data.maNganKho);
+      console.log(data, "9999")
       this.formData.patchValue({
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
@@ -306,6 +307,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+        soLuongPhieuNhapKho: data.tongSlNhap,
       })
       await this.loadDataComboBox();
     }
@@ -372,6 +374,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
   async getNganKho(maDvi: any) {
     if (maDvi) {
       let res = await this.bbNghiemThuBaoQuanService.getDataKho(maDvi);
+      console.log(res, "getDataKho")
       this.formData.patchValue({
         tichLuong: (res.data.tichLuongTkLt - res.data.tichLuongKdLt) > 0 ? res.data.tichLuongTkLt - res.data.tichLuongKdLt : 0,
         loaiHinhKho: res.data.lhKho

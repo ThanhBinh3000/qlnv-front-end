@@ -18,6 +18,7 @@ import {StorageService} from 'src/app/services/storage.service';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-quan-ly-hop-dong-btt',
@@ -28,6 +29,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   @Input() idInput: number;
   @Input() loaiVthh: string;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isView: boolean
   isEditHopDong: boolean
   selected: boolean = false;

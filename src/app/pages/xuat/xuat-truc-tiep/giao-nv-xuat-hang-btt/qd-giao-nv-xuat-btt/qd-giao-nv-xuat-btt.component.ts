@@ -11,8 +11,7 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import {LOAI_HANG_DTQG} from "../../../../../constants/config";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
-import {CHUC_NANG} from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-qd-giao-nv-xuat-btt',
@@ -22,27 +21,13 @@ import {CHUC_NANG} from "../../../../../constants/status";
 export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() listVthh: any[] = [];
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: XuatTrucTiepComponent
   listClVthh: any[] = [];
   isView = false;
   idHd: number = 0;
   isViewHd: boolean = false;
+  listTrangThai: any = [];
+  listTrangThaiXh: any = [];
 
-  listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành'},
-  ];
-
-  listTrangThaiXh: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
-  ];
 
   constructor(
     httpClient: HttpClient,
@@ -51,11 +36,9 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private xuatTrucTiepComponent: XuatTrucTiepComponent,
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
-    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       soQdNv: null,
@@ -79,6 +62,46 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       tenTrangThai: '',
       tenTrangThaiXh: '',
     };
+    this.listTrangThai = [
+      {
+        value: this.STATUS.DU_THAO,
+        text: 'Dự thảo'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_TP,
+        text: 'Chờ duyệt - TP'
+      },
+      {
+        value: this.STATUS.TU_CHOI_TP,
+        text: 'Từ chối - TP'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDC,
+        text: 'Chờ duyệt - LĐ Cục'
+      },
+      {
+        value: this.STATUS.TU_CHOI_LDC,
+        text: 'Từ chối - LĐ Cục'
+      },
+      {
+        value: this.STATUS.BAN_HANH,
+        text: 'Ban hành'
+      },
+    ]
+    this.listTrangThaiXh = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
   }
 
   async ngOnInit() {
@@ -123,20 +146,6 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     this.isView = isView;
   }
 
-  disabledNgayTaoTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayTaoDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayTaoDen.getTime();
-  };
-
-  disabledNgayTaoDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayTaoTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayTaoTu.getTime();
-  };
-
   openModalHd(id: number) {
     this.idHd = id;
     this.isViewHd = true;
@@ -145,5 +154,57 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   closeModalHd() {
     this.idHd = null;
     this.isViewHd = false;
+  }
+
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
+  disabledNgayTaoTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayTaoDen, 'ngayTao');
+  };
+
+  disabledNgayTaoDen = (endValue: Date): boolean => {
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayTaoTu, 'ngayTao');
+  };
+
+  isActionAllowed(action: string, data: any): boolean {
+    const permissionMapping = {
+      XEM: 'XHDTQG_PTTT_QDGNVXH_XEM',
+      THEM: 'XHDTQG_PTTT_QDGNVXH_THEM',
+      XOA: 'XHDTQG_PTTT_QDGNVXH_XOA',
+      DUYET_TP: 'XHDTQG_PTTT_QDGNVXH_DUYET_TP',
+      DUYET_LDCUC: 'XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC',
+    };
+    switch (action) {
+      case 'XEM':
+        return this.userService.isAccessPermisson(permissionMapping.XEM) &&
+          (data.trangThai !== STATUS.DU_THAO &&
+            data.trangThai !== STATUS.TU_CHOI_TP &&
+            data.trangThai !== STATUS.TU_CHOI_LDC);
+      case 'SUA':
+        return (
+          (data.trangThai === STATUS.DU_THAO ||
+            data.trangThai === STATUS.TU_CHOI_TP ||
+            data.trangThai === STATUS.TU_CHOI_LDC) &&
+          this.userService.isAccessPermisson(permissionMapping.THEM)
+        );
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissionMapping.DUYET_TP) &&
+            data.trangThai === STATUS.CHO_DUYET_TP) ||
+          (this.userService.isAccessPermisson(permissionMapping.DUYET_LDCUC) &&
+            data.trangThai === STATUS.CHO_DUYET_LDC)
+        );
+      case 'XOA':
+        return (
+          data.trangThai === STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissionMapping.XOA)
+        );
+      default:
+        return false;
+    }
   }
 }

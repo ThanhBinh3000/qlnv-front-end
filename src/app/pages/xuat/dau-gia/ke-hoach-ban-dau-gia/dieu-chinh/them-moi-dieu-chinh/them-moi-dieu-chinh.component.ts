@@ -20,6 +20,7 @@ import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-them-moi-dieu-chinh',
@@ -327,4 +328,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
     this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
   }
+
+  protected readonly LOAI_HANG_DTQG = LOAI_HANG_DTQG;
 }

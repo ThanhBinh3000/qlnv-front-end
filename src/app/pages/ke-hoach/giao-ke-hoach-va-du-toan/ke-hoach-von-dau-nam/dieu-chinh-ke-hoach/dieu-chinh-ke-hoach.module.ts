@@ -8,6 +8,7 @@ import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-ho
 import { DieuChinhThongTinChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
 import { ThongTinDeXuatDieuChinhComponent } from './de-xuat-dieu-chinh/thong-tin-de-xuat-dieu-chinh/thong-tin-de-xuat-dieu-chinh.component';
 import { PhuongAnDieuChinhCtkhComponent } from './phuong-an-dieu-chinh-ctkh/phuong-an-dieu-chinh-ctkh.component';
+import { ThongTinPhuongAnDieuChinhComponent } from './phuong-an-dieu-chinh-ctkh/thong-tin-phuong-an-dieu-chinh/thong-tin-phuong-an-dieu-chinh.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { PhuongAnDieuChinhCtkhComponent } from './phuong-an-dieu-chinh-ctkh/phuo
     DieuChinhThongTinChiTieuKeHoachNamComponent,
     ThongTinDeXuatDieuChinhComponent,
     PhuongAnDieuChinhCtkhComponent,
+    ThongTinPhuongAnDieuChinhComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +31,8 @@ import { PhuongAnDieuChinhCtkhComponent } from './phuong-an-dieu-chinh-ctkh/phuo
     DieuChinhChiTieuKeHoachNamComponent,
     DieuChinhThongTinChiTieuKeHoachNamComponent,
     ThongTinDeXuatDieuChinhComponent,
+    PhuongAnDieuChinhCtkhComponent,
+    ThongTinPhuongAnDieuChinhComponent
   ]
 })
 export class DieuChinhKeHoachModule { }

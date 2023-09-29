@@ -179,7 +179,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
             data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
           })
           item.detail = {
-            hhQdGiaoNvNhDdiemList: data,
+            children: data
           }
           item.expand = true;
         };

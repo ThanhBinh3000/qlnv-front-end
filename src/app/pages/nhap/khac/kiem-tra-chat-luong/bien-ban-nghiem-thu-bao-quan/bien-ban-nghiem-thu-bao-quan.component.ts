@@ -210,8 +210,7 @@ export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements 
 
   hienThiPheDuyet(data) {
     return (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_THUKHO') && data.trangThai == STATUS.CHO_DUYET_TK)
-      || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_KETOAN') && data.trangThai == STATUS.CHO_DUYET_KT)
-      || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') && data.trangThai == STATUS.DA_DUYET_LDCC);
+      || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_KETOAN') && data.trangThai == STATUS.CHO_DUYET_KT);
   }
 
   hienThiXem(data) {
@@ -220,7 +219,7 @@ export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements 
         return false;
       } else if ((this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_THUKHO') && data.trangThai == STATUS.CHO_DUYET_TK)
         || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_KETOAN') && data.trangThai == STATUS.CHO_DUYET_KT)
-        || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') && data.trangThai == STATUS.DA_DUYET_LDCC)) {
+        || (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC)) {
         return false;
       }
       return true;

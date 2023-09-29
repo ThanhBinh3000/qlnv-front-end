@@ -112,27 +112,27 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       ghiChu: [null, Validators.required],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
-      cdtTen: [null, Validators.required],
-      cdtDiaChi: [null],
-      cdtMst: [null],
-      cdtNguoiDaiDien: [null],
-      cdtChucVu: [null],
-      cdtSdt: [null],
-      cdtStk: [null],
-      cdtFax: [null],
-      cdtMoTai: [null],
-      cdtGiayUq: [null],
+      cdtTen: [null],
+      cdtDiaChi: [null, Validators.required],
+      cdtMst: [null, Validators.required],
+      cdtNguoiDaiDien: [null, Validators.required],
+      cdtChucVu: [null, Validators.required],
+      cdtSdt: [null, Validators.required],
+      cdtStk: [null, Validators.required],
+      cdtFax: [null, Validators.required],
+      cdtMoTai: [null, Validators.required],
+      cdtGiayUq: [null, Validators.required],
       dvccTen: [null],
-      phuongThucTt: [null],
+      phuongThucTt: [null, Validators.required],
       tenPhuongThucTt: [null],
       dvccDiaChi: [null],
       dvccMst: [null],
-      dvccNguoiDaiDien: [null],
-      dvccChucVu: [null],
-      dvccSdt: [null],
-      dvccStk: [null],
-      dvccFax: [null],
-      dvccMoTai: [null],
+      dvccNguoiDaiDien: [null, Validators.required],
+      dvccChucVu: [null, Validators.required],
+      dvccSdt: [null, Validators.required],
+      dvccStk: [null, Validators.required],
+      dvccFax: [null, Validators.required],
+      dvccMoTai: [null, Validators.required],
       thanhTien: [],
       tenDuAn: [null],
       idDuAn: [null],
@@ -161,18 +161,18 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
 
   async bindingData() {
     if (this.itemGoiThau && this.itemQdPdKhlcnt) {
-      console.log(this.itemGoiThau,"this.itemGoiThau")
-      console.log(this.itemQdPdKhlcnt,"this.itemQdPdKhlcnt")
+      console.log(this.itemGoiThau, "this.itemGoiThau")
+      console.log(this.itemQdPdKhlcnt, "this.itemQdPdKhlcnt")
       let rs = await this.quyetdinhpheduyetKqLcntService.getDetail(this.itemGoiThau.idQdPdKqlcnt);
       let dataQdPdKqlcnt;
       let goiThau;
       if (rs.msg == MESSAGE.SUCCESS) {
         dataQdPdKqlcnt = rs.data;
       }
-      console.log(dataQdPdKqlcnt,"dataQdPdKqlcnt")
+      console.log(dataQdPdKqlcnt, "dataQdPdKqlcnt")
       if (dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.length) {
         goiThau = dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
-        console.log(goiThau,"goiThau")
+        console.log(goiThau, "goiThau")
       }
       console.log(this.itemGoiThau, 'this.itemGoiThau this.itemGoiThau ')
       this.formData.patchValue({
@@ -232,7 +232,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     if (this.formData.invalid) {
       return;
     }
-    this.formData.value.soHd = this.formData.value.soHd? this.formData.value.soHd+ this.hauToSoHd:null;
+    this.formData.value.soHd = this.formData.value.soHd ? this.formData.value.soHd + this.hauToSoHd : null;
     if (this.dataKlcv && this.dataKlcv.length > 0) {
       this.formData.value.listKtTdxdHopDongKlcv = this.dataKlcv;
     } else {

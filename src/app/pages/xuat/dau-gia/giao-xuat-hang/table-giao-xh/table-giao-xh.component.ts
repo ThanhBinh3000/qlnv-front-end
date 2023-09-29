@@ -11,8 +11,7 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {DauGiaComponent} from "../../dau-gia.component";
-import {CHUC_NANG} from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-table-giao-xh',
@@ -23,8 +22,7 @@ import {CHUC_NANG} from "../../../../../constants/status";
 export class TableGiaoXh extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() listVthh: any[] = [];
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: DauGiaComponent;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   listLoaiHangHoa: any[] = [];
   isView = false;
   idHopDong: number = 0;
@@ -33,21 +31,8 @@ export class TableGiaoXh extends Base2Component implements OnInit {
   isViewTinhKho: boolean = false;
   idHaoDoi: number = 0;
   isViewHaoDoi: boolean = false
-
-  listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành'},
-  ];
-
-  listTrangThaiXh: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
-  ];
+  listTrangThai: any = [];
+  listTrangThaiXh: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -56,11 +41,9 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private dauGiaComponent: DauGiaComponent,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
-    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
       nam: [null],
       soQdNv: [null],
@@ -84,6 +67,46 @@ export class TableGiaoXh extends Base2Component implements OnInit {
       tenTrangThai: '',
       tenTrangThaiXh: '',
     };
+    this.listTrangThai = [
+      {
+        value: this.STATUS.DU_THAO,
+        text: 'Dự thảo'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_TP,
+        text: 'Chờ duyệt - TP'
+      },
+      {
+        value: this.STATUS.TU_CHOI_TP,
+        text: 'Từ chối - TP'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDC,
+        text: 'Chờ duyệt - LĐ Cục'
+      },
+      {
+        value: this.STATUS.TU_CHOI_LDC,
+        text: 'Từ chối - LĐ Cục'
+      },
+      {
+        value: this.STATUS.BAN_HANH,
+        text: 'Ban hành'
+      },
+    ]
+    this.listTrangThaiXh = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
   }
 
   async ngOnInit() {
@@ -166,17 +189,55 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     }
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayTaoTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyDen, 'ngayKy');
   };
 
   disabledNgayTaoDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyTu, 'ngayKy');
   };
+
+  isActionAllowed(action: string, data: any): boolean {
+    const permissionMapping = {
+        XEM: 'XHDTQG_PTDG_QDGNVXH_XEM',
+        THEM: 'XHDTQG_PTDG_QDGNVXH_THEM',
+        XOA: 'XHDTQG_PTDG_QDGNVXH_XOA',
+        DUYET_TP: 'XHDTQG_PTDG_QDGNVXH_DUYET_TP',
+        DUYET_LDCUC: 'XHDTQG_PTDG_QDGNVXH_DUYET_LDCUC',
+    };
+    switch (action) {
+      case 'XEM':
+        return this.userService.isAccessPermisson(permissionMapping.XEM) &&
+          (data.trangThai !== STATUS.DU_THAO &&
+            data.trangThai !== STATUS.TU_CHOI_TP &&
+            data.trangThai !== STATUS.TU_CHOI_LDC);
+      case 'SUA':
+        return (
+          (data.trangThai === STATUS.DU_THAO ||
+            data.trangThai === STATUS.TU_CHOI_TP ||
+            data.trangThai === STATUS.TU_CHOI_LDC) &&
+          this.userService.isAccessPermisson(permissionMapping.THEM)
+        );
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissionMapping.DUYET_TP) &&
+            data.trangThai === STATUS.CHO_DUYET_TP) ||
+          (this.userService.isAccessPermisson(permissionMapping.DUYET_LDCUC) &&
+            data.trangThai === STATUS.CHO_DUYET_LDC)
+        );
+      case 'XOA':
+        return (
+          data.trangThai === STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissionMapping.XOA)
+        );
+      default:
+        return false;
+    }
+  }
 }

@@ -4,21 +4,21 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
           <div nz-col [nzSpan]="2">
-            <label> Năm kế hoạch </label>
+            <label class="search__label"> Năm kế hoạch </label>
             <nz-select formControlName="nam">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4">
-            <label> Số QĐ giao NV xuất hàng </label>
+            <label class="search__label"> Số QĐ giao NV xuất hàng </label>
             <input placeholder="Nhập số quyết định" nz-input formControlName="soQdNv"/>
           </div>
           <div nz-col [nzSpan]="4">
-            <label> Số phiếu kiểm nghiệm chất lượng </label>
+            <label class="search__label"> Số phiếu kiểm nghiệm chất lượng </label>
             <input placeholder="Nhập số phiếu kiểm nghiệm" nz-input formControlName="soPhieuKiemNghiem"/>
           </div>
           <div nz-col nzSpan="4">
-            <label> Ngày kiểm nghiệm </label>
+            <label class="search__label"> Ngày kiểm nghiệm </label>
             <div nz-row>
               <div nz-col nzSpan="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartngayKnghiem" nzFormat="dd/MM/yyyy"
@@ -32,11 +32,11 @@
             </div>
           </div>
           <div nz-col [nzSpan]="4">
-            <label> Số biên bản lấy mẫu/bàn giao mẫu </label>
+            <label class="search__label"> Số biên bản lấy mẫu/bàn giao mẫu </label>
             <input placeholder="Nhập số biên bản lấy mẫu/ bàn giao mẫu" nz-input formControlName="soBbLayMau"/>
           </div>
           <div nz-col [nzSpan]="4">
-            <label> Số biên bản tịnh kho </label>
+            <label class="search__label"> Số biên bản tịnh kho </label>
             <input placeholder="Nhập số biên bản tịnh kho" nz-input formControlName="soBbTinhKho"/>
           </div>
         </div>
@@ -57,15 +57,15 @@
     <div class="group-button">
       <h3> DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG </h3>
       <div class="buttons">
-        <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_EXP'):
-           userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_EXP')"
-                type="button" class="btn btn-sub" (click)="exportData('Danh-sach-bien-ban-lay-mau/ban-giao-mau.xlsx')">
+        <button
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_EXP')"
+          type="button" class="btn btn-sub" (click)="exportData('Danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
-        <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_THEM'):
-           userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM')"
-                type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
+        <button
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM')"
+          type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
           <i class=" icon htvbdh_dau-cong"></i>
           <span> Thêm </span>
         </button>
@@ -163,32 +163,16 @@
                     <td>{{ lv2.ngayLapTinhKho }}</td>
                     <td>{{ lv2.tenTrangThai }}</td>
                     <td class="text-center">
-                      <a *ngIf="loaiVthh.startsWith('02') ? vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_XEM')&&
-                         !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_THEM'))&&
-                         !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_TP) && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_TP'))&&
-                         !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDC) && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_LDCUC')):
-                         vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_XEM')&&
-                         !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM'))&&
-                         !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_TP) && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP'))&&
-                         !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDC) && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC'))"
-                         (click)="redirectDetail(lv2.id,true)">
+                      <a *ngIf="isActionAllowed('XEM', lv2)" (click)="redirectDetail(lv2.id,true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
-                      <a *ngIf="loaiVthh.startsWith('02') ? (vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_THEM')):
-                         (vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM'))"
-                         (click)="redirectDetail(lv2.id,false)">
+                      <a *ngIf="isActionAllowed('SUA', lv2)" (click)="redirectDetail(lv2.id,false)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
-                      <a *ngIf="loaiVthh.startsWith('02') ? (vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_TP)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_TP'))||
-                         (vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDC)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_LDCUC')):
-                         (vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_TP)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP'))||
-                         (vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDC)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC'))"
-                         (click)="redirectDetail(lv2.id,true)">
+                      <a *ngIf="isActionAllowed('PHEDUYET', lv2)" (click)="redirectDetail(lv2.id,true)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                       </a>
-                      <a *ngIf="loaiVthh.startsWith('02') ? vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XOA)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_XOA'):
-                         vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XOA)&&userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_XOA')"
-                         (click)="delete(lv2)">
+                      <a *ngIf="isActionAllowed('XOA', lv2)" (click)="delete(lv2)">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>

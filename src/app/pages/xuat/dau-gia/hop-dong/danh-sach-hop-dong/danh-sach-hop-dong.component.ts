@@ -10,6 +10,7 @@ import {
   QdPdKetQuaBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import {saveAs} from 'file-saver';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -18,23 +19,15 @@ import {saveAs} from 'file-saver';
 })
 export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isQuanLy: boolean;
   isAddNew: boolean;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   idQdPdKq: number = 0;
   isViewQdPdKq: boolean = false;
-  listTrangThaiHd: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'}
-  ];
-  listTrangThaiXh: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'}
-  ];
-
+  listTrangThaiHd: any = [];
+  listTrangThaiXh: any = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -73,6 +66,34 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       soLuong: '',
       thanhTien: '',
     }
+    this.listTrangThaiHd = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
+    this.listTrangThaiXh = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
   }
 
   async ngOnInit() {
@@ -139,17 +160,17 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
     }
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledStartNgayKy = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayKyDen) {
-      return startValue.getTime() >= this.formData.value.ngayKyDen.getTime();
-    }
-    return false;
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyDen, 'ngayKy');
   };
 
   disabledEndNgayKy = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyTu, 'ngayKy');
   };
 }

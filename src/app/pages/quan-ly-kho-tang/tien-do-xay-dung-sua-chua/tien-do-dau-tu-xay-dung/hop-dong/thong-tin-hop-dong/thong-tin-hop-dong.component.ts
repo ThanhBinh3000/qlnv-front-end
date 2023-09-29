@@ -13,7 +13,6 @@ import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {STATUS} from "../../../../../../constants/status";
@@ -51,6 +50,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
   viewHopDong: boolean = false;
+  tongTien: any;
 
   constructor(
     httpClient: HttpClient,
@@ -85,6 +85,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
       tienCvKhlcnt: [0],
       tienCvChuaDdk: [0],
       tongTien: [0],
+      tongMucDt: [0],
       trangThaiHd: [],
       tenTrangThaiHd: [],
       fileDinhKems: [null],
@@ -154,6 +155,10 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
         this.listHopDong = this.itemQdPdKhLcnt.listKtTdxdQuyetDinhPdKhlcntCvKh.filter(item => item.trangThai == STATUS.THANH_CONG);
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
+          this.tongTien = this.listHopDong.reduce((prev, cur) => {
+            prev += cur.hopDong?.thanhTien;
+            return prev;
+          },0)
         }
       } else {
         //Load lại page thông tin hợp đồng khi back lại từ trang thêm mới hợp đồng.
@@ -171,6 +176,10 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
             this.listHopDong = this.itemQdPdKhLcnt.listKtTdxdQuyetDinhPdKhlcntCvKh;
             if (this.listHopDong && this.listHopDong.length > 0) {
               this.selectRow(this.listHopDong[0]);
+              this.tongTien = this.listHopDong.reduce((prev, cur) => {
+                prev += cur.hopDong?.thanhTien;
+                return prev;
+              },0)
             }
           } else {
             this.notification.warning(MESSAGE.WARNING, "Không tìm thấy thông tin hợp đồng cho dự án này, vui lòng kiểm tra lại.");

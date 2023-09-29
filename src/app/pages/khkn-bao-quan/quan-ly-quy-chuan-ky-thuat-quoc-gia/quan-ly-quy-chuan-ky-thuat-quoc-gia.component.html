@@ -3,6 +3,17 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
+          <div nz-col nzSpan="3">
+            <nz-form-item class="form-item">
+              <nz-form-label nzFor="nam-qd">Bộ/Ngành</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="maBn" nzAllowClear nzShowSearch>
+                  <nz-option *ngFor="let option of dsBoNganh" [nzLabel]="option.tenDvi" [nzValue]="option.maDvi">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
           <div nz-col [nzSpan]="3">
             <nz-form-item class="form-item">
               <nz-form-label nzFor="nam-qd">Số văn bản</nz-form-label>

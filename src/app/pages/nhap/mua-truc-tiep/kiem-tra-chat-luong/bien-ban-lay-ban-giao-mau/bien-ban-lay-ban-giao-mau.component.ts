@@ -30,7 +30,7 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
     ngayTongHop: '',
     ketLuan: '',
     soQuyetDinh: '',
-    namKh: dayjs().get('year'),
+    namKh: '',
   };
   constructor(
     httpClient: HttpClient,
@@ -110,7 +110,7 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
             data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
           })
           item.detail = {
-            hhQdGiaoNvNhDdiemList: data,
+            children: data
           }
           item.expand = true;
         };

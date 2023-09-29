@@ -113,6 +113,8 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       });
     }
     this.itemThongTri.nam = dayjs().year();
+    this.itemThongTri.trangThai = STATUS.DU_THAO;
+    this.itemThongTri.tenTrangThai = 'Dự thảo';
     this.initForm();
     await Promise.all([
       this.getListBoNganh(),
@@ -312,8 +314,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         let res = await this.thongTriDuyetYCapPhiService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (!isOther) {
+            this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
+            // this.back();
           } else {
             return res.data.id;
           }
@@ -324,8 +327,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         let res = await this.thongTriDuyetYCapPhiService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (!isOther) {
+            this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
+            // this.back();
           } else {
             return res.data.id;
           }
