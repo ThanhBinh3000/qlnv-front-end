@@ -50,13 +50,12 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, bcCLuongHangDTQGService);
     this.formData = this.fb.group(
       {
-        namNhap: [[]],
-        namXuat: [[]],
+        namNhap: [[], [Validators.required]],
+        namXuat: [[], [Validators.required]],
         maCuc: null,
         maChiCuc: null,
         loaiVthh: [null, [Validators.required]],
-        cloaiVthh: [null, [Validators.required]],
-        loaiBc: [null, [Validators.required]],
+        loaiBc: ['02', [Validators.required]],
       }
     );
   }
@@ -120,11 +119,15 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
   }
 
   async preView() {
-    // this.helperService.markFormGroupTouched(this.formData);
-    // if (this.formData.invalid) {
-    //   this.spinner.hide();
-    //   return;
-    // }
+    this.formData.controls["maCuc"].clearValidators();
+    if (this.formData.value.loaiBc == '02') {
+      this.formData.controls["maCuc"].setValidators(Validators.required);
+    }
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      return;
+    }
     try {
       this.spinner.show();
       this.formData.value.namNhap = this.formData.value.namNhap && this.formData.value.namNhap.length > 0 ? this.formData.value.namNhap.toString() : ""
@@ -194,8 +197,5 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
 
   async clearFilter() {
     this.formData.reset();
-    this.formData.patchValue({
-      nam: dayjs().get('year')
-    })
   }
 }
