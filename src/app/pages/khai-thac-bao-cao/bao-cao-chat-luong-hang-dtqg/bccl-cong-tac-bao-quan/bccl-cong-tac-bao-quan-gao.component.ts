@@ -158,6 +158,8 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản muối (chi tiết)";
         }
       }
+      body.vaiTro = "LDCHICUC";
+      body.nam = 2023;
       await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();

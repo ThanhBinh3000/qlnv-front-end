@@ -106,7 +106,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       await this.bcCLuongHangDTQGService.bcclNhapHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
+        saveAs(this.excelBlob, "bccl_chat_luong_nhap_hang_dtqg.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
