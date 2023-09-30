@@ -14,7 +14,7 @@ export class PhieuKtraClThanhLyService extends BaseService {
   }
 
   getDanhSachTaoPxk(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API_LOCAL}/${this.table}/ds-tao-pxk`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-tao-pxk`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
