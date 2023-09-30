@@ -43,6 +43,8 @@ export class chiTietBangCanKeHang {
   maCan: string;
   trongLuongBaoBi: number;
   trongLuongCaBaoBi: number;
+  soBaoBi: number;
+  trongLuongCaBi: number;
 }
 
 
