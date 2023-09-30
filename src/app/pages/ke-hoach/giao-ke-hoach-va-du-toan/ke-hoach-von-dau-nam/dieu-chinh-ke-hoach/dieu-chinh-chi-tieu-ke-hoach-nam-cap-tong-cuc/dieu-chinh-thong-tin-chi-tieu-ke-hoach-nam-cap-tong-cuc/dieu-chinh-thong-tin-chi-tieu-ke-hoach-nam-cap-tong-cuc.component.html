@@ -10,16 +10,12 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && !isViewDetail">
+          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV)">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Lưu và gửi duyệt</span>
+          <span>Ban hành</span>
         </button>
-        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="taoQuyetDinh()"-->
-        <!--                *ngIf="thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC ||thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV  ">-->
-        <!--          <i class="icon htvbdh_chuyenvanthu"></i>-->
-        <!--          <span>Tạo quyết định</span>-->
-        <!--        </button>-->
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+
+        <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
           *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))"
           (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -40,9 +36,9 @@
           *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU') )">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
-        </a>
+        </a> -->
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-          *ngIf="!this.isViewDetail && (thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
+          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -60,7 +56,7 @@
             {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai
             }}
           </span>
-          <span>THÔNG TIN ĐỀ XUẤT ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.capDvi == "1" ?
+          <span>THÔNG TIN QUYẾT ĐỊNH ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.cap == "1" ?
             'TỔNG CỤC' : 'CỤC'}}
           </span>
         </div>
@@ -82,10 +78,10 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số đề xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input formControlName="soDeXuat" [readonly]="checkTrangThaiRecord()" nz-input nzSize="small"
+                <input formControlName="soQuyetDinh" [readonly]="checkTrangThaiRecord()" nz-input nzSize="small"
                   placeholder="Nhập số công văn/tờ trình" />
               </nz-input-group>
             </nz-form-control>
@@ -102,6 +98,19 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="text-left"> Ngày hiệu lực
+            </nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayHieuLuc"
+                nzPlaceHolder="Ngày hiệu lực">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
         <!-- <div nz-col [nzSpan]="12" *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1'">
           <div nz-col [nzSpan]="24" style="margin-top: 12px">
             <nz-form-item>
@@ -147,7 +156,7 @@
           </nz-form-item>
         </div>
 
-        <div nz-col nzSpan="24">
+        <!-- <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Nội dung và nguyên nhân điều chỉnh
             </nz-form-label>
@@ -156,23 +165,23 @@
                 placeholder="Nhập text" [readonly]="isViewDetail"></textarea>
             </nz-form-control>
           </nz-form-item>
-        </div>
+        </div> -->
 
-        <!-- <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ pháp lý</nz-form-label>
             <div class="list-file">
               <file-list [isCanCuPL]="true" [isViewDetail]="isViewDetail" [data]="listCcPhapLy"></file-list>
             </div>
           </nz-form-item>
-        </div> -->
+        </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm công văn/tờ trình đã
+              ký</nz-form-label>
             <nz-form-control>
               <div class="list-file">
-                <file-list [disabled]="isViewDetail" [data]="taiLieuDinhKemList"
-                  [isViewDetail]="isViewDetail"></file-list>
+                <file-list [disabled]="isViewDetail" [data]="fileDinhKems" [isViewDetail]="isViewDetail"></file-list>
               </div>
             </nz-form-control>
           </nz-form-item>
@@ -634,7 +643,7 @@
               <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
             </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1' &&  formData.value.loaiCanCu != 'OTHER'">
+            <tr *ngIf="thongTinChiTieuKeHoachNam.cap == '1' &&  formData.value.loaiCanCu != 'OTHER'">
               <th></th>
               <th></th>
               <th></th>
@@ -667,7 +676,7 @@
               <th></th>
               <th></th>
             </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi != '1'">
+            <tr *ngIf="thongTinChiTieuKeHoachNam.cap != '1'">
               <th></th>
               <th></th>
               <th></th>
@@ -1068,6 +1077,7 @@
     <!--        </ng-template>-->
     <!--      </nz-tab>-->
   </nz-tabset>
+
   <!-- </nz-affix> -->
   <!-- start dialog place-->
   <!-- ========== -->
