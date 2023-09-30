@@ -21,6 +21,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PhieuNhapKhoMuaTrucTiepService } from 'src/app/services/phieu-nhap-kho-mua-truc-tiep.service';
 import { BangCanKeMuaTrucTiepService } from 'src/app/services/bang-can-ke-mua-truc-tiep.service';
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
+import {chiTietBangCanKeHang} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
 
 @Component({
   selector: 'app-them-moi-bang-ke-can-hang',
@@ -34,7 +35,8 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   @Input() idQdGiaoNvNh: number;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  @Output()
+  dataTableChange = new EventEmitter<any>();
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
@@ -107,6 +109,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     })
   }
 
+  dataEdit: { [key: string]: { edit: boolean; data: chiTietBangCanKeHang } } = {};
   async ngOnInit() {
     await this.spinner.show();
     try {
@@ -123,6 +126,8 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       } else {
         await this.initForm();
       }
+      this.emitDataTable()
+      this.updateEditCache()
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -330,8 +335,24 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     return convertTienTobangChu(tien);
   }
 
-  deleteRow(data: any) {
-
+  deleteRow(index: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+          this.updateEditCache();
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   editRow(stt: number) {
@@ -339,9 +360,18 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
 
   addRow() {
     if (this.validateDataRow()) {
+      if (!this.dataTable) {
+        this.dataTable = [];
+      }
       this.dataTable = [...this.dataTable, this.rowItem];
-      this.rowItem = {};
+      this.rowItem = new chiTietBangCanKeHang();
+      this.emitDataTable();
+      this.updateEditCache()
     }
+  }
+
+  emitDataTable() {
+    this.dataTableChange.emit(this.dataTable);
   }
 
   validateDataRow() {
@@ -358,12 +388,27 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     }
   }
 
-  cancelEdit(stt: number): void {
-
+  saveEdit(idx: number): void {
+    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
+    this.dataEdit[idx].edit = false;
   }
 
-  saveEdit(stt: number): void {
+  cancelEdit(stt: number): void {
+    this.dataEdit[stt] = {
+      data: {...this.dataTable[stt]},
+      edit: false
+    };
+  }
 
+  updateEditCache(): void {
+    if (this.dataTable) {
+      this.dataTable.forEach((item, index) => {
+        this.dataEdit[index] = {
+          edit: false,
+          data: {...item},
+        };
+      });
+    }
   }
 
   clearItemRow() {
@@ -552,5 +597,19 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       })
       return sum;
     }
+  }
+
+
+  isDisabled() {
+    let trangThai = this.formData.value.trangThai;
+    if (trangThai == STATUS.CHO_DUYET_LDCC || trangThai == STATUS.DA_DUYET_LDCC) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  startEdit(index: number) {
+    this.dataEdit[index].edit = true;
   }
 }
