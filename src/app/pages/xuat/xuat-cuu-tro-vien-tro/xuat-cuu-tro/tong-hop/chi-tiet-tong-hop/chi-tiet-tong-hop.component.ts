@@ -102,7 +102,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   tongSoLuongNhuCauXuat: number = 0;
   tongSoLuongDx: number = 0;
   mucDichXuat: string;
-  thoiGian: string;
+  ngayKetThuc: string;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -284,9 +284,10 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   }
 
   async save() {
-    console.log(this.phuongAnHdrView, 'phuongAnHdrView')
     await this.helperService.ignoreRequiredForm(this.formData);
     let body = this.formData.value;
+    body.kieuNhapXuat = 'Xuất không thu tiền';
+    body.loaiNhapXuat = 'Xuất cứu trợ';
     await this.createUpdate(body);
     await this.helperService.restoreRequiredForm(this.formData);
   }
@@ -354,7 +355,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
       this.tongSoLuongChuyenCapThoc = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongChuyenCapThoc ? cur.soLuongChuyenCapThoc : 0, 0) : 0;
       this.tongSoLuongNhuCauXuat = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0, 0) : 0;
       this.mucDichXuat = currentCuc?.mucDichXuat ? currentCuc.mucDichXuat : "";
-      this.thoiGian = currentCuc?.thoiGian ? currentCuc.thoiGian : ""
+      this.ngayKetThuc = currentCuc?.ngayKetThuc ? currentCuc.ngayKetThuc : ""
     }
   }
 
@@ -490,7 +491,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
             trichYeuDx: row.trichYeuDx,
             mucDichXuat: row.mucDichXuat,
             ngayKyDx: row.ngayKyDx,
-            thoiGian: row.ngayKyDx,
+            ngayKetThuc: row.ngayKetThuc,
             childData: rs
           };
         }).value();
@@ -507,7 +508,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
             trichYeuDx: row.trichYeuDx,
             mucDichXuat: row.mucDichXuat,
             ngayKyDx: row.ngayKyDx,
-            thoiGian: row.ngayKyDx,
+            ngayKetThuc: row.ngayKetThuc,
             childData: row ? value : [],
           };
         }).value();
@@ -523,7 +524,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
     this.tongSoLuongNhuCauXuat = 0;
     this.tongSoLuongChuyenCapThoc = 0;
     this.mucDichXuat = '';
-    this.thoiGian = '';
+    this.ngayKetThuc = '';
 
   }
 
