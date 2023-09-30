@@ -266,11 +266,26 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
           item.soLuong = itemPnk.soLuongNhapKho;
         })
       } else {
+        debugger
         this.dataTable = data.listPhieuKtraCl;
         this.dataTable.forEach(item => {
-          item.soPhieuNhapKho = item.phieuNhapKho?.soPhieuNhapKho;
+          item.soPhieuNhapKho = '';
+          item.soBangKe = '';
+          if(item.phieuNhapKho && item.phieuNhapKho.length > 0) {
+            for (let i = 0; i < item.phieuNhapKho.length; i++) {
+              item.soPhieuNhapKho += item.phieuNhapKho[i].soPhieuNhapKho
+              if (i < item.phieuNhapKho.length - 1) {
+                item.soPhieuNhapKho += ', '
+              }
+              if(item.phieuNhapKho[i].bangKeCanHang) {
+                item.soBangKe += item.phieuNhapKho[i].bangKeCanHang.soBangKe
+                if (i < item.phieuNhapKho.length - 1) {
+                  item.soBangKe += ', '
+                }
+              }
+            }
+          }
           item.soPhieuKtraCl = item.soPhieu;
-          item.soBangKe = item.phieuNhapKho?.bangKeCanHang?.soBangKe;
           item.ngayNhap = item.phieuNhapKho?.ngayTao;
           item.soLuong = item.soLuongNhapKho;
         })
