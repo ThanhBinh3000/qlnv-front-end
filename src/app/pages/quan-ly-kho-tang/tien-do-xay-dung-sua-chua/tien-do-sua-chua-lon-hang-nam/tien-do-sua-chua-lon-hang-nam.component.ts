@@ -109,7 +109,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         this.dataTable = this.convertListData(res.data);
         this.dataTableRaw = res.data;
         if (this.dataTableRaw && this.dataTableRaw.length > 0) {
-          console.log(this.dataTableRaw,"res")
           this.selectRow(this.dataTableRaw[0]);
         }
         this.expandAll(this.dataTable);
@@ -123,7 +122,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     } finally {
       await this.spinner.hide();
     }
-    this.itemSelected = null;
+    // this.itemSelected = null;
   }
 
   clearForm() {
@@ -412,7 +411,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         }
       });
     }
-    console.log(123)
     data.selected = true;
     this.itemSelected = data;
     await this.loadQdPdDaDtxdByDuAn(data);
