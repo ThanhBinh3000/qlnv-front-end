@@ -89,8 +89,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
       diaChi: [null],
       ghiChu: [null],
       tongMucDt: [0],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       fileDinhKems: [null],
       ccPhapLy: [],
       listKtTdxdQuyetDinhPdKqlcntDsgt: [[]]

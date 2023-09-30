@@ -24,6 +24,8 @@ import { Base3Component } from 'src/app/components/base3/base3.component';
 export class ThemMoiThongBaoKetQuaComponent extends Base3Component implements OnInit {
   fileCanCu: any[] = []
 
+  symbol : string;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -52,7 +54,8 @@ export class ThemMoiThongBaoKetQuaComponent extends Base3Component implements On
       tenTrangThaiHs: [],
       noiDung: [null, [Validators.required]],
       lyDo: [null, [Validators.required]],
-    })
+    });
+    this.symbol = '/TCDT-QLHDT';
   }
 
   async ngOnInit() {
@@ -140,8 +143,8 @@ export class ThemMoiThongBaoKetQuaComponent extends Base3Component implements On
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.fileCanCuReq = this.fileCanCu;
-    if (this.formData.value.soQd) {
-      body.soQd = this.formData.value.soQd + '/QĐ-TCDT'
+    if (this.formData.value.soThongBao) {
+      body.soThongBao = this.formData.value.soThongBao + this.symbol
     }
     this.createUpdate(body).then((res) => {
       if (res) {

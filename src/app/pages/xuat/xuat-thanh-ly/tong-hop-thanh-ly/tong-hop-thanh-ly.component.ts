@@ -27,9 +27,9 @@ export class TongHopThanhLyComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private tongHopThanhLyService: TongHopThanhLyService,
+    private _service: TongHopThanhLyService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, tongHopThanhLyService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group({
       nam: null,
       maSc: null,
@@ -52,7 +52,7 @@ export class TongHopThanhLyComponent extends Base3Component implements OnInit {
   async buildTableView() {
     await this.dataTable.forEach(item => {
       item.expandSet = true;
-      item.groupChiCuc = chain(item.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+      item.groupChiCuc = chain(item.children).groupBy('xhTlDanhSachHdr.tenChiCuc').map((value, key) => ({
         tenDonVi: key,
         children: value,
       })
@@ -65,7 +65,7 @@ export class TongHopThanhLyComponent extends Base3Component implements OnInit {
       return
     }
     const modalGT = this.modal.create({
-      nzTitle: 'TỔNG HỢP DANH SÁCH HÀNG CẦN SỬA CHỮA',
+      nzTitle: 'TỔNG HỢP DANH SÁCH HÀNG CẦN THANH LÝ',
       nzContent: ThemmoiThComponent,
       nzMaskClosable: false,
       nzClosable: false,

@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { DeXuatDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/de-xuat-dieu-chinh-ctkh';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { StorageService } from 'src/app/services/storage.service';
 
@@ -39,9 +40,9 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
+    deXuatDieuChinhCTKHService: DeXuatDieuChinhCTKHService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenCucService);
+    super(httpClient, storageService, notification, spinner, modal, deXuatDieuChinhCTKHService);
     this.formData = this.fb.group({
       namKeHoach: [],
       soDeXuat: [],
@@ -49,6 +50,8 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
       ngayKyTu: [],
       ngayKyDen: [],
       trichYeu: [],
+      type: ["00"],
+      cap: [],
     })
     this.filterTable = {
       nam: '',
@@ -66,6 +69,10 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
+
+    this.formData.patchValue({
+      cap: this.userInfo.CAP_DVI
+    })
 
     try {
       this.initData()
@@ -146,11 +153,11 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        this.quyetDinhDieuChuyenCucService
-          .export(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),
-          );
+        // this.deXuatDieuChinhCTKHService
+        //   .export(body)
+        //   .subscribe((blob) =>
+        //     saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),
+        //   );
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);

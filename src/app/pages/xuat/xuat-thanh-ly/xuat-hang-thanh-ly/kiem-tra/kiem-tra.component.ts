@@ -13,6 +13,9 @@ export class KiemTraComponent implements OnInit {
   defaultUrl: string = 'xuat/xuat-thanh-ly/xuat-hang/'
 
   routerUrl: string = "";
+
+  routes: any[] = []
+
   constructor(
     private router: Router,
     public globals: Globals,
@@ -22,25 +25,40 @@ export class KiemTraComponent implements OnInit {
       this.routerUrl = this.router.url;
       const urlList = this.routerUrl.split("/");
       this.defaultUrl  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4];
+      if(urlList[4] == 'kiem-tra-lt'){
+        this.routes = [
+          {
+            url: '/xtl-bb-lm',
+            name: 'Biên bản lấy mẫu/bàn giao mẫu',
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
+          },
+          {
+            url: '/xtl-phieu-ktra-cl',
+            name: 'Phiếu kiểm nghiệm chất lượng',
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
+          },
+        ]
+      }else{
+        this.routes = [
+          {
+            url: '/xtl-bb-lm',
+            name: 'Biên bản lấy mẫu/bàn giao mẫu',
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
+          },
+          {
+            url: '/xtl-phieu-ktra-cl',
+            name: 'Phiếu kiểm nghiệm chất lượng',
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
+          },
+          {
+            url: '/xtl-hs-kt',
+            name: 'Hồ sơ kỹ thật',
+            accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+          },
+        ]
+      }
     })
   }
-  routes: any[] = [
-    {
-      url: '/xtl-bb-lm',
-      name: 'Biên bản lấy mẫu/bàn giao mẫu',
-      accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
-    },
-    {
-      url: '/xtl-phieu-ktra-cl',
-      name: 'Phiếu kiểm nghiệm chất lượng',
-      accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
-    },
-    // {
-    //   url: '/xtl-hs-kt',
-    //   name: 'Hồ sơ kỹ thật',
-    //   accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
-    // },
-  ]
 
   ngOnInit(): void {
     if (this.router.url) {

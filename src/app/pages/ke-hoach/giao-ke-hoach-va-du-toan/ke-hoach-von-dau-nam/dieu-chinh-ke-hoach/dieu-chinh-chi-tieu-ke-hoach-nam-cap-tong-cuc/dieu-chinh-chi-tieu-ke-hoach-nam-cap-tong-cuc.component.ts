@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { QuyetDinhDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/quyet-dinh-dieu-chinh-ctkh';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { StorageService } from 'src/app/services/storage.service';
 
@@ -39,16 +40,17 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
+    private quyetDinhDieuChinhCTKHService: QuyetDinhDieuChinhCTKHService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenCucService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChinhCTKHService);
     this.formData = this.fb.group({
       namKeHoach: [],
-      soDeXuat: [],
-      tenDonVi: [],
+      soQuyetDinh: [],
       ngayKyTu: [],
       ngayKyDen: [],
       trichYeu: [],
+      type: ["02"],
+      cap: [],
     })
     this.filterTable = {
       nam: '',
@@ -66,6 +68,10 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
+
+    this.formData.patchValue({
+      cap: this.userInfo.CAP_DVI
+    })
 
     try {
       this.initData()
@@ -146,7 +152,7 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        this.quyetDinhDieuChuyenCucService
+        this.quyetDinhDieuChinhCTKHService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),

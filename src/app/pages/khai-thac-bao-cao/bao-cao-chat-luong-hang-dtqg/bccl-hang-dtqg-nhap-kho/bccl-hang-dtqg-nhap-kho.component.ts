@@ -82,7 +82,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       let body = this.formData.value;
       body.typeFile = "xlsx";
       body.trangThai = "01";
-      body.maDonVi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
+      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bao_cao_cl_nhap_thoc_tong_hop.jrxml";
@@ -106,7 +106,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       await this.bcCLuongHangDTQGService.bcclNhapHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
+        saveAs(this.excelBlob, "bccl_chat_luong_nhap_hang_dtqg.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -134,7 +134,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.maDonVi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
+      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
@@ -146,14 +146,18 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
           body.tenBaoCao = "Báo cáo chất lượng nhập gạo - Tổng hợp";
         }
       } else {
-          if (body.loaiVthh.startsWith("0101")) {
-            body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
-            body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
-          }
-          if (body.loaiVthh.startsWith("0102")) {
-            body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
-            body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
-          }
+        if (body.loaiVthh.startsWith("0101")) {
+          body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
+        }
+        if (body.loaiVthh.startsWith("0102")) {
+          body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
+        }
+        if (body.loaiVthh.startsWith("02")) {
+          body.fileName = "bc_chat_luong_vattu_nhap_kho.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng vật tư nhập kho"
+        }
       }
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclNhapHangDtqg(body).then(async s => {
@@ -190,14 +194,14 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
     this.listVthh = [];
     let res = await this.danhMucSv.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data.filter(item => item.ma.startsWith("01"));
+      this.listVthh = res.data.filter(item => item.ma.startsWith("01") || item.ma.startsWith("02"));
     }
   }
 
   async changeLoaiVthh(event) {
     if (event) {
       this.formData.patchValue({
-        cloaiVthh : null
+        cloaiVthh: null
       })
       let res = await this.danhMucSv.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {

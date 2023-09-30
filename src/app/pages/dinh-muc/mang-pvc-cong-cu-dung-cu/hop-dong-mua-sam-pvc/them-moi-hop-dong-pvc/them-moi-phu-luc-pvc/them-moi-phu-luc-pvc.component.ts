@@ -129,7 +129,7 @@ export class ThemMoiPhuLucPvcComponent extends Base2Component implements OnInit 
   }
 
 
-  async save() {
+  async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -146,7 +146,11 @@ export class ThemMoiPhuLucPvcComponent extends Base2Component implements OnInit 
     this.formData.value.listQlDinhMucPvcHdDiaDiemNh = this.listDiaDiem
     let body = this.formData.value
     let data = await this.createUpdate(body);
-    if (data) {
+    if(isGuiDuyet){
+    this.id = data.id;
+      await this.pheDuyet();
+    }
+    if (data && !isGuiDuyet) {
       this.goBackHdr(true)
     }
   }
