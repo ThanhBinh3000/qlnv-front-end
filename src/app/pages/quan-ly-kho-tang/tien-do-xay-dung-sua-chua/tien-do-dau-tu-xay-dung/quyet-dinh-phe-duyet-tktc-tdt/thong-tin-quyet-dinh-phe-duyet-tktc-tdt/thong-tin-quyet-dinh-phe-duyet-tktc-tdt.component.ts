@@ -82,8 +82,8 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       quyMo: [null],
       loaiCapCt: [null],
       noiDungKhac: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       fileDinhKems: [null],
       child: [null],
       listKtTdxdQuyetDinhPdTktcTdtDtl: null

@@ -76,8 +76,8 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
       soQuyetDinh: [null],
       trichYeu: [null],
       ngayKy: [null],
-      trangThai: ["00"],
-      tenTrangThai: ["Dự thảo"],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       loai: ["01", Validators.required],
     });
   }
@@ -211,7 +211,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DANG_NHAP_DU_LIEU : {
               trangThai = STATUS.BAN_HANH;
               break;
             }

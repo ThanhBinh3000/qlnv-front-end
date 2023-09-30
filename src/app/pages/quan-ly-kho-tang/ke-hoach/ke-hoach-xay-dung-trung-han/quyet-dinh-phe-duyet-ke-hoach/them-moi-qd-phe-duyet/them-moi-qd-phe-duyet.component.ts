@@ -84,8 +84,8 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       namKetThuc: [null],
       loaiDuAn: [null],
       trichYeu: [null],
-      trangThai: ["00"],
-      tenTrangThai: ["Dự thảo"]
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"]
     });
   }
 
@@ -235,7 +235,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DANG_NHAP_DU_LIEU : {
               trangThai = STATUS.BAN_HANH;
               break;
             }
