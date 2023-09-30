@@ -1,4 +1,3 @@
-
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -6,19 +5,19 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 import { KhCnQuyChuanKyThuat } from './../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { STATUS } from 'src/app/constants/status';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import {Router} from "@angular/router";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-quan-ly-quy-chuan-ky-thuat-quoc-gia',
   templateUrl: './quan-ly-quy-chuan-ky-thuat-quoc-gia.component.html',
-  styleUrls: ['./quan-ly-quy-chuan-ky-thuat-quoc-gia.component.scss']
+  styleUrls: ['./quan-ly-quy-chuan-ky-thuat-quoc-gia.component.scss'],
 })
 export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implements OnInit {
 
@@ -70,7 +69,6 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private router: Router,
-
   ) {
     super(httpClient, storageService, notification, spinner, modal, khCnQuyChuanKyThuat);
     this.formData = this.fb.group({
@@ -86,7 +84,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       tenLoaiVthh: null,
       tenCloaiVthh: null,
       maBn: null,
-    })
+    });
     this.filterTable = {
       soVanBan: '',
       soVanBanThayThe: '',
@@ -102,6 +100,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       tenTrangThaiHl: '',
     };
   }
+
   disabledStartNgayKy = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKyDen) {
       return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
@@ -132,6 +131,9 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       }
       await this.loadLoaiHangHoa();
       await this.getListBoNganh();
+      this.formData.patchValue({
+        maBn: this.userInfo.MA_DVI.startsWith('01') ? '01' : this.userInfo.MA_DVI,
+      });
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -160,14 +162,24 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   async onChangeLoaiHH(id: number) {
     if (id && id > 0) {
-      let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id)
+      let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id);
       if (loaiHangHoa && loaiHangHoa.length > 0) {
-        this.dsChungLoaiHangHoa = loaiHangHoa[0].child
+        this.dsChungLoaiHangHoa = loaiHangHoa[0].child;
       }
     }
   }
+
+  isDisableByBoNganh(): boolean {
+    if (!this.userInfo.MA_DVI.startsWith('01')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   async changeHangHoa(event: any) {
     if (event) {
       let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
@@ -206,7 +218,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   convertDateToString(event: any): string {
     let result = '';
     if (event) {
-      result = dayjs(event).format('DD/MM/YYYY').toString()
+      result = dayjs(event).format('DD/MM/YYYY').toString();
     }
     return result;
   }
