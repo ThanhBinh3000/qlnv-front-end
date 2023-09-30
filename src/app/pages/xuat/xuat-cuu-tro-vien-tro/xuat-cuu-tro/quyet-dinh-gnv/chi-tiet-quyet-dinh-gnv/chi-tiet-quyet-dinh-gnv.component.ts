@@ -192,19 +192,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               res.data.soBbQd = res.data.soBbQd?.split("/")[0];
             }
             // res.data.dataDtl.forEach(s => s.idVirtual = uuidv4());
-            if (this.userService.isCuc()) {
-              res.data.dataDtl.forEach(s => {
-                if (s.tenChiCuc) {
-                  s.mId = uuidv4();
-                }
-              });
-            } else if (this.userService.isChiCuc()) {
-              res.data.dataDtl.forEach(s => {
-                if (s.tenDiaDiem) {
-                  s.mId = uuidv4();
-                }
-              });
-            }
+            res.data.dataDtl.forEach(s => s.mId = uuidv4());
             this.formData.patchValue(res.data);
             await this.buildTableView();
           }
@@ -395,6 +383,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               s.idQdPdDtl = s.id;
               s.soLuongDx = s.soLuong;
               s.soLuong = 0;
+              s.mId = uuidv4();
               delete s.id;
             });
 
@@ -512,15 +501,16 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.phuongAnView = chain(data)
       .groupBy("noiDungDx")
       .map((value, key) => {
-        let noiDungDxRow = value.find(s => s.noiDungDx === key) || {};
+        let noiDungDxRow = value.find(s => key && s.noiDungDx === key);
         let rs = chain(value)
           .groupBy("tenHang")
           .map((v, k) => {
-            let tenLoaiVthhRow = v.find(s => s.tenHang === k) || {};
+            let tenLoaiVthhRow = v.find(s => k && s.tenHang === k);
             let rs = chain(v)
               .groupBy("tenChiCuc")
               .map((v1, k1) => {
-                let tenChiCucRow = v1.find(s => s.tenChiCuc === k1) || {};
+                let tenChiCucRow = v1.find(s => k1 && s.tenChiCuc === k1);
+                if (!tenChiCucRow) return;
                 let soLuong = v1.reduce((prev, next) => prev + next.soLuong, 0);
                 return {
                   idVirtual: uuidv4(),
@@ -531,21 +521,25 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
                   soLuong: soLuong,
                   tonKhoDvi: tenChiCucRow.tonKhoDvi || 0,
                   tonKhoCloaiVthh: tenChiCucRow.tonKhoCloaiVthh,
+                  tenHang: tenChiCucRow.tenHang,
                   tenTrangThai: tenChiCucRow.tenTrangThai || 'Đang thực hiện',
-                  childData: v1,
+                  childData: v1.filter(f => !!f.tenDiaDiem),
                   noiDungDx: tenChiCucRow.noiDungDx,
                   loaiVthh: tenChiCucRow.loaiVthh,
                   cloaiVthh: tenChiCucRow.chungLoaiVthh,
                   tenLoaiVthh: tenChiCucRow.tenLoaiVthh,
                   tenCloaiVthh: tenChiCucRow.tenCloaiVthh,
+                  donViTinh: tenChiCucRow.donViTinh,
                   mId: tenChiCucRow.mId
                 }
-              }).value();
+              }).value().filter(f => !!f);
+            if (!tenLoaiVthhRow || !k) return;
             let soLuong = rs.reduce((prev, next) => prev + next.soLuong, 0);
             let soLuongGiao = rs.reduce((prev, next) => prev + next.soLuongGiao, 0);
             return {
               idVirtual: uuidv4(),
               tenHang: k,
+              noiDungDx: tenLoaiVthhRow.noiDungDx,
               loaiVthh: tenLoaiVthhRow.loaiVthh || '',
               tenLoaiVthh: tenLoaiVthhRow.tenLoaiVthh || '',
               cloaiVthh: tenLoaiVthhRow.cloaiVthh || '',
@@ -558,8 +552,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               childData: rs,
               mId: tenLoaiVthhRow.mId,
             }
-          }).value();
-        const soLuong = rs.reduce((sum, cur) => sum += cur.soLuong, 0)
+          }).value().filter(f => !!f);
+        if (!noiDungDxRow) return;
+        const soLuong = rs.reduce((sum, cur) => sum += cur.soLuong, 0);
         return {
           idVirtual: uuidv4(),
           noiDungDx: key,
@@ -568,7 +563,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           childData: rs,
           mId: noiDungDxRow.mId
         };
-      }).value();
+      }).value().filter(f => !!f);
+    console.log("phuongAnView", this.phuongAnView)
     this.expandAll();
   }
 
@@ -591,18 +587,23 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (data) {
       let edit = editRow;
       if (level == 1) {
-        let baseData = data.childData[0].childData[0];
-        if (!data.childData[0].tenChiCuc) {
+        // let baseData = data.childData[0].childData[0];
+        // if (!data.childData[0].tenChiCuc) {
+        //   edit = true
+        // }
+        if (data.childData.length < 1) {
           edit = true
         }
+        console.log(data)
         this.formDataDtl.patchValue({
-          noiDungDx: baseData.noiDungDx,
-          loaiVthh: baseData.loaiVthh,
-          cloaiVthh: baseData.cloaiVthh,
-          soLuongDx: baseData.soLuongDx,
-          tonKhoDvi: baseData.tonKhoDvi,
-          donViTinh: baseData.donViTinh,
-          idQdPdDtl: baseData.idQdPdDtl,
+          noiDungDx: data.noiDungDx,
+          tenHang: data.tenHang,
+          loaiVthh: data.loaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          soLuongDx: data.soLuongDx,
+          tonKhoDvi: data.tonKhoDvi,
+          donViTinh: data.donViTinh,
+          idQdPdDtl: data.idQdPdDtl,
           edit,
           mId: edit ? data.mId : uuidv4()
         });
@@ -611,6 +612,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           this.formDataDtl.patchValue({
             noiDungDx: data.noiDungDx,
             loaiVthh: data.loaiVthh,
+            tenHang: data.tenHang,
             cloaiVthh: data.cloaiVthh,
             soLuongDx: data.soLuongDx,
             tonKhoDvi: data.tonKhoDvi,
@@ -620,25 +622,29 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             maDvi: data.maDvi,
             idQdPdDtl: data.idQdPdDtl,
             edit,
-            mId: data.mId
+            mId: edit ? data.mId : uuidv4()
           });
           this.kiemTraTonKho();
         } else {
 
-          let baseData = data.childData[0];
-          if (!data.childData[0].tenDiaDiem) {
+          // let baseData = data.childData[0];
+          // if (!data.childData[0].tenDiaDiem) {
+          //   edit = true
+          // }
+          if (data.childData.length < 1) {
             edit = true
           }
           this.formDataDtl.patchValue({
-            noiDungDx: baseData.noiDungDx,
-            loaiVthh: baseData.loaiVthh,
-            cloaiVthh: baseData.cloaiVthh,
-            soLuongDx: baseData.soLuongDx,
-            tonKhoDvi: baseData.tonKhoDvi,
-            donViTinh: baseData.donViTinh,
-            tenChiCuc: baseData.tenChiCuc,
-            soLuongGiao: baseData.soLuongGiao,
-            idQdPdDtl: baseData.idQdPdDtl,
+            noiDungDx: data.noiDungDx,
+            tenHang: data.tenHang,
+            loaiVthh: data.loaiVthh,
+            cloaiVthh: data.cloaiVthh,
+            soLuongDx: data.soLuongDx,
+            tonKhoDvi: data.tonKhoDvi,
+            donViTinh: data.donViTinh,
+            tenChiCuc: data.tenChiCuc,
+            soLuongGiao: data.soLuongGiao,
+            idQdPdDtl: data.idQdPdDtl,
             edit,
             mId: edit ? data.mId : uuidv4()
           });
@@ -647,6 +653,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         this.formDataDtl.patchValue({
           noiDungDx: data.noiDungDx,
           loaiVthh: data.loaiVthh,
+          tenHang: data.tenHang,
           cloaiVthh: data.cloaiVthh,
           soLuongDx: data.soLuongDx,
           tonKhoDvi: data.tonKhoDvi,
@@ -668,7 +675,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       }
     }
     this.listDonVi.forEach(s => {
-      s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);
+      // s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);
+      s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi === s.maDvi && s1.noiDungDx === data.noiDungDx) && !(s.maDvi === data.maDvi && editRow);
+
     })
     await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
     await this.loadDsDiemKho(this.userInfo.MA_DVI, this.formDataDtl.value.loaiVthh, this.formDataDtl.value.cloaiVthh);
@@ -695,11 +704,13 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (row.edit) {
       const findIndex = dataDtl.findIndex(f => f.mId === row.mId);
       if (findIndex >= 0) {
-        dataDtl[findIndex] = row;
+        dataDtl[findIndex] = { ...dataDtl[findIndex], ...row };
       }
     } else {
       dataDtl.push(row);
     };
+    console.log("dataDtl", dataDtl)
+    this.formData.patchValue({ dataDtl })
     await this.buildTableView();
     await this.huyPhuongAn();
   }
@@ -739,7 +750,35 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     //     this.formData.value.dataDtl = [...this.formData.value.dataDtl, data]
     //   }
     // }
-    this.formData.value.dataDtl = this.formData.value.dataDtl.filter(f => f.mId !== data.mId);
+    if (parent.childData.length > 1) {
+      const findIndex = this.formData.value.dataDtl.findIndex(f => f.mId === data.mId);
+      if (findIndex >= 0) {
+        this.formData.value.dataDtl.splice(findIndex, 1)
+      }
+    }
+    else if (parent.childData.length == 1 && lv === 2) {
+      this.formData.value.dataDtl = this.formData.value.dataDtl.map(s => {
+        if (s.mId === data.mId) {
+          s.tenChiCuc = '';
+          s.soLuongGiao = 0;
+          s.maDvi = '';
+        }
+        return s
+      });
+    } else if (parent.childData.length == 1 && lv === 3) {
+      this.formData.value.dataDtl = this.formData.value.dataDtl.map(s => {
+        if (s.mId === data.mId) {
+          s.soLuong = null;
+          s.maDvi = data.maDvi.substring(0, 8);
+          s.tenDiemKho = '';
+          s.tenNhaKho = '';
+          s.tenNganKho = '';
+          s.tenLoKho = '';
+          s.tenDiaDiem = '';
+        }
+        return s
+      });
+    }
     await this.buildTableView();
   }
 

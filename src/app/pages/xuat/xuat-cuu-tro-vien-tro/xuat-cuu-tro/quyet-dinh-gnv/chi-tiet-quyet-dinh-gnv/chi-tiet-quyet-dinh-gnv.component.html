@@ -290,7 +290,7 @@
                 </a>-->
                 </td>
               </tr>
-              <ng-container *ngIf="expandSetString.has(item.idVirtual) && item.childData[0].tenHang">
+              <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv1 of item.childData,let i1=index">
                   <tr>
                     <td></td>
@@ -319,7 +319,7 @@
                       </ng-container>
                     </td>
                   </tr>
-                  <ng-container *ngIf="expandSetString.has(item.idVirtual) && lv1.childData[0].tenChiCuc">
+                  <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
                       <tr>
                         <td></td>
@@ -350,7 +350,7 @@
                         </td>
 
                       </tr>
-                      <ng-container *ngIf="expandSetString.has(item.idVirtual) && lv2.childData[0].tenDiaDiem">
+                      <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                         <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
                           <tr>
                             <td></td>
