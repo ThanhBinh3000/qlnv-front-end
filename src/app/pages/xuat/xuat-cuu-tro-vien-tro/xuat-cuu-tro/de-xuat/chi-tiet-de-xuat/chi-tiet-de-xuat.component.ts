@@ -179,6 +179,9 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
               res.data.soDx = res.data.soDx?.split("/")[0];
             }
             this.formData.patchValue(res.data);
+            if (!this.isVthhVatuThietBi()) {
+              this.formData.patchValue({ donViTinh: "kg" })
+            }
             this.formData.value.deXuatPhuongAn.forEach(s => s.idVirtual = uuidv4());
             await this.buildTableView();
           }
@@ -563,6 +566,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       return true;
     }
     return false;
+  }
+  isVthhVatuThietBi() {
+    if (this.formData.value.tenVthh == "Vật tư thiết bị") {
+      return true;
+    }
+    return false
   }
   genCuuTroVienTro() {
     if (this.formData.value.loaiNhapXuat === 'Xuất viện trợ') {

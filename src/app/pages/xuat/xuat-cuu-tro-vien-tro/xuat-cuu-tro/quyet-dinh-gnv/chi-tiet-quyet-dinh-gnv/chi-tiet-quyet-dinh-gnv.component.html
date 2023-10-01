@@ -106,7 +106,7 @@
       <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="2">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm xuất
+            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Năm xuất
             </nz-form-label>
             <nz-select formControlName="nam" [nzDisabled]="isView">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
@@ -115,7 +115,7 @@
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Đơn vị ra QĐ giao nv xuất hàng</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị ra QĐ giao nv xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <input nz-input formControlName="tenDvi" [readonly]="true" />
             </nz-form-control>
@@ -123,7 +123,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số QĐ xuất hàng</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-group nzAddOnAfter="{{maHauTo}}">
                 <nz-input-number formControlName="soBbQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
@@ -135,7 +135,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Ngày ký QĐ xuất hàng</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Ngày ký QĐ xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-date-picker class="search__input" formControlName="ngayKy" [nzDisabled]="isView"
                 [nzFormat]="globals.dateFormat">
@@ -147,7 +147,7 @@
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label>Căn cứ trên QĐ phê duyệt phương án</nz-form-label>
+            <nz-form-label nzRequired>Căn cứ trên QĐ phê duyệt phương án</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQdPd()">
                 <input [readonly]="true" nz-input formControlName="soQdPd" readonly="true" />
@@ -157,7 +157,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Loại hàng DTQG</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <input [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
             </nz-form-control>
@@ -165,7 +165,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <input nz-input [readonly]="true" formControlName="loaiNhapXuat" />
             </nz-form-control>
@@ -173,7 +173,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <input nz-input [readonly]="true" formControlName="kieuNhapXuat" />
             </nz-form-control>
@@ -290,7 +290,7 @@
                 </a>-->
                 </td>
               </tr>
-              <ng-container *ngIf="expandSetString.has(item.idVirtual) && item.childData[0].tenHang">
+              <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv1 of item.childData,let i1=index">
                   <tr>
                     <td></td>
@@ -319,7 +319,7 @@
                       </ng-container>
                     </td>
                   </tr>
-                  <ng-container *ngIf="expandSetString.has(item.idVirtual) && lv1.childData[0].tenChiCuc">
+                  <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
                       <tr>
                         <td></td>
@@ -337,12 +337,12 @@
                         <td>{{lv2.tenTrangThai}}</td>
                         <td>
                           <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-pencil" (click)="themPhuongAn(lv2,2)"></i>
+                            <i class="fa fa-pencil" (click)="themPhuongAn(lv2,2, true)"></i>
                           </a>
-                          <!-- <a>
-                           <i class="fa fa-edit" *ngIf="!isView" (click)="themPhuongAn(lv2,2)"></i>
-                         </a>
-                         -->
+                          <a *ngIf="userService.isChiCuc()">
+                            <i class="fa fa-plus" (click)="themPhuongAn(lv2,2)"></i>
+                          </a>
+
                           <a *ngIf="userService.isCuc()">
                             <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
                               nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaPhuongAn(lv2,lv1,2)"></i>
@@ -350,7 +350,7 @@
                         </td>
 
                       </tr>
-                      <ng-container *ngIf="expandSetString.has(item.idVirtual) && lv2.childData[0].tenDiaDiem">
+                      <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                         <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
                           <tr>
                             <td></td>
@@ -368,9 +368,9 @@
                             <td></td>
                             <td>
                               <ng-container *ngIf="userService.isChiCuc()">
-                                <!-- <a>
-                                 <i class="fa fa-plus" (click)="themPhuongAn(lv3,3)"></i>
-                               </a>-->
+                                <a>
+                                  <i class="fa fa-pencil" (click)="themPhuongAn(lv3,3, true)"></i>
+                                </a>
                                 <a>
                                   <i class="fa fa-trash-o do" nz-popconfirm nz-button
                                     nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
@@ -431,6 +431,15 @@
   nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="formDataDtl">
+      <ng-template #error let-control>
+        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+        </ng-container>
+        <ng-container *ngIf="control.hasError('max')">Số lượng không hợp lệ hoặc vượt quá số lượng tồn kho hoặc số lượng
+          được giao
+        </ng-container>
+        <ng-container *ngIf="control.hasError('min')">Số lượng phải lớn hơn hoặc bằng {{control.errors.min.min}}
+        </ng-container>
+      </ng-template>
       <div class="modal-card">
         <nz-card class="pd-10">
           <nz-form-item>
@@ -465,7 +474,7 @@
                 </div>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item *ngIf="userService.isChiCuc()">
+            <nz-form-item *ngIf="isVthhVatuThietBi()">
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng DTQG</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập chủng loại hàng'">
                 <div nz-row [nzGutter]="48">
@@ -496,8 +505,10 @@
                   </nz-select>
                 </div>
                 <div nz-col [nzSpan]="8">
-                  <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
+                  <p style="font-size: 13px;font-weight: 500">Tồn kho: <span *ngIf="!isVthhVatuThietBi()"
                       style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span>
+                    <span *ngIf="isVthhVatuThietBi()"
+                      style="color: #001CFF">{{formDataDtl.value.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</span>
                   </p>
                 </div>
               </div>
@@ -541,7 +552,7 @@
           </nz-form-item>
           <nz-form-item *ngIf="userService.isChiCuc()">
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng xuất</nz-form-label>
-            <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'">
+            <nz-form-control [nzErrorTip]="error">
               <nz-input-number formControlName="soLuong" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                 [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
