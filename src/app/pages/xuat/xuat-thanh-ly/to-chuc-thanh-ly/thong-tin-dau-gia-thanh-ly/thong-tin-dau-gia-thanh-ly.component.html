@@ -77,7 +77,6 @@
         <th nzWidth="30px">Năm</th>
         <th nzWidth="150px"> Số quyết định</th>
         <th nzWidth="80px"> Ngày ký</th>
-        <th nzWidth="80px"> Số QĐ PD kết quả BĐG</th>
         <th nzWidth="80px"> Số công văn/tờ trình</th>
         <th nzWidth="80px"> Tổng số ĐV tài sản</th>
         <th nzWidth="80px"> Tổng số ĐV tài sản ĐG thành công</th>
@@ -88,9 +87,6 @@
         <th nzWidth="55px"> Hành động</th>
       </tr>
       <tr class="search-table">
-        <th></th>
-        <th></th>
-        <th></th>
         <th></th>
         <th></th>
         <th>
@@ -118,6 +114,30 @@
           </nz-input-group>
         </th>
         <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTtr"
+                   (input)="filterInTable('soTtr',filterTable.soTtr)" size="small" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTtr"
+                   (input)="filterInTable('soTtr',filterTable.soTtr)" size="small" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTtr"
+                   (input)="filterInTable('soTtr',filterTable.soTtr)" size="small" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTtr"
+                   (input)="filterInTable('soTtr',filterTable.soTtr)" size="small" />
+          </nz-input-group>
+        </th>
+        <th>
           <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
                      (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
             <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
@@ -129,16 +149,16 @@
       <tbody>
       <tr *ngFor="let data of dataTable , let i = index">
         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+        <td>{{data.nam}}</td>
         <td>{{data.soQd}}</td>
-        <td>{{data.trichYeu}}</td>
         <td>{{data.ngayKy | date : 'dd/MM/yyyy' }}</td>
         <td>{{data.soHoSo}}</td>
-        <td>{{data.soHoSo}}</td>
-        <td>{{data.soHoSo}}</td>
-        <td>{{data.soHoSo}}</td>
-        <td>{{data.soHoSo}}</td>
-        <td>{{data.soHoSo}}</td>
-        <td>{{data.tenTrangThai}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{data.tenCloaiVthh}}</td>
+        <td>{{data.tenTrangThaiDg}}</td>
+        <td>{{data.ketQua}}</td>
         <td>
           <a (click)="redirectDetail(data.id)">
             <span class="icon htvbdh_eye"></span>

@@ -1,10 +1,10 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
   <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="goBack()">
+    <button type="button" class="btn btn-sub" (click)="redirectDefault()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT" type="button"
+    <button *ngIf="this.userService.isCuc() && formData.value.trangThaiDg != STATUS.HOAN_THANH_CAP_NHAT" type="button"
             class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Kết thúc đấu giá</span>
@@ -15,7 +15,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
+        <span [ngClass]="formData.value.trangThaiDg == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Quản lý thông tin đấu giá</span>
