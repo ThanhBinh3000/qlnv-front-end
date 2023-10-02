@@ -14,12 +14,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD_THEM') && userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO" type="button"
+      <button *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD_THEM') && userService.isTongCuc() && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" type="button"
               class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
-      <button *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD_THEM') && userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO"
+      <button *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD_THEM') && userService.isTongCuc() && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
               class="btn btn-sub xanh-nhat ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -226,7 +226,7 @@
                   <th class="text-center" width="13%" colSpan="2">TMĐT</th>
                   <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
                   <th class="text-center" width="5%" rowSpan="2"
-                      *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO" nzRight>Hành động
+                      *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" nzRight>Hành động
                   </th>
                 </tr>
                 <tr>
@@ -254,7 +254,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td  *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO" nzRight ></td>
+                    <td  *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" nzRight ></td>
                   </tr>
                   <ng-container *ngIf="expandSet.has(data.idVirtual)">
                     <ng-container *ngFor="let item of data.dataChild, let y = index">
@@ -278,7 +278,7 @@
                           class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhTongSo', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td
                           class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhNstw', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td nzRight *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO"></td>
+                        <td nzRight *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"></td>
                       </tr>
                       <ng-container *ngIf="expandSet.has(item.idVirtual)">
                         <ng-container *ngFor="let children of item.dataChild, let y1 = index">
@@ -298,7 +298,7 @@
                             <td class="text-right">{{ children.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
                             <td class="text-right">{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                             <td class="text-center" nzRight
-                                *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO">
+                                *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU">
                               <a (click)="themMoiItem(children, 'sua', y,  item.dataChild)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
@@ -333,7 +333,7 @@
                       style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', null) | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="font-weight-bold text-right"
                       style="color: blue">{{sumSoLuong(null, 'ncKhNstw', null) | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td nzRight *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO"></td>
+                  <td nzRight *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"></td>
                 </tr>
 
                 </tfoot>

@@ -564,7 +564,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           mId: noiDungDxRow.mId
         };
       }).value().filter(f => !!f);
-    console.log("phuongAnView", this.phuongAnView)
     this.expandAll();
   }
 
@@ -594,7 +593,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         if (data.childData.length < 1) {
           edit = true
         }
-        console.log(data)
         this.formDataDtl.patchValue({
           noiDungDx: data.noiDungDx,
           tenHang: data.tenHang,
@@ -676,7 +674,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
     this.listDonVi.forEach(s => {
       // s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);
-      s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi === s.maDvi && s1.noiDungDx === data.noiDungDx) && !(s.maDvi === data.maDvi && editRow);
+      s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi === s.maDvi && s1.noiDungDx === data.noiDungDx && s1.tenHang === data.tenHang) && !(s.maDvi === data.maDvi && editRow);
 
     })
     await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
@@ -709,7 +707,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     } else {
       dataDtl.push(row);
     };
-    console.log("dataDtl", dataDtl)
     this.formData.patchValue({ dataDtl })
     await this.buildTableView();
     await this.huyPhuongAn();

@@ -90,7 +90,7 @@
   <div class="group-button">
     <h3> TIẾN ĐỘ VÀ KHỐI LƯỢNG CÔNG VIỆC THEO HỢP ĐỒNG</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub">
+      <button type="button" class="btn btn-sub" (click)="exportData('tien-do-va-khoi-luong-theo-hop-dong.xlsx')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
@@ -108,7 +108,10 @@
       <th class="text-center" colSpan="2">Đơn giá thanh toán</th>
       <th class="text-center" colSpan="5">Thành tiền</th>
       <th class="text-center" rowSpan="3">Ghi chú</th>
-      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight>Hành động</th>
+      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight
+          *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+        Hành động
+      </th>
     </tr>
     <tr>
       <th class="text-center" colSpan="2">Tổng số</th>
@@ -152,7 +155,8 @@
       <th></th>
       <th></th>
       <th></th>
-      <th class="text-center" nzRight>
+      <th class="text-center" nzRight
+          *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
         <a (click)="themItemcha()">
           <i class="table-icon icon htvbdh_dau-cong"></i>
         </a>
@@ -182,7 +186,8 @@
         <td></td>
         <td></td>
         <td></td>
-        <td class="text-center" nzRight>
+        <td class="text-center" nzRight
+            *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
           <a (click)="themMoiItem(data, idx, dataTable[idx])">
             <i class="table-icon icon htvbdh_dau-cong"></i>
           </a>
@@ -211,7 +216,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-center" nzRight>
+            <td class="text-center" nzRight
+                *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
               <a (click)="editRow(y)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
