@@ -1,25 +1,25 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
 import * as dayjs from "dayjs";
-import {FormGroup, Validators} from "@angular/forms";
-import {STATUS} from "src/app/constants/status";
-import {FileDinhKem} from "src/app/models/DeXuatKeHoachuaChonNhaThau";
-import {MESSAGE} from "src/app/constants/message";
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.service";
-import {TinhTrangKhoHienThoiService} from "src/app/services/tinhTrangKhoHienThoi.service";
-import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import { FormGroup, Validators } from "@angular/forms";
+import { STATUS } from "src/app/constants/status";
+import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
+import { MESSAGE } from "src/app/constants/message";
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
+import { TinhTrangKhoHienThoiService } from "src/app/services/tinhTrangKhoHienThoi.service";
+import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -75,6 +75,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   @Input() isView: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   formDataDtl: FormGroup;
+  formDataDefault: FormGroup;
   maHauTo: any;
   STATUS = STATUS;
   phuongAnView = [];
@@ -86,19 +87,25 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
   listMucDichXuat: any[] = [];
-
+  phuongAnViewCache: any[] = [];
+  phuongAnHdrView: any[] = [];
+  loaiNhapXuat: string;
+  kieuNhapXuat: string;
+  tongSoLuong: number;
+  tongSlXuatCap: string;
+  tongNhuCauXuat: string;
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private danhMucService: DanhMucService,
-              private donViService: DonviService,
-              private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-              private dmTieuChuanService: DanhMucTieuChuanService,
-              private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
-              private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-              private cdr: ChangeDetectorRef,) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private danhMucService: DanhMucService,
+    private donViService: DonviService,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    private dmTieuChuanService: DanhMucTieuChuanService,
+    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    private cdr: ChangeDetectorRef,) {
 
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     for (let i = -3; i < 23; i++) {
@@ -151,8 +158,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         fileDinhKem: [new Array<FileDinhKem>()],
         canCu: [new Array<FileDinhKem>()],
         qdPaXuatCapId: [],
-        paXuatGaoChuyenXc:[false],
-        qdPaXuatCap:[]
+        paXuatGaoChuyenXc: [false],
+        qdPaXuatCap: [],
+        ngayKetThuc: []
       }
     );
 
@@ -177,6 +185,14 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         tenDvi: [''],
         edit: []
       });
+    this.formDataDefault = this.fb.group(
+      {
+        loaiVthhPd: "Gạo tẻ",
+        loaiVthh: "Thóc tẻ",
+        loaiNhapXuat: "Xuất cấp",
+        kieuNhapXuat: "Xuất không thu tiền"
+      }
+    )
   }
 
   async ngOnInit() {
@@ -215,7 +231,15 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             }
             this.formData.patchValue(res.data);
             this.formData.value.quyetDinhPdDtl.forEach(s => s.idVirtual = uuidv4());
-            await this.buildTableView();
+            if (this.formData.value.paXuatGaoChuyenXc) {
+              await this.buildTableViewChuyenXc();
+              if (this.phuongAnHdrView[0]) {
+                await this.selectRow(this.phuongAnHdrView[0])
+              }
+            }
+            else {
+              await this.buildTableView();
+            }
           }
         })
         .catch((e) => {
@@ -233,7 +257,30 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       })
     }
   }
-
+  async selectRow(item) {
+    if (!item.selected) {
+      this.phuongAnHdrView.forEach(i => i.selected = false);
+      item.selected = true;
+      // this.phuongAnView = (this.phuongAnHdrView.find(s => s.soDx == item.soDx)).childData;
+      // this.phuongAnViewCache = (this.phuongAnHdrViewCache.find(s => s.soDx == item.soDx)).childData;
+      const findndex = this.phuongAnHdrView.findIndex(s => s.soDx == item.soDx);
+      this.phuongAnView = this.phuongAnHdrView[findndex]?.childData ? this.phuongAnHdrView[findndex].childData : [];
+      this.loaiNhapXuat = this.phuongAnHdrView[findndex]?.loaiNhapXuat;
+      this.kieuNhapXuat = this.phuongAnHdrView[findndex]?.kieuNhapXuat;
+      await this.tinhTong();
+    }
+  }
+  tinhTong() {
+    const { tongSoLuong, tongSlXuatCap, tongNhuCauXuat } = this.phuongAnView.reduce((obj, cur) => {
+      obj.tongSoLuong += cur.soLuong ? cur.soLuong : 0;
+      obj.tongSlXuatCap += cur.soLuongXc ? cur.soLuongXc : 0;
+      obj.tongNhuCauXuat += cur.soLuongXc ? cur.soLuongNhuCauXuat : 0;
+      return obj
+    }, { tongSoLuong: 0, tongSlXuatCap: 0, tongNhuCauXuat: 0 });
+    this.tongSoLuong = tongSoLuong;
+    this.tongSlXuatCap = tongSlXuatCap;
+    this.tongNhuCauXuat = tongNhuCauXuat;
+  }
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
     let body = {
@@ -249,7 +296,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     if (trangThaiHienTai == STATUS.DU_THAO || trangThaiHienTai == STATUS.TU_CHOI_LDV || trangThaiHienTai == STATUS.TU_CHOI_LDTC) {
       trangThai = STATUS.CHO_DUYET_LDV;
     }
-    let body = {...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo}
+    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -275,7 +322,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
-        this.formDataDtl.patchValue({noiDungDx: data.noiDungDx});
+        this.formDataDtl.patchValue({ noiDungDx: data.noiDungDx });
       } else if (level == 1) {
         data.edit = level;
         this.formDataDtl.patchValue(data);
@@ -291,7 +338,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
 
   async luuPhuongAn() {
-    await this.helperService.ignoreRequiredForm(this.formDataDtl);
+    // await this.helperService.ignoreRequiredForm(this.formDataDtl);
     await this.helperService.markFormGroupTouched(this.formDataDtl);
     if (this.formDataDtl.invalid) {
       return;
@@ -314,7 +361,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         quyetDinhPdDtl = [...quyetDinhPdDtl, row];
       }
     }
-    this.formData.patchValue({quyetDinhPdDtl: quyetDinhPdDtl});
+    this.formData.patchValue({ quyetDinhPdDtl: quyetDinhPdDtl });
     await this.buildTableView();
     await this.huyPhuongAn();
     await this.helperService.restoreRequiredForm(this.formDataDtl);
@@ -335,7 +382,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     } else if (data.noiDungDx) {
       quyetDinhPdDtl = quyetDinhPdDtl.filter(s => s.noiDungDx !== data.noiDungDx);
     }
-    this.formData.patchValue({quyetDinhPdDtl: quyetDinhPdDtl});
+    this.formData.patchValue({ quyetDinhPdDtl: quyetDinhPdDtl });
     await this.buildTableView();
   }
 
@@ -351,7 +398,26 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         };
       }).value();
     this.phuongAnView = dataView
-    console.log(this.phuongAnView, "phuongAnView")
+    this.expandAll();
+  }
+  async buildTableViewChuyenXc() {
+    this.phuongAnHdrView = chain(this.formData.value.quyetDinhPdDtl)
+      .groupBy("soDx")
+      .map((value, key) => {
+        const row = value.find(f => f.soDx === key);
+        if (!row) return;
+        const soLuong = value.reduce((sum, cur) => sum += cur.soLuong);
+        return {
+          idVirtual: uuidv4(),
+          soDx: key,
+          ngayKyDx: row.ngayKyDx,
+          trichYeuDx: row.trichYeuDx,
+          tenDvi: row.tenDvi,
+          soLuong: soLuong,
+          childData: value
+        };
+      }).value().filter(f => !!f);
+    console.log("aaaaaaaa", this.formData.value.quyetDinhPdDtl)
     this.expandAll();
   }
 
@@ -418,7 +484,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoLoaiVthh)]);
             this.formDataDtl.controls['soLuong'].updateValueAndValidity();
           } else {
-            this.formDataDtl.patchValue({tonKhoLoaiVthh: 0, tonKhoCloaiVthh: 0});
+            this.formDataDtl.patchValue({ tonKhoLoaiVthh: 0, tonKhoCloaiVthh: 0 });
             this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(0)]);
             this.formDataDtl.controls['soLuong'].updateValueAndValidity();
           }
@@ -487,9 +553,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       await this.spinner.hide();
     }
   }
-  async bindingDataQdPd(data:any){
+  async bindingDataQdPd(data: any) {
     data.quyetDinhPdDtl.forEach(s => {
-      if(s.soLuongXc){
+      if (s.soLuongXc) {
 
       }
     });
@@ -549,7 +615,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
               s.tenVthh = detail.tenVthh;
             });
             if (!this.formData.value.id) {
-              this.formData.patchValue({quyetDinhPdDtl: detail.quyetDinhPdDtl});
+              this.formData.patchValue({ quyetDinhPdDtl: detail.quyetDinhPdDtl });
             }
 
             data.idDx = data.id;
@@ -576,8 +642,12 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 
             this.formData.patchValue(data);
-            await this.buildTableView();
-            await this.expandAll();
+            // await this.buildTableView();
+            await this.buildTableViewChuyenXc();
+            if (this.phuongAnHdrView[0]) {
+              this.selectRow(this.phuongAnHdrView[0])
+            }
+            // await this.expandAll();
           }
         });
       }
