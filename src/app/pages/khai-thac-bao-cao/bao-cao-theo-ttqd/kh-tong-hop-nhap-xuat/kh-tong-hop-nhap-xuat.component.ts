@@ -48,6 +48,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
+        namKh: [dayjs().get("year"), [Validators.required]],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: '',
