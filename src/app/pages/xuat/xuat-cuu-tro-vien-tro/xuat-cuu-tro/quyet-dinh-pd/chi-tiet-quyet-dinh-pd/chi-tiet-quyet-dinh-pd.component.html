@@ -252,7 +252,7 @@
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <ng-container *ngIf="formData.value.type == 'TH'">
-        <nz-table #tableHdr class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="this.phuongAnHdrViewCache">
+        <nz-table #tableHdr class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="this.phuongAnHdrView">
           <thead>
             <tr>
               <th style="width: 35px">STT</th>
@@ -404,7 +404,7 @@
                             <ng-container *ngIf="isVthhGao()">
                               <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
                               </td>
-                              <td class="bold">{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
+                              <td class="bold">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}
                               </td>
                             </ng-container>
                           </tr>
@@ -422,7 +422,7 @@
                                 </td>
                                 <ng-container *ngIf="isVthhGao()">
                                   <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                                  <td>{{lv1.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
+                                  <td>{{lv1.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                                 </ng-container>
                               </tr>
                             </ng-container>
@@ -595,7 +595,7 @@
                           <ng-container *ngIf="isVthhGao()">
                             <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
                             </td>
-                            <td class="bold">{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
+                            <td class="bold">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}
                             </td>
                           </ng-container>
                         </tr>
@@ -614,7 +614,7 @@
                                   [(ngModel)]="lv1.soLuong" [nzDisabled]="isView"></nz-input-number></td>
                               <ng-container *ngIf="isVthhGao()">
                                 <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                                <td>{{lv1.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
+                                <td>{{lv1.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                               </ng-container>
                             </tr>
                           </ng-container>
@@ -736,7 +736,7 @@
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true">Loại hình nhập xuất</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
-                        <span style="color: #001CFF"><strong>{{formData.value.loaiNhapXuat}}</strong></span>
+                        <span style="color: #001CFF"><strong>{{loaiNhapXuat}}</strong></span>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -744,7 +744,7 @@
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true">Kiểu nhập xuất</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
-                        <span style="color: #001CFF"><strong>{{formData.value.kieuNhapXuat}}</strong></span>
+                        <span style="color: #001CFF"><strong>{{kieuNhapXuat}}</strong></span>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -798,7 +798,7 @@
                             </td>
                             <ng-container *ngIf="isVthhGao()">
                               <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                              <td>{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
+                              <td>{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                             </ng-container>
                           </tr>
                         </ng-container>
@@ -893,7 +893,7 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true">Loại hình nhập xuất</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <span style="color: #001CFF"><strong>{{formData.value.loaiNhapXuat}}</strong></span>
+                      <span style="color: #001CFF"><strong>{{loaiNhapXuat}}</strong></span>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -901,7 +901,7 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true">Kiểu nhập xuất</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <span style="color: #001CFF"><strong>{{formData.value.kieuNhapXuat}}</strong></span>
+                      <span style="color: #001CFF"><strong>{{kieuNhapXuat}}</strong></span>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -947,7 +947,7 @@
                               [(ngModel)]="item.soLuong" [nzDisabled]="isView"></nz-input-number></td>
                           <ng-container *ngIf="isVthhGao()">
                             <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                            <td>{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
+                            <td>{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                           </ng-container>
                         </tr>
                       </ng-container>
