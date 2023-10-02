@@ -30,6 +30,7 @@ import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { PREVIEW } from "../../../../../../constants/fileType";
+import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-pd',
@@ -216,7 +217,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatCuuTro);
             }
             await this.buildTableView();
-            if (this.phuongAnHdrView && this.formData.value.type === "TH") {
+            if (this.phuongAnHdrView && this.formData.value.type === "TH" && this.phuongAnHdrView[0]) {
               await this.selectRow(this.phuongAnHdrView[0])
             }
           }
@@ -266,8 +267,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       await this.spinner.show();
       let res = await this.tongHopPhuongAnCuuTroService.search({
         trangThai: STATUS.DA_DUYET_LDV,
-        nam: this.formData.get('nam').value,
+        // nam: this.formData.get('nam').value,
         idQdPdNull: true,
+        loaiVthh: this.formData.get('loaiVthh').value,
         paggingReq: {
           limit: this.globals.prop.MAX_INTERGER,
           page: 0
@@ -312,9 +314,12 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             data.ngayThop = data.ngayTao;
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 
+            // this.formData.patchValue(data, { onlySelf: true, emitEvent: false });
             this.formData.patchValue(data);
             await this.buildTableView();
-            await this.selectRow(this.phuongAnHdrViewCache[0]);
+            if (this.phuongAnHdrViewCache[0]) {
+              await this.selectRow(this.phuongAnHdrViewCache[0]);
+            }
           }
 
         });
@@ -339,6 +344,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         maTongHop: null,
         // nam: this.formData.get('2022').value,
         //loaiVthh: this.loaiVthh,
+        loaiVthh: this.formData.get('loaiVthh').value,
         idQdPdNull: true,
         paggingReq: {
           limit: this.globals.prop.MAX_INTERGER,
@@ -391,6 +397,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             delete data.trichYeu;
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 
+            // this.formData.patchValue(data, { onlySelf: true, emitEvent: false });
             this.formData.patchValue(data);
             this.loaiNhapXuat = detail.loaiNhapXuat;
             this.kieuNhapXuat = detail.kieuNhapXuat;
@@ -408,7 +415,17 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       await this.spinner.hide();
     }
   }
-
+  changeVthh($event) {
+    if ($event == TEN_LOAI_VTHH.THOC) {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
+    } else if ($event == TEN_LOAI_VTHH.GAO) {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.GAO, donViTinh: "kg" });
+    } else if ($event == TEN_LOAI_VTHH.MUOI) {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg" });
+    } else {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
+    }
+  }
   async buildTableView() {
     if (this.formData.value.type === "TH") {
 
@@ -490,7 +507,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             //   }).value() : [];
             let soLuongDx = value.reduce((prev, next) => prev += next.soLuongDx, 0);
             let soLuong = value.reduce((prev, next) => prev += next.soLuong, 0);
-            let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.next.soLuongNhuCauXuat : 0, 0);
+            let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
             return {
               idVirtual: uuidv4(),
               tenDvi: row.tenDvi,

@@ -7,6 +7,9 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {ActivatedRoute, Router} from "@angular/router";
 import {KiemTraChatLuongScService} from "../../../../../../services/sua-chua/kiemTraChatLuongSc";
 import {Base3Component} from "../../../../../../components/base3/base3.component";
+import {
+  BienBanLayMauThanhLyService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BienBanLayMauThanhLy.service";
 
 @Component({
   selector: 'app-xtl-bb-lm',
@@ -23,7 +26,7 @@ export class XtlBbLmComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private _service: KiemTraChatLuongScService,
+    private _service: BienBanLayMauThanhLyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group({
@@ -32,16 +35,20 @@ export class XtlBbLmComponent extends Base3Component implements OnInit {
       soPhieuKtcl: null,
       ngayTu: null,
       ngayDen: null,
+      phanLoai : null,
     })
     router.events.subscribe((val) => {
       let routerUrl = this.router.url;
       const urlList = routerUrl.split("/");
+      this.formData.patchValue({
+          phanLoai : urlList[4] == 'kiem-tra-lt' ? 'LT' : 'VT'
+      })
       this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-bb-lm';
     })
   }
 
   ngOnInit(): void {
-    // this.searchPage();
+    this.searchPage();
   }
 
   async searchPage() {

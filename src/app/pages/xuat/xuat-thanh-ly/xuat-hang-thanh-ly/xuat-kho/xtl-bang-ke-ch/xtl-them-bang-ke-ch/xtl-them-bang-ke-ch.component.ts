@@ -19,6 +19,12 @@ import {STATUS} from "../../../../../../../constants/status";
 import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
 import {Base3Component} from "../../../../../../../components/base3/base3.component";
 import { cloneDeep } from 'lodash';
+import {
+  PhieuXuatKhoThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuXuatKhoThanhLy.service";
+import {
+  BangCanKeHangThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BangCanKeHangThanhLy.service";
 
 @Component({
   selector: 'app-xtl-them-bang-ke-ch',
@@ -27,7 +33,9 @@ import { cloneDeep } from 'lodash';
 })
 export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
   rowItem: any = {};
-  symbol: string = ''
+  symbol: string = '';
+  phanLoai : string;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -36,16 +44,16 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private bangKeXuatScService: BangKeXuatScService,
-    private phieuXuatKhoScService: PhieuXuatKhoScService,
+    private _service: BangCanKeHangThanhLyService,
+    private phieuXuatKhoThanhLyService: PhieuXuatKhoThanhLyService,
     private quyetDinhXhService: QuyetDinhXhService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, bangKeXuatScService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     router.events.subscribe((val) => {
       let routerUrl = this.router.url;
       const urlList = routerUrl.split("/");
       this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-bang-ke-ch';
-      console.log(this.defaultURL)
+      this.phanLoai = urlList[4] == 'xuat-kho-lt' ? 'LT' : 'VT'
     })
     this.previewName = 'sc_bang_ke_xvt'
     this.getId();
@@ -57,7 +65,7 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
       tenDvi: ['', [Validators.required]],
       maQhns: [''],
       soBangKe: ['', [Validators.required]],
-      ngayNhap: ['', [Validators.required]],
+      ngayLap: ['', [Validators.required]],
       soQdXh: ['', [Validators.required]],
       idQdXh: ['', [Validators.required]],
       ngayQdXh: ['',],
@@ -68,8 +76,11 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
       tenNganKho: ['',],
       tenLoKho: ['',],
       diaDiemKho: [''],
+      nguoiGiamSat : [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
+      loaiVthh : [''],
+      cloaiVthh : [''],
       donViTinh: [''],
       tenThuKho: [''],
       tenLanhDaoCc: [''],
@@ -80,7 +91,8 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
       diaChi: [''],
       thoiGianGiaoNhan: [''],
       ngayXuatKho: [''],
-      lyDoTuChoi: []
+      lyDoTuChoi: [],
+      tongTrongLuong : ['']
     });
     this.symbol = '/BKCH-' + this.userInfo.DON_VI.tenVietTat;
 
@@ -102,12 +114,11 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
         this.spinner.hide();
         if (res) {
           this.dataTable = res.children;
-          this.bindingDataQdXuatHang(res.idQdXh);
           this.bindingDataPhieuXuatKho(res.idPhieuXuatKho);
         }
       })
     } else {
-      await this.userService.getId("SC_BANG_KE_XUAT_VT_HDR_SEQ").then((res) => {
+      await this.userService.getId("XH_TL_BANG_KE_HDR_SEQ").then((res) => {
         this.formData.patchValue({
           soBangKe: res + '/' + this.formData.value.nam + this.symbol,
           maQhns: this.userInfo.DON_VI.maQhns,
@@ -116,7 +127,12 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
           tenThuKho: this.userInfo.TEN_DAY_DU
         })
       });
-    }
+    };
+    this.formData.patchValue({
+      idQdXh : '1',
+      soQdXh : '1/QD',
+      ngayQdXh : dayjs().format('YYYY-MM-DD')
+    });
   }
 
   openDialogDanhSach() {
@@ -177,7 +193,12 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
       return;
     }
     this.spinner.show();
-    this.phieuXuatKhoScService.getDanhSachTaoBangKe({ idQdXh: this.formData.value.idQdXh }).then((res) => {
+    let body = {
+      idQdXh: this.formData.value.idQdXh,
+      trangThai : STATUS.DU_THAO,
+      phanLoai : this.phanLoai
+    }
+    this.phieuXuatKhoThanhLyService.getDanhSachTaoBangKe(body).then((res) => {
       this.spinner.hide();
       if (res.data) {
         res.data?.forEach(item => {
@@ -208,7 +229,7 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
 
   bindingDataPhieuXuatKho(idPhieuXuatKho) {
     this.spinner.show();
-    this.phieuXuatKhoScService.getDetail(idPhieuXuatKho).then((res) => {
+    this.phieuXuatKhoThanhLyService.getDetail(idPhieuXuatKho).then((res) => {
       const data = res.data;
       this.formData.patchValue({
         soPhieuXuatKho: data.soPhieuXuatKho,
@@ -218,6 +239,8 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
         tenNganKho: data.tenNganKho,
         tenLoKho: data.tenLoKho,
         diaDiemKho: data.diaDiemKho,
+        loaiVthh : data.loaiVthh,
+        cloaiVthh : data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         nguoiGiaoHang: data.nguoiGiaoHang,
@@ -259,8 +282,6 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
     let trangThai
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
-        trangThai = STATUS.DU_THAO;
-        break;
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_LDCC;
         break;
@@ -295,10 +316,11 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
     if (this.validateRow()) {
       let dataRow = cloneDeep(this.rowItem);
       this.dataTable.push(dataRow);
-      this.rowItem.soLuong = 0;
-      this.rowItem.soSerial = null;
+      this.rowItem.maCan = null;
+      this.rowItem.soBaoBi = 0;
+      this.rowItem.trongLuongCaBi = 0;
       this.formData.patchValue({
-        tongSoLuong: this.calTongSlThucTe()
+        tongTrongLuong: this.calTongSlThucTe()
       })
     }
   }
@@ -308,15 +330,15 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
   }
 
   validateRow(): boolean {
-    if (this.rowItem.soSerial && this.rowItem.soLuong) {
-      if (this.dataTable.filter(i => i.soSerial == this.rowItem.soSerial).length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Số serial đã tồn tại");
-        return false
-      }
-      if (this.rowItem.soLuong <= 0) {
-        this.notification.error(MESSAGE.ERROR, "Số lượng thực tế phải lớn hơn 0");
-        return false
-      }
+    if (this.rowItem.maCan && this.rowItem.soBaoBi && this.rowItem.trongLuongCaBi) {
+      // if (this.dataTable.filter(i => i.soSerial == this.rowItem.soSerial).length > 0) {
+      //   this.notification.error(MESSAGE.ERROR, "Số serial đã tồn tại");
+      //   return false
+      // }
+      // if (this.rowItem.soLuong <= 0) {
+      //   this.notification.error(MESSAGE.ERROR, "Số lượng thực tế phải lớn hơn 0");
+      //   return false
+      // }
     } else {
       this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin");
       return false;

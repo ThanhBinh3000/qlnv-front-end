@@ -304,10 +304,10 @@
           <tr *ngFor="let data of dataTable;let i = index">
             <ng-container *ngIf="!data.edit">
               <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ data.chiTieuCl }}</td>
-              <td>{{ data.chiSoCl }}</td>
+              <td>{{ data.tenChiTieu ? data.tenChiTieu : data.chiTieuCl }}</td>
+              <td>{{ data.mucYeuCauXuat ? data.mucYeuCauXuat : data.chiSoCl }}</td>
               <td><input nz-input [disabled]="isView" [(ngModel)]="data.ketQua"/></td>
-              <td>{{ data.phuongPhap }}</td>
+              <td>{{ data.phuongPhapXd ? data.phuongPhapXd : data.phuongPhap }}</td>
               <td>
                 <nz-select [disabled]="isView" [(ngModel)]="data.danhGia">
                   <nz-option nzValue="Đạt" nzLabel="Đạt"></nz-option>

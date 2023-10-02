@@ -7,7 +7,7 @@
             <nz-form-item class="form-item">
               <nz-form-label nzFor="nam-qd">Bộ/Ngành</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="maBn" nzAllowClear nzShowSearch>
+                <nz-select formControlName="maBn" [nzDisabled]='isDisableByBoNganh()' nzAllowClear nzShowSearch>
                   <nz-option *ngFor="let option of dsBoNganh" [nzLabel]="option.tenDvi" [nzValue]="option.maDvi">
                   </nz-option>
                 </nz-select>

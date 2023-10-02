@@ -19,6 +19,12 @@ import {MESSAGE} from "../../../../../../../constants/message";
 import {STATUS} from "../../../../../../../constants/status";
 import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
 import {Base3Component} from "../../../../../../../components/base3/base3.component";
+import {
+  PhieuKtraClThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuKtraClThanhLy.service";
+import {
+  BienBanLayMauThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BienBanLayMauThanhLy.service";
 
 @Component({
   selector: 'app-xtl-them-phieu-ktra-cl',
@@ -30,6 +36,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
   optionDanhGia: any[] = ['Đạt', 'Không đạt'];
   listHinhThucBq: any[];
   symbol: string = ''
+  phanLoai : string;
 
   constructor(
     httpClient: HttpClient,
@@ -39,13 +46,13 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private kiemTraChatLuongSc: KiemTraChatLuongScService,
-    private phieuXuatKhoScService: PhieuXuatKhoScService,
+    private _service: PhieuKtraClThanhLyService,
+    private bienBanLayMauThanhLyService: BienBanLayMauThanhLyService,
     private quyetDinhXhService: QuyetDinhXhService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, kiemTraChatLuongSc);
+    super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.previewName = 'sc_kiem_tra_chat_luong'
     this.getId();
     this.formData = this.fb.group({
@@ -57,26 +64,30 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
       maQhns: [''],
       soPhieuKtcl: ['', [Validators.required]],
       ngayLap: ['', [Validators.required]],
-      tenNguoiTao: [''],
-      tenTruongPhongKtbq: [''],
       soQdXh: ['', [Validators.required]],
       idQdXh: ['', [Validators.required]],
-      soPhieuXuatKho: ['', [Validators.required]],
-      idPhieuXuatKho: ['', [Validators.required]],
+      ngayQdXh : [''],
+      soBbLayMau: ['', [Validators.required]],
+      idBbLayMau: ['', [Validators.required]],
+      ngayLayMau : [''],
+      ngayKnghiem: ['', [Validators.required]],
+      idDiaDiemXh: ['', [Validators.required]],
+      maDiaDiem: ['', [Validators.required]],
       tenDiemKho: ['',],
       tenNhaKho: ['',],
       tenNganKho: ['',],
       tenLoKho: ['',],
       tenThuKho: [''],
-      loaiVthh: [''],
-      tenLoaiVthh: [''],
+      loaiVthh: ['',[Validators.required]],
+      tenLoaiVthh: ['',[Validators.required]],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
-      dviKiemDinh: [''],
-      ngayKiemDinh: ['', [Validators.required]],
+      tenNguoiKnghiem: [''],
+      tenTruongPhongKtbq: [''],
+      tenLdc: [''],
+      dviTinh : [''],
       hinhThucBaoQuan: [''],
       ketQua: [''],
-      dat: [''],
       nhanXet: [''],
       lyDoTuChoi: ['']
     });
@@ -84,8 +95,9 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
     router.events.subscribe((val) => {
       let routerUrl = this.router.url;
       const urlList = routerUrl.split("/");
-      this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-hs-kt';
-      console.log(this.defaultURL)
+      this.phanLoai = urlList[4] == 'kiem-tra-lt' ? 'LT' : 'VT'
+      this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-phieu-ktra-cl';
+      console.log(this.phanLoai)
     })
   }
 
@@ -105,21 +117,29 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
         this.spinner.hide();
         if (res) {
           this.dataTable = res.children;
-          this.bindingDataQdXuatHang(res.idQdXh);
-          this.bindingDataPhieuXuatKho(res.idPhieuXuatKho);
+          this.danhMucService.getDetail(res.cloaiVthh ? res.cloaiVthh : res.loaiVthh).then((res) => {
+            this.listHinhThucBq = res.data?.loaiHinhBq;
+            this.listHinhThucBq.forEach(item => item.checked = true);
+          });
         }
       })
     } else {
-      await this.userService.getId("SC_KIEM_TRA_CL_HDR_SEQ").then((res) => {
+      await this.userService.getId("XH_TL_KTRA_CL_HDR_SEQ").then((res) => {
         this.formData.patchValue({
           soPhieuKtcl: res + '/' + this.formData.value.nam + this.symbol,
           maQhns: this.userInfo.DON_VI.maQhns,
           tenDvi: this.userInfo.TEN_DVI,
           ngayLap: dayjs().format('YYYY-MM-DD'),
-          tenNguoiTao: this.userInfo.TEN_DAY_DU
+          ngayKnghiem : dayjs().format('YYYY-MM-DD'),
+          tenNguoiKnghiem: this.userInfo.TEN_DAY_DU
         })
       });
     }
+    this.formData.patchValue({
+      idQdXh : '1',
+      soQdXh : '1/QD',
+      ngayQdXh : dayjs().format('YYYY-MM-DD')
+    });
   }
 
   openDialogDanhSach() {
@@ -171,7 +191,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
     });
   }
 
-  openDialogPhieuXuatKho() {
+  openDialogBienBanLm() {
     if (!this.formData.value.idQdXh) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng chọn số quyết định giao nhiệm vụ xuất hàng");
       return;
@@ -180,11 +200,16 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
       return;
     }
     this.spinner.show();
-    this.phieuXuatKhoScService.getDanhSachKiemTraCl({ idQdXh: this.formData.value.idQdXh }).then((res) => {
+    let body = {
+      idQdXh: this.formData.value.idQdXh,
+      trangThai : STATUS.DA_DUYET_LDCC,
+      phanLoai : this.phanLoai
+    }
+    this.bienBanLayMauThanhLyService.getDsTaoPhieuKnghiemCl(body).then((res) => {
       this.spinner.hide();
       if (res.data) {
         const modalQD = this.modal.create({
-          nzTitle: 'Danh sách phiếu xuất kho',
+          nzTitle: 'Danh sách biên bản lấy mẫu',
           nzContent: DialogTableSelectionComponent,
           nzMaskClosable: false,
           nzClosable: false,
@@ -192,8 +217,8 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
           nzFooter: null,
           nzComponentParams: {
             dataTable: res.data,
-            dataHeader: ['Số phiếu xuất kho', 'Ghi chú'],
-            dataColumn: ['soPhieuXuatKho', 'ghiChu']
+            dataHeader: ['Số biên bản lấy mẫu', 'Ngày lấy mẫu','Ghi chú'],
+            dataColumn: ['soBienBan', 'ngayLayMau','ghiChu']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -211,24 +236,28 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
     let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(cloaiVthh);
     if (dmTieuChuan.data) {
       this.dataTable = dmTieuChuan.data;
-      console.log(this.dataTable);
     }
   }
 
   bindingDataPhieuXuatKho(idPhieuXuatKho) {
     this.spinner.show();
-    this.phieuXuatKhoScService.getDetail(idPhieuXuatKho).then((res) => {
+    this.bienBanLayMauThanhLyService.getDetail(idPhieuXuatKho).then((res) => {
       const data = res.data;
       this.formData.patchValue({
-        soPhieuXuatKho: data.soPhieuXuatKho,
-        idPhieuXuatKho: data.id,
+        soBbLayMau: data.soBienBan,
+        idBbLayMau: data.id,
+        ngayLayMau : data.ngayLayMau,
+        maDiaDiem : data.maDiaDiem,
+        idDiaDiemXh : data.idDiaDiemXh,
         tenDiemKho: data.tenDiemKho,
         tenNhaKho: data.tenNhaKho,
         tenNganKho: data.tenNganKho,
         tenLoKho: data.tenLoKho,
-        diaDiemKho: data.diaDiemKho,
+        loaiVthh : data.loaiVthh,
+        cloaiVthh : data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
+        dviTinh : data.dviTinh,
         nguoiGiaoHang: data.nguoiGiaoHang,
         soCmt: data.soCmt,
         dviNguoiGiaoHang: data.dviNguoiGiaoHang,
@@ -237,7 +266,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
         donViTinh: data.donViTinh,
         ngayXuatKho: data.ngayXuatKho
       });
-      this.danhMucService.getDetail(data.cloaiVthh ? data.cloaiVthh : data.loaiVtt).then((res) => {
+      this.danhMucService.getDetail(data.cloaiVthh ? data.cloaiVthh : data.loaiVthh).then((res) => {
         this.listHinhThucBq = res.data?.loaiHinhBq;
         this.listHinhThucBq.forEach(item => item.checked = true);
       });

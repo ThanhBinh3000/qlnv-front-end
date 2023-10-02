@@ -243,7 +243,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   }
 
   bindingDataDdNhap(data, isDetail?: boolean) {
-    if (!isDetail) {
+    // if (!isDetail) {
       this.dataTable = data.listPhieuKtraCl.filter(x => x.trangThai == STATUS.DA_DUYET_LDCC);
       console.log(this.dataTable, "datatable")
       this.dataTable.forEach(item => {
@@ -279,19 +279,19 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
         ngayBdauNhap: dataFirst,
       })
 
-    }
-    this.formData.patchValue({
-      idDdiemGiaoNvNh: data.id,
-      maDiemKho: data.maDiemKho,
-      tenDiemKho: data.tenDiemKho,
-      maNhaKho: data.maNhaKho,
-      tenNhaKho: data.tenNhaKho,
-      maNganKho: data.maNganKho,
-      tenNganKho: data.tenNganKho,
-      maLoKho: data.maLoKho,
-      tenLoKho: data.tenLoKho,
-      tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
-    });
+    // }
+    // this.formData.patchValue({
+    //   idDdiemGiaoNvNh: data.id,
+    //   maDiemKho: data.maDiemKho,
+    //   tenDiemKho: data.tenDiemKho,
+    //   maNhaKho: data.maNhaKho,
+    //   tenNhaKho: data.tenNhaKho,
+    //   maNganKho: data.maNganKho,
+    //   tenNganKho: data.tenNganKho,
+    //   maLoKho: data.maLoKho,
+    //   tenLoKho: data.tenLoKho,
+    //   tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+    // });
   }
 
   isDisableField() {
@@ -477,8 +477,9 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       .then(async (res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data;
+          console.log(data, "5555")
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.dataTable = data.hhBienBanDayKhoDtlList;
+          // this.dataTable = data.hhBienBanDayKhoDtlList;
           this.fileDinhKems = data.fileDinhKems
           await this.bindingDataQd(data.idQdGiaoNvNh);
           let dataDdnhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
@@ -551,7 +552,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   }
 
   calcTong() {
-    if (this.dataTable) {
+    if (this.dataTable.length > 0) {
       let sum = 0;
       this.dataTable.forEach(item =>{
         sum = item.bcanKeHangHdr.reduce((prev, cur) => {
@@ -559,7 +560,9 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           return prev;
         }, 0);
       })
-      this.formData.value.soLuong = sum;
+      this.formData.patchValue({
+        soLuong: sum
+      })
       return sum;
       // const sum = this.dataTable.reduce((prev, cur) => {
       //   prev += cur.soLuong;

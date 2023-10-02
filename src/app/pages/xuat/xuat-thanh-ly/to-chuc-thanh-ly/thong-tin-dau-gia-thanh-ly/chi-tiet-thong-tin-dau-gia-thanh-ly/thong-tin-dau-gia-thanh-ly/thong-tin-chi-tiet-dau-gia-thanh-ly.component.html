@@ -256,7 +256,7 @@
                         <nz-form-item>
                           <nz-form-label nzRequired [nzNoColon]="true">% Khoảng tiền đặt trước</nz-form-label>
                           <nz-input-number [nzDisabled]="isDisable()" formControlName="khoanTienDatTruoc"
-                                           (ngModelChange)="calculatorTable()" [nzMin]="1"
+                                           [nzMin]="1"
                                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                           </nz-input-number>
@@ -535,7 +535,7 @@
             <div nz-row [nzGutter]="[24, 16]">
               <div nz-col [nzSpan]="24">
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-radio-group formControlName="ketQua" (ngModelChange)="calculatorTable()"
+                  <nz-radio-group formControlName="ketQua" (ngModelChange)="onChangeKetQua($event)"
                                   [nzDisabled]="isDisabled() || isDisable()">
                     <label nz-radio nzValue="1"> Đấu giá thành công </label>
                     <label nz-radio nzValue="0"> Đấu giá không thành công </label>
@@ -802,8 +802,9 @@
                       <tbody>
                       <ng-container *ngFor="let item of dataTable , let i = index">
                         <tr>
-                          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                          <td> {{item.tenChiCuc}} </td>
+                          <td nzShowExpand="true" [nzExpand]="item.expandSet"
+                              (nzExpandChange)="onExpandChange(item, $event)"></td>
+                          <td> {{item.tenDonVi}} </td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -817,46 +818,49 @@
                           <td></td>
                           <td></td>
                         </tr>
-                        <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                          <tr *ngFor="let lv1 of item.childData,let i1=index">
-                            <td></td>
-                            <td></td>
-                            <td>{{lv1.tenDiemKho}} </td>
-                            <td>{{ (lv1.tenLoKho ? lv1.tenLoKho + ' - ' : '') + lv1.tenNganKho }}</td>
-                            <td>
-                              <input nz-input [(ngModel)]="lv1.maDviTsan" [readonly]="isDisabled() || isDisable()"/>
-                            </td>
-                            <td>{{lv1.slDauGia | number : '1.0-1' : 'vi_VN'}} </td>
-                            <td>{{lv1.donViTinh}} </td>
-                            <td>{{lv1.giaTlKhongVat | number : '1.0-1'
-                              : 'vi_VN'}} </td>
-                            <td>{{lv1.giaKhoiDiem | number : '1.0-1'
-                              : 'vi_VN'}} </td>
-                            <td>{{lv1.soTienDatTruoc | number : '1.0-1'
-                              : 'vi_VN'}} </td>
-                            <td>
-                              <nz-input-number
-                                [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                [(ngModel)]="lv1.soLanTraGia"></nz-input-number>
-                            </td>
-                            <td>
-                              <nz-input-number
-                                [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                [(ngModel)]="lv1.donGiaCaoNhat"
-                                (ngModelChange)="changeThanhTien(i, i1)"></nz-input-number>
-                            </td>
-                            <td>{{lv1.thanhTien | number : '1.0-1'
-                              : 'vi_VN'}} </td>
-                            <td>
-                              <nz-select [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
-                                         [(ngModel)]="lv1.toChucCaNhan" (ngModelChange)="changeNTG(i, i1)">
-                                <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
-                                           [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen"></nz-option>
-                              </nz-select>
-                            </td>
-                          </tr>
+                        <ng-container *ngIf="item.expandSet">
+                          <ng-container *ngFor="let chiCuc of item.children , let i = index">
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td>{{chiCuc.tenDiemKho}} </td>
+                              <td>{{ (chiCuc.tenLoKho ? chiCuc.tenLoKho + ' - ' : '') + chiCuc.tenNganKho }}</td>
+                              <td>
+                                <input nz-input [(ngModel)]="chiCuc.maDviTsan"
+                                       [readonly]="isDisabled() || isDisable()"/>
+                              </td>
+                              <td>{{chiCuc.slDaDuyet | number : '1.0-1' : 'vi_VN'}} </td>
+                              <td>{{chiCuc.donViTinh}} </td>
+                              <td>{{chiCuc.donGiaPd | number : '1.0-1'
+                                : 'vi_VN'}} </td>
+                              <td>{{chiCuc.giaKhoiDiem | number : '1.0-1'
+                                : 'vi_VN'}} </td>
+                              <td>{{chiCuc.soTienDatTruoc | number : '1.0-1'
+                                : 'vi_VN'}} </td>
+                              <td>
+                                <nz-input-number
+                                  [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
+                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                                  [(ngModel)]="chiCuc.soLanTraGia"></nz-input-number>
+                              </td>
+                              <td>
+                                <nz-input-number
+                                  [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
+                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                                  [(ngModel)]="chiCuc.donGiaCaoNhat"
+                                ></nz-input-number>
+                              </td>
+                              <td>{{chiCuc.thanhTien | number : '1.0-1'
+                                : 'vi_VN'}} </td>
+                              <td>
+                                <nz-select [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
+                                           [(ngModel)]="chiCuc.toChucCaNhan">
+                                  <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
+                                             [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen"></nz-option>
+                                </nz-select>
+                              </td>
+                            </tr>
+                          </ng-container>
                         </ng-container>
                       </ng-container>
                       </tbody>
@@ -884,7 +888,7 @@
                       <tbody>
                       <ng-container *ngFor="let item of dataTable , let i = index">
                         <tr>
-                          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                          <td [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(i, $event)"></td>
                           <td> {{item.tenChiCuc}} </td>
                           <td></td>
                           <td></td>
@@ -895,7 +899,7 @@
                           <td></td>
                           <td></td>
                         </tr>
-                        <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                        <ng-container *ngIf="item.expandSet">
                           <tr *ngFor="let lv1 of item.childData,let i1=index">
                             <td></td>
                             <td></td>
@@ -971,7 +975,7 @@
         Hoàn thành
       </button>
       &nbsp;
-      <button nz-button (click)="handleOk()" class="modal__button--save"
+      <button nz-button (click)="save()" class="modal__button--save"
               *ngIf="this.formData.value.trangThai == STATUS.DU_THAO">
         <i nz-icon nzType="save"></i>
         Lưu

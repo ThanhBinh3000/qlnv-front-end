@@ -17,6 +17,12 @@ import {MESSAGE} from "../../../../../../../constants/message";
 import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
 import {Base3Component} from "../../../../../../../components/base3/base3.component";
 import { cloneDeep } from 'lodash';
+import {
+  PhieuKtraClThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuKtraClThanhLy.service";
+import {
+  PhieuXuatKhoThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuXuatKhoThanhLy.service";
 @Component({
   selector: 'app-xtl-them-phieu-xk',
   templateUrl: './xtl-them-phieu-xk.component.html',
@@ -27,6 +33,7 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
   dataTableDiaDiem: any[] = [];
   rowItem: any = {};
   symbol: string = ''
+  phanLoai : string;
 
   constructor(
     httpClient: HttpClient,
@@ -36,15 +43,16 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private phieuXuatKhoScService: PhieuXuatKhoScService,
-
+    private _service: PhieuXuatKhoThanhLyService,
     private quyetDinhXhService: QuyetDinhXhService,
+    private phieuKtraClThanhLyService : PhieuKtraClThanhLyService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, phieuXuatKhoScService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     router.events.subscribe((val) => {
       let routerUrl = this.router.url;
       const urlList = routerUrl.split("/");
       this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-phieu-xk';
+      this.phanLoai = urlList[4] == 'xuat-kho-lt' ? 'LT' : 'VT'
     })
     this.previewName = 'sc_phieu_xuat_kho'
     this.getId();
@@ -63,25 +71,32 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
       soQdXh: ['', [Validators.required]],
       idQdXh: ['', [Validators.required]],
       ngayQdXh: ['', [Validators.required]],
-      idScDanhSachHdr: ['', [Validators.required]],
+      soPhieuKtcl: ['', [Validators.required]],
+      idPhieuKtcl: ['', [Validators.required]],
       maDiaDiem: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       tenNhaKho: ['', [Validators.required]],
       tenNganKho: ['', [Validators.required]],
       tenLoKho: [''],
-      loaiVthh: [''],
-      tenLoaiVthh: [''],
+      loaiVthh: ['',[Validators.required]],
+      tenLoaiVthh: ['',[Validators.required]],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       donViTinh: [''],
       tenThuKho: [''],
       tenLanhDaoCc: [''],
+      idKtv : [''],
+      tenKtv : [''],
       keToanTruong: [''],
-      nguoiGiaoHang: [''],
-      soCmt: [''],
-      dviNguoiGiaoHang: [''],
-      diaChi: [''],
-      thoiGianGiaoNhan: [''],
+      nguoiGiaoHang: ['',[Validators.required]],
+      soCmt: ['',[Validators.required]],
+      dviNguoiGiaoHang: ['',[Validators.required]],
+      diaChi: ['',[Validators.required]],
+      thoiGianGiaoNhan: ['',[Validators.required]],
+      tenLoaiHinhNx : ['Xuất thanh lý'],
+      loaiHinhNx : ['6'],
+      tenKieuNx : ['Xuất bán'],
+      kieuNx : ['03'],
       soBangKeCanHang: [''],
       ghiChu: [''],
       tongSoLuong: [''],
@@ -108,14 +123,14 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
           this.rowItem = {
             donViTinh: data.donViTinh,
             tenMatHang: data.tenMatHang,
-            slDaDuyet: data.slDaDuyet
+            duToanKinhPhi: data.duToanKinhPhi
           }
           this.dataTable = res.children;
-          this.bindingDiaDiemXh(res.idQdXh)
         }
       })
     } else {
-      await this.userService.getId("SC_PHIEU_XUAT_KHO_HDR_SEQ").then((res) => {
+      await this.userService.getId("XH_TL_PHIEU_XUAT_KHO_HDR_SEQ").then((res) => {
+        console.log(this.userInfo);
         this.formData.patchValue({
           soPhieuXuatKho: res + '/' + this.formData.value.nam + this.symbol,
           maQhns: this.userInfo.DON_VI.maQhns,
@@ -126,6 +141,11 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
         })
       });
     }
+    this.formData.patchValue({
+      idQdXh : '1',
+      soQdXh : '1/QD',
+      ngayQdXh : dayjs().format('YYYY-MM-DD')
+    });
   }
 
   openDialogDanhSach() {
@@ -181,49 +201,73 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
     });
   }
 
-  openDialogDiaDiem() {
+  openDialogKtraCluong() {
+    if (!this.formData.value.idQdXh) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn số quyết định giao nhiệm vụ xuất hàng");
+      return;
+    }
     if (this.disabled()) {
       return;
     }
-    console.log(this.dataTableDiaDiem);
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách hàng DTQG được sửa chữa',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1200px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.dataTableDiaDiem,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Tên loại', 'Tên chủng loại', 'Số luợng đã duyệt', 'Đơn giá đã duyệt'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'tenLoaiVthh', 'tenCloaiVthh', 'slDaDuyet', 'donGiaPd']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.spinner.show();
-        this.dataTable = [];
-        await this.formData.patchValue({
-          idScDanhSachHdr: data.id,
-          maDiaDiem: data.maDiaDiem,
+    this.spinner.show();
+    let body = {
+      idQdXh: this.formData.value.idQdXh,
+      trangThai : STATUS.DA_DUYET_LDC,
+      phanLoai : this.phanLoai
+    }
+    this.phieuKtraClThanhLyService.getDanhSachTaoPxk(body).then((res) => {
+      this.spinner.hide();
+      if (res.data) {
+        const modalQD = this.modal.create({
+          nzTitle: 'Danh sách phiếu kiểm tra chất lượng',
+          nzContent: DialogTableSelectionComponent,
+          nzMaskClosable: false,
+          nzClosable: false,
+          nzWidth: '900px',
+          nzFooter: null,
+          nzComponentParams: {
+            dataTable: res.data,
+            dataHeader: ['Số phiếu kiếm nghiệm chất lượng', 'Ngày kiểm nghiệm','Ghi chú'],
+            dataColumn: ['soPhieuKtcl', 'ngayKnghiem','ghiChu']
+          },
+        });
+        modalQD.afterClose.subscribe(async (data) => {
+          if (data) {
+            await this.bindingDataPhieuKtraCl(data.id)
+          }
+        });
+      }
+    })
+  }
+
+  async bindingDataPhieuKtraCl(idPhieuKtraCl){
+    await this.phieuKtraClThanhLyService.getDetail(idPhieuKtraCl).then((res)=>{
+      if(res.data){
+        const data = res.data;
+        this.formData.patchValue({
+          idPhieuKtcl : data.id,
+          soPhieuKtcl : data.soPhieuKtcl,
+          maDiaDiem : data.maDiaDiem,
+          idDiaDiemXh : data.idDiaDiemXh,
           tenDiemKho: data.tenDiemKho,
           tenNhaKho: data.tenNhaKho,
           tenNganKho: data.tenNganKho,
           tenLoKho: data.tenLoKho,
-          loaiVthh: data.loaiVthh,
+          loaiVthh : data.loaiVthh,
+          cloaiVthh : data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
-          cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
-          donViTinh: data.donViTinh,
-        })
+          dviTinh : data.dviTinh,
+          idKtv : data.idNguoiKnghiem,
+          tenKtv : data.tenNguoiKnghiem
+        });
         this.rowItem = {
-          tenMatHang: data.tenCloaiVthh,
-          donViTinh: data.donViTinh,
-          slDaDuyet: data.slDaDuyet
+          tenMatHang : data.tenCloaiVthh ? data.tenCloaiVthh : data.tenLoaiVthh,
+          // donViTinh : data.donViTinh,
+          duToanKinhPhi : data.duToanKinhPhi
         }
-        this.spinner.hide();
       }
-    });
+    })
   }
 
   showSave() {
@@ -239,11 +283,11 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
       this.spinner.hide();
       return;
     }
-    if (this.formData.value.tongSoLuong == null || this.formData.value.tongSoLuong <= 0) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, "Tổng số lượng xuất phải lớn hơn 0");
-      return;
-    }
+    // if (this.formData.value.tongSoLuong == null || this.formData.value.tongSoLuong <= 0) {
+    //   this.spinner.hide();
+    //   this.notification.error(MESSAGE.ERROR, "Tổng số lượng xuất phải lớn hơn 0");
+    //   return;
+    // }
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.children = this.dataTable;
@@ -294,16 +338,16 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
   }
 
   addRow() {
-    if (this.validateRow()) {
+    // if (this.validateRow()) {
       let dataRow = cloneDeep(this.rowItem);
       this.dataTable.push(dataRow);
-      this.rowItem.slThucTe = 0;
+      this.rowItem.slXuatThucTe = 0;
       this.rowItem.maSo = null;
-      console.log(this.calTongSlThucTe());
+      this.rowItem.kinhPhiThucTe = null;
       this.formData.patchValue({
         tongSoLuong: this.calTongSlThucTe()
       })
-    }
+    // }
   }
 
   deleteRow(i: number): void {
@@ -336,7 +380,7 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
     if (this.dataTable) {
       let sum = 0
       this.dataTable.forEach(item => {
-        sum += this.nvl(item.slThucTe);
+        sum += this.nvl(item.slXuatThucTe);
       })
       return sum;
     }

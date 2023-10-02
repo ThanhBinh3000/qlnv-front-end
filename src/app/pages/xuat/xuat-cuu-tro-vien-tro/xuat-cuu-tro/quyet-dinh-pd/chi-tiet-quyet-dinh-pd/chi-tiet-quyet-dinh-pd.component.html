@@ -116,7 +116,7 @@
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
                 <nz-radio-group [nzDisabled]="this.formData.value.id" nzSize="small" class="rdo-input grid-4"
-                  formControlName="tenVthh">
+                  formControlName="tenVthh" (ngModelChange)="changeVthh($event)">
                   <nz-form-item>
                     <label nz-radio nzValue="Gạo tẻ">Gạo tẻ</label>
                   </nz-form-item>

@@ -26,6 +26,7 @@ import {
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
@@ -58,6 +59,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private bienBanLayMauXhService: BienBanLayMauXhService,
     private xhPhieuKnghiemCluongService: XhPhieuKnghiemCluongService
   ) {
@@ -343,16 +345,19 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
       });
-      if (data.children && data.children.length > 0) {
-        this.dataTable = data.children
-          .filter(item => item.type === BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG && item.checked === true)
-          .map(item => ({
-            ma: item.ma,
-            chiTieuCl: item.ten,
-            chiSoCl: item.chiSoCl,
-            phuongPhap: item.phuongPhap,
-          }));
+      if(this.formData.value.cloaiVthh){
+        await this.loadDsQcTheoCloaiVthh()
       }
+      // if (data.children && data.children.length > 0) {
+      //   this.dataTable = data.children
+      //     .filter(item => item.type === BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG && item.checked === true)
+      //     .map(item => ({
+      //       ma: item.ma,
+      //       chiTieuCl: item.ten,
+      //       chiSoCl: item.chiSoCl,
+      //       phuongPhap: item.phuongPhap,
+      //     }));
+      // }
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -459,5 +464,23 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     this.formData.controls["ngayKiemNghiemMau"].setValidators([Validators.required]);
     this.formData.controls["ketQua"].setValidators([Validators.required]);
     this.formData.controls["nhanXet"].setValidators([Validators.required]);
+  }
+
+  async loadDsQcTheoCloaiVthh() {
+    this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh).then(res => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.dataTable = res.data
+          this.dataTable.forEach(element => {
+            element.edit = false
+          });
+          console.log(this.dataTable, "dataTable")
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }).catch(err => {
+      this.notification.error(MESSAGE.ERROR, err.msg);
+    });
   }
 }

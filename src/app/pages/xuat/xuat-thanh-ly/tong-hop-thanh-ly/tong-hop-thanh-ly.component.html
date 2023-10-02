@@ -92,16 +92,15 @@
           <th>Nhà/Ngăn/Lô kho</th>
           <th>Ngày nhập kho</th>
           <th>SL tồn</th>
-          <th>SL hỏng cần TL</th>
-          <th>SL TL đã duyệt</th>
-          <th>SL còn lại cần tL</th>
+          <th>SL đề xuất thanh lý</th>
+          <th>SL thanh lý đã duyệt</th>
+          <th>SL còn lại cần thanh lý</th>
           <th>ĐVT</th>
           <th>Ngày đề xuất</th>
-          <th>Lý do cần TL</th>
-          <th>Thời hạn xuất TL dự kiến</th>
-          <th>Thời hạn nhập TL dự kiến</th>
+          <th>Lý do cần thanh lý</th>
+          <th>Thời hạn đề xuất thanh lý</th>
           <th>Trạng thái</th>
-          <th>Trạng thái TL</th>
+          <th>Trạng thái thanh lý</th>
           <th nzWidth="35px">Hành động</th>
         </tr>
       </thead>
@@ -125,8 +124,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
-            <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
+            <td></td>
             <td>{{item.tenTrangThai}}</td>
             <td></td>
             <td>
@@ -162,7 +160,6 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
               </tr>
               <ng-container *ngFor="let data of chiCuc.children , let i = index">
                 <tr>
@@ -171,22 +168,19 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td>{{data.scDanhSachHdr.tenLoaiVthh}}</td>
-                  <td>{{data.scDanhSachHdr.tenCloaiVthh}}</td>
-                  <td>{{data.scDanhSachHdr.tenDiemKho}}</td>
-                  <td>{{data.scDanhSachHdr.tenNhaKho}}/{{data.scDanhSachHdr.tenNganKho}}/{{data.scDanhSachHdr.tenLoKho}}
-                  </td>
-                  <td>{{data.scDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
-                  <td>{{data.scDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.scDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.scDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.scDanhSachHdr.slDeXuat - data.scDanhSachHdr.slDaDuyet | number : '1.0-1'
-                    : 'vi_VN' }}</td>
-                  <td>{{data.scDanhSachHdr.donViTinh }}</td>
-                  <td>{{data.scDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
-                  <td>{{data.scDanhSachHdr.lyDo}}</td>
-                  <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
-                  <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
+                  <td>{{data.xhTlDanhSachHdr.tenLoaiVthh}}</td>
+                  <td>{{data.xhTlDanhSachHdr.tenCloaiVthh}}</td>
+                  <td>{{data.xhTlDanhSachHdr.tenDiemKho}}</td>
+                  <td>{{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}/{{data.xhTlDanhSachHdr.tenLoKho}}</td>
+                  <td>{{data.xhTlDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
+                  <td>{{data.xhTlDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{data.xhTlDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{data.xhTlDanhSachHdr.slDeXuat - data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
+                  <td>{{data.xhTlDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
+                  <td>{{data.xhTlDanhSachHdr.lyDo}}</td>
+                  <td>{{item.thoiGianTlTu | date : 'dd/MM/yyyy'}} - {{item.thoiGianTlDen | date : 'dd/MM/yyyy'}}</td>
                   <td></td>
                   <td></td>
                   <td></td>

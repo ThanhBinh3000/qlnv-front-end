@@ -126,7 +126,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     } finally {
       await this.spinner.hide();
     }
-    this.itemSelected = null;
+    // this.itemSelected = null;
   }
 
   clearForm() {

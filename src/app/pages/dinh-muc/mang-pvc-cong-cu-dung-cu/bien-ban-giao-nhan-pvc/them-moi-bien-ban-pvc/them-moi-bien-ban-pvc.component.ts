@@ -67,8 +67,8 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
       listQlDinhMucBbGnLoaiHh: [null],
       listQlDinhMucPvcBbGnDaiDienBenNhan: [null],
       listQlDinhMucPvcBbGnDaiDienBenGiao: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: ['78'],
+      tenTrangThai: ['Đang nhập dữ liệu'],
     });
   }
 
@@ -138,7 +138,7 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
     }
   }
 
-  async save() {
+  async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -153,7 +153,11 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
     body.soBienBan = body.soBienBan + this.maBb
     body.fileDinhKems = this.fileDinhKem
     let data = await this.createUpdate(body);
-    if (data) {
+    this.id = data.id;
+    if(isGuiDuyet){
+      await this.pheDuyet();
+    }
+    if (data && !isGuiDuyet) {
       this.goBack()
     }
   }
@@ -161,7 +165,7 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
+      case STATUS.DANG_NHAP_DU_LIEU :
       case STATUS.TUCHOI_CB_CUC : {
         trangThai = STATUS.DA_KY;
         break;

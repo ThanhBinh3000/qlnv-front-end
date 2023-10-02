@@ -42,19 +42,23 @@ export class ChitietThComponent extends Base3Component implements OnInit {
       tenDanhSach: [null, [Validators.required]],
       thoiHanXuat: [null, [Validators.required]],
       thoiHanNhap: [null, [Validators.required]],
-      thoiGianTh: [null, [Validators.required]],
+      ngayTao: [null, [Validators.required]],
       trangThai: [],
-      tenDvi: []
+      tenDvi: [],
+      thoiGianTl : []
     })
   }
 
   ngOnInit(): void {
     this.dataTable = []
     this.detail(this.id).then((res) => {
+      this.formData.patchValue({
+        thoiGianTl : [res.thoiGianTlTu,res.thoiGianTlDen]
+      })
       this.dataTable.push(res);
       this.dataTable.forEach(item => {
         item.expandSet = true;
-        item.groupChiCuc = chain(item.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
+        item.groupChiCuc = chain(item.children).groupBy('xhTlDanhSachHdr.tenChiCuc').map((value, key) => ({
           tenDonVi: key,
           children: value,
         })

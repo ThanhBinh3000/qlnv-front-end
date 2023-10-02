@@ -165,29 +165,27 @@
                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
               </th>
               <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-              <td>{{ data.nam }}</td>
-              <td>{{ data.soQdinh }}</td>
-              <td>{{ data.ngayKyQdinh | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.tenLoaiDc}}</td>
-              <td>{{ data.tenLoaiQdinh }}</td>
-              <td>{{ data.trichYeu }}</td>
-              <td>{{ data.soDxuat }}</td>
+              <td>{{ data.namKeHoach }}</td>
+              <td>{{ data.soDeXuat }}</td>
+              <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.trichYeu}}</td>
+              <td>{{ data.soQuyetDinh }}</td>
               <td>{{ data.tenTrangThai }}</td>
+              <td>{{ data.tenTrangThai }}</td>
+              <td>{{ data.soQuyetDinh }}</td>
               <td class="text-center">
-                <a *ngIf="(data.trangThai === STATUS.CHO_DUYET_TP || data.trangThai === STATUS.CHODUYET_TBP_TVQT || data.trangThai === STATUS.CHO_DUYET_LDCC || data.trangThai === STATUS.CHO_DUYET_LDC || data.trangThai === STATUS.CHO_DUYET_LDTC) && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
+                <a *ngIf="data.trangThai === STATUS.CHO_DUYET_TP || data.trangThai === STATUS.CHO_DUYET_LDC"
                   (click)="redirectDetail(data.id, true)">
                   <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                 </a>
-                <a *ngIf="isTongCuc() || ((data.trangThai === STATUS.BAN_HANH || data.trangThai === STATUS.YC_CHICUC_PHANBO_DC) && isCuc()) || (data.trangThai !== STATUS.YC_CHICUC_PHANBO_DC && data.trangThai !== STATUS.CHODUYET_TBP_TVQT  && data.trangThai !== STATUS.CHO_DUYET_LDCC && isChiCuc()) && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
-                  (click)="redirectDetail(data.id, true)">
+                <a *ngIf="data.trangThai === STATUS.DA_DUYET_LDC" (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
-                <a *ngIf="((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && isCuc()) || (data.trangThai == STATUS.YC_CHICUC_PHANBO_DC && isChiCuc()) && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA')"
+                <a *ngIf="((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && isCuc())"
                   (click)="redirectDetail(data.id, false)">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
-                <a *ngIf="data.trangThai == STATUS.DU_THAO && isCuc() && userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA')"
-                  (click)="delete(data,'')">
+                <a *ngIf="data.trangThai == STATUS.DU_THAO && isCuc()" (click)="delete(data,'')">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
@@ -217,7 +215,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-de-xuat-dieu-chinh [isViewDetail]="isView"
+    <app-thong-tin-de-xuat-dieu-chinh [isViewDetail]="isView" [id]="selectedId"
       (showListEvent)="quayLai()"></app-thong-tin-de-xuat-dieu-chinh>
   </div>
 

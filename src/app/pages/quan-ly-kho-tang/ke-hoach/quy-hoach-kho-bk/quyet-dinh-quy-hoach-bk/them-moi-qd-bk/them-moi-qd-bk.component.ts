@@ -138,15 +138,18 @@ export class ThemMoiQdBkComponent implements OnInit {
       type.tenCuc = chiCuc[0].tenDvi;
       type.maChiCuc = null;
       type.maDiemKho = null;
+      type.diaDiem = null;
     } else {
       if (pa == 'TL') {
         this.rowItemTL.tenCuc = chiCuc[0].tenDvi;
         this.rowItemTL.maChiCuc = null;
         this.rowItemTL.maDiemKho = null;
+        this.rowItemTL.diaDiem = null;
       } else if (pa == 'DTM') {
         this.rowItemDTM.tenCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maChiCuc = null;
         this.rowItemDTM.maDiemKho = null;
+        this.rowItemDTM.diaDiem = null;
       }
     }
   }
@@ -164,13 +167,16 @@ export class ThemMoiQdBkComponent implements OnInit {
     if (type) {
       type.tenChiCuc = chiCuc[0].tenDvi;
       type.maDiemKho = null;
+      type.diaDiem = null;
     } else {
       if (pa == 'TL') {
         this.rowItemTL.tenChiCuc = chiCuc[0].tenDvi;
         this.rowItemTL.maDiemKho = null
+        this.rowItemTL.diaDiem = null
       } else if (pa == 'DTM') {
         this.rowItemDTM.tenChiCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maDiemKho = null
+        this.rowItemDTM.diaDiem = null
       }
     }
   }
@@ -450,8 +456,9 @@ export class ThemMoiQdBkComponent implements OnInit {
 
   async onChangDiemKho(event, type?) {
     const diemKho = this.danhSachDiemKho.filter(item => item.maDvi == event);
-    let res = await this.getDetailMlkByKey(event, '4')
+    let res = await this.getDetailMlkByKey(event, "4")
     if (res) {
+      console.log(res,111)
       if (diemKho) {
         if (type) {
           type.tenDiemKho = diemKho[0].tenDvi
