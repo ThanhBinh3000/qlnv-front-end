@@ -24,8 +24,6 @@ import {
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
 import {Base2Component} from 'src/app/components/base2/base2.component';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import {saveAs} from 'file-saver';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {QuyetDinhGiaCuaBtcService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
@@ -42,6 +40,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   @Input() showFromTH: boolean;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   listPhuongThucThanhToan: any[] = [];
@@ -55,7 +54,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   pdfSrc: any;
   wordSrc: any;
   dataDonGiaDuocDuyet: any;
-  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
 
   constructor(
     httpClient: HttpClient,
@@ -311,7 +309,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       loaiVthh: loaiVthh,
       cloaiVthh: cloaiVthh,
       trangThai: STATUS.BAN_HANH,
-      maDvi: this.formData.value.maDvi.substring(0,6),
+      maDvi: this.formData.value.maDvi.substring(0, 6),
       loaiGia: 'LG04'
     };
     const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
@@ -407,7 +405,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
         });
       }
-      const donGiaDuocDuyet =this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(item.maDvi);
+      let donGiaDuocDuyet = 0;
+      if (this.loaiVthh === LOAI_HANG_DTQG.VAT_TU) {
+        const firstItem = this.dataDonGiaDuocDuyet?.[0];
+        donGiaDuocDuyet = firstItem?.giaQdTcdt || 0;
+      } else {
+        donGiaDuocDuyet = donGiaMap.get(item.maDvi);
+      }
       item.children.forEach((child) => {
         child.donGiaDuocDuyet = donGiaDuocDuyet || null;
         child.giaKhoiDiemDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0);
@@ -557,44 +561,14 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     this.formData.controls["ngayTao"].setValidators([Validators.required]);
     this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
     this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
-    // this.formData.controls["tchuanCluong"].setValidators([Validators.required]);
     this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
     this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
     this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
     this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
     this.formData.controls["thongBao"].setValidators([Validators.required]);
     this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-  }
-
-  async preview(id) {
-    try {
-      const res = await this.deXuatKhBanDauGiaService.preview({
-        "tenBaoCao": "de-xuat-ke-hoach-ban-dau-gia",
-        "id": id
-      });
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    } catch (error) {
-      console.log('error', error);
-      this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+    if (!LOAI_HANG_DTQG.VAT_TU) {
+      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
     }
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, "De-xuat-ke-hoach-ban-dau-gia.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "De-xuat-ke-hoach-ban-dau-gia.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 }

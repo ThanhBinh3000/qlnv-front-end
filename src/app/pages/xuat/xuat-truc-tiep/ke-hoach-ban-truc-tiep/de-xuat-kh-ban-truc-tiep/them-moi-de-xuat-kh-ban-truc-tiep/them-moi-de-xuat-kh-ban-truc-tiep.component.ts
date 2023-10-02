@@ -50,6 +50,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   listVatTu = [];
   dataDonGiaDuocDuyet: any;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -147,7 +148,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-      await this.getDetail(this.idInput);
+    await this.getDetail(this.idInput);
   }
 
   async getDetail(id: number) {
@@ -291,6 +292,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       });
     }
   }
+
   async donGiaDuocDuyet() {
     const {namKh, loaiVthh, cloaiVthh} = this.formData.value;
     const bodyPag = {
@@ -298,7 +300,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       loaiVthh: loaiVthh,
       cloaiVthh: cloaiVthh,
       trangThai: STATUS.BAN_HANH,
-      maDvi: this.formData.value.maDvi.substring(0,6),
+      maDvi: this.formData.value.maDvi.substring(0, 6),
       loaiGia: 'LG04'
     };
     const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
@@ -530,13 +532,14 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.formData.controls["ngayTao"].setValidators([Validators.required]);
     this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
     this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
-    // this.formData.controls["tchuanCluong"].setValidators([Validators.required]);
     this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
     this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
     this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
     this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
     this.formData.controls["thongBao"].setValidators([Validators.required]);
     this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    if (!LOAI_HANG_DTQG.VAT_TU) {
+      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    }
   }
 }
