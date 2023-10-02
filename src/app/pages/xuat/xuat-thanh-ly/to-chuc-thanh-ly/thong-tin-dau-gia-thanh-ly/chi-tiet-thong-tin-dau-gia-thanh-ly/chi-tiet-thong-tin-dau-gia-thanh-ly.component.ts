@@ -44,6 +44,7 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
     private toChucThucHienThanhLyService: ToChucThucHienThanhLyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
+    this.defaultURL = '/xuat/xuat-thanh-ly/to-chuc/thong-tin-dau-gia'
     this.formData = this.fb.group(
       {
         id: [],
@@ -92,9 +93,7 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
       idQdTl : this.id
     }
     await this.toChucThucHienThanhLyService.getAll(body).then((res)=>{
-      console.log(res)
       this.dataTable = res.data;
-
     })
   }
 
@@ -224,7 +223,7 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
 
   themMoiPhienDauGia($event, data?: any) {
     $event.stopPropagation();
-    if (!data) {
+    if (!data && this.dataTable?.length > 0) {
       let dataCheck = this.dataTable.filter(item => {
         return item.trangThai == this.STATUS.DU_THAO
       })
@@ -232,25 +231,42 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
         this.notification.error(MESSAGE.ERROR, "Không thể thêm mới, vì đang có thông tin đấu giá chưa hoàn thành cập nhập, xin viu lòng hoàn thành cập nhập");
         return;
       }
-    } const modalQD = this.modal.create({
-      nzTitle: '',
-      nzContent: ThongTinChiTietDauGiaThanhLyComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '2000px',
-      nzFooter: null,
-      nzBodyStyle: { 'overflow-y': 'auto' },
-      nzComponentParams: {
-        isModal: true,
-        idQdTl: this.id,
-        soQdTl: this.formData.value.soQd,
-        dataDetail: data,
-        soLanDauGia: this.dataTable.length
-      },
-    });
-    modalQD.afterClose.subscribe((data) => {
-      this.loadThongTinDauGia()
-    });
+      const modalQD = this.modal.create({
+        nzTitle: '',
+        nzContent: ThongTinChiTietDauGiaThanhLyComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '2000px',
+        nzFooter: null,
+        nzBodyStyle: { 'overflow-y': 'auto' },
+        nzComponentParams: {
+          isModal: true,
+          idQdTl: this.id,
+          soLanDauGia: this.dataTable ? this.dataTable.length : 0
+        },
+      });
+      modalQD.afterClose.subscribe((data) => {
+        this.loadThongTinDauGia()
+      });
+    }else{
+      const modalQD = this.modal.create({
+        nzTitle: '',
+        nzContent: ThongTinChiTietDauGiaThanhLyComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '2000px',
+        nzFooter: null,
+        nzBodyStyle: { 'overflow-y': 'auto' },
+        nzComponentParams: {
+          isModal: true,
+          idInput : data?.id,
+          soLanDauGia: this.dataTable ? this.dataTable.length : 0
+        },
+      });
+      modalQD.afterClose.subscribe((data) => {
+        this.loadThongTinDauGia()
+      });
+    }
   }
 
 }

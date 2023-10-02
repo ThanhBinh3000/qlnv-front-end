@@ -9,10 +9,10 @@ import {UserService} from "../../../../../services/user.service";
   styleUrls: ['./xuat-kho.component.scss']
 })
 export class XuatKhoComponent implements OnInit {
-
   defaultUrl: string = 'xuat/xuat-thanh-ly/xuat-hang'
-
   routerUrl: string = "";
+
+  routes: any[] = []
   constructor(
     private router: Router,
     public globals: Globals,
@@ -21,32 +21,52 @@ export class XuatKhoComponent implements OnInit {
     router.events.subscribe((val) => {
       this.routerUrl = this.router.url;
       const urlList = this.routerUrl.split("/");
-      this.defaultUrl  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[urlList.length-2];
+      this.defaultUrl  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4];
+      if(urlList[4] == 'xuat-kho-lt'){
+          this.routes = [
+            {
+              url: '/xtl-phieu-xk',
+              name: 'Phiếu xuất kho',
+              accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
+            },
+            {
+              url: '/xtl-bang-ke-ch',
+              name: 'Bảng kê cân hàng',
+              accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
+            },
+            {
+              url: '/xtl-bb-tinh-kho',
+              name: 'Biên bản tịnh khó',
+              accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+            },
+            {
+              url: '/xtl-bb-hao-doi',
+              name: 'Biên bản hao dôi',
+              accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+            },
+          ]
+      }else{
+        this.routes = [
+          {
+            url: '/xtl-phieu-xk',
+            name: 'Phiếu xuất kho',
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
+          },
+          {
+            url: '/xtl-bang-ke-ch',
+            name: 'Bảng kê cân hàng',
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
+          },
+          {
+            url: '/xtl-bb-tinh-kho',
+            name: 'Biên bản tịnh khó',
+            accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+          }]
+      };
     })
   }
 
-  routes: any[] = [
-    {
-      url: '/xtl-phieu-xk',
-      name: 'Phiếu xuất kho',
-      accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
-    },
-    {
-      url: '/xtl-bang-ke-ch',
-      name: 'Bảng kê cân hàng',
-      accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
-    },
-    {
-      url: '/xtl-bb-tinh-kho',
-      name: 'Biên bản tịnh khó',
-      accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
-    },
-    {
-      url: '/xtl-bb-hao-doi',
-      name: 'Biên bản hao dôi',
-      accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
-    },
-  ]
+
 
   ngOnInit(): void {
     if (this.router.url) {

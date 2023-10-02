@@ -8,10 +8,9 @@ import { environment } from "src/environments/environment";
   providedIn: 'root'
 })
 export class HoSoThanhLyService extends BaseService {
-  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-thanh-ly/ho-so', '');
+    super(httpClient, 'xuat-hang/xuat-thanh-ly/ho-so', '/qlnv-hang');
   }
 
 

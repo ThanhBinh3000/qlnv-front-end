@@ -17,7 +17,7 @@ import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
+import { FormGroup, Validators } from "@angular/forms";
 import { STATUS } from "src/app/constants/status";
 import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
 import { MESSAGE } from "src/app/constants/message";
@@ -102,6 +102,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   tongSoLuongQD: number = 0;
   loaiNhapXuat: string;
   kieuNhapXuat: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -134,7 +135,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       tongSoLuong: [],
       thanhTien: [],
       soLuongXuatCap: [],
-      loaiVthh: [],
+      loaiVthh: [LOAI_HANG_DTQG.GAO],
       cloaiVthh: [],
       tenVthh: ["Gạo tẻ"],
       loaiNhapXuat: [],
@@ -180,6 +181,15 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
+    }
+  }
+  bidingDataInFormGroupAndIgnore(formGroup: FormGroup, dataBinding: any, ignoreField: Array<string>) {
+    if (dataBinding) {
+      for (const name in dataBinding) {
+        if (formGroup.controls.hasOwnProperty(name) && !ignoreField.includes(name)) {
+          formGroup.controls[name].setValue(dataBinding[name]);
+        }
+      }
     }
   }
 
@@ -303,7 +313,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               // this.formData.patchValue({ quyetDinhPdDtl: detail.deXuatCuuTro.map(f => ({ ...f, mId: uuidv4() })) });
               this.formData.patchValue({ quyetDinhPdDtl: detail.deXuatCuuTro });
             }
-
+            console.log("aaa", detail.deXuatCuuTro, this.formData.value.quyetDinhPdDtl, data)
             delete data.id;
             delete data.trangThai;
             delete data.tenTrangThai;
@@ -312,10 +322,11 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             delete data.fileDinhKem;
             delete data.trichYeu;
             data.ngayThop = data.ngayTao;
+            debugger;
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
-
-            // this.formData.patchValue(data, { onlySelf: true, emitEvent: false });
-            this.formData.patchValue(data);
+            // this.formData.patchValue(data);
+            this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh']);
+            this.formData.controls["tenVthh"].setValue(data.tenVthh, { emitEvent: false })
             await this.buildTableView();
             if (this.phuongAnHdrViewCache[0]) {
               await this.selectRow(this.phuongAnHdrViewCache[0]);
@@ -398,7 +409,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 
             // this.formData.patchValue(data, { onlySelf: true, emitEvent: false });
-            this.formData.patchValue(data);
+            // this.formData.patchValue(data);
+            this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh']);
+            this.formData.controls["tenVthh"].setValue(data.tenVthh, { emitEvent: false })
             this.loaiNhapXuat = detail.loaiNhapXuat;
             this.kieuNhapXuat = detail.kieuNhapXuat;
             this.mucDichXuat = detail.mucDichXuat
@@ -416,6 +429,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     }
   }
   changeVthh($event) {
+    console.log("event", $event)
     if ($event == TEN_LOAI_VTHH.THOC) {
       this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
     } else if ($event == TEN_LOAI_VTHH.GAO) {
@@ -424,7 +438,16 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg" });
     } else {
       this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
-    }
+    };
+    this.formData.patchValue({ quyetDinhPdDtl: [12] });
+    this.quyetDinhPdDtlCache = [];
+    this.tongSoLuongDx = 0;
+    this.tongSoLuongChuyenCapThocDx = 0;
+    this.mucDichXuat = "";
+    this.tongSoLuong = 0;
+    this.tongSoLuongChuyenCapThoc = 0;
+    this.loaiNhapXuat = "";
+    this.kieuNhapXuat = "";
   }
   async buildTableView() {
     if (this.formData.value.type === "TH") {
@@ -490,10 +513,12 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             };
           }).value();
       } else {
+        console.log("quyetDinhPdDtl", this.formData.value.quyetDinhPdDtl)
         this.phuongAnHdrView = chain(this.formData.value.quyetDinhPdDtl)
           .groupBy("soDx")
           .map((value, key) => {
             let row = value.find(s => s.soDx === key);
+            if (!row) return {};
             // let rs = row ? chain(value)
             //   .groupBy("noiDungDx")
             //   .map((v, k) => {

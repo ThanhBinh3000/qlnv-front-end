@@ -30,13 +30,16 @@ import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from '../../../../../constants/status';
 import { AMOUNT, AMOUNT_NO_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../Utility/utils';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 
 @Component({
   selector: 'app-thong-tin-de-nghi-cap-von-bo-nganh',
   templateUrl: './thong-tin-de-nghi-cap-von-bo-nganh.component.html',
   styleUrls: ['./thong-tin-de-nghi-cap-von-bo-nganh.component.scss'],
 })
-export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
+export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component implements OnInit {
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() isView: boolean;
@@ -143,20 +146,19 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     thanhTienNt: 0,
     thanhTien: 0,
   };
-
+  previewName: string = 'de_nghi_cap_von_dtqg';
   constructor(
-    private modal: NzModalService,
     private danhMucService: DanhMucService,
     private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private fb: FormBuilder,
-    public globals: Globals,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     public userService: UserService,
     private donviService: DonviService,
-    private helperService: HelperService,
     private deNghiCapVonBoNganhService: DeNghiCapVonBoNganhService,
-  ) {
+  ) {super(httpClient, storageService, notification, spinner, modal, deNghiCapVonBoNganhService);
   }
 
   async ngOnInit() {
@@ -193,6 +195,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
             ngayDeNghi: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ngayDeNghi : null],
             ghiChu: [this.itemDnCapVonBn ? this.itemDnCapVonBn.ghiChu : null],
             trangThai: [this.itemDnCapVonBn ? this.itemDnCapVonBn.trangThai : null],
+            id: [this.itemDnCapVonBn ? this.itemDnCapVonBn.id : null],
           });
           this.setTitle();
           if (this.itemDnCapVonBn.fileDinhKems) {

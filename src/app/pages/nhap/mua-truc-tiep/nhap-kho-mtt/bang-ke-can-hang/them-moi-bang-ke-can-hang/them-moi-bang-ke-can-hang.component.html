@@ -367,22 +367,49 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr *ngFor="let item of dataTable; let i = index">
-                        <td>{{i + 1}}</td>
-                        <td>{{item.maCan}}</td>
-                        <td>{{item.soBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>{{item.trongLuongCaBi | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>
-                            <a (click)="editRow(item.id)">
-                                <i class="fa fa-pencil" title="Sửa"></i>
-                            </a>
-                            <a (click)="deleteRow(item)">
-                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
+              <tbody>
+              <tr *ngFor="let data of dataTable; let idx = index">
+                <ng-container *ngIf="(dataEdit && dataEdit[idx] && !dataEdit[idx].edit); else editTemplate ">
+                  <td class="text-center">{{idx + 1}}</td>
+                  <td>{{data.maCan}}</td>
+                  <td>{{data.soBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{data.trongLuongCaBi | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td *ngIf="!isDisabled()">
+                    <a (click)="startEdit(idx)">
+                      <i class=" fa fa-pencil"></i>
+                    </a>
+                    <a (click)="deleteRow(idx)" class="text-center">
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <ng-template #editTemplate>
+                  <td class="text-center">{{idx + 1}} </td>
+                  <td>
+                    <input nz-input [(ngModel)]="dataEdit[idx].data.maCan"/>
+                  </td>
+                  <td>
+                    <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                     [nzParser]="globals.parser"
+                                     [(ngModel)]="dataEdit[idx].data.soBaoBi"></nz-input-number>
+                  </td>
+                  <td>
+                    <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                     [nzParser]="globals.parser"
+                                     [(ngModel)]="dataEdit[idx].data.trongLuongCaBi"></nz-input-number>
+                  </td>
+
+                  <td class="text-center" *ngIf="!isDisabled()">
+                    <a (click)="saveEdit(idx)" class="save">
+                      <i class="icon htvbdh_tcdt_save"></i>
+                    </a>
+                    <a (click)="cancelEdit(idx)">
+                      <i class="fa fa-ban do"></i>
+                    </a>
+                  </td>
+                </ng-template>
+              </tr>
+              </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="2"></td>

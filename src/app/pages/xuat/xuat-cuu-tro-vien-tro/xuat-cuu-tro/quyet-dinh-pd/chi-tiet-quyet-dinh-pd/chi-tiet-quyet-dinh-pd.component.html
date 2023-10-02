@@ -115,8 +115,8 @@
           <div nz-col [nzSpan]="12" class="loaiVthh-group">
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
-                <nz-radio-group [nzDisabled]="this.formData.value.id" nzSize="small" class="rdo-input grid-4"
-                  formControlName="tenVthh" (ngModelChange)="changeVthh($event)">
+                <nz-radio-group [nzDisabled]="formData.value.id" nzSize="small" class="rdo-input grid-4"
+                  nzName="radiogroup" formControlName="tenVthh" (ngModelChange)="changeVthh($event)">
                   <nz-form-item>
                     <label nz-radio nzValue="Gạo tẻ">Gạo tẻ</label>
                   </nz-form-item>
@@ -130,13 +130,13 @@
                     <label nz-radio nzValue="Vật tư thiết bị">Vật tư thiết bị</label>
                   </nz-form-item>
                 </nz-radio-group>
-                <nz-radio-group [nzDisabled]="this.formData.value.id" nzSize="small" class="rdo-input grid-2"
+                <nz-radio-group [nzDisabled]="formData.value.id" nzSize="small" class="rdo-input grid-2"
                   formControlName="type">
                   <nz-form-item>
                     <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
-                        <input [readonly]="true" nz-input formControlName="idTongHop" readonly="true" />
+                        <input [readonly]="true" nz-input formControlName="idTongHop" />
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
@@ -144,7 +144,7 @@
                     <label nz-radio nzValue="TTr">Chọn Số công văn/tờ trình</label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                        <input [readonly]="true" nz-input formControlName="soDx" readonly="true" />
+                        <input [readonly]="true" nz-input formControlName="soDx" />
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
@@ -272,7 +272,7 @@
                 <td>{{item.soDx}}</td>
                 <td>{{item.ngayKyDx}}</td>
                 <td>{{item.trichYeuDx}}</td>
-                <td>{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
               </tr>
             </ng-container>
           </tbody>
@@ -372,10 +372,10 @@
                           <th colspan="3">Chủng loại hàng DTQG</th>
                         </ng-container>
                         <th colspan="2">Cục DTNN KV</th>
-                        <th rowspan="2">SL xuất cứu trợ giao Cục thực hiện</th>
+                        <th rowspan="2">SL xuất cứu trợ đề xuất</th>
                         <ng-container *ngIf="isVthhGao()">
                           <th rowspan="2">Nhu cầu cứu trợ</th>
-                          <th rowspan="2">Số lượng gạo cần chuyển xuất cấp thóc</th>
+                          <th rowspan="2">SL gạo cần chuyển xuất cấp thóc</th>
                         </ng-container>
                       </tr>
                       <tr>
@@ -566,7 +566,7 @@
                       <th rowspan="2">SL xuất cứu trợ giao Cục thực hiện</th>
                       <ng-container *ngIf="isVthhGao()">
                         <th rowspan="2">Nhu cầu cứu trợ</th>
-                        <th rowspan="2">Số lượng gạo cần chuyển xuất cấp thóc</th>
+                        <th rowspan="2">SL gạo cần chuyển xuất cấp thóc</th>
                       </ng-container>
                     </tr>
                     <tr>
@@ -685,8 +685,8 @@
                     </ng-container>
                   </tbody>
                 </nz-table>
-                <label nz-checkbox *ngIf="this.formData.value.tenVthh=='Gạo tẻ'" [nzDisabled]="isView"
-                  [(ngModel)]="this.formData.value.xuatCap">
+                <label nz-checkbox *ngIf="formData.value.tenVthh=='Gạo tẻ'" [nzDisabled]="isView"
+                  [(ngModel)]="formData.value.xuatCap">
                   Đồng ý duyệt xuất cấp
                 </label>
               </div>
@@ -781,11 +781,11 @@
                           <th>Chủng loại hàng DTQG</th>
                           <th>ĐVT</th>
                         </ng-container>
+                        <th>SL giao cứu trợ đề xuất</th>
                         <ng-container *ngIf="isVthhGao()">
-                          <th>Số lượng giao cứu trợ đề xuất</th>
                           <th>Nhu cầu cứu trợ</th>
+                          <th>SL gạo cần chuyển cấp thóc</th>
                         </ng-container>
-                        <th>Số lượng gạo cần chuyển cấp thóc</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -930,7 +930,7 @@
                         <th>Chủng loại hàng DTQG</th>
                         <th>ĐVT</th>
                       </ng-container>
-                      <th>Số lượng phê duyệt giao Cục xuất cứu trợ</th>
+                      <th>SL phê duyệt giao Cục xuất cứu trợ</th>
                       <ng-container *ngIf="isVthhGao()">
                         <th>Nhu cầu cứu trợ</th>
                         <th>SL gạo cần chuyển xuất cấp thóc</th>
@@ -1008,8 +1008,8 @@
                     </ng-container>
                   </tbody>
                 </nz-table>
-                <label nz-checkbox *ngIf="this.formData.value.tenVthh=='Gạo tẻ'" [nzDisabled]="isView"
-                  [(ngModel)]="!!this.formData.value.xuatCap">
+                <label nz-checkbox *ngIf="formData.value.tenVthh=='Gạo tẻ'" [nzDisabled]="isView"
+                  [(ngModel)]="!!formData.value.xuatCap">
                   Đồng ý duyệt xuất cấp
                 </label>
               </div>

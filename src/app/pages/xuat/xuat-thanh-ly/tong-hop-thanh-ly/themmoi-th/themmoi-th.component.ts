@@ -26,10 +26,10 @@ export class ThemmoiThComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private tongHopThanhLyService: TongHopThanhLyService,
+    private _service: TongHopThanhLyService,
     private _modalRef: NzModalRef,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, tongHopThanhLyService);
+    super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group({
       maDanhSach: [null, [Validators.required]],
       tenDanhSach: [null, [Validators.required]],

@@ -86,7 +86,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       let body = this.formData.value;
       body.maDvi = this.userInfo.MA_DVI;
       body.nam  = 2023;
-      body.typeFile = "pdf";
+      body.typeFile = "xlsx";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_hao_hut_thoc_tong_hop.jrxml";
@@ -103,7 +103,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       await this.bcCLuongHangDTQGService.bcclHangHaoHut(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bc_hao_hut_hang_dtqg_chi_tiet.xlsx");
+        saveAs(this.excelBlob, "bc_hao_hut_hang_dtqg.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -183,7 +183,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     this.listVthh = [];
     let res = await this.danhMucSv.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data;
+      this.listVthh = res.data.filter(item => item.ma.startsWith("01"));
     }
   }
 
