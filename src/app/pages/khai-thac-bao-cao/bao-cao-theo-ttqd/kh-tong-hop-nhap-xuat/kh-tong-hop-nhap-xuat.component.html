@@ -9,14 +9,23 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm báo cáo
               </nz-form-label>
               <nz-select formControlName="nam">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="10">
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm kế hoạch
+              </nz-form-label>
+              <nz-select formControlName="namKh">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <!--<div nz-col [nzSpan]="10">
             <nz-form-item>
               <nz-form-label [nzXs]="7">Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
@@ -35,10 +44,10 @@
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
-          </div>
+          </div>-->
         </div>
       </form>
-      <form nzLayout="vertical" nz-form>
+      <!--<form nzLayout="vertical" nz-form>
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="7">
             <nz-form-item>
@@ -92,9 +101,9 @@
             </nz-form-item>
           </div>
         </div>
-      </form>
+      </form>-->
     </nz-card>
-    <div class="group-button">
+    <div class="cangiua group-button-search">
       <button nz-button (click)="preView()"
               class="modal__button--save"
               *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">

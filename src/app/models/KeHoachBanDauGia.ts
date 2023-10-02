@@ -148,7 +148,6 @@ export class chiTietBangKeCanHangBdg {
   id: number;
   maCan: string;
   soBaoBi: string;
-  trongLuongBaoBi: number;
   trongLuongCaBi: number;
 }
 

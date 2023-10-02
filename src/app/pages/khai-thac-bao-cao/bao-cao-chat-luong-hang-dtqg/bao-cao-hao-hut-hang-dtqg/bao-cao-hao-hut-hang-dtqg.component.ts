@@ -36,6 +36,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
   listLoaiKyBc: any[] = [];
   listKyBc: any[] = [];
   rows: any[] = [];
+  nameFile: any;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -75,7 +76,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bccl_cong_tac_bao_quan_gao.pdf");
+    saveAs(this.pdfBlob, this.nameFile + ".pdf");
   }
 
   async downloadExcel() {
@@ -91,19 +92,22 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_hao_hut_thoc_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo hao hụt thóc tổng hợp";
+          this.nameFile = "bc_hao_hut_thoc_tong_hop";
         } else {
           body.fileName = "bc_hao_hut_gao_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo hao hụt gạo tổng hợp";
+          this.nameFile = "bc_hao_hut_gao_tong_hop";
         }
       } else {
         body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
         body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
+        this.nameFile = "bc_hao_hut_hang_dtqg_chi_tiet";
       }
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclHangHaoHut(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bc_hao_hut_hang_dtqg.xlsx");
+        saveAs(this.excelBlob, this.nameFile + ".xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -140,13 +144,16 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_hao_hut_thoc_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo hao hụt thóc tổng hợp";
+          this.nameFile = "bc_hao_hut_thoc_tong_hop";
         } else {
           body.fileName = "bc_hao_hut_gao_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo hao hụt gạo tổng hợp";
+          this.nameFile = "bc_hao_hut_gao_tong_hop";
         }
       } else {
         body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
         body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
+        this.nameFile = "bc_hao_hut_hang_dtqg_chi_tiet";
       }
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclHangHaoHut(body).then(async s => {

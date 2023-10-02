@@ -34,6 +34,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
   listCloaiVthh: any[] = [];
   listLoaiBc: any[] = [];
   rows: any[] = [];
+  nameFile: any;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -73,7 +74,7 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_chat_luong_thoc_nhap_kho.pdf");
+    saveAs(this.pdfBlob, this.nameFile + ".pdf");
   }
 
   async downloadExcel() {
@@ -87,26 +88,30 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bao_cao_cl_nhap_thoc_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng nhập thóc - Tổng hợp";
+          this.nameFile = "bao_cao_cl_nhap_thoc_tong_hop";
         }
         if (body.loaiVthh.startsWith("0102")) {
           body.fileName = "bao_cao_cl_nhap_gao_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng nhập gạo - Tổng hợp";
+          this.nameFile = "bao_cao_cl_nhap_gao_tong_hop";
         }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
+          this.nameFile = "bc_chat_luong_thoc_nhap_kho";
         }
         if (body.loaiVthh.startsWith("0102")) {
           body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
+          this.nameFile = "bc_chat_luong_gao_nhap_kho";
         }
       }
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclNhapHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bccl_chat_luong_nhap_hang_dtqg.xlsx");
+        saveAs(this.excelBlob, this.nameFile + ".xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -140,10 +145,12 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bao_cao_cl_nhap_thoc_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng nhập thóc - Tổng hợp";
+          this.nameFile = "bao_cao_cl_nhap_thoc_tong_hop";
         }
         if (body.loaiVthh.startsWith("0102")) {
           body.fileName = "bao_cao_cl_nhap_gao_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng nhập gạo - Tổng hợp";
+          this.nameFile = "bao_cao_cl_nhap_gao_tong_hop";
         }
         if (body.loaiVthh.startsWith("02")) {
           body.fileName = "bc_chat_luong_vattu_nhap_kho.jrxml";
@@ -153,14 +160,17 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
+          this.nameFile = "bc_chat_luong_thoc_nhap_kho";
         }
         if (body.loaiVthh.startsWith("0102")) {
           body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
+          this.nameFile = "bc_chat_luong_gao_nhap_kho";
         }
         if (body.loaiVthh.startsWith("02")) {
           body.fileName = "bc_chat_luong_vattu_nhap_kho.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng vật tư nhập kho"
+          this.nameFile = "bc_chat_luong_vattu_nhap_kho"
         }
       }
       body.trangThai = "01";

@@ -36,6 +36,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
   listLoaiKyBc: any[] = [];
   listKyBc: any[] = [];
   rows: any[] = [];
+  nameFile: any;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -75,7 +76,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bccl_cong_tac_bao_quan_gao.pdf");
+    saveAs(this.pdfBlob, this.nameFile + ".pdf");
   }
 
   async downloadExcel() {
@@ -89,25 +90,29 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bao_cao_cl_xuat_thoc_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng xuất thóc - Tổng hợp";
+          this.nameFile = "bao_cao_cl_xuat_thoc_tong_hop";
         }
         if (body.loaiVthh.startsWith("0102")) {
           body.fileName = "bao_cao_cl_xuat_gao_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng xuất gạo - Tổng hợp";
+          this.nameFile = "bao_cao_cl_xuat_gao_tong_hop";
         }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_chat_luong_thoc_xuat_kho.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng thóc xuất kho";
+          this.nameFile = "bc_chat_luong_thoc_xuat_kho";
         }
         if (body.loaiVthh.startsWith("0102")) {
           body.fileName = "bc_chat_luong_gao_xuat_kho.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng gạo xuất kho";
+          this.nameFile = "bc_chat_luong_gao_xuat_kho";
         }
       }
       await this.bcCLuongHangDTQGService.bcclXuatHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
+        saveAs(this.excelBlob, this.nameFile + ".xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -141,19 +146,23 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bao_cao_cl_xuat_thoc_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng xuất thóc - Tổng hợp";
+          this.nameFile = "bao_cao_cl_xuat_thoc_tong_hop";
         }
         if (body.loaiVthh.startsWith("0102")) {
           body.fileName = "bao_cao_cl_xuat_gao_tong_hop.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng xuất gạo - Tổng hợp";
+          this.nameFile = "bao_cao_cl_xuat_gao_tong_hop";
         }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_chat_luong_thoc_xuat_kho.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng thóc xuất kho";
+          this.nameFile = "bc_chat_luong_thoc_xuat_kho";
         }
         if (body.loaiVthh.startsWith("0102")) {
           body.fileName = "bc_chat_luong_gao_xuat_kho.jrxml";
           body.tenBaoCao = "Báo cáo chất lượng gạo xuất kho";
+          this.nameFile = "bc_chat_luong_gao_xuat_kho";
         }
       }
       body.trangThai = "01";
