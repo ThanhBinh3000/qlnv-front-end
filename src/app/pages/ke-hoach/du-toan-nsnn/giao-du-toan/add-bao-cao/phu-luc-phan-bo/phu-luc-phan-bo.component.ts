@@ -107,7 +107,7 @@ export class PhuLucPhanBoComponent implements OnInit {
     status: BtnStatus = new BtnStatus();
     editMoneyUnit = false;
     isDataAvailable = false;
-
+    soLaMa: any[] = Utils.LA_MA; // danh sách ký tự la mã
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     scrollX: string;
 
@@ -529,38 +529,95 @@ export class PhuLucPhanBoComponent implements OnInit {
         await this.quanLyVonPhiService.downFile(file, doc);
     }
 
-    exportToExcel() {
-        if (this.lstCtietBcaos.some(e => this.editCache[e.id].edit)) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
-        const header = [
-            { t: 0, b: 1 + this.lstCtietBcaos.length, l: 0, r: 1 + this.lstDvi.length, val: null },
-            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Nội dung' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Số tiền' },
-        ]
-        const fieldOrder = [
-            "maNdung",
-            "tongCong",
-            "dtoanGiao",
-        ]
-
-        const filterData = this.lstCtietBcaos.map(item => {
-            const row: any = {};
-            fieldOrder.forEach(field => {
-                row[field] = field == 'stt' ? item.index() : item[field]
-            })
-            return row;
-        })
-
-        const workbook = XLSX.utils.book_new();
-        const worksheet = Table.initExcel(header);
-        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        let excelName = this.dataInfo.maBcao;
-        excelName = excelName + '_GSTC_PLPB.xlsx'
-        XLSX.writeFile(workbook, excelName);
+  exportToExcel() {
+    if (this.lstCtietBcaos.some(e => this.editCache[e.id].edit)) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
     }
+    const header = [
+      { t: 0, b: 7 + this.lstCtietBcaos.length, l: 0, r: 3 + this.lstDvi.length, val: null },
+      { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
+      { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
+      { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+
+      { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
+      { t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
+      { t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi đơn vị cấp trên giao' },
+      { t: 5, b: 7, l: 3, r: 3, val: 'Tổng cộng' },
+      { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
+      { t: 7, b: 7, l: 1, r: 1, val: 'Tổng cộng' },
+      { t: 7, b: 7, l: 6, r: 6, val: this.total?.dtoanGiao },
+      { t: 7, b: 7, l: 8, r: 8, val: this.total?.tongCong },
+    ]
+    this.lstDvi.forEach((item, index ) => {
+      const left = 4 + index
+      header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
+      const unit = this.total.lstCtietDvis.find(e => e.maDviNhan == item.maDvi);
+      header.push({ t: 8, b: 8, l: left, r: left, val: unit?.soTranChi });
+    })
+
+    const headerBot = 7;
+    this.lstCtietBcaos.forEach((item, index) => {
+      const row = headerBot + index + 1;
+      const tenNdung =  this.getTenNdung(item.maNdung);
+      header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
+      header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung})
+      header.push({ t: row, b: row, l: 2, r: 2, val: item.dtoanGiao?.toString() })
+      header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCong?.toString() })
+
+      item.lstCtietDvis.forEach((e, ind) => {
+        const col = 4 + ind ;
+        header.push({ t: row, b: row, l: col , r: col, val: e.soTranChi?.toString() })
+      })
+    })
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = Table.initExcel(header);
+    // XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+
+    let excelName = this.dataInfo.maBcao;
+    excelName = excelName + '_GSTC_PLPB.xlsx'
+    XLSX.writeFile(workbook, excelName);
+  }
+
+  getTenNdung(maNdung: number): any{
+    let tenNdung: string;
+    this.noiDungs.forEach(itm => {
+      if(itm.ma == maNdung){
+        return tenNdung = itm.giaTri;
+      }
+    })
+    return tenNdung
+  }
+
+  getChiMuc(str: string) {
+    str = str.substring(str.indexOf('.') + 1, str.length);
+    let xau = "";
+    const chiSo: any = str.split('.');
+    const n: number = chiSo.length - 1;
+    let k: number = parseInt(chiSo[n], 10);
+    if (n == 0) {
+      for (let i = 0; i < this.soLaMa.length; i++) {
+        while (k >= this.soLaMa[i].gTri) {
+          xau += this.soLaMa[i].kyTu;
+          k -= this.soLaMa[i].gTri;
+        }
+      }
+    }
+    if (n == 1) {
+      xau = chiSo[n];
+    }
+    if (n == 2) {
+      xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+    }
+    if (n == 3) {
+      xau = String.fromCharCode(k + 96);
+    }
+    if (n == 4) {
+      xau = "-";
+    }
+    return xau;
+  };
 
 }

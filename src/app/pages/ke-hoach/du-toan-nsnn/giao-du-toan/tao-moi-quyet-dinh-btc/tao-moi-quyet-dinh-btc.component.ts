@@ -16,6 +16,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
+import * as XLSX from "xlsx";
 
 
 export const TRANG_THAI_TIM_KIEM = [
@@ -298,7 +299,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.spinner.hide();
     };
 
-    // get danh sách đơn vị con 
+    // get danh sách đơn vị con
     async getChildUnit() {
         const request = {
             maDviCha: this.maDonViTao,
@@ -326,7 +327,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         })
     }
 
-    // check điều kiện ẩn hiện nút trong màn hình 
+    // check điều kiện ẩn hiện nút trong màn hình
     getStatusButton() {
         if (this.id && this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT)) {
             this.status = true;
@@ -431,7 +432,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         return temp;
     }
 
-    // call api lưu  
+    // call api lưu
     async save() {
         let checkSaveEdit;
         let checkNhap = 0;
@@ -572,7 +573,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.spinner.hide();
     };
 
-    // back lại trang trước 
+    // back lại trang trước
     back() {
         const obj = {
             tabSelected: "dsquyetDinh",
@@ -580,7 +581,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.dataChange.emit(obj);
     };
 
-    // Tạo mới phương án 
+    // Tạo mới phương án
     async taoMoiPhuongAn() {
         const listCtietDvi: any[] = [];
         const maPaCha = this.maPa
@@ -777,7 +778,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     };
 
-    // update trạng thái checkbox của tất cả các dòng 
+    // update trạng thái checkbox của tất cả các dòng
     updateAllChecked() {
         this.lstCtietBcao.forEach(item => {
             item.checked = this.allChecked;
@@ -815,7 +816,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     };
 
 
-    // hàm tính tổng cộng dồn trong 1 cột 
+    // hàm tính tổng cộng dồn trong 1 cột
     sum(stt: string) {
         stt = Table.preIndex(stt);
         while (stt != '0') {
@@ -841,7 +842,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.getTotal();
     };
 
-    // hàm tính tổng 
+    // hàm tính tổng
     getTotal() {
         this.total.nguonKhac = 0;
         this.total.nguonNsnn = 0;
@@ -867,7 +868,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         })
     };
 
-    // check có đối tượng có cấp thấp hơn đối tượng ở vị trí hiện tại không 
+    // check có đối tượng có cấp thấp hơn đối tượng ở vị trí hiện tại không
     getLowStatus(str: string) {
         const index: number = this.lstCtietBcao.findIndex(e => Table.preIndex(e.stt) == str);
         if (index == -1) {
@@ -881,7 +882,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.editCache[id].edit = true;
     };
 
-    // Hủy thay đổi 
+    // Hủy thay đổi
     cancelEdit(id: string): void {
         const index = this.lstCtietBcao.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
@@ -891,7 +892,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         };
     };
 
-    // Theo dõi thay đổi trong dòng 
+    // Theo dõi thay đổi trong dòng
     changeModel(id: any) {
         this.editCache[id].data.tongCong = Number(this.editCache[id].data.nguonNsnn) + Number(this.editCache[id].data.nguonKhac);
     };
@@ -911,10 +912,61 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.sum(this.lstCtietBcao[index].stt);
     };
 
-    // Xóa file 
+    // Xóa file
     deleteFile(id: string): void {
         this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
         this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
         this.listIdFilesDelete.push(id);
     };
+
+  exportToExcel() {
+    if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    const header = [
+      { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 8, val: null },
+
+      { t: 0, b: 0, l: 0, r: 1, val: "Quyết định bộ tài chính" },
+      { t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+
+      { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+      { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
+      { t: 4, b: 5, l: 2, r: 2, val: 'Tổng cộng' },
+      { t: 4, b: 4, l: 3, r: 4, val: 'Trong đó' },
+
+      { t: 5, b: 5, l: 3, r: 3, val: 'Nguồn NSNN' },
+      { t: 5, b: 5, l: 4, r: 4, val: 'Nguồn khác' },
+    ]
+
+    const headerBot = 5;
+    this.lstCtietBcao.forEach((item, index) => {
+      const row = headerBot + index + 1;
+      const tenNdung =  this.getTenNdung(item.maNdung);
+      header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
+      header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung})
+      header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
+      header.push({ t: row, b: row, l: 3, r: 3, val: item.nguonNsnn?.toString() })
+      header.push({ t: row, b: row, l: 4, r: 4, val: item.nguonKhac?.toString() })
+
+    })
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = Table.initExcel(header);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+    let excelName = this.maPa;
+    excelName = excelName + '_GSTC_QDBTC.xlsx'
+    XLSX.writeFile(workbook, excelName);
+  }
+
+  getTenNdung(maNdung: number): any{
+    let tenNdung: string;
+    this.noiDungs.forEach(itm => {
+      if(itm.ma == maNdung){
+        return tenNdung = itm.giaTri;
+      }
+    })
+    return tenNdung
+  }
+
 }
