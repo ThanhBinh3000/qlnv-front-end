@@ -32,6 +32,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
+  @Input() loaiVthhCache;
 
   formData: FormGroup
   dataTable: any[] = [];
@@ -146,7 +147,13 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       this.dataTable.forEach((item) => {
         item.tongGiaKdiemDd = 0;
         item.tongTienDtruocDd = 0;
-        const donGiaDuocDuyet = this.dataInput.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(item.maDvi);
+        let donGiaDuocDuyet = 0;
+        if (this.loaiVthhCache === LOAI_HANG_DTQG.VAT_TU) {
+          const firstItem = this.dataDonGiaDuocDuyet?.[0];
+          donGiaDuocDuyet = firstItem?.giaQdTcdt || 0;
+        } else {
+          donGiaDuocDuyet = donGiaMap.get(item.maDvi);
+        }
         item.children.forEach((child) => {
           child.donGiaDuocDuyet = donGiaDuocDuyet || null;
           child.giaKhoiDiemDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0);

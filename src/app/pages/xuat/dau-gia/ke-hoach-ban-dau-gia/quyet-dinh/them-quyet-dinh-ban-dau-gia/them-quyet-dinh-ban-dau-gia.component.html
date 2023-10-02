@@ -261,7 +261,8 @@
             <div nz-col [nzSpan]="12">
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thongtin-dexuat-khbdg [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
-                                           [isView]="true" [isCache]="true" [isTongHop]="isTongHop">
+                                           [isView]="true" [isCache]="true" [isTongHop]="isTongHop"
+                                           [loaiVthhCache]="loaiVthh">
                 </app-thongtin-dexuat-khbdg>
               </nz-card>
             </div>
@@ -269,7 +270,7 @@
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thongtin-dexuat-khbdg [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
                                            [isView]="formData.value.trangThai == STATUS.BAN_HANH"
-                                           [isTongHop]="isTongHop">
+                                           [isTongHop]="isTongHop" [loaiVthhCache]="loaiVthh">
                 </app-thongtin-dexuat-khbdg>
               </nz-card>
             </div>

@@ -396,7 +396,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     );
     if (filteredData.length > 0) {
       const firstItem = filteredData[0];
-      console.log(firstItem, 9999)
       this.formData.patchValue({
         idPhieuXuatKho: firstItem.id,
         soPhieuXuatKho: firstItem.soPhieuXuatKho,
@@ -410,6 +409,8 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         cloaiVthh: firstItem.cloaiVthh,
         tenCloaiVthh: firstItem.tenCloaiVthh,
         tenHangHoa: firstItem.tenHangHoa,
+        soLuong: firstItem.soLuong,
+        donGia: firstItem.donGia,
         donViTinh: firstItem.donViTinh,
         idPhieuKiemNghiem: firstItem.idPhieuKiemNghiem,
         soPhieuKiemNghiem: firstItem.soPhieuKiemNghiem,
