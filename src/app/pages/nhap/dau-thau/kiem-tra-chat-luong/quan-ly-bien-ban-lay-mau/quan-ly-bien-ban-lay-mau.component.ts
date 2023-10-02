@@ -27,7 +27,7 @@ import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-ha
 })
 export class QuanLyBienBanLayMauComponent implements OnInit {
   @Input() loaiVthh: string;
-
+  idQdGiaoNvNh: number = 0;
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -279,6 +279,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
   }
 
   async showList() {
