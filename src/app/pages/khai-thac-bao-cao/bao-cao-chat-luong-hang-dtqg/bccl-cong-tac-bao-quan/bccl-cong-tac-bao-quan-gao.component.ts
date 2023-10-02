@@ -86,23 +86,22 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
   }
 
   async downloadExcel() {
-    this.setValidators();
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.spinner.hide();
-      return;
-    }
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
       body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "xlsx";
       body.trangThai = "01";
       if (body.loaiBc == '01') {
-        body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
-        body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
-        this.nameFile = "bccl_cong_tac_bao_quan_lt_tong_hop";
+        if (body.loaiVthh.startsWith("02")) {
+          body.fileName = "bccl_cong_tac_bao_quan_vattu_chi_tiet.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản vật tư (chi tiết)";
+          this.nameFile = "bccl_cong_tac_bao_quan_vattu_tong_hop";
+        } else {
+          body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
+          this.nameFile = "bccl_cong_tac_bao_quan_luong_thuc_tong_hop";
+        }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bccl_cong_tac_bao_quan_thoc_chi_tiet.jrxml";
@@ -125,8 +124,45 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           this.nameFile = "bccl_cong_tac_bao_quan_muoi_chi_tiet";
         }
       }
-      body.vaiTro = "LDCHICUC";
-      body.nam = 2023;
+      body.vaiTro = this.userService.isChiCuc() ? "LDCHICUC" : "LDCUC";
+      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc;
+      if (body.loaiKyBc) {
+        if (body.loaiKyBc == '01') {
+          if (body.kyBc) {
+            const parts = body.kyBc.split(" "); // Tách chuỗi theo khoảng trắng
+            const monthNumber = parts[1];
+            body.tuNgay = '1/' + monthNumber + '/' + body.nam
+            body.denNgay = '30/' + monthNumber + '/' + body.nam
+          }
+        }
+        if (body.loaiKyBc == '02') {
+          if (body.kyBc && body.kyBc == 'Quý I') {
+            body.tuNgay = '1/1/' + body.nam
+            body.denNgay = '31/3/' + body.nam
+          }
+          if (body.kyBc && body.kyBc == 'Quý II') {
+            body.tuNgay = '1/4/' + body.nam
+            body.denNgay = '30/6/' + body.nam
+          }
+          if (body.kyBc && body.kyBc == 'Quý III') {
+            body.tuNgay = '1/7/' + body.nam
+            body.denNgay = '30/9/' + body.nam
+          }
+          if (body.kyBc && body.kyBc == 'Quý IV') {
+            body.tuNgay = '1/10/' + body.nam
+            body.denNgay = '31/12/' + body.nam
+          }
+        }
+        if (body.loaiKyBc == '03') {
+          body.tuNgay = '1/1/' + body.nam
+          body.denNgay = '31/12/' + body.nam
+        }
+        if (body.loaiKyBc == '04') {
+          body.tuNgay = body.tgBaoCaoTu ? body.tgBaoCaoTu.format('dd/MM/yyyy') : null;
+          body.denNgay = body.tgBaoCaoDen ? body.tgBaoCaoDen.format('dd/MM/yyyy') : null;
+        }
+      }
+      body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
       await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
@@ -171,9 +207,15 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       body.typeFile = "pdf";
       body.trangThai = "01";
       if (body.loaiBc == '01') {
-        body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
-        body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
-        this.nameFile = "bccl_cong_tac_bao_quan_lt_tong_hop";
+        if (body.loaiVthh.startsWith("02")) {
+          body.fileName = "bccl_cong_tac_bao_quan_vattu_chi_tiet.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản vật tư (chi tiết)";
+          this.nameFile = "bccl_cong_tac_bao_quan_vattu_tong_hop";
+        } else {
+          body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
+          this.nameFile = "bccl_cong_tac_bao_quan_luong_thuc_tong_hop";
+        }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bccl_cong_tac_bao_quan_thoc_chi_tiet.jrxml";
