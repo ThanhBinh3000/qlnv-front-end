@@ -144,10 +144,10 @@
             </a>
             <a
               (click)="redirectToChiTiet(data.id,false)"
-              *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')">
+              *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_XOA')" (click)="xoaItem(data)">
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_XOA')" (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
