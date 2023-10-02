@@ -60,7 +60,7 @@ export class DialogThemMoiDmNhomHangComponent extends Base2Component implements 
 
   async getDSMatHang() {
     const body = {
-      nhomCcdc: 1
+      nhomCcdc: [1]
     }
     this.listMatHang = []
     let res = await this.danhMucService.getDSMatHang(body);

@@ -265,7 +265,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   async getListNhomCcdc() {
     this.listNhomCcdc = [];
     const body = {
-      nhomCcdc: 3
+      nhomCcdc: [3]
     }
     let res = await this.danhMucService.getDSMatHang(body);
     if (res.msg == MESSAGE.SUCCESS) {
