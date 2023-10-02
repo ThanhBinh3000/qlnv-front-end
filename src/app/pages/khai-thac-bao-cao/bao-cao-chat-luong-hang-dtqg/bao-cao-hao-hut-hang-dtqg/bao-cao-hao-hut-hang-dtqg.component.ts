@@ -133,7 +133,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       this.formData.value.namNhap = this.formData.value.namNhap && this.formData.value.namNhap.length > 0 ? this.formData.value.namNhap.toString() : ""
       this.formData.value.namXuat = this.formData.value.namXuat && this.formData.value.namXuat.length > 0 ? this.formData.value.namNhap.toString() : ""
       let body = this.formData.value;
-      body.maDvi = this.userInfo.MA_DVI;
+      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.nam  = 2023;
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
