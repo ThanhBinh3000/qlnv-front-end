@@ -57,7 +57,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     private phieuXuatKhoService: PhieuXuatKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
-
     this.formData = this.fb.group(
       {
         id: [],
@@ -407,6 +406,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["soPhieuXuatKho"].setValidators([Validators.required]);
+      this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soPhieuKiemNghiem"].setValidators([Validators.required]);
       const body = {...this.formData.value,};
       await this.createUpdate(body);
@@ -436,6 +436,19 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   }
 
   setValidForm() {
-
+    this.formData.controls["tenDvi"].setValidators([Validators.required]);
+    this.formData.controls["maQhNs"].setValidators([Validators.required]);
+    this.formData.controls["ngayLapPhieu"].setValidators([Validators.required]);
+    this.formData.controls["tenLoaiHinhNx"].setValidators([Validators.required]);
+    this.formData.controls["tenKieuNhapXuat"].setValidators([Validators.required]);
+    this.formData.controls["soHopDong"].setValidators([Validators.required]);
+    this.formData.controls["ngayKyHopDong"].setValidators([Validators.required]);
+    this.formData.controls["toChucCaNhan"].setValidators([Validators.required]);
+    this.formData.controls["ngayKyQdNv"].setValidators([Validators.required]);
+    this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
+    this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
+    this.formData.controls["tenNganKho"].setValidators([Validators.required]);
+    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
   }
 }
