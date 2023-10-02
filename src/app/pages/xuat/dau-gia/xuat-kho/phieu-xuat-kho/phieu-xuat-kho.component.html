@@ -49,14 +49,17 @@
     <div class="group-button">
       <h3 class="text-uppercase"> DANH SÁCH PHIẾU XUẤT KHO </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-xuat-kho.xlsx')"
-                *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_EXP')">
+        <button
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_EXP')"
+          type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-xuat-kho.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Xuất file</span>
+          <span> Xuất file </span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectDetail(0, false, 0)">
-          <i class="icon htvbdh_tcdt_tao-qd"></i>
-          <span>Thêm</span>
+        <button
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_THEM')"
+          type="button" class="btn btn-main" (click)="redirectDetail(0, false, 0)">
+          <i class=" icon htvbdh_dau-cong"></i>
+          <span> Thêm </span>
         </button>
       </div>
     </div>
@@ -144,8 +147,8 @@
                     <td></td>
                     <td></td>
                     <td class="text-center">
-                      <a  (click)="redirectDetail(0, false, item.idQdNv)"
-                          *ngIf="userService.isChiCuc()">
+                      <a (click)="redirectDetail(0, false, item.idQdNv)"
+                         *ngIf="userService.isChiCuc()">
                         <i class="fa fa-plus"></i>
                       </a>
                     </td>
@@ -232,9 +235,11 @@
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKiemnghiem" (nzOnCancel)="closeModal('kiemNghiem')">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKiemnghiem"
+          (nzOnCancel)="closeModal('kiemNghiem')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-bdg-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="idKiemnghiem" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    <app-bdg-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="idKiemnghiem" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                                   [isView]="true">
     </app-bdg-them-moi-phieu-kiem-nghiem-chat-luong>
   </ng-container>
   <div *nzModalFooter>
@@ -244,17 +249,17 @@
     </button>
   </div>
 </nz-modal>
-<!--<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="idBangKe" (nzOnCancel)="closeModal('bangKe')">-->
-<!--  <ng-container *nzModalContent class="modal__content custom-scroll-modal">-->
-<!--    <app-bdg-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="isViewBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">-->
-<!--    </app-bdg-them-moi-phieu-kiem-nghiem-chat-luong>-->
-<!--  </ng-container>-->
-<!--  <div *nzModalFooter>-->
-<!--    <button nz-button (click)="closeModal('bangKe')" class="modal__button&#45;&#45;cancel">-->
-<!--      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
-<!--      Đóng-->
-<!--    </button>-->
-<!--  </div>-->
-<!--</nz-modal>-->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModal('bangKe')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-bdg-chi-tiet-bang-ke-can [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    </app-bdg-chi-tiet-bang-ke-can>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('bangKe')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 
 

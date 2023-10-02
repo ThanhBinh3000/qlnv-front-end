@@ -9,13 +9,12 @@ import {DonviService} from "src/app/services/donvi.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {UserLogin} from "src/app/models/userlogin";
 import {MESSAGE} from "src/app/constants/message";
-import {chain} from 'lodash';
 import {BangKeCanService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
-import {DauGiaComponent} from "../../dau-gia.component";
-import {CHUC_NANG} from "../../../../../constants/status";
+import _ from 'lodash';
 import * as uuid from "uuid";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-bdg-bang-ke-can',
@@ -24,17 +23,17 @@ import * as uuid from "uuid";
 })
 export class BangKeCanComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  public vldTrangThai: DauGiaComponent;
-  public CHUC_NANG = CHUC_NANG;
-  userInfo: UserLogin;
-  userdetail: any = {};
-  selectedId: number = 0;
-  isView = false;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
+  isView: boolean = false;
+  tableDataView: any = [];
   expandSetString = new Set<string>();
-  children: any = [];
-  idPhieuXk: number = 0;
-  openPhieuXk = false;
-  idQdNv: number =0;
+  idQdNv: number = 0;
+  isViewQdNv: boolean = false;
+  idKiemnghiem: number = 0;
+  isViewKiemnghiem: boolean = false;
+  idXuatKho: number = 0;
+  isViewXuatKho: boolean = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -44,137 +43,206 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     private donviService: DonviService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private bangKeCanService: BangKeCanService,
-    private dauGiaComponent: DauGiaComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanService);
-    this.vldTrangThai = dauGiaComponent;
     this.formData = this.fb.group({
-      id: [],
-      nam: [],
-      soQdGiaoNvXh: [],
-      soBangKe: [],
-      thoiGianGiaoNhan: [],
-      ngayXuat: [],
-      ngayXuatTu: [],
-      ngayXuatDen: [],
-      maDiemKho: [],
-      maNhaKho: [],
-      maNganKho: [],
-      maLoKho: [],
-      tenDiemKho: [],
-      tenNhaKho: [],
-      tenNganKho: [],
-      tenLoKho: [],
-      ngayKetThuc: [],
-      type: []
+      nam: null,
+      soQdNv: null,
+      soBangKeHang: null,
+      ngayLapBangKeTu: null,
+      ngayLapBangKeDen: null,
+      loaiVthh: null,
     })
+    this.filterTable = {
+      soQdNv: '',
+      nam: '',
+      ngayKyQdNv: '',
+      tenDiemKho: '',
+      tenNganKho: '',
+      tenLoKho: '',
+      soPhieuKiemNghiem: '',
+      ngayKiemNghiemMau: '',
+      soPhieuXuatKho: '',
+      soBangKeHang: '',
+      ngayLapPhieu: '',
+      tenTrangThai: '',
+    };
   }
-
-  disabledStartNgayXk = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayXuatDen) {
-      return startValue.getTime() >= this.formData.value.ngayXuatDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayXk = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayXuatTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayXuatTu.getTime();
-  };
 
   async ngOnInit() {
     try {
-      this.initData();
+      await this.spinner.show();
       await this.search();
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-  }
-
-  isOwner(maDvi: any) {
-    return this.userInfo.MA_PHONG_BAN == maDvi;
-  }
-
-  isBelong(maDvi: any) {
-    return this.userInfo.MA_DVI == maDvi;
-  }
-
-  async search(roles?): Promise<void> {
-    await this.spinner.show()
+  async search(): Promise<void> {
+    await this.spinner.show();
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     });
-    await super.search(roles);
+    await super.search();
+    this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
-    await this.spinner.hide()
+    await this.spinner.hide();
   }
 
   buildTableView() {
-    let dataView = chain(this.dataTable).groupBy("soQdGiaoNvXh").map((value, key) => {
-      let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-      let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
-        let diaDiem = v.find(s => s.maDiemKho === k)
+    this.tableDataView = _(this.dataTable).groupBy("soQdNv").map((soQdNvGroup, soQdNvKey) => {
+      const firstRowInGroup = _.find(soQdNvGroup, (row) => row.tenDiemKho === soQdNvGroup[0].tenDiemKho);
+      firstRowInGroup.idVirtual = uuid.v4();
+      this.expandSetString.add(firstRowInGroup.idVirtual);
+      const childData = _(soQdNvGroup).groupBy("tenDiemKho").map((tenDiemKhoGroup, tenDiemKhoKey) => {
+        const lv1IdVirtual = uuid.v4();
+        this.expandSetString.add(lv1IdVirtual);
+        const lv1ChildData = _(tenDiemKhoGroup).groupBy((row) => row.tenLoKho || row.tenNganKho).map((group, key) => {
+          const lv2IdVirtual = uuid.v4();
+          this.expandSetString.add(lv2IdVirtual);
+          return {
+            idVirtual: lv2IdVirtual,
+            tenLoKho: key,
+            tenNganKho: group[0].tenNganKho,
+            soPhieuKiemNghiem: group[0].soPhieuKiemNghiem,
+            idPhieuKiemNghiem: group[0].idPhieuKiemNghiem,
+            ngayKiemNghiemMau: group[0].ngayKiemNghiemMau,
+            childData: group,
+          };
+        }).value();
         return {
-          idVirtual: uuid.v4(),
-          maDiemKho: k != null ? k : '',
-          tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
-          idQdGiaoNvXh: diaDiem ? diaDiem.idQdGiaoNvXh : null,
-          childData: v
-        }
+          idVirtual: lv1IdVirtual,
+          tenDiemKho: tenDiemKhoKey,
+          childData: lv1ChildData,
+        };
       }).value();
-      let nam = quyetDinh? quyetDinh.nam : null;
-      let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
-      return{
-        idVirtual: uuid.v4(),
-        soQdGiaoNvXh: key != null ? key : '',
-        nam: nam,
-        ngayQdGiaoNvXh: ngayQdGiaoNvXh,
-        childData: rs
-      }
+      return {
+        idVirtual: firstRowInGroup.idVirtual,
+        soQdNv: soQdNvKey,
+        nam: firstRowInGroup.nam,
+        idQdNv: firstRowInGroup.idQdNv,
+        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || [],
+        childData,
+      };
     }).value();
-    this.children = dataView
-    this.expandAll()
+    this.expandAll();
   }
 
   expandAll() {
-    this.children.forEach(s => {
-      this.expandSetString.add(s.idVirtual);
-    })
+    this.dataTable.forEach(row => {
+      this.expandSetString.add(row.idVirtual);
+    });
   }
 
-  onExpandStringChange(id: string, checked: boolean): void {
-    if (checked) {
-      this.expandSetString.add(id);
+  onExpandStringChange(idVirtual: string, isExpanded: boolean): void {
+    if (isExpanded) {
+      this.expandSetString.add(idVirtual);
     } else {
-      this.expandSetString.delete(id);
+      this.expandSetString.delete(idVirtual);
     }
   }
 
-  redirectDetail(id, b: boolean, idQdNv? : number) {
-    this.selectedId = id;
+  redirectDetail(id, isView: boolean, idQdGnx) {
+    this.idSelected = id;
     this.isDetail = true;
-    this.isView = b;
-    this.idQdNv = idQdNv
+    this.isView = isView;
+    this.idQdNv = idQdGnx
   }
 
-  openPhieuXkModal(id: number) {
-    console.log(id, 'id');
-    this.idPhieuXk = id;
-    this.openPhieuXk = true;
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'QdNv' :
+        this.idQdNv = id;
+        this.isViewQdNv = true;
+        break;
+      case 'kiemNghiem' :
+        this.idKiemnghiem = id;
+        this.isViewKiemnghiem = true;
+        break;
+      case 'xuatKho' :
+        this.idXuatKho = id;
+        this.isViewXuatKho = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closePhieuXkModal() {
-    this.idPhieuXk = null;
-    this.openPhieuXk = false;
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'QdNv' :
+        this.idQdNv = null;
+        this.isViewQdNv = false;
+        break;
+      case 'kiemNghiem' :
+        this.idKiemnghiem = null;
+        this.isViewKiemnghiem = false;
+        break;
+      case 'xuatKho' :
+        this.idXuatKho = null;
+        this.isViewXuatKho = false;
+        break;
+      default:
+        break;
+    }
+  }
+
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
+  disabledStartNgayTaoBangKe = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayLapBangKeTu, 'ngayLapBangKe');
+  };
+
+  disabledEndNgayTaoBangKe = (endValue: Date): boolean => {
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayLapBangKeDen, 'ngayLapBangKe');
+  };
+
+  isActionAllowed(action: string, data: any): boolean {
+    const permissionMapping = {
+      VT: {
+        XEM: 'XHDTQG_PTDG_XK_VT_BKXVT_XEM',
+        THEM: 'XHDTQG_PTDG_XK_VT_BKXVT_THEM',
+        XOA: 'XHDTQG_PTDG_XK_VT_BKXVT_XOA',
+        DUYET_LDCHICUC: 'XHDTQG_PTDG_XK_VT_BKXVT_DUYET_LDCCUC',
+      },
+      LT: {
+        XEM: 'XHDTQG_PTDG_XK_LT_BKCH_XEM',
+        THEM: 'XHDTQG_PTDG_XK_LT_BKCH_THEM',
+        XOA: 'XHDTQG_PTDG_XK_LT_BKCH_XOA',
+        DUYET_LDCHICUC: 'XHDTQG_PTDG_XK_LT_BKCH_DUYET_LDCCUC',
+      },
+    };
+    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    switch (action) {
+      case 'XEM':
+        return this.userService.isAccessPermisson(permissions.XEM) &&
+          (data.trangThai !== STATUS.DU_THAO &&
+            data.trangThai !== STATUS.TU_CHOI_LDCC);
+      case 'SUA':
+        return (
+          (data.trangThai === STATUS.DU_THAO ||
+            data.trangThai === STATUS.TU_CHOI_LDCC) &&
+          this.userService.isAccessPermisson(permissions.THEM)
+        );
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC) &&
+            data.trangThai === STATUS.CHO_DUYET_LDCC)
+        );
+      case 'XOA':
+        return (
+          data.trangThai === STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA)
+        );
+      default:
+        return false;
+    }
   }
 }
