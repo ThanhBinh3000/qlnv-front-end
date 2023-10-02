@@ -67,7 +67,7 @@
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col >
-                <nz-select nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear>
+                <nz-select [nzDisabled]="formData.value.loaiBc == '01'" nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear>
                   <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -77,7 +77,7 @@
             <nz-form-item>
               <nz-form-label>Chi Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col >
-                <nz-select nzShowSearch formControlName="maChiCuc" nzAllowClear>
+                <nz-select  [nzDisabled]="formData.value.loaiBc == '01'" nzShowSearch formControlName="maChiCuc" nzAllowClear>
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -96,7 +96,7 @@
           </div>
           <div nz-col [nzSpan]="14">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Chủng loại hàng DTQG
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Chủng loại hàng DTQG
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select nzShowSearch nzAllowClear formControlName="cloaiVthh">
@@ -110,7 +110,7 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select nzAllowClear formControlName="loaiBc">
+                <nz-select  formControlName="loaiBc">
                   <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -133,7 +133,7 @@
 </div>
 
 <!--popup preview-->
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Báo cáo" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Khai thác báo cáo" nzWidth="100%" (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [original-size]="false" [render-text]="true" style="width: 100%; height: 600px;">
     </pdf-viewer>

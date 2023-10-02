@@ -196,7 +196,7 @@
 
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItemTL.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event)">
+            <nz-select [(ngModel)]="rowItemTL.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event,'TL')">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of danhSachDiemKho">
               </nz-option>
@@ -379,10 +379,13 @@
             </nz-select>
           </nz-input-group>
         </td>
-
         <td style="width: 9%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItemDTM.maDiemKho"/>
+            <nz-select [(ngModel)]="rowItemTL.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event,'DTM')">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of danhSachDiemKho">
+              </nz-option>
+            </nz-select>
           </nz-input-group>
         </td>
         <td style="width: 9%;">

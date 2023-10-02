@@ -38,6 +38,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
   @Input() isView: boolean;
   @Input() isTatCa: boolean;
   @Input() loaiVthh: string;
+  @Input() idQdGiaoNvNh: number;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -199,6 +200,9 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       soBienBan: `${id}/${this.formData.get('nam').value}/BBLM-CCDTVP`,
       tenNguoiTao: this.userInfo.TEN_DAY_DU
     });
+    if (this.idQdGiaoNvNh) {
+      await this.bindingDataQd(this.idQdGiaoNvNh);
+    }
   }
 
   async save(isGuiDuyet?: boolean) {

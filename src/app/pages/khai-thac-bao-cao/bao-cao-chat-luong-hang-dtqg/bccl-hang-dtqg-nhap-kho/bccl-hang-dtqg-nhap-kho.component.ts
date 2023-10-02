@@ -152,6 +152,10 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
           body.tenBaoCao = "Báo cáo chất lượng nhập gạo - Tổng hợp";
           this.nameFile = "bao_cao_cl_nhap_gao_tong_hop";
         }
+        if (body.loaiVthh.startsWith("02")) {
+          body.fileName = "bc_chat_luong_vattu_nhap_kho.jrxml";
+          body.tenBaoCao = "Báo cáo chất lượng vật tư nhập kho"
+        }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";

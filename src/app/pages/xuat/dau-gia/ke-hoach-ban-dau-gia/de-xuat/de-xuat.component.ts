@@ -9,7 +9,6 @@ import {
 import {Base2Component} from 'src/app/components/base2/base2.component';
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
-import {STATUS} from 'src/app/constants/status';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
@@ -40,16 +39,15 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanDauGiaService);
     this.formData = this.fb.group({
-      namKh: null,
-      soDxuat: null,
-      loaiVthh: null,
-      trichYeu: null,
-      maDvi: null,
-      trangThaiList: null,
-      ngayTaoTu: null,
-      ngayTaoDen: null,
-      ngayDuyetTu: null,
-      ngayDuyetDen: null,
+      namKh: '',
+      soDxuat: '',
+      ngayTaoTu: '',
+      ngayTaoDen: '',
+      ngayDuyetTu: '',
+      ngayDuyetDen: '',
+      trichYeu: '',
+      loaiVthh: '',
+      trangThaiList: '',
     });
 
     this.filterTable = {
@@ -203,50 +201,48 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       VT: {
         XEM: 'XHDTQG_PTDG_KHBDG_VT_DEXUAT_XEM',
         THEM: 'XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM',
+        XOA: 'XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA',
         DUYET_TP: 'XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP',
         DUYET_LDCUC: 'XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC',
         DUYET_CANBOVU: 'XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU',
-        XOA: 'XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA',
       },
       LT: {
         XEM: 'XHDTQG_PTDG_KHBDG_LT_DEXUAT_XEM',
         THEM: 'XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM',
+        XOA: 'XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA',
         DUYET_TP: 'XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP',
         DUYET_LDCUC: 'XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC',
         DUYET_CANBOVU: 'XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU',
-        XOA: 'XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA',
       },
     };
     const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
-        return this.userService.isAccessPermisson(permissions.XEM) &&
-          (data.trangThai !== STATUS.DU_THAO &&
-            data.trangThai !== STATUS.TU_CHOI_TP &&
-            data.trangThai !== STATUS.TU_CHOI_LDC &&
-            data.trangThai !== STATUS.TU_CHOI_CBV);
-      case 'SUA':
         return (
-          (data.trangThai === STATUS.DU_THAO ||
-            data.trangThai === STATUS.TU_CHOI_TP ||
-            data.trangThai === STATUS.TU_CHOI_LDC ||
-            data.trangThai === STATUS.TU_CHOI_CBV) &&
-          this.userService.isAccessPermisson(permissions.THEM)
+          this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
+              [
+                this.STATUS.CHO_DUYET_TP, this.STATUS.CHO_DUYET_LDC, this.STATUS.DA_DUYET_LDC, this.STATUS.DA_DUYET_CBV
+              ].includes(data.trangThai)) ||
+            (!this.userService.isAccessPermisson(permissions.THEM) && [
+                this.STATUS.DU_THAO, this.STATUS.TU_CHOI_TP, this.STATUS.TU_CHOI_LDC,
+                this.STATUS.TU_CHOI_CBV, this.STATUS.DA_DUYET_CBV
+              ].includes(data.trangThai) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_TP && !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_LDC && !this.userService.isAccessPermisson(permissions.DUYET_LDCUC)) ||
+              (data.trangThai === this.STATUS.DA_DUYET_LDC && !this.userService.isAccessPermisson(permissions.DUYET_CANBOVU))))
         );
+      case 'SUA':
+        return [
+          this.STATUS.DU_THAO, this.STATUS.TU_CHOI_TP, this.STATUS.TU_CHOI_LDC, this.STATUS.TU_CHOI_CBV
+        ].includes(data.trangThai) && this.userService.isAccessPermisson(permissions.THEM);
       case 'PHEDUYET':
         return (
-          (this.userService.isAccessPermisson(permissions.DUYET_TP) &&
-            data.trangThai === STATUS.CHO_DUYET_TP) ||
-          (this.userService.isAccessPermisson(permissions.DUYET_LDCUC) &&
-            data.trangThai === STATUS.CHO_DUYET_LDC) ||
-          (this.userService.isAccessPermisson(permissions.DUYET_CANBOVU) &&
-            data.trangThai === STATUS.DA_DUYET_LDC)
+          (this.userService.isAccessPermisson(permissions.DUYET_TP) && data.trangThai === this.STATUS.CHO_DUYET_TP) ||
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCUC) && data.trangThai === this.STATUS.CHO_DUYET_LDC) ||
+          (this.userService.isAccessPermisson(permissions.DUYET_CANBOVU) && data.trangThai === this.STATUS.DA_DUYET_LDC)
         );
       case 'XOA':
-        return (
-          data.trangThai === STATUS.DU_THAO &&
-          this.userService.isAccessPermisson(permissions.XOA)
-        );
+        return data.trangThai === this.STATUS.DU_THAO && this.userService.isAccessPermisson(permissions.XOA);
       default:
         return false;
     }
