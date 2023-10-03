@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from "@angular/core";
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Globals} from "../../../../../../../shared/globals";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -11,6 +11,7 @@ import {
 import {
   QuyetDinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-dieu-chinh',
@@ -22,6 +23,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
   @Input() dataInput;
   @Input() isView;
   @Input() isCache;
+  @Output() countChanged: EventEmitter<any> = new EventEmitter();
   formData: FormGroup
   dataTable: any[] = [];
 
@@ -48,10 +50,10 @@ export class ThongTinDieuChinhComponent implements OnChanges {
       pthucGnhan: [''],
       thongBao: [],
       khoanTienDatTruoc: [],
-      tongSoLuong: [],
+      tongSoLuong: [null],
+      tongTienKhoiDiem: [null],
+      tongTienDatTruoc: [null],
       donViTinh: [''],
-      tongTienGiaKdTheoDgiaDd: [],
-      tongKhoanTienDtTheoDgiaDd: [],
     })
   }
 
@@ -94,6 +96,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
       if (updatedData && index >= 0) {
         this.dataTable[index] = updatedData;
         await this.calculatorTable();
+        await this.sendDataToParent();
       }
     });
   }
@@ -111,6 +114,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
         try {
           this.dataTable = this.dataTable.filter((item, index) => index != i);
           await this.calculatorTable();
+          await this.sendDataToParent();
         } catch (e) {
           console.log('error', e);
         }
@@ -128,9 +132,9 @@ export class ThongTinDieuChinhComponent implements OnChanges {
       item.tongTienDtruocDd = item.children.reduce((prev, cur) => prev + cur.soTienDtruocDd, 0);
     }
     this.formData.patchValue({
-      tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.tongSlXuatBanDx, 0),
-      tongTienGiaKdTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.tongGiaKdiemDd, 0),
-      tongKhoanTienDtTheoDgiaDd: this.dataTable.reduce((prev, cur) => prev + cur.tongTienDtruocDd, 0),
+      tongTienKhoiDiem: this.dataTable.reduce((acc, item) => acc + item.tongGiaKdiemDd, 0),
+      tongTienDatTruoc: this.dataTable.reduce((acc, item) => acc + item.tongTienDtruocDd, 0),
+      tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.tongSlXuatBanDx, 0),
     });
   }
 
@@ -138,5 +142,23 @@ export class ThongTinDieuChinhComponent implements OnChanges {
 
   onExpandChange(id: number, checked: boolean): void {
     checked ? this.expandSet.add(id) : this.expandSet.delete(id);
+  }
+
+  async onChangeThoiGian(event) {
+    if (event) {
+      this.formData.patchValue({
+        tgianDkienTu: this.formatDate(event, 0),
+        tgianDkienDen: this.formatDate(event, 1)
+      })
+    }
+    await this.sendDataToParent();
+  }
+
+  formatDate(dateRange, index) {
+    return dateRange ? dayjs(dateRange[index]).format('YYYY-MM-DD') : null;
+  }
+
+  async sendDataToParent() {
+    this.countChanged.emit(this.formData.value);
   }
 }

@@ -178,7 +178,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formTraCuu.controls["noiDungThop"].setValidators([Validators.required])
+      this.formData.controls["noiDungThop"].setValidators([Validators.required])
       const body = this.formData.value;
       await this.createUpdate(body);
       await this.helperService.restoreRequiredForm(this.formData);
