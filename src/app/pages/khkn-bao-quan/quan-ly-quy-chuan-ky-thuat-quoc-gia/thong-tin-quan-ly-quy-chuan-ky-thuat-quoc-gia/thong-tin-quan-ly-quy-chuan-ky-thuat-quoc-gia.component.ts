@@ -99,7 +99,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       soVanBanSuaDoi: [null],
       idVanBanSuaDoi: [null],
       loaiVthh: [],
-      trichYeu: [''],
+      trichYeu: ['', [Validators.required]],
       thoiGianLuuKhoToiDa: [null],
       trangThaiHl: [null],
       trangThai: [null],
