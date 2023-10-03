@@ -24,6 +24,10 @@ import {
 import {
   ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent
 } from "./quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component";
+import {
+  QuanLyHopDongThanhLyComponent
+} from "./hop-dong-thanh-ly/quan-ly-hop-dong-thanh-ly/quan-ly-hop-dong-thanh-ly.component";
+
 
 const routes: Routes = [
   {
@@ -69,6 +73,10 @@ const routes: Routes = [
       {
         path: 'hop-dong/them-moi',
         component: ThongTinHopDongThanhLyComponent
+      },
+      {
+        path: 'hop-dong/quan-ly-chi-tiet/:id',
+        component: QuanLyHopDongThanhLyComponent
       },
       {
         path: 'hop-dong/chi-tiet/:id',

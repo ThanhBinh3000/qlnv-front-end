@@ -99,7 +99,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       soVanBanSuaDoi: [null],
       idVanBanSuaDoi: [null],
       loaiVthh: [],
-      trichYeu: ['', [Validators.required]],
+      trichYeu: [''],
       thoiGianLuuKhoToiDa: [null],
       trangThaiHl: [null],
       trangThai: [null],
@@ -327,7 +327,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
     body.fileDinhKems = this.taiLieuDinhKemList;
     body.loaiVthh = this.listOfTagOptions.join(',');
-    let uniquelistLoaiVthh =  [...new Map(this.listLoaiVthh.map(item => [item, item])).values()];
+    let uniquelistLoaiVthh = [...new Map(this.listLoaiVthh.map(item => [item, item])).values()];
     body.listTenLoaiVthh = uniquelistLoaiVthh.join(',');
     body.apDungTai = this.userInfo.MA_DVI.substring(0, 2);
     let res;
@@ -341,7 +341,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.formData.patchValue({
         id: res.data.id,
         trangThai: res.data.trangThai,
-        loaiVthh: this.listOfTagOptions.join(',')
+        loaiVthh: this.listOfTagOptions.join(','),
       });
       if (isGuiDuyet) {
         await this.guiDuyet();
@@ -716,12 +716,15 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        listVbThayThe: this.formData.get('soVanBanThayThe').value,
+        loaiVthhSearch: this.listOfTagOptions
+      },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         let res = await this.khCnQuyChuanKyThuat.getDetail(data[0].id);
-        if(res.msg == MESSAGE.SUCCESS) {
+        if (res.msg == MESSAGE.SUCCESS) {
           let detail = [res.data];
           this.listOfTagOptions = [];
           this.listLoaiVthh = [];
@@ -770,9 +773,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   async getDsChiTieu(loaiVthh: any[]) {
     let res = await this.danhMucService.danhMucChungGetAll('CHI_TIEU_CL');
     if (res.msg == MESSAGE.SUCCESS) {
-      console.log(loaiVthh, 'loaiVthhloaiVthhloaiVthh');
       this.listChiTieu = res.data.filter(item => loaiVthh.includes(item.phanLoai));
-      console.log(this.listChiTieu, 'this.listChiTieuthis.listChiTieuthis.listChiTieu');
     }
   }
 

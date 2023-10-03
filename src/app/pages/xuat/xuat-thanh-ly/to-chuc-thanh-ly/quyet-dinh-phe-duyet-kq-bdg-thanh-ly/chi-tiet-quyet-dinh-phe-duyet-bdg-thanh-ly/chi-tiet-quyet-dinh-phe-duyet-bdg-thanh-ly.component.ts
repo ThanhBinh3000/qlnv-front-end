@@ -32,12 +32,7 @@ import {Validators} from "@angular/forms";
   styleUrls: ['./chi-tiet-quyet-dinh-phe-duyet-bdg-thanh-ly.component.scss']
 })
 export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component implements OnInit {
-  @Input() isView: boolean;
-  @Input() idSelected: number;
-  @Input() isViewOnModal: boolean;
-  @Output() showListEvent = new EventEmitter<any>();
-  expandSetString = new Set<string>();
-  quyetDinhDtlView: any[] = [];
+
   maHauTo: any;
   listPhuongThucGiaoNhanBDG: any[] = [];
 
@@ -125,10 +120,7 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
               res.data.soQd = res.data.soQd?.split("/")[0];
             }
             this.formData.patchValue(res.data);
-            this.formData.value.quyetDinhDtl.forEach(s => {
-              s.idVirtual = uuidv4();
-            });
-            await this.buildTableView();
+            await this.getDetailThongBao(res.data.idThongBao);
           }
         })
         .catch((e) => {
@@ -149,21 +141,13 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
   }
 
   async buildTableView() {
-    this.quyetDinhDtlView = chain(this.formData.value.quyetDinhDtl)
-      .groupBy("tenChiCuc")
-      .map((v, k) => {
-          let rowItem = v.find(s => s.tenChiCuc === k);
-          let soLuong = v.reduce((prev, cur) => prev + cur.soLuong, 0);
-          let idVirtual = uuidv4();
-          return {
-            idVirtual: idVirtual,
-            tenChiCuc: k,
-            soLuong: soLuong,
-            childData: v
-          }
-        }
-      ).value();
-    await this.expandAll();
+    this.dataTable = chain(this.dataTable).groupBy('xhTlDanhSachHdr.tenChiCuc').map((value, key) => ({
+        tenDonVi: key,
+        children: value,
+        expandSet : true
+      })
+    ).value()
+    console.log(this.dataTable)
   }
 
   async loadDsToChucThanhLy() {
@@ -173,22 +157,6 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     let body = {...this.formData.value, soQd: this.formData.value.soQd + this.maHauTo}
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
-  }
-
-  expandAll() {
-    if (this.quyetDinhDtlView && this.quyetDinhDtlView.length > 0) {
-      this.quyetDinhDtlView.forEach(s => {
-        this.expandSetString.add(s.idVirtual);
-      });
-    }
-  }
-
-  onExpandStringChange(id: string, checked: boolean): void {
-    if (checked) {
-      this.expandSetString.add(id);
-    } else {
-      this.expandSetString.delete(id);
-    }
   }
 
   async openDialogToChucThanhLy() {
@@ -217,29 +185,28 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
     })
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.formData.patchValue({
-          idThongBao: data.id,
-          maThongBao: data.maThongBao,
-          soBienBan: data.soBienBan,
-          thongBaoKhongThanh: data.thongBaoKhongThanh,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          tenLoaiVthh: data.loaiVthh,
-          tenCloaiVthh: data.cloaiVthh,
-          pthucGnhan: data.pthucGnhan,
-          thoiHanGiaoNhan: data.thoiHanGiaoNhan,
-          hthucDgia: data.hthucDgia,
-          pthucDgia: data.pthucDgia,
-          idQdTl: data.idQdTl,
-          soQdTl: data.soQdTl,
-          quyetDinhDtl: data.toChucDtl,
-          tongSlXuatBan: data.toChucDtl.reduce((prev, cur) => prev + cur.slDauGia, 0),
-          thanhTien: data.toChucDtl.reduce((prev, cur) => prev + cur.thanhTien, 0),
-        })
-        await this.buildTableView();
+        await this.getDetailThongBao(data.id);
       }
     });
   };
+
+  async getDetailThongBao(idThongBao){
+    await this.toChucThucHienThanhLyService.getDetail(idThongBao).then((res)=>{
+      console.log(res);
+      if(res.data){
+        const data = res.data;
+        this.formData.patchValue({
+            idThongBao: data.id,
+            maThongBao: data.maThongBao,
+            soBienBan: data.soBienBan,
+            thongBaoKhongThanh: data.thongBaoKhongThanh,
+        });
+        this.dataTable = data.children.filter(item => item.maDviTsan != null && item.toChucCaNhan != null);
+        this.buildTableView();
+
+      }
+    })
+  }
 
   isDisabled() {
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.DA_DUYET_LDC || this.formData.value.trangThai == STATUS.BAN_HANH) {

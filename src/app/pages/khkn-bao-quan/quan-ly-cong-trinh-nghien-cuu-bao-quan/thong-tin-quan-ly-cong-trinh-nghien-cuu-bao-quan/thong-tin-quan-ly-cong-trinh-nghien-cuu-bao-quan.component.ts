@@ -15,6 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { saveAs } from 'file-saver';
 import { PREVIEW } from '../../../../constants/fileType';
+import printJS from 'print-js';
 
 @Component({
   selector: 'app-thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan',
@@ -64,6 +65,10 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   rowItem1: NghiemThuThanhLy = new NghiemThuThanhLy;
   dataEdit1: { [key: string]: { edit: boolean; data: NghiemThuThanhLy } } = {};
+  pdfSrc: any;
+  wordSrc: any;
+  printSrc: any;
+
 
   constructor(
     httpClient: HttpClient,
@@ -505,6 +510,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       if (res.data) {
         this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
         this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.printSrc = res.data.pdfSrc;
         this.showDlgPreview = true;
       } else {
         this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
@@ -519,5 +525,10 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   downloadWord() {
     saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  doPrint() {
+    console.log('aaaaaaaaa');
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
   }
 }

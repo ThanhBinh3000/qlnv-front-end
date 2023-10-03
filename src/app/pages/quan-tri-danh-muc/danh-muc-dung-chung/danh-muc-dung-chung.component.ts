@@ -182,7 +182,6 @@ export class DanhMucDungChungComponent implements OnInit {
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
-
     } else {
       this.dataTable = [];
       this.totalRecord = 0;

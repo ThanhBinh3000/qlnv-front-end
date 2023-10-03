@@ -81,6 +81,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       donGiaTamTinh: [],
       thanhTienDx: [],
       tenCloaiVthh: [],
+      thueVat: [],
     });
   }
 
@@ -214,6 +215,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
           }
         })
         this.giaToiDa = giaToiDa;
+        this.formData.patchValue({
+          thueVat: res.data[0].vat * 100
+        })
       }
     }
   }
