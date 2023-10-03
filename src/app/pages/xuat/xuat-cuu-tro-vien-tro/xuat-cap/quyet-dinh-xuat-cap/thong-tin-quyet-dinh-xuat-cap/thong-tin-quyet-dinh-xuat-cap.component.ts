@@ -92,6 +92,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   loaiNhapXuat: string;
   kieuNhapXuat: string;
   tongSoLuong: number;
+  tongSoLuongDx: number;
   tongSlXuatCap: string;
   tongNhuCauXuat: string;
   constructor(httpClient: HttpClient,
@@ -271,13 +272,13 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     }
   }
   tinhTong() {
-    const { tongSoLuong, tongSlXuatCap, tongNhuCauXuat } = this.phuongAnView.reduce((obj, cur) => {
-      obj.tongSoLuong += cur.soLuong ? cur.soLuong : 0;
+    const { tongSoLuongDx, tongSlXuatCap, tongNhuCauXuat } = this.phuongAnView.reduce((obj, cur) => {
+      obj.tongSoLuongDx += cur.soLuongDx ? cur.soLuongDx : 0;
       obj.tongSlXuatCap += cur.soLuongXc ? cur.soLuongXc : 0;
       obj.tongNhuCauXuat += cur.soLuongXc ? cur.soLuongNhuCauXuat : 0;
       return obj
-    }, { tongSoLuong: 0, tongSlXuatCap: 0, tongNhuCauXuat: 0 });
-    this.tongSoLuong = tongSoLuong;
+    }, { tongSoLuongDx: 0, tongSlXuatCap: 0, tongNhuCauXuat: 0 });
+    this.tongSoLuongDx = tongSoLuongDx;
     this.tongSlXuatCap = tongSlXuatCap;
     this.tongNhuCauXuat = tongNhuCauXuat;
   }

@@ -362,7 +362,7 @@
               <td>{{item.soDx}}</td>
               <td>{{item.ngayKyDx}}</td>
               <td>{{item.trichYeuDx}}</td>
-              <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
+              <td>{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
             </tr>
           </ng-container>
         </tbody>
@@ -419,7 +419,7 @@
                     <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span style="color: #001CFF">
-                        <strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}} kg</strong>
+                        <strong>{{tongSoLuongDx|number:globals.numberFormat:globals.locale}} kg</strong>
                       </span>
                     </nz-form-control>
                   </nz-form-item>
@@ -461,7 +461,7 @@
                       <tr>
                         <td>{{i+1}}</td>
                         <td>{{item.noiDungDx}}</td>
-                        <td style="height: 31.5px">{{item.soLuong|number:globals.numberFormat:globals.locale}}
+                        <td style="height: 31.5px">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}
                         </td>
                         <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                         <td>{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
@@ -470,7 +470,7 @@
                     <tr>
                       <td></td>
                       <td class="text-blue">Tổng</td>
-                      <td class="text-blue">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-blue">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
                       <td class="text-blue">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                       <td class="text-blue">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
                     </tr>
@@ -479,6 +479,9 @@
               </nz-card>
             </ng-container>
           </div>
+          <label nz-checkbox [nzDisabled]="true" [ngModel]="true">
+            Đồng ý duyệt xuất cấp
+          </label>
         </nz-card>
       </div>
       <div nz-col [nzSpan]="12">
@@ -580,7 +583,7 @@
                   <tr>
                     <td></td>
                     <td class="text-blue">Tổng</td>
-                    <td class="text-blue">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-blue">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
                     <td class="text-blue">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                     <td class="text-blue">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
                   </tr>

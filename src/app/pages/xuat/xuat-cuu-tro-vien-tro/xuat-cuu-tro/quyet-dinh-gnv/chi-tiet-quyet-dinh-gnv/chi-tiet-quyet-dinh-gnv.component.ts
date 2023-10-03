@@ -407,90 +407,13 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
   }
 
-  async buildTableView1() {
-    this.formData.value.dataDtl.forEach(s => {
-      s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
-        (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
-        (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-        (s.tenLoKho ?? '');
-    });
-    let data = this.formData.value.dataDtl;
-    if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC) {
-      data = this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*"));
-    }
-    this.phuongAnView = chain(data)
-      .groupBy("noiDungDx")
-      .map((value, key) => {
-        let noiDungDxRow = value.find(s => s.noiDungDx === key) || {};
-        let rs = chain(value)
-          .groupBy("tenLoaiVthh")
-          .map((v, k) => {
-            let tenLoaiVthhRow = v.find(s => s.tenLoaiVthh === k) || {};
-            let rs = chain(v)
-              .groupBy("tenChiCuc")
-              .map((v1, k1) => {
-                let tenChiCucRow = v1.find(s => s.tenChiCuc === k1) || {};
-                let soLuongXuat = v1.reduce((prev, next) => prev + next.soLuong, 0);
-                let rs = chain(v1)
-                  .groupBy("tenCloaiVthh")
-                  .map((v2, k2) => {
-                    let tenCloaiVthhRow = v2.find(s => s.tenCloaiVthh === k2) || {};
-                    let soLuongXuat = v2.reduce((prev, next) => prev + next.soLuong, 0);
-                    return {
-                      idVirtual: uuidv4(),
-                      tenCloaiVthh: tenCloaiVthhRow.tenCloaiVthh || '',
-                      cloaiVthh: tenCloaiVthhRow.cloaiVthh || '',
-                      tonKhoCloaiVthh: tenCloaiVthhRow.tonKhoCloaiVthh || 0,
-                      soLuongXuat: soLuongXuat,
-                      childData: v2
-                    }
-                  }).value();
-                return {
-                  idVirtual: uuidv4(),
-                  tenChiCuc: tenChiCucRow.tenChiCuc || '',
-                  soLuongGiao: tenChiCucRow.soLuongGiao || 0,
-                  soLuongXuat: soLuongXuat,
-                  tonKhoDvi: tenLoaiVthhRow.tonKhoDvi || 0,
-                  childData: rs
-                }
-              }).value();
-            let soLuong = rs.reduce((prev, next) => prev + next.soLuong, 0);
-            return {
-              idVirtual: uuidv4(),
-              loaiVthh: tenLoaiVthhRow.loaiVthh || '',
-              tenLoaiVthh: tenLoaiVthhRow.tenLoaiVthh || '',
-              tonKhoLoaiVthh: tenLoaiVthhRow.tonKhoLoaiVthh || 0,
-              soLuongGiao: tenLoaiVthhRow.soLuongGiao || 0,
-              soLuongDx: tenLoaiVthhRow.soLuongDx || 0,
-              soLuong: soLuong,
-              donViTinh: tenLoaiVthhRow.donViTinh || '',
-              childData: rs
-            }
-          }).value();
-        return {
-          idVirtual: uuidv4(),
-          noiDungDx: key,
-          soLuong: 0,
-          soLuongDx: 0,
-          childData: rs
-        };
-      }).value();
-    this.expandAll();
-  }
-
   async buildTableView() {
     this.formData.value.dataDtl.forEach(s => {
-      // s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
-      //   (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
-      //   (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-      //   (s.tenLoKho ?? '') +
-      //   (s.tenCloaiVthh ? '(' + s.tenCloaiVthh + ')' : '');
       if (s.tenDiemKho) {
         s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
           (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
           (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-          (s.tenLoKho ?? '') +
-          (s.tenCloaiVthh ? '(' + s.tenCloaiVthh + ')' : '');
+          (s.tenLoKho ?? '');
       }
       s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
     });
@@ -526,7 +449,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
                   childData: v1.filter(f => !!f.tenDiaDiem),
                   noiDungDx: tenChiCucRow.noiDungDx,
                   loaiVthh: tenChiCucRow.loaiVthh,
-                  cloaiVthh: tenChiCucRow.chungLoaiVthh,
+                  cloaiVthh: tenChiCucRow.cloaiVthh,
                   tenLoaiVthh: tenChiCucRow.tenLoaiVthh,
                   tenCloaiVthh: tenChiCucRow.tenCloaiVthh,
                   donViTinh: tenChiCucRow.donViTinh,
@@ -584,6 +507,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   async themPhuongAn(data?: any, level?: any, editRow?: boolean) {
     this.formDataDtl.reset();
     if (data) {
+      console.log("data", data)
       let edit = editRow;
       if (level == 1) {
         // let baseData = data.childData[0].childData[0];
@@ -778,6 +702,15 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
     await this.buildTableView();
   }
+  updateTonKhoDvi(slTonKho: number, maDvi) {
+    const tongSlPhanBo = this.formData.value.dataDtl.reduce((sum, cur) => {
+      if (cur.maDvi === maDvi) {
+        sum += cur.soLuong;
+        return sum;
+      }
+    }, 0);
+    return slTonKho - tongSlPhanBo
+  }
 
   selectDiaDiem(node: NzTreeNodeOptions) {
     if (node.isLeaf) {
@@ -847,9 +780,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             });
             if (this.userService.isChiCuc()) {
               cloaiVthh ?
-                this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoCloaiVthh)]) :
-                this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoDvi)]);
-              this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(soLuongGiao)]);
+                this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]) :
+                this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoDvi))]);
               this.formDataDtl.controls['soLuong'].updateValueAndValidity();
             }
           } else {
