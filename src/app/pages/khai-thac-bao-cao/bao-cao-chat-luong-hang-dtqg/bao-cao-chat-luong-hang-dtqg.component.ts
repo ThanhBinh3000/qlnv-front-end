@@ -28,7 +28,7 @@ export class BaoCaoChatLuongHangDtqgComponent implements OnInit, AfterViewInit {
     });
   }
 
-  tabSelected: number;
+  tabSelected: number = 0;
 
   selectTab(tab: number) {
     this.tabSelected = tab;
