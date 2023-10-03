@@ -20,7 +20,6 @@ import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-them-moi-dieu-chinh',
@@ -130,7 +129,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       soCongVan: soCongVan?.split('/')[0],
       soQdDc: soQdDc?.split('/')[0],
     })
-    this.dataTable = children;
+    this.dataTable = this.userService.isCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children;
     await this.showFirstRow(event, 0);
   }
 
@@ -145,16 +144,14 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       }
       await this.loadDanhSachDieuChinh();
       const res = await this.quyetDinhPdKhBdgService.search(body)
-      if (res.msg !== MESSAGE.SUCCESS) {
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
+        this.danhSachQdPdKeHoach = res.data.content.filter(item => !soQdPdSet.has(item.soQdPd));
+      } else if (res && res.msg) {
         this.notification.error(MESSAGE.ERROR, res.msg);
-        return;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
-      const data = res.data.content;
-      if (!data || data.length === 0) {
-        return;
-      }
-      const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
-      this.danhSachQdPdKeHoach = data.filter(item => !soQdPdSet.has(item.soQdPd));
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH BÁN ĐẤU GIÁ',
         nzContent: DialogTableSelectionComponent,
@@ -231,7 +228,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       if (data && data.content && data.content.length > 0) {
         this.danhSachDieuChinh = data.content
       }
-    }else {
+    } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
@@ -290,11 +287,12 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
   }
 
-  async showFirstRow($event, index : number) {
+  async showFirstRow($event, index: number) {
     await this.showDetail($event, index);
   }
 
-  async showDetail($event, index : number) {
+  index = 0;
+  async showDetail($event, index: number) {
     if ($event.type == 'click') {
       const selectedRow = $event.target.parentElement;
       const previouslySelectedRow = selectedRow.parentElement.querySelector('.selectedRow');
@@ -303,31 +301,57 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       }
       selectedRow.classList.add('selectedRow');
       this.selected = false;
+      this.index = index
     } else {
       this.selected = true
     }
     this.dataInput = this.dataTable[index];
     if (this.formData.value.idQdPd) {
       const res = await this.quyetDinhPdKhBdgService.getDetail(this.formData.value.idQdPd);
-      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        return;
+      if (res.msg === MESSAGE.SUCCESS && res.data) {
+        const data = res.data;
+        this.dataInputCache = data.children.find(item => item.soDxuat === this.dataTable[index].soDxuat) ?? null;
       }
-      this.dataInputCache = res.data.children[index];
     }
     await this.spinner.hide();
   }
 
-  setValidForm() {
-    this.formData.controls["nam"].setValidators([Validators.required]);
-    this.formData.controls["ngayTaoCongVan"].setValidators([Validators.required]);
-    this.formData.controls["trichYeu"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
-    this.formData.controls["soQdCc"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiHinhNx"].setValidators([Validators.required]);
-    this.formData.controls["tenKieuNx"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+  async receiveDataFromChild(data: any) {
+    console.log(data, 999)
+    if (this.dataTable[this.index]) {
+      if (data.hasOwnProperty('tongSoLuong')) {
+        this.dataTable[this.index].tongSoLuong = data.tongSoLuong;
+      }
+      if (data.hasOwnProperty('tongTienKhoiDiem')) {
+        this.dataTable[this.index].tongTienKhoiDiem = data.tongTienKhoiDiem;
+      }
+      if (data.hasOwnProperty('tongTienDatTruoc')) {
+        this.dataTable[this.index].tongTienDatTruoc = data.tongTienDatTruoc;
+      }
+      if (data.hasOwnProperty('tgianDkienTu')) {
+        this.dataTable[this.index].tgianDkienTu = data.tgianDkienTu;
+      }
+      if (data.hasOwnProperty('tgianDkienDen')) {
+        this.dataTable[this.index].tgianDkienDen = data.tgianDkienDen;
+      }
+    }
   }
 
-  protected readonly LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  setValidForm() {
+    const requiredFields = [
+      "nam",
+      "ngayTaoCongVan",
+      "trichYeu",
+      "ngayKyQd",
+      "soQdCc",
+      "tenLoaiHinhNx",
+      "tenKieuNx",
+      "tenLoaiVthh",
+      "tenCloaiVthh",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
+  }
 }

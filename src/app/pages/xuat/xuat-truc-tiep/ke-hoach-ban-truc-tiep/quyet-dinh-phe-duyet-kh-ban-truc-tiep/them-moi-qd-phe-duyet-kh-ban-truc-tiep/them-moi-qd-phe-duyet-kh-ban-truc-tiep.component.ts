@@ -110,7 +110,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       await this.spinner.show();
       this.maHauTo = '/' + this.userInfo.MA_QD;
       if (this.idInput > 0) {
-        await this.loadChiTiet(this.idInput);
+        await this.loadDetail(this.idInput);
       } else {
         await this.initForm();
       }
@@ -153,7 +153,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       });
       await this.onChangeIdThHdr(this.formData.value.idThHdr);
     } else {
-      await this.loadChiTiet(dataTongHop.idSoQdPd);
+      await this.loadDetail(dataTongHop.idSoQdPd);
       this.isView = dataTongHop.trangThai == STATUS.DA_BAN_HANH_QD;
     }
   }
@@ -217,7 +217,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     return isValid;
   }
 
-  async loadChiTiet(id: number) {
+  async loadDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
@@ -228,7 +228,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     });
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileDinhKem = data.fileDinhKem;
-    this.danhsachDx = children;
+    this.danhsachDx = this.userService.isCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children;
     if (this.danhsachDx && this.danhsachDx.length > 0) {
       await this.showFirstRow(event, this.danhsachDx[0]);
     }
@@ -292,7 +292,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       }
       const data = res.data;
       if (data.idSoQdPd) {
-        await this.loadChiTiet(data.idSoQdPd);
+        await this.loadDetail(data.idSoQdPd);
       } else {
         const soLuongDviTsan = data.children.reduce((total, item) => total + item.slDviTsan, 0);
         this.formData.patchValue({
