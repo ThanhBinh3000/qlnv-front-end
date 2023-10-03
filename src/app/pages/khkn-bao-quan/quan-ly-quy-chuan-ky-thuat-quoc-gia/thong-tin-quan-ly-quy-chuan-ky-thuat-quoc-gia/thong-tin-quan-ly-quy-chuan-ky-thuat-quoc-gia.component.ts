@@ -110,7 +110,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       apDungCloaiVthh: [true],
       listTenLoaiVthh: [''],
       type: [''],
-      isMat: [],
+      isMat: [false],
       maBn: [],
       maVb: this.listMaSo[0].maVb,
     });
