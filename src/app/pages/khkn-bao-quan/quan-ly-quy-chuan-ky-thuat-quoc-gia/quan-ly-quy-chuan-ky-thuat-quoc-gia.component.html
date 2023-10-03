@@ -131,7 +131,7 @@
           <th>Bộ/Ngành</th>
           <th width='200px'>Số văn bản</th>
           <th width='200px'>Số hiệu quy chuẩn</th>
-          <th width='200px'>Văn bản thay thế</th>
+          <th width='300px'>Văn bản thay thế/Sửa đổi, bố sung</th>
           <th width='200px'>Loại hàng hóa</th>
           <th width='120px'>Ngày ban hành</th>
           <th width='120px'>Ngày hiệu lực</th>
@@ -143,10 +143,10 @@
         <tr>
           <th></th>
           <th class='text-center' width='350px'>
-<!--            <nz-input-group [nzSuffix]='suffixIconSearch'>-->
-<!--              <input type='text' placeholder='Tìm kiếm' nz-input [(ngModel)]='filterTable.tenBn'-->
-<!--                     (input)="filterInTable('tenBn',filterTable.tenBn)" />-->
-<!--            </nz-input-group>-->
+            <!--            <nz-input-group [nzSuffix]='suffixIconSearch'>-->
+            <!--              <input type='text' placeholder='Tìm kiếm' nz-input [(ngModel)]='filterTable.tenBn'-->
+            <!--                     (input)="filterInTable('tenBn',filterTable.tenBn)" />-->
+            <!--            </nz-input-group>-->
           </th>
           <th class='text-center' width='350px'>
             <nz-input-group [nzSuffix]='suffixIconSearch'>
@@ -222,7 +222,12 @@
             <td>{{ data.tenBn }}</td>
             <td>{{ data.soVanBan }}</td>
             <td>{{ data.soHieuQuyChuan}}</td>
-            <td>{{ data.soVanBanThayThe}}</td>
+            <td>
+              <p *ngIf='data.soVanBanThayThe'><span
+                class='text-danger'>VB thay thế:</span> <b>{{ data.soVanBanThayThe}}</b></p>
+              <p *ngIf='data.soVanBanSuaDoi'><span
+                class='text-blue'>VB sửa đổi:</span><b> {{ data.soVanBanSuaDoi}}</b></p>
+            </td>
             <td>{{ data.listTenLoaiVthh }}</td>
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
