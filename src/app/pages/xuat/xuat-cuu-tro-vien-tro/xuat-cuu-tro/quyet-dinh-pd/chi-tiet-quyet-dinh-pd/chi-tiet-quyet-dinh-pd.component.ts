@@ -277,7 +277,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async openDialogTh() {
-    if (this.formData.get('type').value != 'TH') {
+    if (this.formData.get('type').value != 'TH' || this.formData.value.trangThai !== STATUS.DU_THAO) {
       return;
     }
     try {
@@ -300,7 +300,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           nzWidth: '900px',
           nzFooter: null,
           nzComponentParams: {
-            dataTable: res.data.content.filter(f => f.tenVthh === this.formData.value.tenVthh),
+            dataTable: res.data.content.filter(f => !f.soQdPd && f.tenVthh === this.formData.value.tenVthh),
             dataHeader: ['Số tổng hợp', 'Ngày tổng hợp', 'Nội dung tổng hợp'],
             dataColumn: ['id', 'ngayTao', 'noiDungThop']
           },
@@ -376,7 +376,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           nzWidth: '900px',
           nzFooter: null,
           nzComponentParams: {
-            dataTable: res.data.content,
+            dataTable: res.data.content.filter(f => !f.soQdPd && f.tenVthh === this.formData.value.tenVthh),
             dataHeader: ['Số tờ trình đề xuất', 'Ngày đề xuất', 'Nội dung'],
             dataColumn: ['soDx', 'ngayDx', 'noiDung']
           },
