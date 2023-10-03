@@ -92,7 +92,7 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Báo cáo Bộ/Ngành',
     route: MAIN_ROUTES.baoCaoBoNganh,
-    code: 'DCNB'
+    code: 'BCBN'
   },
   {
     title: 'Khai thác báo cáo',
