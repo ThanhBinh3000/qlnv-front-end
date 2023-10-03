@@ -1,29 +1,34 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {MESSAGE} from "../../../../../constants/message";
-import {UserLogin} from "../../../../../models/userlogin";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {KhCnQuyChuanKyThuat} from "../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import dayjs from "dayjs";
-import {STATUS} from "../../../../../constants/status";
-import {Validators} from "@angular/forms";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from '../../../../../components/base2/base2.component';
+import { MESSAGE } from '../../../../../constants/message';
+import { UserLogin } from '../../../../../models/userlogin';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { DonviService } from '../../../../../services/donvi.service';
+import { DanhMucService } from '../../../../../services/danhmuc.service';
+import { KhCnQuyChuanKyThuat } from '../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import dayjs from 'dayjs';
+import { STATUS } from '../../../../../constants/status';
+import { Validators } from '@angular/forms';
 import {
-  DialogTableSelectionComponent
-} from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+  DialogTableSelectionComponent,
+} from '../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component';
+import { PAGE_SIZE_DEFAULT } from '../../../../../constants/config';
 
 @Component({
   selector: 'app-tim-kiem-van-ban',
   templateUrl: './tim-kiem-van-ban.component.html',
-  styleUrls: ['./tim-kiem-van-ban.component.scss']
+  styleUrls: ['./tim-kiem-van-ban.component.scss'],
 })
 export class TimKiemVanBanComponent extends Base2Component implements OnInit {
 
+  @Input()
+  listVbThayThe: string;
+  @Input()
+  loaiVthhSearch: string;
   userInfo: UserLogin;
   detail: any = {};
   STATUS = STATUS;
@@ -42,12 +47,15 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
   allChecked = false;
   indeterminate = false;
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LDV'},
-    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LDV'},
-    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LDV'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LDV' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LDV' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LDV' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
+  page: number = 1;
+  pageSize: number = 20;
+  totalRecord: number = 0;
 
   constructor(
     httpClient: HttpClient,
@@ -63,15 +71,22 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, khCnQuyChuanKyThuat);
     this.formData = this.fb.group({
       loaiVthh: [null, [Validators.required]],
-    })
+    });
   }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+
       this.userInfo = this.userService.getUserLogin();
       await this.loadLoaiHangHoa();
       // await this.timKiem();
+      if (this.loaiVthhSearch && this.loaiVthhSearch.length > 0) {
+        this.formData.patchValue({
+          loaiVthh: this.loaiVthhSearch[0],
+        });
+        await this.timKiem();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -86,15 +101,23 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
       return;
     }
     try {
-      let body = this.formData.value
+      let body = this.formData.value;
       body.paggingReq = {
-        limit: 1000,
-        page: this.page - 1
-      }
+        limit: this.pageSize,
+        page: this.page - 1,
+      };
       let res = await this.khCnQuyChuanKyThuat.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content.filter(item => item.trangThaiHl == '01');
+        this.totalRecord = data.totalElements;
+        if (this.listVbThayThe) {
+          this.dataTable.forEach(item => {
+            if (this.listVbThayThe.indexOf(item.soVanBan) !== -1) {
+              item.checked = true;
+            }
+          });
+        }
       } else {
         this.dataTable = [];
         this.totalRecord = 0;
@@ -138,16 +161,16 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
 
   async onChangeLoaiHH(id: number) {
     if (id && id > 0) {
-      let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id)
+      let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id);
       if (loaiHangHoa && loaiHangHoa.length > 0) {
-        this.dsChungLoaiHangHoa = loaiHangHoa[0].child
+        this.dsChungLoaiHangHoa = loaiHangHoa[0].child;
       }
     }
   }
 
   async changeHangHoa(event: any) {
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listChungLoaiHangHoa = res.data;
@@ -157,9 +180,11 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
       }
     }
   }
+
   changeLoaiVthh() {
     this.timKiem();
   }
+
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.detail.maDvi = this.userInfo.MA_DVI;
