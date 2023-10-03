@@ -90,6 +90,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       maDvi: [''],
       soQdPdGiaCuThe: [''],
       ngayKyQdPdGiaCuThe: [''],
+      vat: [''],
     });
   }
 
@@ -128,6 +129,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         donGiaVat: (pag.data[0].giaQdDcTcdtVat && pag.data[0].giaQdDcTcdtVat > 0)? pag.data[0].giaQdDcTcdtVat : pag.data[0].giaQdTcdtVat,
         soQdPdGiaCuThe: pag.data[0].soQdTcdt,
         ngayKyQdPdGiaCuThe: pag.data[0].ngayKyTcdt,
+        vat: pag.data[0].vat * 100,
       })
     }
     this.formGoiThau.patchValue({

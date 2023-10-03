@@ -154,7 +154,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       gtriDthau: [null, [Validators.required]],
       gtriHdong: [null, [Validators.required]],
       donGiaVat: [],
-      vat: ['5'],
+      thueVat: [],
       tongMucDt: [null],
       tongMucDtLamTron: [null],
       tongMucDtDx: [null, [Validators.required]],
@@ -524,6 +524,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       if (!res) {
         return;
       }
+      this.formData.patchValue({
+        thueVat: res.value.thueVat
+      })
       let isReplace = false;
       if (res.value.goiThau && res.value.goiThau != '') {
         for (let i = 0; i < this.listOfData.length; i++) {

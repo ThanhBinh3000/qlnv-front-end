@@ -65,6 +65,8 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
         kieuNx: [''],
         trangThai: [],
         tenTrangThai: [],
+        trangThaiDg : [],
+        tenTrangThaiDg : [],
       }
     );
   }
@@ -123,7 +125,7 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
             id: this.id,
             trangThai: this.STATUS.HOAN_THANH_CAP_NHAT
           }
-          let res = await this._service.approveDtl(body);
+          let res = await this._service.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.loadThongTinDauGia()
