@@ -17,7 +17,7 @@ import {
   TienDoCongViecService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/tien-do-cong-viec.service";
 import {ThongTinTienDoCongViecComponent} from "./thong-tin-tien-do-cong-viec/thong-tin-tien-do-cong-viec.component";
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-tien-do-cong-viec',
   templateUrl: './tien-do-cong-viec.component.html',
@@ -396,6 +396,28 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
     this.dataTable.forEach(f=>{
       f.dataChild=f.dataChild.filter(x => x.id != data.id);
     })
+  }
+  exportData(fileName?: string) {
+    if (this.itemHopDong) {
+      this.spinner.show();
+      try {
+        let body={
+          "idGoiThau":this.itemHopDong.id
+        }
+        this.service
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, fileName ? fileName : 'data.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
 }

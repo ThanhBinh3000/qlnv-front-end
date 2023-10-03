@@ -250,7 +250,6 @@ export class DialogThongTinCanBoComponent implements OnInit {
 
   async bindingData(dataDt) {
     if (dataDt) {
-      // this.formData.patchValue(dataDt);
       let dv = this.optionsDonVi.find(s => s.maDvi == dataDt.dvql);
       let pb = this.optionsPhongBan.find(s => s.maDvi == dataDt.department);
       this.formData.patchValue({
@@ -263,30 +262,11 @@ export class DialogThongTinCanBoComponent implements OnInit {
         phoneNo: dataDt.phoneNo,
         status: dataDt.status,
         sysType: dataDt.sysType,
+        userType : dataDt.userType,
         dvql: dv ? dv.maDvi + ' - ' + dv.tenDvi : '',
         department: pb ? pb.maDvi + ' - ' + pb.tenDvi : '',
         ghiChu: dataDt.ghiChu,
       });
-      // this.changeDvql();
-      // let res = await this.qlNSDService.getDetail(dataDt.id);
-      // const dataEdit = res.data;
-      // if (dataEdit) {
-      //   this.dataEdit = dataEdit;
-      //   this.formData.patchValue({
-      //     id: dataEdit.id,
-      //     fullName: dataEdit.fullName,
-      //     email: dataEdit.email,
-      //     username: dataEdit.username,
-      //     password: dataEdit.password,
-      //     position: dataEdit.position,
-      //     phoneNo: dataEdit.phoneNo,
-      //     status: dataEdit.status,
-      //     sysType: dataEdit.sysType,
-      //     dvql: dataEdit.dvql,
-      //     department: dataEdit.department,
-      //     ghiChu: dataEdit.ghiChu
-      //   })
-      // }
     }
   }
 

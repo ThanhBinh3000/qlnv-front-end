@@ -26,6 +26,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
+  @Input() loaiVthhCache;
   formData: FormGroup
   dataTable: any[] = [];
   listNguonVon: any[] = [];
@@ -112,7 +113,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
       loaiVthh: this.dataInput.loaiVthh,
       cloaiVthh: this.dataInput.cloaiVthh,
       trangThai: STATUS.BAN_HANH,
-      maDvi: this.dataInput.maDvi.substring(0,6),
+      maDvi: this.dataInput.maDvi.substring(0, 6),
       loaiGia: 'LG04',
     };
     const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
@@ -126,7 +127,13 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
         donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
       });
       this.dataTable.forEach((item) => {
-        const donGiaDuocDuyet = this.dataInput.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(item.maDvi);
+        let donGiaDuocDuyet = 0;
+        if (this.loaiVthhCache === LOAI_HANG_DTQG.VAT_TU) {
+          const firstItem = this.dataDonGiaDuocDuyet?.[0];
+          donGiaDuocDuyet = firstItem?.giaQdTcdt || 0;
+        } else {
+          donGiaDuocDuyet = donGiaMap.get(item.maDvi);
+        }
         item.children.forEach((child) => {
           child.donGiaDuocDuyet = donGiaDuocDuyet || null;
           child.thanhTien = child.soLuongDeXuat * (donGiaDuocDuyet || 0);

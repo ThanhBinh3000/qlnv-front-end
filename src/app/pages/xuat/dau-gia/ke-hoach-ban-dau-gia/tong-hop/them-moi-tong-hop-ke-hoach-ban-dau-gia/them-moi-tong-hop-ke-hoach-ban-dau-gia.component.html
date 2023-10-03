@@ -178,17 +178,18 @@
           <thead>
           <tr>
             <th nzWidth="50px" class="text-center"> STT</th>
-            <th nzWidth="250px" class="text-left"> Cục DTNN KV</th>
-            <th nzWidth="150px" class="text-left"> Số kế hoạch/đề xuất</th>
-            <th nzWidth="100px" class="text-left"> Ngày ký</th>
-            <th nzWidth="250px" class="text-left"> Trích yếu</th>
-            <th nzWidth="70px" class="text-center"> SL đơn vị tài sản</th>
-            <th nzWidth="100px" class="text-right"> Tổng SL xuất bán đề xuất (Kg)</th>
-            <th nzWidth="150px" class="text-right"> Thành tiền Cục đề xuất (đ)</th>
-            <th nzWidth="150px" class="text-right"> % Khoản tiền đặt trước (đ)</th>
-            <th nzWidth="150px" class="text-right"> Khoản tiền đặt trước đề xuất (đ)</th>
-            <th nzWidth="100px" class="text-center"> Trạng thái</th>
-            <!--            <th> Hành động</th>-->
+            <th nzWidth="250px" class="text-left wrap"> Cục DTNN KV</th>
+            <th nzWidth="150px" class="text-left wrap"> Số kế hoạch/đề xuất</th>
+            <th nzWidth="100px" class="text-left wrap"> Ngày ký</th>
+            <th nzWidth="250px" class="text-left wrap"> Trích yếu</th>
+            <th nzWidth="70px" class="text-center wrap"> SL đơn vị tài sản</th>
+            <th nzWidth="100px" class="text-right wrap">Tổng SL xuất bán đề xuất
+              <span *ngIf="!loaiVthh.startsWith('02')">(đ)</span>
+            </th>
+            <th nzWidth="150px" class="text-right wrap"> Thành tiền Cục đề xuất (đ)</th>
+            <th nzWidth="150px" class="text-right wrap"> % Khoản tiền đặt trước (đ)</th>
+            <th nzWidth="150px" class="text-right wrap"> Khoản tiền đặt trước đề xuất (đ)</th>
+            <th nzWidth="100px" class="text-center wrap"> Trạng thái</th>
           </tr>
           </thead>
           <tbody>
@@ -206,11 +207,6 @@
             <td class="text-right">{{ data.khoanTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-right">{{ data.tongTienDatTruocDx|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-center">{{ data.tenTrangThai }}</td>
-            <!--            <td>-->
-            <!--              <a>-->
-            <!--                <i class="icon htvbdh_tcdt_print"></i>-->
-            <!--              </a>-->
-            <!--            </td>-->
           </tr>
           </tbody>
         </nz-table>

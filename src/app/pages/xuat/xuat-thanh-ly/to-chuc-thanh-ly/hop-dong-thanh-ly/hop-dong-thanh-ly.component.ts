@@ -11,6 +11,8 @@ import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 import {
   QuyetDinhPheDuyetKetQuaService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhPheDuyetKetQua.service";
+import {Base3Component} from "../../../../../components/base3/base3.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -18,7 +20,7 @@ import {
   templateUrl: './hop-dong-thanh-ly.component.html',
   styleUrls: ['./hop-dong-thanh-ly.component.scss']
 })
-export class HopDongThanhLyComponent extends Base2Component implements OnInit {
+export class HopDongThanhLyComponent extends Base3Component implements OnInit {
   isQuanLy: boolean;
   isAddNew: boolean;
   dsDonvi: any[] = [];
@@ -44,10 +46,13 @@ export class HopDongThanhLyComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
     private donviService: DonviService,
-    private quyetDinhPheDuyetKetQuaService: QuyetDinhPheDuyetKetQuaService
+    private _service: QuyetDinhPheDuyetKetQuaService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKetQuaService);
+    super(httpClient, storageService, notification, spinner, modal,route,router,_service);
+    this.defaultURL = '/xuat/xuat-thanh-ly/to-chuc/hop-dong'
     this.formData = this.fb.group({
       ngayKy: '',
       ngayKyTu: '',
@@ -80,20 +85,6 @@ export class HopDongThanhLyComponent extends Base2Component implements OnInit {
     }
   }
 
-  disabledStartNgayKy = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayKyDen) {
-      return startValue.getTime() >= this.formData.value.ngayKyDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayKy = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
-  };
-
   async ngOnInit() {
     await this.spinner.show();
     try {
@@ -120,30 +111,10 @@ export class HopDongThanhLyComponent extends Base2Component implements OnInit {
     this.dsDonvi = this.dsDonvi.filter(item => item.type != "PB");
   }
 
-  goDetail(id: number, roles?: any, isQuanLy?: boolean) {
-    this.idSelected = id;
-    this.isDetail = true;
-    this.isQuanLy = isQuanLy;
-    this.isAddNew = !isQuanLy;
-  }
-
-  openModalQdTl(id: number) {
-    this.idQdTl = id;
-    this.isViewQdTl = true;
-  }
-
-  closeModalQdTl() {
-    this.idQdTl = null;
-    this.isViewQdTl = false;
-  }
-
-  openModalQdKq(id: number) {
-    this.idQdKq = id;
-    this.isViewQdKq = true;
-  }
-
-  closeModalQdKq() {
-    this.idQdKq = null;
-    this.isViewQdKq = false;
+  redirectDetail(idDetail, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.router.navigate([this.defaultURL + '/quan-ly-chi-tiet', idDetail]);
   }
 }

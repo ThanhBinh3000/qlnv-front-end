@@ -210,7 +210,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     }
     let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
     console.log(this.dataChiTieu)
-    let resChiTieu = this.dataChiTieu.khLuongThuc.find(x => x.maDonVi == event);
+    let resChiTieu = this.dataChiTieu?.khLuongThuc.find(x => x.maDonVi == event);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.donViService.getDonVi({ str: event })
     this.listDiemKho = [];
@@ -220,16 +220,20 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         diaChi: res.data.diaChi,
         dvt: resChiTieu?.donViTinh,
         // maDonVi: res.data.maDvi,
-        soLuongKhDd: soLuongDaLenKh?.data,
-        soLuongChiTieu: resChiTieu?.ntnThoc,
+
         // soLuongNhap: chiCuc?.soLuongNhap,
         // tongSoLuong: chiCuc?.tongSoLuong,
         // donGiaVat: chiCuc?.donGiaVat,
         // tongThanhTien: chiCuc?.tongThanhTien,
         // tongThanhTienVat: chiCuc?.tongThanhTienVat,
         // donGia: chiCuc?.donGia,
-        tongSoLuongChuaTh: resChiTieu?.ntnThoc - soLuongDaLenKh.data
       })
+      if(soLuongDaLenKh && resChiTieu){
+        this.formData.value.soLuongKhDd = soLuongDaLenKh?.data
+        this.formData.value.soLuongChiTieu = resChiTieu?.ntnThoc
+        this.formData.value.tongSoLuongChuaTh = resChiTieu?.ntnThoc - soLuongDaLenKh.data
+      }
+
       console.log("changeChiCuc", this.formData.value);
       // this.listOfData = chiCuc.children
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');

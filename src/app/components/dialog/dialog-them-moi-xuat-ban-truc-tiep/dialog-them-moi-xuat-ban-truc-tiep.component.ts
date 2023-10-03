@@ -164,7 +164,12 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     this.isValid = !!(this.listOfData && this.listOfData.length);
   }
 
-  async changeChiCuc(event) {
+  async changeChiCuc(event, isSlChiTieu?) {
+    if (isSlChiTieu) {
+      this.formData.patchValue({
+        soLuongChiTieu: null
+      })
+    }
     const body = {
       year: this.namKh,
       loaiVthh: this.loaiVthh,

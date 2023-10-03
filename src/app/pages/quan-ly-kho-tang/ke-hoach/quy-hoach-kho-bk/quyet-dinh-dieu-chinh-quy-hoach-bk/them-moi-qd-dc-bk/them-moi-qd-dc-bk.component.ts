@@ -169,9 +169,11 @@ export class ThemMoiQdDcBkComponent implements OnInit {
       if (pa == "TL") {
         this.rowItemTL.tenChiCuc = chiCuc[0].tenDvi;
         this.rowItemTL.maDiemKho = null;
+        this.rowItemTL.diaDiem = null;
       } else if (pa == "DTM") {
         this.rowItemDTM.tenChiCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maDiemKho = null;
+        this.rowItemTL.diaDiem = null;
       }
     }
   }
@@ -191,15 +193,21 @@ export class ThemMoiQdDcBkComponent implements OnInit {
     }
   }
 
-  onChangDiemKho(event, type?) {
+  onChangDiemKho(event,pa, type?) {
     const diemKho = this.danhSachDiemKho.filter(item => item.maDvi == event);
     if (diemKho) {
       if (type) {
         type.tenDiemKho = diemKho[0].tenDvi;
         type.diaDiem = diemKho[0].diaChi;
       } else {
-        this.rowItemTL.tenDiemKho = diemKho[0].tenDvi;
-        this.rowItemTL.diaDiem = diemKho[0].diaChi;
+
+        if (pa == "TL") {
+          this.rowItemTL.tenDiemKho = diemKho[0].tenDvi;
+          this.rowItemTL.diaDiem = diemKho[0].diaChi;
+        } else if (pa == "DTM") {
+          this.rowItemDTM.tenDiemKho = diemKho[0].tenDvi;
+          this.rowItemDTM.diaDiem = diemKho[0].diaChi;
+        }
       }
     }
   }

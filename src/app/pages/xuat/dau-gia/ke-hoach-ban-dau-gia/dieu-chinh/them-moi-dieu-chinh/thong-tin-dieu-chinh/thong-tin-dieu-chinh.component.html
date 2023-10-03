@@ -17,7 +17,7 @@
               đấu giá đến hết ngày
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy" nzDisabled>
+              <nz-range-picker formControlName="thoiGianDuKien" (ngModelChange)="onChangeThoiGian($event)" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>
@@ -143,32 +143,30 @@
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất</nz-form-label>
-            <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{formData.value.tongSoLuong|number:globals.numberFormat:globals.locale }}
-                      {{formData.value.donViTinh}}</span>
+            <nz-form-control nz-col [nzSpan]="24">
+              <span style="color: blue"
+                    nzDisabled>{{formData.value.tongSoLuong|number:globals.numberFormat:globals.locale }}
+                {{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm theo đơn giá được duyệt</nz-form-label>
-            <nz-form-control nz-col>
-                     <span style="color: blue">
-                       {{ formData.value.tongTienGiaKdTheoDgiaDd | number:globals.numberFormat:globals.locale }}
-                       {{ formData.value.tongTienGiaKdTheoDgiaDd != null ? '(vnđ)' : '' }}
-                     </span>
+            <nz-form-control nz-col [nzSpan]="24">
+              <span
+                style="color: blue">{{ formData.value.tongTienKhoiDiem == 0 ? null : formData.value.tongTienKhoiDiem|number:globals.numberFormat:globals.locale }}
+                (vnd)</span>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt</nz-form-label>
-            <nz-form-control nz-col>
-                     <span style="color: blue">
-                       {{ formData.value.tongKhoanTienDtTheoDgiaDd | number:globals.numberFormat:globals.locale }}
-                       {{ formData.value.tongKhoanTienDtTheoDgiaDd != null ? '(vnđ)' : '' }}
-                     </span>
+            <nz-form-control nz-col [nzSpan]="24">
+              <span
+                style="color: blue">{{ formData.value.tongTienDatTruoc == 0 ? null : formData.value.tongTienDatTruoc|number:globals.numberFormat:globals.locale }}
+                (vnd)</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -178,7 +176,7 @@
 </nz-collapse>
 <nz-collapse nzAccordion class="pd-10">
   <nz-collapse-panel [nzHeader]="'DANH MỤC BẢNG PHÂN LÔ TÀI SẢN'" [nzActive]="true">
-    <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+    <nz-table class="nowrap pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
       <thead>
       <tr>
@@ -188,7 +186,7 @@
         <th nzWidth="150px" class="text-left wrap"> Lô kho</th>
         <th nzWidth="90px" class="text-left wrap"> Mã ĐVTS</th>
         <th class="text-left"> ĐVT</th>
-        <th nzWidth="80px" class="text-right wrap"> SL Xuất bán đề xuất</th>
+        <th nzWidth="80px" class="text-right wrap"> SL xuất bán đề xuất</th>
         <th nzWidth="80px" class="text-right wrap"> Đơn giá được duyệt (đ)</th>
         <th nzWidth="80px" class="text-right wrap"> Giá khởi điểm (đ)</th>
         <th class="text-center" *ngIf="!isView"> Hành động</th>

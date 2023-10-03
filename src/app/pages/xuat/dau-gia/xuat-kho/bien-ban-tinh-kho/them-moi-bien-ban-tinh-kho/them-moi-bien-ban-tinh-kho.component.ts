@@ -193,7 +193,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
         dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-        dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh'],
+        dataColumn: ['soQdNv', 'ngayKy', 'tenLoaiVthh'],
       },
     })
     modalQD.afterClose.subscribe(async (data) => {
@@ -233,16 +233,16 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
           if(res.msg == MESSAGE.SUCCESS){
             const dataQd = res.data
             this.formData.patchValue({
-              soQdGiaoNvXh: dataQd.soQd,
+              soQdGiaoNvXh: dataQd.soQdNv,
               idQdGiaoNvXh: dataQd.id,
               ngayQdGiaoNvXh: dataQd.ngayKy,
-              soHdong: dataQd.soHd,
-              idHdong: dataQd.idHd,
-              ngayKyHd: dataQd.ngayKyHd,
+              soHdong: dataQd.soHopDong,
+              idHdong: dataQd.idHopDong,
+              ngayKyHd: dataQd.ngayKyHopDong,
               loaiVthh: dataQd.loaiVthh,
               cloaiVthh: dataQd.cloaiVthh,
             });
-            await this.loadBienBanTinhKho(dataQd.soQd);
+            await this.loadBienBanTinhKho(dataQd.soQdNv);
             let dataChiCuc = dataQd.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
             if (dataChiCuc) {
               this.listDiaDiemNhap = [];
@@ -290,7 +290,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-
 
   openDialogDdiemNhapHang() {
     const modalQD = this.modal.create({

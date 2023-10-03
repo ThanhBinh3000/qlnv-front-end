@@ -225,7 +225,12 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
             data.xhTlHoSoHdr.children.forEach( item => {
               let dsHdr = item.xhTlDanhSachHdr;
               dsHdr.idDsHdr = dsHdr.id;
-              this.dataTable.push(item.xhTlDanhSachHdr);
+              // Nếu có mã đơn vị tài sản hoặc có nhân tổ chức r thì thôi không cho đấu giá lần sau nữa
+              if(dsHdr.toChucCaNhan || dsHdr.maDviTsan){
+
+              }else{
+                this.dataTable.push(dsHdr);
+              }
             })
             await this.buildTableView();
             // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
@@ -273,14 +278,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
   }
 
   async buildTableView() {
-    // await this.dataTable.forEach(item => {
-    //   item.expandSet = true;
-    //   item.groupChiCuc = chain(item).groupBy('tenChiCuc').map((value, key) => ({
-    //       tenDonVi: key,
-    //       children: value,
-    //     })
-    //   ).value()
-    // })
     this.dataTable = chain(this.dataTable).groupBy('tenChiCuc').map((value, key) => ({
         tenDonVi: key,
         children: value,

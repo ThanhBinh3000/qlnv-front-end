@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Globals} from "../../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
@@ -31,11 +31,10 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   @Input() dataInput;
   @Input() isView;
   @Input() isCache: boolean = false;
-  @Input() isTongHop;
-
+  @Input() loaiVthhCache;
+  @Output() countChanged: EventEmitter<any> = new EventEmitter();
   formData: FormGroup
   dataTable: any[] = [];
-  listNguonVon: any[] = [];
   dataDonGiaDuocDuyet: any;
 
   constructor(
@@ -65,10 +64,10 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       pthucGnhan: [null,],
       thongBao: [null,],
       khoanTienDatTruoc: [null,],
-      tongSoLuong: [null],
       donViTinh: [null,],
-      tongTienGiaKdTheoDgiaDd: [null],
-      tongKhoanTienDtTheoDgiaDd: [null],
+      tongSoLuong: [null],
+      tongTienKhoiDiem: [null],
+      tongTienDatTruoc: [null],
       diaChi: [],
       namKh: [dayjs().get('year'),],
       soDxuat: [null,],
@@ -117,9 +116,9 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
     });
     modalGT.afterClose.subscribe(async (updatedData) => {
       if (updatedData && index >= 0) {
-        console.log(123)
         this.dataTable[index] = updatedData;
-        this.calculatorTable();
+        await this.calculatorTable();
+        await this.sendDataToParent();
       }
     });
   }
@@ -130,7 +129,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       loaiVthh: this.dataInput.loaiVthh,
       cloaiVthh: this.dataInput.cloaiVthh,
       trangThai: STATUS.BAN_HANH,
-      maDvi: this.dataInput.maDvi.substring(0,6),
+      maDvi: this.dataInput.maDvi.substring(0, 6),
       loaiGia: 'LG04',
     };
     const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
@@ -146,7 +145,13 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       this.dataTable.forEach((item) => {
         item.tongGiaKdiemDd = 0;
         item.tongTienDtruocDd = 0;
-        const donGiaDuocDuyet = this.dataInput.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? donGiaMap.get('0101') : donGiaMap.get(item.maDvi);
+        let donGiaDuocDuyet = 0;
+        if (this.loaiVthhCache === LOAI_HANG_DTQG.VAT_TU) {
+          const firstItem = this.dataDonGiaDuocDuyet?.[0];
+          donGiaDuocDuyet = firstItem?.giaQdTcdt || 0;
+        } else {
+          donGiaDuocDuyet = donGiaMap.get(item.maDvi);
+        }
         item.children.forEach((child) => {
           child.donGiaDuocDuyet = donGiaDuocDuyet || null;
           child.giaKhoiDiemDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0);
@@ -157,10 +162,28 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       });
     }
     this.formData.patchValue({
-      tongTienGiaKdTheoDgiaDd: this.dataTable.reduce((acc, item) => acc + item.tongGiaKdiemDd, 0),
-      tongKhoanTienDtTheoDgiaDd: this.dataTable.reduce((acc, item) => acc + item.tongTienDtruocDd, 0),
+      tongTienKhoiDiem: this.dataTable.reduce((acc, item) => acc + item.tongGiaKdiemDd, 0),
+      tongTienDatTruoc: this.dataTable.reduce((acc, item) => acc + item.tongTienDtruocDd, 0),
       tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.tongSlXuatBanDx, 0),
     });
+  }
+
+  async onChangeThoiGian(event) {
+    if (event) {
+      this.formData.patchValue({
+        tgianDkienTu: this.formatDate(event, 0),
+        tgianDkienDen: this.formatDate(event, 1)
+      })
+    }
+    await this.sendDataToParent();
+  }
+
+  formatDate(dateRange, index) {
+    return dateRange ? dayjs(dateRange[index]).format('YYYY-MM-DD') : null;
+  }
+
+  async sendDataToParent() {
+    this.countChanged.emit(this.formData.value);
   }
 
   isDisable() {

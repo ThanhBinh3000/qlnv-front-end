@@ -35,6 +35,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     soPhieu: '',
     ngayNhapKho: '',
     soQuyetDinh: '',
+    namKhoach: '',
   };
 
   listDiemKho: any[] = [];
@@ -68,7 +69,22 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     tenNganLo: '',
     tenTrangThai: '',
   };
+  listNam: any[] = [];
+  tuNgayNk: Date | null = null;
+  denNgayNk: Date | null = null;
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayNk) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayNk.getTime();
+  };
 
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayNk) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayNk.getTime();
+  };
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -76,7 +92,6 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     public userService: UserService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private modal: NzModalService,
     public globals: Globals,
@@ -85,6 +100,12 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: dayjs().get('year') - i,
+          text: dayjs().get('year') - i,
+        });
+      }
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.search(),
@@ -94,17 +115,6 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async loadDiemKho() {
-    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listDiemKho = res.data;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -151,6 +161,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       soPhieu: '',
       ngayNhapKho: '',
       soQuyetDinh: '',
+      namKhoach: '',
     };
     this.search();
   }
@@ -195,6 +206,11 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   async search() {
     await this.spinner.show();
     let body = {
+      tuNgayNk: this.tuNgayNk != null ? dayjs(this.tuNgayNk).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayNk: this.denNgayNk != null ? dayjs(this.denNgayNk).format('YYYY-MM-DD') + " 23:59:59" : null,
+      soPhieu: this.searchFilter.soPhieu,
+      soQdGiaoNvNh: this.searchFilter.soQuyetDinh,
+      nam: this.searchFilter.namKhoach,
       trangThai: STATUS.BAN_HANH,
       paggingReq: {
         "limit": this.pageSize,
@@ -202,7 +218,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       },
       loaiVthh: this.loaiVthh
     };
-    let res = await this.quyetDinhGiaoNhapHangService.search(body);
+    let res = await this.quanLyPhieuNhapKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -244,28 +260,27 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
         });
       })
     });
-    console.log(this.dataTable);
   }
 
   export() {
     if (this.totalRecord && this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body =
-        {
-          "denNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1 ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD') : null,
-          "maDvi": this.userInfo.MA_DVI,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soPhieu": this.searchFilter.soPhieu,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
-          "str": null,
-          "trangThai": null,
-          "tuNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 0 ? dayjs(this.searchFilter.ngayNhapKho[0]).format('YYYY-MM-DD') : null,
-        }
+        let body = {
+          tuNgayNk: this.tuNgayNk != null ? dayjs(this.tuNgayNk).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayNk: this.denNgayNk != null ? dayjs(this.denNgayNk).format('YYYY-MM-DD') + " 23:59:59" : null,
+          soPhieu: this.searchFilter.soPhieu,
+          soQdGiaoNvNh: this.searchFilter.soQuyetDinh,
+          nam: this.searchFilter.namKhoach,
+          trangThai: STATUS.BAN_HANH,
+          paggingReq: {
+            "limit": this.pageSize,
+            "page": this.page - 1
+          },
+          loaiVthh: this.loaiVthh
+        };
         this.quanLyPhieuNhapKhoService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-phieu-nhap-kho.xlsx'),
           );

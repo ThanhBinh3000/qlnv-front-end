@@ -326,7 +326,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     if (data) {
       this.dataInput = data;
       let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(data?.idQdHdr);
-      this.dataInputCache = res.data.children[0]
+      this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
     }
     await this.spinner.hide();
   }

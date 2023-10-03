@@ -92,7 +92,7 @@
                   </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                  <label nz-radio nzValue="TTr"> Chọn số đề xuất/ tờ trình </label>
+                  <label nz-radio nzValue="TTr"> Số công văn/tờ trình </label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabledQD() ? null : openDialogTr()">
                       <input [readonly]="true" nz-input formControlName="soTrHdr" readonly/>
@@ -229,31 +229,29 @@
                     [nzShowPagination]="false">
             <thead>
             <tr>
-              <th [width]="30"> STT</th>
-              <th> Cục DTNN KV</th>
-              <th> Địa chỉ</th>
-              <th> Số kế hoạch/tờ trình</th>
-              <th> Ngày lập KH</th>
-              <th> Ngày duyệt KH</th>
-              <th> Trích yếu</th>
-              <th> Số ĐV tài sản</th>
-              <th> Tổng SL xuất bán (Kg)</th>
-              <!--                <th>Tổng khoản tiền đặt trước theo đơn giá được duyệt (đ)</th>-->
+              <th class="text-center" [width]="30"> STT</th>
+              <th class="text-left"> Cục DTNN KV</th>
+              <th class="text-left"> Địa chỉ</th>
+              <th class="text-left"> Số kế hoạch/tờ trình</th>
+              <th class="text-left"> Ngày lập KH</th>
+              <th class="text-left"> Ngày duyệt KH</th>
+              <th class="text-left"> Trích yếu</th>
+              <th class="text-center"> Số ĐV tài sản</th>
+              <th class="text-right"> Tổng SL xuất bán (Kg)</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let data of danhsachDx ;let i = index" [ngClass]="{'bg-selected': i == 0 && this.selected}"
                 (click)="showDetail($event,i)">
               <td class="text-center">{{i + 1}} </td>
-              <td>{{ data.tenDvi }}</td>
-              <td>{{ data.diaChi }}</td>
-              <td>{{ data.soDxuat }}</td>
-              <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.trichYeu }}</td>
-              <td>{{ data.slDviTsan }}</td>
-              <td>{{ data.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
-              <!--                <td>{{ data.tongTienDatTruocDd | number : '1.0-1' : 'vi_VN'}}</td>-->
+              <td class="text-center">{{ data.tenDvi }}</td>
+              <td class="text-center">{{ data.diaChi }}</td>
+              <td class="text-center">{{ data.soDxuat }}</td>
+              <td class="text-center">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+              <td class="text-center">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+              <td class="text-center">{{ data.trichYeu }}</td>
+              <td class="text-center">{{ data.slDviTsan }}</td>
+              <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
             </tr>
             </tbody>
           </nz-table>
@@ -261,7 +259,8 @@
             <div nz-col [nzSpan]="12">
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thongtin-dexuat-khbdg [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
-                                           [isView]="true" [isCache]="true" [isTongHop]="isTongHop">
+                                           [isView]="true" [isCache]="true"
+                                           [loaiVthhCache]="loaiVthh">
                 </app-thongtin-dexuat-khbdg>
               </nz-card>
             </div>
@@ -269,7 +268,8 @@
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thongtin-dexuat-khbdg [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
                                            [isView]="formData.value.trangThai == STATUS.BAN_HANH"
-                                           [isTongHop]="isTongHop">
+                                           [loaiVthhCache]="loaiVthh"
+                                           (countChanged)="receiveDataFromChild($event)">
                 </app-thongtin-dexuat-khbdg>
               </nz-card>
             </div>

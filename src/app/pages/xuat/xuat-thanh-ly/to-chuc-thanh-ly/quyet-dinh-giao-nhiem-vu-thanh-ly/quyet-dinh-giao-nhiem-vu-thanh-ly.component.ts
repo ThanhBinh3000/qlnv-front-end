@@ -12,14 +12,15 @@ import {CHUC_NANG} from "src/app/constants/status";
 import {
   QuyetDinhGiaoNhiemVuThanhLyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhGiaoNhiemVuThanhLy.service";
+import {Base3Component} from "../../../../../components/base3/base3.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-giao-nhiem-vu-thanh-ly',
   templateUrl: './quyet-dinh-giao-nhiem-vu-thanh-ly.component.html',
   styleUrls: ['./quyet-dinh-giao-nhiem-vu-thanh-ly.component.scss']
 })
-export class QuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component implements OnInit {
-  dsLoaiVthh: any[] = [];
+export class QuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component implements OnInit {
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
@@ -34,8 +35,6 @@ export class QuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component impleme
     {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
     {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
   ];
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: XuatThanhLyComponent;
 
   constructor(
     httpClient: HttpClient,
@@ -43,12 +42,14 @@ export class QuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component impleme
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
     private danhMucService: DanhMucService,
     private xuatThanhLyComponent: XuatThanhLyComponent,
-    private quyetDinhGiaoNhiemVuThanhLyService: QuyetDinhGiaoNhiemVuThanhLyService
+    private _service: QuyetDinhGiaoNhiemVuThanhLyService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNhiemVuThanhLyService);
-    this.vldTrangThai = this.xuatThanhLyComponent;
+    super(httpClient, storageService, notification, spinner, modal,route,router, _service);
+    this.defaultURL = '/xuat/xuat-thanh-ly/to-chuc/qd-giao-nv-xh'
     this.formData = this.fb.group({
       nam: [null],
       soBbQd: [null],
@@ -76,7 +77,6 @@ export class QuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component impleme
     await this.spinner.show()
     try {
       await Promise.all([
-        this.loadDsVthh(),
         this.search(),
       ])
       await this.spinner.hide()
@@ -84,13 +84,6 @@ export class QuyetDinhGiaoNhiemVuThanhLyComponent extends Base2Component impleme
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
     }
   }
 

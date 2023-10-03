@@ -243,55 +243,34 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   }
 
   bindingDataDdNhap(data, isDetail?: boolean) {
-    // if (!isDetail) {
-      this.dataTable = data.listPhieuKtraCl.filter(x => x.trangThai == STATUS.DA_DUYET_LDCC);
-      console.log(this.dataTable, "datatable")
-      this.dataTable.forEach(item => {
-        item.soPhieuKtraCl = item.soPhieu;
-        // item.soPhieuNhapKho = item.phieuNhapKhoHdr.soPhieuNhapKho;
-        // item.soBangKeCanHang = item.bcanKeHangHdr.soBangKeCanHang;
-        // item.ngayNkho = item.phieuNhapKhoHdr.ngayTao;
-        // item.maDiemKho = item.bcanKeHangHdr.maDiemKho;
-        // item.maNhaKho = item.bcanKeHangHdr.maNhaKho;
-        // item.maNganKho = item.bcanKeHangHdr.maNganKho;
-        // item.maLoKho = item.bcanKeHangHdr.maLoKho;
-        // item.soLuong = item.soLuongNhapKho;
-        this.formData.patchValue({
-          ktvBanQuan: item.ktvBaoQuan,
-          // keToanTruong: item.phieuNhapKhoHdr.keToanTruong,
-          // idPhieuNhapKho: item.phieuNhapKhoHdr.id,
-          // idBangCanKeHang: item.bcanKeHangHdr.id,
-          // soPhieuNhapKho: item.phieuNhapKhoHdr.soPhieuNhapKho,
-          // soBangKeCanHang: item.bcanKeHangHdr.soBangKeCanHang,
-          // soLuong: item.bcanKeHangHdr.tongSlCaBaoBi - item.bcanKeHangHdr.tongSlBaoBi,
-          // ngayNkho: item.phieuNhapKhoHdr.ngayTao,
-          tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
-        })
-      })
-      let dataFirst = new Date();
-      this.dataTable.forEach(item => {
-        let dataCompare = new Date(item.ngayTao);
-        if (dataFirst > dataCompare) {
-          dataFirst = dataCompare;
-        }
-      });
+    this.dataTable = data.listPhieuKtraCl.filter(x => x.trangThai == STATUS.DA_DUYET_LDCC);
+    console.log(this.dataTable, "datatable")
+    this.dataTable.forEach(item => {
+      item.soPhieuKtraCl = item.soPhieu;
       this.formData.patchValue({
-        ngayBdauNhap: dataFirst,
+        ktvBanQuan: item.ktvBaoQuan,
+        idDdiemGiaoNvNh: data.id,
+        maDiemKho: data.maDiemKho,
+        tenDiemKho: data.tenDiemKho,
+        maNhaKho: data.maNhaKho,
+        tenNhaKho: data.tenNhaKho,
+        maNganKho: data.maNganKho,
+        tenNganKho: data.tenNganKho,
+        maLoKho: data.maLoKho,
+        tenLoKho: data.tenLoKho,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
-
-    // }
-    // this.formData.patchValue({
-    //   idDdiemGiaoNvNh: data.id,
-    //   maDiemKho: data.maDiemKho,
-    //   tenDiemKho: data.tenDiemKho,
-    //   maNhaKho: data.maNhaKho,
-    //   tenNhaKho: data.tenNhaKho,
-    //   maNganKho: data.maNganKho,
-    //   tenNganKho: data.tenNganKho,
-    //   maLoKho: data.maLoKho,
-    //   tenLoKho: data.tenLoKho,
-    //   tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
-    // });
+    })
+    let dataFirst = new Date();
+    this.dataTable.forEach(item => {
+      let dataCompare = new Date(item.ngayTao);
+      if (dataFirst > dataCompare) {
+        dataFirst = dataCompare;
+      }
+    });
+    this.formData.patchValue({
+      ngayBdauNhap: dataFirst,
+    })
   }
 
   isDisableField() {
