@@ -118,8 +118,8 @@
         </button>
       </div>
     </div>
-    <nz-card class='mt-16 flex-card'>
-      <nz-table #basicTable nzBordered [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false'
+    <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
+      <nz-table #basicTable nzBordered [nzData]='dataTable' class='table-chi-tiet'
                 [nzScroll]="{ x: '1700px' }">
         <thead>
         <tr>
@@ -129,26 +129,27 @@
           </th>
           <th width='50px'>STT</th>
           <th>Bộ/Ngành</th>
-          <th width='200px'>Số văn bản</th>
-          <th width='200px'>Số hiệu quy chuẩn</th>
-          <th width='300px'>Văn bản thay thế/Sửa đổi, bố sung</th>
-          <th width='200px'>Loại hàng hóa</th>
-          <th width='120px'>Ngày ban hành</th>
-          <th width='120px'>Ngày hiệu lực</th>
-          <th width='120px'>Ngày hết hiệu lực</th>
-          <th width='200px'>Trạng thái nhập dữ liệu</th>
-          <th width='120px'>Tình trạng</th>
-          <th width='120px'>Hành động</th>
+          <th>Số văn bản</th>
+          <th>Số hiệu quy chuẩn</th>
+          <th width='350px'>Văn bản thay thế/Sửa đổi, bố sung</th>
+          <th>Loại hàng hóa</th>
+          <th>Ngày ban hành</th>
+          <th>Ngày hiệu lực</th>
+          <th>Ngày hết hiệu lực</th>
+          <th>Trạng thái nhập dữ liệu</th>
+          <th>Tình trạng</th>
+          <th>Hành động</th>
         </tr>
         <tr>
           <th></th>
-          <th class='text-center' width='350px'>
-            <!--            <nz-input-group [nzSuffix]='suffixIconSearch'>-->
-            <!--              <input type='text' placeholder='Tìm kiếm' nz-input [(ngModel)]='filterTable.tenBn'-->
-            <!--                     (input)="filterInTable('tenBn',filterTable.tenBn)" />-->
-            <!--            </nz-input-group>-->
+          <th></th>
+          <th class='text-center'>
+            <nz-input-group [nzSuffix]='suffixIconSearch'>
+              <input type='text' placeholder='Tìm kiếm' nz-input [(ngModel)]='filterTable.tenBn'
+                     (input)="filterInTable('tenBn',filterTable.tenBn)" />
+            </nz-input-group>
           </th>
-          <th class='text-center' width='350px'>
+          <th class='text-center'>
             <nz-input-group [nzSuffix]='suffixIconSearch'>
               <input type='text' placeholder='Tìm kiếm' nz-input [(ngModel)]='filterTable.soVanBan'
                      (input)="filterInTable('soVanBan',filterTable.soVanBan)" />
