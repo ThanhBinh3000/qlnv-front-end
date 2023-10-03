@@ -167,7 +167,12 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.isValid = !!(this.listOfData && this.listOfData.length);
   }
 
-  async changeChiCuc(event) {
+  async changeChiCuc(event, isSlChiTieu?) {
+    if (isSlChiTieu) {
+      this.formData.patchValue({
+        slChiTieu: null
+      })
+    }
     let body = {
       year: this.namKh,
       loaiVthh: this.loaiVthh,

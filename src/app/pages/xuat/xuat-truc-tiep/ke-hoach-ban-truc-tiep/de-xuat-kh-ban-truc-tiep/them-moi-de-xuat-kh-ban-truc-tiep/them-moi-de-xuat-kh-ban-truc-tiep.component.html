@@ -5,7 +5,7 @@
       <span> Quay lại </span>
     </button>
     <ng-container *ngIf="userService.isCuc()">
-      <button *ngIf="(formData.value.trangThai == STATUS.TU_CHOI_LDC) && isView
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
               && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC'))"
               type="button" class="btn btn-sub do"
               (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
@@ -183,7 +183,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="!loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -193,7 +193,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="!loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -203,7 +203,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -215,7 +215,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -384,26 +384,16 @@
             <th class="text-center wrap">Chi cục</th>
             <th class="text-center wrap">Điểm kho</th>
             <th class="text-center wrap">Lô kho</th>
-            <th class="text-center wrap" *ngIf="!loaiVthh.startsWith('02')">MĐVTS
-            </th>
-            <th class="text-center wrap" *ngIf="loaiVthh.startsWith('02')">Mã ĐVTS
-            </th>
+            <th class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">MĐVTS</th>
+            <th class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Mã ĐVTS</th>
             <th class="text-center wrap">Tồn kho</th>
             <th class="text-center wrap">SL xuất bán TT đề xuất</th>
             <th class="text-center wrap">ĐVT</th>
-            <th class="text-center wrap" *ngIf="!loaiVthh.startsWith('02')">Đơn giá
-              đề xuất (đ/kg)
-            </th>
-            <th class="text-center wrap" *ngIf="loaiVthh.startsWith('02')">Đơn giá
-              đề xuất (đ)
-            </th>
+            <th class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Đơn giá đề xuất (đ/kg)</th>
+            <th class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Đơn giá đề xuất (đ)</th>
             <th class="text-center wrap">Thành tiền đề xuất(đ)</th>
-            <th class="text-center wrap" *ngIf="!loaiVthh.startsWith('02')">Đơn giá
-              được duyệt (đ/kg)
-            </th>
-            <th class="text-center wrap" *ngIf="loaiVthh.startsWith('02')">Đơn giá
-              được duyệt (đ)
-            </th>
+            <th class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Đơn giá được duyệt (đ/kg)</th>
+            <th class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Đơn giá được duyệt (đ)</th>
             <th class="text-center wrap">Thành tiền được duyệt (đ)</th>
             <th *ngIf="!isView">Hành động</th>
           </tr>
@@ -464,8 +454,8 @@
             <th style="width: 2%">STT</th>
             <th style="width: 40%">Tên chi cục</th>
             <th style="width: 40%">Địa chỉ</th>
-            <th style="width: 10%" *ngIf="loaiVthh.startsWith('02')">Số lượng</th>
-            <th style="width: 10%" *ngIf="!loaiVthh.startsWith('02')">Số lượng (Kg)</th>
+            <th style="width: 10%" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">Số lượng</th>
+            <th style="width: 10%" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Số lượng (Kg)</th>
           </tr>
           </thead>
           <tbody>

@@ -6,10 +6,6 @@
       <span> Quay lại </span>
     </button>
     <ng-container>
-      <button *ngIf="idInput" type="button" class="btn btn-sub" (click)="preview(idInput)">
-        <i class="icon htvbdh_totrinh"></i>
-        <span> Xem trước </span>
-      </button>
       <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) && isView
               && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU') : userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU'))"
               type="button" class="btn btn-sub do"
@@ -24,7 +20,7 @@
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.TU_CHOI_LDC) && isView
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
               && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC'))"
               type="button" class="btn btn-sub do"
               (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
@@ -203,7 +199,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="!loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -213,7 +209,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="!loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -223,7 +219,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -235,7 +231,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -483,11 +479,11 @@
         <th nzWidth="100px" class="text-center wrap"> Tồn kho</th>
         <th nzWidth="100px" class="text-center wrap"> SL xuất bán đề xuất</th>
         <th nzWidth="100px" class="text-center wrap"> ĐVT</th>
-        <th nzWidth="100px" class="text-center wrap" *ngIf="!loaiVthh.startsWith('02')"> Đơn giá đề xuất (đ/kg)</th>
-        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh.startsWith('02')"> Đơn giá đề xuất (đ)</th>
+        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU"> Đơn giá đề xuất (đ/kg)</th>
+        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU"> Đơn giá đề xuất (đ)</th>
         <th nzWidth="100px" class="text-center wrap"> Giá khởi điểm đề xuất (đ)</th>
-        <th nzWidth="100px" class="text-center wrap" *ngIf="!loaiVthh.startsWith('02')"> Đơn giá được duyệt (đ/kg)</th>
-        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh.startsWith('02')"> Đơn giá được duyệt (đ)</th>
+        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU"> Đơn giá được duyệt (đ/kg)</th>
+        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU"> Đơn giá được duyệt (đ)</th>
         <th nzWidth="100px" class="text-center wrap"> Giá khởi điểm được duyệt (đ)</th>
         <th nzWidth="100px" class="text-center wrap"> Số tiền đặt trước đề xuất (đ)</th>
         <th nzWidth="100px" class="text-center wrap"> Số tiền đặt trước được duyệt (đ)</th>
@@ -597,23 +593,3 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview"
-          nzTitle="ĐỀ XUẤT KẾ HOẠCH BÁN ĐẤU GIÁ" nzWidth="100%" (nzOnCancel)="closeDlg()">
-  <div *nzModalContent class="modal__content">
-    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
-  </div>
-  <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()" class="modal__button--save">
-      <i class="icon htvbdh_file-pdf"></i>
-      Xuất .pdf
-    </button>
-    <button nz-button (click)="downloadWord()" class="modal__button--save">
-      <i class="icon htvbdh_file-word"></i>
-      Xuất .docx
-    </button>
-    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>

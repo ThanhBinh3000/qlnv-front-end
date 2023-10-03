@@ -158,13 +158,13 @@
     <tr *ngFor="let item of tableGiaTriBh, let idx = index">
       <td>{{item.stt}}</td>
       <td  [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-left' : ''">{{item.tenTsHh}}</td>
-      <td *ngIf="item.stt != '2' && item.stt != '2.2'"  [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.gtThamGiaBh | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt == '2'" class="font-weight-bold text-right">{{( tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh) | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt == '2.2'" class="font-weight-bold text-right">{{(tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh)  | number: '1.0-3' }}</td>
-      <td [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.tiLePhiCoBan | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt != '2' && item.stt != '2.2'" [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.tiLePhiCoBan * item.gtThamGiaBh  | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt == '2'" class="font-weight-bold text-right">{{(tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh) | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt == '2.2'" class="font-weight-bold text-right">{{(tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh)  | number: '1.0-3' }}</td>
+      <td *ngIf="item.stt != '2' && item.stt != '2.2'"  [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.gtThamGiaBh | number : '1.0-3' : 'vi_VN'}}</td>
+      <td *ngIf="item.stt == '2'" class="font-weight-bold text-right">{{( tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh) | number : '1.0-3' : 'vi_VN'}}</td>
+      <td *ngIf="item.stt == '2.2'" class="font-weight-bold text-right">{{(tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh)  | number : '1.0-3' : 'vi_VN'}}</td>
+      <td [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.tiLePhiCoBan | number : '1.0-3' : 'vi_VN'}}</td>
+      <td *ngIf="item.stt != '2' && item.stt != '2.2'" [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.tiLePhiCoBan * item.gtThamGiaBh  | number : '1.0-3' : 'vi_VN'}}</td>
+      <td *ngIf="item.stt == '2'" class="font-weight-bold text-right">{{(tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh) | number : '1.0-3' : 'vi_VN'}}</td>
+      <td *ngIf="item.stt == '2.2'" class="font-weight-bold text-right">{{(tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh)  | number : '1.0-3' : 'vi_VN'}}</td>
     </tr>
     <tr>
       <td></td>
@@ -245,11 +245,11 @@
                 <td></td>
                 <td>{{item.tenDiemKho}}</td>
                 <td>{{item.tenNhaKho}}</td>
-                <td class="text-right">{{item.tichLuong | number: '1.0-3' }}</td>
-                <td class="text-right">{{item.dienTich | number: '1.0-3' }}</td>
-                <td class="text-right">{{item.giaTriHt | number: '1.0-3' }}</td>
-                <td class="text-right">{{item.giaTriDk | number: '1.0-3' }}</td>
-                <td class="text-right">{{item.giaTriBhDx | number: '1.0-3' }}</td>
+                <td class="text-right">{{item.tichLuong | number : '1.0-3' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.dienTich | number : '1.0-3' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.giaTriHt | number : '1.0-3' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.giaTriDk | number : '1.0-3' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.giaTriBhDx | number : '1.0-3' : 'vi_VN'}}</td>
                 <td>
                   <nz-input-number class="text-center" [(ngModel)]="item.giaTriTc" [nzSize]="'small'"
                                    [nzDisabled]="isView"
@@ -408,13 +408,13 @@
                           <td>{{i3 + 1}}</td>
                           <td>{{lv3.tenDonVi}}</td>
                           <td>{{lv3.donViTinh}}</td>
-                          <td class="text-right">{{lv3.soLuongHt | number: '1.0-3' }}</td>
-                          <td class="text-right">{{lv3.giaTriHt | number: '1.0-3' }}</td>
-                          <td class="text-right">{{lv3.soLuongDk | number: '1.0-3' }}</td>
-                          <td class="text-right">{{lv3.giaTriDk | number: '1.0-3' }}</td>
-                          <td class="text-right">{{lv3.soLuongTh | number: '1.0-3' }}</td>
-                          <td class="text-right">{{lv3.giaTriTh | number: '1.0-3' }}</td>
-                          <td class="text-right">{{lv3.giaTriBhDx | number: '1.0-3' }}</td>
+                          <td class="text-right">{{lv3.soLuongHt | number : '1.0-3' : 'vi_VN'}}</td>
+                          <td class="text-right">{{lv3.giaTriHt | number : '1.0-3' : 'vi_VN'}}</td>
+                          <td class="text-right">{{lv3.soLuongDk | number : '1.0-3' : 'vi_VN'}}</td>
+                          <td class="text-right">{{lv3.giaTriDk | number : '1.0-3' : 'vi_VN'}}</td>
+                          <td class="text-right">{{lv3.soLuongTh | number : '1.0-3' : 'vi_VN'}}</td>
+                          <td class="text-right">{{lv3.giaTriTh | number : '1.0-3' : 'vi_VN'}}</td>
+                          <td class="text-right">{{lv3.giaTriBhDx | number : '1.0-3' : 'vi_VN'}}</td>
                           <td>
                             <nz-input-number [(ngModel)]="lv3.giaTriTc" [nzSize]="'small'" [nzDisabled]="isView"
                                              [nzFormatter]="globals.formatter" class="text-center"

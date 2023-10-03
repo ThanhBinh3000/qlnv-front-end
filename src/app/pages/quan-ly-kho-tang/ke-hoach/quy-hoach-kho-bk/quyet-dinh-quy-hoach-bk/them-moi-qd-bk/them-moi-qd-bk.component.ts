@@ -138,15 +138,18 @@ export class ThemMoiQdBkComponent implements OnInit {
       type.tenCuc = chiCuc[0].tenDvi;
       type.maChiCuc = null;
       type.maDiemKho = null;
+      type.diaDiem = null;
     } else {
       if (pa == 'TL') {
         this.rowItemTL.tenCuc = chiCuc[0].tenDvi;
         this.rowItemTL.maChiCuc = null;
         this.rowItemTL.maDiemKho = null;
+        this.rowItemTL.diaDiem = null;
       } else if (pa == 'DTM') {
         this.rowItemDTM.tenCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maChiCuc = null;
         this.rowItemDTM.maDiemKho = null;
+        this.rowItemDTM.diaDiem = null;
       }
     }
   }
@@ -164,13 +167,16 @@ export class ThemMoiQdBkComponent implements OnInit {
     if (type) {
       type.tenChiCuc = chiCuc[0].tenDvi;
       type.maDiemKho = null;
+      type.diaDiem = null;
     } else {
       if (pa == 'TL') {
         this.rowItemTL.tenChiCuc = chiCuc[0].tenDvi;
         this.rowItemTL.maDiemKho = null
+        this.rowItemTL.diaDiem = null
       } else if (pa == 'DTM') {
         this.rowItemDTM.tenChiCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maDiemKho = null
+        this.rowItemDTM.diaDiem = null
       }
     }
   }
@@ -447,27 +453,45 @@ export class ThemMoiQdBkComponent implements OnInit {
       }
     }
   }
-
-  async onChangDiemKho(event, type?) {
+  onChangDiemKho(event,pa, type?) {
     const diemKho = this.danhSachDiemKho.filter(item => item.maDvi == event);
-    let res = await this.getDetailMlkByKey(event, '4')
-    if (res) {
-      if (diemKho) {
-        if (type) {
-          type.tenDiemKho = diemKho[0].tenDvi
-          type.diaDiem = diemKho[0].diaChi
-          type.dienTich = res.dienTichDat ? res.dienTichDat : 0
-        } else {
-          this.rowItemTL.tenDiemKho = diemKho[0].tenDvi
-          this.rowItemTL.diaDiem = diemKho[0].diaChi
-          this.rowItemTL.dienTich = res.dienTichDat ? res.dienTichDat : 0
+    if (diemKho) {
+      if (type) {
+        type.tenDiemKho = diemKho[0].tenDvi;
+        type.diaDiem = diemKho[0].diaChi;
+      } else {
+
+        if (pa == "TL") {
+          this.rowItemTL.tenDiemKho = diemKho[0].tenDvi;
+          this.rowItemTL.diaDiem = diemKho[0].diaChi;
+        } else if (pa == "DTM") {
+          this.rowItemDTM.tenDiemKho = diemKho[0].tenDvi;
+          this.rowItemDTM.diaDiem = diemKho[0].diaChi;
         }
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, 'Không thấy thông tin điểm kho!')
-      return;
     }
   }
+  // async onChangDiemKho(event, type?) {
+  //   const diemKho = this.danhSachDiemKho.filter(item => item.maDvi == event);
+  //   let res = await this.getDetailMlkByKey(event, "4")
+  //   if (res) {
+  //     console.log(res,111)
+  //     if (diemKho) {
+  //       if (type) {
+  //         type.tenDiemKho = diemKho[0].tenDvi
+  //         type.diaDiem = diemKho[0].diaChi
+  //         type.dienTich = res.dienTichDat ? res.dienTichDat : 0
+  //       } else {
+  //         this.rowItemTL.tenDiemKho = diemKho[0].tenDvi
+  //         this.rowItemTL.diaDiem = diemKho[0].diaChi
+  //         this.rowItemTL.dienTich = res.dienTichDat ? res.dienTichDat : 0
+  //       }
+  //     }
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, 'Không thấy thông tin điểm kho!')
+  //     return;
+  //   }
+  // }
 
   async getDetailMlkByKey(maDvi, capDvi) {
     let body = {
