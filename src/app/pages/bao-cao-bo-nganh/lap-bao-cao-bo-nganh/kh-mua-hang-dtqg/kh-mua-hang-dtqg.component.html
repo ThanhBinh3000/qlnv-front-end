@@ -73,7 +73,7 @@
     <div class="group-button">
       <h3>DANH SÁCH BÁO CÁO KẾ HOẠCH MUA HÀNG DỰ TRỮ QUỐC GIA</h3>
       <div class="buttons">
-        <button nz-button class="search__button--search" (click)="redirectDetail(false)">
+        <button nz-button class="search__button--search" (click)="redirectDetail(false)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_LAP')">
           <i class="icon  htvbdh_icon_list"></i>
           Lập báo cáo
         </button>
@@ -104,14 +104,16 @@
           <td>{{ data.ngayBanHanh | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectDetail(true, data)" *ngIf="data.trangThai != STATUS.DU_THAO">
+            <a (click)="redirectDetail(true, data)"
+               *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_XEM')
+                 && !(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_LAP') && data.trangThai != STATUS.BAN_HANH)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO"
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_LAP')"
                (click)="redirectDetail(false, data)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO"
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_XOA')"
                (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
