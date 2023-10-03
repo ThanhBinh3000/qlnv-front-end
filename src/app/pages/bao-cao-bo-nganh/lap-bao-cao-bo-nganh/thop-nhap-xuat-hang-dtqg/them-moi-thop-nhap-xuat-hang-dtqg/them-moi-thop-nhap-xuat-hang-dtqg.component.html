@@ -13,12 +13,15 @@
           <span>Quay lại</span>
         </button>
         <ng-container>
-          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView" type="button"
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_DUYET')" type="button"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Ban hành</span>
           </button>
-          <button *ngIf="!isView" type="button" class="btn btn-main" (click)="save()">
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP')"
+                  type="button" class="btn btn-main" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
