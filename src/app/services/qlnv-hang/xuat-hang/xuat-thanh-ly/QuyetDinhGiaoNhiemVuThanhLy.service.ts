@@ -6,9 +6,8 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class QuyetDinhGiaoNhiemVuThanhLyService extends BaseService {
-  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-thanh-ly/qd-giao-nv-thanh-ly', '');
+    super(httpClient, 'xuat-hang/xuat-thanh-ly/qd-giao-nv-thanh-ly', '/qlnv-hang');
   }
 }
