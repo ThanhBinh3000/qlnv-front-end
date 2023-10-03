@@ -10,7 +10,7 @@ import {UserService} from "src/app/services/user.service";
 })
 export class KhaiThacBaoCaoComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  routes = ROUTE_LIST;
+  routes ;
   routerUrl: string = "";
   defaultUrl: string = ''
 
@@ -24,6 +24,8 @@ export class KhaiThacBaoCaoComponent implements OnInit, AfterViewInit {
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
+    console.log(this.routerUrl,111)
+    this.routes = ROUTE_LIST.filter(item => this.userService.isAccessPermisson(item.accessPermisson));
   }
 
   ngAfterViewInit() {

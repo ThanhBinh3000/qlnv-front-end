@@ -10,11 +10,6 @@ const routes: Routes = [{
   canActivate: [AuthGuard],
   children: [
     {
-      path: '',
-      redirectTo: 'bao-cao-theo-ttqd',
-      pathMatch: 'full'
-    },
-    {
       path: 'bao-cao-theo-ttqd',
       loadChildren: () =>
         import('./bao-cao-theo-ttqd/bao-cao-theo-ttqd.module').then((m) => m.BaoCaoTheoTtqdModule),
