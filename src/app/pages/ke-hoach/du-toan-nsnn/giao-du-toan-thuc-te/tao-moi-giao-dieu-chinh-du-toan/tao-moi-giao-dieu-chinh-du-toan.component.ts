@@ -19,6 +19,7 @@ import { Globals } from 'src/app/shared/globals';
 import { Roles, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import * as XLSX from "xlsx";
 // khai báo class data request
 export class ItemData {
 	id: string;
@@ -276,6 +277,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		if (this.id) {
 			// call chi tiết bản ghi khi có id
 			await this.getDetailReport();
+      this.sum1();
 		} else {
 			this.maDonViTao = this.userInfo?.MA_DVI;
 			this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -1507,6 +1509,68 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		})
 		return check;
 	};
+
+
+  sum1() {
+    this.lstCtietBcao.forEach(item => {
+      this.sum(item.stt);
+    })
+  }
+  exportToExcel() {
+    if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    const header = [
+      { t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
+      { t: 0, b: 0, l: 0, r: 1, val: "Phương án giao dự toán nsnn" },
+      { t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+
+      { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
+      { t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
+      { t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi giao từ cấp trên' },
+      { t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
+      { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
+    ]
+    this.lstDvi.forEach((item, index ) => {
+      const left = 4 + index
+      header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
+    })
+
+    const headerBot = 7;
+    this.lstCtietBcao.forEach((item, index) => {
+      const row = headerBot + index + 1;
+      const tenNdung =  this.getTenNdung(item.maNdung);
+      header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
+      header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung})
+      header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
+      header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCongSoTranChi?.toString() })
+
+      item.lstCtietDvis.forEach((e, ind) => {
+        const col = 4 + ind ;
+        header.push({ t: row, b: row, l: col , r: col, val: e.soTranChi?.toString() })
+      })
+    })
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = Table.initExcel(header);
+    // XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+
+    let excelName = this.maPa;
+    excelName = excelName + '_GDTTT_PA.xlsx'
+    XLSX.writeFile(workbook, excelName);
+  }
+
+  getTenNdung(maNdung: number): any{
+    let tenNdung: string;
+    this.noiDungs.forEach(itm => {
+      if(itm.ma == maNdung){
+        return tenNdung = itm.giaTri;
+      }
+    })
+    return tenNdung
+  }
 
 
 
