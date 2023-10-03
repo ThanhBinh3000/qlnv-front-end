@@ -80,11 +80,8 @@
         <th class="text-center">Số quyết định</th>
         <th class="text-center">Ngày quyết định</th>
         <th class="text-center">Số hợp đồng</th>
-        <th class="text-center">Chủng loại hàng hóa</th>
         <th class="text-center">Thời gian giao nhận hàng</th>
         <th class="text-center">Trích yếu quyết định</th>
-        <th class="text-center">Số BB tịnh kho</th>
-        <th class="text-center">Số BB hao đôi</th>
         <th class="text-center">Trạng thái QĐ</th>
         <th class="text-center">Trang thái Xh</th>
         <th class="text-center">Hành động</th>
@@ -119,12 +116,7 @@
                    (input)="filterInTable('soHopDong',filterTable.soHopDong)" size="small"/>
           </nz-input-group>
         </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
-                   (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small"/>
-          </nz-input-group>
-        </th>
+
         <th>
           <nz-input-group>
             <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.thoiGianGiaoNhan"
@@ -136,18 +128,6 @@
           <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                    (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"
-                   (input)="filterInTable('soBbTinhKho',filterTable.soBbTinhKho)" size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbHaoDoi"
-                   (input)="filterInTable('soBbHaoDoi',filterTable.soBbHaoDoi)" size="small"/>
           </nz-input-group>
         </th>
         <th>
@@ -180,11 +160,8 @@
         <td>{{ data.soBbQd }}</td>
         <td>{{ data.ngayKy|date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.soHopDong }}</td>
-        <td>{{ data.tenCloaiVthh }}</td>
         <td>{{ data.thoiGianGiaoNhan|date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.trichYeu}}</td>
-        <td>{{ data.soBbTinhKho }}</td>
-        <td>{{ data.soBbHaoDoi }}</td>
         <td>{{ data.tenTrangThai }}</td>
         <td>{{ data.tenTrangThaiXh }}</td>
         <td class="text-left">
@@ -193,16 +170,16 @@
             <i class="fa fa-eye" title="Xem chi tiết"></i>
           </a>
           <a
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')"
+            *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')"
             (click)="redirectDetail(data.id)">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
-          <a *ngIf="true"
+          <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC )"
              (click)="redirectDetail(data.id)">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
           </a>
           <a
-            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')"
+            *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')"
             (click)="delete(data)">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           </a>
