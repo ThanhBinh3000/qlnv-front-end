@@ -54,8 +54,6 @@ export class BcCongTacDinhmucKtktComponent extends Base2Component implements OnI
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.fileName = "bc_congtac_qly_ktkt.jrxml";
-      body.tenBaoCao = "Báo cáo công tác quản lý định mức ktkt";
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcCongTacKtkt(body).then(async s => {
         this.excelBlob = s;
@@ -75,8 +73,6 @@ export class BcCongTacDinhmucKtktComponent extends Base2Component implements OnI
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_congtac_qly_ktkt.jrxml";
-      body.tenBaoCao = "Báo cáo công tác quản lý định mức ktkt";
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcCongTacKtkt(body).then(async s => {
         this.pdfBlob = s;
