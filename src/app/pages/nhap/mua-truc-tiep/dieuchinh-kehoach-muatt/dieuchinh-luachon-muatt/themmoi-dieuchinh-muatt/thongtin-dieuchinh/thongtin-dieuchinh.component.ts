@@ -113,7 +113,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         this.tgianMkhoChange = this.dataInput.tgianMkho
         this.tgianKthucChange = this.dataInput.tgianKthuc
         await this.getPag(this.dataInput);
-        console.log(this.dataInput)
+        console.log(this.dataInput, "datainput")
         this.dataTable = this.dataInput.children
         this.calculatorTable();
       } else {
@@ -223,8 +223,9 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
 
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
+    console.log(this.formData, "formData")
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
