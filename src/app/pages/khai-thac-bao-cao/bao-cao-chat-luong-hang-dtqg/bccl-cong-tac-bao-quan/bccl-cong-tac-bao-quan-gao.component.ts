@@ -244,6 +244,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       if (body.loaiKyBc) {
         if (body.loaiKyBc == '01') {
           if (body.kyBc) {
+            body.vaiTro = 'LDCHICUC'
             const parts = body.kyBc.split(" "); // Tách chuỗi theo khoảng trắng
             const monthNumber = parts[1];
             const dayOfMonth = new Date(this.formData.value.nam, monthNumber, 0).getDate();
@@ -252,7 +253,6 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           }
         }
         if (body.loaiKyBc == '02') {
-          body.vaiTro = 'LDCHICUC'
           if (body.kyBc && body.kyBc == 'Quý I') {
             body.tuNgay = '1/1/' + body.nam
             body.denNgay = '31/3/' + body.nam
