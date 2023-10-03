@@ -55,10 +55,10 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
         nam: [dayjs().get("year"), [Validators.required]],
         loaiKyBc: ['01', [Validators.required]],
         kyBc: [null],
-        maCuc: null,
-        maChiCuc: null,
-        tgBaoCaoTu: null,
-        tgBaoCaoDen: null,
+        maCuc: [null],
+        maChiCuc: [null],
+        tgBaoCaoTu: [null],
+        tgBaoCaoDen: [null],
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null],
         loaiBc: ['02', [Validators.required]],
@@ -239,7 +239,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           this.nameFile = "bccl_cong_tac_bao_quan_muoi_chi_tiet";
         }
       }
-      body.vaiTro = this.userService.isChiCuc() ? "LDCHICUC" : "LDCUC";
+      body.vaiTro = this.userService.isChiCuc() || (this.userService.isCuc() && (body.loaiKyBc == '01'))  ? "LDCHICUC" : "LDCUC" ;
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc;
       if (body.loaiKyBc) {
         if (body.loaiKyBc == '01') {
@@ -274,8 +274,9 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           body.denNgay = '31/12/' + body.nam
         }
         if (body.loaiKyBc == '04') {
-          body.tuNgay = body.tgBaoCaoTu ? body.tgBaoCaoTu.format('dd/MM/yyyy') : null;
-          body.denNgay = body.tgBaoCaoDen ? body.tgBaoCaoDen.format('dd/MM/yyyy') : null;
+          body.tuNgay = body.tgBaoCaoTu ? dayjs(body.tgBaoCaoTu).format('DD/MM/YYYY') : null;
+          body.denNgay = body.tgBaoCaoDen ? dayjs(body.tgBaoCaoDen).format('DD/MM/YYYY') : null;
+          body.vaiTro = 'CBTHUKHO';
         }
       }
       body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
