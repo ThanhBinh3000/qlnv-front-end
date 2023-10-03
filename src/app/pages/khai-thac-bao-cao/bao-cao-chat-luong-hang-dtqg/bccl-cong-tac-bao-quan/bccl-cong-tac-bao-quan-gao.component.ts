@@ -53,15 +53,15 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        loaiKyBc: [null, [Validators.required]],
+        loaiKyBc: ['01', [Validators.required]],
         kyBc: [null],
-        maCuc: null,
-        maChiCuc: null,
-        tgBaoCaoTu: null,
-        tgBaoCaoDen: null,
+        maCuc: [null],
+        maChiCuc: [null],
+        tgBaoCaoTu: [null],
+        tgBaoCaoDen: [null],
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null],
-        loaiBc: [null, [Validators.required]],
+        loaiBc: ['02', [Validators.required]],
       }
     );
   }
@@ -73,12 +73,223 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       this.loadDsVthh();
       this.loadDsLoaiBc();
       this.loadDsKyBc();
+      this.changLoaiKyBc('01');
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
+  }
+
+  async loadDsDonVi() {
+    let res = await this.donViService.layTatCaDonViByLevel(2);
+    if (res && res.data) {
+      this.dsDonVi = res.data
+      this.dsDonVi = this.dsDonVi.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+    }
+  }
+
+  async changeCuc(event: any) {
+    if (event) {
+      let res = await this.donViService.layTatCaDonViByLevel(3);
+      if (res && res.data) {
+        this.listChiCuc = res.data
+        this.listChiCuc = this.listChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(event))
+      }
+    }
+  }
+
+  async loadDsVthh() {
+    this.listVthh = [];
+    let res = await this.danhMucSv.danhMucChungGetAll("LOAI_HHOA");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listVthh = res.data;
+    }
+  }
+
+  async changeLoaiVthh(event) {
+    if (event) {
+      let res = await this.danhMucSv.loadDanhMucHangHoaTheoMaCha({str: event});
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listCloaiVthh = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+  async loadDsLoaiBc() {
+    let res = await this.danhMucSv.danhMucChungGetAll("LOAI_BAO_CAO");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiBc = res.data;
+    }
+  }
+
+  async loadDsKyBc() {
+    let res = await this.danhMucSv.danhMucChungGetAll("KY_BAO_CAO");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiKyBc = res.data;
+      if (this.listLoaiKyBc && this.listLoaiKyBc.length > 0) {
+        this.listLoaiKyBc.sort((a, b) => (a.ma - b.ma))
+      }
+    }
+  }
+
+
+  async clearFilter() {
+    this.formData.reset();
+    this.formData.patchValue({
+      nam: dayjs().get('year')
+    })
+  }
+
+  changLoaiKyBc(event: any) {
+    if (event) {
+      this.listKyBc = [];
+      switch (event) {
+        case '01': {
+          for (let i = 1; i <= 12; i++) {
+            let item = {
+              ma: 'Tháng ' + i,
+              giaTri: 'Tháng ' + i
+            }
+            this.listKyBc = [...this.listKyBc, item].flat();
+          }
+          break;
+        }
+        case '02': {
+          for (let i = 1; i <= 4; i++) {
+            let item = {
+              ma: 'Quý ' + NumberToRoman(i),
+              giaTri: 'Quý ' + NumberToRoman(i)
+            }
+            this.listKyBc = [...this.listKyBc, item].flat();
+          }
+          break;
+        }
+        case '03': {
+          break;
+        }
+        case '04': {
+          break;
+        }
+      }
+    }
+  }
+
+  changeLoaiBc(event: any) {
+    if (event && event == '01') {
+      this.formData.patchValue({
+        maCuc : null, maChiCuc : null
+      })
+    }
+  }
+
+
+
+
+
+  setValidators() {
+    if (this.formData.value.loaiBc == '02' && this.userService.isTongCuc()) {
+      this.formData.controls["maCuc"].setValidators([Validators.required]);
+    }
+    if (this.formData.value.loaiKyBc == '01' && this.formData.value.loaiKyBc == '02') {
+      this.formData.controls["kyBc"].setValidators([Validators.required]);
+    }
+    if (this.formData.value.loaiKyBc == '04') {
+      this.formData.controls["tgBaoCaoTu"].setValidators([Validators.required]);
+      this.formData.controls["tgBaoCaoDen"].setValidators([Validators.required]);
+    }
+  }
+
+  async preView() {
+    this.helperService.removeValidators(this.formData);
+    this.setValidators();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      return;
+    }
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.maDvi = this.userInfo.MA_DVI;
+      body.typeFile = "pdf";
+      body.trangThai = "01";
+      if (body.loaiBc == '01') {
+        if (body.loaiVthh.startsWith("02")) {
+          this.nameFile = "bccl_cong_tac_bao_quan_vattu_tong_hop";
+        } else {
+          this.nameFile = "bccl_cong_tac_bao_quan_luong_thuc_tong_hop";
+        }
+      } else {
+        if (body.loaiVthh.startsWith("0101")) {
+          this.nameFile = "bccl_cong_tac_bao_quan_thoc_chi_tiet";
+        }
+        if (body.loaiVthh.startsWith("0102")) {
+          this.nameFile = "bccl_cong_tac_bao_quan_gao_chi_tiet";
+        }
+        if (body.loaiVthh.startsWith("02")) {
+          this.nameFile = "bccl_cong_tac_bao_quan_vattu_chi_tiet";
+        }
+        if (body.loaiVthh.startsWith("04")) {
+          this.nameFile = "bccl_cong_tac_bao_quan_muoi_chi_tiet";
+        }
+      }
+      body.vaiTro = this.userService.isChiCuc() || (this.userService.isCuc() && (body.loaiKyBc == '01'))  ? "LDCHICUC" : "LDCUC" ;
+      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc;
+      if (body.loaiKyBc) {
+        if (body.loaiKyBc == '01') {
+          if (body.kyBc) {
+            const parts = body.kyBc.split(" "); // Tách chuỗi theo khoảng trắng
+            const monthNumber = parts[1];
+            const dayOfMonth = new Date(this.formData.value.nam, monthNumber, 0).getDate();
+            body.tuNgay = '1/' + monthNumber + '/' + body.nam
+            body.denNgay = dayOfMonth + '/' + monthNumber + '/' + body.nam
+          }
+        }
+        if (body.loaiKyBc == '02') {
+          if (body.kyBc && body.kyBc == 'Quý I') {
+            body.tuNgay = '1/1/' + body.nam
+            body.denNgay = '31/3/' + body.nam
+          }
+          if (body.kyBc && body.kyBc == 'Quý II') {
+            body.tuNgay = '1/4/' + body.nam
+            body.denNgay = '30/6/' + body.nam
+          }
+          if (body.kyBc && body.kyBc == 'Quý III') {
+            body.tuNgay = '1/7/' + body.nam
+            body.denNgay = '30/9/' + body.nam
+          }
+          if (body.kyBc && body.kyBc == 'Quý IV') {
+            body.tuNgay = '1/10/' + body.nam
+            body.denNgay = '31/12/' + body.nam
+          }
+        }
+        if (body.loaiKyBc == '03') {
+          body.tuNgay = '1/1/' + body.nam
+          body.denNgay = '31/12/' + body.nam
+        }
+        if (body.loaiKyBc == '04') {
+          body.tuNgay = body.tgBaoCaoTu ? dayjs(body.tgBaoCaoTu).format('DD/MM/YYYY') : null;
+          body.denNgay = body.tgBaoCaoDen ? dayjs(body.tgBaoCaoDen).format('DD/MM/YYYY') : null;
+          body.vaiTro = 'CBTHUKHO';
+        }
+      }
+      body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
+      await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   downloadPdf() {
@@ -94,33 +305,21 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       body.trangThai = "01";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("02")) {
-          body.fileName = "bccl_cong_tac_bao_quan_vattu_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản vật tư (chi tiết)";
           this.nameFile = "bccl_cong_tac_bao_quan_vattu_tong_hop";
         } else {
-          body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
           this.nameFile = "bccl_cong_tac_bao_quan_luong_thuc_tong_hop";
         }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bccl_cong_tac_bao_quan_thoc_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản thóc (chi tiết)";
           this.nameFile = "bccl_cong_tac_bao_quan_thoc_chi_tiet";
         }
         if (body.loaiVthh.startsWith("0102")) {
-          body.fileName = "bccl_cong_tac_bao_quan_gao_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo (chi tiết)";
           this.nameFile = "bccl_cong_tac_bao_quan_gao_chi_tiet";
         }
         if (body.loaiVthh.startsWith("02")) {
-          body.fileName = "bccl_cong_tac_bao_quan_vattu_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản vật tư (chi tiết)";
           this.nameFile = "bccl_cong_tac_bao_quan_vattu_chi_tiet";
         }
         if (body.loaiVthh.startsWith("04")) {
-          body.fileName = "bccl_cong_tac_bao_quan_muoi_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản muối (chi tiết)";
           this.nameFile = "bccl_cong_tac_bao_quan_muoi_chi_tiet";
         }
       }
@@ -180,207 +379,5 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     this.showDlgPreview = false;
   }
 
-  setValidators() {
-    if (this.formData.value.loaiBc == '02' && this.userService.isTongCuc()) {
-      this.formData.controls["maCuc"].setValidators([Validators.required]);
-    }
-    if (this.formData.value.loaiKyBc == '01' && this.formData.value.loaiKyBc == '02') {
-      this.formData.controls["kyBc"].setValidators([Validators.required]);
-    }
-    if (this.formData.value.loaiKyBc == '04') {
-      this.formData.controls["tgBaoCaoTu"].setValidators([Validators.required]);
-      this.formData.controls["tgBaoCaoDen"].setValidators([Validators.required]);
-    }
-  }
 
-  async preView() {
-    this.setValidators();
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.spinner.hide();
-      return;
-    }
-    try {
-      this.spinner.show();
-      let body = this.formData.value;
-      body.maDvi = this.userInfo.MA_DVI;
-      body.typeFile = "pdf";
-      body.trangThai = "01";
-      if (body.loaiBc == '01') {
-        if (body.loaiVthh.startsWith("02")) {
-          body.fileName = "bccl_cong_tac_bao_quan_vattu_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản vật tư (chi tiết)";
-          this.nameFile = "bccl_cong_tac_bao_quan_vattu_tong_hop";
-        } else {
-          body.fileName = "bccl_cong_tac_bao_quan_lt_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo, thóc (tổng hợp)";
-          this.nameFile = "bccl_cong_tac_bao_quan_luong_thuc_tong_hop";
-        }
-      } else {
-        if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bccl_cong_tac_bao_quan_thoc_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản thóc (chi tiết)";
-          this.nameFile = "bccl_cong_tac_bao_quan_thoc_chi_tiet";
-        }
-        if (body.loaiVthh.startsWith("0102")) {
-          body.fileName = "bccl_cong_tac_bao_quan_gao_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản gạo (chi tiết)";
-          this.nameFile = "bccl_cong_tac_bao_quan_gao_chi_tiet";
-        }
-        if (body.loaiVthh.startsWith("02")) {
-          body.fileName = "bccl_cong_tac_bao_quan_vattu_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản vật tư (chi tiết)";
-          this.nameFile = "bccl_cong_tac_bao_quan_vattu_chi_tiet";
-        }
-        if (body.loaiVthh.startsWith("04")) {
-          body.fileName = "bccl_cong_tac_bao_quan_muoi_chi_tiet.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng công tác bảo quản muối (chi tiết)";
-          this.nameFile = "bccl_cong_tac_bao_quan_muoi_chi_tiet";
-        }
-      }
-      body.vaiTro = this.userService.isChiCuc() ? "LDCHICUC" : "LDCUC";
-      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc;
-      if (body.loaiKyBc) {
-        if (body.loaiKyBc == '01') {
-          if (body.kyBc) {
-            const parts = body.kyBc.split(" "); // Tách chuỗi theo khoảng trắng
-            const monthNumber = parts[1];
-            body.tuNgay = '1/' + monthNumber + '/' + body.nam
-            body.denNgay = '30/' + monthNumber + '/' + body.nam
-          }
-        }
-        if (body.loaiKyBc == '02') {
-          if (body.kyBc && body.kyBc == 'Quý I') {
-            body.tuNgay = '1/1/' + body.nam
-            body.denNgay = '31/3/' + body.nam
-          }
-          if (body.kyBc && body.kyBc == 'Quý II') {
-            body.tuNgay = '1/4/' + body.nam
-            body.denNgay = '30/6/' + body.nam
-          }
-          if (body.kyBc && body.kyBc == 'Quý III') {
-            body.tuNgay = '1/7/' + body.nam
-            body.denNgay = '30/9/' + body.nam
-          }
-          if (body.kyBc && body.kyBc == 'Quý IV') {
-            body.tuNgay = '1/10/' + body.nam
-            body.denNgay = '31/12/' + body.nam
-          }
-        }
-        if (body.loaiKyBc == '03') {
-          body.tuNgay = '1/1/' + body.nam
-          body.denNgay = '31/12/' + body.nam
-        }
-        if (body.loaiKyBc == '04') {
-          body.tuNgay = body.tgBaoCaoTu ? body.tgBaoCaoTu.format('dd/MM/yyyy') : null;
-          body.denNgay = body.tgBaoCaoDen ? body.tgBaoCaoDen.format('dd/MM/yyyy') : null;
-        }
-      }
-      body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
-      await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
-        this.pdfBlob = s;
-        this.pdfSrc = await new Response(s).arrayBuffer();
-      });
-      this.showDlgPreview = true;
-    } catch (e) {
-      console.log(e);
-    } finally {
-      this.spinner.hide();
-    }
-  }
-
-  async loadDsDonVi() {
-    let res = await this.donViService.layTatCaDonViByLevel(2);
-    if (res && res.data) {
-      this.dsDonVi = res.data
-      this.dsDonVi = this.dsDonVi.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
-    }
-  }
-
-  async changeCuc(event: any) {
-    if (event) {
-      let res = await this.donViService.layTatCaDonViByLevel(3);
-      if (res && res.data) {
-        this.listChiCuc = res.data
-        this.listChiCuc = this.listChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(event))
-      }
-    }
-  }
-
-  async loadDsVthh() {
-    this.listVthh = [];
-    let res = await this.danhMucSv.danhMucChungGetAll("LOAI_HHOA");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data;
-    }
-  }
-
-  async changeLoaiVthh(event) {
-    if (event) {
-      let res = await this.danhMucSv.loadDanhMucHangHoaTheoMaCha({str: event});
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.listCloaiVthh = res.data;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
-  }
-
-  async loadDsLoaiBc() {
-    let res = await this.danhMucSv.danhMucChungGetAll("LOAI_BAO_CAO");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiBc = res.data;
-    }
-  }
-
-  async loadDsKyBc() {
-    let res = await this.danhMucSv.danhMucChungGetAll("KY_BAO_CAO");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiKyBc = res.data;
-    }
-  }
-
-
-  async clearFilter() {
-    this.formData.reset();
-    this.formData.patchValue({
-      nam: dayjs().get('year')
-    })
-  }
-
-  changLoaiKyBc(event: any) {
-    if (event) {
-      this.listKyBc = [];
-      switch (event) {
-        case '01': {
-          for (let i = 1; i <= 12; i++) {
-            let item = {
-              ma: 'Tháng ' + i,
-              giaTri: 'Tháng ' + i
-            }
-            this.listKyBc = [...this.listKyBc, item].flat();
-          }
-          break;
-        }
-        case '02': {
-          for (let i = 1; i <= 4; i++) {
-            let item = {
-              ma: 'Quý ' + NumberToRoman(i),
-              giaTri: 'Quý ' + NumberToRoman(i)
-            }
-            this.listKyBc = [...this.listKyBc, item].flat();
-          }
-          break;
-        }
-        case '03': {
-          break;
-        }
-        case '04': {
-          break;
-        }
-      }
-    }
-  }
 }

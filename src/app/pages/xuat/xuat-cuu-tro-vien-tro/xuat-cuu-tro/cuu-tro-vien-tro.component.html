@@ -2,27 +2,27 @@
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA')">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA')">
       Xây dựng phương án
     </li>
     <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA') && userService.isTongCuc()">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA') && userService.isTongCuc()">
       Tổng hợp phương án
     </li>
     <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA')">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA')">
       Quyết định phê duyệt phương án
     </li>
     <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH')">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH')">
       Quyết định giao nhiệm vụ xuất hàng
     </li>
     <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL')">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL')">
       Kiểm tra chất lượng
     </li>
     <li [nzSelected]="tabSelected==5" nz-menu-item (click)="selectTab(5)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK')">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK')">
       Xuất kho
     </li>
   </ul>
@@ -46,6 +46,7 @@
     </ng-container>
     <ng-container *ngIf="tabSelected == 3">
       <!--      <app-quyet-dinh-gnv-xuat-hang></app-quyet-dinh-gnv-xuat-hang>-->
+      <!-- <app-quyet-dinh-gnv [loaiXuat]="'CTVT'"></app-quyet-dinh-gnv> -->
       <app-quyet-dinh-gnv></app-quyet-dinh-gnv>
     </ng-container>
     <ng-container *ngIf="tabSelected == 4">

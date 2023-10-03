@@ -119,7 +119,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       gtriDthau: [null],
       gtriHdong: [null],
       donGiaVat: [],
-      vat: ["8"],
+      thueVat: [],
       tongMucDt: [null],
       tongMucDtDx: [null],
       nguonVon: ["NGV01"],
@@ -156,7 +156,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       });
     }
     this.formData.get("loaiVthh").setValue(this.loaiVthhInput);
-    this.formData.get("vat").setValue("8");
     await this.loadDanhMucHang();
     if (this.idInput > 0) {
       await this.getDetail(this.idInput, null);
@@ -707,7 +706,8 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
           tongMucDt: parseFloat(tongMucDt.toFixed(2)),
           tongSlChiTieu: tongSlChiTieu,
           ngayKyQdPdGiaCuThe: res.ngayKyQdPdGiaCuThe,
-          soQdPdGiaCuThe: res.soQdPdGiaCuThe
+          soQdPdGiaCuThe: res.soQdPdGiaCuThe,
+          thueVat: res.vat
         });
       }
     });

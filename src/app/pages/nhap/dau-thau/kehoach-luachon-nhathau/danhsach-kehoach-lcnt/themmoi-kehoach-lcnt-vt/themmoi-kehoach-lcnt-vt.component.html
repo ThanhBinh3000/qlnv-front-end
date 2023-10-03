@@ -384,7 +384,7 @@
                 <nz-form-label [nzNoColon]="true"> % thuế VAT
                 </nz-form-label>
                 <nz-form-control>
-                  <span class="blue-text">{{formData.value.vat ? formData.value.vat + '%' : ''}}</span>
+                  <span class="blue-text">{{formData.value.thueVat ? formData.value.thueVat + '%' : ''}}</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -491,7 +491,6 @@
             <td></td>
             <td></td>
             <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
-            <td></td>
             <td></td>
             <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :
               'vi_VN'}}</td>

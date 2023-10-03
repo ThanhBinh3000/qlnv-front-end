@@ -161,20 +161,15 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
 
   async bindingData() {
     if (this.itemGoiThau && this.itemQdPdKhlcnt) {
-      console.log(this.itemGoiThau, "this.itemGoiThau")
-      console.log(this.itemQdPdKhlcnt, "this.itemQdPdKhlcnt")
       let rs = await this.quyetdinhpheduyetKqLcntService.getDetail(this.itemGoiThau.idQdPdKqlcnt);
       let dataQdPdKqlcnt;
       let goiThau;
       if (rs.msg == MESSAGE.SUCCESS) {
         dataQdPdKqlcnt = rs.data;
       }
-      console.log(dataQdPdKqlcnt, "dataQdPdKqlcnt")
       if (dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.length) {
         goiThau = dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
-        console.log(goiThau, "goiThau")
       }
-      console.log(this.itemGoiThau, 'this.itemGoiThau this.itemGoiThau ')
       this.formData.patchValue({
         namKeHoach: this.itemQdPdKhlcnt.namKh,
         idQdPdKqlcnt: this.itemGoiThau.idQdPdKqlcnt,
@@ -281,7 +276,6 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     } else {
       let res = await this.createUpdate(this.formData.value);
       if (res) {
-        console.log(res, 'day là sau khi save ko nè')
         this.emitDataHopDong(res);
       }
     }

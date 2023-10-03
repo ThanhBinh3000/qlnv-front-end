@@ -163,7 +163,6 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
 
   async bindingData() {
     if (this.itemGoiThau && this.itemQdPdKhlcnt) {
-      console.log(this.itemGoiThau,211111)
       let rs = await this.quyetdinhpheduyetKqLcntService.getDetail(this.itemGoiThau.idQdPdKqlcnt);
       let dataQdPdKqlcnt;
       let goiThau;
@@ -188,9 +187,9 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
         tenLoaiHopDong: this.itemGoiThau.tenLoaiHopDong,
         cdtTen: this.itemGoiThau.ktTdscQuyetDinhPdKqlcnt?.chuDauTu,
         cdtDiaChi: this.itemGoiThau.ktTdscQuyetDinhPdKqlcnt?.diaChi,
-        dvccTen: goiThau?.ktTdscQuyetDinhPdKhlcntDsnt?.tenNhaThau,
-        dvccDiaChi: goiThau?.ktTdscQuyetDinhPdKhlcntDsnt?.diaChi,
-        dvccMst: goiThau?.ktTdscQuyetDinhPdKhlcntDsnt?.maSoThue,
+        dvccTen: goiThau?.ktTdScQuyetDinhPdKhlcntDsnt?.tenNhaThau,
+        dvccDiaChi: goiThau?.ktTdScQuyetDinhPdKhlcntDsnt?.diaChi,
+        dvccMst: goiThau?.ktTdScQuyetDinhPdKhlcntDsnt?.maSoThue,
       });
     }
   }
