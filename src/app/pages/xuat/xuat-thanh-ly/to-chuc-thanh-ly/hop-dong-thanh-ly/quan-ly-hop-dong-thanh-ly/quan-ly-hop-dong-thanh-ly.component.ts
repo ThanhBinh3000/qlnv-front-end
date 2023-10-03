@@ -20,6 +20,8 @@ import {
   QuyetDinhThanhLyService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
 import {STATUS} from "../../../../../../constants/status";
+import {Base3Component} from "../../../../../../components/base3/base3.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -27,12 +29,8 @@ import {STATUS} from "../../../../../../constants/status";
   templateUrl: './quan-ly-hop-dong-thanh-ly.component.html',
   styleUrls: ['./quan-ly-hop-dong-thanh-ly.component.scss']
 })
-export class QuanLyHopDongThanhLyComponent extends Base2Component implements OnInit {
+export class QuanLyHopDongThanhLyComponent extends Base3Component implements OnInit {
 
-  @Input() id: number;
-  @Input() loaiVthh: string;
-  @Output()
-  showListEvent = new EventEmitter<any>();
   isView = false;
   idHopDong: number;
   idKqTl: number;
@@ -48,12 +46,15 @@ export class QuanLyHopDongThanhLyComponent extends Base2Component implements OnI
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
     private hopDongThanhLyService: HopDongThanhLyService,
-    private quyetDinhPheDuyetKetQuaService: QuyetDinhPheDuyetKetQuaService,
+    private _service: QuyetDinhPheDuyetKetQuaService,
     private toChucThucHienThanhLyService: ToChucThucHienThanhLyService,
     private quyetDinhThanhLyService: QuyetDinhThanhLyService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKetQuaService);
+    super(httpClient, storageService, notification, spinner, modal,route,router, _service);
+    this.defaultURL = '/xuat/xuat-thanh-ly/to-chuc/hop-dong'
     this.formData = this.fb.group({
       id: [],
       nam: [''],
@@ -80,11 +81,10 @@ export class QuanLyHopDongThanhLyComponent extends Base2Component implements OnI
   async ngOnInit() {
     await this.spinner.show()
     try {
-      await Promise.all([]);
-      if (this.id) {
-        await this.getDetail(this.id)
-        await this.selectRow(this.dataTable[0])
-      }
+      await Promise.all([
+        this.getId(),
+        this.initForm()
+      ])
       await this.spinner.hide()
     } catch (e) {
       console.log('error: ', e)
@@ -93,9 +93,15 @@ export class QuanLyHopDongThanhLyComponent extends Base2Component implements OnI
     }
   }
 
+  initForm(){
+    if(this.id){
+      this.getDetail(this.id);
+    }
+  }
+
   async getDetail(id) {
     if (id) {
-      let res = await this.quyetDinhPheDuyetKetQuaService.getDetail(id);
+      let res = await this._service.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataQdKq = res.data;
         let resTc = await this.toChucThucHienThanhLyService.getDetail(dataQdKq.idThongBao);
@@ -117,16 +123,23 @@ export class QuanLyHopDongThanhLyComponent extends Base2Component implements OnI
             trangThaiHd: dataQdKq.trangThaiHd,
             tenTrangThaiHd: dataQdKq.tenTrangThaiHd
           })
-          this.listAllDviTsan = dataTc.toChucDtl;
-          this.listAllDviTsan = this.listAllDviTsan.filter((item) => {
-            return item.toChucCaNhan !== null && item.soLanTraGia > 0
-          }).map(item => item.maDviTsan);
+          // this.listAllDviTsan = dataTc.toChucDtl;
+          // this.listAllDviTsan = this.listAllDviTsan.filter((item) => {
+          //   return item.toChucCaNhan !== null && item.soLanTraGia > 0
+          // }).map(item => item.maDviTsan);
           this.dataTable = dataQdKq.listHopDong;
-          this.listDviTsanDaKy = this.dataTable.filter(item => item.trangThai == STATUS.DA_KY);
-          this.listDviTsanDaKy = this.listDviTsanDaKy.map(item => item.maDviTsan.split(",")).flat();
+          console.log(this.dataTable);
+          // this.listDviTsanDaKy = this.dataTable.filter(item => item.trangThai == STATUS.DA_KY);
+          // this.listDviTsanDaKy = this.listDviTsanDaKy.map(item => item.maDviTsan.split(",")).flat();
         }
       }
     }
+  }
+
+  getDsHopDong(){
+    // let body = {
+    //   idQd
+    // }
   }
 
   async selectRow(item: any) {
@@ -136,14 +149,6 @@ export class QuanLyHopDongThanhLyComponent extends Base2Component implements OnI
       this.idHopDong = cloneDeep(item.id);
       this.idKqTl = cloneDeep(item.idQdKqTl)
       this.isView = true;
-    }
-  }
-
-  async redirectHopDong(isShowHd: boolean, id: number) {
-    this.isEditHopDong = isShowHd;
-    this.idHopDong = id;
-    if (!isShowHd) {
-      await this.ngOnInit()
     }
   }
 
