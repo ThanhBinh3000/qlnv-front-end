@@ -171,6 +171,7 @@ export class HeSoBaoHiemComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
                     this.baoCao.listIdDeleteFiles = [];
+                    this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
                 } else {
