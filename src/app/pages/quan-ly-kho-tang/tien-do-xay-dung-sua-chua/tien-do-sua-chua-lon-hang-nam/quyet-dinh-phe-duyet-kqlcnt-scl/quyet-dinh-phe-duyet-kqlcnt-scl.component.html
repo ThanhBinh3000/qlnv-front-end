@@ -38,7 +38,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td>{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.namKh }}</td>
@@ -52,10 +52,10 @@
                (click)="openThongTinModal(data.id, true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')" (click)="openThongTinModal(data.id,false)">
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')" (click)="openThongTinModal(data.id,false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XOA') " (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XOA') " (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

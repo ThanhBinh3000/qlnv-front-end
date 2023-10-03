@@ -1,19 +1,19 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
-import {UserLogin} from "src/app/models/userlogin";
-import {MESSAGE} from "src/app/constants/message";
+import { UserLogin } from "src/app/models/userlogin";
+import { MESSAGE } from "src/app/constants/message";
 import dayjs from "dayjs";
-import {isEmpty} from 'lodash';
-import {TEN_LOAI_VTHH} from "src/app/constants/config";
+import { isEmpty } from 'lodash';
+import { TEN_LOAI_VTHH } from "src/app/constants/config";
 
 @Component({
   selector: 'app-quyet-dinh-pd',
@@ -32,8 +32,8 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
   @Output() eventTaoQdXc: EventEmitter<any> = new EventEmitter<any>();
 
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
 
   constructor(
@@ -58,8 +58,9 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
       ngayKetThucDxTu: null,
       ngayKetThucDxDen: null,
       type: null,
-      xuatCap:null,
-      trangThai:null
+      xuatCap: null,
+      trangThai: null,
+      types: [['TH', 'TTr']]
     })
     this.filterTable = {
       soQd: '',
@@ -118,9 +119,9 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({type: this.loaiXuat, xuatCap: this.chuyenXuatCap, trangThai: (!!!this.chuyenXuatCap) ? null: '29' });
-      if(this.chuyenXuatCap){
-        this.formData.patchValue({tenVthh:TEN_LOAI_VTHH.GAO});
+      this.formData.patchValue({ type: this.loaiXuat, xuatCap: this.chuyenXuatCap, trangThai: (!!!this.chuyenXuatCap) ? null : '29' });
+      if (this.chuyenXuatCap) {
+        this.formData.patchValue({ tenVthh: TEN_LOAI_VTHH.GAO });
       }
       await this.initData();
       await this.timKiem();
