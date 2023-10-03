@@ -13,7 +13,7 @@
           <span>Quay lại</span>
         </button>
         <ng-container>
-          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH
           && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHLPDHDTQG_DUYET')" type="button"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_checkfile2"></i>
