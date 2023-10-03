@@ -205,7 +205,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]='24'>
+          <div nz-col [nzSpan]='24' *ngIf="!formData.value.isMat">
             <nz-form-item>
               <nz-form-label [nzNoColon]='true' [nzSpan]='24'>
                 Tài liệu đính kèm
