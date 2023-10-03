@@ -239,7 +239,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           this.nameFile = "bccl_cong_tac_bao_quan_muoi_chi_tiet";
         }
       }
-      body.vaiTro = this.userService.isChiCuc() || (this.userService.isCuc() && (body.loaiKyBc == '01'))  ? "LDCHICUC" : "LDCUC" ;
+      body.vaiTro = this.userService.isChiCuc()  ? "LDCHICUC" : "LDCUC" ;
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc;
       if (body.loaiKyBc) {
         if (body.loaiKyBc == '01') {
@@ -252,6 +252,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           }
         }
         if (body.loaiKyBc == '02') {
+          body.vaiTro = 'LDCHICUC'
           if (body.kyBc && body.kyBc == 'Quý I') {
             body.tuNgay = '1/1/' + body.nam
             body.denNgay = '31/3/' + body.nam
@@ -270,7 +271,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           }
         }
         if (body.loaiKyBc == '03') {
-          body.tuNgay = '1/1/' + body.nam
+          body.tuNgay = '1/10/' + body.nam
           body.denNgay = '31/12/' + body.nam
         }
         if (body.loaiKyBc == '04') {
