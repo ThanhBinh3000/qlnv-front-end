@@ -160,6 +160,7 @@ export class ThongTinHopDongSclComponent extends Base2Component implements OnIni
           tenNguonVon : this.itemQdPdKhLcnt.nguonVonDt
         })
         this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
+        console.log(this.listHopDong,"this.listHopDong")
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
         }
