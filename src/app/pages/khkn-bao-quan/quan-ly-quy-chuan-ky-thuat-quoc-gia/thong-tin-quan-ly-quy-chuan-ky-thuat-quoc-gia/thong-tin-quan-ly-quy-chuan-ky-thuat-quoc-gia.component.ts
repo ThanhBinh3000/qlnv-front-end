@@ -168,6 +168,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         data.apDungTai = ds;
         this.listVanBanId = String(data.idVanBanThayThe);
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        this.formData.patchValue({
+          maBn: data.maBn,
+        });
         this.dataTable = data.tieuChuanKyThuat;
         this.dataTable.sort((a, b) => {
           if (a.thuTuHt !== b.thuTuHt) {
@@ -718,7 +721,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       nzFooter: null,
       nzComponentParams: {
         listVbThayThe: this.formData.get('soVanBanThayThe').value,
-        loaiVthhSearch: this.listOfTagOptions
+        loaiVthhSearch: this.listOfTagOptions,
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
