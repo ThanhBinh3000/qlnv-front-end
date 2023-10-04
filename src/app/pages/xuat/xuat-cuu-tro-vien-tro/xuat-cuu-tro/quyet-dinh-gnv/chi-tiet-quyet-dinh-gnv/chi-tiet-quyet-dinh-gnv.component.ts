@@ -755,6 +755,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let loaiVthh = this.formDataDtl.value.loaiVthh;
     let cloaiVthh = this.formDataDtl.value.cloaiVthh;
     let soLuongGiao = this.formDataDtl.value.soLuongGiao;
+    let soLuongDx = this.formDataDtl.value.soLuongDx;
     if (maDvi) {
       await this.quanLyHangTrongKhoService.getTrangThaiHt({
         maDvi: maDvi,
@@ -780,6 +781,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               tonKhoDvi: tonKhoDvi,
               tonKhoCloaiVthh: tonKhoCloaiVthh
             });
+            if (this.userService.isCuc()) {
+              cloaiVthh ? this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoCloaiVthh))]) :
+                this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);
+              this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
+            }
             if (this.userService.isChiCuc()) {
               cloaiVthh ?
                 this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]) :
