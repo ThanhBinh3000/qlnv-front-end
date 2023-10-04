@@ -539,7 +539,6 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         })) : []
       }
     }
-
   }
 
 

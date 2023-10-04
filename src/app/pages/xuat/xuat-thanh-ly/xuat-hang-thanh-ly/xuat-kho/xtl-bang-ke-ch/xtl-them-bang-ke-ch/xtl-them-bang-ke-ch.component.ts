@@ -25,6 +25,9 @@ import {
 import {
   BangCanKeHangThanhLyService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BangCanKeHangThanhLy.service";
+import {
+  QuyetDinhGiaoNhiemVuThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhGiaoNhiemVuThanhLy.service";
 
 @Component({
   selector: 'app-xtl-them-bang-ke-ch',
@@ -35,7 +38,6 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
   rowItem: any = {};
   symbol: string = '';
   phanLoai : string;
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -47,6 +49,7 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
     private _service: BangCanKeHangThanhLyService,
     private phieuXuatKhoThanhLyService: PhieuXuatKhoThanhLyService,
     private quyetDinhXhService: QuyetDinhXhService,
+    private quyetDinhGiaoNhiemVuThanhLyService : QuyetDinhGiaoNhiemVuThanhLyService
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     router.events.subscribe((val) => {
@@ -71,6 +74,8 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
       ngayQdXh: ['',],
       soPhieuXuatKho: ['', [Validators.required]],
       idPhieuXuatKho: ['', [Validators.required]],
+      idDsHdr : ['', [Validators.required]],
+      maDiaDiem : ['', [Validators.required]],
       tenDiemKho: ['',],
       tenNhaKho: ['',],
       tenNganKho: ['',],
@@ -123,30 +128,26 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
           soBangKe: res + '/' + this.formData.value.nam + this.symbol,
           maQhns: this.userInfo.DON_VI.maQhns,
           tenDvi: this.userInfo.TEN_DVI,
-          ngayNhap: dayjs().format('YYYY-MM-DD'),
+          ngayLap: dayjs().format('YYYY-MM-DD'),
           tenThuKho: this.userInfo.TEN_DAY_DU
         })
       });
     };
-    this.formData.patchValue({
-      idQdXh : '1',
-      soQdXh : '1/QD',
-      ngayQdXh : dayjs().format('YYYY-MM-DD')
-    });
   }
 
-  openDialogDanhSach() {
+  openDialogQdGiaoNvxh() {
     if (this.disabled()) {
       return;
     }
+    let body = {
+      trangThai : STATUS.BAN_HANH,
+      nam : this.formData.value.nam,
+      phanLoai : this.phanLoai
+    }
     this.spinner.show();
-    this.quyetDinhXhService.getDanhSachTaoPhieuXuatKho({}).then((res) => {
+    this.quyetDinhGiaoNhiemVuThanhLyService.getAll(body).then((res) => {
       this.spinner.hide();
       if (res.data) {
-        res.data?.forEach(item => {
-          item.ngayNhap = item.thoiHanNhap;
-          item.ngayXuat = item.thoiHanXuat;
-        })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách quyết định giao nhiệm vụ xuất hàng',
           nzContent: DialogTableSelectionComponent,
@@ -156,32 +157,21 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
           nzFooter: null,
           nzComponentParams: {
             dataTable: res.data,
-            dataHeader: ['Số quyết định xuất hàng', 'Trích yếu', 'Ngày ký', 'Thời hạn xuất', 'Thời hạn nhập'],
-            dataColumn: ['soQd', 'trichYeu', 'ngayKy', 'ngayXuat', 'ngayNhap']
+            dataHeader: ['Số quyết định xuất hàng'],
+            dataColumn: ['soBbQd']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
           if (data) {
-            this.bindingDataQdXuatHang(data.id)
+            this.formData.patchValue({
+              idQdXh : data.id,
+              soQdXh : data.soBbQd,
+              ngayQdXh: data.ngayKy
+            })
           }
         });
       }
     })
-  }
-
-  bindingDataQdXuatHang(id) {
-    this.spinner.show();
-    this.quyetDinhXhService.getDetail(id).then((res) => {
-      if (res.data) {
-        const data = res.data
-        this.formData.patchValue({
-          soQdXh: data.soQd,
-          idQdXh: data.id,
-          ngayQdXh: data.ngayKy
-        })
-      }
-      this.spinner.hide();
-    });
   }
 
   openDialogPhieuXuatKho() {
@@ -234,6 +224,8 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
       this.formData.patchValue({
         soPhieuXuatKho: data.soPhieuXuatKho,
         idPhieuXuatKho: data.id,
+        idDsHdr : data.idDsHdr,
+        maDiaDiem : data.maDiaDiem,
         tenDiemKho: data.tenDiemKho,
         tenNhaKho: data.tenNhaKho,
         tenNganKho: data.tenNganKho,
