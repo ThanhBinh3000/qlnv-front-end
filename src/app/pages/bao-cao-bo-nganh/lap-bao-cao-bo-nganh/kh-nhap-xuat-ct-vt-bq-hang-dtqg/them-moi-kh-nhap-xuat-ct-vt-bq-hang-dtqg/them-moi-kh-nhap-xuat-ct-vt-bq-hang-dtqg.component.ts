@@ -110,6 +110,7 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
             moTai: this.listData.moTai,
             soTien: this.listData.soTien,
             bangChu: this.listData.bangChu,
+            trangThai: this.listData.trangThai,
           });
           this.listDataDetail = this.listData.detail
         }

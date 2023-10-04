@@ -49,6 +49,7 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
     private hopDongThanhLyService: HopDongThanhLyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal,route,router, _service);
+    this.defaultURL = '/xuat/xuat-thanh-ly/to-chuc/qd-giao-nv-xh'
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year')],
@@ -76,11 +77,8 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
     await this.spinner.show();
     try {
       this.maHauTo = '/QĐ-' + this.userInfo.DON_VI.tenVietTat;
-      if (this.idSelected) {
-        await this.loadChiTiet(this.idSelected);
-      } else {
-        this.initForm();
-      }
+      this.getId();
+      await this.initForm()
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -89,13 +87,24 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
     await this.spinner.hide();
   }
 
-  initForm() {
-    this.formData.patchValue({
-      maDvi: this.userInfo.MA_DVI ?? null,
-      tenDvi: this.userInfo.TEN_DVI ?? null,
-      trangThai: STATUS.DU_THAO,
-      tenTrangThai: 'Dự thảo',
-    })
+  async initForm() {
+    if(this.id){
+      await this.detail(this.id).then((res)=>{
+        console.log(res);
+        this.formData.patchValue({
+          soBbQd: res?.soBbQd?.split('/')[0],
+        });
+        this.dataTable = res.children;
+        this.buildTableView();
+      })
+    }else{
+      this.formData.patchValue({
+        maDvi: this.userInfo.MA_DVI ?? null,
+        tenDvi: this.userInfo.TEN_DVI ?? null,
+        trangThai: STATUS.DU_THAO,
+        tenTrangThai: 'Dự thảo',
+      })
+    }
   }
 
   async openDialogHopDong() {
@@ -242,6 +251,9 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
   pheDuyet() {
     let trangThai
     switch (this.formData.value.trangThai) {
+      //Reject
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
       // Approve
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_TP;
@@ -251,11 +263,6 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
         break;
       case STATUS.CHO_DUYET_LDC:
         trangThai = STATUS.BAN_HANH;
-        break;
-      //Reject
-      case STATUS.TU_CHOI_TP:
-      case STATUS.TU_CHOI_LDC:
-        trangThai = STATUS.CHO_DUYET_TP;
         break;
     }
     this.approve(this.formData.value.id, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
@@ -275,6 +282,7 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
   }
 
   showSave(){
-    return true;
+    let trangThai = this.formData.value.trangThai;
+    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDCC
   }
 }

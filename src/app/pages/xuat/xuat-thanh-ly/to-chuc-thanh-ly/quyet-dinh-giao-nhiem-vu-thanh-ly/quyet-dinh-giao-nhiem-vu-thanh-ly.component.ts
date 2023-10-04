@@ -87,7 +87,6 @@ export class QuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component impleme
     }
   }
 
-
   disabledNgayKyTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayKyDen) {
       return false;
