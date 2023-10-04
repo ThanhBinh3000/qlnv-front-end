@@ -67,6 +67,7 @@ import {
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { FILETYPE } from "../../../../../../../constants/fileType";
 import { QuyetDinhDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/quyet-dinh-dieu-chinh-ctkh';
+import { DeXuatDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/de-xuat-dieu-chinh-ctkh';
 
 @Component({
   selector: 'app-dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -165,7 +166,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
   LOAI_QD = LOAI_QD_CTKH;
 
-  //
+  listDeXuat: any[] = [];
 
   constructor(
     private router: Router,
@@ -185,6 +186,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     public quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
     private quyetDinhTtcpService: QuyetDinhTtcpService,
     public quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    private deXuatDieuChinhCTKHService: DeXuatDieuChinhCTKHService,
     private quyetDinhDieuChinhCTKHService: QuyetDinhDieuChinhCTKHService,
   ) {
     this.initForm();
@@ -214,6 +216,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
+    this.getDSDXDC(this.yearNow)
     await this.loadDonVi(),
       await Promise.all([
         this.loadDanhMucHang(),
@@ -246,6 +249,25 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       );
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async getDSDXDC(year) {
+    const body = {
+      namKeHoach: year,
+      trangThai: STATUS.DA_DUYET_LDC
+    }
+
+    let res = await this.deXuatDieuChinhCTKHService.search(body)
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data
+      if (data) {
+        const dsDX = data.content
+        this.listDeXuat = dsDX.map((dx) => dx.soDeXuat)
+        console.log("listDeXuat", this.listDeXuat)
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
     }
   }
 
