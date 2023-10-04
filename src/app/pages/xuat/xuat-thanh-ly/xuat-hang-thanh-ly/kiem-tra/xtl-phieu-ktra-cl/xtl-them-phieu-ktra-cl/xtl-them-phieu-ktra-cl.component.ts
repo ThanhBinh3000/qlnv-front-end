@@ -25,6 +25,9 @@ import {
 import {
   BienBanLayMauThanhLyService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BienBanLayMauThanhLy.service";
+import {
+  QuyetDinhGiaoNhiemVuThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhGiaoNhiemVuThanhLy.service";
 
 @Component({
   selector: 'app-xtl-them-phieu-ktra-cl',
@@ -51,6 +54,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
     private quyetDinhXhService: QuyetDinhXhService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
+    private quyetDinhGiaoNhiemVuThanhLyService : QuyetDinhGiaoNhiemVuThanhLyService
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.previewName = 'sc_kiem_tra_chat_luong'
@@ -71,7 +75,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
       idBbLayMau: ['', [Validators.required]],
       ngayLayMau : [''],
       ngayKnghiem: ['', [Validators.required]],
-      idDiaDiemXh: ['', [Validators.required]],
+      idDsHdr: ['', [Validators.required]],
       maDiaDiem: ['', [Validators.required]],
       tenDiemKho: ['',],
       tenNhaKho: ['',],
@@ -97,7 +101,6 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
       const urlList = routerUrl.split("/");
       this.phanLoai = urlList[4] == 'kiem-tra-lt' ? 'LT' : 'VT'
       this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-phieu-ktra-cl';
-      console.log(this.phanLoai)
     })
   }
 
@@ -135,27 +138,23 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
         })
       });
     }
-    this.formData.patchValue({
-      idQdXh : '1',
-      soQdXh : '1/QD',
-      ngayQdXh : dayjs().format('YYYY-MM-DD')
-    });
   }
 
-  openDialogDanhSach() {
+  openDialogQdGiaoNvxh() {
     if (this.disabled()) {
       return;
     }
+    let body = {
+      trangThai : STATUS.BAN_HANH,
+      nam : this.formData.value.nam,
+      phanLoai : this.phanLoai
+    }
     this.spinner.show();
-    this.quyetDinhXhService.getDanhSachTaoPhieuXuatKho({}).then((res) => {
+    this.quyetDinhGiaoNhiemVuThanhLyService.getAll(body).then((res) => {
       this.spinner.hide();
       if (res.data) {
-        res.data?.forEach(item => {
-          item.ngayNhap = item.thoiHanNhap;
-          item.ngayXuat = item.thoiHanXuat;
-        })
         const modalQD = this.modal.create({
-          nzTitle: 'Danh sách quyết định xuất hàng',
+          nzTitle: 'Danh sách quyết định giao nhiệm vụ xuất hàng',
           nzContent: DialogTableSelectionComponent,
           nzMaskClosable: false,
           nzClosable: false,
@@ -163,32 +162,21 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
           nzFooter: null,
           nzComponentParams: {
             dataTable: res.data,
-            dataHeader: ['Số quyết định xuất hàng', 'Trích yếu', 'Ngày ký', 'Thời hạn xuất', 'Thời hạn nhập'],
-            dataColumn: ['soQd', 'trichYeu', 'ngayKy', 'ngayXuat', 'ngayNhap']
+            dataHeader: ['Số quyết định xuất hàng'],
+            dataColumn: ['soBbQd']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
           if (data) {
-            this.bindingDataQdXuatHang(data.id)
+            this.formData.patchValue({
+              idQdXh : data.id,
+              soQdXh : data.soBbQd,
+              ngayQdXh: data.ngayKy
+            })
           }
         });
       }
     })
-  }
-
-  bindingDataQdXuatHang(id) {
-    this.spinner.show();
-    this.quyetDinhXhService.getDetail(id).then((res) => {
-      if (res.data) {
-        const data = res.data
-        this.formData.patchValue({
-          soQdXh: data.soQd,
-          idQdXh: data.id,
-          ngayQdXh: data.ngayKy
-        });
-      }
-      this.spinner.hide();
-    });
   }
 
   openDialogBienBanLm() {
@@ -224,7 +212,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
         modalQD.afterClose.subscribe(async (data) => {
           if (data) {
             console.log(data);
-            this.bindingDataPhieuXuatKho(data.id)
+            this.bindingDataBbLm(data.id)
             this.getDanhMucTieuChuan(data.cloaiVthh ? data.cloaiVthh : data.loaiVthh);
           }
         });
@@ -239,7 +227,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
     }
   }
 
-  bindingDataPhieuXuatKho(idPhieuXuatKho) {
+  bindingDataBbLm(idPhieuXuatKho) {
     this.spinner.show();
     this.bienBanLayMauThanhLyService.getDetail(idPhieuXuatKho).then((res) => {
       const data = res.data;
@@ -248,7 +236,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
         idBbLayMau: data.id,
         ngayLayMau : data.ngayLayMau,
         maDiaDiem : data.maDiaDiem,
-        idDiaDiemXh : data.idDiaDiemXh,
+        idDsHdr : data.idDsHdr,
         tenDiemKho: data.tenDiemKho,
         tenNhaKho: data.tenNhaKho,
         tenNganKho: data.tenNganKho,
@@ -258,13 +246,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
         tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         dviTinh : data.dviTinh,
-        nguoiGiaoHang: data.nguoiGiaoHang,
-        soCmt: data.soCmt,
-        dviNguoiGiaoHang: data.dviNguoiGiaoHang,
-        diaChi: data.diaChi,
-        thoiGianGiaoNhan: data.thoiGianGiaoNhan,
         donViTinh: data.donViTinh,
-        ngayXuatKho: data.ngayXuatKho
       });
       this.danhMucService.getDetail(data.cloaiVthh ? data.cloaiVthh : data.loaiVthh).then((res) => {
         this.listHinhThucBq = res.data?.loaiHinhBq;

@@ -92,6 +92,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   loaiNhapXuat: string;
   kieuNhapXuat: string;
   tongSoLuong: number;
+  tongSoLuongDx: number;
   tongSlXuatCap: string;
   tongNhuCauXuat: string;
   constructor(httpClient: HttpClient,
@@ -271,13 +272,13 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     }
   }
   tinhTong() {
-    const { tongSoLuong, tongSlXuatCap, tongNhuCauXuat } = this.phuongAnView.reduce((obj, cur) => {
-      obj.tongSoLuong += cur.soLuong ? cur.soLuong : 0;
+    const { tongSoLuongDx, tongSlXuatCap, tongNhuCauXuat } = this.phuongAnView.reduce((obj, cur) => {
+      obj.tongSoLuongDx += cur.soLuongDx ? cur.soLuongDx : 0;
       obj.tongSlXuatCap += cur.soLuongXc ? cur.soLuongXc : 0;
       obj.tongNhuCauXuat += cur.soLuongXc ? cur.soLuongNhuCauXuat : 0;
       return obj
-    }, { tongSoLuong: 0, tongSlXuatCap: 0, tongNhuCauXuat: 0 });
-    this.tongSoLuong = tongSoLuong;
+    }, { tongSoLuongDx: 0, tongSlXuatCap: 0, tongNhuCauXuat: 0 });
+    this.tongSoLuongDx = tongSoLuongDx;
     this.tongSlXuatCap = tongSlXuatCap;
     this.tongNhuCauXuat = tongNhuCauXuat;
   }
@@ -417,7 +418,6 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
           childData: value
         };
       }).value().filter(f => !!f);
-    console.log("aaaaaaaa", this.formData.value.quyetDinhPdDtl)
     this.expandAll();
   }
 
@@ -622,22 +622,22 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             data.paXuatGaoChuyenXc = true;
             data.qdPaXuatCap = res.data.soBbQd;
             data.qdPaXuatCapId = res.data.id;
-            delete data.id;
-            delete data.soBbQd;
-            delete data.ngayHluc;
-            delete data.tenVthh;
-            delete data.loaiNhapXuat;
-            delete data.kieuNhapXuat;
-            delete data.idDx;
-            delete data.soDx;
-            delete data.ngayKy;
-            delete data.trangThai;
-            delete data.tenTrangThai;
-            delete data.type;
-            delete data.canCu;
-            delete data.fileDinhKem;
-            delete data.trichYeu;
-            delete data.quyetDinhPdDtl;
+            // delete data.id;
+            // delete data.soBbQd;
+            // delete data.ngayHluc;
+            // delete data.tenVthh;
+            // delete data.loaiNhapXuat;
+            // delete data.kieuNhapXuat;
+            // delete data.idDx;
+            // delete data.soDx;
+            // delete data.ngayKy;
+            // delete data.trangThai;
+            // delete data.tenTrangThai;
+            // delete data.type;
+            // delete data.canCu;
+            // delete data.fileDinhKem;
+            // delete data.trichYeu;
+            // delete data.quyetDinhPdDtl;
 
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 

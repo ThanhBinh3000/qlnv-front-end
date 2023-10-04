@@ -90,17 +90,11 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       body.typeFile = "xlsx";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bc_hao_hut_thoc_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo hao hụt thóc tổng hợp";
           this.nameFile = "bc_hao_hut_thoc_tong_hop";
         } else {
-          body.fileName = "bc_hao_hut_gao_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo hao hụt gạo tổng hợp";
           this.nameFile = "bc_hao_hut_gao_tong_hop";
         }
       } else {
-        body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
-        body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
         this.nameFile = "bc_hao_hut_hang_dtqg_chi_tiet";
       }
       body.trangThai = "01";
@@ -142,17 +136,11 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bc_hao_hut_thoc_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo hao hụt thóc tổng hợp";
           this.nameFile = "bc_hao_hut_thoc_tong_hop";
         } else {
-          body.fileName = "bc_hao_hut_gao_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo hao hụt gạo tổng hợp";
           this.nameFile = "bc_hao_hut_gao_tong_hop";
         }
       } else {
-        body.fileName = "bc_hao_hut_hang_dtqg_chi_tiet.jrxml";
-        body.tenBaoCao = "Báo cáo hao hụt hàng DTQG chi tiết";
         this.nameFile = "bc_hao_hut_hang_dtqg_chi_tiet";
       }
       body.trangThai = "01";

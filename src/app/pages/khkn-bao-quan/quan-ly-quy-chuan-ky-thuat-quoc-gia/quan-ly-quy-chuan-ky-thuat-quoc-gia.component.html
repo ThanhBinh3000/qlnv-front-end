@@ -118,8 +118,8 @@
         </button>
       </div>
     </div>
-    <nz-card class='mt-16 flex-card'>
-      <nz-table #basicTable nzBordered [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false'
+    <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
+      <nz-table #basicTable nzBordered [nzData]='dataTable' class='table-chi-tiet'
                 [nzScroll]="{ x: '1700px' }">
         <thead>
         <tr>
@@ -127,28 +127,30 @@
             <label nz-checkbox [(ngModel)]='allChecked' (ngModelChange)='updateAllChecked()'
                    [nzIndeterminate]='indeterminate'></label>
           </th>
-          <th width='50px'>STT</th>
-          <th>Bộ/Ngành</th>
-          <th width='200px'>Số văn bản</th>
-          <th width='200px'>Số hiệu quy chuẩn</th>
-          <th width='200px'>Văn bản thay thế</th>
-          <th width='200px'>Loại hàng hóa</th>
-          <th width='120px'>Ngày ban hành</th>
-          <th width='120px'>Ngày hiệu lực</th>
-          <th width='120px'>Ngày hết hiệu lực</th>
-          <th width='200px'>Trạng thái nhập dữ liệu</th>
-          <th width='120px'>Tình trạng</th>
-          <th width='120px'>Hành động</th>
+          <th nzWidth='50px'>STT</th>
+          <th nzWidth='200px'>Bộ/Ngành</th>
+          <th nzWidth='200px'>Số văn bản</th>
+          <th nzWidth='200px'>Số hiệu quy chuẩn</th>
+          <th nzWidth='300px'>Văn bản thay thế/Sửa đổi, bố sung</th>
+          <th nzWidth='250px'>Loại hàng hóa</th>
+          <th nzWidth='150px'>Ngày ban hành</th>
+          <th nzWidth='150px'>Ngày hiệu lực</th>
+          <th nzWidth='150px'>Ngày hết hiệu lực</th>
+          <th nzWidth="100px">Tài liệu mật</th>
+          <th nzWidth="200px">Trạng thái nhập dữ liệu</th>
+          <th nzWidth='200px'>Tình trạng</th>
+          <th nzWidth='120px'>Hành động</th>
         </tr>
         <tr>
           <th></th>
-          <th class='text-center' width='350px'>
-<!--            <nz-input-group [nzSuffix]='suffixIconSearch'>-->
-<!--              <input type='text' placeholder='Tìm kiếm' nz-input [(ngModel)]='filterTable.tenBn'-->
-<!--                     (input)="filterInTable('tenBn',filterTable.tenBn)" />-->
-<!--            </nz-input-group>-->
+          <th></th>
+          <th class='text-center'>
+            <nz-input-group [nzSuffix]='suffixIconSearch'>
+              <input type='text' placeholder='Tìm kiếm' nz-input [(ngModel)]='filterTable.tenBn'
+                     (input)="filterInTable('tenBn',filterTable.tenBn)" />
+            </nz-input-group>
           </th>
-          <th class='text-center' width='350px'>
+          <th class='text-center'>
             <nz-input-group [nzSuffix]='suffixIconSearch'>
               <input type='text' placeholder='Tìm kiếm' nz-input [(ngModel)]='filterTable.soVanBan'
                      (input)="filterInTable('soVanBan',filterTable.soVanBan)" />
@@ -168,7 +170,7 @@
                      (input)="filterInTable('listTenLoaiVthh',filterTable.listTenLoaiVthh)" />
             </nz-input-group>
           </th>
-          <th>
+          <th >
             <nz-input-group>
               <nz-date-picker nzFormat='dd/MM/yyyy' [(ngModel)]='filterTable.ngayKy'
                               (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
@@ -189,6 +191,7 @@
               </nz-date-picker>
             </nz-input-group>
           </th>
+          <th></th>
           <th>
             <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]='filterTable.trangThai'
@@ -222,11 +225,20 @@
             <td>{{ data.tenBn }}</td>
             <td>{{ data.soVanBan }}</td>
             <td>{{ data.soHieuQuyChuan}}</td>
-            <td>{{ data.soVanBanThayThe}}</td>
+            <td>
+              <p *ngIf='data.soVanBanThayThe'><span
+                class='text-danger'>VB thay thế:</span> <b>{{ data.soVanBanThayThe}}</b></p>
+              <p *ngIf='data.soVanBanSuaDoi'><span
+                class='text-blue'>VB sửa đổi:</span><b> {{ data.soVanBanSuaDoi}}</b></p>
+            </td>
             <td>{{ data.listTenLoaiVthh }}</td>
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">
+              <label nz-checkbox nzDisabled [(ngModel)]='data.isMat'
+                     [nzIndeterminate]='indeterminate'></label>
+            </td>
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiHl }}</td>
             <td class='text-left'>

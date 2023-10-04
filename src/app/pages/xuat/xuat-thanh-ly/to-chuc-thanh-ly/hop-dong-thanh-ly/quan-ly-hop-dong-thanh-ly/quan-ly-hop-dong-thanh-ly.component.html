@@ -239,20 +239,8 @@
         </tbody>
       </nz-table>
     </nz-card>
-    <app-thong-tin-hop-dong-thanh-ly *ngIf="idHopDong" [id]="idHopDong" [idKqTl]="idKqTl" [isQuanLy]="true"
+    <app-thong-tin-hop-dong-thanh-ly *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true"
                                      [isView]="isView">
     </app-thong-tin-hop-dong-thanh-ly>
   </nz-card>
 </div>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModalQdNv()">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly [idSelected]="idQdNv" [isViewOnModal]="true">
-    </app-chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModalQdNv()" class="modal__button&#45;&#45;cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>

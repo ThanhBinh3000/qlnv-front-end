@@ -132,7 +132,7 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
       this.danhMucKhoService
         .export(body)
         .subscribe((blob) =>
-          saveAs(blob, 'danh-muc-kho-tang.xlsx'),
+          saveAs(blob, 'danh-sach-du-an-dau-tu-xay-dung-kho-DTQG.xlsx'),
         );
       this.spinner.hide();
     } catch (e) {

@@ -1,4 +1,4 @@
-<div class="bg-trang" *ngIf="!isDetail">
+<div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
@@ -11,12 +11,6 @@
         <div nz-col [nzSpan]="4">
           <label class="search__label"> Số quyết định </label>
           <input placeholder="Nhập số quyết định" nz-input formControlName="soBbQd"/>
-        </div>
-        <div nz-col [nzSpan]="4">
-          <label class="search__label">Loại hàng hóa</label>
-          <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear>
-            <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
-          </nz-select>
         </div>
         <div nz-col [nzSpan]="8">
           <label class="search__label"> Trích yếu </label>
@@ -65,8 +59,8 @@
         <span>Xuất file</span>
       </button>
       <button type="button" class="btn btn-main"
-              (click)="goDetail(null)"
-              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')">
+              (click)="redirectCreate()"
+              *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && userService.isCuc()">
         <i class=" icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -86,11 +80,8 @@
         <th class="text-center">Số quyết định</th>
         <th class="text-center">Ngày quyết định</th>
         <th class="text-center">Số hợp đồng</th>
-        <th class="text-center">Chủng loại hàng hóa</th>
         <th class="text-center">Thời gian giao nhận hàng</th>
         <th class="text-center">Trích yếu quyết định</th>
-        <th class="text-center">Số BB tịnh kho</th>
-        <th class="text-center">Số BB hao đôi</th>
         <th class="text-center">Trạng thái QĐ</th>
         <th class="text-center">Trang thái Xh</th>
         <th class="text-center">Hành động</th>
@@ -125,12 +116,7 @@
                    (input)="filterInTable('soHopDong',filterTable.soHopDong)" size="small"/>
           </nz-input-group>
         </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
-                   (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small"/>
-          </nz-input-group>
-        </th>
+
         <th>
           <nz-input-group>
             <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.thoiGianGiaoNhan"
@@ -142,18 +128,6 @@
           <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                    (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"
-                   (input)="filterInTable('soBbTinhKho',filterTable.soBbTinhKho)" size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbHaoDoi"
-                   (input)="filterInTable('soBbHaoDoi',filterTable.soBbHaoDoi)" size="small"/>
           </nz-input-group>
         </th>
         <th>
@@ -186,34 +160,26 @@
         <td>{{ data.soBbQd }}</td>
         <td>{{ data.ngayKy|date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.soHopDong }}</td>
-        <td>{{ data.tenCloaiVthh }}</td>
         <td>{{ data.thoiGianGiaoNhan|date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.trichYeu}}</td>
-        <td>{{ data.soBbTinhKho }}</td>
-        <td>{{ data.soBbHaoDoi }}</td>
         <td>{{ data.tenTrangThai }}</td>
         <td>{{ data.tenTrangThaiXh }}</td>
         <td class="text-left">
-          <a (click)="goDetail(data.id)"
-             *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_THEM_CUC'))&&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP'))&&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_LDC')) &&
-                userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XEM')">
+          <a (click)="redirectDetail(data.id)"
+             *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XEM')">
             <i class="fa fa-eye" title="Xem chi tiết"></i>
           </a>
           <a
-            *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM'))"
-            (click)="goDetail(data.id)">
+            *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')"
+            (click)="redirectDetail(data.id)">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
-          <a *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP'))
-               ||(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC'))"
-             (click)="goDetail(data.id)">
+          <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC )"
+             (click)="redirectDetail(data.id)">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
           </a>
           <a
-            *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')"
+            *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')"
             (click)="delete(data)">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           </a>
@@ -238,9 +204,4 @@
       </div>
     </div>
   </nz-card>
-</div>
-<div *ngIf="isDetail" class="chi-tiet">
-  <app-chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly [idSelected]="idSelected"
-                                                  (showListEvent)="showList()">
-  </app-chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly>
 </div>

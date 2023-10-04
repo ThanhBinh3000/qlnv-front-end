@@ -7,6 +7,9 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {ActivatedRoute, Router} from "@angular/router";
 import {KiemTraChatLuongScService} from "../../../../../../services/sua-chua/kiemTraChatLuongSc";
 import {Base3Component} from "../../../../../../components/base3/base3.component";
+import {
+  PhieuKtraClThanhLyService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuKtraClThanhLy.service";
 
 @Component({
   selector: 'app-xtl-phieu-ktra-cl',
@@ -22,7 +25,7 @@ export class XtlPhieuKtraClComponent extends Base3Component implements OnInit {
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private _service: KiemTraChatLuongScService,
+    private _service: PhieuKtraClThanhLyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group({
@@ -40,12 +43,11 @@ export class XtlPhieuKtraClComponent extends Base3Component implements OnInit {
         phanLoai : urlList[4] == 'kiem-tra-lt' ? 'LT' : 'VT'
       })
       this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-phieu-ktra-cl';
-      console.log(this.defaultURL)
     })
   }
 
   ngOnInit(): void {
-    // this.searchPage();
+    this.searchPage();
   }
 
   async searchPage() {

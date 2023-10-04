@@ -112,7 +112,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
             soBienBan: [],
             soQuyetDinh: [],
             soQuyetDinhId: [],
-            ngayKy: [],
+            ngayKy: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
             loai: [],
             tenLoai: [],
             trichYeu: [],

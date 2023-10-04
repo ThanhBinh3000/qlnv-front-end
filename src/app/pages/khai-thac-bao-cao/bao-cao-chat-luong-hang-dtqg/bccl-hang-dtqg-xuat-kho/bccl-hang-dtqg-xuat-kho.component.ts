@@ -200,7 +200,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
     this.listVthh = [];
     let res = await this.danhMucSv.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data.filter(item => item.ma.startsWith("01"));
+      this.listVthh = res.data.filter(item => item.ma.startsWith("01") || item.ma.startsWith("02"));
     }
   }
 

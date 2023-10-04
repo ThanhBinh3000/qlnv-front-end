@@ -237,7 +237,7 @@
         </form>
     </nz-card>
 
-    <nz-card class="mg-t-16 flex-card p-lr16 table-card">
+    <!-- <nz-card class="mg-t-16 flex-card p-lr16 table-card">
         <nz-table nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
             [nzShowPagination]="false">
             <thead>
@@ -249,10 +249,6 @@
                     <th rowSpan="2">Số lượng</th>
                     <th rowSpan="2" *ngIf="!isView">Hành động</th>
                 </tr>
-                <!-- <tr>
-                    <th class="text-center">Dự toán kinh phí theo QĐ<br /> (Triệu đồng) (1)</th>
-                    <th>Kinh phí thực tế (2)</th>
-                </tr> -->
                 <tr>
                 </tr>
             </thead>
@@ -280,7 +276,10 @@
                 </tr>
             </tbody>
         </nz-table>
-    </nz-card>
+    </nz-card> -->
+    <app-edit-table [dataTable]="dataTable" [rowInitial]="rowInitial" [dataHeader]="tableHeader"
+        (saveAction)="tinhTongSoLuong()" (deleteAction)="tinhTongSoLuong()" (addAction)="tinhTongSoLuong()"
+        [isEdit]="!isView"></app-edit-table>
     <form nz-form nzLayout="vertical" [formGroup]="formData">
         <div nz-col nzSpan="24">
             <nz-form-item>

@@ -62,7 +62,8 @@ export class ThongTinPhieuXuatHangHaoHutComponent extends Base2Component impleme
     isDisabledThemMoi: boolean = false;
     danhSachQuyetDinh: any[] = [];
     danhSachNganLo: any[] = [];
-
+    tableHeader: Array<{ [key: string]: string | boolean }> = [{ title: "Tên, nhãn hiệu, quy cách phẩm chất hàng hóa", value: "ten", edit: false, dataType: "string" }, { title: "Mã số", value: "maSo", edit: true, dataType: "string" }, { title: "Đơn vị tính", value: "donViTinh", edit: false, dataType: "string" }, { title: "Số lượng", value: "soLuong", edit: true, dataType: "number" }];
+    rowInitial: { [key: string]: any } = { ten: "", maSo: "", donViTinh: "", soLuong: "" };
     constructor(httpClient: HttpClient,
         storageService: StorageService,
         notification: NzNotificationService,
@@ -262,7 +263,13 @@ export class ThongTinPhieuXuatHangHaoHutComponent extends Base2Component impleme
                         this.formData.controls["soQuyetDinh"].setValue(dataDetail.soQuyetDinh, { emitEvent: false });
                         this.formData.controls["tenNganLo"].setValue(tenNganLo, { emitEvent: false });
                         this.listFileDinhKem = dataDetail.fileDinhKem;
-                        this.dataTable = dataDetail.phieuXuatHaoHutDtl;
+                        this.dataTable = cloneDeep(dataDetail.phieuXuatHaoHutDtl);
+                        this.rowInitial = {
+                            maSo: "",
+                            donViTinh: dataDetail.phieuXuatHaoHutDtl[0]?.donViTinh,
+                            ten: dataDetail.phieuXuatHaoHutDtl[0]?.ten,
+                            soLuong: "",
+                        }
                     }
                 }
             })
@@ -349,20 +356,34 @@ export class ThongTinPhieuXuatHangHaoHutComponent extends Base2Component impleme
             tenCloaiVthh: data.tenCloaiVthh,
             donViTinh: data.donViTinh
         });
-        this.addItemRow();
+        // this.addItemRow();
+        this.setRowInitialTable({ donViTinh: data.donViTinh, ten: data.tenCloaiVthh })
     }
-    addItemRow() {
-        this.dataTable.push({
+    setRowInitialTable(data: { donViTinh: string, ten: string }) {
+        this.rowInitial = {
             maSo: "",
-            donViTinh: this.formData.value.donViTinh,
-            ten: this.formData.value.tenCloaiVthh,
-            soLuong: ""
-        });
+            donViTinh: data.donViTinh,
+            ten: data.ten,
+            soLuong: "",
+        }
     }
+    // addItemRow() {
+    //     this.dataTable.push({
+    //         maSo: "",
+    //         donViTinh: this.formData.value.donViTinh,
+    //         ten: this.formData.value.tenCloaiVthh,
+    //         soLuong: ""
+    //     });
+    // }
     deleteItemRow(i) {
         this.dataTable.splice(i, 1)
     }
-    handleChangeSoLuong(value) {
+    // handleChangeSoLuong(value) {
+    //     const tongSoLuong = this.dataTable.reduce((sum, cur) => sum += !isNaN(cur.soLuong) ? cur.soLuong : 0, 0);
+    //     const tongSoLuongBc = this.convertTien(tongSoLuong, this.formData.value.donViTinh);
+    //     this.formData.patchValue({ tongSoLuong, tongSoLuongBc })
+    // }
+    tinhTongSoLuong() {
         const tongSoLuong = this.dataTable.reduce((sum, cur) => sum += !isNaN(cur.soLuong) ? cur.soLuong : 0, 0);
         const tongSoLuongBc = this.convertTien(tongSoLuong, this.formData.value.donViTinh);
         this.formData.patchValue({ tongSoLuong, tongSoLuongBc })

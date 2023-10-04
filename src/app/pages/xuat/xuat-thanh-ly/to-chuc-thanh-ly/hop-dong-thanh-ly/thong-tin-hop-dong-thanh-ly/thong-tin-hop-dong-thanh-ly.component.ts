@@ -37,7 +37,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class ThongTinHopDongThanhLyComponent extends Base3Component implements OnInit, OnChanges {
   @Input() id: number;
-  @Input() idKqTl: number;
   @Input() isQuanLy: boolean;
   @Input() isView: boolean;
 
@@ -130,9 +129,6 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
       await Promise.all([
         this.loadDataComboBox(),
       ]);
-      if (this.idKqTl) {
-        await this.onChangeKqBdg(this.idKqTl);
-      }
       if (this.id) {
         await this.loadChiTiet(this.id);
       } else {
@@ -176,8 +172,9 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
     this.formData.patchValue({
       soHd: data?.soHd?.split('/')[0],
     });
+    await this.onChangeKqBdg(data.idQdKqTl);
     this.maDviTsan(data.toChucCaNhan);
-    await this.buildTableView(data?.hopDongDtl || [])
+    this.selectMaDviTsan(data.listMaDviTsan);
   }
 
   async save(isGuiDuyet?) {
@@ -202,39 +199,6 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
       })
     } catch (e) {
     }
-  }
-
-  async saveAndSend(status: string, message: string, sucessMessage: string) {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      await this.spinner.hide();
-      return;
-    }
-    let body = cloneDeep(this.formData.value);
-    if (body.listMaDviTsan) {
-      body.maDviTsan = body.listMaDviTsan.join(',');
-    }
-    if (body.soHd) {
-      body.soHd = this.formData.value.soHd + this.maHopDongSuffix;
-    }
-    this.dataTable.forEach((item) => {
-      body.hopDongDtl = item.children
-    })
-    if (body.id > 0) {
-      if (body) {
-        await this.approve(body.id, status, message, null, sucessMessage);
-      } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      let data = await this.createUpdate(body);
-      if (data) {
-        await this.approve(data.id, status, message, null, sucessMessage);
-      } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      }
-    }
-
   }
 
   async openDialogKqTlBdg() {
@@ -290,8 +254,9 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
               const dataThongTin = resttin.data;
               this.listToChucTrungDg = [];
               // Loop data children để lấy ra các teen tổ chức và mã đơn vị tài sản
-              // Chỉ lấy ra những Ds HDR có tổ chức cá nhân != null
-              dataThongTin.children.filter(x => x.toChucCaNhan != null ).forEach( item => {
+              // Chỉ lấy ra những Ds HDR có tổ chức cá nhân != null và có id Hợp dồng == null hoặc trùng với id hiện tại
+              console.log(dataThongTin.children);
+              dataThongTin.children.filter(x => x.toChucCaNhan != null && (x.idHopDongTl == null || x.idHopDongTl == this.id)).forEach( item => {
                 // Check nếu trùng tổ chức cá nhân sẽ thêm vào mã đơn vị tài sản
                 let find = this.listToChucTrungDg.filter(x => x.key == item.toChucCaNhan);
                 if(find.length > 0){
@@ -335,10 +300,7 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
   maDviTsan(event) {
     let thongTin = this.listToChucTrungDg.find(f => f.key === event);
     if (thongTin) {
-      console.log(thongTin);
       this.listDviTsan = thongTin.value;
-      console.log(this.listDviTsan)
-
     }
   }
 
@@ -407,6 +369,10 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
         });
       }
     }
+  }
+
+  redirectDefault() {
+    window.history.back();
   }
 
   isDisabled() {

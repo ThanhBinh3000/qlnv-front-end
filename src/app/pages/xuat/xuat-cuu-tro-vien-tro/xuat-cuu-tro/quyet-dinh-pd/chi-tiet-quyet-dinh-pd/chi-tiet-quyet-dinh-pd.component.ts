@@ -223,14 +223,14 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               });
               this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatPhuongAn.map(element => ({
                 ...element,
-                soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc
+                soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc, soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
               })));
             } else {
               let res = await this.tongHopPhuongAnCuuTroService.getDetail(this.formData.value.idTongHop);
               let detail = res.data;
               this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatCuuTro.map(element => ({
                 ...element,
-                soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc
+                soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc, soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
               })));
             }
             await this.buildTableView();
@@ -256,6 +256,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   async save() {
     // await this.helperService.ignoreRequiredForm(this.formData);
     // this.formData.controls.soQdGnv.setValidators([Validators.required]);
+    if (this.formData.value.type !== "TH") {
+      await this.helperService.ignoreRequiredForm(this.formData, ["ngayKetThuc", "mucDichXuat"]);
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return;
     if (!this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
@@ -277,15 +280,15 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async openDialogTh() {
-    if (this.formData.get('type').value != 'TH') {
+    if (this.formData.get('type').value != 'TH' || this.formData.value.trangThai !== STATUS.DU_THAO) {
       return;
     }
     try {
       await this.spinner.show();
-      let res = await this.tongHopPhuongAnCuuTroService.search({
+      let res = await this.tongHopPhuongAnCuuTroService.danhSach({
         trangThai: STATUS.DA_DUYET_LDV,
         // nam: this.formData.get('nam').value,
-        idQdPdNull: true,
+        // idQdPdNull: true,
         paggingReq: {
           limit: this.globals.prop.MAX_INTERGER,
           page: 0
@@ -300,7 +303,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           nzWidth: '900px',
           nzFooter: null,
           nzComponentParams: {
-            dataTable: res.data.content.filter(f => f.tenVthh === this.formData.value.tenVthh),
+            dataTable: res.data.filter(f => f.tenVthh === this.formData.value.tenVthh),
             dataHeader: ['Số tổng hợp', 'Ngày tổng hợp', 'Nội dung tổng hợp'],
             dataColumn: ['id', 'ngayTao', 'noiDungThop']
           },
@@ -376,7 +379,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           nzWidth: '900px',
           nzFooter: null,
           nzComponentParams: {
-            dataTable: res.data.content,
+            dataTable: res.data.content.filter(f => !f.soQdPd && f.tenVthh === this.formData.value.tenVthh),
             dataHeader: ['Số tờ trình đề xuất', 'Ngày đề xuất', 'Nội dung'],
             dataColumn: ['soDx', 'ngayDx', 'noiDung']
           },
@@ -677,6 +680,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             let soLuong = rs.reduce((prev, next) => prev += next.soLuong, 0);
             return {
               idVirtual: uuidv4(),
+              noiDungDx: row.noiDungDx,
               tenDvi: row.tenDvi,
               maDvi: row.maDvi,
               soDx: row.soDx,
@@ -926,6 +930,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         const { soLuong, soLuongXc } = Array.isArray(parentRow.childData) ? parentRow.childData.reduce((obj, cur) => {
           obj.soLuong += cur.soLuong;
           obj.soLuongXc += cur.soLuongXc;
+          return obj;
         }, { soLuong: 0, soLuongXc: 0 }) : { soLuong: 0, soLuongXc: 0 };
         parentRow.soLuongXc = soLuongXc;
         parentRow.soLuong = soLuong;
@@ -933,6 +938,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
           const { soLuong, soLuongXc } = Array.isArray(ppRow.childData) ? ppRow.childData.reduce((obj, cur) => {
             obj.soLuong += cur.soLuong;
             obj.soLuongXc += cur.soLuongXc;
+            return obj;
           }, { soLuong: 0, soLuongXc: 0 }) : { soLuong: 0, soLuongXc: 0 };
           ppRow.soLuongXc = soLuongXc;
           ppRow.soLuong = soLuong;

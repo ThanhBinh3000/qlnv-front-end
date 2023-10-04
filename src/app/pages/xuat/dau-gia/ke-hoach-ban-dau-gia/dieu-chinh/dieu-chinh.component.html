@@ -10,7 +10,7 @@
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4">
-            <label class="search__label">Số QĐ điều chỉnh</label>
+            <label class="search__label">Số quyết định điều chỉnh KH BĐG</label>
             <input placeholder="Nhập số quyết định" nz-input formControlName="soQdDc"/>
           </div>
           <div nz-col [nzSpan]="12">
@@ -76,11 +76,12 @@
           </th>
           <th class="text-center"> STT</th>
           <th class="text-left"> Năm KH</th>
-          <th class="text-left"> Số QĐ điều chỉnh KH BDG</th>
+          <th class="text-left"> Số QĐ điều chỉnh KH BĐG</th>
           <th class="text-left"> Ngày ký QĐ điều chỉnh</th>
           <th class="text-left"> Số QĐ cần điều chỉnh</th>
+          <th class="text-left"> Số QĐ công văn/tờ trình</th>
           <th class="text-left"> Trích yếu</th>
-          <th class="text-left"> Chủng loại hành hóa</th>
+          <th class="text-left"> Chủng loại hàng DTQG</th>
           <th class="text-center"> Số ĐV tài sản</th>
           <th class="text-center"> Số HĐ đã ký</th>
           <th class="text-left"> Thời hạn giao nhận</th>
@@ -115,6 +116,12 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
                      (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
+                     (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -171,6 +178,7 @@
           <td class="text-left"><a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link"
                                    (click)="openModal(data.idQdPd)">
             {{data.soQdPd}}</a></td>
+          <td class="text-left">{{ data.soCongVan }}</td>
           <td class="text-left">{{ data.trichYeu }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-center">{{ data.slDviTsan }}</td>

@@ -6,7 +6,7 @@
           <nz-form-item class='form-item'>
             <nz-form-label nzRequired nzFor='nam-qd'>Loại hàng DTQG</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="loaiVthh" (ngModelChange)="changeLoaiVthh()">
+              <nz-select formControlName='loaiVthh' (ngModelChange)='changeLoaiVthh()'>
                 <nz-option *ngFor='let option of listOfOption' [nzLabel]='option.title' [nzValue]='option.key'>
                 </nz-option>
               </nz-select>
@@ -33,16 +33,17 @@
     <h3>Danh sách quy chuẩn, tiêu chuẩn quốc gia</h3>
   </div>
   <nz-card class='mt-16 flex-card'>
-    <nz-table #basicTable nzBordered [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false'>
+    <nz-table #basicTable nzBordered [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false'
+              [nzScroll]="{ y: '200px' }">
       <thead>
       <tr>
-        <th>STT</th>
+        <th width='50px'>STT</th>
         <th>Số văn bản</th>
         <th>Loại hàng DTQG</th>
-        <th>Ngày hiệu lực</th>
-        <th>Ngày hết hiệu lực</th>
-        <th>Trạng thái hiệu lực</th>
-        <th>Trích yếu</th>
+        <th>Ngày HL</th>
+        <th width='250px'>Ngày hết HL</th>
+        <th width='250px'>Trạng thái HL</th>
+        <!--        <th>Trích yếu</th>-->
         <th>Chọn</th>
       </tr>
       </thead>
@@ -55,7 +56,7 @@
           <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenTrangThaiHl}}</td>
-          <td>{{ data.trichYeu }}</td>
+          <!--          <td>{{ data.trichYeu }}</td>-->
           <td class='text-left'>
             <label nz-checkbox [(ngModel)]='data.checked' (ngModelChange)='updateSingleChecked()'></label>
           </td>
@@ -63,22 +64,22 @@
       </ng-container>
       </tbody>
     </nz-table>
-    <!--      <div class="tab-content tab-menu" id="myTabContent">-->
-    <!--        <div class="tab-pane fade show active justify-content-between">-->
-    <!--          <div class="trai">-->
-
-    <!--          </div>-->
-    <!--          <div class="canphai">-->
-    <!--            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger-->
-    <!--                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"-->
-    <!--                           (nzPageSizeChange)="changePageSize($event)">-->
-    <!--              <ng-template #rangeTemplate let-range="range" let-total>-->
-    <!--                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi-->
-    <!--              </ng-template>-->
-    <!--            </nz-pagination>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </div>-->
+<!--    <div class='tab-content tab-menu' id='myTabContent'>-->
+<!--      <div class='tab-pane fade show active justify-content-between'>-->
+<!--        <div class='trai'>-->
+<!--        </div>-->
+<!--        <div class='canphai'>-->
+<!--          <nz-pagination class='pagination-card' [nzPageIndex]='page' [nzTotal]='totalRecord' nzShowSizeChanger-->
+<!--                         [nzPageSize]='pageSize' [nzShowTotal]='rangeTemplate'-->
+<!--                         (nzPageIndexChange)='changePageIndex($event)'-->
+<!--                         (nzPageSizeChange)='changePageSize($event)'>-->
+<!--            <ng-template #rangeTemplate let-range='range' let-total>-->
+<!--              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi-->
+<!--            </ng-template>-->
+<!--          </nz-pagination>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
   </nz-card>
   <div class='modal-footer'>
     <div class='nut'>

@@ -105,7 +105,7 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
       gtriDthau: [null],
       gtriHdong: [null],
       donGiaVat: [],
-      vat: ["8"],
+      thueVat: [],
       tgianNhang: [null],
       tgianThien: [null],
       tgianThienHd: [null],

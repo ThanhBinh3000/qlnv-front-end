@@ -15,12 +15,14 @@
         <span>Quay lại</span>
       </button>
       <ng-container>
-        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView"
+        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO
+         && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXCTVT_DUYET')"
                 type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet(idInput)">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
-        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView"
+        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView
+         && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXCTVT_LAP')"
                 type="button" class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>

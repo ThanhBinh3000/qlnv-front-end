@@ -14,11 +14,13 @@
                     <i class="fa fa-arrow-left"></i>
                     <span>Quay lại</span>
                 </button>
-                <ng-container *ngIf="checkRoleApprove(formData.value.trangThai)">
+                <ng-container *ngIf="checkRoleReject(formData.value.trangThai)">
                     <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="tuChoi()">
                         <i class="icon htvbdh_tcdt_tuchoi do"></i>
                         <span>Từ chối</span>
                     </button>
+                </ng-container>
+                <ng-container *ngIf="checkRoleApprove(formData.value.trangThai)">
                     <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>

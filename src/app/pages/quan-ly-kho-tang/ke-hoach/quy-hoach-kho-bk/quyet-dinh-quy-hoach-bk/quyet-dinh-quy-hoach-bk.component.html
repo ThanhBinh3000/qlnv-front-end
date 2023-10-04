@@ -6,9 +6,18 @@
           <label class="search__label">Số quyết định</label>
           <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.soQuyetDinh" />
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="5">
           <label class="search__label">Ngày ký</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <div nz-row>
+            <div nz-col nzSpan="11">
+              <nz-date-picker nzPlaceHolder="Ngày ký từ" [(ngModel)]="searchFilter.ngayKyTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="1">
+            </div>
+            <div nz-col nzSpan="11">
+              <nz-date-picker nzPlaceHolder="Ngày ký đến" [(ngModel)]="searchFilter.ngayKyDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+            </div>
+          </div>
         </div>
         <div nz-col nzSpan="6">
           <label class="search__label">Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</label>
@@ -165,7 +174,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != '00'"></label>
+                   [nzDisabled]="data.trangThai != status.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.soQuyetDinh }}</td>

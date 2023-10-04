@@ -38,7 +38,9 @@ export class Base3Component implements OnInit {
   // Const
   listNam: any[] = [];
   listTrangThai: any = [];
-  fileDinhKem: any[] = []
+  fileDinhKem: any[] = [];
+
+  fileCanCu: any[] = [];
   STATUS = STATUS
 
   // Form search and dataTable
@@ -402,7 +404,8 @@ export class Base3Component implements OnInit {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.fileDinhKem = data.fileDinhKem
+          this.fileDinhKem = data.fileDinhKem;
+          this.fileCanCu = data.fileCanCu;
           return data;
         }
       } else {
