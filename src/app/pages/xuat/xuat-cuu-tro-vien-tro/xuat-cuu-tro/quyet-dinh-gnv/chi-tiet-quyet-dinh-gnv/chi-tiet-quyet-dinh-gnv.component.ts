@@ -812,10 +812,10 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     return false
   }
   showAction(): boolean {
-    if (this.userService.isCuc() && this.formData.value.trangThai === STATUS.DU_THAO) {
+    if (this.userService.isCuc() && this.formData.value.trangThai === STATUS.DU_THAO && !this.isView) {
       return true;
     }
-    else if (this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.BAN_HANH) {
+    else if (this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.BAN_HANH && !this.isView) {
       return true;
     }
     return false
