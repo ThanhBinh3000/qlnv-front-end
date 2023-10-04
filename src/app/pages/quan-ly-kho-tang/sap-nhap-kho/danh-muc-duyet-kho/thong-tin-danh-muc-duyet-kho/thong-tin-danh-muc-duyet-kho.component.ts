@@ -227,6 +227,9 @@ export class ThongTinDanhMucDuyetKhoComponent extends Base2Component implements 
     checkRoleApprove(trangThai: string) {
         return ['03', '78'].includes(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_DDDM_DUYET") && this.userService.isCuc();
     }
+    checkRoleReject(trangThai: string) {
+        return ['78'].includes(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_DDDM_DUYET") && this.userService.isCuc();
+    }
 }
 
 
