@@ -351,12 +351,12 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '65%',
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsKeHoach,
-        dataHeader: ['Lô kho nhập', 'Ngăn kho nhập', 'Nhà kho nhập', 'Điểm kho nhập'],
-        dataColumn: ['tenLoKhoNhan', 'tenNganKhoNhan', 'tenNhaKhoNhan', 'tenDiemKhoNhan']
+        dataHeader: ['Lô kho xuất', 'Ngăn kho xuất', 'Nhà kho xuất', 'Điểm kho xuất', 'Lô kho nhập', 'Ngăn kho nhập', 'Nhà kho nhập', 'Điểm kho nhập'],
+        dataColumn: ['tenLoKho', 'tenNganKho', 'tenNhaKho', 'tenDiemKho', 'tenLoKhoNhan', 'tenNganKhoNhan', 'tenNhaKhoNhan', 'tenDiemKhoNhan']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

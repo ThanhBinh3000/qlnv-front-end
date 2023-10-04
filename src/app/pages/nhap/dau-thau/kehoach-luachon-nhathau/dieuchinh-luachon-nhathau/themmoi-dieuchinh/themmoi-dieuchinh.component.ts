@@ -397,21 +397,41 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   async save(isGuiDuyet?) {
+    await this.spinner.show();
     this.setValidator();
-    // let body = { ...this.formData.value, ... this.thongtinDieuchinhComponent.formData.value };
+    await this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
     let body = { ...this.formData.value };
     body.soQdDc = body.soQdDc + this.maQd;
     body.children = this.danhsachDx;
     body.id = this.id;
-    console.log(body)
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.guiDuyet();
-      } else {
-        this.quayLai();
-      }
+    let res = null;
+    if (this.formData.get("id").value) {
+      res = await this.dieuChinhQuyetDinhPdKhlcntService.update(body);
+    } else {
+      res = await this.dieuChinhQuyetDinhPdKhlcntService.create(body);
     }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (isGuiDuyet) {
+        this.id = res.data.id;
+        this.formData.get("id").setValue(res.data.id)
+        await this.guiDuyet();
+      } else {
+        if (this.formData.get("id").value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.formData.get("id").setValue(res.data.id);
+          this.id = res.data.id;
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    await this.spinner.hide();
   }
 
 

@@ -250,7 +250,7 @@
             <a (click)="editItem(idx,'TL')">
               <i class=" fa fa-pencil"></i>
             </a>
-            <a (click)="xoaItem(idx)">
+            <a (click)="xoaItem(idx,'TL')">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -370,7 +370,7 @@
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItemTL.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event,'DTM')">
+            <nz-select [(ngModel)]="rowItemDTM.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event,'DTM')">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of danhSachDiemKho">
               </nz-option>
@@ -384,15 +384,17 @@
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-input-number [(ngModel)]="rowItemDTM.dienTich" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                             [nzSize]="'small'">
+            <nz-input-number [(ngModel)]="rowItemDTM.dienTich" [nzMin]="0" [nzMax]="9999999" [nzStep]="1"
+                             [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-input-number [(ngModel)]="rowItemDTM.tongTichLuong" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                             [nzSize]="'small'">
+            <nz-input-number [(ngModel)]="rowItemDTM.tongTichLuong" [nzMin]="0" [nzMax]="9999999" [nzStep]="1"
+                             [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
         </td>
@@ -426,16 +428,16 @@
           <td>{{ data.tenCuc }}</td>
           <td>{{ data.tenChiCuc }}</td>
           <td>{{ data.maDiemKho }}</td>
-          <td>{{ data.diaDiem }}</td>
-          <td>{{ data.dienTich }}</td>
-          <td>{{ data.tongTichLuong }}</td>
+          <td>{{ data.diaDiem}}</td>
+          <td>{{ data.dienTich | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{ data.tongTichLuong | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.tenPhuongAn }}</td>
           <td>{{ data.ghiChu }}</td>
           <td style="text-align: center;" *ngIf="!isViewDetail">
             <a (click)="editItem(idx, 'DTM')">
               <i class=" fa fa-pencil"></i>
             </a>
-            <a (click)="xoaItem(idx)">
+            <a (click)="xoaItem(idx,'DTM')">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

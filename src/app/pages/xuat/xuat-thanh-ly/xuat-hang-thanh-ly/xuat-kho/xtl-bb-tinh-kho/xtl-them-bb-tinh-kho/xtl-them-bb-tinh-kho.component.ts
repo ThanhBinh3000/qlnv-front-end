@@ -19,6 +19,12 @@ import {STATUS} from "../../../../../../../constants/status";
 import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
 import {Base3Component} from "../../../../../../../components/base3/base3.component";
 import { cloneDeep } from 'lodash';
+import {
+  BienBanTinhKhoThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BienBanTinhKhoThanhLy.service";
+import {
+  QuyetDinhGiaoNhiemVuThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhGiaoNhiemVuThanhLy.service";
 
 @Component({
   selector: 'app-xtl-them-bb-tinh-kho',
@@ -30,7 +36,7 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
   dataTableDiaDiem: any[] = [];
   fileCanCu: any[] = []
   rowItem: any = {};
-
+  phanLoai : string;
   dropdownLoaiDaiDien: any[] = [];
 
   constructor(
@@ -41,16 +47,13 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private bienBanKetThucNhapScService: BienBanKetThucNhapScService,
-
+    private _service : BienBanTinhKhoThanhLyService,
     private quyetDinhNhService: QuyetDinhNhService,
     private danhMucService: DanhMucDungChungService,
-    private danhSachSuaChuaService: DanhSachSuaChuaService
+    private danhSachSuaChuaService: DanhSachSuaChuaService,
+    private quyetDinhGiaoNhiemVuThanhLyService : QuyetDinhGiaoNhiemVuThanhLyService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, route, router, bienBanKetThucNhapScService);
-    this.defaultURL = 'sua-chua/nhap-hang/bb-kt-nhap';
-    this.previewName = 'sc_bien_ban_giao_nhan'
-    this.getId();
+    super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group({
       id: [],
       trangThai: ['00'],
@@ -60,9 +63,10 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
       maQhns: [''],
       soBienBan: ['', [Validators.required]],
       ngayLap: [''],
-      soQdNh: ['', [Validators.required]],
-      idQdNh: ['', [Validators.required]],
-      idScDanhSachHdr: ['', [Validators.required]],
+      soQdXh: ['', [Validators.required]],
+      idQdXh: ['', [Validators.required]],
+      ngayQdXh : ['',[Validators.required]],
+      idDsHdr: ['', [Validators.required]],
       maDiaDiem: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       tenNhaKho: ['', [Validators.required]],
@@ -78,7 +82,14 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
       ngayBatDau: [''],
       ghiChu: [''],
       tongSoLuong: [''],
-      lyDoTuChoi: ['']
+      lyDoTuChoi: [''],
+      phanLoai : [''],
+    })
+    router.events.subscribe((val) => {
+      let routerUrl = this.router.url;
+      const urlList = routerUrl.split("/");
+      this.phanLoai = urlList[4] == 'xuat-kho-lt' ? 'LT' : 'VT'
+      this.defaultURL  = 'xuat/xuat-thanh-ly/xuat-hang/' + urlList[4] + '/xtl-bb-tinh-kho';
     })
   }
 
@@ -114,7 +125,7 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
         }
       })
     } else {
-      await this.userService.getId("SC_BIEN_BAN_KT_HDR_SEQ").then((res) => {
+      await this.userService.getId("XH_TL_TINH_KHO_HDR_SEQ").then((res) => {
         this.formData.patchValue({
           soBienBan: res + '/' + this.formData.value.nam + '/BBNĐK',
           maQhns: this.userInfo.DON_VI.maQhns,
@@ -125,6 +136,45 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
         })
       });
     }
+  }
+
+  openDialogQdGiaoNvxh() {
+    if (this.disabled()) {
+      return;
+    }
+    let body = {
+      trangThai : STATUS.BAN_HANH,
+      nam : this.formData.value.nam,
+      phanLoai : this.phanLoai
+    }
+    this.spinner.show();
+    this.quyetDinhGiaoNhiemVuThanhLyService.getAll(body).then((res) => {
+      this.spinner.hide();
+      if (res.data) {
+        const modalQD = this.modal.create({
+          nzTitle: 'Danh sách quyết định giao nhiệm vụ xuất hàng',
+          nzContent: DialogTableSelectionComponent,
+          nzMaskClosable: false,
+          nzClosable: false,
+          nzWidth: '900px',
+          nzFooter: null,
+          nzComponentParams: {
+            dataTable: res.data,
+            dataHeader: ['Số quyết định xuất hàng'],
+            dataColumn: ['soBbQd']
+          },
+        });
+        modalQD.afterClose.subscribe(async (data) => {
+          if (data) {
+            this.formData.patchValue({
+              idQdXh : data.id,
+              soQdXh : data.soBbQd,
+              ngayQdXh: data.ngayKy
+            })
+          }
+        });
+      }
+    })
   }
 
   openDialogDanhSach() {
@@ -183,7 +233,7 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
   }
 
   openDialogDiaDiem() {
-    if (!this.formData.value.idQdNh) {
+    if (!this.formData.value.idQdXh) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng chọn số quyết định giao nhiệm vụ nhập hàng");
       return;
     }
@@ -191,9 +241,13 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
       return;
     }
     this.spinner.show();
-    this.danhSachSuaChuaService.getDsTaoBienBanKetThuc({ idQdNh: this.formData.value.idQdNh }).then((res) => {
+    this.quyetDinhGiaoNhiemVuThanhLyService.getDetail(this.formData.value.idQdXh).then((res) => {
       this.spinner.hide();
-      this.dataTableDiaDiem = res.data
+      let dataTable = [];
+      const data = res.data;
+      data.children.forEach( item => {
+        dataTable.push(item.xhTlDanhSachHdr);
+      })
       const modalQD = this.modal.create({
         nzTitle: 'Danh sách quyết định sửa chữa',
         nzContent: DialogTableSelectionComponent,
@@ -202,7 +256,7 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
         nzWidth: '1200px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: this.dataTableDiaDiem,
+          dataTable: dataTable,
           dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Tên loại', 'Tên chủng loại'],
           dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'tenLoaiVthh', 'tenCloaiVthh']
         },

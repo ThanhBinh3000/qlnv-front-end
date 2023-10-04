@@ -284,6 +284,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       this.selected = true;
     }
     this.idRowSelect = data.id;
+    console.log(data, "345")
     this.dataTable = data.listChaoGia
     await this.spinner.hide();
   }

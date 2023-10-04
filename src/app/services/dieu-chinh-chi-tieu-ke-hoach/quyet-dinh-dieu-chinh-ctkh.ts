@@ -37,4 +37,9 @@ export class QuyetDinhDieuChinhCTKHService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  xoa(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/delete/multiple`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

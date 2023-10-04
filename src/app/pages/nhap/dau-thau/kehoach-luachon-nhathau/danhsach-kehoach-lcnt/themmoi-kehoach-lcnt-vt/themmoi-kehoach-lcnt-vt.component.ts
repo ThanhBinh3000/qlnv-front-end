@@ -650,8 +650,8 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
 
   themMoiGoiThau($event: any, data?: DanhSachGoiThau, index?: number) {
     $event.stopPropagation();
-    if (this.formData.get("loaiVthh").value == null) {
-      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
+    if (this.formData.get("loaiVthh").value == null || this.formData.get("loaiVthh").value == '02') {
+      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng DTQG");
       return;
     }
     let listGoiThau = [];

@@ -5,7 +5,7 @@
             <span>Quay lại</span>
         </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DA_LAP && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM'))"
+        *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
         type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
@@ -22,7 +22,7 @@
         <i [class]="'icon htvbdh_chuyenvanthu'"></i>
         <span>Duyệt</span>
       </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.DA_LAP ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
+      <button *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
               class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -60,7 +60,7 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzRequired> Số quyết định điều chỉnh KH LCNT
+                        <nz-form-label [nzNoColon]="true" nzRequired> Số công văn/tờ trình
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfter="{{maQd}}">
@@ -74,7 +74,7 @@
                 </div>
                 <div nz-col nzSpan="3">
                     <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzRequired> Ngày quyết định </nz-form-label>
+                        <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo công văn/tờ trình </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"
                                             [nzDisabled]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC">
@@ -104,7 +104,7 @@
                 </div>
                 <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định gốc </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định cần điều chỉnh </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdGoc()">
                                 <input [readonly]="true" nz-input formControlName="soQdGoc" readonly />
@@ -114,7 +114,7 @@
                 </div>
                 <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký QĐ gốc </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký QĐ cần điều chỉnh </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                                 <nz-date-picker formControlName="ngayQdGoc" nzDisabled nzFormat="dd/MM/yyyy">

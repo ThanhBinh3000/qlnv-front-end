@@ -82,12 +82,16 @@
       <tr>
         <th nzWidth="30px"></th>
         <th nzWidth="30px">STT</th>
-        <th nzWidth="80px"> Số QĐ xuất hàng của Cục</th>
-        <th nzWidth="30px">Năm xuất</th>
-        <th nzWidth="50px"> Thời hạn xuất sửa chữa</th>
+        <th nzWidth="80px"> Số QĐ giao NVXH của Cục</th>
+        <th nzWidth="30px">Năm KH</th>
+        <th nzWidth="50px"> Thời hạn hạn lý</th>
         <th nzWidth="200px">Điểm kho / Nhà kho / Ngăn kho / Lô kho</th>
-        <th nzWidth="50px">Số phiếu kiểm định CL</th>
-        <th nzWidth="50px">Ngày kiểm định</th>
+        <th nzWidth="50px">Loại hàng hóa</th>
+        <th nzWidth="50px">Chủng loại hàng hóa</th>
+        <th nzWidth="50px">Số phiếu xuất kho</th>
+        <th nzWidth="50px">Ngày xuất kho</th>
+        <th nzWidth="50px">Số phiếu KNCL</th>
+        <th nzWidth="50px">Ngày giám định</th>
         <th nzWidth="50px">Trạng thái</th>
         <th nzWidth="55px">Hành động</th>
       </tr>
@@ -97,7 +101,7 @@
         <tr>
           <td nzShowExpand="true" [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(item, $event)"></td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-          <td>{{item.soQd}}</td>
+          <td>{{item.soBbQd}}</td>
           <td>{{item.nam}}</td>
           <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy' }}</td>
           <td></td>
@@ -105,22 +109,30 @@
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
         <ng-container *ngIf="item.expandSet">
-          <ng-container *ngFor="let dsHdr of item.scDanhSachHdrList , let i = index">
+          <ng-container *ngFor="let ddKho of item.children , let i = index">
             <tr>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
-              <td>{{dsHdr.tenDiemKho}} / {{dsHdr.tenNhaKho}} / {{dsHdr.tenNganKho}} / {{dsHdr.tenLoKho}}</td>
+              <td>{{ddKho.xhTlDanhSachHdr?.tenDiemKho}} / {{ddKho.xhTlDanhSachHdr?.tenNhaKho}} / {{ddKho.xhTlDanhSachHdr?.tenNganKho}} / {{ddKho.xhTlDanhSachHdr?.tenLoKho}}</td>
+              <td>{{ddKho.xhTlDanhSachHdr?.tenLoaiVthh}}</td>
+              <td>{{ddKho.xhTlDanhSachHdr?.tenCloaiVthh}}</td>
               <td></td>
               <td></td>
+              <td>{{ddKho.xhTlDanhSachHdr?.xhTlKtraClHdr?.soPhieuKtcl}}</td>
+              <td>{{ddKho.xhTlDanhSachHdr?.xhTlKtraClHdr?.ngayKnghiem  | date: 'dd/MM/YYYY' }}</td>
               <td></td>
               <td></td>
             </tr>
-            <ng-container *ngFor="let pxk of dsHdr.scKiemTraChatLuongList , let i = index">
+            <ng-container *ngFor="let pxk of ddKho.xhTlDanhSachHdr?.listXhTlPhieuXuatKhoHdr , let i = index">
               <tr>
                 <td></td>
                 <td></td>
@@ -128,8 +140,12 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{pxk.soPhieuKtcl}}</td>
-                <td>{{pxk.ngayKiemDinh | date: 'dd/MM/YYYY'}}</td>
+                <td></td>
+                <td></td>
+                <td>{{pxk.soPhieuXuatKho}}</td>
+                <td>{{pxk.ngayXuatKho | date: 'dd/MM/YYYY'}}</td>
+                <td></td>
+                <td></td>
                 <td>{{pxk.tenTrangThai}}</td>
                 <td>
                   <a (click)="redirectDetail(pxk.id,'SCHDTQG_KTCL_XEM')">
