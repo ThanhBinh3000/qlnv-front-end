@@ -781,6 +781,10 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         i++;
       }
     }
+
+    console.log('this.dataVatTuNhap', this.dataVatTuNhap)
+    console.log('this.dataVatTuXuat', this.dataVatTuXuat)
+
     this.convertListDataVatTuNhap(this.dataVatTuNhap);
     this.convertListDataVatTuXuat(this.dataVatTuXuat);
     this.expandAll(this.dataVatTuNhapTree);

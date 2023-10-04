@@ -111,6 +111,28 @@
           </nz-form-item>
         </div>
 
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao chỉ tiêu KH năm </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()"> -->
+              <input [readonly]="true" nz-input formControlName="soQuyetDinhGiaoNam" readonly="true" />
+              <!-- </nz-input-group> -->
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Căn cứ trên số công văn/tờ trình</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()"> -->
+              <input [readonly]="true" nz-input formControlName="soCongVan" readonly="true" />
+              <!-- </nz-input-group> -->
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
         <!-- <div nz-col [nzSpan]="12" *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1'">
           <div nz-col [nzSpan]="24" style="margin-top: 12px">
             <nz-form-item>
@@ -161,7 +183,7 @@
             <nz-form-label [nzNoColon]="true"> Số đề xuất điều chỉnh của Cục DTNN KV</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select [nzDisabled]="isViewDetail" nzMode="multiple" nzPlaceHolder="Chọn số đề xuất" nzAllowClear
-                formControlName="soQuyetDinhDcCuaC">
+                formControlName="soQuyetDinhDcCuaCs">
                 <nz-option *ngFor="let dx of listDeXuat" [nzValue]="dx" [nzLabel]="dx"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -189,7 +211,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm công văn/tờ trình đã
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm quyết định đã ký, đóng dấu
               ký</nz-form-label>
             <nz-form-control>
               <div class="list-file">
@@ -276,119 +298,16 @@
               <th class="text-center">Nhập <br> {{yearNow - 2}}</th>
               <th class="text-center">Nhập <br> {{yearNow - 1}}</th>
             </tr>
-            <!--            <tr-->
-            <!--              [ngClass]="this.thongTinChiTieuKeHoachNam.trangThai === STATUS.BAN_HANH || this.isViewDetail ? 'row-disabled' : ''">-->
-            <!--              <th nzLeft></th>-->
-            <!--              <th nzLeft>-->
-            <!--                <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">-->
-            <!--                  <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"-->
-            <!--                                  class="search__input autocomplete__input donvi__input">-->
-            <!--                    <input placeholder="Chọn cục dự trữ nhà nước khu vực" nz-input-->
-            <!--                           (input)="onInput($event,'luong-thuc')" [nzAutocomplete]="auto" class="w-300"-->
-            <!--                           [(ngModel)]="keHoachLuongThucCreate.tenDonvi"/>-->
-            <!--                  </nz-input-group>-->
-            <!--                  <ng-template #suffixIcon>-->
-            <!--                    <i nz-icon nzType="search"></i>-->
-            <!--                  </ng-template>-->
-            <!--                  <nz-autocomplete #auto (selectionChange)="selectDonViKeyDown($event,'khlt')" [nzBackfill]="false">-->
-            <!--                    <ng-container>-->
-            <!--                      <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"-->
-            <!--                      >-->
-            <!--                        &lt;!&ndash;                      <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"&ndash;&gt;-->
-            <!--                        &lt;!&ndash;                                      (click)="selectDonvi(option)">&ndash;&gt;-->
-            <!--                        {{ option.labelDonVi }}-->
-            <!--                      </nz-auto-option>-->
-            <!--                    </ng-container>-->
-            <!--                  </nz-autocomplete>-->
-            <!--                </nz-form-control>-->
-            <!--              </th>-->
-            <!--              <th class="text-right">{{calculatortkdnTongQuyThocCreate()}}</th>-->
-            <!--              <th class="text-right">{{calculatortkdnTongThocCreate()}}-->
-            <!--              </th>-->
-            <!--              <th-->
-            <!--                class="text-right">{{(this.keHoachLuongThucCreate.tkdnThoc[0].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>-->
-            <!--              <th-->
-            <!--                class="text-right">{{(this.keHoachLuongThucCreate.tkdnThoc[1].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>-->
-            <!--              <th-->
-            <!--                class="text-right">{{(this.keHoachLuongThucCreate.tkdnThoc[2].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>-->
-            <!--              <th class="text-right">{{calculatortkdnTongGaoCreate()}}</th>-->
-            <!--              <th-->
-            <!--                class="text-right">-->
-            <!--                {{(this.keHoachLuongThucCreate.tkdnGao[0].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>-->
-            <!--              <th-->
-            <!--                class="text-right">{{(this.keHoachLuongThucCreate.tkdnGao[1].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>-->
-            <!--              <th-->
-            <!--                class="text-right">{{(this.keHoachLuongThucCreate.tkdnGao[2].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>-->
-            <!--              <th class="text-right">{{calculatorntnTongQuyThocCreate()}}</th>-->
-            <!--              <th class="text-right">-->
-            <!--                <input class="money-input" currencyMask [options]="AMOUNT"-->
-            <!--                       [(ngModel)]="keHoachLuongThucCreate.ntnThoc"/>-->
-            <!--                &lt;!&ndash;              <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"&ndash;&gt;-->
-            <!--                &lt;!&ndash;                               [(ngModel)]="keHoachLuongThucCreate.ntnThoc">&ndash;&gt;-->
-            <!--                &lt;!&ndash;              </nz-input-number>&ndash;&gt;-->
-            <!--              </th>-->
-            <!--              <th class="text-right">-->
-            <!--                <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="keHoachLuongThucCreate.ntnGao"/>-->
-            <!--                &lt;!&ndash;              <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"&ndash;&gt;-->
-            <!--                &lt;!&ndash;                               [(ngModel)]="keHoachLuongThucCreate.ntnGao">&ndash;&gt;-->
-            <!--                &lt;!&ndash;              </nz-input-number>&ndash;&gt;-->
-            <!--              </th>-->
-            <!--              <th class="text-right">{{calculatorxtnTongSoQuyThocCreate()}}</th>-->
-            <!--              <th class="text-right">{{calculatorxtnTongThocCreate()}}</th>-->
-            <!--              <th class="text-right">-->
-            <!--                <input class="money-input" currencyMask-->
-            <!--                       [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnThoc[0].soLuong/1000),inputMode: 1}"-->
-            <!--                       [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong"/>-->
-            <!--              </th>-->
-            <!--              <th class="text-right">-->
-            <!--                <input class="money-input" currencyMask-->
-            <!--                       [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnThoc[1].soLuong/1000),inputMode: 1}"-->
-            <!--                       [(ngModel)]="keHoachLuongThucCreate.xtnThoc[1].soLuong"/>-->
-            <!--              </th>-->
-            <!--              <th class="text-right">-->
-            <!--                <input class="money-input" currencyMask-->
-            <!--                       [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnThoc[2].soLuong/1000),inputMode: 1}"-->
-            <!--                       [(ngModel)]="keHoachLuongThucCreate.xtnThoc[2].soLuong"/>-->
 
-            <!--              </th>-->
-            <!--              <th class="text-right">{{calculatorxtnTongGaoCreate()}}</th>-->
-            <!--              <th class="text-right">-->
-            <!--                <input class="money-input" currencyMask-->
-            <!--                       [options]="{allowZero: true, allowNegative: true,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnGao[0].soLuong / 1000),inputMode: 1}"-->
-            <!--                       [(ngModel)]="keHoachLuongThucCreate.xtnGao[0].soLuong"/>-->
-            <!--              </th>-->
-            <!--              <th class="text-right">-->
-            <!--                <input class="money-input" currencyMask-->
-            <!--                       [options]="{allowZero: true, allowNegative: true,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnGao[1].soLuong / 1000),inputMode: 1}"-->
-            <!--                       [(ngModel)]="keHoachLuongThucCreate.xtnGao[1].soLuong"/>-->
-            <!--              </th>-->
-            <!--              <th class="text-right">-->
-            <!--                <input class="money-input" currencyMask-->
-            <!--                       [options]="{allowZero: true, allowNegative: true,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnGao[2].soLuong / 1000),inputMode: 1}"-->
-            <!--                       [(ngModel)]="keHoachLuongThucCreate.xtnGao[2].soLuong"/>-->
-            <!--              </th>-->
-            <!--              <th class="text-right">{{calculatortkcnTongSoQuyThocCreate()}}</th>-->
-            <!--              <th class="text-right">{{calculatortkcnTongThocCreate()}}</th>-->
-            <!--              <th class="text-right">{{calculatortkcnTongGaoCreate()}}</th>-->
-            <!--              &lt;!&ndash; <td class="background-last-row"></td> &ndash;&gt;-->
-            <!--              <th class="text-center" *ngIf="!this.isViewDetail" nzRight>-->
-            <!--                <a class="save" (click)="themMoiKHLT()" [ngClass]="{'isDisabled': !isAddLuongThuc}">-->
-            <!--                  <i class="icon htvbdh_dau-cong"></i>-->
-            <!--                </a>-->
-            <!--                <a (click)="clearKHLT()" class="ml-3" [ngClass]="{'isDisabled': !isAddLuongThuc}">-->
-            <!--                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-            <!--                </a>-->
-            <!--              </th>-->
-            <!--            </tr>-->
           </thead>
           <tbody>
             <tr *ngFor="let data of groupingTable.data, let i = index">
               <ng-container *ngIf="!dsKeHoachLuongThucClone[i]?.isEdit; else editTemplate">
-                <td nzLeft class="text-right">{{data.stt}}</td>
-                <td nzLeft class="text-left">{{data.tenDonvi}}</td>
-                <td class="text-right">{{(data.tkdnTongSoQuyThoc) | number:
+                <td nzLeft class="text-right">{{i+1}}</td>
+                <td nzLeft class="text-left">{{data.tenDvi}}</td>
+                <td class="text-right">{{(data.tongSoTon) | number:
                   '1.0-3': 'vi_VN'}}</td>
-                <td class="text-right">{{(data.tkdnTongThoc)| number: '1.0-3': 'vi_VN'}}
+                <td class="text-right">{{(data.tongThocTon)| number: '1.0-3': 'vi_VN'}}
                 </td>
                 <ng-container *ngIf="data?.tkdnThoc?.length > 0">
                   <td *ngFor="let item of data.tkdnThoc" class="text-right">
@@ -399,7 +318,7 @@
                   <td class="text-right">0</td>
                   <td class="text-right">0</td>
                 </ng-container>
-                <td class="text-right"> {{(data.tkdnTongGao) | number: '1.0-3': 'vi_VN'}} </td>
+                <td class="text-right"> {{(data.tongGaoTon) | number: '1.0-3': 'vi_VN'}} </td>
                 <ng-container *ngIf="data?.tkdnGao?.length > 0">
                   <td *ngFor="let item of data.tkdnGao" class="text-right"> {{(item.soLuong) | number: '1.0-3':
                     'vi_VN'}} </td>
@@ -409,13 +328,13 @@
                   <td class="text-right"> 0</td>
                   <td class="text-right"> 0</td>
                 </ng-container>
-                <td class="tong-so-quy-tdoc" class="text-right"> {{data.ntnTongSoQuyThoc | number: '1.0-3': 'vi_VN'}}
+                <td class="tong-so-quy-tdoc" class="text-right"> {{data.tongSoNhap | number: '1.0-3': 'vi_VN'}}
                 </td>
-                <td class="text-right">{{data.ntnThoc | number: '1.0-3': 'vi_VN'}}</td>
-                <td class="text-right">{{data.ntnGao | number: '1.0-3': 'vi_VN'}}</td>
-                <td class="text-right">{{data.xtnTongSoQuyThoc | number:
+                <td class="text-right">{{data.ntnThoc[0].soLuong | number: '1.0-3': 'vi_VN'}}</td>
+                <td class="text-right">{{data.ntnGao[0].soLuong | number: '1.0-3': 'vi_VN'}}</td>
+                <td class="text-right">{{data.tongSoXuat | number:
                   '1.0-3'}}</td>
-                <td class="text-right">{{data.xtnTongThoc | number: '1.0-3': 'vi_VN'}}
+                <td class="text-right">{{data.tongThocXuat | number: '1.0-3': 'vi_VN'}}
                 </td>
                 <ng-container *ngIf="data?.xtnThoc?.length > 0">
                   <td *ngFor="let item of data.xtnThoc" class="text-right">
@@ -426,7 +345,7 @@
                   <td class="text-right">0</td>
                   <td class="text-right">0</td>
                 </ng-container>
-                <td class="text-right">{{data.xtnTongGao | number: '1.0-3': 'vi_VN'}}
+                <td class="text-right">{{data.tongGaoXuat | number: '1.0-3': 'vi_VN'}}
                 </td>
                 <ng-container *ngIf="data?.xtnGao?.length > 0">
                   <td *ngFor="let item of data.xtnGao" class="text-right">
@@ -437,11 +356,11 @@
                   <td class="text-right">0</td>
                   <td class="text-right">0</td>
                 </ng-container>
-                <td class="text-right">{{(data.tkcnTongSoQuyThoc) | number:
+                <td class="text-right">{{(data.tongSoCuoiNam) | number:
                   '1.0-3': 'vi_VN'}}</td>
-                <td class="text-right">{{(data.tkcnTongThoc) | number: '1.0-3': 'vi_VN'}}
+                <td class="text-right">{{(data.tkcnThoc[0].soLuong) | number: '1.0-3': 'vi_VN'}}
                 </td>
-                <td class="text-right">{{(data.tkcnTongGao) | number: '1.0-3': 'vi_VN'}}
+                <td class="text-right">{{(data.tkcnGao[0].soLuong) | number: '1.0-3': 'vi_VN'}}
                 </td>
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                   <a (click)="startEdit(i)">
@@ -455,11 +374,11 @@
                 <td *ngIf="data.stt ==  null" class="background-last-row"></td>
               </ng-container>
               <ng-template #editTemplate>
-                <td nzLeft class="text-right">{{data.stt}}</td>
-                <td nzLeft class="text-left">{{data.tenDonvi}}</td>
-                <td class="text-right">{{(data.tkdnTongSoQuyThoc) | number:
+                <td nzLeft class="text-right">{{i+1}}</td>
+                <td nzLeft class="text-left">{{data.tenDvi}}</td>
+                <td class="text-right">{{(data.tongSoTon) | number:
                   '1.0-1'}}</td>
-                <td class="text-right">{{(data.tkdnTongThoc)| number: '1.0-3': 'vi_VN'}}
+                <td class="text-right">{{(data.tongThocTon)| number: '1.0-3': 'vi_VN'}}
                 </td>
                 <ng-container *ngIf="data?.tkdnThoc?.length > 0">
                   <td *ngFor="let item of data.tkdnThoc" class="text-right">
@@ -470,7 +389,7 @@
                   <td class="text-right">0</td>
                   <td class="text-right">0</td>
                 </ng-container>
-                <td class="text-right"> {{(data.tkdnTongGao)| number: '1.0-3': 'vi_VN'}} </td>
+                <td class="text-right"> {{(data.tongGaoTon)| number: '1.0-3': 'vi_VN'}} </td>
                 <ng-container *ngIf="data?.tkdnGao?.length > 0">
                   <td *ngFor="let item of data.tkdnGao" class="text-right"> {{(item.soLuong)| number: '1.0-3':
                     'vi_VN'}} </td>
@@ -481,15 +400,13 @@
                   <td class="text-right"> 0</td>
                 </ng-container>
                 <td class="text-right">
-                  {{calculatorntnTongSoQuyThoc(i)}}
+                  <!-- {{calculatorntnTongSoQuyThoc(i)}} -->{{data?.tongSoNhap}}
                 </td>
                 <td class="text-right">
-                  <input class="money-input" currencyMask [options]="AMOUNT"
-                    [(ngModel)]="dsKeHoachLuongThucClone[i].ntnThoc" />
+                  <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="data.ntnThoc[0].soLuong" />
                 </td>
                 <td class="text-right">
-                  <input class="money-input" currencyMask [options]="AMOUNT"
-                    [(ngModel)]="dsKeHoachLuongThucClone[i].ntnGao" />
+                  <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="data.ntnGao[0].soLuong" />
                 </td>
                 <td class="text-right">
                   {{calculatorxtnTongSoQuyThoc(i)}}
@@ -500,17 +417,17 @@
                 <td class="text-right">
                   <input class="money-input" currencyMask
                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (dsKeHoachLuongThucClone[i].tkdnThoc[0].soLuong),inputMode: 1}"
-                    [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[0].soLuong" />
+                    [(ngModel)]="data.xtnThoc[0].soLuong" />
                 </td>
                 <td class="text-right">
                   <input class="money-input" currencyMask
                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (dsKeHoachLuongThucClone[i].tkdnThoc[1].soLuong ),inputMode: 1}"
-                    [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[1].soLuong" />
+                    [(ngModel)]="data.xtnThoc[1].soLuong" />
                 </td>
                 <td class="text-right">
                   <input class="money-input" currencyMask
                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (dsKeHoachLuongThucClone[i].tkdnThoc[2].soLuong ),inputMode: 1}"
-                    [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[2].soLuong" />
+                    [(ngModel)]="data.xtnThoc[2].soLuong" />
                 </td>
                 <td class="text-right">
                   {{calculatorxtnTongGao(i)}}
@@ -518,17 +435,17 @@
                 <td class="text-right">
                   <input class="money-input" currencyMask
                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (dsKeHoachLuongThucClone[i].tkdnGao[0].soLuong),inputMode: 1}"
-                    [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[0].soLuong" />
+                    [(ngModel)]="data.xtnGao[0].soLuong" />
                 </td>
                 <td class="text-right">
                   <input class="money-input" currencyMask
                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (dsKeHoachLuongThucClone[i].tkdnGao[1].soLuong ),inputMode: 1}"
-                    [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[1].soLuong" />
+                    [(ngModel)]="data.xtnGao[1].soLuong" />
                 </td>
                 <td class="text-right">
                   <input class="money-input" currencyMask
                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max:( dsKeHoachLuongThucClone[i].tkdnGao[2].soLuong),inputMode: 1}"
-                    [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[2].soLuong" />
+                    [(ngModel)]="data.xtnGao[2].soLuong" />
                 </td>
                 <td class="text-right">
                   {{ calculatortkcnTongSoQuyThoc(i)}}
@@ -653,9 +570,9 @@
               </th>
               <!-- <td class="background-last-row"></td> -->
               <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
+                  thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
             </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.cap == '1' &&  formData.value.loaiCanCu != 'OTHER'">
+            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1' &&  formData.value.loaiCanCu != 'OTHER'">
               <th></th>
               <th></th>
               <th></th>
@@ -688,7 +605,7 @@
               <th></th>
               <th></th>
             </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.cap != '1'">
+            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi != '1'">
               <th></th>
               <th></th>
               <th></th>
@@ -735,7 +652,7 @@
             <tr>
               <th class="text-center" width="40px" nzLeft>STT</th>
               <th class="text-center" nzLeft>
-                {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
+                CỤC DTNN KHU VỰC
               </th>
               <th class="text-center" width="200px">Tồn kho đầu năm</th>
               <th class="text-center" width="200px">Nhập trong năm</th>
@@ -749,12 +666,12 @@
           <tbody>
             <tr *ngFor="let dataMuoi of groupingTableMuoi.data, let i = index">
               <ng-container *ngIf="!dsMuoiClone[i]?.isEdit; else editTemplateMuoi">
-                <td class="text-center">{{dataMuoi.stt}}</td>
-                <td class="text-left">{{dataMuoi.tenDonVi}}</td>
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-left">{{dataMuoi.tenDvi}}</td>
                 <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
-                <td class="text-right">{{dataMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</td>
-                <td class="text-right">{{dataMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</td>
-                <td class="text-right">{{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi) |
+                <td class="text-right">{{dataMuoi.soLuongNhap | number: '1.0-1': 'vi_VN'}}</td>
+                <td class="text-right">{{dataMuoi.soLuongXuat | number: '1.0-1': 'vi_VN'}}</td>
+                <td class="text-right">{{(dataMuoi.tonKhoDauNam + dataMuoi.soLuongNhap - dataMuoi.soLuongXuat) |
                   number: '1.0-1': 'vi_VN'}}</td>
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                   <a (click)="startEditMuoi(i)">
@@ -767,20 +684,20 @@
               </ng-container>
               <ng-template #editTemplateMuoi>
                 <td class="text-right">{{dataMuoi.stt}}</td>
-                <td class="text-left">{{dataMuoi.tenDonVi}}</td>
+                <td class="text-left">{{dataMuoi.tenDvi}}</td>
                 <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">
                   <input class="money-input" currencyMask
                     [options]="{allowZero: true, allowNegative: false,precision: 0,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: 9999999999999,inputMode: 1}"
-                    [(ngModel)]="dsMuoiClone[i].nhapTrongNam" />
+                    [(ngModel)]="dataMuoi.soLuongNhap" />
                 </td>
                 <td class="text-right">
                   <input class="money-input" currencyMask
                     [options]="{allowZero: true, allowNegative: false,precision: 0,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsMuoiClone[i].tonKhoDauNam,inputMode: 1}"
-                    [(ngModel)]="dsMuoiClone[i].xuatTrongNamMuoi" />
+                    [(ngModel)]="dataMuoi.soLuongXuat" />
                 </td>
-                <td class="text-right">{{(dataMuoi.tonKhoDauNam + dsMuoiClone[i].nhapTrongNam -
-                  dsMuoiClone[i].xuatTrongNamMuoi) | number: '1.0-1': 'vi_VN'}}</td>
+                <td class="text-right">{{(dataMuoi.tonKhoDauNam + dataMuoi.soLuongNhap -
+                  dataMuoi.soLuongXuat) | number: '1.0-1': 'vi_VN'}}</td>
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                   <a (click)="saveEditMuoi(i)" class="save">
                     <i class="fa fa-save"></i>
