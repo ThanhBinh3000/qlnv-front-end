@@ -136,6 +136,7 @@
           <th>Ngày ban hành</th>
           <th>Ngày hiệu lực</th>
           <th>Ngày hết hiệu lực</th>
+          <th nzWidth='40px'>Tài liệu mật</th>
           <th>Trạng thái nhập dữ liệu</th>
           <th>Tình trạng</th>
           <th>Hành động</th>
@@ -190,6 +191,7 @@
               </nz-date-picker>
             </nz-input-group>
           </th>
+          <th></th>
           <th>
             <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]='filterTable.trangThai'
@@ -233,6 +235,10 @@
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
+            <td >
+              <label nz-checkbox nzDisabled [(ngModel)]='data.isMat'
+                     [nzIndeterminate]='indeterminate'></label>
+            </td>
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiHl }}</td>
             <td class='text-left'>
