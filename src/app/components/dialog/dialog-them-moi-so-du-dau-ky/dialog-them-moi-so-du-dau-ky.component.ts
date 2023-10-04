@@ -53,13 +53,12 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       cloaiVthh: [''],
       slTon: ['', Validators.required],
       dviTinh: [''],
-      thanhTien: [0],
+      thanhTien: [0, [Validators.required]],
       isKhoiTao: [true]
     })
   }
 
   async ngOnInit() {
-    console.log(this.loaiHang,11)
     this.loadDsNam();
     await this.getAllLoaiVthh();
     await this.getDetail();
@@ -91,8 +90,8 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
           }
           if (this.loaiHang && this.loaiHang.type && this.loaiHang.type == 'VT') {
             this.formData.patchValue({
-              loaiVthh : this.loaiHang.loaiVthh ?  this.loaiHang.loaiVthh : null,
-              cloaiVthh : this.loaiHang.cloaiVthh ?  this.loaiHang.cloaiVthh : null
+              loaiVthh: this.loaiHang.loaiVthh ? this.loaiHang.loaiVthh : null,
+              cloaiVthh: this.loaiHang.cloaiVthh ? this.loaiHang.cloaiVthh : null
             })
           }
         }
@@ -117,7 +116,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     body.loaiVthh = this.formData.value.loaiVthh
     body.isKhoiTao = true;
     body.cloaiVthh = this.formData.value.cloaiVthh
-    body.slTon = this.formData.value.slTon
+    //body.slTon = this.formData.value.slTon
     body.dviTinh = this.formData.value.dviTinh
     body.namNhap = this.formData.value.namNhap
     body.trangThai = body.trangThai == true ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
