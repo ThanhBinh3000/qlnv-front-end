@@ -152,36 +152,43 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   async getDetail(id) {
     if (id > 0) {
-      let res = await this.khCnQuyChuanKyThuat.getDetail(id);
-      if (res.msg == MESSAGE.SUCCESS) {
-        const data = res.data;
-        this.listOfTagOptions = data.loaiVthh.split(',');
-        this.changeListOfTagOptions(data.loaiVthh, false);
-        let lss = [];
-        for (let item of this.listOfTagOptions) {
-          lss = [...lss, this.listOfOption.find(s => s.maHangHoa == item)?.tenHangHoa];
-          this.listLoaiVthh = lss;
-          data.listTenLoaiVthh = this.listLoaiVthh.join(',');
-        }
-        let ds = [];
-        ds = this.dsBoNganh.find(s => s.key == data.apDungTai)?.title;
-        data.apDungTai = ds;
-        this.listVanBanId = String(data.idVanBanThayThe);
-        this.helperService.bidingDataInFormGroup(this.formData, data);
-        this.formData.patchValue({
-          maBn: data.maBn,
-        });
-        this.dataTable = data.tieuChuanKyThuat;
-        this.dataTable.sort((a, b) => {
-          if (a.thuTuHt !== b.thuTuHt) {
-            return a.thuTuHt - b.thuTuHt;
-          } else {
-            return a.cloaiVthh && b.cloaiVthh ? a.cloaiVthh.localeCompare(b.cloaiVthh) : this.dataTable;
+      await this.spinner.show();
+      try {
+        let res = await this.khCnQuyChuanKyThuat.getDetail(id);
+        if (res.msg == MESSAGE.SUCCESS) {
+          const data = res.data;
+          this.listOfTagOptions = data.loaiVthh.split(',');
+          this.changeListOfTagOptions(data.loaiVthh, false);
+          let lss = [];
+          for (let item of this.listOfTagOptions) {
+            lss = [...lss, this.listOfOption.find(s => s.maHangHoa == item)?.tenHangHoa];
+            this.listLoaiVthh = lss;
+            data.listTenLoaiVthh = this.listLoaiVthh.join(',');
           }
-        });
-        this.taiLieuDinhKemList = data.fileDinhKems;
-        this.dataTableView = cloneDeep(this.dataTable);
-        this.updateEditCache();
+          let ds = [];
+          ds = this.dsBoNganh.find(s => s.key == data.apDungTai)?.title;
+          data.apDungTai = ds;
+          this.listVanBanId = String(data.idVanBanThayThe);
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            maBn: data.maBn,
+          });
+          this.dataTable = data.tieuChuanKyThuat;
+          this.dataTable.sort((a, b) => {
+            if (a.thuTuHt !== b.thuTuHt) {
+              return a.thuTuHt - b.thuTuHt;
+            } else {
+              return a.cloaiVthh && b.cloaiVthh ? a.cloaiVthh.localeCompare(b.cloaiVthh) : this.dataTable;
+            }
+          });
+          this.taiLieuDinhKemList = data.fileDinhKems;
+          this.dataTableView = cloneDeep(this.dataTable);
+          this.updateEditCache();
+        }
+      } catch (e) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      } finally {
+        await this.spinner.hide();
       }
     } else {
       // let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ");

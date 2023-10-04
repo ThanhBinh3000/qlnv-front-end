@@ -83,7 +83,8 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       trichYeu: null,
       tenLoaiVthh: null,
       tenCloaiVthh: null,
-      maBn: null,
+      maDvi: [null],
+      maBn: [],
     });
     this.filterTable = {
       soVanBan: '',
@@ -131,9 +132,9 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       }
       await this.loadLoaiHangHoa();
       await this.getListBoNganh();
-      // this.formData.patchValue({
-      //   maBn: this.userInfo.MA_DVI.startsWith('01') ? '01' : this.userInfo.MA_DVI,
-      // });
+      this.formData.patchValue({
+        maBn: this.userInfo.MA_DVI.startsWith('01') ? null : this.userInfo.MA_DVI,
+      });
       await this.search();
       this.spinner.hide();
     } catch (e) {

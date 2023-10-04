@@ -7,7 +7,7 @@
             {{ formData.value.tenTrangThai }}
           </span>
           <span
-            class='title-form'>{{userInfo.MA_DVI.startsWith("01") ? 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại TCDT' : 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại Bộ/Ngành' }}</span>
+            class='title-form'>{{formData.value.maBn == '01' ? 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại TCDT' : 'Quy chuẩn, tiêu chuẩn quốc gia đối với hàng DTQG tại Bộ/Ngành' }}</span>
         </div>
       </div>
       <div class='btn-group'>
@@ -176,7 +176,7 @@
           </div>
           <div nz-col nzSpan='24'>
             <nz-form-item>
-              <nz-form-label [nzNoColon]='true'>
+              <nz-form-label nzRequired [nzNoColon]='true'>
                 Trích yếu
               </nz-form-label>
               <nz-form-control [nzErrorTip]='error'>
