@@ -186,7 +186,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     ]);
     this.listDiemKho = [];
     if (res.msg === MESSAGE.SUCCESS && chiCuc?.soLuongXuat) {
-      const soLuongChiTieu = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc.soLuongXuat : chiCuc.soLuongXuat * 1000;
+      const soLuongChiTieu = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc.soLuongXuat : chiCuc.soLuongXuat;
       this.formData.patchValue({
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
