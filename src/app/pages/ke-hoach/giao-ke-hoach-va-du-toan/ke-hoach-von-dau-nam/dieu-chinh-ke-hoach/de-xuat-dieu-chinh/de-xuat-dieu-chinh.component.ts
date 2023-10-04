@@ -40,7 +40,7 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    deXuatDieuChinhCTKHService: DeXuatDieuChinhCTKHService
+    private deXuatDieuChinhCTKHService: DeXuatDieuChinhCTKHService
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatDieuChinhCTKHService);
     this.formData = this.fb.group({
@@ -136,6 +136,83 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     }
     if (this.formData.value.soQdinh) this.formData.value.soQdinh = `${this.formData.value.soQdinh}/DCNB`
     await this.search();
+  }
+
+  xoaMulti(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.deXuatDieuChinhCTKHService.xoa({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  xoa(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            // id: item.id,
+            ids: [item.id]
+          };
+          this.deXuatDieuChinhCTKHService.xoa(body).then(async () => {
+            await this.search();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   exportDataCuc() {
