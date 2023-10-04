@@ -36,7 +36,7 @@ export class XuatKhoComponent implements OnInit {
             },
             {
               url: '/xtl-bb-tinh-kho',
-              name: 'Biên bản tịnh khó',
+              name: 'Biên bản tịnh kho',
               accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
             },
             {
@@ -59,7 +59,7 @@ export class XuatKhoComponent implements OnInit {
           },
           {
             url: '/xtl-bb-tinh-kho',
-            name: 'Biên bản tịnh khó',
+            name: 'Biên bản tịnh kho',
             accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
           }]
       };
