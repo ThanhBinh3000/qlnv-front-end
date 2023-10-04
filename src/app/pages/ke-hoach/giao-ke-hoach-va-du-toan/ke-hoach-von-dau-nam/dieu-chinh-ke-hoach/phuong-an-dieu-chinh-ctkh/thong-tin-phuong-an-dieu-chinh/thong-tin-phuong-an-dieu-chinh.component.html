@@ -782,7 +782,7 @@
                   </tr>
                   <ng-container *ngIf="expandSet.has(data.idVirtual)">
                     <ng-container *ngFor="let item of data.dataChild, let y = index">
-                      <tr>
+                      <tr *ngIf="item.tenVatTuCha">
                         <td></td>
                         <td></td>
                         <td class="font-weight-bold bg-parent2">{{item.maVatTuCha}}</td>
@@ -897,7 +897,7 @@
                   </tr>
                   <ng-container *ngIf="expandSet.has(data.idVirtual)">
                     <ng-container *ngFor="let item of data.dataChild, let y = index">
-                      <tr>
+                      <tr *ngIf="item.tenVatTuCha">
                         <td></td>
                         <td></td>
                         <td class="font-weight-bold bg-parent2">{{item.maVatTuCha}}</td>
