@@ -20,6 +20,8 @@ import { DANH_MUC_LEVEL } from "../../../../../luu-kho/luu-kho.constant";
 import { UserLogin } from "../../../../../../models/userlogin";
 import { STATUS } from "../../../../../../constants/status";
 import { DonviService } from "../../../../../../services/donvi.service";
+import {OldResponseData} from "../../../../../../interfaces/response";
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 
 @Component({
   selector: 'app-them-moi-qd-dc-bk',
@@ -64,6 +66,7 @@ export class ThemMoiQdDcBkComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     public quyHoachKhoService: QuyHoachKhoService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     public globals: Globals,
     private danhMucService: DanhMucService,
     private dmDviService: DonviService,
@@ -193,7 +196,7 @@ export class ThemMoiQdDcBkComponent implements OnInit {
     }
   }
 
-  onChangDiemKho(event,pa, type?) {
+  async onChangDiemKho(event,pa, type?) {
     const diemKho = this.danhSachDiemKho.filter(item => item.maDvi == event);
     if (diemKho) {
       if (type) {
@@ -204,12 +207,35 @@ export class ThemMoiQdDcBkComponent implements OnInit {
         if (pa == "TL") {
           this.rowItemTL.tenDiemKho = diemKho[0].tenDvi;
           this.rowItemTL.diaDiem = diemKho[0].diaChi;
+          const res= await this.getDetailMlkByKey(diemKho[0].maDvi, diemKho[0].capDvi);
+          if(res){
+            this.rowItemTL.dienTich = res.dienTichDat;
+            this.rowItemTL.tongTichLuong = res.tichLuongKdLt+res.tichLuongKdVt;
+          }
         } else if (pa == "DTM") {
           this.rowItemDTM.tenDiemKho = diemKho[0].tenDvi;
           this.rowItemDTM.diaDiem = diemKho[0].diaChi;
+          const res= await this.getDetailMlkByKey(diemKho[0].maDvi, diemKho[0].capDvi);
+          if(res){
+            this.rowItemTL.dienTich = res.dienTichDat;
+            this.rowItemTL.tongTichLuong = res.tichLuongKdLt+res.tichLuongKdVt;
+          }
         }
       }
     }
+  }
+  async getDetailMlkByKey(maDvi, capDvi) {
+    let body = {
+      maDvi: maDvi,
+      capDvi: capDvi
+    }
+    let resp;
+    await this.mangLuoiKhoService.getDetailByMa(body).then((res: OldResponseData) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        resp = res.data.object;
+      }
+    })
+    return resp;
   }
 
   quayLai() {
@@ -230,7 +256,7 @@ export class ThemMoiQdDcBkComponent implements OnInit {
     }
   }
 
-  xoaItem(index: number) {
+  xoaItem(index: number,type) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -241,11 +267,15 @@ export class ThemMoiQdDcBkComponent implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(index, 1);
-          this.updateEditCache("TL");
-          this.updateEditCache("DTM");
+          if (type=='DTM'){
+            this.dataTableDTM.splice(index, 1);
+            this.updateEditCache('DTM')
+          }else {
+            this.dataTableTL.splice(index, 1);
+            this.updateEditCache('TL')
+          }
         } catch (e) {
-          console.log("error", e);
+          console.log('error', e);
         }
       }
     });

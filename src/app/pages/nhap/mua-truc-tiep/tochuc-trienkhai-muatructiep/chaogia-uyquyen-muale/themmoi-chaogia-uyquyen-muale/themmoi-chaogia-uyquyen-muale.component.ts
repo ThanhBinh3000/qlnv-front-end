@@ -169,8 +169,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       this.selected = true;
     }
     console.log(data, 123)
-    this.rowItem.donGia = data.donGia
-    this.donGiaRow = data.donGia
+    this.rowItem.donGiaVat = data.donGiaVat
+    this.donGiaRow = data.donGiaVat
     if(this.listChiCuc.length > 0){
       this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
     }
@@ -212,7 +212,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
 
   handleChangeDiemKho(dataTable: any, diemKho: any){
     diemKho.idDiaDiem = dataTable.id
-    diemKho.donGia = dataTable.donGia
+    diemKho.donGiaVat = dataTable.donGiaVat
     diemKho.tenDiemKho = this.listDiemKho.find(x => x.maDvi == diemKho.maDiemKho).tenDvi
   }
 
@@ -320,7 +320,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       }
     });
     this.rowItem = new ChiTietThongTinChaoGia();
-    this.rowItem.donGia = this.donGiaRow
+    this.rowItem.donGiaVat = this.donGiaRow
     this.emitDataTable();
     this.updateEditCache()
   }

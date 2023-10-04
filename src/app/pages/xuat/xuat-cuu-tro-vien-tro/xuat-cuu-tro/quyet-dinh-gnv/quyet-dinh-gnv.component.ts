@@ -71,6 +71,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
       ngayKyDen: [''],
       loaiVthh: [''],
       trichYeu: [''],
+      trangThai: [''],
       type: [''],
       // types: [['TH', 'TTr']]
     });
@@ -108,6 +109,9 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
     await this.spinner.show();
     try {
       this.formData.patchValue({ type: this.loaiXuat });
+      if (this.userService.isChiCuc()) {
+        this.formData.patchValue({ trangThai: this.STATUS.BAN_HANH })
+      }
       await this.timKiem()
     } catch (e) {
       console.log('error: ', e);
@@ -135,10 +139,6 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
   async timKiem() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayKy) {
-        this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('YYYY-MM-DD')
-      }
       await this.search();
     } catch (e) {
       console.log(e)

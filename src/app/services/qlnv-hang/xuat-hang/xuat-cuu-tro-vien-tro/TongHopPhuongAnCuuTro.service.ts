@@ -22,4 +22,8 @@ export class TongHopPhuongAnCuuTroService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}`
     return this.httpClient.post(url, body).toPromise();
   }
+  danhSach(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

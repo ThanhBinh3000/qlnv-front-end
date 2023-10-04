@@ -274,7 +274,9 @@
               <th>Tồn kho</th>
               <th>SL xuất phân bổ</th>
               <th>Trạng thái phân bổ</th>
-              <th>Hành động</th>
+              <ng-container *ngIf="showAction()">
+                <th>Hành động</th>
+              </ng-container>
             </tr>
           </thead>
           <tbody>
@@ -302,7 +304,9 @@
                      (nzOnConfirm)="xoaPhuongAn(item)"></i>
                 </a>-->
                 </td>
-                <td></td>
+                <ng-container *ngIf="showAction()">
+                  <td></td>
+                </ng-container>
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -319,18 +323,20 @@
                     <td></td>
                     <td>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
                     <td></td>
-                    <td>
-                      <ng-container *ngIf="userService.isCuc() && lv1.soLuongDx > lv1.soLuongGiao">
-                        <a>
-                          <i class="fa fa-plus" (click)="themPhuongAn(lv1,1)"></i>
-                        </a>
-                        <!--  <a>
+                    <ng-container *ngIf="showAction()">
+                      <td>
+                        <ng-container *ngIf="userService.isCuc() && lv1.soLuongDx > lv1.soLuongGiao">
+                          <a>
+                            <i class="fa fa-plus" (click)="themPhuongAn(lv1,1)"></i>
+                          </a>
+                          <!--  <a>
                           <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm
                              nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                              (nzOnConfirm)="xoaPhuongAn(lv1,item)"></i>
                         </a>-->
-                      </ng-container>
-                    </td>
+                        </ng-container>
+                      </td>
+                    </ng-container>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -347,20 +353,21 @@
                         <td>{{lv2.tonKho}}</td>
                         <td><strong>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
                         <td>{{lv2.tenTrangThai}}</td>
-                        <td>
-                          <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-pencil" (click)="themPhuongAn(lv2,2, true)"></i>
-                          </a>
-                          <a *ngIf="userService.isChiCuc() && lv2.soLuongGiao > lv2.soLuong">
-                            <i class="fa fa-plus" (click)="themPhuongAn(lv2,2)"></i>
-                          </a>
+                        <ng-container *ngIf="showAction()">
+                          <td>
+                            <a *ngIf="userService.isCuc()">
+                              <i class="fa fa-pencil" (click)="themPhuongAn(lv2,2, true)"></i>
+                            </a>
+                            <a *ngIf="userService.isChiCuc() && lv2.soLuongGiao > lv2.soLuong">
+                              <i class="fa fa-plus" (click)="themPhuongAn(lv2,2)"></i>
+                            </a>
 
-                          <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
-                              nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaPhuongAn(lv2,lv1,2)"></i>
-                          </a>
-                        </td>
-
+                            <a *ngIf="userService.isCuc()">
+                              <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
+                                nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaPhuongAn(lv2,lv1,2)"></i>
+                            </a>
+                          </td>
+                        </ng-container>
                       </tr>
                       <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                         <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
@@ -377,19 +384,21 @@
                             <td>{{lv3.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                             <td>{{lv3.soLuong|number:globals.numberFormat:globals.locale}}</td>
                             <td></td>
-                            <td>
-                              <ng-container *ngIf="userService.isChiCuc()">
-                                <a>
-                                  <i class="fa fa-pencil" (click)="themPhuongAn(lv3,3, true)"></i>
-                                </a>
-                                <a>
-                                  <i class="fa fa-trash-o do" nz-popconfirm nz-button
-                                    nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
-                                    (nzOnConfirm)="xoaPhuongAn(lv3,lv2,3)"></i>
-                                </a>
+                            <ng-container *ngIf="showAction()">
+                              <td>
+                                <ng-container *ngIf="userService.isChiCuc()">
+                                  <a>
+                                    <i class="fa fa-pencil" (click)="themPhuongAn(lv3,3, true)"></i>
+                                  </a>
+                                  <a>
+                                    <i class="fa fa-trash-o do" nz-popconfirm nz-button
+                                      nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                                      (nzOnConfirm)="xoaPhuongAn(lv3,lv2,3)"></i>
+                                  </a>
 
-                              </ng-container>
-                            </td>
+                                </ng-container>
+                              </td>
+                            </ng-container>
                           </tr>
                           <!--<ng-container *ngIf="expandSetString.has(item.idVirtual) && lv3.childData[0].tenDiaDiem">
                           <ng-container *ngFor="let lv4 of lv3.childData,let i4=index">

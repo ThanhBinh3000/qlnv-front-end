@@ -151,8 +151,10 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư NSTW được duyệt (đ)</nz-form-label>
               <nz-input-group>
-                <nz-input-number [nzFormatter]="globals.formatter" [nzSize]="'small'" nz-input
-                                 [nzDisabled]="isViewDetail" formControlName="nstwDuyet"
+                <nz-input-number [nzSize]="'small'"
+                                 [nzFormatter]="globals.formatter"
+                                 [nzParser]="globals.parser" nz-input [nzDisabled]="isViewDetail"
+                                 formControlName="nstwDuyet"
                                  [nzMin]="0" [nzStep]="1">
                 </nz-input-number>
               </nz-input-group>

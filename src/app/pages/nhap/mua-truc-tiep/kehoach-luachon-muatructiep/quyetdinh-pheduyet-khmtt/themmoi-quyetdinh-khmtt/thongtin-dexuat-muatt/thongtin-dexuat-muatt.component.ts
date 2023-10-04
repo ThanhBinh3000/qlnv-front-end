@@ -91,7 +91,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         this.formData.patchValue({
           tongMucDt: this.dataInput.tongSoLuong * this.dataInput.donGiaVat * 1000
         })
-        console.log(this.formData.value)
+        console.log(this.dataInput.children, "123")
         this.dataTable = this.dataInput.children
         this.calculatorTable();
       } else {

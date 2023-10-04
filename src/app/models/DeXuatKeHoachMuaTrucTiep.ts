@@ -65,6 +65,7 @@ export class ChiTietThongTinChaoGia {
   ngayChaoGia: number;
   soLuong: number;
   donGia: number;
+  donGiaVat: number;
   thueGtgt: number;
   thanhTien: number;
   luaChon: boolean = false;
@@ -80,6 +81,7 @@ export class AddDiemKho {
   soLuong: number;
   thanhTien: number;
   donGia: number;
+  donGiaVat: number;
   tenDiemKho: string;
   children: Array<any>;
   edit: boolean = false;

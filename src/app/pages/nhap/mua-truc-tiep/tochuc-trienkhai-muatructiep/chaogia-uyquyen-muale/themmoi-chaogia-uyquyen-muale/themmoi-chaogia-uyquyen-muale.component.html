@@ -216,8 +216,8 @@
               <td></td>
               <td></td>
               <td><input nz-input [(ngModel)]="diemKhoItem.soLuong"/></td>
-              <td><input readonly="true" nz-input [(ngModel)]="diemKhoItem.donGia"/></td>
-              <td>{{(diemKhoItem.donGia * (diemKhoItem.soLuong ? diemKhoItem.soLuong : 0) * 1000) | number : '1.0-1' : 'vi_VN'}}</td>
+              <td><input readonly="true" nz-input [(ngModel)]="diemKhoItem.donGiaVat"/></td>
+              <td>{{(diemKhoItem.donGiaVat * (diemKhoItem.soLuong ? diemKhoItem.soLuong : 0) * 1000) | number : '1.0-1' : 'vi_VN'}}</td>
               <td>
                 <a (click)="addDiemKho(i, diemKhoItem)" [class.disabled]="!diemKhoItem">
                   <i class="fa fa-plus"></i>
@@ -236,8 +236,8 @@
                 <td></td>
                 <td></td>
                 <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{diemKho.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{diemKho.donGia * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{item.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>
                   <a *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && userService.isCuc()" (click)="startEditDk(i, y)"
                      class="text-center">
@@ -260,10 +260,10 @@
                     <input type="text" [(ngModel)]="diemKhoEdit[i]?.data.children[y].soLuong" nz-input/>
                   </td>
                   <td>
-                    <input type="text" [(ngModel)]="diemKhoEdit[i]?.data.children[y].donGia" nz-input/>
+                    <input type="text" [(ngModel)]="diemKhoEdit[i]?.data.children[y].donGiaVat" nz-input/>
                   </td>
                   <td>
-                    {{(diemKhoEdit[i]?.data.children[y].donGia * diemKhoEdit[i]?.data.children[y].soLuong * 1000) | number : '1.0-1' : 'vi_VN'}}
+                    {{(diemKhoEdit[i]?.data.children[y].donGiaVat * diemKhoEdit[i]?.data.children[y].soLuong * 1000) | number : '1.0-1' : 'vi_VN'}}
                   </td>
                   <td class="text-center">
                     <a
