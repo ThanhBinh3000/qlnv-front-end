@@ -225,7 +225,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   }
 
   xoa(row) {
-    this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
+    this.dsHangTH = this.dsHangTH.filter(item => item.id !== row.id)
   }
 
 
