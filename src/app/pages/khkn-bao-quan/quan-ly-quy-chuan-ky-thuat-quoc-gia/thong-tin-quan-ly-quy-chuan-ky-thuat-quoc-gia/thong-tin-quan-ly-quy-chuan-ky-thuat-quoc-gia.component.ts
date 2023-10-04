@@ -639,11 +639,15 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   luuEdit(index: number): void {
     this.hasError = (false);
+    let listCtEdit = this.dataTable.filter(item => item.maChiTieu == this.dataEdit[index].data.maChiTieu);
     const idx = this.dataTable.findIndex(item => item.maChiTieu == this.dataTableView[index].maChiTieu);
     if (this.formData.value.apDungCloaiVthh == true && !this.formData.value.soVanBanSuaDoi && !this.formData.value.soVanBanThayThe) {
-      if (this.checkExitsData(this.dataEdit[index].data, this.dataTable)) {
-        this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng tên chỉ tiêu');
-        return;
+      if (listCtEdit && listCtEdit.length > 0 ) {
+        const idxEdit = this.dataTable.findIndex(item => item.maChiTieu == listCtEdit[0].maChiTieu);
+        if (idxEdit != idx) {
+          this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng tên chỉ tiêu');
+          return;
+        }
       }
     }
     Object.assign(this.dataTable[idx], this.dataEdit[index].data);
