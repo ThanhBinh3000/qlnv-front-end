@@ -126,7 +126,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư khái toán, dự toán được duyệt</nz-form-label>
               <nz-input-group>
                 <nz-input-number [nzSize]="'small'" nz-input [nzDisabled]="isViewDetail" formControlName="tmdt"
-                                 [nzMin]="0" [nzStep]="1" [nzFormatter]="globals.formatter">
+                                 [nzMin]="0" [nzStep]="1" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" >
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>

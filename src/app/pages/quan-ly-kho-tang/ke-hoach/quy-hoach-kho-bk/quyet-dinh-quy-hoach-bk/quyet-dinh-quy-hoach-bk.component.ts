@@ -41,6 +41,8 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
   searchFilter = {
     soQuyetDinh: '',
     ngayKy: '',
+    ngayKyTu: '',
+    ngayKyDen: '',
     namBatDau: '',
     namKetThuc: '',
     phuongAnQuyHoach: '',
@@ -191,8 +193,8 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      ngayKyTu: this.searchFilter.ngayKy[0],
-      ngayKyDen: this.searchFilter.ngayKy[1],
+      ngayKyTu: this.searchFilter.ngayKyTu,
+      ngayKyDen: this.searchFilter.ngayKyDen,
       soQuyetDinh: this.searchFilter.soQuyetDinh,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
@@ -300,6 +302,8 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
     this.searchFilter = {
       soQuyetDinh: '',
       ngayKy: '',
+      ngayKyTu: '',
+      ngayKyDen: '',
       namBatDau: '',
       namKetThuc: '',
       phuongAnQuyHoach: '',
@@ -438,6 +442,4 @@ export class QuyetDinhQuyHoachBkComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
-
-
 }
