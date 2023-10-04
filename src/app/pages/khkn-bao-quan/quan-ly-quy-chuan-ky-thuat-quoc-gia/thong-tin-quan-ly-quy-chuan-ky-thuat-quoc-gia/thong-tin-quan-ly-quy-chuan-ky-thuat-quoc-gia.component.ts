@@ -335,7 +335,11 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     } else {
       body.tieuChuanKyThuat = this.dataTable;
     }
-    body.fileDinhKems = this.taiLieuDinhKemList;
+    if (body.isMat) {
+      body.fileDinhKems = null;
+    } else {
+      body.fileDinhKems = this.taiLieuDinhKemList;
+    }
     body.loaiVthh = this.listOfTagOptions.join(',');
     let uniquelistLoaiVthh = [...new Map(this.listLoaiVthh.map(item => [item, item])).values()];
     body.listTenLoaiVthh = uniquelistLoaiVthh.join(',');
@@ -699,25 +703,33 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   async changeListVanBan() {
-    let res = await this.khCnQuyChuanKyThuat.getDetail(this.formData.value.idVanBanSuaDoi);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let itemVanBanSuaDoi = res.data;
-      if (itemVanBanSuaDoi) {
-        const data = itemVanBanSuaDoi;
-        this.formData.patchValue({
-          soVanBanSuaDoi: itemVanBanSuaDoi.soVanBan,
-        });
-        if (itemVanBanSuaDoi.loaiVthh) {
-          this.listOfTagOptions = data.loaiVthh.split(',');
+    // this.dataTable = [];
+    // this.dataTableView = [];
+    if (this.formData.value.idVanBanSuaDoi) {
+      let res = await this.khCnQuyChuanKyThuat.getDetail(this.formData.value.idVanBanSuaDoi);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let itemVanBanSuaDoi = res.data;
+        if (itemVanBanSuaDoi) {
+          const data = itemVanBanSuaDoi;
+          this.formData.patchValue({
+            soVanBanSuaDoi: itemVanBanSuaDoi.soVanBan,
+          });
+          if (itemVanBanSuaDoi.loaiVthh) {
+            this.listOfTagOptions = data.loaiVthh.split(',');
+          }
+          if (itemVanBanSuaDoi.listTenLoaiVthh) {
+            this.listLoaiVthh = itemVanBanSuaDoi.listTenLoaiVthh.split(',');
+          }
+          this.dataTable = itemVanBanSuaDoi.tieuChuanKyThuat;
+          this.dataTableView = cloneDeep(this.dataTable);
+          this.updateEditCache();
+          await this.getDsChiTieu(this.listOfTagOptions);
         }
-        if (itemVanBanSuaDoi.listTenLoaiVthh) {
-          this.listLoaiVthh = itemVanBanSuaDoi.listTenLoaiVthh.split(',');
-        }
-        this.dataTable = itemVanBanSuaDoi.tieuChuanKyThuat;
-        this.dataTableView = cloneDeep(this.dataTable);
-        this.updateEditCache();
-        await this.getDsChiTieu(this.listOfTagOptions);
       }
+    } else {
+      this.formData.patchValue({
+        soVanBanSuaDoi: null,
+      });
     }
   }
 
