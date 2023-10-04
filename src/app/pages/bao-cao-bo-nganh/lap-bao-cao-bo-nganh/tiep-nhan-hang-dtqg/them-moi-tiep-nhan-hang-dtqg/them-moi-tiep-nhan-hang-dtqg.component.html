@@ -15,7 +15,7 @@
         <span>Quay lại</span>
       </button>
       <ng-container>
-        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView
+        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO
          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_TNSDHDTQG_DUYET')"
                 type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet(idInput)">
           <i class="icon htvbdh_tcdt_pheduyet"></i>

@@ -86,28 +86,19 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bao_cao_cl_nhap_thoc_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng nhập thóc - Tổng hợp";
           this.nameFile = "bao_cao_cl_nhap_thoc_tong_hop";
         }
         if (body.loaiVthh.startsWith("0102")) {
-          body.fileName = "bao_cao_cl_nhap_gao_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng nhập gạo - Tổng hợp";
           this.nameFile = "bao_cao_cl_nhap_gao_tong_hop";
         }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
           this.nameFile = "bc_chat_luong_thoc_nhap_kho";
         }
         if (body.loaiVthh.startsWith("0102")) {
-          body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
           this.nameFile = "bc_chat_luong_gao_nhap_kho";
         }
       }
-      body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclNhapHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
@@ -143,33 +134,22 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bao_cao_cl_nhap_thoc_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng nhập thóc - Tổng hợp";
-          this.nameFile = "bao_cao_cl_nhap_thoc_tong_hop";
+          this.nameFile = "bc_chat_luong_tong_hop_nhap_thoc";
         }
         if (body.loaiVthh.startsWith("0102")) {
-          body.fileName = "bao_cao_cl_nhap_gao_tong_hop.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng nhập gạo - Tổng hợp";
-          this.nameFile = "bao_cao_cl_nhap_gao_tong_hop";
+          this.nameFile = "bc_chat_luong_tong_hop_nhap_gao";
         }
         if (body.loaiVthh.startsWith("02")) {
-          body.fileName = "bc_chat_luong_vattu_nhap_kho.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng vật tư nhập kho"
+          this.nameFile = "bc_chat_luong_tong_hop_nhap_vattu";
         }
       } else {
         if (body.loaiVthh.startsWith("0101")) {
-          body.fileName = "bc_chat_luong_thoc_nhap_kho.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng thóc nhập kho";
           this.nameFile = "bc_chat_luong_thoc_nhap_kho";
         }
         if (body.loaiVthh.startsWith("0102")) {
-          body.fileName = "bc_chat_luong_gao_nhap_kho.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng gạo nhập kho";
           this.nameFile = "bc_chat_luong_gao_nhap_kho";
         }
         if (body.loaiVthh.startsWith("02")) {
-          body.fileName = "bc_chat_luong_vattu_nhap_kho.jrxml";
-          body.tenBaoCao = "Báo cáo chất lượng vật tư nhập kho"
           this.nameFile = "bc_chat_luong_vattu_nhap_kho"
         }
       }

@@ -94,6 +94,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
             thongTuSo: this.listData.thongTuSo,
             boNganh: this.listData.boNganh,
             nam: this.listData.nam,
+            trangThai: this.listData.trangThai,
             tenTrangThai: this.listData.tenTrangThai,
             tGianTaoTuNgay: this.listData.tGianTaoTuNgay,
             tGianTaoDenNgay: this.listData.tGianTaoDenNgay,

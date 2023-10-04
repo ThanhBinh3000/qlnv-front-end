@@ -53,6 +53,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
+        namNhap: [],
         loaiKyBc: ['01', [Validators.required]],
         kyBc: [null],
         maCuc: [null],
@@ -215,6 +216,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     }
     try {
       this.spinner.show();
+      this.formData.value.namNhap = this.formData.value.nam
       let body = this.formData.value;
       body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
@@ -244,35 +246,35 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       if (body.loaiKyBc) {
         if (body.loaiKyBc == '01') {
           if (body.kyBc) {
+            body.vaiTro = 'LDCHICUC'
             const parts = body.kyBc.split(" "); // Tách chuỗi theo khoảng trắng
             const monthNumber = parts[1];
-            const dayOfMonth = new Date(this.formData.value.nam, monthNumber, 0).getDate();
-            body.tuNgay = '1/' + monthNumber + '/' + body.nam
-            body.denNgay = dayOfMonth + '/' + monthNumber + '/' + body.nam
+            const dayOfMonth = new Date(this.formData.value.namNhap, monthNumber, 0).getDate();
+            body.tuNgay = '1/' + monthNumber + '/' + body.namNhap
+            body.denNgay = dayOfMonth + '/' + monthNumber + '/' + body.namNhap
           }
         }
         if (body.loaiKyBc == '02') {
-          body.vaiTro = 'LDCHICUC'
           if (body.kyBc && body.kyBc == 'Quý I') {
-            body.tuNgay = '1/1/' + body.nam
-            body.denNgay = '31/3/' + body.nam
+            body.tuNgay = '1/1/' + body.namNhap
+            body.denNgay = '31/3/' + body.namNhap
           }
           if (body.kyBc && body.kyBc == 'Quý II') {
-            body.tuNgay = '1/4/' + body.nam
-            body.denNgay = '30/6/' + body.nam
+            body.tuNgay = '1/4/' + body.namNhap
+            body.denNgay = '30/6/' + body.namNhap
           }
           if (body.kyBc && body.kyBc == 'Quý III') {
-            body.tuNgay = '1/7/' + body.nam
-            body.denNgay = '30/9/' + body.nam
+            body.tuNgay = '1/7/' + body.namNhap
+            body.denNgay = '30/9/' + body.namNhap
           }
           if (body.kyBc && body.kyBc == 'Quý IV') {
-            body.tuNgay = '1/10/' + body.nam
-            body.denNgay = '31/12/' + body.nam
+            body.tuNgay = '1/10/' + body.namNhap
+            body.denNgay = '31/12/' + body.namNhap
           }
         }
         if (body.loaiKyBc == '03') {
-          body.tuNgay = '1/10/' + body.nam
-          body.denNgay = '31/12/' + body.nam
+          body.tuNgay = '1/10/' + body.namNhap
+          body.denNgay = '31/12/' + body.namNhap
         }
         if (body.loaiKyBc == '04') {
           body.tuNgay = body.tgBaoCaoTu ? dayjs(body.tgBaoCaoTu).format('DD/MM/YYYY') : null;
@@ -280,7 +282,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           body.vaiTro = 'CBTHUKHO';
         }
       }
-      body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
+      body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.namNhap) : ("NĂM " + this.formData.value.namNhap);
       await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
@@ -329,35 +331,35 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       if (body.loaiKyBc) {
         if (body.loaiKyBc == '01') {
           if (body.kyBc) {
+            body.vaiTro = 'LDCHICUC'
             const parts = body.kyBc.split(" "); // Tách chuỗi theo khoảng trắng
             const monthNumber = parts[1];
-            const dayOfMonth = new Date(this.formData.value.nam, monthNumber, 0).getDate();
-            body.tuNgay = '1/' + monthNumber + '/' + body.nam
-            body.denNgay = dayOfMonth + '/' + monthNumber + '/' + body.nam
+            const dayOfMonth = new Date(this.formData.value.namNhap, monthNumber, 0).getDate();
+            body.tuNgay = '1/' + monthNumber + '/' + body.namNhap
+            body.denNgay = dayOfMonth + '/' + monthNumber + '/' + body.namNhap
           }
         }
         if (body.loaiKyBc == '02') {
-          body.vaiTro = 'LDCHICUC'
           if (body.kyBc && body.kyBc == 'Quý I') {
-            body.tuNgay = '1/1/' + body.nam
-            body.denNgay = '31/3/' + body.nam
+            body.tuNgay = '1/1/' + body.namNhap
+            body.denNgay = '31/3/' + body.namNhap
           }
           if (body.kyBc && body.kyBc == 'Quý II') {
-            body.tuNgay = '1/4/' + body.nam
-            body.denNgay = '30/6/' + body.nam
+            body.tuNgay = '1/4/' + body.namNhap
+            body.denNgay = '30/6/' + body.namNhap
           }
           if (body.kyBc && body.kyBc == 'Quý III') {
-            body.tuNgay = '1/7/' + body.nam
-            body.denNgay = '30/9/' + body.nam
+            body.tuNgay = '1/7/' + body.namNhap
+            body.denNgay = '30/9/' + body.namNhap
           }
           if (body.kyBc && body.kyBc == 'Quý IV') {
-            body.tuNgay = '1/10/' + body.nam
-            body.denNgay = '31/12/' + body.nam
+            body.tuNgay = '1/10/' + body.namNhap
+            body.denNgay = '31/12/' + body.namNhap
           }
         }
         if (body.loaiKyBc == '03') {
-          body.tuNgay = '1/10/' + body.nam
-          body.denNgay = '31/12/' + body.nam
+          body.tuNgay = '1/10/' + body.namNhap
+          body.denNgay = '31/12/' + body.namNhap
         }
         if (body.loaiKyBc == '04') {
           body.tuNgay = body.tgBaoCaoTu ? dayjs(body.tgBaoCaoTu).format('DD/MM/YYYY') : null;
@@ -365,7 +367,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           body.vaiTro = 'CBTHUKHO';
         }
       }
-      body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.nam) : ("NĂM " + this.formData.value.nam);
+      body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.namNhap) : ("NĂM " + this.formData.value.namNhap);
       await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();

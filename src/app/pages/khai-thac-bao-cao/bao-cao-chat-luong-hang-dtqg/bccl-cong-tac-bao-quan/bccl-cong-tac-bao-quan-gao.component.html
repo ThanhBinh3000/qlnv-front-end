@@ -66,7 +66,7 @@
           <div nz-col [nzSpan]="formData.value.loaiKyBc == '03' ? 9 : formData.value.loaiKyBc == '04' ? 6 : 7" *ngIf="userService.isTongCuc()">
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
-              <nz-form-control nz-col >
+              <nz-form-control nz-col [nzErrorTip]="error" >
                 <nz-select [nzDisabled]="formData.value.loaiBc == '01'" nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear>
                   <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>

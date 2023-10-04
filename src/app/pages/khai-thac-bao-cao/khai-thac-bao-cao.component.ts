@@ -13,17 +13,28 @@ export class KhaiThacBaoCaoComponent implements OnInit, AfterViewInit {
   routes = ROUTE_LIST;
   routerUrl: string = "";
   defaultUrl: string = ''
+  defaultModule: string = ''
 
   constructor(
     private router: Router,
     public userService: UserService
   ) {
+    if (this.userService.isAccessPermisson('KTBC_TTQD')) {
+      this.defaultModule = '/khai-thac-bao-cao/bao-cao-theo-ttqd';
+    } else if (this.userService.isAccessPermisson('KTBC_CLHDTQG')) {
+      this.defaultModule = '/khai-thac-bao-cao/bao-cao-chat-luong-hang-dtqg';
+    } else if (this.userService.isAccessPermisson('KTBC_NXMBHDTQG')) {
+      this.defaultModule = '/khai-thac-bao-cao/bao-cao-nhap-xuat-hang-dtqg';
+    } else if (this.userService.isAccessPermisson('KTBC_NVQLKT')) {
+      this.defaultModule = '/khai-thac-bao-cao/bao-cao-nghiep-vu-qly-kho';
+    }
   }
 
   ngOnInit(): void {
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
+    this.redirect(this.defaultModule)
   }
 
   ngAfterViewInit() {
@@ -78,6 +89,7 @@ export class KhaiThacBaoCaoComponent implements OnInit, AfterViewInit {
   }
 
   redirect(url: string) {
+    console.log(url, 'url')
     this.routerUrl = url;
     this.router.navigate([this.defaultUrl + url]);
   }

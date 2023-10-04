@@ -9,6 +9,11 @@ const routes: Routes = [{
   component: KhaiThacBaoCaoComponent,
   canActivate: [AuthGuard],
   children: [
+    /*{
+      path: '',
+      redirectTo: 'bao-cao-theo-ttqd',
+      pathMatch: 'full'
+    },*/
     {
       path: '',
       redirectTo: 'bao-cao-theo-ttqd',
