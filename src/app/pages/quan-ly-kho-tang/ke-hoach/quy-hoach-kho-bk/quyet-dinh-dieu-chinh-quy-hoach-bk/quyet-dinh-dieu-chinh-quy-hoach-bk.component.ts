@@ -1,26 +1,21 @@
-import {
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import {Component, Input, OnInit,} from '@angular/core';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { saveAs } from 'file-saver';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {convertTrangThai} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {saveAs} from 'file-saver';
 import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 import {QuyHoachKhoService} from "../../../../../services/quy-hoach-kho.service";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {DonviService} from "../../../../../services/donvi.service";
-import {literal} from "@angular/compiler/src/output/output_ast";
-import { Router } from "@angular/router";
+import {Router} from "@angular/router";
 import {STATUS} from "../../../../../constants/status";
 
 @Component({
@@ -85,7 +80,8 @@ export class QuyetDinhDieuChinhQuyHoachBkComponent implements OnInit {
     private router: Router,
     public userService: UserService,
     public globals: Globals,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     if (!this.userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH')) {
@@ -131,11 +127,11 @@ export class QuyetDinhDieuChinhQuyHoachBkComponent implements OnInit {
       soQuyetDinh: this.searchFilter.soQuyetDinh,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
-      maCuc: this.userService.isCuc()? this.userInfo.MA_DVI :this.searchFilter.maCuc ,
-      maChiCuc: this.userService.isChiCuc()? this.userInfo.MA_DVI :this.searchFilter.maChiCuc,
+      maCuc: this.userService.isCuc() ? this.userInfo.MA_DVI : this.searchFilter.maCuc,
+      maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : this.searchFilter.maChiCuc,
       maDiemKho: this.searchFilter.maDiemKho,
       type: this.type,
-      maDvi : this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
+      maDvi: this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -201,6 +197,7 @@ export class QuyetDinhDieuChinhQuyHoachBkComponent implements OnInit {
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
     this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
   }
+
   async loadDanhSachDiemKho() {
     const body = {
       maDviCha: this.userInfo.MA_DVI,
@@ -211,7 +208,6 @@ export class QuyetDinhDieuChinhQuyHoachBkComponent implements OnInit {
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
     this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
   }
-
 
 
   async onChangChiCuc(event) {
@@ -348,11 +344,11 @@ export class QuyetDinhDieuChinhQuyHoachBkComponent implements OnInit {
           soQuyetDinh: this.searchFilter.soQuyetDinh,
           namBatDau: this.searchFilter.namBatDau,
           namKetThuc: this.searchFilter.namKetThuc,
-          maCuc: this.userService.isCuc()? this.userInfo.MA_DVI :this.searchFilter.maCuc ,
-          maChiCuc: this.userService.isChiCuc()? this.userInfo.MA_DVI :this.searchFilter.maChiCuc,
+          maCuc: this.userService.isCuc() ? this.userInfo.MA_DVI : this.searchFilter.maCuc,
+          maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : this.searchFilter.maChiCuc,
           maDiemKho: this.searchFilter.maDiemKho,
           type: this.type,
-          maDvi : this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
+          maDvi: this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
           paggingReq: {
             limit: this.pageSize,
             page: this.page - 1,
@@ -387,8 +383,7 @@ export class QuyetDinhDieuChinhQuyHoachBkComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
