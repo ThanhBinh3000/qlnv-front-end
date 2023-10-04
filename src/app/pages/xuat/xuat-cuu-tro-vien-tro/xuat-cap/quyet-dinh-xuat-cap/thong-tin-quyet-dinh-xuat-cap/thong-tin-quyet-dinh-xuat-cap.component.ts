@@ -418,7 +418,6 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
           childData: value
         };
       }).value().filter(f => !!f);
-    console.log("aaaaaaaa", this.formData.value.quyetDinhPdDtl)
     this.expandAll();
   }
 
@@ -623,22 +622,22 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             data.paXuatGaoChuyenXc = true;
             data.qdPaXuatCap = res.data.soBbQd;
             data.qdPaXuatCapId = res.data.id;
-            delete data.id;
-            delete data.soBbQd;
-            delete data.ngayHluc;
-            delete data.tenVthh;
-            delete data.loaiNhapXuat;
-            delete data.kieuNhapXuat;
-            delete data.idDx;
-            delete data.soDx;
-            delete data.ngayKy;
-            delete data.trangThai;
-            delete data.tenTrangThai;
-            delete data.type;
-            delete data.canCu;
-            delete data.fileDinhKem;
-            delete data.trichYeu;
-            delete data.quyetDinhPdDtl;
+            // delete data.id;
+            // delete data.soBbQd;
+            // delete data.ngayHluc;
+            // delete data.tenVthh;
+            // delete data.loaiNhapXuat;
+            // delete data.kieuNhapXuat;
+            // delete data.idDx;
+            // delete data.soDx;
+            // delete data.ngayKy;
+            // delete data.trangThai;
+            // delete data.tenTrangThai;
+            // delete data.type;
+            // delete data.canCu;
+            // delete data.fileDinhKem;
+            // delete data.trichYeu;
+            // delete data.quyetDinhPdDtl;
 
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
 

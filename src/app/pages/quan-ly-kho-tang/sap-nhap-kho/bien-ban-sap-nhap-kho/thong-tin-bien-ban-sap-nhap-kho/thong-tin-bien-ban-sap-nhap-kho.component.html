@@ -77,7 +77,8 @@
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký</nz-form-label>
+                            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký biên
+                                bản</nz-form-label>
                             <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/YYYY"
                                 nzPlaceHolder="Ngày ký QĐ xuất hàng" formControlName="ngayKy">
                             </nz-date-picker>
@@ -190,10 +191,11 @@
                                             ||
                                             "")}}
                                         </td>
-                                        <td class="bold">{{(item.tenChiCucDen? item.tenChiCucDen + " - ": "") +
+                                        <!-- <td class="bold">{{(item.tenChiCucDen? item.tenChiCucDen + " - ": "") +
                                             (item.tenDiemKhoDen
                                             ||"")}}
-                                        </td>
+                                        </td> -->
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

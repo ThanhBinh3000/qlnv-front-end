@@ -223,14 +223,14 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               });
               this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatPhuongAn.map(element => ({
                 ...element,
-                soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc
+                soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc, soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
               })));
             } else {
               let res = await this.tongHopPhuongAnCuuTroService.getDetail(this.formData.value.idTongHop);
               let detail = res.data;
               this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatCuuTro.map(element => ({
                 ...element,
-                soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc
+                soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc, soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
               })));
             }
             await this.buildTableView();
@@ -256,6 +256,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   async save() {
     // await this.helperService.ignoreRequiredForm(this.formData);
     // this.formData.controls.soQdGnv.setValidators([Validators.required]);
+    if (this.formData.value.type !== "TH") {
+      await this.helperService.ignoreRequiredForm(this.formData, ["ngayKetThuc", "mucDichXuat"]);
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return;
     if (!this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
@@ -677,6 +680,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             let soLuong = rs.reduce((prev, next) => prev += next.soLuong, 0);
             return {
               idVirtual: uuidv4(),
+              noiDungDx: row.noiDungDx,
               tenDvi: row.tenDvi,
               maDvi: row.maDvi,
               soDx: row.soDx,
