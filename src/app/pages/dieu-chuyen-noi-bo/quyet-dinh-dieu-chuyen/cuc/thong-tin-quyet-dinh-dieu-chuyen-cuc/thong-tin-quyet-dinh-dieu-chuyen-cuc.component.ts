@@ -511,7 +511,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (!data) return
       console.log('onChangeCanCuQdTc', detail)
 
-      let dsDX = data.danhSachQuyetDinh
+      let dsDX = data.danhSachQuyetDinh.filter((dvn) => dvn.maCucNhan === this.userInfo.MA_DVI)
 
       dsDX.forEach(element => {
         element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
@@ -522,27 +522,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         })
       });
 
-      // if (this.formData.value.loaiDc === "CHI_CUC") {
-      //   dsDX.forEach(element => {
-      //     element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
-      //       this.danhSachQuyetDinh.push({
-      //         danhSachKeHoach: itemQD.danhSachKeHoach
-      //       })
-
-      //     })
-      //   });
-      // }
-
-      // if (this.formData.value.loaiDc === "CUC") {
-      //   dsDX.forEach(element => {
-      //     element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
-      //       this.danhSachQuyetDinh.push({
-      //         danhSachKeHoach: itemQD.danhSachKeHoach
-      //       })
-
-      //     })
-      //   });
-      // }
       const hanghoa = dsDX[0]
       hanghoa.danhSachQuyetDinhChiTiet.forEach(itemHH => {
         const dcnbKeHoachDcHdr = itemHH.dcnbKeHoachDcHdr
@@ -560,42 +539,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
       })
 
-      // detail.data.danhSachQuyetDinh.map((qd) => {
-      //   if (qd.dcnbKeHoachDcHdr) {
-      //     const item = qd.dcnbKeHoachDcHdr
-      //     // dsDX.push(item)
-      //     this.danhSachQuyetDinh.push({
-      //       danhSachKeHoach: item.danhSachHangHoa
-      //     })
-      //     if (this.formData.value.loaiDc !== "CUC") {
-      //       item.danhSachHangHoa.map(itemHH => {
-      //         dsHH.push({
-      //           ...itemHH,
-      //           maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
-      //           maDvi: item.maDvi,
-      //           tenDvi: item.tenDvi,
-      //           soDxuat: item.soDxuat
-      //         })
-      //         tong = tong + itemHH.duToanKphi
-      //       })
-      //     }
-      //   }
 
-      // })
-
-      // if (this.formData.value.loaiDc === "CUC") {
-      //   const item = detail.data.danhSachQuyetDinh[0].dcnbKeHoachDcHdr
-      //   item.danhSachHangHoa.map(itemHH => {
-      //     dsHH.push({
-      //       ...itemHH,
-      //       maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
-      //       maDvi: item.maDvi,
-      //       tenDvi: item.tenDvi,
-      //       soDxuat: item.soDxuat
-      //     })
-      //     tong = tong + itemHH.duToanKphi
-      //   })
-      // }
 
       this.dataTableView = this.buildTableView(dsHH, "maDvi")
       let tongDuToanKp = dsDX?.reduce((prev, cur) => prev + cur.tongDuToanKp, 0);

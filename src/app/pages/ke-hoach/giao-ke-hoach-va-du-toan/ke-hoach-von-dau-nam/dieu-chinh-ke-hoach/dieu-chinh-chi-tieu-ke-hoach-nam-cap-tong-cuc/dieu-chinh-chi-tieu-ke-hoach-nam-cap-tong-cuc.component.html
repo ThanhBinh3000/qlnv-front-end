@@ -58,7 +58,7 @@
       <div class="group-button">
         <h3 class="text-uppercase">Danh sách quyết định điều chỉnh chỉ tiêu kế hoạch năm</h3>
         <div class="buttons">
-          <button type="button" class="btn btn-do" (click)="deleteMulti()">
+          <button type="button" class="btn btn-do" (click)="xoaMulti()">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
@@ -184,7 +184,7 @@
                 <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id, false)">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
-                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'')">
+                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoa(data,'')">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
