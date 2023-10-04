@@ -115,11 +115,6 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
 
   async initForm() {
     this.spinner.show();
-    this.dropdownLoaiDaiDien = [];
-    let resTcdd = await this.danhMucService.danhMucChungGetAll('TO_CHUC_DAI_DIEN');
-    if (resTcdd.msg == MESSAGE.SUCCESS) {
-      this.dropdownLoaiDaiDien = resTcdd.data;
-    }
     if (this.id) {
       await this.detail(this.id).then((res) => {
         if (res) {
@@ -138,11 +133,11 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
     } else {
       await this.userService.getId("XH_TL_TINH_KHO_HDR_SEQ").then((res) => {
         this.formData.patchValue({
-          soBienBan: res + '/' + this.formData.value.nam + '/BBNĐK',
+          soBbTinhKho: res + '/' + this.formData.value.nam + '/BBNĐK',
           maQhns: this.userInfo.DON_VI.maQhns,
           tenDvi: this.userInfo.TEN_DVI,
-          ngayLap: dayjs().format('YYYY-MM-DD'),
-          ngayKetThuc: dayjs().format('YYYY-MM-DD'),
+          ngayLapBienBan: dayjs().format('YYYY-MM-DD'),
+          ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
           tenThuKho: this.userInfo.TEN_DAY_DU
         })
       });
@@ -202,7 +197,10 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
       let dataTable = [];
       const data = res.data;
       data.children.forEach( item => {
-        dataTable.push(item.xhTlDanhSachHdr);
+        // Địa điểm chưa tạo Xuất hàng thanh lý Tịnh kho thì ms add vào
+        if(!item.xhTlDanhSachHdr.xhTlTinhKhoHdr){
+          dataTable.push(item.xhTlDanhSachHdr);
+        }
       })
       const modalQD = this.modal.create({
         nzTitle: 'Danh sách quyết định sửa chữa',

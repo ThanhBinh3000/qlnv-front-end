@@ -6,10 +6,9 @@ import { BaseService } from "../../../base.service";
   providedIn: 'root'
 })
 export class BienBanTinhKhoThanhLyService extends BaseService {
-  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-thanh-ly/bien-ban-tinh-kho', '');
+    super(httpClient, 'xuat-hang/xuat-thanh-ly/bien-ban-tinh-kho', '/qlnv-hang');
   }
 
 }

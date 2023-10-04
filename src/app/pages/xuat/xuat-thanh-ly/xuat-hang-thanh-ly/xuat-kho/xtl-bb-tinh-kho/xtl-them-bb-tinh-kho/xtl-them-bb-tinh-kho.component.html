@@ -5,7 +5,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Biên bản giao nhận/kết thúc nhập kho</span>
+        <span>Biên bản tịnh kho</span>
       </div>
     </div>
     <div class="btn-group">
@@ -29,11 +29,11 @@
         <i class="icon htvbdh_tcdt_pheduyet "></i>
         <span>Duyệt</span>
       </button>
-      <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat ml-2"
-              (click)="preview(previewName,'SCHDTQG_NH_BBGN_IN')">
-        <i class=" icon htvbdh_tcdt_print"></i>
-        <span>In/xem trước</span>
-      </button>
+<!--      <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat ml-2"-->
+<!--              (click)="preview(previewName,'SCHDTQG_NH_BBGN_IN')">-->
+<!--        <i class=" icon htvbdh_tcdt_print"></i>-->
+<!--        <span>In/xem trước</span>-->
+<!--      </button>-->
     </div>
   </div>
 
