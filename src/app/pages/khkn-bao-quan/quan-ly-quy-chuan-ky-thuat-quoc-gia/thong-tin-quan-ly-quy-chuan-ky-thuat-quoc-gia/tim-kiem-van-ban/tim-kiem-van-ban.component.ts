@@ -29,6 +29,8 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
   listVbThayThe: string;
   @Input()
   loaiVthhSearch: string;
+  @Input()
+  maBn: string;
   userInfo: UserLogin;
   detail: any = {};
   STATUS = STATUS;
@@ -54,7 +56,7 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
   page: number = 1;
-  pageSize: number = 20;
+  pageSize: number = 1000;
   totalRecord: number = 0;
 
   constructor(
@@ -77,9 +79,8 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-
       this.userInfo = this.userService.getUserLogin();
-      await this.loadLoaiHangHoa();
+      await this.loadLoaiHangHoa(this.maBn);
       // await this.timKiem();
       if (this.loaiVthhSearch && this.loaiVthhSearch.length > 0) {
         this.formData.patchValue({
@@ -140,17 +141,37 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
     this.search();
   }
 
-  async loadLoaiHangHoa() {
-    let ds = [];
+
+  async loadLoaiHangHoa(maBn?) {
     try {
-      let hangHoa = await this.danhMucService.loadDanhMucHangHoa().toPromise();
+      let hangHoa: any;
+      if (this.userInfo.MA_DVI == '0101') {
+        hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
+          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI,
+        }).toPromise();
+      } else {
+        hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
+          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI.substring(0, 2),
+        }).toPromise();
+      }
       if (hangHoa) {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
-          hangHoa.data.forEach(element => {
-            ds = [...ds, element.children];
-            ds = ds.flat();
+          let ds = hangHoa.data.filter(element => {
+              return element.maHangHoa.length == 4;
+            },
+          );
+          ds = ds.flat();
+          if (maBn != '01') {
+            this.listOfOption = ds.map((item) => {
+              return {
+                title: item.tenHangHoa,
+                key: item.maHangHoa,
+                maDvi : item.maDvi
+              };
+            });
+          } else {
             this.listOfOption = ds;
-          });
+          }
         }
       }
     } catch (error) {
@@ -158,6 +179,26 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  //
+  // async loadLoaiHangHoa() {
+  //   let ds = [];
+  //   try {
+  //     let hangHoa = await this.danhMucService.loadDanhMucHangHoa().toPromise();
+  //     if (hangHoa) {
+  //       if (hangHoa.msg == MESSAGE.SUCCESS) {
+  //         hangHoa.data.forEach(element => {
+  //           ds = [...ds, element.children];
+  //           ds = ds.flat();
+  //           this.listOfOption = ds;
+  //         });
+  //       }
+  //     }
+  //   } catch (error) {
+  //     this.spinner.hide();
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //   }
+  // }
 
   async onChangeLoaiHH(id: number) {
     if (id && id > 0) {
