@@ -32,14 +32,14 @@ export class Gdt {
             name: 'Báo cáo từ đơn vị cấp dưới',
             code: Gdt.DANH_SACH_BAO_CAO_TU_CAP_DUOI,
             status: true,
-            role: [Roles.GDT.XEM_PA_TONGHOP_PBDT],
+            role: [Roles.GDT.VIEW_REPORT_TH],
             isSelected: false,
         },
         {
             name: 'Tổng hợp báo cáo từ đơn vị cấp dưới',
             code: Gdt.TONG_HOP_BC_CAP_DUOI,
             status: true,
-            role: [Roles.GDT.ADD_REPORT_TH],
+            role: [Roles.GDT.VIEW_REPORT_TH],
             isSelected: false,
         },
         {
@@ -161,7 +161,7 @@ export const TAB_LIST = [
         code: 'baoCaoCapDuoi',
         status: true,
         role: [
-            Roles.GDT.XEM_PA_TONGHOP_PBDT,
+            Roles.GDT.VIEW_REPORT_TH,
         ],
         isSelected: false,
     },
@@ -170,7 +170,7 @@ export const TAB_LIST = [
         code: 'tongHopBaoCaoCapDuoi',
         status: true,
         role: [
-            Roles.GDT.XEM_PA_TONGHOP_PBDT,
+            Roles.GDT.VIEW_REPORT_TH,
         ],
         isSelected: false,
     },
