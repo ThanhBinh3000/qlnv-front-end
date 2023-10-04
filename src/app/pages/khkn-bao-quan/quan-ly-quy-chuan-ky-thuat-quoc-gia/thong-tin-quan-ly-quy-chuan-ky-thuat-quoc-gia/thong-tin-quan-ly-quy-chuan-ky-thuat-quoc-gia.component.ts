@@ -649,7 +649,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     let listCtEdit = this.dataTable.filter(item => item.maChiTieu == this.dataEdit[index].data.maChiTieu);
     const idx = this.dataTable.findIndex(item => item.maChiTieu == this.dataTableView[index].maChiTieu);
     if (this.formData.value.apDungCloaiVthh == true && !this.formData.value.soVanBanSuaDoi && !this.formData.value.soVanBanThayThe) {
-      if (listCtEdit && listCtEdit.length > 0 ) {
+      if (listCtEdit && listCtEdit.length > 0) {
         const idxEdit = this.dataTable.findIndex(item => item.maChiTieu == listCtEdit[0].maChiTieu);
         if (idxEdit != idx) {
           this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng tên chỉ tiêu');
@@ -733,6 +733,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       nzComponentParams: {
         listVbThayThe: this.formData.get('soVanBanThayThe').value,
         loaiVthhSearch: this.listOfTagOptions,
+        maBn: this.formData.get('maBn').value,
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
