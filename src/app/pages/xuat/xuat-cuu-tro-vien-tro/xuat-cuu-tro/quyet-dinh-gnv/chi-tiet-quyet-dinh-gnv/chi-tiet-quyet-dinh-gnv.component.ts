@@ -63,7 +63,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   listKieuNhapXuat: any;
   maHauTo: any;
   selectedNode: any;
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -238,8 +237,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
   }
 
-  async loadDsDiemKho(maDvi: any, loaiVthh: any, cloaiVthh: any) {
+  async loadDsDiemKho(maDvi: any, loaiVthh: string, cloaiVthh: string) {
     this.listDiaDiemKho = [];
+    if (loaiVthh.startsWith("01") || loaiVthh.startsWith("04")) {
+      cloaiVthh = undefined;
+    }
     let body = {
       maDvi: this.userInfo.MA_DVI,
       loaiVthh: loaiVthh,
@@ -800,6 +802,15 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   isVthhVatuThietBi() {
     if (this.formData.value.tenVthh === "Vật tư thiết bị") {
       return true
+    }
+    return false
+  }
+  showAction(): boolean {
+    if (this.userService.isCuc() && this.formData.value.trangThai === STATUS.DU_THAO) {
+      return true;
+    }
+    else if (this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.BAN_HANH) {
+      return true;
     }
     return false
   }

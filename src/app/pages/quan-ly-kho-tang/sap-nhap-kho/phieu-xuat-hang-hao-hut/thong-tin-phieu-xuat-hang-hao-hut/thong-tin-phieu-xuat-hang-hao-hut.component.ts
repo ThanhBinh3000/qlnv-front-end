@@ -266,8 +266,8 @@ export class ThongTinPhieuXuatHangHaoHutComponent extends Base2Component impleme
                         this.dataTable = cloneDeep(dataDetail.phieuXuatHaoHutDtl);
                         this.rowInitial = {
                             maSo: "",
-                            donViTinh: dataDetail.phieuNhapHangDtl[0]?.donViTinh,
-                            ten: dataDetail.phieuNhapHangDtl[0]?.ten,
+                            donViTinh: dataDetail.phieuXuatHaoHutDtl[0]?.donViTinh,
+                            ten: dataDetail.phieuXuatHaoHutDtl[0]?.ten,
                             soLuong: "",
                         }
                     }
