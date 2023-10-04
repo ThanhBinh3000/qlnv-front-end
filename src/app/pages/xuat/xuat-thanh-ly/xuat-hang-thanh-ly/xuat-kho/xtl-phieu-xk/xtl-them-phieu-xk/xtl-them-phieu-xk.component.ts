@@ -23,13 +23,15 @@ import {
 import {
   PhieuXuatKhoThanhLyService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/PhieuXuatKhoThanhLy.service";
+import {
+  QuyetDinhGiaoNhiemVuThanhLyService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhGiaoNhiemVuThanhLy.service";
 @Component({
   selector: 'app-xtl-them-phieu-xk',
   templateUrl: './xtl-them-phieu-xk.component.html',
   styleUrls: ['./xtl-them-phieu-xk.component.scss']
 })
 export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
-
   dataTableDiaDiem: any[] = [];
   rowItem: any = {};
   symbol: string = ''
@@ -45,7 +47,8 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
     router: Router,
     private _service: PhieuXuatKhoThanhLyService,
     private quyetDinhXhService: QuyetDinhXhService,
-    private phieuKtraClThanhLyService : PhieuKtraClThanhLyService
+    private phieuKtraClThanhLyService : PhieuKtraClThanhLyService,
+    private quyetDinhGiaoNhiemVuThanhLyService : QuyetDinhGiaoNhiemVuThanhLyService
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     router.events.subscribe((val) => {
@@ -73,6 +76,7 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
       ngayQdXh: ['', [Validators.required]],
       soPhieuKtcl: ['', [Validators.required]],
       idPhieuKtcl: ['', [Validators.required]],
+      idDsHdr: ['', [Validators.required]],
       maDiaDiem: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       tenNhaKho: ['', [Validators.required]],
@@ -141,25 +145,21 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
         })
       });
     }
-    this.formData.patchValue({
-      idQdXh : '1',
-      soQdXh : '1/QD',
-      ngayQdXh : dayjs().format('YYYY-MM-DD')
-    });
   }
 
-  openDialogDanhSach() {
+  openDialogQdGiaoNvxh() {
     if (this.disabled()) {
       return;
     }
+    let body = {
+      trangThai : STATUS.BAN_HANH,
+      nam : this.formData.value.nam,
+      phanLoai : this.phanLoai
+    }
     this.spinner.show();
-    this.quyetDinhXhService.getDanhSachTaoPhieuXuatKho({}).then((res) => {
+    this.quyetDinhGiaoNhiemVuThanhLyService.getAll(body).then((res) => {
       this.spinner.hide();
       if (res.data) {
-        res.data?.forEach(item => {
-          item.ngayXuat = item.thoiHanXuat
-          item.ngayNhap = item.thoiHanNhap
-        })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách quyết định giao nhiệm vụ xuất hàng',
           nzContent: DialogTableSelectionComponent,
@@ -169,36 +169,21 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
           nzFooter: null,
           nzComponentParams: {
             dataTable: res.data,
-            dataHeader: ['Số quyết định xuất hàng', 'Trích yếu', 'Ngày ký', 'Thời hạn xuất', 'Thời hạn nhập'],
-            dataColumn: ['soQd', 'trichYeu', 'ngayKy', 'ngayXuat', 'ngayNhap']
+            dataHeader: ['Số quyết định xuất hàng'],
+            dataColumn: ['soBbQd']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
           if (data) {
-            this.bindingDiaDiemXh(data.id)
+            this.formData.patchValue({
+              idQdXh : data.id,
+              soQdXh : data.soBbQd,
+              ngayQdXh: data.ngayKy
+            })
           }
         });
       }
     })
-  }
-
-  bindingDiaDiemXh(id) {
-    this.spinner.show();
-    this.quyetDinhXhService.getDetail(id).then((res) => {
-      this.spinner.hide();
-      if (res.data) {
-        const data = res.data
-        this.formData.patchValue({
-          soQdXh: data.soQd,
-          idQdXh: data.id,
-          ngayQdXh: data.ngayKy
-        })
-        this.dataTableDiaDiem = []
-        data.scQuyetDinhSc.scTrinhThamDinhHdr.children.forEach(item => {
-          this.dataTableDiaDiem.push(item.scDanhSachHdr);
-        })
-      }
-    });
   }
 
   openDialogKtraCluong() {
@@ -248,7 +233,7 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
           idPhieuKtcl : data.id,
           soPhieuKtcl : data.soPhieuKtcl,
           maDiaDiem : data.maDiaDiem,
-          idDiaDiemXh : data.idDiaDiemXh,
+          idDsHdr : data.idDsHdr,
           tenDiemKho: data.tenDiemKho,
           tenNhaKho: data.tenNhaKho,
           tenNganKho: data.tenNganKho,
