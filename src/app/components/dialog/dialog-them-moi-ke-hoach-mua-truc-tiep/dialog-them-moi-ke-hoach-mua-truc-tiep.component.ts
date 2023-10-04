@@ -229,9 +229,11 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         // donGia: chiCuc?.donGia,
       })
       if(soLuongDaLenKh && resChiTieu){
-        this.formData.value.soLuongKhDd = soLuongDaLenKh?.data
-        this.formData.value.soLuongChiTieu = resChiTieu?.ntnThoc
-        this.formData.value.tongSoLuongChuaTh = resChiTieu?.ntnThoc - soLuongDaLenKh.data
+        this.formData.patchValue({
+          soLuongKhDd: soLuongDaLenKh?.data,
+          soLuongChiTieu: resChiTieu?.ntnThoc,
+          tongSoLuongChuaTh: resChiTieu?.ntnThoc - soLuongDaLenKh.data
+        })
       }
 
       console.log("changeChiCuc", this.formData.value);

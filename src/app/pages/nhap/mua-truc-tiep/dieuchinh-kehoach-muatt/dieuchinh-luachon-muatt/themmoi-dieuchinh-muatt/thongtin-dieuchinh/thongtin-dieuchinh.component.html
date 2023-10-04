@@ -219,7 +219,7 @@
         <td class="text-blue">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-blue">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-blue">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-blue">{{item.tongSoLuong * item.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-blue">{{item.tongSoLuong * item.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
         <td>
           <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
             <i class="fa fa-pencil" title="Sửa"></i>
@@ -234,7 +234,7 @@
           <td class="text-blue"></td>
           <td class="text-blue"></td>
           <td>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{data.soLuong * item.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
           <td></td>
         </tr>
       </ng-container>
