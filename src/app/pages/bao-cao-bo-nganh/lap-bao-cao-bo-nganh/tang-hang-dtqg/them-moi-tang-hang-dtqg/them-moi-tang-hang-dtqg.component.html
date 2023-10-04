@@ -2,7 +2,8 @@
   <div class="header header-green-background mg-t-16">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span></span>
+        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+        {{ formData.value.tenTrangThai }}</span>
         <span>Thông tin chung</span>
       </div>
     </div>

@@ -33,6 +33,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
 import {UserService} from "../../../../../../services/user.service";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 
 @Component({
@@ -68,6 +69,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   listNguonVon: any[] = [];
   listNam: any[] = [];
   listThuHoachVu: any[] = [];
+  listQuocGia: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listOfMapData: VatTu[];
@@ -109,7 +111,19 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     soLuong: ''
   }];
   listQuy: any[] = [];
-
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -177,6 +191,11 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       vu: [''],
       thuHoachVu: [''],
       namThuHoach: [''],
+      quocGiaSx: [''],
+      giaBanHoSo: [''],
+      tgianMoHoSo: [''],
+      soQdPdGiaCuThe: [''],
+      ngayKyQdPdGiaCuThe: [''],
     });
   }
 
@@ -262,6 +281,11 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let resVu = await this.danhMucService.danhMucChungGetAll('VU_THU_HOACH');
     if (resVu.msg == MESSAGE.SUCCESS) {
       this.listThuHoachVu = resVu.data;
+    }
+    this.listQuocGia = [];
+    let resQg = await this.danhMucService.danhMucChungGetAll('QUOC_GIA');
+    if (resQg.msg == MESSAGE.SUCCESS) {
+      this.listQuocGia = resQg.data;
     }
   }
 
