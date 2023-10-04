@@ -127,16 +127,17 @@
             <label nz-checkbox [(ngModel)]='allChecked' (ngModelChange)='updateAllChecked()'
                    [nzIndeterminate]='indeterminate'></label>
           </th>
-          <th width='50px'>STT</th>
+          <th nzWidth='50px'>STT</th>
           <th>Bộ/Ngành</th>
           <th>Số văn bản</th>
           <th>Số hiệu quy chuẩn</th>
-          <th width='350px'>Văn bản thay thế/Sửa đổi, bố sung</th>
+          <th nzWidth='350px'>Văn bản thay thế/Sửa đổi, bố sung</th>
           <th>Loại hàng hóa</th>
           <th>Ngày ban hành</th>
           <th>Ngày hiệu lực</th>
           <th>Ngày hết hiệu lực</th>
-          <th>Trạng thái nhập dữ liệu</th>
+          <th nzWidth="100px">Tài liệu mật</th>
+          <th nzWidth="250px">Trạng thái nhập dữ liệu</th>
           <th>Tình trạng</th>
           <th>Hành động</th>
         </tr>
@@ -190,6 +191,7 @@
               </nz-date-picker>
             </nz-input-group>
           </th>
+          <th></th>
           <th>
             <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]='filterTable.trangThai'
@@ -233,6 +235,10 @@
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">
+              <label nz-checkbox nzDisabled [(ngModel)]='data.isMat'
+                     [nzIndeterminate]='indeterminate'></label>
+            </td>
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiHl }}</td>
             <td class='text-left'>
