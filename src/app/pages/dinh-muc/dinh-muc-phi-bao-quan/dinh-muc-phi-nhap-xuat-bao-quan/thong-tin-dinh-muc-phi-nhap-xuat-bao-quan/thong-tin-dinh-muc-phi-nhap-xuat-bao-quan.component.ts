@@ -12,7 +12,6 @@ import {MESSAGE} from "../../../../../constants/message";
 import {DanhMucDinhMucService} from "../../../../../services/danh-muc-dinh-muc.service";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {DonviService} from "../../../../../services/donvi.service";
-import {KeHoachVonPhiBNCT} from "../../../../../models/KeHoachVonPhiBNCT";
 
 @Component({
   selector: 'app-thong-tin-dinh-muc-phi-nhap-xuat-bao-quan',
