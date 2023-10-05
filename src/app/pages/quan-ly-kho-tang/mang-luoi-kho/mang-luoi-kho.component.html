@@ -89,7 +89,7 @@
                            [(ngModel)]="loaiHangHoa.muoi" class="font-weight-bold" nz-checkbox>Muối</label>
                   </div>
                   <div nz-col nzSpan="2" *ngIf="loaiHangHoa.type == 'VT'">
-                    <label class="font-weight-bold">Loại hàng hóa</label>
+                    <label class="font-weight-bold">Loại hàng DTQG</label>
                   </div>
                   <div nz-col nzSpan="5" *ngIf="loaiHangHoa.type == 'VT'">
                     <nz-select [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
@@ -99,7 +99,7 @@
                     </nz-select>
                   </div>
                   <div nz-col nzSpan="3" *ngIf="loaiHangHoa.type == 'VT'">
-                    <label class="font-weight-bold">Chủng loại hàng hóa</label>
+                    <label class="font-weight-bold">Chủng loại hàng DTQG</label>
                   </div>
                   <div nz-col nzSpan="5" *ngIf="loaiHangHoa.type == 'VT'">
                     <nz-select [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
@@ -143,7 +143,7 @@
     <!--                    </div>-->
     <!--                    <div nz-col [nzSpan]="3" *ngIf="loaiHangHoa.type == 'VT'">-->
     <!--                      <nz-form-item>-->
-    <!--                        <nz-form-label nzRequired nzNoColon>Loại hàng hóa</nz-form-label>-->
+    <!--                        <nz-form-label nzRequired nzNoColon>Loại hàng DTQG</nz-form-label>-->
     <!--                      </nz-form-item>-->
     <!--                    </div>-->
     <!--                    <div nz-col [nzSpan]="6" *ngIf="loaiHangHoa.type == 'VT'">-->
@@ -159,7 +159,7 @@
     <!--                    </div>-->
     <!--                    <div nz-col [nzSpan]="4" *ngIf="loaiHangHoa.type == 'VT'">-->
     <!--                      <nz-form-item>-->
-    <!--                        <nz-form-label nzNoColon>Chủng loại hàng hóa</nz-form-label>-->
+    <!--                        <nz-form-label nzNoColon>Chủng loại hàng DTQG</nz-form-label>-->
     <!--                      </nz-form-item>-->
     <!--                    </div>-->
     <!--                    <div nz-col [nzSpan]="6" *ngIf="loaiHangHoa.type == 'VT'">-->
@@ -1235,7 +1235,7 @@
           </div>
           <div nz-col [nzSpan]="6" *ngIf="!checkLoKho">
             <nz-form-item>
-              <nz-form-label>Loại hàng hóa</nz-form-label>
+              <nz-form-label>Loại hàng DTQG</nz-form-label>
               <nz-form-control>
                 <input nz-input formControlName="tenLoaiVthh" [readOnly]="true"/>
                 <!--<nz-input-group>
@@ -1250,7 +1250,7 @@
           </div>
           <div nz-col [nzSpan]="6" *ngIf="!checkLoKho">
             <nz-form-item>
-              <nz-form-label>Chủng loại hàng hóa</nz-form-label>
+              <nz-form-label>Chủng loại hàng DTQG</nz-form-label>
               <nz-form-control>
                 <nz-input-group>
                  <!-- <nz-select [nzDisabled]="true" formControlName="cloaiVthh"
@@ -1580,30 +1580,32 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label>Loại hàng hóa</nz-form-label>
+              <nz-form-label>Loại hàng DTQG</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-group>
+                <!--<nz-input-group>
                   <nz-select formControlName="loaiVthh" [nzDisabled]="true"
                              (ngModelChange)="onChangeLoaiVthh($event)">
                     <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
                                [nzValue]="item.ma"></nz-option>
                   </nz-select>
-                </nz-input-group>
+                </nz-input-group>-->
+                <input nz-input formControlName="tenLoaiVthh" [readOnly]="true"/>
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label>Chủng loại hàng hóa</nz-form-label>
+              <nz-form-label>Chủng loại hàng DTQG</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-group>
+                <!--<nz-input-group>
                   <nz-select [nzDisabled]="true"
                              formControlName="cloaiVthh"
                              (ngModelChange)="onChangCloaiVthh($event)">
                     <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
                                [nzValue]="item.ma"></nz-option>
                   </nz-select>
-                </nz-input-group>
+                </nz-input-group>-->
+                <input nz-input formControlName="tenCloaiVthh" [readOnly]="true"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -1765,13 +1767,13 @@
         </nz-collapse-panel>
       </nz-collapse>
       <nz-collapse>
-        <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG HÀNG HÓA">
+        <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG HÀNG DTQG">
           <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
             <tr>
               <th nzWidth="40px">STT</th>
-              <th nzWidth="150px">Tên hàng hóa</th>
-              <th>Tên chủng loại hàng hóa</th>
+              <th nzWidth="150px">Tên hàng DTQG</th>
+              <th>Tên chủng loại hàng DTQG</th>
               <th nzWidth="150px">Số lượng tồn kho</th>
               <th nzWidth="150px">ĐVT</th>
             </tr>
@@ -1805,12 +1807,12 @@
         </nz-collapse-panel>
       </nz-collapse>
       <nz-collapse>
-        <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHI TIẾT HÀNG HÓA">
+        <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHI TIẾT HÀNG DTQG">
           <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
             <tr>
               <th nzWidth="40px"></th>
-              <th>Tên hàng hóa</th>
+              <th>Tên hàng DTQG</th>
               <th nzWidth="100px">Số lượng</th>
               <th nzWidth="90px">ĐVT</th>
             </tr>
