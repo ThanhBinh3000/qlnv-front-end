@@ -6,8 +6,8 @@
           <nz-form-item class='form-item'>
             <nz-form-label nzRequired nzFor='nam-qd'>Loại hàng DTQG</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName='loaiVthh' (ngModelChange)='changeLoaiVthh()'>
-                <nz-option *ngFor='let option of listOfOption' [nzLabel]='option.title' [nzValue]='option.key'>
+              <nz-select formControlName='loaiVthh' (ngModelChange)='changeLoaiVthh()' nzShowSearch nzAllowClear>
+                <nz-option *ngFor='let option of listOfOption' [nzLabel]='option.tenHangHoa' [nzValue]='option.maHangHoa'>
                 </nz-option>
               </nz-select>
             </nz-form-control>

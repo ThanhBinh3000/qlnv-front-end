@@ -1,22 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from '../../../../../components/base2/base2.component';
-import { MESSAGE } from '../../../../../constants/message';
-import { UserLogin } from '../../../../../models/userlogin';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from '../../../../../services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { DonviService } from '../../../../../services/donvi.service';
-import { DanhMucService } from '../../../../../services/danhmuc.service';
-import { KhCnQuyChuanKyThuat } from '../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from '../../../../../components/base2/base2.component';
+import {MESSAGE} from '../../../../../constants/message';
+import {UserLogin} from '../../../../../models/userlogin';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from '../../../../../services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
+import {DonviService} from '../../../../../services/donvi.service';
+import {DanhMucService} from '../../../../../services/danhmuc.service';
+import {KhCnQuyChuanKyThuat} from '../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import dayjs from 'dayjs';
-import { STATUS } from '../../../../../constants/status';
-import { Validators } from '@angular/forms';
+import {STATUS} from '../../../../../constants/status';
+import {Validators} from '@angular/forms';
 import {
   DialogTableSelectionComponent,
 } from '../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { PAGE_SIZE_DEFAULT } from '../../../../../constants/config';
+import {PAGE_SIZE_DEFAULT} from '../../../../../constants/config';
 
 @Component({
   selector: 'app-tim-kiem-van-ban',
@@ -49,11 +49,11 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
   allChecked = false;
   indeterminate = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LDV' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LDV' },
-    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LDV' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LDV'},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LDV'},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LDV'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
   page: number = 1;
   pageSize: number = 1000;
@@ -155,25 +155,17 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
         }).toPromise();
       }
       if (hangHoa) {
+        console.log(hangHoa)
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           let ds = hangHoa.data.filter(element => {
               return element.maHangHoa.length == 4;
             },
           );
           ds = ds.flat();
-          if (maBn != '01') {
-            this.listOfOption = ds.map((item) => {
-              return {
-                title: item.tenHangHoa,
-                key: item.maHangHoa,
-                maDvi : item.maDvi
-              };
-            });
-          } else {
-            this.listOfOption = ds;
-          }
+          this.listOfOption = ds
         }
       }
+
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -211,7 +203,7 @@ export class TimKiemVanBanComponent extends Base2Component implements OnInit {
 
   async changeHangHoa(event: any) {
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listChungLoaiHangHoa = res.data;
