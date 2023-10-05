@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DonviService } from 'src/app/services/donvi.service';
 import { MESSAGE } from 'src/app/constants/message';
-import { BBLM_LOAI_DOI_TUONG, HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG } from 'src/app/constants/status';
+import { BBLM_LOAI_DOI_TUONG, HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG, STATUS } from 'src/app/constants/status';
 import { BaseService } from 'src/app/services/base.service';
 import { saveAs } from 'file-saver';
 import {
@@ -588,5 +588,18 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         break;
     }
     this.reject(this.idSelected, trangThai);
+  }
+  checkRoleDuyet(trangThai: STATUS): boolean {
+    if (trangThai === this.STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson("") || trangThai === this.STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCCUC")) {
+      return false
+    }
+
+    return false
+  }
+  checkRoleLuu(trangThai: STATUS): boolean {
+    if ([this.STATUS.DU_THAO, this.STATUS.TU_CHOI_TP, this.STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson("")) {
+      return true
+    }
+    return false
   }
 }
