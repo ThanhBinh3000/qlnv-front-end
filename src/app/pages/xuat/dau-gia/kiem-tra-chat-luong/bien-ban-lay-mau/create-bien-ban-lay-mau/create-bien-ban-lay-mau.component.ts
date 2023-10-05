@@ -41,7 +41,9 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   listBienBan: any[] = [];
+  maTuSinh: number;
   maHauTo: any;
   dataQuyetDinh: any[] = [];
   loadDanhSachBbLm: any[] = [];
@@ -51,7 +53,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   danhSachCtieuCluong: any[] = [];
   flagInit: Boolean = false;
   children: any[] = [];
-  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
 
   constructor(
     httpClient: HttpClient,
@@ -100,7 +101,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       donViTinh: [''],
       ketQuaNiemPhong: [''],
       trangThai: [''],
-      LyDoTuChoi: [''],
+      lyDoTuChoi: [''],
       idHaoDoi: [''],
       soBbHaoDoi: [''],
       idTinhKho: [''],
@@ -111,6 +112,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       tenNhaKho: [''],
       tenNganKho: [''],
       tenLoKho: [''],
+      tenNganLoKho: [''],
       tenLoaiHinhNx: [''],
       tenKieuNhapXuat: [''],
       tenLoaiVthh: [''],
@@ -147,11 +149,11 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async initForm() {
-    let id = await this.userService.getId('XH_BB_LAY_MAU_SEQ')
+    this.maTuSinh = await this.userService.getId('XH_BB_LAY_MAU_SEQ')
     this.formData.patchValue({
       tenDvi: this.userInfo.TEN_DVI,
       maQhNs: this.userInfo.DON_VI.maQhns,
-      soBbLayMau: `${id}/${this.formData.get('nam').value}${this.maHauTo}`,
+      soBbLayMau: `${this.maTuSinh}/${this.formData.get('nam').value}${this.maHauTo}`,
       ngayLayMau: dayjs().format('YYYY-MM-DD'),
       tenKtvBaoQuan: this.userInfo.TEN_DAY_DU,
       trangThai: STATUS.DU_THAO,
@@ -159,6 +161,14 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       ketQuaNiemPhong: true,
       loaiBienBan: 'LBGM',
     });
+  }
+
+  async onChangeNam(event) {
+    if (event){
+      this.formData.patchValue({
+        soBbLayMau: `${this.maTuSinh}/${event}${this.maHauTo}`,
+      });
+    }
   }
 
   async loadDataComboBox() {
@@ -214,15 +224,13 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         trangThai: STATUS.BAN_HANH
       }
       const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
-      if (res.msg !== MESSAGE.SUCCESS) {
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
+      } else if (res && res.msg) {
         this.notification.error(MESSAGE.ERROR, res.msg);
-        return;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
-      const data = res.data.content;
-      if (!data || data.length === 0) {
-        return;
-      }
-      this.dataQuyetDinh = data.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
         nzContent: DialogTableSelectionComponent,
@@ -259,6 +267,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         tenNganKho: null,
         maLoKho: null,
         tenLoKho: null,
+        tenNganLoKho: null,
       });
     }
   }
@@ -273,6 +282,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       }
       const data = res.data;
       this.formData.patchValue({
+        nam: data.nam,
         idQdNv: data.id,
         soQdNv: data.soQdNv,
         ngayKyQdNv: data.ngayKy,
@@ -291,20 +301,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       });
       await this.loadDanhSachLayMau(data.soQdNv)
       const dataChiCuc = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
-      this.listDiaDiemXuat = dataChiCuc?.children.filter(item => {
-        const key = JSON.stringify({
-          maDiemKho: item.maDiemKho,
-          maNhaKho: item.maNhaKho,
-          maNganKho: item.maNganKho,
-          maLoKho: item.maLoKho
-        });
-        return !new Set(this.loadDanhSachBbLm.map(item => JSON.stringify({
-          maDiemKho: item.maDiemKho,
-          maNhaKho: item.maNhaKho,
-          maNganKho: item.maNganKho,
-          maLoKho: item.maLoKho
-        }))).has(key);
-      }) || [];
+      this.listDiaDiemXuat = dataChiCuc?.children
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -357,6 +354,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
+          tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho
         });
         await this.loadDanhSachPpLayMau();
         await this.loadDanhSachCtieuCluong();
@@ -517,14 +515,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     });
   }
 
-  // downloadPdf() {
-  //   saveAs(this.pdfSrc, "bien-ban-lay-mau/ban-giao-mau.pdf");
-  // }
-
-  // downloadWord() {
-  //   saveAs(this.wordSrc, "bien-ban-lay-mau/ban-giao-mau.docx");
-  // }
-
   closeDlg() {
     this.showDlgPreview = false;
   }
@@ -538,7 +528,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
     this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
     this.formData.controls["tenNganKho"].setValidators([Validators.required]);
-    this.formData.controls["tenLoKho"].setValidators([Validators.required]);
+    this.formData.controls["tenNganLoKho"].setValidators([Validators.required]);
   }
 
   setValidForm() {

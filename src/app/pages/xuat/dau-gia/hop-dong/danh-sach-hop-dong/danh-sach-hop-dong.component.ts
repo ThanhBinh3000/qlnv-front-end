@@ -11,6 +11,8 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import {saveAs} from 'file-saver';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {DonviService} from "../../../../../services/donvi.service";
+import {isEmpty} from 'lodash';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -20,6 +22,7 @@ import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
+  dsDonvi: any[] = [];
   isQuanLy: boolean;
   isAddNew: boolean;
   idQdPd: number = 0;
@@ -28,43 +31,44 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   isViewQdPdKq: boolean = false;
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private donviService: DonviService,
     private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     this.formData = this.fb.group({
-      ngayKy: '',
+      nam: '',
+      soHopDong: '',
+      tenHopDong: '',
+      maDvi: '',
+      toChucCaNhan: '',
       ngayKyTu: '',
       ngayKyDen: '',
-      soHd: '',
-      tenHd: '',
-      nhaCungCap: '',
       trangThai: this.STATUS.BAN_HANH,
       loaiVthh: '',
-      nam: '',
-      tenDviThucHien: '',
-      tenDviMua: '',
-      maDvi: ''
+
     });
     this.filterTable = {
       nam: '',
       soQdPd: '',
       soQdKq: '',
-      tongDvts: '',
-      tongDvtsDg: '',
-      slHdDaKy: '',
-      thoiHanTt: '',
+      tongDviTsan: '',
+      slDviTsanThanhCong: '',
+      slHopDongDaKy: '',
+      ngayKy: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
-      tenDviThucHien: '',
-      tenDviMua: '',
-      soLuong: '',
+      tenDvi: '',
+      tongSlXuat: '',
       thanhTien: '',
+      tenTrangThaiHd: '',
+      tenTrangThaiXh: '',
     }
     this.listTrangThaiHd = [
       {
@@ -98,22 +102,35 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userInfo.MA_DVI,
-      });
-
       await this.spinner.show();
-      await this.search();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+        this.loadDsTong(),
+      ]);
     } catch (e) {
-      console.error('error:', e);
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
-      await this.spinner.hide();
+      this.spinner.hide();
     }
   }
 
-  goDetail(id: number, boolean?: boolean) {
+  async timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+    });
+  }
+
+  async loadDsTong() {
+    const dsTong = await this.donviService.layDonViCon();
+    if (!isEmpty(dsTong)) {
+      const typeFilter = this.userService.isTongCuc() ? 'DV' : 'PB';
+      this.dsDonvi = dsTong.data.filter(s => s.type === typeFilter);
+    }
+  }
+
+  redirectDetail(id: number, boolean?: boolean) {
     this.idSelected = id;
     this.isDetail = true;
     this.isQuanLy = boolean;

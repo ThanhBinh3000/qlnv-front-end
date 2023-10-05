@@ -70,7 +70,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       idLanhDaoCuc: [],
       trichYeu: [''],
       trangThai: [''],
-      LyDoTuChoi: [''],
+      lyDoTuChoi: [''],
       tenDvi: [''],
       tenLoaiHinhNx: [''],
       tenKieuNhapXuat: [''],
@@ -124,7 +124,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     this.formData.patchValue({
       soQdNv: soQdNv?.split('/')[0]
     });
-    this.dataTable = children;
+    this.dataTable = this.userService.isChiCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children;
   }
 
   async openDialog() {
@@ -137,16 +137,14 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       }
       await this.loadDanhDachNhiemVu();
       const res = await this.hopDongXuatHangService.search(body)
-      if (res.msg !== MESSAGE.SUCCESS) {
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        const soHopDongSet = new Set(this.loadDanhSachQdGiaoNv.map(item => item.soHopDong));
+        this.dataHopDong = res.data.content.filter(item => !soHopDongSet.has(item.soHopDong));
+      } else if (res && res.msg) {
         this.notification.error(MESSAGE.ERROR, res.msg);
-        return;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
-      const data = res.data.content;
-      if (!data || data.length === 0) {
-        return;
-      }
-      const soHopDongSet = new Set(this.loadDanhSachQdGiaoNv.map(item => item.soHopDong));
-      this.dataHopDong = data.filter(item => !soHopDongSet.has(item.soHopDong));
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH HỢP ĐỒNG BÁN ĐẤU GIÁ',
         nzContent: DialogTableSelectionComponent,

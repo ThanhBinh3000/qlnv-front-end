@@ -292,6 +292,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   index = 0;
+
   async showDetail($event, index: number) {
     if ($event.type == 'click') {
       const selectedRow = $event.target.parentElement;
@@ -317,7 +318,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   async receiveDataFromChild(data: any) {
-    console.log(data, 999)
     if (this.dataTable[this.index]) {
       if (data.hasOwnProperty('tongSoLuong')) {
         this.dataTable[this.index].tongSoLuong = data.tongSoLuong;
