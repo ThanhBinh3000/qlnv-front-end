@@ -745,7 +745,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
+      if (data && data.length > 0) {
         let res = await this.khCnQuyChuanKyThuat.getDetail(data[0].id);
         if (res.msg == MESSAGE.SUCCESS) {
           let detail = [res.data];
@@ -770,6 +770,13 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           this.getDsChiTieu(this.listOfTagOptions);
           this.updateEditCache();
         }
+      } else {
+        this.formData.patchValue({
+          soVanBanThayThe : null,
+          idVanBanThayThe : null
+        })
+        this.dataTable = [];
+        this.dataTableView= [];
       }
     });
 
