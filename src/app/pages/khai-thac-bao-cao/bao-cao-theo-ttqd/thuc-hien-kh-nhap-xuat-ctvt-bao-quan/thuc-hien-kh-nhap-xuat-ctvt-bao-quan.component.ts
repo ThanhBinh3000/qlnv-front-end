@@ -49,6 +49,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
+        quy: [],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: [],
@@ -59,11 +60,16 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
       }
     );
   }
-
+  listQuy: any[] = [
+    { text: 'Quý I', value: 1 },
+    { text: 'Quý II', value: 2 },
+    { text: 'Quý III', value: 3 },
+    { text: 'Quý IV', value: 4 },
+  ]
   async ngOnInit() {
     await this.spinner.show();
     try {
-      for (let i = -3; i < 23; i++) {
+      for (let i = 0; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i
@@ -206,5 +212,12 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
     });
     // this.formData.get("loaiVthh").setValue(listVthhCondition);
     this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
+  }
+
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      quy:null,
+    })
   }
 }

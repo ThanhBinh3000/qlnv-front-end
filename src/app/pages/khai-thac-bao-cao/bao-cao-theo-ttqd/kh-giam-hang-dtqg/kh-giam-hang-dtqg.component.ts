@@ -49,6 +49,7 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
+        namKh:null,
         maCuc: null,
         maChiCuc: null,
         loaiVthh: null,
@@ -204,5 +205,11 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
 
   deleteRow(index: number) {
     this.rows.splice(index, 1)
+  }
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      namKh:null,
+    })
   }
 }

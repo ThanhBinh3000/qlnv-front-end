@@ -48,7 +48,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        namKh: [dayjs().get("year"), [Validators.required]],
+        namKh: [],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: '',
@@ -196,5 +196,10 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
     // this.formData.get("loaiVthh").setValue(listVthhCondition);
     this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
   }
-
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      namKh:null,
+    })
+  }
 }
