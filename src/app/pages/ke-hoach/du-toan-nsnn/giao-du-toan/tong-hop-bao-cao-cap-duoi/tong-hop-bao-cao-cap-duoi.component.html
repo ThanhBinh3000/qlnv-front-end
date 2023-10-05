@@ -91,7 +91,7 @@
                     <td>
                         {{item.namBcao}}
                     </td>
-                    <td class="text-center">{{getStatusName(item.trangThai)}}
+                    <td>{{getStatusName(item.trangThai)}}
                         <ng-template
                             [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do:
                             {{item.lyDoTuChoi}}</ng-template>
