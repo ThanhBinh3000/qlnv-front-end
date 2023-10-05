@@ -1,16 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {XuatHangThanhLyComponent} from "../xuat-hang-thanh-ly.component";
 import {XuatKhoComponent} from "./xuat-kho.component";
-import {ThanhLyDanhSachHangComponent} from "../../thanh-ly-danh-sach-hang/thanh-ly-danh-sach-hang.component";
-import {XtlBbLmComponent} from "../kiem-tra/xtl-bb-lm/xtl-bb-lm.component";
-import {XtlPhieuKtraClComponent} from "../kiem-tra/xtl-phieu-ktra-cl/xtl-phieu-ktra-cl.component";
-import {XtlHsKtComponent} from "../kiem-tra/xtl-hs-kt/xtl-hs-kt.component";
 import {XtlPhieuXkComponent} from "./xtl-phieu-xk/xtl-phieu-xk.component";
 import {XtlBangKeChComponent} from "./xtl-bang-ke-ch/xtl-bang-ke-ch.component";
 import {XtlBbTinhKhoComponent} from "./xtl-bb-tinh-kho/xtl-bb-tinh-kho.component";
 import {XtlBbHaoDoiComponent} from "./xtl-bb-hao-doi/xtl-bb-hao-doi.component";
-import {XtlThemBbLmComponent} from "../kiem-tra/xtl-bb-lm/xtl-them-bb-lm/xtl-them-bb-lm.component";
 import {XtlThemBbHaoDoiComponent} from "./xtl-bb-hao-doi/xtl-them-bb-hao-doi/xtl-them-bb-hao-doi.component";
 import {XtlThemBbTinhKhoComponent} from "./xtl-bb-tinh-kho/xtl-them-bb-tinh-kho/xtl-them-bb-tinh-kho.component";
 import {XtlThemBangKeChComponent} from "./xtl-bang-ke-ch/xtl-them-bang-ke-ch/xtl-them-bang-ke-ch.component";

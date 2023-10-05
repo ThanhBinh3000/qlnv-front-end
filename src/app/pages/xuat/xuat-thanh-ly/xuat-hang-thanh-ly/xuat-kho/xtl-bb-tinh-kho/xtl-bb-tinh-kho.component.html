@@ -88,10 +88,12 @@
         <th nzWidth="200px">Điểm kho / Nhà kho / Ngăn kho / Lô kho</th>
         <th nzWidth="50px">Loại hàng hóa</th>
         <th nzWidth="50px">Chủng loại hàng hóa</th>
-        <th nzWidth="50px">Số phiếu xuất kho</th>
+        <th nzWidth="50px">Số BB tịnh kho</th>
+        <th nzWidth="50px">Ngày bắt đầu xuất</th>
+        <th nzWidth="50px">Ngày kết thúc xuất</th>
+        <th nzWidth="50px">Số phiếu XK</th>
+        <th nzWidth="50px">Số bảng kê</th>
         <th nzWidth="50px">Ngày xuất kho</th>
-        <th nzWidth="50px">Số phiếu KNCL</th>
-        <th nzWidth="50px">Ngày giám định</th>
         <th nzWidth="50px">Trạng thái</th>
         <th nzWidth="55px">Hành động</th>
       </tr>
@@ -113,26 +115,44 @@
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
+          <td></td>
         </tr>
         <ng-container *ngIf="item.expandSet">
-          <ng-container *ngFor="let ddKho of item.children , let i = index">
+          <ng-container *ngFor="let bbTk of item.children , let i = index">
             <tr>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
-              <td>{{ddKho.xhTlDanhSachHdr?.tenDiemKho}} / {{ddKho.xhTlDanhSachHdr?.tenNhaKho}} / {{ddKho.xhTlDanhSachHdr?.tenNganKho}} / {{ddKho.xhTlDanhSachHdr?.tenLoKho}}</td>
-              <td>{{ddKho.xhTlDanhSachHdr?.tenLoaiVthh}}</td>
-              <td>{{ddKho.xhTlDanhSachHdr?.tenCloaiVthh}}</td>
+              <td>{{bbTk.xhTlDanhSachHdr?.tenDiemKho}} / {{bbTk.xhTlDanhSachHdr?.tenNhaKho}} / {{bbTk.xhTlDanhSachHdr?.tenNganKho}} / {{bbTk.xhTlDanhSachHdr?.tenLoKho}}</td>
+              <td>{{bbTk.xhTlDanhSachHdr?.tenLoaiVthh}}</td>
+              <td>{{bbTk.xhTlDanhSachHdr?.tenCloaiVthh}}</td>
+              <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.soBbTinhKho}}</td>
+              <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.ngayBatDauXuat  | date: 'dd/MM/YYYY' }}</td>
+              <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.ngayKetThucXuat  | date: 'dd/MM/YYYY' }}</td>
               <td></td>
               <td></td>
-              <td>{{ddKho.xhTlDanhSachHdr?.xhTlKtraClHdr?.soPhieuKtcl}}</td>
-              <td>{{ddKho.xhTlDanhSachHdr?.xhTlKtraClHdr?.ngayKnghiem  | date: 'dd/MM/YYYY' }}</td>
               <td></td>
-              <td></td>
+              <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.tenTrangThai}}</td>
+              <td>
+                <ng-container *ngIf="bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr">
+                  <a (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.id,'SCHDTQG_KTCL_XEM')">
+                    <span class="icon htvbdh_eye"></span>
+                  </a>
+                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
+                     (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr?.id,'SCHDTQG_KTCL_THEM')">
+                    <span class="fa fa-pencil"></span>
+                  </a>
+                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
+                     (click)="delete(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr,'SCHDTQG_KTCL_XOA')">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </ng-container>
+              </td>
             </tr>
-            <ng-container *ngFor="let pxk of ddKho.xhTlDanhSachHdr?.listXhTlPhieuXuatKhoHdr , let i = index">
+            <ng-container *ngFor="let pxk of bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.children , let i = index">
               <tr>
                 <td></td>
                 <td></td>
@@ -142,24 +162,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>{{pxk.soPhieuXuatKho}}</td>
+                <td>{{pxk.soBangKe}}</td>
                 <td>{{pxk.ngayXuatKho | date: 'dd/MM/YYYY'}}</td>
                 <td></td>
                 <td></td>
-                <td>{{pxk.tenTrangThai}}</td>
-                <td>
-                  <a (click)="redirectDetail(pxk.id,'SCHDTQG_KTCL_XEM')">
-                    <span class="icon htvbdh_eye"></span>
-                  </a>
-                  <a *ngIf="this.userService.isCuc() && pxk.trangThai == STATUS.DU_THAO"
-                     (click)="redirectDetail(pxk.id,'SCHDTQG_KTCL_THEM')">
-                    <span class="fa fa-pencil"></span>
-                  </a>
-                  <a *ngIf="this.userService.isCuc() && pxk.trangThai == STATUS.DU_THAO"
-                     (click)="delete(pxk,'SCHDTQG_KTCL_XOA')">
-                    <i class="fa fa-trash-o do"></i>
-                  </a>
-                </td>
               </tr>
             </ng-container>
           </ng-container>

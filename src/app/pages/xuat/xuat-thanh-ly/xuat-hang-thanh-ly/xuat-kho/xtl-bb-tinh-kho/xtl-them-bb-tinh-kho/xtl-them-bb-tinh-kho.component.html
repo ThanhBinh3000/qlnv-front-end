@@ -5,7 +5,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Biên bản giao nhận/kết thúc nhập kho</span>
+        <span>Biên bản tịnh kho</span>
       </div>
     </div>
     <div class="btn-group">
@@ -29,11 +29,11 @@
         <i class="icon htvbdh_tcdt_pheduyet "></i>
         <span>Duyệt</span>
       </button>
-      <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat ml-2"
-              (click)="preview(previewName,'SCHDTQG_NH_BBGN_IN')">
-        <i class=" icon htvbdh_tcdt_print"></i>
-        <span>In/xem trước</span>
-      </button>
+<!--      <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat ml-2"-->
+<!--              (click)="preview(previewName,'SCHDTQG_NH_BBGN_IN')">-->
+<!--        <i class=" icon htvbdh_tcdt_print"></i>-->
+<!--        <span>In/xem trước</span>-->
+<!--      </button>-->
     </div>
   </div>
 
@@ -77,7 +77,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Số BB giao nhận/kết thúc nhập kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input [readonly]="true" formControlName="soBienBan"/>
+                  <input nz-input [readonly]="true" formControlName="soBbTinhKho"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -85,7 +85,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Ngày lập biên bản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayLap" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()">
+                  <nz-date-picker formControlName="ngayLapBienBan" nzFormat="dd/MM/yyyy" [nzDisabled]="disabled()">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -169,7 +169,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày bắt đầu nhập</nz-form-label>
                 <nz-form-control>
-                  <nz-date-picker formControlName="ngayBatDau" nzFormat="dd/MM/yyyy" nzDisabled>
+                  <nz-date-picker formControlName="ngayBatDauXuat" nzFormat="dd/MM/yyyy" nzDisabled>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -178,7 +178,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày kết thúc nhập</nz-form-label>
                 <nz-form-control>
-                  <nz-date-picker formControlName="ngayKetThuc" nzFormat="dd/MM/yyyy" nzDisabled>
+                  <nz-date-picker formControlName="ngayKetThucXuat" nzFormat="dd/MM/yyyy" nzDisabled>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -187,7 +187,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Đơn vị tính</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenLanhDaoCc" readonly/>
+                  <input nz-input formControlName="donViTinh" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -195,7 +195,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Số phiếu kiểm nghiệm chất lượng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenLanhDaoCc" readonly/>
+                  <input nz-input formControlName="soPhieuKtcl" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -211,19 +211,19 @@
           <tr>
             <th nzWidth="30px">STT</th>
             <th>Phiếu nhập kho</th>
-            <th>Bảng kê nhập vật tư</th>
-            <th nzWidth="100px">Ngày nhập</th>
-            <th nzWidth="100px">Số lượng nhập</th>
+            <th>Bảng kê cân hàng</th>
+            <th nzWidth="100px">Ngày xuất kho</th>
+            <th nzWidth="100px">Số lượng xuất</th>
           </tr>
           </thead>
           <tbody>
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
               <td>{{ i + 1 }}</td>
-              <td>{{ item.soPhieuNhapKho }}</td>
-              <td>{{ item.soBangKeCanHang }}</td>
-              <td>{{ item.ngayNhapKho | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ item.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ item.soPhieuXuatKho }}</td>
+              <td>{{ item.soBangKe }}</td>
+              <td>{{ item.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ item.slXuat | number : '1.0-1' : 'vi_VN' }}</td>
             </tr>
           </ng-container>
           </tbody>
