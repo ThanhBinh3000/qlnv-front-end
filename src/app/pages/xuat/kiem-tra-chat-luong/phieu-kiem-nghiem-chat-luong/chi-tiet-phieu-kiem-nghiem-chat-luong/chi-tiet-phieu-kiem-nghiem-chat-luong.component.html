@@ -5,7 +5,7 @@
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isChiCuc">
-      <button *ngIf='idSelected' type="button" class="btn btn-sub" (click)="preview(idSelected)">
+      <button *ngIf='idSelected && checkRoleIn()' type="button" class="btn btn-sub" (click)="preview(idSelected)">
         <i class="icon htvbdh_totrinh"></i>
         <span> In/Xem trước </span>
       </button>

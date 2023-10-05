@@ -56,7 +56,7 @@
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH" type="button" class="btn btn-sub xanh-nhat"
+      <button *ngIf="formData.value.trangThaiXh == STATUS.CHUA_THUC_HIEN" type="button" class="btn btn-sub xanh-nhat"
         (click)="updateProcess(STATUS.DA_HOAN_THANH)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành phân bổ</span>

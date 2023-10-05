@@ -266,10 +266,12 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (res.msg == MESSAGE.SUCCESS) {
       this.listVatTuHangHoa = res.data;
       //
+      debugger;
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
       let filterLuongThuc = cloneDeep(listLuongThuc.children.filter(s => s.key == '0101' || s.key == '0102'));
-      let filterVatTu = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '02' || s.key == '04'));
-      this.listLoaiHangHoa = [...filterLuongThuc, ...filterVatTu.children];
+      let listVatTu = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '02'));
+      let listMuoi = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '04'));
+      this.listLoaiHangHoa = [...filterLuongThuc, ...listVatTu.children, ...listMuoi.children];
     }
   }
 
@@ -509,7 +511,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   async themPhuongAn(data?: any, level?: any, editRow?: boolean) {
     this.formDataDtl.reset();
     if (data) {
-      console.log("data", data)
       let edit = editRow;
       if (level == 1) {
         // let baseData = data.childData[0].childData[0];
@@ -815,7 +816,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (this.userService.isCuc() && this.formData.value.trangThai === STATUS.DU_THAO && !this.isView) {
       return true;
     }
-    else if (this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.BAN_HANH && !this.isView) {
+    else if (this.userService.isChiCuc() && this.formData.value.trangThaiXh !== STATUS.DA_HOAN_THANH) {
       return true;
     }
     return false
