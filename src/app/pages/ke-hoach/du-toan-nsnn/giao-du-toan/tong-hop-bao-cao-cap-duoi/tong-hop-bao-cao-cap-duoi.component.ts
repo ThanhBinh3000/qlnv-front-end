@@ -128,7 +128,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
 
         this.userInfo = this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
-        if (this.userService.isAccessPermisson(Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
+        if (this.userService.isAccessPermisson(Roles.GSTC.TIEPNHAN_TUCHOI_BC)) {
             this.isCanbotc = true;
         }
 
@@ -146,7 +146,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
             }
         );
 
-        if (this.userService.isAccessPermisson(Roles.GDT.TIEP_NHAN_TC_REPORT_TH) || this.userService.isAccessPermisson(Roles.GDT.VIEW_REPORT_TH)) {
+        if (this.userService.isAccessPermisson(Roles.GSTC.TIEPNHAN_TUCHOI_BC) || this.userService.isAccessPermisson(Roles.GSTC.XEM_BC_TONGHOP)) {
             this.trangThai = '9';
             this.status = false;
             this.searchFilter.loaiTimKiem = '1';

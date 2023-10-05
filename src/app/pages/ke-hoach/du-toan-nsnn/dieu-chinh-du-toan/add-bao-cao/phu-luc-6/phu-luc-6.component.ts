@@ -535,7 +535,7 @@ export class PhuLuc6Component implements OnInit {
                         noiDung: data.ten,
                         level: 0,
                     }))
-                    const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
+                    const lstTemp = this.dsDinhMuc.filter(e => (!e.cloaiVthh && e.loaiVthh == data.ma) || e.cloaiVthh == data.ma);
                     for (let i = 1; i <= lstTemp.length; i++) {
                         this.lstCtietBcao.push(new ItemData({
                             id: uuid.v4() + 'FE',

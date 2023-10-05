@@ -516,7 +516,8 @@ export class PhuLuc03Component implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (data) => {
             if (data) {
-                const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma);
+                // const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma);
+                const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
                 if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma) == -1) {
                     let stt: any;
                     const index = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.2');
