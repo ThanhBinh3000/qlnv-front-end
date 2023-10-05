@@ -19,8 +19,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
-import {DatePipe} from "@angular/common";
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { DatePipe } from "@angular/common";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khmtt',
@@ -51,7 +51,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   isTongHop: boolean
   dataChiTieu: any;
   idSoQdCc: any;
-
+  previewName: string = "mtt_qd_pd_kh";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -80,8 +80,8 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
       tchuanCluong: [''],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       phanLoai: ['TH', [Validators.required]],
       soQdCc: [''],
       idSoQdCc: [''],
@@ -206,7 +206,8 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         soQd: data.soQd?.split('/')[0]
       })
       this.idSoQdCc = data.idSoQdCc
-      this.danhsachDx = data.children;
+      this.danhsachDx = data.children.filter(x => x.maDvi.includes(this.userInfo.MA_DVI));
+      console.log(this.danhsachDx, "danhsachDx")
       this.fileDinhKem = data.fileDinhKems;
     }
     this.showDetail(event, this.danhsachDx[0]);
@@ -276,6 +277,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
               const dataRes = res.data;
               dataRes.idDxHdr = dataRes.id;
               this.danhsachDx.push(dataRes);
+              console.log(this.danhsachDx, 4444)
             }
           })
         };
@@ -358,6 +360,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         })
         this.idSoQdCc = data.idSoQdCc
         this.dataInput = null;
+        console.log(this.danhsachDx, "00000")
         this.dataInputCache = null;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -396,7 +399,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   }
 
   isDisabled() {
-    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
       return false;
     } else {
       return true;
@@ -413,9 +416,10 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
 
   setNewTableData($event) {
     debugger
-    this.danhsachDx.forEach(item =>{
+    this.danhsachDx.forEach(item => {
       item.children = $event.filter(x => x.maDvi.includes(item.maDvi));
       item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
+      item.tongTienGomThue = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
     })
     console.log(this.danhsachDx)
   }
@@ -424,7 +428,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     if (this.danhsachDx) {
       let sum = 0
       for (let i = 0; i < this.danhsachDx[index].children.length; i++) {
-        sum += this.danhsachDx[index].children[i].soLuong;
+        sum += this.danhsachDx[index].children[i].soLuong * this.danhsachDx[index].children[i].donGia * 1000;
       }
       return sum;
     }

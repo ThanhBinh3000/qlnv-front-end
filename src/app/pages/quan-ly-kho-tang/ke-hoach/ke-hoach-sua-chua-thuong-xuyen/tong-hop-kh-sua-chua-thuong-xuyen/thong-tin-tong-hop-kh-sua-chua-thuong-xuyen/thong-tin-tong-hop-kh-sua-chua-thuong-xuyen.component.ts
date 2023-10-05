@@ -1,32 +1,32 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UserLogin} from "../../../../../../models/userlogin";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
-import {Router} from "@angular/router";
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {UserService} from "../../../../../../services/user.service";
-import {Globals} from "../../../../../../shared/globals";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {HelperService} from "../../../../../../services/helper.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UserLogin } from "../../../../../../models/userlogin";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { KeHoachXayDungTrungHan } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
+import { Router } from "@angular/router";
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { UserService } from "../../../../../../services/user.service";
+import { Globals } from "../../../../../../shared/globals";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { HelperService } from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
-import {MESSAGE} from "../../../../../../constants/message";
-import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import {STATUS} from 'src/app/constants/status';
+import { MESSAGE } from "../../../../../../constants/message";
+import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { STATUS } from 'src/app/constants/status';
 import {
   DeXuatScThuongXuyenService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/de-xuat-sc-thuong-xuyen.service";
 import {
   DialogThemMoiKehoachDanhmucChitietComponent
 } from "../../de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component";
-import {DM_SC_TYPE} from "../../../../../../constants/config";
+import { DM_SC_TYPE } from "../../../../../../constants/config";
 import {
   DanhMucSuaChuaService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import {FILETYPE} from "../../../../../../constants/fileType";
+import { FILETYPE } from "../../../../../../constants/fileType";
 import {
   TongHopScThuongXuyenService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service";
@@ -93,7 +93,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       noiDungTh: [null],
       soToTrinh: [null, Validators.required],
       soQuyetDinh: [null],
-      ngayKyQd: [null],
+      ngayKy: [null],
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
       loai: ["00", Validators.required],
@@ -181,7 +181,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     }
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) {
       this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
-      this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
     }
   }
 
@@ -270,23 +270,23 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DU_THAO: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_LDV : {
+            case STATUS.TU_CHOI_LDV: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_LDV : {
+            case STATUS.CHO_DUYET_LDV: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.TU_CHOI_LDTC : {
+            case STATUS.TU_CHOI_LDTC: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDTC : {
+            case STATUS.CHO_DUYET_LDTC: {
               trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
@@ -374,7 +374,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       "trangThai": STATUS.DA_DUYET_CBV,
       "trangThaiTh": STATUS.CHUA_TONG_HOP,
       "capDvi": 1,
-      "paggingReq": {"limit": 10000, "page": 0}
+      "paggingReq": { "limit": 10000, "page": 0 }
     };
     let res = await this.deXuatScThuongXuyenService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -417,7 +417,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     let body = {
       "type": DM_SC_TYPE.SC_THUONG_XUYEN,
       "namKh": this.formData.value.namKh,
-      "paggingReq": {"limit": 10000, "page": 0}
+      "paggingReq": { "limit": 10000, "page": 0 }
     }
     let res = await this.danhMucSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -524,13 +524,13 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
           let rs = chain(value)
             .groupBy("khoi")
             .map((v, k) => {
-                return {
-                  idVirtual: uuidv4(),
-                  khoi: k,
-                  tenKhoi: v[0].tenKhoi,
-                  dataChild: v
-                };
-              }
+              return {
+                idVirtual: uuidv4(),
+                khoi: k,
+                tenKhoi: v[0].tenKhoi,
+                dataChild: v
+              };
+            }
             ).value();
           return {
             idVirtual: uuidv4(),

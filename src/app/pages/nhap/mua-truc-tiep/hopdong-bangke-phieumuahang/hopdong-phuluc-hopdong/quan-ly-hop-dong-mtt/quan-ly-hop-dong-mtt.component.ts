@@ -14,9 +14,9 @@ import { StorageService } from 'src/app/services/storage.service';
 import {
   QuyetDinhGiaoNvNhapHangService
 } from "../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {UserService} from "../../../../../../services/user.service";
-import {UserLogin} from "../../../../../../models/userlogin";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { UserService } from "../../../../../../services/user.service";
+import { UserLogin } from "../../../../../../models/userlogin";
 import { Globals } from 'src/app/shared/globals';
 import { STATUS, STATUS_LABEL } from 'src/app/constants/status';
 
@@ -25,13 +25,14 @@ import { STATUS, STATUS_LABEL } from 'src/app/constants/status';
   templateUrl: './quan-ly-hop-dong-mtt.component.html',
   styleUrls: ['./quan-ly-hop-dong-mtt.component.scss']
 })
-export class QuanLyHopDongMttComponent implements OnInit {
+export class QuanLyHopDongMttComponent extends Base2Component implements OnInit {
 
   @Input() id: number;
   @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   idQdKh: number
+  idQdGnvu: number
   idHopDong: number;
   isEditHopDong: boolean
   listNguonVon: any[] = [];
@@ -45,16 +46,17 @@ export class QuanLyHopDongMttComponent implements OnInit {
   STATUS = STATUS
   isDetail: boolean
   tongSlChaoGia: number;
+  previewName: string = '';
+
 
   constructor(
-    private fb: FormBuilder,
-    private httpClient: HttpClient,
-    private storageService : StorageService,
-    private notification: NzNotificationService,
-    private spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     public globals: Globals,
     public userService: UserService,
-    private modal: NzModalService,
     private thongTinPhuLucHopDongService: MttHopDongPhuLucHdService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
@@ -62,6 +64,7 @@ export class QuanLyHopDongMttComponent implements OnInit {
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
     private danhMucService: DanhMucService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, thongTinPhuLucHopDongService);
     this.formData = this.fb.group({
       id: [],
       namKh: [''],
@@ -78,10 +81,13 @@ export class QuanLyHopDongMttComponent implements OnInit {
       canhanTochuc: [],
       trangThaiHd: [''],
       tenTrangThaiHd: [''],
+      idQdKq: [''],
+      idQdGiaoNvNh: [''],
     });
   }
 
   async ngOnInit() {
+    this.previewName = this.userService.isChiCuc() ? 'nhap_truc_tiep_hop_dong_chicuc' : 'nhap_truc_tiep_hop_dong_cuc'
     this.userInfo = this.userService.getUserLogin();
     this.dataTable = []
     await this.spinner.show()
@@ -109,7 +115,6 @@ export class QuanLyHopDongMttComponent implements OnInit {
   async getDetail(id) {
     if (id) {
       let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.getDetail(id);
-      console.log(res.data)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(data.idPdKhDtl).then(dataTtin => {
@@ -124,21 +129,21 @@ export class QuanLyHopDongMttComponent implements OnInit {
             tenLoaiVthh: dataTtin.data?.tenLoaiVthh,
             tenCloaiVthh: dataTtin.data?.tenCloaiVthh,
             trangThaiHd: data.trangThaiHd,
+            idQdKq: data.id,
             tenTrangThaiHd: data.tenTrangThaiHd
 
           })
           this.danhSachCtiet = res.data.danhSachCtiet;
           this.tongSlChaoGia = 0;
-          this.danhSachCtiet.forEach(item =>{
+          this.danhSachCtiet.forEach(item => {
             this.dataTable.push(...item.listHdong)
             this.tongSlChaoGia += item.listChaoGia.length
           })
-          this.formData.get('canhanTochuc').setValue(this.tongSlChaoGia);
-          console.log(this.danhSachCtiet)
+          this.formData.get('canhanTochuc').setValue(this.dataTable.length);
           // this.showDetail(event, this.danhSachCtiet[0])
           this.showDetailHd(event, this.dataTable[0])
         });
-      }else {
+      } else {
         await this.getDetailChiCuc(id)
       }
     }
@@ -147,32 +152,26 @@ export class QuanLyHopDongMttComponent implements OnInit {
   async getDetailChiCuc(id) {
     if (id) {
       let res = await this.quyetDinhGiaoNvNhapHangService.getDetail(id);
-      console.log(res.data)
       if (res.msg == MESSAGE.SUCCESS) {
-        // const data = res.data;
-        // await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(data.idPdKhDtl).then(dataTtin => {
-          this.formData.patchValue({
-            namKh: res.data.hhQdPheduyetKhMttHdr.namKh,
-            soQd: res.data.hhQdPheduyetKhMttHdr.soQd,
-            tenDuAn: res.data.hhQdPheduyetKhMttHdr.tenDuAn,
-            tongMucDt: res.data.tongMucDt,
-            nguonVon: res.data.nguonVon,
-            tongSoLuong: res.data.soLuong,
-            tenLoaiVthh: res.data.tenLoaiVthh,
-            tenCloaiVthh: res.data.tenCloaiVthh,
-            trangThaiHd: res.data.hhQdPheduyetKhMttHdr.trangThaiHd,
-            tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr.tenTrangThaiHd
-
-          })
+        this.dataTable = []
+        this.formData.patchValue({
+          namKh: res.data.hhQdPheduyetKhMttHdr.namKh,
+          soQd: res.data.hhQdPheduyetKhMttHdr.soQd,
+          tenDuAn: res.data.hhQdPheduyetKhMttHdr.tenDuAn,
+          tongMucDt: res.data.tongMucDt,
+          nguonVon: res.data.nguonVon,
+          tongSoLuong: res.data.soLuong,
+          tenLoaiVthh: res.data.tenLoaiVthh,
+          tenCloaiVthh: res.data.tenCloaiVthh,
+          trangThaiHd: res.data.hhQdPheduyetKhMttHdr?.trangThaiHd,
+          tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr?.tenTrangThaiHd,
+          idQdGiaoNvNh: res.data.id
+        })
+        console.log(this.formData.value)
         this.idQdKh = res.data.idQdPdKh
-        //   this.danhSachCtiet = res.data.danhSachCtiet;
-        //   this.danhSachCtiet.forEach(item =>{
-            this.dataTable.push(...res.data.hopDongMttHdrs)
-          // })
-          console.log(this.dataTable)
-          // this.showDetail(event, this.danhSachCtiet[0])
-          this.showDetailHd(event, this.dataTable[0])
-        // });
+        this.idQdGnvu = res.data.id
+        this.dataTable.push(...res.data.hopDongMttHdrs)
+        this.showDetailHd(event, this.dataTable[0])
       }
     }
   }
@@ -215,24 +214,27 @@ export class QuanLyHopDongMttComponent implements OnInit {
     this.isEditHopDong = isShowHd;
     this.idHopDong = id;
     if (!isShowHd) {
-      await this.ngOnInit()
+      if (!this.userService.isChiCuc()) {
+        await this.ngOnInit()
+      } else {
+        await this.getDetailChiCuc(this.idQdGnvu)
+      }
     }
   }
 
-  validateListHopDong(){
-    console.log(this.dataTable)
-    if(this.dataTable.filter(x => x.trangThai == STATUS.DU_THAO).length > 0){
+  validateListHopDong() {
+    if (this.dataTable.filter(x => x.trangThai == STATUS.DU_THAO).length > 0) {
       return true
-    }else{
+    } else {
       return false
     }
   }
 
   pheDuyet() {
-    if(this.validateListHopDong()){
+    if (this.validateListHopDong()) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng thêm các hợp đồng cho các đơn vị cung cấp');
       return;
-    }else{
+    } else {
       let trangThai = STATUS.DA_HOAN_THANH
       let mesg = 'Bạn có muốn hoàn thành ?'
       this.modal.confirm({
@@ -247,7 +249,7 @@ export class QuanLyHopDongMttComponent implements OnInit {
           this.spinner.show();
           try {
             let res = null
-            if(!this.userService.isChiCuc()){
+            if (!this.userService.isChiCuc()) {
               let body = {
                 id: this.id,
                 lyDoTuChoi: null,
@@ -257,7 +259,7 @@ export class QuanLyHopDongMttComponent implements OnInit {
                 await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.approve(
                   body,
                 );
-            }else{
+            } else {
               let body = {
                 id: this.idQdKh,
                 lyDoTuChoi: null,
@@ -342,10 +344,6 @@ export class QuanLyHopDongMttComponent implements OnInit {
     }
     this.idHopDong = data.id;
     this.id = data.idQdKq;
-
-    console.log("showDetailHd ", this.idHopDong)
-    console.log("showDetailHd ", this.loaiVthh)
-    console.log("showDetailHd ", this.id)
     await this.spinner.hide();
   }
 
@@ -379,5 +377,11 @@ export class QuanLyHopDongMttComponent implements OnInit {
   goBack() {
     this.showListEvent.emit();
   }
+
+  // showList(idHopDong: number) {
+  //   this.isDetail = false;
+  //   this.getDetail(idHopDong);
+  //   this.showListEvent.emit();
+  // }
 
 }

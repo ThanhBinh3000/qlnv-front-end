@@ -1,21 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Globals} from 'src/app/shared/globals';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {STATUS} from "../../../../../../constants/status";
-import {HelperService} from "../../../../../../services/helper.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Globals } from 'src/app/shared/globals';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { STATUS } from "../../../../../../constants/status";
+import { HelperService } from "../../../../../../services/helper.service";
 import {
   ThongTinHopDongService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
 import {
   QuyetDinhPheDuyetKetQuaLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {UserLogin} from "../../../../../../models/userlogin";
-import {UserService} from "../../../../../../services/user.service";
-import {NzModalService} from 'ng-zorro-antd/modal';
-
+import { MESSAGE } from "../../../../../../constants/message";
+import { UserLogin } from "../../../../../../models/userlogin";
+import { UserService } from "../../../../../../services/user.service";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { PREVIEW } from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-quanly-hopdong',
   templateUrl: './quanly-hopdong.component.html',
@@ -33,7 +35,18 @@ export class QuanlyHopdongComponent implements OnInit {
   idHopDong: number;
   isEditHopDong: boolean
   userInfo: UserLogin;
-
+  showDlgPreview = false;
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  previewName: string;
+  listNguoiDaiDien: any[] = [];
   constructor(
     public globals: Globals,
     private helperService: HelperService,
@@ -98,6 +111,7 @@ export class QuanlyHopdongComponent implements OnInit {
       await this.spinner.show()
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
+        this.loadListNguoiDaiDien(),
       ]);
       if (this.id) {
         await this.getDetail(this.id)
@@ -111,6 +125,21 @@ export class QuanlyHopdongComponent implements OnInit {
         firstRow.classList.add("selectedRow");
       }
     });
+  }
+
+  async loadListNguoiDaiDien() {
+    let body = {
+      maDvi: '0101',
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      }
+    }
+    await this.userService.search(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listNguoiDaiDien = res.data?.content
+      }
+    })
   }
 
   async getDetail(id) {
@@ -136,7 +165,7 @@ export class QuanlyHopdongComponent implements OnInit {
       soQdPdKqLcnt: data.soQd,
       soQdPdKhlcnt: data.soQdPdKhlcnt,
       tenLoaiHdong: data.hhQdKhlcntHdr?.tenLoaiHdong,
-      tenNguonVon: data.hhQdKhlcntHdr?.tenNguonVon,
+      tenNguonVon: data.hhQdKhlcntHdr?.dxKhlcntHdr?.tenNguonVon,
       tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
       tenCloaiVthh: data.hhQdKhlcntHdr?.tenCloaiVthh,
       soGthauTrung: data.hhQdKhlcntHdr?.soGthauTrung == null ? 0 : data.hhQdKhlcntHdr?.soGthauTrung,
@@ -148,7 +177,7 @@ export class QuanlyHopdongComponent implements OnInit {
       trangThaiHd: data.trangThaiHd,
       tenDvi: data.hhQdKhlcntHdr?.tenDvi,
     });
-    this.dataTable = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr?  data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG): data.hhQdKhlcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
+    this.dataTable = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr ? data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG) : data.hhQdKhlcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
@@ -203,16 +232,16 @@ export class QuanlyHopdongComponent implements OnInit {
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
     });
-    if(data.qdKhlcntDtl?.children) {
+    if (data.qdKhlcntDtl?.children) {
       let tongMucDt = 0;
       data.qdKhlcntDtl?.children.forEach(i => {
-         tongMucDt += i.donGiaNhaThau * i.soLuong * 1000
+        tongMucDt += i.donGiaNhaThau * i.soLuong * 1000
       })
       this.formData.patchValue({
         tongMucDt: tongMucDt
       })
     }
-    this.dataTable = data.qdKhlcntDtl?.children.filter(item => item.trangThai == STATUS.THANH_CONG);
+    this.dataTable = data.qdKhlcntDtl?.children.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
@@ -379,5 +408,38 @@ export class QuanlyHopdongComponent implements OnInit {
       })
       return sum;
     }
+  }
+
+  async preview(id) {
+    if (this.loaiVthh.startsWith('02')) {
+      this.previewName = 'thong_tin_hop_dong_vt'
+    } else {
+      this.previewName = 'thong_tin_hop_dong_lt'
+    }
+    this.reportTemplate.fileName = this.previewName + '.docx';
+    let body = {
+      id: id,
+      reportTemplateRequest: this.reportTemplate
+    }
+    await this.thongTinHopDong.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
+  downloadPdf(fileName: string) {
+    saveAs(this.pdfSrc, fileName + '.pdf');
+  }
+
+  downloadWord(fileName: string) {
+    saveAs(this.wordSrc, fileName + '.docx');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 }

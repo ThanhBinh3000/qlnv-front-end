@@ -144,7 +144,7 @@ export class DeXuatKeHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      namKeHoach : this.searchFilter.namKeHoach,
+      namKeHoach: this.searchFilter.namKeHoach,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
       ngayDuyetTu: this.searchFilter.ngayDuyetTu,
@@ -155,7 +155,7 @@ export class DeXuatKeHoachComponent implements OnInit {
         page: this.page - 1
       },
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : this.searchFilter.maDvi,
-      capDvi:this.userInfo.CAP_DVI
+      capDvi: this.userInfo.CAP_DVI
     };
     let res = await this.deXuatTrungHanService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -181,6 +181,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     try {
       this.page = event;
       this.spinner.hide();
+      await this.search();
     } catch (e) {
       console.log("error: ", e);
       this.spinner.hide();
@@ -224,6 +225,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     try {
       this.pageSize = event;
       this.spinner.hide();
+      await this.search();
     } catch (e) {
       console.log("error: ", e);
       this.spinner.hide();
@@ -295,7 +297,7 @@ export class DeXuatKeHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          namKeHoach : this.searchFilter.namKeHoach,
+          namKeHoach: this.searchFilter.namKeHoach,
           namBatDau: this.searchFilter.namBatDau,
           namKetThuc: this.searchFilter.namKetThuc,
           ngayDuyetTu: this.searchFilter.ngayDuyetTu,

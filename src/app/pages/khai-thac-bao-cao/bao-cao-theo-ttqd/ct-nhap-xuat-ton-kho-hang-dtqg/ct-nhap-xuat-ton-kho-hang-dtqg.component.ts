@@ -23,6 +23,7 @@ import { saveAs } from "file-saver";
 export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   pdfBlob: any;
+  excelBlob: any;
 
   dsBoNganh: any[] = [];
   selectedVthhCache: any;
@@ -36,17 +37,17 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private thongTu1452013Service: ThongTu1452013Service,
-              public userService: UserService,
-              private donViService: DonviService,
-              private danhMucService: DanhMucService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private thongTu1452013Service: ThongTu1452013Service,
+    public userService: UserService,
+    private donViService: DonviService,
+    private danhMucService: DanhMucService,
 
-              private donviService: DonviService,
-              public globals: Globals) {
+    private donviService: DonviService,
+    public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
@@ -85,7 +86,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_tang_hang_du_tru_quoc_gia.pdf");
+    saveAs(this.pdfBlob, "bc_ct_nhap_xuat_ton_kho_hang_dtqg_145.pdf");
   }
 
   closeDlg() {
@@ -101,14 +102,34 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
       }
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch tăng hàng dự trữ quốc gia";
+      body.fileName = "bc_ct_nhap_xuat_ton_kho_hang_dtqg_145.jrxml";
+      body.tenBaoCao = "Báo cáo chi tiết nhập, xuất, tồn kho hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.nhapXuatTonCt(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
       this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      // this.setListCondition();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_ct_nhap_xuat_ton_kho_hang_dtqg_145.jrxml";
+      body.tenBaoCao = "Báo cáo chi tiết nhập, xuất, tồn kho hàng DTQG";
+      body.trangThai = "01";
+      await this.thongTu1452013Service.nhapXuatTonCt(body).then(async s => {
+        this.excelBlob = s;
+        saveAs(this.excelBlob, "bc_ct_nhap_xuat_ton_kho_hang_dtqg_145.xlsx");
+      });
     } catch (e) {
       console.log(e);
     } finally {
@@ -181,7 +202,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
   changeNuocSX(event) {
 
   }
-  addRow () {
+  addRow() {
     this.rows.push({})
   }
 

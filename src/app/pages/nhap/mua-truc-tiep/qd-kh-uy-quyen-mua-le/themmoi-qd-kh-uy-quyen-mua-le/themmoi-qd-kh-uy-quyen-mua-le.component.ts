@@ -22,10 +22,10 @@ import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-
 import { CanCuXacDinh, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
 import { DatePipe } from '@angular/common';
-import {STATUS} from "../../../../../constants/status";
-import {QuyetDinhPheDuyetKeHoachMTTService} from "../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
-import {ChaogiaUyquyenMualeService} from "../../../../../services/chaogia-uyquyen-muale.service";
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import { STATUS } from "../../../../../constants/status";
+import { QuyetDinhPheDuyetKeHoachMTTService } from "../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
+import { ChaogiaUyquyenMualeService } from "../../../../../services/chaogia-uyquyen-muale.service";
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import {
   DialogThemMoiBangKeThuMuaLeComponent
 } from "../../../../../components/dialog/dialog-them-moi-bang-ke-thu-mua-le/dialog-them-moi-bang-ke-thu-mua-le.component";
@@ -87,7 +87,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
     this.formData = this.fb.group({
       id: [],
       idQdDtl: [],
-      namKh: [dayjs().get("year"), [Validators.required]],
+      namKh: ['', [Validators.required]],
       soQd: ['', [Validators.required]],
       maDvi: [''],
       tenDvi: ['', [Validators.required]],
@@ -142,7 +142,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
       await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(id)
         .then(async (res) => {
           const dataDtl = res.data;
-          console.log(dataDtl)
+          console.log(dataDtl, 123)
           // this.danhSachCtiet = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2
           this.formData.patchValue({
             idQdDtl: id,
@@ -167,12 +167,13 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
             tenPthucMuaTrucTiep: dataDtl.tenPthucMuaTrucTiep,
             pthucMuaTrucTiep: dataDtl.pthucMuaTrucTiep,
             tchuanCluong: dataDtl.hhQdPheduyetKhMttHdr.tchuanCluong,
-            donGia: dataDtl.children[0].donGia,
-            donGiaVat: dataDtl.children[0].donGia + (dataDtl.children[0].donGia * 5 / 100),
+            donGiaVat: dataDtl.children.length > 0 ? dataDtl.children[0]?.donGia : dataDtl.children2[0]?.donGia,
+            donGia: dataDtl.children.length > 0 ? Math.round(dataDtl.children[0]?.donGia - (dataDtl.children[0]?.donGia * dataDtl.thueGtgt / 100)) : Math.round(dataDtl.children2[0]?.donGia - (dataDtl.children2[0]?.donGia * dataDtl.thueGtgt / 100)),
             tgianMkho: dataDtl.tgianMkho,
             tgianKthuc: dataDtl.tgianKthuc,
             thueGtgt: dataDtl.thueGtgt,
-            ghiChu: dataDtl.ghiChu
+            ghiChu: dataDtl.ghiChu,
+            namKh: dataDtl.namKh
           })
           this.idQdGnvu = dataDtl.hhQdPheduyetKhMttHdr.idQdGnvu
           this.canCuKhacList = dataDtl.hhQdPheduyetKhMttHdr.fileDinhKems
@@ -192,14 +193,18 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
     }
   }
 
-  convertTien(data: any){
+  convertTien(data: any) {
     return convertTienTobangChu(data);
   }
-  redirectHopDong(){
+  redirectHopDong() {
+    let elem = document.getElementById('muatt');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[1];
+    setActive.classList.add('ant-menu-item-selected');
     this.isHopDong = true
     this.idSelected = this.formData.value.id
   }
-
   async themMoiBangKeMuaLe($event, data?: null, index?: number) {
     let res = await this.quyetDinhGiaoNvNhapHangService.getDetail(this.idQdGnvu);
     console.log(res.data, 5555);

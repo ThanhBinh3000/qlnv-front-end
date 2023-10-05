@@ -1,22 +1,31 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BienBanLayMauBanGiaoMauService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
+import {
+  BienBanLayMauBanGiaoMauService
+} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Validators } from '@angular/forms';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { KetQuaKiemNghiemChatLuongHang, PhieuKiemNghiemChatLuongHang } from 'src/app/models/PhieuKiemNghiemChatLuongThoc';
-import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
+import {
+  PhieuKiemNghiemChatLuongService
+} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
+import { KhCnQuyChuanKyThuat } from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import { PREVIEW } from "../../../../../../../constants/fileType";
+
+;
 
 @Component({
   selector: 'app-them-moi-phieu-kn-cl',
@@ -42,12 +51,10 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
   checked: boolean = false;
   listFileDinhKem: any = [];
   maVthh: string;
-  phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
-    new PhieuKiemNghiemChatLuongHang();
-  viewChiTiet: boolean = false;
-  ketQuaKiemNghiemHangCreate: KetQuaKiemNghiemChatLuongHang =
-    new KetQuaKiemNghiemChatLuongHang();
-  dsKetQuaKiemNghiemHangClone: Array<KetQuaKiemNghiemChatLuongHang> = [];
+
+  templateName = "Phiếu kiểm nghiệm chất lượng";
+  templateNameVt = "Phiếu kiểm nghiệm chất lượng vật tư";
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -56,6 +63,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService
   ) {
@@ -139,7 +147,6 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
 
 
   async loadDetail(idInput: number) {
-    console.log(idInput, "idInput");
     if (idInput > 0) {
       await this.phieuKiemNghiemChatLuongService.getDetail(idInput)
         .then((res) => {
@@ -218,7 +225,6 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
     let res = await this.bienBanLayMauBanGiaoMauService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
-      console.log(data, 55);
       this.formData.patchValue({
         soBienBan: data.soBienBan,
         idBienBan: data.id,
@@ -244,28 +250,27 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
 
       })
       if (!isChiTiet) {
-        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+        let [dmTieuChuan] = await Promise.all([this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh)])
         if (dmTieuChuan.data) {
-          this.dataTableChiTieu = dmTieuChuan.data.children;
-          this.dataTableChiTieu.forEach(element => {
-            element.edit = false
-          });
+          console.log(dmTieuChuan.data, "dmTieuChuan.data")
+          this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({
+            edit: false,
+            chiSoXuat: element.mucYeuCauXuat,
+            tenTchuan: element.tenChiTieu,
+            maChiTieu: element.maChiTieu,
+            danhGia: element.danhGia,
+            hdrId: element.hdrId,
+            id: element.id,
+            ketQuaPt: element.ketQuaPt,
+            phuongPhap: element.phuongPhapXd
+          })) : [];
         }
       }
     }
   }
+
   async loadDanhMucPhuongThucBaoQuan() {
-    let body = {
-      maHthuc: null,
-      paggingReq: {
-        limit: 1000,
-        page: 1,
-      },
-      str: null,
-      tenHthuc: null,
-      trangThai: null,
-    };
-    let res = await this.danhMucService.loadDanhMucHinhThucBaoQuan(body);
+    let res = await this.danhMucService.danhMucChungGetAll('HINH_THUC_BAO_QUAN');
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content) {
         this.listHinhThucBaoQuan = res.data.content;
@@ -348,8 +353,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
     this.danhMucService.danhMucChungGetAll("PP_LAY_MAU").then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.phuongPhapLayMaus = res.data;
-      }
-      else {
+      } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }).catch(err => {

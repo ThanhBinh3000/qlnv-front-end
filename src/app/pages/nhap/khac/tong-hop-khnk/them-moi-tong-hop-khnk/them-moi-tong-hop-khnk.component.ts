@@ -13,7 +13,7 @@ import {
   TongHopDxKhNhapKhacService
 } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/tongHopDxKhNhapKhac.service";
 import { STATUS } from "../../../../../constants/status";
-import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { DialogTuChoiComponent } from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: "app-them-moi-tong-hop-khnk",
@@ -173,7 +173,14 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
   }
 
   clearFilter() {
-
+    this.formTraCuu.patchValue(
+      {
+        loaiVthh: null,
+        tenLoaiVthh: null,
+        namKhoach: dayjs().get("year"),
+        loaiHinhNx: null
+      }
+    );
   }
 
 

@@ -67,7 +67,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       namBatDau: [null],
       namKetThuc: [null],
       loaiDuAn: [null],
-      trangThai: ["00"],
+      trangThai: ["78"],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [null]
     });
@@ -124,6 +124,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           tenTrangThai: data.tenTrangThai
         });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLy = data.canCuPhapLys;
       this.dataTableRes = data.chiTiets;
       this.dataTableDm = data.listDanhMuc;
       await this.convertListToTree();
@@ -133,7 +134,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   setValidators() {
     this.formData.controls["trichYeu"].setValidators(Validators.required);
     this.formData.controls["namKeHoach"].setValidators(Validators.required);
-    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
       this.formData.controls["ngayTaoDx"].setValidators(Validators.required);
     }
     if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC) {
@@ -157,6 +158,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     body.maDvi = this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi;
     body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLy;
     this.conVertTreToList();
     body.chiTiets = this.dataTableRes;
     let data = await this.createUpdate(body);
@@ -168,14 +170,14 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       if (isOther) {
         let trangThai;
         switch (this.formData.value.trangThai) {
-          case STATUS.DU_THAO :
+          case STATUS.DANG_NHAP_DU_LIEU:
           case STATUS.TU_CHOI_LDV:
-          case STATUS.TU_CHOI_TP : {
+          case STATUS.TU_CHOI_TP: {
             trangThai = STATUS.CHO_DUYET_TP;
             break;
           }
           case STATUS.TU_CHOI_LDC:
-          case STATUS.CHO_DUYET_TP : {
+          case STATUS.CHO_DUYET_TP: {
             trangThai = STATUS.CHO_DUYET_LDC;
             break;
           }
@@ -192,15 +194,15 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   async duyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_TP : {
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
         break;
       }
-      case STATUS.CHO_DUYET_LDC : {
+      case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_LDC;
         break;
       }
-      case STATUS.DA_DUYET_LDC : {
+      case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_CBV;
         break;
       }
@@ -211,20 +213,20 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   async tuChoi() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_TP : {
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.TU_CHOI_TP;
         break;
       }
-      case STATUS.CHO_DUYET_LDC : {
+      case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.TU_CHOI_LDC;
         break;
       }
-      case STATUS.DA_DUYET_LDC : {
+      case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.TU_CHOI_CBV;
         break;
       }
     }
-    await this.reject(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn từ chối?");
+    await this.approve(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn từ chối?");
   }
 
   sumSoLuong(data: any, row: string, type?: any) {
@@ -238,7 +240,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         sl = sum;
       }
     } else {
-      if(type == 'duoi') {
+      if (type == 'duoi') {
         if (this.dataTable && this.dataTable.length > 0) {
           let sum = 0;
           this.dataTable.forEach(item => {
@@ -266,40 +268,40 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   }
 
   themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
-      let modalQD = this.modal.create({
-        nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
-        nzContent: DialogDxScLonComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: "1200px",
-        nzStyle: { top: "100px" },
-        nzFooter: null,
-        nzComponentParams: {
-          dataTable: list && list.dataChild ? list.dataChild : [],
-          dataInput: data,
-          type: type,
-          page: tmdt
+    let modalQD = this.modal.create({
+      nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
+      nzContent: DialogDxScLonComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: { top: "100px" },
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: tmdt
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
         }
-      });
-      modalQD.afterClose.subscribe(async (detail) => {
-        if (detail) {
-          if (!data.dataChild) {
-            data.dataChild = [];
-          }
-          if (!data.idVirtual) {
-            data.idVirtual = uuidv4();
-          }
-          if (type == "them") {
-            data.dataChild.push(detail);
-          } else {
-            if (list) {
-              Object.assign(list.dataChild[idx], detail);
-            }
-          }
-          this.expandAll(this.tableDuoi);
-          this.expandAll(this.tableTren);
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
         }
-      });
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list.dataChild[idx], detail);
+          }
+        }
+        this.expandAll(this.tableDuoi);
+        this.expandAll(this.tableTren);
+      }
+    });
   }
 
   expandAll(table: any[]) {
@@ -319,7 +321,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     }
   }
 
-  deleteItemCha(idx, table : any[]) {
+  deleteItemCha(idx, table: any[]) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -338,7 +340,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     });
   }
 
-  deleteItem(y: any, table : any[]) {
+  deleteItem(y: any, table: any[]) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -382,8 +384,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
 
 
   convertListToTree() {
-    this.tableTren = this.dataTableRes.filter(item => item.tmdt > 5000000000);
-    this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 5000000000);
+    this.tableTren = this.dataTableRes.filter(item => item.tmdt > 15000000000);
+    this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 15000000000);
     if (this.tableTren && this.tableTren.length > 0) {
       this.tableTren = chain(this.tableTren).groupBy("tenKhoi")
         .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))

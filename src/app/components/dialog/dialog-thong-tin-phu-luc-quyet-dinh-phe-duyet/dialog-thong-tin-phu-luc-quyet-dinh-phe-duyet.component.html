@@ -14,26 +14,26 @@
       </tr>
     </thead>
     <tbody>
-    <ng-container *ngFor="let item of listOfData , let i = index">
-    </ng-container>
-<!--    <ng-container *ngFor="let data of expandTable.data">-->
-<!--        <ng-container *ngFor="let item of mapOfExpandedData2[data.idVirtual]">-->
-<!--          <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">-->
-<!--            <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"-->
-<!--              (nzExpandChange)="collapse2(mapOfExpandedData2[data.idVirtual], item, $event)">-->
-<!--              {{ item.tenDvi }}-->
-<!--            </td>-->
-<!--            <td (click)="editRow(item.id)">{{ item.goiThau }}</td>-->
-<!--            <td>{{ item.tenDiemKho }}</td>-->
-<!--            <td>{{ item.soLuongTheoChiTieu }}</td>-->
-<!--            <td>{{ item.soLuongTheoChiTieu }}</td>-->
-<!--            <td>{{ item.soLuong }}</td>-->
-<!--            <td>{{ item.donGia }}</td>-->
-<!--            <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>-->
-<!--            <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>-->
-<!--          </tr>-->
-<!--        </ng-container>-->
-<!--      </ng-container>-->
+      <ng-container *ngFor="let item of listOfData , let i = index">
+      </ng-container>
+      <!--    <ng-container *ngFor="let data of expandTable.data">-->
+      <!--        <ng-container *ngFor="let item of mapOfExpandedData2[data.idVirtual]">-->
+      <!--          <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">-->
+      <!--            <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"-->
+      <!--              (nzExpandChange)="collapse2(mapOfExpandedData2[data.idVirtual], item, $event)">-->
+      <!--              {{ item.tenDvi }}-->
+      <!--            </td>-->
+      <!--            <td (click)="editRow(item.id)">{{ item.goiThau }}</td>-->
+      <!--            <td>{{ item.tenDiemKho }}</td>-->
+      <!--            <td>{{ item.soLuongTheoChiTieu }}</td>-->
+      <!--            <td>{{ item.soLuongTheoChiTieu }}</td>-->
+      <!--            <td>{{ item.soLuong }}</td>-->
+      <!--            <td>{{ item.donGia }}</td>-->
+      <!--            <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>-->
+      <!--            <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>-->
+      <!--          </tr>-->
+      <!--        </ng-container>-->
+      <!--      </ng-container>-->
     </tbody>
   </nz-table>
 </nz-card>
@@ -108,7 +108,7 @@
         <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
           <td>{{ data.maDiemKho }}</td>
           <td>{{ data.diaDiemNhap }}</td>
-          <td>{{ data.soLuong | number: '1.0-1' }}</td>
+          <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
           <td>
             <a (click)="startEdit(i)">
               <i class="fa fa-pencil" title="Sửa"></i>

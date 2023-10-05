@@ -21,6 +21,7 @@ import * as uuidv4 from "uuid";
 import { ThongTinHangDtqgComponent } from "../thong-tin-hang-dtqg/thong-tin-hang-dtqg.component";
 import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
+import { PhieuNhapKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-nhap-kho";
 
 
 @Component({
@@ -41,6 +42,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   listDanhSachQuyetDinh: any[] = [];
   listPhuongThucBaoQuan: any[] = [];
   listHinhThucBaoQuan: any[] = [];
+  listLoaiHinhBaoQuan: any[] = [];
 
   dsKeHoach: any[] = []
 
@@ -49,7 +51,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   dsHangPD = []
   typeData: string;
   typeAction: string;
-
+  previewName: string = "nhap_lt_bien_ban_nghiem_thu_bao_quan_lan_dau"
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -58,6 +60,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     modal: NzModalService,
     private cdr: ChangeDetectorRef,
     private danhMucService: DanhMucService,
+    private phieuNhapKhoService: PhieuNhapKhoService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
     private mangLuoiKhoService: MangLuoiKhoService,
@@ -66,6 +69,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     super(httpClient, storageService, notification, spinner, modal, bbNghiemThuBaoQuanLanDauService);
     this.formData = this.fb.group({
       trangThai: [STATUS.DU_THAO],
+      id: [],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year")],
       maDvi: [],
@@ -97,10 +101,11 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       cloaiVthh: [],
       tenCloaiVthh: [],
       tichLuongKhaDung: [],
-      tenDonViTinh: [],
+      donViTinh: [],
       dsPhieuNhapKho: [],
       slThucNhapDc: [],
       hinhThucBaoQuan: [],
+      loaiHinhBaoQuan: [],
       phuongThucBaoQuan: [],
       dinhMucDuocGiao: [],
       dinhMucTT: [],
@@ -120,7 +125,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       loaiDc: ["DCNB"],
       loaiQdinh: [],
       lyDoTuChoi: [],
-      thayDoiThuKho: []
+      thayDoiThuKho: [],
+      keHoachDcDtlId: [, [Validators.required]],
+      soBbNhapDayKho: []
     });
   }
 
@@ -169,8 +176,9 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
         cloaiVthh: this.data.cloaiVthh,
         tenCloaiVthh: this.data.tenCloaiVthh,
         tichLuongKhaDung: this.data.tichLuongKd,
-        tenDonViTinh: this.data.tenDonViTinh,
-        idKeHoachDtl: this.data.qdinhDccId
+        donViTinh: this.data.donViTinh,
+        idKeHoachDtl: this.data.qdinhDccId,
+        keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
       await this.loadDataBaoQuan(this.data.cloaiVthh)
@@ -196,8 +204,8 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
 
   async getTLKD() {
     let body = {
-      maDvi: this.formData.value.maNganKho,
-      capDvi: "6"
+      maDvi: this.formData.value.maLoKho || this.formData.value.maNganKho,
+      capDvi: this.formData.value.maLoKho ? "7" : "6"
     }
     const detail = await this.mangLuoiKhoService.getDetailByMa(body);
     const tichLuongKhaDung = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt
@@ -210,13 +218,29 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      await this.loadDataBaoQuan(data.cloaiVthh)
       this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} ${data.tenNganKho}`, });
       this.dsHangTH = data.dcnbBBNTBQDtl.filter(item => item.type === "TH")
       this.dsHangPD = data.dcnbBBNTBQDtl.filter(item => item.type === "PD")
       this.fileDinhKemReq = data.fileDinhKems
+      await this.loadDataBaoQuan(data.cloaiVthh)
+      await this.dsPhieuNhapKho(data)
     }
     await this.spinner.hide();
+  }
+
+  async dsPhieuNhapKho(data) {
+    const body = {
+      trangThai: STATUS.DA_DUYET_LDCC,
+      qdDcCucId: data.qdDcCucId,
+      soQdDcCuc: data.soQdDcCuc,
+      maLoKho: data.maLoKho,
+      maNganKho: data.maNganKho,
+      isVatTu: false
+    }
+    let res = await this.phieuNhapKhoService.getDanhSach(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log('phieuNhapKhoService', res)
+    }
   }
 
   async loadDataBaoQuan(cloaiVthh) {
@@ -227,6 +251,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq
+        this.listLoaiHinhBaoQuan = res.data?.loaiHinhBq
       }
     }
   }
@@ -580,7 +605,8 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       // loaiVthh: ['0101', '0102'],
       loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI,
-      type: this.formData.value.type
+      type: this.formData.value.type,
+      thayDoiThuKho: true
     }
     let resSoDX = this.isCuc() ? await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body) : await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenChiCuc(body);
     if (resSoDX.msg == MESSAGE.SUCCESS) {
@@ -628,7 +654,8 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
           cloaiVthh: "",
           tenCloaiVthh: "",
           tichLuongKhaDung: "",
-          tenDonViTinh: "",
+          donViTinh: "",
+          keHoachDcDtlId: ""
         });
         this.listPhuongThucBaoQuan = []
         this.listHinhThucBaoQuan = []
@@ -680,11 +707,13 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tichLuongKhaDung: data.tichLuongKd,
-          tenDonViTinh: data.tenDonViTinh,
-          idKeHoachDtl: data.id
+          donViTinh: data.donViTinh,
+          idKeHoachDtl: data.id,
+          keHoachDcDtlId: data.id
         });
         await this.loadDataBaoQuan(data.cloaiVthh)
         await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)
+        await this.getTLKD()
       }
     });
   }
@@ -709,7 +738,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       })
       if (data.danhSachQuyetDinh.length == 0) return
       data.danhSachQuyetDinh.map(qdinh => {
-        this.dsKeHoach = this.dsKeHoach.concat(qdinh.danhSachKeHoach)
+        this.dsKeHoach = this.dsKeHoach.concat(qdinh.dcnbKeHoachDcHdr.danhSachHangHoa)
       })
 
     }
@@ -745,9 +774,12 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
       body.id = this.idInput
     }
 
-    let data = await this.createUpdate(body);
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.idInput = data.id;
+      this.formData.patchValue({
+        id: data.id, trangThai: data.trangThai, tenTrangThai: data.tenTrangThai, soBban: data.soBban
+      })
       if (isGuiDuyet) {
         this.guiDuyet();
       }
@@ -768,15 +800,15 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_KT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async tuChoi() {
     let trangThai = () => {
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_TK)
         return STATUS.TU_CHOI_TK
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
-        return STATUS.TU_CHOI_KT
+      // if (this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
+      //   return STATUS.TU_CHOI_KT
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
         return STATUS.TU_CHOI_LDCC
     };

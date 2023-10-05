@@ -1,19 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "../../../../../services/donvi.service";
-import {MESSAGE} from "../../../../../constants/message";
-import {saveAs} from 'file-saver';
+import { Component, OnInit } from '@angular/core';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "../../../../../services/donvi.service";
+import { MESSAGE } from "../../../../../constants/message";
+import { saveAs } from 'file-saver';
 import dayjs from "dayjs";
-import {ThongTinDmScLonComponent} from "./thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component";
+import { ThongTinDmScLonComponent } from "./thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component";
 import {
   DanhMucSuaChuaService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import {  Router } from "@angular/router";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-danh-muc-sc-lon',
@@ -25,9 +25,9 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
   dsCuc: any[] = [];
   dsKho: any[] = [];
   listTrangThai: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
+    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
   ];
   constructor(
     private httpClient: HttpClient,
@@ -43,8 +43,7 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [null],
-      tenCongTrinh: [null],
-      maDiemKho: [null],
+      soQdPdBcKtkt: [null],
       trangThai: [null],
       tgThucHien: [null],
       tgThucHienTu: [null],
@@ -63,10 +62,11 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     }
     this.spinner.show();
     try {
-      if (this.userService.isTongCuc()) {
-        this.loadDsCuc()
-      } else {
-        this.loadDsDiemKho()
+      this.loadDsCuc()
+      if (this.userService.isCuc()) {
+        this.formData.patchValue({
+          maDvi: this.userInfo.MA_DVI
+        })
       }
       await this.filter()
       this.spinner.hide();
@@ -87,8 +87,8 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
       })
     }
     this.formData.patchValue({
-      maDvi: this.userService.isCuc() ?  this.userInfo.MA_DVI : null,
-      type : "00"
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      type: "00"
     })
     await this.search();
   }
@@ -112,24 +112,12 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     this.dsCuc = this.dsCuc.filter(item => item.type != "PB")
   }
 
-  async changeCuc(event) {
-    const dsTong = await this.dviService.layTatCaDonViByLevel(4);
-    this.dsKho = dsTong.data
-    this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(event) && item.type != 'PB')
-  }
-
-  async loadDsDiemKho() {
-    const dsTong = await this.dviService.layTatCaDonViByLevel(4);
-    this.dsKho = dsTong.data
-    this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI) && item.type != 'PB')
-  }
-
   openDialog(data: any, isView: boolean) {
     let modalQD = this.modal.create({
       nzContent: ThongTinDmScLonComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzStyle: {top: '100px'},
+      nzStyle: { top: '100px' },
       nzWidth: '1000px',
       nzFooter: null,
       nzComponentParams: {

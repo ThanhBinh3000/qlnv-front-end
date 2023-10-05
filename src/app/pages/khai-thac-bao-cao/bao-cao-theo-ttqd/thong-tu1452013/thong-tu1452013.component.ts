@@ -1,15 +1,15 @@
-import {saveAs} from 'file-saver';
-import {Component, OnInit} from '@angular/core';
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {UserService} from "../../../../services/user.service";
-import {DonviService} from "../../../../services/donvi.service";
-import {Globals} from "../../../../shared/globals";
-import {ThongTu1452013Service} from "../../../../services/bao-cao/ThongTu1452013.service";
+import { saveAs } from 'file-saver';
+import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { UserService } from "../../../../services/user.service";
+import { DonviService } from "../../../../services/donvi.service";
+import { Globals } from "../../../../shared/globals";
+import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
 import * as dayjs from "dayjs";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {createLogErrorHandler} from "@angular/compiler-cli/ngcc/src/execution/tasks/completion";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { createLogErrorHandler } from "@angular/compiler-cli/ngcc/src/execution/tasks/completion";
 
 @Component({
   selector: 'app-thong-tu1452013',
@@ -18,20 +18,22 @@ import {createLogErrorHandler} from "@angular/compiler-cli/ngcc/src/execution/ta
 })
 export class ThongTu1452013Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   showDlgPreview = false;
   listNam: any[] = [];
   formData: FormGroup;
 
 
   constructor(private spinner: NgxSpinnerService,
-              private notification: NzNotificationService,
-              private thongTu1452013Service: ThongTu1452013Service,
-              private fb: FormBuilder,
-              private modal: NzModalService,
-              public userService: UserService,
-              private donviService: DonviService,
-              public globals: Globals,
+    private notification: NzNotificationService,
+    private thongTu1452013Service: ThongTu1452013Service,
+    private fb: FormBuilder,
+    private modal: NzModalService,
+    public userService: UserService,
+    private donviService: DonviService,
+    public globals: Globals,
   ) {
 
     this.formData = this.fb.group(
@@ -54,7 +56,7 @@ export class ThongTu1452013Component implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-//do stuff here to give the blob some data...
+    //do stuff here to give the blob some data...
   }
 
   private blobToFile = (theBlob: Blob, fileName: string): File => {
@@ -88,11 +90,32 @@ export class ThongTu1452013Component implements OnInit {
       body.fileName = "bc_nhap_xuat_ton_kho_hang_dtnn.jrxml";
       body.tenBaoCao = "Báo cáo nhập, xuất, tồn kho hàng dự trữ nhà nước";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
+      await this.thongTu1452013Service.nhapXuatTon(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
       this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      // this.setListCondition();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_nhap_xuat_ton_kho_hang_dtnn.jrxml";
+      body.tenBaoCao = "Báo cáo nhập, xuất, tồn kho hàng dự trữ nhà nước";
+      body.trangThai = "01";
+      await this.thongTu1452013Service.nhapXuatTon(body).then(async s => {
+        this.excelBlob = s;
+        saveAs(this.excelBlob, "bc_nhap_xuat_ton_kho_hang_dtnn.xlsx");
+      });
     } catch (e) {
       console.log(e);
     } finally {

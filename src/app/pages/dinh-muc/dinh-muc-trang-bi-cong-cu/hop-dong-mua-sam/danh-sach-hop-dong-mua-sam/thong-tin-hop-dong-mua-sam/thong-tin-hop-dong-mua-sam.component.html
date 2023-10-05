@@ -145,10 +145,10 @@
                           <ng-container *ngIf="!editCache[data.stt]?.edit; else editTemplate">
                             <td class="text-center">{{i+1}}</td>
                             <td>{{ data.chiCuc }}</td>
-                            <td>{{ data.soLuong ?? 0 | number: '1.0-1' }}</td>
+                            <td>{{ data.soLuong ?? 0 | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{ data.diemKho }}</td>
-                            <td>{{ data.soLuong ?? 0 | number: '1.0-1' }}</td>
-                            <td>{{ data.soLuong ?? 0 | number: '1.0-1' }}</td>
+                            <td>{{ data.soLuong ?? 0 | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{ data.soLuong ?? 0 | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>
                               <a (click)="editRow(data.stt)">
                                 <i class="fa fa-pencil" title="Sửa"></i>

@@ -35,8 +35,9 @@ import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-
 import { DatePipe } from '@angular/common';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { saveAs } from "file-saver";
-import {PREVIEW} from "../../../../../../constants/fileType";
-import {ThongtinDexuatComponent} from "./thongtin-dexuat/thongtin-dexuat.component";
+import { PREVIEW } from "../../../../../../constants/fileType";
+import { ThongtinDexuatComponent } from "./thongtin-dexuat/thongtin-dexuat.component";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khlcnt',
@@ -107,6 +108,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   showDlgPreview = false;
   pdfSrc: any;
   wordSrc: any;
+  printSrc: any;
   constructor(
     private router: Router,
     private modal: NzModalService,
@@ -243,7 +245,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         this.loadDataComboBox(),
         this.bindingDataTongHop(this.dataTongHop),
       ]);
-      await this.getDataChiTieu()
+      // await this.getDataChiTieu()
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -285,7 +287,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -368,7 +370,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         this.idInput = res.data.id;
-        this.guiDuyet();
+        await this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -506,10 +508,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
-  openDialogTh() {
+  async openDialogTh() {
     if (this.formData.get('phanLoai').value != 'TH') {
       return;
     }
+    await this.listDsTongHopToTrinh();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách tổng hợp đề xuất kế hoạch lựa chọn nhà thầu',
       nzContent: DialogTableSelectionComponent,
@@ -685,6 +688,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = this.danhsachDxCache[index];
       this.index = index;
+      await this.getDataChiTieu()
       await this.spinner.hide();
     } else {
       this.selected = true
@@ -693,6 +697,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
       this.maDviSelected = this.danhsachDx[0].maDvi
+      await this.getDataChiTieu()
       await this.spinner.hide();
     }
   }
@@ -807,6 +812,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     body.reportTemplateRequest = this.reportTemplate;
     await this.quyetDinhPheDuyetKeHoachLCNTService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
@@ -821,5 +827,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   closeDlg() {
     this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 }

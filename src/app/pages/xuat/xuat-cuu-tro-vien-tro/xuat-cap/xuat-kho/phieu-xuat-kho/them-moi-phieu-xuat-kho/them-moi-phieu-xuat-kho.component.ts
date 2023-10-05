@@ -39,6 +39,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   maPhieu: string;
   checked: boolean = false;
   listFileDinhKem: any = [];
+  templateName = "Phiếu xuất kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -101,9 +102,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         diaChiDvi: [],
         tenLoaiVthh: [],
         tenCloaiVthh: [],
-        tenDiemKho:  ['', [Validators.required]],
-        tenNhaKho:  ['', [Validators.required]],
-        tenNganKho:  ['', [Validators.required]],
+        tenDiemKho: ['', [Validators.required]],
+        tenNhaKho: ['', [Validators.required]],
+        tenNganKho: ['', [Validators.required]],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
 

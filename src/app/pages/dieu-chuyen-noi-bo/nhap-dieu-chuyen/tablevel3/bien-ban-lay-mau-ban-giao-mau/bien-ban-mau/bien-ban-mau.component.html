@@ -58,8 +58,7 @@
       <div class="group-button">
         <h3 class="text-uppercase">Danh sách biên bản lấy mẫu bàn giao mẫu</h3>
         <div class="buttons">
-          <button type="button" class="btn btn-do" (click)="deleteMulti()"
-            *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
+          <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="isChiCuc()">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
@@ -67,7 +66,7 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)">
+          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)" *ngIf="isChiCuc()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -89,10 +88,10 @@
               <th class="text-center">Lô kho</th>
               <th class="text-center">Số BB LM/BGM</th>
               <th class="text-center">Ngày lấy mẫu</th>
-              <th class="text-center">Số BB tịnh kho</th>
-              <th class="text-center">Ngày duyệt BB tịnh kho</th>
+              <th class="text-center" *ngIf="!isVatTu">Số BB nhập đầy kho</th>
+              <th class="text-center" *ngIf="!isVatTu">Ngày nhập đầy kho</th>
               <th class="text-center">Trạng thái</th>
-              <th class="text-center">Hành động</th>
+              <th class="text-center" *ngIf="isChiCuc()">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -109,12 +108,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td *ngIf="!isVatTu"></td>
+                <td *ngIf="!isVatTu"></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <!-- <td></td>
-                <td></td> -->
+                <td *ngIf="isChiCuc()"></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -129,12 +126,10 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td *ngIf="!isVatTu"></td>
+                    <td *ngIf="!isVatTu"></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <!-- <td></td>
-                    <td></td> -->
+                    <td *ngIf="isChiCuc()"></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -151,19 +146,26 @@
                         <!-- <td class="bold">{{row3.soPhieuKnChatLuong || ""}}</td>
                         <td>{{(row3.ngayKiemNghiem || "")}}</td> -->
                         <td>{{(row3.soBBLayMau || "")}}</td>
-                        <td>{{(row3.ngaylayMau || "")}}</td>
-                        <td>{{(row3.soBBTinhKho || "")}}</td>
-                        <td>{{(row3.ngayXuatDocKho || "")}}</td>
+                        <td>{{(row3.ngaylayMau | date: "dd/MM/yyyy")}}</td>
+                        <td *ngIf="!isVatTu">{{(row3.soBBTinhKho || "")}}</td>
+                        <td *ngIf="!isVatTu">{{(row3.ngayXuatDocKho || "")}}</td>
                         <td>{{(row3.tenTrangThai || "")}}</td>
-                        <td>
-                          <a *ngIf="!row3.soBBLayMau" (click)="add(row3)">
+                        <td *ngIf="isChiCuc()">
+                          <a *ngIf="!row3.soBBLayMau && isChiCuc()" (click)="add(row3)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
-                          <a *ngIf="row3.soBBLayMau && row3.trangThai !== STATUS.DU_THAO"
+                          <a *ngIf="row3.soBBLayMau && row3.trangThai === STATUS.DA_DUYET_LDCC"
                             (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
-                          <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="redirectDetail(row3.id, false)">
+
+                          <a *ngIf="row3.soBBLayMau && (row3.trangThai === STATUS.CHO_DUYET_LDCC)"
+                            (click)="redirectDetail(row3.id, true)">
+                            <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
+                          </a>
+
+                          <a *ngIf="row3.trangThai == STATUS.DU_THAO || row3.trangThai == STATUS.TU_CHOI_LDCC"
+                            (click)="redirectDetail(row3.id, false)">
                             <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="xoa(row3)">

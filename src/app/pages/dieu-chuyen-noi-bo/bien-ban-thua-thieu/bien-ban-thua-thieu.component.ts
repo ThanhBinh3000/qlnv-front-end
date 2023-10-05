@@ -27,8 +27,8 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     page: number = 1;
     pageSize: number = PAGE_SIZE_DEFAULT;
     totalRecord: number = 0;
-    passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, tenBc: string, bcKetQuaDcId: number, ngayBc: string } = {
-        soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', tenBc: '', bcKetQuaDcId: null, ngayBc: ''
+    passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, tenBc: string, bcKetQuaDcId: number, ngayBc: string, maDviNhan: string } = {
+        soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', tenBc: '', bcKetQuaDcId: null, ngayBc: '', maDviNhan: ''
     };
     LIST_TRANG_THAI: Array<{ ma: string, giaTri: string }> = [
         { ma: this.STATUS.DU_THAO, giaTri: "Dự thảo" },
@@ -227,7 +227,7 @@ export class BienBanThuaThieuComponent extends Base2Component implements OnInit 
     goBack() {
         this.showList();
         this.passData = {
-            soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', tenBc: '', bcKetQuaDcId: null, ngayBc: ''
+            soQdDcCuc: '', qdDcCucId: null, ngayKyQd: '', soBc: '', tenBc: '', bcKetQuaDcId: null, ngayBc: '', maDviNhan: ''
         };
     }
 }

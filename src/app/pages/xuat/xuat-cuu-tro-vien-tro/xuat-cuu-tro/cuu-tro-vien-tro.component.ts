@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {STATUS} from "../../../../constants/status";
-import {cloneDeep} from 'lodash';
+import { Component, Input, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { STATUS } from "../../../../constants/status";
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-cuu-tro-vien-tro',
@@ -15,6 +15,7 @@ export class CuuTroVienTroComponent implements OnInit {
   visibleTab: boolean = true;
   dataInit: any = {};
   isDetail: boolean;
+  @Input() defaultTab: any;
 
   constructor(
     public userService: UserService,
@@ -26,6 +27,7 @@ export class CuuTroVienTroComponent implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
+    this.tabSelected = this.defaultTab;
   }
 
   tabSelected: number = 0;

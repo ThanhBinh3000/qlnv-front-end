@@ -35,22 +35,23 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private thongTu1452013Service: ThongTu1452013Service,
-              public userService: UserService,
-              private donViService: DonviService,
-              private danhMucService: DanhMucService,
-              public globals: Globals) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private thongTu1452013Service: ThongTu1452013Service,
+    public userService: UserService,
+    private donViService: DonviService,
+    private danhMucService: DanhMucService,
+    public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
+        namKh: [dayjs().get("year"), [Validators.required]],
         maCuc: [],
         maChiCuc: [],
-        loaiVthh: [],
+        loaiVthh: '',
         cloaiVthh: []
       }
     );
@@ -90,9 +91,9 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
       body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.khTongHopNhapXuat(body).then(async s => {
         this.excelBlob = s;
-        saveAs(this.excelBlob, "bc_kh_tong_hop_nhap_xuat_hang_dtqg.xls");
+        saveAs(this.excelBlob, "bc_kh_tong_hop_nhap_xuat_hang_dtqg.xlsx");
       });
     } catch (e) {
       console.log(e);
@@ -114,7 +115,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
       body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.khTongHopNhapXuat(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -192,7 +193,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
       listVthhCondition.push(item.loaiVthh);
       listCloaiVthhCondition.push(item.cloaiVthh);
     });
-    this.formData.get("loaiVthh").setValue(listVthhCondition);
+    // this.formData.get("loaiVthh").setValue(listVthhCondition);
     this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
   }
 

@@ -91,8 +91,7 @@
       <div class="group-button">
         <h3 class="text-uppercase">Danh sách phiếu kiểm tra chất lượng</h3>
         <div class="buttons">
-          <button type="button" class="btn btn-do" (click)="deleteMulti()"
-            *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
+          <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="isChiCuc()">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
@@ -100,7 +99,7 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)">
+          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)" *ngIf="isChiCuc()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -129,7 +128,7 @@
               <th rowspan="2">Số phiếu nhập kho</th>
               <th rowspan="2">Ngày nhập kho</th>
               <th rowspan="2">Trạng thái</th>
-              <th rowspan="2">Hành động</th>
+              <th rowspan="2" *ngIf="isChiCuc()">Hành động</th>
             </tr>
             <tr>
               <th class="text-center">Lô kho</th>
@@ -161,7 +160,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td *ngIf="isChiCuc()"></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -186,7 +185,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td *ngIf="isChiCuc()"></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -208,7 +207,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td *ngIf="isChiCuc()"></td>
                       </tr>
                       <ng-container *ngFor="let row4 of row3.children, let y = index">
                         <tr>
@@ -231,8 +230,8 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td>
-                            <a (click)="add(row4)">
+                          <td *ngIf="isChiCuc()">
+                            <a (click)="add(row4)" *ngIf="isChiCuc()">
                               <i class="icon htvbdh_dau-cong"></i>
                             </a>
                           </td>
@@ -251,15 +250,22 @@
                             <td></td>
                             <td></td>
                             <td>{{(row5.soPhieuKtChatLuong || "")}}</td>
-                            <td>{{(row5.ngayKiemNghiem || "")}}</td>
+                            <td>{{(row5.ngayGiamDinh | date: "dd/MM/yyyy")}}</td>
                             <td>{{(row5.ketQuaDanhGia || "")}}</td>
                             <td>{{(row5.soPhieuNhapKho || "")}}</td>
                             <td>{{(row5.ngayNhapKho || "")}}</td>
                             <td>{{(row5.tenTrangThai || "")}}</td>
-                            <td>
-                              <a *ngIf="row5.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(row5.id, true)">
+                            <td *ngIf="isChiCuc()">
+                              <a *ngIf="row5.trangThai === STATUS.DA_DUYET_LDCC"
+                                (click)="redirectDetail(row5.id, true)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                               </a>
+
+                              <a *ngIf="row5.trangThai === STATUS.CHO_DUYET_LDCC"
+                                (click)="redirectDetail(row5.id, true)">
+                                <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
+                              </a>
+
                               <a *ngIf="isSua(row5)" (click)="redirectDetail(row5.id, false)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>

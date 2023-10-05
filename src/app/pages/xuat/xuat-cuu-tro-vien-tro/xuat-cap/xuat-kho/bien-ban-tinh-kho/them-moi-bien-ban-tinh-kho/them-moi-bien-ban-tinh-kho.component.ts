@@ -46,6 +46,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   openPhieuXk = false;
   idBangKe: number = 0;
   openBangKe = false;
+  templateName = "Biên bản tịnh kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -101,7 +102,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         tenCloaiVthh: [],
         tenLoaiVthh: [],
         tenTrangThai: ['Dự Thảo'],
-        tenNhaKho:['', [Validators.required]],
+        tenNhaKho: ['', [Validators.required]],
         tenDiemKho: ['', [Validators.required]],
         tenLoKho: [],
         tenNganKho: ['', [Validators.required]],
@@ -269,11 +270,11 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho));
       this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
-          s.slXuat = s.thucXuat;
-          s.soBkCanHang = s.soBangKeCh;
-          s.idBkCanHang = s.idBangKeCh;
-          s.idPhieuXuatKho = s.id;
-        }
+        s.slXuat = s.thucXuat;
+        s.soBkCanHang = s.soBangKeCh;
+        s.idBkCanHang = s.idBangKeCh;
+        s.idPhieuXuatKho = s.id;
+      }
       )
       this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
     }

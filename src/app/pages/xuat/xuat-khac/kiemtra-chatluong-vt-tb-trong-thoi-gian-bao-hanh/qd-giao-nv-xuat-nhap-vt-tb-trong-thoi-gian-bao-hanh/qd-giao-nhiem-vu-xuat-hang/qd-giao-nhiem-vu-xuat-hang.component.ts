@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {StorageService} from "../../../../../../services/storage.service";
-import {DonviService} from "../../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { StorageService } from "../../../../../../services/storage.service";
+import { DonviService } from "../../../../../../services/donvi.service";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
 import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
-import {STATUS} from "../../../../../../constants/status";
-import {MESSAGE} from "../../../../../../constants/message";
+import { STATUS } from "../../../../../../constants/status";
+import { MESSAGE } from "../../../../../../constants/message";
 
 
 
@@ -28,13 +28,13 @@ export class QdGiaoNhiemVuXuatHangComponent extends Base2Component implements On
   isView: boolean = false;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private qdGiaoNvXuatHangTrongThoiGianBaoHanhService: QdGiaoNvXuatHangTrongThoiGianBaoHanhService) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private qdGiaoNvXuatHangTrongThoiGianBaoHanhService: QdGiaoNvXuatHangTrongThoiGianBaoHanhService) {
     super(httpClient, storageService, notification, spinner, modal, qdGiaoNvXuatHangTrongThoiGianBaoHanhService);
     this.formData = this.fb.group({
       namKeHoach: [],
@@ -63,7 +63,7 @@ export class QdGiaoNhiemVuXuatHangComponent extends Base2Component implements On
     await this.search();
   }
 
-  themMoi(id, isView) {
+  redirectDetail(id, isView) {
     this.isDetail = true;
     this.selectedId = id;
     this.isView = isView;

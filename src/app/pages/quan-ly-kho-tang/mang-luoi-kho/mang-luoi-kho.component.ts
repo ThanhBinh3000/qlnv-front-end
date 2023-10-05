@@ -1,32 +1,32 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
-import {FormGroup, FormBuilder} from "@angular/forms";
-import {Router} from "@angular/router";
-import {DonviService} from "src/app/services/donvi.service";
-import {OldResponseData} from "src/app/interfaces/response";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {MESSAGE} from "src/app/constants/message";
-import {HelperService} from "src/app/services/helper.service";
-import {NzTreeSelectComponent} from "ng-zorro-antd/tree-select";
-import {LOAI_DON_VI, TrangThaiHoatDong} from "src/app/constants/status";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {chain} from "lodash";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormGroup, FormBuilder } from "@angular/forms";
+import { Router } from "@angular/router";
+import { DonviService } from "src/app/services/donvi.service";
+import { OldResponseData } from "src/app/interfaces/response";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { MESSAGE } from "src/app/constants/message";
+import { HelperService } from "src/app/services/helper.service";
+import { NzTreeSelectComponent } from "ng-zorro-antd/tree-select";
+import { LOAI_DON_VI, TrangThaiHoatDong } from "src/app/constants/status";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { chain } from "lodash";
 import * as uuid from "uuid";
-import {NgxSpinnerService} from "ngx-spinner";
-import {MangLuoiKhoService} from "src/app/services/qlnv-kho/mangLuoiKho.service";
-import {Globals} from "src/app/shared/globals";
+import { NgxSpinnerService } from "ngx-spinner";
+import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
+import { Globals } from "src/app/shared/globals";
 import dayjs from "dayjs";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {ThemMoiKhoComponent} from "./them-moi-kho/them-moi-kho.component";
-import {UserLogin} from "../../../models/userlogin";
-import {UserService} from "../../../services/user.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { ThemMoiKhoComponent } from "./them-moi-kho/them-moi-kho.component";
+import { UserLogin } from "../../../models/userlogin";
+import { UserService } from "../../../services/user.service";
 import {
   DialogThemMoiSoDuDauKyComponent
 } from "../../../components/dialog/dialog-them-moi-so-du-dau-ky/dialog-them-moi-so-du-dau-ky.component";
-import {Tcdtnn} from "../../../models/Tcdtnn";
-import {DialogKtGiaoKhoComponent} from "../../../components/dialog/dialog-kt-giao-kho/dialog-kt-giao-kho.component";
-import {NzFormatEmitEvent, NzTreeService} from "ng-zorro-antd/tree";
-import {NzTreeBaseService, NzTreeNodeOptions} from "ng-zorro-antd/core/tree";
-import {ThemmoiThukhoComponent} from "../../quan-tri-danh-muc/danh-muc-thu-kho/themmoi-thukho/themmoi-thukho.component";
+import { Tcdtnn } from "../../../models/Tcdtnn";
+import { DialogKtGiaoKhoComponent } from "../../../components/dialog/dialog-kt-giao-kho/dialog-kt-giao-kho.component";
+import { NzFormatEmitEvent, NzTreeService } from "ng-zorro-antd/tree";
+import { NzTreeBaseService, NzTreeNodeOptions } from "ng-zorro-antd/core/tree";
+import { ThemmoiThukhoComponent } from "../../quan-tri-danh-muc/danh-muc-thu-kho/themmoi-thukho/themmoi-thukho.component";
 
 
 @Component({
@@ -36,7 +36,7 @@ import {ThemmoiThukhoComponent} from "../../quan-tri-danh-muc/danh-muc-thu-kho/t
 })
 export class MangLuoiKhoComponent implements OnInit {
   expandSet = new Set<number>();
-  @ViewChild("nzTreeSelectComponent", {static: false}) nzTreeSelectComponent!: NzTreeSelectComponent;
+  @ViewChild("nzTreeSelectComponent", { static: false }) nzTreeSelectComponent!: NzTreeSelectComponent;
   searchValue = "";
   searchFilter = {
     soQD: "",
@@ -116,6 +116,8 @@ export class MangLuoiKhoComponent implements OnInit {
       nhakhoId: [""],
       loaiVthh: [null],
       cloaiVthh: [null],
+      tenLoaiVthh: [null],
+      tenCloaiVthh: [null],
       trangThai: [true],
       diaDiem: [""],
       type: [true],
@@ -151,7 +153,7 @@ export class MangLuoiKhoComponent implements OnInit {
       ngayNhapDay: [""],
       sdt: [""],
       idParent: [""],
-      isKhoiTao: [null],
+      isKhoiTao: [false],
       dviReq: [null],
       loaiHangHoa: [],
       kieuHang: [""]
@@ -259,30 +261,30 @@ export class MangLuoiKhoComponent implements OnInit {
         let rs = chain(value)
           .groupBy("tenNhaKho")
           .map((v, k) => {
-              let rs1 = chain(v)
-                .groupBy("tenNganKho")
-                .map((v1, k1) => {
-                  let rs2 = chain(v1)
-                    .groupBy("tenNganLo")
-                    .map((v2, k2) => {
-                      return {
-                        idVirtual: uuid.v4(),
-                        tenDviCha: k2,
-                        childData: v2
-                      };
-                    }).value();
-                  return {
-                    idVirtual: uuid.v4(),
-                    tenDviCha: k1,
-                    childData: rs2
-                  };
-                }).value();
-              return {
-                idVirtual: uuid.v4(),
-                tenDviCha: k,
-                childData: rs1
-              };
-            }
+            let rs1 = chain(v)
+              .groupBy("tenNganKho")
+              .map((v1, k1) => {
+                let rs2 = chain(v1)
+                  .groupBy("tenNganLo")
+                  .map((v2, k2) => {
+                    return {
+                      idVirtual: uuid.v4(),
+                      tenDviCha: k2,
+                      childData: v2
+                    };
+                  }).value();
+                return {
+                  idVirtual: uuid.v4(),
+                  tenDviCha: k1,
+                  childData: rs2
+                };
+              }).value();
+            return {
+              idVirtual: uuid.v4(),
+              tenDviCha: k,
+              childData: rs1
+            };
+          }
           ).value();
         return {
           idVirtual: uuid.v4(),
@@ -322,12 +324,12 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   async getAllLoaiVthh() {
-      let res = await this.danhMucService.getAllVthhByCap("2");
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.listVthh = res.data
-        }
+    let res = await this.danhMucService.getAllVthhByCap("2");
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listVthh = res.data
       }
+    }
   }
 
   async onChangeLoaiVthh(event) {
@@ -458,6 +460,8 @@ export class MangLuoiKhoComponent implements OnInit {
         chatluongId: dataNode.chatluongId,
         loaiVthh: dataNode.loaiVthh ? dataNode.loaiVthh : null,
         cloaiVthh: dataNode.cloaiVthh ? dataNode.cloaiVthh : null,
+        tenLoaiVthh: dataNode.tenLoaiVthh ?? null,
+        tenCloaiVthh: dataNode.tenCloaiVthh ?? null,
         slTon: dataNode.slTon ? dataNode.slTon : 0,
         dviTinh: dataNode.dviTinh ? dataNode.dviTinh : null,
         ngayNhapDay: dataNode.ngayNhapDay ? dataNode.ngayNhapDay : null,
@@ -472,7 +476,8 @@ export class MangLuoiKhoComponent implements OnInit {
           tenNgankho: dataNode.tenNgankho,
           tenNhakho: dataNode.tenNhakho,
           tenDiemkho: dataNode.tenDiemkho,
-          tenTongKho: dataNode.tenTongKho
+          tenTongKho: dataNode.tenTongKho,
+          namNhap: dataNode.namNhap ?? null,
         });
       }
       if (this.levelNode == 6) {
@@ -484,7 +489,8 @@ export class MangLuoiKhoComponent implements OnInit {
           tenDiemkho: dataNode.tenDiemkho,
           tenTongKho: dataNode.tenTongKho,
           soLokho: dataNode.soLokho,
-          coLoKho: dataNode.coLoKho
+          coLoKho: dataNode.coLoKho,
+          namNhap: dataNode.namNhap ?? null,
         });
       }
       if (this.levelNode == 5) {
@@ -620,6 +626,7 @@ export class MangLuoiKhoComponent implements OnInit {
         };
         body.loaiHangHoa = this.setLoaiHangHoa();
         body.kieuHang = this.loaiHangHoa.type;
+        body.isKhoiTao = false;
         let dviReq = {
           "diaChi": this.detailDonVi.value.diaChi,
           "fax": this.nodeDetail.fax,
@@ -649,12 +656,10 @@ export class MangLuoiKhoComponent implements OnInit {
           type = "nha-kho";
         }
         if (this.levelNode == 6) {
-          body.isKhoiTao = this.detailDonVi.value.coLoKho == true ? false : true;
           body.slTon = body.slTon ? body.slTon : 0;
           type = "ngan-kho";
         }
         if (this.levelNode == 7) {
-          body.isKhoiTao = true;
           type = "ngan-lo";
         }
         this.mangLuoiKhoService.updateKho(type, body).then((res: OldResponseData) => {
@@ -710,7 +715,7 @@ export class MangLuoiKhoComponent implements OnInit {
       nzContent: ThemMoiKhoComponent,
       nzClosable: true,
       nzFooter: null,
-      nzStyle: {top: "50px", backgroud: "red"},
+      nzStyle: { top: "50px", backgroud: "red" },
       nzWidth: 1600
     });
     modal.afterClose.subscribe(res => {
@@ -762,11 +767,11 @@ export class MangLuoiKhoComponent implements OnInit {
       nzClosable: false,
       nzWidth: "900px",
       nzFooter: null,
-      nzStyle: {top: "50px"},
+      nzStyle: { top: "50px" },
       nzComponentParams: {
         detail: this.detailDonVi.value,
         levelNode: this.levelNode,
-        loaiHang : this.loaiHangHoa
+        loaiHang: this.loaiHangHoa
       }
     });
     modalQD.afterClose.subscribe((data) => {
@@ -839,7 +844,7 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   openDialogGiaoKho() {
-    this.donviService.layTatCaDangTree({'maDviCha': this.detailDonVi.value.maNhakho}).then((res) => {
+    this.donviService.layTatCaDangTree({ 'maDviCha': this.detailDonVi.value.maNhakho }).then((res) => {
       this.spinner.hide();
       console.log(res);
       const modalQD = this.modals.create({

@@ -65,11 +65,12 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách phiếu nhập kho sau khi hoàn thành sửa chữa</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData()">
+      <button type="button" class="btn btn-sub" (click)="exportData('SCHDTQG_NH_PNK_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc()" (click)="redirectCreate()">
+      <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc()"
+        (click)="redirectCreate('SCHDTQG_NH_PNK_THEM')">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -147,7 +148,8 @@
                       (click)="redirectDetail(pxk.id)">
                       <span class="fa fa-pencil"></span>
                     </a>
-                    <a *ngIf="this.userService.isChiCuc() && pxk.trangThai == STATUS.DU_THAO" (click)="delete(pxk)">
+                    <a *ngIf="this.userService.isChiCuc() && pxk.trangThai == STATUS.DU_THAO"
+                      (click)="delete(pxk,'SCHDTQG_NH_PNK_XOA')">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>

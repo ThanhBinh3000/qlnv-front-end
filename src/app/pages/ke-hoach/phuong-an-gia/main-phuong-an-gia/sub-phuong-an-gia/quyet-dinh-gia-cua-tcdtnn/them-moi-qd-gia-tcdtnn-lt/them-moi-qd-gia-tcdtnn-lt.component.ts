@@ -1,24 +1,24 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import dayjs from 'dayjs';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from "src/app/constants/status";
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from "src/app/constants/status";
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {DonviService} from "../../../../../../../services/donvi.service";
-import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { DonviService } from "../../../../../../../services/donvi.service";
+import { DialogPagQdTcdtnnComponent } from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-lt',
@@ -233,10 +233,10 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value,
-            apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
-            vat : value && value[0] && value[0].vat ? value[0].vat : null,
-            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
-            giaQdTcdt : value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
+            apDungTatCa: value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
+            vat: value && value[0] && value[0].vat ? value[0].vat : null,
+            giaQdBtc: value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
+            giaQdTcdt: value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
           };
         }).value();
     }
@@ -251,7 +251,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
           item.children.forEach(child => {
             if (child.apDungTatCa) {
               child.giaQdTcdt = item.giaQdTcdt;
-              if (child.vat) {
+              if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
                 child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
               }
             }
@@ -290,7 +290,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         nzComponentParams: {
           type: this.type,
           namKeHoach: this.formData.value.namKeHoach,
-          pagType : this.pagType,
+          pagType: this.pagType,
         },
       });
       modalQD.afterClose.subscribe((data) => {

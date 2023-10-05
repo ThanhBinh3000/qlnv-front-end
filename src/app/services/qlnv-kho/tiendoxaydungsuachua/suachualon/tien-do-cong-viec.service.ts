@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {BaseService} from "../../../base.service";
-import {environment} from "../../../../../environments/environment";
-import {OldResponseData} from "../../../../interfaces/response";
+import { HttpClient } from "@angular/common/http";
+import { BaseService } from "../../../base.service";
+import { environment } from "../../../../../environments/environment";
+import { OldResponseData } from "../../../../interfaces/response";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TienDoCongViecTdscService extends BaseService{
+export class TienDoCongViecTdscService extends BaseService {
   GATEWAY = '/qlnv-kho';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'tien-do-xdsc/xay-dung/tien-do-cong-viec', '');
+    super(httpClient, 'tien-do-xdsc/sua-chua/tien-do-cong-viec', '');
   }
 
   hoanThanh(body) {

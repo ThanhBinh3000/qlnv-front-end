@@ -1,30 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {UserLogin} from "../../../../../../../models/userlogin";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {UserService} from "../../../../../../../services/user.service";
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {Globals} from "../../../../../../../shared/globals";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {DanhMucKhoService} from "../../../../../../../services/danh-muc-kho.service";
-import dayjs from "dayjs";
-import {formatNumber} from "@angular/common";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {STATUS} from "../../../../../../../constants/status";
-import {KeHoachDmChiTiet} from "../thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen.component";
-import {AMOUNT, AMOUNT_NO_DECIMAL} from "../../../../../../../Utility/utils";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {
-  DeXuatScLonService
-} from "../../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
-import {
-  DanhMucSuaChuaService
-} from "../../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import {DonviService} from "../../../../../../../services/donvi.service";
-import {Validators} from "@angular/forms";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { Component, Input, OnInit } from '@angular/core';
+import { UserLogin } from "../../../../../../../models/userlogin";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { DanhMucKhoService } from "../../../../../../../services/danh-muc-kho.service";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { Base2Component } from "../../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../../services/storage.service";
+import { Validators } from "@angular/forms";
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 @Component({
   selector: 'app-dialog-them-moi-kehoach-danhmuc-chitiet',
@@ -77,6 +63,7 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
       maDm: [null, Validators.required],
       tenDm: [null, Validators.required],
       maChiCuc: [null],
+      maDvi: [null],
       tenChiCuc: [null],
       maDiemKho: [null],
       tenDiemKho: [null],
@@ -165,9 +152,8 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.maDuAn == item.maDuAn) {
+        if (it.maDm == item) {
           rs = true;
-          return;
         }
       });
     }

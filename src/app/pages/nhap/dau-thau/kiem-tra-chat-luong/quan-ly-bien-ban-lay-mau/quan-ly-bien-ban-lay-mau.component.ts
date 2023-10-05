@@ -27,7 +27,7 @@ import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-ha
 })
 export class QuanLyBienBanLayMauComponent implements OnInit {
   @Input() loaiVthh: string;
-
+  idQdGiaoNvNh: number = 0;
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -154,7 +154,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: this.loaiVthh,
       ngayLayMauDen: this.denNgayLayMau != null ? dayjs(this.denNgayLayMau).format('YYYY-MM-DD') + " 23:59:59" : null,
-      ngayLayMauTu:  this.tuNgayLayMau != null ? dayjs(this.tuNgayLayMau).format('YYYY-MM-DD') + " 00:00:00" : null,
+      ngayLayMauTu: this.tuNgayLayMau != null ? dayjs(this.tuNgayLayMau).format('YYYY-MM-DD') + " 00:00:00" : null,
       soBienBan: this.searchFilter.soBienBan,
       soQd: this.searchFilter.soQd,
       dviKiemNghiem: this.searchFilter.dviKiemNghiem,
@@ -279,6 +279,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
   }
 
   async showList() {
@@ -294,7 +295,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
           "maDvi": this.userInfo.MA_DVI,
           "maVatTuCha": this.isTatCa ? null : this.loaiVthh,
           "ngayLayMauDen": this.denNgayLayMau != null ? dayjs(this.denNgayLayMau).format('YYYY-MM-DD') + " 23:59:59" : null,
-          "ngayLayMauTu":  this.tuNgayLayMau != null ? dayjs(this.tuNgayLayMau).format('YYYY-MM-DD') + " 00:00:00" : null,
+          "ngayLayMauTu": this.tuNgayLayMau != null ? dayjs(this.tuNgayLayMau).format('YYYY-MM-DD') + " 00:00:00" : null,
           "orderBy": null,
           "orderDirection": null,
           "paggingReq": null,
@@ -466,4 +467,27 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     }
   }
 
+  hienThiXem(data) {
+    if (this.loaiVthh.startsWith('02')) {
+      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_XEM')) {
+        if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+          return false;
+        } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
+          return false;
+        }
+        return true;
+      }
+      return false;
+    } else {
+      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_XEM')) {
+        if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+          return false;
+        } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
+          return false;
+        }
+        return true;
+      }
+      return false;
+    }
+  }
 }

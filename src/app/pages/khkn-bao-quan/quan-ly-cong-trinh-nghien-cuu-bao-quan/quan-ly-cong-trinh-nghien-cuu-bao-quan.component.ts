@@ -89,6 +89,9 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    // if (!this.userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ')) {
+    //   this.router.navigateByUrl('/error/401')
+    // }
     this.spinner.show();
     try {
       if (!this.typeVthh || this.typeVthh == '') {

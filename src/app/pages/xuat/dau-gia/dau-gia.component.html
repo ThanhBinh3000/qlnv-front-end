@@ -1,28 +1,27 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
-  <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item nzSelected (click)="selectTab(0)"
-        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG')">
+      *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KHBDG') && !userService.isChiCuc()">
       Kế hoạch bán đấu giá
     </li>
-    <li nz-menu-item (click)="selectTab(1)"
-        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG')">
+    <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_TBBDG')">
       Tổ chức triển khai KH bán đấu giá
     </li>
-    <li nz-menu-item (click)="selectTab(2)"
-        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_QDKQDG')">
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_QDKQDG')">
       Quyết định phê duyệt kết quả bán đấu giá
     </li>
-    <li nz-menu-item (click)="selectTab(3)" *ngIf="!userService.isChiCuc()">
+    <li nz-menu-item (click)="selectTab(3)" *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB')">
       Hợp đồng
     </li>
-    <li nz-menu-item (click)="selectTab(4)" *ngIf="!userService.isTongCuc()">
+    <li nz-menu-item (click)="selectTab(4)" *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH')">
       Quyết định giao nhiệm vụ xuất hàng
     </li>
-    <li nz-menu-item (click)="selectTab(5)" *ngIf="!userService.isTongCuc()">
+    <li nz-menu-item (click)="selectTab(5)"
+      *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KTCL') && !userService.isTongCuc()">
       Kiểm tra chất lượng
     </li>
-    <li nz-menu-item (click)="selectTab(6)" *ngIf="!userService.isTongCuc()">
+    <li nz-menu-item (click)="selectTab(6)"
+      *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_XK') && !userService.isTongCuc()">
       Xuất kho
     </li>
   </ul>

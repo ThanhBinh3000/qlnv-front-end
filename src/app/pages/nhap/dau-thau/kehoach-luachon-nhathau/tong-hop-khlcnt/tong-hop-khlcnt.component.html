@@ -10,13 +10,13 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label"> Loại hàng hóa </label>
+            <label class="search__label"> Loại hàng DTQG </label>
             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
               <input [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
             </nz-input-group>
           </div>
           <div nz-col nzSpan="5">
-            <label class="search__label"> Chủng loại hàng hóa</label>
+            <label class="search__label"> Chủng loại hàng DTQG</label>
             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
               <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
             </nz-input-group>
@@ -63,8 +63,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="goDetail(null,'NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')"
-          *ngIf="loaiVthh != '02'">
+        <button type="button" class="btn btn-main" (click)="goDetail(null,false)"
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tổng hợp</span>
         </button>
@@ -84,8 +84,8 @@
             <th>Ngày tổng hợp</th>
             <th>Nội dung tổng hợp</th>
             <th>Năm kế hoạch</th>
-            <th>Loại hàng hóa</th>
-            <th>Chủng loại hàng hóa</th>
+            <th>Loại hàng DTQG</th>
+            <th>Chủng loại hàng DTQG</th>
             <th>Hình thức LCNT</th>
             <th>Phương thức LCNT</th>
             <th>Loại hợp đồng</th>
@@ -199,15 +199,22 @@
             </td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_TONGHOP_XEM')"
-                *ngIf=" ( data.trangThai==STATUS.CHUA_TAO_QD || data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XEM')">
+              <a (click)="goDetail(data.id, true)" *ngIf="hienThiXem(data)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf=" ( data.trangThai == STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai==STATUS.DA_BAN_HANH_QD ) && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')"
+              <a *ngIf=" data.trangThai == STATUS.CHUA_TAO_QD && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')"
+                (click)="goDetail(data.id, false)">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a *ngIf=" ( data.trangThai == STATUS.CHUA_TAO_QD ) && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')"
                 (click)="taoQdinh(data)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
-              <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'))"
+              <a *ngIf=" ( data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai == STATUS.DA_BAN_HANH_QD ) && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')"
+                (click)="redirectQd(data)">
+                <i class="icon htvbdh_tcdt_tao-qd"></i>
+              </a>
+              <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD || data.trangThai== STATUS.DA_DU_THAO_QD) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'))"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>

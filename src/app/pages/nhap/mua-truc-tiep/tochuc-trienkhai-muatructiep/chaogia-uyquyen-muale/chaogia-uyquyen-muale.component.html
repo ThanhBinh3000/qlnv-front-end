@@ -63,14 +63,14 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
-            <th class="text-center" style="width: 10%;">Số QĐ phê duyệt Kh mua trực tiếp</th>
+            <th class="text-center" style="width: 10%;">Số QĐ phê duyệt KH mua trực tiếp</th>
             <th class="text-center">Đơn vị</th>
             <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
-            <th class="text-center" style="width: 10%;">Phương thức bán trực tiếp</th>
+            <th class="text-center" style="width: 10%;">Phương thức mua trực tiếp</th>
             <th class="text-center" style="width: 10%;">Ngày nhận chào giá/Ngày ủy quyền</th>
             <th class="text-center" style="width: 35%;">Số QĐ PDKQ chào giá</th>
-            <th class="text-center" style="width: 12%;">Loại hàng hóa</th>
-            <th class="text-center" style="width: 12%;">Chủng loại hành hóa</th>
+            <th class="text-center" style="width: 12%;">Loại hàng DTQG</th>
+            <th class="text-center" style="width: 12%;">Chủng loại hàng DTQG</th>
             <th>Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -155,7 +155,8 @@
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.tenTrangThai}}</td>
             <td class="text-left">
-              <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT || (data.trangThai == STATUS.DANG_CAP_NHAT && !userService.isCuc())" (click)="goDetail(data.id, true)">
+              <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT || (data.trangThai == STATUS.DANG_CAP_NHAT && !userService.isCuc())"
+                (click)="goDetail(data.id, true)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"
@@ -190,6 +191,7 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-themmoi-chaogia-uyquyen-muale [loaiVthh]="loaiVthh" [idInput]="idSelected" [isView]="isView" (showListEvent)="showList()">
+  <app-themmoi-chaogia-uyquyen-muale [loaiVthh]="loaiVthh" [idInput]="idSelected" [isView]="isView"
+    (showListEvent)="showList()">
   </app-themmoi-chaogia-uyquyen-muale>
 </div>

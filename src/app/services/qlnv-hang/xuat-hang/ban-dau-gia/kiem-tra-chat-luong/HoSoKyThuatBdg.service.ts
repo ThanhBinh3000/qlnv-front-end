@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BaseService} from "src/app/services/base.service";
-import {environment} from "src/environments/environment";
-import {OldResponseData} from "src/app/interfaces/response";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BaseService } from "src/app/services/base.service";
+import { environment } from "src/environments/environment";
+import { OldResponseData } from "src/app/interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +41,10 @@ export class HoSoKyThuatBdgService extends BaseService {
 
   approve(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/ho-so-ky-thuat/phe-duyet`
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+  preview(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/ho-so-ky-thuat/xem-truoc`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 }

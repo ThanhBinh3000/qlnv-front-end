@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BaseService} from "../../../base.service";
-import {environment} from "../../../../../environments/environment";
-import {OldResponseData} from "../../../../interfaces/response";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BaseService } from "../../../base.service";
+import { environment } from "../../../../../environments/environment";
+import { OldResponseData } from "../../../../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +26,7 @@ export class HoSoKyThuatCtvtService extends BaseService {
 
   getDetail(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/ho-so-ky-thuat/chi-tiet`;
-    return this._httpClient.post<OldResponseData>(url,body).toPromise();
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
   create(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/ho-so-ky-thuat/them-moi`;
@@ -40,6 +40,10 @@ export class HoSoKyThuatCtvtService extends BaseService {
 
   approve(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/ho-so-ky-thuat/phe-duyet`
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+  preview(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-cl/ho-so-ky-thuat/xem-truoc`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 }

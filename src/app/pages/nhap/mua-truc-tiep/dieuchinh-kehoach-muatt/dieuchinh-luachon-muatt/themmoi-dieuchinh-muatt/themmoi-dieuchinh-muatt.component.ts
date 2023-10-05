@@ -21,7 +21,7 @@ import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
 import { filter } from 'rxjs/operators';
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 
 @Component({
@@ -326,7 +326,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     if (data) {
       this.dataInput = data;
       let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(data?.idQdHdr);
-      this.dataInputCache = res.data.children[0]
+      this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
     }
     await this.spinner.hide();
   }

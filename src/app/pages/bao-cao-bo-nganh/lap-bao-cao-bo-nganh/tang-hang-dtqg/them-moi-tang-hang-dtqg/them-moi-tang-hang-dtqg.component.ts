@@ -96,6 +96,7 @@ export class ThemMoiTangHangDtqgComponent extends Base2Component implements OnIn
             boNganh: this.listData.boNganh,
             nam: this.listData.nam,
             tenTrangThai: this.listData.tenTrangThai,
+            trangThai: this.listData.trangThai,
             tGianTaoTuNgay: this.listData.tGianTaoTuNgay,
             tGianTaoDenNgay: this.listData.tGianTaoDenNgay,
             tGianBanHanhTuNgay: this.listData.tGianBanHanhTuNgay,

@@ -1,21 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {MESSAGE} from "../../../../../constants/message";
-import {STATUS} from "../../../../../constants/status";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { MESSAGE } from "../../../../../constants/message";
+import { STATUS } from "../../../../../constants/status";
 import dayjs from "dayjs";
-import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
-import {chain} from 'lodash';
+import { DialogMmMuaSamComponent } from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
+import { chain } from 'lodash';
 import * as uuid from "uuid";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {HopDongPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/hop-dong-pvc.service";
-import {QdMuaSamPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service";
-import {MmHopDongCt} from "../../../may-moc-thiet-bi/mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { HopDongPvcService } from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/hop-dong-pvc.service";
+import { QdMuaSamPvcService } from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service";
+import { MmHopDongCt } from "../../../may-moc-thiet-bi/mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
 
 @Component({
   selector: 'app-them-moi-hop-dong-pvc',
@@ -150,8 +150,8 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
           "limit": 10,
           "page": 0
         },
-        "capDvi" : this.userInfo.CAP_DVI,
-        "maDvi" : this.userInfo.MA_DVI,
+        "capDvi": this.userInfo.CAP_DVI,
+        "maDvi": this.userInfo.MA_DVI,
       }
       let res = await this.qdMuaSamService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -206,17 +206,18 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          this.changeSoQdMs(data.soQdpdKhMuaSam);
+          await this.changeSoQdMs(data.soQdpdKhMuaSam);
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soHopDong : this.formData.value.soHopDong ?  this.formData.value.soHopDong.split('/')[0] : null
+            soHopDong: this.formData.value.soHopDong ? this.formData.value.soHopDong.split('/')[0] : null
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucPvcHdLoaiHh;
           this.listPhuLuc = data.listPhuLuc
           this.listDiaDiem = data.listQlDinhMucPvcHdDiaDiemNh;
-          this.buildDiaDiemTc()
-          this.updateEditCache()
+          console.log(1111)
+          await this.buildDiaDiemTc()
+          await this.updateEditCache()
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -315,12 +316,13 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
     return msgRequired;
   }
 
-  updateEditCache() {
+  async updateEditCache() {
+    console.log(this.dataTable)
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -336,7 +338,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.dataTable[stt]},
+      data: { ...this.dataTable[stt] },
       edit: false
     };
   }
@@ -410,13 +412,13 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
         let datams = detailMs.data
         if (datams && datams.listQlDinhMucPvcQdMuaSamDtl) {
           this.listHangHoa = datams.listQlDinhMucPvcQdMuaSamDtl
-           this.convertListData()
+          this.convertListData()
         }
       }
     }
   }
 
-   async loadDsHangHoa(soQdMs: string, tableHangHoa : any[]) : Promise<boolean> {
+  async loadDsHangHoa(soQdMs: string, tableHangHoa: any[]): Promise<boolean> {
     let check = true;
     let body = {
       soQdMs: soQdMs,
@@ -425,7 +427,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
         page: this.page - 1,
       },
       loai: '01',
-      trangThai : STATUS.DA_KY
+      trangThai: STATUS.DA_KY
     }
     let res = await this.qdMuaSamService.listTtPbo(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -435,18 +437,18 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
         }
         this.listDiaDiem = res.data.filter(item => tableHangHoa.includes(item.maCcdc))
         this.buildDiaDiemTc()
-        return  check;
+        return check;
       } else {
         if (!this.listDiaDiem) {
           this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
           check = false
-          return  check;
+          return check;
         }
       }
     } else {
       check = false
       this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
-      return  check;
+      return check;
     }
     return check;
   }
@@ -461,8 +463,8 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
     if (this.listHangHoa && this.listHangHoa.length > 0) {
       this.listHangHoa = chain(this.listHangHoa).groupBy('tenCcdc').map((value, key) => ({
         tenCcdc: key,
-          dataChild: value
-        })
+        dataChild: value
+      })
       ).value()
     }
     if (this.listHangHoa && this.listHangHoa.length > 0) {
@@ -500,7 +502,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
     }
   }
 
-  buildDiaDiemTc() {
+  async buildDiaDiemTc() {
     if (this.listDiaDiem && this.listDiaDiem.length > 0) {
       this.listDiaDiem = chain(this.listDiaDiem)
         .groupBy("tenCcdc")
@@ -508,12 +510,12 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
           let rs = chain(value)
             .groupBy("tenDviCha")
             .map((v, k) => {
-                return {
-                  idVirtual: uuid.v4(),
-                  tenDviCha: k,
-                  childData: v
-                }
+              return {
+                idVirtual: uuid.v4(),
+                tenDviCha: k,
+                childData: v
               }
+            }
             ).value();
           return {
             idVirtual: uuid.v4(),

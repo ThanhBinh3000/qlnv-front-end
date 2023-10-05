@@ -88,10 +88,10 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
   showSave() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV;
+      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('SCHDTQG_HSSC_THEM');
     }
     if (this.userService.isTongCuc()) {
-      return trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU;
+      return (trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU) && this.userService.isAccessPermisson('SCHDTQG_HSSC_THEM');
     }
     return false
   }
@@ -194,10 +194,10 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC;
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('SCHDTQG_HSSC_DUYETTP')) || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('SCHDTQG_HSSC_DUYETLDC'));
     }
     if (this.userService.isTongCuc()) {
-      return trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC;
+      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson('SCHDTQG_HSSC_DUYETLDV')) || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('SCHDTQG_HSSC_DUYETLDTC'));
     }
     return false
   }

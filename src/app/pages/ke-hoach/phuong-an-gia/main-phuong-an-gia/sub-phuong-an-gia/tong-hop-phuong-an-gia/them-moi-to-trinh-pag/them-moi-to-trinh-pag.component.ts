@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";import { NzModalService } from 'ng-zorro-antd/modal';
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid"; import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {TYPE_PAG} from 'src/app/constants/config';
+import { TYPE_PAG } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -13,7 +13,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
 import { ToTrinhPAGService } from 'src/app/services/ke-hoach/phuong-an-gia/toTrinhPAG.service';
 import { Globals } from 'src/app/shared/globals';
-import {UserService} from "../../../../../../../services/user.service";
+import { UserService } from "../../../../../../../services/user.service";
 
 @Component({
   selector: 'app-them-moi-to-trinh-pag',
@@ -134,7 +134,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
       loaiGia: data.loaiGia,
       tchuanCluong: data.tchuanCluong,
       trangThaiTt: data.trangThaiTt,
-      tenTrangThaiTt: data.tenTrangThaiTt ? data.tenTrangThaiTt : 'Dự thảo' ,
+      tenTrangThaiTt: data.tenTrangThaiTt ? data.tenTrangThaiTt : 'Dự thảo',
       ttLyDoTuChoi: data.ttLyDoTuChoi,
       giaKsTt: giaKsTt,
       giaKsTtVat: giaKsTtVat,
@@ -163,15 +163,6 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     let body = this.formData.value;
     body.type = this.type;
     body.soToTrinh = body.soToTrinh + this.maSuffix;
-    if (this.dataTable && this.dataTable.length > 0) {
-      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
-        this.dataTable.forEach(item => {
-          if (item.vat) {
-            item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
-          }
-        })
-      }
-    }
     body.pagChiTiets = this.dataTable
     let res = await this.toTrinhPAGService.update(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -291,13 +282,13 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
             idVirtual: uuidv4(),
             tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
-            soDx : value && value[0] && value[0].soDx ? value[0].soDx : null,
+            soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value,
             pagId: value && value[0] && value[0].pagId ? value[0].pagId : null,
-            apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
-            vat : value && value[0] && value[0].vat ? value[0].vat : null,
-            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
-            giaQdTcdt : value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : 0,
+            apDungTatCa: value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
+            vat: value && value[0] && value[0].vat ? value[0].vat : null,
+            giaQdBtc: value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
+            giaQdTcdt: value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : 0,
           };
         }).value();
     }
@@ -321,17 +312,17 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   }
 
   convertTreeToList() {
-    if (this.dataTableView && this.dataTableView.length > 0 ) {
+    if (this.dataTableView && this.dataTableView.length > 0) {
       this.dataTable = [];
       this.dataTableView.forEach(item => {
         if (item.children && item.children.length > 0) {
           item.children.forEach(child => {
-              if (child.apDungTatCa) {
-                child.giaQdTcdt = item.giaQdTcdt;
-                if (child.vat) {
-                  child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
-                }
+            if (child.apDungTatCa) {
+              child.giaQdTcdt = item.giaQdTcdt;
+              if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
+                child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
               }
+            }
             this.dataTable.push(child);
           })
         }

@@ -24,7 +24,7 @@
             <div nz-col nzSpan="4">
                 <nz-form-item>
                     <nz-form-label [nzNoColon]="true">
-                        Số Qđ giao nhiệm vụ NH
+                        Số QĐ giao nhiệm vụ NH
                     </nz-form-label>
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
                         <input [readonly]="true" nz-input formControlName="soQdGiaoNvNh" readonly />
@@ -33,7 +33,7 @@
             </div>
             <div nz-col nzSpan="4">
                 <nz-form-item class="form-item">
-                    <nz-form-label [nzNoColon]="true"> Số lượng phải nhập theo QĐ(kg)</nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Số lượng phải nhập theo QĐ (kg)</nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                             <span class="text-green" readonly>{{formData.value.soLuongQd}}</span>
@@ -43,7 +43,7 @@
             </div>
             <div nz-col nzSpan="4">
                 <nz-form-item class="form-item">
-                    <nz-form-label [nzNoColon]="true"> Số lượng thu mua còn lại(kg)</nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Số lượng thu mua còn lại (kg)</nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                         <span class="text-green" readonly>{{formData.value.soLuongConLai}}</span>
                     </nz-form-control>
@@ -102,18 +102,18 @@
             </div>
             <div nz-col [nzSpan]="4">
                 <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số lượng mua trực tiếp(kg)</nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Số lượng mua trực tiếp (kg)</nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
-                        <nz-input-number class="text-right" nz-input (change)="calculatorThanhTien()" formControlName="soLuongMtt"
-                            (input)="calculatorThanhTien()" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                        <nz-input-number class="text-right" nz-input (change)="calculatorThanhTien()"
+                            formControlName="soLuongMtt" (input)="calculatorThanhTien()" [nzMin]="1" [nzStep]="1"
+                            [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>
                     </nz-form-control>
                 </nz-form-item>
             </div>
             <div nz-col [nzSpan]="4">
                 <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Đơn giá(đ)</nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Đơn giá (đ)</nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                         <nz-input-number class="text-right" nz-input formControlName="donGia"
                             (input)="calculatorThanhTien()" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
@@ -124,7 +124,7 @@
             </div>
             <div nz-col [nzSpan]="4">
                 <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Thành tiền(đ)</nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Thành tiền (đ)</nz-form-label>
                     <nz-form-control>
                         <span class="text-green" readonly>{{formData.value.thanhTien | number : '1.0-1' :
                             'vi_VN'}}</span>

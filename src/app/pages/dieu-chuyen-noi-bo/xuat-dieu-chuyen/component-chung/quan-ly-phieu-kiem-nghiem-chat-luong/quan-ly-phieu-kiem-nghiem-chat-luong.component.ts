@@ -28,7 +28,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 export interface PassDataPKNCL {
   soPhieuKnChatLuong: string, phieuKnChatLuongId: number, soQdinhDcc: string, qdinhDccId: number, ngayQDHieuLuc: string, soBBLayMau: string, bblayMauId: number, ngaylayMau: string, tenLoKho: string, maLoKho: string,
   tenNganKho: string, maNganKho: string, tenNhaKho: string, maNhaKho: string, tenDiemKho: string, maDiemKho: string, tenHangHoa: string, maHangHoa: string, tenChLoaiHangHoa: string, maChLoaiHangHoa: string,
-  thuKhoId: number, tenThuKho: string, donViTinh: string, tenDonViTinh: string
+  thuKhoId: number, tenThuKho: string, donViTinh: string, keHoachDcDtlId: number, ngayHieuLuc: string, ngayQdinhDc: string
 }
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -40,6 +40,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   @Input() isVatTu: boolean;
   @Input() thayDoiThuKho: boolean;
   @Input() type: string;
+  @Input() typeQd: string;
   toDay = new Date();
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
@@ -82,7 +83,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   passData: PassDataPKNCL = {
     soPhieuKnChatLuong: '', phieuKnChatLuongId: null, soQdinhDcc: '', qdinhDccId: null, ngayQDHieuLuc: '', soBBLayMau: '', bblayMauId: null, ngaylayMau: '', tenLoKho: '', maLoKho: '',
     tenNganKho: '', maNganKho: '', tenNhaKho: '', maNhaKho: '', tenDiemKho: '', maDiemKho: '', tenHangHoa: '', maHangHoa: '', tenChLoaiHangHoa: '', maChLoaiHangHoa: '', thuKhoId: null, tenThuKho: '',
-    donViTinh: '', tenDonViTinh: ''
+    donViTinh: '', keHoachDcDtlId: null, ngayHieuLuc: '', ngayQdinhDc: ''
   };
   LIST_TRANG_THAI: { [key: string]: string } = {
     [STATUS.DU_THAO]: "Dự thảo",
@@ -113,6 +114,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       loaiDc: [null],
       isVatTu: [false],
       thayDoiThuKho: [false],
+      typeQd: [],
       soQdinh: [null],
       soPhieu: [null],
       tuNgay: [null],
@@ -145,7 +147,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       // if (this.typeVthh == 'tat-ca') {
       //   this.isTatCa = true;
       // }
-      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
+      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
       await this.timKiem()
     } catch (e) {
       console.log('error: ', e);
@@ -264,7 +266,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   }
   resetForm() {
     this.formData.reset();
-    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type })
+    this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd })
   }
   clearFilter() {
     this.resetForm()
@@ -445,7 +447,8 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       soPhieuKnChatLuong: lv2.soPhieuKnChatLuong, phieuKnChatLuongId: lv2.id, soQdinhDcc: lv2.soQdinh, qdinhDccId: lv2.qdinhDccId, ngayQDHieuLuc: lv2.ngayQDHieuLuc,
       soBBLayMau: lv2.soBBLayMau, bblayMauId: lv2.bblayMauId, ngaylayMau: lv2.ngaylayMau, tenLoKho: lv2.tenLoKho, maLoKho: lv2.maLoKho, tenNganKho: lv2.tenNganKho,
       maNganKho: lv2.maNganKho, tenNhaKho: lv2.tenNhaKho, maNhaKho: lv2.maNhaKho, tenDiemKho: lv2.tenDiemKho, maDiemKho: lv2.maDiemKho, tenHangHoa: lv2.tenHangHoa,
-      maHangHoa: lv2.maHangHoa, tenChLoaiHangHoa: lv2.tenChLoaiHangHoa, maChLoaiHangHoa: lv2.maChLoaiHangHoa, thuKhoId: lv2.thuKhoId, tenThuKho: lv2.thuKho, donViTinh: lv2.donViTinh, tenDonViTinh: lv2.tenDonViTinh
+      maHangHoa: lv2.maHangHoa, tenChLoaiHangHoa: lv2.tenChLoaiHangHoa, maChLoaiHangHoa: lv2.maChLoaiHangHoa, thuKhoId: lv2.thuKhoId, tenThuKho: lv2.thuKho,
+      donViTinh: lv2.donViTinh, keHoachDcDtlId: lv2.keHoachDcDtlId, ngayHieuLuc: lv2.ngayHieuLuc, ngayQdinhDc: lv2.ngayQdinhDc
     }
   }
 

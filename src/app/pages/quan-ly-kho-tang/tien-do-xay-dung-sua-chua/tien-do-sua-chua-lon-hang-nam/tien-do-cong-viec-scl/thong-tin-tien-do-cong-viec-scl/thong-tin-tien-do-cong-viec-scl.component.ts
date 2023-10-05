@@ -1,15 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {UserLogin} from "../../../../../../models/userlogin";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {UserService} from "../../../../../../services/user.service";
-import {Globals} from "../../../../../../shared/globals";
-import {MESSAGE} from "../../../../../../constants/message";
-import { cloneDeep } from "lodash";
-import {TienDoXayDungCt} from "../tien-do-cong-viec-scl.component";
-
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { UserLogin } from "../../../../../../models/userlogin";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { UserService } from "../../../../../../services/user.service";
+import { Globals } from "../../../../../../shared/globals";
+import { MESSAGE } from "../../../../../../constants/message";
+import { TienDoXayDungCt } from "../../../tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component";
 @Component({
   selector: 'app-thong-tin-tien-do-cong-viec-scl',
   templateUrl: './thong-tin-tien-do-cong-viec-scl.component.html',
@@ -21,11 +19,11 @@ export class ThongTinTienDoCongViecSclComponent implements OnInit {
   @Input() sum: number
   @Input() dataTable: any[] = []
   @Input() tableCongViec: any[] = []
-  dataTableRes : any[] = []
+  dataTableRes: any[] = []
   item: TienDoXayDungCt = new TienDoXayDungCt();
   userInfo: UserLogin
   valueLabel: boolean = true;
-  tableCvMoi: any[] = []
+  tableCvMoi: any[] = [];
 
   constructor(
     private danhMucService: DanhMucService,
@@ -49,7 +47,7 @@ export class ThongTinTienDoCongViecSclComponent implements OnInit {
     } else {
       this.tableCongViec.forEach(item => {
         item.loai = "00";
-        item.quy = this.dataInput.quy
+        item.thang = this.dataInput.thang
       })
       let arr = [...this.tableCongViec, this.tableCvMoi].flat()
       this._modalRef.close(arr)
@@ -61,10 +59,14 @@ export class ThongTinTienDoCongViecSclComponent implements OnInit {
   }
 
   filterData() {
-    if(this.dataInput && this.dataInput.dataChild && this.dataInput.dataChild.length > 0) {
+    if (this.dataInput && this.dataInput.dataChild && this.dataInput.dataChild.length > 0) {
       this.tableCongViec = this.dataTable.filter(item => item.loai == "00");
       this.tableCvMoi = this.dataTable.filter(item => item.loai == "01");
     } else {
+      this.dataTable.forEach(item => {
+        item.klTheoHd = item.khoiLuong ?? null
+        item.ttTheoHd = item.donGia ?? null
+      })
       this.tableCongViec = this.dataTable
     }
   }
@@ -92,7 +94,7 @@ export class ThongTinTienDoCongViecSclComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    this.item.quy = this.dataInput.quy
+    this.item.thang = this.dataInput.thang
     this.item.loai = "01"
     this.tableCvMoi = [...this.tableCvMoi, this.item]
     this.dataTableRes.push(this.item)

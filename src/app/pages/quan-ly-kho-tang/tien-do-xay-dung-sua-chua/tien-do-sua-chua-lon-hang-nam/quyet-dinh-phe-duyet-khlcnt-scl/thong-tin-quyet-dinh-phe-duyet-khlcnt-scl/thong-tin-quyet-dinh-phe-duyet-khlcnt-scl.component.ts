@@ -1,30 +1,29 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {FormGroup, Validators} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {MESSAGE} from "../../../../../../constants/message";
-import {STATUS} from "../../../../../../constants/status";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
-import {FILETYPE} from "../../../../../../constants/fileType";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { FormGroup, Validators } from "@angular/forms";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { MESSAGE } from "../../../../../../constants/message";
+import { STATUS } from "../../../../../../constants/status";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { AMOUNT_NO_DECIMAL } from "../../../../../../Utility/utils";
+import { FILETYPE } from "../../../../../../constants/fileType";
 import {
   QdPheDuyetKhlcntTdsclService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
 import {
   QdPheDuyetBaoCaoKtktService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-bao-cao-ktkt.service";
-import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-khlcnt-scl',
   templateUrl: './thong-tin-quyet-dinh-phe-duyet-khlcnt-scl.component.html',
   styleUrls: ['./thong-tin-quyet-dinh-phe-duyet-khlcnt-scl.component.scss']
 })
-export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component implements OnInit {
+export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends Base2Component implements OnInit {
   formData: FormGroup;
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
@@ -89,15 +88,17 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
       tongTien: [0],
       tongMucDt: [0],
       nguonVonDt: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
+      trangThaiDt: [],
+      trangThaiHd: [],
       fileDinhKems: [null],
       listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtTdscQuyetDinhPdKhlcntCvKad: null,
       listKtTdscQuyetDinhPdKhlcntCvKh: null,
       khoi: [null],
       loaiCapCt: [null],
-      loai : ['01']
+      loai: ['00']
     });
   }
 
@@ -276,7 +277,15 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : '',
           })
-          this.fileDinhKem = data.fileDinhKems;
+          if (data.fileDinhKems && data.fileDinhKems.length > 0) {
+            data.fileDinhKems.forEach(item => {
+              if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+                this.listFileDinhKem.push(item)
+              } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+                this.listCcPhapLy.push(item)
+              }
+            })
+          }
           this.dataCongViecDaTh = data.listKtTdscQuyetDinhPdKhlcntCvDaTh ? data.listKtTdscQuyetDinhPdKhlcntCvDaTh : [];
           this.dataCongViecKad = data.listKtTdscQuyetDinhPdKhlcntCvKad ? data.listKtTdscQuyetDinhPdKhlcntCvKad : [];
           this.dataCongViecKh = data.listKtTdscQuyetDinhPdKhlcntCvKh ? data.listKtTdscQuyetDinhPdKhlcntCvKh : [];
@@ -409,7 +418,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
       this.dataCongViecDaTh.forEach((item, index) => {
         this.dataCongViecDaThEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -420,7 +429,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
       this.dataCongViecKad.forEach((item, index) => {
         this.dataCongViecKadEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -431,7 +440,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
       this.dataCongViecKh.forEach((item, index) => {
         this.dataCongViecKhEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -545,21 +554,21 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
 
   cancelEditCongViecDaTh(idx) {
     this.dataCongViecDaThEdit[idx] = {
-      data: {...this.dataCongViecDaTh[idx]},
+      data: { ...this.dataCongViecDaTh[idx] },
       edit: false
     };
   }
 
   cancelEditCongViecKad(idx) {
     this.dataCongViecKadEdit[idx] = {
-      data: {...this.dataCongViecKad[idx]},
+      data: { ...this.dataCongViecKad[idx] },
       edit: false
     };
   }
 
   cancelEditCongViecKh(idx) {
     this.dataCongViecKhEdit[idx] = {
-      data: {...this.dataCongViecKh[idx]},
+      data: { ...this.dataCongViecKh[idx] },
       edit: false
     };
   }

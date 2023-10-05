@@ -45,6 +45,8 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   listFileDinhKem: any = [];
   fileNiemPhong: any = [];
   bienBan: any[] = [];
+  templateName = "Biên bản lấy mẫu bàn giao mẫu";
+  templateNameVt = "Biên bản lấy mẫu bàn giao mẫu vật tư";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -178,7 +180,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
-      console.log(this.listSoQuyetDinh,"this.listSoQuyetDinh")
+      console.log(this.listSoQuyetDinh, "this.listSoQuyetDinh")
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -247,7 +249,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       }),
     ];
     this.listDiaDiemNhap = listDd;
-    console.log(this.listDiaDiemNhap,"this.listDiaDiemNhap")
+    console.log(this.listDiaDiemNhap, "this.listDiaDiemNhap")
   }
 
   openDialogDdiemNhapHang() {

@@ -27,7 +27,7 @@ export class PhieuNhapKhoComponent implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
-    namKh: dayjs().get('year'),
+    namKh: '',
     soQuyetDinhNhap: '',
     soPhieuNhapKho: '',
     ngayNkho: '',
@@ -58,6 +58,8 @@ export class PhieuNhapKhoComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   listNam: any[] = [];
+  tuNgayNkho: Date | null = null;
+  denNgayNkho: Date | null = null;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -135,7 +137,7 @@ export class PhieuNhapKhoComponent implements OnInit {
       soQuyetDinhNhap: '',
       soPhieuNhapKho: '',
       ngayNkho: '',
-      namKh: dayjs().get('year'),
+      namKh: '',
     };
     this.search();
   }
@@ -188,6 +190,9 @@ export class PhieuNhapKhoComponent implements OnInit {
     let body = {
       trangThai: STATUS.BAN_HANH,
       maDvi: this.userInfo.MA_DVI,
+      tuNgayNkho: this.tuNgayNkho != null ? dayjs(this.tuNgayNkho).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayNkho: this.denNgayNkho != null ? dayjs(this.denNgayNkho).format('YYYY-MM-DD') + " 23:59:59" : null,
+      soPnk: this.searchFilter.soPhieuNhapKho,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -204,14 +209,16 @@ export class PhieuNhapKhoComponent implements OnInit {
           item.detail = {
             children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
           }
+          item.expand = true;
         } else {
           let data = [];
           item.hhQdGiaoNvNhangDtlList.forEach(res => {
             data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
           })
           item.detail = {
-            hhQdGiaoNvNhDdiemList: data,
+            children: data,
           }
+          item.expand = true;
         };
       });
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -221,6 +228,13 @@ export class PhieuNhapKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
+  }
+
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
   }
 
   convertDataTable() {
@@ -289,4 +303,18 @@ export class PhieuNhapKhoComponent implements OnInit {
       this.expandSet2.delete(id);
     }
   }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayNkho) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayNkho.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayNkho) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayNkho.getTime();
+  };
 }

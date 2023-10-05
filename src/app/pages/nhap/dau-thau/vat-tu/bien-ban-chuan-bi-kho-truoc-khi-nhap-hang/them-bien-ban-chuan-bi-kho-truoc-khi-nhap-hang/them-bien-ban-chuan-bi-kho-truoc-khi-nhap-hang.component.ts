@@ -34,9 +34,9 @@ export class ThemBienBanChuanBiKhoTruocKhiNhapHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private router: Router,
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   themNganKho() {
     const modalLuongThuc = this.modal.create({
       nzTitle: 'Danh sách chi tiết ngăn kho',
@@ -92,7 +92,7 @@ export class ThemBienBanChuanBiKhoTruocKhiNhapHangComponent implements OnInit {
   }
   selectHangHoa() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'Danh sách hàng DTQG',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,

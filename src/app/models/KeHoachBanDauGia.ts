@@ -1,4 +1,4 @@
-import {FileDinhKem} from "./FileDinhKem"
+import { FileDinhKem } from "./FileDinhKem"
 
 export class KeHoachBanDauGia {
   capDv: string;
@@ -148,7 +148,6 @@ export class chiTietBangKeCanHangBdg {
   id: number;
   maCan: string;
   soBaoBi: string;
-  trongLuongBaoBi: number;
   trongLuongCaBi: number;
 }
 

@@ -1,41 +1,43 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
-      <i class="fa fa-arrow-left"></i>
+<nz-affix [nzOffsetTop]='globals.prop.MENU_LV2' class='btn-affix'>
+  <div class='btn-group'>
+    <button type='button' class='btn btn-sub' (click)='quayLai()'>
+      <i class='fa fa-arrow-left'></i>
       <span>Quay lại</span>
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')"
-      type="button" class="btn btn-sub" (click)="save(true)">
-      <i class="icon htvbdh_chuyenvanthu"></i>
+      type='button' class='btn btn-sub' (click)='save(true)'>
+      <i class='icon htvbdh_chuyenvanthu'></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView" type="button" class="btn btn-sub xanh" (click)="save()">
-      <i class="icon htvbdh_luu"></i>
+    <button *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView' type='button'
+      class='btn btn-sub xanh' (click)='save()'>
+      <i class='icon htvbdh_luu'></i>
       <span>Lưu</span>
     </button>
   </div>
 </nz-affix>
-<div class="bg-trang">
-  <nz-card class="mt16 flex-card p-lr16">
-    <div class="header">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+<div class='bg-trang'>
+  <nz-card class='mt16 flex-card p-lr16'>
+    <div class='header'>
+      <div class='header-text'>
+        <div class='title-chi-tieu'>
+          <span
+            [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
             {{ formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
           </span>
           <span>QUYẾT ĐỊNH CỦA BỘ TÀI CHÍNH</span>
         </div>
       </div>
     </div>
-    <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="24">
-        <div nz-col [nzSpan]="3">
-          <nz-form-item class="form-item">
-            <nz-form-label nzFor="nam-qd" nzRequired>Năm Quyết Định</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="namQd" [nzDisabled]="isView" (ngModelChange)="onChangeNamQd($event)">
-                <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
+    <form nzLayout='vertical' nz-form [formGroup]='formData'>
+      <div nz-row [nzGutter]='24'>
+        <div nz-col [nzSpan]='3'>
+          <nz-form-item class='form-item'>
+            <nz-form-label nzFor='nam-qd' nzRequired>Năm Quyết Định</nz-form-label>
+            <nz-form-control [nzErrorTip]='error'>
+              <nz-select formControlName='namQd' [nzDisabled]='isView' (ngModelChange)='onChangeNamQd($event)'>
+                <nz-option *ngFor='let p of dsNam' [nzValue]='p.value' [nzLabel]='p.text'>
                 </nz-option>
               </nz-select>
               <ng-template #error let-control>
@@ -44,13 +46,14 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="so-qd" nzRequired>Số Quyết Định</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <nz-input-number [nzSize]="'small'" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" nz-input
-                  formControlName="soQd" [nzDisabled]="isView"></nz-input-number>
+        <div nz-col [nzSpan]='4'>
+          <nz-form-item class='form-item'>
+            <nz-form-label [nzNoColon]='true' nzFor='so-qd' nzRequired>Số Quyết Định</nz-form-label>
+            <nz-form-control [nzErrorTip]='error'>
+              <nz-input-group nzAddOnAfter='{{maQd}}' id='so-qd'>
+                <!--                <input nz-input formControlName='soQd' [readOnly]='isView' />-->
+                <nz-input-number [nzSize]="'small'" [nzMin]='0' [nzMax]='globals.prop.MAX_INPUT' nz-input
+                  formControlName='soQd' [nzDisabled]='isView'></nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
@@ -58,11 +61,11 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd" nzRequired>Ngày Quyết Định</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
+        <div nz-col [nzSpan]='5'>
+          <nz-form-item class='form-item'>
+            <nz-form-label [nzNoColon]='true' nzFor='ngay-qd' nzRequired>Ngày Quyết Định</nz-form-label>
+            <nz-form-control [nzErrorTip]='error'>
+              <nz-date-picker [nzDisabled]='isView' formControlName='ngayQd' nzFormat='dd/MM/yyyy'>
               </nz-date-picker>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
@@ -70,12 +73,12 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
-          <nz-form-item class="form-item">
-            <nz-form-label nzFor="nam-qd" nzRequired>Quyết định của TTCP</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="soQdTtcp" [nzDisabled]="isView" nzAllowClear="true">
-                <nz-option *ngFor="let data of listTtcp" [nzValue]="data.soQd" [nzLabel]="data.soQd">
+        <div nz-col [nzSpan]='4'>
+          <nz-form-item class='form-item'>
+            <nz-form-label nzFor='nam-qd' nzRequired>Quyết định của TTCP</nz-form-label>
+            <nz-form-control [nzErrorTip]='error'>
+              <nz-select formControlName='soQdTtcp' [nzDisabled]='isView' nzAllowClear='true'>
+                <nz-option *ngFor='let data of listTtcp' [nzValue]='data.soQd' [nzLabel]='data.soQd'>
                 </nz-option>
               </nz-select>
               <ng-template #error let-control>
@@ -84,20 +87,20 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
+        <div nz-col [nzSpan]='24'>
+          <nz-form-item class='form-item'>
+            <nz-form-label [nzNoColon]='true' nzFor='ngay-qd'>Trích yếu</nz-form-label>
             <nz-form-control>
-              <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input placeholder="Nhập text"
-                [readonly]="isView"></textarea>
+              <textarea rows='3' formControlName='trichYeu' class='search__input' nz-input placeholder='Nhập text'
+                [readonly]='isView'></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
-            <div class="list-file">
-              <file-list [data]="taiLieuDinhKemList"></file-list>
+        <div nz-col [nzSpan]='24'>
+          <nz-form-item class='form-item'>
+            <nz-form-label [nzNoColon]='true' class='label-color-kh'> Tài liệu đính kèm</nz-form-label>
+            <div class='list-file'>
+              <file-list [data]='taiLieuDinhKemList'></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -105,44 +108,45 @@
     </form>
   </nz-card>
 
-  <div class="group-button">
+  <div class='group-button'>
     <h3>Kế hoạch giao Bộ/Ngành</h3>
-    <div class="buttons" *ngIf="!isView">
-      <button type="button" class="btn btn-sub xanh" (click)="themKeHoach()">
-        <i class="fa fa-floppy-o"></i>
+    <div class='buttons' *ngIf='!isView'>
+      <button type='button' class='btn btn-sub xanh' (click)='themKeHoach()'>
+        <i class='fa fa-floppy-o'></i>
         <span>Thêm</span>
       </button>
     </div>
   </div>
 
-  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+  <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
+    <nz-table [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false'>
       <thead>
         <tr>
-          <th class="text-center" style="width: 3%;">STT</th>
-          <th style="width: 45%;">Bộ</th>
-          <th style="width: 10%;">Tổng</th>
-          <th style="width: 12%;">Kế hoạch mua bù</th>
-          <th style="width: 12%;">Kế hoạch mua bổ sung</th>
-          <th style="width: 8%;">Hành động</th>
+          <th class='text-center' style='width: 3%;'>STT</th>
+          <th style='width: 45%;'>Bộ</th>
+          <th style='width: 10%;'>Tổng</th>
+          <th style='width: 12%;'>Kế hoạch mua bù</th>
+          <th style='width: 12%;'>Kế hoạch mua bổ sung</th>
+          <th style='width: 8%;'>Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of dataTable; let idx = index">
-          <td class="text-center">{{ idx + 1 }}</td>
+        <tr *ngFor='let data of dataTable; let idx = index'>
+          <td class='text-center'>{{ idx + 1 }}</td>
           <td>{{ data.tenBoNganh }}</td>
           <td>{{ data.tongTien | number: '1.0-3': 'vi_VN' }}</td>
           <td>{{data.ttMuaBu | number: '1.0-3': 'vi_VN' }}</td>
           <td>{{data.ttMuaBsung | number: '1.0-3': 'vi_VN' }}</td>
-          <td style="text-align: left; white-space: nowrap;">
-            <a  *ngIf="formData.value.trangThai != STATUS.DANG_NHAP_DU_LIEU" (click)="themKeHoach(data, idx,true)">
-              <i class="fa fa-eye" title="Xem chi tiết"></i>
+          <td style='text-align: left; white-space: nowrap;'>
+            <a *ngIf='formData.value.trangThai != STATUS.DANG_NHAP_DU_LIEU' (click)='themKeHoach(data, idx,true)'>
+              <i class='fa fa-eye' title='Xem chi tiết'></i>
             </a>
-            <a *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView" (click)="themKeHoach(data, idx,false)">
-              <i class="fa fa-pencil" title="Sửa"></i>
+            <a *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView'
+              (click)='themKeHoach(data, idx,false)'>
+              <i class='fa fa-pencil' title='Sửa'></i>
             </a>
-            <a *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView" (click)="xoaItem(idx)">
-              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            <a *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView' (click)='xoaItem(idx)'>
+              <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
             </a>
           </td>
         </tr>

@@ -17,9 +17,11 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
-import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
+import { convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai } from "../../../../../../shared/commonFunction";
 import { saveAs } from "file-saver";
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { PREVIEW } from "../../../../../../constants/fileType";
+import printJS from "print-js";
+
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
   templateUrl: './themmoi-tonghop-khlcnt.component.html',
@@ -56,6 +58,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   };
   showDlgPreview = false;
   pdfSrc: any;
+  printSrc: any;
   wordSrc: any;
   constructor(
     httpClient: HttpClient,
@@ -92,7 +95,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       // loaiHdong: ['', [Validators.required]],
       // nguonVon: ['', [Validators.required]],
       ghiChu: ['',],
-      trangThai: [''],
+      trangThai: [null],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
       tchuanCluong: [''],
@@ -104,7 +107,6 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   }
 
   async ngOnInit() {
-    console.log("isView: ", this.isView)
     await this.spinner.show();
     try {
       await Promise.all([
@@ -112,7 +114,6 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         this.loadChiTiet(),
         this.convertTenVthh()
       ]);
-      console.log(this.isViewOnModal)
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -121,9 +122,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     }
   }
 
-  convertTenVthh(){
+  convertTenVthh() {
     let data = convertIdToTenLoaiVthh(this.loaiVthh);
-    console.log(data)
     this.formTraCuu.get('tenLoaiVthh').setValue(data)
     this.formTraCuu.get('loaiVthh').setValue(this.loaiVthh)
   }
@@ -172,7 +172,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -194,7 +194,6 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
     try {
-      debugger
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
         await this.spinner.hide();
@@ -212,6 +211,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         })
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
         this.isTongHop = true;
+        this.showFirstRow(event, this.dataTableDanhSachDX[0].idDxHdr);
       } else {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu để tổng hợp.");
         this.isTongHop = false;
@@ -317,6 +317,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     body.reportTemplateRequest = this.reportTemplate;
     await this.tongHopDeXuatKHLCNTService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
@@ -331,6 +332,9 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
 
   closeDlg() {
     this.showDlgPreview = false;
+  }
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 }
 

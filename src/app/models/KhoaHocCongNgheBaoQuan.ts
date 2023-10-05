@@ -1,8 +1,9 @@
-import {Validators} from "@angular/forms";
+import { Validators } from "@angular/forms";
 
 export class QuyChunKyThuatQuocGia {
   id: number;
   idHdr: number;
+  maChiTieu: string;
   tenChiTieu: string;
   thuTuHt: string;
   chiTieuCha: boolean;

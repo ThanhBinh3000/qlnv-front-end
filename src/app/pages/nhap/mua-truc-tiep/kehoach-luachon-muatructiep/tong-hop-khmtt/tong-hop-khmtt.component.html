@@ -10,7 +10,7 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Chủng loại hàng hóa </label>
+            <label class="search__label">Chủng loại hàng DTQG </label>
             <nz-select formControlName="cloaiVthh">
               <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
             </nz-select>
@@ -93,7 +93,7 @@
             <th>Ngày tổng hợp</th>
             <th>Nội dung tổng hợp</th>
             <th>Năm kế hoạch</th>
-            <th>Chủng loại hàng hóa</th>
+            <th>Chủng loại hàng DTQG</th>
             <th>Trạng thái</th>
             <th>Số QĐ phê duyệt KH mua trực tiếp</th>
             <th width="90px" class="text-right">Hành động</th>
@@ -168,7 +168,7 @@
                 *ngIf=" (data.trangThai == STATUS.CHUA_TAO_QD ||data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf=" ( data.trangThai == STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai==STATUS.DA_BAN_HANH_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')"
+              <a *ngIf=" ( data.trangThai == STATUS.CHUA_TAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')"
                 (click)="taoQdinh(data)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
@@ -199,13 +199,12 @@
   </div>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-themmoi-tonghop-khmtt [id]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-    (showListEvent)="showList()">
+  <app-themmoi-tonghop-khmtt [id]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView" (showListEvent)="showList()">
   </app-themmoi-tonghop-khmtt>
 </div>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khmtt [idInput]="qdPdMttId" [disableField]="disableField" [loaiVthh]="loaiVthh" [dataTongHop]="formDataQd.value"
-    (showListEvent)="showTongHop()">
+  <app-themmoi-quyetdinh-khmtt [idInput]="qdPdMttId" [disableField]="disableField" [loaiVthh]="loaiVthh"
+    [dataTongHop]="formDataQd.value" (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khmtt>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">

@@ -1,22 +1,22 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {chain} from 'lodash';
-import {v4 as uuidv4} from 'uuid';
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { chain } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import {
   MmThongTinNcChiCuc
 } from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
-import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
-import {MESSAGE} from "../../../../../constants/message";
+import { MmDxChiCucService } from "../../../../../services/mm-dx-chi-cuc.service";
+import { MESSAGE } from "../../../../../constants/message";
 import dayjs from "dayjs";
-import {STATUS} from "../../../../../constants/status";
-import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
-import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
+import { STATUS } from "../../../../../constants/status";
+import { QuyetDinhMuaSamService } from "../../../../../services/quyet-dinh-mua-sam.service";
+import { DialogMmMuaSamComponent } from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
 
 @Component({
   selector: 'app-mm-them-moi-qd-mua-sam',
@@ -97,7 +97,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         this.listTongHop = data.content;
         if (this.listTongHop) {
           this.listTongHop = this.listTongHop.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && !item.qdMuaSamId)
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDTC && !item.qdMuaSamId)
           )
         }
       } else {
@@ -212,12 +212,12 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDTC : {
+      case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;
       }
-      case STATUS.CHO_DUYET_LDTC : {
+      case STATUS.CHO_DUYET_LDTC: {
         trangThai = STATUS.BAN_HANH
       }
     }
@@ -227,10 +227,10 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({
-          tenTaiSan: key,
-          dataChild: value,
-          idVirtual: uuidv4(),
-        })
+        tenTaiSan: key,
+        dataChild: value,
+        idVirtual: uuidv4(),
+      })
       ).value()
     }
     if (this.dataTable && this.dataTable.length > 0) {

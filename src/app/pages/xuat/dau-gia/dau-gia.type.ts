@@ -1,4 +1,4 @@
-export type DauThau = {
+export type XuatBanDauGia = {
   icon: string;
   title: string;
   description: string;

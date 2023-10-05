@@ -34,6 +34,10 @@ import { HelperService } from 'src/app/services/helper.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import { PREVIEW } from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from "file-saver";
+import { KhCnQuyChuanKyThuat } from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -65,7 +69,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   listSoQuyetDinh = [];
   listBbBanGiaoMau = [];
   dataTableChiTieu: any[] = [];
-
+  previewName: string = 'nk_phieu_knghiem_cl';
 
   phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
     new PhieuKiemNghiemChatLuongHang();
@@ -76,6 +80,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   isChiTiet: boolean = false;
   listTieuChuan: any[] = [];
   isValid = false;
+  dmTieuChuan: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -84,6 +89,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     modal: NzModalService,
     private phieuKiemNghiemChatLuongHangService: QuanLyPhieuKiemNghiemChatLuongHangService,
     private danhMucService: DanhMucService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
   ) {
@@ -143,7 +149,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     try {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        this.loadDanhMucPhuongThucBaoQuan(),
+        // this.loadDanhMucPhuongThucBaoQuan(),
+        this.loadBbLayMau(),
         this.loadTieuChuan(),
       ]);
       if (this.id > 0) {
@@ -294,6 +301,17 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   tuChoi() {
+    let trangThai = ''
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -310,7 +328,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: STATUS.TU_CHOI_LDCC,
+            trangThai: trangThai,
           };
           let res =
             await this.phieuKiemNghiemChatLuongHangService.approve(
@@ -365,7 +383,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   openDialogBbLayMau() {
-    this.loadBbLayMau();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách biên bản lấy mẫu',
       nzContent: DialogTableSelectionComponent,
@@ -413,13 +430,20 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenThuKho: data.bbNhapDayKho.tenNguoiTao
       })
       if (!isChiTiet) {
-        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-        if (dmTieuChuan.data) {
-          this.dataTableChiTieu = dmTieuChuan.data.children;
-          this.dataTableChiTieu.forEach(element => {
-            element.edit = false
-          });
-        }
+        this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh).then(res => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            if (res.data) {
+              this.dataTableChiTieu = res.data
+              this.dataTableChiTieu.forEach(element => {
+                element.edit = false
+              });
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }).catch(err => {
+          this.notification.error(MESSAGE.ERROR, err.msg);
+        });
       }
     }
   }

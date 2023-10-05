@@ -4,36 +4,37 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-<!--    <button-->
-<!--      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"-->
-<!--      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">-->
-<!--      <i class="icon htvbdh_tcdt_guiduyet"></i>-->
-<!--      <span>Lưu và gửi duyệt</span>-->
-<!--    </button>-->
+    <!--    <button-->
+    <!--      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"-->
+    <!--      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">-->
+    <!--      <i class="icon htvbdh_tcdt_guiduyet"></i>-->
+    <!--      <span>Lưu và gửi duyệt</span>-->
+    <!--    </button>-->
     <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.lastest == false" type="button"
-            class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
+      class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định giao NV nhập hàng</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"
+      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV) && userService.isAccessPermisson('NHDTQG_NK_QDNH_DUYETLDV') && !isView"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc() && !isView" type="button"
-      class="btn btn-sub do" (click)="tuChoi()">
+    <button
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('NHDTQG_NK_QDNH_DUYETLDV') && !isView"
+      type="button" class="btn btn-sub do" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi "></i>
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isTongCuc() && !isView"
+      *ngIf="(((formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && (userService.isAccessPermisson('NHDTQG_NK_QDNH_THEM'))) || (formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('NHDTQG_NK_QDNH_DUYETLDV'))) && !isView"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span> {{ formData.value.trangThai == STATUS.CHO_DUYET_LDV ? 'Duyệt' : 'Lưu và gửi duyệt'}} </span>
     </button>
     <button
-      *ngIf="(this.isCheckCreate && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ))  && isDetailPermission() && !isView"
+      *ngIf="(this.isCheckCreate && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )) && userService.isAccessPermisson('NHDTQG_NK_QDNH_THEM') && isDetailPermission() && !isView"
       type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -48,7 +49,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH NHẬP KHÁC </span>
+        <span>QUYẾT ĐỊNH NHẬP HÀNG DTQG </span>
       </div>
     </div>
   </div>
@@ -134,7 +135,7 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item *ngIf="this.idInput != 0">
-              <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
+              <label nz-radio nzValue="TTr">Chọn số công văn tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTr()">
                   <input [readonly]="true" nz-input formControlName="soDxuat" readonly="true" />
@@ -163,7 +164,7 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Loại hàng hóa
+            <nz-form-label [nzNoColon]="true"> Loại hàng DTQG
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
@@ -276,7 +277,6 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-qdinh-nhap-xuat-hang-khac [idQdPd]="idInput" [loaiVthh]="loaiVthh"
-                                  (showListEvent)="showTongHop()">
+  <app-themmoi-qdinh-nhap-xuat-hang-khac [idQdPd]="idInput" [loaiVthh]="loaiVthh" (showListEvent)="showTongHop()">
   </app-themmoi-qdinh-nhap-xuat-hang-khac>
 </div>

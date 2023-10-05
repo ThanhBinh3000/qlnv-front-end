@@ -14,11 +14,11 @@ import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat
 import { CuuTroVienTroComponent } from '../../cuu-tro-vien-tro.component';
 import { CHUC_NANG } from 'src/app/constants/status';
 @Component({
-  selector: 'app-phieu-kiem-nghiem-chat-luong',
+  selector: 'app-phieu-kiem-nghiem-chat-luong1',
   templateUrl: './phieu-kiem-nghiem-chat-luong.component.html',
   styleUrls: ['./phieu-kiem-nghiem-chat-luong.component.scss']
 })
-export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
+export class PhieuKiemNghiemChatLuongComponent1 extends Base2Component implements OnInit {
 
   @Input()
   loaiVthh: string;
@@ -154,12 +154,14 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
             idQdGiaoNvXh: idQdGiaoNvXh,
             nam: nam,
             ngayQdGiaoNvXh: ngayQdGiaoNvXh,
-            childData: value };
+            childData: value
+          };
         } else {
           return {
             idVirtual: uuid.v4(),
             soQdGiaoNvXh: key != "null" ? key : '',
-            childData: value };
+            childData: value
+          };
         }
       }).value();
     this.children = dataView

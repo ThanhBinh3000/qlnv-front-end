@@ -120,8 +120,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     return this.httpClient.get<any>(url_).toPromise();
   }
 
-  loadThongTinChiTieuKeHoachTheoNamVaDonVi (namKh: number, maDvi:string): Promise<any> {
-    const url_ = `${environment.SERVICE_API}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}/${maDvi}`;
+  loadThongTinChiTieuKeHoachTheoNamVaDonVi(namKh: number, maDvi: string): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}/${maDvi}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
   loadThongTinChiTieuKeHoachTongCucGiao(body: any): Promise<any> {

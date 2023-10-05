@@ -14,8 +14,9 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
 import { Globals } from 'src/app/shared/globals';
 import { isEmpty } from 'lodash';
-import {DonviService} from "../../../../../services/donvi.service";
-import {STATUS} from "../../../../../constants/status";
+import { DonviService } from '../../../../../services/donvi.service';
+import { STATUS } from '../../../../../constants/status';
+import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
 
 export class DeNghiCapPhi {
   stt: string;
@@ -56,40 +57,30 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   formData: FormGroup;
   yearNow: number = 0;
   taiLieuDinhKemList: any[] = [];
-  maQd : string = '/BQP-KH'
   listNam: any[] = [];
   listBoNganh: any[] = [];
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
   listLoaiChiPhi: any[] = [];
-  deNghiCapPhiBoNganh: DeNghiCapPhiBoNganh = new DeNghiCapPhiBoNganh();
-
-  deNghiCapPhi: DeNghiCapPhi = new DeNghiCapPhi();
-  deNghiCapPhiCreate: DeNghiCapPhi = new DeNghiCapPhi();
-  dsDeNghiCapPhiClone: Array<DeNghiCapPhi>;
-
-  chiTieDeNghiCapPhi: ChiTietDeNghiCapPhi = new ChiTietDeNghiCapPhi();
-  chiTieDeNghiCapPhiCreate: ChiTietDeNghiCapPhi = new ChiTietDeNghiCapPhi();
-  dsChiTietDeNghiCapPhiClone: Array<ChiTietDeNghiCapPhi> = [];
+  itemCt1Selected: any;
   STATUS = STATUS;
   hanghoa: any = {
-    "maLoaiHangHoa": "",
-    "maChungLoaiHangHoa": "",
-    "tenHangHoa": "",
-  }
+    'maLoaiHangHoa': '',
+    'maChungLoaiHangHoa': '',
+    'tenHangHoa': '',
+  };
 
   detail: any = {};
   cts: any[] = [];
   ct1s: any[] = [];
 
-  rowDisplay: any = {};
   rowEdit: any = {};
-
   oldDataEdit1: any = {};
   oldDataEdit2: any = {};
 
   create: any = {};
   create1: any = {};
+  amount = AMOUNT_NO_DECIMAL;
 
   constructor(
     private deNghiCapPhiBoNganhService: DeNghiCapPhiBoNganhService,
@@ -101,13 +92,13 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     private modal: NzModalService,
     private helperService: HelperService,
     private donviService: DonviService,
-
-  ) { }
+  ) {
+  }
 
   isDisableField() {
     if (
       this.detail &&
-      this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU
+      this.detail.trangThai == STATUS.DA_HOAN_THANH
     ) {
       return true;
     }
@@ -116,13 +107,13 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
-      this.detail.trangThai = this.globals.prop.NHAP_DU_THAO;
-      this.detail.tenTrangThai = "Dự Thảo";
+      this.detail.trangThai = STATUS.DANG_NHAP_DU_LIEU;
+      this.detail.tenTrangThai = 'Đang nhập dữ liệu';
       this.initForm();
-      Promise.all([this.getListNam(), this.getListBoNganh(), this.loaiVTHHGetAll(),this.getListLoaiCPhi()]);
+      Promise.all([this.getListNam(), this.getListBoNganh(), this.loaiVTHHGetAll(), this.getListLoaiCPhi()]);
       this.rowEdit.isView = true;
       if (this.idInput > 0) {
-        this.loadChiTiet(this.idInput)
+        await this.loadChiTiet(this.idInput);
       }
       this.spinner.hide();
     } catch (error) {
@@ -136,7 +127,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       'maBoNganh': [null, [Validators.required]],
       'soDeNghi': [null, [Validators.required]],
       'ngayDeNghi': [null, [Validators.required]],
-      'ghiChu':[null]
+      'ghiChu': [null],
     });
   }
 
@@ -183,7 +174,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     this.listBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listBoNganh = res.data;
+      this.listBoNganh = res.data.filter(item => (item.code != 'BQP' && item.code != 'BCA' && item.code != 'BTC'));
     }
   }
 
@@ -203,7 +194,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -213,14 +204,14 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThaiId:STATUS.DA_HOAN_THANH,
+            trangThaiId: STATUS.DA_HOAN_THANH,
           };
 
           let res = await this.deNghiCapPhiBoNganhService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
               MESSAGE.SUCCESS,
-              MESSAGE.GUI_DUYET_SUCCESS,
+              'Đã hoàn thành cập nhật',
             );
             this.back();
           } else {
@@ -244,8 +235,11 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     }
     let body = this.formData.value;
     body.ct1List = this.ct1s;
-    body.soDeNghi = body.soDeNghi ? body.soDeNghi + this.maQd : '';
-    body.ngayDeNghi = this.formData.get("ngayDeNghi").value ? dayjs(this.formData.get("ngayDeNghi").value).format("YYYY-MM-DD") : null;
+    body.ngayDeNghi = this.formData.get('ngayDeNghi').value ? dayjs(this.formData.get('ngayDeNghi').value).format('YYYY-MM-DD') : null;
+    if (!body.ct1List || body.ct1List.length <= 0) {
+      this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập thông tin đơn vị cung cấp.');
+      return;
+    }
     this.spinner.show();
     try {
       if (this.idInput > 0) {
@@ -256,8 +250,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.idInput = res.data.id;
             this.formData.patchValue({
-              id : res.data.id
-            })
+              id: res.data.id,
+            });
           } else {
             return res.data.id;
           }
@@ -271,8 +265,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.idInput = res.data.id;
             this.formData.patchValue({
-              id : res.data.id
-            })
+              id: res.data.id,
+            });
           } else {
             return res.data.id;
           }
@@ -300,28 +294,14 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
           this.formData.patchValue({
             'nam': data.nam,
             'maBoNganh': data.maBoNganh,
-            'soDeNghi': data.soDeNghi ? data.soDeNghi.split("/")[0] : '',
+            'soDeNghi': data.soDeNghi,
             'ngayDeNghi': data.ngayDeNghi,
-            'ghiChu' : data.ghiChu
+            'ghiChu': data.ghiChu,
           });
-          this.hanghoa = {
-            "maLoaiHangHoa": "",
-            "maChungLoaiHangHoa": "",
-            "tenHangHoa": "",
-          }
-          this.detail.trangThai = data.trangThai
+          this.detail.trangThai = data.trangThai;
           this.detail.tenTrangThai = data.tenTrangThai;
           this.ct1s = data.ct1List;
-          if (data.ct1List && data.ct1List.length > 0 ) {
-            let ct2List = data.ct1List[0].ct2List;
-            ct2List.forEach(item => {
-              let chiPhi = this.listLoaiChiPhi.filter(cp => cp.ma == item.loaiChiPhi);
-              if (chiPhi && chiPhi.length > 0) {
-                item.tenLoaiChiPhi =  chiPhi[0].giaTri
-              }
-            })
-          }
-          this.rowEdit.ct2s =  data.ct1List &&  data.ct1List.length > 0 ?  data.ct1List[0].ct2List : [];
+          this.selectRow(this.ct1s[0]);
           this.sortTableId('ct1s');
         }
       }
@@ -335,59 +315,60 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.ct1s.forEach((lt, i) => {
         lt.stt = i + 1;
       });
-    }
-    else if (type === 'ct2s') {
-      this.rowEdit.ct2List?.forEach((lt, i) => {
+    } else if (type === 'ct2s') {
+      this.itemCt1Selected.ct2List?.forEach((lt, i) => {
         lt.stt = i + 1;
       });
     }
   }
 
   cancelEdit(item, type) {
-    if (type === 'ct1s') {
-      let index = this.ct1s.findIndex(x => x.stt === item.stt);
-      if (index != -1) {
-        let temp = cloneDeep(this.ct1s);
-        temp[index] = cloneDeep(this.oldDataEdit1);
-        this.ct1s = temp;
-      }
-      this.rowEdit.isView = true;
-    }
-    else if (type === 'ct2s') {
-      let index = this.rowEdit.ct2s.findIndex(x => x.stt === item.stt);
-      if (index != -1) {
-        let temp = cloneDeep(this.rowEdit.ct2s);
-        temp[index] = cloneDeep(this.oldDataEdit2);
-        this.rowEdit.ct2s = temp;
-      }
-    }
+    // if (type === 'ct1s') {
+    //   let index = this.ct1s.findIndex(x => x.stt === item.stt);
+    //   if (index != -1) {
+    //     let temp = cloneDeep(this.ct1s);
+    //     temp[index] = cloneDeep(this.oldDataEdit1);
+    //     this.ct1s = temp;
+    //   }
+    //   this.rowEdit.isView = true;
+    // } else if (type === 'ct2s') {
+    //   let index = this.itemCt1Selected.ct2List.findIndex(x => x.stt === item.stt);
+    //   if (index != -1) {
+    //     let temp = cloneDeep(this.itemCt1Selected.ct2List);
+    //     temp[index] = cloneDeep(this.oldDataEdit2);
+    //     this.itemCt1Selected.ct2List = temp;
+    //   }
+    // }
     item.edit = false;
   }
 
   saveEdit(item, type) {
-    item.edit = false;
-    if (type === 'ct1s') {
-      item.maVatTuCha = this.rowEdit.maVatTuCha;
-      item.maVatTu = this.rowEdit.maVatTu;
-      item.tenHangHoa = this.rowEdit.tenHangHoa;
-      item.ct2s = cloneDeep(this.rowEdit.ct2s);
-      item.ct2List = cloneDeep(this.rowEdit.ct2s);
-      item.ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
-      this.rowEdit.isView = true;
+    if (type == 'ct2s') {
+      if (item.yeuCauCapThem > (item.tongTien - item.kinhPhiDaCap)) {
+        this.notification.warning(MESSAGE.WARNING, 'Số tiền yêu cầu cấp thêm lớn hơn kinh phí chưa cấp.');
+        return;
+      }
+      if (item.tongTien < item.kinhPhiDaCap) {
+        this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp lớn hơn tổng tiền.');
+        return;
+      }
     }
-    console.log("this.rowEdit: ", this.rowEdit);
-
+    item.edit = false;
   }
 
   deleteRow(item: any, type) {
     if (type === 'ct1s') {
       let temp = this.ct1s.filter(x => x.stt !== item.stt);
       this.ct1s = temp;
+      if (!this.ct1s || this.ct1s.length <= 0) {
+        this.itemCt1Selected = null;
+      } else {
+        this.selectRow(this.ct1s[0]);
+      }
       this.sortTableId('ct1s');
-    }
-    else if (type === 'ct2s') {
-      let temp = this.rowEdit.ct2s.filter(x => x.stt !== item.stt);
-      this.rowEdit.ct2s = temp;
+    } else if (type === 'ct2s') {
+      this.itemCt1Selected.ct2List.splice(item, 1);
+      this.itemCt1Selected.ycCapThemPhi = this.tongCapThemBang2(this.itemCt1Selected);
       this.sortTableId('ct2s');
     }
   }
@@ -401,8 +382,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.rowEdit.ct2s = cloneDeep(this.rowEdit.ct2List);
       this.rowEdit.isView = false;
       this.oldDataEdit1 = cloneDeep(item);
-    }
-    else if (type === 'ct2s') {
+    } else if (type === 'ct2s') {
       this.oldDataEdit2 = cloneDeep(item);
     }
     item.edit = true;
@@ -415,36 +395,33 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       }
       this.sortTableId('ct1s');
       let item = cloneDeep(this.create1);
-      if(item.tenDvCungCap && item.soTaiKhoan && item.nganHang){
+      if (item.tenDvCungCap && item.soTaiKhoan && item.nganHang) {
         item.stt = this.ct1s.length + 1;
         item.ct2List = [];
         this.ct1s = [
           ...this.ct1s,
           item,
-        ]
-      }else{
+        ];
+        this.selectRow(this.ct1s[0]);
+      } else {
         this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
         return;
       }
-    }
-    else if (type === 'ct2s') {
-      if (!this.rowEdit.ct2s) {
-        this.rowEdit.ct2s = [];
-      }
+    } else if (type === 'ct2s') {
       this.sortTableId('ct2s');
       let item = cloneDeep(this.create);
-      item.stt = this.rowEdit.ct2s.length + 1;
-      item.tenLoaiChiPhi=this.listLoaiChiPhi.find(s=>s.ma == item.loaiChiPhi).giaTri;
-      item.yeuCauCapThem = item.tongTien - item.kinhPhiDaCap
-      this.rowEdit.ct2s = [
-        ...this.rowEdit.ct2s,
-        item,
-      ]
-      this.ct1s[0].ct2List = this.rowEdit.ct2s
-      this.ct1s[0].maVatTuCha = this.create.maVatTuCha
-      this.ct1s[0].maVatTu = this.create.maVatTu
-      this.ct1s[0].tenHangHoa = this.create.tenHangHoa
-      this.ct1s[0].ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
+      item.stt = this.itemCt1Selected.ct2List.length + 1;
+      item.tenLoaiChiPhi = this.listLoaiChiPhi.find(s => s.ma == item.loaiChiPhi).giaTri;
+      if (item.yeuCauCapThem > (item.tongTien - item.kinhPhiDaCap)) {
+        this.notification.warning(MESSAGE.WARNING, 'Số tiền yêu cầu cấp thêm lớn hơn kinh phí chưa cấp.');
+        return;
+      }
+      if (item.tongTien < item.kinhPhiDaCap) {
+        this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp lớn hơn tổng tiền.');
+        return;
+      }
+      this.itemCt1Selected.ct2List.push(item);
+      this.itemCt1Selected.ycCapThemPhi = this.tongCapThemBang2(this.itemCt1Selected);
     }
     this.clearItemRow(type);
   }
@@ -452,29 +429,26 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   clearItemRow(type) {
     if (type === 'ct1s') {
       this.create1 = {};
-    }
-    else if (type === 'ct2s') {
+    } else if (type === 'ct2s') {
       this.create = {};
     }
   }
 
-  selectRow(row, rowSet) {
-    if (row) {
-      if (rowSet === 'rowDisplay') {
-        this.rowDisplay = cloneDeep(row);
-        this.rowDisplay.isView = true;
-      }
-      else if (rowSet === 'rowEdit') {
-        this.rowEdit = cloneDeep(row);
-        this.rowEdit.isView = true;
-        this.ct1s.forEach(element => {
-          element.edit = false;
-        });
-        this.sortTableId('ct2s');
-        this.changeLoaiHangHoa(this.rowEdit.maVatTuCha);
-      }
-    }
-    this.rowEdit.ct2s = cloneDeep(this.rowEdit.ct2List);
+  selectRow(row) {
+    this.ct1s.forEach(item => {
+      item.selected = false;
+    });
+    row.selected = true;
+    this.itemCt1Selected = row;
+    // if (this.itemCt1Selected) {
+    //   let ct2List = this.itemCt1Selected.ct2List;
+    //   ct2List.forEach(item => {
+    //     let chiPhi = this.listLoaiChiPhi.find(cp => cp.ma == item.loaiChiPhi);
+    //     if (chiPhi) {
+    //       item.tenLoaiChiPhi = chiPhi.giaTri;
+    //     }
+    //   });
+    // }
   }
 
   tongBang1(data) {
@@ -482,34 +456,34 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       let sum = data.map((item) => item.ycCapThemPhi).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 
   tongChiPhiBang2(data) {
-    if (data && data?.ct2s && data?.ct2s.length > 0) {
-      let sum = data.ct2s.map((item) => item.tongTien).reduce((prev, next) => Number(prev) + Number(next));
+    if (data && data?.ct2List && data?.ct2List.length > 0) {
+      let sum = data.ct2List.map((item) => item.tongTien).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 
   tongKinhPhiBang2(data) {
-    if (data && data?.ct2s && data?.ct2s.length > 0) {
-      let sum = data.ct2s.map((item) => item.kinhPhiDaCap).reduce((prev, next) => Number(prev) + Number(next));
+    if (data && data?.ct2List && data?.ct2List.length > 0) {
+      let sum = data.ct2List.map((item) => item.kinhPhiDaCap).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 
   tongCapThemBang2(data) {
-    if (data && data?.ct2s && data?.ct2s.length > 0) {
-      let sum = data.ct2s.map((item) => item.yeuCauCapThem).reduce((prev, next) => Number(prev) + Number(next));
+    if (data && data?.ct2List && data?.ct2List.length > 0) {
+      let sum = data.ct2List.map((item) => item.yeuCauCapThem).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
-      return 0
+      return 0;
     }
   }
 }

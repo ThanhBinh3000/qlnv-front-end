@@ -27,12 +27,16 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../constants/status";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { PREVIEW } from "../../../../../constants/fileType";
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
   templateUrl: './themmoi-qdinh-nhap-xuat-hang.component.html',
   styleUrls: ['./themmoi-qdinh-nhap-xuat-hang.component.scss'],
 })
-export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
+export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
   @Output()
@@ -87,21 +91,18 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   listNganKhoEdit: any[] = [];
   listNganLoEdit: any[] = [];
   listCanCu: any[] = [];
-
+  previewName: string;
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private modal: NzModalService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
-    private notification: NzNotificationService,
-    private spinner: NgxSpinnerService,
-    public globals: Globals,
-    public userService: UserService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private uploadFileService: UploadFileService,
     private thongTinHopDongSercive: ThongTinHopDongService,
-    private helperService: HelperService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNhapHangService);
     this.formData = this.fb.group({
       id: [''],
       soQd: [''],
@@ -188,7 +189,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listHopDong,
-        dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Ngày ký', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Ngày ký', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soHd', 'tenHd', 'ngayKy', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
@@ -220,6 +221,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
               x.tenTrangThai = "Chưa thực hiện";
             });
           } else {
+            this.formData.patchValue({
+              donViTinh: 'tấn',
+            })
             this.dataTable = data.details[0].children;
             this.dataTable.forEach(x => {
               x.trangThai = STATUS.CHUA_THUC_HIEN;
@@ -427,6 +431,11 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          if (!this.loaiVthh.startsWith('02')) {
+            this.formData.patchValue({
+              donViTinh: 'tấn',
+            })
+          }
           this.formData.patchValue({
             soQd: data.soQd?.split('/')[0],
           });
@@ -436,7 +445,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           if (this.userService.isChiCuc()) {
             this.dataTable = data.dtlList.filter(x => x.maDvi == this.userInfo.MA_DVI);
             this.formData.patchValue({
-                  trangThaiChiCuc: this.dataTable[0].trangThai
+              trangThaiChiCuc: this.dataTable[0].trangThai
             });
             // this.dataTable.forEach(x => {
             //   let objListDiemKho = x.children.map(x => x.maDiemKho);
@@ -458,7 +467,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           }
           this.listFileDinhKem = data.fileDinhKems;
           this.listCanCu = data.fileCanCu;
-          console.log(this.dataTable)
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -594,12 +602,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     return result;
   }
 
-  isDetail(): boolean {
-    return (
-      this.isViewDetail
-    );
-  }
-
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
@@ -618,7 +620,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.dataTable[indexTable].children.forEach(item => {
       soLuong += item.soLuong
     })
-    if (soLuong + this.rowItem.soLuong > this.dataTable[indexTable].soLuong ) {
+    if (soLuong + this.rowItem.soLuong > this.dataTable[indexTable].soLuong) {
       this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu.")
       return false;
     }
@@ -682,34 +684,34 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
 
   }
- editRow (i, y){
-   this.dataTable[i].children.forEach(i => {
-     i.edit = false;
-   })
-   this.dataTable[i].children[y].edit = true;
-   this.rowItemEdit = cloneDeep(this.dataTable[i].children[y])
-   let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
-   if (diemKho && diemKho.length > 0) {
-     this.listNhaKhoEdit = diemKho[0].children;
-   }
-   let nhaKho = this.listNhaKhoEdit.filter(x => x.key == this.rowItemEdit.maNhaKho);
-   if (nhaKho && nhaKho.length > 0) {
-     this.listNganKhoEdit = nhaKho[0].children;
-   }
-   let nganKho = this.listNganKhoEdit.filter(x => x.key == this.rowItemEdit.maNganKho);
-   if (nganKho && nganKho.length > 0) {
-     this.listNganLoEdit = nganKho[0].children;
-   }
- }
+  editRow(i, y) {
+    this.dataTable[i].children.forEach(i => {
+      i.edit = false;
+    })
+    this.dataTable[i].children[y].edit = true;
+    this.rowItemEdit = cloneDeep(this.dataTable[i].children[y])
+    let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
+    if (diemKho && diemKho.length > 0) {
+      this.listNhaKhoEdit = diemKho[0].children;
+    }
+    let nhaKho = this.listNhaKhoEdit.filter(x => x.key == this.rowItemEdit.maNhaKho);
+    if (nhaKho && nhaKho.length > 0) {
+      this.listNganKhoEdit = nhaKho[0].children;
+    }
+    let nganKho = this.listNganKhoEdit.filter(x => x.key == this.rowItemEdit.maNganKho);
+    if (nganKho && nganKho.length > 0) {
+      this.listNganLoEdit = nganKho[0].children;
+    }
+  }
 
-  saveEdit (i, y){
+  saveEdit(i, y) {
     let soLuong = 0;
     let data = cloneDeep(this.dataTable[i].children);
     data.splice(y, 1)
     data.forEach(i => {
       soLuong += i.soLuong;
     })
-    if (soLuong + this.rowItemEdit.soLuong  > this.dataTable[i].soLuong) {
+    if (soLuong + this.rowItemEdit.soLuong > this.dataTable[i].soLuong) {
       this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu.")
       return false;
     }
@@ -717,7 +719,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.dataTable[i].children[y].edit = false;
   }
 
-  cancelEdit (i, y){
+  cancelEdit(i, y) {
     this.dataTable[i].children[y].edit = false;
     this.rowItemEdit = new ThongTinDiaDiemNhap();
   }
@@ -873,7 +875,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         this.spinner.show();
         this.dataTable.forEach(item => {
           item.trangThai = statusSave
-          if(item.children.length == 0){
+          if (item.children.length == 0) {
             this.notification.success(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
           }
         })
@@ -899,6 +901,23 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  async preview() {
+    if (this.loaiVthh.startsWith('02')) {
+      this.previewName = 'qd_giao_nhiem_vu_nhap_hang_vt'
+    } else {
+      this.previewName = 'qd_giao_nhiem_vu_nhap_hang_lt'
+    }
+    let body = this.formData.value;
+    this.reportTemplate.fileName = this.previewName + '.docx';
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.service.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
   }
 
 }

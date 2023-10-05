@@ -1,18 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {CHUC_NANG} from 'src/app/constants/status';
-import {MESSAGE} from "src/app/constants/message";
-import {chain, isEmpty} from "lodash";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {v4 as uuidv4} from "uuid";
-import {XuatTieuHuyComponent} from "../xuat-tieu-huy.component";
-import {DanhSachTieuHuyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Base2Component } from "../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { CHUC_NANG } from 'src/app/constants/status';
+import { MESSAGE } from "src/app/constants/message";
+import { chain, isEmpty } from "lodash";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { v4 as uuidv4 } from "uuid";
+import { XuatTieuHuyComponent } from "../xuat-tieu-huy.component";
+import { DanhSachTieuHuyService } from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
 
 @Component({
   selector: 'app-danh-sach-hang-tieu-huy',
@@ -26,18 +26,19 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
   dsCloaiVthh: any[] = [];
   dataTableView: any = [];
   expandSetString = new Set<string>();
-
+  tongHop = false;
+  @Output() tabFocus = new EventEmitter<object>();
   public vldTrangThai: XuatTieuHuyComponent;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private danhSachTieuHuyService: DanhSachTieuHuyService,
-              private XuatTieuHuyComponent: XuatTieuHuyComponent) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private danhSachTieuHuyService: DanhSachTieuHuyService,
+    private XuatTieuHuyComponent: XuatTieuHuyComponent) {
     super(httpClient, storageService, notification, spinner, modal, danhSachTieuHuyService);
     this.vldTrangThai = XuatTieuHuyComponent;
     this.formData = this.fb.group({
@@ -121,20 +122,20 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
   };
 
   async timKiem() {
-    /*    if (this.formData.value.ngayDx) {
-          this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-        }
-        if (this.formData.value.ngayKetThuc) {
-          this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-        }*/
     await this.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
       this.expandSetString.add(s.idVirtual);
     });
     this.buildTableView();
+  }
+
+  async xoaDieuKien(currentSearch?: any) {
+    this.formData.reset();
+    if (currentSearch) {
+      this.formData.patchValue(currentSearch)
+    }
+    this.timKiem();
   }
 
   async loadDsDonVi() {
@@ -152,9 +153,9 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({cloaiVthh: null})
+    this.formData.patchValue({ cloaiVthh: null })
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -172,17 +173,17 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => {
-              let rowItem = v.find(s => s.tenChiCuc === k);
-              let idVirtual = uuidv4();
-              this.expandSetString.add(idVirtual);
-              return {
-                idVirtual: idVirtual,
-                tenChiCuc: k,
-                maDiaDiem: rowItem.maDiaDiem,
-                tenCloaiVthh: rowItem.tenCloaiVthh,
-                childData: v
-              }
+            let rowItem = v.find(s => s.tenChiCuc === k);
+            let idVirtual = uuidv4();
+            this.expandSetString.add(idVirtual);
+            return {
+              idVirtual: idVirtual,
+              tenChiCuc: k,
+              maDiaDiem: rowItem.maDiaDiem,
+              tenCloaiVthh: rowItem.tenCloaiVthh,
+              childData: v
             }
+          }
           ).value();
         let rowItem = value.find(s => s.tenCuc === key);
         let idVirtual = uuidv4();
@@ -203,5 +204,12 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
     } else {
       this.expandSetString.delete(id);
     }
+  }
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+  openTongHop() {
+    this.tongHop = !this.tongHop;
+    this.emitTab(1);
   }
 }

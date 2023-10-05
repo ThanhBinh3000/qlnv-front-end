@@ -15,7 +15,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { formatDate } from '@angular/common';
 import { DonviService } from 'src/app/services/donvi.service';
 import { DialogThemMoiChiTietNhapXuatTonKhoHangDtqgComponent } from '../dialog-them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg/dialog-them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg.component';
-import {cTNhapXuatHangDtqg, slGtriHangDtqg} from 'src/app/models/BaoCaoBoNganh';
+import { cTNhapXuatHangDtqg, slGtriHangDtqg } from 'src/app/models/BaoCaoBoNganh';
 
 @Component({
   selector: 'app-them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg',
@@ -105,6 +105,7 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
             boNganh: this.listData.boNganh,
             nam: this.listData.nam,
             tenTrangThai: this.listData.tenTrangThai,
+            trangThai: this.listData.trangThai,
             tGianTaoTuNgay: this.listData.tGianTaoTuNgay,
             tGianTaoDenNgay: this.listData.tGianTaoDenNgay,
             tGianBanHanhTuNgay: this.listData.tGianBanHanhTuNgay,
@@ -247,14 +248,14 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
       }
     }
 
-    if(k == undefined){
+    if (k == undefined) {
       this.itemRow[i][y][z].diaDiemDeNhapHang = ddDeNhapHang[0].key;
       this.itemRow[i][y][z].tenDiaDiem = ddDeNhapHang[0].tenDvi;
       this.itemRow[i][y][z].nuocSanXuat = "Việt Nam";
       this.itemRowEdit[i][y][z].diaDiemDeNhapHang = ddDeNhapHang[0].key;
       this.itemRowEdit[i][y][z].tenDiaDiem = ddDeNhapHang[0].tenDvi;
       this.itemRowEdit[i][y][z].nuocSanXuat = "Việt Nam";
-    }else{
+    } else {
       this.itemRowEdit[i][y][z][k].diaDiemDeNhapHang = ddDeNhapHang[0].key;
       this.itemRowEdit[i][y][z][k].tenDiaDiem = ddDeNhapHang[0].tenDvi;
       this.itemRowEdit[i][y][z][k].nuocSanXuat = "Việt Nam";
@@ -266,7 +267,7 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
     this.spinner.show();
     debugger
     for (let i = 0; i < this.listDataGroup.length; i++) {
-      this.listDataGroup[i].thuTuHienThi = (i+1)
+      this.listDataGroup[i].thuTuHienThi = (i + 1)
     }
     // if (this.listDataGroup.length == 0) {
     //   this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin báo cáo");

@@ -22,7 +22,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from './../../../../../../services/uploaFile.service';
-import {FILETYPE} from "../../../../../../constants/fileType";
+import { FILETYPE } from "../../../../../../constants/fileType";
 @Component({
   selector: 'app-them-moi-phieu-kiem-tra-chat-luong',
   templateUrl: './them-moi-phieu-kiem-tra-chat-luong.component.html',
@@ -55,7 +55,8 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   listDiaDiemNhap: any[] = [];
   listFileDinhKem: FileDinhKem[] = [];
   listFileDinhKemKTCL: FileDinhKem[] = [];
-  listFile: any[] = []
+  listFile: any[] = [];
+  previewName: string = 'ntt_phieu_kiem_tra_chat_luong';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -227,7 +228,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     if (dataChiCuc.length > 0) {
       console.log(dataChiCuc[0].children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI)))
       this.listDiaDiemNhap = dataChiCuc[0].children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI));
@@ -277,7 +278,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
-        soLuong: data.soLuong,
+        soLuong: data.soLuong * 1000,
         soLuongQdGiaoNvNh: data.soLuong * 1000,
         soBb: data.listBienBanNghiemThuBq.find(item => item.id === Math.min(...data.listBienBanNghiemThuBq.map(item => item.id))).soBb,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
@@ -335,7 +336,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
           });
           this.helperService.bidingDataInFormGroup(this.formData, data);
           await this.bindingDataQd(data.idQdGiaoNvNh);
-          if(data.fileDinhKems.length > 0){
+          if (data.fileDinhKems.length > 0) {
             data.fileDinhKems.forEach(item => {
               if (item.fileType == FILETYPE.FILE_DINH_KEM) {
                 this.listFileDinhKem.push(item)
@@ -376,7 +377,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         })
       }
       if (this.listFile && this.listFile.length > 0) {
-        body.fileDinhKems= this.listFile;
+        body.fileDinhKems = this.listFile;
       }
       body.phieuKiemTraChatLuongDtlList = this.dataTableChiTieu;
       body.phieuKiemTraChatLuongDtlList.forEach(e => {

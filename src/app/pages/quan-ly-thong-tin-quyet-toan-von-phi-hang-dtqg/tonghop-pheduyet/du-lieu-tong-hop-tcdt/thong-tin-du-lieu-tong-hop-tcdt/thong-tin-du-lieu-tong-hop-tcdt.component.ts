@@ -1,23 +1,26 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {KeHoachVonPhiBNCT} from "../../../../../models/KeHoachVonPhiBNCT";
-import {Globals} from "../../../../../shared/globals";
-import {NgxSpinnerService} from "ngx-spinner";
-import {UserService} from "../../../../../services/user.service";
-import {DonviService} from "../../../../../services/donvi.service";
-import {QuyetToanVonPhiService} from "../../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {HelperService} from "../../../../../services/helper.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import * as dayjs from "dayjs";
-import {MESSAGE} from "../../../../../constants/message";
-import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import {STATUS} from 'src/app/constants/status';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { KeHoachVonPhiBNCT } from '../../../../../models/KeHoachVonPhiBNCT';
+import { Globals } from '../../../../../shared/globals';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { UserService } from '../../../../../services/user.service';
+import { DonviService } from '../../../../../services/donvi.service';
+import { QuyetToanVonPhiService } from '../../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { HelperService } from '../../../../../services/helper.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import * as dayjs from 'dayjs';
+import { MESSAGE } from '../../../../../constants/message';
+import { DialogTuChoiComponent } from '../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { STATUS } from 'src/app/constants/status';
+import { PREVIEW } from '../../../../../constants/fileType';
+import printJS from 'print-js';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-du-lieu-tong-hop-tcdt',
   templateUrl: './thong-tin-du-lieu-tong-hop-tcdt.component.html',
-  styleUrls: ['./thong-tin-du-lieu-tong-hop-tcdt.component.scss']
+  styleUrls: ['./thong-tin-du-lieu-tong-hop-tcdt.component.scss'],
 })
 export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
 
@@ -54,6 +57,11 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
     trangThai: '',
     trangThaiPdBtc: '',
   };
+  templateName = 'bao-cao-so-lieu-quyet-toan-toan-nganh';
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -123,15 +131,15 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
       return;
     }
     let body = {
-      "id": null,
-      "namQt": this.formData.value.namQuyetToan,
-      "trangThai": this.formData.value.trangThai,
-      "ngayNhap": this.formData.get("ngayNhap").value ? dayjs(this.formData.get("ngayNhap").value).format("YYYY-MM-DD") : null,
-      "dsQtNsChiTw": this.dsQtNsChiTw,
-      "dsQtNsKpChiNvDtqg": this.dsQtNsKpChiNvDtqg,
-      "taiLieuDinhKems": this.taiLieuDinhKemList,
-      "loai": "01",
-      "soToTrinh": this.formData.value.soToTrinh,
+      'id': null,
+      'namQt': this.formData.value.namQuyetToan,
+      'trangThai': this.formData.value.trangThai,
+      'ngayNhap': this.formData.get('ngayNhap').value ? dayjs(this.formData.get('ngayNhap').value).format('YYYY-MM-DD') : null,
+      'dsQtNsChiTw': this.dsQtNsChiTw,
+      'dsQtNsKpChiNvDtqg': this.dsQtNsKpChiNvDtqg,
+      'taiLieuDinhKems': this.taiLieuDinhKemList,
+      'loai': '01',
+      'soToTrinh': this.formData.value.soToTrinh,
     };
     this.spinner.show();
     try {
@@ -203,7 +211,7 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
       this.dsQtNsChiTw.forEach((item, index) => {
         this.dataQtNsChiTwEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -214,7 +222,7 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
       this.dsQtNsKpChiNvDtqg.forEach((item, index) => {
         this.dataQtNsKpChiNvDtqgEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -280,15 +288,15 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
 
   cancelEditQtNsChiTw(idx) {
     this.dataQtNsChiTwEdit[idx] = {
-      data: {...this.dsQtNsChiTw[idx]},
-      edit: false
+      data: { ...this.dsQtNsChiTw[idx] },
+      edit: false,
     };
   }
 
   cancelEditQtNsKpChiNvDtqg(idx) {
     this.dataQtNsKpChiNvDtqgEdit[idx] = {
-      data: {...this.dsQtNsKpChiNvDtqg[idx]},
-      edit: false
+      data: { ...this.dsQtNsKpChiNvDtqg[idx] },
+      edit: false,
     };
   }
 
@@ -325,7 +333,8 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO: {
+            case STATUS.DU_THAO:
+            case STATUS.TU_CHOI_LDTC: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
@@ -377,7 +386,7 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
           const res = await this.vonPhiService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
-            this.quayLai()
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -409,4 +418,36 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
     }
   }
 
+  async preview(id) {
+    this.spinner.show();
+    await this.vonPhiService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
 }

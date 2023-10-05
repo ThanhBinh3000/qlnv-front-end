@@ -1,20 +1,20 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {Validators} from "@angular/forms";
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { Validators } from "@angular/forms";
 import dayjs from "dayjs";
-import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
-import {STATUS} from "../../../../../constants/status";
-import {DonviService} from "../../../../../services/donvi.service";
-import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
-import {OldResponseData} from "../../../../../interfaces/response";
-import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
+import { MmDxChiCucService } from "../../../../../services/mm-dx-chi-cuc.service";
+import { STATUS } from "../../../../../constants/status";
+import { DonviService } from "../../../../../services/donvi.service";
+import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
+import { OldResponseData } from "../../../../../interfaces/response";
+import { MangLuoiKhoService } from "../../../../../services/qlnv-kho/mangLuoiKho.service";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
 import {
   DeXuatNhuCauBaoHiemService
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
@@ -62,6 +62,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       giaTriDx: [null,],
       trichYeu: [null,],
       trangThai: ['00'],
+      trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
@@ -90,12 +91,12 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TUCHOI_CB_CUC : {
+      case STATUS.DU_THAO:
+      case STATUS.TUCHOI_CB_CUC: {
         trangThai = STATUS.DA_KY;
         break;
       }
-      case STATUS.DA_KY : {
+      case STATUS.DA_KY: {
         trangThai = STATUS.DADUYET_CB_CUC
       }
     }
@@ -144,7 +145,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       this.dataTable.forEach((item, index) => {
         this.dataEditKho[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -160,7 +161,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
 
   cancelEdit(stt: number): void {
     this.dataEditKho[stt] = {
-      data: {...this.dataTable[stt]},
+      data: { ...this.dataTable[stt] },
       edit: false
     };
   }
@@ -250,23 +251,27 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   }
 
   async loadAllDsDiemKho() {
-      let res = await this.donViService.layTatCaDonViByLevel(4);
-      if (res && res.data) {
-        this.dsDiemKho = res.data
-        this.dsDiemKho = this.dsDiemKho.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI));
-      }
+    let res = await this.donViService.layTatCaDonViByLevel(4);
+    if (res && res.data) {
+      this.dsDiemKho = res.data
+      this.dsDiemKho = this.dsDiemKho.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI));
+    }
   }
 
   async changDiemKho(event, type?: any) {
-    let list = this.dsDiemKho.filter(item => item.maDvi == event)
-    if (list && list.length > 0) {
-      this.dsNhaKho = list[0].children
-      if (type) {
-        type.nhaKho = null
-        type.tenDiemKho = list[0].tenDvi
-      } else {
-        this.rowItemKho.nhaKho = null
-        this.rowItemKho.tenDiemKho = list[0].tenDvi
+    if (event) {
+      const dsTong = await this.donViService.layTatCaDonViByLevel(5);
+      this.dsNhaKho = dsTong.data
+      this.dsNhaKho = this.dsNhaKho.filter(item => item.maDvi.startsWith(event) && item.type != 'PB')
+      let list = this.dsDiemKho.filter(item => item.maDvi == event)
+      if (list && list.length > 0) {
+        if (type) {
+          type.nhaKho = null
+          type.tenDiemKho = list[0].tenDvi
+        } else {
+          this.rowItemKho.nhaKho = null
+          this.rowItemKho.tenDiemKho = list[0].tenDvi
+        }
       }
     }
   }
@@ -351,7 +356,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       this.tableHangDtqg.forEach((item, index) => {
         this.dataEditHh[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -367,7 +372,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
 
   cancelEditHh(stt: number): void {
     this.dataEditHh[stt] = {
-      data: {...this.tableHangDtqg[stt]},
+      data: { ...this.tableHangDtqg[stt] },
       edit: false
     };
   }

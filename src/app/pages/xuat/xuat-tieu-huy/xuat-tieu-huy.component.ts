@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Subject} from "rxjs";
-import {UserService} from "../../../services/user.service";
-import {Globals} from "../../../shared/globals";
-import {STATUS} from "../../../constants/status";
-import {cloneDeep} from 'lodash';
+import { Subject } from "rxjs";
+import { UserService } from "../../../services/user.service";
+import { Globals } from "../../../shared/globals";
+import { STATUS } from "../../../constants/status";
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-xuat-tieu-huy',
@@ -80,9 +80,15 @@ export class XuatTieuHuyComponent implements OnInit {
       actionTmp = actionTmp + "_NO";
     }
     if (data) {
-      return mapQuyen[actionTmp].includes(data.trangThai)
+      return mapQuyen[actionTmp].includes(data.trangThai) && mapQuyen[actionTmp].includes(data.trangThaiTc);
     } else {
       return false;
+    }
+  }
+
+  receivedTab(tab) {
+    if (tab >= 0) {
+      this.tabSelected = tab;
     }
   }
 }

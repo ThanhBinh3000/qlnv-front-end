@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import {Base2Component} from "../../base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../services/danhmuc.service";
-import {DonviService} from "../../../services/donvi.service";
-import {MangLuoiKhoService} from "../../../services/qlnv-kho/mangLuoiKho.service";
-import {QuanLyHangTrongKhoService} from "../../../services/quanLyHangTrongKho.service";
-import {MESSAGE} from "../../../constants/message";
+import { Base2Component } from "../../base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../services/danhmuc.service";
+import { DonviService } from "../../../services/donvi.service";
+import { MangLuoiKhoService } from "../../../services/qlnv-kho/mangLuoiKho.service";
+import { QuanLyHangTrongKhoService } from "../../../services/quanLyHangTrongKho.service";
+import { MESSAGE } from "../../../constants/message";
 
 @Component({
   selector: 'app-dialog-them-moi-dm-nhom-hang',
@@ -36,21 +36,21 @@ export class DialogThemMoiDmNhomHangComponent extends Base2Component implements 
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
-        id: [],
-        danhMuc: [],
-        nhomHang: [],
-        donViTinh: [],
-        isMatHang: [],
-        tenMatHang: [],
-        matHang: [],
-        donViTinhMh: [],
-        tongGiaTri: [],
-        soLuongTrongNam: [],
-        donGia: [],
-        thanhTienTrongNam: [],
-        soLuongNamTruoc: [],
-        thanhTienNamTruoc: [],
-      }
+      id: [],
+      danhMuc: [],
+      nhomHang: [],
+      donViTinh: [],
+      isMatHang: [],
+      tenMatHang: [],
+      matHang: [],
+      donViTinhMh: [],
+      tongGiaTri: [],
+      soLuongTrongNam: [],
+      donGia: [],
+      thanhTienTrongNam: [],
+      soLuongNamTruoc: [],
+      thanhTienNamTruoc: [],
+    }
     );
   }
 
@@ -60,7 +60,7 @@ export class DialogThemMoiDmNhomHangComponent extends Base2Component implements 
 
   async getDSMatHang() {
     const body = {
-      nhomCcdc: 1
+      nhomCcdc: [1]
     }
     this.listMatHang = []
     let res = await this.danhMucService.getDSMatHang(body);

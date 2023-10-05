@@ -1,24 +1,25 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {TongHopPhuongAnGiaService} from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
-import {saveAs} from 'file-saver';
-import {PREVIEW} from "../../../../../../../constants/fileType";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { PAGE_SIZE_DEFAULT, TYPE_PAG } from 'src/app/constants/config';
+import { saveAs } from 'file-saver';
+import { PREVIEW } from "../../../../../../../constants/fileType";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-them-tong-hop-phuong-an-gia',
@@ -65,7 +66,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   pdfSrc: any;
   wordSrc: any;
   excelSrc: any;
-  isPrint: boolean = false;
+  printSrc: any;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -140,7 +141,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     const res = await this.donviService.layTatCaDonViByLevel(2);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
-        this.listCuc.push({tenDvi: "Tất cả", maDvi: "all", type: "DV"})
+        this.listCuc.push({ tenDvi: "Tất cả", maDvi: "all", type: "DV" })
         this.listCuc = [...this.listCuc, res.data].flat();
         if (this.listCuc && this.listCuc.length > 0) {
           this.listCuc = this.listCuc.filter(item => item.type != 'PB')
@@ -397,11 +398,11 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   downloadPdf() {
-   if (this.type == 'GCT') {
-     saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gct.pdf");
-   } else {
-     saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gmtdbtt.pdf");
-   }
+    if (this.type == 'GCT') {
+      saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gct.pdf");
+    } else {
+      saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gmtdbtt.pdf");
+    }
   }
 
   async downloadExcel() {
@@ -421,6 +422,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       await this.tongHopPhuongAnGiaService.preview(body).then(async s => {
         this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
         this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.printSrc = s.data.pdfSrc;
         this.showDlgPreview = true;
         this
       });
@@ -437,21 +439,15 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   doPrint() {
-    const WindowPrt = window.open(
-      '',
-      '',
-      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-    );
-    let printContent = '';
-    printContent = printContent + '<div>';
-    printContent =
-      printContent + document.getElementById('modal').innerHTML;
-    printContent = printContent + '</div>';
-    WindowPrt.document.write(printContent);
-    WindowPrt.document.close();
-    WindowPrt.focus();
-    WindowPrt.print();
-    WindowPrt.close();
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  downloadWord() {
+    if (this.type == 'GCT') {
+      saveAs(this.wordSrc, "tong_hop_phuong_an_gia_gct.docx");
+    } else {
+      saveAs(this.wordSrc, "tong_hop_phuong_an_gia_gmtdbtt.docx");
+    }
   }
 }
 

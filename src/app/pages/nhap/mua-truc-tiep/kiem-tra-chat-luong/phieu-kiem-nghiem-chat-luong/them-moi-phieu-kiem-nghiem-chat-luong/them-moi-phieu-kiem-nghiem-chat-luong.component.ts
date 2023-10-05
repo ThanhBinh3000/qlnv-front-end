@@ -19,8 +19,8 @@ import { MttBienBanLayMauService } from './../../../../../../services/qlnv-hang/
 import { DanhMucTieuChuanService } from './../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service';
 import { KetQuaKiemNghiemChatLuongHang, PhieuKiemNghiemChatLuongHang } from './../../../../../../models/PhieuKiemNghiemChatLuongThoc';
 import { MttPhieuKiemNghiemChatLuongService } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttPhieuKiemNghiemChatLuongService.service';
-import {FILETYPE} from "../../../../../../constants/fileType";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import { FILETYPE } from "../../../../../../constants/fileType";
+import { FileDinhKem } from "../../../../../../models/FileDinhKem";
 import {
   QuyetDinhGiaoNvNhapHangService
 } from "../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service";
@@ -74,6 +74,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   isChiTiet: boolean = false;
   listTieuChuan: any[] = [];
   isValid = false;
+  previewName: string = 'ntt_phieu_kiem_nghiem_chat_luong';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -146,11 +147,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       console.log(this.isView)
       await Promise.all([
         this.loadBbLayMau(),
-        this.loadDanhMucPhuongThucBaoQuan(),
+        // this.loadDanhMucPhuongThucBaoQuan(),
         this.loadTieuChuan(),
         this.loadSoQuyetDinh()
       ]);
-      if(this.idQdGiaoNvNh){
+      if (this.idQdGiaoNvNh) {
         await this.bindingDataQd(this.idQdGiaoNvNh)
       }
       if (this.id) {
@@ -259,13 +260,13 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       tenCloaiVthh: data.tenCloaiVthh,
       soLuongNhapDayKho: data.soLuong,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     console.log(dataChiCuc)
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
+      let nganLoKho = this.listDiaDiemNhap.find(x => x.id == this.idDiemKho)
+      await this.bindingDDiem(nganLoKho);
     }
-    let nganLoKho = this.listDiaDiemNhap.find(x => x.id == this.idDiemKho)
-    await this.bindingDDiem(nganLoKho);
     await this.loadPhuongPhapLayMau();
     await this.loadChiTieuCl();
     await this.spinner.hide();
@@ -292,7 +293,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     });
   }
 
-  async bindingDDiem(data: any){
+  async bindingDDiem(data: any) {
     this.listBbNhapDayKho = [];
     this.formData.patchValue({
       idDdiemGiaoNvNh: data.id,
@@ -325,7 +326,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         const data = res.data;
         data.tenDvi = this.userInfo.TEN_DVI;
         this.helperService.bidingDataInFormGroup(this.formData, data);
-        if(data.fileDinhKems.length > 0){
+        if (data.fileDinhKems.length > 0) {
           data.fileDinhKems.forEach(item => {
             this.listFileDinhKemKTCL.push(item)
           })

@@ -1,33 +1,13 @@
-import {cloneDeep} from 'lodash';
-import {saveAs} from 'file-saver';
-import {Component, Input, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DonviService} from 'src/app/services/donvi.service';
-import {UserService} from 'src/app/services/user.service';
-import {convertTrangThai} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {
-  DialogDanhSachHangHoaComponent
-} from "../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { QlDinhMucPhiService } from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
+import { Base2Component } from "../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../services/storage.service";
 
 ;
-import {DinhMucPhiNxBq} from "../../../../models/DinhMucPhi";
-import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
-import {DanhMucDinhMucService} from "../../../../services/danh-muc-dinh-muc.service";
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
-import {
-  TongHopDeXuatKHLCNTService
-} from "../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service";
 
 @Component({
   selector: 'app-dinh-muc-phi-nhap-xuat-bao-quan',

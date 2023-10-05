@@ -35,7 +35,7 @@ export class TongHopKhnkComponent implements OnInit {
   searchFilter = {
     namKhoach: "",
     maTh: "",
-    trangThai: "",
+    // trangThai: "",
 
   };
   dataTable: any[] = [];
@@ -128,7 +128,7 @@ export class TongHopKhnkComponent implements OnInit {
   clearFilter() {
     this.searchFilter.namKhoach = null;
     this.searchFilter.maTh = null;
-    this.searchFilter.trangThai = null;
+    // this.searchFilter.trangThai = null;
     this.tuNgayKy = null;
     this.denNgayKy = null;
     this.tuNgayTh = null;
@@ -145,7 +145,7 @@ export class TongHopKhnkComponent implements OnInit {
       denNgayTh: this.denNgayTh != null ? dayjs(this.denNgayTh).format("YYYY-MM-DD") + " 23:59:59" : null,
       namKhoach: this.searchFilter.namKhoach,
       maTh: this.searchFilter.maTh,
-      trangThai: this.searchFilter.trangThai,
+      // trangThai: this.searchFilter.trangThai,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1
@@ -173,7 +173,7 @@ export class TongHopKhnkComponent implements OnInit {
     this.spinner.hide();
   };
 
-  deleteSelect(){
+  deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
@@ -215,7 +215,7 @@ export class TongHopKhnkComponent implements OnInit {
     }
   };
 
-  exportData(){
+  exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -226,7 +226,7 @@ export class TongHopKhnkComponent implements OnInit {
           denNgayTh: this.denNgayTh != null ? dayjs(this.denNgayTh).format("YYYY-MM-DD") + " 23:59:59" : null,
           namKhoach: this.searchFilter.namKhoach,
           maTh: this.searchFilter.maTh,
-          trangThai: this.searchFilter.trangThai,
+          // trangThai: this.searchFilter.trangThai,
         };
         this.tongHopDxKhNhapKhacService
           .export(body)
@@ -387,7 +387,7 @@ export class TongHopKhnkComponent implements OnInit {
     this.search();
   }
 
-  async taoQdinh(data: any){
+  async taoQdinh(data: any) {
     this.dataTongHop = data;
     this.isQuyetDinh = true;
   }

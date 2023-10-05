@@ -28,7 +28,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     @Input() isView: boolean;
     @Input() isViewOnModal: boolean;
     @Input() loaiBc: string;
-    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, tenBc: string, ngayBc: string };
+    @Input() passData: { soQdDcCuc: string, qdDcCucId: number, ngayKyQd: string, soBc: string, bcKetQuaDcId: number, tenBc: string, ngayBc: string, maDviNhan: string };
     @Output()
     showListEvent = new EventEmitter<any>();
     expandSetString = new Set<string>();
@@ -56,6 +56,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             value: "Đại diện Cục DTNN KV", text: "Đại diện Cục DTNN KV"
         }
     ]
+    hasThuaThieu: boolean = false;
     constructor(
         httpClient: HttpClient,
         storageService: StorageService,
@@ -71,18 +72,19 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         this.formData = this.fb.group({
             id: [0],
             nam: [dayjs().get('year'), [Validators.required]],
-            tenDvi: [],
-            maDvi: [],
-            tenCanBo: [],
+            tenDvi: [, [Validators.required]],
+            maDvi: [, [Validators.required]],
+            maDviNhan: [, [Validators.required]],
+            tenCanBo: [, [Validators.required]],
             ngayLap: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-            canBoId: [],
-            soBb: [''],
+            canBoId: [, [Validators.required]],
+            soBb: ['', [Validators.required]],
             soBcKetQuaDc: ['', [Validators.required]],
-            bcKetQuaDcId: [''],
-            ngayLapBcKetQuaDc: [],
+            bcKetQuaDcId: ['', [Validators.required]],
+            ngayLapBcKetQuaDc: [, [Validators.required]],
             soQdDcCuc: ['', [Validators.required]],
-            qdDcCucId: [],
-            ngayKyQdCuc: [],
+            qdDcCucId: [, [Validators.required]],
+            ngayKyQdCuc: [, [Validators.required]],
             trangThai: ['00'],
             nguyenNhan: [],
             kienNghi: [],
@@ -90,7 +92,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             fileDinhKems: [new Array()],
             fileBienBanHaoDois: [new Array()],
             banKiemKe: [new Array()],
-            tenBaoCao: []
+            tenBaoCao: [, [Validators.required]]
         })
     }
 
@@ -128,6 +130,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
                 ngayKyQdCuc: this.passData.ngayKyQd,
                 bcKetQuaDcId: this.passData.bcKetQuaDcId,
                 tenBaoCao: this.passData.tenBc,
+                maDviNhan: this.passData.maDviNhan
 
             })
             if (this.passData.bcKetQuaDcId) {
@@ -185,7 +188,8 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     bindingDataQd(data: any) {
         this.formData.patchValue({
             soQdDcCuc: data.soQdinh,
-            ngayKyQdCuc: data.ngayKyQdinh
+            ngayKyQdCuc: data.ngayKyQdinh,
+            qdDcCucId: data.id
         })
     };
 
@@ -206,6 +210,9 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     }
     async openDialogSoBc() {
         if (this.isView) return;
+        if (!this.formData.value.soQdDcCuc) {
+            return this.notification.error(MESSAGE.ERROR, "Chưa có quyết định nào được chọn.")
+        }
         await this.loadListBaoCaoChiCuc();
         const modalQD = this.modal.create({
             nzTitle: 'CHỌN BÁO CÁO TỪ CHI CỤC GỬI LÊN',
@@ -233,7 +240,8 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             soBcKetQuaDc: data.soBc,
             tenBaoCao: data.tenBc,
             ngayLapBcKetQuaDc: data.ngayBc,
-            bcKetQuaDcId: data.id
+            bcKetQuaDcId: data.id,
+            maDviNhan: data.maDviNhan
         })
         // this.danhSachKetQua = Array.isArray(data.danhSachKetQua) ? cloneDeep(data.danhSachKetQua) : [];
         if (data.id) {
@@ -244,6 +252,10 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         const data = await this.baoCaoDieuChuyenService.getDetail(id);
         this.danhSachKetQua = Array.isArray(data?.data?.danhSachKetQua) ? cloneDeep(data.data.danhSachKetQua) : [];
         this.buildTableView();
+        this.checkThuaThieu(this.danhSachKetQua);
+    }
+    checkThuaThieu(list: any[]) {
+        this.hasThuaThieu = list.some(f => f.tinhTrang);
     }
     expandAll() {
         this.dataView.forEach(s => {
@@ -350,7 +362,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
                         trangThai: trangThai
                     };
                     let res =
-                        await this.baoCaoDieuChuyenService.approve(
+                        await this.bienBanThuThieuService.approve(
                             body,
                         );
                     if (res.msg == MESSAGE.SUCCESS) {
@@ -388,7 +400,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
                         trangThai: STATUS.TU_CHOI_LDCC,
                     };
                     let res =
-                        await this.baoCaoDieuChuyenService.approve(
+                        await this.bienBanThuThieuService.approve(
                             body,
                         );
                     if (res.msg == MESSAGE.SUCCESS) {
@@ -464,7 +476,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
         return false
     }
     checkRoleHoanThanh() {
-        if (!this.isViewOnModal && this.formData.value.trangThai === STATUS.DU_THAO) {
+        if (!this.isViewOnModal && this.formData.value.trangThai === STATUS.DU_THAO && this.hasThuaThieu) {
             return true
         }
         return false
@@ -484,7 +496,11 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             if (i === index) {
                 return { ...f, isEdit: true }
             } else {
-                return { ...f, isEdit: false }
+                if (f.isEdit) {
+                    return { ...this.canBoThamGiaClone, isEdit: false }
+                } else {
+                    return { ...f }
+                }
             }
         });
         this.formData.patchValue({

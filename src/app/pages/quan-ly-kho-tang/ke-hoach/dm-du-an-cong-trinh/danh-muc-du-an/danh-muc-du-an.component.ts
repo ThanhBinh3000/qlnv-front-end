@@ -25,9 +25,9 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   danhSachNam: any[] = [];
-  listTrangThai = [{"ma": STATUS.CHUA_THUC_HIEN, "giaTri": "Chưa thực hiện"},
-    {"ma": STATUS.DANG_THUC_HIEN, "giaTri": "Đang thực hiện"},
-    {"ma": STATUS.DA_HOAN_THANH, "giaTri": "Đã hoàn thành"}
+  listTrangThai = [{ "ma": STATUS.CHUA_THUC_HIEN, "giaTri": "Chưa thực hiện" },
+  { "ma": STATUS.DANG_THUC_HIEN, "giaTri": "Đang thực hiện" },
+  { "ma": STATUS.DA_HOAN_THANH, "giaTri": "Đã hoàn thành" }
   ];
   dsKhoi: any[] = [];
   danhSachCuc: any[] = [];
@@ -41,8 +41,8 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private danhMucKhoService: DanhMucKhoService,
     private dviService: DonviService,
-    private dmService : DanhMucService,
-    private router : Router
+    private dmService: DanhMucService,
+    private router: Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhMucKhoService);
     super.ngOnInit()
@@ -72,10 +72,10 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       if (this.userService.isCuc()) {
-         this.loadDsKhoi();
-         this.loadDsChiCuc();
+        this.loadDsKhoi();
+        this.loadDsChiCuc();
       } else {
-         this.loadDanhSachCuc();
+        this.loadDanhSachCuc();
       }
       this.filter();
       this.spinner.hide();
@@ -108,7 +108,7 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
     }
   }
 
-   async changeChiCuc(event: any) {
+  async changeChiCuc(event: any) {
     if (event) {
       let res = await this.dviService.layTatCaDonViByLevel(4);
       if (res && res.data) {
@@ -132,7 +132,7 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
       this.danhMucKhoService
         .export(body)
         .subscribe((blob) =>
-          saveAs(blob, 'danh-muc-kho-tang.xlsx'),
+          saveAs(blob, 'danh-sach-du-an-dau-tu-xay-dung-kho-DTQG.xlsx'),
         );
       this.spinner.hide();
     } catch (e) {
@@ -147,8 +147,8 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
       nzContent: ThemMoiDanhMucDuAnKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzBodyStyle : { 'overflow-y': 'auto' },
-      nzStyle: {top: '100px'},
+      nzBodyStyle: { 'overflow-y': 'auto' },
+      nzStyle: { top: '100px' },
       nzWidth: '800px',
       nzFooter: null,
       nzComponentParams: {
@@ -170,8 +170,8 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
 
   filter() {
     this.formData.patchValue({
-      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      capDvi : this.userInfo.CAP_DVI
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      capDvi: this.userInfo.CAP_DVI
     })
     this.search()
   }
@@ -179,20 +179,20 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
 
 export class DanhMucKho {
   id: number;
-  namKeHoach : number;
-  idVirtual : any
+  namKeHoach: number;
+  idVirtual: any
   maDuAn: string;
   tenDuAn: string;
   diaDiem: string;
   khoi: string;
   tenKhoi: string;
-  maChiCuc : string;
-  tenChiCuc : string;
-  maDiemKho : string;
-  tenDiemKho : string;
+  maChiCuc: string;
+  tenChiCuc: string;
+  maDiemKho: string;
+  tenDiemKho: string;
   giaiDoan: any;
   tgKcHt: any;
-  ngayQdDc : any;
+  ngayQdDc: any;
   tuNam: number;
   denNam: number;
   tgKhoiCong: any;
@@ -207,10 +207,10 @@ export class DanhMucKho {
   nstwDuyet: number;
   tongSoLuyKe: number;
   luyKeNstw: number;
-  khVonTongSo : number;
-  khVonNstw : number;
-  ncKhTongSo  : number;
-  ncKhNstw : number;
+  khVonTongSo: number;
+  khVonNstw: number;
+  ncKhTongSo: number;
+  ncKhNstw: number;
   trangThai: string;
   tenTrangThai: string;
   vonDauTu: number;

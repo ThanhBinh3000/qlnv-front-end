@@ -1,20 +1,20 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   ThongTinDauThauService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import {
   QuyetDinhPheDuyetKeHoachLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {cloneDeep} from 'lodash';
-import {formatDate} from "@angular/common";
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { MESSAGE } from "../../../../../../constants/message";
+import { cloneDeep } from 'lodash';
+import { formatDate } from "@angular/common";
+import { PREVIEW } from "../../../../../../constants/fileType";
 import { saveAs } from "file-saver";
 @Component({
   selector: 'app-themmoi-thongtin-dauthau-vt',
@@ -37,15 +37,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   itemRowUpdate: any = {};
   idGoiThau: number = 0;
   isDieuChinh: boolean = false;
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "thong_tin_dau_thau_vt.docx",
-    tenBaoCao: "",
-    trangThai: ""
-  };
-  showDlgPreview = false;
-  pdfSrc: any;
-  wordSrc: any;
+  previewName: string = "thong_tin_dau_thau_vt";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -159,22 +151,22 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
         tenNguonVon: data.dxKhlcntHdr?.tenNguonVon,
-        tongMucDt: data.dchinhDxKhLcntHdr? data.dchinhDxKhLcntHdr.tongMucDtDx * 1000000000 : data.tongMucDtDx * 1000000000,
+        tongMucDt: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tongMucDtDx * 1000000000 : data.tongMucDtDx * 1000000000,
         tenLoaiHdong: data.tenLoaiHdong,
         tenHthucLcnt: data.tenHthucLcnt,
         tenPthucLcnt: data.tenPthucLcnt,
-        tgianBdauTchuc: data.dchinhDxKhLcntHdr? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc,
+        tgianBdauTchuc: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc,
         tgianMthau: data.qdPdHsmt?.tgianMthau ? formatDate(data.qdPdHsmt?.tgianMthau, "dd/MM/yyyy", 'en-US') : null,
         tgianDthau: data.qdPdHsmt?.tgianDthau ? formatDate(data.qdPdHsmt?.tgianDthau, "dd/MM/yyyy", 'en-US') : null,
         tongMucDtGoiTrung: [''],
         soGthauTrung: [''],
         tenLoaiVthh: data.tenLoaiVthh,
         vat: data.vat + '%',
-        tgianThien: data.dchinhDxKhLcntHdr? data.dchinhDxKhLcntHdr.tgianThien + " ngày" : data.tgianThien + " ngày",
+        tgianThien: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianThien + " ngày" : data.tgianThien + " ngày",
         tenLoaiHinhNx: data.dxKhlcntHdr?.tenLoaiHinhNx,
         tenKieuNx: data.dxKhlcntHdr?.tenKieuNx,
       })
-      this.danhsachDx = data.dchinhDxKhLcntHdr? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
+      this.danhsachDx = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
       if (data.dchinhDxKhLcntHdr) {
         this.isDieuChinh = true;
       }
@@ -189,7 +181,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
         }
       })
       this.formData.patchValue({
-        soLuong: soLuong ,
+        soLuong: soLuong,
         tongGiaTriGthau: tongGiaTri,
         soGthau: this.danhsachDx.length,
         soGthauTrung: soGthauTrung
@@ -212,7 +204,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       this.idGoiThau = dataGoiThau.id;
     }
     let type = "GOC";
-    if(this.isDieuChinh) {
+    if (this.isDieuChinh) {
       type = "DC"
     }
     let res = await this.thongTinDauThauService.getDetailThongTinVt(this.idGoiThau, this.loaiVthh, type);
@@ -261,7 +253,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     if (this.listNthauNopHs.length > 0) {
       await this.spinner.show()
       let type = "GOC";
-      if(this.isDieuChinh) {
+      if (this.isDieuChinh) {
         type = "DC"
       }
       let body = {
@@ -296,7 +288,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
 
   async startEditRowNt(i) {
     let type = "GOC";
-    if(this.isDieuChinh) {
+    if (this.isDieuChinh) {
       type = "DC"
     }
     let res = await this.thongTinDauThauService.getDetailThongTinVt(this.danhsachDx[i].id, this.loaiVthh, type);
@@ -325,10 +317,10 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     this.danhsachDx[i].edit = false;
   }
 
-  async updateKqLcnt (i) {
+  async updateKqLcnt(i) {
     await this.spinner.show()
     let type = "GOC";
-    if(this.isDieuChinh) {
+    if (this.isDieuChinh) {
       type = "DC"
     }
     let body = {
@@ -372,26 +364,17 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   }
 
   async preview() {
+    this.reportTemplate.fileName = this.previewName + '.docx';
     let body = {
-      id : this.idInput,
-      reportTemplateRequest : this.reportTemplate,
+      id: this.idInput,
+      reportTemplateRequest: this.reportTemplate,
       loaiVthh: this.loaiVthh
     }
     await this.thongTinDauThauService.preview(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
-  }
-  downloadPdf() {
-    saveAs(this.pdfSrc, "thong_tin_dau_thau_vt.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "thong_tin_dau_thau_vt.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 }

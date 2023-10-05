@@ -1,26 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {XuatThanhLyComponent} from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
-import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
-import {CHUC_NANG} from 'src/app/constants/status';
-import {MESSAGE} from "src/app/constants/message";
-import {chain, isEmpty} from "lodash";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {v4 as uuidv4} from "uuid";
-import {TongHopThanhLyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
+import { Component, OnInit } from '@angular/core';
+import { Base2Component } from "../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { XuatThanhLyComponent } from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
+import { DanhSachThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
+import { CHUC_NANG } from 'src/app/constants/status';
+import { MESSAGE } from "src/app/constants/message";
+import { chain, isEmpty } from "lodash";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { v4 as uuidv4 } from "uuid";
+import { TongHopThanhLyService } from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
+import { Base3Component } from 'src/app/components/base3/base3.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-thanh-ly-danh-sach-hang',
   templateUrl: './thanh-ly-danh-sach-hang.component.html',
   styleUrls: ['./thanh-ly-danh-sach-hang.component.scss']
 })
-export class ThanhLyDanhSachHangComponent extends Base2Component implements OnInit {
+export class ThanhLyDanhSachHangComponent extends Base3Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
@@ -31,16 +33,18 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
   public vldTrangThai: XuatThanhLyComponent;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private danhSachThanhLyService: DanhSachThanhLyService,
-              private tongHopThanhLyService: TongHopThanhLyService,
-              private xuatThanhLyComponent: XuatThanhLyComponent) {
-    super(httpClient, storageService, notification, spinner, modal, danhSachThanhLyService);
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private danhSachThanhLyService: DanhSachThanhLyService,
+    private tongHopThanhLyService: TongHopThanhLyService,
+    private xuatThanhLyComponent: XuatThanhLyComponent) {
+    super(httpClient, storageService, notification, spinner, modal, route, router, danhSachThanhLyService);
     this.vldTrangThai = xuatThanhLyComponent;
     this.formData = this.fb.group({
       id: [],
@@ -54,7 +58,7 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
       slHienTai: [],
       slDeXuat: [],
       slDaDuyet: [],
-      slConlai:[],
+      slConlai: [],
       thanhTien: [],
       ngayNhapKho: [],
       ngayDeXuat: [],
@@ -68,7 +72,7 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
       type: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
-      moTaHangHoa:[],
+      moTaHangHoa: [],
       tenTrangThai: [],
       tenCuc: [],
       tenChiCuc: [],
@@ -127,14 +131,6 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
   };
 
   async timKiem() {
-    /*    if (this.formData.value.ngayDx) {
-          this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-        }
-        if (this.formData.value.ngayKetThuc) {
-          this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-          this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-        }*/
     await this.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
@@ -163,9 +159,9 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({cloaiVthh: null})
+    this.formData.patchValue({ cloaiVthh: null })
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -183,17 +179,17 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => {
-              let rowItem = v.find(s => s.tenChiCuc === k);
-              let idVirtual = uuidv4();
-              this.expandSetString.add(idVirtual);
-              return {
-                idVirtual: idVirtual,
-                tenChiCuc: k,
-                maDiaDiem: rowItem.maDiaDiem,
-                tenCloaiVthh: rowItem.tenCloaiVthh,
-                childData: v
-              }
+            let rowItem = v.find(s => s.tenChiCuc === k);
+            let idVirtual = uuidv4();
+            this.expandSetString.add(idVirtual);
+            return {
+              idVirtual: idVirtual,
+              tenChiCuc: k,
+              maDiaDiem: rowItem.maDiaDiem,
+              tenCloaiVthh: rowItem.tenCloaiVthh,
+              childData: v
             }
+          }
           ).value();
         let rowItem = value.find(s => s.tenCuc === key);
         let idVirtual = uuidv4();
@@ -235,15 +231,33 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
   async showModal(isVisibleModal: boolean, item?: any) {
     this.isVisibleModal = isVisibleModal;
     this.modalWidth = '50vw';
-    if(item.id){
+    if (item.id) {
       this.spinner.show()
       let data = await this.detail(item.id);
       this.formData.patchValue({
-        slConlai:data.slDeXuat - data.slConlai,
+        slConlai: data.slDeXuat - data.slConlai,
         tenTrangThai: data.tenTrangThai
       });
     }
     this.spinner.hide()
   }
+
+  // showDetail(data) {
+  //   if (data) {
+  //     const modalGT = this.modal.create({
+  //       nzTitle: 'Thông tin hàng DTQG cần sửa chữa',
+  //       nzContent: ChiTietDanhSachSuaChuaComponent,
+  //       nzMaskClosable: false,
+  //       nzClosable: false,
+  //       nzWidth: '900px',
+  //       nzFooter: null,
+  //       nzComponentParams: {
+  //         data: data
+  //       },
+  //     });
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
+  //   }
+  // }
 
 }

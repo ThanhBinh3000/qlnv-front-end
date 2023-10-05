@@ -167,17 +167,19 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      console.log(this.dataTable)
       this.dataTable.forEach(item => {
         if (this.userService.isChiCuc()) {
           item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
         } else {
           let data = [];
+          let listBienBanNghiemThuBq = [];
           item.dtlList.forEach(item => {
             data = [...data, ...item.children];
+            listBienBanNghiemThuBq = [...listBienBanNghiemThuBq, ...item.listBienBanNghiemThuBq];
           })
           item.detail = {
-            children: data
+            children: data,
+            listBienBanNghiemThuBq: listBienBanNghiemThuBq
           }
         };
       });
@@ -426,4 +428,15 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     return endValue.getTime() <= this.tuNgayGD.getTime();
   };
 
+  hienThiXem(data) {
+    if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XEM') && data != null) {
+      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+        return false;
+      } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
 }

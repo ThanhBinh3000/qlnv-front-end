@@ -46,6 +46,8 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   listFileDinhKem: any[] = [];
   listKhoi: any[] = [];
   listLoaiDuAn: any[] = [];
+  STATUS = STATUS;
+
 
   constructor(
     private httpClient: HttpClient,
@@ -83,9 +85,9 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-     if (!this.idInput) {
-       this.maQd = "/" + this.userInfo.MA_TCKT;
-     }
+      if (!this.idInput) {
+        this.maQd = "/" + this.userInfo.MA_TCKT;
+      }
       this.getDsKhoi();
       this.getAllQdTrungHan();
       if (this.idInput) {
@@ -114,9 +116,6 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     let res = await this.qdTrungHanSv.getListQd();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listQdKhTh = res.data;
-      if (this.listQdKhTh && this.listQdKhTh.length > 0) {
-        this.listQdKhTh = this.listQdKhTh.filter(item => item.trangThaiQd == "00")
-      }
     }
   }
 
@@ -125,23 +124,23 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     if (id > 0) {
       let res = await this.dexuatService.getDetail(id);
       const data = res.data;
-      this.maQd = data.soCongVan ? "/" +  data.soCongVan.split("/")[1] : "",
-      this.formData.patchValue({
-        id: data.id,
-        maDvi: data.maDvi,
-        tenDvi: data.tenDvi,
-        soCongVan: data.soCongVan ? data.soCongVan.split("/")[0] : "",
-        namKeHoach: data.namKeHoach,
-        namBatDau: data.namBatDau,
-        namKetThuc: data.namKetThuc,
-        ngayTaoDx: data.ngayTaoDx,
-        loaiDuAn: data.loaiDuAn,
-        soQdTrunghan: data.soQdTrunghan,
-        trichYeu: data.trichYeu,
-        ngayDuyet: data.ngayDuyet,
-        trangThai: data.trangThai,
-        tenTrangThai: data.tenTrangThai
-      });
+      this.maQd = data.soCongVan ? "/" + data.soCongVan.split("/")[1] : "",
+        this.formData.patchValue({
+          id: data.id,
+          maDvi: data.maDvi,
+          tenDvi: data.tenDvi,
+          soCongVan: data.soCongVan ? data.soCongVan.split("/")[0] : "",
+          namKeHoach: data.namKeHoach,
+          namBatDau: data.namBatDau,
+          namKetThuc: data.namKetThuc,
+          ngayTaoDx: data.ngayTaoDx,
+          loaiDuAn: data.loaiDuAn,
+          soQdTrunghan: data.soQdTrunghan,
+          trichYeu: data.trichYeu,
+          ngayDuyet: data.ngayDuyet,
+          trangThai: data.trangThai,
+          tenTrangThai: data.tenTrangThai
+        });
       this.fileDinhKem = data.fileDinhKems;
       this.dataTableRes = data.ctiets;
       await this.convertListToTree();
@@ -174,7 +173,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     }
     let body = this.formData.value;
     body.maDvi = this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi;
-    body.soCongVan = body.soCongVan ?  body.soCongVan + this.maQd : this.maQd;
+    body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
     body.ctiets = this.dataTableRes;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
@@ -183,14 +182,14 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       if (isOther) {
         let trangThai;
         switch (this.formData.value.trangThai) {
-          case STATUS.DU_THAO :
+          case STATUS.DU_THAO:
           case STATUS.TU_CHOI_LDV:
-          case STATUS.TU_CHOI_TP : {
+          case STATUS.TU_CHOI_TP: {
             trangThai = STATUS.CHO_DUYET_TP;
             break;
           }
           case STATUS.TU_CHOI_LDC:
-          case STATUS.CHO_DUYET_TP : {
+          case STATUS.CHO_DUYET_TP: {
             trangThai = STATUS.CHO_DUYET_LDC;
             break;
           }
@@ -213,15 +212,15 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   async duyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_TP : {
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
         break;
       }
-      case STATUS.CHO_DUYET_LDC : {
+      case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_LDC;
         break;
       }
-      case STATUS.DA_DUYET_LDC : {
+      case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_CBV;
         break;
       }
@@ -232,15 +231,15 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   async tuChoi() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_TP : {
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.TU_CHOI_TP;
         break;
       }
-      case STATUS.CHO_DUYET_LDC : {
+      case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.TU_CHOI_LDC;
         break;
       }
-      case STATUS.DA_DUYET_LDC : {
+      case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.TU_CHOI_CBV;
         break;
       }
@@ -297,7 +296,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
-          page : "DXNC"
+          page: "DXNC"
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
@@ -410,9 +409,9 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         if (data) {
           this.formData.patchValue({
             soQdTrunghan: data.soQuyetDinh,
-              namBatDau : data.namBatDau,
-              namKetThuc : data.namKetThuc,
-              loaiDuAn : data.loaiDuAn,
+            namBatDau: data.namBatDau,
+            namKetThuc: data.namKetThuc,
+            loaiDuAn: data.loaiDuAn,
           });
           await this.changeSoQdTrunghan(data.id)
         }
@@ -422,7 +421,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
 
   convertListToTree() {
     this.dataTable = chain(this.dataTableRes).groupBy("tenKhoi")
-      .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual : uuidv4() }))
+      .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))
       .value();
     this.expandAll();
   }
@@ -433,7 +432,10 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       this.dataTable = [];
       let detail = res.data;
       this.dataTableRes = detail.ctRes?.ctietList;
-      this.convertListToTree() ;
+      if (this.dataTableRes && this.dataTableRes.length > 0) {
+        this.dataTableRes = this.dataTableRes.filter(item => item.maDvi == this.userInfo.MA_DVI);
+      }
+      this.convertListToTree();
     }
   }
 
@@ -459,7 +461,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     if (event) {
       let result = this.listKhoi.filter(item => item.ma == event);
       if (result && result.length > 0) {
-        this.rowItemCha.tenKhoi =  result[0].giaTri
+        this.rowItemCha.tenKhoi = result[0].giaTri
       }
     }
   }

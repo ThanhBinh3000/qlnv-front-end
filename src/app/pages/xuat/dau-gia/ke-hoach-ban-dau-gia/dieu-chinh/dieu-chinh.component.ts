@@ -1,15 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
-import {UserService} from "../../../../../services/user.service";
-import {MESSAGE} from "../../../../../constants/message";
+import { MESSAGE } from "../../../../../constants/message";
 
 @Component({
   selector: 'app-dieu-chinh',
@@ -17,18 +16,11 @@ import {MESSAGE} from "../../../../../constants/message";
   styleUrls: ['./dieu-chinh.component.scss']
 })
 export class DieuChinhComponent extends Base2Component implements OnInit {
-
   @Input() loaiVthh: string;
-  idQdPdGoc: number = 0;
-  isViewQdPdGoc: boolean = false;
-
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ Chối - LĐ Vụ' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ Duyệt - LĐ Vụ' },
-    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã Duyệt - LĐ Vụ' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hanh' },
-  ];
+  isView = false;
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
+  listTrangThai: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -37,80 +29,150 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
-    public userService: UserService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhDchinhKhBdgService);
     this.formData = this.fb.group({
-      namKh: null,
+      nam: null,
       soQdDc: null,
       trichYeu: null,
       ngayKyDcTu: null,
       ngayKyDcDen: null,
       loaiVthh: null,
-      trangThai: null,
+      maDvi: null,
     })
 
     this.filterTable = {
       nam: '',
       soQdDc: '',
       ngayKyDc: '',
-      soQdGoc: '',
+      soQdPd: '',
+      soCongVan: '',
       trichYeu: '',
-      cloaiVthh: '',
       tenCloaiVthh: '',
       slDviTsan: '',
+      slHdongDaKy: '',
+      thoiHanGiaoNhan: '',
+      tenTrangThai: '',
     };
 
+    this.listTrangThai = [
+      {
+        value: this.STATUS.DA_LAP,
+        text: 'Đã lập'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDV,
+        text: 'Chờ Duyệt - LĐ Vụ'
+      },
+      {
+        value: this.STATUS.TU_CHOI_LDV,
+        text: 'Từ Chối - LĐ Vụ'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDTC,
+        text: 'Chờ Duyệt - LĐ Tổng Cục'
+      },
+      {
+        value: this.STATUS.TU_CHOI_LDTC,
+        text: 'Từ Chối - LĐ Tổng Cục'
+      },
+      {
+        value: this.STATUS.BAN_HANH,
+        text: 'Ban Hanh'
+      },
+    ]
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
-      this.timKiem();
-      await this.search();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+      ]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  openModal(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModal() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
+  }
+
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
 
   disabledNgayKyQdDcTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyDcDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyDcDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyDcDen, 'ngayKyDc');
   };
 
   disabledNgayKyQdDcDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyDcTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyDcTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyDcTu, 'ngayKyDc');
   };
 
-
-  openModalQdPdGoc(id: number) {
-    this.idQdPdGoc = id;
-    this.isViewQdPdGoc = true;
-  }
-
-  closeModalQdPdGoc() {
-    this.idQdPdGoc = null;
-    this.isViewQdPdGoc = false;
+  isActionAllowed(action: string, data: any): boolean {
+    const permissions = {
+      XEM: 'XHDTQG_PTDG_DCKHBDG_XEM',
+      THEM: 'XHDTQG_PTDG_DCKHBDG_THEM',
+      XOA: 'XHDTQG_PTDG_DCKHBDG_XOA',
+      BAN_HANH: 'XHDTQG_PTDG_DCKHBDG_BANHANH',
+    };
+    switch (action) {
+      case 'XEM':
+        return (
+          this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
+            [
+              this.STATUS.CHO_DUYET_LDV, this.STATUS.CHO_DUYET_LDTC, this.STATUS.BAN_HANH
+            ].includes(data.trangThai)) ||
+            (!this.userService.isAccessPermisson(permissions.THEM) && [
+              this.STATUS.DA_LAP, this.STATUS.TU_CHOI_LDV, this.STATUS.TU_CHOI_LDTC,
+              this.STATUS.BAN_HANH
+            ].includes(data.trangThai) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_LDV) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_LDTC && !this.userService.isAccessPermisson(permissions.BAN_HANH))))
+        );
+      case 'SUA':
+        return [
+          this.STATUS.DA_LAP, this.STATUS.TU_CHOI_LDV, this.STATUS.TU_CHOI_LDTC
+        ].includes(data.trangThai) && this.userService.isAccessPermisson(permissions.THEM);
+      case 'PHEDUYET':
+        return (
+          (data.trangThai === this.STATUS.CHO_DUYET_LDV) ||
+          (this.userService.isAccessPermisson(permissions.BAN_HANH) && data.trangThai === this.STATUS.CHO_DUYET_LDTC)
+        );
+      case 'XOA':
+        return data.trangThai === this.STATUS.DA_LAP && this.userService.isAccessPermisson(permissions.XOA);
+      default:
+        return false;
+    }
   }
 }

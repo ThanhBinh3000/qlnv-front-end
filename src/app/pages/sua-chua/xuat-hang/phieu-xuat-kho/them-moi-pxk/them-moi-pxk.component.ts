@@ -44,7 +44,8 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
     private quyetDinhXhService: QuyetDinhXhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, phieuXuatKhoScService);
-    this.defaultURL = 'sua-chua/xuat-hang/phieu-xuat-kho'
+    this.defaultURL = 'sua-chua/xuat-hang/phieu-xuat-kho';
+    this.previewName = 'sc_phieu_xuat_kho'
     this.getId();
     this.formData = this.fb.group({
       id: [],
@@ -226,7 +227,7 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC;
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC) && this.userService.isAccessPermisson('SCHDTQG_XH_PXK_THEM');
   }
 
   save(isGuiDuyet?) {
@@ -288,7 +289,7 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.CHO_DUYET_LDCC;
+    return trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('SCHDTQG_XH_PXK_DUYET_LDCCUC');
   }
 
   addRow() {
