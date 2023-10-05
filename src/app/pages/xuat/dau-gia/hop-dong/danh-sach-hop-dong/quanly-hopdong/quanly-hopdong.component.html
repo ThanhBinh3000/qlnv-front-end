@@ -110,7 +110,7 @@
               </div>
               <div nz-col nzSpan="24">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                   <nz-form-control>
                     <input style="color: blue" nz-input formControlName="tenLoaiVthh" readonly/>
                   </nz-form-control>
@@ -118,7 +118,7 @@
               </div>
               <div nz-col nzSpan="24">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                   <nz-form-control>
                     <input style="color: blue" nz-input formControlName="tenCloaiVthh" readonly/>
                   </nz-form-control>
@@ -190,32 +190,32 @@
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th> STT</th>
-            <th> Số hợp đồng</th>
-            <th> Tên hợp đồng</th>
-            <th> Ngày ký hợp đồng</th>
-            <th> Số lượng {{loaiVthh == '02' ? null : '(kg)'}}</th>
-            <th> Giá trị (đ)</th>
-            <th> Trạng thái HĐ</th>
-            <th> Số QĐ giao NV XH</th>
-            <th> Trạng thái XH</th>
-            <th> Hành động</th>
+            <th class="text-center" nzWidth="50px"> STT</th>
+            <th class="text-left"> Số hợp đồng</th>
+            <th class="text-left"> Tên hợp đồng</th>
+            <th class="text-left"> Ngày ký hợp đồng</th>
+            <th class="text-right"> Số lượng {{loaiVthh == '02' ? null : '(kg)'}}</th>
+            <th class="text-right"> Giá trị (đ)</th>
+            <th class="text-center"> Trạng thái HĐ</th>
+            <th class="text-left"> Số QĐ giao NV XH</th>
+            <th class="text-center"> Trạng thái XH</th>
+            <th class="text-center"> Hành động</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let data of dataTable;let i = index"
               [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,data.id)">
-            <td>{{ i + 1}}</td>
-            <td>{{ data.soHopDong}}</td>
-            <td>{{ data.tenHopDong}}</td>
-            <td>{{ data.ngayKyHopDong|date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.soLuong|number:globals.numberFormat:globals.locale }} </td>
-            <td>{{ data.thanhTien|number:globals.numberFormat:globals.locale }} </td>
-            <td>{{ data.tenTrangThai}}</td>
+            <td class="text-center">{{ i + 1}}</td>
+            <td class="text-left">{{ data.soHopDong}}</td>
+            <td class="text-left">{{ data.tenHopDong}}</td>
+            <td class="text-left">{{ data.ngayKyHopDong|date: 'dd/MM/YYYY' }}</td>
+            <td class="text-right">{{ data.soLuong|number:globals.numberFormat:globals.locale }} </td>
+            <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale }} </td>
+            <td class="text-center">{{ data.tenTrangThai}}</td>
             <td class="text-left"><a *ngIf="data.soQdNv && data.idQdNv" nz-button nzType="link"
                                      (click)="openModal(data.idQdNv)">{{ data.soQdNv }}</a></td>
-            <td>{{ data.tenTrangThaiXh}}</td>
-            <td>
+            <td class="text-center">{{ data.tenTrangThaiXh}}</td>
+            <td class="text-center">
               <a *ngIf="data.trangThai == STATUS.DA_KY"
                  (click)="redirectHopDong(data.id, true, true) ">
                 <i class="fa fa-eye" title="Xem"></i>
@@ -234,8 +234,10 @@
           <tfoot *ngIf="dataTable.length > 0">
           <tr>
             <th colspan="4"></th>
-            <th style="color: blue"> {{ calcTong('soLuong')|number:globals.numberFormat:globals.locale }}</th>
-            <th style="color: blue"> {{ calcTong('thanhTien')|number:globals.numberFormat:globals.locale }}</th>
+            <th style="color: blue"
+                class="text-right"> {{ calcTong('soLuong')|number:globals.numberFormat:globals.locale }}</th>
+            <th style="color: blue"
+                class="text-right"> {{ calcTong('thanhTien')|number:globals.numberFormat:globals.locale }}</th>
             <th></th>
             <th></th>
             <th></th>

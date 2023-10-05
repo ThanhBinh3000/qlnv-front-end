@@ -333,8 +333,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   async tonKho(item, index?) {
     const body = {
       maDvi: item.maDvi,
-      loaiVthh: this.loaiVthh,
-      cloaiVthh: this.cloaiVthh,
+      loaiVthh: LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
+      ...(LOAI_HANG_DTQG.MUOI ? {} : { cloaiVthh: this.cloaiVthh }),
     };
     try {
       const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);

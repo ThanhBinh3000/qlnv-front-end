@@ -73,18 +73,15 @@
     <div class="group-button">
       <h3 class="text-uppercase">DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="checkRoleXoaDs()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_EXP')">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="checkRoleExport()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM') && userService.isCuc()">
+        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="checkRoleAdd()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -159,22 +156,16 @@
                   <td></td>
                   <td>{{lv1.tenTrangThai}}</td>
                   <td>
-                    <a (click)="redirectDetail(lv1.id, true)" *ngIf="checkStatusPermission(lv1,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM') &&
-                     !(this.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM'))&&
-                     !(this.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCCUC'))
-                  ">
+                    <a *ngIf="checkRoleView(lv1.trangThai)" (click)="redirectDetail(lv1.id, true)">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                     </a>
-                    <a *ngIf="(this.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM'))"
-                      (click)="redirectDetail(lv1.id, false)">
+                    <a *ngIf="checkRoleEdit(lv1.trangThai)" (click)="redirectDetail(lv1.id, false)">
                       <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
-                    <a *ngIf="(this.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCCUC'))"
-                      (click)="redirectDetail(lv1.id, true)">
+                    <a *ngIf="checkRoleApprove(lv1.trangThai)" (click)="redirectDetail(lv1.id, true)">
                       <i class="icon htvbdh_tcdt_pheduyet"></i>
                     </a>
-                    <a *ngIf="this.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA')"
-                      (click)="delete(lv1)">
+                    <a *ngIf="checkRoleDelete(lv1.trangThai)" (click)="delete(lv1)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
@@ -208,7 +199,7 @@
 <div class="chi-tiet" *ngIf="isDetail">
   <app-chi-tiet-phieu-kiem-nghiem-chat-luong [idSelected]="idSelected" [isView]="isView" [inputService]="inputService"
     [inputServiceGnv]="inputServiceGnv" [inputServiceBbLayMau]="inputServiceBbLayMau" [inputData]="inputData"
-    [loaiXuat]="loaiXuat" (showListEvent)="showList()">
+    [maQuyen]="maQuyen" [loaiXuat]="loaiXuat" (showListEvent)="showList()">
   </app-chi-tiet-phieu-kiem-nghiem-chat-luong>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="showQdGnv" (nzOnCancel)="closeQdGnvModal()">

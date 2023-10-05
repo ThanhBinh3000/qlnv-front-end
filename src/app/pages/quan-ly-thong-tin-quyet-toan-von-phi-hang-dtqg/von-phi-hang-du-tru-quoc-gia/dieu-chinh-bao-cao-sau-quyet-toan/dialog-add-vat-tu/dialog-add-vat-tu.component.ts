@@ -32,8 +32,6 @@ export class DialogAddVatTuComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadDanhMucHang();
-
-
     }
 
     handleOk() {
@@ -46,7 +44,6 @@ export class DialogAddVatTuComponent implements OnInit {
 
     loadDanhMucHang() {
         this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-            // 
             if (this.obj.stt.startsWith("0.1")) {
                 hangHoa.data = hangHoa.data.filter(item => item.ma == "01");
             } else {
@@ -71,13 +68,13 @@ export class DialogAddVatTuComponent implements OnInit {
                     if (this.data && this.data.length > 2) {
                         item.child = item.child.filter(item => item.ma == this.data);
                     }
-                    if (this.isCaseSpecial) {
-                        item.child.forEach(item => {
-                            if (item.ma.startsWith("02")) {
-                                item.child = [];
-                            }
-                        })
-                    }
+                    // if (this.isCaseSpecial) {
+                    //     item.child.forEach(item => {
+                    //         if (item.ma.startsWith("02")) {
+                    //             item.child = [];
+                    //         }
+                    //     })
+                    // }
                     this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
                 });
             }
@@ -147,7 +144,7 @@ export class DialogAddVatTuComponent implements OnInit {
     }
 
     isSelect(item: any) {
-        if (item.ma.startsWith('02')) {
+        if (item.ma.startsWith('02') || item.ma.startsWith('01')) {
             if (item?.child?.length == 0 || !item?.child || item.level == 2) {
                 return true
             } else {
@@ -163,7 +160,7 @@ export class DialogAddVatTuComponent implements OnInit {
     }
 
     isExpand(item) {
-        if (item.ma.startsWith('02')) {
+        if (item.ma.startsWith('02') || item.ma.startsWith('01')) {
             if ((!!item.child && item.child.length !== 0) && item.level < 2) {
                 return true;
             } else {

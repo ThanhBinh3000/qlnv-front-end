@@ -82,7 +82,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
       ngayDuyetTu: [''],
       ngayDuyetDen: [''],
       ngayThop: [''],
-      noiDungThop: ['', [Validators.required]],
+      noiDungThop: [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
       trangThai: [''],
@@ -183,6 +183,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
+      this.formData.controls["noiDungThop"].setValidators([Validators.required])
       const body = this.formData.value;
       await this.createUpdate(body);
       await this.helperService.restoreRequiredForm(this.formData);
@@ -243,6 +244,10 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     if (res.msg === MESSAGE.SUCCESS) {
       const data = res.data.find(item => item.ma === this.loaiVthh);
       this.listVatTuCha = data?.children || [];
+      if (this.formData.value.loaiVthh) {
+        const chungLoai = this.listVatTuCha.find(item => item.ma === this.formData.value.loaiVthh);
+        this.listVatTu = chungLoai?.children || [];
+      }
     }
   }
 

@@ -17,40 +17,41 @@
               đấu giá đến hết ngày
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy" nzDisabled>
+              <nz-range-picker formControlName="thoiGianDuKien" (ngModelChange)="onChangeThoiGian($event)"
+                               nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24" *ngIf="!isCaChe">
+        <div nz-col [nzSpan]="24" *ngIf="!isCache">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24" *ngIf="!isCaChe">
+        <div nz-col [nzSpan]="24" *ngIf="!isCache">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24" *ngIf="!isCaChe">
+        <div nz-col [nzSpan]="24" *ngIf="!isCache">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24" *ngIf="!isCaChe">
+        <div nz-col [nzSpan]="24" *ngIf="!isCache">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="isCaChe">
+        <div nz-col [nzSpan]="6" *ngIf="isCache">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn thanh toán (ngày)</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -61,7 +62,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="1" *ngIf="isCaChe">
+        <div nz-col [nzSpan]="1" *ngIf="isCache">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control class="text-center">
@@ -69,7 +70,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="12" *ngIf="isCaChe">
+        <div nz-col [nzSpan]="12" *ngIf="isCache">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="hidden-label"> Thời gian thanh toán ghi chú</nz-form-label>
             <nz-form-control>
@@ -77,7 +78,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5" *ngIf="isCaChe">
+        <div nz-col [nzSpan]="5" *ngIf="isCache">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Phương thức thanh toán</nz-form-label>
             <nz-form-control>
@@ -85,7 +86,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="isCaChe">
+        <div nz-col [nzSpan]="6" *ngIf="isCache">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn giao nhận (ngày)</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -96,7 +97,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="1" *ngIf="isCaChe">
+        <div nz-col [nzSpan]="1" *ngIf="isCache">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control class="text-center">
@@ -104,7 +105,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="12" *ngIf="isCaChe">
+        <div nz-col [nzSpan]="12" *ngIf="isCache">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="hidden-label"> Thời hạn giao nhận ghi chú</nz-form-label>
             <nz-form-control>
@@ -112,7 +113,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5" *ngIf="isCaChe">
+        <div nz-col [nzSpan]="5" *ngIf="isCache">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Phương thức giao nhận</nz-form-label>
             <nz-form-control>
@@ -120,7 +121,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24" *ngIf="isCaChe">
+        <div nz-col [nzSpan]="24" *ngIf="isCache">
           <nz-form-item class="form-item display-block">
             <nz-form-label nzRequired [nzNoColon]="true"> Thông tin bán đấu giá</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -144,7 +145,7 @@
 </nz-collapse>
 <nz-collapse nzAccordion class="pd-10">
   <nz-collapse-panel [nzHeader]="'DANH MỤC ĐƠN VỊ TÀI SẢN BÁN TRỰC TIẾP'" [nzActive]="true">
-    <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+    <nz-table class="nowrap pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
       <thead>
       <tr>

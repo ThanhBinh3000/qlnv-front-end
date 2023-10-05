@@ -186,7 +186,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     ]);
     this.listDiemKho = [];
     if (res.msg === MESSAGE.SUCCESS && chiCuc?.soLuongXuat) {
-      const soLuongChiTieu = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc.soLuongXuat : chiCuc.soLuongXuat * 1000;
+      const soLuongChiTieu = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc.soLuongXuat : chiCuc.soLuongXuat;
       this.formData.patchValue({
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
@@ -336,8 +336,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   async tonKho(item, index?) {
     const body = {
       maDvi: item.maDvi,
-      loaiVthh: this.loaiVthh,
-      cloaiVthh: this.cloaiVthh,
+      loaiVthh: LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
+      ...(LOAI_HANG_DTQG.MUOI ? {} : { cloaiVthh: this.cloaiVthh }),
     };
     try {
       const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);

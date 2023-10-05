@@ -17,7 +17,8 @@
               ngày
             </nz-form-label>
             <nz-form-control nz-col>
-              <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy" nzDisabled>
+              <nz-range-picker formControlName="thoiGianDuKien" (ngModelChange)="onChangeThoiGian($event)"
+                               nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>

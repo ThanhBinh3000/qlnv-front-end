@@ -33,7 +33,7 @@ export const TAB_LIST = [
         code: 'baoCaoCapDuoi',
         status: true,
         role: [
-            Roles.GDT.XEM_PA_TONGHOP_PBDT,
+            Roles.GDT.VIEW_REPORT_TH,
         ],
         isSelected: false,
     },
@@ -42,7 +42,7 @@ export const TAB_LIST = [
         code: 'tongHopBaoCaoCapDuoi',
         status: true,
         role: [
-            Roles.GDT.XEM_PA_TONGHOP_PBDT,
+            Roles.GDT.VIEW_REPORT_TH,
         ],
         isSelected: false,
     },
@@ -53,7 +53,7 @@ export const TAB_LIST = [
         role: [
             // Roles.GDT.EDIT_REPORT_TH,
             // Roles.GDT.XOA_REPORT_TH,
-            Roles.GDT.XEM_PA_TONGHOP_PBDT,
+            Roles.GDT.VIEW_REPORT_TH,
         ],
         isSelected: false,
     },

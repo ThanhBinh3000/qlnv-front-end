@@ -366,7 +366,7 @@
                   <a (click)="startEdit(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a (click)="deleteKeHoachLuongThuc(data.stt)" class="ml-3">
+                  <a (click)="deleteKeHoachLuongThuc(i)" class="ml-3">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
@@ -400,10 +400,12 @@
                   <td class="text-right"> 0</td>
                 </ng-container>
                 <td class="text-right">
-                  <!-- {{calculatorntnTongSoQuyThoc(i)}} -->{{data?.tongSoNhap}}
+                  {{calculatorntnTongSoQuyThoc(i)}}
                 </td>
                 <td class="text-right">
-                  <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="data.ntnThoc[0].soLuong" />
+                  <input class="money-input" currencyMask
+                    [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,inputMode: 1}"
+                    [(ngModel)]="data.ntnThoc[0].soLuong" />
                 </td>
                 <td class="text-right">
                   <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="data.ntnGao[0].soLuong" />
@@ -469,7 +471,7 @@
             </tr>
           </tbody>
           <tfoot>
-            <tr *ngIf="thongTinChiTieuKeHoachNam?.khLuongThuc?.length > 0">
+            <tr>
               <th nzLeft></th>
               <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
               <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc ?
@@ -572,40 +574,7 @@
               <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                   thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
             </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1' &&  formData.value.loaiCanCu != 'OTHER'">
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="first-last-row-table background-last-row"> Chỉ tiêu của {{formData.value.loaiCanCu}} </th>
-              <th class="text-right text-btc "> {{(dataQdCanCu ? dataQdCanCu.ltThocMua : 0)| number: '1.0-1':
-                'vi_VN'}}</th>
-              <th class="text-right text-btc "> {{(dataQdCanCu ? dataQdCanCu.ltGaoMua : 0) | number: '1.0-1':
-                'vi_VN'}}</th>
-              <th></th>
-              <th class="text-right text-btc "> {{(dataQdCanCu ? dataQdCanCu.ltThocXuat : 0)| number: '1.0-1': 'vi_VN'
-                }}</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="text-right text-btc "> {{(dataQdCanCu ? dataQdCanCu.ltGaoXuat : 0) | number: '1.0-1':
-                'vi_VN'}}</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi != '1'">
+            <tr>
               <th></th>
               <th></th>
               <th></th>
@@ -652,7 +621,7 @@
             <tr>
               <th class="text-center" width="40px" nzLeft>STT</th>
               <th class="text-center" nzLeft>
-                CỤC DTNN KHU VỰC
+                {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
               </th>
               <th class="text-center" width="200px">Tồn kho đầu năm</th>
               <th class="text-center" width="200px">Nhập trong năm</th>
@@ -722,23 +691,14 @@
             <tr *ngIf="userService.isTongCuc()">
               <td></td>
               <th style="text-align: right; font-weight: 700">Chỉ tiêu của BTC</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}
+              <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}</th>
+              <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}</th>
+              <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}
               </th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</th>
+              <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}</th>
               <th></th>
             </tr>
-            <tr *ngIf="userService.isCuc()">
-              <th></th>
-              <th style="text-align: right; font-weight: 700">Chỉ tiêu của TCDT</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}
-              </th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-            </tr>
+
           </tfoot>
         </nz-table>
       </div>
@@ -789,7 +749,7 @@
                   </tr>
                   <ng-container *ngIf="expandSet.has(data.idVirtual)">
                     <ng-container *ngFor="let item of data.dataChild, let y = index">
-                      <tr>
+                      <tr *ngIf="item.tenVatTuCha">
                         <td></td>
                         <td></td>
                         <td class="font-weight-bold bg-parent2">{{item.maVatTuCha}}</td>
@@ -904,7 +864,7 @@
                   </tr>
                   <ng-container *ngIf="expandSet.has(data.idVirtual)">
                     <ng-container *ngFor="let item of data.dataChild, let y = index">
-                      <tr>
+                      <tr *ngIf="item.tenVatTuCha">
                         <td></td>
                         <td></td>
                         <td class="font-weight-bold bg-parent2">{{item.maVatTuCha}}</td>
@@ -1000,11 +960,7 @@
         </nz-tab>
       </nz-tabset>
     </nz-tab>
-    <!--      <nz-tab (nzClick)="downloadTemplate()" [nzTitle]="titleTemplate">-->
-    <!--        <ng-template #titleTemplate>-->
-    <!--          <div><i style="color: blue" class="icon htvbdh_tcdt_tep"></i> Tải biểu mẫu import dữ liệu</div>-->
-    <!--        </ng-template>-->
-    <!--      </nz-tab>-->
+
   </nz-tabset>
 
   <!-- </nz-affix> -->

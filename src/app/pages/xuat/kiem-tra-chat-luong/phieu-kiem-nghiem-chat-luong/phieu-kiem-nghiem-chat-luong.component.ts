@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {MESSAGE} from "src/app/constants/message";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { MESSAGE } from "src/app/constants/message";
 import dayjs from "dayjs";
-import {chain, cloneDeep} from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import * as uuid from "uuid";
-import {CHUC_NANG, STATUS} from "src/app/constants/status";
+import { CHUC_NANG, STATUS } from "src/app/constants/status";
 
 @Component({
   selector: 'app-phieu-kiem-nghiem-chat-luong',
@@ -23,6 +23,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   @Input() inputService: any;
   @Input() inputServiceGnv: any;
   @Input() inputServiceBbLayMau: any;
+  @Input() maQuyen: MA_QUYEN_PKNCL = { THEM: '', XOA: '', XEM: '', DUYET_TP: '', DUYET_LDC: '', IN: '', EXPORT: '' };
   inputData: any;
   expandSetString = new Set<string>();
   isView: any = false;
@@ -32,7 +33,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   showQdGnv: boolean = false;
   tableDataView: any = [];
   CHUC_NANG = CHUC_NANG;
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -281,7 +281,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
              "nguoiSuaId": 38
            }];*/
       this.dataTable.forEach(s => s.idVirtual = uuid.v4());
-      console.log(this.dataTable,'ádasdas')
       this.buildTableView();
     } catch (e) {
       console.log('error: ', e)
@@ -292,7 +291,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   }
 
   buildTableView() {
-    console.log(this.dataTable);
     this.tableDataView = chain(this.dataTable)
       .groupBy("soQdGnv")
       .map((value, key) => {
@@ -307,7 +305,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
           childData: value
         };
       }).value();
-    console.log(this.tableDataView, 'tableDataView')
     this.expandAll()
 
   }
@@ -412,4 +409,55 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
       return false;
     }
   }
+  checkRoleEdit(trangThai: STATUS): boolean {
+    if (this.userService.isCuc() && [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson(this.maQuyen.THEM)) {
+      return true
+    }
+    return false
+  };
+  checkRoleApprove(trangThai: STATUS): boolean {
+    if (this.userService.isCuc() && (STATUS.CHO_DUYET_TP === trangThai && this.userService.isAccessPermisson(this.maQuyen.DUYET_TP) || STATUS.CHO_DUYET_LDC === trangThai && this.userService.isAccessPermisson(this.maQuyen.DUYET_LDC))) {
+      return true
+    }
+    return false
+  }
+  checkRoleDelete(trangThai: STATUS): boolean {
+    if (this.userService.isCuc() && ([STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson(this.maQuyen.XOA))) {
+      return true
+    }
+    return false
+  };
+  checkRoleView(trangThai: STATUS): boolean {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson(this.maQuyen.XEM)) {
+      return true
+    }
+    return false
+  }
+  checkRoleAdd(): boolean {
+    if (this.userService.isCuc() && this.userService.isAccessPermisson(this.maQuyen.THEM)) {
+      return true;
+    }
+    return false
+  }
+  checkRoleXoaDs(): boolean {
+    if (this.userService.isCuc() && this.userService.isAccessPermisson(this.maQuyen.XOA)) {
+      return true;
+    }
+    return false
+  }
+  checkRoleExport() {
+    if (this.userService.isAccessPermisson(this.maQuyen.EXPORT)) {
+      return true;
+    }
+    return false
+  }
+}
+export interface MA_QUYEN_PKNCL {
+  THEM: string;
+  XOA: string;
+  XEM: string;
+  DUYET_TP: string;
+  DUYET_LDC: string;
+  IN: string;
+  EXPORT: string
 }

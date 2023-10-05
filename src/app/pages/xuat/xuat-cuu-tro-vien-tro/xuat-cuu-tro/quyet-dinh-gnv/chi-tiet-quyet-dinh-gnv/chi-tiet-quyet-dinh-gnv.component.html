@@ -56,7 +56,7 @@
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH" type="button" class="btn btn-sub xanh-nhat"
+      <button *ngIf="formData.value.trangThaiXh == STATUS.CHUA_THUC_HIEN" type="button" class="btn btn-sub xanh-nhat"
         (click)="updateProcess(STATUS.DA_HOAN_THANH)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành phân bổ</span>
@@ -563,7 +563,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao Chi cục</nz-form-label>
-            <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'">
+            <nz-form-control [nzErrorTip]="error">
               <nz-input-number formControlName="soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                 [nzDisabled]="!userService.isCuc()" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                 [nzParser]="globals.parser">

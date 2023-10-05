@@ -51,6 +51,10 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
       soBangKeHang: null,
       ngayLapBangKeTu: null,
       ngayLapBangKeDen: null,
+      thoiGianGiaoNhanTu: null,
+      thoiGianGiaoNhanDen: null,
+      ngayXuatKhoTu: null,
+      ngayXuatKhoDen: null,
       loaiVthh: null,
     })
     this.filterTable = {
@@ -105,26 +109,26 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
           this.expandSetString.add(lv2IdVirtual);
           return {
             idVirtual: lv2IdVirtual,
-            tenLoKho: key,
-            tenNganKho: group[0].tenNganKho,
-            soPhieuKiemNghiem: group[0].soPhieuKiemNghiem,
-            idPhieuKiemNghiem: group[0].idPhieuKiemNghiem,
-            ngayKiemNghiemMau: group[0].ngayKiemNghiemMau,
+            tenLoKho: key || "",
+            tenNganKho: group[0].tenNganKho || "",
+            soPhieuKiemNghiem: group[0].soPhieuKiemNghiem || "",
+            idPhieuKiemNghiem: group[0].idPhieuKiemNghiem || "",
+            ngayKiemNghiemMau: group[0].ngayKiemNghiemMau || "",
             childData: group,
           };
         }).value();
         return {
           idVirtual: lv1IdVirtual,
-          tenDiemKho: tenDiemKhoKey,
-          childData: lv1ChildData,
+          tenDiemKho: tenDiemKhoKey || "",
+          childData: lv1ChildData || "",
         };
       }).value();
       return {
         idVirtual: firstRowInGroup.idVirtual,
         soQdNv: soQdNvKey,
-        nam: firstRowInGroup.nam,
-        idQdNv: firstRowInGroup.idQdNv,
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || [],
+        nam: firstRowInGroup.nam || "",
+        idQdNv: firstRowInGroup.idQdNv || "",
+        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
         childData,
       };
     }).value();
@@ -145,11 +149,10 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     }
   }
 
-  redirectDetail(id, isView: boolean, idQdGnx) {
+  redirectDetail(id, isView: boolean) {
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;
-    this.idQdNv = idQdGnx
   }
 
   openModal(id: number, modalType: string) {
@@ -196,12 +199,28 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
-  disabledStartNgayTaoBangKe = (startValue: Date): boolean => {
+  disabledStartNgayTaoBangKeTu = (startValue: Date): boolean => {
     return this.isInvalidDateRange(startValue, this.formData.value.ngayLapBangKeTu, 'ngayLapBangKe');
   };
 
-  disabledEndNgayTaoBangKe = (endValue: Date): boolean => {
+  disabledStartNgayTaoBangKeDen = (endValue: Date): boolean => {
     return this.isInvalidDateRange(endValue, this.formData.value.ngayLapBangKeDen, 'ngayLapBangKe');
+  };
+
+  disabledStartThoiHanGiaoNhanTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.thoiGianGiaoNhanTu, 'thoiGianGiaoNhan');
+  };
+
+  disabledStartThoiHanGiaoNhanDen = (endValue: Date): boolean => {
+    return this.isInvalidDateRange(endValue, this.formData.value.thoiGianGiaoNhanDen, 'thoiGianGiaoNhan');
+  };
+
+  disabledStartNgayXuatKhoTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayXuatKhoTu, 'ngayXuatKho');
+  };
+
+  disabledStartNgayXuatKhoDen = (endValue: Date): boolean => {
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayXuatKhoDen, 'ngayXuatKho');
   };
 
   isActionAllowed(action: string, data: any): boolean {
@@ -222,25 +241,33 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
-        return this.userService.isAccessPermisson(permissions.XEM) &&
-          (data.trangThai !== STATUS.DU_THAO &&
-            data.trangThai !== STATUS.TU_CHOI_LDCC);
-      case 'SUA':
         return (
-          (data.trangThai === STATUS.DU_THAO ||
-            data.trangThai === STATUS.TU_CHOI_LDCC) &&
-          this.userService.isAccessPermisson(permissions.THEM)
+          this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
+              [
+                this.STATUS.CHO_DUYET_LDCC,
+                this.STATUS.DA_DUYET_LDCC,
+              ].includes(data.trangThai)) ||
+            (!this.userService.isAccessPermisson(permissions.THEM) && [
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_LDCC,
+                this.STATUS.DA_DUYET_LDCC
+              ].includes(data.trangThai) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_LDCC &&
+                !this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC))))
         );
+      case 'SUA':
+        return [
+          this.STATUS.DU_THAO,
+          this.STATUS.TU_CHOI_LDCC
+        ].includes(data.trangThai) && this.userService.isAccessPermisson(permissions.THEM);
       case 'PHEDUYET':
         return (
           (this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC) &&
-            data.trangThai === STATUS.CHO_DUYET_LDCC)
+            data.trangThai === this.STATUS.CHO_DUYET_LDCC)
         );
       case 'XOA':
-        return (
-          data.trangThai === STATUS.DU_THAO &&
-          this.userService.isAccessPermisson(permissions.XOA)
-        );
+        return data.trangThai === this.STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA);
       default:
         return false;
     }
