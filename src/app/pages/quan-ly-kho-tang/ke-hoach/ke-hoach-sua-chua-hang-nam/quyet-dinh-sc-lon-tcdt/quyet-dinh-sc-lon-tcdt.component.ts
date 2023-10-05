@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {saveAs} from 'file-saver';
+import { Component, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { saveAs } from 'file-saver';
 import {
   TongHopDxScLonService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
@@ -27,12 +27,12 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
   isDetail: boolean = false;
 
   listTrangThai: any[] = [
-    {ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu'},
-    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
-    {ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục'},
-    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối LĐ-Vụ'},
-    {ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục'},
-    {ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục'},
+    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối LĐ-Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục' },
+    { ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục' },
   ];
   isViewModal: boolean;
   idQd: number;
@@ -62,7 +62,6 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     });
     this.filterTable = {};
   }
-
   async ngOnInit() {
     if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH')) {
       this.router.navigateByUrl('/error/401')

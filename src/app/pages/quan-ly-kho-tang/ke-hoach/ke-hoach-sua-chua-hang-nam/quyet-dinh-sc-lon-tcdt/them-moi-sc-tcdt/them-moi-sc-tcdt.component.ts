@@ -22,7 +22,7 @@ import {
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
-import {log} from "ng-zorro-antd/core/logger";
+import { log } from "ng-zorro-antd/core/logger";
 
 @Component({
   selector: "app-them-moi-sc-tcdt",
@@ -134,7 +134,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
           lyDoTuChoi: data.lyDoTuChoi,
           loaiDuAn: data.loaiDuAn,
           tgTongHop: data.tgTongHop,
-          loaiTmdt : data.loaiTmdt
+          loaiTmdt: data.loaiTmdt
         });
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
@@ -146,7 +146,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
         this.dataTableDxTren = this.convertListData(resultDx?.filter(item => item.tmdt > 15000000000));
       }
       this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
-      this.dataTableDuoi= this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
+      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
     }
   }
 
@@ -234,23 +234,23 @@ export class ThemMoiScTcdtComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DANG_NHAP_DU_LIEU : {
+            case STATUS.DANG_NHAP_DU_LIEU: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_LDV : {
+            case STATUS.TU_CHOI_LDV: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_LDV : {
+            case STATUS.CHO_DUYET_LDV: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.TU_CHOI_LDTC : {
+            case STATUS.TU_CHOI_LDTC: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDTC : {
+            case STATUS.CHO_DUYET_LDTC: {
               trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
@@ -353,7 +353,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
         this.dataTableDxDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
         this.dataTableDxTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
         this.dataTableTren = cloneDeep(this.dataTableDxTren);
-        this.dataTableDuoi= cloneDeep(this.dataTableDxDuoi);
+        this.dataTableDuoi = cloneDeep(this.dataTableDxDuoi);
       } else {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu!");
         this.isTongHop = false;
@@ -401,12 +401,12 @@ export class ThemMoiScTcdtComponent implements OnInit {
               let rs1 = chain(v)
                 .groupBy("tenKhoi")
                 .map((v1, k1) => {
-                    return {
-                      idVirtual: uuidv4(),
-                      tenKhoi: k1,
-                      dataChild: v1
-                    };
-                  }
+                  return {
+                    idVirtual: uuidv4(),
+                    tenKhoi: k1,
+                    dataChild: v1
+                  };
+                }
                 ).value();
               return {
                 idVirtual: uuidv4(),
@@ -437,13 +437,13 @@ export class ThemMoiScTcdtComponent implements OnInit {
       }
     } else {
       let sum = 0;
-      if(data==true){
-          this.dataTableReq?.filter(item => item.tmdt > 15000000000)
-          this.dataTableReq.forEach(item => {
-            sum += item[row];
-          });
-          sl = sum;
-        }else {
+      if (data == true) {
+        this.dataTableReq?.filter(item => item.tmdt > 15000000000)
+        this.dataTableReq.forEach(item => {
+          sum += item[row];
+        });
+        sl = sum;
+      } else {
         this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
         this.dataTableReq.forEach(item => {
           sum += item[row];
@@ -482,40 +482,40 @@ export class ThemMoiScTcdtComponent implements OnInit {
   }
 
   themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
-      let modalQD = this.modal.create({
-        nzTitle: "CHI TIẾT DANH MỤC SỬA CHỮA LỚN",
-        nzContent: DialogDxScLonComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: "1200px",
-        nzStyle: { top: "100px" },
-        nzFooter: null,
-        nzComponentParams: {
-          dataTable: list && list.dataChild ? list.dataChild : [],
-          dataInput: data,
-          type: type,
-          page: tmdt
+    let modalQD = this.modal.create({
+      nzTitle: "CHI TIẾT DANH MỤC SỬA CHỮA LỚN",
+      nzContent: DialogDxScLonComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: { top: "100px" },
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: tmdt
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
         }
-      });
-      modalQD.afterClose.subscribe(async (detail) => {
-        if (detail) {
-          if (!data.dataChild) {
-            data.dataChild = [];
-          }
-          if (!data.idVirtual) {
-            data.idVirtual = uuidv4();
-          }
-          if (type == "them") {
-            data.dataChild.push(detail);
-          } else {
-            if (list) {
-              Object.assign(list.dataChild[idx], detail);
-            }
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
+        }
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list.dataChild[idx], detail);
           }
         }
-      });
+      }
+    });
   }
-  deleteItem(index: any, y: any, table : any[]) {
+  deleteItem(index: any, y: any, table: any[]) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",

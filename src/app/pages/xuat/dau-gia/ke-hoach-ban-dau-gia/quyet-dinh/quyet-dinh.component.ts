@@ -1,15 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 @Component({
   selector: 'app-quyet-dinh',
   templateUrl: './quyet-dinh.component.html',

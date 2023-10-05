@@ -1,16 +1,16 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {Globals} from "../../../../../../../shared/globals";
-import {NgxSpinnerService} from 'ngx-spinner';
-import {HelperService} from 'src/app/services/helper.service';
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NzNotificationService} from 'ng-zorro-antd/notification';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Globals } from "../../../../../../../shared/globals";
+import { NgxSpinnerService } from 'ngx-spinner';
+import { HelperService } from 'src/app/services/helper.service';
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import {
   DialogThemMoiXuatBanTrucTiepComponent
 } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
-import {STATUS} from "../../../../../../../constants/status";
-import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
-import {MESSAGE} from "../../../../../../../constants/message";
+import { STATUS } from "../../../../../../../constants/status";
+import { LOAI_HANG_DTQG } from "../../../../../../../constants/config";
+import { MESSAGE } from "../../../../../../../constants/message";
 import {
   QuyetDinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";

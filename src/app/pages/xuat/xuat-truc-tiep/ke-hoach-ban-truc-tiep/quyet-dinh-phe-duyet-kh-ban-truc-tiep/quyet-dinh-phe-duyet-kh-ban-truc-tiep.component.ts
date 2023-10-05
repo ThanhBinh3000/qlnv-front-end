@@ -1,11 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QuyetDinhPdKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
@@ -24,8 +24,8 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
 
   constructor(

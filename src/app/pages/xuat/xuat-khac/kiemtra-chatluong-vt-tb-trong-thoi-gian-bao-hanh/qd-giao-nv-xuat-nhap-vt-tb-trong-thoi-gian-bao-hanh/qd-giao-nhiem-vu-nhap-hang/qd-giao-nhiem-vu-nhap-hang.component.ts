@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {StorageService} from "../../../../../../services/storage.service";
-import {DonviService} from "../../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { StorageService } from "../../../../../../services/storage.service";
+import { DonviService } from "../../../../../../services/donvi.service";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
 
-import {STATUS} from "../../../../../../constants/status";
-import {MESSAGE} from "../../../../../../constants/message";
+import { STATUS } from "../../../../../../constants/status";
+import { MESSAGE } from "../../../../../../constants/message";
 import {
   QdGiaoNvNhapHangTrongThoiGianBaoHanhService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvNhapHangTrongThoiGianBaoHanh.service";
@@ -29,13 +29,13 @@ export class QdGiaoNhiemVuNhapHangComponent extends Base2Component implements On
   isView: boolean = false;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private qdGiaoNvNhapHangTrongThoiGianBaoHanhService: QdGiaoNvNhapHangTrongThoiGianBaoHanhService) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private qdGiaoNvNhapHangTrongThoiGianBaoHanhService: QdGiaoNvNhapHangTrongThoiGianBaoHanhService) {
     super(httpClient, storageService, notification, spinner, modal, qdGiaoNvNhapHangTrongThoiGianBaoHanhService);
     this.formData = this.fb.group({
       nam: [''],
@@ -76,17 +76,17 @@ export class QdGiaoNhiemVuNhapHangComponent extends Base2Component implements On
     return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
   };
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
-    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
   ];
   listTrangThaiXh: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'}
+    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' }
   ];
   async ngOnInit(): Promise<void> {
     try {

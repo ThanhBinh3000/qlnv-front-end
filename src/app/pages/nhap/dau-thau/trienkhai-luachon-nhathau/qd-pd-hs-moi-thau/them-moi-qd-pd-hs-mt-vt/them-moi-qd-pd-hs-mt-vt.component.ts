@@ -1,17 +1,17 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {STATUS} from "../../../../../../constants/status";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { STATUS } from "../../../../../../constants/status";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   QuyetDinhPheDuyetHsmtService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetHsmt.service";
 import * as dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {MESSAGE} from "../../../../../../constants/message";
+import { Validators } from "@angular/forms";
+import { MESSAGE } from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -222,7 +222,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
     }
     this.listQuy = [];
     for (const element of quarters) {
-      this.listQuy.push({giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element })
     }
   }
 
@@ -245,14 +245,14 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
         soQd: data.soQd?.split("/")[0],
         soQdPdKhlcnt: data.qdKhlcntHdr.soQd,
         idQdPdKhlcnt: data.qdKhlcntHdr.id,
-        tenDuAn: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tenDuAn : data.qdKhlcntHdr.tenDuAn,
+        tenDuAn: data.qdKhlcntHdr.dchinhDxKhLcntHdr ? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tenDuAn : data.qdKhlcntHdr.tenDuAn,
         tenLoaiVthh: data.qdKhlcntHdr.tenLoaiVthh,
         loaiVthh: data.qdKhlcntHdr.loaiVthh,
         tchuanCluong: data.qdKhlcntHdr.dxKhlcntHdr.tchuanCluong,
         quy: data.qdKhlcntHdr.dxKhlcntHdr?.quy,
-        tgianBdauTchuc: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tgianBdauTchuc : data.qdKhlcntHdr.tgianBdauTchuc,
+        tgianBdauTchuc: data.qdKhlcntHdr.dchinhDxKhLcntHdr ? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tgianBdauTchuc : data.qdKhlcntHdr.tgianBdauTchuc,
       });
-      this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
+      this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr ? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
       this.listCcPhapLy = data.listCcPhapLy;
     }
   }

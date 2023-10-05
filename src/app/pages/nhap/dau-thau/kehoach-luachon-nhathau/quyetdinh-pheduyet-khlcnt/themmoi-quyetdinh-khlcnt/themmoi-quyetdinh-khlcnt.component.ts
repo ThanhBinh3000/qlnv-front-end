@@ -35,8 +35,8 @@ import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-
 import { DatePipe } from '@angular/common';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { saveAs } from "file-saver";
-import {PREVIEW} from "../../../../../../constants/fileType";
-import {ThongtinDexuatComponent} from "./thongtin-dexuat/thongtin-dexuat.component";
+import { PREVIEW } from "../../../../../../constants/fileType";
+import { ThongtinDexuatComponent } from "./thongtin-dexuat/thongtin-dexuat.component";
 import printJS from "print-js";
 
 @Component({
@@ -829,7 +829,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.showDlgPreview = false;
   }
 
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 }

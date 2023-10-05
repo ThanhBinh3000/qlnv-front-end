@@ -1,29 +1,29 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormArray, FormGroup, Validators} from "@angular/forms";
-import {UserLogin} from "../../../../models/userlogin";
-import {DatePipe} from "@angular/common";
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../services/danhmuc.service";
-import {DonviService} from "../../../../services/donvi.service";
-import {TinhTrangKhoHienThoiService} from "../../../../services/tinhTrangKhoHienThoi.service";
-import {DanhMucTieuChuanService} from "../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
-import {QuanLyHangTrongKhoService} from "../../../../services/quanLyHangTrongKho.service";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormArray, FormGroup, Validators } from "@angular/forms";
+import { UserLogin } from "../../../../models/userlogin";
+import { DatePipe } from "@angular/common";
+import { Base2Component } from "../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../services/danhmuc.service";
+import { DonviService } from "../../../../services/donvi.service";
+import { TinhTrangKhoHienThoiService } from "../../../../services/tinhTrangKhoHienThoi.service";
+import { DanhMucTieuChuanService } from "../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
+import { QuanLyHangTrongKhoService } from "../../../../services/quanLyHangTrongKho.service";
 import * as dayjs from "dayjs";
-import {MESSAGE} from "../../../../constants/message";
-import {STATUS} from "src/app/constants/status";
-import {chain, cloneDeep} from 'lodash';
+import { MESSAGE } from "../../../../constants/message";
+import { STATUS } from "src/app/constants/status";
+import { chain, cloneDeep } from 'lodash';
 import * as uuid from "uuid";
-import {KeHoachDieuChuyenService} from "../ke-hoach-dieu-chuyen.service";
-import {DanhMucDungChungService} from "../../../../services/danh-muc-dung-chung.service";
-import {MangLuoiKhoService} from "../../../../services/qlnv-kho/mangLuoiKho.service";
-import {OldResponseData} from "../../../../interfaces/response";
-import {AMOUNT_THREE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../Utility/utils";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { KeHoachDieuChuyenService } from "../ke-hoach-dieu-chuyen.service";
+import { DanhMucDungChungService } from "../../../../services/danh-muc-dung-chung.service";
+import { MangLuoiKhoService } from "../../../../services/qlnv-kho/mangLuoiKho.service";
+import { OldResponseData } from "../../../../interfaces/response";
+import { AMOUNT_THREE_DECIMAL, AMOUNT_TWO_DECIMAL } from "../../../../Utility/utils";
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 @Component({
   selector: 'app-chi-tiet-ke-hoach-dcnb',
@@ -92,19 +92,19 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private danhMucService: DanhMucService,
-              private donViService: DonviService,
-              private mangLuoiKhoService: MangLuoiKhoService,
-              private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-              private dmTieuChuanService: DanhMucTieuChuanService,
-              private keHoachDieuChuyenService: KeHoachDieuChuyenService,
-              private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-              private dmService: DanhMucDungChungService,
-              private cdr: ChangeDetectorRef,) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private danhMucService: DanhMucService,
+    private donViService: DonviService,
+    private mangLuoiKhoService: MangLuoiKhoService,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    private dmTieuChuanService: DanhMucTieuChuanService,
+    private keHoachDieuChuyenService: KeHoachDieuChuyenService,
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    private dmService: DanhMucDungChungService,
+    private cdr: ChangeDetectorRef,) {
     super(httpClient, storageService, notification, spinner, modal, keHoachDieuChuyenService);
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -197,7 +197,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       rows: this.fb.array([])
     });
     this.userInfo = this.userService.getUserLogin();
-    this.dataChiCuc = [{maDvi: this.userInfo.MA_DVI, tenDvi: this.userInfo.TEN_DVI}]
+    this.dataChiCuc = [{ maDvi: this.userInfo.MA_DVI, tenDvi: this.userInfo.TEN_DVI }]
   }
 
   createRow(id, maChiCucNhan, tenChiCucNhan, hinhThucDvCcDvVanChuyen, tenHinhThucDvCcDvVanChuyen, pthucGiaoHang, tenPthucGiaoHang, pthucNhanHang, tenPthucNhanHang, nguonChi, tenNguonChi): FormGroup {
@@ -276,7 +276,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     if (!this.isView) {
-      let resDonVi = await this.donViService.getDonVi({str: this.userInfo.MA_DVI?.slice(0, -2)});
+      let resDonVi = await this.donViService.getDonVi({ str: this.userInfo.MA_DVI?.slice(0, -2) });
       if (resDonVi.msg == MESSAGE.SUCCESS) {
         this.dsDonVi = [resDonVi.data];
         if (this.dsDonVi) {
@@ -503,7 +503,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
   changeLoKho = (value) => {
     let tenLoKho = (this.listLoKhoBq ? this.listLoKhoBq : []).find(item => item.maDvi === value);
-    this.formDataChiTiet.patchValue({tenLoKho: tenLoKho ? tenLoKho.tenDvi : ""});
+    this.formDataChiTiet.patchValue({ tenLoKho: tenLoKho ? tenLoKho.tenDvi : "" });
     if (value) {
       this.getDetailMlkByKey(tenLoKho.maDvi, tenLoKho.capDvi).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -674,11 +674,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.isAddDiemKho = false;
     //clean
     this.formDataChiTiet.reset();
-    this.formDataChiTiet.patchValue({tonKho: 0, duToanKphi: 0, soLuongDc: 0});
+    this.formDataChiTiet.patchValue({ tonKho: 0, duToanKphi: 0, soLuongDc: 0 });
     this.errorInputComponent = [];
     this.listChiCuc = []
   }
-  handleOkDieuChuyen(){
+  handleOkDieuChuyen() {
     if (this.formDataChiTiet.value.maLoKho) {
       let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKho == this.formDataChiTiet.value.maLoKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
       if (maLoKho && !this.isEditDetail) {
@@ -701,7 +701,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       }
     }
   }
-  handleOkNhanDieuChuyen(){
+  handleOkNhanDieuChuyen() {
     if (this.formDataChiTiet.value.maLoKhoNhan) {
       let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKhoNhan == this.formDataChiTiet.value.maLoKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
       if (maLoKho && !this.isEditDetail) {
@@ -730,7 +730,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.isAddDiemKho = false;
     //clean
     this.formDataChiTiet.reset();
-    this.formDataChiTiet.patchValue({coLoKho: true, tonKho: 0, duToanKphi: 0, soLuongDc: 0});
+    this.formDataChiTiet.patchValue({ coLoKho: true, tonKho: 0, duToanKphi: 0, soLuongDc: 0 });
     this.errorInputComponent = [];
     this.listChiCuc = []
   }
@@ -738,7 +738,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   buildTableView() {
     let danhSachView = this.formData.value.danhSachHangHoa.map(item => {
       // Ngăn kho C1/2-Nhà kho C1
-      return { ...item,
+      return {
+        ...item,
         loKhoXuat: item.coLoKho ? item.tenLoKho + " - " + item.tenNhaKho : item.tenNganKho + " - " + item.tenNhaKho,
         loKhoNhan: item.coLoKhoNhan ? item.tenLoKhoNhan + " - " + item.tenNhaKhoNhan : item.tenNganKhoNhan + " - " + item.tenNhaKhoNhan,
       };
@@ -755,56 +756,56 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
                 let rsss = chain(vs)
                   .groupBy("maDiemKhoNhan")
                   .map((vss, kss) => {
-                      let maLoKho = vss.find(s => (s.maDiemKhoNhan == kss));
-                       let rssss = chain(vss)
-                         .groupBy("loKhoNhan")
-                         .map((vsss, ksss) => {
-                           let maLoKhoNhan = vsss.find(s => (s.loKhoNhan == ksss));
-                           return {
-                             ...maLoKhoNhan,
-                             idVirtual: maLoKhoNhan ? maLoKhoNhan.idVirtual ? maLoKhoNhan.idVirtual : uuid.v4() : uuid.v4(),
-                           }
-                         }).value();
-                      return {
-                        ...maLoKho,
-                        idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
-                        childData: (kss != "null" && kss != null && kss != undefined && kss != "undefined"  && kss != "" )  ? rssss: []
-                      }
+                    let maLoKho = vss.find(s => (s.maDiemKhoNhan == kss));
+                    let rssss = chain(vss)
+                      .groupBy("loKhoNhan")
+                      .map((vsss, ksss) => {
+                        let maLoKhoNhan = vsss.find(s => (s.loKhoNhan == ksss));
+                        return {
+                          ...maLoKhoNhan,
+                          idVirtual: maLoKhoNhan ? maLoKhoNhan.idVirtual ? maLoKhoNhan.idVirtual : uuid.v4() : uuid.v4(),
+                        }
+                      }).value();
+                    return {
+                      ...maLoKho,
+                      idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
+                      childData: (kss != "null" && kss != null && kss != undefined && kss != "undefined" && kss != "") ? rssss : []
                     }
-                  ).value().filter(it => it.maDiemKhoNhan != undefined);
-                  let duToanKphi = vs.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-                  let rowNganKho = vs.find(s => s.loKhoXuat === ks);
-
-                  return {
-                    ...rowNganKho,
-                    idVirtual: rowNganKho ? rowNganKho.idVirtual ? rowNganKho.idVirtual : uuid.v4() : uuid.v4(),
-                    maDiemKhoNhan: "",
-                    tenDiemKhoNhan: "",
-                    maNhaKhoNhan: "",
-                    tenNhaKhoNhan: "",
-                    maNganKhoNhan: "",
-                    tenNganKhoNhan: "",
-                    coLoKhoNhan: true,
-                    maLoKhoNhan: "",
-                    tenLoKhoNhan: "",
-                    soLuongPhanBo: 0,
-                    tichLuongKd: 0,
-                    slDcConLai: 0,
-                    duToanKphi: duToanKphi,
-                    childData: rsss
                   }
+                  ).value().filter(it => it.maDiemKhoNhan != undefined);
+                let duToanKphi = vs.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let rowNganKho = vs.find(s => s.loKhoXuat === ks);
+
+                return {
+                  ...rowNganKho,
+                  idVirtual: rowNganKho ? rowNganKho.idVirtual ? rowNganKho.idVirtual : uuid.v4() : uuid.v4(),
+                  maDiemKhoNhan: "",
+                  tenDiemKhoNhan: "",
+                  maNhaKhoNhan: "",
+                  tenNhaKhoNhan: "",
+                  maNganKhoNhan: "",
+                  tenNganKhoNhan: "",
+                  coLoKhoNhan: true,
+                  maLoKhoNhan: "",
+                  tenLoKhoNhan: "",
+                  soLuongPhanBo: 0,
+                  tichLuongKd: 0,
+                  slDcConLai: 0,
+                  duToanKphi: duToanKphi,
+                  childData: rsss
                 }
+              }
               ).value();
 
             let duToanKphi = v.reduce((prev, cur) => prev + cur.duToanKphi, 0);
             let rowDiemKho = v.find(s => s.maDiemKho === k);
-              return {
-                ...rowDiemKho,
-                idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
-                duToanKphi: duToanKphi,
-                childData: rss
-              }
+            return {
+              ...rowDiemKho,
+              idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
+              duToanKphi: duToanKphi,
+              childData: rss
             }
+          }
           ).value();
 
         let duToanKphi = rs.reduce((prev, cur) => prev + cur.duToanKphi, 0);
@@ -1100,7 +1101,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.isVisibleSuaChiCuc = false;
     //clean
     this.formDataChiTiet.reset();
-    this.formDataChiTiet.patchValue({tonKho: 0, duToanKphi: 0, soLuongDc: 0});
+    this.formDataChiTiet.patchValue({ tonKho: 0, duToanKphi: 0, soLuongDc: 0 });
   }
 
   handleCancelSuaChiCuc(): void {
@@ -1108,7 +1109,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
 
     //clean
     this.formDataChiTiet.reset();
-    this.formDataChiTiet.patchValue({tonKho: 0, duToanKphi: 0, soLuongDc: 0});
+    this.formDataChiTiet.patchValue({ tonKho: 0, duToanKphi: 0, soLuongDc: 0 });
   }
 
   checkVld(inputName: string) {
@@ -1368,7 +1369,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
 
   changeLoKhoNhan(value: any) {
     let tenLoKhoNhan = (this.listLoKhoNhanBq ? this.listLoKhoNhanBq : []).find(item => item.maDvi === value);
-    this.formDataChiTiet.patchValue({tenLoKhoNhan: tenLoKhoNhan ? tenLoKhoNhan.tenDvi : ""});
+    this.formDataChiTiet.patchValue({ tenLoKhoNhan: tenLoKhoNhan ? tenLoKhoNhan.tenDvi : "" });
     if (value) {
       this.getDetailMlkByKey(value, tenLoKhoNhan.capDvi).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -1434,7 +1435,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   async addDiemKhoNhan(data: any) {
-    if(data.childData.length !== 0){
+    if (data.childData.length !== 0) {
       data.idVirtual = undefined;
       data.id = undefined;
     }

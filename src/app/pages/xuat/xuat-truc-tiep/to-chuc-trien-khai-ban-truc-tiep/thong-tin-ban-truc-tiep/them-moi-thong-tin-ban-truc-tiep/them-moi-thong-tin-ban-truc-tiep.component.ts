@@ -1,21 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {Validators} from "@angular/forms";
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {MESSAGE} from 'src/app/constants/message';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { Validators } from "@angular/forms";
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { MESSAGE } from 'src/app/constants/message';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import {ChiTietThongTinBanTrucTiepChaoGia} from 'src/app/models/DeXuatKeHoachBanTrucTiep';
-import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {saveAs} from 'file-saver';
-import {STATUS} from 'src/app/constants/status';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { ChiTietThongTinBanTrucTiepChaoGia } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { saveAs } from 'file-saver';
+import { STATUS } from 'src/app/constants/status';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
 
 @Component({
@@ -281,7 +281,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.listOfData.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -293,7 +293,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.listOfData[stt]},
+      data: { ...this.listOfData[stt] },
       edit: false
     };
   }
@@ -472,7 +472,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
   setValidator() {

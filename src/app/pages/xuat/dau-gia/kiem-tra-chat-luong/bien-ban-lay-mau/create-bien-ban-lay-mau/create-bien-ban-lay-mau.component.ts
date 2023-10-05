@@ -3,32 +3,32 @@ import {
   Input,
   OnInit, Output
 } from '@angular/core';
-import {Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
+import { Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
 import {
   BienBanLayMauXhService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import dayjs from 'dayjs';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {BBLM_LOAI_DOI_TUONG, STATUS} from 'src/app/constants/status';
+import { BBLM_LOAI_DOI_TUONG, STATUS } from 'src/app/constants/status';
 import {
   QuyetDinhGiaoNvXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
-import {FileDinhKem} from "../../../../../../models/CuuTro";
-import {v4 as uuidv4} from 'uuid';
-import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { FileDinhKem } from "../../../../../../models/CuuTro";
+import { v4 as uuidv4 } from 'uuid';
+import { KhCnQuyChuanKyThuat } from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-create-bien-ban-lay-mau',
@@ -164,7 +164,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async onChangeNam(event) {
-    if (event){
+    if (event) {
       this.formData.patchValue({
         soBbLayMau: `${this.maTuSinh}/${event}${this.maHauTo}`,
       });
@@ -363,7 +363,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async saveDataTable() {
-    const {ten, loai} = this.daiDienRow;
+    const { ten, loai } = this.daiDienRow;
     if (ten && loai) {
       this.daiDienRow.type = BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN;
       this.daiDienRow.idVirtual = uuidv4();
@@ -484,7 +484,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async saveChildren() {
-    const {phuongPhapLayMau, chiTieuChatLuong} = this.formData.value;
+    const { phuongPhapLayMau, chiTieuChatLuong } = this.formData.value;
     const filter = phuongPhapLayMau.concat(chiTieuChatLuong, this.dataTable).map(s => ({
       ten: s.label ? s.label : s.ten,
       loai: s.loai,
@@ -520,7 +520,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
   setValidator() {

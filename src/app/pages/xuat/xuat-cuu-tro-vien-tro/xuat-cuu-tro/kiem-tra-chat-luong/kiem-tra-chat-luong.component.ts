@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {Globals} from 'src/app/shared/globals';
-import {MESSAGE} from 'src/app/constants/message';
+import { Component, OnInit } from '@angular/core';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { Globals } from 'src/app/shared/globals';
+import { MESSAGE } from 'src/app/constants/message';
 import {
   BienBanLayMauService
 } from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/BienBanLayMau.service";

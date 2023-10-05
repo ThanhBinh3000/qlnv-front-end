@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {CHUC_NANG} from 'src/app/constants/status';
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { CHUC_NANG } from 'src/app/constants/status';
 import dayjs from "dayjs";
-import {MESSAGE} from "src/app/constants/message";
-import {XuatTieuHuyComponent} from "../xuat-tieu-huy.component";
-import {HoSoTieuHuyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/HoSoTieuHuy.service";
+import { MESSAGE } from "src/app/constants/message";
+import { XuatTieuHuyComponent } from "../xuat-tieu-huy.component";
+import { HoSoTieuHuyService } from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/HoSoTieuHuy.service";
 
 @Component({
   selector: 'app-ho-so-tieu-huy',
@@ -27,17 +27,17 @@ export class HoSoTieuHuyComponent extends Base2Component implements OnInit {
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
-    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
   ];
   listTrangThaiTc: any[] = [
-    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
-    {ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ TC'},
-    {ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ TC'}
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ TC' },
+    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ TC' }
   ];
   idQdPd: number = 0;
   openQdPd = false;
@@ -49,13 +49,13 @@ export class HoSoTieuHuyComponent extends Base2Component implements OnInit {
   openTb = false;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private hoSoTieuHuyService: HoSoTieuHuyService,
-              private danhMucService: DanhMucService,
-              private xuatTieuHuyComponent: XuatTieuHuyComponent
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private hoSoTieuHuyService: HoSoTieuHuyService,
+    private danhMucService: DanhMucService,
+    private xuatTieuHuyComponent: XuatTieuHuyComponent
   ) {
 
     super(httpClient, storageService, notification, spinner, modal, hoSoTieuHuyService);

@@ -1,33 +1,33 @@
-import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
-import {Validators} from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
+import { Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QuyetDinhNvXuatBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import {
   QuyetDinhPdKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import {
   QdPdKetQuaBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import {chain, cloneDeep} from 'lodash';
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {FileDinhKem} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
+import { chain, cloneDeep } from 'lodash';
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { FileDinhKem } from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
 
 @Component({
   selector: 'app-them-moi-qd-giao-nv-xuat-btt',

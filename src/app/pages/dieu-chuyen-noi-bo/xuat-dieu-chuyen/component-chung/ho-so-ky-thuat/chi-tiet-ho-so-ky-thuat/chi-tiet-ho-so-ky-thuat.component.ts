@@ -24,7 +24,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { HoSoKyThuatBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
 import { BienBanLayMauDieuChuyenService } from '../../services/dcnb-bien-ban-lay-mau.service';
-import {PREVIEW} from "src/app/constants/fileType";
+import { PREVIEW } from "src/app/constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat-xuat-dieu-chuyen',
@@ -108,7 +108,7 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
   viewTableHoSo: any[] = [];
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
-  templateName: string="Hồ sơ kỹ thuật";
+  templateName: string = "Hồ sơ kỹ thuật";
 
   constructor(
     httpClient: HttpClient,

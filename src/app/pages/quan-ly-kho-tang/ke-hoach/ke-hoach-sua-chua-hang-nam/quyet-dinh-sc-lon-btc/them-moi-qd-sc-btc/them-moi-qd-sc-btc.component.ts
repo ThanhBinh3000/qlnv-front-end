@@ -1,26 +1,26 @@
-import {chain, cloneDeep} from "lodash";
-import {Component, Input, OnInit} from "@angular/core";
-import {Validators} from "@angular/forms";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {MESSAGE} from "../../../../../../constants/message";
+import { chain, cloneDeep } from "lodash";
+import { Component, Input, OnInit } from "@angular/core";
+import { Validators } from "@angular/forms";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { MESSAGE } from "../../../../../../constants/message";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 import dayjs from "dayjs";
-import {DialogQdScBtcComponent} from "./dialog-qd-sc-btc/dialog-qd-sc-btc.component";
-import {STATUS} from "../../../../../../constants/status";
+import { DialogQdScBtcComponent } from "./dialog-qd-sc-btc/dialog-qd-sc-btc.component";
+import { STATUS } from "../../../../../../constants/status";
 import {
   DeXuatScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 import {
   TongHopDxScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
@@ -56,7 +56,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private qdScBtcService: KtKhSuaChuaBtcService,
     private dexuatService: DeXuatScLonService,
-    private tongHopDxScLon : TongHopDxScLonService
+    private tongHopDxScLon: TongHopDxScLonService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdScBtcService);
     super.ngOnInit();
@@ -133,7 +133,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "namKeHoach" : this.formData.value.namKeHoach,
+        "namKeHoach": this.formData.value.namKeHoach,
         "paggingReq": {
           "limit": 999,
           "page": 0
@@ -200,12 +200,12 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
               let rs1 = chain(v)
                 .groupBy("tenKhoi")
                 .map((v1, k1) => {
-                    return {
-                      idVirtual: uuidv4(),
-                      tenKhoi: k1,
-                      dataChild: v1
-                    };
-                  }
+                  return {
+                    idVirtual: uuidv4(),
+                    tenKhoi: k1,
+                    dataChild: v1
+                  };
+                }
                 ).value();
               return {
                 idVirtual: uuidv4(),
@@ -230,7 +230,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       let res = await this.qdScBtcService.getDetail(id);
       const data = res.data;
       this.maQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
-      this.helperService.bidingDataInFormGroup(this.formData, data);
+        this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : ""
       });
@@ -260,7 +260,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     body.fileDinhKems = this.fileDinhKem;
     body.canCuPhapLys = this.canCuPhapLy;
     body.chiTiets = this.dataTableReq;
-    console.log(this.dataTableReq,222)
+    console.log(this.dataTableReq, 222)
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -384,11 +384,12 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         try {
           const idx = this.dataTableReq.findIndex(it => it.id == id);
           if (idx) {
-            this.dataTableReq.splice(idx,1);
+            this.dataTableReq.splice(idx, 1);
             this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
-            this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));          }
+            this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
+          }
         } catch (e) {
-;          console.log("error", e);
+          ; console.log("error", e);
         }
       }
     });

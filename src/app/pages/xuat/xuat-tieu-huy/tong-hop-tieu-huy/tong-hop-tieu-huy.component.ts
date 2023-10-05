@@ -1,21 +1,21 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {MESSAGE} from "src/app/constants/message";
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {CHUC_NANG} from 'src/app/constants/status';
-import {chain, isEmpty} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {FormGroup} from "@angular/forms";
-import {NumberToRoman} from 'src/app/shared/commonFunction';
-import {XuatTieuHuyComponent} from "../xuat-tieu-huy.component";
-import {DanhSachTieuHuyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
-import {TongHopTieuHuyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/TongHopTieuHuy.service";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { MESSAGE } from "src/app/constants/message";
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { CHUC_NANG } from 'src/app/constants/status';
+import { chain, isEmpty } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { FormGroup } from "@angular/forms";
+import { NumberToRoman } from 'src/app/shared/commonFunction';
+import { XuatTieuHuyComponent } from "../xuat-tieu-huy.component";
+import { DanhSachTieuHuyService } from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
+import { TongHopTieuHuyService } from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/TongHopTieuHuy.service";
 
 @Component({
   selector: 'app-tong-hop-tieu-huy',
@@ -44,15 +44,15 @@ export class TongHopTieuHuyComponent extends Base2Component implements OnInit {
   DanhSach: boolean = false;
   @Output() tabFocus = new EventEmitter<number>();
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private tongHopTieuHuyService: TongHopTieuHuyService,
-              private danhSachTieuHuyService: DanhSachTieuHuyService,
-              private xuatTieuHuyComponent: XuatTieuHuyComponent) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private tongHopTieuHuyService: TongHopTieuHuyService,
+    private danhSachTieuHuyService: DanhSachTieuHuyService,
+    private xuatTieuHuyComponent: XuatTieuHuyComponent) {
     super(httpClient, storageService, notification, spinner, modal, tongHopTieuHuyService);
     this.vldTrangThai = xuatTieuHuyComponent;
     this.formData = this.fb.group({
@@ -174,9 +174,9 @@ export class TongHopTieuHuyComponent extends Base2Component implements OnInit {
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({cloaiVthh: null})
+    this.formData.patchValue({ cloaiVthh: null })
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -194,18 +194,18 @@ export class TongHopTieuHuyComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => {
-              let rowItem = v.find(s => s.tenChiCuc === k);
-              let idVirtual = uuidv4();
-              this.expandSetString.add(idVirtual);
-              return {
-                idVirtual: idVirtual,
-                tenChiCuc: k,
-                tenCuc: rowItem?.tenCuc,
-                maDiaDiem: rowItem?.maDiaDiem,
-                tenCloaiVthh: rowItem?.tenCloaiVthh,
-                childData: v
-              }
+            let rowItem = v.find(s => s.tenChiCuc === k);
+            let idVirtual = uuidv4();
+            this.expandSetString.add(idVirtual);
+            return {
+              idVirtual: idVirtual,
+              tenChiCuc: k,
+              tenCuc: rowItem?.tenCuc,
+              maDiaDiem: rowItem?.maDiaDiem,
+              tenCloaiVthh: rowItem?.tenCloaiVthh,
+              childData: v
             }
+          }
           ).value();
         let rowItem = value.find(s => s.header === key);
         let idVirtual = uuidv4();

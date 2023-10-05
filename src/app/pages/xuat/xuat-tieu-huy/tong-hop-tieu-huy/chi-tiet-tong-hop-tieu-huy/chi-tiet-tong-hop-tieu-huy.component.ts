@@ -81,7 +81,7 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
       nguoiGduyetId: [],
       ngayPduyet: [],
       nguoiPduyetId: [],
-      ngayTao:[dayjs().format('YYYY-MM-DD HH:mm:ss')],
+      ngayTao: [dayjs().format('YYYY-MM-DD HH:mm:ss')],
       lyDoTuChoi: [],
       tongSlHienTai: [],
       tongSlDeXuat: [],
@@ -121,7 +121,7 @@ export class ChiTietTongHopTieuHuyComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             // this.maHauTo = '/' + res.data.maDanhSach.split("/")[1];
             // res.data.maDanhSach = res.data.maDanhSach.split("/")[0];
-            this.selectedItem=res.data;
+            this.selectedItem = res.data;
             this.formData.patchValue(res.data);
             this.formData.value.tongHopDtl.forEach(s => {
               s.idVirtual = uuidv4();

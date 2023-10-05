@@ -1,9 +1,11 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('dxnc')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX')">
+    <li nz-menu-item nzSelected (click)="selectTab('dxnc')"
+      *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX')">
       Đề xuất nhu cầu đầu tư xây dựng kho tàng DTQG hàng năm
     </li>
-    <li nz-menu-item (click)="selectTab('thnc')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH')">
+    <li nz-menu-item (click)="selectTab('thnc')"
+      *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH')">
       Tổng hợp phương án đề xuất nhu cầu đầu tư xây dựng kho tàng DTQG hàng năm
     </li>
     <li nz-menu-item (click)="selectTab('qdpd')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD')">

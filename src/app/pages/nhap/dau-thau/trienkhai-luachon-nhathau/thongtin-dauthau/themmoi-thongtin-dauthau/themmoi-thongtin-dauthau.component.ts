@@ -23,7 +23,7 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import {
   DialogThongBaoThongTinDauThauComponent
 } from "../../../../../../components/dialog/dialog-thong-bao-thong-tin-dau-thau/dialog-thong-bao-thong-tin-dau-thau.component";
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { PREVIEW } from "../../../../../../constants/fileType";
 import { saveAs } from "file-saver";
 import printJS from "print-js";
 @Component({
@@ -238,7 +238,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       this.donGiaVatObject = res.data
       let tongMucDtTrung = 0
       let tongMucDt = 0
-      let slGthauTrung  = 0
+      let slGthauTrung = 0
       data.children.forEach(item => {
         tongMucDt += item.soLuong * item.donGiaTamTinh
         if (item.trangThaiDt == STATUS.THANH_CONG) {
@@ -535,7 +535,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     }
   }
 
-  async saveGt(){
+  async saveGt() {
     if (this.listNthauNopHs.length > 0) {
       await this.saveGoiThau();
     } else {
@@ -677,10 +677,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         const sum = arr.reduce((prev, cur) => {
           if (cur['trangThai'] == 40 && column == 'chenhLech') {
             prev += Math.abs((cur['donGiaNhaThau'] - (cur['donGiaVat'] != null ? cur['donGiaVat'] : cur['donGiaTamTinh'])) * cur['soLuong'] * 1000);
-          } else if(column == 'donGiaVat') {
+          } else if (column == 'donGiaVat') {
             prev += cur['donGiaVat'] != null ? cur['donGiaVat'] * cur['soLuong'] * 1000 : (cur['donGiaTamTinh'] != null ? cur['donGiaTamTinh'] * cur['soLuong'] * 1000 : 0);
-          }else{
-            if(column != 'chenhLech'){
+          } else {
+            if (column != 'chenhLech') {
               prev += cur[column] * cur['soLuong'] * 1000;
             }
           }
@@ -698,8 +698,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   async preview() {
     let body = {
-      id : this.idInput,
-      reportTemplateRequest : this.reportTemplate,
+      id: this.idInput,
+      reportTemplateRequest: this.reportTemplate,
       loaiVthh: this.loaiVthh
     }
     await this.thongTinDauThauService.preview(body).then(async s => {
@@ -720,8 +720,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   closeDlg() {
     this.showDlgPreview = false;
   }
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
   calcTongSl() {
     if (this.listOfData) {

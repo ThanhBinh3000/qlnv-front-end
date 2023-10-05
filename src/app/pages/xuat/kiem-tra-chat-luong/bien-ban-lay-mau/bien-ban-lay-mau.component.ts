@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {MESSAGE} from "src/app/constants/message";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { MESSAGE } from "src/app/constants/message";
 import dayjs from "dayjs";
-import {chain, cloneDeep} from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import * as uuid from "uuid";
-import {CHUC_NANG, STATUS} from "src/app/constants/status";
+import { CHUC_NANG, STATUS } from "src/app/constants/status";
 
 @Component({
   selector: 'app-bien-ban-lay-mau',
@@ -98,13 +98,15 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
           .groupBy("tenDiemKho")
           .map((v, k) => {
             let r = value.find(s => s.tenDiemKho === k);
-            if(r){r.idVirtual = uuid.v4();
+            if (r) {
+              r.idVirtual = uuid.v4();
               this.expandSetString.add(r.idVirtual);
               return {
                 idVirtual: r.idVirtual,
                 tenDiemKho: k,
                 childData: v
-              };}
+              };
+            }
           }).value();
         let row = value.find(s => s.soQdGnv === key)
         this.expandSetString.add(row.idVirtual);

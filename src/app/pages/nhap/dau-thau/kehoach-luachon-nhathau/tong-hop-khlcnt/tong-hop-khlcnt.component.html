@@ -199,12 +199,11 @@
             </td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id, true)"
-                *ngIf="hienThiXem(data)">
+              <a (click)="goDetail(data.id, true)" *ngIf="hienThiXem(data)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf=" data.trangThai == STATUS.CHUA_TAO_QD && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')"
-                 (click)="goDetail(data.id, false)">
+                (click)="goDetail(data.id, false)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf=" ( data.trangThai == STATUS.CHUA_TAO_QD ) && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')"
@@ -212,7 +211,7 @@
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
               <a *ngIf=" ( data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai == STATUS.DA_BAN_HANH_QD ) && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')"
-                 (click)="redirectQd(data)">
+                (click)="redirectQd(data)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
               <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD || data.trangThai== STATUS.DA_DU_THAO_QD) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'))"

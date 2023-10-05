@@ -15,8 +15,8 @@ import { DxuatKhLcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-tha
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { formatNumber } from "@angular/common";
 import { DanhMucService } from "../../../services/danhmuc.service";
-import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { QuyetDinhGiaCuaBtcService } from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -185,7 +185,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
-  async getGiaToiDa(maDvi?:any) {
+  async getGiaToiDa(maDvi?: any) {
     let dvi;
     if (maDvi != null) {
       dvi = maDvi;
@@ -205,7 +205,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         let giaToiDa = 0;
         res.data.forEach(i => {
           let giaQdBtc = 0;
-          if(i.giaQdDcBtcVat != null && i.giaQdDcBtcVat >0) {
+          if (i.giaQdDcBtcVat != null && i.giaQdDcBtcVat > 0) {
             giaQdBtc = i.giaQdDcBtcVat
           } else {
             giaQdBtc = i.giaQdBtcVat
@@ -264,7 +264,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
           listDiemKho.push(item);
         }
         this.listAllDiemKho.push(listDiemKho);
-        if(this.listOfData[i].children.length > 0) {
+        if (this.listOfData[i].children.length > 0) {
           this.listOfData[i].children.forEach((i) => {
             i.thanhTienDx = i.soLuong * this.formData.get('donGiaTamTinh').value
             i.thanhTienQd = i.soLuong * this.formData.get('donGiaVat').value
@@ -472,7 +472,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   calculatorThanhTien() {
-    if(this.formData.get('donGiaVat').value != undefined){
+    if (this.formData.get('donGiaVat').value != undefined) {
       this.formData.patchValue({
         thanhTien:
           +this.formData.get('soLuong').value *
@@ -490,7 +490,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.formData.patchValue({
       thanhTienDx:
         +this.formData.get('soLuong').value *
-        +this.formData.get('donGiaTamTinh').value *1000,
+        +this.formData.get('donGiaTamTinh').value * 1000,
     });
     this.formattedThanhTienDx = this.formData.get('thanhTienDx') ? formatNumber(this.formData.get('thanhTienDx').value, 'vi_VN', '1.0-1') : '0';
   }

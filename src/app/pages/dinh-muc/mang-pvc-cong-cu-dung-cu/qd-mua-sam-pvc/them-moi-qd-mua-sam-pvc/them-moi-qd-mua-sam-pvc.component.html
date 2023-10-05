@@ -4,8 +4,8 @@
       <div class='title-chi-tieu'>
         <span
           [ngClass]="formData.value.trangThai == STATUS.BAN_HANH  || formData.value.trangThai == STATUS.DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-        {{ formData.value.tenTrangThai }}
-      </span>
+          {{ formData.value.tenTrangThai }}
+        </span>
         <span>QUYẾT ĐỊNH MUA SẮM MÀNG PVC VÀ CÔNG CỤ DỤNG CỤ</span>
       </div>
     </div>
@@ -15,32 +15,31 @@
         <span>Quay lại</span>
       </button>
       <button class='btn btn-sub ml-2' (click)='save(true)'
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM') ">
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM') ">
         <i class='icon htvbdh_trinh'></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type='button' class='btn btn-sub btn-xoa  ml-2'
-              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())  && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_QDMUASAM_DUYETLDTC')"
-              (click)='reject(id, STATUS.TU_CHOI_LDTC)'>
+        *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())  && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_QDMUASAM_DUYETLDTC')"
+        (click)='reject(id, STATUS.TU_CHOI_LDTC)'>
         <i class='icon htvbdh_tcdt_tuchoi'></i>
         <span>Từ chối</span>
       </button>
       <button type='button' class='btn btn-sub xanh-nhat  ml-2'
-              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())  && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_QDMUASAM_DUYETLDTC')"
-              (click)='pheDuyet()'>
+        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())  && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_QDMUASAM_DUYETLDTC')"
+        (click)='pheDuyet()'>
         <i class='icon htvbdh_dakyduyet'></i>
         <span>Duyệt</span>
       </button>
       <button type='button' class='btn btn-sub xanh ml-2' (click)='save(false)'
-              *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM') ">
+        *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM') ">
         <i class='icon htvbdh_tcdt_save'></i>
         <span>Lưu</span>
       </button>
     </div>
   </div>
   <nz-alert *ngIf='formData.value.trangThai == STATUS.TU_CHOI_LDTC ' nzShowIcon nzType='error' class='mg-t-10'
-            nzMessage='Lý do từ chối'
-            nzDescription='{{formData.value.lyDoTuChoi}}'>
+    nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
   </nz-alert>
   <nz-card class='mt16 flex-card p-lr16 mg-t-10'>
     <form [nzLayout]="'vertical'" nz-form [formGroup]='formData'>
@@ -49,8 +48,7 @@
           <nz-form-item>
             <nz-form-label>Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
-              <nz-select [nzDisabled]='isView' formControlName='namKeHoach'
-                         nzAllowClear>
+              <nz-select [nzDisabled]='isView' formControlName='namKeHoach' nzAllowClear>
                 <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'>
                 </nz-option>
               </nz-select>
@@ -68,9 +66,8 @@
           </nz-form-item>
         </div>
         <div nz-col nzSpan='6'>
-          <nz-radio-group
-            [nzDisabled]="formData.value.trangThai !== '00'"
-            nzSize='small' class='rdo-input' [(ngModel)]='typeQd' [ngModelOptions]='{standalone: true}'>
+          <nz-radio-group [nzDisabled]="formData.value.trangThai !== '00'" nzSize='small' class='rdo-input'
+            [(ngModel)]='typeQd' [ngModelOptions]='{standalone: true}'>
             <nz-form-item>
               <label nz-radio nzValue='TH'>Số tổng hợp</label>
               <nz-form-control [nzErrorTip]='error'>
@@ -102,7 +99,7 @@
             <nz-form-label nzRequired>Ngày ký</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
               <nz-date-picker [nzDisabled]='isView' class='search__input' nzFormat='dd/MM/YYYY' nzPlaceHolder='Ngày ký'
-                              formControlName='ngayKy'>
+                formControlName='ngayKy'>
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -128,84 +125,84 @@
         </div>
       </div>
     </div>
-    <nz-table class='nowrap mg-t-10 pd-10' [nzFrontPagination]='false'
-              [nzShowPagination]='false' nzBordered>
+    <nz-table class='nowrap mg-t-10 pd-10' [nzFrontPagination]='false' [nzShowPagination]='false' nzBordered>
       <thead>
-      <tr>
-        <th rowSpan='2' nzWidth='2%'></th>
-        <th rowSpan='2' nzWidth='2%'>STT</th>
-        <th rowSpan='2' nzWidth='15%'>Nội dung</th>
-        <th rowSpan='2' nzWidth='7%'>Đơn vị tính</th>
-        <th rowSpan='2' nzWidth='7%'>Số lượng hiện có (1)</th>
-        <th rowSpan='2' nzWidth='7%'>Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }} (2)</th>
-        <th rowSpan='2' nzWidth='7%'>Tổng cộng (3=1+2)</th>
-        <th colSpan='4'>Số lượng trang bị cho đơn vị</th>
-        <th rowSpan='2' nzWidth='15%'>Ghi chú</th>
-      </tr>
-      <tr>
-        <th class='text-center'>SL theo tiêu chuẩn đinh mức</th>
-        <th class='text-center'>SL trang bị</th>
-        <th class='text-center'>Đơn giá</th>
-        <th class='text-center'>Thành tiền</th>
-      </tr>
+        <tr>
+          <th rowSpan='2' nzWidth='2%'></th>
+          <th rowSpan='2' nzWidth='2%'>STT</th>
+          <th rowSpan='2' nzWidth='15%'>Nội dung</th>
+          <th rowSpan='2' nzWidth='7%'>Đơn vị tính</th>
+          <th rowSpan='2' nzWidth='7%'>Số lượng hiện có (1)</th>
+          <th rowSpan='2' nzWidth='7%'>Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }} (2)</th>
+          <th rowSpan='2' nzWidth='7%'>Tổng cộng (3=1+2)</th>
+          <th colSpan='4'>Số lượng trang bị cho đơn vị</th>
+          <th rowSpan='2' nzWidth='15%'>Ghi chú</th>
+        </tr>
+        <tr>
+          <th class='text-center'>SL theo tiêu chuẩn đinh mức</th>
+          <th class='text-center'>SL trang bị</th>
+          <th class='text-center'>Đơn giá</th>
+          <th class='text-center'>Thành tiền</th>
+        </tr>
       </thead>
       <tbody>
-      <ng-container *ngFor='let data of dataTable , let idx = index'>
-        <tr>
-          <td [nzExpand]='expandSet.has(data.idVirtual)' (nzExpandChange)='onExpandChange(data.idVirtual, $event)'></td>
-          <td class='font-weight-bold'>{{idx + 1}}</td>
-          <td class='font-weight-bold'>{{data.tenCcdc}}</td>
-          <td class='font-weight-bold'>{{data.donViTinh}}</td>
-          <td
-            class='font-weight-bold text-right'>{{sumSoLuong('slHienCo', data.tenCcdc) | number : '1.0-1' : 'vi_VN' }}</td>
-          <td
-            class='font-weight-bold text-right'>{{sumSoLuong('slNhapThem', data.tenCcdc) | number : '1.0-1' : 'vi_VN'}}</td>
-          <td
-            class='font-weight-bold text-right'>{{sumSoLuong('slNhapThem', data.tenCcdc) + sumSoLuong('slHienCo', data.tenCcdc) | number : '1.0-1' : 'vi_VN'}}</td>
-          <td
-            class='font-weight-bold text-right'>{{sumSoLuong('slTieuChuanTc', data.tenCcdc) | number : '1.0-1' : 'vi_VN'}}</td>
-          <td
-            class='font-weight-bold text-right'>{{sumSoLuong('soLuong', data.tenCcdc) | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class='font-weight-bold text-right'></td>
-          <td
-            class='font-weight-bold text-right'>{{sumSoLuong(null, data.tenCcdc, 'tong') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td></td>
-        </tr>
-        <ng-container *ngIf='expandSet.has(data.idVirtual)'>
-          <tr *ngFor='let item of data.dataChild, let y = index'>
+        <ng-container *ngFor='let data of dataTable , let idx = index'>
+          <tr>
+            <td [nzExpand]='expandSet.has(data.idVirtual)' (nzExpandChange)='onExpandChange(data.idVirtual, $event)'>
+            </td>
+            <td class='font-weight-bold'>{{idx + 1}}</td>
+            <td class='font-weight-bold'>{{data.tenCcdc}}</td>
+            <td class='font-weight-bold'>{{data.donViTinh}}</td>
+            <td class='font-weight-bold text-right'>{{sumSoLuong('slHienCo', data.tenCcdc) | number : '1.0-1' : 'vi_VN'
+              }}</td>
+            <td class='font-weight-bold text-right'>{{sumSoLuong('slNhapThem', data.tenCcdc) | number : '1.0-1' :
+              'vi_VN'}}</td>
+            <td class='font-weight-bold text-right'>{{sumSoLuong('slNhapThem', data.tenCcdc) + sumSoLuong('slHienCo',
+              data.tenCcdc) | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='font-weight-bold text-right'>{{sumSoLuong('slTieuChuanTc', data.tenCcdc) | number : '1.0-1' :
+              'vi_VN'}}</td>
+            <td class='font-weight-bold text-right'>{{sumSoLuong('soLuong', data.tenCcdc) | number : '1.0-1' : 'vi_VN'}}
+            </td>
+            <td class='font-weight-bold text-right'></td>
+            <td class='font-weight-bold text-right'>{{sumSoLuong(null, data.tenCcdc, 'tong') | number : '1.0-1' :
+              'vi_VN'}}</td>
             <td></td>
-            <td>{{idx + 1}}.{{y + 1}}</td>
-            <td>{{item.tenDvi}}</td>
-            <td>{{item.donViTinh}}</td>
-            <td class='text-right'>{{item.slHienCo |number : '1.0-1' : 'vi_VN'}}</td>
-            <td class='text-right'>{{item.slNhapThem | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class='text-right'>{{item.slHienCo + item.slNhapThem |number : '1.0-1' : 'vi_VN'}}</td>
-            <td>
-              <input class='money-input' [min]='0' currencyMask [options]='amount'
-                     [(ngModel)]='item.slTieuChuanTc' [readOnly]='isView' />
-              <!--              <nz-input-number [(ngModel)]="item.slTieuChuanTc" [nzSize]="'small'" [nzDisabled]="isView"-->
-              <!--                               [nzFormatter]="globals.formatter" [nzMin]="0"-->
-              <!--                               [nzParser]="globals.parser"></nz-input-number>-->
-            </td>
-            <td>
-              <input class='money-input' [min]='0' currencyMask [options]='amount'
-                     [(ngModel)]='item.soLuong' [readOnly]='isView' />
-              <!--              <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"-->
-              <!--                               [nzFormatter]="globals.formatter" [nzMin]="0"-->
-              <!--                               [nzParser]="globals.parser"></nz-input-number>-->
-            </td>
-            <td>
-              <input class='money-input' [min]='0' currencyMask [options]='amount'
-                     [(ngModel)]='item.donGiaTd' [readOnly]='isView' />
-              <!--              <nz-input-number [(ngModel)]="item.donGiaTd" [nzSize]="'small'" [nzDisabled]="isView"-->
-              <!--                               [nzFormatter]="globals.formatter" [nzMin]="0"-->
-              <!--                               [nzParser]="globals.parser"></nz-input-number>-->
-            </td>
-            <td class='text-right'>{{item.donGiaTd * item.soLuong |number : '1.0-1' : 'vi_VN' }}</td>
-            <td><input type='text' nz-input [(ngModel)]='item.ghiChu'></td>
           </tr>
+          <ng-container *ngIf='expandSet.has(data.idVirtual)'>
+            <tr *ngFor='let item of data.dataChild, let y = index'>
+              <td></td>
+              <td>{{idx + 1}}.{{y + 1}}</td>
+              <td>{{item.tenDvi}}</td>
+              <td>{{item.donViTinh}}</td>
+              <td class='text-right'>{{item.slHienCo |number : '1.0-1' : 'vi_VN'}}</td>
+              <td class='text-right'>{{item.slNhapThem | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class='text-right'>{{item.slHienCo + item.slNhapThem |number : '1.0-1' : 'vi_VN'}}</td>
+              <td>
+                <input class='money-input' [min]='0' currencyMask [options]='amount' [(ngModel)]='item.slTieuChuanTc'
+                  [readOnly]='isView' />
+                <!--              <nz-input-number [(ngModel)]="item.slTieuChuanTc" [nzSize]="'small'" [nzDisabled]="isView"-->
+                <!--                               [nzFormatter]="globals.formatter" [nzMin]="0"-->
+                <!--                               [nzParser]="globals.parser"></nz-input-number>-->
+              </td>
+              <td>
+                <input class='money-input' [min]='0' currencyMask [options]='amount' [(ngModel)]='item.soLuong'
+                  [readOnly]='isView' />
+                <!--              <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"-->
+                <!--                               [nzFormatter]="globals.formatter" [nzMin]="0"-->
+                <!--                               [nzParser]="globals.parser"></nz-input-number>-->
+              </td>
+              <td>
+                <input class='money-input' [min]='0' currencyMask [options]='amount' [(ngModel)]='item.donGiaTd'
+                  [readOnly]='isView' />
+                <!--              <nz-input-number [(ngModel)]="item.donGiaTd" [nzSize]="'small'" [nzDisabled]="isView"-->
+                <!--                               [nzFormatter]="globals.formatter" [nzMin]="0"-->
+                <!--                               [nzParser]="globals.parser"></nz-input-number>-->
+              </td>
+              <td class='text-right'>{{item.donGiaTd * item.soLuong |number : '1.0-1' : 'vi_VN' }}</td>
+              <td><input type='text' nz-input [(ngModel)]='item.ghiChu'></td>
+            </tr>
+          </ng-container>
         </ng-container>
-      </ng-container>
       </tbody>
     </nz-table>
   </nz-card>

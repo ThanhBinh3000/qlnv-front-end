@@ -1,21 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Base2Component } from "../../../../../components/base2/base2.component";
 import {
   ThemmoiThongtinDauthauVtComponent
 } from "../../trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau-vt/themmoi-thongtin-dauthau-vt.component";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {FileDinhKem} from "../../../../../models/FileDinhKem";
-import {UserLogin} from "../../../../../models/userlogin";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {UploadFileService} from "../../../../../services/uploaFile.service";
-import {Globals} from "../../../../../shared/globals";
-import {UserService} from "../../../../../services/user.service";
-import {HelperService} from "../../../../../services/helper.service";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FileDinhKem } from "../../../../../models/FileDinhKem";
+import { UserLogin } from "../../../../../models/userlogin";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { UploadFileService } from "../../../../../services/uploaFile.service";
+import { Globals } from "../../../../../shared/globals";
+import { UserService } from "../../../../../services/user.service";
+import { HelperService } from "../../../../../services/helper.service";
 import {
   QuyetDinhPheDuyetKetQuaLCNTService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
@@ -23,8 +23,8 @@ import {
   ThongTinDauThauService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import * as dayjs from "dayjs";
-import {MESSAGE} from "../../../../../constants/message";
-import {FILETYPE, PREVIEW} from "../../../../../constants/fileType";
+import { MESSAGE } from "../../../../../constants/message";
+import { FILETYPE, PREVIEW } from "../../../../../constants/fileType";
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -182,7 +182,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       body.listCcPhapLy = this.danhSachFileCanCuPL;
       let detail = [];
       let type = "GOC";
-      if(this.thongTinDauThauVt.isDieuChinh) {
+      if (this.thongTinDauThauVt.isDieuChinh) {
         type = "DC"
       }
       this.thongTinDauThauVt.danhsachDx.forEach(item => {
@@ -392,7 +392,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   }
 
   async preview() {
-    if(this.loaiVthh.startsWith('02')) {
+    if (this.loaiVthh.startsWith('02')) {
       this.previewName = "qd_pd_kqlcnt_vt.docx";
     } else {
       this.previewName = "qd_pd_kqlcnt_lt.docx"

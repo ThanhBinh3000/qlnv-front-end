@@ -1,23 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {UserService} from "../../../../../../services/user.service";
-import {Globals} from "../../../../../../shared/globals";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {HelperService} from "../../../../../../services/helper.service";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { UserService } from "../../../../../../services/user.service";
+import { Globals } from "../../../../../../shared/globals";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { HelperService } from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 import {
   DialogQdXdTrungHanComponent
 } from "../../../../../../components/dialog/dialog-qd-xd-trung-han/dialog-qd-xd-trung-han.component";
-import {MESSAGE} from "../../../../../../constants/message";
-import {STATUS} from "../../../../../../constants/status";
-import {UserLogin} from "../../../../../../models/userlogin";
-import {TongHopKhTrungHanService} from "../../../../../../services/tong-hop-kh-trung-han.service";
+import { MESSAGE } from "../../../../../../constants/message";
+import { STATUS } from "../../../../../../constants/status";
+import { UserLogin } from "../../../../../../models/userlogin";
+import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh-trung-han.service";
 import {
   DialogThemMoiKehoachDanhmucChitietComponent
 } from "../../de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component";
@@ -211,7 +211,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DANG_NHAP_DU_LIEU : {
+            case STATUS.DANG_NHAP_DU_LIEU: {
               trangThai = STATUS.BAN_HANH;
               break;
             }
@@ -335,13 +335,13 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
           let rs = chain(value)
             .groupBy("khoi")
             .map((v, k) => {
-                return {
-                  idVirtual: uuidv4(),
-                  khoi: k,
-                  tenKhoi: v[0].tenKhoi,
-                  dataChild: v
-                };
-              }
+              return {
+                idVirtual: uuidv4(),
+                khoi: k,
+                tenKhoi: v[0].tenKhoi,
+                dataChild: v
+              };
+            }
             ).value();
           return {
             idVirtual: uuidv4(),

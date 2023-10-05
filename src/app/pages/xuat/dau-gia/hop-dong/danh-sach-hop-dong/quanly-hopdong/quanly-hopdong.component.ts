@@ -1,21 +1,21 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import {
   QdPdKetQuaBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
-import {StorageService} from 'src/app/services/storage.service';
-import {formatNumber} from "@angular/common";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { StorageService } from 'src/app/services/storage.service';
+import { formatNumber } from "@angular/common";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-quanly-hopdong',
@@ -197,7 +197,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       nzOnOk: async () => {
         await this.spinner.show();
         try {
-          const body = {id: data.id};
+          const body = { id: data.id };
           await this.hopDongXuatHangService.delete(body);
           await this.getDetail(this.idInput);
         } catch (error) {

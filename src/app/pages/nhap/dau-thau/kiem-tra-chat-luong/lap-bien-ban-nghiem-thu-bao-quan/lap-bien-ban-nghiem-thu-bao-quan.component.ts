@@ -557,9 +557,9 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     return endValue.getTime() <= this.tuNgayLP.getTime();
   };
 
-  hienThiXem(data){
+  hienThiXem(data) {
     if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XEM') && data != null) {
-      if(this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM') && (data.trangThai == STATUS.DU_THAO
+      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM') && (data.trangThai == STATUS.DU_THAO
         || data.trangThai == STATUS.TU_CHOI_KT
         || data.trangThai == STATUS.TU_CHOI_TK
         || data.trangThai == STATUS.TU_CHOI_LDCC)) {

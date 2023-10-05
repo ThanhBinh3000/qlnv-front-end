@@ -1,17 +1,17 @@
-import {Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges} from '@angular/core';
-import {Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import dayjs from 'dayjs';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
@@ -21,11 +21,11 @@ import {
 import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import {cloneDeep} from 'lodash';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
-import {STATUS} from 'src/app/constants/status';
-import {DonviService} from "../../../../../../services/donvi.service";
+import { cloneDeep } from 'lodash';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { STATUS } from 'src/app/constants/status';
+import { DonviService } from "../../../../../../services/donvi.service";
 import _ from 'lodash';
 
 
@@ -167,7 +167,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    const {idInput, idHopDong} = this;
+    const { idInput, idHopDong } = this;
     if (idInput) {
       await this.onChange(idInput);
     }
@@ -207,7 +207,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
-    const {soHopDong, children, phuLuc} = data;
+    const { soHopDong, children, phuLuc } = data;
     this.formData.patchValue({
       soHopDong: soHopDong?.split('/')[0] || null,
     })
@@ -323,7 +323,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       });
       this.listToChucCaNhan = Array.from(new Set(dataponse.children
         .flatMap(child => child.children.map(grandchild => grandchild.toChucCaNhan)).filter(val => val !== null)
-      )).map(name => ({name}));
+      )).map(name => ({ name }));
       this.lisDviTrungGia = dataponse.listNguoiTgia.filter(s => s.loai === 'NTG');
     } catch (error) {
       console.log('error: ', error);
@@ -340,7 +340,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         if (formDataValue.tgianGiaoNhanNgay) {
           const updatedDateXK = new Date(event);
           updatedDateXK.setDate(updatedDateXK.getDate() + formDataValue.tgianGiaoNhanNgay);
-          this.formData.patchValue({tgianXuatKho: updatedDateXK.toISOString().split('T')[0]});
+          this.formData.patchValue({ tgianXuatKho: updatedDateXK.toISOString().split('T')[0] });
         }
         break;
       case 'TH':
@@ -349,7 +349,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
           if (typeof event === 'number') {
             updatedDateTH.setDate(updatedDateTH.getDate() + event);
           }
-          this.formData.patchValue({tgianThienHdong: updatedDateTH.toISOString().split('T')[0]});
+          this.formData.patchValue({ tgianThienHdong: updatedDateTH.toISOString().split('T')[0] });
         }
         break;
       case 'TP':
@@ -358,11 +358,11 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
           const tgianGiaoHang = new Date(event);
           if (tgianXuatKho > tgianGiaoHang && this.formData.value.tgianGiaoHang) {
             this.notification.error(MESSAGE.WARNING, 'Thời gian giao hàng thực tế phải lớn hơn hoặc bằng thời gian xuất kho trước ngày.');
-            this.formData.patchValue({tgianGiaoHang: '', tgianTinhPhat: ''});
+            this.formData.patchValue({ tgianGiaoHang: '', tgianTinhPhat: '' });
           } else {
             const khoangThoiGianMs = tgianGiaoHang.getTime() - tgianXuatKho.getTime();
             const khoangThoiGianNgayLamTron = Math.round(khoangThoiGianMs / (1000 * 60 * 60 * 24));
-            this.formData.patchValue({tgianTinhPhat: khoangThoiGianNgayLamTron});
+            this.formData.patchValue({ tgianTinhPhat: khoangThoiGianNgayLamTron });
           }
         }
         break;
@@ -402,15 +402,15 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   async maDviTsan(event) {
-    const {flagInit, formData, listDviTsan, lisDviTrungGia} = this;
+    const { flagInit, formData, listDviTsan, lisDviTrungGia } = this;
     if (flagInit && event && event !== formData.value.tenDviBenMua) {
-      formData.patchValue({listMaDviTsan: null});
+      formData.patchValue({ listMaDviTsan: null });
       this.dataTable = [];
     }
     this.listDviTsanFilter = listDviTsan.map(item => {
       if (item.children && item.children.length > 0) {
         const filteredChildren = item.children.filter(s => s.toChucCaNhan === event);
-        return filteredChildren.length > 0 ? {...item, children: filteredChildren} : null;
+        return filteredChildren.length > 0 ? { ...item, children: filteredChildren } : null;
       }
       return null;
     }).filter(item => item !== null);
@@ -426,7 +426,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
 
   async selectMaDviTsan() {
     this.dataTable = [];
-    const {listDviTsanFilter, formData, idHopDong} = this;
+    const { listDviTsanFilter, formData, idHopDong } = this;
     const currentSelectList = cloneDeep(listDviTsanFilter);
     if (formData.value.listMaDviTsan && formData.value.listMaDviTsan.length > 0) {
       const selectedItems = currentSelectList.filter(s => formData.value.listMaDviTsan.includes(s.maDviTsan));
@@ -513,7 +513,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          await this.hopDongXuatHangService.delete({id: data.id});
+          await this.hopDongXuatHangService.delete({ id: data.id });
           await this.loadChiTiet(this.idHopDong);
           this.spinner.hide();
         } catch (e) {

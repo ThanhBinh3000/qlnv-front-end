@@ -19,13 +19,13 @@ import { STATUS } from 'src/app/constants/status';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat, ThongTinDiaDiemNhap } from 'src/app/models/QuyetDinhNhapXuat';
 import { DonviService } from 'src/app/services/donvi.service';
-import {FILETYPE} from "../../../../../../constants/fileType";
-import {QuyetDinhPheDuyetKeHoachMTTService} from "../../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
-import {ChaogiaUyquyenMualeService} from "../../../../../../services/chaogia-uyquyen-muale.service";
-import {NzSelectSizeType} from "ng-zorro-antd/select";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
+import { FILETYPE } from "../../../../../../constants/fileType";
+import { QuyetDinhPheDuyetKeHoachMTTService } from "../../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
+import { ChaogiaUyquyenMualeService } from "../../../../../../services/chaogia-uyquyen-muale.service";
+import { NzSelectSizeType } from "ng-zorro-antd/select";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
 @Component({
   selector: 'app-themmoi-nhiemvu-nhaphang',
   templateUrl: './themmoi-nhiemvu-nhaphang.component.html',
@@ -94,7 +94,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
     private hopdongPhulucHopdongService: HopdongPhulucHopdongService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
-    private quyetDinhPheDuyetKeHoachMTTService : QuyetDinhPheDuyetKeHoachMTTService,
+    private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvNhapHangService);
@@ -157,7 +157,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     this.spinner.hide();
   }
 
-  editRow (i, y){
+  editRow(i, y) {
     this.dataTable[i].children.forEach(i => {
       i.edit = false;
     })
@@ -166,14 +166,14 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     this.changeDiemKho(true)
   }
 
-  saveEdit (i, y){
-      this.dataTable[i].children[y] = cloneDeep(this.rowItemEdit);
-    if(this.validatorDdiemNhap(i,true)){
+  saveEdit(i, y) {
+    this.dataTable[i].children[y] = cloneDeep(this.rowItemEdit);
+    if (this.validatorDdiemNhap(i, true)) {
       this.dataTable[i].children[y].edit = false;
     }
   }
 
-  cancelEdit (i, y){
+  cancelEdit(i, y) {
     this.dataTable[i].children[y].edit = false;
     this.rowItemEdit = this.dataTable[i].children[y];
   }
@@ -435,7 +435,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
 
   async save(isGuiDuyet?) {
     this.setValidator(isGuiDuyet)
-    if(this.checkListHopDong()){
+    if (this.checkListHopDong()) {
       return;
     }
     this.helperService.markFormGroupTouched(this.formData);
@@ -499,8 +499,8 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     }
   }
 
-  checkListHopDong(){
-    if(this.listHopDong.length > this.dsHongDong.length){
+  checkListHopDong() {
+    if (this.listHopDong.length > this.dsHongDong.length) {
       this.notification.error(MESSAGE.ERROR, 'Phải chọn tất cả các hợp đồng của cục trước khi tạo QĐ');
       return true;
     }
@@ -551,7 +551,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
             tenHd: data.tenHd,
             tgianNkho: data.tgianNkho,
           });
-          if(data.soHd){
+          if (data.soHd) {
             this.dsHongDong = data.soHd.split(",")
           }
           console.log(this.dsHongDong);
@@ -741,9 +741,9 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
       prev += cur.soLuong;
       return prev;
     }, 0);
-    if(isEdit){
+    if (isEdit) {
       soLuong += sum
-    }else{
+    } else {
       soLuong += this.rowItem.soLuong + sum
     }
     if (soLuong > +this.formData.value.soLuong) {
@@ -756,8 +756,8 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   calcTong() {
     if (this.dataTable) {
       let sum = 0;
-      this.dataTable.forEach(item =>{
-        item.children.forEach(x =>{
+      this.dataTable.forEach(item => {
+        item.children.forEach(x => {
           sum += x.soLuong
         })
       })
@@ -771,8 +771,8 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   calcTongChil() {
     if (this.dataTable) {
       let sum = 0;
-      this.dataTable.forEach(item =>{
-        item.children.forEach(x =>{
+      this.dataTable.forEach(item => {
+        item.children.forEach(x => {
           sum += x.soLuong
         })
       })
@@ -943,22 +943,22 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   }
 
   async saveDdiemNhap(statusSave, hoanThanh?) {
-    if(!this.validatorDdiemNhap(0, true)){
+    if (!this.validatorDdiemNhap(0, true)) {
       return;
     }
     let checkTable = false;
     let msg = '';
     this.dataTable.forEach(item => {
       item.trangThai = statusSave
-      item.children.forEach(x =>{
-        if(x.maLoKho == null){
+      item.children.forEach(x => {
+        if (x.maLoKho == null) {
           checkTable = true
         }
       })
     })
-    if(hoanThanh){
+    if (hoanThanh) {
       msg = 'Bạn có muốn hoàn thành cập nhật'
-    }else{
+    } else {
       msg = 'Bạn có lưu cập nhật'
     }
     // if(checkTable){
@@ -994,7 +994,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   }
 
   isDisableForm() {
-    if ((this.isViewDetail || (!this.isViewDetail && this.userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_TP') || !this.isViewDetail && this.userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_LDC')) ) && (this.formData.value.trangThai == STATUS.BAN_HANH || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP)) {
+    if ((this.isViewDetail || (!this.isViewDetail && this.userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_TP') || !this.isViewDetail && this.userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_DUYET_LDC'))) && (this.formData.value.trangThai == STATUS.BAN_HANH || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP)) {
       return true
     } else {
       return false;
@@ -1032,7 +1032,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
       let tenHd = ''
       let idHd = ''
       let listChildren = []
-      res.data.forEach(item =>{
+      res.data.forEach(item => {
         // this.dataTable = [];
         soHd = soHd + item.soHd + ","
         tenHd = tenHd + item.tenHd + ","

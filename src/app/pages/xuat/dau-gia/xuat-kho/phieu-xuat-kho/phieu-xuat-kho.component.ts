@@ -1,16 +1,16 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {MESSAGE} from 'src/app/constants/message';
+import { Component, OnInit, Input } from '@angular/core';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { MESSAGE } from 'src/app/constants/message';
 import * as uuid from "uuid";
-import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
+import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
 import _ from 'lodash';
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {STATUS} from "../../../../../constants/status";
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: 'app-bdg-phieu-xuat-kho',
@@ -149,15 +149,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
 
   openModal(id: number, modalType: string) {
     switch (modalType) {
-      case 'QdNv' :
+      case 'QdNv':
         this.idQdNv = id;
         this.isViewQdNv = true;
         break;
-      case 'kiemNghiem' :
+      case 'kiemNghiem':
         this.idKiemnghiem = id;
         this.isViewKiemnghiem = true;
         break;
-      case 'bangKe' :
+      case 'bangKe':
         this.idBangKe = id;
         this.isViewBangKe = true;
         break;
@@ -168,15 +168,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
 
   closeModal(modalType: string) {
     switch (modalType) {
-      case 'QdNv' :
+      case 'QdNv':
         this.idQdNv = null;
         this.isViewQdNv = false;
         break;
-      case 'kiemNghiem' :
+      case 'kiemNghiem':
         this.idKiemnghiem = null;
         this.isViewKiemnghiem = false;
         break;
-      case 'bangKe' :
+      case 'bangKe':
         this.idBangKe = null;
         this.isViewBangKe = false;
         break;
@@ -219,15 +219,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-              [
-                this.STATUS.CHO_DUYET_LDCC,
-                this.STATUS.DA_DUYET_LDCC,
-              ].includes(data.trangThai)) ||
+            [
+              this.STATUS.CHO_DUYET_LDCC,
+              this.STATUS.DA_DUYET_LDCC,
+            ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-                this.STATUS.DU_THAO,
-                this.STATUS.TU_CHOI_LDCC,
-                this.STATUS.DA_DUYET_LDCC
-              ].includes(data.trangThai) ||
+              this.STATUS.DU_THAO,
+              this.STATUS.TU_CHOI_LDCC,
+              this.STATUS.DA_DUYET_LDCC
+            ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDCC &&
                 !this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC))))
         );

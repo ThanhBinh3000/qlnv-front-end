@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
-        {{ formData.value.tenTrangThai }}</span>
+          {{ formData.value.tenTrangThai }}</span>
         <span>LẬP BÁO CÁO NHẬP, XUẤT, TỒN KHO HÀNG DỰ TRỮ QUỐC GIA</span>
       </div>
     </div>
@@ -21,7 +21,8 @@
             <span>Ban hành</span>
           </button>
           <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
-          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_NXTHDTQG_LAP')" type="button" class="btn btn-main" (click)="save()">
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_NXTHDTQG_LAP')" type="button" class="btn btn-main"
+            (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>

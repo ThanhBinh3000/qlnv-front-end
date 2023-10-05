@@ -271,13 +271,13 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
         this.dataTable.forEach(item => {
           item.soPhieuNhapKho = '';
           item.soBangKe = '';
-          if(item.phieuNhapKho && item.phieuNhapKho.length > 0) {
+          if (item.phieuNhapKho && item.phieuNhapKho.length > 0) {
             for (let i = 0; i < item.phieuNhapKho.length; i++) {
               item.soPhieuNhapKho += item.phieuNhapKho[i].soPhieuNhapKho
               if (i < item.phieuNhapKho.length - 1) {
                 item.soPhieuNhapKho += ', '
               }
-              if(item.phieuNhapKho[i].bangKeCanHang) {
+              if (item.phieuNhapKho[i].bangKeCanHang) {
                 item.soBangKe += item.phieuNhapKho[i].bangKeCanHang.soBangKe
                 if (i < item.phieuNhapKho.length - 1) {
                   item.soBangKe += ', '
@@ -345,7 +345,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
           return;
         }
         if (isGuiDuyet) {
-          if(this.listFileDinhKemBb.length <= 0) {
+          if (this.listFileDinhKemBb.length <= 0) {
             this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
             this.spinner.hide();
             return;

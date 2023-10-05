@@ -1,16 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import * as uuid from "uuid";
-import {MESSAGE} from "../../../../../../constants/message";
-import {STATUS} from "../../../../../../constants/status";
-import {FILETYPE} from "../../../../../../constants/fileType";
-import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
+import { MESSAGE } from "../../../../../../constants/message";
+import { STATUS } from "../../../../../../constants/status";
+import { FILETYPE } from "../../../../../../constants/fileType";
+import { AMOUNT_NO_DECIMAL } from "../../../../../../Utility/utils";
 import {
   DuToanXayDung
 } from "../../../tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-tktc-tdt/thong-tin-quyet-dinh-phe-duyet-tktc-tdt/thong-tin-quyet-dinh-phe-duyet-tktc-tdt.component";
@@ -88,7 +88,7 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
       fileDinhKems: [null],
       child: [null],
       listKtTdscQuyetDinhPdBcKtktDtl: null,
-      loai : ['01']
+      loai: ['01']
     });
   }
 
@@ -116,7 +116,7 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
   bindingData() {
     if (this.itemDuAn) {
       this.formData.patchValue({
-        idDuAn : this.itemDuAn.id,
+        idDuAn: this.itemDuAn.id,
         namKh: this.itemDuAn.namKh,
         tenCongTrinh: this.itemDuAn.tenCongTrinh,
         idQdPdKhScl: this.itemDuAn.idQdTcdt,
@@ -130,7 +130,7 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
         diaDiem: this.itemDuAn.diaDiem,
         giaTriDt: this.itemDuAn.tmdt,
         tieuChuanDm: this.itemDuAn.tieuChuan,
-        chuDauTu : this.userInfo.TEN_DVI
+        chuDauTu: this.userInfo.TEN_DVI
       })
     }
   }
@@ -395,13 +395,13 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
     const stack: DuToanXayDung[] = [];
     const array: DuToanXayDung[] = [];
     const hashMap = {};
-    stack.push({...root, capChiMuc: 1, expand: true});
+    stack.push({ ...root, capChiMuc: 1, expand: true });
     while (stack.length !== 0) {
       const node = stack.pop()!;
       this.visitNode(node, hashMap, array);
       if (node.children) {
         for (let i = node.children.length - 1; i >= 0; i--) {
-          stack.push({...node.children[i], capChiMuc: node.capChiMuc! + 1, expand: true, parent: node});
+          stack.push({ ...node.children[i], capChiMuc: node.capChiMuc! + 1, expand: true, parent: node });
         }
       }
     }

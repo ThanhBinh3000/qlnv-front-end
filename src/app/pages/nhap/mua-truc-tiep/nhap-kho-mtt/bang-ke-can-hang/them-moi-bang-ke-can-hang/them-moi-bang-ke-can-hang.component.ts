@@ -21,7 +21,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PhieuNhapKhoMuaTrucTiepService } from 'src/app/services/phieu-nhap-kho-mua-truc-tiep.service';
 import { BangCanKeMuaTrucTiepService } from 'src/app/services/bang-can-ke-mua-truc-tiep.service';
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
-import {chiTietBangCanKeHang} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
+import { chiTietBangCanKeHang } from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
 
 @Component({
   selector: 'app-them-moi-bang-ke-can-hang',
@@ -118,7 +118,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       await Promise.all([
         // this.loadSoQuyetDinh(),
       ]);
-      if(this.idQdGiaoNvNh){
+      if (this.idQdGiaoNvNh) {
         await this.bindingDataQd(this.idQdGiaoNvNh)
       }
       if (this.id) {
@@ -395,7 +395,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.dataTable[stt]},
+      data: { ...this.dataTable[stt] },
       edit: false
     };
   }
@@ -405,7 +405,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }

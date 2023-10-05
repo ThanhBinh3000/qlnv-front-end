@@ -104,9 +104,8 @@
       </form>-->
     </nz-card>
     <div class="cangiua group-button-search">
-      <button nz-button (click)="preView()"
-              class="modal__button--save"
-              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
+      <button nz-button (click)="preView()" class="modal__button--save"
+        *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
         <i class="icon htvbdh_new-tab"></i>
         Kết xuất báo cáo
       </button>
@@ -121,13 +120,11 @@
     </pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()"
-            class="modal__button--save">
+    <button nz-button (click)="downloadPdf()" class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadExcel()"
-            class="modal__button--save">
+    <button nz-button (click)="downloadExcel()" class="modal__button--save">
       <i class="icon htvbdh_nhap-excel"></i>
       Xuất Excel
     </button>

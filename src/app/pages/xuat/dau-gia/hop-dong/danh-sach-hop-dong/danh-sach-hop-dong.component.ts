@@ -1,18 +1,18 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
-import {saveAs} from 'file-saver';
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {DonviService} from "../../../../../services/donvi.service";
-import {isEmpty} from 'lodash';
+import { saveAs } from 'file-saver';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { DonviService } from "../../../../../services/donvi.service";
+import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',

@@ -1,17 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import {saveAs} from 'file-saver';
-import {STATUS} from "../../../../../constants/status";
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { saveAs } from 'file-saver';
+import { STATUS } from "../../../../../constants/status";
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',

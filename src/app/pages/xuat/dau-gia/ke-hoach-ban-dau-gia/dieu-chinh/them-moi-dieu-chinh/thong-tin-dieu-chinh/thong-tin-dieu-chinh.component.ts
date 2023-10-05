@@ -1,10 +1,10 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {Globals} from "../../../../../../../shared/globals";
-import {NgxSpinnerService} from "ngx-spinner";
-import {HelperService} from "../../../../../../../services/helper.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NzNotificationService} from "ng-zorro-antd/notification";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Globals } from "../../../../../../../shared/globals";
+import { NgxSpinnerService } from "ngx-spinner";
+import { HelperService } from "../../../../../../../services/helper.service";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 import {
   DialogThemDiaDiemPhanLoComponent
 } from "../../../../../../../components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component";

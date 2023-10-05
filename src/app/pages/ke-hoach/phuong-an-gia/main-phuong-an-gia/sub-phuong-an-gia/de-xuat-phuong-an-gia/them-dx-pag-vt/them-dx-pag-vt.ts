@@ -1,31 +1,31 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {UserLogin} from "../../../../../../../models/userlogin";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NgxSpinnerService} from "ngx-spinner";
-import {UserService} from "../../../../../../../services/user.service";
-import {Globals} from "../../../../../../../shared/globals";
-import {HelperService} from "../../../../../../../services/helper.service";
-import {DeXuatPAGService} from "../../../../../../../services/ke-hoach/phuong-an-gia/deXuatPAG.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UserLogin } from "../../../../../../../models/userlogin";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NgxSpinnerService } from "ngx-spinner";
+import { UserService } from "../../../../../../../services/user.service";
+import { Globals } from "../../../../../../../shared/globals";
+import { HelperService } from "../../../../../../../services/helper.service";
+import { DeXuatPAGService } from "../../../../../../../services/ke-hoach/phuong-an-gia/deXuatPAG.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import {TYPE_PAG} from "../../../../../../../constants/config";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {DanhMucTieuChuanService} from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
-import {UploadFileService} from "../../../../../../../services/uploaFile.service";
-import {saveAs} from 'file-saver';
-import {CanCuXacDinhPag, PhuongPhapXacDinhGia, ThongTinChungPag,} from "../../../../../../../models/DeXuatPhuongAnGia";
-import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
-import {STATUS} from "../../../../../../../constants/status";
-import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { TYPE_PAG } from "../../../../../../../constants/config";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { DanhMucTieuChuanService } from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
+import { UploadFileService } from "../../../../../../../services/uploaFile.service";
+import { saveAs } from 'file-saver';
+import { CanCuXacDinhPag, PhuongPhapXacDinhGia, ThongTinChungPag, } from "../../../../../../../models/DeXuatPhuongAnGia";
+import { FileDinhKem } from "../../../../../../../models/FileDinhKem";
+import { STATUS } from "../../../../../../../constants/status";
+import { DialogTuChoiComponent } from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {
   QuyetDinhGiaCuaBtcService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
-import {PREVIEW} from "../../../../../../../constants/fileType";
+import { PREVIEW } from "../../../../../../../constants/fileType";
 import printJS from "print-js";
 
 @Component({
@@ -384,7 +384,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.pagTtChungs.forEach((item, index) => {
           this.dataEdit[index] = {
             edit: false,
-            data: {...item},
+            data: { ...item },
           };
         });
       }
@@ -394,7 +394,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.dataTableCanCuXdg.forEach((item, index) => {
           this.dataEditCc[index] = {
             edit: false,
-            data: {...item},
+            data: { ...item },
           };
         });
       }
@@ -404,7 +404,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.pagPpXacDinhGias.forEach((item, index) => {
           this.dataEditPp[index] = {
             edit: false,
-            data: {...item},
+            data: { ...item },
           };
         });
       }
@@ -705,19 +705,19 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   cancelEdit(index: number, page: string) {
     if (page == 'ttc') {
       this.dataEdit[index] = {
-        data: {...this.pagTtChungs[index]},
+        data: { ...this.pagTtChungs[index] },
         edit: false,
       };
     }
     if (page == 'ccXdg') {
       this.dataEditCc[index] = {
-        data: {...this.dataTableCanCuXdg[index]},
+        data: { ...this.dataTableCanCuXdg[index] },
         edit: false,
       };
     }
     if (page == 'ppxdg') {
       this.dataEditPp[index] = {
-        data: {...this.pagPpXacDinhGias[index]},
+        data: { ...this.pagPpXacDinhGias[index] },
         edit: false,
       };
     }
@@ -836,7 +836,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     try {
       let body = {
         reportTemplateRequest: this.reportTemplate,
-        id : this.idInput
+        id: this.idInput
       }
       await this.giaDeXuatGiaService.preview(body).then(async s => {
         this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
@@ -858,7 +858,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   doPrint() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true});
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
   }
 
   downloadWord() {

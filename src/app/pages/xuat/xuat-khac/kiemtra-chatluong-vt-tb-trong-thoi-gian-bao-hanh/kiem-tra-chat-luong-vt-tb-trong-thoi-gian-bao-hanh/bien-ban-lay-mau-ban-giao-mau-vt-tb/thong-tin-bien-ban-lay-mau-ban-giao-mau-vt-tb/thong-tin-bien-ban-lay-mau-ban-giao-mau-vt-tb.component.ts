@@ -1,23 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {PhuongPhapLayMau} from "../../../../../../../models/PhuongPhapLayMau";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {KhCnQuyChuanKyThuat} from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import {STATUS} from "../../../../../../../constants/status";
-import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
-import {MESSAGE} from "../../../../../../../constants/message";
+import { Validators } from "@angular/forms";
+import { HttpClient } from "@angular/common/http";
+import { Base2Component } from "../../../../../../../components/base2/base2.component";
+import { PhuongPhapLayMau } from "../../../../../../../models/PhuongPhapLayMau";
+import { StorageService } from "../../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import { KhCnQuyChuanKyThuat } from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import { STATUS } from "../../../../../../../constants/status";
+import { FileDinhKem } from "../../../../../../../models/FileDinhKem";
+import { MESSAGE } from "../../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {FILETYPE} from "../../../../../../../constants/fileType";
+import { FILETYPE } from "../../../../../../../constants/fileType";
 import {
   BienBanLayMauVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BienBanLayMauVtTbTrongThoiGianBaoHanh.service";
@@ -27,7 +27,7 @@ import {
 import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
-import {cloneDeep} from 'lodash';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-lay-mau-ban-giao-mau-vt-tb',
@@ -167,31 +167,31 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
               this.canCu = data.fileDinhKems.filter(item => item.fileType === FILETYPE.CAN_CU_PHAP_LY);
               this.fileNiemPhong = data.fileDinhKems.filter(item => item.fileType === FILETYPE.ANH_DINH_KEM);
             }
-            this.dataTable=this.formData.value.bbLayMauDtl ;
+            this.dataTable = this.formData.value.bbLayMauDtl;
             this.dataTable.forEach((item, index) => {
               this.dataEdit[index] = {
                 edit: false,
-                data: {...item},
+                data: { ...item },
               };
             });
 
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
               let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : [data.ppLayMau];
-              ppLayMauOptions = ppLayMauOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
+              ppLayMauOptions = ppLayMauOptions.map((str, index) => ({ label: str, value: index + 1, checked: true }));
               this.formData.patchValue({
                 ppLayMauList: ppLayMauOptions,
               });
             }
             if (data.chiTieuKiemTra) {
               let chiTieuOptions = data.chiTieuKiemTra.indexOf(",") > 0 ? data.chiTieuKiemTra.split(",") : [data.chiTieuKiemTra];
-              chiTieuOptions = chiTieuOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
+              chiTieuOptions = chiTieuOptions.map((str, index) => ({ label: str, value: index + 1, checked: true }));
               this.formData.patchValue({
                 chiTieuKiemTraList: chiTieuOptions,
               });
             }
 
-            }
+          }
         })
         .catch((e) => {
           console.log('error: ', e);
@@ -336,10 +336,10 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
       })
     }
     if (this.listFiles && this.listFiles.length > 0) {
-      console.log(this.listFiles,'this.listFiles')
+      console.log(this.listFiles, 'this.listFiles')
       body.fileDinhKems = this.listFiles;
     }
-    console.log( body.fileDinhKems,' body.fileDinhKems')
+    console.log(body.fileDinhKems, ' body.fileDinhKems')
     // xử lý pp lấy mẫu và tiêu chuẩn cần lấy mẫu kiểm tra
     if (body.ppLayMauList && body.ppLayMauList.length > 0) {
       body.ppLayMau = body.ppLayMauList.map(function (item) {
@@ -353,7 +353,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
     }
     // xử lý người liên quan
     body.bbLayMauDtl = this.dataTable;
-    console.log(body,"body")
+    console.log(body, "body")
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -517,7 +517,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -526,7 +526,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
   huyEdit1(id: number): void {
     const index = this.dataTable.findIndex((item) => item.idVirtual == id);
     this.dataEdit[id] = {
-      data: {...this.dataTable[index]},
+      data: { ...this.dataTable[index] },
       edit: false,
     };
   }

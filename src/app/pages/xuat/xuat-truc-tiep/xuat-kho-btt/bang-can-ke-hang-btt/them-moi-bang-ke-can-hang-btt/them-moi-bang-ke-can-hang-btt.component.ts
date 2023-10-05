@@ -1,18 +1,18 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
-import {Validators} from "@angular/forms";
-import {STATUS} from "../../../../../../constants/status";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { Validators } from "@angular/forms";
+import { STATUS } from "../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 import {
   PhieuXuatKhoBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service';
@@ -22,12 +22,12 @@ import {
 import {
   BangCanKeHangBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bang-can-ke-hang-btt.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {chiTietBangCanKeHang} from 'src/app/models/DeXuatKeHoachBanTrucTiep';
-import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
-import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
-import {saveAs} from 'file-saver';
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { DonviService } from 'src/app/services/donvi.service';
+import { chiTietBangCanKeHang } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
+import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import { saveAs } from 'file-saver';
+import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
 
 @Component({
@@ -642,7 +642,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -696,7 +696,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.dataTable[stt]},
+      data: { ...this.dataTable[stt] },
       edit: false
     };
   }
@@ -757,8 +757,8 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     this.showDlgPreview = false;
   }
 
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
   setValidator(isGuiDuyet) {

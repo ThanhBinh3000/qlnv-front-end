@@ -9,7 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import {HSKT_LOAI_DOI_TUONG, STATUS} from 'src/app/constants/status';
+import { HSKT_LOAI_DOI_TUONG, STATUS } from 'src/app/constants/status';
 import { BienBanLayMau } from 'src/app/models/BienBanLayMau';
 import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
 import { UserLogin } from 'src/app/models/userlogin';
@@ -26,8 +26,8 @@ import { isEmpty } from 'lodash';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import {cloneDeep} from 'lodash';
+import { KhCnQuyChuanKyThuat } from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
   templateUrl: './them-moi-bien-ban-lay-mau.component.html',
@@ -214,12 +214,12 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       return;
     }
     if (isGuiDuyet) {
-      if(this.listFileDinhKemBb.length <= 0) {
+      if (this.listFileDinhKemBb.length <= 0) {
         this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
         this.spinner.hide();
         return;
       }
-      if(this.listFileDinhKemAnh.length <= 0) {
+      if (this.listFileDinhKemAnh.length <= 0) {
         this.notification.error(MESSAGE.ERROR, 'File đính kèm ảnh chụp mẫu đã niêm phong không được để trống.');
         this.spinner.hide();
         return;
@@ -265,7 +265,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
   }
 
   setValidator(isGuiDuyet) {
-    if(isGuiDuyet) {
+    if (isGuiDuyet) {
       if (this.loaiVthh.startsWith('02')) {
         this.formData.controls['soBbNhapDayKho'].clearValidators();
         this.formData.controls['idBbNhapDayKho'].clearValidators();
@@ -549,7 +549,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
     });
   }
 
-  bindingDataDdNhap (data) {
+  bindingDataDdNhap(data) {
     if (data) {
       this.listBbNhapDayKho = [];
       this.formData.patchValue({

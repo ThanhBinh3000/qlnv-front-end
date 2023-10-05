@@ -17,7 +17,7 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import {formatNumber} from "@angular/common";
+import { formatNumber } from "@angular/common";
 
 
 @Component({
@@ -333,7 +333,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
     }
   }
 
-  async loadDsHthucBquan () {
+  async loadDsHthucBquan() {
     if (this.formData.value.cloaiVthh) {
       let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
       if (res.msg == MESSAGE.SUCCESS) {

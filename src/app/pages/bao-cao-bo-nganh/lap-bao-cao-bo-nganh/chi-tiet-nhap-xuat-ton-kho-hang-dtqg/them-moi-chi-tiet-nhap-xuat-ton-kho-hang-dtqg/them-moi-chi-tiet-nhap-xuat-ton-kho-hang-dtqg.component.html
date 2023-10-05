@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
-        {{ formData.value.tenTrangThai }}</span>
+          {{ formData.value.tenTrangThai }}</span>
         <span>LẬP BÁO CÁO NHẬP, XUẤT, TỒN KHO HÀNG DỰ TRỮ QUỐC GIA</span>
       </div>
     </div>
@@ -14,13 +14,15 @@
           <span>Quay lại</span>
         </button>
         <ng-container>
-          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG_DUYET')" type="button"
-            class="btn btn-sub xanh-nhat" (click)="save(true)">
+          <button
+            *ngIf="formData.value.trangThai != STATUS.BAN_HANH && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG_DUYET')"
+            type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Ban hành</span>
           </button>
           <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
-          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG_LAP')" type="button" class="btn btn-main" (click)="save()">
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG_LAP')" type="button" class="btn btn-main"
+            (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
@@ -324,7 +326,8 @@
                 </ng-container>
                 <ng-template #editTemplateLoaiVthh>
                   <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                  <td nzLeft class="dm-title" style="padding-left: 20px"><input nz-input [(ngModel)]="itemRowLoaiVthhEdit[i][y].tenLoaiVthh" /></td>
+                  <td nzLeft class="dm-title" style="padding-left: 20px"><input nz-input
+                      [(ngModel)]="itemRowLoaiVthhEdit[i][y].tenLoaiVthh" /></td>
                   <td nzLeft></td>
                   <td></td>
                   <td></td>
@@ -411,7 +414,8 @@
                   </ng-container>
                   <ng-template #editTemplateCLoaiVthh>
                     <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                    <td nzLeft class="dm-title" style="padding-left: 40px"><input nz-input [(ngModel)]="itemRowCLoaiVthhEdit[i][y][z].tenCloaiVthh" />
+                    <td nzLeft class="dm-title" style="padding-left: 40px"><input nz-input
+                        [(ngModel)]="itemRowCLoaiVthhEdit[i][y][z].tenCloaiVthh" />
                     </td>
                     <td nzLeft></td>
                     <td></td>
@@ -502,7 +506,7 @@
                       <td nzLeft></td>
                       <td nzLeft class="dm-title">
                         <nz-select [nzDisabled]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].diaDiemDeNhapHang"
-                                   (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z, k)">
+                          (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z, k)">
                           <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.tenDvi">
                           </nz-option>
                         </nz-select>
@@ -552,7 +556,7 @@
                   <td nzLeft></td>
                   <td nzLeft>
                     <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow[i][y][z].diaDiemDeNhapHang"
-                               (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z)">
+                      (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z)">
                       <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.tenDvi">
                       </nz-option>
                     </nz-select>

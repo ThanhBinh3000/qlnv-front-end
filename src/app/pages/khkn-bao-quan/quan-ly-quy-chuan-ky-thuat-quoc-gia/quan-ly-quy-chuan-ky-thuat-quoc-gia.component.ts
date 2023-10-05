@@ -101,7 +101,6 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       tenTrangThaiHl: '',
     };
   }
-
   disabledStartNgayKy = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKyDen) {
       return startValue.getTime() > this.formData.value.ngayKyDen.getTime();

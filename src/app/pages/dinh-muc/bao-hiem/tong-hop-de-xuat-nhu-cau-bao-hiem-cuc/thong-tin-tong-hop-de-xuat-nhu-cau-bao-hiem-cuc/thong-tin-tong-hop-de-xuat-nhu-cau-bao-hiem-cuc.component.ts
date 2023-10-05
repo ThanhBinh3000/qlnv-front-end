@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {chain} from 'lodash';
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { chain } from 'lodash';
 import * as uuid from "uuid";
-import {MESSAGE} from "../../../../../constants/message";
+import { MESSAGE } from "../../../../../constants/message";
 import dayjs from "dayjs";
-import {STATUS} from "../../../../../constants/status";
+import { STATUS } from "../../../../../constants/status";
 import {
   DeXuatNhuCauBaoHiemService
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
@@ -85,9 +85,9 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     if (listHh.listQlDinhMucDxBhHdtqg && listHh.listQlDinhMucDxBhHdtqg.length > 0) {
       this.dataHang = listHh.listQlDinhMucDxBhKhoChua
       this.dataHang = chain(this.dataHang).groupBy('tenDonViCha').map((value, key) => ({
-          tenDonViCha: key,
-          idVirtual: uuid.v4(),
-        })
+        tenDonViCha: key,
+        idVirtual: uuid.v4(),
+      })
       ).value()
       this.dataHang.forEach(item => {
         if (listHh.listQlDinhMucDxBhKhoChua && listHh.listQlDinhMucDxBhKhoChua.length > 0) {
@@ -206,7 +206,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
-    this.formData.value.giaTriDx = (this.tableGiaTriBh[0].gtThamGiaBh  * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11/10
+    this.formData.value.giaTriDx = (this.tableGiaTriBh[0].gtThamGiaBh * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11 / 10
     let data = await this.createUpdate(this.formData.value)
     if (data) {
       if (isOther) {
@@ -271,11 +271,11 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
   async tuChoi() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_LDV : {
+      case STATUS.CHO_DUYET_LDV: {
         trangThai = STATUS.CHO_DUYET_LDV;
         break;
       }
-      case STATUS.CHO_DUYET_LDTC : {
+      case STATUS.CHO_DUYET_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDTC
       }
     }
@@ -285,10 +285,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
   convertListData(table: any): any[] {
     if (table && table.length > 0) {
       table = chain(table).groupBy('tenDonVi').map((value, key) => ({
-          tenDonVi: key,
-          dataChild: value,
-          idVirtual: uuid.v4(),
-        })
+        tenDonVi: key,
+        dataChild: value,
+        idVirtual: uuid.v4(),
+      })
       ).value()
     }
     return table
@@ -338,21 +338,21 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           let rs = chain(value)
             .groupBy("tenNhomTiLeBaoHiem")
             .map((v, k) => {
-                let res = chain(v)
-                  .groupBy("tenHangHoa")
-                  .map((v1, k1) => {
-                    return {
-                      idVirtual: uuid.v4(),
-                      tenHangHoa: k1,
-                      childData: v1
-                    }
-                  }).value();
-                return {
-                  idVirtual: uuid.v4(),
-                  tenNhomTiLeBaoHiem: k,
-                  childData: res
-                };
-              }
+              let res = chain(v)
+                .groupBy("tenHangHoa")
+                .map((v1, k1) => {
+                  return {
+                    idVirtual: uuid.v4(),
+                    tenHangHoa: k1,
+                    childData: v1
+                  }
+                }).value();
+              return {
+                idVirtual: uuid.v4(),
+                tenNhomTiLeBaoHiem: k,
+                childData: res
+              };
+            }
             ).value();
           return {
             idVirtual: uuid.v4(),
@@ -369,7 +369,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     let result = 0;
     if (array && array.length > 0) {
       switch (type) {
-        case 'tenHangHoa' : {
+        case 'tenHangHoa': {
           if (array) {
             let arr = array.filter(item => item.tenHangHoa == tenHangHoa)
             if (arr && arr.length > 0) {
@@ -382,7 +382,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           }
           break;
         }
-        case 'tenNhomTiLeBaoHiem' : {
+        case 'tenNhomTiLeBaoHiem': {
           if (array) {
             let arr = array.filter(item => item.tenNhomTiLeBaoHiem == tenNhomTiLeBaoHiem)
             const sum = arr.reduce((prev, cur) => {
@@ -393,7 +393,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           }
           break;
         }
-        case 'tenLoaiVthh' : {
+        case 'tenLoaiVthh': {
           if (array) {
             let arr = array.filter(item => item.tenLoaiVthh == tenLoaiVthh)
             const sum = arr.reduce((prev, cur) => {
@@ -404,7 +404,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           }
           break;
         }
-        case 'tong' : {
+        case 'tong': {
           if (array) {
             const sum = array.reduce((prev, cur) => {
               prev += cur[column];

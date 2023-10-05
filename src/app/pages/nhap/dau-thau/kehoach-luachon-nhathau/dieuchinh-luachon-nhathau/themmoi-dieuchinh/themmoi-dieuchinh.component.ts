@@ -18,8 +18,8 @@ import { ThongtinDieuchinhComponent } from './thongtin-dieuchinh/thongtin-dieuch
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import {DatePipe} from "@angular/common";
-import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { DatePipe } from "@angular/common";
+import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 
 @Component({

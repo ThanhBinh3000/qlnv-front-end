@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {STATUS} from "../../../constants/status";
-import {cloneDeep} from 'lodash';
+import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { STATUS } from "../../../constants/status";
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-xuat-truc-tiep',

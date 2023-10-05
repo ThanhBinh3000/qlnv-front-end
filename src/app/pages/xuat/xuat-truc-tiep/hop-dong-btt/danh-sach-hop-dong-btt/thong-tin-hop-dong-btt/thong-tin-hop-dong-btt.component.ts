@@ -1,29 +1,29 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import dayjs from 'dayjs';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
-import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import {
   QdPdKetQuaBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import {STATUS} from 'src/app/constants/status';
-import {cloneDeep} from 'lodash';
-import {Validators} from '@angular/forms';
+import { STATUS } from 'src/app/constants/status';
+import { cloneDeep } from 'lodash';
+import { Validators } from '@angular/forms';
 import {
   QuyetDinhNvXuatBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
-import {DonviService} from 'src/app/services/donvi.service';
+import { DonviService } from 'src/app/services/donvi.service';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
@@ -168,7 +168,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    const {idInput, idHopDong} = this;
+    const { idInput, idHopDong } = this;
     if (idInput) {
       await (this.userService.isCuc() ? this.onChangeChaoGia(idInput) : this.onChangeUyQuyen(idInput));
     }
@@ -203,7 +203,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
-    const {soHd, tgianGnhanTu, tgianGnhanDen, tenDviMua, children, xhHopDongBttDviList, phuLuc} = data;
+    const { soHd, tgianGnhanTu, tgianGnhanDen, tenDviMua, children, xhHopDongBttDviList, phuLuc } = data;
     this.formData.patchValue({
       soHd: soHd?.split('/')[0] || null,
       tgianGnhanHang: (tgianGnhanTu && tgianGnhanDen) ? [tgianGnhanTu, tgianGnhanDen] : null,
@@ -219,7 +219,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
     this.setValidator();
-    const {soHd, tgianGnhanHang} = this.formData.value;
+    const { soHd, tgianGnhanHang } = this.formData.value;
     const body = {
       ...this.formData.value,
       soHd: soHd ? soHd + this.maHopDongSuffix : null,
@@ -233,7 +233,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     this.setValidForm();
-    const {soHd, tgianGnhanHang} = this.formData.value;
+    const { soHd, tgianGnhanHang } = this.formData.value;
     const body = {
       ...this.formData.value,
       soHd: soHd ? soHd + this.maHopDongSuffix : null,
@@ -562,7 +562,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       await this.loadDanhDachHopDong();
       const loaiVthhItem = this.listHangHoaAll.find(s => s.ma == data.loaiVthh);
       const formDataPatchValue = {
-        namKh : data.namKh,
+        namKh: data.namKh,
         idChaoGia: data.id,
         idQdPd: data.idHdr,
         soQdPd: data.soQdPd,
@@ -664,7 +664,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          await this.hopDongBttService.delete({id: data.id});
+          await this.hopDongBttService.delete({ id: data.id });
           await this.loadChiTiet(this.idHopDong);
           this.spinner.hide();
         } catch (e) {

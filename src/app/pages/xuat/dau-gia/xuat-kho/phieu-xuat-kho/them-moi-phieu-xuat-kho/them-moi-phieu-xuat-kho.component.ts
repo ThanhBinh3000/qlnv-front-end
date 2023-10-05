@@ -1,20 +1,20 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Base2Component} from 'src/app/components/base2/base2.component';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
-import {Validators} from '@angular/forms';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { Validators } from '@angular/forms';
 import {
   QuyetDinhGiaoNvXuatHangService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
@@ -24,7 +24,7 @@ import {
 import {
   PhieuXuatKhoService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-bdg-them-moi-phieu-xuat-kho',
@@ -401,7 +401,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       this.formData.controls["soPhieuXuatKho"].setValidators([Validators.required]);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soPhieuKiemNghiem"].setValidators([Validators.required]);
-      const body = {...this.formData.value,};
+      const body = { ...this.formData.value, };
       await this.createUpdate(body);
     } catch (e) {
       console.error('Error: ', e);
@@ -419,7 +419,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       }
       await this.helperService.ignoreRequiredForm(this.formData);
       this.setValidForm();
-      const body = {...this.formData.value};
+      const body = { ...this.formData.value };
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (e) {
       console.error('Error: ', e);

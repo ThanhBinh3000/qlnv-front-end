@@ -1,33 +1,33 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {HttpClient} from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { HttpClient } from '@angular/common/http';
 import {
   BienBanLayMauXhService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
-import {StorageService} from 'src/app/services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import {
   XhPhieuKnghiemCluongService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
-import {FileDinhKem} from "../../../../../../models/CuuTro";
-import {MESSAGE} from "../../../../../../constants/message";
+import { FileDinhKem } from "../../../../../../models/CuuTro";
+import { MESSAGE } from "../../../../../../constants/message";
 import dayjs from "dayjs";
-import {STATUS} from "../../../../../../constants/status";
-import {Validators} from "@angular/forms";
+import { STATUS } from "../../../../../../constants/status";
+import { Validators } from "@angular/forms";
 import {
   QuyetDinhGiaoNvXuatHangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { KhCnQuyChuanKyThuat } from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-bdg-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -456,7 +456,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
   setValidForm() {

@@ -52,7 +52,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       ngayKtra: [null, [Validators.required]],
       loaiVthh: [null, [Validators.required]],
       tenLoaiVthh: [null, [Validators.required]],
-      cloaiVthh: [null, ],
+      cloaiVthh: [null,],
       tenCloaiVthh: [null,],
       dviTinh: [null, [Validators.required]],
       vaiTro: [null, [Validators.required]],

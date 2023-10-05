@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {environment} from 'src/environments/environment';
-import {BaseService} from '../../base.service';
-import {OldResponseData} from "../../../interfaces/response";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { BaseService } from '../../base.service';
+import { OldResponseData } from "../../../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -64,7 +64,6 @@ export class DeNghiCapVonBoNganhService extends BaseService {
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }
-
   loadThTCDT(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/tong-hop/TCDT`;
     return this.httpClient.post(url, body).toPromise();
@@ -93,7 +92,7 @@ export class DeNghiCapVonBoNganhService extends BaseService {
   deleteMultiple(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh`;
     const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       body: body
     }
     return this.httpClient.delete(url, httpOptions).toPromise();
@@ -106,14 +105,13 @@ export class DeNghiCapVonBoNganhService extends BaseService {
 
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/export/list`;
-    return this.httpClient.post(url, body, {responseType: 'blob'});
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 
   dsThuHuong(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/ds-thu-huong`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
-
   dsHopDongTheoBoNganh(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/ds-hop-dong-theo-bo-nganh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();

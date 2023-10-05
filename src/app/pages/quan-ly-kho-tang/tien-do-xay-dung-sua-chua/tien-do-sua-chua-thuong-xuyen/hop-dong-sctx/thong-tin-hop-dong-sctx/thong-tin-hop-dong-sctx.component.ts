@@ -1,15 +1,14 @@
-
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {CurrencyMaskInputMode} from "ngx-currency";
-import {STATUS} from "../../../../../../constants/status";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { MESSAGE } from "../../../../../../constants/message";
+import { CurrencyMaskInputMode } from "ngx-currency";
+import { STATUS } from "../../../../../../constants/status";
 import {
   HopdongTdscService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
@@ -92,7 +91,7 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
       trangThaiHd: [],
       tenTrangThaiHd: [],
       fileDinhKems: [null],
-      loaiSuaChua : [null],
+      loaiSuaChua: [null],
       listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtTdscQuyetDinhPdKhlcntCvKad: null,
       listKtTdscQuyetDinhPdKhlcntCvKh: null,
@@ -157,8 +156,8 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
       if (this.itemQdPdKhLcnt && !isBackFromHd) {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
         this.formData.patchValue({
-          tenDuAn : this.itemDuAn.tenCongTrinh,
-          tenNguonVon : this.itemQdPdKhLcnt.nguonVonDt
+          tenDuAn: this.itemDuAn.tenCongTrinh,
+          tenNguonVon: this.itemQdPdKhLcnt.nguonVonDt
         })
         this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
         if (this.listHopDong && this.listHopDong.length > 0) {
@@ -175,7 +174,8 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
         }
         let res = await this.hopdongService.detailQdPdKhLcnt(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {(this.itemQdPdKhLcnt, 'this item')
+          if (res.data) {
+            (this.itemQdPdKhLcnt, 'this item')
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
             this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntDsnt;
             if (this.listHopDong && this.listHopDong.length > 0) {
@@ -189,7 +189,7 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
         }
       }
     } catch
-      (e) {
+    (e) {
       this.notification.error(MESSAGE.ERROR, e);
       this.spinner.hide();
     } finally {
@@ -229,8 +229,8 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
   }
 
   delete(item
-           :
-           any
+    :
+    any
   ) {
     this.modal.confirm({
       nzClosable: false,
@@ -248,7 +248,7 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
           };
           this.hopdongService.delete(body).then(async () => {
             let body = {
-              idQdPdKhlcnt : this.itemQdPdKhLcnt.id,
+              idQdPdKhlcnt: this.itemQdPdKhLcnt.id,
               loai: "00"
             }
             let resp = await this.hopdongService.danhSachHdTheoKhlcnt(body);

@@ -1,9 +1,9 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {PATH} from 'src/app/constants/path';
-import {BaseService} from '../../../../base.service';
-import {OldResponseData} from 'src/app/interfaces/response';
-import {environment} from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { PATH } from 'src/app/constants/path';
+import { BaseService } from '../../../../base.service';
+import { OldResponseData } from 'src/app/interfaces/response';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({

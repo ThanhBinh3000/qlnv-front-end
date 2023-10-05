@@ -1,17 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   DeXuatKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
-import {isEmpty} from 'lodash';
-import {DonviService} from 'src/app/services/donvi.service';
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { isEmpty } from 'lodash';
+import { DonviService } from 'src/app/services/donvi.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-de-xuat-kh-ban-truc-tiep',
@@ -255,17 +255,17 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-              [
-                this.STATUS.CHO_DUYET_TP,
-                this.STATUS.CHO_DUYET_LDC,
-                this.STATUS.DA_DUYET_LDC
-              ].includes(data.trangThai)) ||
+            [
+              this.STATUS.CHO_DUYET_TP,
+              this.STATUS.CHO_DUYET_LDC,
+              this.STATUS.DA_DUYET_LDC
+            ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-                this.STATUS.DU_THAO,
-                this.STATUS.TU_CHOI_TP,
-                this.STATUS.TU_CHOI_LDC,
-                this.STATUS.DA_DUYET_LDC
-              ].includes(data.trangThai) ||
+              this.STATUS.DU_THAO,
+              this.STATUS.TU_CHOI_TP,
+              this.STATUS.TU_CHOI_LDC,
+              this.STATUS.DA_DUYET_LDC
+            ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_TP &&
                 !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDC &&

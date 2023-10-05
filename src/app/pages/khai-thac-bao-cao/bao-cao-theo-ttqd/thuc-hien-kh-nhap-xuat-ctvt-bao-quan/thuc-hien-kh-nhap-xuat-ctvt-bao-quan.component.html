@@ -44,7 +44,7 @@
             <nz-form-item>
               <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>
               <nz-select [(ngModel)]="selectedVthhCache" (ngModelChange)="changeLoaiVthh($event)"
-                         [ngModelOptions]="{standalone: true}">
+                [ngModelOptions]="{standalone: true}">
                 <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
               </nz-select>
             </nz-form-item>
@@ -72,7 +72,7 @@
             <nz-form-item>
               <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>
               <nz-select [(ngModel)]="row.loaiVthh" (ngModelChange)="changeLoaiVthh($event)"
-                         [ngModelOptions]="{standalone: true}">
+                [ngModelOptions]="{standalone: true}">
                 <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
               </nz-select>
             </nz-form-item>
@@ -124,8 +124,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Tài khoản tiền gửi của đơn vị</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input placeholder="Số tài khoản"
-                       formControlName="stk"/>
+                <input nz-input placeholder="Số tài khoản" formControlName="stk" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -133,8 +132,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Mở tại</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input placeholder="Mở tại"
-                       formControlName="moTai"/>
+                <input nz-input placeholder="Mở tại" formControlName="moTai" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -143,7 +141,7 @@
     </nz-card>
     <div class="group-button">
       <button type="button" class="btn btn-sub" (click)="preView()"
-              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
+        *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Kết xuất báo cáo</span>
       </button>
@@ -158,13 +156,11 @@
     </pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()"
-            class="modal__button--save">
+    <button nz-button (click)="downloadPdf()" class="modal__button--save">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       Tải báo cáo
     </button>
-    <button nz-button (click)="downloadExcel()"
-            class="modal__button--save">
+    <button nz-button (click)="downloadExcel()" class="modal__button--save">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       Tải báo cáo Excel
     </button>

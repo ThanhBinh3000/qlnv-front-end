@@ -53,7 +53,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       thoiGianTlTu: [null],
       thoiGianTlDen: [null],
     });
-    this.symbol = '/'+this.userInfo.DON_VI.tenVietTat+"-KH&QLHDT";
+    this.symbol = '/' + this.userInfo.DON_VI.tenVietTat + "-KH&QLHDT";
   }
 
   async ngOnInit() {

@@ -1,31 +1,31 @@
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges} from '@angular/core';
-import {Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
-import {API_STATUS_CODE, LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { API_STATUS_CODE, LOAI_HANG_DTQG } from 'src/app/constants/config';
 import {
   DialogDanhSachHangHoaComponent
 } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import {STATUS} from "../../../../../../constants/status";
-import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import {DanhSachPhanLo} from 'src/app/models/KeHoachBanDauGia';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { STATUS } from "../../../../../../constants/status";
+import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
 import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {
   DialogThemDiaDiemPhanLoComponent
 } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {FileDinhKem} from "../../../../../../models/CuuTro";
-import {QuyetDinhGiaCuaBtcService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { FileDinhKem } from "../../../../../../models/CuuTro";
+import { QuyetDinhGiaCuaBtcService } from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'app-them-de-xuat-ke-hoach-ban-dau-gia',
@@ -163,7 +163,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
-    const {soDxuat, tgianDkienTu, tgianDkienDen, children, loaiVthh} = data;
+    const { soDxuat, tgianDkienTu, tgianDkienDen, children, loaiVthh } = data;
     this.formData.patchValue({
       soDxuat: soDxuat?.split('/')[0],
       thoiGianDuKien: tgianDkienTu && tgianDkienDen ? [tgianDkienTu, tgianDkienDen] : null
@@ -268,17 +268,17 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
 
   async onChangeLoaiVthh(event, isCloai?) {
     if (isCloai) {
-      this.formData.patchValue({cloaiVthh: null, tenCloaiVthh: null});
+      this.formData.patchValue({ cloaiVthh: null, tenCloaiVthh: null });
     }
     const filteredVatTu = (this.dataChiTieu?.khVatTuXuat || []).filter(item => item.maVatTuCha === event);
     const uniqueVatTu = [...new Set(filteredVatTu.map(item => item.maVatTu))].map(maVatTu => {
       const vatTuItem = filteredVatTu.find(item => item.maVatTu === maVatTu);
-      return {maVatTu: vatTuItem.maVatTu, tenVatTu: vatTuItem.tenVatTu};
+      return { maVatTu: vatTuItem.maVatTu, tenVatTu: vatTuItem.tenVatTu };
     });
     this.listVatTu = uniqueVatTu;
     if (isCloai) {
       const vatTu = filteredVatTu[0];
-      this.formData.patchValue({donViTinh: vatTu?.donViTinh, tenCloaiVthh: vatTu?.tenVatTu});
+      this.formData.patchValue({ donViTinh: vatTu?.donViTinh, tenCloaiVthh: vatTu?.tenVatTu });
     }
   }
 
@@ -290,7 +290,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   async getGiaToiThieu(event?) {
-    const {namKh, loaiVthh, cloaiVthh} = this.formData.value;
+    const { namKh, loaiVthh, cloaiVthh } = this.formData.value;
     const body = {
       namKeHoach: namKh,
       loaiVthh: loaiVthh,
@@ -318,7 +318,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   async donGiaDuocDuyet() {
-    const {namKh, loaiVthh, cloaiVthh} = this.formData.value;
+    const { namKh, loaiVthh, cloaiVthh } = this.formData.value;
     const bodyPag = {
       namKeHoach: namKh,
       loaiVthh: loaiVthh,
@@ -527,7 +527,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) && Array.isArray(this.dataChiTieu.khVatTuXuat) && this.dataChiTieu.khVatTuXuat.length > 0) {
       const uniqueVatTuCha = this.dataChiTieu.khVatTuXuat
         .filter((item, index, self) => item.maVatTuCha !== null && index === self.findIndex(x => x.maVatTuCha === item.maVatTuCha))
-        .map(item => ({maVatTuCha: item.maVatTuCha, tenVatTuCha: item.tenVatTuCha}));
+        .map(item => ({ maVatTuCha: item.maVatTuCha, tenVatTuCha: item.tenVatTuCha }));
       this.listVatTuCha = uniqueVatTuCha;
     } else {
       this.listVatTuCha = [];
@@ -554,7 +554,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   validateNgay() {
-    const {ngayTao, ngayPduyet} = this.formData.value;
+    const { ngayTao, ngayPduyet } = this.formData.value;
     if (ngayPduyet && new Date(ngayTao) > new Date(ngayPduyet)) {
       this.notification.error(MESSAGE.ERROR, "Ngày tạo không được vượt quá ngày phê duyệt");
       return false;

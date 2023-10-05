@@ -3,21 +3,21 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import * as dayjs from 'dayjs';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
-import {DialogTableSelectionComponent} from '../dialog-table-selection/dialog-table-selection.component';
-import {STATUS} from 'src/app/constants/status';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import { DialogTableSelectionComponent } from '../dialog-table-selection/dialog-table-selection.component';
+import { STATUS } from 'src/app/constants/status';
 import {
   QuyetDinhNvXuatBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
-import {Validators} from '@angular/forms';
-import {MESSAGE} from 'src/app/constants/message';
+import { Validators } from '@angular/forms';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-dialog-them-moi-bang-ke-ban-le',

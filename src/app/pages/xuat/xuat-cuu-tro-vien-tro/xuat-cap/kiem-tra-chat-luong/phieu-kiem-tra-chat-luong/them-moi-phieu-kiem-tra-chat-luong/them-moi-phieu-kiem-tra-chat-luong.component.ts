@@ -117,7 +117,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   async ngOnInit() {
     try {
       this.spinner.show();
-      console.log(this.loaiVthh,"333")
+      console.log(this.loaiVthh, "333")
       await Promise.all([
         this.loadSoQuyetDinh(),
         this.loadDanhMucPhuongThucBaoQuan(),

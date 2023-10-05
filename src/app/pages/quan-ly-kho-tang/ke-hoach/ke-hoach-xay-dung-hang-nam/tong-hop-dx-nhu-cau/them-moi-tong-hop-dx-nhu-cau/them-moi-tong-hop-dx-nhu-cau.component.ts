@@ -90,7 +90,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    if(!this.idInput) {
+    if (!this.idInput) {
       this.maTt = "/" + this.userInfo.MA_TR;
       this.soQd = "/" + this.userInfo.MA_QD;
     }
@@ -122,22 +122,22 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       const data = res.data;
       this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
         this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
-      this.formData.patchValue({
-        id: data.id,
-        namBatDau: data.namBatDau,
-        namKeHoach: data.namKeHoach,
-        namKetThuc: data.namKetThuc,
-        ngayTaoTt: data.ngayTaoTt,
-        ngayKyQd: data.ngayKyQd,
-        noiDung: data.noiDung,
-        maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
-        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
-        trangThai: data.trangThai,
-        tenTrangThai: data.tenTrangThai,
-        lyDoTuChoi: data.lyDoTuChoi,
-        loaiDuAn: data.loaiDuAn,
-        tgTongHop: data.tgTongHop
-      });
+        this.formData.patchValue({
+          id: data.id,
+          namBatDau: data.namBatDau,
+          namKeHoach: data.namKeHoach,
+          namKetThuc: data.namKetThuc,
+          ngayTaoTt: data.ngayTaoTt,
+          ngayKyQd: data.ngayKyQd,
+          noiDung: data.noiDung,
+          maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
+          soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
+          trangThai: data.trangThai,
+          tenTrangThai: data.tenTrangThai,
+          lyDoTuChoi: data.lyDoTuChoi,
+          loaiDuAn: data.loaiDuAn,
+          tgTongHop: data.tgTongHop
+        });
       this.dataTableReq = data.ctiets;
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
@@ -183,8 +183,8 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     }
     let body = this.formData.value;
     body.tgTongHop = body.tgTongHop ? dayjs(body.tgTongHop) : null;
-    body.maToTrinh =  body.maToTrinh ?   body.maToTrinh + this.maTt : this.maTt;
-    body.soQuyetDinh = body.soQuyetDinh ?  body.soQuyetDinh + this.soQd : this.soQd;
+    body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : this.maTt;
+    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : this.soQd;
     body.ctiets = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;
@@ -225,7 +225,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
-      nzContent: (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV || this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) ? "Bạn có chắc chắn muốn duyệt?" :  "Bạn có chắc chắn muốn gửi duyệt?",
+      nzContent: (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV || this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) ? "Bạn có chắc chắn muốn duyệt?" : "Bạn có chắc chắn muốn gửi duyệt?",
       nzOkText: "Đồng ý",
       nzCancelText: "Không",
       nzOkDanger: true,
@@ -235,23 +235,23 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DU_THAO: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_LDV : {
+            case STATUS.TU_CHOI_LDV: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_LDV : {
+            case STATUS.CHO_DUYET_LDV: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.TU_CHOI_LDTC : {
+            case STATUS.TU_CHOI_LDTC: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDTC : {
+            case STATUS.CHO_DUYET_LDTC: {
               trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
@@ -266,7 +266,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
               body
             );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV || this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) ? MESSAGE.PHE_DUYET_SUCCESS :  MESSAGE.GUI_DUYET_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV || this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) ? MESSAGE.PHE_DUYET_SUCCESS : MESSAGE.GUI_DUYET_SUCCESS);
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -428,12 +428,12 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
           let rs = chain(value)
             .groupBy("tenKhoi")
             .map((v, k) => {
-                return {
-                  idVirtual: uuidv4(),
-                  tenKhoi: k,
-                  dataChild: v
-                };
-              }
+              return {
+                idVirtual: uuidv4(),
+                tenKhoi: k,
+                dataChild: v
+              };
+            }
             ).value();
           return {
             idVirtual: uuidv4(),
@@ -500,7 +500,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   themMoiItem(data: any, type: string, idx: number, list?: any) {
     let modalQD = this.modal.create({
-      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
+      nzTitle: "Chỉnh sửa chi tiết kế hoạch",
       nzContent: DialogThemMoiDxkhthComponent,
       nzMaskClosable: false,
       nzClosable: false,

@@ -1,17 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {STATUS} from 'src/app/constants/status';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { STATUS } from 'src/app/constants/status';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
-import {saveAs} from 'file-saver';
-import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
+import { saveAs } from 'file-saver';
+import { LOAI_HANG_DTQG } from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-danh-sach-ban-truc-tiep-chi-cuc',

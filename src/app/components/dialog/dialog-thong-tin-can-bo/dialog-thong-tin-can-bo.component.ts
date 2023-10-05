@@ -262,7 +262,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
         phoneNo: dataDt.phoneNo,
         status: dataDt.status,
         sysType: dataDt.sysType,
-        userType : dataDt.userType,
+        userType: dataDt.userType,
         dvql: dv ? dv.maDvi + ' - ' + dv.tenDvi : '',
         department: pb ? pb.maDvi + ' - ' + pb.tenDvi : '',
         ghiChu: dataDt.ghiChu,

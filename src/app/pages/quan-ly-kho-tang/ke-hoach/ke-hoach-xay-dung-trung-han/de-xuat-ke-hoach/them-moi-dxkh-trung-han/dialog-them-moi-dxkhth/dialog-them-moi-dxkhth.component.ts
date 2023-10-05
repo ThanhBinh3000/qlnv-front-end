@@ -1,11 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {UserLogin} from "../../../../../../../models/userlogin";
-import {UserService} from "../../../../../../../services/user.service";
-import {NzModalRef} from "ng-zorro-antd/modal";
-import {Globals} from "../../../../../../../shared/globals";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
+import { Component, Input, OnInit } from '@angular/core';
+import { UserLogin } from "../../../../../../../models/userlogin";
+import { UserService } from "../../../../../../../services/user.service";
+import { NzModalRef } from "ng-zorro-antd/modal";
+import { Globals } from "../../../../../../../shared/globals";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
 import { DanhMucKho } from "../../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
 import { DanhMucKhoService } from "../../../../../../../services/danh-muc-kho.service";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
@@ -28,7 +28,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   listLoaiDuAn: any[] = []
   listKhoi: any[] = []
   userInfo: UserLogin
-  namKh : number
+  namKh: number
 
   constructor(
     private danhMucService: DanhMucService,
@@ -37,7 +37,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     public globals: Globals,
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
-    private dmKhoService : DanhMucKhoService
+    private dmKhoService: DanhMucKhoService
   ) {
   }
 
@@ -106,10 +106,10 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
 
   async getAllDmKho() {
     let body = {
-      "type" : "DMK",
-      "maDvi" : this.userInfo.MA_DVI,
-      "khoi" : this.dataInput.khoi,
-      "trangThai" : STATUS.CHUA_THUC_HIEN
+      "type": "DMK",
+      "maDvi": this.userInfo.MA_DVI,
+      "khoi": this.dataInput.khoi,
+      "trangThai": STATUS.CHUA_THUC_HIEN
     }
     let res = await this.dmKhoService.getAllDmKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -135,7 +135,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.item.tgKhoiCong = this.dataInput.tgKhoiCong;
       this.item.tgHoanThanh = this.dataInput.tgHoanThanh;
       this.item.ghiChu = this.dataInput.ghiChu;
-      this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
+      this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0;
     }
   }
 

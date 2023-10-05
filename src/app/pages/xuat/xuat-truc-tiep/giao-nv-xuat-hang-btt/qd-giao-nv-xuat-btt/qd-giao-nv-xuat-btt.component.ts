@@ -1,17 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MESSAGE} from "../../../../../constants/message";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {StorageService} from 'src/app/services/storage.service';
-import {HttpClient} from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
+import { MESSAGE } from "../../../../../constants/message";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { StorageService } from 'src/app/services/storage.service';
+import { HttpClient } from '@angular/common/http';
 import {
   QuyetDinhNvXuatBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
-import {LOAI_HANG_DTQG} from "../../../../../constants/config";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {STATUS} from "../../../../../constants/status";
+import { LOAI_HANG_DTQG } from "../../../../../constants/config";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: 'app-qd-giao-nv-xuat-btt',
@@ -124,7 +124,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       loaiVthh: this.loaiVthh,
     })
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-     await this.loadDsVthh();
+      await this.loadDsVthh();
     }
   }
 

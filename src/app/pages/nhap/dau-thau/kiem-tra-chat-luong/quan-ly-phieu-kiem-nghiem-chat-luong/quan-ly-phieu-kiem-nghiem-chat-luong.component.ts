@@ -19,7 +19,7 @@ import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import {STATUS} from "../../../../../constants/status";
+import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -175,7 +175,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
       // });
       this.dataTableAll = cloneDeep(this.dataTable);
       for (let i = 0; i < this.dataTable.length; i++) {
-        if (this.dataTable[i].listPhieuKiemNghiemCl !=null && this.dataTable[i].listPhieuKiemNghiemCl.length > 0) {
+        if (this.dataTable[i].listPhieuKiemNghiemCl != null && this.dataTable[i].listPhieuKiemNghiemCl.length > 0) {
           this.expandSet.add(i);
         }
       }
@@ -415,14 +415,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
     }
   }
 
-  hienThiXem(data){
+  hienThiXem(data) {
     if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_XEM') && data != null) {
-      if(this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM') && (data.trangThai == STATUS.DU_THAO
+      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM') && (data.trangThai == STATUS.DU_THAO
         || data.trangThai == STATUS.TU_CHOI_LDC
-      || data.trangThai == STATUS.TU_CHOI_TP)) {
+        || data.trangThai == STATUS.TU_CHOI_TP)) {
         return false;
       } else if ((this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
-      || (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)) {
+        || (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)) {
         return false;
       }
       return true;

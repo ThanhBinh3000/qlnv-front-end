@@ -1,22 +1,22 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
-import {Globals} from 'src/app/shared/globals';
-import {UserService} from 'src/app/services/user.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {MESSAGE} from 'src/app/constants/message';
-import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {HelperService} from 'src/app/services/helper.service';
-import {UserLogin} from 'src/app/models/userlogin';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {DanhSachXuatBanTrucTiep} from 'src/app/models/KeHoachBanDauGia';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {QuanLyHangTrongKhoService} from 'src/app/services/quanLyHangTrongKho.service';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { Globals } from 'src/app/shared/globals';
+import { UserService } from 'src/app/services/user.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { HelperService } from 'src/app/services/helper.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { DanhSachXuatBanTrucTiep } from 'src/app/models/KeHoachBanDauGia';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
 import {
   DeXuatKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
-import {cloneDeep} from 'lodash';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-dialog-them-moi-xuat-ban-truc-tiep',
@@ -99,7 +99,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   initForm() {
     this.userInfo = this.userService.getUserLogin();
     this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
-    this.formData.patchValue({donViTinh: this.donViTinh});
+    this.formData.patchValue({ donViTinh: this.donViTinh });
     this.loadDonVi();
     if (this.dataEdit) {
       this.helperService.bidingDataInFormGroup(this.formData, this.dataEdit);
@@ -179,7 +179,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     const [soLuongDaLenKh, chiCuc, res] = await Promise.all([
       this.deXuatKhBanTrucTiepService.getSoLuongAdded(body),
       this.listChiCuc.find(item => item.maDvi === event),
-      this.donViService.getDonVi({str: event}),
+      this.donViService.getDonVi({ str: event }),
     ]);
     this.listDiemKho = [];
     if (res.msg === MESSAGE.SUCCESS && chiCuc?.soLuongXuat) {
@@ -372,7 +372,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   }
 
   validateDiemKho(): boolean {
-    const {maDiemKho, maNhaKho, maNganKho, maDviTsan, soLuongDeXuat, donGiaDeXuat,} = this.thongTinXuatBanTrucTiep;
+    const { maDiemKho, maNhaKho, maNganKho, maDviTsan, soLuongDeXuat, donGiaDeXuat, } = this.thongTinXuatBanTrucTiep;
     if (maDiemKho && maNhaKho && maNganKho && maDviTsan && soLuongDeXuat && donGiaDeXuat) {
       const data = this.listOfData.find(
         item => item.maDiemKho === maDiemKho && item.maNhaKho === maNhaKho && item.maNganKho === maNganKho);
@@ -395,8 +395,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   }
 
   validateSoLuong() {
-    const {soLuongChiTieu, soLuongKhDaDuyet} = this.formData.value;
-    const {tonKho, soLuongDeXuat,donGiaDeXuat, maDviTsan} = this.thongTinXuatBanTrucTiep;
+    const { soLuongChiTieu, soLuongKhDaDuyet } = this.formData.value;
+    const { tonKho, soLuongDeXuat, donGiaDeXuat, maDviTsan } = this.thongTinXuatBanTrucTiep;
     const tongSoLuong = this.listOfData.reduce((total, item) => total + item.soLuongDeXuat, 0);
     const maDonViTsan = this.listOfData.find(item => item.maDviTsan)?.maDviTsan;
     if (maDonViTsan == maDviTsan) {
@@ -408,7 +408,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     } else if (soLuongDeXuat > soLuongChiTieu - soLuongKhDaDuyet) {
       this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại");
       return false;
-    } else if( tongSoLuong > soLuongChiTieu - soLuongKhDaDuyet){
+    } else if (tongSoLuong > soLuongChiTieu - soLuongKhDaDuyet) {
       this.notification.error(MESSAGE.ERROR, "Tổng số lượng đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại");
       return false;
     } else if (donGiaDeXuat < this.giaToiDa) {
@@ -497,7 +497,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     this.listOfData.forEach((item, index) => {
       this.editCache[index] = {
         edit: false,
-        data: {...item}
+        data: { ...item }
       };
     });
   }

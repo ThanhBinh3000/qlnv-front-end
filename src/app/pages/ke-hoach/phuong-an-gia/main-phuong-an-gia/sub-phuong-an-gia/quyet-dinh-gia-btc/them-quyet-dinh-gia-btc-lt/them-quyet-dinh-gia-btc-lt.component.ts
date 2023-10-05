@@ -1,21 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import dayjs from "dayjs";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {MESSAGE} from "src/app/constants/message";
-import {UserLogin} from "src/app/models/userlogin";
-import {HelperService} from "src/app/services/helper.service";
-import {UserService} from "src/app/services/user.service";
-import {Globals} from "src/app/shared/globals";
-import {STATUS} from "src/app/constants/status";
-import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import {DialogPagQdBtcComponent} from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { MESSAGE } from "src/app/constants/message";
+import { UserLogin } from "src/app/models/userlogin";
+import { HelperService } from "src/app/services/helper.service";
+import { UserService } from "src/app/services/user.service";
+import { Globals } from "src/app/shared/globals";
+import { STATUS } from "src/app/constants/status";
+import { QuyetDinhGiaCuaBtcService } from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { TongHopPhuongAnGiaService } from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import { DialogPagQdBtcComponent } from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-lt",
@@ -134,7 +134,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     }
   }
 
-   quayLai() {
+  quayLai() {
     this.onClose.emit();
   }
 
@@ -238,7 +238,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         nzWidth: '1200px',
         nzFooter: null,
         nzComponentParams: {
-          pagType : this.pagType,
+          pagType: this.pagType,
           type: this.type,
           namKeHoach: this.formData.value.namKeHoach
         },
@@ -290,9 +290,9 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value,
-            apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
-            vat : value && value[0] && value[0].vat ? value[0].vat : null,
-            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : 0,
+            apDungTatCa: value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
+            vat: value && value[0] && value[0].vat ? value[0].vat : null,
+            giaQdBtc: value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : 0,
           };
         }).value();
     }

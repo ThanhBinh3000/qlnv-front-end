@@ -1,23 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Globals} from 'src/app/shared/globals';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {STATUS} from "../../../../../../constants/status";
-import {HelperService} from "../../../../../../services/helper.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Globals } from 'src/app/shared/globals';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { STATUS } from "../../../../../../constants/status";
+import { HelperService } from "../../../../../../services/helper.service";
 import {
   ThongTinHopDongService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
 import {
   QuyetDinhPheDuyetKetQuaLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {UserLogin} from "../../../../../../models/userlogin";
-import {UserService} from "../../../../../../services/user.service";
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { MESSAGE } from "../../../../../../constants/message";
+import { UserLogin } from "../../../../../../models/userlogin";
+import { UserService } from "../../../../../../services/user.service";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import {saveAs} from 'file-saver';
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-quanly-hopdong',
   templateUrl: './quanly-hopdong.component.html',
@@ -45,7 +45,7 @@ export class QuanlyHopdongComponent implements OnInit {
     tenBaoCao: "",
     trangThai: ""
   };
-  previewName : string;
+  previewName: string;
   listNguoiDaiDien: any[] = [];
   constructor(
     public globals: Globals,
@@ -177,7 +177,7 @@ export class QuanlyHopdongComponent implements OnInit {
       trangThaiHd: data.trangThaiHd,
       tenDvi: data.hhQdKhlcntHdr?.tenDvi,
     });
-    this.dataTable = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr?  data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG): data.hhQdKhlcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
+    this.dataTable = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr ? data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG) : data.hhQdKhlcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
@@ -232,10 +232,10 @@ export class QuanlyHopdongComponent implements OnInit {
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
     });
-    if(data.qdKhlcntDtl?.children) {
+    if (data.qdKhlcntDtl?.children) {
       let tongMucDt = 0;
       data.qdKhlcntDtl?.children.forEach(i => {
-         tongMucDt += i.donGiaNhaThau * i.soLuong * 1000
+        tongMucDt += i.donGiaNhaThau * i.soLuong * 1000
       })
       this.formData.patchValue({
         tongMucDt: tongMucDt

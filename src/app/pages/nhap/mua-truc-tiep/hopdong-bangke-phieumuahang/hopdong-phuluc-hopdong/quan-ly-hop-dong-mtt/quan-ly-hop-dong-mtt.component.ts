@@ -14,9 +14,9 @@ import { StorageService } from 'src/app/services/storage.service';
 import {
   QuyetDinhGiaoNvNhapHangService
 } from "../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {UserService} from "../../../../../../services/user.service";
-import {UserLogin} from "../../../../../../models/userlogin";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { UserService } from "../../../../../../services/user.service";
+import { UserLogin } from "../../../../../../models/userlogin";
 import { Globals } from 'src/app/shared/globals';
 import { STATUS, STATUS_LABEL } from 'src/app/constants/status';
 
@@ -135,7 +135,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
           })
           this.danhSachCtiet = res.data.danhSachCtiet;
           this.tongSlChaoGia = 0;
-          this.danhSachCtiet.forEach(item =>{
+          this.danhSachCtiet.forEach(item => {
             this.dataTable.push(...item.listHdong)
             this.tongSlChaoGia += item.listChaoGia.length
           })
@@ -143,7 +143,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
           // this.showDetail(event, this.danhSachCtiet[0])
           this.showDetailHd(event, this.dataTable[0])
         });
-      }else {
+      } else {
         await this.getDetailChiCuc(id)
       }
     }
@@ -154,19 +154,19 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
       let res = await this.quyetDinhGiaoNvNhapHangService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         this.dataTable = []
-          this.formData.patchValue({
-            namKh: res.data.hhQdPheduyetKhMttHdr.namKh,
-            soQd: res.data.hhQdPheduyetKhMttHdr.soQd,
-            tenDuAn: res.data.hhQdPheduyetKhMttHdr.tenDuAn,
-            tongMucDt: res.data.tongMucDt,
-            nguonVon: res.data.nguonVon,
-            tongSoLuong: res.data.soLuong,
-            tenLoaiVthh: res.data.tenLoaiVthh,
-            tenCloaiVthh: res.data.tenCloaiVthh,
-            trangThaiHd: res.data.hhQdPheduyetKhMttHdr?.trangThaiHd,
-            tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr?.tenTrangThaiHd,
-            idQdGiaoNvNh: res.data.id
-          })
+        this.formData.patchValue({
+          namKh: res.data.hhQdPheduyetKhMttHdr.namKh,
+          soQd: res.data.hhQdPheduyetKhMttHdr.soQd,
+          tenDuAn: res.data.hhQdPheduyetKhMttHdr.tenDuAn,
+          tongMucDt: res.data.tongMucDt,
+          nguonVon: res.data.nguonVon,
+          tongSoLuong: res.data.soLuong,
+          tenLoaiVthh: res.data.tenLoaiVthh,
+          tenCloaiVthh: res.data.tenCloaiVthh,
+          trangThaiHd: res.data.hhQdPheduyetKhMttHdr?.trangThaiHd,
+          tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr?.tenTrangThaiHd,
+          idQdGiaoNvNh: res.data.id
+        })
         console.log(this.formData.value)
         this.idQdKh = res.data.idQdPdKh
         this.idQdGnvu = res.data.id
@@ -214,27 +214,27 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
     this.isEditHopDong = isShowHd;
     this.idHopDong = id;
     if (!isShowHd) {
-      if(!this.userService.isChiCuc()){
+      if (!this.userService.isChiCuc()) {
         await this.ngOnInit()
-      }else{
+      } else {
         await this.getDetailChiCuc(this.idQdGnvu)
       }
     }
   }
 
-  validateListHopDong(){
-    if(this.dataTable.filter(x => x.trangThai == STATUS.DU_THAO).length > 0){
+  validateListHopDong() {
+    if (this.dataTable.filter(x => x.trangThai == STATUS.DU_THAO).length > 0) {
       return true
-    }else{
+    } else {
       return false
     }
   }
 
   pheDuyet() {
-    if(this.validateListHopDong()){
+    if (this.validateListHopDong()) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng thêm các hợp đồng cho các đơn vị cung cấp');
       return;
-    }else{
+    } else {
       let trangThai = STATUS.DA_HOAN_THANH
       let mesg = 'Bạn có muốn hoàn thành ?'
       this.modal.confirm({
@@ -249,7 +249,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
           this.spinner.show();
           try {
             let res = null
-            if(!this.userService.isChiCuc()){
+            if (!this.userService.isChiCuc()) {
               let body = {
                 id: this.id,
                 lyDoTuChoi: null,
@@ -259,7 +259,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
                 await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.approve(
                   body,
                 );
-            }else{
+            } else {
               let body = {
                 id: this.idQdKh,
                 lyDoTuChoi: null,

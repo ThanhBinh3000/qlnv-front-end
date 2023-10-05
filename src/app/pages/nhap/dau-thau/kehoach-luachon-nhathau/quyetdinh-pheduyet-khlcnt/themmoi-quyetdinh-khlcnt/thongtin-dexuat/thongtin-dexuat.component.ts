@@ -16,12 +16,12 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import dayjs from 'dayjs';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { DatePipe } from '@angular/common';
-import {STATUS} from "../../../../../../../constants/status";
+import { STATUS } from "../../../../../../../constants/status";
 import {
   DialogThemMoiGoiThauComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
-import {UserService} from "../../../../../../../services/user.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
+import { UserService } from "../../../../../../../services/user.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 
 
 @Component({
@@ -202,7 +202,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     }
     this.listQuy = [];
     for (const element of quarters) {
-      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element })
     }
   }
   async loadDataComboBox() {
@@ -372,12 +372,12 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       this.dsDxChange.emit(this.dataInput);
     });
   }
-  deleteGoiThau(i:number) {
+  deleteGoiThau(i: number) {
     this.listOfData.splice(i, 1)
     this.tinhTongMucDtDx()
   }
 
-  deleteDiemKho(i:number, y:number, z:number) {
+  deleteDiemKho(i: number, y: number, z: number) {
     this.listOfData[i].children[y].children.splice(z, 1)
     if (this.listOfData[i].children[y].children.length > 0) {
       let soLuong = 0;
@@ -398,18 +398,18 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     this.tinhTongMucDtDx()
   }
 
-  tinhTongMucDtDx () {
+  tinhTongMucDtDx() {
     let tongMucDt: number = 0;
     let tongMucDtDx: number = 0;
     let tongSl: number = 0;
     this.listOfData.forEach((item) => {
-      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
+      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat * 1000);
       tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
       tongSl += item.soLuong
     });
     this.formData.patchValue({
-      tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),
-      tongMucDtDxLamTron: parseFloat((tongMucDtDx/1000000000).toFixed(2)),
+      tongMucDtLamTron: parseFloat((tongMucDt / 1000000000).toFixed(2)),
+      tongMucDtDxLamTron: parseFloat((tongMucDtDx / 1000000000).toFixed(2)),
       tongMucDt: tongMucDt,
       tongMucDtDx: tongMucDtDx,
       soLuong: tongSl,

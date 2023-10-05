@@ -1,28 +1,28 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {HttpClient} from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {STATUS} from 'src/app/constants/status';
-import {StorageService} from 'src/app/services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { STATUS } from 'src/app/constants/status';
+import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import {
   PhieuKtraCluongBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
 import {
   BienBanLayMauBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import {saveAs} from 'file-saver';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-them-phieu-ktra-cluong-btt',
@@ -172,9 +172,9 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content
       if (data && data.length > 0) {
-        let set = new Set(this.loadPhieuKnghiemCluong.map(item => JSON.stringify({soBienBan: item.soBienBan})));
+        let set = new Set(this.loadPhieuKnghiemCluong.map(item => JSON.stringify({ soBienBan: item.soBienBan })));
         this.dataBienBanLayMau = data.filter(item => {
-          const key = JSON.stringify({soBienBan: item.soBienBan});
+          const key = JSON.stringify({ soBienBan: item.soBienBan });
           return !set.has(key);
         });
       }
@@ -400,8 +400,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     this.showDlgPreview = false;
   }
 
-  printPreview(){
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
   setValidator(isGuiDuyet) {

@@ -235,7 +235,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DANG_NHAP_DU_LIEU : {
+            case STATUS.DANG_NHAP_DU_LIEU: {
               trangThai = STATUS.BAN_HANH;
               break;
             }
@@ -336,13 +336,13 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
           let rs = chain(value)
             .groupBy("tenKhoi")
             .map((v, k) => {
-                return {
-                  idVirtual: uuidv4(),
-                  tenKhoi: k,
-                  dataChild: v,
-                  khoi : v && v[0] && v[0].khoi ? v[0].khoi : null
-                };
-              }
+              return {
+                idVirtual: uuidv4(),
+                tenKhoi: k,
+                dataChild: v,
+                khoi: v && v[0] && v[0].khoi ? v[0].khoi : null
+              };
+            }
             ).value();
           return {
             idVirtual: uuidv4(),
@@ -455,7 +455,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
 
   themMoiItem(data: any, type: string, idx: number, list?: any) {
     let modalQD = this.modal.create({
-      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
+      nzTitle: "Chỉnh sửa chi tiết kế hoạch",
       nzContent: DialogThemMoiDxkhthComponent,
       nzMaskClosable: false,
       nzClosable: false,

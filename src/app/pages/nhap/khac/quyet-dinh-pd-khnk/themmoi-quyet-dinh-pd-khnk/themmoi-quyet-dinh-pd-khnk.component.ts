@@ -29,13 +29,13 @@ import { cloneDeep } from "lodash";
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DatePipe } from '@angular/common';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import {STATUS} from "../../../../../constants/status";
+import { STATUS } from "../../../../../constants/status";
 import {
   QuyetDinhPheDuyetKeHoachNhapKhacService
 } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhPheDuyetKeHoachNhapKhac.service";
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import {FILETYPE} from "../../../../../constants/fileType";
-import {DxKhNhapKhacService} from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
+import { FILETYPE } from "../../../../../constants/fileType";
+import { DxKhNhapKhacService } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
 import {
   TongHopDxKhNhapKhacService
 } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/tongHopDxKhNhapKhac.service";
@@ -559,9 +559,9 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
 
   async getDataChiTieu() {
     let res2 = null;
-      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.get('namKhoach').value,
-      );
+    res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+      +this.formData.get('namKhoach').value,
+    );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       // this.formData.patchValue({
@@ -677,39 +677,39 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     await this.spinner.show();
     this.danhsachDx = [];
     if (data) {
-        const dataRes = data.hdr;
-        let tongMucDt = 0
-        // dataRes.idDxHdr = data.hdr.id;
-        if (data.dtl) {
-          dataRes.details = data.dtl
-        };
-        this.danhsachDx.push(dataRes);
-        this.formData.patchValue({
-          cloaiVthh: data.hdr.cloaiVthh,
-          tenCloaiVthh: data.hdr.tenCloaiVthh,
-          loaiVthh: data.hdr.loaiVthh,
-          tenLoaiVthh: data.hdr.tenLoaiVthh,
-          trichYeu: data.hdr.trichYeu,
-          tgianBdauTchuc: data.hdr.tgianBdauTchuc,
-          ngayPduyet: data.hdr.ngayPduyet,
-          dvt: data.hdr.dvt,
-          tongThanhTien: data.hdr.tongThanhTien,
-          tgianMthau: data.hdr.tgianMthau,
-          tgianDthau: data.hdr.tgianDthau,
-          tgianThien: data.hdr.tgianThien,
-          maDvi: data.hdr.maDviDxuat,
-          idTh: null,
-          maTh: null,
-          soDxuat: data.hdr.soDxuat,
-          tongMucDt: tongMucDt,
-          kieuNx: data.hdr.kieuNx,
-          tenKieuNx: data.hdr.tenKieuNx,
-          tenLoaiHinhNx: data.hdr.tenLoaiHinhNx,
-          loaiHinhNx: data.hdr.loaiHinhNx
-        })
-        this.danhsachDxCache = cloneDeep(this.danhsachDx);
-        this.dataInput = null;
-        this.dataInputCache = null;
+      const dataRes = data.hdr;
+      let tongMucDt = 0
+      // dataRes.idDxHdr = data.hdr.id;
+      if (data.dtl) {
+        dataRes.details = data.dtl
+      };
+      this.danhsachDx.push(dataRes);
+      this.formData.patchValue({
+        cloaiVthh: data.hdr.cloaiVthh,
+        tenCloaiVthh: data.hdr.tenCloaiVthh,
+        loaiVthh: data.hdr.loaiVthh,
+        tenLoaiVthh: data.hdr.tenLoaiVthh,
+        trichYeu: data.hdr.trichYeu,
+        tgianBdauTchuc: data.hdr.tgianBdauTchuc,
+        ngayPduyet: data.hdr.ngayPduyet,
+        dvt: data.hdr.dvt,
+        tongThanhTien: data.hdr.tongThanhTien,
+        tgianMthau: data.hdr.tgianMthau,
+        tgianDthau: data.hdr.tgianDthau,
+        tgianThien: data.hdr.tgianThien,
+        maDvi: data.hdr.maDviDxuat,
+        idTh: null,
+        maTh: null,
+        soDxuat: data.hdr.soDxuat,
+        tongMucDt: tongMucDt,
+        kieuNx: data.hdr.kieuNx,
+        tenKieuNx: data.hdr.tenKieuNx,
+        tenLoaiHinhNx: data.hdr.tenLoaiHinhNx,
+        loaiHinhNx: data.hdr.loaiHinhNx
+      })
+      this.danhsachDxCache = cloneDeep(this.danhsachDx);
+      this.dataInput = null;
+      this.dataInputCache = null;
       await this.showFirstRow(Event, this.danhsachDx[0]);
     }
     await this.spinner.hide();

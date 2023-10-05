@@ -162,7 +162,7 @@
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DANG_THUC_HIEN)) "
-                 (click)="redirectToChiTiet(false,data.id)">
+                (click)="redirectToChiTiet(false,data.id)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DANG_THUC_HIEN  ) && userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_XOA') "

@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {chain} from 'lodash';
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { chain } from 'lodash';
 import * as uuid from "uuid";
-import {MESSAGE} from "../../../../../constants/message";
+import { MESSAGE } from "../../../../../constants/message";
 import dayjs from "dayjs";
-import {STATUS} from "../../../../../constants/status";
+import { STATUS } from "../../../../../constants/status";
 import {
   DeXuatNhuCauBaoHiemService
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
@@ -126,7 +126,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           }
           item.id = null;
           item.ghiChu = null;
-          idVirtual:uuid.v4()
+          idVirtual: uuid.v4()
         })
         this.convertListData()
       }
@@ -143,7 +143,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           }
           item.id = null;
           item.ghiChu = null;
-          idVirtual:uuid.v4()
+          idVirtual: uuid.v4()
         })
         this.buildDiaDiemTc()
       }
@@ -188,7 +188,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
   async save() {
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach,
-      giaTriDx  : this.sumslKho('giaTriBhDx', null, 'tong')
+      giaTriDx: this.sumslKho('giaTriBhDx', null, 'tong')
     })
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
@@ -242,12 +242,12 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_CBV : {
+      case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_CBV: {
         trangThai = STATUS.DA_KY;
         break;
       }
-      case STATUS.DA_KY : {
+      case STATUS.DA_KY: {
         trangThai = STATUS.DA_DUYET_CBV
       }
     }
@@ -257,10 +257,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenDonVi').map((value, key) => ({
-          tenDonVi: key,
-          dataChild: value,
-          idVirtual: uuid.v4(),
-        })
+        tenDonVi: key,
+        dataChild: value,
+        idVirtual: uuid.v4(),
+      })
       ).value()
     }
     this.expandAll('kho');
@@ -300,7 +300,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     }
   }
 
-  conVertArrayHang() : any[] {
+  conVertArrayHang(): any[] {
     let arr = [];
     if (this.tableHangDtqg) {
       this.tableHangDtqg.forEach(item => {
@@ -330,21 +330,21 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           let rs = chain(value)
             .groupBy("tenNhomTiLeBaoHiem")
             .map((v, k) => {
-                let res = chain(v)
-                  .groupBy("tenHangHoa")
-                  .map((v1, k1) => {
-                    return {
-                      idVirtual: uuid.v4(),
-                      tenHangHoa: k1,
-                      childData: v1
-                    }
-                  }).value();
-                return {
-                  idVirtual: uuid.v4(),
-                  tenNhomTiLeBaoHiem: k,
-                  childData: res
-                };
-              }
+              let res = chain(v)
+                .groupBy("tenHangHoa")
+                .map((v1, k1) => {
+                  return {
+                    idVirtual: uuid.v4(),
+                    tenHangHoa: k1,
+                    childData: v1
+                  }
+                }).value();
+              return {
+                idVirtual: uuid.v4(),
+                tenNhomTiLeBaoHiem: k,
+                childData: res
+              };
+            }
             ).value();
           return {
             idVirtual: uuid.v4(),
@@ -356,12 +356,12 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     this.expandAll('dtqg');
   }
 
-  sumSoLuongHang(column?: string, tenLoaiVthh?: string, tenNhomTiLeBaoHiem?: string, tenHangHoa?: string, type?: string) : number {
+  sumSoLuongHang(column?: string, tenLoaiVthh?: string, tenNhomTiLeBaoHiem?: string, tenHangHoa?: string, type?: string): number {
     let array = this.conVertArrayHang();
     let result = 0;
     if (array && array.length > 0) {
       switch (type) {
-        case 'tenHangHoa' : {
+        case 'tenHangHoa': {
           if (array) {
             let arr = array.filter(item => item.tenHangHoa == tenHangHoa)
             if (arr && arr.length > 0) {
@@ -374,7 +374,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           }
           break;
         }
-        case 'tenNhomTiLeBaoHiem' : {
+        case 'tenNhomTiLeBaoHiem': {
           if (array) {
             let arr = array.filter(item => item.tenNhomTiLeBaoHiem == tenNhomTiLeBaoHiem)
             const sum = arr.reduce((prev, cur) => {
@@ -385,7 +385,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           }
           break;
         }
-        case 'tenLoaiVthh' : {
+        case 'tenLoaiVthh': {
           if (array) {
             let arr = array.filter(item => item.tenLoaiVthh == tenLoaiVthh)
             const sum = arr.reduce((prev, cur) => {
@@ -396,7 +396,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           }
           break;
         }
-        case 'tong' : {
+        case 'tong': {
           if (array) {
             const sum = array.reduce((prev, cur) => {
               prev += cur[column];
@@ -411,7 +411,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     return result;
   }
 
-  sumslKho(column?: string, tenDvi? : string, type?: string) : number {
+  sumslKho(column?: string, tenDvi?: string, type?: string): number {
     let result = 0;
     let arr = [];
     this.dataTable.forEach(item => {
@@ -423,14 +423,14 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     })
     if (arr && arr.length > 0) {
       if (type) {
-          const sum = arr.reduce((prev, cur) => {
-            prev += cur[column];
-            return prev;
-          }, 0);
-          result = sum
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur[column];
+          return prev;
+        }, 0);
+        result = sum
       } else {
-        let list = arr.filter(item => item.tenDonVi == tenDvi )
-        if(list && list.length > 0) {
+        let list = arr.filter(item => item.tenDonVi == tenDvi)
+        if (list && list.length > 0) {
           const sum = list.reduce((prev, cur) => {
             prev += cur[column];
             return prev;

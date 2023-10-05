@@ -1,24 +1,24 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {UserService} from "../../../../../../services/user.service";
-import {Globals} from "../../../../../../shared/globals";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {HelperService} from "../../../../../../services/helper.service";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { UserService } from "../../../../../../services/user.service";
+import { Globals } from "../../../../../../shared/globals";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { HelperService } from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {UserLogin} from "../../../../../../models/userlogin";
-import {MESSAGE} from "../../../../../../constants/message";
-import {DxXdTrungHanService} from "../../../../../../services/dx-xd-trung-han.service";
-import {STATUS} from "../../../../../../constants/status";
-import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
-import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
-import {DialogThemMoiDxkhthComponent} from "./dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { UserLogin } from "../../../../../../models/userlogin";
+import { MESSAGE } from "../../../../../../constants/message";
+import { DxXdTrungHanService } from "../../../../../../services/dx-xd-trung-han.service";
+import { STATUS } from "../../../../../../constants/status";
+import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { DanhMucKhoService } from "../../../../../../services/danh-muc-kho.service";
+import { DanhMucKho } from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
+import { DialogThemMoiDxkhthComponent } from "./dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
 
 @Component({
   selector: "app-them-moi-dxkh-trung-han",
@@ -287,15 +287,15 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.CHO_DUYET_TP : {
+            case STATUS.CHO_DUYET_TP: {
               trangThai = STATUS.CHO_DUYET_LDC;
               break;
             }
-            case STATUS.CHO_DUYET_LDC : {
+            case STATUS.CHO_DUYET_LDC: {
               trangThai = STATUS.DA_DUYET_LDC;
               break;
             }
-            case STATUS.DA_DUYET_LDC : {
+            case STATUS.DA_DUYET_LDC: {
               trangThai = STATUS.DA_DUYET_CBV;
               break;
             }
@@ -339,10 +339,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO :
-            case STATUS.TU_CHOI_TP :
-            case STATUS.TU_CHOI_LDC :
-            case STATUS.TU_CHOI_CBV : {
+            case STATUS.DU_THAO:
+            case STATUS.TU_CHOI_TP:
+            case STATUS.TU_CHOI_LDC:
+            case STATUS.TU_CHOI_CBV: {
               trangThai = STATUS.CHO_DUYET_TP;
               break;
             }
@@ -412,39 +412,39 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
 
   themMoiItem(data: any, type: string, idx: number, list?: any) {
-      let modalQD = this.modal.create({
-        nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
-        nzContent: DialogThemMoiDxkhthComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: "1200px",
-        nzStyle: {top: "200px"},
-        nzFooter: null,
-        nzComponentParams: {
-          dataTable: list && list.dataChild ? list.dataChild : [],
-          dataInput: data,
-          type: type,
-          page: "DXTH"
+    let modalQD = this.modal.create({
+      nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
+      nzContent: DialogThemMoiDxkhthComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: { top: "200px" },
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: "DXTH"
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
         }
-      });
-      modalQD.afterClose.subscribe(async (detail) => {
-        if (detail) {
-          if (!data.dataChild) {
-            data.dataChild = [];
-          }
-          if (!data.idVirtual) {
-            data.idVirtual = uuidv4();
-          }
-          if (type == "them") {
-            data.dataChild.push(detail);
-          } else {
-            if (list) {
-              Object.assign(list.dataChild[idx], detail);
-            }
-          }
-          this.expandAll();
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
         }
-      });
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list.dataChild[idx], detail);
+          }
+        }
+        this.expandAll();
+      }
+    });
   }
 
   themItemcha() {
@@ -540,10 +540,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy("tenKhoi").map((value, key) => ({
-          tenKhoi: key,
-          dataChild: value,
-          idVirtual: uuidv4()
-        })
+        tenKhoi: key,
+        dataChild: value,
+        idVirtual: uuidv4()
+      })
       ).value();
     }
     this.expandAll();
@@ -553,7 +553,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     if (event) {
       let result = this.listKhoi.filter(item => item.ma == event);
       if (result && result.length > 0) {
-        this.rowItemCha.tenKhoi =  result[0].giaTri
+        this.rowItemCha.tenKhoi = result[0].giaTri
       }
     }
   }

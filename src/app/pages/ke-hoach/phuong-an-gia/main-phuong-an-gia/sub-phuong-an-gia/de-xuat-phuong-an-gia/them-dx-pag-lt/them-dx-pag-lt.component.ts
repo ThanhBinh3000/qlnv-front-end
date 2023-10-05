@@ -1,30 +1,30 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {TYPE_PAG} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
-import {CanCuXacDinhPag, ThongTinChungPag} from 'src/app/models/DeXuatPhuongAnGia';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {UserLogin} from 'src/app/models/userlogin';
-import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import {DeXuatPAGService} from 'src/app/services/ke-hoach/phuong-an-gia/deXuatPAG.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {saveAs} from 'file-saver';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { TYPE_PAG } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
+import { CanCuXacDinhPag, ThongTinChungPag } from 'src/app/models/DeXuatPhuongAnGia';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { UserLogin } from 'src/app/models/userlogin';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { DeXuatPAGService } from 'src/app/services/ke-hoach/phuong-an-gia/deXuatPAG.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { saveAs } from 'file-saver';
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {DonviService} from "../../../../../../../services/donvi.service";
-import {AMOUNT} from "../../../../../../../Utility/utils";
+import { DonviService } from "../../../../../../../services/donvi.service";
+import { AMOUNT } from "../../../../../../../Utility/utils";
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
@@ -326,13 +326,13 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
               console.log(ctieuChiCuc)
               if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG02' || this.formData.value.loaiGia == 'LG04'))) {
                 if (event.startsWith("0101")) {
-                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongThoc ?  ctieuChiCuc.xtnTongThoc : 0
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongThoc ? ctieuChiCuc.xtnTongThoc : 0
                 }
                 if (event.startsWith("0102")) {
                   pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongGao ? ctieuChiCuc.xtnTongGao : 0
                 }
                 if (event.startsWith("04")) {
-                  pagTtChung.soLuongCtieu = ctieuChiCuc.xuatTrongNamMuoi ? ctieuChiCuc.xuatTrongNamMuoi  :0
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xuatTrongNamMuoi ? ctieuChiCuc.xuatTrongNamMuoi : 0
                 }
               }
               if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
@@ -650,7 +650,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   cancelEdit(index: number) {
     this.dataEdit[index] = {
-      data: {...this.dataTableCanCuXdg[index]},
+      data: { ...this.dataTableCanCuXdg[index] },
       edit: false,
     };
   }
@@ -684,7 +684,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dataTableCanCuXdg.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -809,7 +809,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.formData.patchValue({
       apDungTatCa: event
     })
-    console.log(this.formData.value.vat,222)
+    console.log(this.formData.value.vat, 222)
   }
 
   async loadDsChiCuc() {

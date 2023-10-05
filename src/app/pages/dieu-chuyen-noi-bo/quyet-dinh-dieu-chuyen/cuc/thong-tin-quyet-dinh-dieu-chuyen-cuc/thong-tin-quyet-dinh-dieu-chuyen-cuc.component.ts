@@ -156,7 +156,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenKieuNhapXuat: [],
       quyetDinhPdDtl: [new Array<any>(),],
       danhSachQuyetDinh: [new Array<any>(),],
-
     }
     );
   }
@@ -540,7 +539,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       })
 
 
-
       this.dataTableView = this.buildTableView(dsHH, "maDvi")
       let tongDuToanKp = dsDX?.reduce((prev, cur) => prev + cur.tongDuToanKp, 0);
 
@@ -607,7 +605,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-
                 return {
                   ...maLoKho,
                   idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
@@ -1333,7 +1330,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return
-
     let body = this.formData.value;
     body.canCu = this.canCu;
     body.quyetDinh = this.quyetDinh;

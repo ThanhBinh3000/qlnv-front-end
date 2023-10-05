@@ -51,10 +51,9 @@
     <div nz-col [nzSpan]="4">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đề xuất có VAT (đ/kg)</nz-form-label>
-        <input nz-input
-               formControlName="donGiaTamTinh" class="money-input" currencyMask [options]="amount">
-<!--        <nz-input-number formControlName="donGiaTamTinh" [nzSize]="'small'" (input)="calculatorThanhTienDx()" [nzStep]="0.1">-->
-<!--        </nz-input-number>-->
+        <input nz-input formControlName="donGiaTamTinh" class="money-input" currencyMask [options]="amount">
+        <!--        <nz-input-number formControlName="donGiaTamTinh" [nzSize]="'small'" (input)="calculatorThanhTienDx()" [nzStep]="0.1">-->
+        <!--        </nz-input-number>-->
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="5">
@@ -118,8 +117,8 @@
         <td>{{thongTinChiCuc.soLuongTheoChiTieu}}</td>
         <td>{{thongTinChiCuc.soLuongDaMua}}</td>
         <td>
-          <nz-input-number [(ngModel)]="thongTinChiCuc.soLuong" class="text-right" nz-input [nzMin]="1"
-                           [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+          <nz-input-number [(ngModel)]="thongTinChiCuc.soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
+            [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
           </nz-input-number>
         </td>
         <td></td>
@@ -181,23 +180,23 @@
           </tr>
           <tr *ngFor="let itemChild of dataChiCuc.children , let y = index">
             <ng-container *ngIf="!itemChild.edit; else editTemplate">
-            <td></td>
-            <td></td>
-            <td>{{itemChild.tenDvi}}</td>
-            <td>{{itemChild.diaDiemNhap}}</td>
-            <td></td>
-            <td></td>
-            <td>{{itemChild.soLuong}}</td>
-            <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
-            <td>{{ itemChild.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
-            <td [nzRight]="true">
-              <a (click)="editRow(i, y)">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-              <a (click)="deleteRow(i,y)">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-              </a>
-            </td>
+              <td></td>
+              <td></td>
+              <td>{{itemChild.tenDvi}}</td>
+              <td>{{itemChild.diaDiemNhap}}</td>
+              <td></td>
+              <td></td>
+              <td>{{itemChild.soLuong}}</td>
+              <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ itemChild.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+              <td [nzRight]="true">
+                <a (click)="editRow(i, y)">
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a (click)="deleteRow(i,y)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
             </ng-container>
             <ng-template #editTemplate>
               <td></td>
@@ -207,15 +206,16 @@
               <td></td>
               <td></td>
               <td>
-                <nz-input-number class="text-right w-400" [nzMin]="0"
-                                 [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [(ngModel)]="listOfData[i].children[y].soLuongEdit">
+                <nz-input-number class="text-right w-400" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'"
+                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                  [(ngModel)]="listOfData[i].children[y].soLuongEdit">
                 </nz-input-number>
               </td>
               <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ itemChild.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
               <td [nzRight]="true">
                 <a (click)="saveEdit(i, y)">
-                <i class="fa fa-save"></i>
+                  <i class="fa fa-save"></i>
                 </a>
                 <a>
                   <i (click)="cancelEdit(i, y)" class="fa fa-times do"></i>

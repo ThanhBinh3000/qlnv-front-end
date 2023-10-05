@@ -14,7 +14,7 @@ import { UserLogin } from "../../../models/userlogin";
 import { UserService } from "../../../services/user.service";
 import { STATUS } from "../../../constants/status";
 import { QuyetDinhGiaTCDTNNService } from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
-import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import { QuyetDinhGiaCuaBtcService } from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'dialog-them-moi-goi-thau',
@@ -126,7 +126,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
     if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
       this.formGoiThau.patchValue({
-        donGiaVat: (pag.data[0].giaQdDcTcdtVat && pag.data[0].giaQdDcTcdtVat > 0)? pag.data[0].giaQdDcTcdtVat : pag.data[0].giaQdTcdtVat,
+        donGiaVat: (pag.data[0].giaQdDcTcdtVat && pag.data[0].giaQdDcTcdtVat > 0) ? pag.data[0].giaQdDcTcdtVat : pag.data[0].giaQdTcdtVat,
         soQdPdGiaCuThe: pag.data[0].soQdTcdt,
         ngayKyQdPdGiaCuThe: pag.data[0].ngayKyTcdt,
         vat: pag.data[0].vat * 100,
@@ -445,7 +445,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         let giaToiDa = 0;
         res.data.forEach(i => {
           let giaQdBtc = 0;
-          if(i.giaQdDcBtcVat != null && i.giaQdDcBtcVat >0) {
+          if (i.giaQdDcBtcVat != null && i.giaQdDcBtcVat > 0) {
             giaQdBtc = i.giaQdDcBtcVat
           } else {
             giaQdBtc = i.giaQdBtcVat
@@ -480,7 +480,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   editRowCuc(i: number) {
-    this.thongTinCucEdit[i] =  this.dataTable[i].soLuong
+    this.thongTinCucEdit[i] = this.dataTable[i].soLuong
     this.dataTable[i].edit = true;
   }
   saveEditCuc(i: number) {

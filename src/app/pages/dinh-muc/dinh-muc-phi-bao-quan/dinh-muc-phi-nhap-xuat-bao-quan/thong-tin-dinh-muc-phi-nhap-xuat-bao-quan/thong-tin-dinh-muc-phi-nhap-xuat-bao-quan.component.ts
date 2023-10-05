@@ -1,17 +1,17 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {QlDinhMucPhiService} from "../../../../../services/qlnv-kho/QlDinhMucPhi.service";
-import {FormGroup, Validators} from "@angular/forms";
-import {DinhMucPhiNxBq} from "../../../../../models/DinhMucPhi";
-import {MESSAGE} from "../../../../../constants/message";
-import {DanhMucDinhMucService} from "../../../../../services/danh-muc-dinh-muc.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {DonviService} from "../../../../../services/donvi.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { QlDinhMucPhiService } from "../../../../../services/qlnv-kho/QlDinhMucPhi.service";
+import { FormGroup, Validators } from "@angular/forms";
+import { DinhMucPhiNxBq } from "../../../../../models/DinhMucPhi";
+import { MESSAGE } from "../../../../../constants/message";
+import { DanhMucDinhMucService } from "../../../../../services/danh-muc-dinh-muc.service";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { DonviService } from "../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-thong-tin-dinh-muc-phi-nhap-xuat-bao-quan',
@@ -293,7 +293,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   async getTongDinhMucTongCucPhan() {
     this.listTongDinhMucTongCucPhan = [];
-    let body = {trangThai: "29", loai: "00", capDvi: 1, maDvi: this.userInfo.MA_DVI};
+    let body = { trangThai: "29", loai: "00", capDvi: 1, maDvi: this.userInfo.MA_DVI };
     let res = await this.qlDinhMucPhiService.layDanhSachTongDinhMucTongCucPhan(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listTongDinhMucTongCucPhan = res.data;
@@ -370,7 +370,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.dataTableDetail.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -388,7 +388,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.dataTableDetail[stt]},
+      data: { ...this.dataTableDetail[stt] },
       edit: false
     };
   }

@@ -273,7 +273,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             // this.back();
           } else {
-            console.log(res.data,'res.datares.datares.data');
+            console.log(res.data, 'res.datares.datares.data');
             this.guiDuyet(res.data.id);
           }
         } else {

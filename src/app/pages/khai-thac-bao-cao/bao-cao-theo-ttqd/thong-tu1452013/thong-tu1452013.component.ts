@@ -1,15 +1,15 @@
-import {saveAs} from 'file-saver';
-import {Component, OnInit} from '@angular/core';
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {UserService} from "../../../../services/user.service";
-import {DonviService} from "../../../../services/donvi.service";
-import {Globals} from "../../../../shared/globals";
-import {ThongTu1452013Service} from "../../../../services/bao-cao/ThongTu1452013.service";
+import { saveAs } from 'file-saver';
+import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { UserService } from "../../../../services/user.service";
+import { DonviService } from "../../../../services/donvi.service";
+import { Globals } from "../../../../shared/globals";
+import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
 import * as dayjs from "dayjs";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {createLogErrorHandler} from "@angular/compiler-cli/ngcc/src/execution/tasks/completion";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { createLogErrorHandler } from "@angular/compiler-cli/ngcc/src/execution/tasks/completion";
 
 @Component({
   selector: 'app-thong-tu1452013',
@@ -27,13 +27,13 @@ export class ThongTu1452013Component implements OnInit {
 
 
   constructor(private spinner: NgxSpinnerService,
-              private notification: NzNotificationService,
-              private thongTu1452013Service: ThongTu1452013Service,
-              private fb: FormBuilder,
-              private modal: NzModalService,
-              public userService: UserService,
-              private donviService: DonviService,
-              public globals: Globals,
+    private notification: NzNotificationService,
+    private thongTu1452013Service: ThongTu1452013Service,
+    private fb: FormBuilder,
+    private modal: NzModalService,
+    public userService: UserService,
+    private donviService: DonviService,
+    public globals: Globals,
   ) {
 
     this.formData = this.fb.group(
@@ -56,7 +56,7 @@ export class ThongTu1452013Component implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-//do stuff here to give the blob some data...
+    //do stuff here to give the blob some data...
   }
 
   private blobToFile = (theBlob: Blob, fileName: string): File => {

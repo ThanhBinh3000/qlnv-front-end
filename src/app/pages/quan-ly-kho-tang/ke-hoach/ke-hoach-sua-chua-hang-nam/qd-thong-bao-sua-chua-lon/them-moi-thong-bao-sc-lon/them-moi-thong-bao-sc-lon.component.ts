@@ -1,15 +1,15 @@
 import { cloneDeep } from 'lodash';
 import { chain } from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import {Component, Input, OnInit, } from '@angular/core';
-import {Validators} from "@angular/forms";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {MESSAGE} from "../../../../../../constants/message";
+import { Component, Input, OnInit, } from '@angular/core';
+import { Validators } from "@angular/forms";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { MESSAGE } from "../../../../../../constants/message";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
@@ -23,7 +23,7 @@ import {
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-thong-bao-sc-lon',
@@ -35,12 +35,12 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
   maQd: string;
-  dataEdit : any
+  dataEdit: any
   listQdBtc: any[] = [];
   dataTableReq: any[] = [];
-  isEdit : number = -1
-  dataTableTren : any[] =[];
-  dataTableDuoi : any[] =[];
+  isEdit: number = -1
+  dataTableTren: any[] = [];
+  dataTableDuoi: any[] = [];
 
   constructor(
     private httpClient: HttpClient,
@@ -48,23 +48,23 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdScBtcService : KtKhSuaChuaBtcService,
-    private dexuatService : DeXuatScLonService
+    private qdScBtcService: KtKhSuaChuaBtcService,
+    private dexuatService: DeXuatScLonService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdScBtcService);
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
-      maDvi : [null],
-      tenDvi : [null],
-      soQuyetDinh : [null, Validators.required],
-      namKeHoach : [dayjs().get('year'), Validators.required],
-      trichYeu : [null],
-      ngayKy : [null, Validators.required],
-      qdBtc : [null, Validators.required],
+      maDvi: [null],
+      tenDvi: [null],
+      soQuyetDinh: [null, Validators.required],
+      namKeHoach: [dayjs().get('year'), Validators.required],
+      trichYeu: [null],
+      ngayKy: [null, Validators.required],
+      qdBtc: [null, Validators.required],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
-      type : ['01']
+      type: ['01']
     });
   }
 
@@ -104,7 +104,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         this.listQdBtc = data.content;
         if (this.listQdBtc) {
           this.listQdBtc = this.listQdBtc.filter(
-            (item) => (item.trangThai == this.STATUS.BAN_HANH && !item.qdTcdt )
+            (item) => (item.trangThai == this.STATUS.BAN_HANH && !item.qdTcdt)
           )
         }
       } else {
@@ -149,7 +149,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-        soQuyetDinh : data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : ''
+        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : ''
       })
       this.fileDinhKem = data.fileDinhKems
       this.dataTableReq = data.chiTiets;
@@ -202,26 +202,26 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
   }
 
   chonMaTongHop() {
-      let modalQD = this.modal.create({
-        nzTitle: 'DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT CỦA BỘ TÀI CHÍNH',
-        nzContent: DialogQdScBtcComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          type: "00",
-          listTh : this.listQdBtc
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            qdBtc : data.soQuyetDinh
-          })
-          this.changSoTh(data.id)
-        }
-      })
+    let modalQD = this.modal.create({
+      nzTitle: 'DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT CỦA BỘ TÀI CHÍNH',
+      nzContent: DialogQdScBtcComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '700px',
+      nzFooter: null,
+      nzComponentParams: {
+        type: "00",
+        listTh: this.listQdBtc
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.formData.patchValue({
+          qdBtc: data.soQuyetDinh
+        })
+        this.changSoTh(data.id)
+      }
+    })
   }
 
   convertListData(table: any[]): any[] {
@@ -236,12 +236,12 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
               let rs1 = chain(v)
                 .groupBy("tenKhoi")
                 .map((v1, k1) => {
-                    return {
-                      idVirtual: uuidv4(),
-                      tenKhoi: k1,
-                      dataChild: v1
-                    };
-                  }
+                  return {
+                    idVirtual: uuidv4(),
+                    tenKhoi: k1,
+                    dataChild: v1
+                  };
+                }
                 ).value();
               return {
                 idVirtual: uuidv4(),

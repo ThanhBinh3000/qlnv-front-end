@@ -570,7 +570,7 @@ export class ThongTinTonghopComponent implements OnInit {
         if (res.data && res.data.length > 0) {
           let data = res.data;
           this.listThongTinChiTiet = data;
-          this.khDnCapVonIds = data.map(item => item.id).filter(function(el) {
+          this.khDnCapVonIds = data.map(item => item.id).filter(function (el) {
             return el != null;
           });
           this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds });

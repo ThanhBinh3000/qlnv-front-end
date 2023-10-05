@@ -1,23 +1,23 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import * as dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {STATUS} from "../../../../../constants/status";
+import { Validators } from "@angular/forms";
+import { STATUS } from "../../../../../constants/status";
 
-import {ActivatedRoute, Router} from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
   ThongBaoKqThanhLyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/ThongBaoKqThanhLy.service";
-import {HoSoThanhLyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoThanhLy.service";
+import { HoSoThanhLyService } from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoThanhLy.service";
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {Base3Component} from "../../../../../components/base3/base3.component";
+import { Base3Component } from "../../../../../components/base3/base3.component";
 import {
   QuyetDinhThanhLyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
@@ -48,13 +48,13 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
       id: [],
       nam: [dayjs().get('year')],
       trangThai: ['00'],
-      tenDvi : [''],
+      tenDvi: [''],
       tenTrangThai: ['Dự thảo'],
       soBaoCao: [null, [Validators.required]],
       ngayBaoCao: [null],
       soQd: [null, [Validators.required]],
       idQd: [null, [Validators.required]],
-      ngayQd : [null,[Validators.required]],
+      ngayQd: [null, [Validators.required]],
       noiDung: [null, [Validators.required]],
       lyDoTuChoi: [null, [Validators.required]],
     })

@@ -30,9 +30,9 @@ import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from '../../../../../constants/status';
 import { AMOUNT, AMOUNT_NO_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../Utility/utils';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
 
 @Component({
   selector: 'app-thong-tin-de-nghi-cap-von-bo-nganh',
@@ -158,7 +158,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
     public userService: UserService,
     private donviService: DonviService,
     private deNghiCapVonBoNganhService: DeNghiCapVonBoNganhService,
-  ) {super(httpClient, storageService, notification, spinner, modal, deNghiCapVonBoNganhService);
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, deNghiCapVonBoNganhService);
   }
 
   async ngOnInit() {

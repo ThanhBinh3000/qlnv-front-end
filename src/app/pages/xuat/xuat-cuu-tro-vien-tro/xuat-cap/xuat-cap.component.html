@@ -3,33 +3,33 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPACHUYENXC') && userService.isTongCuc()">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPACHUYENXC') && userService.isTongCuc()">
       Quyết định PA cứu trợ, viện trợ được chuyển xuất cấp
     </li>
     <li nz-menu-item [nzSelected]="tabSelected==1" (click)="selectTab(1)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC')">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC')">
       Quyết định xuất cấp
     </li>
     <!--    <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPDPA')">-->
     <!--      Quyết định phê duyệt phương án-->
     <!--    </li>-->
     <li nz-menu-item [nzSelected]="tabSelected==2" (click)="selectTab(2)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDGNVXH')">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDGNVXH')">
       Quyết định giao nhiệm vụ xuất hàng
     </li>
     <li nz-menu-item [nzSelected]="tabSelected==3" (click)="selectTab(3)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL')">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL')">
       Kiểm tra chất lượng
     </li>
     <li nz-menu-item [nzSelected]="tabSelected==4" (click)="selectTab(4)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK')">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK')">
       Xuất kho
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-   <!-- <ng-container *ngIf="tabSelected == 0">
+    <!-- <ng-container *ngIf="tabSelected == 0">
       <app-quyet-dinh-phuong-an (eventTaoQd)="taoQd($event)"></app-quyet-dinh-phuong-an>
     </ng-container>-->
     <ng-container *ngIf="tabSelected == 0">
@@ -37,7 +37,7 @@
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
       <app-quyet-dinh-xuat-cap [isDetail]="isDetail" [dataInit]="dataInit"
-                               (showListEvent)="quayLai()"></app-quyet-dinh-xuat-cap>
+        (showListEvent)="quayLai()"></app-quyet-dinh-xuat-cap>
     </ng-container>
     <!--    <ng-container *ngIf="tabSelected == 2">-->
     <!--      <app-quyet-dinh-phe-duyet-phuong-an></app-quyet-dinh-phe-duyet-phuong-an>-->

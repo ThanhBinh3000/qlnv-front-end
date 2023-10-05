@@ -1,25 +1,25 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Base2Component} from 'src/app/components/base2/base2.component';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 import {
   QuyetDinhGiaoNvCuuTroService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
-import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import {Validators} from '@angular/forms';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import { Validators } from '@angular/forms';
 import {
   PhieuKiemNghiemChatLuongService
 } from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service";
@@ -358,7 +358,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     }
     return false;
   }
-
   clearItemRow(id) {
 
     this.formData.patchValue({

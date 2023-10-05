@@ -162,7 +162,6 @@ export enum HSKT_LOAI_DOI_TUONG {
   HO_SO = "HS",
   NGUOI_LIEN_QUAN = "NLQ"
 }
-
 export enum LOAI_DOI_TUONG {
   HO_SO = "HS",
   NGUOI_LIEN_QUAN = "NLQ",

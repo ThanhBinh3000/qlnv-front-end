@@ -21,7 +21,7 @@ import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
 import { filter } from 'rxjs/operators';
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 
 @Component({

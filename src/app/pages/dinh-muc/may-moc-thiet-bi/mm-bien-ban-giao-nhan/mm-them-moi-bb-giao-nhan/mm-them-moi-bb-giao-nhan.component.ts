@@ -1,19 +1,19 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {KtKhXdHangNamService} from "../../../../../services/kt-kh-xd-hang-nam.service";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {MESSAGE} from "../../../../../constants/message";
-import {HopDongMmTbcdService} from "../../../../../services/hop-dong-mm-tbcd.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { KtKhXdHangNamService } from "../../../../../services/kt-kh-xd-hang-nam.service";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { MESSAGE } from "../../../../../constants/message";
+import { HopDongMmTbcdService } from "../../../../../services/hop-dong-mm-tbcd.service";
 import dayjs from "dayjs";
-import {DialogMmBbGiaoNhanComponent} from "./dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component";
-import {MmHopDongCt} from "../../mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
-import {MmBbGiaoNhanService} from "../../../../../services/mm-bb-giao-nhan.service";
-import {STATUS} from "../../../../../constants/status";
+import { DialogMmBbGiaoNhanComponent } from "./dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component";
+import { MmHopDongCt } from "../../mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
+import { MmBbGiaoNhanService } from "../../../../../services/mm-bb-giao-nhan.service";
+import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: 'app-mm-them-moi-bb-giao-nhan',
@@ -43,7 +43,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanSv : MmBbGiaoNhanService,
+    private bienBanSv: MmBbGiaoNhanService,
     private hopDongService: HopDongMmTbcdService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanSv);
@@ -69,11 +69,11 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
     this.spinner.show();
     try {
       this.maBb = `/${this.formData.value.namKeHoach}/BBGN-` + this.userInfo.DON_VI.tenVietTat;
-       this.loadDsHopDong();
+      this.loadDsHopDong();
       if (this.id > 0) {
-         this.detail(this.id)
+        this.detail(this.id)
       } else {
-         this.initForm()
+        this.initForm()
       }
       this.spinner.hide();
     } catch (e) {
@@ -95,7 +95,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
   async getMaDanhSach() {
     let id = await this.userService.getId('QL_DINH_MUC_BB_GIAO_NHAN_SEQ')
     this.formData.patchValue({
-      soBienBan : id
+      soBienBan: id
     })
   }
 
@@ -110,7 +110,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
           this.formData.patchValue({
-            soBienBan : this.formData.value.soBienBan ?  this.formData.value.soBienBan.split('/')[0] : null
+            soBienBan: this.formData.value.soBienBan ? this.formData.value.soBienBan.split('/')[0] : null
           })
           this.dataTable = data.listQlDinhMucBbGnLoaiHh;
           this.tableBenNhan = data.listQlDinhMucBbGnDaiDienBenNhan;
@@ -149,19 +149,19 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
     body.listQlDinhMucBbGnDaiDienBenNhan = this.tableBenNhan
     let data = await this.createUpdate(body);
     if (data) {
-        this.goBack()
-      }
+      this.goBack()
+    }
   }
 
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TUCHOI_CB_CUC : {
+      case STATUS.DU_THAO:
+      case STATUS.TUCHOI_CB_CUC: {
         trangThai = STATUS.DA_KY;
         break;
       }
-      case STATUS.DA_KY : {
+      case STATUS.DA_KY: {
         trangThai = STATUS.DADUYET_CB_CUC
       }
     }
@@ -206,7 +206,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
         let data = res.data;
         this.listHopDong = data.content;
         if (this.listHopDong) {
-          this.listHopDong = this.listHopDong.filter(item => item.trangThai == this.STATUS.DA_KY )
+          this.listHopDong = this.listHopDong.filter(item => item.trangThai == this.STATUS.DA_KY)
         }
       }
       this.spinner.hide();
@@ -251,9 +251,9 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          console.log(data,222)
+          console.log(data, 222)
           this.formData.patchValue({
-            benGiaoHang : data.banTenDvi
+            benGiaoHang: data.banTenDvi
           })
           this.listHangHoa = data.listQlDinhMucHdLoaiHh;
           if (this.listHangHoa && this.listHangHoa.length > 0) {
@@ -268,7 +268,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
     }
   }
 
-  changHangHoa(event, type? : any) {
+  changHangHoa(event, type?: any) {
     let result = this.listHangHoa.filter(item => item.maHangHoa === event)
     if (result && result.length > 0) {
       if (type) {
@@ -298,7 +298,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
       this.spinner.hide();
       return;
     }
-    this.rowItem.id= null
+    this.rowItem.id = null
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new MmHopDongCt();
     this.updateEditCache();
@@ -333,7 +333,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -349,7 +349,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.dataTable[stt]},
+      data: { ...this.dataTable[stt] },
       edit: false
     };
   }
@@ -389,13 +389,13 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
   themMoiBgBn(type) {
     if (type == 'benGiao') {
       this.rowItemBg.loai = 'GIAO'
-      this.rowItemBg.id= null
+      this.rowItemBg.id = null
       this.tableBenGiao = [...this.tableBenGiao, this.rowItemBg];
       this.rowItemBg = new MmBbGiaoNhanCt();
       this.updateEditCacheBgBn(type);
     } else {
       this.rowItemBn.loai = 'NHAN '
-      this.rowItemBn.id= null
+      this.rowItemBn.id = null
       this.tableBenNhan = [...this.tableBenNhan, this.rowItemBn];
       this.rowItemBn = new MmBbGiaoNhanCt();
       this.updateEditCacheBgBn(type);
@@ -408,7 +408,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
         this.tableBenGiao.forEach((item, index) => {
           this.dataEditBg[index] = {
             edit: false,
-            data: {...item},
+            data: { ...item },
           };
         });
       }
@@ -417,7 +417,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
         this.tableBenNhan.forEach((item, index) => {
           this.dataEditBn[index] = {
             edit: false,
-            data: {...item},
+            data: { ...item },
           };
         });
       }
@@ -425,7 +425,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
   }
 
   refreshBgBn(type) {
-    if (type =='benGiao') {
+    if (type == 'benGiao') {
       this.rowItemBg = new MmBbGiaoNhanCt();
     } else {
       this.rowItemBn = new MmBbGiaoNhanCt();
@@ -443,12 +443,12 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
   cancelEditBgBn(stt: number, type): void {
     if (type == 'benGiao') {
       this.dataEditBg[stt] = {
-        data: {...this.tableBenGiao[stt]},
+        data: { ...this.tableBenGiao[stt] },
         edit: false
       };
     } else {
       this.dataEditBn[stt] = {
-        data: {...this.tableBenNhan[stt]},
+        data: { ...this.tableBenNhan[stt] },
         edit: false
       };
     }
@@ -494,10 +494,10 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
 }
 
 export class MmBbGiaoNhanCt {
-  id : number;
-  bbGnId : number;
-  hoVaTen : string;
-  chucVu : string;
-  loai : string;
+  id: number;
+  bbGnId: number;
+  hoVaTen: string;
+  chucVu: string;
+  loai: string;
 }
 

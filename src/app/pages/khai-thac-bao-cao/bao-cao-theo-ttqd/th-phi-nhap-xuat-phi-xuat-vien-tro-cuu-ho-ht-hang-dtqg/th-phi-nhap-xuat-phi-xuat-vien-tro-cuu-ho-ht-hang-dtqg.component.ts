@@ -14,7 +14,7 @@ import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
-import {ThongTu1082018Service} from "../../../../services/bao-cao/ThongTu1082018.service";
+import { ThongTu1082018Service } from "../../../../services/bao-cao/ThongTu1082018.service";
 
 @Component({
   selector: 'app-th-phi-nhap-xuat-phi-xuat-vien-tro-cuu-ho-ht-hang-dtqg',
@@ -35,17 +35,17 @@ export class ThPhiNhapXuatPhiXuatVienTroCuuHoHtHangDtqgComponent extends Base2Co
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private thongTu1082018Service: ThongTu1082018Service,
-              public userService: UserService,
-              private donViService: DonviService,
-              private danhMucService: DanhMucService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private thongTu1082018Service: ThongTu1082018Service,
+    public userService: UserService,
+    private donViService: DonviService,
+    private danhMucService: DanhMucService,
 
-              private donviService: DonviService,
-              public globals: Globals) {
+    private donviService: DonviService,
+    public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1082018Service);
     this.formData = this.fb.group(
       {

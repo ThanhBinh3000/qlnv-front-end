@@ -22,7 +22,7 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { cloneDeep } from "lodash";
-import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: "app-themmoi-dieuchinh-vt",
@@ -97,10 +97,10 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       kieuNx: [""],
       tenDuAn: [""],
       tongMucDtDx: [""],
-      dienGiaiTongMucDt:[""],
+      dienGiaiTongMucDt: [""],
       quyMo: [""],
-      tgianThienHd:[""],
-      dienGiai:[""],
+      tgianThienHd: [""],
+      dienGiai: [""],
       vat: [""],
     });
   }
@@ -248,7 +248,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
         this.formData.patchValue({
           soQdGoc: data.soQd,
           idQdGoc: $event,
-          lanDieuChinh: data.dchinhDxKhLcntHdr?data.dchinhDxKhLcntHdr.lanDieuChinh + 1 : 1,
+          lanDieuChinh: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.lanDieuChinh + 1 : 1,
           ngayQdGoc: data.ngayQd,
           soQdCc: data.dxKhlcntHdr.soQd,
           loaiVthh: data.loaiVthh,

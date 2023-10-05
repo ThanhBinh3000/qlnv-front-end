@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { chain } from 'lodash';
@@ -30,10 +30,10 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
-import {UserService} from "../../../../../../services/user.service";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { PREVIEW } from "../../../../../../constants/fileType";
+import { convertTienTobangChu } from "../../../../../../shared/commonFunction";
+import { UserService } from "../../../../../../services/user.service";
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 
 @Component({
@@ -312,7 +312,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
   }
 
-  async preview(){
+  async preview() {
     let pipe = new DatePipe('en-US');
     let body = this.formData.value;
     body.reportTemplateRequest = this.reportTemplate;
@@ -355,8 +355,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
             this.formData.patchValue({
               tgianBdauTchuc: dataDetail.tgianBdauTchuc,
               soDxuat: dataDetail.soDxuat?.split('/')[0],
-              tongMucDtLamTron: parseFloat((this.formData.get('tongMucDt').value/1000000000).toFixed(2)),
-              tongMucDtDxLamTron: parseFloat((this.formData.get('tongMucDtDx').value/1000000000).toFixed(2)),
+              tongMucDtLamTron: parseFloat((this.formData.get('tongMucDt').value / 1000000000).toFixed(2)),
+              tongMucDtDxLamTron: parseFloat((this.formData.get('tongMucDtDx').value / 1000000000).toFixed(2)),
             })
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
@@ -568,29 +568,29 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
 
   }
 
-  tinhTongMucDtDx () {
+  tinhTongMucDtDx() {
     let tongMucDt: number = 0;
     let tongMucDtDx: number = 0;
     let tongSlChiTieu: number = 0;
     this.listOfData.forEach((item) => {
-      tongMucDt = tongMucDt + (item.soLuong * (item.donGiaVat?item.donGiaVat:0) *1000);
+      tongMucDt = tongMucDt + (item.soLuong * (item.donGiaVat ? item.donGiaVat : 0) * 1000);
       tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
       tongSlChiTieu += item.soLuongChiTieu
     });
     this.formData.patchValue({
-      tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),
-      tongMucDtDxLamTron: parseFloat((tongMucDtDx/1000000000).toFixed(2)),
+      tongMucDtLamTron: parseFloat((tongMucDt / 1000000000).toFixed(2)),
+      tongMucDtDxLamTron: parseFloat((tongMucDtDx / 1000000000).toFixed(2)),
       tongMucDt: tongMucDt,
       tongMucDtDx: tongMucDtDx,
       tongSlChiTieu: tongSlChiTieu,
     });
   }
-  deleteGoiThau(i:number) {
+  deleteGoiThau(i: number) {
     this.listOfData.splice(i, 1)
     this.tinhTongMucDtDx()
   }
 
-  deleteDiemKho(i:number, y:number, z:number) {
+  deleteDiemKho(i: number, y: number, z: number) {
     this.listOfData[i].children[y].children.splice(z, 1)
     if (this.listOfData[i].children[y].children.length > 0) {
       let soLuong = 0;
@@ -762,8 +762,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async getDataChiTieu() {
-    let res2 =  await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.get('namKhoach').value,)
+    let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+      +this.formData.get('namKhoach').value,)
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
@@ -1248,7 +1248,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         }, 0);
         sum += sumChild;
       })
-      if (this.loaiVthhInput.startsWith('02')){
+      if (this.loaiVthhInput.startsWith('02')) {
         return sum;
       } else {
         return sum * 1000;
@@ -1282,7 +1282,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
     this.listQuy = [];
     for (const element of quarters) {
-      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element })
     }
   }
   disabledDate = (current: Date): boolean => {

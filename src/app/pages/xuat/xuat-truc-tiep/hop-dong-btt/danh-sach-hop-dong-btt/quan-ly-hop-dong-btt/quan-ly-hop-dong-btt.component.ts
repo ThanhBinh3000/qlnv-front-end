@@ -1,24 +1,24 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import {
   QuyetDinhPdKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import {
   QdPdKetQuaBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import {StorageService} from 'src/app/services/storage.service';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-quan-ly-hop-dong-btt',
@@ -160,7 +160,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuongBanTrucTiep, 0);
       const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
       this.formData.patchValue({
-        tongSlDaKyHdong:tongSlDaKyHdong,
+        tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
       this.formData.patchValue(formDataValues);

@@ -34,18 +34,18 @@
       <h3>Danh sách biên bản nhập đầy kho </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_XOA')">
+          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_EXP') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_EXP')"
-        type="button" class="btn btn-sub"
-          (click)="export()">
+        <button
+          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_EXP') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_EXP')"
+          type="button" class="btn btn-sub" (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="print()"
-                *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_IN') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_IN')">
+          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_IN') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_IN')">
           <i class="icon htvbdh_tcdt_print"></i>
           <span>In</span>
         </button>
@@ -116,21 +116,18 @@
                   <td colspan="4"></td>
                   <td>{{bbNhapDayKho.tenTrangThai}}</td>
                   <td>
-                    <a *ngIf="hienThiXem(bbNhapDayKho)"
-                      (click)="redirectToChiTiet(true, bbNhapDayKho.id)">
+                    <a *ngIf="hienThiXem(bbNhapDayKho)" (click)="redirectToChiTiet(true, bbNhapDayKho.id)">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                     </a>
-                    <a *ngIf="hienThiSua(bbNhapDayKho)"
-                      (click)="redirectToChiTiet(false, bbNhapDayKho.id)">
+                    <a *ngIf="hienThiSua(bbNhapDayKho)" (click)="redirectToChiTiet(false, bbNhapDayKho.id)">
                       <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
-                    <a *ngIf="hienThiDuyet(bbNhapDayKho)"
-                       (click)="redirectToChiTiet(true, bbNhapDayKho.id)">
+                    <a *ngIf="hienThiDuyet(bbNhapDayKho)" (click)="redirectToChiTiet(true, bbNhapDayKho.id)">
                       <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
                     </a>
                     <a *ngIf="bbNhapDayKho.trangThai == STATUS.DU_THAO
                     && (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_XOA'))"
-                       (click)="xoaItem(bbNhapDayKho)">
+                      (click)="xoaItem(bbNhapDayKho)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>

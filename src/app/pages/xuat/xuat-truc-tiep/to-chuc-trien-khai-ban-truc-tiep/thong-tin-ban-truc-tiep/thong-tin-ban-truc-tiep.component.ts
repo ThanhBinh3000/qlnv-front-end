@@ -1,18 +1,18 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {MESSAGE} from 'src/app/constants/message';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { MESSAGE } from 'src/app/constants/message';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import {isEmpty} from 'lodash';
-import {DonviService} from 'src/app/services/donvi.service';
-import {cloneDeep} from 'lodash';
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { isEmpty } from 'lodash';
+import { DonviService } from 'src/app/services/donvi.service';
+import { cloneDeep } from 'lodash';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-thong-tin-ban-truc-tiep',

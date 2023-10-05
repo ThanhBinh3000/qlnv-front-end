@@ -1,18 +1,18 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Validators} from "@angular/forms";
-import {chiTietBangKeCanHangBdg} from "src/app/models/KeHoachBanDauGia";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {DonviService} from "src/app/services/donvi.service";
-import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Validators } from "@angular/forms";
+import { chiTietBangKeCanHangBdg } from "src/app/models/KeHoachBanDauGia";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { DonviService } from "src/app/services/donvi.service";
+import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import * as dayjs from "dayjs";
-import {MESSAGE} from "src/app/constants/message";
-import {STATUS} from 'src/app/constants/status';
-import {Base2Component} from "src/app/components/base2/base2.component";
+import { MESSAGE } from "src/app/constants/message";
+import { STATUS } from 'src/app/constants/status';
+import { Base2Component } from "src/app/components/base2/base2.component";
 
 import {
   DialogTableSelectionComponent
@@ -26,11 +26,11 @@ import {
 import {
   QuyetDinhGiaoNvXuatHangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service";
-import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
-import {PREVIEW} from "../../../../../../constants/fileType";
+import { convertTienTobangChu } from "../../../../../../shared/commonFunction";
+import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {FileDinhKem} from "../../../../../../models/CuuTro";
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { FileDinhKem } from "../../../../../../models/CuuTro";
 
 @Component({
   selector: 'app-bdg-chi-tiet-bang-ke-can',
@@ -398,7 +398,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       this.formData.patchValue({
         idPhieuXuatKho: firstItem.id,
         soPhieuXuatKho: firstItem.soPhieuXuatKho,
-        ngayXuatKho: firstItem. ngayLapPhieu,
+        ngayXuatKho: firstItem.ngayLapPhieu,
         tenNguoiGiao: firstItem.tenNguoiGiao,
         cmtNguoiGiao: firstItem.cmtNguoiGiao,
         congTyNguoiGiao: firstItem.congTyNguoiGiao,
@@ -432,7 +432,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index.toString()] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -497,7 +497,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   cancelEdit(stt: number): void {
     if (this.dataTable[stt] && this.dataEdit[stt]) {
       this.dataEdit[stt] = {
-        data: {...this.dataTable[stt]},
+        data: { ...this.dataTable[stt] },
         edit: false,
       };
     }
@@ -603,7 +603,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 }
 

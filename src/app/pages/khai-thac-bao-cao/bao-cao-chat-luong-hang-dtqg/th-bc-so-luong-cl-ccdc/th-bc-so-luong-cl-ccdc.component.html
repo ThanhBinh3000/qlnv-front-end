@@ -47,12 +47,12 @@
     </nz-card>
     <div class="cangiua group-button-search">
       <button nz-button class="search__button--clear" (click)="clearFilter()"
-              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
+        *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
         <i class="icon  htvbdh_nhap-lai1"></i>
         <span>Xóa điều kiện</span>
       </button>
       <button nz-button class="search__button--search" (click)="preView()"
-              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
+        *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Kết xuất báo cáo</span>
       </button>

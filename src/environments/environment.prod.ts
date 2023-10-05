@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  AUTHEN_API: 'http://192.168.1.62:8888',
-  SERVICE_API: 'http://192.168.1.62:8888',
+  AUTHEN_API: 'http://10.100.30.13:9111',
+  SERVICE_API: 'http://10.100.30.13:9111',
 };

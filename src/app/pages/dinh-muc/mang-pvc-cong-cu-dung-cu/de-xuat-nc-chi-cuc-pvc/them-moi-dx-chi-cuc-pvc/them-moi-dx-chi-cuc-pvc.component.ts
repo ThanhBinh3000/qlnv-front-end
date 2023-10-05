@@ -128,12 +128,12 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TUCHOI_CB_CUC : {
+      case STATUS.DU_THAO:
+      case STATUS.TUCHOI_CB_CUC: {
         trangThai = STATUS.DA_KY;
         break;
       }
-      case STATUS.DA_KY : {
+      case STATUS.DA_KY: {
         trangThai = STATUS.DADUYET_CB_CUC;
       }
     }

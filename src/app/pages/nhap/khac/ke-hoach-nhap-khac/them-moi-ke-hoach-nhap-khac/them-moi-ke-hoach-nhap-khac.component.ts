@@ -1,23 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from "@angular/core";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DxKhNhapKhacService} from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
-import {MESSAGE} from "../../../../../constants/message";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {Validators} from "@angular/forms";
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DxKhNhapKhacService } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
+import { MESSAGE } from "../../../../../constants/message";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
-import {DonviService} from "../../../../../services/donvi.service";
-import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
-import {OldResponseData} from "../../../../../interfaces/response";
-import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {chain, cloneDeep} from "lodash";
-import {STATUS} from "../../../../../constants/status";
-import {LOAI_HINH_NHAP_XUAT} from "../../../../../constants/config";
-import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { DonviService } from "../../../../../services/donvi.service";
+import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
+import { OldResponseData } from "../../../../../interfaces/response";
+import { MangLuoiKhoService } from "../../../../../services/qlnv-kho/mangLuoiKho.service";
+import { chain, cloneDeep } from "lodash";
+import { STATUS } from "../../../../../constants/status";
+import { LOAI_HINH_NHAP_XUAT } from "../../../../../constants/config";
+import { DialogTuChoiComponent } from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: "app-them-moi-ke-hoach-nhap-khac",
@@ -83,11 +83,11 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async ngOnInit() {
-      this.userInfo = this.userService.getUserLogin();
-      this.maTrinh = "/" + this.userInfo.MA_TR;
-      await Promise.all([
-        this.loadData(),
-      ]);
+    this.userInfo = this.userService.getUserLogin();
+    this.maTrinh = "/" + this.userInfo.MA_TR;
+    await Promise.all([
+      this.loadData(),
+    ]);
   }
 
   async ngOnChanges(changes: SimpleChanges) {

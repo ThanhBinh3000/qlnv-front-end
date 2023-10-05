@@ -533,7 +533,7 @@ export class ThongTinTongHopComponent implements OnInit {
     this.sortTableId('ct2s');
     let item = cloneDeep(this.create);
     item.stt = this.rowEdit.ct2s.length + 1;
-    item.tenLoaiChiPhi = this.listLoaiChiPhi.find(chiphi => chiphi.ma ==item.loaiChiPhi)?.giaTri;
+    item.tenLoaiChiPhi = this.listLoaiChiPhi.find(chiphi => chiphi.ma == item.loaiChiPhi)?.giaTri;
     this.rowEdit.ct2s = [
       ...this.rowEdit.ct2s,
       item,

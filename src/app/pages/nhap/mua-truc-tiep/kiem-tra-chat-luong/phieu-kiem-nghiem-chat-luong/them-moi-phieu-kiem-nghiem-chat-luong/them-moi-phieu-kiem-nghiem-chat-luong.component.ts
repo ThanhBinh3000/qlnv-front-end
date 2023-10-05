@@ -19,8 +19,8 @@ import { MttBienBanLayMauService } from './../../../../../../services/qlnv-hang/
 import { DanhMucTieuChuanService } from './../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service';
 import { KetQuaKiemNghiemChatLuongHang, PhieuKiemNghiemChatLuongHang } from './../../../../../../models/PhieuKiemNghiemChatLuongThoc';
 import { MttPhieuKiemNghiemChatLuongService } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttPhieuKiemNghiemChatLuongService.service';
-import {FILETYPE} from "../../../../../../constants/fileType";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import { FILETYPE } from "../../../../../../constants/fileType";
+import { FileDinhKem } from "../../../../../../models/FileDinhKem";
 import {
   QuyetDinhGiaoNvNhapHangService
 } from "../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service";
@@ -151,7 +151,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         this.loadTieuChuan(),
         this.loadSoQuyetDinh()
       ]);
-      if(this.idQdGiaoNvNh){
+      if (this.idQdGiaoNvNh) {
         await this.bindingDataQd(this.idQdGiaoNvNh)
       }
       if (this.id) {
@@ -293,7 +293,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     });
   }
 
-  async bindingDDiem(data: any){
+  async bindingDDiem(data: any) {
     this.listBbNhapDayKho = [];
     this.formData.patchValue({
       idDdiemGiaoNvNh: data.id,
@@ -326,7 +326,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         const data = res.data;
         data.tenDvi = this.userInfo.TEN_DVI;
         this.helperService.bidingDataInFormGroup(this.formData, data);
-        if(data.fileDinhKems.length > 0){
+        if (data.fileDinhKems.length > 0) {
           data.fileDinhKems.forEach(item => {
             this.listFileDinhKemKTCL.push(item)
           })

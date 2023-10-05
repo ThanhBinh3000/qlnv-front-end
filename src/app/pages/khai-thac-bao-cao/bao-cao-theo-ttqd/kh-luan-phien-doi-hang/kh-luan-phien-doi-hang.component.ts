@@ -36,15 +36,15 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private thongTu1452013Service: ThongTu1452013Service,
-              public userService: UserService,
-              private donViService: DonviService,
-              private danhMucService: DanhMucService,
-              public globals: Globals) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private thongTu1452013Service: ThongTu1452013Service,
+    public userService: UserService,
+    private donViService: DonviService,
+    private danhMucService: DanhMucService,
+    public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
@@ -198,7 +198,7 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
   changeCloaiVthh(event) {
 
   }
-  addRow () {
+  addRow() {
     this.rows.push({})
   }
 
