@@ -410,25 +410,25 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     }
   }
   checkRoleEdit(trangThai: STATUS): boolean {
-    if ([STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson('')) {
+    if ([STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM')) {
       return true
     }
     return false
   };
   checkRoleApprove(trangThai: STATUS): boolean {
-    if ([STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDC].includes(trangThai) && this.userService.isAccessPermisson("")) {
+    if (STATUS.CHO_DUYET_TP === trangThai && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP") || STATUS.CHO_DUYET_LDC === trangThai && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCUC")) {
       return true
     }
     return false
   }
   checkRoleDelete(trangThai: STATUS): boolean {
-    if ([STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson("")) {
+    if ([STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA")) {
       return true
     }
     return false
   };
   checkRoleView(trangThai: STATUS) {
-    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("")) {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM")) {
       return true
     }
     return false
