@@ -214,7 +214,7 @@ export class PhuLuc02Component implements OnInit {
 		await this.getDinhMuc();
 		this.lstCtietBcao.forEach(item => {
 			if (!item.tenDanhMuc) {
-				const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc);
+				const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc || e.loaiVthh == item.maDanhMuc);
 				item.tenDanhMuc = dinhMuc?.tenDinhMuc;
 				item.dmucTaiKho = dinhMuc?.tongDmuc;
 				item.dviTinh = dinhMuc?.donViTinh;
@@ -483,7 +483,7 @@ export class PhuLuc02Component implements OnInit {
 		});
 		modalTuChoi.afterClose.subscribe(async (data) => {
 			if (data) {
-				const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma);
+				const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
 				if (this.lstCtietBcao.findIndex(e => e.maDanhMuc == data.ma) == -1) {
 					let stt: any;
 					const index = this.lstCtietBcao.findIndex(e => e.maDanhMuc == '0.2');

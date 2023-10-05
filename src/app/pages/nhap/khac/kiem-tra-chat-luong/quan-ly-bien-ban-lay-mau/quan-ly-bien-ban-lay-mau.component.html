@@ -45,17 +45,17 @@
       <h3>Danh sách biên bản lấy mẫu</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_XOA')">
+          *ngIf="userService.isChiCuc() && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_XOA') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_XOA'))">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_EXP')" type="button"
+        <button *ngIf="(userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_EXP') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_EXP'))" type="button"
           class="btn btn-sub" (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_THEM')"
+          *ngIf="userService.isChiCuc() && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_THEM') && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_THEM'))"
           (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -95,9 +95,9 @@
               <td class="bold">{{ item.tgianNkMnhat }}</td>
               <td colspan="7"></td>
               <td>
-                <a (click)="redirectToChiTiet(false, 0,item.id)">
-                  <i class="fa fa-plus"></i>
-                </a>
+<!--                <a (click)="redirectToChiTiet(false, 0,item.id)">-->
+<!--                  <i class="fa fa-plus"></i>-->
+<!--                </a>-->
               </td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
@@ -113,7 +113,11 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
+                  <td>
+                    <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_THEM') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_THEM')" (click)="redirectToChiTiet(false, 0,item.id)">
+                      <i class="fa fa-plus"></i>
+                    </a>
+                  </td>
                 </tr>
                 <ng-container *ngFor="let lk of bb.children, let k = index">
                   <tr>
@@ -128,17 +132,21 @@
                     <td>{{lk.bbLayMau?.ngayNhapDayKho}}</td>
                     <td>{{lk.bbLayMau?.tenTrangThai}}</td>
                     <td>
-                      <a *ngIf="lk.bbLayMau && lk.bbLayMau?.trangThai == STATUS.DA_DUYET_LDCC"
+                      <a *ngIf="lk.bbLayMau && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_XEM') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_XEM'))"
                          (click)="redirectToChiTiet(false, lk.bbLayMau?.id)">
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-eye" title="Xem"></i>
                       </a>
-                      <a *ngIf="lk.bbLayMau && lk.bbLayMau?.trangThai != STATUS.DA_DUYET_LDCC"
+                      <a *ngIf="lk.bbLayMau && (lk.bbLayMau?.trangThai == STATUS.DU_THAO || lk.bbLayMau?.trangThai == STATUS.TU_CHOI_LDCC) && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_THEM') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_THEM'))"
                          (click)="redirectToChiTiet(false, lk.bbLayMau?.id)">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
-                      <a *ngIf="lk.bbLayMau && lk.bbLayMau?.trangThai == STATUS.DU_THAO"
+                      <a *ngIf="lk.bbLayMau && lk.bbLayMau?.trangThai == STATUS.CHO_DUYET_LDCC && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_DUYET_LDCCUC') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_DUYET_LDCCUC'))"
+                         (click)="redirectToChiTiet(true, lk.bbLayMau?.id)">
+                        <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
+                      </a>
+                      <a *ngIf="lk.bbLayMau && lk.bbLayMau?.trangThai == STATUS.DU_THAO && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_XOA') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_XOA'))"
                          (click)="xoaItem(lk.bbLayMau)">
-                        <i class="fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do" title="Xóa"></i>
                       </a>
                     </td>
                   </tr>

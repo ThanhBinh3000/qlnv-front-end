@@ -333,8 +333,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   async tonKho(item, index?) {
     const body = {
       maDvi: item.maDvi,
-      loaiVthh: this.loaiVthh,
-      cloaiVthh: this.cloaiVthh,
+      loaiVthh: this.loaiVthh === LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
+      ...(this.loaiVthh === LOAI_HANG_DTQG.MUOI ? {} : {cloaiVthh: this.cloaiVthh}),
     };
     try {
       const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
@@ -349,8 +349,9 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       } else {
         console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho');
       }
-    } catch (error) {
-      console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho', error);
+    } catch (e) {
+      console.error('Error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -396,7 +397,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   validateSoLuong() {
     const {soLuongChiTieu, soLuongKhDaDuyet} = this.formData.value;
-    const {tonKho, soLuongDeXuat,donGiaDeXuat, maDviTsan} = this.thongTinXuatBanTrucTiep;
+    const {tonKho, soLuongDeXuat, donGiaDeXuat, maDviTsan} = this.thongTinXuatBanTrucTiep;
     const tongSoLuong = this.listOfData.reduce((total, item) => total + item.soLuongDeXuat, 0);
     const maDonViTsan = this.listOfData.find(item => item.maDviTsan)?.maDviTsan;
     if (maDonViTsan == maDviTsan) {
@@ -408,7 +409,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     } else if (soLuongDeXuat > soLuongChiTieu - soLuongKhDaDuyet) {
       this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại");
       return false;
-    } else if( tongSoLuong > soLuongChiTieu - soLuongKhDaDuyet){
+    } else if (tongSoLuong > soLuongChiTieu - soLuongKhDaDuyet) {
       this.notification.error(MESSAGE.ERROR, "Tổng số lượng đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại");
       return false;
     } else if (donGiaDeXuat < this.giaToiDa) {
