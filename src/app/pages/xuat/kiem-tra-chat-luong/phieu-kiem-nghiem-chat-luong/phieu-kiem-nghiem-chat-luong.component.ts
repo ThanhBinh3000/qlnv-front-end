@@ -23,6 +23,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   @Input() inputService: any;
   @Input() inputServiceGnv: any;
   @Input() inputServiceBbLayMau: any;
+  @Input() maQuyen: MA_QUYEN_PKNCL = { THEM: '', XOA: '', XEM: '', DUYET_TP: '', DUYET_LDC: '', IN: '', EXPORT: '' };
   inputData: any;
   expandSetString = new Set<string>();
   isView: any = false;
@@ -32,7 +33,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   showQdGnv: boolean = false;
   tableDataView: any = [];
   CHUC_NANG = CHUC_NANG;
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -410,27 +410,54 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     }
   }
   checkRoleEdit(trangThai: STATUS): boolean {
-    if ([STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM')) {
+    if (this.userService.isCuc() && [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson(this.maQuyen.THEM)) {
       return true
     }
     return false
   };
   checkRoleApprove(trangThai: STATUS): boolean {
-    if (STATUS.CHO_DUYET_TP === trangThai && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP") || STATUS.CHO_DUYET_LDC === trangThai && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCUC")) {
+    if (this.userService.isCuc() && (STATUS.CHO_DUYET_TP === trangThai && this.userService.isAccessPermisson(this.maQuyen.DUYET_TP) || STATUS.CHO_DUYET_LDC === trangThai && this.userService.isAccessPermisson(this.maQuyen.DUYET_LDC))) {
       return true
     }
     return false
   }
   checkRoleDelete(trangThai: STATUS): boolean {
-    if ([STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA")) {
+    if (this.userService.isCuc() && ([STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson(this.maQuyen.XOA))) {
       return true
     }
     return false
   };
-  checkRoleView(trangThai: STATUS) {
-    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM")) {
+  checkRoleView(trangThai: STATUS): boolean {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson(this.maQuyen.XEM)) {
       return true
     }
     return false
   }
+  checkRoleAdd(): boolean {
+    if (this.userService.isCuc() && this.userService.isAccessPermisson(this.maQuyen.THEM)) {
+      return true;
+    }
+    return false
+  }
+  checkRoleXoaDs(): boolean {
+    if (this.userService.isCuc() && this.userService.isAccessPermisson(this.maQuyen.XOA)) {
+      return true;
+    }
+    return false
+  }
+  checkRoleExport() {
+    if (this.userService.isAccessPermisson(this.maQuyen.EXPORT)) {
+      return true;
+    }
+    return false
+  }
+}
+export interface MA_QUYEN_PKNCL {
+  THEM: string;
+  XOA: string;
+  XEM: string;
+  DUYET_TP: string;
+  DUYET_LDC: string;
+  IN: string;
+  EXPORT: string
 }
