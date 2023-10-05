@@ -52,8 +52,9 @@
       </div>
     </div>
   </div>
-  <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
-            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  <nz-alert class="mg-t-10"
+            *ngIf=" formData.value.trangThai == STATUS.TU_CHOI_LDCC"
+            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{ formData.value.lyDoTuChoi }}">
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse>
@@ -74,7 +75,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-select formControlName="nam" [nzDisabled]="isView">
+                  <nz-select formControlName="nam" (ngModelChange)="onChangeNam($event)" [nzDisabled]="isView">
                     <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -156,7 +157,7 @@
                 <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKho()">
-                    <input nz-input formControlName="tenLoKho" readonly/>
+                    <input nz-input formControlName="tenNganLoKho" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -445,16 +446,6 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <!--    <button nz-button (click)="downloadPdf()"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-pdf"></i>-->
-    <!--      Xuất .pdf-->
-    <!--    </button>-->
-    <!--    <button nz-button (click)="downloadWord()"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-word"></i>-->
-    <!--      Xuất .docx-->
-    <!--    </button>-->
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
