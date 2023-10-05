@@ -1326,9 +1326,9 @@ export class AddQuyetToanComponent implements OnInit {
 					this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
 					let luyKes: any[] = [];
 					if (this.getTail(data.stt) == 1) {
-						luyKes = this.lstDsHangTrongKho.filter(e => e.cloaiVthh == res.ma && e.maLoai == "LK");
+						luyKes = this.lstDsHangTrongKho.filter(e => (e.cloaiVthh == res.ma || e.loaiVthh == data.ma) && e.maLoai == "LK");
 					} else {
-						luyKes = this.lstDsHangTrongKho.filter(e => e.cloaiVthh == res.ma && e.maLoai == "PS");
+						luyKes = this.lstDsHangTrongKho.filter(e => (e.cloaiVthh == res.ma || e.loaiVthh == data.ma) && e.maLoai == "PS");
 					}
 					if (luyKes.length > 0) {
 						luyKes.forEach(luyKe => {

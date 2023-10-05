@@ -167,14 +167,14 @@ export class PhanBoDuToanComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         this.checkVP = this.userInfo.DON_VI.type.indexOf('PB') != -1;
-        if (this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
+        if (this.userService.isAccessPermisson(Roles.GSTC.NHAP_CV_QD_GIAO_SOKIEMTRA)) {
             this.statusTaoMoi = false;
         }
-        if (this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
+        if (this.userService.isAccessPermisson(Roles.GSTC.NHAP_CV_QD_GIAO_SOKIEMTRA)) {
             this.trangThai = '1';
-        } else if (this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_PA_PBDT)) {
+        } else if (this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_PA_GIAO_SKT)) {
             this.trangThai = '2';
-        } else if (this.userService.isAccessPermisson(Roles.GDT.PHE_DUYET_REPORT_PA_PBDT)) {
+        } else if (this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_PA_GIAO_SKT)) {
             this.trangThai = '4';
         }
         //lay danh sach danh muc
@@ -271,12 +271,12 @@ export class PhanBoDuToanComponent implements OnInit {
 
     checkEditStatus(trangThai: string) {
         return Status.TT_01 == trangThai &&
-            (this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT));
+            (this.userService.isAccessPermisson(Roles.GSTC.SUA_PA_GIAO_SOKIEMTRA));
     };
 
     checkDeleteStatus(trangThai: string) {
         return Status.TT_01 == trangThai &&
-            (this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_PA_PBDT));
+            (this.userService.isAccessPermisson(Roles.GSTC.XOA_PA_GIAO_SOKIEMTRA));
     };
 
     updateSingleChecked(): void {

@@ -385,10 +385,10 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     };
 
     checkAddReport() {
-        return this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT);
+        return this.userService.isAccessPermisson(Roles.GSTC.LAP_PA_GIAO_SOKIEMTRA);
     }
     checkTiepNhan() {
-        return this.userService.isAccessPermisson(Roles.GDT.NHAN_PA_PBDT)
+        return this.userService.isAccessPermisson(Roles.GSTC.NHAN_SO_KIEMTRA)
     }
     // luu
     async save() {

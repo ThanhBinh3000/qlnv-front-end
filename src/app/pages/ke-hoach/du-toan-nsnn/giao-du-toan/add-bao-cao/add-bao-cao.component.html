@@ -13,31 +13,31 @@
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
                 <span>Tạo mới</span>
             </button>
-            <button type="button" class="btn btn-sub" (click)="action('submit')">
+            <button *ngIf="status.submit" type="button" class="btn btn-sub" (click)="action('submit')">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
             </button>
-            <button type="button" class="btn btn-sub" (click)="action('pass')">
+            <button *ngIf="status.pass" type="button" class="btn btn-sub" (click)="action('pass')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button type="button" class="btn btn-do" (click)="action('nonpass')">
+            <button *ngIf="status.pass" type="button" class="btn btn-do" (click)="action('nonpass')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button type="button" class="btn btn-sub" (click)="action('approve')">
+            <button *ngIf="status.approve" type="button" class="btn btn-sub" (click)="action('approve')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Phê duyệt</span>
             </button>
-            <button type="button" class="btn btn-do" (click)="action('nonapprove')">
+            <button *ngIf="status.approve" type="button" class="btn btn-do" (click)="action('nonapprove')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button type="button" class="btn btn-sub" (click)="action('accept')">
+            <button *ngIf="status.accept" type="button" class="btn btn-sub" (click)="action('accept')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Tiếp nhận</span>
             </button>
-            <button type="button" class="btn btn-do" (click)="action('nonaccept')">
+            <button *ngIf="status.accept" type="button" class="btn btn-do" (click)="action('nonaccept')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>

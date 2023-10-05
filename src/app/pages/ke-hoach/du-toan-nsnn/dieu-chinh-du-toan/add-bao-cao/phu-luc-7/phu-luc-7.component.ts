@@ -625,6 +625,7 @@ export class PhuLuc7Component implements OnInit {
     handlSelectGoods(data: any) {
         const obj = {
             stt: data.stt,
+            tab: "dieu chinh"
         }
 
         const modalTuChoi = this.modal.create({
@@ -671,7 +672,7 @@ export class PhuLuc7Component implements OnInit {
                 const stt = this.lstCtietBcao.find(e => e.id == parentItem.id).stt;
                 this.lstCtietBcao.forEach(item => {
                     if (item.level == 2) {
-                        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.dmucHang);
+                        const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.dmucHang) || e.cloaiVthh == item.dmucHang);
                         item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
                     }
                 })

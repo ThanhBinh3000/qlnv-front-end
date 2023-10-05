@@ -273,11 +273,11 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
 
     checkEditStatus(trangThai: string) {
         return Status.TT_01 == trangThai &&
-            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_BTC));
+            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(Roles.GSTC.SUA_SO_KIEMTRA_BTC));
     };
 
     checkDeleteStatus(trangThai: string) {
         return Status.TT_01 == trangThai &&
-            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_BTC));
+            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(Roles.GSTC.XOA_SO_KIEMTRA_BTC));
     };
 }

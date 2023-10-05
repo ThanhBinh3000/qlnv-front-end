@@ -691,7 +691,7 @@ export class AddBaoCaoComponent implements OnInit {
         }
     }
     statusDeleteCv() {
-        if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH)) {
+        if (!this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP)) {
             return false;
         }
         if (!this.baoCao.soQd?.fileName) {
@@ -731,16 +731,16 @@ export class AddBaoCaoComponent implements OnInit {
         this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_TH);
-        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.TRINHDUYET_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.APPROVE_REPORT_TH);
-        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.DUYET_TUCHOI_PA_TH_PBDT) : this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_TH);
-        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_TUCHOI_PA_TH_PBDT) : this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_REPORT_TH);
-        const checkAccept = this.userService.isAccessPermisson(Roles.GDT.TIEP_NHAN_TC_REPORT_TH);
-        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.IN_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.PRINT_REPORT);
-        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.XUAT_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.XUAT_PA_TONGHOP_PBDT)
+        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP);
+        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.TRINHDUYET_BC) : this.userService.isAccessPermisson(Roles.GSTC.TRINHDUYET_BC_TONGHOP);
+        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC) : this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC_TH);
+        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC) : this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC_TH);
+        const checkAccept = this.userService.isAccessPermisson(Roles.GSTC.TIEPNHAN_TUCHOI_BC);
+        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.IN_BC) : this.userService.isAccessPermisson(Roles.GSTC.IN_BC_TONGHOP);
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.XUAT_BC) : this.userService.isAccessPermisson(Roles.GSTC.XUAT_BC_TONGHOP)
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
-        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_TH) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.GSTC.LAP_BC) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
@@ -813,11 +813,6 @@ export class AddBaoCaoComponent implements OnInit {
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
-    };
-
-    // xem phuong an cha
-    xemCtietPaBTC() {
-
     };
 
 

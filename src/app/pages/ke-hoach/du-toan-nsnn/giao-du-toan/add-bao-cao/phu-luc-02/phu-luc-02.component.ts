@@ -417,7 +417,7 @@ export class PhuLuc02Component implements OnInit {
                         tenDanhMuc: data.ten,
                         level: 0,
                     }))
-                    const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
+                    const lstTemp = this.dsDinhMuc.filter(e => (!e.cloaiVthh && e.loaiVthh == data.ma) || e.cloaiVthh == data.ma);
                     for (let i = 1; i <= lstTemp.length; i++) {
                         this.lstCtietBcaos.push(new ItemData({
 
