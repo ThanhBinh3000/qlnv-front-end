@@ -755,6 +755,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let loaiVthh = this.formDataDtl.value.loaiVthh;
     let cloaiVthh = this.formDataDtl.value.cloaiVthh;
     let soLuongGiao = this.formDataDtl.value.soLuongGiao;
+    let soLuongDx = this.formDataDtl.value.soLuongDx;
     if (maDvi) {
       await this.quanLyHangTrongKhoService.getTrangThaiHt({
         maDvi: maDvi,
@@ -780,6 +781,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               tonKhoDvi: tonKhoDvi,
               tonKhoCloaiVthh: tonKhoCloaiVthh
             });
+            if (this.userService.isCuc()) {
+              cloaiVthh ? this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoCloaiVthh))]) :
+                this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);
+              this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
+            }
             if (this.userService.isChiCuc()) {
               cloaiVthh ?
                 this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]) :
@@ -806,10 +812,10 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     return false
   }
   showAction(): boolean {
-    if (this.userService.isCuc() && this.formData.value.trangThai === STATUS.DU_THAO) {
+    if (this.userService.isCuc() && this.formData.value.trangThai === STATUS.DU_THAO && !this.isView) {
       return true;
     }
-    else if (this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.BAN_HANH) {
+    else if (this.userService.isChiCuc() && this.formData.value.trangThai === STATUS.BAN_HANH && !this.isView) {
       return true;
     }
     return false

@@ -50,7 +50,6 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
       maDvi: null,
       loaiVthh: null,
     })
-
     this.filterTable = {
       soQdNv: '',
       nam: '',
@@ -96,15 +95,15 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
       this.expandSetString.add(firstRowInGroup.idVirtual);
       const childData = _(soQdNvGroup).groupBy("tenDiemKho").map((tenDiemKhoGroup, tenDiemKhoKey) => ({
         idVirtual: firstRowInGroup.idVirtual,
-        tenDiemKho: tenDiemKhoKey,
+        tenDiemKho: tenDiemKhoKey || "",
         childData: tenDiemKhoGroup,
       })).value();
       return {
         idVirtual: firstRowInGroup.idVirtual,
-        soQdNv: soQdNvKey,
-        nam: firstRowInGroup.nam,
-        idQdNv: firstRowInGroup.idQdNv,
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv,
+        soQdNv: soQdNvKey || "",
+        nam: firstRowInGroup.nam || "",
+        idQdNv: firstRowInGroup.idQdNv || "",
+        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
         childData,
       };
     }).value();
@@ -201,25 +200,33 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
-        return this.userService.isAccessPermisson(permissions.XEM) &&
-          (data.trangThai !== STATUS.DU_THAO &&
-            data.trangThai !== STATUS.TU_CHOI_LDCC);
-      case 'SUA':
         return (
-          (data.trangThai === STATUS.DU_THAO ||
-            data.trangThai === STATUS.TU_CHOI_LDCC) &&
-          this.userService.isAccessPermisson(permissions.THEM)
+          this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
+              [
+                this.STATUS.CHO_DUYET_LDCC,
+                this.STATUS.DA_DUYET_LDCC,
+              ].includes(data.trangThai)) ||
+            (!this.userService.isAccessPermisson(permissions.THEM) && [
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_LDCC,
+                this.STATUS.DA_DUYET_LDCC
+              ].includes(data.trangThai) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_LDCC &&
+                !this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC))))
         );
+      case 'SUA':
+        return [
+          this.STATUS.DU_THAO,
+          this.STATUS.TU_CHOI_LDCC
+        ].includes(data.trangThai) && this.userService.isAccessPermisson(permissions.THEM);
       case 'PHEDUYET':
         return (
           (this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC) &&
-            data.trangThai === STATUS.CHO_DUYET_LDCC)
+            data.trangThai === this.STATUS.CHO_DUYET_LDCC)
         );
       case 'XOA':
-        return (
-          data.trangThai === STATUS.DU_THAO &&
-          this.userService.isAccessPermisson(permissions.XOA)
-        );
+        return data.trangThai === this.STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA);
       default:
         return false;
     }

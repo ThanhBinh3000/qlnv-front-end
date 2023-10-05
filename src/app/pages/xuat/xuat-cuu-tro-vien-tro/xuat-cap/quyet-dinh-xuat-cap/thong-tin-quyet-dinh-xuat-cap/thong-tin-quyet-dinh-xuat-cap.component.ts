@@ -121,8 +121,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         maDvi: [],
         nam: [dayjs().get("year"), [Validators.required]],
         soBbQd: [, [Validators.required]],
-        ngayKy: [],
-        ngayHluc: [],
+        ngayKy: [, [Validators.required]],
+        ngayHluc: [, [Validators.required]],
         idTongHop: [],
         maTongHop: [],
         ngayThop: [],
@@ -604,24 +604,17 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             let detail = res.data;
             detail.quyetDinhPdDtl = detail.quyetDinhPdDtl.filter(item => item.soLuongXc > 0);
             detail.quyetDinhPdDtl.forEach(s => {
-              s.soDx = detail.soDx;
-              s.idDx = detail.idDx;
-              s.ngayKyDx = detail.ngayDx;
-              s.trichYeuDx = detail.trichYeu;
               s.soLuong = s.soLuongXc;
-              s.loaiNhapXuat = detail.loaiNhapXuat;
-              s.kieuNhapXuat = detail.kieuNhapXuat;
-              s.mucDichXuat = detail.mucDichXuat;
               s.tenVthh = detail.tenVthh;
             });
-            if (!this.formData.value.id) {
-              this.formData.patchValue({ quyetDinhPdDtl: detail.quyetDinhPdDtl });
-            }
+            // if (!this.formData.value.id) {
+            //   this.formData.patchValue({ quyetDinhPdDtl: detail.quyetDinhPdDtl });
+            // }
 
-            data.idDx = data.id;
-            data.paXuatGaoChuyenXc = true;
-            data.qdPaXuatCap = res.data.soBbQd;
-            data.qdPaXuatCapId = res.data.id;
+            // data.idDx = data.id;
+            // data.paXuatGaoChuyenXc = true;
+            // data.qdPaXuatCap = res.data.soBbQd;
+            // data.qdPaXuatCapId = res.data.id;
             // delete data.id;
             // delete data.soBbQd;
             // delete data.ngayHluc;
@@ -638,10 +631,15 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             // delete data.fileDinhKem;
             // delete data.trichYeu;
             // delete data.quyetDinhPdDtl;
+            const idDx = data.id;
+            const paXuatGaoChuyenXc = true;
+            const qdPaXuatCap = detail.soBbQd;
+            const qdPaXuatCapId = detail.id;
 
+            // this.formData.patchValue(data);
+            this.formData.patchValue({ idDx, paXuatGaoChuyenXc, qdPaXuatCap, qdPaXuatCapId, quyetDinhPdDtl: detail.quyetDinhPdDtl });
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
-
-            this.formData.patchValue(data);
+            console.log(" this.formData.value.quyetDinhPdDtl", this.formData.value.quyetDinhPdDtl)
             // await this.buildTableView();
             await this.buildTableViewChuyenXc();
             if (this.phuongAnHdrView[0]) {

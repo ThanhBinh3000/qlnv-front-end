@@ -581,11 +581,10 @@
                   </thead>
                   <tbody>
                     <ng-container *ngIf="!isVthhVatuThietBi()">
-                      <ng-container *ngFor="let item of tblPhuongAnViewCache.data, let i = index;">
+                      <ng-container *ngFor="let item of tblPhuongAnView.data, let i = index;">
                         <tr>
                           <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                            [nzExpand]="expandSetStringCache.has(item.idVirtual)" nzShowExpand="true"
-                            style="width: 35px">
+                            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
                           </td>
                           <td>{{i+1}}</td>
                           <td class="bold">{{item.noiDungDx}}</td>
@@ -599,7 +598,7 @@
                             </td>
                           </ng-container>
                         </tr>
-                        <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
+                        <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                           <ng-container *ngFor="let lv1 of item.childData,let i1=index">
                             <tr>
                               <td></td>

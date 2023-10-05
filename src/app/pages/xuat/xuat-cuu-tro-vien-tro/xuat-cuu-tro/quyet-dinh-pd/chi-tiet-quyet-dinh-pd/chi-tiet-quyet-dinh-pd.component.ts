@@ -168,6 +168,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         text: dayjs().get('year') - i,
       });
     };
+    this.formData.controls['ngayHluc'].valueChanges.subscribe((value) => {
+      console.log("value", value)
+    })
   }
 
   async ngOnInit() {
@@ -205,7 +208,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             }
             res.data.quyetDinhPdDtl.forEach(s => s.idVirtual = uuidv4());
             this.formData.patchValue(res.data);
-
+            console.log("111", this.formData.value)
 
             //get cache
             if (this.formData.value.type == 'TTr') {
@@ -256,8 +259,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   async save() {
     // await this.helperService.ignoreRequiredForm(this.formData);
     // this.formData.controls.soQdGnv.setValidators([Validators.required]);
-    if (this.formData.value.type !== "TH") {
-      await this.helperService.ignoreRequiredForm(this.formData, ["ngayKetThuc", "mucDichXuat"]);
+    if (this.formData.value.type === "TH") {
+      this.formData.controls["ngayKetThuc"].clearValidators();
+      this.formData.controls["mucDichXuat"].clearValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return;
@@ -271,7 +275,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     }
     await this.createUpdate(body);
     this.formData.patchValue({ xuatCap: xuatCap });
-    await this.helperService.restoreRequiredForm(this.formData);
+    this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
+    this.formData.controls["mucDichXuat"].setValidators(Validators.required);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
@@ -335,7 +340,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               delete s.id
             });
             // this.formData.patchValue(data);
-            this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh']);
+            this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh', 'quyetDinhPdDtl']);
             await this.buildTableView();
             if (this.phuongAnHdrView[0]) {
               await this.selectRow(this.phuongAnHdrView[0]);
@@ -415,10 +420,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             delete data.fileDinhKem;
             delete data.trichYeu;
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
-
             // this.formData.patchValue(data, { onlySelf: true, emitEvent: false });
             // this.formData.patchValue(data);
-            this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh']);
+            this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh', 'quyetDinhPdDtl']);
             this.loaiNhapXuat = detail.loaiNhapXuat;
             this.kieuNhapXuat = detail.kieuNhapXuat;
             this.mucDichXuat = detail.mucDichXuat
@@ -869,6 +873,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async tinhTong() {
+    console.log("aaa", this.phuongAnView, this.phuongAnViewCache);
     const { tongSoLuongDx, tongSoLuongChuyenCapThocDx } = this.phuongAnViewCache.reduce((obj, cur) => {
       obj.tongSoLuongDx += cur.soLuongDx;
       obj.tongSoLuongChuyenCapThocDx += cur.soLuongXc ? cur.soLuongXc : 0;

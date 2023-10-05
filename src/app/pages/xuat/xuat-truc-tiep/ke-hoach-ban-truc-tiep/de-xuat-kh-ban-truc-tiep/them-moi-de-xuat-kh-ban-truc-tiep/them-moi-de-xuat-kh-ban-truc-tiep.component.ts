@@ -40,6 +40,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   @Input() showFromTH: boolean;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   listPhuongThucThanhToan: any[] = [];
@@ -49,7 +50,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   listVatTuCha: any[] = [];
   listVatTu = [];
   dataDonGiaDuocDuyet: any;
-  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
 
   constructor(
     httpClient: HttpClient,
@@ -163,8 +163,23 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.dataTable = children;
     await Promise.all([this.getGiaToiThieu(), this.donGiaDuocDuyet()]);
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      await this.onChangeLoaiVthh(loaiVthh);
+      await this.selectVthh(data);
     }
+  }
+
+  async selectVthh(data) {
+    this.listVatTuCha = [
+      {
+        maVatTuCha: data.loaiVthh,
+        tenVatTuCha: data.tenLoaiVthh
+      },
+    ]
+    this.listVatTu = [
+      {
+        maVatTu: data.cloaiVthh,
+        tenVatTu: data.tenCloaiVthh
+      },
+    ]
   }
 
   async loadDsVthh() {
@@ -379,22 +394,26 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   }
 
   calculatorTable() {
-    const donGiaDuocDuyetMap = new Map();
-    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
-      for (const s of this.dataDonGiaDuocDuyet) {
-        donGiaDuocDuyetMap.set(s.maChiCuc, s.giaQdTcdt);
-      }
-    }
     this.dataTable.forEach((item) => {
       item.thanhTienCuc = 0;
-      for (const child of item.children) {
-        const donGiaDuocDuyet = donGiaDuocDuyetMap.get(item.maDvi) || 0;
-        child.donGiaDuocDuyet = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)
-          ? donGiaDuocDuyet
-          : donGiaDuocDuyetMap.get(item.maDvi) || 0;
-        child.thanhTienDuocDuyet = child.donGiaDuocDuyet * child.soLuongDeXuat;
-        item.thanhTienCuc += child.thanhTienDeXuat;
+      const donGiaMap = new Map();
+      if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
+        this.dataDonGiaDuocDuyet.forEach((item) => {
+          donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
+        });
       }
+      let donGiaDuocDuyet = 0;
+      if (this.loaiVthh === LOAI_HANG_DTQG.VAT_TU) {
+        const firstItem = this.dataDonGiaDuocDuyet?.[0];
+        donGiaDuocDuyet = firstItem?.giaQdTcdt || 0;
+      } else {
+        donGiaDuocDuyet = donGiaMap.get(item.maDvi);
+      }
+      item.children.forEach((child) => {
+        child.donGiaDuocDuyet = donGiaDuocDuyet || null;
+        child.thanhTienDuocDuyet = (donGiaDuocDuyet || 0) * child.soLuongDeXuat;
+      })
+      item.thanhTienCuc = item.children.map(child => child.thanhTienDeXuat).reduce((prev, cur) => prev + cur, 0);
     });
     this.formData.patchValue({
       tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),

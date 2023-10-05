@@ -144,16 +144,14 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       }
       await this.loadDanhSachDieuChinh();
       const res = await this.quyetDinhPdKhBanTrucTiepService.search(body)
-      if (res.msg !== MESSAGE.SUCCESS) {
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
+        this.danhSachQdPdKeHoach = res.data.content.filter(item => !soQdPdSet.has(item.soQdPd));
+      } else if (res && res.msg) {
         this.notification.error(MESSAGE.ERROR, res.msg);
-        return;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
-      const data = res.data.content;
-      if (!data || data.length === 0) {
-        return;
-      }
-      const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
-      this.danhSachQdPdKeHoach = data.filter(item => !soQdPdSet.has(item.soQdPd));
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH BÁN TRỰC TIẾP',
         nzContent: DialogTableSelectionComponent,
@@ -293,6 +291,8 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
     await this.showDetail($event, index);
   }
 
+  index = 0;
+
   async showDetail($event, index: number) {
     if ($event.type == 'click') {
       const selectedRow = $event.target.parentElement;
@@ -302,30 +302,54 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       }
       selectedRow.classList.add('selectedRow');
       this.selected = false;
+      this.index = index
     } else {
       this.selected = true
     }
     this.dataInput = this.dataTable[index];
     if (this.formData.value.idQdPd) {
       const res = await this.quyetDinhPdKhBanTrucTiepService.getDetail(this.formData.value.idQdPd);
-      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        return;
+      if (res.msg === MESSAGE.SUCCESS && res.data) {
+        const data = res.data;
+        this.dataInputCache = data.children.find(item => item.soDxuat === this.dataTable[index].soDxuat) ?? null;
       }
-      this.dataInputCache = res.data.children[index];
     }
     await this.spinner.hide();
   }
 
+  async receiveDataFromChild(data: any) {
+    if (this.dataTable[this.index]) {
+      if (data.hasOwnProperty('tongSoLuong')) {
+        this.dataTable[this.index].tongSoLuong = data.tongSoLuong;
+      }
+      if (data.hasOwnProperty('tongTien')) {
+        this.dataTable[this.index].tongTien = data.tongTien;
+      }
+      if (data.hasOwnProperty('tgianDkienTu')) {
+        this.dataTable[this.index].tgianDkienTu = data.tgianDkienTu;
+      }
+      if (data.hasOwnProperty('tgianDkienDen')) {
+        this.dataTable[this.index].tgianDkienDen = data.tgianDkienDen;
+      }
+    }
+  }
+
   setValidForm() {
-    this.formData.controls["namKh"].setValidators([Validators.required]);
-    this.formData.controls["ngayTaoCongVan"].setValidators([Validators.required]);
-    this.formData.controls["trichYeu"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
-    this.formData.controls["soQdCc"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiHinhNx"].setValidators([Validators.required]);
-    this.formData.controls["tenKieuNx"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    const requiredFields = [
+      "namKh",
+      "ngayTaoCongVan",
+      "trichYeu",
+      "ngayKyQd",
+      "soQdCc",
+      "tenLoaiHinhNx",
+      "tenKieuNx",
+      "tenLoaiVthh",
+      "tenCloaiVthh",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 }
 

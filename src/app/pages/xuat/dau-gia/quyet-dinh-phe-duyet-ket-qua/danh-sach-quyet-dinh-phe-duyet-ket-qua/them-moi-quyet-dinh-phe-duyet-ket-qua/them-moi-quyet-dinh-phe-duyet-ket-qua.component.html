@@ -8,7 +8,7 @@
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.TU_CHOI_LDC) && isView
+    <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
               && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_LDC') : userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_LDC'))"
             type="button" class="btn btn-sub do"
             (click)="reject(idInput,STATUS.TU_CHOI_LDC)">

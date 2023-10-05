@@ -45,27 +45,8 @@ import {
 import {
   ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent
 } from './to-chuc-thanh-ly/quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly/chi-tiet-quyet-dinh-giao-nhiem-vu-thanh-ly.component';
-import { ThucHienXuatThanhLyComponent } from './thuc-hien-xuat-thanh-ly/thuc-hien-xuat-thanh-ly.component';
-import { KiemTraChatLuongComponent } from './thuc-hien-xuat-thanh-ly/kiem-tra-chat-luong/kiem-tra-chat-luong.component';
-import { XuatKhoComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/xuat-kho.component';
+
 import { XuatModule } from "src/app/pages/xuat/xuat.module";
-import { PhieuXuatKhoThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/phieu-xuat-kho-thanh-ly/phieu-xuat-kho-thanh-ly.component';
-import { ChiTietPhieuXuatKhoThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly/chi-tiet-phieu-xuat-kho-thanh-ly.component';
-import { BangKeCanThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bang-ke-can-thanh-ly/bang-ke-can-thanh-ly.component';
-import { ChiTietBangKeCanThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bang-ke-can-thanh-ly/chi-tiet-bang-ke-can-thanh-ly/chi-tiet-bang-ke-can-thanh-ly.component';
-import { BienBanTinhKhoThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bien-ban-tinh-kho-thanh-ly/bien-ban-tinh-kho-thanh-ly.component';
-import { ChiTietBbTinhKhoThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bien-ban-tinh-kho-thanh-ly/chi-tiet-bb-tinh-kho-thanh-ly/chi-tiet-bb-tinh-kho-thanh-ly.component';
-import { BienBanHaoDoiThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bien-ban-hao-doi-thanh-ly/bien-ban-hao-doi-thanh-ly.component';
-import { ChiTietBbHaoDoiThanhLyComponent } from './thuc-hien-xuat-thanh-ly/xuat-kho/bien-ban-hao-doi-thanh-ly/chi-tiet-bb-hao-doi-thanh-ly/chi-tiet-bb-hao-doi-thanh-ly.component';
-import {
-  HoSoKyThuatComponent
-} from "src/app/pages/xuat/xuat-thanh-ly/thuc-hien-xuat-thanh-ly/kiem-tra-chat-luong/ho-so-ky-thuat/ho-so-ky-thuat.component";
-import {
-  ChiTietHoSoKyThuatComponent
-} from "src/app/pages/xuat/xuat-thanh-ly/thuc-hien-xuat-thanh-ly/kiem-tra-chat-luong/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component";
-import {
-  ChiTietBienBanKiemTraComponent
-} from "src/app/pages/xuat/xuat-thanh-ly/thuc-hien-xuat-thanh-ly/kiem-tra-chat-luong/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-bien-ban-kiem-tra/chi-tiet-bien-ban-kiem-tra.component";
 import { DauGiaModule } from "../dau-gia/dau-gia.module";
 import { ThemmoiThComponent } from './tong-hop-thanh-ly/themmoi-th/themmoi-th.component';
 import { ChitietThComponent } from './tong-hop-thanh-ly/chitiet-th/chitiet-th.component';
@@ -96,20 +77,6 @@ import { XuatHangThanhLyModule } from './xuat-hang-thanh-ly/xuat-hang-thanh-ly.m
     ThongTinHopDongThanhLyComponent,
     QuyetDinhGiaoNhiemVuThanhLyComponent,
     ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent,
-    ThucHienXuatThanhLyComponent,
-    KiemTraChatLuongComponent,
-    XuatKhoComponent,
-    PhieuXuatKhoThanhLyComponent,
-    ChiTietPhieuXuatKhoThanhLyComponent,
-    BangKeCanThanhLyComponent,
-    ChiTietBangKeCanThanhLyComponent,
-    BienBanTinhKhoThanhLyComponent,
-    ChiTietBbTinhKhoThanhLyComponent,
-    BienBanHaoDoiThanhLyComponent,
-    ChiTietBbHaoDoiThanhLyComponent,
-    HoSoKyThuatComponent,
-    ChiTietHoSoKyThuatComponent,
-    ChiTietBienBanKiemTraComponent
   ],
   imports: [
     CommonModule,

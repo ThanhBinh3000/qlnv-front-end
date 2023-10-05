@@ -113,7 +113,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <nz-select formControlName="namKhoach" (ngModelChange)="onChangeNamKh()">
+                  <nz-select formControlName="namKhoach" (ngModelChange)="onChangeNamKh()" [nzDisabled]="isView">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -143,7 +143,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                  <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -235,7 +235,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Nguồn vốn</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="nguonVon">
+                  <nz-select formControlName="nguonVon" [nzDisabled]="isView">
                     <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                     </nz-option>
                   </nz-select>

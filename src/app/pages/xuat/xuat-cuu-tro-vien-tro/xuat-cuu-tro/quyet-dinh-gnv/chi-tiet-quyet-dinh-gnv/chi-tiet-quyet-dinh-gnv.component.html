@@ -563,7 +563,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao Chi cục</nz-form-label>
-            <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'">
+            <nz-form-control [nzErrorTip]="error">
               <nz-input-number formControlName="soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                 [nzDisabled]="!userService.isCuc()" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                 [nzParser]="globals.parser">
