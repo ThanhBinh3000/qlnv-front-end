@@ -33,11 +33,9 @@ import {
 })
 export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit {
 
-  dataTableDiaDiem: any[] = [];
   fileCanCu: any[] = []
   rowItem: any = {};
   phanLoai : string;
-  dropdownLoaiDaiDien: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -133,7 +131,7 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
     } else {
       await this.userService.getId("XH_TL_TINH_KHO_HDR_SEQ").then((res) => {
         this.formData.patchValue({
-          soBbTinhKho: res + '/' + this.formData.value.nam + '/BBNĐK',
+          soBbTinhKho: res + '/' + this.formData.value.nam + '/BBTK',
           maQhns: this.userInfo.DON_VI.maQhns,
           tenDvi: this.userInfo.TEN_DVI,
           ngayLapBienBan: dayjs().format('YYYY-MM-DD'),

@@ -131,24 +131,24 @@
               <td>{{bbTk.xhTlDanhSachHdr?.tenDiemKho}} / {{bbTk.xhTlDanhSachHdr?.tenNhaKho}} / {{bbTk.xhTlDanhSachHdr?.tenNganKho}} / {{bbTk.xhTlDanhSachHdr?.tenLoKho}}</td>
               <td>{{bbTk.xhTlDanhSachHdr?.tenLoaiVthh}}</td>
               <td>{{bbTk.xhTlDanhSachHdr?.tenCloaiVthh}}</td>
-              <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.xhTlHaoDoiHdr}}</td>
+              <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.xhTlHaoDoiHdr.soBbHaoDoi}}</td>
               <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.soBbTinhKho}}</td>
               <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.ngayBatDauXuat  | date: 'dd/MM/YYYY' }}</td>
               <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.ngayKetThucXuat  | date: 'dd/MM/YYYY' }}</td>
               <td></td>
               <td></td>
               <td></td>
-              <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.tenTrangThai}}</td>
+              <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.xhTlHaoDoiHdr?.tenTrangThai}}</td>
               <td>
-                <ng-container *ngIf="bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr">
-                  <a (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.id,'SCHDTQG_KTCL_XEM')">
+                <ng-container *ngIf="bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.xhTlHaoDoiHdr">
+                  <a (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr.xhTlHaoDoiHdr?.id,'SCHDTQG_KTCL_XEM')">
                     <span class="icon htvbdh_eye"></span>
                   </a>
-                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
+                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr.xhTlHaoDoiHdr?.trangThai == STATUS.DU_THAO"
                      (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr?.id,'SCHDTQG_KTCL_THEM')">
                     <span class="fa fa-pencil"></span>
                   </a>
-                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
+                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.xhTlHaoDoiHdr?.trangThai == STATUS.DU_THAO"
                      (click)="delete(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr,'SCHDTQG_KTCL_XOA')">
                     <i class="fa fa-trash-o do"></i>
                   </a>
@@ -157,6 +157,7 @@
             </tr>
             <ng-container *ngFor="let pxk of bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.children , let i = index">
               <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
