@@ -63,16 +63,16 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách báo cáo kết quả bán thanh lý DTQG</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-do" (click)="deleteMulti('XHDTQG_XTL_QDTL_XOA')">
+      <button type="button" class="btn btn-do" (click)="deleteMulti('XHDTQG_XTL_BCKQ_XOA')">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData('XHDTQG_XTL_QDTL_EXP')">
+      <button type="button" class="btn btn-sub" (click)="exportData('XHDTQG_XTL_BCKQ_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
       <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
-              (click)="redirectCreate('XHDTQG_XTL_QDTL_THEM')">
+              (click)="redirectCreate('XHDTQG_XTL_BCKQ_THEM')">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Tạo quyết định</span>
       </button>
@@ -155,10 +155,10 @@
           <a (click)="redirectDetail(data.id)">
             <span class="icon htvbdh_eye"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTL_QDTL_THEM')">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTL_BCKQ_XEM')">
             <span class="fa fa-pencil"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTL_QDTL_XOA')">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTL_BCKQ_XOA')">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>

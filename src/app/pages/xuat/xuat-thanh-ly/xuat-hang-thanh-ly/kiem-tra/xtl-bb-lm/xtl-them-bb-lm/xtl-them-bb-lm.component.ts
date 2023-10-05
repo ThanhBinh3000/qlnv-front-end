@@ -304,7 +304,7 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC) && this.userService.isAccessPermisson('SCHDTQG_KTCL_THEM');
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC);
   }
 
   showPheDuyetTuChoi(){
