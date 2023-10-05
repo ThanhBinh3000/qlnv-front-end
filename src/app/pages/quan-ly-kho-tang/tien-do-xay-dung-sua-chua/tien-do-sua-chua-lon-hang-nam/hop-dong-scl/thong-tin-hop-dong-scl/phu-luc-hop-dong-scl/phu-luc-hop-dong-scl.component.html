@@ -15,12 +15,12 @@
         <span>Quay lại</span>
       </button>
       <button class="btn btn-sub ml-2" (click)="save(true)"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_DUYET')">
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_HD_THEM')">
         <i class="icon htvbdh_trinh "></i>
         <span>Đã ký</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
-              *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO )">
+              *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_HD_THEM') ">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>

@@ -33,9 +33,9 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import {
   HoSoKyThuatNkService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/hoSoKyThuatNk.service";
-import {HoSoBienBanNkService} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/hoSoBienBanNk.service";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
-import {FILETYPE} from "../../../../../../constants/fileType";
+import { HoSoBienBanNkService } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/hoSoBienBanNk.service";
+import { FileDinhKem } from "../../../../../../models/FileDinhKem";
+import { FILETYPE } from "../../../../../../constants/fileType";
 import {
   QuanLyBienBanLayMauKhacService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quanLyBienBanLayMauKhac.service";
@@ -98,7 +98,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
   canCuPhapLy: FileDinhKem[] = [];
   taiLieuBoSung: FileDinhKem[] = [];
   listFile: any[] = []
-
+  previewName: string = '';
 
   constructor(
     httpClient: HttpClient,
@@ -177,12 +177,15 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
     if (this.loai == LOAI_BIEN_BAN.BB_KTRA_NGOAI_QUAN) {
       this.title = 'Biên bản kiểm tra ngoại quan';
       this.sufffix = 'BBKTNQ';
+      this.previewName = 'nk_bb_ktra_nq';
     } else if (this.loai == LOAI_BIEN_BAN.BB_KTRA_VAN_HANH) {
       this.title = 'Biên bản kiểm tra vận hành';
       this.sufffix = 'BBKTVH';
+      this.previewName = 'nk_bb_ktra_vh';
     } else if (this.loai == LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT) {
       this.title = 'Biên bản kiểm tra hồ sơ kỹ thuật';
       this.sufffix = 'BBKTHSKT';
+      this.previewName = 'nk_bb_ktra_kt';
     }
   }
 
@@ -204,7 +207,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
         }
         this.helperService.bidingDataInFormGroup(this.formData, data);
         debugger
-        if(data.idBbLayMau){
+        if (data.idBbLayMau) {
           await this.buldingDataBbLayMau(data)
         }
         console.log("1", this.formData.value)
@@ -213,7 +216,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
     }
   }
 
-  async buldingDataBbLayMau(data: any){
+  async buldingDataBbLayMau(data: any) {
     console.log(data, "bien ban")
     let res = await this.bienBanLayMauService.getDetail(data.idBbLayMau);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -264,7 +267,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
         ngayHd: data.ngayHd,
         loaiBb: this.sufffix
       })
-      if(data.idBbLayMau){
+      if (data.idBbLayMau) {
         await this.buldingDataBbLayMau(data)
       }
     }

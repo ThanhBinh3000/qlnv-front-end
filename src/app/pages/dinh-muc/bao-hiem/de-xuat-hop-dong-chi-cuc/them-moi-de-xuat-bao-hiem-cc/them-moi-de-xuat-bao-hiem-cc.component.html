@@ -90,7 +90,7 @@
               <nz-form-label [nzNoColon]="true" >Tổng giá trị bảo hiểm đề xuất
               </nz-form-label>
               <nz-input-group>
-                <span class="text-blue">{{+sumTable(dataTable, 'giaTriBhDx') + +sumTable(tableHangDtqg, 'giaTriBhDx') | number: '1.0-1'}}</span>
+                <span class="text-blue">{{+sumTable(dataTable, 'giaTriBhDx') + +sumTable(tableHangDtqg, 'giaTriBhDx') | number: '1.0-1': 'vi_VN'}}</span>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -188,11 +188,11 @@
         <td>{{idx + 1}}</td>
         <td>{{data.tenDiemKho}}</td>
         <td>{{data.tenNhaKho}}</td>
-        <td class="text-right">{{data.tichLuong | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.dienTich | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.giaTriHt | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.giaTriDk | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.giaTriBhDx | number: '1.0-1' }}</td>
+        <td class="text-right">{{data.tichLuong | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.dienTich | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.giaTriHt | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.giaTriDk | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.giaTriBhDx | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center" *ngIf="!isView">
           <a (click)="editRow(idx)">
             <i class="fa fa-pencil" title="Sửa"></i>
@@ -262,11 +262,11 @@
       <td></td>
       <td class="font-weight-bold text-left">Tổng cộng</td>
       <td></td>
-      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'tichLuong') | number: '1.0-1' }}</td>
-      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'dienTich') | number: '1.0-1' }}</td>
-      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'giaTriHt') | number: '1.0-1' }}</td>
-      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'giaTriDk') | number: '1.0-1' }}</td>
-      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'giaTriBhDx')| number: '1.0-1' }}</td>
+      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'tichLuong') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'dienTich') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'giaTriHt') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'giaTriDk') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold text-right">{{sumTable(dataTable, 'giaTriBhDx')| number : '1.0-1' : 'vi_VN'}}</td>
       <td></td>
     </tr>
     </tbody>
@@ -274,7 +274,7 @@
   <div class="header header-green-background mg-t-10">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span class="text-uppercase font-weight-bold">HÀNG DỮ TRỮ QUỐC GIA</span>
+        <span class="text-uppercase font-weight-bold">HÀNG DỰ TRỮ QUỐC GIA</span>
       </div>
     </div>
   </div>
@@ -287,7 +287,7 @@
       <th rowSpan="2" nzWidth="10%">Đơn vị tính</th>
       <th colSpan="2" nzWidth="15%">Đến thời điểm hiện tại</th>
       <th colSpan="2" nzWidth="15%">Dự kiến đến hết 31/12</th>
-      <th rowSpan="2" nzWidth="10%">Giá trị bảo hểm đề xuất</th>
+      <th rowSpan="2" nzWidth="10%">Giá trị bảo hiểm đề xuất</th>
       <th rowSpan="2" nzWidth="15%" *ngIf="!isView">Hành động</th>
     </tr>
     <tr>
@@ -352,11 +352,11 @@
         <td>{{idx + 1}}</td>
         <td>{{data.tenHangHoa}}</td>
         <td>{{data.donViTinh}}</td>
-        <td class="text-right">{{data.soLuongHt | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.giaTriHt | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.soLuongDk | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.giaTriDk | number: '1.0-1' }}</td>
-        <td class="text-right">{{data.giaTriBhDx | number: '1.0-1' }}</td>
+        <td class="text-right">{{data.soLuongHt | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.giaTriHt | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.soLuongDk | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.giaTriDk | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right">{{data.giaTriBhDx | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center" *ngIf="!isView">
           <a (click)="editRowHh(idx)">
             <i class="fa fa-pencil" title="Sửa"></i>
@@ -425,10 +425,10 @@
       <td class="font-weight-bold text-left">Tổng cộng</td>
       <td></td>
       <td></td>
-      <td class="font-weight-bold text-right">{{sumTable(tableHangDtqg, 'giaTriHt') | number: '1.0-1' }}</td>
+      <td class="font-weight-bold text-right">{{sumTable(tableHangDtqg, 'giaTriHt') | number : '1.0-1' : 'vi_VN'}}</td>
       <td></td>
-      <td class="font-weight-bold text-right">{{sumTable(tableHangDtqg, 'giaTriDk') | number: '1.0-1' }}</td>
-      <td class="font-weight-bold text-right">{{sumTable(tableHangDtqg, 'giaTriBhDx') | number: '1.0-1' }}</td>
+      <td class="font-weight-bold text-right">{{sumTable(tableHangDtqg, 'giaTriDk') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold text-right">{{sumTable(tableHangDtqg, 'giaTriBhDx') | number : '1.0-1' : 'vi_VN'}}</td>
       <td></td>
     </tr>
     </tbody>

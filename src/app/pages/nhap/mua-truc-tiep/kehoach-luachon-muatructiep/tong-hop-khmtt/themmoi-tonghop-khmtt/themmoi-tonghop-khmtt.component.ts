@@ -46,6 +46,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   disableField: boolean = false;
   selected: boolean = false;
   listFileDinhKem: any[] = [];
+  previewName: string = "mtt_tong_hop_kh";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

@@ -2,8 +2,9 @@
   <div class="header header-green-background mg-t-16">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span></span>
-        <span>LẬP BÁO CÁO NHẬP, XUẤT, TỒN KHO HÀNG DỮ TRỮ QUỐC GIA</span>
+        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+        {{ formData.value.tenTrangThai }}</span>
+        <span>LẬP BÁO CÁO NHẬP, XUẤT, TỒN KHO HÀNG DỰ TRỮ QUỐC GIA</span>
       </div>
     </div>
     <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
@@ -13,12 +14,13 @@
           <span>Quay lại</span>
         </button>
         <ng-container>
-          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView" type="button"
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG_DUYET')" type="button"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Ban hành</span>
           </button>
-          <button *ngIf="!isView" type="button" class="btn btn-main" (click)="save()">
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG_LAP')" type="button" class="btn btn-main" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
@@ -93,7 +95,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
-          <span>Danh sách nhập, xuất, cứu trợ, viện trợ, bảo quản hàng dữ trữ quốc gia</span>
+          <span>Danh sách nhập, xuất, cứu trợ, viện trợ, bảo quản hàng dự trữ quốc gia</span>
         </div>
       </div>
       <div class="buttons" *ngIf="!isView">

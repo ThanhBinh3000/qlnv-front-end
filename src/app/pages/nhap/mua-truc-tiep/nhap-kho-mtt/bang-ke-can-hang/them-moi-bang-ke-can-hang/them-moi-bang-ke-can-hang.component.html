@@ -4,24 +4,29 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
+      <button
+        type="button" class="btn btn-sub do" (click)="preview(previewName)">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Xem trước</span>
+      </button>
         <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
+            *ngIf="(!isView && formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
             (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
         </button>
-        <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
+        <button type="button" class="btn btn-sub do" *ngIf="!isView && formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_DUYET')"
             (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
+        <button class="btn btn-sub xanh-nhat" *ngIf="!isView && formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_DUYET')"
             (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
         </button>
         <button class="btn btn-sub xanh"
-            *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
+            *ngIf="(!isView && formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
             (click)="save(false)">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
@@ -362,22 +367,49 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr *ngFor="let item of dataTable; let i = index">
-                        <td>{{i + 1}}</td>
-                        <td>{{item.maCan}}</td>
-                        <td>{{item.soBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>{{item.trongLuongCaBi | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>
-                            <a (click)="editRow(item.id)">
-                                <i class="fa fa-pencil" title="Sửa"></i>
-                            </a>
-                            <a (click)="deleteRow(item)">
-                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
+              <tbody>
+              <tr *ngFor="let data of dataTable; let idx = index">
+                <ng-container *ngIf="(dataEdit && dataEdit[idx] && !dataEdit[idx].edit); else editTemplate ">
+                  <td class="text-center">{{idx + 1}}</td>
+                  <td>{{data.maCan}}</td>
+                  <td>{{data.soBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{data.trongLuongCaBi | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td *ngIf="!isDisabled()">
+                    <a (click)="startEdit(idx)">
+                      <i class=" fa fa-pencil"></i>
+                    </a>
+                    <a (click)="deleteRow(idx)" class="text-center">
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <ng-template #editTemplate>
+                  <td class="text-center">{{idx + 1}} </td>
+                  <td>
+                    <input nz-input [(ngModel)]="dataEdit[idx].data.maCan"/>
+                  </td>
+                  <td>
+                    <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                     [nzParser]="globals.parser"
+                                     [(ngModel)]="dataEdit[idx].data.soBaoBi"></nz-input-number>
+                  </td>
+                  <td>
+                    <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                     [nzParser]="globals.parser"
+                                     [(ngModel)]="dataEdit[idx].data.trongLuongCaBi"></nz-input-number>
+                  </td>
+
+                  <td class="text-center" *ngIf="!isDisabled()">
+                    <a (click)="saveEdit(idx)" class="save">
+                      <i class="icon htvbdh_tcdt_save"></i>
+                    </a>
+                    <a (click)="cancelEdit(idx)">
+                      <i class="fa fa-ban do"></i>
+                    </a>
+                  </td>
+                </ng-template>
+              </tr>
+              </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="2"></td>
@@ -408,9 +440,8 @@
                             Tổng trọng lượng bao bì
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-input-number nz-input nzSize="small" readonly [ngModel]="calcTong('soBaoBi')"
-                                [ngModelOptions]="{standalone: true}" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" nzDisabled></nz-input-number>
+                            <nz-input-number nz-input nzSize="small" formControlName="tongSlBaoBi" [nzFormatter]="globals.formatter"
+                                [nzParser]="globals.parser"></nz-input-number>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -421,7 +452,7 @@
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
                             <nz-input-number nz-input nzSize="small" readonly
-                                [ngModel]="calcTong('trongLuongCaBi') - calcTong('soBaoBi')"
+                                [ngModel]="calcTong('trongLuongCaBi') - formData.value.tongSlBaoBi"
                                 [ngModelOptions]="{standalone: true}" [nzFormatter]="globals.formatter"
                                 [nzParser]="globals.parser" nzDisabled></nz-input-number>
                         </nz-form-control>
@@ -433,7 +464,7 @@
                             Tổng trọng lượng hàng đã trừ bì (bằng chữ)
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <input nz-input [ngModel]="convertTien(calcTong('trongLuongCaBi') - calcTong('soBaoBi')) "
+                            <input nz-input [ngModel]="convertTien(calcTong('trongLuongCaBi') - formData.value.tongSlBaoBi) "
                                 [ngModelOptions]="{standalone: true}" readonly />
                         </nz-form-control>
                     </nz-form-item>
@@ -446,3 +477,30 @@
 <ng-template #error let-control>
     <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="BẢNG KÊ CÂN HÀNG" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

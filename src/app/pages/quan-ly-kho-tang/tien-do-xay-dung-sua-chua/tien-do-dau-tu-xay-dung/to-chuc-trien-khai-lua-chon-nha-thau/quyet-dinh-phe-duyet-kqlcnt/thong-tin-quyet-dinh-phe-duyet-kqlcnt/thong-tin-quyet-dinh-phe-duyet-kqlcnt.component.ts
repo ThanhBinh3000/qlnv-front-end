@@ -89,8 +89,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
       diaChi: [null],
       ghiChu: [null],
       tongMucDt: [0],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       fileDinhKems: [null],
       ccPhapLy: [],
       listKtTdxdQuyetDinhPdKqlcntDsgt: [[]]
@@ -191,10 +191,12 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     if (this.listGoiThau && this.listGoiThau.length > 0) {
       this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt = this.listGoiThau;
-      this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt.forEach(item => {
-        item.idGoiThau = item.id;
-        item.id = null
-      })
+      if (!this.formData.value.id) {
+        this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt.forEach(item => {
+          item.idGoiThau = item.id;
+          item.id = null
+        })
+      }
     } else {
       this.notification.success(MESSAGE.ERROR, "Kết quả lựa chọn nhà thầu không được để trống.");
       return;

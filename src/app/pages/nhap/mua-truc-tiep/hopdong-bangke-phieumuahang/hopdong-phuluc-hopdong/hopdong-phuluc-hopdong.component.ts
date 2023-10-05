@@ -113,7 +113,6 @@ export class HopdongPhulucHopdongComponent implements OnInit {
   }
 
   async timKiem() {
-    debugger
     if(!this.userService.isChiCuc()){
       this.formData.patchValue({
         trangThaiKq: STATUS.DA_DUYET_LDC,

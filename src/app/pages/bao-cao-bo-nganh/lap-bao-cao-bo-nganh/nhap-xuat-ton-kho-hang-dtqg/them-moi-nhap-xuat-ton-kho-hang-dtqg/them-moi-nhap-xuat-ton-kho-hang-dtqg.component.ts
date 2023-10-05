@@ -100,6 +100,7 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
             tGianTaoDenNgay: this.listData.tGianTaoDenNgay,
             tGianBanHanhTuNgay: this.listData.tGianBanHanhTuNgay,
             tGianBanHanhDenNgay: this.listData.tGianBanHanhDenNgay,
+            trangThai: this.listData.trangThai,
           });
           this.listDataDetail = this.listData.detail
         }

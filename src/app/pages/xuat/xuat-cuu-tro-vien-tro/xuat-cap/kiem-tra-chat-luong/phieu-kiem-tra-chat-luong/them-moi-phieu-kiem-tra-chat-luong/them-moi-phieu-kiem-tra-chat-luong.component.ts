@@ -47,12 +47,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   checked: boolean = false;
   listFileDinhKem: any = [];
   maVthh: string;
-  phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
-    new PhieuKiemNghiemChatLuongHang();
-  viewChiTiet: boolean = false;
-  ketQuaKiemNghiemHangCreate: KetQuaKiemNghiemChatLuongHang =
-    new KetQuaKiemNghiemChatLuongHang();
-  dsKetQuaKiemNghiemHangClone: Array<KetQuaKiemNghiemChatLuongHang> = [];
+  templateName = "Phiếu kiểm tra chất lượng-Xuất cấp";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -177,17 +172,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   }
 
   async loadDanhMucPhuongThucBaoQuan() {
-    let body = {
-      maHthuc: null,
-      paggingReq: {
-        limit: 1000,
-        page: 1,
-      },
-      str: null,
-      tenHthuc: null,
-      trangThai: null,
-    };
-    let res = await this.danhMucService.loadDanhMucHinhThucBaoQuan(body);
+    let res = await this.danhMucService.danhMucChungGetAll('HINH_THUC_BAO_QUAN');
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content) {
         this.listHinhThucBaoQuan = res.data.content;

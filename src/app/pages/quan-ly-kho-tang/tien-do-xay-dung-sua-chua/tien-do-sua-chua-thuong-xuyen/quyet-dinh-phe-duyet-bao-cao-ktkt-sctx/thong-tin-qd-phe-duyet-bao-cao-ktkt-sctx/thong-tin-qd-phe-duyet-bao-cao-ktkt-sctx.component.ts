@@ -83,8 +83,8 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
       quyMo: [null],
       loaiCapCt: [null],
       noiDungKhac: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       fileDinhKems: [null],
       child: [null],
       listKtTdscQuyetDinhPdBcKtktDtl: null,
@@ -450,7 +450,17 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
         });
       } else {
         itemChild.expand = true;
-        this.dataTable = [...this.dataTable, itemChild];
+        let itemCheck = this.dataTable.find(it => it.idVirtual == itemChild.idVirtual);
+        if (itemCheck) {
+          this.dataTable = this.dataTable.map(obj => {
+            if (obj.idVirtual == itemChild.idVirtual) {
+              return itemChild;
+            }
+            return obj;
+          });
+        } else {
+          this.dataTable = [...this.dataTable, itemChild];
+        }
       }
       this.dataTreeTable = this.dataTable;
       this.formDataDetail.reset();

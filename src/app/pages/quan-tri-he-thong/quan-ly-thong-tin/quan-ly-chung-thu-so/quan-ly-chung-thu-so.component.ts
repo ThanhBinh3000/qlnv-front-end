@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -9,7 +9,12 @@ import { Subject } from 'rxjs';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+import { QLChungTuService } from 'src/app/services/quantri-nguoidung/quan-ly-thong-tin/quan-ly-chung-tu';
 import { StorageService } from 'src/app/services/storage.service';
+import { cloneDeep } from 'lodash';
+import { ThemChungThuSoComponent } from './them-chung-thu-so/them-chung-thu-so.component';
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import moment from 'moment';
 
 @Component({
   selector: 'app-quan-ly-chung-thu-so',
@@ -17,26 +22,12 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./quan-ly-chung-thu-so.component.scss']
 })
 export class QuanLyChungThuSoComponent extends Base2Component implements OnInit {
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = true;
-
-  @Input()
-  idTHop: number;
-  @Input()
-  qdDcId: number;
-  @Input() isViewOnModal: boolean;
 
   selectedId: number = 0;
   isView = false;
-
-  listLoaiDieuChuyen: any[] = [
-    { ma: "ALL", ten: "Tất cả" },
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  ];
-  listLoaiDCFilterTable: any[] = [
-    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  listStatus: any[] = [
+    { value: true, text: "Hoạt động" },
+    { value: false, text: "Ngừng hoạt động" },
   ];
 
   constructor(
@@ -45,41 +36,26 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
+    private qlChungTuService: QLChungTuService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenTCService);
+    super(httpClient, storageService, notification, spinner, modal, qlChungTuService);
     this.formData = this.fb.group({
-      nam: null,
-      soQdinh: null,
-      ngayDuyetTc: null,
-      ngayHieuLuc: null,
-      loaiDc: null,
-      trichYeu: null,
+      certificateNumber: null,
+      status: null,
+      startDate: null,
+      endDate: null,
     })
     this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      loaiDc: '',
-      trichYeu: '',
-      maDxuat: '',
-      maThop: '',
-      soQdinhXuatCuc: '',
-      soQdinhNhapCuc: '',
-      tenTrangThai: '',
+      certificateNumber: '',
+      startDate: '',
+      endDate: '',
+      description: '',
+      note: '',
+      status: '',
     };
   }
 
-
   async ngOnInit() {
-    this.isVisibleChangeTab$.subscribe((value: boolean) => {
-      this.visibleTab = value;
-    });
-
-    if (this.idTHop)
-      this.redirectDetail(0, false)
-    if (this.qdDcId)
-      this.redirectDetail(this.qdDcId, true)
 
     try {
       this.initData()
@@ -95,19 +71,21 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
 
   }
 
-  isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
-  }
+  disabledStart = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.endDate) {
+      return startValue.getTime() > this.formData.value.endDate.getTime();
+    } else {
+      return false;
+    }
+  };
 
-  isTongCuc() {
-    return this.userService.isTongCuc()
-  }
-
-  isCuc() {
-    return this.userService.isCuc()
-  }
+  disabledEnd = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.startDate) {
+      return endValue.getTime() < this.formData.value.startDate.getTime();
+    } else {
+      return false;
+    }
+  };
 
 
   async initData() {
@@ -115,15 +93,89 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
   }
 
   async timKiem() {
-    if (this.formData.value.ngayDuyetTc) {
-      this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
+    if (this.formData.value.startDate) {
+      this.formData.value.startDate = dayjs(this.formData.value.startDate).format('DD/MM/YYYY')
     }
-    if (this.formData.value.ngayHieuLuc) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
+    if (this.formData.value.endDate) {
+      this.formData.value.endDate = dayjs(this.formData.value.endDate).format('DD/MM/YYYY')
     }
-    await this.search();
+    this.search()
+  }
+
+  async search() {
+    await this.spinner.show();
+    try {
+      let body = this.formData.value
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
+      }
+      let res = await this.qlChungTuService.danhSach(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        this.totalRecord = data.totalElements;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  deleteMulti(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push({ id: item.id });
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.qlChungTuService.deleteMuti(dataDelete);
+            if (res.statusCode == 0) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
   }
 
   exportDataTC() {
@@ -132,18 +184,10 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
       try {
 
         let body = this.formData.value;
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
-        this.quyetDinhDieuChuyenTCService
+        this.qlChungTuService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
+            saveAs(blob, 'danh-sach-chung-thu-so.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -156,11 +200,85 @@ export class QuanLyChungThuSoComponent extends Base2Component implements OnInit 
     }
   }
 
-  redirectDetail(id, b: boolean) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isView = b;
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.status) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
   }
+
+  async add(row?: any) {
+    await this.spinner.show();
+
+    await this.spinner.hide();
+    const curent = this.dataTable
+    console.log('curent', curent)
+    const modalQD = this.modal.create({
+      nzTitle: row ? 'CẬP NHẬT CHỨNG THƯ SỐ' : 'THÊM MỚI CHỨNG THƯ SỐ',
+      nzContent: ThemChungThuSoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '800px',
+      nzFooter: null,
+      nzComponentParams: {
+        data: row
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (!data) return
+      if (data.startDate) data.startDate = dayjs(data.startDate).format('DD/MM/YYYY')
+      if (data.endDate) data.endDate = dayjs(data.endDate).format('DD/MM/YYYY')
+      let res = data.isUpdate ? await this.qlChungTuService.capNhat({ ...data, id: row.id }) : await this.qlChungTuService.themMoi(data);
+      if (res.statusCode == 0) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.timKiem()
+      }
+
+    });
+  }
+
+  delete(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.qlChungTuService.delete(item.id).then(async (res) => {
+            if (res.statusCode == 0) this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            console.log(res)
+            await this.timKiem();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
 
   quayLai() {
     this.showListEvent.emit();

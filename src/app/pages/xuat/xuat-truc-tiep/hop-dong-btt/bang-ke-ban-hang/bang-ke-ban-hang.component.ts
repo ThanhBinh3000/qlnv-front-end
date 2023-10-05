@@ -1,24 +1,28 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
-import { DialogThemMoiBangKeBanLeComponent } from 'src/app/components/dialog/dialog-them-moi-bang-ke-ban-le/dialog-them-moi-bang-ke-ban-le.component';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import {
+  DialogThemMoiBangKeBanLeComponent
+} from 'src/app/components/dialog/dialog-them-moi-bang-ke-ban-le/dialog-them-moi-bang-ke-ban-le.component';
+import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
+import {CHUC_NANG} from "../../../../../constants/status";
+
 @Component({
   selector: 'app-bang-ke-ban-hang',
   templateUrl: './bang-ke-ban-hang.component.html',
   styleUrls: ['./bang-ke-ban-hang.component.scss']
 })
 export class BangKeBanHangComponent extends Base2Component implements OnInit {
-  @Input()
-  loaiVthh: string;
-  dataEdit: any;
-
+  @Input() loaiVthh: string;
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: XuatTrucTiepComponent
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
 
@@ -26,12 +30,14 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
-    private donviService: DonviService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private donviService: DonviService,
     private bangKeBttService: BangKeBttService,
+    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeBttService);
+    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: [],
       soBangKe: [],
@@ -57,60 +63,61 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
       thanhTien: '',
     };
   }
-
   async ngOnInit() {
     try {
-      this.timKiem();
+      await this.spinner.show();
       await Promise.all([
+        this.timKiem(),
         this.search(),
       ]);
-      await this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+    } catch (e) {
+      console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
-  themMoiBangKeBanLe($event, data?: null, index?: number) {
-    const modalGT = this.modal.create({
-      nzContent: DialogThemMoiBangKeBanLeComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzStyle: { top: '200px' },
-      nzWidth: '1500px',
-      nzFooter: null,
-      nzComponentParams: {
-        idInput: data,
-        loaiVthh: this.loaiVthh,
-      },
-    });
-    modalGT.afterClose.subscribe((data) => {
+  async themMoiBangKeBanLe($event, isView: boolean, idInput?: number, index?: number) {
+    try {
+      const modalGT = this.modal.create({
+        nzContent: DialogThemMoiBangKeBanLeComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzStyle: { top: '200px' },
+        nzWidth: '1500px',
+        nzFooter: null,
+        nzComponentParams: {
+          idInput,
+          loaiVthh: this.loaiVthh,
+          isView,
+        },
+      });
+      const data = await modalGT.afterClose.toPromise();
+      if (data) {
+        if (index >= 0) {
+          this.dataTable[index] = data;
+        } else {
+          this.dataTable.push(data);
+        }
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
       this.search();
-      if (!data) {
-        return;
-      }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      } else {
-        this.dataTable.push(data);
-      }
-    });
-  };
+    }
+  }
 
   openModalQdNv(id: number) {
     this.idQdNv = id;
@@ -135,5 +142,4 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayBanHangTu.getTime();
   };
-
 }

@@ -62,6 +62,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       giaTriDx: [null,],
       trichYeu: [null,],
       trangThai: ['00'],
+      trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
@@ -258,15 +259,19 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   }
 
   async changDiemKho(event, type?: any) {
-    let list = this.dsDiemKho.filter(item => item.maDvi == event)
-    if (list && list.length > 0) {
-      this.dsNhaKho = list[0].children
-      if (type) {
-        type.nhaKho = null
-        type.tenDiemKho = list[0].tenDvi
-      } else {
-        this.rowItemKho.nhaKho = null
-        this.rowItemKho.tenDiemKho = list[0].tenDvi
+    if (event) {
+      const dsTong = await this.donViService.layTatCaDonViByLevel(5);
+      this.dsNhaKho = dsTong.data
+      this.dsNhaKho = this.dsNhaKho.filter(item => item.maDvi.startsWith(event) && item.type != 'PB')
+      let list = this.dsDiemKho.filter(item => item.maDvi == event)
+      if (list && list.length > 0) {
+        if (type) {
+          type.nhaKho = null
+          type.tenDiemKho = list[0].tenDvi
+        } else {
+          this.rowItemKho.nhaKho = null
+          this.rowItemKho.tenDiemKho = list[0].tenDvi
+        }
       }
     }
   }

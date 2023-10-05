@@ -100,7 +100,7 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
       body.fileName = "bc_kh_luan_phien_doi_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo KH luân phiên đổi hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhLuanPhienDoiHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.keHoachLuanPhienDoiHang(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bc_kh_luan_phien_doi_hang_dtqg.xlsx");
@@ -134,7 +134,7 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
       body.fileName = "bc_kh_luan_phien_doi_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo KH luân phiên đổi hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhLuanPhienDoiHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.keHoachLuanPhienDoiHang(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

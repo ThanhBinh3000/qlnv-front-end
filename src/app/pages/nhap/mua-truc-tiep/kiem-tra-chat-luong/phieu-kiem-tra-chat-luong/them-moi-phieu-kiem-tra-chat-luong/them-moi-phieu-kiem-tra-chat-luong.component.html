@@ -4,13 +4,18 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button
+      type="button" class="btn btn-sub do" (click)="preview(previewName)">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      <span>Xem trước</span>
+    </button>
     <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
+            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_THEM') "
             (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
+    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_LDCC')"
             (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
@@ -22,7 +27,7 @@
       <span>Duyệt</span>
     </button>
     <button class="btn btn-sub xanh"
-            *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
+            *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_THEM') "
             (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -47,7 +52,7 @@
 
   <nz-card class="mt16 flex-card p-lr16">
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
           <div nz-row [nzGutter]="20">
             <div nz-col nzSpan="3">
@@ -106,7 +111,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayTao">
+                    <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" formControlName="ngayTao">
                     </nz-date-picker>
                   </nz-input-group>
                 </nz-form-control>
@@ -187,7 +192,7 @@
             <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngày quyết định
+                  Ngày hợp đồng
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
@@ -464,7 +469,7 @@
     </nz-collapse>
     <nz-collapse nzAccordion>
       <nz-collapse-panel
-        [nzHeader]="'Kết quả đánh giá cảm quan: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)'"
+        [nzHeader]="'KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)'"
         [nzActive]="true">
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[18, 6]">
@@ -485,7 +490,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Kết quả phân tích chỉ tiêu chất lượng'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'KẾT QUẢ PHÂN TÍCH CHỈ TIÊU CHẤT LƯỢNG'" [nzActive]="true">
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
           <nz-table class="pd-10" #basicTable class="nowrap" [nzFrontPagination]="false"
                     [nzShowPagination]="false" [nzData]="dataTableChiTieu">
@@ -542,7 +547,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Nhận xét kết luận'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'NHẬN XÉT KẾT LUẬN'" [nzActive]="true">
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[20]">
             <div nz-col nzSpan="24">
@@ -598,3 +603,30 @@
   </nz-card> -->
   <!--   END KQ ĐG -->
 </div>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="PHIẾU KIỂM TRA CHẤT LƯỢNG" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

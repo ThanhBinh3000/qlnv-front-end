@@ -14,6 +14,11 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
+        <button
+          type="button" class="btn btn-sub do ml-2" (click)="preview()" *ngIf="idInput > 0 && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG04')">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Xem trước</span>
+        </button>
         <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV)
     && ((userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_DEXUAT_THEM') && type == typeConst.GIA_MUA_TOI_DA )
      || (userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT_THEM') && type == typeConst.GIA_CU_THE )
@@ -203,7 +208,7 @@
             <th class="text-center"  *ngIf="type=='GCT'">{{formData.value.loaiGia == 'LG03' ? 'Đơn giá tối đa của BTC chưa VAT (đồng)' : 'Đơn giá tối thiểu của BTC chưa VAT (đồng)'}}</th>
             <th class="text-center"
                 *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03')">Đơn giá
-              tối đa của BTC có VAT(đồng)
+              tối đa của BTC có VAT (đồng)
             </th>
             <th class="text-center" >Đơn giá đề nghị chưa VAT (đồng)</th>
             <th class="text-center"
@@ -247,9 +252,9 @@
             <td *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03')">
               {{rowItemTtc.vat}}
             </td>
-            <td *ngIf="type=='GCT'" class="text-right">{{rowItemTtc.giaQdBtc | number : '1.0-1'}}</td>
+            <td *ngIf="type=='GCT'" class="text-right">{{rowItemTtc.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
             <td *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')"  class="text-right">
-              {{rowItemTtc.giaQdBtcVat | number : '1.0-1'}}
+              {{rowItemTtc.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}
             </td>
             <td>
               <nz-input-group>
@@ -278,11 +283,11 @@
               <td>{{ data.tenLoaiVthh }}</td>
               <td>{{ data.tenCloaiVthh }}</td>
               <td>{{ data.tchuanCluong }}</td>
-              <td class="text-right">{{ data.soLuong | number : '1.0-1' }}</td>
+              <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{ data.donViTinh }}</td>
               <td class="text-right" *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{ data.vat * 100 + '%' }}</td>
-              <td class="text-right" *ngIf="type=='GCT'">{{data.giaQdBtc | number : '1.0-1'}}</td>
-              <td  class="text-right"*ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{data.giaQdBtcVat | number : '1.0-1'}}</td>
+              <td class="text-right" *ngIf="type=='GCT'">{{data.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
+              <td  class="text-right"*ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{data.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right">{{ data.giaDn | number : '1.0-1'  }}</td>
               <td class="text-right"
                 *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{ data.vat ? (data.giaDn + data.giaDn * data.vat | number : '1.0-1' : 'vi-VN') : 0   }}</td>
@@ -644,6 +649,32 @@
   <nz-card class="mt16 flex-card p-lr16">
   </nz-card>
 </div>
+
+<nz-modal id="modal" [(nzVisible)]="showDlgPreview" nzTitle="ĐỀ XUẤT PHƯƠNG ÁN GIÁ" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px; margin-top: 20px"></pdf-viewer>
+  </div>
+  <div *nzModalFooter >
+    <button nz-button (click)="downloadPdf()"
+            class="modal__button--save ml-2">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord()" class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button type="button" class="btn btn-main ml-2" (click)="doPrint()">
+      <i nz-icon nzType="printer" nzTheme="outline"></i>
+      <span>In</span>
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel ml-2" >
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}

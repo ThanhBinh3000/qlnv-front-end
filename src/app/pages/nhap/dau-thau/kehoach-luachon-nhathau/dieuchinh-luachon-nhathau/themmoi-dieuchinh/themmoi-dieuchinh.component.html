@@ -4,16 +4,29 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ) && userService.isTongCuc()"
-                class="btn btn-sub xanh-nhat" (click)="save(true)">
-            <i [class]="'icon htvbdh_chuyenvanthu'"></i>
-            <span>Ban hành</span>
-        </button>
-        <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ) && userService.isTongCuc()"
-                class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
-            <i class="icon htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
-        </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
+        type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Lưu và gửi duyệt</span>
+      </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU')"
+        class="btn btn-sub do" (click)="tuChoi()">
+        <i [class]="'icon htvbdh_chuyenvanthu'"></i>
+        <span>Từ chối</span>
+      </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU')"
+        class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
+        <i [class]="'icon htvbdh_chuyenvanthu'"></i>
+        <span>Duyệt</span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
+              class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
     </div>
 </nz-affix>
 <div class="bg-trang">
@@ -47,7 +60,7 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzRequired> Số quyết định điều chỉnh KH LCNT
+                        <nz-form-label [nzNoColon]="true" nzRequired> Số công văn/tờ trình
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfter="{{maQd}}">
@@ -61,7 +74,7 @@
                 </div>
                 <div nz-col nzSpan="3">
                     <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzRequired> Ngày quyết định </nz-form-label>
+                        <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo công văn/tờ trình </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"
                                             [nzDisabled]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC">
@@ -91,7 +104,7 @@
                 </div>
                 <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định gốc </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định cần điều chỉnh </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdGoc()">
                                 <input [readonly]="true" nz-input formControlName="soQdGoc" readonly />
@@ -101,7 +114,7 @@
                 </div>
                 <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký QĐ gốc </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký QĐ cần điều chỉnh </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                                 <nz-date-picker formControlName="ngayQdGoc" nzDisabled nzFormat="dd/MM/yyyy">
@@ -250,8 +263,8 @@
                 <td>{{ data.soGthau }}</td>
                 <td>{{ data.soDxuat }}</td>
                 <td>{{ data.ngayDxuat | date: 'dd/MM/YYYY' }}</td>
-                <td>{{ data.soLuong | number: '1.0-1' }}</td>
-                <td>{{ data.tongTien | number: '1.0-1' }}</td>
+                <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN'}}</td>
             </tr>
             </tbody>
         </nz-table>
@@ -445,8 +458,8 @@
                         <td>{{ data.soGthau }}</td>
                         <td>{{ data.soDxuat }}</td>
                         <td>{{ data.ngayDxuat | date: 'dd/MM/YYYY' }}</td>
-                        <td>{{ data.soLuong | number: '1.0-1' }}</td>
-                        <td>{{ data.tongTien | number: '1.0-1' }}</td>
+                        <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN'}}</td>
                         <td class="text-center">
                             <a (click)="openDialogDeXuat(i)">
                                 <i class="fa fa-pencil" title="Sửa"></i>

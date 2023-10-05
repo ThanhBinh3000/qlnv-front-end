@@ -19,6 +19,7 @@ import { FormGroup } from "@angular/forms";
 import * as dayjs from "dayjs";
 import { NzCollapsePanelComponent } from "ng-zorro-antd/collapse";
 import {formatDate} from "@angular/common";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-thongtin-dexuat-vt',
@@ -43,6 +44,19 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
   listOfDataCache: any[] = [];
   dataChiTieu: any;
   formData: FormGroup
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -91,7 +105,7 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
       gtriDthau: [null],
       gtriHdong: [null],
       donGiaVat: [],
-      vat: ["5"],
+      thueVat: [],
       tgianNhang: [null],
       tgianThien: [null],
       tgianThienHd: [null],
@@ -183,7 +197,7 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll("LOAI_HDONG");
+    let resHd = await this.danhMucService.danhMucChungGetAll("HINH_THUC_HOP_DONG");
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -213,7 +227,7 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
   themMoiGoiThau($event: any, data?: DanhSachGoiThau, index?: number) {
     $event.stopPropagation();
     if (this.formData.get("loaiVthh").value == null) {
-      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
+      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng DTQG");
       return;
     }
     let listGoiThau = [];

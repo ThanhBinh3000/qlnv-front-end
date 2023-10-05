@@ -88,7 +88,10 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.tgianMkhoChange = this.dataInput.tgianMkho
         this.tgianKthucChange = this.dataInput.tgianKthuc
-        console.log(this.dataInput.children)
+        this.formData.patchValue({
+          tongMucDt: this.dataInput.tongSoLuong * this.dataInput.donGiaVat * 1000
+        })
+        console.log(this.dataInput.children, "123")
         this.dataTable = this.dataInput.children
         this.calculatorTable();
       } else {
@@ -120,7 +123,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzTitle: 'THÊM ĐỊA ĐIỂM NHẬP KHO',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -132,21 +135,37 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         dataChiTieu: this.dataChiTieu,
         namKh: this.formData.get('namKh').value,
         loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
         donGiaVat: this.formData.value.donGiaVat,
         maDviCuc: this.formData.value.maDvi
       },
     });
+    // modalGT.afterClose.subscribe((data) => {
+    //   if (!data) {
+    //     return;
+    //   }
+    //   const existingIndex = this.dataTable.findIndex(item => item.maDvi === data.maDvi);
+    //   if (existingIndex !== -1) {
+    //     this.dataTable[existingIndex] = { ...data, children: this.dataTable[existingIndex].children };
+    //   } else {
+    //     this.dataTable.push(data);
+    //   }
+    //   this.emitDataTable();
+    //   this.calculatorTable();
+    // });
     modalGT.afterClose.subscribe((data) => {
       if (!data) {
         return;
       }
-      const existingIndex = this.dataTable.findIndex(item => item.maDvi === data.maDvi);
-      if (existingIndex !== -1) {
-        this.dataTable[existingIndex] = { ...data, children: this.dataTable[existingIndex].children };
+      if (index >= 0) {
+        this.dataTable[index] = data;
       } else {
+        // if (!this.validateAddDiaDiem(data)) {
+        //   return
+        // }
+        console.log(data, "popup")
         this.dataTable.push(data);
       }
-      this.emitDataTable();
       this.calculatorTable();
     });
   }

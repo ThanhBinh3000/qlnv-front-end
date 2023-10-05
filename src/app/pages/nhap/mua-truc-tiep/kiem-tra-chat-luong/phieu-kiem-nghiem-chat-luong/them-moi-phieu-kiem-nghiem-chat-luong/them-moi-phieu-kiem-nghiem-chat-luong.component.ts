@@ -74,6 +74,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   isChiTiet: boolean = false;
   listTieuChuan: any[] = [];
   isValid = false;
+  previewName: string = 'ntt_phieu_kiem_nghiem_chat_luong';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -146,7 +147,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       console.log(this.isView)
       await Promise.all([
         this.loadBbLayMau(),
-        this.loadDanhMucPhuongThucBaoQuan(),
+        // this.loadDanhMucPhuongThucBaoQuan(),
         this.loadTieuChuan(),
         this.loadSoQuyetDinh()
       ]);
@@ -259,13 +260,13 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       tenCloaiVthh: data.tenCloaiVthh,
       soLuongNhapDayKho: data.soLuong,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     console.log(dataChiCuc)
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
+      let nganLoKho = this.listDiaDiemNhap.find(x => x.id == this.idDiemKho)
+      await this.bindingDDiem(nganLoKho);
     }
-    let nganLoKho = this.listDiaDiemNhap.find(x => x.id == this.idDiemKho)
-    await this.bindingDDiem(nganLoKho);
     await this.loadPhuongPhapLayMau();
     await this.loadChiTieuCl();
     await this.spinner.hide();

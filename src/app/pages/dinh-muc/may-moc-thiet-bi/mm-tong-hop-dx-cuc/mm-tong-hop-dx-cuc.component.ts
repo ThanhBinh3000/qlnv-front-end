@@ -8,6 +8,10 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
+import {
+  TimKiemVanBanComponent
+} from "../../../khkn-bao-quan/quan-ly-quy-chuan-ky-thuat-quoc-gia/thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia/tim-kiem-van-ban/tim-kiem-van-ban.component";
+import {MmDialogThongBaoTuChoiComponent} from "./mm-dialog-thong-bao-tu-choi/mm-dialog-thong-bao-tu-choi.component";
 @Component({
   selector: 'app-mm-tong-hop-dx-cuc',
   templateUrl: './mm-tong-hop-dx-cuc.component.html',
@@ -120,4 +124,22 @@ export class MmTongHopDxCucComponent extends Base2Component implements OnInit {
     }
   }
 
+  openDialogThongBao(idHdr: number) {
+    const modalQD = this.modal.create({
+      nzTitle: '',
+      nzContent: MmDialogThongBaoTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        idHdr : idHdr
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.filter();
+      }
+  })
+  }
 }

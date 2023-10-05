@@ -1,32 +1,32 @@
-import {cloneDeep} from 'lodash';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, Validators} from '@angular/forms';
+import { cloneDeep } from 'lodash';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {BienBanChuanBiKho, ChiTietBienBanChuanBiKho} from 'src/app/models/BienBanChuanBiKho';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DonviService} from 'src/app/services/donvi.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { BienBanChuanBiKho, ChiTietBienBanChuanBiKho } from 'src/app/models/BienBanChuanBiKho';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
 import {
   QuanLyBienBanChuanBiKhoService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
 import {
   QuyetDinhGiaoNhapHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import {
   QuanLyPhieuKiemTraChatLuongHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 import * as uuidv4 from "uuid";
 import {
   DialogThemMoiDmNhomHangComponent
@@ -75,7 +75,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   dsHangPD = []
   typeData: string;
   typeAction: string;
-
+  previewName: string = 'nk_bb_cb_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -105,16 +105,16 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         idDdiemGiaoNvNh: [, [Validators.required]],
         soLuongDdiemGiaoNvNh: [''],
         maDiemKho: ['', [Validators.required]],
-        tenDiemKho: ['', [Validators.required]],
+        tenDiemKho: [''],
         maNhaKho: ['', [Validators.required]],
-        tenNhaKho: ['', [Validators.required]],
+        tenNhaKho: [''],
         maNganKho: ['', [Validators.required]],
-        tenNganKho: ['', [Validators.required]],
+        tenNganKho: [''],
         maLoKho: [''],
         tenLoKho: [''],
 
         loaiVthh: ['', [Validators.required]],
-        tenLoaiVthh: ['', [Validators.required]],
+        tenLoaiVthh: [''],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
 
@@ -190,7 +190,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh'],
       },
     })
@@ -646,7 +646,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   calcTongCong(): string {
     const tong = this.dsChiTietChuanBiKhoClone.length > 0 ?
       this.dsChiTietChuanBiKhoClone.reduce((total, currentValue) =>
-          total + currentValue.thanhTienTrongNam
+        total + currentValue.thanhTienTrongNam
         , 0) : 0
     this.formData.patchValue({
       tongSo: tong

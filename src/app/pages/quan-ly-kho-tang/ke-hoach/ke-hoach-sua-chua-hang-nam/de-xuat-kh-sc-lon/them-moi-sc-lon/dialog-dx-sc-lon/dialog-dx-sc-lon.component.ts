@@ -24,6 +24,7 @@ export class DialogDxScLonComponent implements OnInit {
   @Input() sum: number;
   @Input() dataTable: any;
   @Input() page: string;
+  @Input()isQd: boolean = false;
   item: KhSuaChuaLonDtl = new KhSuaChuaLonDtl();
   listDmScLon: any[] = [];
   listLoaiDuAn: any[] = [];
@@ -62,6 +63,10 @@ export class DialogDxScLonComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục dự án");
       this.spinner.hide();
       return;
+    }
+    let nguonVon = this.listNguonVon.find(data => data.ma == this.item.nguonVon);
+    if (nguonVon) {
+      this.item.tenNguonVon = nguonVon.giaTri;
     }
     this._modalRef.close(this.item);
     this.item = new KhSuaChuaLonDtl();
@@ -102,7 +107,6 @@ export class DialogDxScLonComponent implements OnInit {
 
   async getAllDmKho() {
     let body = {
-      "namKh": dayjs().get("year"),
       "maDvi" : this.userService.isCuc() ? this.userInfo.MA_DVI  :null,
       "paggingReq": {
         limit: 999999,
@@ -113,8 +117,8 @@ export class DialogDxScLonComponent implements OnInit {
     let res = await this.dmSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmScLon = res.data.content;
-      if (this.type == 'them' && this.listDmScLon && this.listDmScLon.length > 0) {
-        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 5000000000 : item.tmdt <= 5000000000));
+      if (this.type == 'them' && this.listDmScLon && this.listDmScLon.length > 0 && !this.isQd) {
+        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000));
       }
     }
   }
@@ -137,6 +141,7 @@ export class DialogDxScLonComponent implements OnInit {
       this.item.soQdPheDuyet = this.dataInput.soQdPheDuyet;
       this.item.ngayQdPd = this.dataInput.ngayQdPd;
       this.item.giaTriPd = this.dataInput.giaTriPd;
+      this.item.luyKeVon = this.dataInput.luyKeVon;
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0;
       this.item.tieuChuan = this.dataInput.tieuChuan;
       this.item.lyDo = this.dataInput.lyDo;
@@ -200,6 +205,7 @@ export class KhSuaChuaLonDtl {
   tgHoanThanh: number;
 
   nguonVon: string;
+  tenNguonVon: string;
 
   tgSuaChua: number;
 

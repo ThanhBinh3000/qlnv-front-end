@@ -13,7 +13,7 @@
       <button *ngIf="idInput && formData.value.trangThai == STATUS.DU_THAO " type="button" (click)="delete(formData.value)"
               class="btn btn-sub btn-xoa">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-        <span>Xóa {{idInput}}</span>
+        <span>Xóa</span>
       </button>
       <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO) ">
@@ -369,7 +369,7 @@
       </nz-collapse>
     </form>
     <nz-collapse>
-      <nz-collapse-panel nzActive="true" nzHeader="KHỐI LƯỢNG CÔNG VIỆC">
+      <nz-collapse-panel nzActive="true" nzHeader="GIÁ TRỊ HỢP ĐỒNG VÀ PHƯƠNG THỨC THANH TOÁN">
         <form nz-form nzLayout="vertical" [formGroup]="formData">
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="4">
@@ -482,9 +482,9 @@
               <td>{{i + 1}} </td>
               <td>{{data.tenCongViec }}</td>
               <td>{{data.donViTinh }}</td>
-              <td class="text-right">{{data.khoiLuong  | number}}</td>
-              <td class="text-right">{{data.donGia  | number}}</td>
-              <td class="text-right">{{data.thanhTien  | number}}</td>
+              <td class="text-right">{{data.khoiLuong  | number : '1.0-1' : 'vi-VN'}}</td>
+              <td class="text-right">{{data.donGia  | number : '1.0-1' : 'vi-VN'}}</td>
+              <td class="text-right">{{data.thanhTien  | number : '1.0-1' : 'vi-VN'}}</td>
               <td>{{data.ghiChu}}</td>
               <td class="text-center" *ngIf="!isViewDetail">
                 <a  (click)="editDataKlCongViec(i)">

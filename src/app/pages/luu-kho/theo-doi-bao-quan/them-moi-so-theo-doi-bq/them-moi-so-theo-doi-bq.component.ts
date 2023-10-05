@@ -5,14 +5,11 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {Globals} from "../../../../shared/globals";
-import {HelperService} from "../../../../services/helper.service";
 import {STATUS} from "../../../../constants/status";
 import dayjs from "dayjs";
 import {UserLogin} from "../../../../models/userlogin";
 import {MESSAGE} from "../../../../constants/message";
 import {DANH_MUC_LEVEL} from "../../luu-kho.constant";
-import {saveAs} from 'file-saver';
 import {DonviService} from "../../../../services/donvi.service";
 import {TheoDoiBqService} from "../../../../services/luu-kho/theo-doi-bq.service";
 import {DialogTuChoiComponent} from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
@@ -46,7 +43,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   listPhuongThucBaoQuan : any[] = []
   listHinhThucBaoQuan : any[] = []
   monthFormat = 'MM/yyyy'
-  monthSelect = new Date();
+  monthSelect = new Date().getDate() >= 25 ? new Date(new Date().getFullYear(),new Date().getMonth()+1,new Date().getDate()) : new Date();
 
   constructor(
     httpClient: HttpClient,
@@ -256,7 +253,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO;
+    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC ;
   }
 
   save(isGuiDuyet?) {
@@ -279,6 +276,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   pheDuyet() {
     let trangThai
     switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_KT :
+      case STATUS.TU_CHOI_LDCC :
       case STATUS.DU_THAO :
         trangThai = STATUS.CHO_DUYET_KT;
         break;
@@ -306,7 +305,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   }
 
   disabled() {
-    return this.formData.value.trangThai != STATUS.DU_THAO;
+    return this.formData.value.trangThai != STATUS.DU_THAO && this.formData.value.trangThai != STATUS.TU_CHOI_KT && this.formData.value.trangThai != STATUS.TU_CHOI_LDCC;
   }
 
   isShowEditDelete(item) {
@@ -317,7 +316,6 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
     let trangThai = this.formData.value.trangThai;
     return trangThai == STATUS.CHO_DUYET_KT || trangThai == STATUS.CHO_DUYET_LDCC;
   }
-
   addRow() {
 
   }

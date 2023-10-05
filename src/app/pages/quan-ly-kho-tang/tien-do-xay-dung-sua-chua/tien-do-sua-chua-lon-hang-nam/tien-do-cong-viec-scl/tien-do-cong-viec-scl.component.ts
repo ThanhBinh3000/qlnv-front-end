@@ -11,13 +11,14 @@ import {v4 as uuidv4} from "uuid";
 import {AMOUNT_NO_DECIMAL} from "../../../../../Utility/utils";
 import {STATUS} from "../../../../../constants/status";
 import {Base2Component} from "../../../../../components/base2/base2.component";
+import {TienDoXayDungCt} from "../../tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component";
 import {
   ThongTinTienDoCongViecSclComponent
 } from "./thong-tin-tien-do-cong-viec-scl/thong-tin-tien-do-cong-viec-scl.component";
-import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
 import {
   TienDoCongViecTdscService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/tien-do-cong-viec.service";
+import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
 
 @Component({
   selector: 'app-tien-do-cong-viec-scl',
@@ -26,8 +27,8 @@ import {
 })
 export class TienDoCongViecSclComponent extends Base2Component implements OnInit {
   @Input() itemQdPdKhLcnt: any;
-  @Input() itemQdPdDaDtxd: any;
-  @Input() itemQdPdTktcTdt: any;
+  @Input() itemQdPdKtkt: any;
+  @Input() itemDuAn: any;
   listHopDong: any[] = [];
   dataTable: any[] = [];
   dataTableReq: any[] = [];
@@ -36,13 +37,8 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   AMOUNT = AMOUNT_NO_DECIMAL;
   STATUS = STATUS;
   rowItemCha: TienDoXayDungCt = new TienDoXayDungCt();
-  listTrangThai: any[] = [
-    {ma: 'Quý I', giaTri: 'Quý I'},
-    {ma: 'Quý II', giaTri: 'Quý II'},
-    {ma: 'Quý III', giaTri: 'Quý III'},
-    {ma: 'Quý IV', giaTri: 'Quý IV'},
-  ];
-
+  itemHopDong : any;
+  listThang: any[] = [];
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -62,7 +58,18 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   }
 
   ngOnInit(): void {
+    this.loadDsThang()
     this.loadItemDsGoiThau();
+  }
+
+  loadDsThang() {
+    for (let i = 1; i <= 12; i++) {
+      let item = {
+        ma: 'Tháng ' + i,
+        giaTri: 'Tháng ' + i
+      }
+      this.listThang = [...this.listThang, item].flat();
+    }
   }
 
 
@@ -71,17 +78,18 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
       let body = {
         "namKh": this.itemQdPdKhLcnt.namKh,
         "idDuAn": this.itemQdPdKhLcnt.idDuAn,
-        "idQdPdDaDtxd": this.itemQdPdKhLcnt.idQdPdDaDtxd,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
+        "idQdPdKtkt": this.itemQdPdKtkt.id,
+        "loai": "00"
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          let listGoiThau = res.data.listKtTdxdQuyetDinhPdKhlcntCvKh;
+          let listGoiThau = res.data.listKtTdscQuyetDinhPdKhlcntCvKh;
           if (listGoiThau && listGoiThau.length > 0) {
             listGoiThau.forEach(item => item.chuDauTu = res.data.chuDauTu);
           }
-          this.listHopDong = listGoiThau;
+          this.listHopDong = listGoiThau.filter(item => item.hopDong && item.hopDong.soHd);
           if (this.listHopDong && this.listHopDong.length > 0) {
             this.selectRow(this.listHopDong[0]);
           }
@@ -97,6 +105,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
 
   async selectRow(data) {
     if (data) {
+      this.itemHopDong = data;
       this.listHopDong.forEach(item => item.selected = false);
       data.selected = true;
       this.loadCtCvHopDong(data.hopDong?.id);
@@ -111,7 +120,8 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          this.dataKlcv = data.listKtTdxdHopDongKlcv && data.listKtTdxdHopDongKlcv.length > 0 ? data.listKtTdxdHopDongKlcv : [];
+          this.dataKlcv = data.listKtTdscHopDongKlcv && data.listKtTdscHopDongKlcv.length > 0 ? data.listKtTdscHopDongKlcv : [];
+          console.log(this.dataKlcv,3333)
           this.expandAll();
         }
       } else {
@@ -150,12 +160,12 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   }
 
   themItemcha() {
-    if (!this.rowItemCha.quy) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn quý");
+    if (!this.rowItemCha.thang) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn tháng");
       return;
     }
     if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
-      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng quý");
+      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng tháng");
       return;
     }
     this.rowItemCha.idVirtual = uuidv4();
@@ -196,7 +206,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.quy == item.quy) {
+        if (it.thang == item.thang) {
           rs = true;
           return;
         }
@@ -268,8 +278,8 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   }
 
   convertListToTree() {
-    this.dataTable = chain(this.dataTableReq).groupBy("quy")
-      .map((value, key) => ({ quy: key, dataChild: value, idVirtual : uuidv4() }))
+    this.dataTable = chain(this.dataTableReq).groupBy("thang")
+      .map((value, key) => ({ thang: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
   }
 
@@ -349,7 +359,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
           let itemGoiThau = this.listHopDong.filter(item => item.selected == true)
           let body = {
             idGoiThau: itemGoiThau[0]?.id,
-            listKtTdxdTiendoCongviec: this.dataTableReq
+            listKtTdscTiendoCongviec: this.dataTableReq
           };
           let res = await this.tienDoCongViecService.create(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -373,21 +383,4 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
       });
     }
   }
-}
-
-export class TienDoXayDungCt {
-  donViTinh: string;
-  ghiChu: string;
-  giaBoSung: number = 0;
-  giaTheoHd: number = 0;
-  id: number;
-  klLuyKe: number = 0;
-  klPhatSinh: number = 0;
-  klTheoHd: number = 0;
-  ktGoiThauId: number = 0;
-  namKh: number = 0;
-  quy: string;
-  tenCongViec: string;
-  idVirtual : any;
-  loai : string;
 }

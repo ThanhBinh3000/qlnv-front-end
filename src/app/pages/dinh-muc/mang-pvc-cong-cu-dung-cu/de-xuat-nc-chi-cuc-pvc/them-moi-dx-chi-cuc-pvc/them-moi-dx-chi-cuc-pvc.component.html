@@ -6,7 +6,7 @@
           [ngClass]="formData.value.trangThai == STATUS.DA_KY || formData.value.trangThai == STATUS.DADUYET_CB_CUC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span class="text-uppercase">ĐỀ XUẤT NHU CẦU TRANG BỊ MÀNG PVC VÀ CÔNG CỤ DỤNG CỤ PHỤC VỤ BẢO QUẢN</span>
+        <span class="text-uppercase">ĐỀ XUẤT NHU CẦU TRANG BỊ MÀNG PVC VÀ CÔNG CỤ, DỤNG CỤ PHỤC VỤ BẢO QUẢN</span>
       </div>
     </div>
     <div class="btn-group">
@@ -115,10 +115,10 @@
       <th nzWidth="150px">Tên CCDC</th>
       <th>Mô tả</th>
       <th nzWidth="120px">Đơn vị tính</th>
-      <th nzWidth="100px">Số lượng hiện có(1)</th>
-      <th nzWidth="100px">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }}(2)</th>
-      <th nzWidth="100px">Tổng cộng(3=1+2)</th>
-      <th nzWidth="100px">SL theo tiêu chuẩn <br> định mức(4)</th>
+      <th nzWidth="100px">Số lượng hiện có (1)</th>
+      <th nzWidth="100px">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }} (2)</th>
+      <th nzWidth="100px">Tổng cộng (3=1+2)</th>
+      <th nzWidth="100px">SL theo tiêu chuẩn <br> định mức (4)</th>
       <th nzWidth="200px">Nhu cầu trang bị (5)=4-3</th>
       <th nzWidth="200px">Ghi chú</th>
       <th nzWidth="140px" *ngIf="!isView">Hành động</th>
@@ -155,7 +155,7 @@
       </th>
       <th>
         <input class="money-input" currencyMask [options]="amount" [min]="0"
-               [(ngModel)]="rowItem.slTieuChuan"
+               [(ngModel)]="rowItem.slTieuChuan" (ngModelChange)="changeSlTieuChuan($event)"
         />
         <!--        <nz-input-number [(ngModel)]="rowItem.slTieuChuan" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
         <!--                          [nzMin]="0"-->

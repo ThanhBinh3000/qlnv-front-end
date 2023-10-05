@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {ActivatedRoute, Router} from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { ActivatedRoute, Router } from "@angular/router";
 import dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {Base3Component} from "../../../../../components/base3/base3.component";
-import {TongHopScService} from "../../../../../services/sua-chua/tongHopSc.service";
-import {LOAI_HANG_DTQG} from "../../../../../constants/config";
-import {TheoDoiBqService} from "../../../../../services/luu-kho/theo-doi-bq.service";
-import {TheoDoiBqDtlService} from "../../../../../services/luu-kho/theoDoiBqDtl.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {MESSAGE} from "../../../../../constants/message";
+import { Validators } from "@angular/forms";
+import { Base3Component } from "../../../../../components/base3/base3.component";
+import { TongHopScService } from "../../../../../services/sua-chua/tongHopSc.service";
+import { LOAI_HANG_DTQG } from "../../../../../constants/config";
+import { TheoDoiBqService } from "../../../../../services/luu-kho/theo-doi-bq.service";
+import { TheoDoiBqDtlService } from "../../../../../services/luu-kho/theoDoiBqDtl.service";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { MESSAGE } from "../../../../../constants/message";
 
 @Component({
   selector: 'app-them-moi-ctiet-tdbq',
@@ -22,15 +22,15 @@ import {MESSAGE} from "../../../../../constants/message";
 })
 export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit {
 
-  rowItem : ChiSoChatLuong = new ChiSoChatLuong();
-  listBpxl : any[] = [];
+  rowItem: ChiSoChatLuong = new ChiSoChatLuong();
+  listBpxl: any[] = [];
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  dataHdr : any;
-  isXacNhan : boolean = false;
-  dataTk : any;
-  dataKtv : any;
-  dataLdcc : any;
-  thoiGianConLaiBh : any;
+  dataHdr: any;
+  isXacNhan: boolean = false;
+  dataTk: any;
+  dataKtv: any;
+  dataLdcc: any;
+  thoiGianConLaiBh: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -40,98 +40,98 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
     route: ActivatedRoute,
     router: Router,
     private theoDoiBqDtlService: TheoDoiBqDtlService,
-    private danhMucService : DanhMucService,
+    private danhMucService: DanhMucService,
     private _modalRef: NzModalRef,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, theoDoiBqDtlService);
     this.formData = this.fb.group({
-      id : [null,],
-      idHdr : [null,[Validators.required]],
-      idNguoiKtra : [null],
-      tenNguoiKtra : [null,[Validators.required]],
-      ngayKtra : [null,[Validators.required]],
-      loaiVthh : [null,[Validators.required]],
-      tenLoaiVthh : [null,[Validators.required]],
-      cloaiVthh : [null,[Validators.required]],
-      tenCloaiVthh : [null,[Validators.required]],
-      dviTinh : [null,[Validators.required]],
-      vaiTro : [null,[Validators.required]],
-      tenVaiTro : [null,[Validators.required]],
-      nguyenNhan : [null],
-      dienBien : [null],
-      bienPhapXl : [null],
-      soLuongXl : [null,[Validators.required]],
-      moTa : [null],
-      idDataTk : [],
-      idDataKtv : [],
-      idDataLdcc : [],
-      trangThai : [],
+      id: [null,],
+      idHdr: [null, [Validators.required]],
+      idNguoiKtra: [null],
+      tenNguoiKtra: [null, [Validators.required]],
+      ngayKtra: [null, [Validators.required]],
+      loaiVthh: [null, [Validators.required]],
+      tenLoaiVthh: [null, [Validators.required]],
+      cloaiVthh: [null, ],
+      tenCloaiVthh: [null,],
+      dviTinh: [null, [Validators.required]],
+      vaiTro: [null, [Validators.required]],
+      tenVaiTro: [null, [Validators.required]],
+      nguyenNhan: [null],
+      dienBien: [null],
+      bienPhapXl: [null],
+      soLuongXl: [null, [Validators.required]],
+      moTa: [null],
+      idDataTk: [],
+      idDataKtv: [],
+      idDataLdcc: [],
+      trangThai: [],
     })
   }
 
 
   async ngOnInit() {
-    if(this.id){
-      await this.detail(this.id).then((res)=>{
+    if (this.id) {
+      await this.detail(this.id).then((res) => {
         for (const property in this.rowItem) {
           this.rowItem[property] = res[property];
         }
       });
-    }else{
+    } else {
       this.formData.patchValue({
-        tenNguoiKtra : this.userInfo.TEN_DAY_DU,
-        ngayKtra : dayjs().format('YYYY-MM-DD'),
-        loaiVthh : this.dataHdr.loaiVthh,
-        tenLoaiVthh : this.dataHdr.tenLoaiVthh,
-        cloaiVthh : this.dataHdr.cloaiVthh,
-        tenCloaiVthh : this.dataHdr.tenCloaiVthh,
-        dviTinh : this.dataHdr.dviTinh,
-        idHdr : this.dataHdr.id,
-        vaiTro : this.userInfo.POSITION,
-        tenVaiTro : this.userInfo.POSITION_NAME,
-        idDataTk : this.dataTk?.id,
-        idDataKtv : this.dataKtv?.id,
-        idDataLdcc : this.dataLdcc?.id,
+        tenNguoiKtra: this.userInfo.TEN_DAY_DU,
+        ngayKtra: dayjs().format('YYYY-MM-DD'),
+        loaiVthh: this.dataHdr.loaiVthh,
+        tenLoaiVthh: this.dataHdr.tenLoaiVthh,
+        cloaiVthh: this.dataHdr.cloaiVthh,
+        tenCloaiVthh: this.dataHdr.tenCloaiVthh,
+        dviTinh: this.dataHdr.dviTinh,
+        idHdr: this.dataHdr.id,
+        vaiTro: this.userInfo.POSITION,
+        tenVaiTro: this.userInfo.POSITION_NAME,
+        idDataTk: this.dataTk?.id,
+        idDataKtv: this.dataKtv?.id,
+        idDataLdcc: this.dataLdcc?.id,
       })
       this.rowItem.tongSoLuong = this.dataHdr.soLuong;
     }
     this.loadDataCombobox();
   }
 
-  async loadDataCombobox(){
+  async loadDataCombobox() {
     this.listBpxl = [];
-    await this.danhMucService.danhMucChungGetAll('BIEN_PHAP_XU_LY').then((res)=>{
+    await this.danhMucService.danhMucChungGetAll('BIEN_PHAP_XU_LY').then((res) => {
       if (res.msg == MESSAGE.SUCCESS) {
         console.log(this.formData.value.loaiVthh);
-        if(this.formData.value.loaiVthh?.startsWith('02')){
+        if (this.formData.value.loaiVthh?.startsWith('02')) {
           this.listBpxl = res.data.filter(item => item.phanLoai == 'VT');
-        }else{
+        } else {
           this.listBpxl = res.data.filter(item => item.phanLoai == 'LT');
         }
       }
     });
   }
 
-  handleOk(isApprove){
+  handleOk(isApprove) {
     let body = {
       ...this.formData.value,
       ...this.rowItem
     };
-    this.createUpdate(body).then((res)=>{
-      if(res){
-        if(isApprove){
+    this.createUpdate(body).then((res) => {
+      if (res) {
+        if (isApprove) {
           this.formData.patchValue({
-            id : res.id
+            id: res.id
           })
           this.handleApprove();
-        }else{
+        } else {
           this._modalRef.close();
         }
       }
     });
   }
 
-  handleApprove(){
+  handleApprove() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -149,7 +149,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
           }
           let res = await this.theoDoiBqDtlService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.NOTIFICATION,  MESSAGE.UPDATE_SUCCESS);
+            this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
             this.spinner.hide();
             this._modalRef.close();
           } else {
@@ -171,10 +171,10 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
     this._modalRef.close();
   }
 
-  disabled():boolean{
-    if(this.formData.value.id){
-      return !(this.formData.value.ngayKtra == dayjs().format('YYYY-MM-DD') &&  this.formData.value.idNguoiKtra == this.userInfo.ID && this.formData.value.trangThai == this.STATUS.DU_THAO) ;
-    }else{
+  disabled(): boolean {
+    if (this.formData.value.id) {
+      return !(this.formData.value.ngayKtra == dayjs().format('YYYY-MM-DD') && this.formData.value.idNguoiKtra == this.userInfo.ID && this.formData.value.trangThai == this.STATUS.DU_THAO);
+    } else {
       return false
     }
   }
@@ -190,7 +190,7 @@ export class ChiSoChatLuong {
   nhietDo: number = 0;
   doAm: number = 0;
   hatVang: number = 0;
-  camQuan:string;
+  camQuan: string;
   tinhTrangNamMoc: string;
   conTrungSong: number = 0;
   // Muoi them

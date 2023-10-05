@@ -104,19 +104,19 @@
           <td></td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThai ==STATUS.DA_DUYET_LDC" (click)="redirectDetail(data.id, true)">
+            <a *ngIf="data.trangThai == STATUS.DA_DUYET_LDC" (click)="redirectDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TBP_KTBQ || data.trangThai ==STATUS.DU_THAO"
+              *ngIf="data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TBP_KTBQ || data.trangThai ==STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP"
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai ==STATUS.CHO_DUYET_LDC || data.trangThai == STATUS.CHO_DUYET_TBP_KTBQ"
+            <a *ngIf="data.trangThai ==STATUS.CHO_DUYET_LDC || data.trangThai == STATUS.CHO_DUYET_TBP_KTBQ  || data.trangThai == STATUS.CHO_DUYET_TP"
                (click)="redirectDetail(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
-            <a *ngIf="data.trangThai ==STATUS.DU_THAO || STATUS.TU_CHOI_LDC" (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

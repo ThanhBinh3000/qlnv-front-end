@@ -41,8 +41,9 @@
                         <i class="icon  htvbdh_da-xu-ly" title="Hoàn thành"></i>
                         <span>Hoàn thành</span>
                     </button>
-                    <button *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO" nz-button type="button"
-                        class="modal__button--save" (click)="save(false)">
+                    <button
+                        *ngIf="!isView && [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC].includes(formData.value.trangThai)"
+                        nz-button type="button" class="modal__button--save" (click)="save(false)">
                         <i class="icon htvbdh_tcdt_save" title="Lưu"></i>
                         <span>Lưu</span>
                     </button>
@@ -97,10 +98,10 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true"> Số báo cáo</nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Số báo cáo</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group>
-                                <input nz-input formControlName="soBc" readonly />
+                            <nz-input-group [nzAddOnAfter]="maBc">
+                                <input nz-input formControlName="soBc" [readonly]="isView" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -120,10 +121,10 @@
                 </div>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
+                        <nz-form-label nzRequired [nzNoColon]="true">
                             Tên báo cáo
                         </nz-form-label>
-                        <nz-form-control>
+                        <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                                 <input nz-input [readOnly]="isView" formControlName="tenBc" />
                             </nz-input-group>
@@ -133,10 +134,10 @@
                 <ng-container *ngIf="loaiBc==='CHI_CUC'; else loaiBcCucTemplate">
                     <div nz-col [nzSpan]="8">
                         <nz-form-item>
-                            <nz-form-label [nzNoColon]="true">
+                            <nz-form-label nzRequired [nzNoColon]="true">
                                 Số QĐ ĐC của Cục
                             </nz-form-label>
-                            <nz-form-control>
+                            <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
                                     <input nz-input formControlName="soQdDcCuc" readonly />
                                 </nz-input-group>
@@ -145,11 +146,13 @@
                     </div>
                     <div nz-col [nzSpan]="4">
                         <nz-form-item>
-                            <nz-form-label [nzNoColon]="true">
+                            <nz-form-label nzRequired [nzNoColon]="true">
                                 Ngày ký quyết định của Cục
                             </nz-form-label>
-                            <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyQd" nzDisabled>
-                            </nz-date-picker>
+                            <nz-form-control [nzErrorTip]="error">
+                                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyQd" nzDisabled>
+                                </nz-date-picker>
+                            </nz-form-control>
                         </nz-form-item>
                     </div>
                 </ng-container>
@@ -254,16 +257,16 @@
                                 <td *ngIf="i2===0 && checkLoaiBc('CUC')" [rowSpan]="item.childData.length">
                                     {{lv2.tenChiCucXuat}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenDiemKho}}</td>
-                                <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenLokho || ""}}
+                                <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenLoKho || ""}} -
                                     {{lv2.tenNganKho ||
-                                    ""}}
+                                    ""}} -
                                     {{lv2.tenNhaKho || ""}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length" class="text-right">
                                     {{lv2.slTon}}</td>
 
                                 <td>{{lv2.tenDviNhan}}</td>
                                 <td>{{lv2.tenDiemKhoNhan}}</td>
-                                <td>{{lv2.tenLokhoNhan || ""}} {{lv2.tenNganKhoNhan || ""}}
+                                <td>{{lv2.tenLoKhoNhan || ""}} - {{lv2.tenNganKhoNhan || ""}} -
                                     {{lv2.tenNhaKhoNhan || ""}}</td>
 
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length" class="text-right">
@@ -276,7 +279,7 @@
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length" class="text-right">
                                     {{lv2.kinhPhiXuatTt}}</td>
                                 <td class="text-right">{{lv2.kinhPhiNhapTt}}</td>
-                                <td>{{lv2.ketQua}}</td>
+                                <td>{{ObKetQua[lv2.ketQua]}}</td>
                                 <td style="text-align: center"><label nz-checkbox nzDisabled
                                         [ngModel]="lv2.tinhTrang"></label></td>
                             </tr>

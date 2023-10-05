@@ -341,12 +341,9 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           switch (this.formData.value.trangThai) {
             case STATUS.DU_THAO :
             case STATUS.TU_CHOI_TP :
+            case STATUS.TU_CHOI_LDC :
             case STATUS.TU_CHOI_CBV : {
               trangThai = STATUS.CHO_DUYET_TP;
-              break;
-            }
-            case STATUS.TU_CHOI_LDC : {
-              trangThai = STATUS.CHO_DUYET_LDC;
               break;
             }
           }
@@ -382,6 +379,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       this.maQd = data.soCongVan ? "/" + data.soCongVan.split("/")[1] : "",
         this.formData.patchValue({
           id: data.id,
+          maDvi: data.maDvi,
           tenDvi: data.tenDvi,
           trangThai: data.trangThai,
           trichYeu: data.trichYeu,
@@ -391,7 +389,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           ngayDuyet: data.ngayDuyet,
           namBatDau: data.namBatDau,
           namKetThuc: data.namKetThuc,
-          lyDo: data.lyDoTuChoi
+          lyDo: data.lyDoTuChoi,
+          namKeHoach: data.namKeHoach
         });
       this.listFileDinhKem = data.fileDinhKems;
       this.dataTable = data.chiTiets;

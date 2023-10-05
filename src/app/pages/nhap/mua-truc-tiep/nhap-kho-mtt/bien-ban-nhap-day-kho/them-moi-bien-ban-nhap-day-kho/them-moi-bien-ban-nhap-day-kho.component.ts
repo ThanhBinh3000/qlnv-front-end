@@ -62,6 +62,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
   bbNghiemThuBaoQuans: any[] = [];
+  previewName: string = 'ntt_bien_ban_nhap_day_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -110,7 +111,8 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       tenTrangThai: [],
       lyDoTuChoi: [],
       nguoiPduyet: [''],
-      donGiaHd: [10000],
+      donGiaHd: [''],
+      soLuong: [''],
       soPhieuNhapKho: [''],
       tenNganLoKho: [''],
       soBangKeCanHang: [''],
@@ -206,9 +208,13 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       idQdGiaoNvNh: data.id,
       soQuyetDinhNhap: data.soQd,
       soHdong: data.soHd,
-      ngayKiHdong: data.ngayKyHd,
+      ngayKiHdong: data.hopDongMttHdrs[0]?.ngayPduyet,
+      // soLuong: data.hopDongMttHdrs[0]?.soLuong,
+      donGiaHd: data.hopDongMttHdrs[0]?.donGiaGomThue,
+      thanhTien: data.hopDongMttHdrs[0]?.soLuong * data.hopDongMttHdrs[0]?.donGiaGomThue,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    console.log(dataRes, 123)
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
@@ -237,52 +243,34 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   }
 
   bindingDataDdNhap(data, isDetail?: boolean) {
-    if (!isDetail) {
-      this.dataTable = data.listPhieuKtraCl;
-      this.dataTable.forEach(item => {
-        item.soPhieuKtraCl = item.soPhieu;
-        item.soPhieuNhapKho = item.phieuNhapKhoHdr.soPhieuNhapKho;
-        item.soBangKeCanHang = item.bcanKeHangHdr.soBangKeCanHang;
-        item.ngayNkho = item.phieuNhapKhoHdr.ngayTao;
-        item.maDiemKho = item.bcanKeHangHdr.maDiemKho;
-        item.maNhaKho = item.bcanKeHangHdr.maNhaKho;
-        item.maNganKho = item.bcanKeHangHdr.maNganKho;
-        item.maLoKho = item.bcanKeHangHdr.maLoKho;
-        item.soLuong = item.soLuongNhapKho;
-        this.formData.patchValue({
-          ktvBanQuan: item.ktvBaoQuan,
-          keToanTruong: item.phieuNhapKhoHdr.keToanTruong,
-          idPhieuNhapKho: item.phieuNhapKhoHdr.id,
-          idBangCanKeHang: item.bcanKeHangHdr.id,
-          soPhieuNhapKho: item.phieuNhapKhoHdr.soPhieuNhapKho,
-          soBangKeCanHang: item.bcanKeHangHdr.soBangKeCanHang,
-          ngayNkho: item.phieuNhapKhoHdr.ngayTao,
-          tenNganLoKho: item.tenLoKho ? `${item.tenLoKho} - ${item.tenNganKho}` : item.tenNganKho,
-        })
-      })
-      let dataFirst = new Date();
-      this.dataTable.forEach(item => {
-        let dataCompare = new Date(item.ngayTao);
-        if (dataFirst > dataCompare) {
-          dataFirst = dataCompare;
-        }
-      });
+    this.dataTable = data.listPhieuKtraCl.filter(x => x.trangThai == STATUS.DA_DUYET_LDCC);
+    console.log(this.dataTable, "datatable")
+    this.dataTable.forEach(item => {
+      item.soPhieuKtraCl = item.soPhieu;
       this.formData.patchValue({
-        ngayBdauNhap: dataFirst,
+        ktvBanQuan: item.ktvBaoQuan,
+        idDdiemGiaoNvNh: data.id,
+        maDiemKho: data.maDiemKho,
+        tenDiemKho: data.tenDiemKho,
+        maNhaKho: data.maNhaKho,
+        tenNhaKho: data.tenNhaKho,
+        maNganKho: data.maNganKho,
+        tenNganKho: data.tenNganKho,
+        maLoKho: data.maLoKho,
+        tenLoKho: data.tenLoKho,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
-
-    }
-    this.formData.patchValue({
-      idDdiemGiaoNvNh: data.id,
-      maDiemKho: data.maDiemKho,
-      tenDiemKho: data.tenDiemKho,
-      maNhaKho: data.maNhaKho,
-      tenNhaKho: data.tenNhaKho,
-      maNganKho: data.maNganKho,
-      tenNganKho: data.tenNganKho,
-      maLoKho: data.maLoKho,
-      tenLoKho: data.tenLoKho,
+    })
+    let dataFirst = new Date();
+    this.dataTable.forEach(item => {
+      let dataCompare = new Date(item.ngayTao);
+      if (dataFirst > dataCompare) {
+        dataFirst = dataCompare;
+      }
     });
+    this.formData.patchValue({
+      ngayBdauNhap: dataFirst,
+    })
   }
 
   isDisableField() {
@@ -364,6 +352,16 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
     switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_KTVBQ;
+        mess = ' Bạn có muốn gửi duyệt ? '
+        break;
+      }
+      case STATUS.CHO_DUYET_KTVBQ: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        mess = ' Bạn có muốn gửi duyệt ? '
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         mess = ' Bạn có muốn gửi duyệt ? '
         break;
@@ -426,7 +424,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: STATUS.TU_CHOI_LDCC,
+            trangThai:  this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ ? STATUS.TU_CHOI_KTVBQ : (this.formData.value.trangThai == STATUS.CHO_DUYET_KT ? STATUS.TU_CHOI_KT : STATUS.CHO_DUYET_LDCC),
           };
           let res =
             await this.bienBanDayKhoMuaTrucTiepService.approve(
@@ -458,8 +456,9 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       .then(async (res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data;
+          console.log(data, "5555")
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.dataTable = data.hhBienBanDayKhoDtlList;
+          // this.dataTable = data.hhBienBanDayKhoDtlList;
           this.fileDinhKems = data.fileDinhKems
           await this.bindingDataQd(data.idQdGiaoNvNh);
           let dataDdnhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
@@ -532,12 +531,23 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   }
 
   calcTong() {
-    if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur.soLuong;
-        return prev;
-      }, 0);
+    if (this.dataTable.length > 0) {
+      let sum = 0;
+      this.dataTable.forEach(item =>{
+        sum = item.bcanKeHangHdr.reduce((prev, cur) => {
+          prev += cur.tongSlCaBaoBi - cur.tongSlBaoBi;
+          return prev;
+        }, 0);
+      })
+      this.formData.patchValue({
+        soLuong: sum
+      })
       return sum;
+      // const sum = this.dataTable.reduce((prev, cur) => {
+      //   prev += cur.soLuong;
+      //   return prev;
+      // }, 0);
+      // return sum;
     }
   }
 

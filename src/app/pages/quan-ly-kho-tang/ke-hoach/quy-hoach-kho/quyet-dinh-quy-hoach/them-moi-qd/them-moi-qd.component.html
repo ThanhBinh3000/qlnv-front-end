@@ -14,13 +14,13 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub btn-xanh  ml-2"
-              *ngIf="!isViewDetail && formData.value.trangThai == globals.prop.NHAP_DU_THAO && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM')"
+              *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_THEM') && type == '01'))"
               (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có chắc chắn muốn ban hành?', 'Ban hành thành công!')">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
       <button type="button" class="btn btn-sub btn-xanh  ml-2"
-              *ngIf="!isViewDetail && formData.value.trangThai == globals.prop.NHAP_DU_THAO && userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM')"
+              *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_THEM') && type == '01'))"
               (click)="save()">
         <i class="fa fa-save"></i>
         <span>Lưu</span>

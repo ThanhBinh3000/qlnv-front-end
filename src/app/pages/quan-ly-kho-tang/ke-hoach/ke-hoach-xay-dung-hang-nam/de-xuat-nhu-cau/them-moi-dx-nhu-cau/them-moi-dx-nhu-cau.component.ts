@@ -46,6 +46,8 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   listFileDinhKem: any[] = [];
   listKhoi: any[] = [];
   listLoaiDuAn: any[] = [];
+  STATUS = STATUS;
+
 
   constructor(
     private httpClient: HttpClient,
@@ -114,9 +116,6 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     let res = await this.qdTrungHanSv.getListQd();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listQdKhTh = res.data;
-      if (this.listQdKhTh && this.listQdKhTh.length > 0) {
-        this.listQdKhTh = this.listQdKhTh.filter(item => item.trangThaiQd == "00")
-      }
     }
   }
 
@@ -433,6 +432,9 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       this.dataTable = [];
       let detail = res.data;
       this.dataTableRes = detail.ctRes?.ctietList;
+      if (this.dataTableRes && this.dataTableRes.length > 0) {
+        this.dataTableRes = this.dataTableRes.filter(item => item.maDvi == this.userInfo.MA_DVI);
+      }
       this.convertListToTree() ;
     }
   }

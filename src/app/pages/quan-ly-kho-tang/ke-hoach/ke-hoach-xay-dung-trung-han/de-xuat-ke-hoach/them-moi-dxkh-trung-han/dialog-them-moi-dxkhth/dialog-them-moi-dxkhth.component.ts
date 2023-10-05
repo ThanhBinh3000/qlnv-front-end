@@ -43,11 +43,11 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.namKh = dayjs().get('year')
-    this.getAllDmKho();
+    this.namKh = dayjs().get('year');
     this.getAllLoaiDuAn();
     this.getDsKhoi();
-    this.getDetail();
+    await this.getAllDmKho();
+    await this.getDetail();
   }
 
   async getDsKhoi() {
@@ -107,14 +107,13 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   async getAllDmKho() {
     let body = {
       "type" : "DMK",
-      "maDvi" : this.userInfo.MA_DVI
+      "maDvi" : this.userInfo.MA_DVI,
+      "khoi" : this.dataInput.khoi,
+      "trangThai" : STATUS.CHUA_THUC_HIEN
     }
     let res = await this.dmKhoService.getAllDmKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmKho = res.data
-      if (this.listDmKho && this.listDmKho.length > 0) {
-        this.listDmKho = this.listDmKho.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi)
-      }
     }
   }
 
@@ -146,6 +145,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       if (result && result.length > 0) {
         this.item = result[0];
         this.item.tgKcHt = this.item.tgKhoiCong + ' - ' + this.item.tgHoanThanh
+        this.item.namKeHoach = dayjs().get('year')
       }
     }
   }

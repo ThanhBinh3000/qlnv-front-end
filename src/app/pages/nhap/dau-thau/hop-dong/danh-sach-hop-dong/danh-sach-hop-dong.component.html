@@ -81,8 +81,8 @@
             <th nzWidth="5%">SL hợp đồng đã ký</th>
             <th nzWidth="5%" *ngIf="loaiVthh.startsWith('02')">Thời gian thực hiện HĐ</th>
             <th nzWidth="5%" *ngIf="!loaiVthh.startsWith('02')">Thời hạn nhập kho</th>
-            <th nzWidth="10%" *ngIf="loaiVthh.startsWith('02')">Loại hàng hóa</th>
-            <th nzWidth="10%" *ngIf="!loaiVthh.startsWith('02')">Chủng loại hàng hóa</th>
+            <th nzWidth="10%" *ngIf="loaiVthh.startsWith('02')">Loại hàng DTQG</th>
+            <th nzWidth="10%" *ngIf="!loaiVthh.startsWith('02')">Chủng loại hàng DTQG</th>
             <th nzWidth="10%">Tổng mức đầu tư (đ)</th>
             <th nzWidth="5%" *ngIf="!loaiVthh.startsWith('02')">Chủ đầu tư</th>
             <th nzWidth="5%">Trạng thái ký HĐ</th>
@@ -201,14 +201,14 @@
                 {{ data.soQd}}
 <!--              </a>-->
             </td>
-            <td class="text-right">{{ data.soGthau}}</td>
-            <td class="text-right">{{ data.qdKhlcntDtl?.soGthauTrung}}</td>
+            <td class="text-right">{{ data.hhQdKhlcntHdr?.soGthau}}</td>
+            <td class="text-right">{{ data.hhQdKhlcntHdr?.soGthauTrung == null ? 0 : data.hhQdKhlcntHdr?.soGthauTrung}}</td>
             <td class="text-right">{{ data.listHopDong?.length }}</td>
             <td>{{ data.qdKhlcntDtl?.dxuatKhLcntHdr?.tgianNhang | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
             <td class="text-right">{{ data.qdKhlcntDtl?.donGiaVat * data.qdKhlcntDtl?.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.tenDvi}}</td>
-            <td>{{ data.tenTrangThaiHd }}</td>num
+            <td>{{ data.tenTrangThaiHd }}</td>
             <td>{{ data.tenTrangThaiNh }}</td>
             <td class="text-left">
               <div nz-row>

@@ -158,17 +158,13 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
     else return false
   }
 
-  isTongCuc() {
-    return this.userService.isTongCuc()
-  }
-
   isCuc() {
-    return false//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
-  // isChiCuc() {
-  //   return false//this.userService.isChiCuc()
-  // }
+  isChiCuc() {
+    return this.userService.isChiCuc()
+  }
 
   selectTab(tab: number) {
     if (this.isDetail) {
@@ -324,19 +320,32 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       this.spinner.show();
       try {
 
+        if (this.formData.value.tuNgayKtnk) {
+          this.formData.value.tuNgayKtnk = dayjs(this.formData.value.tuNgayKtnk).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayKtnk) {
+          this.formData.value.denNgayKtnk = dayjs(this.formData.value.denNgayKtnk).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.tuNgayThoiHanNhap) {
+          this.formData.value.tuNgayThoiHanNhap = dayjs(this.formData.value.tuNgayThoiHanNhap).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayThoiHanNhap) {
+          this.formData.value.denNgayThoiHanNhap = dayjs(this.formData.value.denNgayThoiHanNhap).format('YYYY-MM-DD')
+        }
+
         let body = this.formData.value;
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
+        // if (this.formData.value.ngayDuyetTc) {
+        //   body.ngayDuyetTcTu = body.ngayDuyetTc[0];
+        //   body.ngayDuyetTcDen = body.ngayDuyetTc[1];
+        // }
+        // if (this.formData.value.ngayHieuLuc) {
+        //   body.ngayHieuLucTu = body.ngayHieuLuc[0];
+        //   body.ngayHieuLucDen = body.ngayHieuLuc[1];
+        // }
         this.bienBanGiaoNhanService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
+            saveAs(blob, 'dcnb-bien-ban-giao-nhan.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

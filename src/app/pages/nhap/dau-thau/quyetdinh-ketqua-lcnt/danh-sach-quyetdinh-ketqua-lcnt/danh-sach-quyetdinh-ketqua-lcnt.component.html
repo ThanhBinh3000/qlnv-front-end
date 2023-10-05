@@ -187,7 +187,7 @@
         <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
           <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != '00'"></label>
+                   [nzDisabled]="data.trangThai != '78'"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
           <td>{{ data.namKhoach}}</td>
@@ -203,8 +203,8 @@
           <td *ngIf="loaiVthh.startsWith('02')">{{ data?.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
           <!-- <td *ngIf="loaiVthh.startsWith('02')">{{ data?.hhQdKhlcntHdr?.tenCloaiVthh }}</td> -->
           <td *ngIf="!loaiVthh.startsWith('02')">{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
-          <td>{{ data.soGthau ? data.soGthau : data.hhQdKhlcntHdr.soGthau }}</td>
-          <td>{{ data.qdKhlcntDtl ? data.qdKhlcntDtl.soGthauTrung : data.hhQdKhlcntHdr.soGthauTrung }}
+          <td>{{ data.soGthau ? data.soGthau : data.hhQdKhlcntHdr?.soGthau }}</td>
+          <td>{{ data.soGthauTrung ? data.soGthauTrung : data.hhQdKhlcntHdr?.soGthauTrung }}
           </td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">

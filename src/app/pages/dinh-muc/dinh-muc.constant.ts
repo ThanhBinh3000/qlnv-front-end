@@ -20,7 +20,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     },
     {
         icon: 'htvbdh_tcdt_congcudungcu',
-        title: 'Màng PVC và công cụ dụng cụ',
+        title: 'Màng PVC và công cụ, dụng cụ',
         url: `/${MAIN_ROUTE_DINH_MUC}/mang-pvc-cong-cu-dung-cu`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',

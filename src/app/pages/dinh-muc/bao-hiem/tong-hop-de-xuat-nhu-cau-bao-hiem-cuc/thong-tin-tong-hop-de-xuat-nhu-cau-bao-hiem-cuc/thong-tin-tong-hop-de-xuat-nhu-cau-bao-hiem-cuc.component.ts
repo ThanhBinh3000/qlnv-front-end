@@ -50,6 +50,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: ['00'],
+      trangThaiTh: [],
       giaTriDx: [null],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
@@ -143,6 +144,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
+    body.maDvi = this.userInfo.MA_DVI;
     let res = await this.deXuatBaoHiemSv.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.isTongHop = true;

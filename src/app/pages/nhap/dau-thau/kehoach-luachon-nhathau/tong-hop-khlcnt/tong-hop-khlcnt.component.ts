@@ -222,20 +222,10 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
 
   }
 
-  async goDetail(id: number, roles?: any) {
-    if(roles != 'NHDTQG_PTDT_KHLCNT_TONGHOP_XEM'){
-      if (!this.checkPermission(roles)) {
-        return
-      }
-      this.idSelected = id;
-      this.isDetail = true;
-      this.isView = false
-    }else{
-      // await this.detail(id, roles);
-      this.idSelected = id;
-      this.isDetail = true;
-      this.isView = true
-    }
+  async goDetail(id: number, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView
   }
 
   // disabledTuNgayQd = (startValue: Date): boolean => {
@@ -259,6 +249,16 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
     this.idSelected = data.id;
     this.isQdPdKhlcntId = data.qdPdKhlcntId
     await this.loadChiTiet()
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = true;
+  }
+
+  redirectQd(data: any) {
+    this.isQdPdKhlcntId = data.qdPdKhlcntId;
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
     tabActive.classList.remove('ant-menu-item-selected')
@@ -337,4 +337,33 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
     }
   }
 
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == this.STATUS.CHUA_TAO_QD) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  hienThiXem(data) {
+    if (this.userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XEM')) {
+      if (data.trangThai == STATUS.CHUA_TAO_QD && this.userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')) {
+        return false
+      }
+      return true
+    } else {
+      return false
+    }
+  }
 }

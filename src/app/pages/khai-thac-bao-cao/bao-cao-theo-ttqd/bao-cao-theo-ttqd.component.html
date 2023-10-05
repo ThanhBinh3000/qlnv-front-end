@@ -14,11 +14,11 @@
             </li>
             <li nz-menu-item (click)="selectTab(1)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
-              <span>KH tăng hang DTQG</span>
+              <span>KH tăng hàng DTQG</span>
             </li>
             <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
-              <span>KH giảm hang DTQG</span>
+              <span>KH giảm hàng DTQG</span>
             </li>
             <li nz-menu-item (click)="selectTab(3)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
@@ -154,6 +154,9 @@
         <ng-container *ngIf="tabSelected == 5">
           <app-thong-tu1452013></app-thong-tu1452013>
         </ng-container>
+        <ng-container *ngIf="tabSelected == 6">
+          <app-ct-nhap-xuat-ton-kho-hang-dtqg></app-ct-nhap-xuat-ton-kho-hang-dtqg>
+        </ng-container>
 
 <!--        tab 2-->
         <ng-container *ngIf="tabSelected == 7">
@@ -174,7 +177,7 @@
           <app-tong-chi-cho-mua-hang-dtqg-trong-ky></app-tong-chi-cho-mua-hang-dtqg-trong-ky>
         </ng-container>
         <ng-container *ngIf="tabSelected == 18">
-          
+
           <app-kh-mua-hang-dtqg></app-kh-mua-hang-dtqg>
         </ng-container>
         <ng-container *ngIf="tabSelected == 19">

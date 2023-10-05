@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
@@ -6,8 +6,8 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
-  BienBanNghiemThuDtxdService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/bien-ban-nghiem-thu-dtxd.service";
+  BienBanNghiemThuTdscServiceService
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/bien-ban-nghiem-thu-tdsc.service";
 import {ThongTinBienBanSctxComponent} from "./thong-tin-bien-ban-sctx/thong-tin-bien-ban-sctx.component";
 
 @Component({
@@ -18,6 +18,8 @@ import {ThongTinBienBanSctxComponent} from "./thong-tin-bien-ban-sctx/thong-tin-
 export class BienBanNghiemThuSctxComponent extends Base2Component implements OnInit {
   @Input() itemDuAn: any;
   @Input() itemQdPdKhLcnt: any
+  @Input() itemQdPdKtkt: any
+  @Output() dataBbnt = new EventEmitter<object>();
   selectedId: number;
   isViewDetail: boolean;
 
@@ -27,7 +29,7 @@ export class BienBanNghiemThuSctxComponent extends Base2Component implements OnI
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanSv: BienBanNghiemThuDtxdService
+    private bienBanSv: BienBanNghiemThuTdscServiceService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanSv);
     super.ngOnInit()
@@ -35,6 +37,7 @@ export class BienBanNghiemThuSctxComponent extends Base2Component implements OnI
       namKh: [null],
       maDvi: [null],
       idDuAn: [null],
+      loai: ['01']
     });
   }
 
@@ -58,13 +61,14 @@ export class BienBanNghiemThuSctxComponent extends Base2Component implements OnI
       }
     });
     modalQD.afterClose.subscribe(async (listData) => {
-      this.filter()
+      this.filter();
+      this.dataBbnt.emit()
     })
   }
 
   async filter() {
     this.formData.patchValue({
-      namKh: this.itemDuAn.namKeHoach,
+      namKh: this.itemDuAn.namKh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       idDuAn: this.itemDuAn.id
     })

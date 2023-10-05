@@ -4,27 +4,25 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="3">
-            <nz-form-item class="form-item">
-              <label> Năm kế hoạch </label>
-              <nz-select formControlName="namKh">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
-            </nz-form-item>
+            <label class="search__label">Năm kế hoạch</label>
+            <nz-select formControlName="namKh">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
           </div>
           <div nz-col [nzSpan]="3">
-            <label>Số hợp đồng</label>
+            <label class="search__label">Số hợp đồng</label>
             <input nz-input formControlName="soHd" placeholder="Số hợp đồng"/>
           </div>
           <div nz-col [nzSpan]="4">
-            <label>Tên hợp đồng</label>
+            <label class="search__label">Tên hợp đồng</label>
             <input nz-input formControlName="tenHd" placeholder="Tên hợp đồng"/>
           </div>
           <div nz-col [nzSpan]="10">
-            <label>Đơn vị mua</label>
+            <label class="search__label">Đơn vị mua</label>
             <input nz-input formControlName="tenDviMua" placeholder="Nhà cung cấp"/>
           </div>
           <div nz-col [nzSpan]="4">
-            <label> Ngày ký hợp đồng </label>
+            <label class="search__label"> Ngày ký hợp đồng </label>
             <div nz-row [nzGutter]="24">
               <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayPduyetTu" nzFormat="dd/MM/yyyy"
@@ -39,29 +37,33 @@
           </div>
         </div>
       </form>
-
-      <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearFilter()">
-          <i class="icon  htvbdh_nhap-lai1"></i>
-          Xóa điều kiện
-        </button>
-        <button nz-button class="search__button--search" (click)="search()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
-        </button>
+      <div nz-col class="cangiua group-button-search">
+        <div>
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
+            <i class="icon  htvbdh_nhap-lai1"></i>
+            Xóa điều kiện
+          </button>
+          <button nz-button class="search__button--search" (click)="search()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+        </div>
       </div>
     </nz-card>
     <div class="group-button">
       <h3> QUẢN LÝ KÝ HỢP ĐỒNG BÁN HÀNG DTQG THEO PHƯƠNG THỨC TRỤC TIẾP </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData('Danh-sach-hop-dong-ban-truc-tiep.xlsx')">
+        <button
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_EXP') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_EXP')"
+          type="button" class="btn btn-sub" (click)="exportDataHopDong('quan-ly-ky-hop-dong-ban-hang-dtqg-theo-phuong-thuc-truc-tiep.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Xuất file</span>
+          <span> Xuất file </span>
         </button>
-        <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)"
-                *ngIf="!userService.isTongCuc()">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm hợp đồng</span>
+        <button
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_THEM')"
+          type="button" class="btn btn-main" (click)="goDetail(0, false)">
+          <i class=" icon htvbdh_dau-cong"></i>
+          <span> Thêm hợp đồng </span>
         </button>
       </div>
     </div>
@@ -153,19 +155,17 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThaiHd"
-                         (ngModelChange)="filterInTable('tenTrangThaiHd',filterTable.tenTrangThaiHd)">
-                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri"
-                           [nzLabel]="p.giaTri"></nz-option>
+              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiHd"
+                         (ngModelChange)="filterInTable('trangThaiHd',filterTable.trangThaiHd)">
+                <nz-option *ngFor="let p of listTrangThaiHd" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThaiXh"
-                         (ngModelChange)="filterInTable('tenTrangThaiXh',filterTable.tenTrangThaiXh)">
-                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri"
-                           [nzLabel]="p.giaTri"></nz-option>
+              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiXh"
+                         (ngModelChange)="filterInTable('trangThaiXh',filterTable.trangThaiXh)">
+                <nz-option *ngFor="let p of listTrangThaiXh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-input-group>
           </th>
@@ -184,17 +184,24 @@
           <td>{{ data.soQdKq }}</td>
           <td>{{ data.slHdChuaKy }}</td>
           <td>{{ data.slHdDaKy }}</td>
-          <td>{{ data.ngayMkho | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayMkho|date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
-          <td></td>
+          <td>{{ data.tongGiaTriHdong|number:globals.numberFormat:globals.locale}}</td>
           <td>{{ data.tenTrangThaiHd }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-left">
-            <a *ngIf="(data.trangThaiHd == STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id,null,true)">
+            <a *ngIf="(data.trangThaiHd == STATUS.CHUA_THUC_HIEN || data.trangThaiHd == STATUS.DANG_THUC_HIEN) ?
+                  (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? (userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_XEM') && !userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM'))
+                  : (userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_XEM') && !userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_THEM')))
+                  : (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_XEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_XEM'))"
+               (click)="goDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="(data.trangThaiHd != STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id,null,true)">
+            <a
+              *ngIf="data.trangThaiHd != STATUS.DA_HOAN_THANH
+                     && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_THEM'))"
+              (click)="goDetail(data.id, true)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
           </td>
@@ -219,9 +226,9 @@
     </nz-card>
   </div>
 </ng-container>
-<ng-container *ngIf="isDetail">
-  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
+<ng-container class="chi-tiet" *ngIf="isDetail">
+  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-thong-tin-hop-dong-btt>
-  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
+  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-quan-ly-hop-dong-btt>
 </ng-container>

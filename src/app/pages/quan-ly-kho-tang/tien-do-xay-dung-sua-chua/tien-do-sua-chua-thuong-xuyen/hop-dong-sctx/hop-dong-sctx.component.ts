@@ -52,6 +52,7 @@ export class HopDongSctxComponent implements OnInit {
         "idDuAn": this.itemTtdt.idDuAn,
         "idQdPdKtkt": this.itemQdPdKtkt.id,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
+        "loai" : "01"
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {

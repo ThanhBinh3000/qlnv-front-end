@@ -27,7 +27,7 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
     dropdown: 'de-xuat-dieu-chinh-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
-    code: 'KHVDTNSNN_DTNSNN'
+    code: ''
   },
   // {
   //   icon: 'htvbdh_tcdt_tochucthuchien',
@@ -54,14 +54,14 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
     hasTab: false,
     code: 'KHVDTNSNN_PAGIA'
   },
-  {
-    icon: 'htvbdh_tcdt_baocao2',
-    title: 'Báo cáo',
-    url: `/${MAIN_ROUTE_KE_HOACH}/bao-cao`,
-    dropdown: 'bao-cao',
-    idHover: 'giao-chi-tieu',
-    hasTab: false,
-    code: 'KHVDTNSNN_BAOCAO',
-    children: []
-  },
+  // {
+  //   icon: 'htvbdh_tcdt_baocao2',
+  //   title: 'Báo cáo',
+  //   url: `/${MAIN_ROUTE_KE_HOACH}/bao-cao`,
+  //   dropdown: 'bao-cao',
+  //   idHover: 'giao-chi-tieu',
+  //   hasTab: false,
+  //   code: '',
+  //   children: []
+  // },
 ];

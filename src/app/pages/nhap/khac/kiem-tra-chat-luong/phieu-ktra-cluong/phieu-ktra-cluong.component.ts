@@ -140,6 +140,7 @@ export class PhieuKtraCluongComponent implements OnInit {
       namKhoach: this.searchFilter.namKh,
       soPhieu: this.searchFilter.soPhieu,
       kqDanhGia: this.searchFilter.ketLuan,
+      trangThai: STATUS.BAN_HANH,
       tuNgayLP: this.tuNgayLP != null ? dayjs(this.tuNgayLP).format('YYYY-MM-DD') + " 00:00:00" : null,
       denNgayLP: this.denNgayLP != null ? dayjs(this.denNgayLP).format('YYYY-MM-DD') + " 24:59:59" : null,
       tuNgayGd: this.tuNgayGd != null ? dayjs(this.tuNgayGd).format('YYYY-MM-DD') + " 00:00:00" : null,
@@ -149,6 +150,9 @@ export class PhieuKtraCluongComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      this.dataTable.forEach(item => {
+        item.expand = true
+      })
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -247,5 +251,24 @@ export class PhieuKtraCluongComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  hienThiXem(data){
+    if (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_XEM') && data != null) {
+      if(this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+        return false;
+      } else if (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
   }
 }

@@ -4,23 +4,29 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
           <div nz-col [nzSpan]="2">
-            <label> Năm kế hoạch </label>
+            <label class="search__label"> Năm kế hoạch </label>
             <nz-select formControlName="namKh">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4">
-            <label> Loại hành hóa </label>
+          <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
+            <label class="search__label"> Loại hàng DTQG </label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
           </div>
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith('02')">
+            <label class="search__label"> Loại hàng DTQG </label>
+            <nz-select formControlName="loaiVthh">
+              <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+            </nz-select>
+          </div>
           <div nz-col [nzSpan]="14">
-            <label> Nội dung tổng hợp </label>
+            <label class="search__label"> Nội dung tổng hợp </label>
             <input class="search__input" placeholder="" nz-input formControlName="noiDungThop"/>
           </div>
           <div nz-col [nzSpan]="4">
-            <label> Ngày tông hợp </label>
+            <label class="search__label"> Ngày tông hợp </label>
             <div nz-row [nzGutter]="24">
               <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayThopTu" nzFormat="dd/MM/yyyy"
@@ -84,7 +90,8 @@
           <th>Ngày tổng hợp</th>
           <th>Nội dung tổng hợp</th>
           <th>Số QĐ phê duyệt KH bán trực tiếp</th>
-          <th>Chủng loại hàng hóa</th>
+          <th *ngIf="loaiVthh.startsWith('02')">Loại hàng DTQG</th>
+          <th>Chủng loại hàng DTQG</th>
           <th>Trạng thái</th>
           <th width="90px" class="text-right">Hành động</th>
         </tr>
@@ -125,6 +132,13 @@
                      (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
             </nz-input-group>
           </th>
+          <th *ngIf="loaiVthh.startsWith('02')">
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm"
+                     [(ngModel)]="filterTable.tenLoaiVthh"
+                     (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
+            </nz-input-group>
+          </th>
           <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm"
@@ -134,10 +148,9 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThai"
-                         (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)">
-                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri"
-                           [nzLabel]="p.giaTri"></nz-option>
+              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                         (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-input-group>
           </th>
@@ -160,26 +173,21 @@
                (click)="openModalQdPd(data.idSoQdPd)">{{
               data.soQdPd}}</a>
           </td>
+          <td *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XEM')&&
-                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP'))"
+            <a *ngIf="isActionAllowed(data)"
                (click)="redirectDetail(data.id,true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP')"
-              (click)="redirectDetail(data.id,false)">
-              <i class="fa fa-pencil" title="Sửa"></i>
+              *ngIf="data.trangThai == STATUS.CHUA_TAO_QD && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP')"
+              (click)="taoQdinh(data)">
+              <i class="icon htvbdh_tcdt_tao-qd"></i>
             </a>
             <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD)  && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP')"
-              (click)="taoQdinh(data.id)">
-              <i class="icon htvbdh_soanthao"></i>
-            </a>
-            <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XOA')"
+              *ngIf="data.trangThai== STATUS.CHUA_TAO_QD && (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XOA'))"
               (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
@@ -213,13 +221,15 @@
   </app-them-moi-tong-hop-kh-ban-truc-tiep>
 </div>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep (showListEvent)="showTongHop()">
+  <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [dataTongHop]="dataTongHop" [loaiVthh]="loaiVthh"
+                                              (showListEvent)="showTongHop()">
   </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
 </div>
 <!-- Xem -->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                                [isView]="true">
     </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>

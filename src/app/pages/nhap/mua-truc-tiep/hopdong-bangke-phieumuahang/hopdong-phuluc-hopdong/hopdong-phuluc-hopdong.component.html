@@ -174,12 +174,12 @@
             <td>{{ data.namKh ? data.namKh : data.namNhap }}</td>
             <td>{{ data.soQd }}</td>
             <td *ngIf="!userService.isChiCuc">{{ data.soQdKq }}</td>
-            <td>1</td>
-            <td>5</td>
+            <td>{{ data.slHd }}</td>
+            <td>{{ data.slHdDaKy }}</td>
             <td>{{ data.ngayMkho ? data.ngayMkho : data.tgianNkho | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
-            <td>200</td>
+            <td>{{ data.tongGtriHd | number : '1.0-1' : 'vi_VN'}}</td>
             <td>{{ data.tenTrangThaiHd ? data.tenTrangThaiHd : data?.hhQdPheduyetKhMttHdr?.tenTrangThaiHd }}</td>
             <td>{{ data.tenTrangThaiNh }}</td>
             <td class="text-left">

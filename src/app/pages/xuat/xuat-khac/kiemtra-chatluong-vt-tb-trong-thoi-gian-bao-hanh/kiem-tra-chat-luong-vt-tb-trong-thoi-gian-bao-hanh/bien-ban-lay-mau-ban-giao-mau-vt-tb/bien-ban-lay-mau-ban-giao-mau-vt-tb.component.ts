@@ -124,14 +124,15 @@ export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implement
       .map((value, key) => {
         let parent = value.find(f => f.soQdGiaoNvXh === key)
         let rs = chain(value)
-          .groupBy("tenDiemKho")
+          .groupBy("maDiaDiem")
           .map((v, k) => {
-              let bb = v.find(s => s.tenDiemKho === k)
+              let bb = v.find(s => s.maDiaDiem === k)
               return {
                 idVirtual: uuid.v4(),
-                tenDiemKho: k != "null" ? k : '',
+                maDiaDiem: k != "null" ? k : '',
                 tenLoKho: bb.tenLoKho != "null" ? bb.tenLoKho : '',
                 tenNganKho: bb.tenNganKho != "null" ? bb.tenNganKho : '',
+                tenDiemKho: bb.tenDiemKho != "null" ? bb.tenDiemKho : '',
                 tenCloaiVthh: bb.tenCloaiVthh != "null" ? bb.tenCloaiVthh : '',
                 childData: v,
               };

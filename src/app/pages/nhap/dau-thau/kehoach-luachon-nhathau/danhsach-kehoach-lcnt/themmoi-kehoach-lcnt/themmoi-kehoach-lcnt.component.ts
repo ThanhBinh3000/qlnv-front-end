@@ -33,6 +33,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
 import {UserService} from "../../../../../../services/user.service";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 
 @Component({
@@ -68,6 +69,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   listNguonVon: any[] = [];
   listNam: any[] = [];
   listThuHoachVu: any[] = [];
+  listQuocGia: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listOfMapData: VatTu[];
@@ -109,7 +111,19 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     soLuong: ''
   }];
   listQuy: any[] = [];
-
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -154,7 +168,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       gtriDthau: [null, [Validators.required]],
       gtriHdong: [null, [Validators.required]],
       donGiaVat: [],
-      vat: ['5'],
+      thueVat: [],
       tongMucDt: [null],
       tongMucDtLamTron: [null],
       tongMucDtDx: [null, [Validators.required]],
@@ -177,6 +191,11 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       vu: [''],
       thuHoachVu: [''],
       namThuHoach: [''],
+      quocGiaSx: [''],
+      giaBanHoSo: [''],
+      tgianMoHoSo: [''],
+      soQdPdGiaCuThe: [''],
+      ngayKyQdPdGiaCuThe: [''],
     });
   }
 
@@ -254,7 +273,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -262,6 +281,11 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let resVu = await this.danhMucService.danhMucChungGetAll('VU_THU_HOACH');
     if (resVu.msg == MESSAGE.SUCCESS) {
       this.listThuHoachVu = resVu.data;
+    }
+    this.listQuocGia = [];
+    let resQg = await this.danhMucService.danhMucChungGetAll('QUOC_GIA');
+    if (resQg.msg == MESSAGE.SUCCESS) {
+      this.listQuocGia = resQg.data;
     }
   }
 
@@ -421,7 +445,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       onlyLuongThuc: true
     }
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'Danh sách hàng DTQG',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -482,7 +506,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
   themMoiCuc(goiThau?: string) {
     if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng DTQG');
       return;
     }
     let data = [];
@@ -524,6 +548,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       if (!res) {
         return;
       }
+      this.formData.patchValue({
+        thueVat: res.value.thueVat
+      })
       let isReplace = false;
       if (res.value.goiThau && res.value.goiThau != '') {
         for (let i = 0; i < this.listOfData.length; i++) {
@@ -546,9 +573,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let tongMucDtDx: number = 0;
     let tongSlChiTieu: number = 0;
     this.listOfData.forEach((item) => {
-      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
+      tongMucDt = tongMucDt + (item.soLuong * (item.donGiaVat?item.donGiaVat:0) *1000);
       tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
-      tongSlChiTieu += item.soLuongTheoChiTieu
+      tongSlChiTieu += item.soLuongChiTieu
     });
     this.formData.patchValue({
       tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),

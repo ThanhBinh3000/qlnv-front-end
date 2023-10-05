@@ -139,14 +139,14 @@
           <td>{{ data.soQdMs }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY) && userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XEM')">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XEM') && !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DU_THAO ) && userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM')"
+            <a *ngIf="(data.trangThai == STATUS.DU_THAO )&& userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM')"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai ==STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XOA')" (click)="delete(data)">
+            <a  (click)="delete(data)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && data.trangThai == STATUS.DU_THAO">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

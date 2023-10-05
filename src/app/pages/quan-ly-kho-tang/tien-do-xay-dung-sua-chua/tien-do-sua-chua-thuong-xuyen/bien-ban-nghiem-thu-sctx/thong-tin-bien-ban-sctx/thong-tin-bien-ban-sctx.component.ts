@@ -13,12 +13,14 @@ import {
   MmHopDongCt
 } from "../../../../../dinh-muc/may-moc-thiet-bi/mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
 import {
-  BienBanNghiemThuDtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/bien-ban-nghiem-thu-dtxd.service";
-import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import {
   DialogMmBbGiaoNhanComponent
 } from "../../../../../dinh-muc/may-moc-thiet-bi/mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component";
+import {
+  HopdongTdscService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {
+  BienBanNghiemThuTdscServiceService
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/bien-ban-nghiem-thu-tdsc.service";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-sctx',
@@ -54,8 +56,8 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanSv: BienBanNghiemThuDtxdService,
-    private hopdongService: HopdongService
+    private bienBanSv: BienBanNghiemThuTdscServiceService,
+    private hopdongService: HopdongTdscService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanSv);
     super.ngOnInit()
@@ -80,6 +82,7 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       chatLuong: [null],
       ketLuan: [null],
       trangThai: ['00'],
+      loai: ['01'],
       tenTrangThai: ['Dự thảo'],
     });
   }
@@ -90,10 +93,6 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       this.loadDsHopDong()
       if (this.id > 0) {
         this.detail(this.id)
-      } else {
-        this.formData.patchValue({
-          namKeHoach: this.itemDuAn.namKeHoach
-        })
       }
       this.maBb = `/${this.formData.value.namKeHoach}/BBNT-` + this.userInfo.DON_VI.tenVietTat;
       this.spinner.hide();
@@ -108,8 +107,9 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
     this.spinner.show();
     try {
       let body = {
-        "namKh" : this.itemDuAn.namKeHoach,
-        "idDuAn" : this.itemDuAn.id
+        "namKh" : this.formData.value.namKeHoach,
+        "idDuAn" : this.itemDuAn.id,
+        "page" : "01"
       }
       let res = await this.hopdongService.listHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -140,7 +140,7 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
             soBienBan: dataSobb && dataSobb.length > 0 ? dataSobb[0] : null,
             tenHopDong : data && data.hopDong && data.hopDong.tenHd ? data.hopDong.tenHd : ''
           })
-          let dataList = data.listKtTdxdBienbanNghiemthuDtl;
+          let dataList = data.listKtTdscBienbanNghiemthuDtl;
           if (dataList && dataList.length > 0) {
             this.talbeChuDauTu = dataList.filter(item => item.loai == '00');
             this.tableDvSuDung = dataList.filter(item => item.loai == '01');
@@ -176,7 +176,7 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
     body.fileDinhKems = this.fileDinhKem
     body.idDuAn = this.itemDuAn.id
     body.idQdPdKhlcnt = this.itemQdPdKhLcnt.id
-    body.listKtTdxdBienbanNghiemthuDtl = [...this.talbeChuDauTu, this.talbeDvThiCong, this.tableDvSuDung, this.talbeDvGiamSat].flat();
+    body.listKtTdscBienbanNghiemthuDtl = [...this.talbeChuDauTu, this.talbeDvThiCong, this.tableDvSuDung, this.talbeDvGiamSat].flat();
     if (isKy) {
       this.modal.confirm({
         nzClosable: false,
@@ -402,7 +402,7 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
           this.formData.patchValue({
             soHopDong: data.soHd,
             tenHopDong: data.tenHd,
-            tenDuAn : data.tenDuAn,
+            tenDuAn : this.itemDuAn.tenCongTrinh,
             idHopDong : data.id,
             chuDauTu : data.cdtTen
           })

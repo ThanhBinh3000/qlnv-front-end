@@ -27,15 +27,18 @@ import {
 import {
   QuyetDinhGiaoNhapHangKhacService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhGiaoNhapHangKhac.service";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
-import {FILETYPE} from "../../../../../../constants/fileType";
+import { FileDinhKem } from "../../../../../../models/FileDinhKem";
+import { FILETYPE } from "../../../../../../constants/fileType";
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
   templateUrl: './them-moi-bien-ban-lay-mau.component.html',
   styleUrls: ['./them-moi-bien-ban-lay-mau.component.scss'],
 })
-export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
+export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() idQdGvuNh: number;
   @Input() isView: boolean;
@@ -43,7 +46,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  previewName: string = 'nk_bien_ban_lay_mau';
   formData: FormGroup;
   maSuffix: string = '/BBLM-CCDTVP';
   listFileDinhKem: FileDinhKem[] = [];
@@ -96,11 +99,13 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   ];
   STATUS = STATUS
   constructor(
-    private spinner: NgxSpinnerService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
+    spinner: NgxSpinnerService,
     private bienBanLayMauKhacService: QuanLyBienBanLayMauKhacService,
-    private notification: NzNotificationService,
+    notification: NzNotificationService,
     private router: Router,
-    private modal: NzModalService,
+    modal: NzModalService,
     public globals: Globals,
     private routerActive: ActivatedRoute,
     public userService: UserService,
@@ -108,9 +113,8 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private quyetDinhGiaoNhapHangKhacService: QuyetDinhGiaoNhapHangKhacService,
     private danhMucService: DanhMucService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-    private fb: FormBuilder,
-    private helperService: HelperService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, bienBanLayMauKhacService);
     this.formData = this.fb.group({
       id: [],
       trangThai: [STATUS.DU_THAO],
@@ -173,7 +177,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     if (this.id > 0) {
       await this.loadBienbanLayMau();
     }
-    if (this.idQdGvuNh > 0){
+    if (this.idQdGvuNh > 0) {
       await this.initForm();
       await this.bindingDataQd(this.idQdGvuNh);
     }
@@ -502,8 +506,8 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       tenLoaiVthh: data.tenLoaiVthh,
       moTaHangHoa: data.moTaHangHoa,
     });
-    data.dtlList.forEach(item =>{
-      if(item.idBbLayMau == this.id){
+    data.dtlList.forEach(item => {
+      if (item.idBbLayMau == this.id) {
         this.formData.patchValue({
           tenCloaiVthh: item.tenCloaiVthh,
           cloaiVthh: item.cloaiVthh,
@@ -516,7 +520,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       // if (this.loaiVthh.startsWith('02')) {
       //   this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanGuiHang));
       // } else {
-        this.listDiaDiemNhap = dataChiCuc.filter(item => item.maChiCuc == this.userInfo.MA_DVI);
+      this.listDiaDiemNhap = dataChiCuc.filter(item => item.maChiCuc == this.userInfo.MA_DVI);
       // }
     }
     await this.spinner.hide();

@@ -17,7 +17,6 @@ import {
 import {
   QdPheDuyetBaoCaoKtktService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-bao-cao-ktkt.service";
-import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-khlcnt-scl',
@@ -89,15 +88,17 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
       tongTien: [0],
       tongMucDt: [0],
       nguonVonDt: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
+      trangThaiDt: [],
+      trangThaiHd: [],
       fileDinhKems: [null],
       listKtTdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtTdscQuyetDinhPdKhlcntCvKad: null,
       listKtTdscQuyetDinhPdKhlcntCvKh: null,
       khoi: [null],
       loaiCapCt: [null],
-      loai : ['01']
+      loai : ['00']
     });
   }
 
@@ -276,7 +277,15 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : '',
           })
-          this.fileDinhKem = data.fileDinhKems;
+          if (data.fileDinhKems && data.fileDinhKems.length > 0) {
+            data.fileDinhKems.forEach(item => {
+              if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+                this.listFileDinhKem.push(item)
+              } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+                this.listCcPhapLy.push(item)
+              }
+            })
+          }
           this.dataCongViecDaTh = data.listKtTdscQuyetDinhPdKhlcntCvDaTh ? data.listKtTdscQuyetDinhPdKhlcntCvDaTh : [];
           this.dataCongViecKad = data.listKtTdscQuyetDinhPdKhlcntCvKad ? data.listKtTdscQuyetDinhPdKhlcntCvKad : [];
           this.dataCongViecKh = data.listKtTdscQuyetDinhPdKhlcntCvKh ? data.listKtTdscQuyetDinhPdKhlcntCvKh : [];

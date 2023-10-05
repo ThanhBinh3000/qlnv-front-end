@@ -7,7 +7,7 @@
           [ngClass]="formData.value.trangThai == STATUS.BAN_HANH  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-          <span class="text-uppercase">Quyết định  </span>
+          <span class="text-uppercase">Quyết định phê duyệt báo cáo kinh tế kỹ thuật   </span>
         </div>
       </div>
       <div class="btn-group">
@@ -16,12 +16,12 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD_THEM')">
+                *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDBCKTKT_THEM')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
         <button (click)="save(false)"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  "
+                *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDBCKTKT_THEM')"
                 class="btn btn-main btn-sm waves-effect waves-light ml-2">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -284,7 +284,7 @@
                   {{ item.chiMuc }}
                 </td>
                 <td>{{ item.noiDung }}</td>
-                <td>{{ item.giaTri |  number: '1.0-1'  }}</td>
+                <td>{{ item.giaTri | number : '1.0-1' : 'vi-VN'}}</td>
                 <td>{{ item.kyHieu }}</td>
                 <td class="text-center" *ngIf="!isViewDetail">
                   <a (click)="themMoiCtiet(item)" *ngIf="item.capChiMuc < 3">

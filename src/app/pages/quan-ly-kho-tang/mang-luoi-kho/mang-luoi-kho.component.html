@@ -927,11 +927,11 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="6" *ngIf="!isEditData">
             <nz-form-item>
               <nz-form-label></nz-form-label>
               <nz-form-control>
-                <button type="button" class="btn btn-main" (click)="openDialogGiaoKho()">
+                <button type="button" class="btn btn-main" (click)="openDialogGiaoKho()" style="margin-top: -6px">
                   <i class="icon htvbdh_dau-cong"></i>
                   <span>Giao kho</span>
                 </button>
@@ -1237,13 +1237,14 @@
             <nz-form-item>
               <nz-form-label>Loại hàng hóa</nz-form-label>
               <nz-form-control>
-                <nz-input-group>
+                <input nz-input formControlName="tenLoaiVthh" [readOnly]="true"/>
+                <!--<nz-input-group>
                   <nz-select formControlName="loaiVthh" [nzDisabled]="true"
                              (ngModelChange)="onChangeLoaiVthh($event)">
                     <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
                                [nzValue]="item.ma"></nz-option>
                   </nz-select>
-                </nz-input-group>
+                </nz-input-group>-->
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -1252,18 +1253,19 @@
               <nz-form-label>Chủng loại hàng hóa</nz-form-label>
               <nz-form-control>
                 <nz-input-group>
-                  <nz-select [nzDisabled]="true" formControlName="cloaiVthh"
+                 <!-- <nz-select [nzDisabled]="true" formControlName="cloaiVthh"
                              (ngModelChange)="onChangCloaiVthh($event)">
                     <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
                                [nzValue]="item.ma"></nz-option>
-                  </nz-select>
+                  </nz-select>-->
+                  <input nz-input formControlName="tenCloaiVthh" [readOnly]="true"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="6" *ngIf="!checkLoKho">
             <nz-form-item>
-              <nz-form-label>Số lượng tồn đầu kỳ</nz-form-label>
+              <nz-form-label>Số lượng tồn kho</nz-form-label>
               <nz-form-control>
                 <nz-input-group>
                   <nz-input-number [nzDisabled]="true" formControlName="slTon"

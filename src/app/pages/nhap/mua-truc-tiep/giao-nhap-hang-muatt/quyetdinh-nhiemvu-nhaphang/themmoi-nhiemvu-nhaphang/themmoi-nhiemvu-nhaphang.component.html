@@ -4,9 +4,14 @@
             <i class="icon htvbdh_arrow-left2"></i>
             <span>Quay lại</span>
         </button>
+      <button
+        type="button" class="btn btn-sub do" (click)="preview(previewName)">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Xem trước</span>
+      </button>
         <ng-container *ngIf="userService.isCuc()">
             <button type="button" class="btn btn-sub xanh-nhat"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isViewDetail"
                 (click)="save(true)">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Lưu và gửi duyệt</span>
@@ -29,16 +34,16 @@
 <!--                <span>Ban hành</span>-->
 <!--            </button>-->
             <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isViewDetail"
                 type="
             button" class="btn btn-main" (click)="save()">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
         </ng-container>
-        <ng-container *ngIf="userService.isChiCuc() && (formData.value.trangThaiDtl == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiDtl == STATUS.DANG_CAP_NHAT)">
+        <ng-container *ngIf="formData.value.trangThai == STATUS.BAN_HANH && userService.isChiCuc() && (formData.value.trangThaiDtl == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiDtl == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO')">
             <button type="button" class="btn btn-sub xanh-nhat"
-                (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
+                (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT, true)">
                 <i class="icon htvbdh_duyet"></i>
                 <span>Hoàn thành</span>
             </button>
@@ -133,16 +138,22 @@
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="4" *ngIf=" radioValue == '01'">
-                    <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzRequired>
-                            Chọn 1 hợp đồng đã ký cấp Cục
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogHopDong()">
-                                <input [readonly]="true" nz-input formControlName="soHd" readonly="true" />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
+<!--                    <nz-form-item class="form-item">-->
+<!--                        <nz-form-label [nzNoColon]="true" nzRequired>-->
+<!--                            Chọn 1 hợp đồng đã ký cấp Cục-->
+<!--                        </nz-form-label>-->
+<!--                        <nz-form-control [nzErrorTip]="error">-->
+<!--                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogHopDong()">-->
+<!--                                <input [readonly]="true" nz-input formControlName="soHd" readonly="true" />-->
+<!--                            </nz-input-group>-->
+<!--                        </nz-form-control>-->
+<!--                    </nz-form-item>-->
+                  <nz-form-label [nzNoColon]="true" nzRequired>
+                    Chọn các hợp đồng đã ký cấp Cục
+                  </nz-form-label>
+                  <nz-select [nzDisabled]="formData.value.id != null" [(ngModel)]="dsHongDong" [ngModelOptions]="{standalone: true}" [nzSize]="size" nzMode="tags" (ngModelChange)="handleTagValueChange()">
+                    <nz-option *ngFor="let option of listHopDong" [nzLabel]="option.soHd" [nzValue]="option.id"></nz-option>
+                  </nz-select>
                 </div>
                 <div nz-col [nzSpan]="4" *ngIf=" radioValue == '02'">
                     <nz-form-item class="form-item">
@@ -158,7 +169,7 @@
                 </div>
                 <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                        <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                         <nz-form-control>
                             <input class="search__input" [readonly]="true" nz-input formControlName="tenLoaiVthh"
                                 readonly="true" />
@@ -167,7 +178,7 @@
                 </div>
                 <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                        <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                         <nz-form-control>
                             <input class="search__input" [readonly]="true" nz-input formControlName="tenCloaiVthh"
                                 readonly="true" />
@@ -265,7 +276,7 @@
           <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td>{{ item.tenDvi }}</td>
           <td></td>
-          <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ formData.value.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -405,7 +416,7 @@
           <td style="text-align: right; font-weight: 700; color: blue" colspan="8">Tổng số</td>
           <td></td>
           <td></td>
-          <td class="text-blue">{{ calcTong(i) | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-blue">{{ calcTongChil() | number : '1.0-1' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO')"></td>
@@ -418,7 +429,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td class="text-blue">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-blue">{{ calcTongChil() | number : '1.0-1' : 'vi_VN' }}</td>
         <td></td>
       </tr>
       </tfoot>
@@ -428,3 +439,30 @@
 <ng-template #error let-control>
     <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP HÀNG" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 650px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

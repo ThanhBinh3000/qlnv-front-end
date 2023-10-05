@@ -7,11 +7,11 @@
                     <label class="search__label">Mã tổng hợp</label>
                     <input nz-input type="text" formControlName="maTongHop" id="math">
                   </div>
-                  <div nz-col nzSpan="3">
-                    <label class="search__label">Năm</label>
-                    <nz-select formControlName="nam" id="nam">
-                      <nz-option *ngFor="let item of listNam" nzValue="{{item.value}}"
-                                 nzLabel="{{item.text}}">
+                  <div nz-col nzSpan='3'>
+                    <label class='search__label'>Năm</label>
+                    <nz-select formControlName='nam' id='nam'>
+                      <nz-option *ngFor='let item of listNam' nzValue='{{item.value}}'
+                                 nzLabel='{{item.text}}'>
                       </nz-option>
                     </nz-select>
                   </div>
@@ -56,7 +56,7 @@
                 </button>
                 <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP_THEM')">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
-                    <span>Thêm</span>
+                    <span>Tổng hợp</span>
                 </button>
             </div>
         </div>
@@ -145,9 +145,9 @@
                         <td>{{ data.maTongHop }}</td>
                         <td class="text-center">{{ data.nam }}</td>
                         <td>{{ data.ngayTongHop|date: 'dd/MM/YYYY'}}</td>
-                        <td class="text-right">{{ data.tongTien  | number: '1.0-1' }}</td>
-                        <td class="text-right">{{ data.kinhPhiDaCap  | number: '1.0-1' }}</td>
-                        <td class="text-right">{{ data.ycCapThemPhi  | number: '1.0-1' }}</td>
+                        <td class="text-right">{{ data.tongTien  | number : '1.0-1' : 'vi-VN' }}</td>
+                        <td class="text-right">{{ data.kinhPhiDaCap  | number : '1.0-1' : 'vi-VN' }}</td>
+                        <td class="text-right">{{ data.ycCapThemPhi  | number : '1.0-1' : 'vi-VN' }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
                             <a (click)="detail(data, true)" *ngIf="!((data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_VU) && userInfo.MA_DVI == data.maDvi)">

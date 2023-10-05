@@ -1,13 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
 import Cleave from 'cleave.js';
 import * as XLSX from 'xlsx';
-import { environment } from 'src/environments/environment';
-import { ResponseData } from '../interfaces/response';
-import { MESSAGE } from "../constants/message";
-import { NzNotificationService } from "ng-zorro-antd/notification";
+import {environment} from 'src/environments/environment';
+import {ResponseData} from '../interfaces/response';
+import {MESSAGE} from "../constants/message";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+
 declare var vgcapluginObject: any;
 
 @Injectable({
@@ -18,14 +19,15 @@ export class HelperService {
   constructor(
     private httpClient: HttpClient,
     private notification: NzNotificationService,
-  ) { }
+  ) {
+  }
 
-  markFormGroupTouched(formGroup) {
+  async markFormGroupTouched(formGroup) {
     for (const i in formGroup.controls) {
       if (formGroup.controls.hasOwnProperty(i) && formGroup.controls[i].enabled) {
 
-          formGroup.controls[i].markAsDirty();
-          formGroup.controls[i].updateValueAndValidity();
+        formGroup.controls[i].markAsDirty();
+        formGroup.controls[i].updateValueAndValidity();
 
       }
     }
@@ -53,7 +55,7 @@ export class HelperService {
 
   dateValidator = (control: FormControl): { [s: string]: boolean } => {
     if (control.value && !moment(control.value, 'DD/MM/YYYY', true).isValid()) {
-      return { invalid: true };
+      return {invalid: true};
     }
     return;
   };
@@ -92,7 +94,7 @@ export class HelperService {
     }
     if (invalid.length > 0) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      console.log(invalid,' invalid');
+      console.log(invalid, ' invalid');
     }
   }
 
@@ -120,10 +122,13 @@ export class HelperService {
     }
   }
 
-  async ignoreRequiredForm(formGroup: FormGroup) {
+  async ignoreRequiredForm(formGroup: FormGroup, ignore?: any[]) {
+    if (!ignore) {
+      ignore = [];
+    }
     for (let controlsKey in formGroup.controls) {
       const control = formGroup.controls[controlsKey];
-      if (control.validator) {
+      if (control.validator && !ignore.includes(controlsKey)) {
         control.setValidators(Validators.nullValidator);
       }
     }

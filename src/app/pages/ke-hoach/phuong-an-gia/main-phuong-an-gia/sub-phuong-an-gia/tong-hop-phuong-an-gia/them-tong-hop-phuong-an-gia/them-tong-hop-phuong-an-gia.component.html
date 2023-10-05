@@ -287,7 +287,7 @@
             <th class="text-center" rowSpan="2">Cục DTNN KV</th>
             <th class="text-center" rowSpan="2">Vùng miền</th>
             <th class="text-center" rowSpan="2">Chi cục DTNN</th>
-            <th class="text-center" rowSpan="2">Số lượng(tấn)</th>
+            <th class="text-center" rowSpan="2">Số lượng (tấn)</th>
             <th class="text-center" colSpan="2">Giá khảo sát</th>
             <th class="text-center" colSpan="2">Giá Cục đề nghị</th>
             <th class="text-center" colSpan="2" *ngIf="!isMuaToiDa">Giá ban hành của BTC</th>
@@ -424,10 +424,14 @@
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadExcel()"
-            class="modal__button--save ml-2">
-      <i class="icon htvbdh_nhap-excel"></i>
-      Xuất Excel
+<!--    <button nz-button (click)="downloadExcel()"-->
+<!--            class="modal__button&#45;&#45;save ml-2">-->
+<!--      <i class="icon htvbdh_nhap-excel"></i>-->
+<!--      Xuất Excel-->
+<!--    </button>-->
+    <button nz-button (click)="downloadWord()" class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
     </button>
     <button type="button" class="btn btn-main ml-2" (click)="doPrint()">
       <i nz-icon nzType="printer" nzTheme="outline"></i>

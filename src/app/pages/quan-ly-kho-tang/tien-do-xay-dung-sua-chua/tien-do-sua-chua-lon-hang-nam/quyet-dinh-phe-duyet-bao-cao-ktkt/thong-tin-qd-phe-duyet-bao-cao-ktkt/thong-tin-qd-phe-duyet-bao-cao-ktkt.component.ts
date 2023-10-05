@@ -83,8 +83,8 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
       quyMo: [null],
       loaiCapCt: [null],
       noiDungKhac: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       fileDinhKems: [null],
       child: [null],
       listKtTdscQuyetDinhPdBcKtktDtl: null,
@@ -333,9 +333,15 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
 
   required(item: DuToanXayDung) {
     let msgRequired = '';
-    //validator
     if (!item.noiDung || !item.chiMuc || !item.giaTri) {
       msgRequired = "Chỉ mục, nội dung, và giá trị không được để trống";
+    }
+    let tong = this.dataTable.reduce((sum, cur)=>sum+=cur.giaTri, 0);
+    if (item.giaTri) {
+      tong += item.giaTri;
+      if (tong > this.formData.value.giaTriDt) {
+        msgRequired = "Giá trị sau thế phải bằng tổng mức đầu tư";
+      }
     }
     return msgRequired;
   }
@@ -449,7 +455,17 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
         });
       } else {
         itemChild.expand = true;
-        this.dataTable = [...this.dataTable, itemChild];
+        let itemCheck = this.dataTable.find(it => it.idVirtual == itemChild.idVirtual);
+        if (itemCheck) {
+          this.dataTable = this.dataTable.map(obj => {
+            if (obj.idVirtual == itemChild.idVirtual) {
+              return itemChild;
+            }
+            return obj;
+          });
+        } else {
+          this.dataTable = [...this.dataTable, itemChild];
+        }
       }
       this.dataTreeTable = this.dataTable;
       this.formDataDetail.reset();

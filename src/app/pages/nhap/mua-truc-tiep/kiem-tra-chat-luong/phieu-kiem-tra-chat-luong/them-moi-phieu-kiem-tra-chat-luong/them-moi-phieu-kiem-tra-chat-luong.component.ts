@@ -55,7 +55,8 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   listDiaDiemNhap: any[] = [];
   listFileDinhKem: FileDinhKem[] = [];
   listFileDinhKemKTCL: FileDinhKem[] = [];
-  listFile: any[] = []
+  listFile: any[] = [];
+  previewName: string = 'ntt_phieu_kiem_tra_chat_luong';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -227,7 +228,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     if (dataChiCuc.length > 0) {
       console.log(dataChiCuc[0].children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI)))
       this.listDiaDiemNhap = dataChiCuc[0].children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI));
@@ -277,7 +278,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
-        soLuong: data.soLuong,
+        soLuong: data.soLuong * 1000,
         soLuongQdGiaoNvNh: data.soLuong * 1000,
         soBb: data.listBienBanNghiemThuBq.find(item => item.id === Math.min(...data.listBienBanNghiemThuBq.map(item => item.id))).soBb,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,

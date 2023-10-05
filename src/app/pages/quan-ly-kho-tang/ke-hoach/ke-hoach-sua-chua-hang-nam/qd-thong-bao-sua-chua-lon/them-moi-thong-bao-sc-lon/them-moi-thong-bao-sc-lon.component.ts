@@ -23,6 +23,7 @@ import {
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-thong-bao-sc-lon',
@@ -61,8 +62,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       trichYeu : [null],
       ngayKy : [null, Validators.required],
       qdBtc : [null, Validators.required],
-      trangThai : ['00'],
-      tenTrangThai : ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       type : ['01']
     });
   }
@@ -130,8 +131,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
           this.dataTable = []
           const data = res.data;
           this.dataTableReq = data.chiTiets;
-          this.dataTableTren = this.convertListData(this.dataTableReq.filter(item => item.tmdt > 5000000000));
-          this.dataTableDuoi = this.convertListData(this.dataTableReq.filter(item => item.tmdt <= 5000000000));
+          this.dataTableTren = this.convertListData(this.dataTableReq.filter(item => item.tmdt > 15000000000));
+          this.dataTableDuoi = this.convertListData(this.dataTableReq.filter(item => item.tmdt <= 15000000000));
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg)
@@ -153,8 +154,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       this.fileDinhKem = data.fileDinhKems
       this.dataTableReq = data.chiTiets;
       if (this.dataTableReq && this.dataTableReq.length > 0) {
-        this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
-        this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
+        this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
+        this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
       }
     }
   }

@@ -5,3 +5,8 @@
   max-width: unset;
   padding-top: 16px;
 }
+
+::ng-deep .ant-checkbox-group {
+  display: inline-grid;
+  grid-template-columns: auto auto auto;
+}

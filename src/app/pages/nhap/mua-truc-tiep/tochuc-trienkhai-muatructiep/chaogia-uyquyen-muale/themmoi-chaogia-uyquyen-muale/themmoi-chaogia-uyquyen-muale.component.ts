@@ -43,6 +43,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   listDiemKho: any[] = [];
   listChiCuc: any[] = [];
   selected: boolean = false;
+  previewName : string = 'mtt_thong_tin_chao_gia';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -167,7 +168,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     } else {
       this.selected = true;
     }
-    this.rowItem.donGia = data.donGiaVat
+    console.log(data, 123)
+    this.rowItem.donGiaVat = data.donGiaVat
     this.donGiaRow = data.donGiaVat
     if(this.listChiCuc.length > 0){
       this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
@@ -210,7 +212,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
 
   handleChangeDiemKho(dataTable: any, diemKho: any){
     diemKho.idDiaDiem = dataTable.id
-    diemKho.donGia = dataTable.donGia
+    diemKho.donGiaVat = dataTable.donGiaVat
     diemKho.tenDiemKho = this.listDiemKho.find(x => x.maDvi == diemKho.maDiemKho).tenDvi
   }
 
@@ -254,7 +256,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             await this.spinner.hide();
             await this.loadDetail(this.idInput);
-            this.goBack()
+            // this.goBack()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             await this.spinner.hide();
@@ -291,7 +293,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           await this.hoanThanhCapNhat()
         }
         await this.loadDetail(this.idInput)
-        this.goBack()
+        // this.goBack()
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -318,7 +320,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       }
     });
     this.rowItem = new ChiTietThongTinChaoGia();
-    this.rowItem.donGia = this.donGiaRow
+    this.rowItem.donGiaVat = this.donGiaRow
     this.emitDataTable();
     this.updateEditCache()
   }

@@ -11,131 +11,76 @@ import dayjs from "dayjs";
 import {XuatThanhLyComponent} from "../xuat-thanh-ly.component";
 import {CHUC_NANG} from "../../../../constants/status";
 import {BaoCaoKqThanhLyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BaoCaoKqThanhLy.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {
+  ThongBaoKqThanhLyService
+} from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/ThongBaoKqThanhLy.service";
+import {Base3Component} from "../../../../components/base3/base3.component";
 
 @Component({
   selector: 'app-bao-cao-ket-qua-thanh-ly',
   templateUrl: './bao-cao-ket-qua-thanh-ly.component.html',
   styleUrls: ['./bao-cao-ket-qua-thanh-ly.component.scss']
 })
-export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnInit {
-  @Input() loaiVthh: string;
-  isDetail: boolean = false;
-  selectedId: number = 0;
-  isView = false;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: XuatThanhLyComponent;
-  listHangHoaAll: any[] = [];
-  listLoaiHangHoa: any[] = [];
-  listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - LĐ Vụ'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - LĐ Vụ'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ TC'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ TC'},
-    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Ban hành'},
-  ];
-  idQd: number = 0;
-  openQd = false;
+export class BaoCaoKetQuaThanhLyComponent extends Base3Component implements OnInit {
+  listTrangThai: any[] = [];
 
-  constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private baoCaoKqThanhLyService: BaoCaoKqThanhLyService,
-              private danhMucService: DanhMucService,
-              private xuatThanhLyComponent: XuatThanhLyComponent,
-
+  constructor(
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    route: ActivatedRoute,
+    router: Router,
+    private _service: BaoCaoKqThanhLyService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, baoCaoKqThanhLyService);
-    this.vldTrangThai = this.xuatThanhLyComponent;
+    super(httpClient, storageService, notification, spinner, modal, route, router, _service);
+    this.defaultURL = 'xuat/xuat-thanh-ly/bao-cao-kq'
     this.formData = this.fb.group({
-      nam: [''],
-      soQd: [''],
-      soBaoCao: [''],
-      maDvi: [''],
-      ngayBaoCao: [''],
-      ngayBaoCaoTu: [''],
-      ngayBaoCaoDen: [''],
-      loaiVthh: [''],
-      trichYeu: [''],
-      trangThai: [''],
-    });
-    this.filterTable = {
-      soQd: '',
-      trichYeu: '',
-      ngayBaoCao: '',
-      soHoSo: '',
-      tenTrangThai: '',
-      tenTrangThaiXh: '',
-
-    };
-  }
-  disabledStartngayBaoCao = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayBaoCaoDen) {
-      return startValue.getTime() > this.formData.value.ngayBaoCaoDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndngayBaoCao = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayBaoCaoTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayBaoCaoTu.getTime();
-  };
-  async ngOnInit() {
-    await this.spinner.show();
-    try {
-      await Promise.all([
-        this.timKiem(),
-        this.loadDsVthh(),
-      ])
-      await this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      await this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-  redirectDetail(id, b: boolean) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isView = b;
-    // this.isViewDetail = isView ?? false;
+      nam: null,
+      maSc: null,
+      maCc: null,
+      ngayTu: null,
+      ngayDen: null,
+    })
+    this.listTrangThai = [
+      {
+        value: this.STATUS.DU_THAO,
+        text: 'Dự thảo'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_TP,
+        text: 'Chờ duyệt - TP'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDC,
+        text: 'Chờ duyệt - LĐ Cục'
+      },
+      {
+        value: this.STATUS.DA_DUYET_LDC,
+        text: 'Đã duyệt - LĐ Cục'
+      },
+      {
+        value: this.STATUS.DANG_DUYET_CB_VU,
+        text: 'Đang duyệt - CB Vụ'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDV,
+        text: 'Chờ duyệt - LĐ Vụ'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDTC,
+        text: 'Chờ duyệt - LĐ Tổng cục'
+      },
+      {
+        value: this.STATUS.DA_DUYET_LDTC,
+        text: 'Đã duyệt - LĐ Tổng cục'
+      },
+    ]
   }
 
-  async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listHangHoaAll = res.data;
-      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
-    }
-  }
-
-  async timKiem() {
-    await this.spinner.show();
-    try {
-      if (this.formData.value.ngayBaoCao) {
-        this.formData.value.ngayBaoCaoTu = dayjs(this.formData.value.ngayBaoCao[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayBaoCaoDen = dayjs(this.formData.value.ngayBaoCao[1]).format('YYYY-MM-DD')
-      }
-      await this.search();
-    } catch (e) {
-      console.log(e)
-    }
-    await this.spinner.hide();
-  }
-
-
-
-  openQdModal(id: any) {
-    this.idQd = id;
-    this.openQd = true;
-  }
-
-  closeQdModal() {
-    this.idQd = null;
-    this.openQd = false;
+  ngOnInit(): void {
+    this.search();
   }
 }

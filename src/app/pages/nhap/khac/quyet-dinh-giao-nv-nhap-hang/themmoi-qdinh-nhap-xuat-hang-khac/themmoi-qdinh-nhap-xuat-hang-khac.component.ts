@@ -32,14 +32,17 @@ import {
 import {
   QuyetDinhPheDuyetKeHoachNhapKhacService
 } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhPheDuyetKeHoachNhapKhac.service";
-import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang-khac',
   templateUrl: './themmoi-qdinh-nhap-xuat-hang-khac.component.html',
   styleUrls: ['./themmoi-qdinh-nhap-xuat-hang-khac.component.scss'],
 })
-export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
+export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
   @Input() idQdPd: number;
@@ -89,7 +92,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
   dataTable: any[] = [];
 
   rowItem: ThongTinDiaDiemNhap = new ThongTinDiaDiemNhap();
-
+  previewName: string = 'nk_qd_giao_nv_nh';
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
@@ -98,20 +101,23 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
   listCanCu: any[] = [];
 
   constructor(
+    httpClient: HttpClient,
+    storageService: StorageService,
     private router: Router,
-    private fb: FormBuilder,
-    private modal: NzModalService,
+    fb: FormBuilder,
+    modal: NzModalService,
     private donViService: DonviService,
-    private notification: NzNotificationService,
-    private spinner: NgxSpinnerService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
     public globals: Globals,
     public userService: UserService,
     private quyetDinhGiaoNhapHangKhacService: QuyetDinhGiaoNhapHangKhacService,
     private quyetDinhPheDuyetKeHoachNhapKhacService: QuyetDinhPheDuyetKeHoachNhapKhacService,
-    private uploadFileService: UploadFileService,
+    uploadFileService: UploadFileService,
     private thongTinHopDongSercive: ThongTinHopDongService,
-    private helperService: HelperService,
+    helperService: HelperService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNhapHangKhacService);
     this.formData = this.fb.group({
       id: [''],
       idQdPdNk: [],
@@ -121,8 +127,8 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
       nam: [dayjs().get('year')],
       tenDvi: [''],
       maDvi: [''],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: ['78'],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       loaiVthh: [''],
       tenLoaiVthh: [''],
       cloaiVthh: [''],
@@ -154,7 +160,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
       await this.loadDiemKho(),
       await this.loadDsDonVi()
     ])
-    if(this.idQdPd > 0){
+    if (this.idQdPd > 0) {
       await this.bindingDataQd(this.idQdPd);
     }
     if (this.id > 0) {
@@ -214,7 +220,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
 
   }
 
-  async bindingDataQd(id: any){
+  async bindingDataQd(id: any) {
     this.spinner.show();
     let res = await this.quyetDinhPheDuyetKeHoachNhapKhacService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -270,7 +276,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
   async loadDsDonVi() {
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI,
+      maDviCha: this.userService.isChiCuc() ? this.userInfo.MA_DVI.substring(0, 6) : this.userInfo.MA_DVI,
       type: "DV"
     };
     let res = await this.donViService.layDonViTheoCapDo(body);
@@ -288,7 +294,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
     let listOfData: any;
     let slNhap = 0;
     this.helperService.setIndexArray(this.dataTable);
-    listOfData = this.dataTable.filter(x => x.maCuc.includes(this.userInfo.MA_DVI))
+    listOfData = this.userService.isChiCuc() ? this.dataTable.filter(x => x.maChiCuc.includes(this.userInfo.MA_DVI.substring(0, 6))) : this.dataTable.filter(x => x.maChiCuc.includes(this.userInfo.MA_DVI))
     this.listDataGroup = chain(listOfData).groupBy("maCuc").map((value, key) => (
       {
         tenCuc: this.listDonVi[DANH_MUC_LEVEL.CUC].find(i => i.maDvi == key)?.tenDvi,
@@ -312,17 +318,17 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
             children: value
           }))
           .value();
-        chiCuc.children.forEach(diemKho => {
-          diemKho.children.forEach(nganLo => {
-            if (nganLo.maLoKho != null) {
-              nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.LO_KHO].find(i => i.maDvi == nganLo.maLoKho).tenDvi + " - "
-                + this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
-              this.sumSlNhap = slNhap += nganLo.slDoiThua;
-            } else {
-              nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
-            }
-          });
-        });
+        // chiCuc.children.forEach(diemKho => {
+        //   diemKho.children.forEach(nganLo => {
+        //     if (nganLo.maLoKho != null) {
+        //       nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.LO_KHO].find(i => i.maDvi == nganLo.maLoKho).tenDvi + " - "
+        //         + this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+        //       this.sumSlNhap = slNhap += nganLo.slDoiThua;
+        //     } else {
+        //       nganLo.tenNganLoKho = this.listDonVi[DANH_MUC_LEVEL.NGAN_KHO].find(i => i.maDvi == nganLo.maNganKho).tenDvi;
+        //     }
+        //   });
+        // });
       });
     });
     this.formData.get('tongSlNhap').setValue(this.sumSlNhap);
@@ -661,8 +667,8 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
     }
     return result;
   }
-
-  isDetail(): boolean {
+  /// Vũ đổi tên k bị trùng base
+  isDetaill(): boolean {
     return (
       this.isViewDetail
     );
@@ -845,7 +851,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent implements OnInit {
     this.spinner.show();
     this.dataTable.forEach(item => {
       item.trangThai = statusSave
-      if(item.children.length == 0){
+      if (item.children.length == 0) {
         this.notification.success(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       }
     })

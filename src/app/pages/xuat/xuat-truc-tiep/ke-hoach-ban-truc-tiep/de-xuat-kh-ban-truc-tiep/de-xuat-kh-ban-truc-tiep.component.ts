@@ -11,8 +11,7 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import {isEmpty} from 'lodash';
 import {DonviService} from 'src/app/services/donvi.service';
-import {CHUC_NANG} from "../../../../../constants/status";
-import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-de-xuat-kh-ban-truc-tiep',
@@ -21,12 +20,9 @@ import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
 })
 
 export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnInit {
-  @Input()
-  loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: XuatTrucTiepComponent
+  @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   dsDonvi: any[] = [];
-  userdetail: any = {};
   isView = false;
   idChiTieu: number = 0;
   isViewChiTieu: boolean = false;
@@ -34,21 +30,8 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   isViewQdPd: boolean = false;
   idThop: number = 0;
   isViewThop: boolean = false;
-  listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
-    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
-  ];
-  listTrangThaiTh: any[] = [
-    {ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa Tổng Hợp'},
-    {ma: this.STATUS.DA_TONG_HOP, giaTri: 'Đã Tổng Hợp'},
-    {ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ'},
-    {ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ'},
-    {ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ'},
-  ];
+  listTrangThai: any = [];
+  listTrangThaiTh: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -58,10 +41,8 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     modal: NzModalService,
     private donviService: DonviService,
     private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
-    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanTrucTiepService);
-    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: null,
       soDxuat: null,
@@ -73,63 +54,107 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       trichYeu: null,
       ngayKyQdTu: null,
       ngayKyQdDen: null,
-      soTrHdr: null,
       loaiVthh: null,
     });
+
     this.filterTable = {
       namKh: '',
+      soDxuat: '',
+      ngayTao: '',
+      ngayPduyet: '',
       soQdPd: '',
       ngayKyQd: '',
       trichYeu: '',
-      soTrHdr: '',
-      idThHdr: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
       slDviTsan: '',
-      soHdongDaKy: '',
-      tenTrangThai: '',
+      slHdDaKy: '',
+      soQdCtieu: '',
+      tenTrangThaiTh: '',
+      idThop: '',
     };
+
+    this.listTrangThai = [
+      {
+        value: this.STATUS.DU_THAO,
+        text: 'Dự thảo'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_TP,
+        text: 'Chờ duyệt - TP'
+      },
+      {
+        value: this.STATUS.TU_CHOI_TP,
+        text: 'Từ chối - TP'
+      },
+      {
+        value: this.STATUS.CHO_DUYET_LDC,
+        text: 'Chờ duyệt - LĐ Cục'
+      },
+      {
+        value: this.STATUS.TU_CHOI_LDC,
+        text: 'Từ chối - LĐ Cục'
+      },
+      {
+        value: this.STATUS.DA_DUYET_LDC,
+        text: 'Đã duyệt - LĐ Cục'
+      },
+    ]
+
+    this.listTrangThaiTh = [
+      {
+        value: this.STATUS.CHUA_TONG_HOP,
+        text: 'Chưa Tổng Hợp'
+      },
+      {
+        value: this.STATUS.DA_TONG_HOP,
+        text: 'Đã Tổng Hợp'
+      },
+      {
+        value: this.STATUS.CHUA_TAO_QD,
+        text: 'Chưa Tạo QĐ'
+      },
+      {
+        value: this.STATUS.DA_DU_THAO_QD,
+        text: 'Đã Dự Thảo QĐ'
+      },
+      {
+        value: this.STATUS.DA_BAN_HANH_QD,
+        text: 'Đã Ban Hành QĐ'
+      },
+    ]
   }
 
   async ngOnInit() {
     try {
-      this.timKiem();
+      await this.spinner.show();
       await Promise.all([
+        this.timKiem(),
         this.search(),
-        this.initData()
+        this.loadDsTong()
       ]);
-      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-  }
-
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    await this.loadDsTong();
   }
 
   async loadDsTong() {
     const dsTong = await this.donviService.layDonViCon();
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong.data;
-    }
+    this.dsDonvi = isEmpty(dsTong) ? [] : dsTong.data;
   }
 
-  timKiem() {
+  async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -138,76 +163,132 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     this.isView = isView;
   }
 
-  openModalChiTieu(id: number) {
-    this.idChiTieu = id;
-    this.isViewChiTieu = true;
-  }
-
-  closeModalChiTieu() {
-    this.idChiTieu = null;
-    this.isViewChiTieu = false;
-  }
-
-  openModalQdPd(id: number) {
-    this.idQdPd = id;
-    this.isViewQdPd = true;
-  }
-
-  closeModalQdPd() {
-    this.idQdPd = null;
-    this.isViewQdPd = false;
-  }
-
-  openModalTh(id: number) {
-    this.idThop = id;
-    this.isViewThop = true;
-  }
-
-  closeModalTh() {
-    this.idThop = null;
-    this.isViewThop = false;
-  }
-
-
-  disabledNgayTaoTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayTaoDen) {
-      return false;
+  openModal(modalName: string, id: number) {
+    switch (modalName) {
+      case 'ChiTieu':
+        this.idChiTieu = id;
+        this.isViewChiTieu = true;
+        break;
+      case 'QdPd':
+        this.idQdPd = id;
+        this.isViewQdPd = true;
+        break;
+      case 'Th':
+        this.idThop = id;
+        this.isViewThop = true;
+        break;
+      default:
+        break;
     }
-    return startValue.getTime() > this.formData.value.ngayTaoDen.getTime();
+  }
+
+  closeModal(modalName: string) {
+    switch (modalName) {
+      case 'ChiTieu':
+        this.idChiTieu = null;
+        this.isViewChiTieu = false;
+        break;
+      case 'QdPd':
+        this.idQdPd = null;
+        this.isViewQdPd = false;
+        break;
+      case 'Th':
+        this.idThop = null;
+        this.isViewThop = false;
+        break;
+      default:
+        break;
+    }
+  }
+
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
+  disabledNgayTaoTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayTaoDen, 'ngayTao');
+  };
+
+
   disabledNgayTaoDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayTaoTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayTaoTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayTaoTu, 'ngayTao');
   };
 
   disabledNgayDuyetTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayDuyetDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayDuyetDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayDuyetDen, 'ngayDuyet');
   };
 
   disabledNgayDuyetDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayDuyetTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayDuyetTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayDuyetTu, 'ngayDuyet');
   };
 
   disabledNgayKyQdTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyQdDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdDen, 'ngayKy');
   };
 
   disabledNgayKyQdDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyQdTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdTu, 'ngayKy');
   };
+
+  isActionAllowed(action: string, data: any): boolean {
+    const permissionMapping = {
+      VT: {
+        XEM: 'XHDTQG_PTTT_KHBTT_VT_DEXUAT_XEM',
+        THEM: 'XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM',
+        XOA: 'XHDTQG_PTTT_KHBTT_VT_DEXUAT_XOA',
+        DUYET_TP: 'XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP',
+        DUYET_LDCUC: 'XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC',
+      },
+      LT: {
+        XEM: 'XHDTQG_PTTT_KHBTT_LT_DEXUAT_XEM',
+        THEM: 'XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM',
+        XOA: 'XHDTQG_PTTT_KHBTT_LT_DEXUAT_XOA',
+        DUYET_TP: 'XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP',
+
+        DUYET_LDCUC: 'XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC',
+      },
+    };
+    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    switch (action) {
+      case 'XEM':
+        return (
+          this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
+              [
+                this.STATUS.CHO_DUYET_TP,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.DA_DUYET_LDC
+              ].includes(data.trangThai)) ||
+            (!this.userService.isAccessPermisson(permissions.THEM) && [
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_TP,
+                this.STATUS.TU_CHOI_LDC,
+                this.STATUS.DA_DUYET_LDC
+              ].includes(data.trangThai) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_TP &&
+                !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_LDC &&
+                !this.userService.isAccessPermisson(permissions.DUYET_LDCUC))))
+        );
+      case 'SUA':
+        return [
+          this.STATUS.DU_THAO,
+          this.STATUS.TU_CHOI_TP,
+          this.STATUS.TU_CHOI_LDC
+        ].includes(data.trangThai) && this.userService.isAccessPermisson(permissions.THEM);
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissions.DUYET_TP) &&
+            data.trangThai === this.STATUS.CHO_DUYET_TP) ||
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCUC) &&
+            data.trangThai === this.STATUS.CHO_DUYET_LDC)
+        );
+      case 'XOA':
+        return data.trangThai === this.STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA);
+      default:
+        return false;
+    }
+  }
 }

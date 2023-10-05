@@ -1,0 +1,107 @@
+<div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span>
+        </span>
+        <span>CẤU HÌNH ĐĂNG NHẬP</span>
+      </div>
+    </div>
+
+    <div class="btn-group">
+
+      <button type="button" class="btn btn-main ml-2" (click)="save()">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+
+
+    </div>
+  </div>
+
+  <form nz-form nzLayout="vertical" [formGroup]="formData">
+    <div nz-row [nzGutter]="24" class="mg-t-16">
+      <div nz-col nzSpan="12">
+        <nz-card class="pd-t-10">
+          <div nz-row [nzGutter]="24" class="mg-t-16">
+            <div nz-col [nzSpan]="18">
+              <span>Số lần đăng nhập tối đa</span>
+            </div>
+            <div nz-col [nzSpan]="2">
+
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-input-number formControlName="maxNumberLogin" [nzMin]="1" [nzMax]="999"
+                [nzStep]="1"></nz-input-number>
+            </div>
+          </div>
+          <div nz-row [nzGutter]="24" class="mg-t-16">
+            <div nz-col [nzSpan]="18">
+              <span>Cho phép lấy lại mật khẩu qua Email</span>
+            </div>
+            <div nz-col [nzSpan]="2">
+              <nz-switch formControlName="passwordRecoveryByMail"></nz-switch>
+            </div>
+            <div nz-col [nzSpan]="4">
+
+            </div>
+          </div>
+
+          <br />
+          <br />
+          <h3>Độ phức tạp mật khẩu</h3>
+
+          <div nz-row [nzGutter]="24" class="mg-t-16">
+            <div nz-col [nzSpan]="18">
+              <span>Độ dài mật khẩu</span>
+            </div>
+            <div nz-col [nzSpan]="2">
+              <nz-switch formControlName="isSizePassword"></nz-switch>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-input-number [nzDisabled]="!formData.value.isSizePassword" formControlName="sizePassword" [nzMin]="1"
+                [nzMax]="999" [nzStep]="1"></nz-input-number>
+            </div>
+          </div>
+          <div nz-row [nzGutter]="24" class="mg-t-16">
+            <div nz-col [nzSpan]="18">
+              <span>Bao gồm cả số và chữ, chữ hoa và chữ thường</span>
+            </div>
+            <div nz-col [nzSpan]="2">
+              <nz-switch formControlName="includeNumberAndChar"></nz-switch>
+            </div>
+            <div nz-col [nzSpan]="4">
+
+            </div>
+          </div>
+          <div nz-row [nzGutter]="24" class="mg-t-16">
+            <div nz-col [nzSpan]="18">
+              <span>Chứa ký tự đặc biệt ít nhất</span>
+            </div>
+            <div nz-col [nzSpan]="2">
+              <nz-switch formControlName="isMinSpecial" (ngModelChange)="onMinSpecial($event)"></nz-switch>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-input-number [nzDisabled]="!formData.value.isMinSpecial" formControlName="minSpecial" [nzMin]="1"
+                [nzMax]="999" [nzStep]="1"></nz-input-number>
+            </div>
+          </div>
+
+        </nz-card>
+
+      </div>
+      <div nz-col nzSpan="12">
+
+
+      </div>
+    </div>
+
+  </form>
+
+
+
+  <ng-template #error let-control>
+    <app-template-error #error [control]="control"></app-template-error>
+  </ng-template>
+
+</div>

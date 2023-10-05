@@ -1,7 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {STATUS} from "../../../../../constants/status";
 import {UserService} from "../../../../../services/user.service";
 import {

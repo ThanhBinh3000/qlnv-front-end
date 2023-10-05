@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
-import {MESSAGE} from "src/app/constants/message";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
+import { MESSAGE } from "src/app/constants/message";
 import dayjs from "dayjs";
-import {chain, cloneDeep} from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import * as uuid from "uuid";
-import {CHUC_NANG, STATUS} from "src/app/constants/status";
+import { CHUC_NANG, STATUS } from "src/app/constants/status";
 
 @Component({
   selector: 'app-phieu-kiem-nghiem-chat-luong',
@@ -18,6 +18,8 @@ import {CHUC_NANG, STATUS} from "src/app/constants/status";
   styleUrls: ['./phieu-kiem-nghiem-chat-luong.component.scss']
 })
 export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
+  @Input() loaiXuat: any;
+  @Input() loaiVthh: any;
   @Input() inputService: any;
   @Input() inputServiceGnv: any;
   @Input() inputServiceBbLayMau: any;
@@ -59,6 +61,10 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
 
   async ngOnInit() {
     try {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        type: this.loaiXuat
+      });
       super.service = this.inputService;
       await this.search();
     } catch (e) {
@@ -275,7 +281,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
              "nguoiSuaId": 38
            }];*/
       this.dataTable.forEach(s => s.idVirtual = uuid.v4());
-      console.log(this.dataTable,'ádasdas')
       this.buildTableView();
     } catch (e) {
       console.log('error: ', e)
@@ -286,7 +291,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   }
 
   buildTableView() {
-    console.log(this.dataTable);
     this.tableDataView = chain(this.dataTable)
       .groupBy("soQdGnv")
       .map((value, key) => {
@@ -301,7 +305,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
           childData: value
         };
       }).value();
-    console.log(this.tableDataView, 'tableDataView')
     this.expandAll()
 
   }
@@ -405,5 +408,29 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     } else {
       return false;
     }
+  }
+  checkRoleEdit(trangThai: STATUS): boolean {
+    if ([STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM')) {
+      return true
+    }
+    return false
+  };
+  checkRoleApprove(trangThai: STATUS): boolean {
+    if (STATUS.CHO_DUYET_TP === trangThai && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP") || STATUS.CHO_DUYET_LDC === trangThai && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCUC")) {
+      return true
+    }
+    return false
+  }
+  checkRoleDelete(trangThai: STATUS): boolean {
+    if ([STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA")) {
+      return true
+    }
+    return false
+  };
+  checkRoleView(trangThai: STATUS) {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM")) {
+      return true
+    }
+    return false
   }
 }

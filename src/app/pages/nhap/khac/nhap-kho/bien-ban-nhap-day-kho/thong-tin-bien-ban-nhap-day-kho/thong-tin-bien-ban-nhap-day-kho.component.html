@@ -16,23 +16,23 @@
         <span>Quay lại</span>
       </button>
 
-      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
+      <button *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')" type="button"
         class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
 
-      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-main ml-2"
+      <button *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')" type="button" class="btn btn-main ml-2"
         (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
 
-      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"
-        (click)="guiDuyet()">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Gửi duyệt</span>
-      </button>
+<!--      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"-->
+<!--        (click)="guiDuyet()">-->
+<!--        <i class="icon htvbdh_tcdt_pheduyet"></i>-->
+<!--        <span>Gửi duyệt</span>-->
+<!--      </button>-->
 
       <button *ngIf="isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
@@ -49,6 +49,12 @@
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
+
+      <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+        <i class=" icon htvbdh_tcdt_print"></i>
+        <span>In/xem trước</span>
+      </button>
+
 
     </div>
   </div>
@@ -404,3 +410,26 @@
   </ng-template>
 
 </div>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="BIÊN BẢN NHẬP ĐẦY KHO" nzWidth="100%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()" class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

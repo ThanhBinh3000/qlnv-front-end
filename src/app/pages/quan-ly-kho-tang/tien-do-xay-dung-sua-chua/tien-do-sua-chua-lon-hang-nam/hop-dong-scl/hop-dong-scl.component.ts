@@ -7,6 +7,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {STATUS} from "../../../../../constants/status";
 import {MESSAGE} from "../../../../../constants/message";
 import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {UserService} from "../../../../../services/user.service";
 
 @Component({
   selector: 'app-hop-dong-scl',
@@ -19,8 +20,7 @@ export class HopDongSclComponent implements OnInit {
   isDetail: boolean = true;
   flagInfo: string = 'addnew';
   STATUS = STATUS;
-  @Input()
-  itemQdPdKhLcnt: any;
+  @Input() itemQdPdKhLcnt: any;
   @Input() itemQdPdKtkt: any;
   @Input()   itemDuAn: any;
   @Input()
@@ -32,7 +32,8 @@ export class HopDongSclComponent implements OnInit {
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     private modal: NzModalService,
-    private hopdongService: HopdongTdscService
+    private hopdongService: HopdongTdscService,
+    public userService : UserService
   ) {
 
   }
@@ -52,6 +53,7 @@ export class HopDongSclComponent implements OnInit {
         "idDuAn": this.itemTtdt.idDuAn,
         "idQdPdKtkt": this.itemQdPdKtkt.id,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
+        "loai" : "00"
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -77,7 +79,7 @@ export class HopDongSclComponent implements OnInit {
   redirectToChiTiet(data: any, action, isView?: boolean) {
     this.selectedId = data.id;
     this.itemQdPdKhLcnt = data;
-    this.isDetail = true;
+    this.isDetail = false;
     this.flagInfo = action;
     this.isViewDetail = isView ?? false;
   }

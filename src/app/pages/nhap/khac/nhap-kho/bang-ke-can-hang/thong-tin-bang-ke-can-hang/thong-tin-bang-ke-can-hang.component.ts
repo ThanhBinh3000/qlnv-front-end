@@ -40,6 +40,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   chungTuDinhKem: any[] = [];
   fileDinhKemReq: any[] = [];
   listDanhSachQuyetDinh: any[] = [];
+  previewName: string = 'nk_bang_ke_can_hang';
 
   dsKeHoach: any[] = []
 
@@ -128,7 +129,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       console.log('data', this.data)
       this.formData.patchValue({
         soQdPdNk: this.data.soQdPdNk,
-        ngayKyQdinh: "2023-31-07",//ngayKyQdinh
+        ngayKyQdinh: this.data.ngayKyQdinh,
         idQdPdNk: this.data.idQdPdNk,
         tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
         tenLoKho: this.data.tenLoKho,
@@ -224,7 +225,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   }
 
   xoa(row) {
-    this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
+    this.dsHangTH = this.dsHangTH.filter(item => item.id !== row.id)
   }
 
 
@@ -458,7 +459,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
         this.idInput = data.id;
         this.guiDuyet();
       } else {
-        this.quayLai();
+        // this.quayLai();
       }
     }
     await this.spinner.hide();

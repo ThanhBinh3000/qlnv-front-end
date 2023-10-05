@@ -20,6 +20,8 @@ import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.c
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { endOfMonth } from 'date-fns';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PREVIEW } from 'src/app/constants/fileType';
+import printJS from 'print-js';
 
 @Component({
   selector: 'app-base3',
@@ -36,7 +38,9 @@ export class Base3Component implements OnInit {
   // Const
   listNam: any[] = [];
   listTrangThai: any = [];
-  fileDinhKem: any[] = []
+  fileDinhKem: any[] = [];
+
+  fileCanCu: any[] = [];
   STATUS = STATUS
 
   // Form search and dataTable
@@ -326,7 +330,10 @@ export class Base3Component implements OnInit {
   }
 
   // Export data
-  exportData(fileName?: string) {
+  exportData(fileName?: string, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -397,7 +404,8 @@ export class Base3Component implements OnInit {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.fileDinhKem = data.fileDinhKem
+          this.fileDinhKem = data.fileDinhKem;
+          this.fileCanCu = data.fileCanCu;
           return data;
         }
       } else {
@@ -631,7 +639,10 @@ export class Base3Component implements OnInit {
     return endValue.getTime() <= this.formData.value.ngayDen.getTime();
   };
 
-  redirectCreate() {
+  redirectCreate(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.router.navigate([this.defaultURL + '/them-moi']);
   }
 
@@ -639,7 +650,10 @@ export class Base3Component implements OnInit {
     this.router.navigate([url]);
   }
 
-  redirectDetail(idDetail) {
+  redirectDetail(idDetail, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.router.navigate([this.defaultURL + '/chi-tiet', idDetail]);
   }
 
@@ -662,6 +676,54 @@ export class Base3Component implements OnInit {
     }
     return false;
   }
+
+  showDlgPreview = false;
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  previewName: string = '';
+  async preview(fileName: string, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.spinner.show();
+    let body = this.formData.value;
+    this.reportTemplate.fileName = fileName + '.docx';
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.service.preview(body).then(async s => {
+      this.spinner.hide();
+      if (s.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+        this.printSrc = s.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.info(MESSAGE.NOTIFICATION, MESSAGE.TEMPLATE_NULL);
+      }
+
+    });
+  }
+  downloadPdf(fileName: string) {
+    saveAs(this.pdfSrc, fileName + '.pdf');
+  }
+
+  downloadWord(fileName: string) {
+    saveAs(this.wordSrc, fileName + '.docx');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+  }
+
 
 
 

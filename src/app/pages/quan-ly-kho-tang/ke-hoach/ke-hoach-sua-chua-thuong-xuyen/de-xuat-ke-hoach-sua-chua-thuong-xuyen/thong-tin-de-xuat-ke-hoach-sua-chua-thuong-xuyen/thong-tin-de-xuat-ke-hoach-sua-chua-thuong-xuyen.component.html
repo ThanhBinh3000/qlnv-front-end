@@ -46,6 +46,11 @@
       </button>
     </div>
   </div>
+  <nz-alert
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_CBV"
+    nzShowIcon nzType="error" nzMessage="Lý do từ chối"
+    nzDescription="{{formData.value.lyDoTuChoi}}">
+  </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
     <nz-collapse>
       <nz-collapse-panel [nzActive]="true" nzHeader="THÔNG TIN CHUNG" class="mg-t-10">
@@ -57,7 +62,8 @@
                 </nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <nz-select formControlName="namKh" [nzDisabled]="isViewDetail">
+                    <nz-select formControlName="namKh" [nzDisabled]="isViewDetail"
+                               (ngModelChange)="getDmSuaChuaThuongXuyen($event)">
                       <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                   </nz-input-group>

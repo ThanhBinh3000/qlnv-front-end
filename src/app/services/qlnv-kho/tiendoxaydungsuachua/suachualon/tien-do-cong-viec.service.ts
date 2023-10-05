@@ -11,7 +11,7 @@ export class TienDoCongViecTdscService extends BaseService{
   GATEWAY = '/qlnv-kho';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'tien-do-xdsc/xay-dung/tien-do-cong-viec', '');
+    super(httpClient, 'tien-do-xdsc/sua-chua/tien-do-cong-viec', '');
   }
 
   hoanThanh(body) {

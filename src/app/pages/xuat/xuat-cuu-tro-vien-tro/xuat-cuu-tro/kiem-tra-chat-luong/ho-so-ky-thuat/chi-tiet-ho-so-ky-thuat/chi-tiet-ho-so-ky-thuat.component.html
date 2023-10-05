@@ -5,6 +5,10 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+      <button type="button" class="btn btn-sub" (click)="inBienBan(id,'CTVT','HS')">
+        <i class="icon htvbdh_totrinh"></i>
+        <span> In/Xem trước </span>
+      </button>
       <button (click)="approve(id,STATUS.DA_KY,'Bạn có muốn xác nhận ?')"
               [disabled]="formData.value.kqKiemTra != 1"
               class="btn btn-sub" type="button">
@@ -334,6 +338,9 @@
           <a *ngIf="item.trangThai != STATUS.DA_KY" (click)="redirectToBienBan(false,item)">
             <i class="fa fa-edit" title="Chỉnh sửa"></i>
           </a>
+          <a (click)="inBienBan(id,'CTVT',item.loaiBb)">
+            <i class="fa fa-print" title="Xem biên bản"></i>
+          </a>
         </td>
       </tr>
       </tbody>
@@ -369,3 +376,32 @@
                                   (saveDtl)="saveDtl($event)">
   </app-chi-tiet-bien-ban-kiem-tra>
 </ng-container>
+
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf( templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord( templateName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

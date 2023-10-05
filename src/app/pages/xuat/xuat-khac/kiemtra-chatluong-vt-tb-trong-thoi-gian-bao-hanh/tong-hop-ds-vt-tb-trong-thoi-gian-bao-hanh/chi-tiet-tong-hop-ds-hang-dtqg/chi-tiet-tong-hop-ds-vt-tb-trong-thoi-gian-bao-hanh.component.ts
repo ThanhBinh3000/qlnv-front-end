@@ -52,6 +52,7 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
   numberToRoman = NumberToRoman;
   maHauTo: any;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
+  fileDinhKems: any[] = [];
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -83,9 +84,9 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
       tenTrangThai: [],
       tenDvi: [],
       tenCuc: [],
-      loai: [],
       tongHopDtl: [new Array()],
       fileDinhKems: [new Array<FileDinhKem>()],
+      loai: [LOAI_HH_XUAT_KHAC.VT_BH],
     })
     this.userInfo = this.userService.getUserLogin();
     this.maHauTo = 'DSLT06';
@@ -94,8 +95,6 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
   async ngOnInit(): Promise<void> {
     try {
       await this.spinner.show();
-      console.log(this.showDetail, 666)
-      console.log(this.selectedItem, 77)
       await this.loadDetail(this.idInput);
     } catch (e) {
       console.log('error: ', e)
@@ -112,7 +111,7 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.selectedItem = res.data;
-            console.log(this.selectedItem,888)
+            console.log(this.selectedItem, 888)
             this.formData.patchValue(res.data);
             this.formData.value.tongHopDtl.forEach(s => {
               s.idVirtual = uuidv4();
@@ -216,25 +215,26 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
         return;
       } else {
         await this.danhSachVtTbTrongThoiGIanBaoHanh.search({
-          type: 'TH',
+          loai: LOAI_HH_XUAT_KHAC.VT_BH,
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data.numberOfElements == 0) {
-              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy hàng hóa cần thanh lý trong danh sách.');
+              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy danh sách cần tổng hợp');
             } else {
               res.data.content.forEach(s => {
                 s.idDsHdr = cloneDeep(s.id);
                 s.id = null;
               });
-              this.formData.patchValue({
-                maDanhSach: this.selectedItem ?? this.maHauTo,
-                loai: this.loaiHhXuatKhac.VT_BH,
-                tongHopDtl: res.data.content
-              });
+              let body = this.formData.value;
+              body.maDanhSach = this.selectedItem ?? this.maHauTo;
+              body.fileDinhKems = this.fileDinhKems;
+              body.tongHopDtl = res.data.content;
               let result = await this.createUpdate(this.formData.value);
               if (result) {
                 this.selectedItem = cloneDeep(result);
-                await this.buildTableView(result.tongHopDtl);
+                // console.log(this.selectedItem,"file")
+                // await this.buildTableView(result.tongHopDtl);
+                await this.loadDetail(this.selectedItem.id)
                 this.step.emit({step: 2, item: this.selectedItem});
               }
             }

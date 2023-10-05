@@ -22,6 +22,7 @@ import {DonviService} from "../../../../../../services/donvi.service";
 import {OldResponseData} from "../../../../../../interfaces/response";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {LOAI_HINH_NHAP_XUAT} from "../../../../../../constants/config";
 
 
 @Component({
@@ -79,7 +80,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   listCloaiVthh: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-
+  loaiHinhNhapXuat = LOAI_HINH_NHAP_XUAT;
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
@@ -146,6 +147,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     if (changes) {
       if (this.dataInput) {
         this.formData.patchValue({
+          loaiHinhNx: this.dataInput.loaiHinhNx,
           tenLoaiHinhNx: this.dataInput.tenLoaiHinhNx,
           tongSlNhap: this.dataInput.tongSlNhap,
           tongThanhTien: this.dataInput.tongThanhTien
@@ -255,8 +257,16 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     let tongSl = 0;
     let tongThanhTien = 0;
     this.listOfData.forEach(i => {
-      tongSl += i.slDoiThua;
-      tongThanhTien += i.slDoiThua * i.donGia;
+      if (this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.DOI_THUA) {
+        tongSl += i.slDoiThua;
+        tongThanhTien += i.slDoiThua * i.donGia;
+      } else if (this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK) {
+        tongSl += (i.slTonKhoThucTe - i.slTonKho);
+        tongThanhTien += (i.slTonKhoThucTe - i.slTonKho) * i.donGia;
+      } else {
+        tongSl += i.slNhap;
+        tongThanhTien += i.slNhap * i.donGia;
+      }
     })
     this.formData.get("tongSlNhap").setValue(tongSl);
     this.formData.get("tongThanhTien").setValue(tongThanhTien);

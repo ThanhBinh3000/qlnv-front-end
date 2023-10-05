@@ -1,37 +1,46 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
-  <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item *ngIf="userService.isTongCuc()" [nzSelected]="tabSelected==0" (click)="selectTab(0)">
-      Danh sách hàng dữ trữ theo chỉ đạo của chính phủ
+<nz-affix [nzOffsetTop]='globals.prop.MENU_LV1' class='level1'>
+  <ul nz-menu nzMode='horizontal'>
+    <li nz-menu-item *ngIf="userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSHDTQG') "
+        [nzSelected]='tabSelected==0' (click)='selectTab(0)'>
+      Danh sách hàng dự trữ theo chỉ đạo của chính phủ
     </li>
-    <li [nzSelected]="tabSelected==1" *ngIf="userService.isTongCuc()" nz-menu-item (click)="selectTab(1)">
-      Danh sách hàng dữ trữ trong kho ngoài danh mục
+    <li [nzSelected]='tabSelected==1'
+        *ngIf="userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSHNDM')" nz-menu-item
+        (click)='selectTab(1)'>
+      Danh sách hàng dự trữ trong kho ngoài danh mục
     </li>
-    <li [nzSelected]="tabSelected==2" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(2)">
+    <li [nzSelected]='tabSelected==2'
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_QDXH')" nz-menu-item
+        (click)='selectTab(2)'>
       Quyết định xuất hàng khỏi danh mục
     </li>
-    <li [nzSelected]="tabSelected==3" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(3)">
+    <li [nzSelected]='tabSelected==3'
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSXH')" nz-menu-item
+        (click)='selectTab(3)'>
       Tổng hợp danh sách hàng DTQG thuộc diện xuất hàng khỏi danh mục
     </li>
-    <li [nzSelected]="tabSelected==4" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(4)">
+    <li [nzSelected]='tabSelected==4'
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_BCKQ')" nz-menu-item
+        (click)='selectTab(4)'>
       Báo cáo kết quả xuất hàng DTQG ngoài danh mục
     </li>
   </ul>
 </nz-affix>
-<div class="contentBor chi-tieu__body giao-ke-hoach">
-  <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
+<div class='contentBor chi-tieu__body giao-ke-hoach'>
+  <div class='contentDetail'>
+    <ng-container *ngIf='tabSelected == 0'>
       <app-danh-sach-hang-du-tru-theo-chi-dao-cua-cp></app-danh-sach-hang-du-tru-theo-chi-dao-cua-cp>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
+    <ng-container *ngIf='tabSelected == 1'>
       <app-danh-sach-hang-du-tru-trong-kho-ngoai-danh-muc></app-danh-sach-hang-du-tru-trong-kho-ngoai-danh-muc>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 2">
+    <ng-container *ngIf='tabSelected == 2'>
       <app-quyet-dinh-xuat-hang-khoi-danh-muc></app-quyet-dinh-xuat-hang-khoi-danh-muc>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 3">
+    <ng-container *ngIf='tabSelected == 3'>
       <app-tong-hop-danh-sach-hang-dtqg-thuoc-dien-xuat-khoi-dm></app-tong-hop-danh-sach-hang-dtqg-thuoc-dien-xuat-khoi-dm>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 4">
+    <ng-container *ngIf='tabSelected == 4'>
       <app-bao-cao-kq-xuat-hang-dtqg-ngoai-dm></app-bao-cao-kq-xuat-hang-dtqg-ngoai-dm>
     </ng-container>
   </div>

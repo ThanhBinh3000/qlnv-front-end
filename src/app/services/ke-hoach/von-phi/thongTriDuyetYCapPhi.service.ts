@@ -41,7 +41,7 @@ export class ThongTriDuyetYCapPhiService extends BaseService {
     }
 
     deleteMultiple(body: any): Promise<any> {
-        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}`;
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/delete/multiple`;
         return this.httpClient.post(url, body).toPromise();
     }
 

@@ -30,7 +30,7 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
     ngayTongHop: '',
     ketLuan: '',
     soQuyetDinh: '',
-    namKh: dayjs().get('year'),
+    namKh: '',
   };
   constructor(
     httpClient: HttpClient,
@@ -103,14 +103,16 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
           item.detail = {
             children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
           }
+          item.expand = true;
         } else {
           let data = [];
           item.hhQdGiaoNvNhangDtlList.forEach(res => {
             data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
           })
           item.detail = {
-            hhQdGiaoNvNhDdiemList: data,
+            children: data
           }
+          item.expand = true;
         };
       });
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -192,5 +194,12 @@ export class BienBanLayBanGiaoMauComponent extends Base2Component implements OnI
     this.idQdGiaoNvNh = idQdGiaoNvu;
     this.isDetail = true;
     this.isView = isView;
+  }
+
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
   }
 }

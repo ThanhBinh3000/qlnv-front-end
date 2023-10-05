@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { XUAT_ROUTE_LIST } from './xuat.constant';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-xuat',
   templateUrl: './xuat.component.html',
@@ -20,6 +21,7 @@ export class XuatComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
+    public userService: UserService
   ) { }
 
   ngOnInit(): void {

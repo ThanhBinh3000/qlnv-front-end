@@ -132,7 +132,7 @@
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.ngayTongHop | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.giaTriBh| number : '1.0-1' }}</td>
+          <td>{{ data.giaTriBh| number: '1.0-1': 'vi_VN'}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THGIATRIBH_XEM') &&(((data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.DA_DUYET_LDV) && userService.isTongCuc()) || userService.isCuc())">

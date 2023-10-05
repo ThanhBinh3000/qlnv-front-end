@@ -24,6 +24,7 @@ import {
 import {
   HoSoKyThuatBttService
 } from "src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/HoSoKyThuatBtt.service";
+import {PREVIEW} from "src/app/constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat-btt',
@@ -107,6 +108,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
   viewTableHoSo: any[] = [];
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
+  templateName: string="Hồ sơ kỹ thuật";
 
   constructor(
     httpClient: HttpClient,
@@ -432,4 +434,20 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       }
     });
   };
+  async inBienBan(id, type, loai) {
+    await this.hoSoKyThuatBttService.preview({
+      id: id,
+      type: type,
+      loai: loai
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
 }

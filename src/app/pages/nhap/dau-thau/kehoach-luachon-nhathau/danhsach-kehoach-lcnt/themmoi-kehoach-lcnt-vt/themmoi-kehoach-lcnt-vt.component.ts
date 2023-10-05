@@ -10,19 +10,12 @@ import {
   DanhSachDauThauService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service";
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import { DanhMucTieuChuanService } from "../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
-import {
-  QuyetDinhGiaTCDTNNService
-} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import { Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
 import { MESSAGE } from "../../../../../../constants/message";
-import { API_STATUS_CODE, LOAI_HANG_DTQG } from "../../../../../../constants/config";
 import { CanCuXacDinh, DanhSachGoiThau, FileDinhKem } from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import { chain } from "lodash";
 import { DatePipe } from "@angular/common";
 import { PREVIEW } from "../../../../../../constants/fileType";
-import { convertTienTobangChu } from "../../../../../../shared/commonFunction";
 import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import { STATUS } from "../../../../../../constants/status";
 import { saveAs } from "file-saver";
@@ -32,7 +25,7 @@ import {
 import {
   DialogThemMoiGoiThauComponent
 } from "../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
-import {AMOUNT} from "../../../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: "app-themmoi-kehoach-lcnt-vt",
@@ -59,15 +52,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   listOfData: any[] = [];
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "de_xuat_kh_lcnt_vat_tu.docx",
-    tenBaoCao: "",
-    trangThai: ""
-  };
-  showDlgPreview = false;
-  pdfSrc: any;
-  wordSrc: any;
   addModelBaoGia: any = {
     moTa: "",
     tenTlieu: "",
@@ -79,7 +63,20 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   };
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
-  amount = AMOUNT
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
+  previewName: string = "de_xuat_kh_lcnt_vat_tu";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -89,8 +86,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     private danhMucService: DanhMucService,
     private dauThauService: DanhSachDauThauService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
-    private dmTieuChuanService: DanhMucTieuChuanService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dauThauService);
     this.formData = this.fb.group({
@@ -124,7 +119,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       gtriDthau: [null],
       gtriHdong: [null],
       donGiaVat: [],
-      vat: ["5"],
+      thueVat: [],
       tongMucDt: [null],
       tongMucDtDx: [null],
       nguonVon: ["NGV01"],
@@ -161,7 +156,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       });
     }
     this.formData.get("loaiVthh").setValue(this.loaiVthhInput);
-    this.formData.get("vat").setValue("8");
     await this.loadDanhMucHang();
     if (this.idInput > 0) {
       await this.getDetail(this.idInput, null);
@@ -284,7 +278,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll("LOAI_HDONG");
+    let resHd = await this.danhMucService.danhMucChungGetAll("HINH_THUC_HOP_DONG");
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -348,15 +342,12 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
   }
 
   async preview() {
-    let pipe = new DatePipe("en-US");
+    this.reportTemplate.fileName = this.previewName + '.docx';
     let body = this.formData.value;
     body.reportTemplateRequest = this.reportTemplate;
-    // body.fileDinhKemReq = this.fileDinhKem;
-    // body.tongMucDtBangChu = convertTienTobangChu(this.formData.get("tongMucDt").value);
-    // body.tgianDthau = pipe.transform(body.tgianDthau, "yyyy-MM-dd HH:mm");
-    // body.tgianMthau = pipe.transform(body.tgianMthau, "yyyy-MM-dd HH:mm");
     await this.dauThauService.previewVt(body).then(async s => {
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
@@ -532,25 +523,63 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     body.dsGtReq = this.listOfData;
     body.ccXdgReq = [...this.baoGiaThiTruongList, ...this.canCuKhacList];
     let res = null;
-    if (this.formData.get("id").value) {
-      res = await this.dauThauService.update(body);
-    } else {
-      res = await this.dauThauService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (isGuiDuyet) {
-        this.idInput = res.data.id;
-        await this.guiDuyet();
-      } else {
-        if (this.formData.get("id").value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.formData.get("id").setValue(res.data.id);
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+    if (this.formData.value.tongMucDtDx > this.formData.value.tongMucDt) {
+      await this.modal.confirm({
+        nzClosable: false,
+        nzTitle: "Xác nhận",
+        nzContent: "Tổng mức đầu tư cao hơn Tổng dự toán các gói thầu, bạn vẫn muốn lưu ?",
+        nzOkText: "Đồng ý",
+        nzCancelText: "Không",
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          this.spinner.show();
+          if (this.formData.get("id").value) {
+            res = await this.dauThauService.update(body);
+          } else {
+            res = await this.dauThauService.create(body);
+          }
+          if (res.msg == MESSAGE.SUCCESS) {
+            if (isGuiDuyet) {
+              this.idInput = res.data.id;
+              await this.guiDuyet();
+            } else {
+              if (this.formData.get("id").value) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              } else {
+                this.formData.get("id").setValue(res.data.id);
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              }
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
         }
-      }
+      });
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      this.spinner.show();
+      if (this.formData.get("id").value) {
+        res = await this.dauThauService.update(body);
+      } else {
+        res = await this.dauThauService.create(body);
+      }
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (isGuiDuyet) {
+          this.idInput = res.data.id;
+          await this.guiDuyet();
+        } else {
+          if (this.formData.get("id").value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.formData.get("id").setValue(res.data.id);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
     }
   }
 
@@ -560,18 +589,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     }
     this.notification.error(MESSAGE.ERROR, "Bạn không có quyền truy cập chức năng này !");
     return false;
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, "de_xuat_kh_lcnt_vat_tu.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "de_xuat_kh_lcnt_vat_tu.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 
   onChangeLhNx($event) {
@@ -633,8 +650,8 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
 
   themMoiGoiThau($event: any, data?: DanhSachGoiThau, index?: number) {
     $event.stopPropagation();
-    if (this.formData.get("loaiVthh").value == null) {
-      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
+    if (this.formData.get("loaiVthh").value == null || this.formData.get("loaiVthh").value == '02') {
+      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng DTQG");
       return;
     }
     let listGoiThau = [];
@@ -689,7 +706,8 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
           tongMucDt: parseFloat(tongMucDt.toFixed(2)),
           tongSlChiTieu: tongSlChiTieu,
           ngayKyQdPdGiaCuThe: res.ngayKyQdPdGiaCuThe,
-          soQdPdGiaCuThe: res.soQdPdGiaCuThe
+          soQdPdGiaCuThe: res.soQdPdGiaCuThe,
+          thueVat: res.vat
         });
       }
     });

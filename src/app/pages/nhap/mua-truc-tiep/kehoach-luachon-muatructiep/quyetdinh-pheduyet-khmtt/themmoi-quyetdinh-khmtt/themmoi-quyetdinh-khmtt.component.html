@@ -4,13 +4,18 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isTongCuc()" type="button"
+    <button
+      type="button" class="btn btn-sub do" (click)="preview(previewName)">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      <span>Xem trước</span>
+    </button>
+    <button *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isTongCuc()" type="button"
       class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isTongCuc()"
+      *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isTongCuc()"
       type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -143,7 +148,7 @@
                 <th>Trích yếu</th>
                 <th>Tên dự án</th>
                 <th>Số lượng (tấn)</th>
-                <th>Tổng tiền đã bao gồm thuế(đồng)</th>
+                <th>Tổng tiền đã bao gồm thuế</th>
               </tr>
             </thead>
             <tbody>
@@ -156,8 +161,8 @@
                 <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                 <td>{{ data.trichYeu }}</td>
                 <td>{{ data.tenDuAn }}</td>
-                <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-                <td>{{ data.tongSoLuong * data.donGiaVat * 1000| number: '1.0-1' }}</td>
+                <td>{{ data.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ (data.tongTienGomThue ? data.tongTienGomThue : (data.tongMucDt ? data.tongMucDt : data.tongSoLuong * data.donGiaVat * 1000)) | number : '1.0-1' : 'vi_VN'}}</td>
               </tr>
             </tbody>
           </nz-table>
@@ -186,3 +191,30 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH MUA TRỰC TIẾP" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 650px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

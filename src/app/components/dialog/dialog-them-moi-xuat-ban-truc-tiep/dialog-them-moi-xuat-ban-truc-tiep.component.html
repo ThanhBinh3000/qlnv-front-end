@@ -3,9 +3,9 @@
     <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
       <div nz-col [nzSpan]="6">
         <nz-form-item>
-          <nz-form-label nzRequired [nzNoColon]="true"> Chi cục </nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]="true"> Chi cục</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event)"
+            <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event, true)"
                        [nzDisabled]='selectedChiCuc'>
               <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi"
                          [nzLabel]="p.tenDvi"></nz-option>
@@ -15,7 +15,7 @@
       </div>
       <div nz-col [nzSpan]="5">
         <nz-form-item>
-          <nz-form-label nzRequired [nzNoColon]="true"> SL xuất theo chỉ tiêu KH giao đầu năm </nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]="true"> SL xuất theo chỉ tiêu KH giao đầu năm</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
             <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
                              [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
@@ -26,7 +26,7 @@
       </div>
       <div nz-col [nzSpan]="5">
         <nz-form-item>
-          <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán theo KH đã được duyệt </nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán theo KH đã được duyệt</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
             <nz-input-number [nzDisabled]="true" formControlName="soLuongKhDaDuyet" [nzMin]="1"
                              [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
@@ -37,7 +37,7 @@
       </div>
       <div nz-col [nzSpan]="5">
         <nz-form-item>
-          <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán TT đề xuất </nz-form-label>
+          <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán TT đề xuất</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
             <nz-input-number [nzDisabled]="true" formControlName="soLuongChiCuc" [nzMin]="1"
                              [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
@@ -106,10 +106,11 @@
       <th>
         <input nz-input [(ngModel)]="thongTinXuatBanTrucTiep.maDviTsan" class="w-150"/>
       </th>
-      <th>{{thongTinXuatBanTrucTiep.tonKho|number:globals.numberFormat:globals.locale}}</th>
+      <th>{{thongTinXuatBanTrucTiep.tonKho == 0 ? null : thongTinXuatBanTrucTiep.tonKho|number:globals.numberFormat:globals.locale}}</th>
       <th>
         <nz-input-number placeholder="(1)" class="text-right" nz-input
-                         [(ngModel)]="thongTinXuatBanTrucTiep.soLuongDeXuat" (ngModelChange)="onChangeTinh()" [nzMin]="0"
+                         [(ngModel)]="thongTinXuatBanTrucTiep.soLuongDeXuat" (ngModelChange)="onChangeTinh()"
+                         [nzMin]="0"
                          [nzStep]="1" [nzSize]="'small'"
                          [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
         </nz-input-number>
@@ -143,7 +144,7 @@
         <td>{{ data.tenLoKho }}</td>
         <td>{{ data.tenCloaiVthh }}</td>
         <td>{{ data.maDviTsan }}</td>
-        <td>{{ data.tonKho|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ data.tonKho == 0 ? null : data.tonKho|number:globals.numberFormat:globals.locale }}</td>
         <td>{{ data.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
         <td>{{ data.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
         <td>{{ data.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
@@ -188,7 +189,7 @@
           <input nz-input [(ngModel)]="editCache[idx].data.maDviTsan" class="w-150"/>
         </td>
 
-        <td>{{ editCache[idx].data.tonKho|number:globals.numberFormat:globals.locale }}</td>
+        <td>{{ editCache[idx].data.tonKho == 0 ? null : editCache[idx].data.tonKho|number:globals.numberFormat:globals.locale }}</td>
 
         <td>
           <nz-input-number class="text-right" nz-input [(ngModel)]="editCache[idx].data.soLuongDeXuat"
@@ -221,10 +222,12 @@
     </tbody>
     <tfoot>
     <tr *ngIf="listOfData.length > 0">
-      <th colspan="6" class="first-last-row-table background-last-row text-left"> Cộng </th>
-      <th class="background-last-row text-left"> {{ calcTong('tonKho')|number:globals.numberFormat:globals.locale }}
+      <th colspan="6" class="first-last-row-table background-last-row text-left"> Cộng</th>
+      <th
+        class="background-last-row text-left">  {{ calcTong('tonKho') == 0 ? null : calcTong('tonKho')|number:globals.numberFormat:globals.locale }}
       </th>
-      <th class="background-last-row text-left"> {{ calcTong('soLuongDeXuat')|number:globals.numberFormat:globals.locale }}</th>
+      <th
+        class="background-last-row text-left"> {{ calcTong('soLuongDeXuat')|number:globals.numberFormat:globals.locale }}</th>
       <th colspan="5"></th>
     </tr>
     </tfoot>

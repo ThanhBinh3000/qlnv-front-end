@@ -70,7 +70,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   daiDienCuc: ChiTiet = new ChiTiet();
   daiDienChiCuc: ChiTiet = new ChiTiet();
   benGiao: ChiTiet = new ChiTiet();
-
+  previewName: string = 'bien_ban_giao_nhan';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -353,7 +353,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh'],
       },
     })
@@ -430,10 +430,10 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         tenLoKho: data.tenLoKho,
         soLuongNhapKho: this.loaiVthh == '02' ? data.soLuong : data.soLuong * 1000,
         soLuong: data.soLuong,
-        ngayBatDauNhap: data.bienBanNhapDayKho.ngayBatDauNhap,
-        ngayKetThucNhap: data.bienBanNhapDayKho.ngayKetThucNhap,
-        soBbNhapDayKho: data.bienBanNhapDayKho.soBienBanNhapDayKho,
-        soHoSoKyThuat: data.hoSoKyThuat.soHoSoKyThuat
+        ngayBatDauNhap: data.bienBanNhapDayKho?.ngayBatDauNhap,
+        ngayKetThucNhap: data.bienBanNhapDayKho?.ngayKetThucNhap,
+        soBbNhapDayKho: data.bienBanNhapDayKho?.soBienBanNhapDayKho,
+        soHoSoKyThuat: data.hoSoKyThuat?.soHoSoKyThuat
       });
     }
   }

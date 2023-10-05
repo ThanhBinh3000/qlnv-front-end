@@ -22,6 +22,7 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { cloneDeep } from "lodash";
+import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: "app-themmoi-dieuchinh-vt",
@@ -162,7 +163,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll("LOAI_HDONG");
+    let resHd = await this.danhMucService.danhMucChungGetAll("HINH_THUC_HOP_DONG");
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -227,7 +228,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ["Số quyết định gốc", "Loại hàng hóa", "Chủng loại hàng hóa"],
+        dataHeader: ["Số quyết định gốc", "Loại hàng DTQG", "Chủng loại hàng DTQG"],
         dataColumn: ["soQd", "tenLoaiVthh", "tenCloaiVthh"]
       }
     });
@@ -400,7 +401,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
 
   checkDisableQdDc() {
     if (this.isViewDetail) {
-      return !(this.formData.get('trangThai').value == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_BANHANH"));
+      return !(this.formData.get('trangThai').value == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU"));
     }
     return true;
   }
@@ -447,6 +448,42 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
         } catch (e) {
           console.log("error: ", e);
           await this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
+  }
+
+  async tuChoi() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: "TỪ CHỐI PHÊ DUYỆT",
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "900px",
+      nzFooter: null,
+      nzComponentParams: {}
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.formData.get("id").value,
+            lyDo: text,
+            trangThai: STATUS.TU_CHOI_LDV,
+          };
+          const res = await this.dieuChinhQuyetDinhPdKhlcntService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log("error: ", e);
+          this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       }

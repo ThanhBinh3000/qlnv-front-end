@@ -5,50 +5,49 @@
       <span> Quay lại </span>
     </button>
     <ng-container *ngIf="userService.isCuc()">
-      <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC):
-        userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
+              && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC'))"
               type="button" class="btn btn-sub do"
               (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
-      <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC):
-        userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
+              && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC'))"
               type="button" class="btn btn-sub xanh-nhat"
               (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
-      <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP):
-        userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
+               && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP'))"
               type="button" class="btn btn-sub do"
               (click)="reject(idInput,STATUS.TU_CHOI_TP)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
-      <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP):
-        userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
+               && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP'))"
               type="button" class="btn btn-sub xanh-nhat"
               (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
-      <button *ngIf=" loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
-        || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC)):
-        userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM')&&((formData.value.trangThai===STATUS.DU_THAO)
-        || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP
+              || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView
+              && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM'))"
               type="button" class="btn btn-sub xanh-nhat"
               (click)="saveAndSend(STATUS.CHO_DUYET_TP, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span> Lưu và gửi duyệt </span>
+        <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf=" loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
-        ||(formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC)):
-        userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
-        ||(formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
-              type="button" class="btn btn-main" (click)="save()">
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP
+              || formData.value.trangThai == STATUS.TU_CHOI_LDC)  && !isView
+              && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM'))"
+              type="button" class="btn btn-main"
+              (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
-        <span> Lưu </span>
+        <span>Lưu</span>
       </button>
     </ng-container>
   </div>
@@ -184,9 +183,9 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="!loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showFromTH ? '' : selectHangHoa()">
                 <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly/>
@@ -194,9 +193,9 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="!loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showFromTH ? '' : selectHangHoa()">
                 <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly/>
@@ -204,9 +203,9 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-select formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event, true)"
                          [nzDisabled]="isView">
@@ -216,11 +215,11 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="6" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
-            <nz-form-control nz-col>
-              <nz-select formControlName="cloaiVthh" [nzDisabled]="isView">
+            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="cloaiVthh" (ngModelChange)="onChangeCloaiVthh()" [nzDisabled]="isView">
                 <nz-option *ngFor="let item of listVatTu" [nzValue]="item.maVatTu" [nzLabel]="item.tenVatTu">
                 </nz-option>
               </nz-select>
@@ -229,7 +228,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <input nz-input formControlName="moTaHangHoa" [readonly]="isView"/>
             </nz-form-control>
@@ -334,7 +333,7 @@
             <div nz-col [nzSpan]="7">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Phương thức giao nhận</nz-form-label>
-                <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-form-control nz-col>
                   <input placeholder="" nz-input formControlName="pthucGnhan" [readonly]="isView"/>
                 </nz-form-control>
               </nz-form-item>
@@ -385,26 +384,16 @@
             <th class="text-center wrap">Chi cục</th>
             <th class="text-center wrap">Điểm kho</th>
             <th class="text-center wrap">Lô kho</th>
-            <th class="text-center wrap" *ngIf="!loaiVthh.startsWith('02')">MĐVTS
-            </th>
-            <th class="text-center wrap" *ngIf="loaiVthh.startsWith('02')">Mã ĐVTS
-            </th>
+            <th class="text-center wrap" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">MĐVTS</th>
+            <th class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Mã ĐVTS</th>
             <th class="text-center wrap">Tồn kho</th>
             <th class="text-center wrap">SL xuất bán TT đề xuất</th>
             <th class="text-center wrap">ĐVT</th>
-            <th class="text-center wrap" *ngIf="!loaiVthh.startsWith('02')">Đơn giá
-              đề xuất (đ/kg)
-            </th>
-            <th class="text-center wrap" *ngIf="loaiVthh.startsWith('02')">Đơn giá
-              đề xuất (đ)
-            </th>
+            <th class="text-center wrap" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">Đơn giá đề xuất (đ/kg)</th>
+            <th class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Đơn giá đề xuất (đ)</th>
             <th class="text-center wrap">Thành tiền đề xuất(đ)</th>
-            <th class="text-center wrap" *ngIf="!loaiVthh.startsWith('02')">Đơn giá
-              được duyệt (đ/kg)
-            </th>
-            <th class="text-center wrap" *ngIf="loaiVthh.startsWith('02')">Đơn giá
-              được duyệt (đ)
-            </th>
+            <th class="text-center wrap" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">Đơn giá được duyệt (đ/kg)</th>
+            <th class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Đơn giá được duyệt (đ)</th>
             <th class="text-center wrap">Thành tiền được duyệt (đ)</th>
             <th *ngIf="!isView">Hành động</th>
           </tr>
@@ -435,7 +424,7 @@
                 <td></td>
                 <td></td>
                 <td>{{children.tenDiemKho}}</td>
-                <td>{{ children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }}
+                <td>{{ children.tenLoKho ? children.tenNganKho : children.tenLoKho + ' - ' + children.tenNganKho }}
                   , {{ children.tenNhaKho }}</td>
                 <td>{{children.maDviTsan}}</td>
                 <td>{{children.tonKho|number:globals.numberFormat:globals.locale}}</td>
@@ -443,7 +432,7 @@
                 <td>{{children.donViTinh}}</td>
                 <td>{{children.donGiaDeXuat|number:globals.numberFormat:globals.locale}}</td>
                 <td>{{children.thanhTienDeXuat|number:globals.numberFormat:globals.locale}}</td>
-                <td>{{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
+                <td>{{children.donGiaDuocDuyet == 0 ? null : children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
                 <td>{{children.thanhTienDuocDuyet == 0 ? null : children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
                 <td class="text-right" *ngIf="!isView">
                 </td>
@@ -465,8 +454,8 @@
             <th style="width: 2%">STT</th>
             <th style="width: 40%">Tên chi cục</th>
             <th style="width: 40%">Địa chỉ</th>
-            <th style="width: 10%" *ngIf="loaiVthh.startsWith('02')">Số lượng</th>
-            <th style="width: 10%" *ngIf="!loaiVthh.startsWith('02')">Số lượng (Kg)</th>
+            <th style="width: 10%" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">Số lượng</th>
+            <th style="width: 10%" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Số lượng (Kg)</th>
           </tr>
           </thead>
           <tbody>
