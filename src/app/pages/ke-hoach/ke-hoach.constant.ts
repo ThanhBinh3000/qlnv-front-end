@@ -27,7 +27,7 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
     dropdown: 'de-xuat-dieu-chinh-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
-    code: '',
+    code: 'KHVDTNSNN_DTNSNN',
   },
   // {
   //   icon: 'htvbdh_tcdt_tochucthuchien',
@@ -61,7 +61,7 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
     dropdown: 'bao-cao',
     idHover: 'giao-chi-tieu',
     hasTab: false,
-    code: '',
+    code: 'KHVDTNSNN_BAOCAO',
     children: [],
   },
 ];
