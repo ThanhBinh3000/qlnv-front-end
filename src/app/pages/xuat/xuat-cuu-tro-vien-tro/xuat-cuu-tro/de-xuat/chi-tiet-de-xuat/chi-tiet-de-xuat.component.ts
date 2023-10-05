@@ -207,6 +207,10 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     await this.helperService.ignoreRequiredForm(this.formData);
     let body = {
       ...this.formData.value,
+      deXuatPhuongAn: cloneDeep(this.formData.value.deXuatPhuongAn).map(f => ({
+        ...f, soLuongChuyenCapThoc: f.soLuongChuyenCapThoc ? f.soLuongChuyenCapThoc : 0,
+        soLuongConThieu: f.soLuongConThieu ? f.soLuongConThieu : 0, soLuongNhuCauXuat: f.soLuongNhuCauXuat ? f.soLuongNhuCauXuat : 0
+      })),
       soDx: this.formData.value.soDx ? this.formData.value.soDx + this.maHauTo : null
     }
     await this.createUpdate(body);

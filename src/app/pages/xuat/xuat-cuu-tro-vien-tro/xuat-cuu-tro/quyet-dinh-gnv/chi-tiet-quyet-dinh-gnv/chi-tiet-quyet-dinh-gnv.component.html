@@ -287,7 +287,7 @@
                 <td>{{i + 1}}</td>
                 <td>{{ item.noiDungDx }}</td>
                 <td></td>
-                <td>{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                <td class="bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                 <td></td>
                 <td>{{item.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                 <td></td>
@@ -317,7 +317,7 @@
                     <td>{{lv1.tenHang}}</td>
                     <td>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                     <td></td>
-                    <td>{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="bold">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                     <td></td>
                     <td>{{lv1.donViTinh}}</td>
                     <td></td>
@@ -351,7 +351,7 @@
                         <td></td>
                         <td></td>
                         <td>{{lv2.tonKho}}</td>
-                        <td><strong>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
+                        <td class="bold">{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
                         <td>{{lv2.tenTrangThai}}</td>
                         <ng-container *ngIf="showAction()">
                           <td>
