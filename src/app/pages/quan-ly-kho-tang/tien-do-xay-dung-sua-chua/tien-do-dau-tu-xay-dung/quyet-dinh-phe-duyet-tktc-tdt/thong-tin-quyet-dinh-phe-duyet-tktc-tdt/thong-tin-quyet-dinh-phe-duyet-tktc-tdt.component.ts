@@ -1,22 +1,22 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import * as uuid from "uuid";
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {STATUS} from "../../../../../../constants/status";
+import { MESSAGE } from "../../../../../../constants/message";
+import { STATUS } from "../../../../../../constants/status";
 import {
   QuyetdinhpheduyetTktcTdtService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
-import {FILETYPE} from "../../../../../../constants/fileType";
-import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
+import { FILETYPE } from "../../../../../../constants/fileType";
+import { AMOUNT_NO_DECIMAL } from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-tktc-tdt',
@@ -82,8 +82,8 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       quyMo: [null],
       loaiCapCt: [null],
       noiDungKhac: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       fileDinhKems: [null],
       child: [null],
       listKtTdxdQuyetDinhPdTktcTdtDtl: null
@@ -122,6 +122,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
         idDuAn: this.itemDuAn.id,
         soQdKhDtxdNam: this.itemDuAn.soQdPdKhNam,
         soQdPdDaDtxd: this.itemQdPdDaDtxd.soQd,
+        soQdPdDtxd: this.itemQdPdDaDtxd.soQd,
         idQdPdDaDtxd: this.itemQdPdDaDtxd.id,
         loaiDuAn: this.itemDuAn.loaiDuAn,
         loaiCapCt: this.itemQdPdDaDtxd.loaiCapCt,
@@ -177,7 +178,8 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
             khoi: this.itemDuAn.tenKhoi,
-            namKh: this.itemDuAn.namKeHoach
+            namKh: this.itemDuAn.namKeHoach,
+            soQdPdDtxd: this.itemQdPdDaDtxd.soQd,
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -299,6 +301,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           id: res.id,
         });
         this.idInput = res.id;
+        this.emitDataTktcTdt(res);
       }
     }
   }
@@ -448,13 +451,13 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     const stack: DuToanXayDung[] = [];
     const array: DuToanXayDung[] = [];
     const hashMap = {};
-    stack.push({...root, capChiMuc: 1, expand: true});
+    stack.push({ ...root, capChiMuc: 1, expand: true });
     while (stack.length !== 0) {
       const node = stack.pop()!;
       this.visitNode(node, hashMap, array);
       if (node.children) {
         for (let i = node.children.length - 1; i >= 0; i--) {
-          stack.push({...node.children[i], capChiMuc: node.capChiMuc! + 1, expand: true, parent: node});
+          stack.push({ ...node.children[i], capChiMuc: node.capChiMuc! + 1, expand: true, parent: node });
         }
       }
     }
@@ -504,7 +507,17 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
         });
       } else {
         itemChild.expand = true;
-        this.dataTable = [...this.dataTable, itemChild];
+        let itemCheck = this.dataTable.find(it => it.idVirtual == itemChild.idVirtual);
+        if (itemCheck) {
+          this.dataTable = this.dataTable.map(obj => {
+            if (obj.idVirtual == itemChild.idVirtual) {
+              return itemChild;
+            }
+            return obj;
+          });
+        } else {
+          this.dataTable = [...this.dataTable, itemChild];
+        }
       }
       this.dataTreeTable = this.dataTable;
       this.formDataDetail.reset();
@@ -526,7 +539,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          let res = await this.quyetdinhpheduyetTktcTdtService.delete({id: this.idInput});
+          let res = await this.quyetdinhpheduyetTktcTdtService.delete({ id: this.idInput });
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             this.showListEvent.emit();

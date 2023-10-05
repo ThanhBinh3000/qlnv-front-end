@@ -1,16 +1,10 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
-    <ul nz-menu nzMode="horizontal" id="mainTongCuc">
-        <li nz-menu-item nzSelected (click)="selectTab(0)">
-            Chào giá/Ủy quyền/Bán Lẻ
-        </li>
-        <li nz-menu-item (click)="selectTab(1)">
-            Quyết định phê duyệt kết quả chào giá
-        </li>
-    </ul>
+  <ul nz-menu nzMode="horizontal" id="mainTongCuc">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Chào giá/Ủy quyền/Bán Lẻ
+    </li>
+  </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-thong-tin-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-thong-tin-ban-truc-tiep>
-</ng-container>
-<ng-container *ngIf="tabSelected == 1">
-    <app-qd-pd-ket-qua-btt [loaiVthh]="inputLoaiVthh"></app-qd-pd-ket-qua-btt>
+  <app-thong-tin-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-thong-tin-ban-truc-tiep>
 </ng-container>

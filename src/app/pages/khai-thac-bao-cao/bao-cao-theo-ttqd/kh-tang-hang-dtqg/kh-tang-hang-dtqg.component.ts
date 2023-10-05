@@ -36,15 +36,15 @@ export class KhTangHangDtqgComponent extends Base2Component implements OnInit {
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private thongTu1452013Service: ThongTu1452013Service,
-              public userService: UserService,
-              private donViService: DonviService,
-              private danhMucService: DanhMucService,
-              public globals: Globals) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private thongTu1452013Service: ThongTu1452013Service,
+    public userService: UserService,
+    private donViService: DonviService,
+    private danhMucService: DanhMucService,
+    public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
@@ -97,7 +97,7 @@ export class KhTangHangDtqgComponent extends Base2Component implements OnInit {
       body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
       body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
+      await this.thongTu1452013Service.keHoachTang(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bc_kh_tang_hang_du_tru_quoc_gia.xlsx");
@@ -127,7 +127,7 @@ export class KhTangHangDtqgComponent extends Base2Component implements OnInit {
       body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
       body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
+      await this.thongTu1452013Service.keHoachTang(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -191,7 +191,7 @@ export class KhTangHangDtqgComponent extends Base2Component implements OnInit {
   changeCloaiVthh(event) {
 
   }
-  addRow () {
+  addRow() {
     this.rows.push({})
   }
 

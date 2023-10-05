@@ -22,7 +22,9 @@ import { saveAs } from "file-saver";
 })
 export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -34,15 +36,15 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private thongTu1452013Service: ThongTu1452013Service,
-              public userService: UserService,
-              private donViService: DonviService,
-              private danhMucService: DanhMucService,
-              public globals: Globals) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private thongTu1452013Service: ThongTu1452013Service,
+    public userService: UserService,
+    private donViService: DonviService,
+    private danhMucService: DanhMucService,
+    public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
@@ -106,7 +108,7 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
       body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.keHoachGiam(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -116,6 +118,32 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      if (this.formData.value.thoiGianSx) {
+        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
+        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
+      }
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
+      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
+      body.trangThai = "01";
+      await this.thongTu1452013Service.keHoachGiam(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bc_kh_giam_hang_du_tru_quoc_gia.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
   async loadDsDonVi() {
@@ -170,7 +198,7 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
   changeCloaiVthh(event) {
 
   }
-  addRow () {
+  addRow() {
     this.rows.push({})
   }
 

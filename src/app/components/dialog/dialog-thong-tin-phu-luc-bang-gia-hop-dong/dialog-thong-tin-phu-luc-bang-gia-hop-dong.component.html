@@ -108,7 +108,7 @@
                 <td>{{ data.chiCuc }}</td>
                 <td>{{ data.diemKho }}</td>
                 <td>{{ data.nhaKho}}</td>
-                <td>{{ data.soLuong ?? 0 | number: '1.0-1' }}</td>
+                <td>{{ data.soLuong ?? 0 | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>
                   <a (click)="editRow(data.stt)">
                     <i class="fa fa-pencil" title="Sửa"></i>

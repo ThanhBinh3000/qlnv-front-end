@@ -6,7 +6,12 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
+import {
+  QdPdKetQuaBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
+import { saveAs } from 'file-saver';
+import { STATUS } from "../../../../../constants/status";
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',
@@ -17,12 +22,10 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
+  listTrangThaiHd: any = [];
+  listTrangThaiXh: any = [];
 
-  listTrangThai: any[] = [
-    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
-  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -56,58 +59,103 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
       tenTrangThaiHd: '',
       tenTrangThaiXh: '',
     }
+    this.listTrangThaiHd = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
+    this.listTrangThaiXh = [
+      {
+        value: this.STATUS.CHUA_THUC_HIEN,
+        text: 'Chưa thực hiện'
+      },
+      {
+        value: this.STATUS.DANG_THUC_HIEN,
+        text: 'Đang thực hiện'
+      },
+      {
+        value: this.STATUS.DA_HOAN_THANH,
+        text: 'Đã hoàn thành'
+      },
+    ]
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
-      this.timKiem();
+      await this.spinner.show();
       await Promise.all([
+        this.timKiem(),
         this.search(),
       ]);
-      await this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
-  goDetail(id: number, roles?: any, isQuanLy?: boolean) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
-    this.idSelected = id;
-    this.isDetail = true;
-    this.isQuanLy = isQuanLy;
-    this.isAddNew = !isQuanLy;
-  }
 
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([
+      this.timKiem(),
+      this.search()
+    ]);
   }
 
-  disabledNgayPduyetTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayPduyetDen) {
-      return false;
+  goDetail(id: number, boolean?: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isQuanLy = boolean;
+    this.isAddNew = !boolean;
+  }
+
+  exportDataHopDong(fileName?: string) {
+    if (this.totalRecord <= 0) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+      return;
     }
-    return startValue.getTime() > this.formData.value.ngayPduyetDen.getTime();
+    this.spinner.show();
+    this.qdPdKetQuaBttService.exportHopDong(this.formData.value).subscribe(
+      (blob) => {
+        saveAs(blob, fileName ? fileName : 'data.xlsx');
+      }, (error) => {
+        console.error('error: ', error);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }, () => {
+        this.spinner.hide();
+      }
+    );
+  }
+
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
+  disabledNgayPduyetTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayPduyetDen, 'ngayPduyet');
   };
 
   disabledNgayPduyetDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayPduyetTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayPduyetTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayPduyetTu, 'ngayPduyet');
   };
 }

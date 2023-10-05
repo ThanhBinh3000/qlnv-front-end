@@ -179,17 +179,9 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
     else return false
   }
 
-  isTongCuc() {
-    return this.userService.isTongCuc()
+  isChiCuc() {
+    return this.userService.isChiCuc()
   }
-
-  isCuc() {
-    return this.userService.isCuc()
-  }
-
-  // isChiCuc() {
-  //   return false//this.userService.isChiCuc()
-  // }
 
   selectTab(tab: number) {
     if (this.isDetail) {
@@ -387,19 +379,41 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
       this.spinner.show();
       try {
 
+        if (this.formData.value.tuNgayBdNhap) {
+          this.formData.value.tuNgayBdNhap = dayjs(this.formData.value.tuNgayBdNhap).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayBdNhap) {
+          this.formData.value.denNgayBdNhap = dayjs(this.formData.value.denNgayBdNhap).format('YYYY-MM-DD')
+        }
+
+        if (this.formData.value.tuNgayKtNhap) {
+          this.formData.value.tuNgayKtNhap = dayjs(this.formData.value.tuNgayKtNhap).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayKtNhap) {
+          this.formData.value.denNgayKtNhap = dayjs(this.formData.value.denNgayKtNhap).format('YYYY-MM-DD')
+        }
+
+        if (this.formData.value.tuNgayThoiHanNh) {
+          this.formData.value.tuNgayThoiHanNh = dayjs(this.formData.value.tuNgayThoiHanNh).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.denNgayThoiHanNh) {
+          this.formData.value.denNgayThoiHanNh = dayjs(this.formData.value.denNgayThoiHanNh).format('YYYY-MM-DD')
+        }
+
         let body = this.formData.value;
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
-        this.quyetDinhDieuChuyenTCService
+        // if (this.formData.value.ngayDuyetTc) {
+        //   body.ngayDuyetTcTu = body.ngayDuyetTc[0];
+        //   body.ngayDuyetTcDen = body.ngayDuyetTc[1];
+        // }
+        // if (this.formData.value.ngayHieuLuc) {
+        //   body.ngayHieuLucTu = body.ngayHieuLuc[0];
+        //   body.ngayHieuLucDen = body.ngayHieuLuc[1];
+        // }
+
+        this.bienBanNhapDayKhoService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
+            saveAs(blob, 'dcnb-bien-ban-nhap-day-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

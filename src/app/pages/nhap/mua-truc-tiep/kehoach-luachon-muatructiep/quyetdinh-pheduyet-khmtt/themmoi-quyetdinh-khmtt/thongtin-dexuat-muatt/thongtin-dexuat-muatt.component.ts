@@ -1,25 +1,25 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {Globals} from "../../../../../../../shared/globals";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {HelperService} from 'src/app/services/helper.service';
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Globals } from "../../../../../../../shared/globals";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { HelperService } from 'src/app/services/helper.service';
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {
   DialogThemDiaDiemPhanLoComponent
 } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
-import {DanhSachMuaTrucTiepService} from 'src/app/services/danh-sach-mua-truc-tiep.service';
+import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import {
   DialogThemMoiKeHoachMuaTrucTiepComponent
 } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-thongtin-dexuat-muatt',
@@ -88,7 +88,10 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.tgianMkhoChange = this.dataInput.tgianMkho
         this.tgianKthucChange = this.dataInput.tgianKthuc
-        console.log(this.dataInput.children)
+        this.formData.patchValue({
+          tongMucDt: this.dataInput.tongSoLuong * this.dataInput.donGiaVat * 1000
+        })
+        console.log(this.dataInput.children, "123")
         this.dataTable = this.dataInput.children
         this.calculatorTable();
       } else {
@@ -120,7 +123,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzTitle: 'THÊM ĐỊA ĐIỂM NHẬP KHO',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -132,21 +135,37 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         dataChiTieu: this.dataChiTieu,
         namKh: this.formData.get('namKh').value,
         loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
         donGiaVat: this.formData.value.donGiaVat,
         maDviCuc: this.formData.value.maDvi
       },
     });
+    // modalGT.afterClose.subscribe((data) => {
+    //   if (!data) {
+    //     return;
+    //   }
+    //   const existingIndex = this.dataTable.findIndex(item => item.maDvi === data.maDvi);
+    //   if (existingIndex !== -1) {
+    //     this.dataTable[existingIndex] = { ...data, children: this.dataTable[existingIndex].children };
+    //   } else {
+    //     this.dataTable.push(data);
+    //   }
+    //   this.emitDataTable();
+    //   this.calculatorTable();
+    // });
     modalGT.afterClose.subscribe((data) => {
       if (!data) {
         return;
       }
-      const existingIndex = this.dataTable.findIndex(item => item.maDvi === data.maDvi);
-      if (existingIndex !== -1) {
-        this.dataTable[existingIndex] = { ...data, children: this.dataTable[existingIndex].children };
+      if (index >= 0) {
+        this.dataTable[index] = data;
       } else {
+        // if (!this.validateAddDiaDiem(data)) {
+        //   return
+        // }
+        console.log(data, "popup")
         this.dataTable.push(data);
       }
-      this.emitDataTable();
       this.calculatorTable();
     });
   }
@@ -185,12 +204,12 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
 
   calculatorTable() {
     let sum = 0;
-    this.dataTable.forEach(item =>{
+    this.dataTable.forEach(item => {
       sum += Number.parseInt(item.tongSoLuong)
     })
-  this.formData.patchValue({
-    tongSoLuong: sum
-  })
+    this.formData.patchValue({
+      tongSoLuong: sum
+    })
     console.log(sum, 123)
   }
 

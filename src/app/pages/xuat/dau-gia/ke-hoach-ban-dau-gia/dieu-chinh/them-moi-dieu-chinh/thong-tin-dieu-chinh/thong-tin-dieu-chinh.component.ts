@@ -1,107 +1,84 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {Globals} from "../../../../../../../shared/globals";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {
-  DeXuatKhBanDauGiaService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {HelperService} from "../../../../../../../services/helper.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NzNotificationService} from "ng-zorro-antd/notification";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Globals } from "../../../../../../../shared/globals";
+import { NgxSpinnerService } from "ngx-spinner";
+import { HelperService } from "../../../../../../../services/helper.service";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 import {
   DialogThemDiaDiemPhanLoComponent
 } from "../../../../../../../components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component";
+import {
+  QuyetDinhGiaTCDTNNService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-dieu-chinh',
   templateUrl: './thong-tin-dieu-chinh.component.html',
   styleUrls: ['./thong-tin-dieu-chinh.component.scss']
 })
-export class ThongTinDieuChinhComponent implements OnInit {
+export class ThongTinDieuChinhComponent implements OnChanges {
   @Input() title;
   @Input() dataInput;
-  @Output() soLuongChange = new EventEmitter<number>();
   @Input() isView;
-  @Input() isCache: boolean = false;
-
+  @Input() isCache;
+  @Output() countChanged: EventEmitter<any> = new EventEmitter();
   formData: FormGroup
-  listNguonVon: any[] = [];
-  listDataGroup: any[] = [];
   dataTable: any[] = [];
-  dataChiTieu: any;
-  listPhuongThucThanhToan: any[] = [];
-
 
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
-    private danhMucService: DanhMucService,
-    private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private modal: NzModalService,
     private notification: NzNotificationService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
-
     this.formData = this.fb.group({
       id: [],
-      maDvi: [''],
-      tenDvi: [''],
-      diaChi: [''],
-      soDxuat: [''],
-      NgayTao: [''],
-      ngaypduyet: [''],
-      trichYeu: [''],
-      slDviTsan: [''],
-      tongSoLuong: [''],
-      tgianBdauTchuc: [],
+      thoiGianDuKien: [''],
       tgianDkienTu: [''],
       tgianDkienDen: [''],
       tgianTtoan: [],
       tgianTtoanGhiChu: [''],
       pthucTtoan: [''],
+      tenPthucTtoan: [''],
       tgianGnhan: [],
       tgianGnhanGhiChu: [''],
       pthucGnhan: [''],
-      thongBaoKh: [''],
+      thongBao: [],
       khoanTienDatTruoc: [],
-    });
+      tongSoLuong: [null],
+      tongTienKhoiDiem: [null],
+      tongTienDatTruoc: [null],
+      donViTinh: [''],
+    })
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    await this.spinner.show()
-    if (changes) {
-      if (this.dataInput) {
-        this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
+    if (changes.dataInput) {
+      await this.spinner.show();
+      const dataInput = changes.dataInput.currentValue;
+      if (dataInput) {
+        this.helperService.bidingDataInFormGroup(this.formData, dataInput);
+        const hasValidTime = dataInput.tgianDkienTu && dataInput.tgianDkienDen;
         this.formData.patchValue({
-          tgianBdauTchuc: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
-        })
-        this.dataTable = this.dataInput.children
-        await this.ptThanhToan(this.dataInput)
+          thoiGianDuKien: hasValidTime ? [dataInput.tgianDkienTu, dataInput.tgianDkienDen] : null
+        });
+        this.dataTable = dataInput.children;
+        if (this.dataTable && this.dataTable.length > 0) {
+          await this.calculatorTable();
+        }
       } else {
         this.formData.reset();
       }
-    }
-    await this.spinner.hide()
-  }
-
-
-  async ngOnInit() {
-  }
-
-
-  expandSet = new Set<number>();
-
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
+      await this.spinner.hide();
     }
   }
 
-  themMoiBangPhanLoTaiSan(data?: any, index?: number) {
+  async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm giao nhận hàng',
       nzContent: DialogThemDiaDiemPhanLoComponent,
@@ -111,44 +88,77 @@ export class ThongTinDieuChinhComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
+        loaiVthh: this.dataInput.loaiVthh,
+        cloaiVthh: this.dataInput.cloaiVthh,
       },
     });
-    modalGT.afterClose.subscribe((data) => {
-      if (!data) {
-        return;
+    modalGT.afterClose.subscribe(async (updatedData) => {
+      if (updatedData && index >= 0) {
+        this.dataTable[index] = updatedData;
+        await this.calculatorTable();
+        await this.sendDataToParent();
       }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      }
-      this.calculatorTable();
-    });
-  };
-
-  calculatorTable() {
-    let tongSoLuong: number = 0;
-    this.dataTable.forEach((item) => {
-      tongSoLuong += item.soLuongChiCuc;
-    });
-    this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
     });
   }
 
-  async ptThanhToan(data) {
-    if (data.pthucTtoan == '1') {
-      this.listPhuongThucThanhToan = [
-        {
-          ma: '1',
-          giaTri: 'Tiền mặt',
-        },
-      ];
-    } else {
-      this.listPhuongThucThanhToan = [
-        {
-          ma: '2',
-          giaTri: 'Chuyển khoản',
-        },
-      ];
+  deleteRow(i: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable = this.dataTable.filter((item, index) => index != i);
+          await this.calculatorTable();
+          await this.sendDataToParent();
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
+  async calculatorTable() {
+    for (const item of this.dataTable) {
+      item.children.forEach((child) => {
+        child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
+        child.soTienDtruocDd = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
+      });
+      item.tongGiaKdiemDd = item.children.reduce((prev, cur) => prev + cur.giaKhoiDiemDd, 0);
+      item.tongTienDtruocDd = item.children.reduce((prev, cur) => prev + cur.soTienDtruocDd, 0);
     }
+    this.formData.patchValue({
+      tongTienKhoiDiem: this.dataTable.reduce((acc, item) => acc + item.tongGiaKdiemDd, 0),
+      tongTienDatTruoc: this.dataTable.reduce((acc, item) => acc + item.tongTienDtruocDd, 0),
+      tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.tongSlXuatBanDx, 0),
+    });
+  }
+
+  expandSet = new Set<number>();
+
+  onExpandChange(id: number, checked: boolean): void {
+    checked ? this.expandSet.add(id) : this.expandSet.delete(id);
+  }
+
+  async onChangeThoiGian(event) {
+    if (event) {
+      this.formData.patchValue({
+        tgianDkienTu: this.formatDate(event, 0),
+        tgianDkienDen: this.formatDate(event, 1)
+      })
+    }
+    await this.sendDataToParent();
+  }
+
+  formatDate(dateRange, index) {
+    return dateRange ? dayjs(dateRange[index]).format('YYYY-MM-DD') : null;
+  }
+
+  async sendDataToParent() {
+    this.countChanged.emit(this.formData.value);
   }
 }

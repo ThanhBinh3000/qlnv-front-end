@@ -1,21 +1,21 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 import {
   TongHopDeXuatKHLCNTService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {UserService} from "../../../../../services/user.service";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { UserService } from "../../../../../services/user.service";
 import {
   QuyetDinhPheDuyetKetQuaLCNTService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {PAGE_SIZE_DEFAULT} from "../../../../../constants/config";
-import {UserLogin} from "../../../../../models/userlogin";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { PAGE_SIZE_DEFAULT } from "../../../../../constants/config";
+import { UserLogin } from "../../../../../models/userlogin";
 import dayjs from "dayjs";
-import {MESSAGE} from "../../../../../constants/message";
-import {convertTrangThai, convertTrangThaiGt} from "../../../../../shared/commonFunction";
+import { MESSAGE } from "../../../../../constants/message";
+import { convertTrangThai, convertTrangThaiGt } from "../../../../../shared/commonFunction";
 import {
   DialogDanhSachHangHoaComponent
 } from "../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
@@ -357,7 +357,7 @@ export class DanhSachQuyetdinhKetquaLcntComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == '78') {
             item.checked = true;
           }
         });

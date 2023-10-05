@@ -5,22 +5,23 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {TongHopTheoDoiCapVonService} from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
-import {UserService} from 'src/app/services/user.service';
-import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
-import {STATUS} from "../../../../../constants/status";
-import {ThongTriDuyetYCapVonService} from "../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapVon.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
+import { UserService } from 'src/app/services/user.service';
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { STATUS } from "../../../../../constants/status";
+import { ThongTriDuyetYCapVonService } from "../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapVon.service";
 import dayjs from "dayjs";
+import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-thong-tin-tong-hop-theo-doi-cap-von',
@@ -35,11 +36,9 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   @Input() id: number;
   formData: FormGroup;
-  STATUS: STATUS;
   fileDinhKem: Array<FileDinhKem> = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
-
   titleStatus: string = '';
   titleButtonDuyet: string = '';
   iconButtonDuyet: string = '';
@@ -51,7 +50,8 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   dsBoNganh: any[] = [];
   dsThongTri: any[] = [];
   chiTietList: any[] = [];
-
+  STATUS = STATUS
+  amount = AMOUNT_NO_DECIMAL;
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -94,7 +94,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
         if (res.data) {
           this.itemThTheoDoi = res.data;
           this.initForm();
-          this.formData.patchValue({soThongTri: +this.itemThTheoDoi.soThongTri})
+          this.formData.patchValue({ soThongTri: +this.itemThTheoDoi.soThongTri })
           if (this.itemThTheoDoi.fileDinhKems) {
             this.listFileDinhKem = this.itemThTheoDoi.fileDinhKems;
           }
@@ -112,6 +112,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   }
 
   initForm() {
+    console.log(this.itemThTheoDoi, '12312312');
     this.formData = this.fb.group({
       soThongTri: [this.itemThTheoDoi ? this.itemThTheoDoi.soThongTri : null, [Validators.required]],
       dviThongTri: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThongTri : null],
@@ -122,6 +123,8 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       khoan: [this.itemThTheoDoi ? this.itemThTheoDoi.khoan : null],
       lyDoChi: [this.itemThTheoDoi ? this.itemThTheoDoi.lyDoChi : null],
       soTien: [this.itemThTheoDoi ? this.itemThTheoDoi.soTien : null],
+      loaiTien: [this.itemThTheoDoi ? this.itemThTheoDoi.loaiTien : null],
+      tenLoaiTien: [this.itemThTheoDoi ? this.itemThTheoDoi.tenLoaiTien : null],
       dviThuHuong: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThuHuong : null, [Validators.required]],
       tenDviThuHuong: [this.itemThTheoDoi ? this.itemThTheoDoi.tenDviThuHuong : null],
       dviThuHuongStk: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThuHuongStk : null, [Validators.required]],
@@ -195,7 +198,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -205,7 +208,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+            trangThai: STATUS.DA_HOAN_THANH,
           };
           let res = await this.tongHopTheoDoiCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -255,4 +258,6 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       this.formData.patchValue(dataDetail);
     }
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }

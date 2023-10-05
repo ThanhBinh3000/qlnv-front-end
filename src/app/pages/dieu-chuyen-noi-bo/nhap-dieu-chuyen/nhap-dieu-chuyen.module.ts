@@ -36,13 +36,14 @@ import { BienBanChuanBiKhoComponent } from './tablevel3/bien-ban-chuan-bi-kho/bi
 import { BienBanKetThucNhapKhoComponent } from './tablevel3/bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
 import { ThongTinBienBanChuanBiKhoComponent } from './tablevel3/bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho.component';
 import { ThongTinBienBanNhapDayDuComponent } from './tablevel3/bien-ban-nhap-day-du/thong-tin-bien-ban-nhap-day-du/thong-tin-bien-ban-nhap-day-du.component';
-import { DauGiaModule } from "../../xuat/dau-gia/dau-gia.module";
 import { ThongTinHoSoKyThuatComponent } from './tablevel3/ho-so-ky-thuat/thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
 import { ThongTinPhieuNhapKhoComponent } from './tablevel3/phieu-nhap-kho/thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component';
 import { ThongTinBangKeCanHangComponent } from './tablevel3/bang-ke-can-hang/thong-tin-bang-ke-can-hang/thong-tin-bang-ke-can-hang.component';
 import { ThongTinBangKeNhapVatTuComponent } from './tablevel3/bang-ke-nhap-vat-tu/thong-tin-bang-ke-nhap-vat-tu/thong-tin-bang-ke-nhap-vat-tu.component';
 import { ThongTinBienBanGiaoNhanComponent } from './tablevel3/bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
 import { ThongTinBienBanKetThucNhapKhoComponent } from './tablevel3/bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
+import { DauGiaModule } from "../../xuat/dau-gia/dau-gia.module";
+import { ThongTinBienBanKiemTraComponent } from './tablevel3/ho-so-ky-thuat/thong-tin-bien-ban-kiem-tra/thong-tin-bien-ban-kiem-tra.component';
 
 
 
@@ -80,7 +81,8 @@ import { ThongTinBienBanKetThucNhapKhoComponent } from './tablevel3/bien-ban-ket
     ThongTinBangKeCanHangComponent,
     ThongTinBangKeNhapVatTuComponent,
     ThongTinBienBanGiaoNhanComponent,
-    ThongTinBienBanKetThucNhapKhoComponent
+    ThongTinBienBanKetThucNhapKhoComponent,
+    ThongTinBienBanKiemTraComponent
   ],
   exports: [
     KiemTraChatLuongComponent

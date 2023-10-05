@@ -1,38 +1,39 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UserLogin} from "../../../../../../../models/userlogin";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {KeHoachXayDungTrungHan} from "../../../../../../../models/QuyHoachVaKeHoachKhoTang";
-import {Router} from "@angular/router";
-import {NgxSpinnerService} from "ngx-spinner";
-import {chain, cloneDeep, isEmpty} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {UserService} from "../../../../../../../services/user.service";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import dayjs from "dayjs";
-import {STATUS} from "../../../../../../../constants/status";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {DonviService} from "../../../../../../../services/donvi.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UserLogin } from '../../../../../../../models/userlogin';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { KeHoachXayDungTrungHan } from '../../../../../../../models/QuyHoachVaKeHoachKhoTang';
+import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { chain, cloneDeep, isEmpty } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { UserService } from '../../../../../../../services/user.service';
+import { DanhMucService } from '../../../../../../../services/danhmuc.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import dayjs from 'dayjs';
+import { STATUS } from '../../../../../../../constants/status';
+import { MESSAGE } from '../../../../../../../constants/message';
+import { Base2Component } from '../../../../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../../../services/storage.service';
+import { DonviService } from '../../../../../../../services/donvi.service';
 import {
-  TongHopDanhSachVttbService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service";
+  TongHopDanhSachVttbService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service';
 import {
-  KeHoachXuatHangService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/KeHoachXuatHang.service";
-import {NumberToRoman} from "../../../../../../../shared/commonFunction";
+  KeHoachXuatHangService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/KeHoachXuatHang.service';
+import { NumberToRoman } from '../../../../../../../shared/commonFunction';
 import {
-  TongHopKeHoachXuatHangService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopKeHoachXuatHang.service";
-import {FILETYPE} from "../../../../../../../constants/fileType";
+  TongHopKeHoachXuatHangService,
+} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopKeHoachXuatHang.service';
+import { FILETYPE, PREVIEW } from '../../../../../../../constants/fileType';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-tong-hop-ke-hoach-xuat-hang',
   templateUrl: './thong-tin-tong-hop-ke-hoach-xuat-hang.component.html',
-  styleUrls: ['./thong-tin-tong-hop-ke-hoach-xuat-hang.component.scss']
+  styleUrls: ['./thong-tin-tong-hop-ke-hoach-xuat-hang.component.scss'],
 })
 export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component implements OnInit {
   @Input() isViewDetail: boolean;
@@ -52,18 +53,19 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
   expandSetStringCuc = new Set<string>();
   expandSetStringLoaiVthh = new Set<string>();
   numberToRoman = NumberToRoman;
+  templateName = 'xuat_khac_ktcl_vat_tu_12_thang_th_kh_xuat_hang';
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private keHoachXuatHangService: KeHoachXuatHangService,
-              private tongHopKeHoachXuatHangService: TongHopKeHoachXuatHangService) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private keHoachXuatHangService: KeHoachXuatHangService,
+    private tongHopKeHoachXuatHangService: TongHopKeHoachXuatHangService) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKeHoachXuatHangService);
-    super.ngOnInit()
+    super.ngOnInit();
     this.formData = this.fb.group({
       id: [null],
       ngayTaoTt: [null],
@@ -71,17 +73,17 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
       thoiGianDuKienXuat: [null],
       thoiGianDuKienXuatTu: [null],
       thoiGianDuKienXuatDen: [null],
-      namKeHoach: [dayjs().get("year")],
+      namKeHoach: [dayjs().get('year')],
       noiDungTh: [null, Validators.required],
       ngayKyQd: [null],
       trangThai: [STATUS.CHUATAO_KH],
       moTa: [null],
       maDvi: [this.userInfo.MA_DVI],
-      tenTrangThai: ["Dự thảo kế hoạch"],
-      loai: ["01", Validators.required],
+      tenTrangThai: ['Dự thảo kế hoạch'],
+      loai: ['01', Validators.required],
       listSoKeHoachs: [],
       listIdKeHoachs: [new Array()],
-      xhXkKhXuatHangDtl: [new Array()]
+      xhXkKhXuatHangDtl: [new Array()],
     });
   }
 
@@ -90,7 +92,7 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
     try {
       this.userInfo = this.userService.getUserLogin();
       if (this.idInput) {
-        this.getDetail(this.idInput)
+        this.getDetail(this.idInput);
       }
       this.spinner.hide();
     } catch (e) {
@@ -124,13 +126,13 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
     try {
       this.spinner.show();
       this.formData.patchValue({
-        thoiGianTh: new Date()
+        thoiGianTh: new Date(),
       });
       let body = {
-        "namKeHoach": this.formData.get("namKeHoach").value,
-        "loai": "00",
-        "trangThai": STATUS.DA_DUYET_LDC,
-        "capDvi": 2,
+        'namKeHoach': this.formData.get('namKeHoach').value,
+        'loai': '00',
+        'trangThai': STATUS.DA_DUYET_LDC,
+        'capDvi': 2,
       };
       let res = await this.keHoachXuatHangService.searchTh(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -139,17 +141,17 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
         let listDataKh = res.data;
         if (listDataKh) {
           this.formData.patchValue({
-            listSoKeHoachs: listDataKh.listSoKeHoachs.join(","),
+            listSoKeHoachs: listDataKh.listSoKeHoachs.join(','),
             listIdKeHoachs: listDataKh.listIdKeHoachs,
-            xhXkKhXuatHangDtl: listDataKh.xhXkKhXuatHangDtl
-          })
+            xhXkKhXuatHangDtl: listDataKh.xhXkKhXuatHangDtl,
+          });
           this.listKeHoachDtl = cloneDeep(listDataKh.xhXkKhXuatHangDtl);
           this.listDxCuc = cloneDeep(listDataKh.listDxCuc);
           this.isTongHop = true;
           this.buildTableView(this.listKeHoachDtl);
           this.buildTableViewByLoaiVthh(this.listKeHoachDtl);
         } else {
-          this.notification.warning(MESSAGE.WARNING, "Không tìm thấy dữ liệu kế hoạch xuất hàng của Cục111");
+          this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy dữ liệu kế hoạch xuất hàng của Cục111');
           this.isTongHop = false;
           this.spinner.hide();
           return;
@@ -169,28 +171,28 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
 
   async buildTableView(data: any) {
     this.listKeHoachDtlTreeByChiCuc = chain(data)
-      .groupBy("tenChiCuc")
+      .groupBy('tenChiCuc')
       .map((value, key) => {
         let idVirtual = uuidv4();
         this.expandSetStringCuc.add(idVirtual);
         return {
           idVirtual: idVirtual,
           tenChiCuc: key,
-          childData: value
+          childData: value,
         };
       }).value();
   }
 
   async buildTableViewByLoaiVthh(data: any) {
     this.listKeHoachDtlTreeByVthh = chain(data)
-      .groupBy("tenLoaiVthh")
+      .groupBy('tenLoaiVthh')
       .map((value, key) => {
         let idVirtual = uuidv4();
         this.expandSetStringLoaiVthh.add(idVirtual);
         return {
           idVirtual: idVirtual,
           tenLoaiVthh: key,
-          childData: value
+          childData: value,
         };
       }).value();
   }
@@ -198,13 +200,13 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
   async save() {
     try {
       this.spinner.show();
-      this.helperService.markFormGroupTouched(this.formData)
+      this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         return;
       }
-      if (this.formData.get("thoiGianDuKienXuat").value) {
-        this.formData.value.thoiGianDuKienXuatTu = this.formData.get("thoiGianDuKienXuat").value[0] ? this.formData.get("thoiGianDuKienXuat").value[0] : null;
-        this.formData.value.thoiGianDuKienXuatDen = this.formData.get("thoiGianDuKienXuat").value[1] ? this.formData.get("thoiGianDuKienXuat").value[1] : null;
+      if (this.formData.get('thoiGianDuKienXuat').value) {
+        this.formData.value.thoiGianDuKienXuatTu = this.formData.get('thoiGianDuKienXuat').value[0] ? this.formData.get('thoiGianDuKienXuat').value[0] : null;
+        this.formData.value.thoiGianDuKienXuatDen = this.formData.get('thoiGianDuKienXuat').value[1] ? this.formData.get('thoiGianDuKienXuat').value[1] : null;
       }
       this.formData.value.xhXkKhXuatHangDtl.forEach(item => {
         delete item.id;
@@ -214,10 +216,10 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
       if (data) {
         if (!this.idInput) {
           this.idInput = data.id;
-          this.formData.patchValue({id: data.id, trangThai: data.trangThai});
+          this.formData.patchValue({ id: data.id, trangThai: data.trangThai });
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.");
+        this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -237,7 +239,7 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
             let thoiGianDuKienXuat = [dataDetail.thoiGianDuKienXuatTu, dataDetail.thoiGianDuKienXuatDen];
             if (dataDetail.thoiGianDuKienXuatTu || dataDetail.thoiGianDuKienXuatDen) {
               this.formData.patchValue({
-                thoiGianDuKienXuat: thoiGianDuKienXuat
+                thoiGianDuKienXuat: thoiGianDuKienXuat,
               });
             }
             this.listKeHoachDtl = cloneDeep(dataDetail.xhXkKhXuatHangDtl);
@@ -253,5 +255,30 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
+  }
+
+  async preview(id) {
+    this.spinner.show();
+    await this.tongHopKeHoachXuatHangService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
   }
 }

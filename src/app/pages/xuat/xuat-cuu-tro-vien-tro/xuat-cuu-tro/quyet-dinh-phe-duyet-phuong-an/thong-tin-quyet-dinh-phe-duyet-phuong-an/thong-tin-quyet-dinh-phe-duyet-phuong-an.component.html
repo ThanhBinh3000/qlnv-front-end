@@ -4,14 +4,14 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="!formData.value.idXc" type="button"
-            class="btn btn-sub xanh-nhat" >
+    <button *ngIf="!formData.value.idXc" type="button" class="btn btn-sub xanh-nhat">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo QĐ xuất cấp</span>
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_BANHANH')"
-      type="button" class="btn btn-sub xanh-nhat" (click)="saveAndSend(STATUS.BAN_HANH,'Bạn có muốn ban hành ?','Bạn đã ban hành thành công!')">
+      type="button" class="btn btn-sub xanh-nhat"
+      (click)="saveAndSend(STATUS.BAN_HANH,'Bạn có muốn ban hành ?','Bạn đã ban hành thành công!')">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
@@ -56,7 +56,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="nam" nzAllowClear >
+                <nz-select formControlName="nam" nzAllowClear>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -96,7 +96,7 @@
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
                 <nz-radio-group [nzDisabled]="disableSelect()" nzSize="small" class="rdo-input" formControlName="type">
-                <nz-form-item>
+                  <nz-form-item>
                     <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
@@ -129,17 +129,17 @@
 
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label  [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+              <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
               <nz-form-control>
-                <input nz-input [readonly]="true" formControlName="loaiNhapXuat"/>
+                <input nz-input [readonly]="true" formControlName="loaiNhapXuat" />
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label  [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+              <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
               <nz-form-control>
-                <input nz-input [readonly]="true" formControlName="kieuNhapXuat"/>
+                <input nz-input [readonly]="true" formControlName="kieuNhapXuat" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -160,7 +160,7 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [isCanCuPL]="true" [isViewDetail]="isView"  [data]="canCu"></file-list>
+                <file-list [isCanCuPL]="true" [isViewDetail]="isView" [data]="canCu"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -248,7 +248,8 @@
                             Tổng số lượng đề xuất CT,VT
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{listSoLuongDxCache |number: '1.0-1' :'vi_VN'}} {{formData.value.donViTinh}}</span>
+                            <span class="text-blue">{{listSoLuongDxCache |number: '1.0-1' :'vi_VN'}}
+                              {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -258,7 +259,8 @@
                             Tổng số lượng thực tế xuất CT,VT của từng chi cục
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{listSoLuongCache |number: '1.0-1' : 'vi_VN'}} {{formData.value.donViTinh}}</span>
+                            <span class="text-blue">{{listSoLuongCache |number: '1.0-1' : 'vi_VN'}}
+                              {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -278,7 +280,8 @@
                             SL đề xuất CT,VT trong kho không đáp ứng chuyển sang xuất cấp
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-danger">{{listSoLuongXcCache |number: '1.0-1' :'vi_VN'}} {{formData.value.donViTinh}}</span>
+                            <span class="text-danger">{{listSoLuongXcCache |number: '1.0-1' :'vi_VN'}}
+                              {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -289,7 +292,7 @@
                       <tr>
                         <th [rowspan]="2"></th>
                         <th [rowspan]="2" style="width: 35px">STT</th>
-                        <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
+                        <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
                         <th [rowspan]="2">Tổng SL đề xuất CT, VT ({{formData.value.donViTinh}})</th>
                         <th [colspan]="3">Cục DTNN KV</th>
                         <th [colspan]="2">Chi cục DTNN</th>
@@ -434,8 +437,8 @@
                         <nz-form-label [nzNoColon]="true">
                           SL đề xuất CT,VT trong kho không đáp ứng chuyển sang xuất cấp
                         </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error" >
-                          <span class="text-danger">{{formData.value.soLuongXuaCap>0?(formData.value.soLuongXuaCap|
+                        <nz-form-control [nzErrorTip]="error">
+                          <span class="text-danger">{{formData.value.soLuongXuatCap>0?(formData.value.soLuongXuatCap|
                             number: '1.0-1' : 'vi_VN'):''}}
                             {{formData.value.donViTinh}}</span>
                         </nz-form-control>
@@ -448,7 +451,7 @@
                     <tr>
                       <th [rowspan]="2"></th>
                       <th [rowspan]="2" style="width: 35px">STT</th>
-                      <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
+                      <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
                       <th [rowspan]="2">Tổng SL đề xuất CT, VT ({{formData.value.donViTinh}})</th>
                       <th [colspan]="3">Cục DTNN KV</th>
                       <th [colspan]="2">Chi cục DTNN</th>
@@ -560,12 +563,12 @@
       </div>
     </nz-card>
   </div>
-  <nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible" nzTitle="Chi tiết phương án" [nzFooter]="modalFooterSuaNoiDung"
+  <nz-modal [nzWidth]="'60%'" [(nzVisible)]="isVisible" nzTitle="Chi tiết phương án" [nzFooter]="modalFooterSuaNoiDung"
     [nzClosable]="false">
     <ng-container *nzModalContent>
       <!--    <form nz-form>-->
       <nz-form-item>
-        <nz-form-label [nzXs]="7">Địa phương nhận cứu trợ, viện trợ</nz-form-label>
+        <nz-form-label [nzXs]="7">Địa phương/cơ quan/đơn vị nhận cứu trợ</nz-form-label>
         <nz-form-control>
           <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto" [readonly]="true">
           <nz-autocomplete #auto>

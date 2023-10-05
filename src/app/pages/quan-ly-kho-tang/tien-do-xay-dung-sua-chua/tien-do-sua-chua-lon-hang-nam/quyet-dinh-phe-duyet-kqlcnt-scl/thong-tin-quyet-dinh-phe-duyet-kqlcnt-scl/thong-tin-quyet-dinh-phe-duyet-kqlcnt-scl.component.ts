@@ -1,28 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {STATUS} from "../../../../../../constants/status";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {
-  QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
-import {FILETYPE} from "../../../../../../constants/fileType";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { STATUS } from "../../../../../../constants/status";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { MESSAGE } from "../../../../../../constants/message";
+import { FILETYPE } from "../../../../../../constants/fileType";
+import { CurrencyMaskInputMode } from "ngx-currency";
 import {
   QuyetdinhpheduyetKqLcntSclService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
 import {
   QdPheDuyetKhlcntTdsclService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl',
@@ -36,8 +31,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
-  @Input()
-  itemQdPdKhLcnt: any;
+  @Input() itemQdPdKhLcnt: any;
+  @Input() itemDuAn: any;
   STATUS = STATUS;
   maQd = "/" + this.userInfo.MA_QD;
   trangThaiTtdt: boolean = true;
@@ -82,12 +77,16 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
       idQdPdKhlcnt: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenCongTrinh: [null],
+      loaiCongTrinh: [null],
       chuDauTu: [null],
       diaChi: [null],
       ghiChu: [null],
       tongMucDt: [0],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      loai: ['00'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
+      trangThaiDt: [],
+      trangThaiHd: [],
       fileDinhKems: [null],
       ccPhapLy: [],
       listKtTdscQuyetDinhPdKqlcntDsgt: [[]]
@@ -114,12 +113,13 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     if (this.itemQdPdKhLcnt) {
       this.formData.patchValue({
         namKh: this.itemQdPdKhLcnt.namKh,
-        idQdPdKhlcnt: this.itemQdPdKhLcnt.id,
-        soQdPdKhlcnt: this.itemQdPdKhLcnt.soQd,
-        chuDauTu: this.itemQdPdKhLcnt.chuDauTu,
-        tenCongTrinh: this.itemQdPdKhLcnt.tenCongTrinh,
-        idDuAn: this.itemQdPdKhLcnt.idDuAn,
-        tongMucDt: this.itemQdPdKhLcnt.tongMucDt,
+        idQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.id ? this.itemQdPdKhLcnt.id : null,
+        soQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.soQd ? this.itemQdPdKhLcnt.soQd : null,
+        chuDauTu: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.chuDauTu ? this.itemQdPdKhLcnt.chuDauTu : null,
+        tenCongTrinh: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.tenCongTrinh ? this.itemQdPdKhLcnt.tenCongTrinh : null,
+        idDuAn: this.itemDuAn && this.itemDuAn.idDuAn ? this.itemDuAn.idDuAn : null,
+        tongMucDt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.tongMucDt ? this.itemQdPdKhLcnt.tongMucDt : null,
+        loaiCongTrinh: this.itemDuAn && this.itemDuAn.tenLoaiCongTrinh ? this.itemDuAn.tenLoaiCongTrinh : null,
       });
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -136,6 +136,10 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            tenCongTrinh: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.tenCongTrinh ? this.itemQdPdKhLcnt.tenCongTrinh : null,
+            idDuAn: this.itemDuAn && this.itemDuAn.idDuAn ? this.itemDuAn.idDuAn : null,
+          })
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
           })

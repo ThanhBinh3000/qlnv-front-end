@@ -1,25 +1,28 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {HttpClient} from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {STATUS} from 'src/app/constants/status';
-import {StorageService} from 'src/app/services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { STATUS } from 'src/app/constants/status';
+import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import {
   PhieuKtraCluongBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
 import {
   BienBanLayMauBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
+import { PREVIEW } from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-them-phieu-ktra-cluong-btt',
@@ -169,9 +172,9 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content
       if (data && data.length > 0) {
-        let set = new Set(this.loadPhieuKnghiemCluong.map(item => JSON.stringify({soBienBan: item.soBienBan})));
+        let set = new Set(this.loadPhieuKnghiemCluong.map(item => JSON.stringify({ soBienBan: item.soBienBan })));
         this.dataBienBanLayMau = data.filter(item => {
-          const key = JSON.stringify({soBienBan: item.soBienBan});
+          const key = JSON.stringify({ soBienBan: item.soBienBan });
           return !set.has(key);
         });
       }
@@ -369,12 +372,44 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     });
   }
 
+  async preview(id) {
+    await this.phieuKtraCluongBttService.preview({
+      tenBaoCao: 'Phiếu kiểm nghiệm chất lượng bán trực tiếp',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "phieu-kiem-nghiem-chat-luong-ban-truc-tiep.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "phieu-kiem-nghiem-chat-luong-ban-truc-tiep.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+  }
+
   setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
       this.formData.controls["namKh"].setValidators([Validators.required]);
       this.formData.controls["maDvi"].setValidators([Validators.required]);
       this.formData.controls["tenDvi"].setValidators([Validators.required]);
-      this.formData.controls["maQhns"].setValidators([Validators.required]);
+      // this.formData.controls["maQhns"].setValidators([Validators.required]);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soPhieu"].setValidators([Validators.required]);
       this.formData.controls["loaiVthh"].setValidators([Validators.required]);
@@ -389,7 +424,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       this.formData.controls["namKh"].clearValidators();
       this.formData.controls["maDvi"].clearValidators();
       this.formData.controls["tenDvi"].clearValidators();
-      this.formData.controls["maQhns"].clearValidators();
+      // this.formData.controls["maQhns"].clearValidators();
       this.formData.controls["soQdNv"].clearValidators();
       this.formData.controls["soPhieu"].clearValidators();
       this.formData.controls["loaiVthh"].clearValidators();

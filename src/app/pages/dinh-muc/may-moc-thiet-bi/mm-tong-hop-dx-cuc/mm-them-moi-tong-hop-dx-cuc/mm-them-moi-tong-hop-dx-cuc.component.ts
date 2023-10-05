@@ -1,20 +1,20 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {chain} from 'lodash';
-import {v4 as uuidv4} from 'uuid';
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../components/base2/base2.component";
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { chain } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../components/base2/base2.component";
 import dayjs from "dayjs";
-import {MESSAGE} from "../../../../../constants/message";
-import {STATUS} from "../../../../../constants/status";
+import { MESSAGE } from "../../../../../constants/message";
+import { STATUS } from "../../../../../constants/status";
 import {
   MmThongTinNcChiCuc
 } from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
-import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
+import { MmDxChiCucService } from "../../../../../services/mm-dx-chi-cuc.service";
 
 @Component({
   selector: 'app-mm-them-moi-tong-hop-dx-cuc',
@@ -57,6 +57,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       ngayKy: [null, Validators.required],
       soQdGiaoCt: [null],
       trangThai: ['00'],
+      trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
@@ -119,6 +120,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
+    body.MA_DVI = this.userInfo.MA_DVI;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
@@ -148,7 +150,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           }
           item.id = null;
           item.ghiChu = null;
-          idVirtual:uuidv4();
+          idVirtual: uuidv4();
         })
         this.convertListData()
       }
@@ -214,8 +216,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     let body = this.formData.value;
     let data = await this.createUpdate(body);
     if (data) {
-        this.goBack()
-      }
+      this.goBack()
+    }
     else {
       this.convertListData()
     }
@@ -249,7 +251,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
           this.dataTable.forEach(item => {
-             this.loadSlThuaThieu(item)
+            this.loadSlThuaThieu(item)
           })
           this.convertListData()
           this.expandAll();
@@ -269,12 +271,12 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDTC : {
+      case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;
       }
-      case STATUS.CHO_DUYET_LDTC : {
+      case STATUS.CHO_DUYET_LDTC: {
         trangThai = STATUS.DA_DUYET_LDTC
       }
     }
@@ -284,10 +286,10 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({
-          tenTaiSan: key,
-          dataChild: value,
-          idVirtual: uuidv4(),
-        })
+        tenTaiSan: key,
+        dataChild: value,
+        idVirtual: uuidv4(),
+      })
       ).value()
     }
     if (this.dataTable && this.dataTable.length > 0) {
@@ -351,8 +353,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     } else {
       item.chenhLechThieu = 0
     }
-    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
-      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    if ((item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo - item.slTieuChuan
     } else {
       item.chenhLechThua = 0
     }

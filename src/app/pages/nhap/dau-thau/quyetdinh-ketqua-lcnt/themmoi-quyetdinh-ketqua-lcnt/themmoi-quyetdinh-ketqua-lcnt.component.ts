@@ -1,21 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Base2Component } from "../../../../../components/base2/base2.component";
 import {
   ThemmoiThongtinDauthauVtComponent
 } from "../../trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau-vt/themmoi-thongtin-dauthau-vt.component";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {FileDinhKem} from "../../../../../models/FileDinhKem";
-import {UserLogin} from "../../../../../models/userlogin";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {UploadFileService} from "../../../../../services/uploaFile.service";
-import {Globals} from "../../../../../shared/globals";
-import {UserService} from "../../../../../services/user.service";
-import {HelperService} from "../../../../../services/helper.service";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FileDinhKem } from "../../../../../models/FileDinhKem";
+import { UserLogin } from "../../../../../models/userlogin";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { UploadFileService } from "../../../../../services/uploaFile.service";
+import { Globals } from "../../../../../shared/globals";
+import { UserService } from "../../../../../services/user.service";
+import { HelperService } from "../../../../../services/helper.service";
 import {
   QuyetDinhPheDuyetKetQuaLCNTService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
@@ -23,13 +23,17 @@ import {
   ThongTinDauThauService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import * as dayjs from "dayjs";
-import {MESSAGE} from "../../../../../constants/message";
-import {FILETYPE} from "../../../../../constants/fileType";
+import { MESSAGE } from "../../../../../constants/message";
+import { FILETYPE, PREVIEW } from "../../../../../constants/fileType";
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { STATUS } from "../../../../../constants/status";
 import { isEmpty } from 'lodash'
+import {
+  ThemmoiThongtinDauthauComponent
+} from "../../trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau/themmoi-thongtin-dauthau.component";
+import { saveAs } from "file-saver";
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
   templateUrl: './themmoi-quyetdinh-ketqua-lcnt.component.html',
@@ -46,6 +50,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
 
   @Input() isView: boolean;
   @ViewChild('thongtindtvt') thongTinDauThauVt: ThemmoiThongtinDauthauVtComponent;
+  @ViewChild('thongtindt') thongTinDauThau: ThemmoiThongtinDauthauComponent;
 
   formData: FormGroup;
 
@@ -59,6 +64,13 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   listFile: any[] = []
   userInfo: UserLogin;
   STATUS = STATUS
+  reportTemplate: any = {
+    typeFile: "",
+    fileName: "qd_pd_kqlcnt_vt.docx",
+    tenBaoCao: "",
+    trangThai: ""
+  };
+  previewName: string;
   constructor(
     modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -84,7 +96,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         ngayHluc: [],
         namKhoach: [dayjs().get('year')],
         trichYeu: [null],
-        soQdPdKhlcnt: ['', [Validators.required]],
+        soQdPdKhlcnt: [''],
         idQdPdKhlcnt: [''],
         idQdPdKhlcntDtl: [''],
         ghiChu: [null,],
@@ -142,7 +154,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         })
         this.danhSachFileDinhKem = dataDetail.fileDinhKems;
         this.danhSachFileCanCuPL = dataDetail.canCuPhapLy;
-        if (dataDetail.children.length > 0) {
+        if (dataDetail.children?.length > 0) {
           dataDetail.children.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
               this.danhSachFileDinhKem.push(item)
@@ -170,7 +182,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       body.listCcPhapLy = this.danhSachFileCanCuPL;
       let detail = [];
       let type = "GOC";
-      if(this.thongTinDauThauVt.isDieuChinh) {
+      if (this.thongTinDauThauVt.isDieuChinh) {
         type = "DC"
       }
       this.thongTinDauThauVt.danhsachDx.forEach(item => {
@@ -186,19 +198,20 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       })
       body.detailList = detail;
     } else {
-      if (this.danhSachFileDinhKem.length > 0) {
-        this.danhSachFileDinhKem.forEach(item => {
-          item.fileType = FILETYPE.FILE_DINH_KEM
-          this.listFile.push(item)
-        })
-      }
-      if (this.danhSachFileCanCuPL.length > 0) {
-        this.danhSachFileCanCuPL.forEach(element => {
-          element.fileType = FILETYPE.CAN_CU_PHAP_LY
-          this.listFile.push(element)
-        })
-      }
-      body.fileDinhKems = this.listFile;
+      body.fileDinhKems = this.danhSachFileDinhKem;
+      body.listCcPhapLy = this.danhSachFileCanCuPL;
+      let detail = [];
+      // this.thongTinDauThau.listOfData.forEach(item => {
+      //   let dtl = {
+      //     idGoiThau: item.id,
+      //     idNhaThau: item.kqlcntDtl?.idNhaThau,
+      //     donGiaVat: item.kqlcntDtl?.donGiaVat,
+      //     trangThai: item.kqlcntDtl?.trangThai,
+      //     tenNhaThau: item.kqlcntDtl?.tenNhaThau
+      //   }
+      //   detail.push(dtl)
+      // })
+      body.detailList = detail;
     }
 
     let res;
@@ -338,7 +351,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdPdKhlcnt,
-        dataHeader: ['Số Đề Xuất KHLCNT', 'Số QĐ PD KHLCNT', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Tổng số gói thầu', 'Số gói thầu trúng', 'Số gói thầu trượt'],
+        dataHeader: ['Số Đề Xuất KHLCNT', 'Số QĐ PD KHLCNT', 'Loại hàng DTQG', 'Chủng loại hàng DTQG', 'Tổng số gói thầu', 'Số gói thầu trúng', 'Số gói thầu trượt'],
         dataColumn: ['soDxuat', 'soQdPdKhlcnt', 'tenLoaiVthh', 'tenCloaiVthh', 'soGthau', 'soGthauTrung', 'soGthauTruot']
       },
     });
@@ -378,5 +391,20 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     }
   }
 
-
+  async preview() {
+    if (this.loaiVthh.startsWith('02')) {
+      this.previewName = "qd_pd_kqlcnt_vt.docx";
+    } else {
+      this.previewName = "qd_pd_kqlcnt_lt.docx"
+    }
+    this.reportTemplate.fileName = this.previewName;
+    let body = this.formData.value;
+    body.reportTemplateRequest = this.reportTemplate;
+    await this.quyetDinhPheDuyetKetQuaLCNTService.preview(body).then(async s => {
+      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+      this.printSrc = s.data.pdfSrc;
+      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+      this.showDlgPreview = true;
+    });
+  }
 }

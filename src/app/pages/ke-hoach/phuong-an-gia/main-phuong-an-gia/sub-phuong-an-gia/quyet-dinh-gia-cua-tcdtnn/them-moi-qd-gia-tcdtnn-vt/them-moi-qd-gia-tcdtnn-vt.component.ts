@@ -1,23 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import dayjs from 'dayjs';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {STATUS} from "../../../../../../../constants/status";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { STATUS } from "../../../../../../../constants/status";
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
-import {DialogPagQdBtcComponent} from "../../quyet-dinh-gia-btc/dialog-pag-qd-btc/dialog-pag-qd-btc.component";
+import { DialogPagQdTcdtnnComponent } from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
+import { DialogPagQdBtcComponent } from "../../quyet-dinh-gia-btc/dialog-pag-qd-btc/dialog-pag-qd-btc.component";
 import {
   QuyetDinhGiaCuaBtcService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
@@ -178,7 +178,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     }
     if (this.arrThongTinGia && this.arrThongTinGia.length > 0) {
       if (this.formData.value.loaiGia == 'LG03') {
-        this.dataTable.forEach(item => {
+        this.arrThongTinGia.forEach(item => {
           if (item.vat) {
             item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
           }
@@ -254,7 +254,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
             listId: thRes && thRes.length > 0 ? thRes.map(item => item.id) : []
           }
           this.formData.patchValue({
-            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : []
+            soToTrinh: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuat).toString() : []
           })
           this.tongHopData(body);
         }

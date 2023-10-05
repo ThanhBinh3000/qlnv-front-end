@@ -1,11 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {MESSAGE} from "../../../../../constants/message";
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { MESSAGE } from "../../../../../constants/message";
 import {
   QuyetdinhpheduyetKqLcntSclService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
@@ -27,8 +27,8 @@ export class QuyetDinhPheDuyetKqlcntSclComponent extends Base2Component implemen
   @Input()
   itemTtdt: any;
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
   openPopThongTin = false;
   trangThaiTtdt = false;
@@ -79,10 +79,10 @@ export class QuyetDinhPheDuyetKqlcntSclComponent extends Base2Component implemen
   }
 
   openThongTinModal(id?, isView?: boolean) {
-    if (!id && this.trangThaiTtdt) {
-      this.notification.warning(MESSAGE.WARNING, "Tất cả các gói thầu của dự án đã được tạo quyết định phê duyệt kết quả lựa chọn nhà thầu, không thể tạo thêm quyết định!");
-      return;
-    }
+    // if (!id && this.trangThaiTtdt) {
+    //   this.notification.warning(MESSAGE.WARNING, "Tất cả các gói thầu của dự án đã được tạo quyết định phê duyệt kết quả lựa chọn nhà thầu, không thể tạo thêm quyết định!");
+    //   return;
+    // }
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;

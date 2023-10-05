@@ -1,35 +1,35 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
-import {Subject} from 'rxjs';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {convertTienTobangChu, thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { Subject } from 'rxjs';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import * as dayjs from 'dayjs';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {FormBuilder, Validators} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QuyetDinhGiaoNvNhapHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
-import {DanhMucTieuChuanService} from './../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service';
-import {Base2Component} from './../../../../../../components/base2/base2.component';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
+import { DanhMucTieuChuanService } from './../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service';
+import { Base2Component } from './../../../../../../components/base2/base2.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import {
   MttBienBanNghiemThuBaoQuan
 } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttBienBanNghiemThuBaoQuan.service';
-import {BienBanNghiemThuBaoQuanDtl} from './../../../../../../models/KiemTraChatLuong';
-import {cloneDeep} from 'lodash';
-import {FileDinhKem} from './../../../../../../models/DeXuatKeHoachuaChonNhaThau';
-import {UploadFileService} from './../../../../../../services/uploaFile.service';
+import { BienBanNghiemThuBaoQuanDtl } from './../../../../../../models/KiemTraChatLuong';
+import { cloneDeep } from 'lodash';
+import { FileDinhKem } from './../../../../../../models/DeXuatKeHoachuaChonNhaThau';
+import { UploadFileService } from './../../../../../../services/uploaFile.service';
 import {
   ThongTinHangDtqgComponent
 } from "../../../../../dieu-chuyen-noi-bo/nhap-dieu-chuyen/tablevel3/bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-hang-dtqg/thong-tin-hang-dtqg.component";
@@ -78,7 +78,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   dsHangPD = []
   typeData: string;
   typeAction: string;
-
+  previewName: string = 'ntt_bien_ban_ntbq_lan_dau';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -108,9 +108,9 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         ngayNghiemThu: [''],
         slCanNhap: [''],
         nguoiTao: [''],
-        tenThuKho: [''],
-        tenKeToan: [''],
-        tenNguoiPduyet: [''],
+        thuKho: [''],
+        keToan: [''],
+        nguoiPduyet: [''],
         tenNganLoKho: [''],
 
         loaiVthh: ['',],
@@ -239,7 +239,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
     });
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     console.log(dataChiCuc)
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
@@ -269,7 +269,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
 
   async bindingDataDdNhap(data) {
     if (data) {
-      console.log(data)
+      console.log(data, "kho kho kho")
       if (data.listPhieuNhapKho) {
         this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter(item => item.trangThai == STATUS.DA_DUYET_LDCC);
         this.listSoPhieuNhapKho.forEach(item => {
@@ -289,8 +289,9 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+        // soPhieuNhapKho: data?.hhPhieuNhapKhoHdr.find(x => x.maLoKho == data.maLoKho).soPhieuNhapKho,
       })
-      this.loadLoaiKho()
+      // this.loadLoaiKho()
     }
   }
 
@@ -361,6 +362,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        console.log(data)
         await this.bindingDataQd(res.data?.idQdGiaoNvNh);
         let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
         this.bindingDataDdNhap(dataDdNhap);
@@ -440,7 +442,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   cancelEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.idVirtual == id);
     this.dataEdit[id] = {
-      data: {...this.dataTable[index]},
+      data: { ...this.dataTable[index] },
       edit: false,
     };
   }
@@ -456,7 +458,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -511,7 +513,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       this.dataTable1.forEach((item, index) => {
         this.dataEdit1[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -530,7 +532,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   cancelEdit1(id: number): void {
     const index = this.dataTable1.findIndex((item) => item.idVirtual == id);
     this.dataEdit1[id] = {
-      data: {...this.dataTable1[index]},
+      data: { ...this.dataTable1[index] },
       edit: false,
     };
   }
@@ -832,7 +834,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
           fileDinhKemQd.fileSize = resUpload.size;
           fileDinhKemQd.fileUrl = resUpload.url;
           fileDinhKemQd.idVirtual = new Date().getTime();
-          this.formData.patchValue({fileDinhKem: fileDinhKemQd, fileName: itemFile.name})
+          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
         });
     }
   }

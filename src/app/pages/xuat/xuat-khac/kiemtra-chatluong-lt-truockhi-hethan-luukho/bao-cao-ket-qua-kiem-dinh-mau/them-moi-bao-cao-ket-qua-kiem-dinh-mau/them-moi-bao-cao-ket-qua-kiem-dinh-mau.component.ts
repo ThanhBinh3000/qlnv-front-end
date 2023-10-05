@@ -1,26 +1,27 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Base2Component} from 'src/app/components/base2/base2.component';
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
-import {Validators} from '@angular/forms';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
+import { Validators } from '@angular/forms';
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {
   BaoCaoKqKdLuongThucHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/BaoCaoKqKdLuongThucHangDTQG.service";
-import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
+import { LOAI_HH_XUAT_KHAC } from "../../../../../../constants/config";
 import {
   PhieuKiemNgiemClLuongThucHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/PhieuKiemNgiemClLuongThucHangDTQG.service";
-
+import { PREVIEW } from '../../../../../../constants/fileType';
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'them-moi-bao-cao-ket-qua-kiem-dinh-mau',
   templateUrl: './them-moi-bao-cao-ket-qua-kiem-dinh-mau.component.html',
@@ -41,7 +42,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
   selectedId: number;
   isFirstInit = true;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
-
+  templateName = 'xuat_khac_ktcl_luong_thuc_bao_cao_kq_kiem_dinh';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -107,7 +108,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
               ...res.data,
               soBaoCao: res.data.soBaoCao?.split('/')[0] ?? null,
 
-            }, {emitEvent: false});
+            }, { emitEvent: false });
 
           }
         })
@@ -148,17 +149,17 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
   }
 
   async save() {
-    this.formData.disable({emitEvent: false});
+    this.formData.disable({ emitEvent: false });
     let body = {
       ...this.formData.value,
       soBaoCao: this.formData.value.soBaoCao ? this.formData.value.soBaoCao + this.maHauTo : this.maHauTo,
     };
     let rs = await this.createUpdate(body)
-    this.formData.enable({emitEvent: false});
+    this.formData.enable({ emitEvent: false });
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    body = {...body, soBaoCao: this.formData.value.soBaoCao + this.maHauTo}
+    body = { ...body, soBaoCao: this.formData.value.soBaoCao + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -238,8 +239,32 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-    }else {
+    } else {
       this.kiemTraCl = false;
     }
+  }
+  async preview(id) {
+    this.spinner.show();
+    await this.baoCaoKqKdLuongThucHangDTQGService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + ".pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + ".docx");
   }
 }

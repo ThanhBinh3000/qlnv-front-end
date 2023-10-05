@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { BaseService } from '../../base.service';
-import {OldResponseData} from "../../../interfaces/response";
+import { OldResponseData } from "../../../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -107,6 +107,7 @@ export class DeNghiCapVonBoNganhService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
+
   dsThuHuong(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/ds-thu-huong`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
@@ -114,5 +115,10 @@ export class DeNghiCapVonBoNganhService extends BaseService {
   dsHopDongTheoBoNganh(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/ds-hop-dong-theo-bo-nganh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  detailHopDong(maHopDong: string): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/chi-tiet-lan-dn-theo-hd/${maHopDong}`;
+    return this.httpClient.get<any>(url_).toPromise();
   }
 }

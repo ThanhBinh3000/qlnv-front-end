@@ -201,7 +201,7 @@
                       <td class="text-center">{{ i+1 }}</td>
                       <td>{{ data.maDvi }}</td>
                       <td>{{ data.tenDvi }}</td>
-                      <td>{{ data.soLuong | number: '1.0-1' }}</td>
+                      <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                       <td>{{ data.ghiChu }}</td>
                       <td class="text-center">
                         <a (click)="reactToDonViThuchienQuyetDinh(data)">

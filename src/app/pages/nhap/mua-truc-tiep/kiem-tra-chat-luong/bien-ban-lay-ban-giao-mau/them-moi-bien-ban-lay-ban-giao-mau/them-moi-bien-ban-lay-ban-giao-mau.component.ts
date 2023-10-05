@@ -18,7 +18,7 @@ import { DialogTuChoiComponent } from './../../../../../../components/dialog/dia
 import { PhuongPhapLayMau } from './../../../../../../models/PhuongPhapLayMau';
 import { isEmpty } from 'lodash';
 import { MttBienBanLayMauService } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttBienBanLayMauService.service';
-import {FILETYPE} from "../../../../../../constants/fileType";
+import { FILETYPE } from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-moi-bien-ban-lay-ban-giao-mau',
@@ -57,6 +57,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
   tenNganLoKho: any;
   ppLayMau: any;
   checked: boolean = false;
+  previewName: string = 'ntt_bien_ban_lay_mau';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -490,7 +491,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       // donGiaHd: data.hopDong.donGia
     });
     console.log("2", this.formData.value)
-    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
+    let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI))[0];
     // this.listDiaDiemNhap = dataChiCuc.hhQdGiaoNvNhDdiemList.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
     if (dataChiCuc) {
       this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
@@ -572,8 +573,8 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
               checked: false
             }
             ppLayMauOptions.push(option);
-            if(this.formData.value.ppLayMau != null){
-              ppLayMauOptions.find(x => x.value == this.formData.value.ppLayMau).checked = true;
+            if (this.formData.value.ppLayMau != null) {
+              ppLayMauOptions.find(x => x.value == this.formData.value.ppLayMau) ? ppLayMauOptions.find(x => x.value == this.formData.value.ppLayMau).checked = true : ppLayMauOptions;
             }
             console.log(ppLayMauOptions)
             this.formData.patchValue({
@@ -590,9 +591,9 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
   }
 
   handleChange(selectedValues: any): void {
-    if(selectedValues != undefined){
+    if (selectedValues != undefined) {
       console.log('Các giá trị đã chọn:', selectedValues);
-      if(selectedValues.checked == true){
+      if (selectedValues.checked == true) {
         this.formData.patchValue({
           ppLayMau: selectedValues.value
         })

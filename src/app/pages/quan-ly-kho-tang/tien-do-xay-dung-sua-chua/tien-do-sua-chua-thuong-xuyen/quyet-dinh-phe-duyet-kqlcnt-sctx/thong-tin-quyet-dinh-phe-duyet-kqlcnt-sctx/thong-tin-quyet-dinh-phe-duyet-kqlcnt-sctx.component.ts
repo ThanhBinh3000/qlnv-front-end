@@ -1,16 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {STATUS} from "../../../../../../constants/status";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {FILETYPE} from "../../../../../../constants/fileType";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { STATUS } from "../../../../../../constants/status";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { MESSAGE } from "../../../../../../constants/message";
+import { FILETYPE } from "../../../../../../constants/fileType";
+import { CurrencyMaskInputMode } from "ngx-currency";
 import {
   QuyetdinhpheduyetKqLcntSclService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
@@ -80,8 +80,9 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSctxComponent extends Base2Component
       diaChi: [null],
       ghiChu: [null],
       tongMucDt: [0],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
+      loai: ['01'],
       fileDinhKems: [null],
       ccPhapLy: [],
       listKtTdscQuyetDinhPdKqlcntDsgt: [[]]
@@ -287,4 +288,4 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSctxComponent extends Base2Component
   //         tongTien: 0
   //       });
   //   }
-  }
+}

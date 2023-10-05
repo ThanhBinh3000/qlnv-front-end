@@ -24,7 +24,7 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
   thMttId: number = 0;
   openThMtt = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
   constructor(
@@ -81,7 +81,7 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
       this.formData.value.ngayQdTu = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null
       this.formData.value.ngayQdDen = this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null
     }
-    if(this.userService.isCuc()){
+    if (this.userService.isCuc()) {
       this.formData.value.trangThai = this.STATUS.BAN_HANH;
     }
     this.formData.value.maDvi = this.userInfo.MA_DVI;
@@ -160,6 +160,9 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
     }
   }
   showList() {
+    if (this.userService.isCuc()) {
+      this.formData.value.trangThai = this.STATUS.BAN_HANH;
+    }
     this.isDetail = false;
     this.timKiem()
   }

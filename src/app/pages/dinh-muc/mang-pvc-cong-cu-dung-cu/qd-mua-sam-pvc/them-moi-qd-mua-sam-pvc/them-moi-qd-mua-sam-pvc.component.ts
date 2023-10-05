@@ -1,19 +1,20 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import { Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {chain} from 'lodash';
-import {v4 as uuidv4} from 'uuid';
-import {MESSAGE} from "../../../../../constants/message";
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { chain } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { MESSAGE } from "../../../../../constants/message";
 import dayjs from "dayjs";
-import {STATUS} from "../../../../../constants/status";
-import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
-import {QdMuaSamPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service";
-import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
+import { STATUS } from "../../../../../constants/status";
+import { DialogMmMuaSamComponent } from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
+import { QdMuaSamPvcService } from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service";
+import { DxChiCucPvcService } from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-them-moi-qd-mua-sam-pvc',
@@ -27,7 +28,8 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   listDxCuc: any[] = [];
   maQd: string
   expandSet = new Set<number>();
-  typeQd : string
+  typeQd: string
+  amount = AMOUNT_ONE_DECIMAL;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -54,7 +56,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdPvcMuaSamDtlReq: [null],
-      loai : ['00']
+      loai: ['00']
     });
   }
 
@@ -91,8 +93,8 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
         let data = res.data;
         this.listTongHop = data.content;
         if (this.listTongHop) {
-          this.listTongHop =  this.listTongHop.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDTC && item.qdMuaSamBhId == null )
+          this.listTongHop = this.listTongHop.filter(
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDTC && item.qdMuaSamBhId == null)
           )
         }
       } else {
@@ -123,8 +125,8 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
         let data = res.data;
         this.listDxCuc = data.content;
         if (this.listDxCuc) {
-          this.listDxCuc =  this.listDxCuc.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP && item.qdMuaSamBhId == null )
+          this.listDxCuc = this.listDxCuc.filter(
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP && item.qdMuaSamBhId == null)
           )
         }
       } else {
@@ -142,12 +144,12 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid ) {
+    if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
-    if (!this.formData.value.maTh && ! this.formData.value.maDx) {
+    if (!this.formData.value.maTh && !this.formData.value.maDx) {
       this.notification.error(MESSAGE.ERROR, 'Chọn số tổng hợp hoặc số đề xuất!')
       this.spinner.hide();
       return;
@@ -172,7 +174,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
     }
   }
 
-  sumSoLuong(column: string, tenCcdc : string, type?) {
+  sumSoLuong(column: string, tenCcdc: string, type?) {
     let sl = 0;
     let arr = [];
     this.dataTable.forEach(item => {
@@ -183,7 +185,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       }
     })
     arr = arr.filter(item => item.tenCcdc == tenCcdc)
-    if (arr && arr.length> 0) {
+    if (arr && arr.length > 0) {
       if (!type) {
         const sum = arr.reduce((prev, cur) => {
           prev += cur[column]
@@ -204,7 +206,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({tenCcdc: key, dataChild: value, idVirtual: uuidv4(),})
+        .map((value, key) => ({ tenCcdc: key, dataChild: value, idVirtual: uuidv4(), })
         ).value()
     }
     this.expandAll();
@@ -246,10 +248,10 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soQd : this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
+            soQd: this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
           })
           if (this.formData.value.maTh) {
-            this.typeQd ='TH'
+            this.typeQd = 'TH'
           } else {
             this.typeQd = 'DX'
           }
@@ -272,22 +274,22 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDTC : {
+      case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;
       }
-      case STATUS.CHO_DUYET_LDTC : {
+      case STATUS.CHO_DUYET_LDTC: {
         trangThai = STATUS.BAN_HANH
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
   }
 
-  async changSoTh(event, type? : string) {
+  async changSoTh(event, type?: string) {
     let result;
     if (type == 'DX') {
-      result =this.listDxCuc.filter(item => item.id = event)
+      result = this.listDxCuc.filter(item => item.id = event)
     } else {
       result = this.listTongHop.filter(item => item.id = event)
     }
@@ -298,6 +300,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
         if (res.data) {
           this.dataTable = []
           this.dataTable = res.data.listQlDinhMucPvcDxCcdcDtl
+          console.log(this.dataTable, 'this.dataTablethis.dataTablethis.dataTable');
           if (this.dataTable && this.dataTable.length > 0) {
             this.dataTable.forEach(item => {
               item.id = null;
@@ -319,22 +322,22 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       this.formData.controls["maDx"].clearValidators();
       this.formData.controls["maTh"].setValidators([Validators.required])
       let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CCDC CỦA CÁC CỤC',
+        nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CCDC CỦA CÁC CỤC',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          listTh:  this.listTongHop ,
-          type :this.formData.value.loai
+          listTh: this.listTongHop,
+          type: this.formData.value.loai
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            maTh :  data.id,
-            maDx :  null,
+            maTh: data.id,
+            maDx: null,
           })
           await this.changSoTh(data.id, 'TH');
         }
@@ -346,26 +349,28 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       this.formData.controls["maTh"].clearValidators();
       this.formData.controls["maDx"].setValidators([Validators.required]);
       let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CCDCCỦA CỤC',
+        nzTitle: 'DANH SÁCH ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CCDCCỦA CỤC',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          listTh:  this.listDxCuc ,
-          type : "02"
+          listTh: this.listDxCuc,
+          type: "02"
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            maDx :  data.soCv,
-            maTh :  null,
+            maDx: data.soCv,
+            maTh: null,
           })
           await this.changSoTh(data.id, 'DX');
         }
       })
     }
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }

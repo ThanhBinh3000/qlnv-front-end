@@ -3,28 +3,31 @@ import {
   Input,
   OnInit
 } from '@angular/core';
-import {Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import dayjs from 'dayjs';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {STATUS} from 'src/app/constants/status';
+import { STATUS } from 'src/app/constants/status';
 import {
   QuyetDinhNvXuatBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import {
   BienBanLayMauBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
-import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
-import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import { PREVIEW } from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-them-moi-bien-ban-lay-mau-btt',
@@ -320,7 +323,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       let data = res.data.content
       if (data && data.length > 0) {
         this.dsSoHopDong = data;
-        this.dsSoHopDong = this.dsSoHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI);
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -405,7 +407,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       let data = res.data.content;
       if (data && data.length > 0) {
         this.dsBangkeBanLe = data;
-        this.dsBangkeBanLe = this.dsBangkeBanLe.filter(item => item.maDvi === this.userInfo.MA_DVI);
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -565,6 +566,38 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       }
       this.reject(this.id, trangThai)
     }
+  }
+
+  async preview(id) {
+    await this.bienBanLayMauBttService.preview({
+      tenBaoCao: 'Biên bản lấy mẫu bán trực tiếp',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "bien-ban-lay-mau-ban-truc-tiep.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "bien-ban-lay-mau-ban-truc-tiep.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
   setValidator(isGuiDuyet) {

@@ -107,6 +107,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
             tGianTaoDenNgay: this.listData.tGianTaoDenNgay,
             tGianBanHanhTuNgay: this.listData.tGianBanHanhTuNgay,
             tGianBanHanhDenNgay: this.listData.tGianBanHanhDenNgay,
+            trangThai: this.listData.trangThai,
           });
           this.listDataDetail = this.listData.detail
           this.listDataNhap = this.listDataDetail.filter(item => item.type == "1");

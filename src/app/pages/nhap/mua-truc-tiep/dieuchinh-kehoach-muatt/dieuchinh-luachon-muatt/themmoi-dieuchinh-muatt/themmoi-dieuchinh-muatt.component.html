@@ -221,8 +221,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let data of danhsachDxMtt ;let i = index" (click)="showDetail($event,data)"
-                            [ngClass]="{'bg-selected': i == 0 && this.selected}"
-                        >
+                            [ngClass]="{'bg-selected': i == 0 && this.selected}">
                             <td style="width: 35px">{{i + 1}}</td>
                             <td>{{ data.tenDvi }}</td>
                             <td>{{ data.diaChiDvi }}</td>
@@ -231,7 +230,8 @@
                             <td>{{ data.trichYeu }}</td>
                             <td>{{ data.tenDuAn }}</td>
                             <td>{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
-                            <td>{{ data.tongMucDt | number: '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{ (data.tongMucDt ? data.tongMucDt : data.tongSoLuong * data.donGiaVat * 1000) |
+                                number: '1.0-1' : 'vi_VN' }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -251,7 +251,8 @@
                     <nz-card class="mg-t-10 flex-card p-lr16 ">
                         <app-thongtin-dieuchinh [title]="'Nội dung Quyết định điều chỉnh'" [dataInput]="dataInput"
                             [isCache]="false" [isView]="formData.value.trangThai != STATUS.DU_THAO"
-                            (data)="onChangesData($event)" (dataChild)="onChangesDataChild($event)" [dataChiTieu]="this.dataChiTieu">
+                            (data)="onChangesData($event)" (dataChild)="onChangesDataChild($event)"
+                            [dataChiTieu]="this.dataChiTieu">
                         </app-thongtin-dieuchinh>
                     </nz-card>
                 </div>

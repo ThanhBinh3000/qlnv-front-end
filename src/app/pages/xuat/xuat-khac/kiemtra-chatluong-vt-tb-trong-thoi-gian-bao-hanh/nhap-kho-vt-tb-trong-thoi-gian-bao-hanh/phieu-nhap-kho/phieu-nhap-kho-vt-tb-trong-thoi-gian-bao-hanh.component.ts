@@ -1,18 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
 
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 
-import {chain} from 'lodash';
+import { chain } from 'lodash';
 import * as uuid from "uuid";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {StorageService} from "../../../../../../services/storage.service";
-import {DataService} from "../../../../../../services/data.service";
-import {CHUC_NANG} from "../../../../../../constants/status";
-import {UserLogin} from "../../../../../../models/userlogin";
-import {MESSAGE} from "../../../../../../constants/message";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { StorageService } from "../../../../../../services/storage.service";
+import { DataService } from "../../../../../../services/data.service";
+import { CHUC_NANG } from "../../../../../../constants/status";
+import { UserLogin } from "../../../../../../models/userlogin";
+import { MESSAGE } from "../../../../../../constants/message";
 import {
   PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanh.service";
@@ -41,6 +41,7 @@ export class PhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Componen
       tenDvi: null,
       maDvi: null,
       nam: null,
+      soCanCu: null,
       soBckqKdm: null,
       soPhieu: null,
       ngayXuatNhapTu: null,
@@ -137,28 +138,28 @@ export class PhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Componen
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
-              // let child = v.find(s => s.tenDiemKho === k)
-              let rs1 = chain(v)
-                .groupBy("tenCloaiVthh")
-                .map((v1, k1) => {
-                    let childOfChild = v1.find(s => s.tenCloaiVthh === k1)
-                    return {
-                      idVirtual: uuid.v4(),
-                      tenCloaiVthh: k1 != "null" ? k1 : '',
-                      maDiaDiem: childOfChild ? childOfChild.maDiaDiem : null,
-                      tenLoKho: childOfChild ? childOfChild.tenLoKho : null,
-                      tenNganKho: childOfChild ? childOfChild.tenNganKho : null,
-                      childData: v1
-                    }
-                  }
-                ).value();
-              return {
-                idVirtual: uuid.v4(),
-                tenDiemKho: k != "null" ? k : '',
-                // tenLoaiVthh: child ? child.tenLoaiVthh : null,
-                childData: rs1
+            // let child = v.find(s => s.tenDiemKho === k)
+            let rs1 = chain(v)
+              .groupBy("tenCloaiVthh")
+              .map((v1, k1) => {
+                let childOfChild = v1.find(s => s.tenCloaiVthh === k1)
+                return {
+                  idVirtual: uuid.v4(),
+                  tenCloaiVthh: k1 != "null" ? k1 : '',
+                  maDiaDiem: childOfChild ? childOfChild.maDiaDiem : null,
+                  tenLoKho: childOfChild ? childOfChild.tenLoKho : null,
+                  tenNganKho: childOfChild ? childOfChild.tenNganKho : null,
+                  childData: v1
+                }
               }
+              ).value();
+            return {
+              idVirtual: uuid.v4(),
+              tenDiemKho: k != "null" ? k : '',
+              // tenLoaiVthh: child ? child.tenLoaiVthh : null,
+              childData: rs1
             }
+          }
           ).value();
         return {
           idVirtual: uuid.v4(),

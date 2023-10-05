@@ -15,6 +15,7 @@ import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 import { DonviService } from "../../../../../services/donvi.service";
 import { QuyetDinhKhTrungHanService } from "../../../../../services/quyet-dinh-kh-trung-han.service";
 import { Router } from "@angular/router";
+import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: "app-de-xuat-nhu-cau",
@@ -28,16 +29,17 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
 
   idTongHop: number = 0;
   isViewTh: boolean;
+  STATUS = STATUS;
 
   listTrangThai = [{ "ma": "00", "giaTri": "Dự thảo" },
-    { "ma": "01", "giaTri": "Chờ duyệt TP" },
-    { "ma": "02", "giaTri": "Từ chối TP" },
-    { "ma": "03", "giaTri": "Chờ duyệt LĐ Cục" },
-    { "ma": "04", "giaTri": "Từ chối LĐ Cục" },
-    { "ma": "05", "giaTri": "Đã duyệt LĐ Cục" },
-    { "ma": "18", "giaTri": "Chờ duyệt CB Vụ" },
-    { "ma": "19", "giaTri": "Từ chối CB Vụ" },
-    { "ma": "20", "giaTri": "Đã duyệt CB Vụ" }];
+  { "ma": "01", "giaTri": "Chờ duyệt TP" },
+  { "ma": "02", "giaTri": "Từ chối TP" },
+  { "ma": "03", "giaTri": "Chờ duyệt LĐ Cục" },
+  { "ma": "04", "giaTri": "Từ chối LĐ Cục" },
+  { "ma": "05", "giaTri": "Đã duyệt LĐ Cục" },
+  { "ma": "18", "giaTri": "Chờ duyệt CB Vụ" },
+  { "ma": "19", "giaTri": "Từ chối CB Vụ" },
+  { "ma": "20", "giaTri": "Đã duyệt CB Vụ" }];
 
   constructor(
     private httpClient: HttpClient,
@@ -114,7 +116,7 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
 
   async openModalCttongHop(data: any) {
     let body = {
-      namKeHoach : data.namKeHoach,
+      namKeHoach: data.namKeHoach,
       paggingReq: {
         limit: 100,
         page: this.page - 1,
@@ -135,7 +137,5 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
     this.idTongHop = null;
     this.isViewTh = false;
   }
-
-
 }
 

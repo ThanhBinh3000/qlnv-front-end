@@ -34,7 +34,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
 
   searchFilter = {
     soQuyetDinhNhap: '',
-    namKh: dayjs().get('year'),
+    namKh: '',
     soBbNhapDayKho: '',
     ngayBdauNhap: '',
     ngayKthucNhap: '',
@@ -62,6 +62,8 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
   allChecked = false;
   indeterminate = false;
   listNam: any[] = [];
+  tuNgayTao: Date | null = null;
+  denNgayTao: Date | null = null;
 
   filterTable = {
     soQuyetDinhNhap: '',
@@ -154,12 +156,38 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.convertDataTable();
+      // this.convertDataTable();
+      this.dataTable.forEach(item => {
+        if (this.userService.isChiCuc()) {
+          item.detail = item.hhQdGiaoNvNhangDtlList.filter(y => y.maDvi == this.userInfo.MA_DVI)[0]
+          item.detail = {
+            children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
+          }
+          item.expand = true;
+        } else {
+          let data = [];
+          item.hhQdGiaoNvNhangDtlList.forEach(res => {
+            data = [...data, ...res.children.filter(x => x.idDtl == res.id)];
+          })
+          item.detail = {
+            children: data,
+          }
+          item.expand = true;
+        };
+      });
+      console.log(this.dataTable)
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
+  }
+
+  setExpand(parantExpand: boolean = false, children: any = []): void {
+    if (parantExpand) {
+      return children.map(f => ({ ...f, expand: false }))
+    }
+    return children
   }
 
   convertDataTable() {
@@ -184,7 +212,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
 
   clearFilter() {
     this.searchFilter = {
-      namKh: dayjs().get('year'),
+      namKh: '',
       soQuyetDinhNhap: '',
       soBbNhapDayKho: '',
       ngayBdauNhap: '',
@@ -456,4 +484,18 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
       this.expandSet2.delete(id);
     }
   }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayTao) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayTao.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayTao) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayTao.getTime();
+  };
 }

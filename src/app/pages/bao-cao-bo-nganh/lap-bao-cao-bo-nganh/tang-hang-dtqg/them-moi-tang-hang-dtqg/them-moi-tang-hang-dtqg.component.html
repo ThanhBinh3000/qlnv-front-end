@@ -2,7 +2,8 @@
   <div class="header header-green-background mg-t-16">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span></span>
+        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+          {{ formData.value.tenTrangThai }}</span>
         <span>Thông tin chung</span>
       </div>
     </div>
@@ -13,12 +14,15 @@
           <span>Quay lại</span>
         </button>
         <ng-container>
-          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView" type="button"
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHDTQG_DUYET')" type="button"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Ban hành</span>
           </button>
-          <button *ngIf="!isView" type="button" class="btn btn-main" (click)="save()">
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHDTQG_LAP')" type="button" class="btn btn-main"
+            (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>

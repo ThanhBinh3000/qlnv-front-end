@@ -385,8 +385,9 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
     }
   }
 
-  redirectDetail(id, b: boolean) {
-    this.selectedId = id;
+  redirectDetail(data, b: boolean) {
+    console.log(data, "123")
+    this.selectedId = data.id;
     this.isDetail = true;
     this.isView = b;
     // this.isViewDetail = isView ?? false;

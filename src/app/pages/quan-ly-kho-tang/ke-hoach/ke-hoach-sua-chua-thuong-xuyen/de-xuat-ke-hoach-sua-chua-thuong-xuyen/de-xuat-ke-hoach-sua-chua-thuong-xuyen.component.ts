@@ -1,13 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {
-  QuyetdinhpheduyetduandtxdService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
+import { Component, OnInit } from '@angular/core';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   DeXuatScThuongXuyenService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/de-xuat-sc-thuong-xuyen.service";
@@ -23,17 +20,17 @@ export class DeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Component imp
   isViewDetail: boolean;
   isDetail: boolean = false;
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt trưởng phòng'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối trưởng phòng'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt lãnh đạo cục'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối lãnh đạo cục'},
-    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt lãnh đạo cục'},
-    {ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối cán bộ vụ'},
-    {ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt cán bộ vụ'},
-    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt lãnh đạo vụ'},
-    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối lãnh đạo vụ'},
-    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt lãnh đạo vụ'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt trưởng phòng' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối trưởng phòng' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt lãnh đạo cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối lãnh đạo cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt lãnh đạo cục' },
+    { ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối cán bộ vụ' },
+    { ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt cán bộ vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt lãnh đạo vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối lãnh đạo vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt lãnh đạo vụ' },
   ];
 
   constructor(
@@ -43,7 +40,7 @@ export class DeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Component imp
     spinner: NgxSpinnerService,
     modal: NzModalService,
     deXuatScThuongXuyenService: DeXuatScThuongXuyenService,
-    public  router : Router
+    public router: Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatScThuongXuyenService)
     super.ngOnInit()

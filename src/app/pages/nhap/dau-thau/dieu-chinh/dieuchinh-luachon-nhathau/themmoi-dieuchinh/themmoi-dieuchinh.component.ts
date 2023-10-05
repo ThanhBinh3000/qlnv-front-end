@@ -18,7 +18,7 @@ import { ThongtinDieuchinhComponent } from './thongtin-dieuchinh/thongtin-dieuch
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import {DatePipe} from "@angular/common";
+import { DatePipe } from "@angular/common";
 
 
 @Component({
@@ -139,7 +139,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }

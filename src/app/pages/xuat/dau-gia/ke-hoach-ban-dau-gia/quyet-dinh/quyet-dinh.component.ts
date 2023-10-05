@@ -1,16 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {CHUC_NANG} from "../../../../../constants/status";
-import {DauGiaComponent} from "../../dau-gia.component";
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 @Component({
   selector: 'app-quyet-dinh',
   templateUrl: './quyet-dinh.component.html',
@@ -19,17 +17,12 @@ import {DauGiaComponent} from "../../dau-gia.component";
 
 export class QuyetDinhComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: DauGiaComponent;
   isView = false;
   idThop: number = 0;
   isViewThop: boolean = false;
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
-  listTrangThai: any[] = [
-    {ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
-  ];
+  listTrangThai: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -38,10 +31,8 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-    private dauGiaComponent: DauGiaComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
-    this.vldTrangThai = this.dauGiaComponent;
     this.formData = this.fb.group({
       nam: null,
       soQdPd: null,
@@ -51,7 +42,7 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       ngayKyQdDen: null,
       soTrHdr: null,
       lastest: null,
-    })
+    });
 
     this.filterTable = {
       namKh: '',
@@ -66,18 +57,31 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       slHdDaKy: '',
       tenTrangThai: '',
     };
+
+    this.listTrangThai = [
+      {
+        value: this.STATUS.DANG_NHAP_DU_LIEU,
+        text: 'Đang nhập dữ liệu'
+      },
+      {
+        value: this.STATUS.BAN_HANH,
+        text: 'Ban hành'
+      },
+    ]
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
-      await this.timKiem()
-      await this.search();
-      await this.spinner.hide();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.search(),
+      ]);
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
@@ -88,10 +92,9 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.timKiem();
-    this.search();
+    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -100,38 +103,37 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     this.isView = isView;
   }
 
-  openModalDxKh(id: number) {
-    this.idDxKh = id;
-    this.isViewDxKh = true;
+  openModal(id: number, modalType: string) {
+    if (modalType === 'DxKh') {
+      this.idDxKh = id;
+      this.isViewDxKh = true;
+    } else if (modalType === 'Thop') {
+      this.idThop = id;
+      this.isViewThop = true;
+    }
   }
 
-  closeModalDxKh() {
-    this.idDxKh = null;
-    this.isViewDxKh = false;
+  closeModal(modalType: string) {
+    if (modalType === 'DxKh') {
+      this.idDxKh = null;
+      this.isViewDxKh = false;
+    } else if (modalType === 'Thop') {
+      this.idThop = null;
+      this.isViewThop = false;
+    }
   }
 
-  openModalTh(id: number) {
-    this.idThop = id;
-    this.isViewThop = true;
-  }
-
-  closeModalTh() {
-    this.idThop = null;
-    this.isViewThop = false;
-  }
-
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
 
   disabledNgayKyQdTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKyQdDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdDen, 'ngayKyQd');
   };
 
   disabledNgayKyQdDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKyQdTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdTu, 'ngayKyQd');
   };
 }

@@ -13,6 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { cloneDeep } from 'lodash';
+import { STATUS } from "../../../../../constants/status";
 @Component({
   selector: 'app-dieuchinh-luachon-nhathau',
   templateUrl: './dieuchinh-luachon-nhathau.component.html',
@@ -168,7 +169,7 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
   };
 
   disableXem(trangThai) {
-    switch (trangThai){
+    switch (trangThai) {
       case this.STATUS.DA_LAP: {
         if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_THEM")) {
           return false;
@@ -178,7 +179,7 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
         break;
       }
       case this.STATUS.CHO_DUYET_LDV: {
-        if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_BANHANH")) {
+        if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU")) {
           return false;
         } else if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_XEM")) {
           return true;
@@ -190,6 +191,39 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
           return true;
         }
         break;
+      }
+    }
+  }
+
+  hienThiXem(data) {
+    if (this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_XEM') && data != null) {
+      if (this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')
+        && (data.trangThai == STATUS.DU_THAO
+          || data.trangThai == STATUS.TU_CHOI_LDV)) {
+        return false;
+      } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU') && data.trangThai == STATUS.CHO_DUYET_LDV) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == this.STATUS.DA_LAP) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
       }
     }
   }

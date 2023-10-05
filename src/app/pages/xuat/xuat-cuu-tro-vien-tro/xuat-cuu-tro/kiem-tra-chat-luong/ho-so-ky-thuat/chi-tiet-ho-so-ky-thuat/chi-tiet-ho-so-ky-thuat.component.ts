@@ -1,29 +1,30 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS} from "src/app/constants/status";
-import {NzDatePickerComponent} from "ng-zorro-antd/date-picker";
-import {Subject} from "rxjs";
-import {UserLogin} from "src/app/models/userlogin";
-import {UserService} from "src/app/services/user.service";
-import {MESSAGE} from "src/app/constants/message";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS } from "src/app/constants/status";
+import { NzDatePickerComponent } from "ng-zorro-antd/date-picker";
+import { Subject } from "rxjs";
+import { UserLogin } from "src/app/models/userlogin";
+import { UserService } from "src/app/services/user.service";
+import { MESSAGE } from "src/app/constants/message";
 import {
   HoSoKyThuatCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
-import {v4 as uuidv4} from "uuid";
-import {cloneDeep} from 'lodash';
-import {FileDinhKem} from "src/app/models/FileDinhKem";
-import {saveAs} from 'file-saver';
+import { v4 as uuidv4 } from "uuid";
+import { cloneDeep } from 'lodash';
+import { FileDinhKem } from "src/app/models/FileDinhKem";
+import { saveAs } from 'file-saver';
 import {
   BienBanLayMauBanGiaoMauService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service";
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
+import { PREVIEW } from "src/app/constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat',
@@ -100,13 +101,14 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     }
   ];
   radioData = [
-    {label: 'Đã đạt yêu cầu để có thể xuất hàng', value: '1', disable: false},
-    {label: 'Không đạt yêu cầu', value: '0', disable: false},
+    { label: 'Đã đạt yêu cầu để có thể xuất hàng', value: '1', disable: false },
+    { label: 'Không đạt yêu cầu', value: '0', disable: false },
   ];
   hoSoRow: any = {};
   viewTableHoSo: any[] = [];
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
+  templateName = "Hồ sơ kỹ thuật";
 
   constructor(
     httpClient: HttpClient,
@@ -178,7 +180,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
   }
 
   async loadDetail(id) {
-    let res = await this.hoSoKyThuatCtvtService.getDetail({id: id, type: "CTVT"});
+    let res = await this.hoSoKyThuatCtvtService.getDetail({ id: id, type: "CTVT" });
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.formData.patchValue(data);
@@ -227,7 +229,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
 
   async save() {
     try {
-      this.formData.patchValue({type: 'CTVT'});
+      this.formData.patchValue({ type: 'CTVT' });
       let body = this.formData.value;
       let rs = await this.createUpdate(body);
       this.formData.patchValue(rs);
@@ -277,7 +279,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       }
       return s;
     });
-    this.formData.patchValue({id: data.id, xhHoSoKyThuatDtl: dataUpdate});
+    this.formData.patchValue({ id: data.id, xhHoSoKyThuatDtl: dataUpdate });
     await this.save();
   }
 
@@ -289,7 +291,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     let newValue = cloneDeep(this.formData.value.xhHoSoKyThuatDtl);
     let hsktDtl = newValue.find(s => (s.loaiBb == LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT && s.thoiDiemLap == 'XUAT'));
     hsktDtl.xhHoSoKyThuatRow = [...hsktDtl.xhHoSoKyThuatRow, this.hoSoRow];
-    this.formData.patchValue({xhHoSoKyThuatDtl: newValue});
+    this.formData.patchValue({ xhHoSoKyThuatDtl: newValue });
     await this.buildTableView();
     console.log(this.hoSoRow)
     this.hoSoRow = {};
@@ -312,7 +314,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     let index = hsktDtl.xhHoSoKyThuatRow.findIndex(s => s.idVirtual == item.idVirtual);
     item.edit = false;
     hsktDtl.xhHoSoKyThuatRow.splice(index, 1, item);
-    this.formData.patchValue({xhHoSoKyThuatDtl: newValue});
+    this.formData.patchValue({ xhHoSoKyThuatDtl: newValue });
     await this.buildTableView();
   }
 
@@ -326,7 +328,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     let hsktDtl = newValue.find(s => (s.loaiBb == LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT && s.thoiDiemLap == 'XUAT'));
     let index = hsktDtl.xhHoSoKyThuatRow.findIndex(s => s.idVirtual == item.idVirtual);
     hsktDtl.xhHoSoKyThuatRow.splice(index, 1);
-    this.formData.patchValue({xhHoSoKyThuatDtl: newValue});
+    this.formData.patchValue({ xhHoSoKyThuatDtl: newValue });
     await this.buildTableView();
   }
 
@@ -392,7 +394,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
   }
 
   changeKqKiemtra($event) {
-    this.formData.patchValue({kqKiemTra: $event});
+    this.formData.patchValue({ kqKiemTra: $event });
   }
 
   async openDialogBbLayMauXuat() {
@@ -424,7 +426,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
-      console.log(dataChose,'dataChose')
+      console.log(dataChose, 'dataChose')
       if (dataChose) {
         this.formData.patchValue({
           idBbLayMau: dataChose.id,
@@ -433,4 +435,21 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       }
     });
   };
+
+  async inBienBan(id, type, loai) {
+    await this.hoSoKyThuatCtvtService.preview({
+      id: id,
+      type: type,
+      loai: loai
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
 }

@@ -7,8 +7,10 @@ import { MESSAGE } from 'src/app/constants/message';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import { STATUS } from 'src/app/constants/status';
+import {
+  ChaoGiaMuaLeUyQuyenService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-quyet-dinh-uy-quen-ban-le',
@@ -16,17 +18,16 @@ import { STATUS } from 'src/app/constants/status';
   styleUrls: ['./quyet-dinh-uy-quen-ban-le.component.scss']
 })
 export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnInit {
-  @Input()
-  loaiVthh: string;
+  @Input() loaiVthh: string;
+  isView: boolean = false;
+  idQdPdKh: number = 0;
+  isViewQdPdKh: boolean = false;
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
-  pthucBanTrucTiep: string;
-  selectedId: number = 0;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành' },
   ];
-
   listPtBanTt: any[] = [
     { ma: '02', giaTri: 'Ủy Quyền' },
     { ma: '03', giaTri: 'Bán lẻ' },
@@ -51,10 +52,7 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
       ngayDuyetTu: null,
       ngayDuyetDen: null,
       loaiVthh: null,
-      trangThai: null,
-      maDviChiCuc: null,
       pthucBanTrucTiep: null,
-      lastest: 1
     });
 
     this.filterTable = {
@@ -62,49 +60,122 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
       soDxuat: '',
       namKh: '',
       ngayPduyet: '',
+      ngayNhanCgia: '',
       trichYeu: '',
-      loaiVthh: '',
       tenLoaiVthh: '',
-      cloaiVthh: '',
       tenCloaiVthh: '',
-      soLuong: '',
+      tongSoLuong: '',
       pthucBanTrucTiep: '',
-      trangThai: '',
       tenTrangThai: '',
-
     };
   }
 
   async ngOnInit() {
     try {
-      this.thimKiem();
-      await this.search();
+      await this.spinner.show();
+      await Promise.all([
+        this.timKiem(),
+        this.searchThongTin(),
+      ]);
     } catch (e) {
       console.log('error: ', e);
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
-  thimKiem() {
+  async timKiem() {
     this.formData.patchValue({
-      maDviChiCuc: this.userInfo.MA_DVI,
       loaiVthh: this.loaiVthh,
-      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
       pthucBanTrucTiep: ['02', '03'],
-      lastest: 1
     })
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-    this.thimKiem();
-    this.search();
+    await this.timKiem();
+    await this.searchThongTin();
   }
 
-  redirectToChiTiet(id: number) {
-    this.selectedId = id;
+  async searchThongTin() {
+    try {
+      await this.spinner.show();
+      const body = {
+        ...this.formData.value,
+      };
+      const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const data = res.data;
+        const soDxuatMap = {};
+        const filteredRecords = [];
+        data.content.forEach(record => {
+          if (!soDxuatMap[record.soDxuat]) {
+            filteredRecords.push(record);
+            soDxuatMap[record.soDxuat] = true;
+          } else if (record.isDieuChinh) {
+            const index = filteredRecords.findIndex(existingRecord => existingRecord.soDxuat === record.soDxuat);
+            if (index !== -1) {
+              filteredRecords[index] = record;
+            }
+          }
+        });
+        this.dataTable = filteredRecords;
+        this.totalRecord = data.totalElements;
+        this.dataTable?.forEach((item) => (item.checked = false));
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async showListThongTin() {
+    this.isDetail = false;
+    await this.searchThongTin();
+    this.showListEvent.emit();
+  }
+
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
     this.isDetail = true;
+    this.isView = isView;
+  }
+
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'QdKh':
+        this.idQdPdKh = id;
+        this.isViewQdPdKh = true;
+        break;
+      case 'DxKh':
+        this.idDxKh = id;
+        this.isViewDxKh = true;
+        break;
+      default:
+        break;
+    }
+  }
+
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'QdKh':
+        this.idQdPdKh = null;
+        this.isViewQdPdKh = false;
+        break;
+      case 'DxKh':
+        this.idDxKh = null;
+        this.isViewDxKh = false;
+        break;
+      default:
+        break;
+    }
   }
 
   disabledNgayTaoTu = (startValue: Date): boolean => {
@@ -134,15 +205,4 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
     }
     return endValue.getTime() <= this.formData.value.ngayDuyetTu.getTime();
   };
-
-  openModalDxKh(id: number) {
-    this.idDxKh = id;
-    this.isViewDxKh = true;
-  }
-
-  closeModalDxKh() {
-    this.idDxKh = null;
-    this.isViewDxKh = false;
-  }
-
 }

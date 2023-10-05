@@ -10,7 +10,7 @@
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Số QĐ giao nhiệm vụ NH</label>
-          <input [(ngModel)]="searchFilter.soQuyetDinhNhap" nz-input nzSize="small"/>
+          <input [(ngModel)]="searchFilter.soQuyetDinhNhap" nz-input nzSize="small" />
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Số BB chuẩn bị kho</label>
@@ -21,12 +21,12 @@
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayTao"
-                              nzPlaceHolder="Ngày bắt đầu">
+                nzPlaceHolder="Ngày bắt đầu">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="12" class="cus-end-date">
               <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayTao"
-                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
             </div>
           </div>
         </div>
@@ -46,7 +46,8 @@
     <div class="group-button">
       <h3>DANH SÁCH BIÊN BẢN CHUẨN BỊ KHO</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="export()" *ngIf="this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_EXP')">
+        <button type="button" class="btn btn-sub" (click)="export()"
+          *ngIf="this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -65,15 +66,15 @@
           <tr>
             <th nzWidth="3%" class="text-center">STT</th>
             <th nzWidth="3%"></th>
-            <th nzWidth="10%" > Số QĐ giao NVNH</th>
-            <th nzWidth="5%" >Năm KH</th>
-            <th nzWidth="10%" >Thời gian nhập kho muộn nhất</th>
-            <th nzWidth="15%" >Điểm kho</th>
-            <th nzWidth="15%" >Ngăn/Lô kho</th>
-            <th nzWidth="14%" >Số BB chuẩn bị kho</th>
-            <th nzWidth="10%" >Ngày lập biên bản</th>
-            <th nzWidth="10%" >Trạng thái</th>
-            <th nzWidth="5%" >Hành động</th>
+            <th nzWidth="10%"> Số QĐ giao NVNH</th>
+            <th nzWidth="5%">Năm KH</th>
+            <th nzWidth="10%">Thời gian nhập kho muộn nhất</th>
+            <th nzWidth="15%">Điểm kho</th>
+            <th nzWidth="15%">Ngăn/Lô kho</th>
+            <th nzWidth="14%">Số BB chuẩn bị kho</th>
+            <th nzWidth="10%">Ngày lập biên bản</th>
+            <th nzWidth="10%">Trạng thái</th>
+            <th nzWidth="5%">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -100,23 +101,26 @@
                 <td></td>
                 <td></td>
                 <td>{{bb.tenDiemKho}}</td>
-                <td>{{bb.tenLoKho + ' - ' + bb.tenNganKho}}</td>
+                <td>{{bb.tenLoKho? bb.tenLoKho + ' - ' + bb.tenNganKho : bb.tenNganKho}}</td>
                 <td>{{bb.bienBanChuanBiKho?.soBienBan}}</td>
                 <td>{{bb.bienBanChuanBiKho?.ngayTao | date : 'dd/MM/yyyy' }}</td>
                 <td>{{bb.bienBanChuanBiKho?.tenTrangThai}}</td>
                 <td>
-                  <a *ngIf="checkQuyenXem(bb.bienBanChuanBiKho?.trangThai)" (click)="redirectToChiTiet(true, bb.bienBanChuanBiKho?.id)">
+                  <a *ngIf="checkQuyenXem(bb.bienBanChuanBiKho?.trangThai)"
+                    (click)="redirectToChiTiet(true, bb.bienBanChuanBiKho?.id)">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
-                  <a *ngIf="bb.bienBanChuanBiKho?.trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')" (click)="redirectToChiTiet(false, bb.bienBanChuanBiKho?.id)">
+                  <a *ngIf="bb.bienBanChuanBiKho?.trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')"
+                    (click)="redirectToChiTiet(false, bb.bienBanChuanBiKho?.id)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_THUKHO') && bb.bienBanChuanBiKho?.trangThai == STATUS.CHO_DUYET_TK)
               || (userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC') && bb.bienBanChuanBiKho?.trangThai == STATUS.CHO_DUYET_LDCC) "
-                     (click)="redirectToChiTiet(true, bb.bienBanChuanBiKho?.id)">
+                    (click)="redirectToChiTiet(true, bb.bienBanChuanBiKho?.id)">
                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                   </a>
-                  <a *ngIf="bb.bienBanChuanBiKho?.trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_XOA')" (click)="xoaItem(bb.bienBanChuanBiKho)">
+                  <a *ngIf="bb.bienBanChuanBiKho?.trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_XOA')"
+                    (click)="xoaItem(bb.bienBanChuanBiKho)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>

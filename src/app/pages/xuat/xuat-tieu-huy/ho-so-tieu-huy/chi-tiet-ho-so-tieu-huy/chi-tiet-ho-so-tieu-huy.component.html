@@ -15,79 +15,130 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <ng-container *ngIf="userService.isTongCuc">
-          <button (click)="reject(idInput,STATUS.TU_CHOI_LDV)"
-                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDV') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
-                  class="btn btn-sub" type="button">
+        <button
+          *ngIf="showPheDuyetTuChoi() || (userService.isTongCuc() && (formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DANG_DUYET_CB_VU))"
+          type="button" class="btn btn-sub do ml-2" (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
+          <span>Từ chối</span>
+        </button>
+        <button *ngIf="showPheDuyetTuChoi()" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet "></i>
+          <span>Duyệt</span>
+        </button>
+        <button *ngIf="showSave()" type="button" class="btn btn-sub xanh-nhat ml-2"
+          (click)="saveAndSend(formData.value, userService.isTongCuc() ? STATUS.CHO_DUYET_LDV : STATUS.CHO_DUYET_TP , 'Bạn có muốn gửi duyệt ?')">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Lưu và gửi duyệt</span>
+        </button>
+        <button *ngIf="showTrinhBtc()" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Trình duyệt BTC</span>
+        </button>
+        <button *ngIf="showSave()" type="button" class="btn btn-main ml-2" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+
+
+
+        <!-- <ng-container *ngIf="userService.isTongCuc">
+          <button (click)="reject(idInput,STATUS.TU_CHOI_LDV)" *ngIf="(formData.value.trangThai===STATUS.DA_DUYET_LDC)"
+            class="btn btn-sub" type="button">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+          </button>
+          <button (click)="reject(idInput,STATUS.TUCHOI_BTC)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETBTC') && (formData.value.trangThai===STATUS.CHODUYET_BTC)"
+            class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </button>
           <button (click)="reject(idInput,STATUS.TU_CHOI_LDTC)"
-                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
-                  class="btn btn-sub" type="button">
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC') && (formData.value.trangThaiTc===STATUS.CHO_DUYET_LDTC)"
+            class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </button>
           <button (click)="approve(idInput,STATUS.CHO_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
-                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDV') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
-                  class="btn btn-sub" type="button">
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDV') && (formData.value.trangThaiTc === STATUS.CHO_DUYET_LDV)"
+            class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
           <button (click)="approve(idInput,STATUS.DA_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
-                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
-                  class="btn btn-sub" type="button">
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC') && (formData.value.trangThaiTc === STATUS.CHO_DUYET_LDTC)"
+            class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
+          <button (click)="approve(idInput,STATUS.CHODUYET_BTC,'Bạn có muốn duyệt quyết định này')"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC') && (formData.value.trangThai === STATUS.DA_DUYET_LDTC)"
+            class="btn btn-sub" type="button">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Trình duyệt bộ tài chính</span>
+          </button>
+          <button *ngIf="formData.value.trangThaiTc == STATUS.DU_THAO ||
+              formData.value.trangThaiTc == STATUS.TU_CHOI_LDV ||
+              formData.value.trangThaiTc == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.DA_DUYET_LDC"
+            type="button" class="btn btn-sub"
+            (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?')">
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <span>Lưu và gửi duyệt</span>
+          </button>
+          <button *ngIf="(formData.value.trangThaiTc == STATUS.DU_THAO|| formData.value.trangThaiTc == STATUS.TU_CHOI_LDTC || 
+            formData.value.trangThaiTc == STATUS.TU_CHOxcI_LDV || formData.value.trangThai == STATUS.DA_DUYET_LDC)"
+            type="button" class="btn btn-main " (click)="save()">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
         </ng-container>
         <ng-container *ngIf="userService.isCuc">
-          <button
-            *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
+          <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
               formData.value.trangThai == STATUS.TU_CHOI_TP ||
               formData.value.trangThai == STATUS.TU_CHOI_LDC)
-              && userService.isAccessPermisson('XHDTQG_XTL_HSTL_THEM')"
-            type="button" class="btn btn-sub"
+              && userService.isAccessPermisson('XHDTQG_XTH_HSTH_THEM')" type="button" class="btn btn-sub"
             (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?')">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
           </button>
           <button (click)="reject(idInput,STATUS.TU_CHOI_TP)"
-                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETTP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
-                  class="btn btn-sub" type="button">
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETTP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
+            class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </button>
           <button (click)="reject(idInput,STATUS.TU_CHOI_LDC)"
-                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
-                  class="btn btn-sub" type="button">
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
+            class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </button>
           <button (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
-                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETTP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
-                  class="btn btn-sub" type="button">
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETTP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
+            class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
-          <button (click)="approve(idInput,STATUS.CHO_DUYET_LDV,'Bạn có muốn duyệt quyết định này')"
-                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
-                  class="btn btn-sub" type="button">
+          <button (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
+            class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
           <button
-            *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP)"
+            *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO|| formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP)"
             type="button" class="btn btn-main" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
-        </ng-container>
+        </ng-container> -->
       </div>
     </nz-affix>
   </div>
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error" nzMessage="Lý do từ chối"
-            nzDescription="{{formData.value.lyDoTuChoi}}">
+  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP||formData.value.trangThai == STATUS.TU_CHOI_LDC||
+   formData.value.trangThai == STATUS.TU_CHOI_LDV||formData.value.trangThai == STATUS.TU_CHOI_LDTC||
+   formData.value.trangThai == STATUS.TUCHOI_BTC" nzShowIcon nzType="error" nzMessage="Lý do từ chối"
+    nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse nzAccordion>
@@ -109,8 +160,7 @@
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="{{maHauTo}}">
                   <nz-input-number formControlName="soHoSo" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                                   [nzSize]="'small'"
-                                   [nzDisabled]="isView">
+                    [nzSize]="'small'" [nzDisabled]="isView">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -130,9 +180,9 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số hồ sơ đề nghị tiêu hủy</nz-form-label>
               <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
                 <nz-select (ngModelChange)="changeMaDanhSach($event)" [nzDisabled]="isView" formControlName="idDanhSach"
-                           nzAllowClear nzShowSearch>
+                  nzAllowClear nzShowSearch>
                   <nz-option *ngFor="let p of dsAll.dsTieuHuy" [nzLabel]="'['+p.maDanhSach+'] '+p.tenDanhSach"
-                             [nzValue]="p.id"></nz-option>
+                    [nzValue]="p.id"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -151,7 +201,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Thời gian đề xuất tiêu hủy</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-range-picker formControlName="thoiGianTl" [nzFormat]="globals.dateFormat"
-                                 [nzDisabled]="isView"></nz-range-picker>
+                  [nzDisabled]="isView"></nz-range-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -159,7 +209,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định tiêu hủy</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input formControlName="soQd" [readonly]="true"/>
+                <input nz-input formControlName="soQd" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -167,7 +217,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Số thông báo KQ trình hồ sơ</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input formControlName="soTb" [readonly]="true"/>
+                <input nz-input formControlName="soTb" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -177,7 +227,7 @@
                 Tên hồ sơ / trích yếu
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isView"/>
+                <input nz-input formControlName="trichYeu" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -226,67 +276,67 @@
           <nz-card class="mg-t-16">
             <nz-table #tblData [nzData]="danhSachTieuHuyView" class="nowrap table-chi-tiet" nzBordered>
               <thead>
-              <tr>
-                <th>STT</th>
-                <th>Chi cục DTNN KV</th>
-                <th>Loại hàng hóa</th>
-                <th>Chủng loại</th>
-                <th>Điểm kho</th>
-                <th>Ngăn/lô kho</th>
-                <th>Ngày nhập kho</th>
-                <th>SL tồn</th>
-                <th>SL cần tiêu hủy</th>
-                <th>SL cần tiêu hủy đã duyệt</th>
-                <th>SL còn lại cần tiêu hủy</th>
-                <th>ĐVT</th>
-                <th>Đơn giá tiêu hủy dự kiến</th>
-                <th>Ngày tổng hợp</th>
-                <th>Lý do cần tiêu hủy</th>
-                <th>Kết quả đánh giá chất lượng</th>
-              </tr>
+                <tr>
+                  <th>STT</th>
+                  <th>Chi cục DTNN KV</th>
+                  <th>Loại hàng hóa</th>
+                  <th>Chủng loại</th>
+                  <th>Điểm kho</th>
+                  <th>Ngăn/lô kho</th>
+                  <th>Ngày nhập kho</th>
+                  <th>SL tồn</th>
+                  <th>SL cần tiêu hủy</th>
+                  <th>SL cần tiêu hủy đã duyệt</th>
+                  <th>SL còn lại cần tiêu hủy</th>
+                  <th>ĐVT</th>
+                  <th>Đơn giá tiêu hủy dự kiến</th>
+                  <th>Ngày tổng hợp</th>
+                  <th>Lý do cần tiêu hủy</th>
+                  <th>Kết quả đánh giá chất lượng</th>
+                </tr>
               </thead>
               <tbody>
 
-              <ng-container *ngFor="let item of tblData.data, let i = index;">
-                <tr>
-                  <td>{{numberToRoman(i + 1)}}</td>
-                  <td>{{item.tenChiCuc}}</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                  <tr *ngIf="lv1.type == 'T'">
-                    <td style="text-align: right;">{{i1 + 1}}</td>
+                <ng-container *ngFor="let item of tblData.data, let i = index;">
+                  <tr>
+                    <td>{{numberToRoman(i + 1)}}</td>
+                    <td>{{item.tenChiCuc}}</td>
                     <td></td>
-                    <td>{{lv1.tenLoaiVthh}}</td>
-                    <td>{{lv1.tenCloaiVthh}}</td>
-                    <td>{{lv1.tenDiemKho}}</td>
-                    <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
-                    <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
-                    <td>{{lv1.slHienTai|number:globals.numberFormat}}</td>
-                    <td>{{lv1.slDeXuat|number:globals.numberFormat}}</td>
-                    <td>{{lv1.slDaDuyet|number:globals.numberFormat}}</td>
-                    <td>{{lv1.slDeXuat - lv1.slDaDuyet|number:globals.numberFormat}}</td>
-                    <td>{{lv1.donViTinh}}</td>
-                    <td><input nz-input [(ngModel)]="lv1.donGia"/></td>
-                    <td>{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
-                    <td>{{lv1.lyDo}}</td>
-                    <td><input nz-input [(ngModel)]="lv1.ketQuaDanhGia"/></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                   </tr>
+                  <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+                    <tr *ngIf="lv1.type == 'T'">
+                      <td style="text-align: right;">{{i1 + 1}}</td>
+                      <td></td>
+                      <td>{{lv1.tenLoaiVthh}}</td>
+                      <td>{{lv1.tenCloaiVthh}}</td>
+                      <td>{{lv1.tenDiemKho}}</td>
+                      <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
+                      <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
+                      <td>{{lv1.slHienTai|number:globals.numberFormat}}</td>
+                      <td>{{lv1.slDeXuat|number:globals.numberFormat}}</td>
+                      <td>{{lv1.slDaDuyet|number:globals.numberFormat}}</td>
+                      <td>{{lv1.slDeXuat - lv1.slDaDuyet|number:globals.numberFormat}}</td>
+                      <td>{{lv1.donViTinh}}</td>
+                      <td><input nz-input [(ngModel)]="lv1.donGia" /></td>
+                      <td>{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
+                      <td>{{lv1.lyDo}}</td>
+                      <td><input nz-input [(ngModel)]="lv1.ketQuaDanhGia" /></td>
+                    </tr>
+                  </ng-container>
                 </ng-container>
-              </ng-container>
               </tbody>
             </nz-table>
           </nz-card>
@@ -307,68 +357,68 @@
           <nz-card class="mg-t-16">
             <nz-table #tblData [nzData]="danhSachTieuHuyView" class="nowrap table-chi-tiet" nzBordered>
               <thead>
-              <tr>
-                <th>STT</th>
-                <th>Chi cục DTNN KV</th>
-                <th>Loại hàng hóa</th>
-                <th>Chủng loại</th>
-                <th>Điểm kho</th>
-                <th>Ngăn/lô kho</th>
-                <th>Ngày nhập kho</th>
-                <th>SL tồn</th>
-                <th>SL cần tiêu hủy</th>
-                <th>SL cần tiêu hủy đã duyệt</th>
-                <th>SL còn lại cần tiêu hủy</th>
-                <th>ĐVT</th>
-                <th>Đơn giá tiêu hủy dự kiến</th>
-                <th>Ngày tổng hợp</th>
-                <th>Lý do cần tiêu hủy</th>
-                <th>Kết quả đánh giá chất lượng</th>
-              </tr>
+                <tr>
+                  <th>STT</th>
+                  <th>Chi cục DTNN KV</th>
+                  <th>Loại hàng hóa</th>
+                  <th>Chủng loại</th>
+                  <th>Điểm kho</th>
+                  <th>Ngăn/lô kho</th>
+                  <th>Ngày nhập kho</th>
+                  <th>SL tồn</th>
+                  <th>SL cần tiêu hủy</th>
+                  <th>SL cần tiêu hủy đã duyệt</th>
+                  <th>SL còn lại cần tiêu hủy</th>
+                  <th>ĐVT</th>
+                  <th>Đơn giá tiêu hủy dự kiến</th>
+                  <th>Ngày tổng hợp</th>
+                  <th>Lý do cần tiêu hủy</th>
+                  <th>Kết quả đánh giá chất lượng</th>
+                </tr>
               </thead>
               <tbody>
 
-              <ng-container *ngFor="let item of tblData.data, let i = index;">
-                <tr>
-                  <td>{{numberToRoman(i + 1)}}</td>
-                  <td>{{item.tenChiCuc}}</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <ng-container *ngFor="let lv1 of item.childData;let i1=index;let c1 = count">
-                  <tr *ngIf="lv1.type == 'TD'">
-
-                    <td style="text-align: right;">{{i1 - c1 / 2 + 1}}</td>
+                <ng-container *ngFor="let item of tblData.data, let i = index;">
+                  <tr>
+                    <td>{{numberToRoman(i + 1)}}</td>
+                    <td>{{item.tenChiCuc}}</td>
                     <td></td>
-                    <td>{{lv1.tenLoaiVthh}}</td>
-                    <td>{{lv1.tenCloaiVthh}}</td>
-                    <td>{{lv1.tenDiemKho}}</td>
-                    <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
-                    <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
-                    <td>{{lv1.slHienTai|number:globals.numberFormat}}</td>
-                    <td>{{lv1.slDeXuat|number:globals.numberFormat}}</td>
-                    <td>{{lv1.slDaDuyet|number:globals.numberFormat}}</td>
-                    <td>{{lv1.slDeXuat - lv1.slDaDuyet|number:globals.numberFormat}}</td>
-                    <td>{{lv1.donViTinh}}</td>
-                    <td><input nz-input [(ngModel)]="lv1.donGia"/></td>
-                    <td>{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
-                    <td>{{lv1.lyDo}}</td>
-                    <td><input nz-input [(ngModel)]="lv1.ketQuaDanhGia"/></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                   </tr>
+                  <ng-container *ngFor="let lv1 of item.childData;let i1=index;let c1 = count">
+                    <tr *ngIf="lv1.type == 'TD'">
+
+                      <td style="text-align: right;">{{i1 - c1 / 2 + 1}}</td>
+                      <td></td>
+                      <td>{{lv1.tenLoaiVthh}}</td>
+                      <td>{{lv1.tenCloaiVthh}}</td>
+                      <td>{{lv1.tenDiemKho}}</td>
+                      <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
+                      <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
+                      <td>{{lv1.slHienTai|number:globals.numberFormat}}</td>
+                      <td>{{lv1.slDeXuat|number:globals.numberFormat}}</td>
+                      <td>{{lv1.slDaDuyet|number:globals.numberFormat}}</td>
+                      <td>{{lv1.slDeXuat - lv1.slDaDuyet|number:globals.numberFormat}}</td>
+                      <td>{{lv1.donViTinh}}</td>
+                      <td><input nz-input [(ngModel)]="lv1.donGia" /></td>
+                      <td>{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
+                      <td>{{lv1.lyDo}}</td>
+                      <td><input nz-input [(ngModel)]="lv1.ketQuaDanhGia" /></td>
+                    </tr>
+                  </ng-container>
                 </ng-container>
-              </ng-container>
               </tbody>
             </nz-table>
           </nz-card>

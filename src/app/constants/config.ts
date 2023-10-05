@@ -5,7 +5,7 @@ export const STORAGE_KEY = {
   ROLE: 'role',
   USER_INFO: 'user_info',
   PERMISSION: 'permission',
-  DVQL: 'dvql'
+  DVQL: 'dvql',
 };
 
 export const STATUS_CODE = {
@@ -173,13 +173,13 @@ export const TEN_HANG_DTQG = {
   GAO: 'gao',
   THOC: 'thoc',
   MUOI: 'muoi',
-  VAT_TU: 'vat-tu'
+  VAT_TU: 'vat-tu',
 };
 
 export const TEN_LOAI_VTHH = {
   GAO: 'Gạo tẻ',
   THOC: 'Thóc tẻ',
-  MUOI: 'Muối trắng'
+  MUOI: 'Muối trắng',
 };
 
 export const STATUS_USER = {
@@ -204,27 +204,27 @@ export const LIST_VAT_TU_HANG_HOA = [
   {
     value: LOAI_HANG_DTQG.THOC,
     text: 'Thóc',
-    title: 'Thóc'
+    title: 'Thóc',
   },
   {
     value: LOAI_HANG_DTQG.GAO,
     text: 'Gạo',
-    title: 'Gạo'
+    title: 'Gạo',
   },
   {
     value: LOAI_HANG_DTQG.MUOI,
     text: 'Muối',
-    title: 'Muối'
+    title: 'Muối',
   },
   {
     value: LOAI_HANG_DTQG.VAT_TU,
     text: 'Vật tư',
-    title: 'Vật tư'
-  }
-]
-export const STATUS_DA_DUYET = "29";
+    title: 'Vật tư',
+  },
+];
+export const STATUS_DA_DUYET = '29';
 
-export const STATUS_DA_HOAN_THANH = "35";
+export const STATUS_DA_HOAN_THANH = '35';
 
 export const TYPE_PAG = {
   GIA_MUA_TOI_DA: 'GMTDBTT',
@@ -237,9 +237,11 @@ export const DM_SC_TYPE = {
 };
 //Loại qd giao chỉ tiêu kế hoạch năm
 export const LOAI_QD_CTKH = {
-  QD: '00',
-  QD_DC: '01',
-  PA: '02'
+  QD: '00', // Qd giao chỉ tiêu kế hoạch năm
+  QD_DC: '01', // QĐ điều chỉnh chỉ tiêu kế hoạch năm
+  PA: '02', // Phương án giao chỉ tiêu kế hoạch năm
+  DX_DC: '03', // Đề xuất điều chỉnh chỉ tiêu kế hoạch năm
+  PA_DC: '04', // Phương án điều chỉnh chỉ tiêu kế hoạch năm
 };
 //Loại hàng hóa xuât khác
 export const LOAI_HH_XUAT_KHAC = {
@@ -255,5 +257,13 @@ export const KIEU_NHAP_XUAT = {
   '02': 'Nhập không chi tiền',
   '03': 'Xuất bán',
   '04': 'Xuất không thu tiền',
-  '05': 'Khác'
+  '05': 'Khác',
+};
+
+export const LOAI_HINH_NHAP_XUAT = {
+  NHAP_KHAC: 141,
+  NHAP_TANG_SO_LUONG_SAU_KK: 150,
+  NHAP_DO_BOI_THUONG: 151,
+  NHAP_DO_TAI_NHAP: 152,
+  DOI_THUA: 83,
 };

@@ -1,14 +1,58 @@
-.icon-file-dinh-kem {
-    display: flex;
-    align-items: center;
-    position: relative;
+::ng-deep {
+    .icon-file-dinh-kem {
+        display: flex;
+        align-items: center;
+        position: relative;
 
-    .input-file {
-        width: 20px;
-        height: 20px;
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
+        .input-file {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+    }
+
+    .label-wrapper {
+        display: flex;
+        flex-direction: column !important;
+        flex-wrap: wrap;
+    }
+
+    .min-h-24 {
+        min-height: 24px;
+    }
+
+    .f-size-13 {
+        font-size: 13px;
+    }
+
+    .text-black {
+        color: black;
+    }
+
+    .text-bold {
+        font-weight: bold;
+    }
+
+    .dcnb-pkncl-collapse-header {
+        font-size: 17px;
+        font-weight: 500;
+    }
+
+    .dcnb-pkncl-collapse-header::before {
+        display: inline-block;
+        margin-right: 4px;
+        color: #ff4d4f;
+        font-size: 14px;
+        font-family: SimSun, sans-serif;
+        line-height: 1;
+        content: ' *';
+    }
+
+    .dcnb-pkncl.ant-form-item-label>label {
+        font-size: 16px !important;
+        font-weight: 500;
     }
 }
 

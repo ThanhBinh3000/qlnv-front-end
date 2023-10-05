@@ -16,12 +16,12 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import dayjs from 'dayjs';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { DatePipe } from '@angular/common';
-import {STATUS} from "../../../../../../../constants/status";
+import { STATUS } from "../../../../../../../constants/status";
 import {
   DialogThemMoiGoiThauComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
-import {UserService} from "../../../../../../../services/user.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
+import { UserService } from "../../../../../../../services/user.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 
 
 @Component({
@@ -31,6 +31,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 })
 export class ThongtinDexuatComponent implements OnInit, OnChanges {
   @Input() title;
+  @Input() titlePl;
   @Input() dataInput;
   @Output() soLuongChange = new EventEmitter<number>();
   @Output() donGiaTamTinhOut = new EventEmitter<number>();
@@ -154,18 +155,18 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
             tgianMthau: this.dataInput.tgianMthau,
             tgianNhang: this.dataInput.tgianNhang,
             tgianBdauTchuc: this.dataInput.tgianBdauTchuc,
-            gtriDthau: this.dataInput.dxuatKhLcntHdr.gtriDthau,
-            gtriHdong: this.dataInput.dxuatKhLcntHdr.gtriHdong,
-            tchuanCluong: this.dataInput.dxuatKhLcntHdr.tchuanCluong,
-            tongMucDt: this.dataInput.dxuatKhLcntHdr.tongMucDt,
-            tenDuAn: this.dataInput.dxuatKhLcntHdr.tenDuAn,
-            tenDvi: this.dataInput.dxuatKhLcntHdr.tenDvi,
-            ctietTccl: this.dataInput.dxuatKhLcntHdr.ctietTccl,
-            namSxuat: this.dataInput.dxuatKhLcntHdr.namSxuat,
-            vu: this.dataInput.dxuatKhLcntHdr.vu,
-            thuHoachVu: this.dataInput.dxuatKhLcntHdr.thuHoachVu,
-            namThuHoach: this.dataInput.dxuatKhLcntHdr.namThuHoach,
-            quy: this.dataInput.dxuatKhLcntHdr.quy,
+            gtriDthau: this.dataInput.dxuatKhLcntHdr?.gtriDthau,
+            gtriHdong: this.dataInput.dxuatKhLcntHdr?.gtriHdong,
+            tchuanCluong: this.dataInput.dxuatKhLcntHdr?.tchuanCluong,
+            tongMucDt: this.dataInput.dxuatKhLcntHdr?.tongMucDt,
+            tenDuAn: this.dataInput.dxuatKhLcntHdr?.tenDuAn,
+            tenDvi: this.dataInput.dxuatKhLcntHdr?.tenDvi,
+            ctietTccl: this.dataInput.dxuatKhLcntHdr?.ctietTccl,
+            namSxuat: this.dataInput.dxuatKhLcntHdr?.namSxuat,
+            vu: this.dataInput.dxuatKhLcntHdr?.vu,
+            thuHoachVu: this.dataInput.dxuatKhLcntHdr?.thuHoachVu,
+            namThuHoach: this.dataInput.dxuatKhLcntHdr?.namThuHoach,
+            quy: this.dataInput.dxuatKhLcntHdr?.quy,
           });
           this.initListQuy();
           this.tinhTongMucDtDx();
@@ -201,7 +202,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     }
     this.listQuy = [];
     for (const element of quarters) {
-      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element })
     }
   }
   async loadDataComboBox() {
@@ -304,7 +305,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     }
   }
 
-  themMoiCuc(goiThau?: string) {
+  themMoiCuc($event: any, goiThau?: string) {
+    $event.stopPropagation();
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
       return;
@@ -370,12 +372,12 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       this.dsDxChange.emit(this.dataInput);
     });
   }
-  deleteGoiThau(i:number) {
+  deleteGoiThau(i: number) {
     this.listOfData.splice(i, 1)
     this.tinhTongMucDtDx()
   }
 
-  deleteDiemKho(i:number, y:number, z:number) {
+  deleteDiemKho(i: number, y: number, z: number) {
     this.listOfData[i].children[y].children.splice(z, 1)
     if (this.listOfData[i].children[y].children.length > 0) {
       let soLuong = 0;
@@ -396,18 +398,18 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     this.tinhTongMucDtDx()
   }
 
-  tinhTongMucDtDx () {
+  tinhTongMucDtDx() {
     let tongMucDt: number = 0;
     let tongMucDtDx: number = 0;
     let tongSl: number = 0;
     this.listOfData.forEach((item) => {
-      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
+      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat * 1000);
       tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
       tongSl += item.soLuong
     });
     this.formData.patchValue({
-      tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),
-      tongMucDtDxLamTron: parseFloat((tongMucDtDx/1000000000).toFixed(2)),
+      tongMucDtLamTron: parseFloat((tongMucDt / 1000000000).toFixed(2)),
+      tongMucDtDxLamTron: parseFloat((tongMucDtDx / 1000000000).toFixed(2)),
       tongMucDt: tongMucDt,
       tongMucDtDx: tongMucDtDx,
       soLuong: tongSl,

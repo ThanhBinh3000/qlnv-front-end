@@ -80,7 +80,7 @@
             <th>Số đề xuất/tờ trình</th>
             <th *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
             <th class="text-center" style="width: 10%;">Trích yếu</th>
-            <th class="text-center" style="width: 8%;">Phương thức mua trực tiếp</th>
+            <th *ngIf="!userService.isTongCuc()" class="text-center" style="width: 8%;">Phương thức mua trực tiếp</th>
             <th>Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -124,7 +124,7 @@
                   (input)="filterInTable('idThHdr',filterTable.idThHdr)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="!userService.isTongCuc()">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ptMuaTrucTiep"
                   (input)="filterInTable('ptMuaTrucTiep',filterTable.ptMuaTrucTiep)" size="small" />
@@ -154,21 +154,22 @@
             <td>
               <a style="color: blue; font-weight: bold;" (click)="openDxMttModal(data.idTrHdr)">{{ data.soTrHdr }}</a>
             </td>
-            <td class="text-blue" *ngIf="userService.isTongCuc()"><a style="color: blue; font-weight: bold;" (click)="openThMttModal(data.idThHdr)">{{ data.idThHdr }}</a></td>
+            <td class="text-blue" *ngIf="userService.isTongCuc()"><a style="color: blue; font-weight: bold;"
+                (click)="openThMttModal(data.idThHdr)">{{ data.idThHdr }}</a></td>
             <td>{{ data.trichYeu }}</td>
-            <td>{{data.tenPtMuaTrucTiep}}</td>
+            <td *ngIf="!userService.isTongCuc()">{{data.tenPtMuaTrucTiep}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id)"
                 *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_QDLCNT_XEM')">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
+              <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
                             && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_QDLCNT_THEM')) && userService.isTongCuc()"
                 (click)="goDetail(data.id)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO
+              <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU
                             && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_QDLCNT_XOA')) && userService.isTongCuc()"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
@@ -217,8 +218,8 @@
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openThMtt" (nzOnCancel)="closeThMttModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-themmoi-tonghop-khmtt [id]="thMttId" [loaiVthh]="loaiVthh" [isView]="true"
-                                     [isViewOnModal]="true" (showListEvent)="showList()">
+    <app-themmoi-tonghop-khmtt [id]="thMttId" [loaiVthh]="loaiVthh" [isView]="true" [isViewOnModal]="true"
+      (showListEvent)="showList()">
     </app-themmoi-tonghop-khmtt>
   </ng-container>
   <div *nzModalFooter>

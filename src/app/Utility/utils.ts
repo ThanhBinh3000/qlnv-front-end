@@ -5,6 +5,25 @@ import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 
 export class Status {
+
+  static notiMessage(trangThai: string) {
+    if (Status.check('reject', trangThai)) {
+      return 'Từ chối thành công';
+    }
+    switch (trangThai) {
+      case Status.TT_02:
+        return 'Trình duyệt thành công';
+      case Status.TT_04:
+        return 'Duyệt thành công';
+      case Status.TT_07:
+        return 'Phê duyệt thành công';
+      case Status.TT_09:
+        return 'Tiếp nhận thành công';
+      default:
+        return '';
+    }
+  }
+
   //cac ma trang thai cua bao cao
   static readonly TT_KT = '-1';
   static readonly TT_00 = '0';
@@ -191,6 +210,41 @@ export class Status {
     return Status.TRANG_THAI_KIEM_TRA.find(e => e.id == status)?.tenDm;
   }
 
+  static readonly TRANG_THAI_PD_DVCT = [
+    {
+      id: Status.TT_01,
+      tenDm: 'Mới',
+    },
+    {
+      id: Status.TT_02,
+      tenDm: 'Trình duyệt',
+    },
+    {
+      id: Status.TT_03,
+      tenDm: 'Từ chối duyệt',
+    },
+    {
+      id: Status.TT_04,
+      tenDm: 'Duyệt',
+    },
+    {
+      id: Status.TT_05,
+      tenDm: 'Từ chối phê duyệt',
+    },
+    {
+      id: Status.TT_06,
+      tenDm: 'Phê duyệt',
+    },
+    {
+      id: Status.TT_07,
+      tenDm: 'Phê duyệt',
+    },
+  ]
+
+  static statusDvctName(id: string) {
+    return Status.TRANG_THAI_PD_DVCT.find(e => e.id == id)?.tenDm;
+  }
+
   static readonly DA_TONG_HOP = '1';
   static readonly CHUA_TONG_HOP = '0';
   static readonly TRANG_THAI_TONG_HOP = [
@@ -206,24 +260,6 @@ export class Status {
 
   static synthStatusName(id: string) {
     return Status.TRANG_THAI_TONG_HOP.find(e => e.id == id)?.tenDm;
-  }
-
-  static notiMessage(trangThai: string) {
-    if (Status.check('reject', trangThai)) {
-      return 'Từ chối thành công';
-    }
-    switch (trangThai) {
-      case Status.TT_02:
-        return 'Trình duyệt thành công';
-      case Status.TT_04:
-        return 'Duyệt thành công';
-      case Status.TT_07:
-        return 'Phê duyệt thành công';
-      case Status.TT_09:
-        return 'Tiếp nhận thành công';
-      default:
-        return '';
-    }
   }
 }
 
@@ -510,7 +546,7 @@ export class Operator {
     let check = true;
     let tong = 0;
     num.forEach(item => {
-      if (+item) {
+      if (item || item === 0) {
         check = false;
       }
       tong += (+item) ? (+item) : 0;
@@ -1266,7 +1302,6 @@ export class Roles {
     PRINT_GNV: 'VONPHIHANG_VONMBANTT_IN_BC_GNV',
     EXPORT_GNV: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV',
     //hop dong von ban
-
     //ghi nhan von ban hang
     // ADD_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV_BH',
     // APPROVE_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV_BH',

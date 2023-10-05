@@ -1,20 +1,20 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {STATUS} from "../../../../../../../constants/status";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../../../components/base2/base2.component";
+import { STATUS } from "../../../../../../../constants/status";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
-import {MESSAGE} from "../../../../../../../constants/message";
+import { MESSAGE } from "../../../../../../../constants/message";
 import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
@@ -24,8 +24,8 @@ import {
 import {
   DialogQdPdKhlcntComponent
 } from "../../../../../../../components/dialog/ql-kho-tang/dialog-qd-pd-khlcnt/dialog-qd-pd-khlcnt.component";
-import {FILETYPE} from "../../../../../../../constants/fileType";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { FILETYPE } from "../../../../../../../constants/fileType";
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-kqlcnt',
@@ -89,8 +89,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
       diaChi: [null],
       ghiChu: [null],
       tongMucDt: [0],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       fileDinhKems: [null],
       ccPhapLy: [],
       listKtTdxdQuyetDinhPdKqlcntDsgt: [[]]
@@ -191,10 +191,12 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     if (this.listGoiThau && this.listGoiThau.length > 0) {
       this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt = this.listGoiThau;
-      this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt.forEach(item => {
-        item.idGoiThau = item.id;
-        item.id = null
-      })
+      if (!this.formData.value.id) {
+        this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt.forEach(item => {
+          item.idGoiThau = item.id;
+          item.id = null
+        })
+      }
     } else {
       this.notification.success(MESSAGE.ERROR, "Kết quả lựa chọn nhà thầu không được để trống.");
       return;

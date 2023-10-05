@@ -1,20 +1,20 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
 
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {CHUC_NANG, STATUS} from "../../../../../../../constants/status";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Base2Component } from "../../../../../../../components/base2/base2.component";
+import { CHUC_NANG, STATUS } from "../../../../../../../constants/status";
 import {
   PhieuXuatNhapKhoService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {Validators} from "@angular/forms";
+import { StorageService } from "../../../../../../../services/storage.service";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import { Validators } from "@angular/forms";
 import dayjs from "dayjs";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {FILETYPE} from "../../../../../../../constants/fileType";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { FILETYPE } from "../../../../../../../constants/fileType";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -27,8 +27,8 @@ import {
 import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
-import {MangLuoiKhoService} from "../../../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {OldResponseData} from "../../../../../../../interfaces/response";
+import { MangLuoiKhoService } from "../../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import { OldResponseData } from "../../../../../../../interfaces/response";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-yeu-cau-bao-hanh',
@@ -51,18 +51,19 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
   listFile: any[] = [];
   listPhieuXuatKho: any[] = [];
   listTrangThaiBh: any[] = [
-    {value: 'DANG_BH', label: "Đang bảo hành"},
-    {value: 'DA_BH', label: "Đã hoàn thành bảo hành"},
+    { value: 'DANG_BH', label: "Đang bảo hành" },
+    { value: 'DA_BH', label: "Đã hoàn thành bảo hành" },
   ]
   matchingLoaiVthh = ['0201', '0202', '0208'];
   dataThTree: any[] = [];
   expandSetString = new Set<string>();
   LIST_DANH_GIA: any[] = [
-    {value: 0, label: "Không đạt"},
-    {value: 1, label: "Đạt"}
+    { value: 0, label: "Không đạt" },
+    { value: 1, label: "Đạt" }
   ]
   maQd: string;
-
+  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
+  bienBan: any;
 
   constructor(
     httpClient: HttpClient,
@@ -71,13 +72,13 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private phieuXuatKhoService: PhieuXuatNhapKhoService,
-    private banYeuCauBaoHanhService: BienBanYeuCauBaoHanhService,
+    private bienBanYeuCauBaoHanhService: BienBanYeuCauBaoHanhService,
     private danhMucService: DanhMucService,
     private mangLuoiKhoService: MangLuoiKhoService,
     private qdGiaoNvXuatHangTrongThoiGianBaoHanhService: QdGiaoNvXuatHangTrongThoiGianBaoHanhService,
     private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, banYeuCauBaoHanhService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanYeuCauBaoHanhService);
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get("year")],
@@ -108,8 +109,10 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
       soPhieuKtcl: [],
       ngayLayMauL1: [],
       soBbLayMauL1: [],
+      slLayMauL1: [],
       ngayLayMauL2: [],
       soBbLayMauL2: [],
+      slLayMauL2: [],
       ketQuaKdclL2: [false],
       tenTrangThai: ['Dự Thảo'],
       trangThaiBh: [],
@@ -146,7 +149,7 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
 
   async loadDetail(idInput: number) {
     if (idInput > 0) {
-      await this.banYeuCauBaoHanhService.getDetail(idInput)
+      await this.bienBanYeuCauBaoHanhService.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue({
@@ -183,7 +186,7 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
 
 
   async save(update?) {
-    if (update){
+    if (update) {
       this.formData.patchValue({
         trangThaiBh: "DA_BH",
       })
@@ -234,7 +237,8 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
     let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.listSoQuyetDinh = data.content;
+      this.listSoQuyetDinh = data.content.filter(i => i.soLanLm == 2);
+      console.log(this.listSoQuyetDinh, "1111")
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -269,13 +273,14 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
       let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
+        console.log(data, "data")
         this.formData.patchValue({
           soCanCu: data.soQuyetDinh,
           idCanCu: data.id,
           soLanLm: data.soLanLm,
         });
-        await this.loadSoPhieuKdcl(data.soQuyetDinh)
-        await this.changePhieuKdclL1(data.idCanCu)
+        this.loadSoPhieuKdcl(data.soQuyetDinh)
+        this.changePhieuKdclL1(data.idCanCu)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -299,11 +304,30 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
         this.listPhieuKdcl = res.data.content;
         console.log(this.listPhieuKdcl, 123)
       }
+      // await this.listBienBan(item);
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  async listBienBan(item) {
+    await this.spinner.show();
+    let body = {
+      soCanCu: item,
+    }
+    let res = await this.bienBanYeuCauBaoHanhService.search(body)
+    const data = res.data;
+    this.bienBan = data.content;
+    let phieuKdcl = [
+      ...this.listPhieuKdcl.filter((e) => {
+        return !this.bienBan.some((bb) => {
+          return e.soPhieu === bb.soPhieuKdcl;
+        });
+      }),
+    ];
+    this.listPhieuKdcl = phieuKdcl;
   }
 
   async changePhieuKdcl($event: any) {
@@ -315,17 +339,18 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
     if (!item) {
       return;
     }
-
-    const res = await this.getDetailMlkByKey(item.maDiaDiem, (item.maDiaDiem.length / 2 - 1));
-    console.log(res, "sl");
+    // const res = await this.getDetailMlkByKey(item.maDiaDiem, (item.maDiaDiem.length / 2 - 1));
+    // console.log(res, "sl");
 
     const isLoaiVthhMatching = this.matchingLoaiVthh.includes(item.loaiVthh);
-
     this.formData.patchValue({
       capLaiCaLo: isLoaiVthhMatching,
-      slTonKho: res.slTon,
-      slBaoHanh: res.slTon,
+      // slTonKho: res.slTon,
+      // slBaoHanh: res.slTon,
+      slTonKho: item.slTonKho,
+      slBaoHanh: item.slTonKho,
       idPhieuKdcl: item.id,
+      soPhieuKdcl: item.soPhieu,
       maDiaDiem: item.maDiaDiem,
       loaiVthh: item.loaiVthh,
       cloaiVthh: item.cloaiVthh,
@@ -338,6 +363,7 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
       idBbLayMauL2: item.idBbLayMau,
       soBbLayMauL2: item.soBbLayMau,
       ngayLayMauL2: item.ngayLayMau,
+      slLayMauL2: item.soLuongMau,
       ketQuaKdclL2: item.isDat,
     });
   }
@@ -348,11 +374,13 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
       await this.phieuKdclVtTbTrongThoiGianBaoHanhService.getDetail($event).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           let item = res.data;
+          console.log(item, "lấy mẫu lần 1")
           if (item) {
             this.formData.patchValue({
               idBbLayMauL1: item.idBbLayMau,
               soBbLayMauL1: item.soBbLayMau,
               ngayLayMauL1: item.ngayLayMau,
+              slLayMauL1: item.soLuongMau,
             });
           }
         } else {
@@ -378,7 +406,7 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
   }
 
 
-  async updateTrangThaiBb(update:boolean) {
+  async updateTrangThaiBb(update: boolean) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

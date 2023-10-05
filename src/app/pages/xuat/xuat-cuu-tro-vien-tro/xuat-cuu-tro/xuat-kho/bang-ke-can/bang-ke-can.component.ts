@@ -1,24 +1,24 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
 import dayjs from "dayjs";
-import {UserLogin} from "src/app/models/userlogin";
-import {MESSAGE} from "src/app/constants/message";
-import {chain, isEmpty} from 'lodash';
-import {v4 as uuidv4} from 'uuid';
+import { UserLogin } from "src/app/models/userlogin";
+import { MESSAGE } from "src/app/constants/message";
+import { chain, isEmpty } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import {
   BangKeCanCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
-import {CHUC_NANG} from "../../../../../../constants/status";
-import {CuuTroVienTroComponent} from "../../cuu-tro-vien-tro.component";
+import { CHUC_NANG } from "../../../../../../constants/status";
+import { CuuTroVienTroComponent } from "../../cuu-tro-vien-tro.component";
 
 @Component({
   selector: 'app-bang-ke-can',
@@ -147,7 +147,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   async search(roles?): Promise<void> {
     await this.spinner.show()
     this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
+      // loaiVthh: this.loaiVthh,
       type: "XUAT_CTVT"
     });
     await super.search(roles);
@@ -197,18 +197,18 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("maDiemKho")
           .map((v, k) => {
-              let rowLv2 = v.find(s => s.maDiemKho === k);
-              return {
-                id: rowLv2 ? rowLv2.id : null,
-                idVirtual: uuidv4(),
-                maDiemKho: k != "null" ? k : '',
-                tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
-                tenNhaKho: rowLv2 ? rowLv2.tenNhaKho : null,
-                tenNganKho: rowLv2 ? rowLv2.tenNganKho : null,
-                tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
-                childData: v
-              }
+            let rowLv2 = v.find(s => s.maDiemKho === k);
+            return {
+              id: rowLv2 ? rowLv2.id : null,
+              idVirtual: uuidv4(),
+              maDiemKho: k != "null" ? k : '',
+              tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
+              tenNhaKho: rowLv2 ? rowLv2.tenNhaKho : null,
+              tenNganKho: rowLv2 ? rowLv2.tenNganKho : null,
+              tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
+              childData: v
             }
+          }
           ).value();
         let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
         return {

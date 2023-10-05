@@ -18,7 +18,8 @@ import { ThongtinDieuchinhComponent } from './thongtin-dieuchinh/thongtin-dieuch
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import {DatePipe} from "@angular/common";
+import { DatePipe } from "@angular/common";
+import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 
 @Component({
@@ -139,7 +140,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
     // hợp đồng
     this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
+    let resHd = await this.danhMucService.danhMucChungGetAll('HINH_THUC_HOP_DONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
@@ -263,10 +264,88 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     this.spinner.hide();
   }
 
-  async pheDuyet() {
-    let trangThai = STATUS.BAN_HANH;
-    let mesg = 'Văn bản sẵn sàng ban hành ?'
-    await this.approve(this.formData.value.id, trangThai, mesg);
+  async guiDuyet() {
+    let trangThai = "";
+    let mesg = "";
+    // Vật tư
+    switch (this.formData.get("trangThai").value) {
+      case STATUS.DA_LAP: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn gửi duyệt?";
+        break;
+      }
+      case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.BAN_HANH;
+        mesg = "Bạn muốn ban hành quyết định?";
+        break;
+      }
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: "Xác nhận",
+      nzContent: mesg,
+      nzOkText: "Đồng ý",
+      nzCancelText: "Không",
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        await this.spinner.show();
+        try {
+          let body = {
+            id: this.formData.get("id").value,
+            trangThai: trangThai
+          };
+          let res = await this.dieuChinhQuyetDinhPdKhlcntService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          await this.spinner.hide();
+        } catch (e) {
+          console.log("error: ", e);
+          await this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
+  }
+
+  async tuChoi() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: "TỪ CHỐI PHÊ DUYỆT",
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "900px",
+      nzFooter: null,
+      nzComponentParams: {}
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.formData.get("id").value,
+            lyDo: text,
+            trangThai: STATUS.TU_CHOI_LDV,
+          };
+          const res = await this.dieuChinhQuyetDinhPdKhlcntService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log("error: ", e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
   }
 
   quayLai() {
@@ -318,21 +397,41 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   async save(isGuiDuyet?) {
+    await this.spinner.show();
     this.setValidator();
-    // let body = { ...this.formData.value, ... this.thongtinDieuchinhComponent.formData.value };
+    await this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
     let body = { ...this.formData.value };
     body.soQdDc = body.soQdDc + this.maQd;
     body.children = this.danhsachDx;
     body.id = this.id;
-    console.log(body)
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.pheDuyet();
-      } else {
-        this.quayLai();
-      }
+    let res = null;
+    if (this.formData.get("id").value) {
+      res = await this.dieuChinhQuyetDinhPdKhlcntService.update(body);
+    } else {
+      res = await this.dieuChinhQuyetDinhPdKhlcntService.create(body);
     }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (isGuiDuyet) {
+        this.id = res.data.id;
+        this.formData.get("id").setValue(res.data.id)
+        await this.guiDuyet();
+      } else {
+        if (this.formData.get("id").value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.formData.get("id").setValue(res.data.id);
+          this.id = res.data.id;
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    await this.spinner.hide();
   }
 
 

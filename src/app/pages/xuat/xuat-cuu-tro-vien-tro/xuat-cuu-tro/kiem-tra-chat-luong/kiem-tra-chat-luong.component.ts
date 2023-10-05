@@ -2,6 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Globals } from 'src/app/shared/globals';
 import { MESSAGE } from 'src/app/constants/message';
+import {
+  BienBanLayMauService
+} from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/BienBanLayMau.service";
+import {
+  PhieuKiemNghiemChatLuongService
+} from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service";
+import {
+  QuyetDinhGiaoNhiemVuThanhLyService
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhGiaoNhiemVuThanhLy.service";
+import {
+  QuyetDinhGiaoNvCuuTroService
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
 
 @Component({
   selector: 'app-kiem-tra-chat-luong',
@@ -11,12 +23,18 @@ import { MESSAGE } from 'src/app/constants/message';
 export class KiemTraChatLuongComponent implements OnInit {
   tabs: any[] = [];
   loaiVthhSelected: string;
+
   constructor(
     private danhMucService: DanhMucService,
     public globals: Globals,
-  ) { }
+    public bienBanLayMauService: BienBanLayMauService,
+    public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    public quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+  ) {
+  }
+
   ngOnInit(): void {
-    this.loaiVTHHGetAll();
+    //this.loaiVTHHGetAll();
   }
 
   async loaiVTHHGetAll() {
@@ -33,8 +51,12 @@ export class KiemTraChatLuongComponent implements OnInit {
     }
   }
 
-  selectTab(loaiVthh) {
-    this.loaiVthhSelected = loaiVthh;
-  }
+  /*  selectTab(loaiVthh) {
+      this.loaiVthhSelected = loaiVthh;
+    }*/
+  tabSelected = 0;
 
+  selectTab(tab) {
+    this.tabSelected = tab;
+  }
 }

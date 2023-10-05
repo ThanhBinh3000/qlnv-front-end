@@ -75,7 +75,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       namKeHoach: [dayjs().get("year")],
-      soQuyetDinh: [null],
+      soQuyetDinh: [''],
       ngayTrinhBtc: [null],
       ngayKyBtc: [null],
       ngayHieuLuc: [null],
@@ -84,8 +84,8 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       namKetThuc: [null],
       loaiDuAn: [null],
       trichYeu: [null],
-      trangThai: ["00"],
-      tenTrangThai: ["Dự thảo"]
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"]
     });
   }
 
@@ -124,7 +124,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         phuongAnTc: data.phuongAnTc,
-        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
+        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : '',
         ngayTrinhBtc: data.ngayTrinhBtc,
         ngayKyBtc: data.ngayKyBtc,
         ngayHieuLuc: data.ngayKyBtc,
@@ -133,9 +133,11 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         namKetThuc: data.namKetThuc,
         loaiDuAn: data.loaiDuAn,
         trangThai: data.trangThai,
-        tenTrangThai: data.tenTrangThai
+        tenTrangThai: data.tenTrangThai,
+        namKeHoach: data.namKeHoach,
       });
       this.fileDinhKems = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
       let listDx = data.ctRes;
       if (listDx) {
         this.dataTableReq = listDx.ctietList;
@@ -233,7 +235,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DANG_NHAP_DU_LIEU: {
               trangThai = STATUS.BAN_HANH;
               break;
             }
@@ -334,12 +336,13 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
           let rs = chain(value)
             .groupBy("tenKhoi")
             .map((v, k) => {
-                return {
-                  idVirtual: uuidv4(),
-                  tenKhoi: k,
-                  dataChild: v
-                };
-              }
+              return {
+                idVirtual: uuidv4(),
+                tenKhoi: k,
+                dataChild: v,
+                khoi: v && v[0] && v[0].khoi ? v[0].khoi : null
+              };
+            }
             ).value();
           return {
             idVirtual: uuidv4(),
@@ -385,11 +388,15 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         sl = sum;
       }
     } else {
-      const sum = this.dataTableReq.reduce((prev, cur) => {
-        prev += cur[row];
-        return prev;
-      }, 0);
-      sl = sum;
+      let itemSelected = this.listDx.find(item => item.selected == true);
+      if (itemSelected) {
+        let arr = this.dataTableReq.filter(item => item.soCv == itemSelected.soCongVan)
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur[row];
+          return prev;
+        }, 0);
+        sl = sum;
+      }
     }
     return sl;
   }
@@ -448,7 +455,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
 
   themMoiItem(data: any, type: string, idx: number, list?: any) {
     let modalQD = this.modal.create({
-      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
+      nzTitle: "Chỉnh sửa chi tiết kế hoạch",
       nzContent: DialogThemMoiDxkhthComponent,
       nzMaskClosable: false,
       nzClosable: false,

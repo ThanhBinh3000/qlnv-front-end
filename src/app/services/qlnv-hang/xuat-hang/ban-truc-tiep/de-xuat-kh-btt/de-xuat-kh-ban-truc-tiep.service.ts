@@ -1,9 +1,9 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {PATH} from 'src/app/constants/path';
-import {BaseService} from '../../../../base.service';
-import {OldResponseData} from 'src/app/interfaces/response';
-import {environment} from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { PATH } from 'src/app/constants/path';
+import { BaseService } from '../../../../base.service';
+import { OldResponseData } from 'src/app/interfaces/response';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -17,15 +17,5 @@ export class DeXuatKhBanTrucTiepService extends BaseService {
   getSoLuongAdded(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/count-sl-kh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
-  }
-
-  getGiaBanToiThieu(cloaiVthh: string, maDvi: string, namKhoach: string) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/gia-ban-toi-thieu/${cloaiVthh}/${maDvi}/${namKhoach}`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
-  getDonGiaDuocDuyet(cloaiVthh: string, maDvi: string, namKh: string) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/don-gia-duoc-duyet/${cloaiVthh}/${maDvi}/${namKh}`;
-    return this.httpClient.get<any>(url).toPromise();
   }
 }

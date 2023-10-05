@@ -26,7 +26,10 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import {
+  QuanLyNghiemThuKeLotService
+} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service";
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
   templateUrl: './thong-tin-quan-ly-bang-ke-can-hang.component.html',
@@ -49,13 +52,15 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   listDiaDiemNhap: any[] = [];
   listSoPhieuNhapKho: any[] = [];
   rowItem: any = {};
-
+  listFileDinhKem: any[] = [];
+  rowItemEdit: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
@@ -108,6 +113,13 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       trangThai: [],
       tenTrangThai: [],
       lyDoTuChoi: [],
+      tenNganLoKho: [],
+      dvt: ['kg'],
+      nguoiGiamSat: [],
+      ngayTao: [],
+      diaDiemKho: [],
+      lhKho: [],
+      trongLuongBaoBi: [],
     })
   }
 
@@ -141,6 +153,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data
+          this.listFileDinhKem = data.listFileDinhKem;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           await this.bindingDataQd(data.idQdGiaoNvNh);
           let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
@@ -200,7 +213,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh'],
       },
     })
@@ -228,9 +241,17 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       ngayHd: data.hopDong.ngayKy,
       donGiaHd: data.hopDong.donGia
     });
-    let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
-    if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].children;
+    let dataChiCuc;
+    if (this.userService.isChiCuc()) {
+      dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+      if (dataChiCuc.length > 0) {
+        this.listDiaDiemNhap = dataChiCuc[0].children;
+      }
+    } else {
+      dataChiCuc = data.dtlList.filter(item => item.maDvi == this.formData.value.maDvi);
+      if (dataChiCuc.length > 0) {
+        this.listDiaDiemNhap = dataChiCuc[0].children;
+      }
     }
     await this.spinner.hide();
   }
@@ -251,13 +272,14 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.bindingDataDdNhap(data, true);
+        await this.bindingDataDdNhap(data, true);
       }
     });
   }
 
-  bindingDataDdNhap(data, isDetail?) {
+  async bindingDataDdNhap(data, isDetail?) {
     this.dataTable = [];
+    await this.getNganKho(data.maLoKho ? data.maLoKho : data.maNganKho);
     this.formData.patchValue({
       idDdiemGiaoNvNh: data.id,
       maDiemKho: data.maDiemKho,
@@ -268,6 +290,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
+      tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
     });
     if (isDetail) {
       this.formData.patchValue({
@@ -283,6 +306,14 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
     this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter(item => (item.trangThai == STATUS.DU_THAO && isEmpty(item.bangKeCanHang)));
   }
 
+  async getNganKho(maDvi: any) {
+    if (maDvi) {
+      let res = await this.quanLyNghiemThuKeLotService.getDataKho(maDvi);
+      this.formData.patchValue({
+        lhKho: res.data.lhKho
+      });
+    }
+  }
   openDialogSoPhieuNhapKho() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số phiếu nhập kho',
@@ -332,18 +363,20 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
     return convertTienTobangChu(tien);
   }
 
-  deleteRow(data: any) {
-
+  deleteRow(i: any) {
+    this.dataTable.splice(i, 1)
   }
 
-  editRow(stt: number) {
+  editRow(i: number) {
+    this.dataTable[i].edit = true;
+    this.rowItemEdit[i] = cloneDeep(this.dataTable[i])
   }
 
   addRow() {
-    if (this.validateDataRow()) {
-      this.dataTable = [...this.dataTable, this.rowItem];
-      this.rowItem = {};
-    }
+    // if (this.validateDataRow()) {
+    this.dataTable = [...this.dataTable, this.rowItem];
+    this.rowItem = {};
+    // }
   }
 
   validateDataRow() {
@@ -360,12 +393,13 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
     }
   }
 
-  cancelEdit(stt: number): void {
-
+  cancelEdit(i: number): void {
+    this.dataTable[i].edit = false;
   }
 
-  saveEdit(stt: number): void {
-
+  saveEdit(i: number): void {
+    this.dataTable[i] = cloneDeep(this.rowItemEdit[i])
+    this.dataTable[i].edit = false;
   }
 
   clearItemRow() {
@@ -492,6 +526,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
         }
         let body = this.formData.value;
         body.chiTiets = this.dataTable;
+        body.fileDinhKems = this.listFileDinhKem;
         let res;
         if (this.formData.get('id').value > 0) {
           res = await this.quanLyBangKeCanHangService.update(body);
@@ -506,10 +541,10 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
           } else {
             if (this.formData.get('id').value) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-              this.back();
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.back();
+              this.id = res.data.id;
+              this.formData.get('id').setValue(res.data.id);
             }
             await this.spinner.hide();
           }
@@ -527,7 +562,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
   validateSave() {
-    let tongTrongLuong = this.calcTong('trongLuongCaBaoBi');
+    let tongTrongLuong = this.calcTong('trongLuongCaBaoBi') - this.formData.value.trongLuongBaoBi;
     if (tongTrongLuong != this.formData.value.soLuongNhapKho) {
       this.notification.error(MESSAGE.ERROR, "Tổng trọng lượng bao bì của bảng kê đang không đủ số lượng nhập kho")
       return false;

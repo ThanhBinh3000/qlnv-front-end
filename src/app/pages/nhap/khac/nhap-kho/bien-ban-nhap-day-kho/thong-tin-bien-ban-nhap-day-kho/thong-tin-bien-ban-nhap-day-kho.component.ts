@@ -29,9 +29,11 @@ export class ThongTinBienBanNhapDayKhoComponent extends Base2Component implement
   @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() data: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
+  previewName: string = 'nk_bb_ndk';
   maBb: string;
   danhSach: any[] = []
   dataTableView: any[] = []
@@ -115,7 +117,40 @@ export class ThongTinBienBanNhapDayKhoComponent extends Base2Component implement
       soBb: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
 
     })
-
+    if (this.data && !this.idInput) {
+      console.log(this.data, "data")
+      this.formData.patchValue({
+        soQdPdNk: this.data.soQdPdNk,
+        ngayQdPdNk: this.data.ngayKyQdinh,
+        qdPdNkId: this.data.idQdPdNk,
+        tenLoKhoXuat: "",
+        maLoKhoXuat: "",
+        tenNganKhoXuat: "",
+        maNganKhoXuat: "",
+        tenNhaKhoXuat: "",
+        maNhaKhoXuat: "",
+        tenDiemKhoXuat: "",
+        maDiemKhoXuat: "",
+        tichLuongKhaDung: "",
+        tenLoNganKho: `${this.data.tenLoKho} ${this.data.tenNganKho}`,
+        tenLoKho: this.data.tenLoKho,
+        maLoKho: this.data.maLoKho,
+        tenNganKho: this.data.tenNganKho,
+        maNganKho: this.data.maNganKho,
+        tenNhaKho: this.data.tenNhaKho,
+        maNhaKho: this.data.maNhaKho,
+        tenDiemKho: this.data.tenDiemKho,
+        maDiemKho: this.data.maDiemKho,
+        loaiVthh: this.data.loaiVthh,
+        tenLoaiVthh: this.data.tenLoaiVthh,
+        cloaiVthh: this.data.cloaiVthh,
+        tenCloaiVthh: this.data.tenCloaiVthh,
+        donViTinh: this.data.donViTinh,
+        soLuongQd: this.data.slDienChuyen,
+      });
+      await this.loadChiTietQdinh(this.data.idQdPdNk);
+      await this.getDanhSachTT(this.data.qdPdNkId)
+    }
     if (this.idInput) {
       await this.loadChiTiet(this.idInput)
     }
@@ -228,6 +263,10 @@ export class ThongTinBienBanNhapDayKhoComponent extends Base2Component implement
           checked: !!check || false
         }
       });
+      let minIdRecord = this.danhSach.reduce((min, current) => (current.id < min.id ? current : min), this.danhSach[0]);
+      this.formData.patchValue({
+        ngayBdNhap: minIdRecord.ngayNhapKho
+      })
     }
   }
 
@@ -331,6 +370,7 @@ export class ThongTinBienBanNhapDayKhoComponent extends Base2Component implement
     body.fileDinhKemReq = this.fileDinhKemReq;
     body.ngayKtNhap = body.ngayLap
     body.children = this.danhSach.filter(item => item.checked)
+    body.ngayQdPdNk = new Date(body.ngayQdPdNk);
     if (this.idInput) {
       body.id = this.idInput
     }
@@ -356,7 +396,7 @@ export class ThongTinBienBanNhapDayKhoComponent extends Base2Component implement
   }
 
   isTuChoi() {
-    return (this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ || this.formData.value.trangThai == STATUS.CHO_DUYET_KT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+    return (this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KTVBQ') || this.formData.value.trangThai == STATUS.CHO_DUYET_KT && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KETOAN') || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_LDCCUC'))
   }
 
   async tuChoi() {
@@ -371,7 +411,7 @@ export class ThongTinBienBanNhapDayKhoComponent extends Base2Component implement
   }
 
   isPheDuyet() {
-    return (this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ || this.formData.value.trangThai == STATUS.CHO_DUYET_KT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+    return (this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KTVBQ') || this.formData.value.trangThai == STATUS.CHO_DUYET_KT && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KETOAN') || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_LDCCUC'))
   }
 
   async pheDuyet() {

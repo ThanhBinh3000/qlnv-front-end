@@ -1,20 +1,20 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {v4 as uuidv4} from "uuid";
-import {Validators} from "@angular/forms";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { v4 as uuidv4 } from "uuid";
+import { Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {DonviService} from "../../../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {STATUS} from "../../../../../../../constants/status";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {LOAI_HH_XUAT_KHAC} from "../../../../../../../constants/config";
-import {FILETYPE} from "../../../../../../../constants/fileType";
-import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { Base2Component } from "../../../../../../../components/base2/base2.component";
+import { StorageService } from "../../../../../../../services/storage.service";
+import { DonviService } from "../../../../../../../services/donvi.service";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import { STATUS } from "../../../../../../../constants/status";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { LOAI_HH_XUAT_KHAC } from "../../../../../../../constants/config";
+import { FILETYPE } from "../../../../../../../constants/fileType";
+import { DialogTuChoiComponent } from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {
   QdGiaoNvNhapHangTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvNhapHangTrongThoiGianBaoHanh.service";
@@ -24,8 +24,8 @@ import {
 import {
   DialogTableCheckBoxComponent
 } from "../../../../../../../components/dialog/dialog-table-check-box/dialog-table-check-box.component";
-import {chain, cloneDeep} from 'lodash';
-import {isArray} from "rxjs/internal-compatibility";
+import { chain, cloneDeep } from 'lodash';
+import { isArray } from "rxjs/internal-compatibility";
 import {
   PhieuKtclVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuKtclVtTbTrongThoiGianBaoHanh.service";
@@ -53,15 +53,15 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
 
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
-              private phieuKtclVtTbTrongThoiGianBaoHanhService: PhieuKtclVtTbTrongThoiGianBaoHanhService,
-              private qdGiaoNvNhapHangTrongThoiGianBaoHanhService: QdGiaoNvNhapHangTrongThoiGianBaoHanhService) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
+    private phieuKtclVtTbTrongThoiGianBaoHanhService: PhieuKtclVtTbTrongThoiGianBaoHanhService,
+    private qdGiaoNvNhapHangTrongThoiGianBaoHanhService: QdGiaoNvNhapHangTrongThoiGianBaoHanhService) {
     super(httpClient, storageService, notification, spinner, modal, qdGiaoNvNhapHangTrongThoiGianBaoHanhService);
     this.formData = this.fb.group({
       id: [],
@@ -116,23 +116,23 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     this.dataTable = chain(data)
       .groupBy("tenChiCuc")
       .map((v, k) => {
-          let rowItem = v.find(s => s.tenChiCuc === k);
-          let idVirtual = uuidv4();
-          this.expandSetString.add(idVirtual);
-          return {
-            idVirtual: idVirtual,
-            tenChiCuc: k,
-            tenCuc: rowItem?.tenCuc,
-            maDiaDiem: rowItem?.maDiaDiem,
-            tenCloaiVthh: rowItem?.tenCloaiVthh,
-            childData: v
-          }
+        let rowItem = v.find(s => s.tenChiCuc === k);
+        let idVirtual = uuidv4();
+        this.expandSetString.add(idVirtual);
+        return {
+          idVirtual: idVirtual,
+          tenChiCuc: k,
+          tenCuc: rowItem?.tenCuc,
+          maDiaDiem: rowItem?.maDiaDiem,
+          tenCloaiVthh: rowItem?.tenCloaiVthh,
+          childData: v
         }
+      }
       ).value();
   }
 
   async bindingData() {
-    let res = await this.donviService.getDonVi({str: this.userInfo.MA_DVI});
+    let res = await this.donviService.getDonVi({ str: this.userInfo.MA_DVI });
     if (res && res.data) {
       this.formData.patchValue({
         tenDvi: res.data.tenDvi,
@@ -174,10 +174,10 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     if (body.idCanCu && isArray(body.idCanCu)) {
       body.idCanCu = body.idCanCu.join(",");
     }
-    if (body.loai=="NHAP_SAU_BH"){
-      this.listDtl = this.listPhieuKtcl.map((item) => ({...item, id: null}));
-    }else {
-      this.listDtl = this.listPhieuKdcl.map((item) => ({...item, id: null}));
+    if (body.loai == "NHAP_SAU_BH") {
+      this.listDtl = this.listPhieuKtcl.map((item) => ({ ...item, id: null }));
+    } else {
+      this.listDtl = this.listPhieuKdcl.map((item) => ({ ...item, id: null }));
     }
 
     body.qdGiaonvXhDtl = this.listDtl;
@@ -200,20 +200,21 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO:
-      case STATUS.TU_CHOI_LDC: {
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        mess = 'Bạn có muối gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
-        mess = 'Bạn có muối gửi duyệt?'
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_LDC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?'
-        break;
-      }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_LDC;
-        mess = 'Bạn có chắc chắn muốn từ chối ?'
         break;
       }
     }
@@ -268,8 +269,12 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
         try {
           let trangThai;
           switch (this.formData.get('trangThai').value) {
+            case STATUS.CHO_DUYET_TP: {
+              trangThai = STATUS.TU_CHOI_TP;
+              break;
+            }
             case STATUS.CHO_DUYET_LDC: {
-              trangThai = STATUS.TU_CHOI_LDC
+              trangThai = STATUS.TU_CHOI_LDC;
               break;
             }
           }
@@ -396,8 +401,8 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
     if (rs.msg == MESSAGE.SUCCESS) {
       let data = rs.data.content;
       this.listPhieuKtcl = data.filter(i => i.mauBiHuy == false);
-      this.listPhieuKtcl = this.listPhieuKtcl.map((item) => ({...item, slLayMau: item.slBaoHanh}));
-      console.log(this.listPhieuKtcl ,'this.listPhieuKtcl ')
+      this.listPhieuKtcl = this.listPhieuKtcl.map((item) => ({ ...item, slLayMau: item.slBaoHanh }));
+      console.log(this.listPhieuKtcl, 'this.listPhieuKtcl ')
     }
     return this.listPhieuKtcl;
   }

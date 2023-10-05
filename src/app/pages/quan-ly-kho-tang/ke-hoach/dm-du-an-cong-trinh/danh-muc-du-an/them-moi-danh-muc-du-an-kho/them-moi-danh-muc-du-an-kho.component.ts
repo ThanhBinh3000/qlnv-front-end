@@ -1,18 +1,14 @@
 import { Component, Input, OnInit } from "@angular/core";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {MESSAGE} from "../../../../../../constants/message";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {DonviService} from "../../../../../../services/donvi.service";
-import {Validators} from "@angular/forms";
-import {
-  DanhMucSuaChuaService
-} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import dayjs from "dayjs";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { MESSAGE } from "../../../../../../constants/message";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { DonviService } from "../../../../../../services/donvi.service";
+import { Validators } from "@angular/forms";
 import { DanhMucKhoService } from "../../../../../../services/danh-muc-kho.service";
 import { STATUS } from "../../../../../../constants/status";
 
@@ -30,9 +26,9 @@ export class ThemMoiDanhMucDuAnKhoComponent extends Base2Component implements On
   dsChiCuc: any[] = [];
   fileDinhKemDc: any[] = []
   listTrangThai: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
+    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
   ];
 
   constructor(
@@ -60,19 +56,19 @@ export class ThemMoiDanhMucDuAnKhoComponent extends Base2Component implements On
       maDiemKho: [null, Validators.required],
       tgKhoiCong: [null, Validators.required],
       tgHoanThanh: [null, Validators.required],
-      loaiDuAn: [null , Validators.required],
-      tmdtDuKien: [null , Validators.required],
-      nstwDuKien: [null , Validators.required],
-      tmdtDuyet: [null , Validators.required],
-      nstwDuyet: [null , Validators.required],
-      soQdPd: [null , Validators.required],
-      ngayQdPd: [null , Validators.required],
-      soQdDc: [null],
+      loaiDuAn: [null, Validators.required],
+      tmdtDuKien: [null, Validators.required],
+      nstwDuKien: [null, Validators.required],
+      tmdtDuyet: [null, Validators.required],
+      nstwDuyet: [null, Validators.required],
+      soQdPd: [null],
+      ngayQdPd: [null],
+      soQdDcPd: [null],
       ngayQdDc: [null],
       soQdPdDtxd: [null],
       tongSoLuyKe: [null],
       luyKeNstw: [null],
-      type : [null],
+      type: [null],
       trangThai: [STATUS.CHUA_THUC_HIEN],
     });
   }

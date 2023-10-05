@@ -6,7 +6,10 @@ import {
     ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { KHKN_BAO_QUAN_ROUTE_LIST } from './khkn-bao-quan.constant';
+import { KHKN_BAO_QUAN_MAIN_ROUTE, KHKN_BAO_QUAN_ROUTE_LIST } from './khkn-bao-quan.constant';
+import { UserLogin } from "../../models/userlogin";
+import { UserService } from "../../services/user.service";
+import { MAIN_ROUTES } from "../../layout/main/main-routing.constant";
 @Component({
     selector: 'app-khkn-bao-quan',
     templateUrl: './khkn-bao-quan.component.html',
@@ -14,17 +17,38 @@ import { KHKN_BAO_QUAN_ROUTE_LIST } from './khkn-bao-quan.constant';
 })
 export class KhknBaoQuanComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
-    routes = KHKN_BAO_QUAN_ROUTE_LIST;
+    routes = [
+        {
+            icon: 'htvbdh_tcdt_congtrinhnghiencuu',
+            title: 'Quản lý công trình nghiên cứu, công nghệ bảo quản',
+            url: `/${KHKN_BAO_QUAN_MAIN_ROUTE}/quan-ly-cong-trinh-nghien-cuu-bao-quan`,
+            dropdown: 'dau-thau',
+            idHover: 'dauthau',
+            hasTab: false,
+            permission: this.userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ') ? true : false
+        },
+        {
+            icon: 'htvbdh_tcdt_quytrinhkythuat',
+            title: 'Quản lý quy chuẩn, tiêu chuẩn quốc gia',
+            url: `/${KHKN_BAO_QUAN_MAIN_ROUTE}/quan-ly-quy-chuan-ky-thuat-quoc-gia`,
+            dropdown: 'dau-thau',
+            idHover: 'dauthau',
+            hasTab: false,
+            permission: this.userService.isAccessPermisson('KHCNBQ_QCKTTCCS') ? true : false
+        }
+    ];
     routerUrl: string = "";
-
+    userInfo: UserLogin;
     constructor(
         private router: Router,
+        private userService: UserService,
     ) { }
 
     ngOnInit(): void {
         if (this.router.url) {
             this.routerUrl = this.router.url;
         }
+        this.userInfo = this.userService.getUserLogin();
     }
 
     ngAfterViewInit() {

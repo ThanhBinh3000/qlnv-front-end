@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {QlDinhMucPhiService} from "../../../services/qlnv-kho/QlDinhMucPhi.service";
+import { Component, OnInit } from '@angular/core';
+import { Base2Component } from "../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { QlDinhMucPhiService } from "../../../services/qlnv-kho/QlDinhMucPhi.service";
 import dayjs from "dayjs";
-import {MESSAGE} from "../../../constants/message";
+import { MESSAGE } from "../../../constants/message";
 
 @Component({
   selector: 'app-dinh-muc-trang-bi-cong-cu-dung-cu',
@@ -58,10 +58,6 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
-    if (!this.userService.isTongCuc()) {
-      this.notification.error(MESSAGE.ERROR, "Bạn không có quyền thực hiện chức năng này.");
-      return;
-    }
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;

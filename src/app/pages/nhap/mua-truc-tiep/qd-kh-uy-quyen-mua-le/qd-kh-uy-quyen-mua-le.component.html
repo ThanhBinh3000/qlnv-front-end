@@ -41,13 +41,13 @@
                             </div>
                         </div>
                     </div>
-<!--                    <div nz-col nzSpan="4">-->
-<!--                        <label>Trạng thái tổng hợp</label>-->
-<!--                        <nz-select formControlName="trangThaiTh">-->
-<!--                            <nz-option *ngFor="let p of listTrangThaiTh" [nzValue]="p.ma"-->
-<!--                                [nzLabel]="p.giaTri"></nz-option>-->
-<!--                        </nz-select>-->
-<!--                    </div>-->
+                    <!--                    <div nz-col nzSpan="4">-->
+                    <!--                        <label>Trạng thái tổng hợp</label>-->
+                    <!--                        <nz-select formControlName="trangThaiTh">-->
+                    <!--                            <nz-option *ngFor="let p of listTrangThaiTh" [nzValue]="p.ma"-->
+                    <!--                                [nzLabel]="p.giaTri"></nz-option>-->
+                    <!--                        </nz-select>-->
+                    <!--                    </div>-->
                 </div>
             </form>
             <div nz-col class="cangiua group-button-search">
@@ -98,8 +98,8 @@
                         <th class="text-center" style="width: 7%;">Ngày duyệt</th>
                         <th class="text-center" style="width: 5%;">Ngày ủy quyền</th>
                         <th class="text-center" style="width: 10%;">Trích yếu</th>
-                        <th class="text-center" style="width: 10%;">Loại hàng hóa</th>
-                        <th class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
+                        <th class="text-center" style="width: 10%;">Loại hàng DTQG</th>
+                        <th class="text-center" style="width: 12%;">Chủng loại hàng DTQG</th>
                         <th class="text-center" style="width: 5%;">Số lượng (Tấn)</th>
                         <th class="text-center" style="width: 12%;">Phương thức mua trực tiếp</th>
                         <th class="text-center" style="width: 12%;">Trạng thái</th>
@@ -201,8 +201,7 @@
                         <td>{{ data.tenPthucMuaTrucTiep}}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
-                            <a (click)="xemChiTiet(data.id, true,'NHDTQG_PTMTT_KHMTT_LT_DEXUAT_XEM')"
-                               >
+                            <a (click)="xemChiTiet(data.id, true)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                         </td>

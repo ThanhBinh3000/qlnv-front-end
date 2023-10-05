@@ -1,18 +1,18 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
-import {Validators} from "@angular/forms";
-import {STATUS} from "../../../../../../constants/status";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { Validators } from "@angular/forms";
+import { STATUS } from "../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 import {
   PhieuXuatKhoBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service';
@@ -22,8 +22,11 @@ import {
 import {
   PhieuKtraCluongBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
-import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
-import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import { PREVIEW } from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho-btt',
@@ -635,6 +638,38 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
   calculateSum() {
     let sum = this.formData.value.soLuongThucXuat * this.formData.value.donGia;
     return sum;
+  }
+
+  async preview(id) {
+    await this.phieuXuatKhoBttService.preview({
+      tenBaoCao: 'Phiếu xuất kho bán trực tiếp',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "phieu-xuat-kho-ban-truc-tiep.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "phieu-xuat-kho-ban-truc-tiep.docx");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
   setValidator(isGuiDuyet) {
