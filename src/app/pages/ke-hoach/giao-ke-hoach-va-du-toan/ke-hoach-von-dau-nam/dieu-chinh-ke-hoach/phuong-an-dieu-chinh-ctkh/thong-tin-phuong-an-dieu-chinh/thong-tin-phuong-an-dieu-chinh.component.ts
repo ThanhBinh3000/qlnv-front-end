@@ -1673,6 +1673,9 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     body.fileDinhKemReq = this.fileDinhKems
     body.canCus = this.listCcPhapLy
 
+    if (this.thongTinChiTieuKeHoachNam.id) {
+      body.id = this.thongTinChiTieuKeHoachNam.id
+    }
 
     this.spinner.show();
     if (this.thongTinChiTieuKeHoachNam.id > 0) {
