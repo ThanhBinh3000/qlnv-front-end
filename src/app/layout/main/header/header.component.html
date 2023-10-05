@@ -1,0 +1,84 @@
+<nz-header>
+  <!-- <div class="logo"></div> -->
+  <img src="../../../../assets/images/logo-tcdt.svg" alt="" class="logo-tcdt">
+  <div class="justify-content-between header-style">
+    <div class="navbar navbar-expand-lg navbar-light">
+      <!-- #navbarNavDropdown,  -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsnav"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse">
+        <app-main-router></app-main-router>
+      </div>
+    </div>
+    <div class="menuphai">
+      <!-- mail........................ -->
+      <nz-badge [nzCount]="thongbaomoi">
+        <a class="head-example" nz-dropdown [nzDropdownMenu]="menu">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+        </a>
+        <div class="count-notti">5</div>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <div class="list-title">Bạn có {{ thongbaomoi }} thông báo mới</div>
+          <nz-list [nzDataSource]="listNoti" [nzRenderItem]="item" nzItemLayout="horizontal"
+            *ngIf="listNoti && listNoti.length > 0">
+            <ng-template #item let-item>
+              <nz-list-item>
+                <nz-list-item-meta nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                  (click)="onItemNoti(item)">
+                  <nz-list-item-meta-title>
+                    <b>
+                      {{ item.sendUserName }}
+                    </b>
+                    <small>
+                      {{ item.message }}
+                    </small>
+                  </nz-list-item-meta-title>
+                </nz-list-item-meta>
+
+                <ul nz-list-item-actions>
+                  <nz-list-item-action *ngIf="item.isRead"><a><i class="fa fa-eye" aria-hidden="true"></i></a>
+                  </nz-list-item-action>
+                  <nz-list-item-action><a (click)="xoaThongBao(item.id)"><i class="fa fa-trash"
+                        aria-hidden="true"></i></a></nz-list-item-action>
+                </ul>
+              </nz-list-item>
+            </ng-template>
+          </nz-list>
+          <div class="justify-content-center" *ngIf="listNoti && listNoti.length > 0">
+            <button nz-button nzType="default" nzValue="small">
+              <i nz-icon nzType="search"></i>
+              Xem tất cả
+            </button>
+          </div>
+        </nz-dropdown-menu>
+      </nz-badge>
+
+      <!-- mail end........................ -->
+
+      <!-- avatar........................ -->
+      <a nz-dropdown [nzDropdownMenu]="avatar" class="user" [nzOverlayStyle]="{width: 300}" [nzVisible]="true">
+        <div class="cricle-profile">
+          <i nz-icon nzType="user" nzTheme="outline"></i>
+        </div>
+        <span class="tenvachucvu">
+          <span>{{ userInfo?.sub }}</span>
+          <p>{{ userInfo?.TEN_PHONG_BAN }} </p>
+        </span>
+      </a>
+      <nz-dropdown-menu #avatar="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item (click)="showModalDoiVaiTro()">Đổi vai trò</li>
+          <li nz-menu-item (click)="showModalThongTinCaNhan()">
+            Thông tin cá nhân
+          </li>
+          <li nz-menu-divider></li>
+          <li nz-menu-item (click)="logOut()">Đăng xuất</li>
+        </ul>
+      </nz-dropdown-menu>
+      <!-- avatar end........................ -->
+    </div>
+  </div>
+</nz-header>

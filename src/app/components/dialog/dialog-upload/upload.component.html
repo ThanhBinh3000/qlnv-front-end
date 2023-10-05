@@ -1,0 +1,48 @@
+<form nz-form [formGroup]="formData">
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tên tài liệu </nz-form-label>
+        <nz-form-control nzErrorTip="Vui lòng nhập tên tài liệu">
+          <input nz-input formControlName="tenTaiLieu" (input)="changeValue($event)" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24" class="mt-40">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Chọn file </nz-form-label>
+        <!-- <nz-upload nzAction="" class="chon-file"> -->
+        <div class="upload-file">
+          <input type="file" id="avatar" name="avatar" #inputFile (change)="getNameFile($event)" class="input-file">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light file-tai-lieu-dinh-kem">
+            <ng-container *ngIf="nameFile; else elseTemplate">
+              {{nameFile}}
+            </ng-container>
+            <ng-template #elseTemplate>
+              <i class="icon htvbdh_tcdt_tep icon-tep"></i>
+              Tài liệu đính kèm
+            </ng-template>
+          </a>
+        </div>
+        <!-- </nz-upload> -->
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onSave()"
+        [disabled]="!formData.valid || !isSave">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<!-- duongvd 230223-->
+<!-- menu xuat cuu tro, vien tro -->
+
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Xuất cứu trợ, viện trợ
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      Xuất thóc gia công
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-cuu-tro-vien-tro [defaultTab]=defaultTabCtvt></app-cuu-tro-vien-tro>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-xuat-cap [defaultTab]=defaultTabXc></app-xuat-cap>
+    </ng-container>
+  </div>
+</div>

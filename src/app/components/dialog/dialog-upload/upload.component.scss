@@ -1,0 +1,41 @@
+.check-box {
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+.chon-file {
+  border: 1px solid #c4c9cc;
+  width: 100%;
+  border-radius: 0px;
+  .htvbdh_tcdt_tep {
+    margin-right: 8px;
+  }
+}
+.input-file {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0;
+}
+.file-tai-lieu-dinh-kem {
+  width: 100%;
+  border: 1px solid #c4c9cc;
+  position: absolute;
+  top: 0px;
+  z-index: 0;
+}
+.upload-file {
+  position: relative;
+}
+.icon-tep {
+  margin-right: 8px;
+}
+.mt-40 {
+  margin-top: 40px;
+}
+.canphai {
+  button.btn.btn-outline-grey {
+    margin: 0px !important;
+  }
+}

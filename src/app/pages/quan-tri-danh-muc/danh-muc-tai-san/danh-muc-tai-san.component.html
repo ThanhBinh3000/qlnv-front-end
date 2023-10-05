@@ -1,0 +1,209 @@
+<div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span></span>
+        <span>DANH MỤC TÀI SẢN</span>
+      </div>
+    </div>
+  </div>
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="3">
+        <label class="search__label">Tên tài sản</label>
+        <nz-input-group >
+          <input type="text" nz-input [(ngModel)]="searchFilter.tenTaiSan"/>
+        </nz-input-group>
+      </div>
+      <div nz-col [nzSpan]="15">
+        <label class="search__label">Mô tả tài sản</label>
+        <nz-input-group >
+          <input type="text" nz-input [(ngModel)]="searchFilter.moTa"/>
+        </nz-input-group>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <label class="search__label">Trạng thái</label>
+        <nz-input-group >
+          <nz-select  [(ngModel)]="searchFilter.trangThai"  >
+            <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
+          </nz-select>
+        </nz-input-group>
+      </div>
+    </div>
+    <div class="cangiua group-button-search">
+      <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <i class="icon  htvbdh_nhap-lai1"></i>
+        Xóa điều kiện
+      </button>
+      <button nz-button class="search__button--search" (click)="search()">
+        <i nz-icon nzType="search"></i>
+        Tìm kiếm
+      </button>
+    </div>
+  </nz-card>
+    <div class="group-button">
+      <h3 class="label_dm">DANH SÁCH DANH MỤC TÀI SẢN</h3>
+      <div class="buttons">
+        <button type="button" class="btn btn-sub" (click)="export()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
+      </div>
+    </div>
+  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered>
+        <thead>
+        <tr>
+          <th class="text-center" nzWidth="45px">STT</th>
+          <th class="text-center" nzWidth="150px">Mã tài sản</th>
+          <th class="text-center" nzWidth="300px">Tên tài sản</th>
+          <th class="text-center" nzWidth="">Mô tả tài sản</th>
+          <th class="text-center" nzWidth="150px">Đơn vị tính</th>
+          <th class="text-center" nzWidth="150px">Trạng thái</th>
+          <th class="text-center" nzWidth="120px">Hành động</th>
+        </tr>
+        <tr class="search-table">
+          <th></th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" placeholder="Nhập text" nz-input [(ngModel)]="rowItem.maTaiSan"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" placeholder="Nhập text" nz-input [(ngModel)]="rowItem.tenTaiSan"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" placeholder="Nhập text" nz-input [(ngModel)]="rowItem.moTa"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <nz-select  [(ngModel)]="rowItem.dviTinh"  >
+                  <nz-option *ngFor="let item of listDviTinh" [nzLabel]="item.giaTri" [nzValue]="item.giaTri"></nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <nz-select  [(ngModel)]="rowItem.trangThai"  >
+                  <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th class="text-center">
+            <a (click)="themMoiItem(null, rowItem)">
+              <i class="icon htvbdh_dau-cong"></i>
+            </a>
+            <a>
+              <i (click)="refresh()" class="icon  htvbdh_nhap-lai1 "></i>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of dataTable let i = index">
+          <ng-container *ngIf="!dataEdit[i].edit; else editTemplate">
+            <td class="text-center">{{i + 1}}</td>
+            <td>{{data.maTaiSan}}</td>
+            <td>{{data.tenTaiSan}}</td>
+            <td>{{data.moTa}}</td>
+            <td>{{data.dviTinh}}</td>
+            <td>{{data.tenTrangThai}}</td>
+            <td style="text-align: center;">
+              <a (click)="startEdit(i)">
+                <i class="table-icon fa fa-pencil"></i>
+              </a>
+              <a (click)="xoaItem(data)">
+                <i class="table-icon fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <th></th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <input type="text" nz-input [(ngModel)]="dataEdit[i].data.maTaiSan"/>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <input type="text" nz-input [(ngModel)]="dataEdit[i].data.tenTaiSan"/>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <input type="text" nz-input [(ngModel)]="dataEdit[i].data.moTa"/>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <nz-input-group>
+                    <nz-select  [(ngModel)]="dataEdit[i].data.dviTinh">
+                      <nz-option *ngFor="let item of listDviTinh" [nzLabel]="item.giaTri" [nzValue]="item.giaTri"></nz-option>
+                    </nz-select>
+                  </nz-input-group>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <nz-select  [(ngModel)]="dataEdit[i].data.trangThai"  >
+                    <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th style="text-align: center;">
+              <a (click)="themMoiItem(data.id, dataEdit[i].data)">
+                <i class="fa fa-save mr-3"></i>
+              </a>
+              <a (click)="huyEdit(i)">
+                <i class="fa fa-times do mr-3"></i>
+              </a>
+            </th>
+          </ng-template>
+        </tr>
+        </tbody>
+      </nz-table>
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between">
+        <div class="trai">
+        </div>
+        <div class="canphai">
+          <!-- begin phân trang  -->
+          <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                         [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                         (nzPageIndexChange)="changePageIndex($event)"
+                         (nzPageSizeChange)="changePageSize($event)">
+            <ng-template #rangeTemplate let-range="range" let-total>
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+            </ng-template>
+          </nz-pagination>
+          <!-- end phân trang  -->
+        </div>
+      </div>
+    </div>
+  </nz-card>
+</div>

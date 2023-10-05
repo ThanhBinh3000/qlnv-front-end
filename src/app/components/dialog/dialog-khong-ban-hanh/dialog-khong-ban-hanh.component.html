@@ -1,0 +1,54 @@
+<div class="modal__content">
+  <div class="search__body" nz-row [nzGutter]="[18, 12]">
+    <div nz-col nzSpan="8">
+      <nz-form-label [nzNoColon]="true" nzRequired class="search__label p-0"> Số văn bản</nz-form-label>
+      <nz-input-group [nzAddOnAfter]="'/TCDT-QLHDT'">
+        <nz-input-number class="search__input" [nzSize]="'small'" nz-input [(ngModel)]="khongBanHanh.soVanBan"
+                         [nzDisabled]="isView">
+        </nz-input-number>
+      </nz-input-group>
+    </div>
+    <div nz-col nzSpan="6">
+      <nz-form-label [nzNoColon]="true" nzRequired class="search__label p-0"> Ngày ký</nz-form-label>
+      <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
+                      [(ngModel)]="khongBanHanh.ngayKy" nzPlaceHolder="Ngày ký"
+                      [nzDisabled]="isView"
+      >
+      </nz-date-picker>
+    </div>
+    <div nz-col nzSpan="12">
+      <nz-form-label [nzNoColon]="true" class="search__label p-0">Nội dung văn bản</nz-form-label>
+      <textarea rows="5" class="search__input" nz-input [(ngModel)]="khongBanHanh.noiDung"
+                [disabled]="isView"></textarea>
+    </div>
+    <div nz-col nzSpan="12">
+      <nz-form-label [nzNoColon]="true" class="search__label p-0">Lý do không điều chỉnh</nz-form-label>
+      <textarea rows="5" class="search__input" nz-input [(ngModel)]="khongBanHanh.lyDo" [disabled]="isView"></textarea>
+    </div>
+    <div nz-col nzSpan="24">
+      <nz-form-label [nzNoColon]="true" nzRequired class="search__label p-0"> File văn bản không đồng ý điều chỉnh
+      </nz-form-label>
+      <nz-form-item>
+        <div class="list-file">
+          <file-list [data]="vanBanDinhKemList" [isViewDetail]="isView"></file-list>
+        </div>
+      </nz-form-item>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save" *ngIf="!isView">
+        <!--        <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+        Lưu
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel ml-2">
+        <!--        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

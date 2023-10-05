@@ -1,0 +1,56 @@
+.label-50 {
+    .ant-form-item-label.ant-col {
+        text-align: left;
+        width: 50%;
+    }
+
+    .ant-picker,
+    input {
+        border: none;
+        background: transparent;
+        font-weight: 700;
+    }
+
+    .ant-input-number {
+        width: 100% !important;
+        border: none;
+        background: transparent;
+        color: #444444;
+        font-weight: 700;
+    }
+}
+
+.border-right {
+    border-right: solid 1px #e2e2e2;
+
+}
+.bg-selected td {
+  background-color: #ebedff;
+}
+.text-bold {
+  color: #444444;
+  font-weight: 700;
+}
+
+::ng-deep {
+    .bg-xam .ant-card-body {
+        background: #f8f9fa;
+        //padding: 12px;
+        //margin: 12px;
+        //border-radius: 0px;
+        //border: solid 1px #f1f1f1;
+        //margin-right: 0px !important;
+        //margin-left: 0px !important;
+    }
+}
+
+.list-file {
+    .ant-input-affix-wrapper {
+        padding: 0px 11px !important;
+    }
+}
+.blue-text {
+  color: #001CFF;
+  font-weight: 500;
+  font-size: 12px;
+}

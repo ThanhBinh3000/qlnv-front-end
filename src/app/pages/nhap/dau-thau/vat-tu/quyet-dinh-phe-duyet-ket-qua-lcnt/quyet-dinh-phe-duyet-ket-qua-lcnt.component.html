@@ -1,0 +1,128 @@
+<div class="luong-thuc__danh-sach">
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="6">
+              <label class="search__label">Số QĐ phê duyệt KQ LCNT</label>
+              <input class="search__input" placeholder="Số QĐ phê duyệt KQ LCNT" nz-input
+                [(ngModel)]="searchFilter.soDxuat" />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Từ ngày QĐ</label>
+              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                [(ngModel)]="startValue" nzPlaceHolder="Từ ngày QĐ" (nzOnOpenChange)="handleEndOpenChange($event)">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Đến ngày QĐ</label>
+              <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                [(ngModel)]="endValue" nzPlaceHolder="Đến ngày QĐ" (nzOnOpenChange)="handleEndOpenChange($event)">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6">
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Loại hàng DTQG</label>
+              <nz-select>
+                <nz-option nzValue="Gạo/Thóc" nzLabel="Gạo/Thóc"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label"> Năm kế hoạch</label>
+              <nz-select>
+                <nz-option nzValue="2021" nzLabel="2021"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--search" (click)="search()">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
+              <i nz-icon nzType="close"></i>
+              Xóa điều kiện
+            </button>
+          </div>
+          <div class="cangiua" *ngIf="errorMessage && errorMessage != ''">
+            <span class="error">{{errorMessage}}</span>
+          </div>
+        </nz-card>
+        <nz-card nzTitle="Danh sách quyết định phê duyệt kết quả LCNT" [nzExtra]="tableCard1"
+          class="mt16 flex-card p-lr16">
+          <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th width="60px">STT</th>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <th width="130px">Số gói thầu</th>
+                <th>Số QĐ</th>
+                <th>Ngày QĐ</th>
+                <th>Loại hàng DTQG</th>
+                <th>Tên đơn vị</th>
+                <th>Về việc</th>
+                <th>Trạng thái</th>
+                <th width="120px" class="text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>
+                  <label nz-checkbox></label>
+                </td>
+                <td>9</td>
+                <td>123</td>
+                <td>10/03/2022</td>
+                <td>QDPD CTKH_01</td>
+                <td>Cục DTNNKV Tây Nam Bộ</td>
+                <td>Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022 tại nam bộ</td>
+                <td>Chờ duyệt</td>
+                <td>
+                  <a (click)="redirectToChiTiet(1)">
+                    <i class="fa fa-pencil den"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+
+              </div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                  (nzPageSizeChange)="changePageSize($event)">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-card>
+        <ng-template #tableCard1>
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

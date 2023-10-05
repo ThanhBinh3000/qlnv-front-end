@@ -1,0 +1,12 @@
+export enum PhanHe {
+  NHAP_DT = 'NHAP_DT',
+  NHAP_TT = 'NHAP_TT',
+  NHAP_KHAC = 'NHAP_KHAC',
+  XUAT_DG = 'XUAT_DG',
+  XUAT_TT = 'XUAT_TT',
+  XUAT_KHAC = 'XUAT_KHAC',
+  XUAT_CTVT = 'XUAT_CTVT',
+  NHAP_DC = 'NHAP_DC',
+  XUAT_DC = 'XUAXUAT_DCT_TT',
+  QUAN_LY_VP = 'QUAN_LY_VP'
+}

@@ -1,0 +1,19 @@
+.multi-line {
+  white-space: normal !important;
+}
+
+.grey-bg th {
+  background-color: #F3F3F3;
+}
+
+.bold-first-child:first-child td {
+  font-weight: 500;
+}
+
+.btn-group > .btn-group:not(:first-child), .btn-group > .btn:not(:first-child) {
+  margin-left: 6px;
+}
+
+.dm-title {
+  font-weight: 500 !important;
+}

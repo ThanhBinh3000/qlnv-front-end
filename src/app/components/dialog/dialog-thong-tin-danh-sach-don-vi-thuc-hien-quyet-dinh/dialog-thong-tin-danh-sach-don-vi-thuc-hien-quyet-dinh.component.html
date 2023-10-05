@@ -1,0 +1,142 @@
+<div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+  <div nz-col [nzSpan]="8">
+    <nz-form-item>
+      <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNN KV </nz-form-label>
+      <nz-form-control>
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+          <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
+            [nzAutocomplete]="auto" [readonly]="isEdit" />
+        </nz-input-group>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
+            (click)="selectDonVi(option)">
+            {{ option.labelDonVi }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="24" class="mt-16">
+    <div id="table-goi-thau">
+      <nz-card nzTitle="Danh sách chi tiết ngăn kho" class="mt16 flex-card p-lr16 dialog-thong-tin-phu-luc">
+        <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
+          [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th width="60px">STT</th>
+              <th>Mã kho / ngăn / Lô</th>
+              <th>Tên kho / ngăn / Lô</th>
+              <th>Số lượng (tấn)</th>
+              <th>Thủ kho phụ trách</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td><input nz-input [(ngModel)]="itemRow.maKhoNganLo" [readonly]="true" /></td>
+              <td>
+                <nz-select (ngModelChange)="selectNganLo($event, itemRow)" [(ngModel)]="itemRow.maKhoNganLo">
+                  <nz-option *ngFor="let nganLo of listNganLo" [nzValue]="nganLo.maNganlo" [nzLabel]="nganLo.tenNganlo">
+                  </nz-option>
+                </nz-select>
+              </td>
+              <td>
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="itemRow.soLuong" [nzMin]="0">
+                </nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRow.thuKhoPhuTrach" /></td>
+              <td>
+                <a (click)="addRow()" [class.disabled]="!itemRow.maKhoNganLo">
+                  <i class="fa fa-plus"></i>
+                </a>
+                <a (click)="clearItemRow()">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </tr>
+            <tr *ngFor="let data of basicTable.data; let i = index">
+              <ng-container *ngIf="!editCache[data.id]?.edit; else editTemplate">
+                <td class="text-center">{{i+1}}</td>
+                <td>{{ data.maKhoNganLo }}</td>
+                <td>{{ data.tenKhoNganLo }}</td>
+                <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.thuKhoPhuTrach }}</td>
+                <td>
+                  <a (click)="editRow(data.id)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a (click)="deleteRow(data)">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplate>
+                <td></td>
+                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.maKhoNganLo" [readonly]="true" />
+                </td>
+                <td>
+                  <nz-select (ngModelChange)="selectNganLo($event, editCache[data.id]?.data)"
+                    [(ngModel)]="editCache[data.id]?.data.maKhoNganLo">
+                    <nz-option *ngFor="let nganLo of listNganLo" [nzValue]="nganLo.maNganlo"
+                      [nzLabel]="nganLo.tenNganlo">
+                    </nz-option>
+                  </nz-select>
+                </td>
+                <td>
+                  <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="editCache[data.id]?.data.soLuong"
+                    [nzMin]="0">
+                  </nz-input-number>
+                </td>
+                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.thuKhoPhuTrach" /></td>
+                <td>
+                  <a (click)="saveEdit(data.id)" class="save" [class.disabled]="!editCache[data.id]?.data.maKhoNganLo">
+                    <i class="fa fa-save"></i>
+                  </a>
+                  <a (click)="cancelEdit(data.id)">
+                    <i class="fa fa-times do"></i>
+                  </a>
+                </td>
+              </ng-template>
+            </tr>
+            <tr>
+              <td colspan="3" class="background-last-row align-right">Tổng</td>
+              <td class="background-last-row">{{(tableExist && basicTable.data.length > 0 ? reduceRowData(0, 3, 2,
+                ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
+              <td class="background-last-row"></td>
+              <td class="background-last-row"></td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </div>
+  </div>
+  <div nz-col [nzSpan]="24" class="mt-16">
+    <nz-form-item>
+      <nz-form-label nzRequired [nzNoColon]="true">
+        Ghi chú
+      </nz-form-label>
+      <textarea nz-input [rows]="3" [(ngModel)]="data.ghiChu"></textarea>
+    </nz-form-item>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save"
+        [disabled]="!selectedDonVi.maDvi || selectedDonVi.maDvi == '' || !data.ghiChu || data.ghiChu == ''">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

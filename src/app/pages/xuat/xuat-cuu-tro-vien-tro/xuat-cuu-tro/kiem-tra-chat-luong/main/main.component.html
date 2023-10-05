@@ -1,0 +1,22 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Biên bản lấy mẫu/bàn giao mẫu
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      Phiếu kiểm nghiệm chất lượng
+    </li>
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="loaiVthh == '02'">
+      Hồ sơ kỹ thuật
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-bien-ban-lay-mau-ban-giao-mau [loaiVthh]="loaiVthh"></app-bien-ban-lay-mau-ban-giao-mau>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-phieu-kiem-nghiem-chat-luong [loaiVthh]="loaiVthh"></app-phieu-kiem-nghiem-chat-luong>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-ho-so-ky-thuat-cuu-tro [loaiVthh]="loaiVthh"></app-ho-so-ky-thuat-cuu-tro>
+</ng-container>

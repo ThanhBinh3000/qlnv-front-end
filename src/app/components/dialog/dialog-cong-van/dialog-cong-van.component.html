@@ -1,0 +1,29 @@
+<div class="modal__content">
+    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+        <div nz-col nzSpan="6">
+            <label class="search__label">Số công văn</label>
+            <input nz-input [class]="soCv ?'' : 'input-error-validate'" [(ngModel)]="soCv" />
+        </div>
+        <div nz-col nzSpan="6">
+            <label class="search__label">Ngày công văn</label>
+            <nz-date-picker class="search__input" [class]="ngayCv ?'' : 'input-error-validate'" [(ngModel)]="ngayCv"
+                nzFormat="dd/MM/yyyy"></nz-date-picker>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
+                <i class="icon htvbdh_tcdt_save"></i>
+                Lưu
+            </button>
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+                Hủy
+            </button>
+        </div>
+    </div>
+</div>

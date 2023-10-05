@@ -1,0 +1,102 @@
+<nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzScroll]="{y:'400px'}">
+        <thead>
+            <tr>
+                <th nzWidth="20px">STT</th>
+                <th nzWidth="170px">Tên tiêu chuẩn</th>
+                <th nzWidth="50px">Chỉ tiêu cha?</th>
+                <th nzWidth="100px">Chủng loại hàng hóa</th>
+                <th nzWidth="100px">Mức yêu cầu nhập</th>
+                <th nzWidth="100px">Mức yêu cầu nhập tối thiểu</th>
+                <th nzWidth="100px">Mức yêu cầu nhập tối đa</th>
+                <th nzWidth="100px">Mức yêu cầu xuất </th>
+                <th nzWidth="100px">Mức yêu cầu xuất tối thiểu</th>
+                <th nzWidth="100px">Mức yêu cầu xuất tối đa</th>
+                <th nzWidth="50px" *ngIf="userService.isTongCuc()">Hành động</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td>
+                    <nz-input-group>
+                        <input nz-input [(ngModel)]="rowItem.tenChiTieu" />
+                    </nz-input-group>
+                </td>
+                <td style="text-align:center">
+                    <nz-input-group>
+                        <label nz-checkbox></label>
+                    </nz-input-group>
+                </td>
+                <td>
+                    <nz-input-group>
+                        <input nz-input [(ngModel)]="rowItem.tenLoaiVthh" />
+                    </nz-input-group>
+                </td>
+                <td>
+                    <nz-input-group>
+                        <input nz-input [(ngModel)]="rowItem.mucYeuCauNhap" />
+                    </nz-input-group>
+                </td>
+                <td>
+                    <nz-input-group>
+                        <input nz-input [(ngModel)]="rowItem.mucYeuCauNhapToiThieu" />
+                    </nz-input-group>
+                </td>
+                <td>
+                    <nz-input-group>
+                        <input nz-input [(ngModel)]="rowItem.mucYeuCauNhapToiDa" />
+                    </nz-input-group>
+                </td>
+                <td>
+                    <nz-input-group>
+                        <input nz-input [(ngModel)]="rowItem.mucYeuCauXuat" />
+                    </nz-input-group>
+                </td>
+                <td>
+                    <nz-input-group>
+                        <input nz-input [(ngModel)]="rowItem.mucYeuCauXuatToiThieu" />
+                    </nz-input-group>
+                </td>
+                <td>
+                    <nz-input-group>
+                        <input nz-input [(ngModel)]="rowItem.mucYeuCauXuatToiDa" />
+                    </nz-input-group>
+                </td>
+                <td *ngIf="userService.isTongCuc()">
+                    <a (click)="addRow()">
+                        <i class="icon htvbdh_dau-cong"></i>
+                    </a>
+                    <a (click)="clearData()">
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                </td>
+            </tr>
+            <tr *ngFor="let data of dataTableKyThuat; let idx = index">
+                <td>{{ idx + 1 }}</td>
+                <td>{{ data.tenChiTieu }}</td>
+                <td style="text-align:center">
+                    <nz-input-group>
+                        <label nz-checkbox [(ngModel)]="rowItem.chiTieuCha"></label>
+                    </nz-input-group>
+                </td>
+                <td>{{ data.tenLoaiVthh }}</td>
+                <td>{{ data.mucYeuCauNhap }}</td>
+                <td>{{ data.mucYeuCauNhapToiThieu }}</td>
+                <td>{{ data.mucYeuCauNhapToiDa }}</td>
+                <td>{{ data.mucYeuCauXuat }}</td>
+                <td>{{ data.mucYeuCauXuatToiThieu }}</td>
+                <td>{{ data.mucYeuCauXuatToiDa }}</td>
+                <td *ngIf="userService.isTongCuc()">
+                    <a>
+                        <i class="fa fa-pencil" title="Sửa"></i>
+                    </a>
+                    <a>
+                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

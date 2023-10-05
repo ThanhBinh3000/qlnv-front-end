@@ -1,0 +1,176 @@
+<div class="contentBor luong-dau-thau-gao__body" *ngIf="!visibleTab">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 12]">
+          <div nz-col nzSpan="6">
+            <label class="search__label">Số QĐ phê duyệt KH LCNT</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Từ ngày QĐ</label>
+            <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+              [(ngModel)]="startValue" nzPlaceHolder="Từ ngày QĐ" (nzOnOpenChange)="handleEndOpenChange($event)">
+            </nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đến ngày QĐ</label>
+            <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+              [(ngModel)]="endValue" nzPlaceHolder="Đến ngày QĐ" (nzOnOpenChange)="handleEndOpenChange($event)">
+            </nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Năm kế hoạch </label>
+            <nz-select [(ngModel)]="searchFilter.namKeHoach">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Loại hàng DTQG</label>
+            <nz-form-control nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click" class="pd-0">
+              <nz-input-group nzAddOnAfterIcon="folder-open" class="ma-hang-hoa">
+                <input nz-input [(ngModel)]="selectHang.ten" [readonly]="true" />
+              </nz-input-group>
+            </nz-form-control>
+            <!-- dropdown -->
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <div class="dropdown__container">
+                <h6 class="modal__title">Danh sách vật tư hàng hóa</h6>
+                <p style="margin-bottom: 0px; font-weight: 500">Tìm kiếm</p>
+                <div style="margin-bottom: 6px">
+                  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                    <input type="text" nz-input (input)="searchHangHoa($event)" />
+                  </nz-input-group>
+                  <ng-template #suffixIconButton>
+                    <button nz-button nzSearch>
+                      <i nz-icon nzType="search"></i>
+                    </button>
+                  </ng-template>
+                </div>
+                <nz-table #expandTable [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false"
+                  class="table__container-vat-tu">
+                  <thead>
+                    <tr>
+                      <th>Tên vật tư</th>
+                      <th>Mã vật tư</th>
+                      <th>Chọn</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let data of expandTable.data, let i = index">
+                      <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
+                        <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                          <td [nzIndentSize]="item.level! * 20"
+                            [nzShowExpand]="!!item.child && item.child.length !== 0 || !item?.child"
+                            [(nzExpand)]="item.expand" (nzExpandChange)="
+                              collapse(mapOfExpandedData[data.id], item, $event)
+                            ">
+                            {{ item.ten }}
+                          </td>
+                          <td>{{ item.ma }}</td>
+                          <td style="text-align: center">
+                            <div *ngIf="item?.child?.length == 0 || !item?.child">
+                              <i nz-icon nzType="plus" nzTheme="outline" nzColo nz-menu-item
+                                (click)="selectHangHoa(item)"></i>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </nz-table>
+              </div>
+            </nz-dropdown-menu>
+          </div>
+        </div>
+        <div class="cangiua group-button-search">
+          <button nz-button class="search__button--search" (click)="searchData()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
+            <i nz-icon nzType="close"></i>
+            Xóa điều kiện
+          </button>
+        </div>
+      </nz-card>
+      <div class="tab__container">
+        <nz-card nzTitle="Danh sách QĐ phê duyệt KH LCNT" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+          <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th width="60px">STT</th>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <th>Số quyết định</th>
+                <th>Ngày QĐ</th>
+                <th>Về việc</th>
+                <th>Số QĐ giao cho</th>
+                <th>Loại hàng DTQG</th>
+                <th>Tên Loại hàng DTQG</th>
+                <th>Tiêu chuẩn chất lượng</th>
+                <th>Nguồn vốn</th>
+                <th>Trạng thái</th>
+                <th> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <td>{{ data.soQd }}</td>
+                <td>{{ data.ngayQdStr }}</td>
+                <td>{{ data.veViec }}</td>
+                <td>{{ data.soQd }}</td>
+                <td>{{ data.loaiVthh }}</td>
+                <td>{{ data.loaiVthh }}</td>
+                <td>{{ data.loaiVthh }}</td>
+                <td>{{ data.nguonVon }}</td>
+                <td>{{ data.trangThai }}</td>
+                <td class="text-center">
+                  <a (click)="redirectChiTiet(data.id)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+              </div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                  (nzPageSizeChange)="changePageSize($event)">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-card>
+        <ng-template #tableCard1>
+          <button type="button" class="btn btn-main" (click)="redirectChiTiet(0)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub" (click)="exportData()">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

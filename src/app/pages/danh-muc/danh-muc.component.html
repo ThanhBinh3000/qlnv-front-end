@@ -1,0 +1,19 @@
+<div class="khung">
+  <nz-affix class="fix collapse" id="collapsnav">
+    <div class="navbar-mobile">
+      <app-main-router></app-main-router>
+    </div>
+    <ul class="nav nav-tabs" #myTab id="myTab" role="tablist">
+      <li class="nav-item next" (click)="startSlide()">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </li>
+      <li class="nav-item menu-item" *ngFor="let route of routes">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="route.url">
+          <span class="icon" [ngClass]="route.icon"></span>
+          <span class="text"> {{route.title}} </span>
+        </a>
+      </li>
+    </ul>
+  </nz-affix>
+</div>
+<router-outlet></router-outlet>

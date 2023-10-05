@@ -1,0 +1,48 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('khnk')"
+      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT')">
+      Kế hoạch nhập khác
+    </li>
+    <li nz-menu-item (click)="selectTab('thkhnk')"
+      *ngIf="!userService.isChiCuc()  && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT')">
+      Tổng hợp kế hoạch nhập khác
+    </li>
+    <li nz-menu-item (click)="selectTab('qdpdkhnk')"
+      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT')">
+      Quyết định nhập hàng
+    </li>
+    <li nz-menu-item (click)="selectTab('qdgnvnh')">
+      Quyết định giao nhiệm vụ nhập hàng
+    </li>
+    <li nz-menu-item (click)="selectTab('ktcl')">
+      Kiểm tra chất lượng
+    </li>
+    <li nz-menu-item (click)="selectTab('nhapkho')">
+      Nhập kho
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'khnk'">
+      <app-ke-hoach-nhap-khac></app-ke-hoach-nhap-khac>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'thkhnk'">
+      <app-tong-hop-khnk></app-tong-hop-khnk>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'qdpdkhnk'">
+      <app-quyet-dinh-pd-khnk></app-quyet-dinh-pd-khnk>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'qdgnvnh'">
+      <app-quyet-dinh-giao-nv-nhap-hang></app-quyet-dinh-giao-nv-nhap-hang>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'ktcl'">
+      <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'nhapkho'">
+      <app-nhap-kho></app-nhap-kho>
+    </ng-container>
+  </div>
+</div>

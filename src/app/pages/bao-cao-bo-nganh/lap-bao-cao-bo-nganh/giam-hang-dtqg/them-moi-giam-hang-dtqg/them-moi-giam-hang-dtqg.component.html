@@ -1,0 +1,280 @@
+<nz-card class="mg-t-16 flex-card p-lr16">
+  <div class="header header-green-background mg-t-16">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+        {{ formData.value.tenTrangThai }}</span>
+        <span>Thông tin chung</span>
+      </div>
+    </div>
+    <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+      <div class="btn-group">
+        <button type="button" class="btn btn-sub" (click)="quayLai()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <ng-container>
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHGHDTQG_DUYET')" type="button"
+            class="btn btn-sub xanh-nhat" (click)="save(true)">
+            <i class="icon htvbdh_checkfile2"></i>
+            <span>Ban hành</span>
+          </button>
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHGHDTQG_LAP')"
+                  type="button" class="btn btn-main" (click)="save()">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+        </ng-container>
+      </div>
+    </nz-affix>
+  </div>
+  <form nzLayout="vertical" nz-form [formGroup]="formData">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="4">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Thông tư số </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input readonly formControlName="thongTuSo" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="4">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Biểu số </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input readonly formControlName="tenBieuSo" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Đơn vị gửi báo cáo </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input readonly formControlName="dviGui" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Đơn vị nhận báo cáo </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input readonly formControlName="dviNhan" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="4">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Thời gian tạo </nz-form-label>
+          <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+            <nz-date-picker nzDisabled formControlName="tgianTao" nzFormat="dd/MM/yyyy">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+  <nz-card class="mg-t-16 flex-card p-lr16">
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span></span>
+          <span>Danh sách giảm hàng dự trữ quốc gia</span>
+        </div>
+      </div>
+    </div>
+    <nz-card class="mg-t-16 flex-card p-lr16 table-card">
+      <nz-table nzBordered class="nowrap" [nzData]="listDataDetail" [nzFrontPagination]="false"
+        [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th rowspan="3" style="width: 2%;">STT</th>
+            <th rowspan="3">Tên hàng, quy cách</th>
+            <th rowspan="3">ĐVT</th>
+            <th rowspan="3">Thời gian sản xuất</th>
+            <th rowspan="3">Thời gian nhập kho</th>
+            <th colspan="4">Năm báo cáo</th>
+            <th colspan="2">Năm kế hoạch</th>
+            <th rowspan="3" style="
+            padding: 60px 150px 60px 150px;
+        ">Ghi chú</th>
+            <th rowspan="3">Hành động</th>
+          </tr>
+          <tr>
+            <th colspan="2" style="
+            padding: 20px 70px 20px 70px;
+        ">Kế hoạch được duyệt</th>
+            <th colspan="2" style="
+            padding: 20px 70px 20px 70px;
+        ">Ước thực hiện</th>
+            <th rowspan="2" style="
+            padding: 40px 40px 40px 40px;
+        ">Số lượng</th>
+            <th rowspan="2" style="
+            padding: 40px 40px 40px 40px;
+        ">Dự toán</th>
+          </tr>
+          <tr>
+            <th style="
+            text-align: center;
+        ">Số lượng</th>
+            <th style="
+            text-align: center;
+        ">Thành tiền</th>
+            <th style="
+            text-align: center;
+        ">Số lượng</th>
+            <th style="
+            text-align: center;
+        ">Thành tiền</th>
+          </tr>
+          <tr>
+            <th class="colNumber">1</th>
+            <th class="colNumber">2</th>
+            <th class="colNumber">3</th>
+            <th class="colNumber">4</th>
+            <th class="colNumber">5</th>
+            <th class="colNumber">6</th>
+            <th class="colNumber">7</th>
+            <th class="colNumber">8</th>
+            <th class="colNumber">9</th>
+            <th class="colNumber">10</th>
+            <th class="colNumber">11</th>
+            <th class="colNumber">12</th>
+            <th class="colNumber"></th>
+          </tr>
+          <tr>
+            <th></th>
+            <th>
+              <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow.cloaiVthh"
+                (ngModelChange)="changeCloaiVthh($event)">
+                <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                </nz-option>
+              </nz-select>
+            </th>
+            <th>{{itemRow.dvt}}</th>
+            <th>
+              <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" [(ngModel)]="itemRow.thoiGianSx">
+              </nz-date-picker>
+            </th>
+            <th>
+              <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" [(ngModel)]="itemRow.thoiGianNk">
+              </nz-date-picker>
+            </th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.keHoachSl" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.keHoachTt" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.uocThienSl" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.uocThienTt" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.namKhSl" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.namKhDt" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.ghiChu" /></th>
+            <th>
+              <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
+                <i class="fa fa-plus"></i>
+              </a>
+              <a *ngIf="!isView" (click)="clearItemRow()">
+                <i class="icon  htvbdh_nhap-lai1"></i>
+              </a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of listDataDetail, let i = index">
+            <ng-container *ngIf="!data.edit; else editTemplate">
+              <td class="text-center">{{i+1}}</td>
+              <td>{{ data.tenHang }}</td>
+              <td>{{ data.dvt }}</td>
+              <td class="text-right">{{ data.thoiGianSx | date: 'dd/MM/YYYY' }}</td>
+              <td class="text-right">{{ data.thoiGianNk | date: 'dd/MM/YYYY' }}</td>
+              <td class="text-right">{{ data.keHoachSl | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.keHoachTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.uocThienSl | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.uocThienTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.namKhSl | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.namKhDt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.ghiChu | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-center">
+                <a *ngIf="!isView" (click)="startEdit(i)">
+                  <i class=" fa fa-pencil"></i>
+                </a>
+                <a *ngIf="!isView" (click)="deleteRow(i)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </ng-container>
+            <ng-template #editTemplate>
+              <td class="text-center">{{i+1}}</td>
+              <th>
+                <nz-select [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.cloaiVthh"
+                  (ngModelChange)="changeCloaiVthh($event)">
+                  <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                  </nz-option>
+                </nz-select>
+              </th>
+              <th>{{itemRowUpdate.dvt}}</th>
+              <th>
+                <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" [(ngModel)]="itemRowUpdate.thoiGianSx">
+                </nz-date-picker>
+              </th>
+              <th>
+                <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" [(ngModel)]="itemRowUpdate.thoiGianNk">
+                </nz-date-picker>
+              </th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.keHoachSl" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.keHoachTt" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.uocThienSl" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.uocThienTt" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.namKhSl" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.namKhDt" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.ghiChu" /></th>
+              <td class="text-center">
+                <a (click)="saveEdit(itemRowUpdate,i)" class="save">
+                  <i class="icon htvbdh_tcdt_save"></i>
+                </a>
+                <a (click)="cancelEdit(i)">
+                  <i class="fa fa-ban do"></i>
+                </a>
+              </td>
+            </ng-template>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td class=" text-blue">Cộng</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslKho('keHoachSl', null,
+              'tong') |
+              number:
+              '1.0-3'}}</td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslKho('uocThienSl', null,
+              'tong') |
+              number: '1.0-3'}}</td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslKho('namKhSl', null,
+              'tong') |
+              number: '1.0-3'}}
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </nz-table>
+    </nz-card>
+  </nz-card>
+</nz-card>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>

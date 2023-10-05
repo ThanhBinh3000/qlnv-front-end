@@ -1,0 +1,121 @@
+::ng-deep {
+  .main-menu-top {
+    font-size: 15px;
+  }
+
+  .ant-menu-dark.ant-menu-horizontal,
+  .navbar-expand-lg .navbar-collapse app-main-router {
+    flex: 0 0 100%;
+    max-width: calc(100% - 16px);
+    display: flex;
+  }
+
+  .ant-menu-dark.ant-menu-horizontal {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-right: 0px;
+    margin-left: 16px;
+  }
+
+  .navbar-expand-lg .navbar-collapse {
+    height: 27px;
+    overflow: hidden;
+    align-items: flex-start;
+    max-width: calc(100vw - 290px);
+  }
+
+  body .ant-menu-dark.ant-menu-horizontal>.ant-menu-item.prev,
+  body .ant-menu-dark.ant-menu-horizontal>.ant-menu-item.next {
+    display: flex;
+    position: absolute;
+    background: #363b66;
+    top: 0;
+    bottom: 0;
+    width: auto;
+    z-index: 22;
+    // padding: 10px 3px 3px 3px;
+    padding: 18px 12px;
+    cursor: pointer;
+    align-items: center;
+  }
+
+  body .ant-menu-dark.ant-menu-horizontal>.ant-menu-item:hover {
+    background: #4e5484 !important;
+  }
+
+  body .ant-menu-dark.ant-menu-horizontal>.ant-menu-item.prev {
+    right: 0;
+  }
+
+  body .ant-menu-dark.ant-menu-horizontal>.ant-menu-item.next {
+    left: 8px;
+    background: #3d4374 !important;
+
+    &:hover {
+      background: #4e5484 !important;
+    }
+  }
+
+  .ant-menu.ant-menu-dark.myTab2-an {
+    padding-left: 0;
+  }
+
+  .ant-menu.ant-menu-dark.myTab2-an .next,
+  .ant-menu.ant-menu-dark.myTab2-an .prev {
+    display: none !important;
+  }
+
+  #myTab2 .fa-chevron-left:before {
+    content: "\f104";
+    font-size: 18px;
+  }
+
+  #myTab2 .fa-chevron-right:before {
+    content: "\f105";
+    font-size: 18px;
+  }
+
+  #myTab2.prev-an .prev {
+    display: none !important;
+  }
+
+  #myTab2.next-an .next {
+    display: none !important;
+  }
+
+
+  .ant-menu-dark.ant-menu-horizontal>.ant-menu-item a {
+    align-items: center;
+    padding-top: 8px !important;
+    // display: inline-block;
+    line-height: 1;
+    padding-bottom: 8px !important;
+    display: inline-flex;
+  }
+
+  .navbar-expand-lg .navbar-collapse,
+  .header-style,
+  .ant-menu-dark.ant-menu-horizontal>.ant-menu-item a {
+    height: 37px !important;
+  }
+
+  .tenvachucvu {
+    margin-top: 0;
+
+    p {
+      margin-bottom: 0;
+      font-size: 11px;
+      font-weight: 300;
+      color: rgb(255 255 255 / 50%);
+    }
+
+    span {
+      padding-left: 0;
+      margin-left: 0;
+      font-size: 14px;
+      padding-top: 0 !important;
+      line-height: 1;
+      font-weight: 400;
+    }
+  }
+}

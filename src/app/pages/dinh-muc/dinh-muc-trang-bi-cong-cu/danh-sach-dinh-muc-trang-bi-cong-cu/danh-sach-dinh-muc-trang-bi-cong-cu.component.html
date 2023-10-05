@@ -1,0 +1,153 @@
+<div class="bg-trang">
+  <h3 class="text-uppercase">Quản lý định mức TRANG BỊ CÔNG CỤ, DỤNG CỤ</h3>
+  <nz-card class="mt16 flex-card p-lr16">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="search-hang-trong-kho" *ngIf="formData">
+      <div class="search__body" nz-row [nzGutter]="[20]">
+
+        <div nz-col nzSpan="3">
+          <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="idLoaiHH" id="loai-hang-hoa" (ngModelChange)="onChangeLoaiHH($event)">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsLoaiHangHoa">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+
+        <div nz-col nzSpan="3">
+          <nz-form-label nzFor="chung-loai-hang-ho">Chủng loại hàng hoá</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="idChungLoaiHH" id="chung-loai-hang-hoa">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+
+        <div nz-col nzSpan="6">
+          <nz-form-label nzFor="loai-hang-hoa">Loại định mức</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="idDiemKho" id="diem-kho">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+
+        <div nz-col nzSpan="6">
+          <nz-form-label nzFor="loai-hang-hoa">Loại bảo quản</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="idDiemKho" id="diem-kho">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+
+        <div nz-col nzSpan="3">
+          <nz-form-label nzFor="diem-kho">Trạng thái</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="idDiemKho" id="diem-kho">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+      </div>
+    </form>
+
+    <div class="cangiua group-button-search">
+      <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <i class="icon  htvbdh_nhap-lai1"></i>
+        Xóa điều kiện
+      </button>
+      <button nz-button class="search__button--search" (click)="search()">
+        <i nz-icon nzType="search"></i>
+        Tìm kiếm
+      </button>
+    </div>
+    <div class="cangiua" *ngIf="errorMessage">
+      <span class="error">{{errorMessage}}</span>
+    </div>
+  </nz-card>
+  <div class="group-button">
+    <h3 class="text-uppercase">Quản lý định mức</h3>
+    <div class="buttons">
+      <button type="button" class="btn btn-do" (click)="deleteSelect()">
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+        <span>Xóa</span>
+      </button>
+      <button type="button" class="btn btn-sub" (click)="exportData()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+      <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)">
+        <i class="icon htvbdh_dau-cong"></i>
+        <span>Thêm</span>
+      </button>
+    </div>
+  </div>
+  <nz-card class="mt-16 flex-card data-table">
+    <nz-table #expandTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th class="text-center">STT</th>
+          <th>Loại hàng hóa</th>
+          <th>Chủng loại hàng hóa</th>
+          <th>Loại bảo quản</th>
+          <th>Loại định mức</th>
+          <th>Áp dụng tại Cục</th>
+          <th>Đơn vị tính</th>
+          <th>Công cụ dụng cụ</th>
+          <th>Chi tiết CCDC</th>
+          <th>Số lượng ĐM</th>
+          <th>Đơn vị tính</th>
+          <th>Đơn giá</th>
+          <th>Chi phí (đồng)</th>
+          <th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of expandTable.data, let i = index">
+          <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
+            <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+              <td class="overflow-hidden" [nzIndentSize]="item.level! * 20"
+                [nzShowExpand]="!!item.child && item.child.length !== 0 || !item?.child" [(nzExpand)]="item.expand"
+                (nzExpandChange)="treeTableService.collapse(mapOfExpandedData[data.id], item, $event, 'id')">
+                {{ item.tenDvi }}
+              </td>
+              <td>{{ item.loaiHH }}</td>
+              <td>{{ item.chungLoaiHH}}</td>
+              <td>{{ item.tonKhoDauKy }}</td>
+              <td>{{ item.nhapTrongKy }}</td>
+              <td>{{ item.xuatTrongKy}}</td>
+              <td>{{ item.tonKhoCuoiKy }}</td>
+              <td>{{ item.donViTinh }}</td>
+              <td>{{ item.donViTinh }}</td>
+              <td>{{ item.donViTinh }}</td>
+              <td>{{ item.donViTinh }}</td>
+              <td>{{ item.donViTinh }}</td>
+              <td>{{ item.donViTinh }}</td>
+              <td>{{ item.donViTinh }}</td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </nz-table>
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between">
+        <div class="trai">
+
+        </div>
+        <div class="canphai">
+          <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+            [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+            (nzPageSizeChange)="changePageSize($event)">
+            <ng-template #rangeTemplate let-range="range" let-total>
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+            </ng-template>
+          </nz-pagination>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+</div>

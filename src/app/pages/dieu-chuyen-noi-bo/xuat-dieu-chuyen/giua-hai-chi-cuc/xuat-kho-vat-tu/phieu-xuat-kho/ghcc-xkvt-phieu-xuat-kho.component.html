@@ -1,0 +1,30 @@
+<!-- <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+      Phiếu xuất kho
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+      Bảng kê cân hàng
+    </li>
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+      Biên bản tịnh kho
+    </li>
+    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)">
+      Biên bản hao dôi
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+    </ng-container>
+  </div>
+</div> -->
+<app-xuat-dcnb-phieu-xuat-kho loaiDc="CHI_CUC" [isVatTu]="true" [thayDoiThuKho]="true"
+  type="00"></app-xuat-dcnb-phieu-xuat-kho>

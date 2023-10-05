@@ -1,0 +1,127 @@
+<ng-template
+  cdkConnectedOverlay
+  nzConnectedOverlay
+  [cdkConnectedOverlayHasBackdrop]="nzBackdrop"
+  [cdkConnectedOverlayOrigin]="cdkOverlayOrigin"
+  [cdkConnectedOverlayOpen]="nzOpen"
+  [cdkConnectedOverlayTransformOriginOn]="'.ant-select-tree-dropdown'"
+  [cdkConnectedOverlayMinWidth]="
+    $any(nzDropdownMatchSelectWidth ? null : triggerWidth)
+  "
+  [cdkConnectedOverlayWidth]="
+    $any(nzDropdownMatchSelectWidth ? triggerWidth : null)
+  "
+  (overlayOutsideClick)="onClickOutside($event)"
+  (detach)="closeDropDown()"
+  (positionChange)="onPositionChange($event)"
+>
+  <div
+    [@slideMotion]="'enter'"
+    [ngClass]="dropdownClassName"
+    [@.disabled]="noAnimation?.nzNoAnimation"
+    [nzNoAnimation]="noAnimation?.nzNoAnimation"
+    [class.ant-select-dropdown-placement-bottomLeft]="
+      dropDownPosition === 'bottom'
+    "
+    [class.ant-select-dropdown-placement-topLeft]="dropDownPosition === 'top'"
+    [class.ant-tree-select-dropdown-rtl]="dir === 'rtl'"
+    [dir]="dir"
+    [ngStyle]="nzDropdownStyle"
+  >
+    <nz-tree
+      #treeRef
+      [hidden]="isNotFound"
+      nzNoAnimation
+      nzSelectMode
+      nzBlockNode
+      [nzData]="nzNodes"
+      [nzMultiple]="nzMultiple"
+      [nzSearchValue]="inputValue"
+      [nzHideUnMatched]="nzHideUnMatched"
+      [nzShowIcon]="nzShowIcon"
+      [nzCheckable]="nzCheckable"
+      [nzAsyncData]="nzAsyncData"
+      [nzShowExpand]="nzShowExpand"
+      [nzShowLine]="nzShowLine"
+      [nzExpandedIcon]="nzExpandedIcon"
+      [nzExpandAll]="nzDefaultExpandAll"
+      [nzExpandedKeys]="expandedKeys"
+      [nzCheckedKeys]="nzCheckable ? value : []"
+      [nzSelectedKeys]="!nzCheckable ? value : []"
+      [nzTreeTemplate]="treeTemplate"
+      [nzCheckStrictly]="nzCheckStrictly"
+      [nzVirtualItemSize]="nzVirtualItemSize"
+      [nzVirtualMaxBufferPx]="nzVirtualMaxBufferPx"
+      [nzVirtualMinBufferPx]="nzVirtualMinBufferPx"
+      [nzVirtualHeight]="nzVirtualHeight"
+      (nzExpandChange)="onExpandedKeysChange($event)"
+      (nzClick)="nzTreeClick.emit($event)"
+      (nzCheckedKeysChange)="updateSelectedNodes()"
+      (nzSelectedKeysChange)="updateSelectedNodes()"
+      (nzCheckBoxChange)="nzTreeCheckBoxChange.emit($event)"
+    ></nz-tree>
+    <span
+      *ngIf="nzNodes.length === 0 || isNotFound"
+      class="ant-select-not-found"
+    >
+      <nz-embed-empty
+        [nzComponentName]="'tree-select'"
+        [specificContent]="nzNotFoundContent"
+      ></nz-embed-empty>
+    </span>
+  </div>
+</ng-template>
+<div cdkOverlayOrigin class="ant-select-selector">
+  <ng-container *ngIf="isMultiple">
+    <nz-select-item
+      *ngFor="
+        let node of selectedNodes | slice: 0:nzMaxTagCount;
+        trackBy: trackValue
+      "
+      [deletable]="true"
+      [disabled]="node.isDisabled || nzDisabled"
+      [label]="nzDisplayWith(node)"
+      (delete)="removeSelected(node, true)"
+    ></nz-select-item>
+    <nz-select-item
+      *ngIf="selectedNodes.length > nzMaxTagCount"
+      [contentTemplateOutlet]="nzMaxTagPlaceholder"
+      [contentTemplateOutletContext]="selectedNodes | slice: nzMaxTagCount"
+      [deletable]="false"
+      [disabled]="false"
+      [label]="'+ ' + (selectedNodes.length - nzMaxTagCount) + ' ...'"
+    ></nz-select-item>
+  </ng-container>
+  <nz-select-search
+    [nzId]="nzId"
+    [showInput]="nzShowSearch"
+    (keydown)="onKeyDownInput($event)"
+    (isComposingChange)="isComposing = $event"
+    (valueChange)="setInputValue($event)"
+    [value]="inputValue"
+    [mirrorSync]="isMultiple"
+    [disabled]="nzDisabled"
+    [focusTrigger]="nzOpen"
+  ></nz-select-search>
+  <nz-select-placeholder
+    *ngIf="nzPlaceHolder && selectedNodes.length === 0"
+    [placeholder]="nzPlaceHolder"
+    [style.display]="placeHolderDisplay"
+  ></nz-select-placeholder>
+  <nz-select-item
+    *ngIf="
+      !isMultiple &&
+      selectedNodes.length === 1 &&
+      !isComposing &&
+      inputValue === ''
+    "
+    [deletable]="false"
+    [disabled]="false"
+    [label]="nzDisplayWith(selectedNodes[0])"
+  ></nz-select-item>
+  <nz-select-arrow *ngIf="!isMultiple"></nz-select-arrow>
+  <nz-select-clear
+    *ngIf="nzAllowClear && !nzDisabled && selectedNodes.length"
+    (clear)="onClearSelection()"
+  ></nz-select-clear>
+</div>

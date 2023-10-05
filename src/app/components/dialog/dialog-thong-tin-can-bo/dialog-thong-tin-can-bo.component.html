@@ -1,0 +1,166 @@
+<form nz-form nzLayout="vertical" [formGroup]="formData">
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="24" style="margin-top: 12px">
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-radio-group nzSize="small" class="rdo-input" [nzDisabled]="dataEdit" (ngModelChange)="changeUserType($event)"
+                          formControlName="userType">
+            <label nz-radio nzValue="DT">TCDT</label>
+            <label nz-radio nzValue="BN">Bộ/Ngành</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tên cán bộ</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input formControlName="fullName" [readOnly]="isView">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Email</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input formControlName="email" [readOnly]="isView">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tài khoản</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input formControlName="username" [readOnly]="isView">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8" *ngIf="!formData.value.id">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Mật khẩu</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input type="password" formControlName="password" [readOnly]="isView">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Chức vụ</nz-form-label>
+        <!--          <nz-input-group>-->
+        <!--            <input nz-input formControlName="position" [readOnly]="isView">-->
+        <!--          </nz-input-group>-->
+        <nz-select formControlName="position" nzAllowClear>
+          <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of optionsChucVu">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> SĐT di động</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input formControlName="phoneNo" [readOnly]="isView">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Trạng thái</nz-form-label>
+        <nz-select formControlName="status" nzAllowClear>
+          <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsTrangThai">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Loại người sử dụng</nz-form-label>
+        <nz-select formControlName="sysType" nzAllowClear>
+          <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of sysTypeList">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị quản lý</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group [nzSuffix]="suffixIcon">
+            <input nz-input formControlName="dvql" (input)="onInput($event)" [nzAutocomplete]="auto"
+                   (ngModelChange)="changeDvql()"/>
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24" *ngIf="formData.get('userType').value == 'DT'">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Phòng ban</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group [nzSuffix]="suffixIcon">
+            <input nz-input formControlName="department" (input)="onInputPhongBan($event)"
+                   [nzAutocomplete]="autoPhongBan"/>
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #autoPhongBan>
+          <nz-auto-option *ngFor="let option of suggestPhongBan" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
+        <textarea rows="3" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>
+      </nz-form-item>
+      <ng-template #error let-control>
+        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+        <ng-container *ngIf="control.hasError('email')">{{globals.prop.EMAIL_INVALID}}</ng-container>
+        <ng-container *ngIf="control.hasError('minlength')">Vui lòng nhập đủ {{ control.errors.minlength.requiredLength
+          }} ký
+          tự
+        </ng-container>
+        <ng-container *ngIf="control.hasError('maxlength')">Không được vượt quá {{
+          control.errors.maxlength.requiredLength }}
+          ký tự
+        </ng-container>
+      </ng-template>
+    </div>
+  </div>
+
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i aria-hidden="true" class="fa fa-close"></i>
+        Hủy
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save() ">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

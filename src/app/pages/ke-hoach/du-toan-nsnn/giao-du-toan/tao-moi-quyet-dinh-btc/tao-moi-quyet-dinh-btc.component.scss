@@ -1,0 +1,27 @@
+.contentTemplate_chonpa {
+    display: flex;
+    flex-direction: column;
+}
+
+.contentTemplate_chonpa:focus {
+    color: #fff;
+}
+
+.contentTemplate_chonpa__con {
+    color: #30475f;
+}
+
+.contentTemplate_chonpa__con:hover {
+    background-color: rgb(130, 180, 238);
+    color: #000;
+}
+
+.money-input {
+    border: 1px solid #bbb8b8;
+    height: inherit;
+    width: 100%;
+}
+
+.money-input:focus-visible {
+    outline: none !important;
+}

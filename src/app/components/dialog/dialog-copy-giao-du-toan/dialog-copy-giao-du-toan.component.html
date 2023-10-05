@@ -1,0 +1,25 @@
+<div class="modal__content">
+  <div class="search__body" nz-row [nzGutter]="[18, 12]">
+    <div nz-col nzSpan="4">
+      <label class="search__label">Năm báo cáo</label>
+      <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="request.namBcao" [class]="request.namBcao && request.namBcao < 3000 && request.namBcao > 999 ? '' : 'input-error-validate' ">
+      </nz-input-number>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i class="icon htvbdh_tcdt_save"></i>
+        Copy Báo Cáo
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</div>

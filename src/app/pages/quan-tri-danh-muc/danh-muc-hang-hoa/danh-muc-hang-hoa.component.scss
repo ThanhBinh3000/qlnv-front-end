@@ -1,0 +1,45 @@
+.action-top {
+  padding-right: 50px;
+}
+.chi-tieu__body {
+  .flex-card.ant-card {
+    border: 1px solid #ececec !important;
+    background: transparent;
+    box-shadow: unset;
+    margin-bottom: 0px !important;
+    margin-top: 11px !important;
+    border-radius: 0px;
+  }
+}
+
+.card-tree {
+  padding: 0 !important;
+  padding-top: px !important;
+
+  .item-url-menu {
+    width: 100%;
+    padding-top: 24px;
+
+    .item-url-click-left {
+      border-top: 1px solid #4e5484;
+      background: #edffff;
+      color: #0064b1 !important;
+      border-bottom-left-radius: 0px;
+    }
+
+    .item-url-click-center {
+      border-top: 1px solid #4e5484;
+      border-right: 1px solid #4e5484;
+      border-left: 1px solid #4e5484;
+      background: #edffff;
+      color: #0064b1 !important;
+    }
+
+    .item-url-click-right {
+      border-top: 1px solid #4e5484;
+      background: #edffff;
+      color: #0064b1 !important;
+      border-bottom-right-radius: 0px;
+    }
+  }
+}

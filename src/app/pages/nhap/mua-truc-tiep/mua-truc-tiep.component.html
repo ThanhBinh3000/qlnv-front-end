@@ -1,0 +1,57 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+    <!-- (nzChange)="onChange($event)" -->
+    <ul nz-menu nzMode="horizontal" id="muatt">
+        <li nz-menu-item nzSelected (click)="selectTab('khlcmtt')" *ngIf="!userService.isChiCuc()">
+            Kế hoạch mua trực tiếp
+        </li>
+        <li nz-menu-item (click)="selectTab('tccmtt')" *ngIf="!userService.isChiCuc()">
+            Tổ chức triển khai KH mua trực tiếp
+        </li>
+      <li nz-menu-item (click)="selectTab('qdpdkqcg')" *ngIf="!userService.isChiCuc()">
+        Quyết định phê duyệt kết quả chào giá
+      </li>
+      <li *ngIf="userService.isChiCuc()" nz-menu-item (click)="selectTab('qdkhuqml')">
+        QĐ KH mua trực tiếp được Ủy quyền/Mua lẻ
+      </li>
+        <li nz-menu-item (click)="selectTab('hdbkpmh')">
+            Hợp đồng/Bảng kê,phiếu mua hàng
+        </li>
+        <li nz-menu-item (click)="selectTab('gnvnn')">
+            Quyết định giao nhiệm vụ nhập hàng
+        </li>
+        <li nz-menu-item (click)="selectTab('ktcl')">
+            Kiểm tra chất lượng
+        </li>
+        <li nz-menu-item (click)="selectTab('nk')">
+            Nhập kho
+        </li>
+    </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 'khlcmtt'">
+            <app-kehoach-luachon-muatructiep></app-kehoach-luachon-muatructiep>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'tccmtt'">
+            <app-tochuc-trienkhai-muatructiep></app-tochuc-trienkhai-muatructiep>
+        </ng-container>
+      <ng-container *ngIf="tabSelected == 'qdpdkqcg'">
+        <app-quyetdinh-pheduyet-kqcg></app-quyetdinh-pheduyet-kqcg>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 'qdkhuqml' && userService.isChiCuc()">
+        <app-qd-kh-uy-quyen-mua-le></app-qd-kh-uy-quyen-mua-le>
+      </ng-container>
+        <ng-container *ngIf="tabSelected == 'hdbkpmh'">
+            <app-hopdong-bangke-phieumuahang></app-hopdong-bangke-phieumuahang>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'gnvnn'">
+            <app-giao-nhap-hang-muatt></app-giao-nhap-hang-muatt>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'ktcl'">
+            <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'nk'">
+            <app-nhap-kho-mtt></app-nhap-kho-mtt>
+        </ng-container>
+    </div>
+</div>

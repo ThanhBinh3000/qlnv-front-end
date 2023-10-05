@@ -1,0 +1,10 @@
+::ng-deep .ant-modal-body .ant-row .ant-form-item-label.ant-col {
+    padding-top: 19px !important;
+}
+
+::ng-deep .ant-modal-body .ant-row .ant-form-item-label.ant-col label,
+.ant-col-24.ant-form-item-label>label,
+.ant-col-xl-24.ant-form-item-label>label,
+.ant-form-vertical .ant-form-item-label>label {
+    height: 40px !important;
+}

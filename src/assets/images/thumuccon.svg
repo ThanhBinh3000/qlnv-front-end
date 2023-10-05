@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="11" height="14" viewBox="0 0 11 14">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#9975c9"/>
+      <stop offset="1" stop-color="#1585af"/>
+    </linearGradient>
+    <clipPath id="clip-thumuccon">
+      <rect width="11" height="14"/>
+    </clipPath>
+  </defs>
+  <g id="thumuccon" clip-path="url(#clip-thumuccon)">
+    <g id="document" transform="translate(-61 0)">
+      <path id="Path_30261" data-name="Path 30261" d="M71.016,2.838,68.425.4A1.477,1.477,0,0,0,67.41,0H62.478A1.475,1.475,0,0,0,61,1.469V12.205a1.475,1.475,0,0,0,1.478,1.469H70a1.475,1.475,0,0,0,1.478-1.469v-8.3A1.471,1.471,0,0,0,71.016,2.838Zm-.783.367H68.227a.134.134,0,0,1-.134-.134V1.192ZM70,12.873H62.478a.67.67,0,0,1-.672-.668V1.469A.67.67,0,0,1,62.478.8h4.809v2.27a.939.939,0,0,0,.94.935h2.445v8.2A.67.67,0,0,1,70,12.873Z" transform="translate(0 0)" fill="url(#linear-gradient)"/>
+      <path id="Path_30262" data-name="Path 30262" d="M134.932,200h-6.49c-.244,0-.442.149-.442.332s.2.332.442.332h6.49c.244,0,.442-.149.442-.332S135.177,200,134.932,200Z" transform="translate(-65.515 -194.602)" fill="url(#linear-gradient)"/>
+      <path id="Path_30263" data-name="Path 30263" d="M134.932,280h-6.49c-.244,0-.442.149-.442.332s.2.333.442.333h6.49c.244,0,.442-.149.442-.333S135.177,280,134.932,280Z" transform="translate(-65.515 -272.443)" fill="url(#linear-gradient)"/>
+      <path id="Path_30264" data-name="Path 30264" d="M129.944,360h-1.612a.332.332,0,0,0,0,.665h1.612a.332.332,0,0,0,0-.665Z" transform="translate(-65.087 -350.283)" fill="url(#linear-gradient)"/>
+    </g>
+  </g>
+</svg>

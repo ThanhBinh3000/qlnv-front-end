@@ -1,0 +1,31 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <!--<li nz-menu-item nzSelected (click)="selectTab(0)">
+      Quyết định
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      Chỉ tiêu kế hoạch
+    </li>
+    <li nz-menu-item (click)="selectTab(2)">
+      Điều chỉnh chỉ tiêu KH
+    </li>-->
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV')" nz-menu-item nzSelected (click)="selectTab(0)">
+      NQ của UBTVQH
+    </li>
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_TTCP')" nz-menu-item (click)="selectTab(1)">
+      QĐ của TTCP
+    </li>
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC')" nz-menu-item (click)="selectTab(2)">
+      QĐ của BTC
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-ubtvqh-muabu></app-ubtvqh-muabu>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-ttcp-muabu></app-ttcp-muabu>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-btc-mua-bu></app-btc-mua-bu>
+</ng-container>

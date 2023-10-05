@@ -1,0 +1,121 @@
+<div>
+  <div>
+    <form nz-form nzLayout="vertical" [formGroup]="formData">
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Người tạo</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="createBy" [readonly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Ngày tạo</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker [nzDisabled]="isView" formControlName="dateCreated" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Phân loại</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="classify" [readonly]="isView" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24" class="mt10">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Tiêu đề</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="title" [readonly]="isView" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24" class="mt10">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Tên link</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="linkName" [readonly]="isView" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Link</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="link" [readonly]="isView" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24" class="mt10">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Nội dung
+            </nz-form-label>
+            <nz-form-control>
+              <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isView"
+                formControlName="content"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24" class="mt10">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Tài liệu đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="fileDinhKems" [disabled]="isView" [isViewDetail]="isView"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24" class="mt10">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+            </nz-form-label>
+            <nz-form-control>
+              <label nz-checkbox [nzDisabled]="isView" formControlName="status">Hoạt động</label>
+
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <button nz-button (click)="onCancel()" class="modal__button--cancel">
+          <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+          Hủy bỏ
+        </button>
+        <button nz-button (click)="handleOk(formData.value)" class="modal__button--save">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+  <ng-template #error let-control>
+    <app-template-error #error [control]="control"></app-template-error>
+  </ng-template>
+</div>

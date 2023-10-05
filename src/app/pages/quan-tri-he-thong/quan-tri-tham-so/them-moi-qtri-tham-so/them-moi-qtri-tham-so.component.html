@@ -1,0 +1,105 @@
+<div class="bg-trang">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="4">
+            <nz-form-label nzRequired>Mã tham số</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input class="search__input" placeholder="Nhập text" nz-input formControlName="ma"/>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="8">
+            <nz-form-label>Tên tham số</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input class="search__input" placeholder="Nhập text" nz-input formControlName="ten"/>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+            <nz-form-label nzRequired>Kiểu giá trị</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="loai" nzAllowClear (ngModelChange)="loadDanhSach($event)">
+                <nz-option *ngFor="let p of danhSachLoai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+            <nz-form-label >Danh sách</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="danhSach" [nzDisabled]="formData.value.loai != '03'" nzAllowClear (ngModelChange)="loadDanhSachCt($event)">
+                <nz-option *ngFor="let p of danhSachDmdc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4" *ngIf="formData.value.loai == '03'">
+            <nz-form-label nzRequired>Giá trị</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="giaTri" nzAllowClear>
+                <nz-option *ngFor="let p of danhSachDmDcCt" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4" *ngIf="formData.value.loai == '01'">
+            <nz-form-label nzRequired>Giá trị</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input class="search__input" placeholder="Nhập text" nz-input formControlName="giaTri"/>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4" *ngIf="formData.value.loai == '02'">
+            <nz-form-label nzRequired>Giá trị</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                               [nzSize]="'small'" formControlName="giaTri"></nz-input-number>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="24" class="mt-2">
+            <nz-form-label >Mô tả</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <textarea rows="3" class="search__input" formControlName="moTa" nz-input></textarea>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4" class="mt-2">
+            <nz-form-label nzRequired [nzNoColon]="true"> Áp dụng từ ngày </nz-form-label>
+            <nz-form-control>
+              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="dd-MM-yyyy" formControlName="tuNgay">
+              </nz-date-picker>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4" class="mt-2">
+            <nz-form-label nzRequired [nzNoColon]="true"> Áp dụng đến ngày </nz-form-label>
+            <nz-form-control>
+              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="dd-MM-yyyy" formControlName="denNgay">
+              </nz-date-picker>
+            </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4" class="mt-2">
+            <nz-form-label nzRequired>Trạng thái hoạt động</nz-form-label>
+            <nz-form-control>
+            <label nz-checkbox formControlName="trangThai" >
+              động</label>
+            </nz-form-control>
+        </div>
+      </div>
+    </form>
+</div>
+<ng-template #error let-control>
+  <app-template-error #error [control]="control"></app-template-error>
+</ng-template>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="onCancel()" class="modal__button--cancel ml-2">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+      <button nz-button (click)="handleOk()" class="modal__button--save ml-2">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,190 @@
+@use "sass:math";
+@import './shared/colors.scss';
+/*::ng-deep <<<< để apdungj css toàn cục*/
+$font-size10: 10px; //1rem;
+$font-size11: 11px; //1.1rem;
+$font-size12: 12px; //1.2rem;
+$font-size13: 13px; //1.3rem;
+$font-size14: 14px; //1.4rem;
+$font-size15: 15px; //1.5rem;
+$font-size16: 16px; //1.6rem;
+$font-size18: 18px; //1.8rem;
+$font-size20: 20px; //2rem;
+$font-size28: 28px; //3.2rem;
+$font-size42: 42px; //4.2rem;
+
+th,
+td {
+  line-height: 1.3;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: $font-size13;
+}
+
+textarea.ant-input,
+.ant-form-item-label>label,
+.ant-descriptions-extra,
+.ant-descriptions-item-content,
+.ant-descriptions-item-label,
+.ant-divider,
+.ant-tabs-tab,
+.ant-select-item,
+.ant-select-item-empty,
+.ant-col-24.ant-form-item-label>label,
+.ant-col-xl-24.ant-form-item-label>label,
+.ant-form-vertical .ant-form-item-label>label,
+.ant-select-single.ant-select-show-arrow .ant-select-selection-item,
+.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder,
+.ant-btn,
+[role='button'],
+a,
+area,
+button,
+input:not([type='range']),
+label,
+select,
+summary,
+textarea,
+.ant-menu {
+  font-size: $font-size13;
+}
+
+.btn {
+  font-size: $font-size13;
+}
+
+.ant-checkbox+span {
+  line-height: 1.2;
+}
+
+/* link ảnh.............................*/
+$img-path: '../../../../assets/images/';
+
+/*top menu.......................*/
+$bg-header: $maincolor;
+$bg-header-gradient: lighten($maincolor, 5%);
+$maincolorhover: darken($maincolor, 5%);
+$bgmenu-active: $maincolorhover;
+/*top menu.......................*/
+
+/*menu lv2.......................*/
+/*gộp 2 màu header */
+// $bg-header2: lighten($bg-header, 10%); //#ffe7e7;
+$bg-header2: #4e5484;
+/*gộp 2 màu header */
+
+$border-header2: lighten($bg-header2, 5%);
+/*menu lv2.......................*/
+
+/*menu lv2 mobole.......................*/
+$bg-header-mobile: $bg-header2;
+/*menu lv2 mobole.......................*/
+
+/*menu lv3.......................*/
+$bg-nhat: lighten($bg-header2, 60%); //#fff7f7;
+$bg-nhat2: darken($bg-nhat, 5%); //$bg-header2;
+$border-nhat2: darken($bg-nhat2, 10%);
+
+$color-menu: $bg-nhat; //#444;
+$color-menu2: #fff;
+$tab-menu: $bg-nhat;
+$tab-menu-border: darken($tab-menu, 10%);
+$maincolor-border: $maincolorhover;
+
+$borderinput: #c4c9cc;
+$borderconten: #f1f1f1;
+$bordercolortable: #f1f1f1;
+$bordercolortableth: darken($bordercolortable, 5%);
+
+$bordercolor: #e4e4e4;
+$border-btn: #e4e4e4;
+$border-bnt: #e1e1e1;
+$bg-bnt: $color-f2;
+
+$boder-mobile: $border-btn;
+
+$thongbao: $bg-header2;
+/*32px............................................*/
+/* $input-h:                       32px; */
+$input-h: 24px;
+$bnt-h: $input-h + 2;
+$inputLabel-h: (
+  $input-h - 4px
+);
+$label-padding: (
+  0 // $input-h / 6
+);
+$textarea-h: (
+  $input-h * 2
+); //(($input-h * 2) + $inputLabel-h);
+$btn-padding: (
+  math.div($input-h,2) - 5
+);
+$input-mb: $label-padding;
+$inputLabel-text: 500;
+$mb: math.div($input-h,2);
+
+$tab-h: 9px;
+
+/*32px............................................*/
+$maxTD-w: 200px;
+/* important.............................*/
+$i: unquote('!important');
+$shadow-menu-right: 0px 0px 11px rgb(0 0 0 / 40%);
+$navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
+
+/*extended..................................................*/
+%main-color-border {
+  border-color: $maincolor;
+}
+
+%main-color-bg {
+  background-color: $maincolor;
+}
+
+@mixin bg-header {
+  background: $bg-header $i;
+  background: -moz-linear-gradient(left,
+      $bg-header-gradient 0%,
+      $bg-header 100%) $i;
+  background: -webkit-gradient(left top,
+      right top,
+      color-stop(0%, $bg-header-gradient),
+      color-stop(100%, $bg-header)) $i;
+  background: -webkit-linear-gradient(left,
+      $bg-header-gradient 0%,
+      $bg-header 100%) $i;
+  background: -o-linear-gradient(left, $bg-header-gradient 0%, $bg-header 100%) $i;
+  background: -ms-linear-gradient(left, $bg-header-gradient 0%, $bg-header 100%) $i;
+  background: linear-gradient(to right, $bg-header-gradient 0%, $bg-header 100%) $i;
+  // box-shadow: -2px -1px 6px rgb(0 0 0 / 30%);
+}
+
+%bg-header {
+  @include bg-header;
+}
+
+%btn-create {
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+  line-height: $input-h; //($input-h - 4px);
+  height: $input-h $i; //($input-h - 4px) $i;
+  background: $bg-nhat2;
+  border: solid 1px $border-nhat2 $i;
+  border-radius: 0px;
+  outline: unset;
+  box-shadow: unset;
+}
+
+%textsm {
+  color: #fff !important;
+
+  span+span {
+    color: #fff !important;
+  }
+}
+
+/*extended..................................................*/

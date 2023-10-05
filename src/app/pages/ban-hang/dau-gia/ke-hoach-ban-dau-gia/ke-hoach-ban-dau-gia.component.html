@@ -1,0 +1,21 @@
+<nz-tabset nzType="card" class="mt-16 tab-level-1">
+  <nz-tab [nzTitle]="title_tat_ca">
+    <ng-template #title_tat_ca>
+      Tất cả
+      (<span class="number-title-tab">{{ count[0] }}</span>)
+    </ng-template>
+    <ng-template nz-tab>
+      <app-danh-sach-ke-hoach-ban-dau-gia [typeVthh]="null"></app-danh-sach-ke-hoach-ban-dau-gia>
+    </ng-template>
+  </nz-tab>
+  <nz-tab *ngFor="let tab of tabs, let i = index" [nzTitle]="title_thoc">
+    <ng-template #title_thoc>
+      {{tab.giaTri}}
+      (<span class="number-title-tab">{{count[i+1]}}</span>)
+    </ng-template>
+    <ng-template nz-tab>
+      <app-danh-sach-ke-hoach-ban-dau-gia typeVthh="{{tab.ma}}" (getCount)="getCount()">
+      </app-danh-sach-ke-hoach-ban-dau-gia>
+    </ng-template>
+  </nz-tab>
+</nz-tabset>

@@ -1,0 +1,349 @@
+<ng-container *ngIf="isDataAvailable">
+    <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+        <div class="btn-group">
+            <button type="button" class="btn btn-sub" (click)="back()">
+                <i class="fa fa-arrow-left"></i>
+                <span>Quay lại</span>
+            </button>
+            <button class="btn btn-main" (click)="action('save')" *ngIf="statusBtnSave">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Lưu</span>
+            </button>
+            <button class="btn btn-main" (click)="action('submit')" [hidden]="statusBtnApprove">
+                <i class="icon htvbdh_tcdt_guiduyet"></i>
+                <span>Trình duyệt</span>
+            </button>
+            <button class="btn btn-main" (click)="action('approveDVCT')" [hidden]="statusBtnGuiDVCT">
+                <i class="icon htvbdh_tcdt_guiduyet"></i>
+                <span>Gửi đơn vị cấp trên</span>
+            </button>
+            <button class="btn btn-main" (click)="action('nonpass')" [hidden]="statusBtnTBP">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
+            </button>
+            <button class="btn btn-main" (click)="action('pass')" [hidden]="statusBtnTBP">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Duyệt</span>
+            </button>
+            <button class="btn btn-main" (click)="action('nonapprove')" [hidden]="statusBtnLD">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Từ chối</span>
+            </button>
+            <ng-container *ngIf="statusDvi(); else viewDvi">
+                <button class="btn btn-main" (click)="action('approveDVCT')" [hidden]="statusBtnLD">
+                    <i class="icon htvbdh_tcdt_tuchoi"></i>
+                    <span>Phê duyệt</span>
+                </button>
+            </ng-container>
+            <ng-template #viewDvi>
+                <button class="btn btn-main" (click)="action('approve')" [hidden]="statusBtnLD">
+                    <i class="icon htvbdh_tcdt_tuchoi"></i>
+                    <span>Phê duyệt</span>
+                </button>
+            </ng-template>
+
+            <button class="btn btn-main" (click)="action('nonaccept')" [hidden]="statusBtnDVCT">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Từ chối</span>
+            </button>
+            <button class="btn btn-main" (click)="action('accept')" [hidden]="statusBtnDVCT">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Tiếp nhận</span>
+            </button>
+            <button type="button" class="btn btn-main" (click)="exportToExcel()">
+              <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+              <span>Xuất</span>
+            </button>
+        </div>
+    </nz-affix>
+    <div class="bg-trang">
+        <div class="mt16 flex-card p-lr16">
+            <div class="header mg-t-16">
+                <div class="header-text">
+                    <div class="title-chi-tieu">
+                        <span [ngClass]="Status.statusClass(trangThaiBanGhi)">{{getStatusName()}}</span>
+                        <span>Phương án điều chỉnh giao dự toán chi NSNN</span>
+                    </div>
+                </div>
+                <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                    <nz-table class="nowrap mt-16 table-chi-tiet">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <ng-container *ngIf="statusDeleteCv(); else view">
+                                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa quyết định công văn?"
+                                            style="color:black" (nzOnConfirm)="deleteQdCv()">Số QĐ/CV
+                                        </a>
+                                    </ng-container>
+                                    <ng-template #view>
+                                        Số QĐ/CV
+                                    </ng-template>
+                                </th>
+                                <th scope="col" nzWidth="175px">Loại phương án</th>
+                                <th scope="col" nzWidth="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định
+                                    BTC giao)</th>
+                                <th scope="col" nzWidth="175px">Mã phương án</th>
+                                <th scope="col" nzWidth="175px">Năm phương án</th>
+                                <th scope="col" nzWidth="175px">Ngày tạo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="tep_sqd" (click)="downloadFileCv()">
+                                        <span>{{soQd?.fileName}}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    Phương án giao điều chỉnh dự toán
+                                </td>
+                                <td>
+                                    <a (click)="xemCtietPaBTC()" style="color: #1890ff;">
+                                        {{maPaCha}}
+                                    </a>
+                                </td>
+                                <td>{{maPa}}</td>
+                                <td>{{namPa}}</td>
+                                <td>{{ngayTao}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </div>
+        </div>
+        <div class="mt16 flex-card p-lr16">
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Nội dung báo cáo"
+                [nzExtra]="extraTemplate">
+                <div id="tablePrint">
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }"
+                        style="margin-top: 10px; margin-bottom: 10px;">
+                        <div nz-col [nzSpan]="3">
+                            Đơn vị:
+                            <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                                <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                            </ng-container>
+                            <ng-template #editMoney>
+                                <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                    (ngModelChange)="editMoneyUnit=false">
+                                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+                                        [nzLabel]="item.tenDm">
+                                    </nz-option>
+                                </nz-select>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
+                        <thead>
+                            <tr>
+                                <th scope="col" rowspan="2" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" rowspan="2" nzWidth="350px" nzLeft>Nhóm</th>
+                                <th scope="col" rowspan="2">Số tiền giao từ cấp trên</th>
+                                <th scope="col" rowspan="2">Tổng số</th>
+                                <th scope="col" colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
+                                <th scope="col" rowspan="2" style="width: 60px" *ngIf="!status" nzRight></th>
+                            </tr>
+                            <tr>
+                                <th scope="col" *ngFor="let item of lstDvi">
+                                    {{(item.tenDvi)}}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of lstCtietBcao; let i = index">
+                                <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                                    <td nzLeft>
+                                        {{getChiMuc(data.stt)}}
+                                    </td>
+                                    <td nzLeft>
+                                        <div *ngFor="let item of noiDungs">
+                                            <div *ngIf="item.ma == data.maNdung">
+                                                <span>
+                                                    {{item.giaTri}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{Op.fmtVal(data.tongCong)}}</td>
+                                    <td>{{Op.fmtVal(data.tongCongSoTranChi)}}</td>
+                                    <td *ngFor="let item of lstDvi">
+                                        <div *ngFor="let e of data.lstCtietDvis;">
+                                            <div *ngIf="e.maDviNhan == item.maDvi">
+                                                {{Op.fmtVal(e.soTranChi)}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td nzRight *ngIf="!status">
+                                        <ng-container *ngIf="!getLowStatus(data.stt)">
+                                            <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <ng-template #editTemplate>
+                                    <td nzLeft>
+                                        {{getChiMuc(editCache[data.id].data.stt)}}
+                                    </td>
+                                    <td nzLeft>
+                                        <div *ngFor="let item of noiDungs;">
+                                            <div *ngIf="item.ma ==data.maNdung">
+                                                {{item.giaTri}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(editCache[data.id].data.tongCong)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(editCache[data.id].data.tongCongSoTranChi)}}
+                                    </td>
+                                    <td *ngFor="let item of lstDvi">
+                                        <div *ngFor="let e of editCache[data.id].data.lstCtietDvis">
+                                            <div *ngIf="e.maDviNhan == item.maDvi">
+                                                <input class="money-input" currencyMask [(ngModel)]="e.soTranChi"
+                                                    [class]="(e.soTranChi || e.soTranChi === 0) && e.soTranChi >= 0 ?'' : 'input-error-validate'"
+                                                    (ngModelChange)="changeModel(data.id)" [options]="amount" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td nzRight>
+                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                                            Hủy
+                                        </a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                            <ng-container *ngIf="lstCtietBcao.length > 0">
+                                <tr [hidden]="statusBtnGiao">
+                                    <td nzLeft></td>
+                                    <td nzLeft></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td *ngFor="let item of lstDvi">
+                                        <div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
+                                            <div *ngIf="e.maDviNhan == item.maDvi">
+                                                <ng-container *ngIf="e.trangThai == null">
+                                                    <a (click)="giaoSoTranChi(e.maDviNhan)">
+                                                        Giao
+                                                    </a>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td nzRight *ngIf="!status"></td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </nz-table>
+
+                    <ng-container *ngIf="lstDviTrucThuoc.length != 0">
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col class="gutter-row" [nzSpan]="12">
+                                Danh sách báo cáo từ các đơn vị trực thuộc
+                                <br />
+                            </div>
+                        </div>
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col class="gutter-row" [nzSpan]="24">
+                                <nz-table [nzData]="lstDviTrucThuoc" nzBordered class="table__body">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" nzWidth="50px">STT</th>
+                                            <th scope="col" nzWidth="200px">Đơn vị lập</th>
+                                            <th scope="col" nzWidth="150px">Mã báo cáo</th>
+                                            <th scope="col" nzWidth="150px">Năm báo cáo</th>
+                                            <th scope="col" nzWidth="150px">Ngày trình duyệt <br /> (Ngày đơn vị cấp
+                                                dưới gửi
+                                                báo cáo)</th>
+                                            <th scope="col" nzWidth="150px">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt
+                                                báo
+                                                cáo)
+                                            </th>
+                                            <th scope="col" nzWidth="150px">Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let data of lstDviTrucThuoc; let i = index">
+                                            <td>{{i+1}}</td>
+                                            <td>{{getUnitNameDviTT(data.maDvi)}}</td>
+                                            <td>
+                                                <a (click)="xemChiTiet(data.id)" style="color: #1890ff;">
+                                                    {{ data.maPa}}
+                                                </a>
+                                            </td>
+                                            <td>{{data.namPa}}</td>
+                                            <td>{{data.ngayTrinh}}</td>
+                                            <td>{{data.ngayDuyet}}</td>
+                                            <td>{{getStatusNameDviTT(data.trangThai)}}</td>
+                                        </tr>
+                                    </tbody>
+                                </nz-table>
+                            </div>
+                        </div>
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col nzSpan="24">
+                                <label class="search__label">Thuyết minh</label>
+                                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                        <div nz-col class="gutter-row" [nzSpan]="3">
+                            Danh sách văn bản đính kèm
+                            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                                *ngIf="!status">
+                                <button nz-button>
+                                    <i nz-icon nzType="upload"></i>
+                                    Chọn tệp
+                                </button>
+                            </nz-upload>
+                            <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                                [disabled]="fileList.length === 0" *ngIf="!status" style="margin-top: 16px">
+                                Thêm vào danh sách
+                            </button>
+                        </div>
+                    </div>
+
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                        <div nz-col class="gutter-row" [nzSpan]="12">
+                            <nz-table nzBordered class="table__body">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">STT</th>
+                                        <th scope="col">Tên file</th>
+                                        <th scope="col"></th>
+                                        <th scope="col" class="th" *ngIf="!status"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of lstFiles; let i = index">
+                                        <td>{{ i + 1 }} </td>
+                                        <td>{{ data.fileName }}</td>
+                                        <a (click)="downloadFile(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="!status" (click)="deleteFile(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </nz-card>
+            <ng-template #extraTemplate>
+                <div class="buttons">
+                    <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)"
+                        [hidden]="statusGiaoToanBo ">
+                        <span>Giao toàn bộ</span>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</ng-container>

@@ -1,0 +1,39 @@
+<div class="header-file">
+    <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="itemRow.daiDien" />
+    <div *ngIf="this.trangThaiBb == null|| this.trangThaiBb == STATUS.DU_THAO || this.trangThaiBb == STATUS.TU_CHOI_LDCC "
+        class="icon-plus" (click)="addDaiDien()">
+        <i class="icon htvbdh_dau-cong "></i>
+    </div>
+    <div *ngIf="this.trangThaiBb == null|| this.trangThaiBb == STATUS.DU_THAO || this.trangThaiBb == STATUS.TU_CHOI_LDCC "
+        class="icon-empty" (click)="clearDaiDien()">
+        <i class="icon htvbdh_nhap-lai1 "></i>
+    </div>
+</div>
+<div class="body-file" *ngFor="let item of dataTable;let i = index">
+    <ng-container *ngIf="!item.isEdit; else editTemplate">
+        <div class="content-data d-flex align-items-center">
+            <div class="nd-text" disabled="isView">{{item.daiDien}}</div>
+        </div>
+        <div *ngIf="this.trangThaiBb == null|| this.trangThaiBb == STATUS.DU_THAO || this.trangThaiBb == STATUS.TU_CHOI_LDCC "
+            class="icon-edit" (click)="editRow(i)">
+            <i class="fa fa-pencil "></i>
+        </div>
+        <div *ngIf="this.trangThaiBb == null|| this.trangThaiBb == STATUS.DU_THAO || this.trangThaiBb == STATUS.TU_CHOI_LDCC "
+            class="icon-xoa" (click)="deleteRow(i)">
+            <i class="fa fa-trash-o do "></i>
+        </div>
+    </ng-container>
+    <ng-template #editTemplate>
+        <div class="content-data d-flex align-items-center">
+            <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="item.daiDien" />
+        </div>
+        <div *ngIf="this.trangThaiBb == null|| this.trangThaiBb == STATUS.DU_THAO || this.trangThaiBb == STATUS.TU_CHOI_LDCC "
+            class="icon-edit" (click)="saveEdit(i)">
+            <i class="fa fa-save"></i>
+        </div>
+        <div *ngIf="this.trangThaiBb == null|| this.trangThaiBb == STATUS.DU_THAO || this.trangThaiBb == STATUS.TU_CHOI_LDCC "
+            class="icon-xoa" (click)="cancelEdit(i)">
+            <i class="fa fa-times do"></i>
+        </div>
+    </ng-template>
+</div>

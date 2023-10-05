@@ -1,0 +1,57 @@
+<div class="scroll-modal">
+  <nz-table [nzData]="dataTree" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th>{{data.tenDvi}}</th>
+        <th nzWidth="200px">Chọn thủ kho</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let nganKho of dataTree , let i = index">
+        <tr>
+          <td class="bold" nzShowExpand="true" [nzExpand]="nganKho.expandSet"
+            (nzExpandChange)="onExpandChange(nganKho, $event)">
+            {{nganKho.tenDvi}}
+          </td>
+          <td>
+            <nz-select [ngModel]="nganKho.idThuKho?.toString()" (ngModelChange)="onChangeThuKho(nganKho,$event)"
+              nzAllowClear>
+              <nz-option *ngFor="let item of dsUser" nzValue="{{item.id}}" nzLabel="{{item.fullName}}">
+              </nz-option>
+            </nz-select>
+          </td>
+        </tr>
+        <ng-container *ngIf="nganKho.expandSet">
+          <ng-container *ngFor="let loKho of nganKho.children , let i = index">
+            <tr>
+              <td class="pd-l-40">{{loKho.tenDvi}}</td> <!-- Lô kho-->
+              <td>
+                <nz-select [ngModel]="loKho.idThuKho?.toString()" (ngModelChange)="onChangeThuKho(loKho,$event)"
+                  nzAllowClear>
+                  <nz-option *ngFor="let item of dsUser" nzValue="{{item.id}}" nzLabel="{{item.fullName}}">
+                  </nz-option>
+                </nz-select>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</div>

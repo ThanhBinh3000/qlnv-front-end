@@ -1,0 +1,27 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected  (click)="selectTab(0)" *ngIf="userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT')" >
+            Thóc, Gạo, Muối
+        </li>
+        <li nz-menu-item  (click)="selectTab(1)" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT') " >
+            Vật tư, thiết bị
+        </li>
+        <!-- <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isTongCuc()">
+            Vật tư, thiết bị
+        </li> -->
+    </ul>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 0">
+            <app-main-phuong-an-gia [loaiVthh]="'LT'"></app-main-phuong-an-gia>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 1">
+            <app-main-phuong-an-gia [loaiVthh]="'VT'"></app-main-phuong-an-gia>
+        </ng-container>
+        <!-- <ng-container *ngIf="tabSelected == 2">
+            <app-vat-tu-thiet-bi></app-vat-tu-thiet-bi>
+        </ng-container> -->
+    </div>
+</div>

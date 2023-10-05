@@ -1,0 +1,44 @@
+<nz-affix [nzOffsetTop]='98' class='level2'>
+  <ul nz-menu nzMode='horizontal'>
+    <li [nzSelected]="tabSelected=='DXDC'" *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT')"
+        nz-menu-item nzSelected
+        (click)="selectTab('DXDC')">
+      Đề xuất điều chỉnh chỉ tiêu kế hoạch
+    </li>
+    <li [nzSelected]="tabSelected=='PADC'" *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT')"
+        nz-menu-item
+        (click)="selectTab('PADC')">
+      Phương án điều chỉnh chỉ tiêu kế hoạch
+    </li>
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC')" nz-menu-item
+        (click)="selectTab('QDDC')" [nzSelected]="tabSelected=='QDDC'">
+      Quyết định điều chỉnh chỉ tiêu kế hoạch
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 'DXDC'">
+  <app-de-xuat-dieu-chinh></app-de-xuat-dieu-chinh>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'PADC'">
+  <app-phuong-an-dieu-chinh-ctkh></app-phuong-an-dieu-chinh-ctkh>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'QDDC'">
+  <app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+</ng-container>
+
+
+<!--
+<nz-tabset nzType="card" class="tab-level-2" [nzSelectedIndex]="tabSelect">
+  <nz-tab [nzTitle]="'Đề xuất điều chỉnh chỉ tiêu KH'" *ngIf="!userService.isChiCuc()">
+    <ng-template nz-tab>
+      <app-de-xuat-dieu-chinh (showDieuChinhEvent)="selectTabDieuChinh($event)"></app-de-xuat-dieu-chinh>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Quyết định điều chỉnh chỉ tiêu KH'">
+    <ng-template nz-tab>
+      <app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc [isDetail]="isDetail" [selectedId]="selectedId"
+        [deXuatId]="deXuatId" [isView]="isView">
+      </app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+    </ng-template>
+  </nz-tab>
+</nz-tabset> -->

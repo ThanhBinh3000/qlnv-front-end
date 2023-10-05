@@ -1,0 +1,105 @@
+<ng-container *ngIf="!isDetail">
+  <div class="bg-trang">
+    <nz-card class="mt16 flex-card p-lr16">
+      <div nz-row [nzGutter]="20">
+        <div nz-col nzSpan="4">
+          <label class="search__label">Năm kế hoạch</label>
+          <input [(ngModel)]="searchFilter.soQuyetDinhNhap" nz-input nzSize="small" placeholder="Nhập số"
+            appNumberOnly />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số biên bản</label>
+          <input class="search__input" placeholder="Nhập Trạng thái" nz-input [(ngModel)]="searchFilter.soBienBan" />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số hợp đồng</label>
+          <input class="search__input" placeholder="Nhập Trạng thái" nz-input [(ngModel)]="searchFilter.soBienBan" />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày giao nhận</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayBienBan" nzFormat="dd/MM/yyyy"></nz-range-picker>
+        </div>
+      </div>
+      <div class="cangiua group-button-search">
+        <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <i class="icon  htvbdh_nhap-lai1"></i>
+          Xóa điều kiện
+        </button>
+        <button nz-button class="search__button--search" (click)="search()">
+          <i nz-icon nzType="search"></i>
+          Tìm kiếm
+        </button>
+      </div>
+    </nz-card>
+
+    <div class="group-button">
+      <h3>Danh sách biên bản giao nhận</h3>
+      <div class="buttons">
+        <button type="button" class="btn btn-sub" (click)="export()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
+      </div>
+    </div>
+
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #basicTable nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+        [nzData]="dataTable">
+        <thead>
+          <tr>
+            <th width="60px">STT</th>
+            <th>Số biên bản</th>
+            <th>Năm kế hoạch</th>
+            <th>Số hợp đồng</th>
+            <th>Ngày giao nhận</th>
+            <th>Bên giao</th>
+            <th>Bên nhận</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td><input nz-input nzSize="small" /></td>
+            <td>
+              <input nz-input nzSize="small" />
+            </td>
+            <td>
+              <input nz-input nzSize="small" />
+            </td>
+            <td>
+              <input nz-input nzSize="small" />
+            </td>
+            <td>
+              <input nz-input nzSize="small" />
+            </td>
+            <td><input nz-input nzSize="small" /></td>
+            <td><input nz-input nzSize="small" /></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>576</td>
+            <td>2022</td>
+            <td>576/QĐ-NHDTQG</td>
+            <td>00/00/2022</td>
+            <td>Công ty A</td>
+            <td>Chi cục DTNN ...</td>
+            <td>Đã ký</td>
+            <td>
+              <a (click)="redirectToChiTiet(true,0)">
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+</ng-container>
+
+<ng-container class="chi-tiet" *ngIf="isDetail">
+  <app-thong-tin-bien-ban-giao-nhan [id]="selectedId" (showListEvent)="showList()" [isView]="isView">
+  </app-thong-tin-bien-ban-giao-nhan>
+</ng-container>

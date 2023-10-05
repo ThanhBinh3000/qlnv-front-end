@@ -1,0 +1,41 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP')" nz-menu-item nzSelected (click)="selectTab(0)">
+      TTgCP
+    </li>
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN')" nz-menu-item (click)="selectTab(1)">
+      BTC giao các Bộ/Ngành
+    </li>
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT')" nz-menu-item (click)="selectTab(2)">
+      BTC giao TCDT
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-ttcp></app-ttcp>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-btc-giao-cac-bo-nganh></app-btc-giao-cac-bo-nganh>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-btc-giao-tcdt></app-btc-giao-tcdt>
+</ng-container>
+
+
+<!-- <nz-tabset nzType="card" class="tab-level-2">
+  <nz-tab [nzTitle]="'TTCP'">
+    <ng-template nz-tab>
+      <app-ttcp></app-ttcp>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'BTC giao các Bộ/Ngành'">
+    <ng-template nz-tab>
+      <app-btc-giao-cac-bo-nganh></app-btc-giao-cac-bo-nganh>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'BTC giao TCDT'">
+    <ng-template nz-tab>
+      <app-btc-giao-tcdt></app-btc-giao-tcdt>
+    </ng-template>
+  </nz-tab>
+</nz-tabset> -->

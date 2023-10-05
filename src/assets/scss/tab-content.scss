@@ -1,0 +1,358 @@
+::ng-deep {
+    .action-top {
+        padding-right: 50px;
+    }
+
+    .giao-ke-hoach {
+        padding: 0px 10px;
+    }
+
+    .chi-tieu__body {
+        .flex-card.ant-card {
+            background: transparent;
+            box-shadow: unset;
+            border-radius: 0px;
+        }
+    }
+
+    .table__container-tt {
+        border: 1px solid #f3f3f3;
+        border-bottom: none;
+        border-top: 0px;
+        border-right: 0px;
+    }
+
+    .tab-menu.tab-content .justify-content-between.active {
+        display: flex;
+        background: #f8f8f8;
+    }
+
+    .tab-menu {
+        padding-top: 0px !important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
+    .tab-menu-new {
+        .main-content {
+            padding: 0;
+        }
+
+        .ant-tabs-content-holder {
+            border: 0;
+            border-radius: 0;
+        }
+
+        .tab-level-0 {
+            .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+                font-weight: 500;
+                font-size: 11px;
+                line-height: 13px;
+                color: #ffffff;
+            }
+
+            .ant-tabs-tab-btn {
+                font-weight: 500;
+                font-size: 11px;
+                line-height: 13px;
+                color: #444444;
+            }
+
+            .ant-tabs-nav-list .ant-tabs-tab {
+                margin-left: 0px !important;
+            }
+
+            .ant-tabs-content-holder {
+                background: #f8f8f8;
+                // overflow: hidden;
+                // max-height: calc(100vh - 180px);
+
+                .ant-card {
+                    margin: 9px 10px;
+                    border-radius: 0;
+                }
+
+                .ant-tabs {
+                    // margin: 0 16px;
+                    margin-top: 2px;
+                    border-radius: 0;
+                }
+            }
+        }
+
+        .tab-level-1 {
+            .ant-tabs-content-holder {
+                background: #f8f8f8;
+                padding-left: 0;
+                padding-bottom: 0;
+                padding-right: 0;
+                // overflow: hidden;
+                // max-height: calc(100vh - 230px);
+
+                .contentBor {
+                    .main-content {
+                        nz-card {
+                            padding-top: 10px;
+                            border: 0;
+                            padding-bottom: 7px;
+
+                            .ant-card-body {
+                                border: 1px solid #ececec;
+                            }
+                        }
+
+                        .tab-giao-chi-tieu {
+                            padding: 10px;
+                        }
+
+                        .tab-padding-10 {
+                            padding: 10px;
+                        }
+                    }
+                }
+
+                .ant-tabs {
+                    margin-top: 0;
+                    margin-left: 0;
+                    margin-right: 0;
+                }
+            }
+
+            .ant-tabs-nav {
+                padding-bottom: 0px;
+                background: #f8f8f8;
+
+                .ant-tabs-nav-wrap {
+                    background: #f8f8f8;
+
+                    .ant-tabs-tab {
+                        border: 0;
+                        border-radius: 0;
+                        background-color: #f8f8f8;
+
+                        .ant-tabs-tab-btn {
+                            color: #444444;
+                            font-style: normal;
+                            font-weight: 400;
+                            font-size: 11px;
+                        }
+                    }
+
+                    .ant-tabs-tab-active::before {
+                        background-color: #4e5484;
+                    }
+
+                    .ant-tabs-tab.ant-tabs-tab-active {
+                        .ant-tabs-tab-btn {
+                            font-weight: 500;
+                        }
+                    }
+                }
+
+                &::before {
+                    border-bottom: 1px solid #ffffff;
+                }
+            }
+
+            .ant-tabs-tabpane-active {
+                // background: #f8f8f8;
+            }
+        }
+
+        .tab-level-2 {
+            margin-top: 7px !important;
+
+            .ant-tabs-content-holder {
+                background: #fff;
+                padding-left: 0;
+                overflow-y: auto;
+                // max-height: calc(100vh - 280px);
+
+                .ant-tabs {
+                    margin: 0 10px 10px 10px;
+                }
+
+                .tab-content {
+                    margin: 0 -16px;
+                }
+            }
+
+            .ant-tabs-nav {
+                .ant-tabs-nav-wrap {
+                    background: #f8f8f8;
+
+                    .ant-tabs-tab {
+                        background-color: #f8f8f8;
+
+                        .ant-tabs-tab-btn {
+                            color: #444444;
+                            font-style: normal;
+                            font-weight: 400;
+                            font-size: 11px;
+                        }
+                    }
+
+                    .ant-tabs-tab-active::before {
+                        height: 0;
+                    }
+
+                    .ant-tabs-tab.ant-tabs-tab-active {
+                        background-color: #fff;
+
+                        .ant-tabs-tab-btn {
+                            font-weight: 500;
+                        }
+                    }
+                }
+            }
+        }
+
+        .tab-level-3 {
+            margin: 0 !important;
+
+            .ant-tabs-content-holder {
+                overflow-y: auto;
+                // max-height: calc(100vh - 480px);
+                background-color: #fff;
+
+                .ant-tabs {
+                    margin-top: 16px;
+                }
+
+                .ant-tabs-tabpane {
+                    border: 1px solid #f3f3f3;
+                    padding: 10px;
+                    overflow-y: auto;
+                    // max-height: calc(70vh - 200px);
+
+                    .ant-table-container {
+                        border: 0;
+                    }
+
+                    .table__container-tt {
+                        .first-row {
+                            background: #f3f3f3;
+                        }
+                    }
+
+                    .tab-content {
+                        margin: 0;
+                        position: relative;
+
+                        .pagination-card li:first-child {
+                            left: 16px !important;
+                        }
+                    }
+                }
+            }
+
+            .ant-tabs-nav {
+                background: #fff;
+
+                .ant-tabs-nav-wrap {
+                    background: #fff;
+                    margin-left: 0px;
+
+                    .ant-tabs-tab {
+                        background-color: #fff;
+                    }
+
+                    .ant-tabs-tab-active::before {
+                        height: 0;
+                    }
+
+                    .ant-tabs-tab.ant-tabs-tab-active {
+                        background-color: #fff;
+                        border-width: 1px 1px 0px 1px;
+                        border-color: #f3f3f3;
+                        border-style: solid;
+
+                        .ant-tabs-tab-btn {
+                            font-style: normal;
+                            font-weight: 400;
+                            font-size: 13px;
+                            line-height: 15px;
+                            color: #000000;
+                        }
+                    }
+
+                    .ant-tabs-tab-btn {
+                        font-weight: 400;
+                        font-size: 13px !important;
+                        line-height: 15px;
+                        color: #828282;
+                    }
+
+                }
+            }
+        }
+
+        .tab-level-3-specical {
+            margin-bottom: 0 !important;
+
+            .ant-tabs-content-holder {
+                .ant-tabs {
+                    margin-bottom: 0;
+                }
+
+                .ant-tabs-tabpane {
+                    padding: 0;
+                    border-bottom: 0;
+                    padding: 0;
+                    border-top: 0;
+                }
+            }
+        }
+    }
+
+    .chi-tiet {
+        .dieu-chinh-button {
+            position: absolute;
+            top: 55px;
+            right: 25px;
+
+            .tab-menu.tab-content {
+                border-bottom: none !important;
+            }
+        }
+
+        .main-content {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            // height: calc(100vh - 245px);
+
+            .ant-table {
+                .ant-table-container {
+                    border: 0;
+                }
+            }
+
+            .tab__luong-thuc {
+                position: relative;
+                margin: 0 10px;
+            }
+        }
+    }
+
+    .tab-level-3.mr-10 {
+        margin: 10px !important;
+    }
+
+    .card-table {
+        border: none !important;
+
+        .ant-card-body {
+            border: none !important;
+            padding: 0px !important;
+        }
+    }
+
+    .no-scroll {
+        .ant-tabs-content-holder {
+            max-height: unset !important;
+        }
+    }
+
+}

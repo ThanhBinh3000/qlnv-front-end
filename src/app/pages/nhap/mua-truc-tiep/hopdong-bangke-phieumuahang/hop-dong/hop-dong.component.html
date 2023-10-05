@@ -1,0 +1,16 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected (click)="selectTab(0)">
+            Hợp đồng/Phụ lục hợp đồng
+        </li>
+        <li nz-menu-item (click)="selectTab(1)">
+            Bảng kê thu mua lẻ
+        </li>
+    </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+    <app-hopdong-phuluc-hopdong></app-hopdong-phuluc-hopdong>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+    <app-bangke-thumuale></app-bangke-thumuale>
+</ng-container>

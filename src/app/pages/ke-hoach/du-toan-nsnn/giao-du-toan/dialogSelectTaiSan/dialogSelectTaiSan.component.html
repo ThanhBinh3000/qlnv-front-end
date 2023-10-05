@@ -1,0 +1,44 @@
+<div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="scroll-modal">
+    <nz-table #expandTable [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false"
+        class="table__container-vat-tu">
+        <thead>
+            <tr>
+                <th scope="col">Tên vật tư</th>
+                <th scope="col">Mã vật tư</th>
+                <th scope="col">Chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let data of expandTable.data, let i = index">
+                <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
+                    <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                        <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="isExpand(item)" [(nzExpand)]="item.expand"
+                            (nzExpandChange)="
+                              collapse(mapOfExpandedData[data.id], item, $event)
+                            ">
+                            {{ item.tenTaiSan }}
+                        </td>
+                        <td>{{ item.maTaiSan }}</td>
+                        <td style="text-align: center">
+                            <div *ngIf="isSelect(item)">
+                                <i nz-icon nzType="plus" nzTheme="outline" nzColor (click)="selectHangHoa(item)"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+        </tbody>
+    </nz-table>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+                Đóng
+            </button>
+        </div>
+    </div>
+</div>

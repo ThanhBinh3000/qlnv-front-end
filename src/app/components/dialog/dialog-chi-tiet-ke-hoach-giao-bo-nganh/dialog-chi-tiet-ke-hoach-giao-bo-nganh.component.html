@@ -1,0 +1,88 @@
+<div class="input-group-search" nz-row [nzGutter]="24">
+  <div nz-col nzSpan="24">
+    <nz-radio-group [nzDisabled]="isView" [(ngModel)]="radioValue" (ngModelChange)="onChangeBoNganhRadio()" nzSpan="8">
+      <label nz-radio [nzValue]="o.value" *ngFor="let o of radioData">{{ o.label }}</label>
+    </nz-radio-group>
+  </div>
+  <div nz-col nzSpan="24">
+    <nz-form-item *ngIf="radioValue=='Khac'" nz-col nzSpan="24" class="form-item" style="padding-right: 15px;">
+      <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Bộ/Ngành</nz-form-label>
+      <nz-select [nzDisabled]="isView" [(ngModel)]="keHoach.maBoNganh" (ngModelChange)="onChangeBoNganh($event)">
+        <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsBoNganh">
+        </nz-option>
+      </nz-select>
+      <span class="error-text" *ngIf="errorBn">{{globals.prop.REQUIRED}}</span>
+    </nz-form-item>
+  </div>
+  <!--  <div nz-col nzSpan="24" class="mt-4">-->
+  <!--    <nz-form-item nz-col nzSpan="8" class="form-item text-right canphai">-->
+  <!--      <nz-form-label [nzNoColon]="true" nzFor="gia-tri">Tổng giá trị(Triệu đồng)</nz-form-label>-->
+  <!--      <nz-input-group id="gia-tri">-->
+  <!--        <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput" [nzDisabled]="isView"-->
+  <!--                         [nzMin]="1"-->
+  <!--                         np [nzSize]="'small'" [(ngModel)]="keHoach.tongTien">-->
+  <!--        </nz-input-number>-->
+  <!--      </nz-input-group>-->
+  <!--      <span class="error-text" *ngIf="errorTt">{{globals.prop.REQUIRED}}</span>-->
+  <!--    </nz-form-item>-->
+  <!--  </div>-->
+</div>
+<div class="flex-card dialog-chi-tiet-ke-hoach">
+  <nz-tabset nzType="card" class="mt-16 tab-level-3" nzSelectedIndex="0">
+    <nz-tab *ngIf="radioValue=='BTC'" [nzTitle]="'Nhập - Xuất tồn kho lương thực'">
+      <app-ke-hoach-luong-thuc #keHoachLuongThuc [(ltGaoMua)]="keHoach.ltGaoMua" [isView]="isView" [namHienTai]="nam"
+                               [(ltGaoXuat)]="keHoach.ltGaoXuat" [(ltThocMua)]="keHoach.ltThocMua"
+                               [(ltThocXuat)]="keHoach.ltThocXuat" [(ltGaoTon)]="keHoach.ltGaoTon"
+                               [(ltThocTon)]="keHoach.ltThocTon"
+                               [maBoNganh]="keHoach.maBoNganh">
+      </app-ke-hoach-luong-thuc>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="'Mua tăng'">
+      <app-ke-hoach-xuat-giam [isView]="isView" tab='MT' [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa"
+                              [(tongGtri)]="keHoach.ttMuaTang"
+                              [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.muaTangList"
+                              [dataToanBn]="dataToanBn">
+      </app-ke-hoach-xuat-giam>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="'Xuất giảm không thu tiền'">
+      <app-ke-hoach-xuat-giam [isView]="isView" tab="XG" [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa"
+                              [(tongGtri)]="keHoach.ttXuatGiam"
+                              [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.xuatGiamList">
+      </app-ke-hoach-xuat-giam>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="'Xuất bán thu tiền'">
+      <app-ke-hoach-xuat-giam [isView]="isView" tab="XB" [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa"
+                              [(tongGtri)]="keHoach.ttXuatBan"
+                              [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.xuatBanList">
+      </app-ke-hoach-xuat-giam>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="'Luân phiên đổi hàng'">
+      <app-ke-hoach-xuat-giam [isView]="isView" tab="LPDH" [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa"
+                              [tabName]="'LuanPhien'"
+                              [namHienTai]="nam"
+                              [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.luanPhienList">
+      </app-ke-hoach-xuat-giam>
+    </nz-tab>
+  </nz-tabset>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <a class="btn btn-sub btn-sm waves-effect waves-light " (click)="onCancel()">
+        <i nz-icon nzType="close" class="fa fa-close"></i>
+        Đóng
+      </a>
+      &nbsp;
+      <a *ngIf="!isView" class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="luu()">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </a>
+    </div>
+  </div>
+</div>

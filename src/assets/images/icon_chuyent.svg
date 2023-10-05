@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
+  <defs>
+    <clipPath id="clip-icon_chuyent">
+      <rect width="26" height="26"/>
+    </clipPath>
+  </defs>
+  <g id="icon_chuyent" clip-path="url(#clip-icon_chuyent)">
+    <g id="Group_8128" data-name="Group 8128" transform="translate(-1647 -463)">
+      <path id="Path_25882" data-name="Path 25882" d="M13,0A13,13,0,1,0,26,13,13,13,0,0,0,13,0m0,24.375A11.375,11.375,0,1,1,24.375,13,11.375,11.375,0,0,1,13,24.375" transform="translate(1647 463)" fill="#707070"/>
+      <g id="Group_7745" data-name="Group 7745" transform="translate(1245.158 353.043)">
+        <g id="Group_7606" data-name="Group 7606" transform="translate(407.842 115.957)">
+          <g id="Group_7605" data-name="Group 7605" transform="translate(0 0)">
+            <path id="Path_30114" data-name="Path 30114" d="M436.533,125.627h-.967v-1.934a.484.484,0,0,0-.483-.484h-4.352v-3.385h2.418a.484.484,0,0,0,.484-.484v-2.9a.484.484,0,0,0-.484-.483h-5.8a.484.484,0,0,0-.484.484v2.9a.484.484,0,0,0,.484.484h2.418v3.385h-4.352a.484.484,0,0,0-.484.484v1.934h-.967a.484.484,0,0,0-.484.483v2.9a.484.484,0,0,0,.484.484h2.9a.483.483,0,0,0,.483-.484v-2.9a.483.483,0,0,0-.483-.484H425.9v-1.451h3.868v1.451H428.8a.483.483,0,0,0-.484.484v2.9a.483.483,0,0,0,.484.484h2.9a.484.484,0,0,0,.484-.484v-2.9a.484.484,0,0,0-.484-.484h-.967v-1.451H434.6v1.451h-.967a.483.483,0,0,0-.484.484v2.9a.483.483,0,0,0,.484.484h2.9a.484.484,0,0,0,.484-.484v-2.9A.484.484,0,0,0,436.533,125.627Z" transform="translate(-423.478 -115.957)" fill="#636363"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,65 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+      Toàn bộ DS VT, TB trong thời gian bảo hành theo HĐ cần xuất để kiểm tra
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+      Tổng hợp DS VT, TB trong thời gian bảo hành theo HĐ cần xuất để kiểm tra
+    </li>
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+      Quyết định xuất giảm vật tư
+    </li>
+    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)">
+      Quyết định giao nhiệm vụ nhập xuất hàng
+    </li>
+    <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)">
+      Kiểm tra chất lượng
+    </li>
+    <li [nzSelected]="tabSelected==5" nz-menu-item (click)="selectTab(5)">
+      Xuất kho
+    </li>
+    <li [nzSelected]="tabSelected==6" nz-menu-item (click)="selectTab(6)">
+      Nhập kho
+    </li>
+    <li [nzSelected]="tabSelected==7" nz-menu-item (click)="selectTab(7)">
+      Báo cáo kết quả bảo hành
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-toan-bo-ds-vt-tb-trong-thoi-gian-bao-hanh
+        (tabFocus)="receivedTab($event)"></app-toan-bo-ds-vt-tb-trong-thoi-gian-bao-hanh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh
+        (tabFocus)="receivedTab($event)"></app-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-quyet-dinh-xuat-giam-vat-tu-bao-hanh>
+      </app-quyet-dinh-xuat-giam-vat-tu-bao-hanh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+      <app-qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh>
+      </app-qd-giao-nv-xuat-nhap-vt-tb-trong-thoi-gian-bao-hanh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+      <app-kiem-tra-chat-luong-vt-tb>
+      </app-kiem-tra-chat-luong-vt-tb>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 5">
+      <app-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh>
+      </app-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 6">
+      <app-nhap-kho-vt-tb-trong-thoi-gian-bao-hanh>
+      </app-nhap-kho-vt-tb-trong-thoi-gian-bao-hanh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 7">
+      <app-bao-cao-ket-qua-bao-hanh>
+      </app-bao-cao-ket-qua-bao-hanh>
+    </ng-container>
+
+  </div>
+</div>

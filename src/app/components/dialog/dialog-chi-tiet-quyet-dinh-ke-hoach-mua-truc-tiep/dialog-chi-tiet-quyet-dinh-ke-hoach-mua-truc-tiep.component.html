@@ -1,0 +1,66 @@
+<div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+  <div nz-col [nzSpan]="12">
+    <nz-form-item>
+      <nz-form-label nzRequired [nzNoColon]="true"> Mã đơn vị </nz-form-label>
+      <input nz-input />
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="12">
+    <nz-form-item>
+      <nz-form-label nzRequired [nzNoColon]="true"> Tỉnh / Thành phố </nz-form-label>
+      <input nz-input />
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="24">
+    <nz-form-item>
+      <nz-form-label nzRequired [nzNoColon]="true"> Tên đơn vị </nz-form-label>
+      <input nz-input />
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="12">
+    <nz-form-item>
+      <nz-form-label [nzNoColon]="true"> Số lượng </nz-form-label>
+      <input nz-input />
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="12">
+    <nz-form-item>
+      <nz-form-label [nzNoColon]="true"> Đơn giá không thuế </nz-form-label>
+      <input nz-input />
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="12">
+    <nz-form-item>
+      <nz-form-label [nzNoColon]="true"> Thuế </nz-form-label>
+      <input nz-input />
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="12">
+    <nz-form-item>
+      <nz-form-label [nzNoColon]="true"> Đơn giá có thuế </nz-form-label>
+      <input nz-input />
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="24">
+    <nz-form-item>
+      <nz-form-label [nzNoColon]="true"> Giá trị </nz-form-label>
+      <input nz-input />
+    </nz-form-item>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Cập nhật
+      </button>
+      <button nz-button (click)="onCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

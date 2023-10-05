@@ -1,0 +1,170 @@
+<div class="bg-trang">
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzRequired nzNoColon="true">Năm kế hoạch</nz-form-label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="item.namKeHoach" readonly />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Khối dự án/công trình</nz-form-label>
+              <nz-select nzAllowClear [(ngModel)]="item.khoi" nzDisabled>
+                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzRequired nzNoColon="true">Danh mục dự án</nz-form-label>
+          <nz-select [nzDisabled]="type == 'sua'" nzAllowClear [(ngModel)]="item.maDuAn"
+                     (ngModelChange)="changeDmucDuAn($event)">
+            <nz-option *ngFor="let item of listDmKho" [nzLabel]="item.tenDuAn" [nzValue]="item.maDuAn">
+            </nz-option>
+          </nz-select>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzRequired nzNoColon="true">Loại dự án</nz-form-label>
+          <nz-select [(ngModel)]="item.loaiDuAn" nzAllowClear>
+            <nz-option *ngFor="let item of listLoaiDuAn" [nzLabel]="item.giaTri" [nzValue]="item.giaTri">
+            </nz-option>
+          </nz-select>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Địa điểm xây dựng</nz-form-label>
+          <input nz-input [(ngModel)]="item.diaDiem" readonly />
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Thời gian khởi công</nz-form-label>
+          <nz-input-group>
+            <input nz-input [(ngModel)]="item.tgKhoiCong" readonly />
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Thời gian hoàn thành</nz-form-label>
+          <nz-input-group>
+            <input nz-input [(ngModel)]="item.tgHoanThanh" readonly />
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Số QĐ phê duyệt/điều chỉnh TMĐT</nz-form-label>
+          <nz-input-group>
+            <input nz-input [(ngModel)]="item.soQdPd" readonly />
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Ngày ký QĐ phê duyệt/điều chỉnh TMĐT</nz-form-label>
+          <nz-input-group>
+            <input nz-input [(ngModel)]="item.ngayQdDc" readonly />
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Tổng mức đầu tư theo QĐ phê duyệt/điều chỉnh TMĐT (đ)</nz-form-label>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Tổng số (tất cả các nguồn vốn)</nz-form-label>
+          <nz-input-group>
+            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.tmdtDuKien" [nzMin]="0"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" nzDisabled class="text-blue"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Trong đó vốn NSTW</nz-form-label>
+          <nz-input-group>
+            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.nstwDuKien" [nzMin]="0"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" nzDisabled class="text-blue"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Tổng mức đầu tư theo kế hoạch trung hạn giai đoạn 5 năm (đ)</nz-form-label>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label nzRequired nzNoColon="true">Tổng số (tất cả các nguồn vốn)</nz-form-label>
+          <nz-input-group>
+            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.ncKhTongSo" [nzMin]="0"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"  class="text-blue"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label nzRequired nzNoColon="true">Trong đó vốn NSTW</nz-form-label>
+          <nz-input-group>
+            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.ncKhNstw" [nzMin]="0"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"  class="text-blue"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label nzRequired nzNoColon="true">Kế hoạch vốn đầu tư nguồn NSNN năm hiện tại (đ)</nz-form-label>
+          <nz-input-group>
+            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.vonDauTu" [nzMin]="0" class="text-blue"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Ghi chú</nz-form-label>
+          <nz-input-group>
+            <textarea nz-input nz-row="3" [(ngModel)]="item.ghiChu"></textarea>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+    </div>
+  </nz-card>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="onCancel()" class="modal__button--cancel ml-2">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+      <button nz-button (click)="handleOk()" class="modal__button--save ml-2">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+
+    </div>
+  </div>
+</div>

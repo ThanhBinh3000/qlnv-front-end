@@ -1,0 +1,50 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item (click)="selectTab(0)">
+      Thông tin đấu giá
+    </li>
+    <!-- <li nz-menu-item (click)="selectTab(1)">
+      Thông báo đấu giá không thành
+    </li>
+    <li nz-menu-item (click)="selectTab(2)">
+      Biên bản bán đấu giá
+    </li> -->
+    <li nz-menu-item (click)="selectTab(3)">
+      Quyết định phê duyệt kết quả bán đấu giá
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-thong-bao-dau-gia-tai-san></app-thong-bao-dau-gia-tai-san>
+</ng-container>
+<!-- <ng-container *ngIf="tabSelected == 1">
+  <app-thong-bao-dau-gia-khong-thanh></app-thong-bao-dau-gia-khong-thanh>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-bien-ban-ban-dau-gia></app-bien-ban-ban-dau-gia>
+</ng-container> -->
+<ng-container *ngIf="tabSelected == 3">
+  <app-quyet-dinh-phe-duyet-kq-ban-dau-gia></app-quyet-dinh-phe-duyet-kq-ban-dau-gia>
+</ng-container>
+<!-- <nz-tabset nzType="card" class="mt-16 chuc-nang-nhap-kho tab-level-2">
+  <nz-tab [nzTitle]="'Thông báo đấu giá tài sản'">
+    <ng-template nz-tab>
+      <app-thong-bao-dau-gia-tai-san></app-thong-bao-dau-gia-tai-san>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Thông báo đấu giá không thành'">
+    <ng-template nz-tab>
+      <app-thong-bao-dau-gia-khong-thanh></app-thong-bao-dau-gia-khong-thanh>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản bán đấu giá'">
+    <ng-template nz-tab>
+      <app-bien-ban-ban-dau-gia></app-bien-ban-ban-dau-gia>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Quyết định phê duyệt kết quả bán đấu giá'">
+    <ng-template nz-tab>
+      <app-quyet-dinh-phe-duyet-kq-ban-dau-gia></app-quyet-dinh-phe-duyet-kq-ban-dau-gia>
+    </ng-template>
+  </nz-tab>
+</nz-tabset> -->

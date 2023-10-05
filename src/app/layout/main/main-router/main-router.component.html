@@ -1,0 +1,14 @@
+<ul nz-menu nzTheme="dark" nzMode="horizontal" #myTab2 id="myTab2">
+  <li class="ant-menu-item next" (click)="startSlide()">
+    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+  </li>
+  <ng-container *ngFor="let item of lstPage">
+    <li *ngIf="userService.isAccessPermisson(item.code)||item.code ==''" i nz-menu-item [nzMatchRouter]="true"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+      <a [routerLink]="item.route" class="main-menu-top">{{ item.title }}</a>
+    </li>
+  </ng-container>
+  <li class="ant-menu-item prev" (click)="endSlide()">
+    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+  </li>
+</ul>

@@ -1,0 +1,253 @@
+<nz-card class="mg-t-16 flex-card p-lr16">
+  <div class="header header-green-background mg-t-16">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+        {{ formData.value.tenTrangThai }}</span>
+        <span>LẬP BÁO CÁO NHẬP, XUẤT, TỒN KHO HÀNG DỰ TRỮ QUỐC GIA</span>
+      </div>
+    </div>
+    <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+      <div class="btn-group">
+        <button type="button" class="btn btn-sub" (click)="quayLai()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <ng-container>
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_NXTHDTQG_DUYET')" type="button"
+            class="btn btn-sub xanh-nhat" (click)="save(true)">
+            <i class="icon htvbdh_checkfile2"></i>
+            <span>Ban hành</span>
+          </button>
+          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_NXTHDTQG_LAP')" type="button" class="btn btn-main" (click)="save()">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+        </ng-container>
+      </div>
+    </nz-affix>
+  </div>
+  <nz-card class="mg-t-16 flex-card p-lr16">
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span></span>
+          <span>Thông tin chung</span>
+        </div>
+      </div>
+    </div>
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thông tư số </nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <input nz-input readonly formControlName="thongTuSo" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Biểu số </nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <input nz-input readonly formControlName="tenBieuSo" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Đơn vị gửi báo cáo </nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <input nz-input readonly formControlName="dviGui" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Đơn vị nhận báo cáo </nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <input nz-input readonly formControlName="dviNhan" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian tạo </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-date-picker nzDisabled formControlName="thoiGianTao" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span></span>
+          <span>Danh sách thực hiện kế hoạch nhập, xuất, cứu trợ, viện trợ, bảo quản hàng dự trữ quốc gia</span>
+        </div>
+      </div>
+    </div>
+    <nz-card class="mg-t-16 flex-card p-lr16 table-card">
+      <nz-table nzBordered class="nowrap" [nzData]="listDataDetail" [nzFrontPagination]="false"
+        [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th rowspan="3" style="width: 2%;">STT</th>
+            <th rowspan="3" style=" padding: 50px 50px 50px 50px; ">Tên hàng, quy cách</th>
+            <th rowspan="3">ĐVT</th>
+            <th colspan="2">Tồn kho đầu năm</th>
+            <th colspan="4">Nhập</th>
+            <th colspan="4">Xuất</th>
+            <th colspan="2">Tồn kho cuối kỳ</th>
+            <th rowspan="3">Hành động</th>
+          </tr>
+          <tr>
+            <th rowspan="2" style=" padding: 40px 40px 40px 40px; ">Số lượng</th>
+            <th rowspan="2" style=" padding: 40px 40px 40px 40px; ">Thành tiền</th>
+            <th colspan="2" style=" padding: 20px 80px 20px 80px; ">Kỳ này</th>
+            <th colspan="2" style=" padding: 20px 80px 20px 80px; ">Lũy kế</th>
+            <th colspan="2" style=" padding: 20px 80px 20px 80px; ">Kỳ này</th>
+            <th colspan="2" style=" padding: 20px 80px 20px 80px; ">Lũy kế</th>
+            <th rowspan="2" style=" padding: 40px 40px 40px 40px; ">Số lượng</th>
+            <th rowspan="2" style=" padding: 40px 40px 40px 40px; ">Thành tiền</th>
+          </tr>
+          <tr>
+            <th style=" text-align: center; ">Số lượng</th>
+            <th style=" text-align: center; ">Thành tiền</th>
+            <th style=" text-align: center; ">Số lượng</th>
+            <th style=" text-align: center; ">Thành tiền</th>
+            <th style=" text-align: center; ">Số lượng</th>
+            <th style=" text-align: center; ">Thành tiền</th>
+            <th style=" text-align: center; ">Số lượng</th>
+            <th style=" text-align: center; ">Thành tiền</th>
+          </tr>
+          <tr>
+            <th class="colNumber">A</th>
+            <th class="colNumber">B</th>
+            <th class="colNumber">C</th>
+            <th class="colNumber">1</th>
+            <th class="colNumber">2</th>
+            <th class="colNumber">3</th>
+            <th class="colNumber">4</th>
+            <th class="colNumber">5</th>
+            <th class="colNumber">6</th>
+            <th class="colNumber">7</th>
+            <th class="colNumber">8</th>
+            <th class="colNumber">9</th>
+            <th class="colNumber">10</th>
+            <th class="colNumber">11</th>
+            <th class="colNumber">12</th>
+            <th class="colNumber"></th>
+          </tr>
+          <tr>
+            <th></th>
+            <th>
+              <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow.cloaiVthh"
+                (ngModelChange)="changeCloaiVthh($event)">
+                <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                </nz-option>
+              </nz-select>
+            </th>
+            <th>{{itemRow.dvt}}</th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoDauNamSl" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoDauNamTt" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnSl" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnTt" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkSl" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkTt" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnSl" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnTt" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkSl" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkTt" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoCuoiKySl" /></th>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoCuoiKyTt" /></th>
+            <th>
+              <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
+                <i class="fa fa-plus"></i>
+              </a>
+              <a *ngIf="!isView" (click)="clearItemRow()">
+                <i class="icon  htvbdh_nhap-lai1"></i>
+              </a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of listDataDetail, let i = index">
+            <ng-container *ngIf="!data.edit; else editTemplate">
+              <td class="text-center">{{i+1}}</td>
+              <td>{{ data.tenHang }}</td>
+              <td>{{ data.dvt }}</td>
+              <td class="text-right">{{ data.tonKhoDauNamSl | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoDauNamTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapKnSl | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapKnTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapLkSl | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapLkTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatKnSl | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatKnTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatLkSl | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatLkTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoCuoiKySl | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoCuoiKyTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-center">
+                <a *ngIf="!isView" (click)="startEdit(i)">
+                  <i class=" fa fa-pencil"></i>
+                </a>
+                <a *ngIf="!isView" (click)="deleteRow(i)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </ng-container>
+            <ng-template #editTemplate>
+              <td class="text-center">{{i+1}}</td>
+              <th>
+                <nz-select [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.cloaiVthh"
+                  (ngModelChange)="changeCloaiVthh($event)">
+                  <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                  </nz-option>
+                </nz-select>
+              </th>
+              <th>{{itemRowUpdate.dvt}}</th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoDauNamSl" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoDauNamTt" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnSl" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnTt" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkSl" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkTt" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnSl" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnTt" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkSl" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkTt" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoCuoiKySl" /></th>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoCuoiKyTt" /></th>
+              <td class="text-center">
+                <a (click)="saveEdit(itemRowUpdate,i)" class="save">
+                  <i class="icon htvbdh_tcdt_save"></i>
+                </a>
+                <a (click)="cancelEdit(i)">
+                  <i class="fa fa-ban do"></i>
+                </a>
+              </td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </nz-card>
+</nz-card>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>

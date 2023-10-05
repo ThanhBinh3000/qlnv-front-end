@@ -1,0 +1,33 @@
+::ng-deep {
+  .donvi__input {
+    margin-bottom: 0px !important;
+  }
+  .form__thong-tin-luong-thuc {
+    padding-bottom: 16px;
+  }
+  .form-multi-input {
+    border: 1px solid #f8f9fa;
+    border-radius: 0px;
+    margin: 0 !important;
+    margin-top: 8px !important;
+
+    .header-multi-input-form {
+      padding: 12px !important;
+      background: #fafafa;
+      border-bottom: 1px solid #f8f9fa;
+      border-radius: 0px;
+    }
+    .content-multi-input-form {
+      padding: 12px !important;
+    }
+  }
+  .canphai {
+    button.btn.btn-outline-grey {
+      margin: 0px !important;
+    }
+  }
+  .error {
+    font-size: 12px;
+    color: red;
+  }
+}

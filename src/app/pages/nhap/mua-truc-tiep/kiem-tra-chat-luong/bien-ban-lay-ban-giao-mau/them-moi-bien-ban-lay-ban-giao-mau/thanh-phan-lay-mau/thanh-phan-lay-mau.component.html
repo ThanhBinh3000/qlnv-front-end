@@ -1,0 +1,24 @@
+<div class="list-file">
+    <div class="header-file">
+        <input type="text" nz-input placeholder="Tên đại diện" [(ngModel)]="itemRow.daiDien" />
+        <div class="icon-plus" (click)="addDaiDien()">
+            <i class="icon htvbdh_dau-cong "></i>
+        </div>
+        <div class="icon-empty">
+            <i class="icon htvbdh_nhap-lai1 "></i>
+        </div>
+    </div>
+    <div class="body-file" *ngFor="let item of dataTable;let i = index">
+        <ng-container *ngIf="!item.isEdit">
+            <div class="content-data d-flex align-items-center">
+                <div class="nd-text">{{item.daiDien}}</div>
+            </div>
+            <div class="icon-edit">
+                <i class="fa fa-pencil "></i>
+            </div>
+            <div class="icon-xoa">
+                <i class="fa fa-trash-o do "></i>
+            </div>
+        </ng-container>
+    </div>
+</div>

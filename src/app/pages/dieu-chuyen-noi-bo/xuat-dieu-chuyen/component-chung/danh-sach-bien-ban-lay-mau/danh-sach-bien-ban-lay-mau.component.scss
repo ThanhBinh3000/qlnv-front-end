@@ -1,0 +1,21 @@
+.cus-start-date.ant-col {
+    padding-right: 0 !important;
+}
+
+.cus-end-date.ant-col {
+    padding-left: 0 !important;
+}
+
+::ng-deep .ant-modal-body {
+    overflow: scroll;
+}
+
+::ng-deep .ant-select-selection-placeholder {
+    color: #999;
+    opacity: 70%;
+}
+
+::ng-deep .ant-modal-body .ant-row .ant-form-item-label.ant-col label,
+.ant-col-24.ant-form-item-label>label {
+    height: 40px !important;
+}

@@ -1,0 +1,146 @@
+<div class="luong-thuc__danh-sach">
+  <div class="menu-lv3">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab"></div>
+    </div>
+  </div>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="12">
+              <label class="search__label">Số hợp đồng</label>
+              <input class="search__input" nz-input />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Từ ngày ký</label>
+              <nz-date-picker class="search__input"></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Đến ngày ký</label>
+              <nz-date-picker class="search__input"></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12">
+              <label class="search__label">Loại hàng DTQG</label>
+              <nz-select nzPlaceHolder="Loại hàng DTQG">
+                <nz-option nzValue="gao" nzLabel="Gạo"></nz-option>
+                <nz-option nzValue="muoi" nzLabel="Muối"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Căn cứ</label>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                <input nz-input [readonly]="true" [(ngModel)]="selectedCanCu.soQuyetDinh" />
+              </nz-input-group>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Tìm theo bên B</label>
+              <input class="search__input" nz-input />
+            </div>
+            <div nz-col nzSpan="24">
+              <label class="search__label">Đơn vị</label>
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
+                  [nzAutocomplete]="auto" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #auto>
+                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </div>
+          </div>
+          <div class="search-tools">
+            <button nz-button class="search__button--search">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+            <button nz-button class="search__button--clear">
+              <i nz-icon nzType="close"></i>
+              Xóa điều kiện
+            </button>
+          </div>
+        </nz-card>
+        <nz-card nzTitle="Danh sách hợp đồng mua lương thực" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+          <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th width="60px">STT</th>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <th>Số HĐ</th>
+                <th>Ngày ký</th>
+                <th>Loại hàng DTQG</th>
+                <th>Tên hợp đồng</th>
+                <th>Bên A</th>
+                <th>Bên B</th>
+                <th>Giá trị hợp đồng</th>
+                <th>Số gói thầu</th>
+                <th>Trạng thái </th>
+                <th class="text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>
+                  <label nz-checkbox></label>
+                </td>
+                <td>123</td>
+                <td>10/03/2022</td>
+                <td>Gạo</td>
+                <td>Hợp đồng mua 100 tấn gạo </td>
+                <td>Cục DTNNKV Tây Nam Bộ </td>
+                <td>Hợp đồng mua 100 tấn gạo</td>
+                <td>17.316.600.000</td>
+                <td>10</td>
+                <td>Có phụ lục</td>
+                <td class="text-center">
+                  <a (click)="redirectToChiTiet(1)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a>
+                    <i class="icon htvbdh_tcdt_pheduyet"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai"></div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                  [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    3-3 of 4 items
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-card>
+        <ng-template #tableCard1>
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

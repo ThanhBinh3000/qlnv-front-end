@@ -1,0 +1,22 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li *ngFor="let tab of tabs,let i = index" [nzSelected]="i == 0" nz-menu-item (click)="selectTab(tab.ma)">
+      {{tab.giaTri}}
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngFor="let tab of tabs">
+  <app-theo-phuong-thuc-dau-thau *ngIf="tab.ma == loaiVthhSelected" [typeVthh]="loaiVthhSelected">
+  </app-theo-phuong-thuc-dau-thau>
+</ng-container>
+<!-- <nz-tabset nzType="card" class="mt-16 tab-level-1">
+  <nz-tab *ngFor="let tab of tabs" [nzTitle]="title_thoc">
+    <ng-template #title_thoc>
+      {{tab.giaTri}}
+      (<span class="number-title-tab">{{tab.count}}</span>)
+    </ng-template>
+    <ng-template nz-tab>
+      <app-theo-phuong-thuc-dau-thau typeVthh="{{tab.ma}}"></app-theo-phuong-thuc-dau-thau>
+    </ng-template>
+  </nz-tab>
+</nz-tabset> -->

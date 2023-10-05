@@ -1,0 +1,202 @@
+<!-- <div > -->
+<div class="bg-trang">
+  <form nz-form [formGroup]="formDonVi" [nzLayout]="'vertical'">
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
+        <nz-form-item>
+          <nz-form-label>Đơn vị cấp trên</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <nz-tree-select #treeSelect [nzNodes]="nodesTree" [nzDropdownMatchSelectWidth]="true"
+                [nzDefaultExpandAll]="true" nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" (nzTreeClick)="changeMaDvi($event.node)"
+                formControlName="maDviCha">
+              </nz-tree-select>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+        <nz-form-item>
+          <nz-form-label>Mã đơn vị cấp trên</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input readonly [(ngModel)]="formDonVi.value.maDviCha" [ngModelOptions]="{standalone: true}" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="tenDvi" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+        <nz-form-item>
+          <nz-form-label >Tên viết tắt</nz-form-label>
+          <nz-form-control >
+            <nz-input-group>
+              <input nz-input formControlName="tenVietTat" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+        <nz-form-item>
+          <nz-form-label nzRequired>Mã đơn vị</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input readonly nz-input formControlName="maDvi">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label>Địa chỉ</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="diaChi" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
+          <nz-form-label>SĐT</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="sdt" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
+          <nz-form-label>Fax</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="fax" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
+          <nz-form-label>Mã tự định nghĩa</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="maTuDinhNghia" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
+          <nz-form-label>Trạng thái</nz-form-label>
+          <label nz-checkbox formControlName="trangThai">Hoạt động</label>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" *ngIf="levelNode != 0">
+        <nz-form-item>
+          <nz-form-label></nz-form-label>
+          <label [nzDisabled]="levelNode == 3" nz-checkbox formControlName="type">Là phòng ban</label>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8"></div>
+      <div nz-col [nzSpan]="24" *ngIf="levelNode == 1">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Vùng miền
+          </nz-form-label>
+          <nz-form-control>
+            <nz-radio-group formControlName="vungMien" >
+              <label nz-radio nzValue="Miền Bắc"> Miên bắc </label>
+              <label nz-radio nzValue="Miền Trung"> Miền trung </label>
+              <label nz-radio nzValue="Miền Nam"> Miền Nam </label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24"  *ngIf="levelNode == 1">
+        <nz-form-item>
+        <nz-form-label nzRequired>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-select  nzMode="multiple"  nzAllowClear
+                     formControlName="tinhThanhList">
+            <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.id"
+                       [nzLabel]="option.ten"></nz-option>
+          </nz-select>
+        </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8" *ngIf="levelNode == 2">
+        <nz-form-item>
+          <nz-form-label nzRequired>Tỉnh, thành</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-select   nzAllowClear (ngModelChange)="changeTinhThanh($event)" nzShowSearch
+                        formControlName="tinhThanh">
+              <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.id"
+                         [nzLabel]="option.ten"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8" *ngIf="levelNode == 2">
+        <nz-form-item>
+          <nz-form-label nzRequired>Quận, huyện</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-select  nzAllowClear (ngModelChange)="changeQuanHuyen($event)" nzShowSearch
+                        formControlName="quanHuyen">
+              <nz-option *ngFor="let option of listQuanHuyen" [nzValue]="option.id"
+                         [nzLabel]="option.ten"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8" *ngIf="levelNode == 2">
+        <nz-form-item>
+          <nz-form-label nzRequired>Phường, xã</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-select  nzAllowClear formControlName="phuongXa" nzShowSearch>
+              <nz-option *ngFor="let option of listPhuongXa" [nzValue]="option.id"
+                         [nzLabel]="option.ten"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label>Ghi chú</nz-form-label>
+          <nz-form-control>
+            <textarea nz-input [rows]="3" formControlName="ghiChu"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <ng-template #error let-control>
+      <app-template-error #error [control]="control"></app-template-error>
+    </ng-template>
+  </form>
+  <div class="m-footer">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="add()">
+          <div *ngIf="!data">
+            <i class="fa fa-save" aria-hidden="true"></i>
+            Thêm
+          </div>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+          <i aria-hidden="true" class="fa fa-sign-out"></i>
+          <span>Thoát</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

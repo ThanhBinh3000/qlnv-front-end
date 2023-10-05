@@ -1,0 +1,44 @@
+<div class="input-group-search" nz-row [nzGutter]="24">
+  <nz-form-item nz-col nzSpan="16" class="form-item" style="padding-right: 15px;">
+    <nz-form-label  [nzNoColon]="true" nzFor="bo-nganh">Bộ/Ngành</nz-form-label>
+    <nz-select [nzDisabled]="isView" [(ngModel)]="keHoach.maBoNganh" (ngModelChange)="onChangeBoNganh($event)">
+      <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsBoNganh">
+      </nz-option>
+    </nz-select>
+    <span class="error-text" *ngIf="errorBn">{{globals.prop.REQUIRED}}</span>
+  </nz-form-item>
+
+  <nz-form-item nz-col nzSpan="8" class="form-item">
+    <nz-form-label [nzNoColon]="true" nzFor="gia-tri">Tổng giá trị (Triệu đồng)</nz-form-label>
+    <nz-input-group id="gia-tri">
+      <input type="text" nz-input id="tongTien" [(ngModel)]="keHoach.tongTien" [value]="keHoach.ttMuaBu + keHoach.ttMuaBsung" disabled />
+    </nz-input-group>
+  </nz-form-item>
+</div>
+<div class="mt16 flex-card p-lr16 mb16 dialog-chi-tiet-ke-hoach">
+  <nz-tabset nzType="card" class="mt-16 tab-level-3">
+    <nz-tab [nzTitle]="'Mua bù'">
+      <app-muabu-bosung  [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBu" [isView]="isView" [(dataTable)]="keHoach.muaBuList" ></app-muabu-bosung>
+    </nz-tab>
+    <nz-tab [nzTitle]="'Mua bổ sung'" >
+      <app-muabu-bosung [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaBsung"  [isView]="isView" [(dataTable)]="keHoach.muaBsungList"></app-muabu-bosung>
+    </nz-tab>
+  </nz-tabset>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <a class="btn btn-sub btn-sm waves-effect waves-light " (click)="onCancel()">
+        <i nz-icon nzType="close" class="fa fa-close"></i>
+        Đóng
+      </a>
+      <a *ngIf="!isView" class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="luu()">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </a>
+    </div>
+  </div>
+</div>
+

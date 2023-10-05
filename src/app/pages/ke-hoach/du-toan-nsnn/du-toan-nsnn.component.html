@@ -1,0 +1,35 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+    <!-- (nzChange)="onChange($event)" -->
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item (click)="selectTab('lapthamdinh')" [nzSelected]="tabSelected == 'lapthamdinh'">
+            Lập kế hoạch và thẩm định dự toán
+        </li>
+        <li nz-menu-item (click)="selectTab('dieuchinhdutoan')" [nzSelected]="tabSelected == 'dieuchinhdutoan'">
+            Điều chỉnh dự toán chi NSNN
+            <!-- </button> -->
+        </li>
+        <li nz-menu-item (click)="selectTab('giaodutoan1')" [nzSelected]="tabSelected == 'giaodutoan1'">
+            Giao số trần chi NSNN
+        </li>
+        <li nz-menu-item (click)="selectTab('giaodutoanthucte')" [nzSelected]="tabSelected == 'giaodutoanthucte'">
+            Giao dự toán chi NSNN thực tế
+        </li>
+    </ul>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 'lapthamdinh'">
+            <app-lap-ke-hoach-va-tham-dinh-du-toan></app-lap-ke-hoach-va-tham-dinh-du-toan>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'dieuchinhdutoan'">
+            <app-dieu-chinh-du-toan></app-dieu-chinh-du-toan>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'giaodutoan1'">
+            <app-giao-du-toan></app-giao-du-toan>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'giaodutoanthucte'">
+            <app-giao-du-toan-thuc-te></app-giao-du-toan-thuc-te>
+        </ng-container>
+    </div>
+</div>

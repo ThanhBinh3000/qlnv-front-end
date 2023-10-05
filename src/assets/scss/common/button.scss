@@ -1,0 +1,277 @@
+.btn.btn-main {
+  background: $maincolor;
+  padding: 0 10px;
+  border-radius: 0px;
+  border-color: #e3f9f9;
+  margin-left: 6px;
+  color: #ffffff;
+
+  &:hover {
+    color: #353a64;
+    background: #fff;
+    border-color: #4e5484 !important;
+  }
+
+  i {
+    font-size: 10px;
+    margin-right: 4px;
+  }
+}
+
+.btn.btn-sub {
+  &.xanh-nhat {
+    background-color: #EAF3F3;
+    color: #4E5484;
+    border-color: #4E5484;
+
+  }
+
+  background: #f8f9fa;
+  padding: 0 10px;
+  border-radius: 0px;
+  border-color: #dfdfdf;
+  margin-left: 6px;
+  color: #444444;
+}
+
+.btn.btn-do {
+  background: #FFF3F3;
+  padding: 0 10px;
+  border-radius: 0px;
+  border-color: #FF9393 !important;
+  margin-left: 6px;
+  color: #FF4D4F;
+
+  &:hover {
+    color: #FF4D4F;
+    background: #FFF3F3;
+    border-color: #FF9393 !important;
+  }
+}
+
+// button ..................................................
+// .cangiua.group-button-search {
+//   padding-bottom: 10px;
+// }
+
+.cangiua.group-button-search {
+  padding: 10px 0px 0px 0px;
+}
+
+.group-button-search-center {
+  align-items: flex-end;
+  padding: 10px 0px 0px 0px;
+
+  button.ant-btn {
+    margin-left: 10px;
+  }
+
+  &>div {
+    padding: 0;
+  }
+}
+
+.ant-btn.search__button--search:focus,
+.ant-btn.search__button--search:hover,
+.group-button .xanh:hover {
+  background: #363b65;
+  color: #fff;
+  border-color: #363b65 !important;
+}
+
+.ant-btn:hover,
+.group-button .btn-sub:hover {
+  background: #fff;
+  color: #363b65;
+  border-color: #363b65 !important;
+}
+
+.search__button--search.ant-btn,
+.group-button .xanh,
+.group-button .btn-sub.xanh,
+.xanh {
+  border-color: #4e5484 !important;
+  background-color: #4E5484 !important;
+  color: #fff !important;
+
+  &:hover {
+    background: #363b65;
+    color: #fff;
+    border-color: #363b65 !important;
+  }
+}
+
+.btn-sub.do,
+.btn-sub.btn-xoa,
+.btn-sub.xoa,
+.group-button .btn-xoa,
+.btn-xoa {
+  background-color: rgba(224, 6, 6, 0.2);
+  color: #e00606;
+  border: 1px solid #e00606 !important;
+
+  &:hover {
+    background: #fff;
+    color: #e00606;
+    border-color: #e00606 !important;
+  }
+}
+
+// button ..................................................
+.btn.btn-tep {
+  background: #f8f9fa;
+  padding: 0 10px;
+  border-radius: 0px;
+  border-color: #dfdfdf;
+  color: #444444;
+  width: 100%;
+}
+
+.back-button {
+  background-color: #e3f9f9;
+  margin-bottom: 6px;
+}
+
+
+// tree tạm fix.....................................................
+// .ant-table-row-indent:before {
+//   border-bottom: solid 1px #f0f0f0;
+//   content: "";
+//   width: 30px; //20px;
+//   display: block;
+//   position: absolute;
+//   left: calc(100% - 10px); //100%;
+// }
+
+// .ant-table-tbody>tr>td {
+//   border: none;
+// }
+
+// .ant-table-row-indent:after {
+//   content: "";
+//   display: block;
+//   position: absolute;
+//   height: 26px;
+//   width: 0;
+//   border-left: solid 1px #f0f0f0;
+//   bottom: 0;
+//   right: 10px; //0;
+// }
+
+// .ant-table-row-indent {
+//   position: relative;
+//   margin-top: 10px;
+// }
+
+// .ant-table-row-indent[style="padding-left: 40px;"]+.ant-table-row-expand-icon-spaced:before {
+//   content: "";
+//   border-left: solid 1px #f0f0f0 !important;
+//   height: 26px;
+//   display: block;
+//   width: 0;
+//   background: transparent !important;
+//   top: auto;
+//   left: -33px;
+//   bottom: 8px;
+//   box-shadow: unset;
+// }
+
+// .ant-table-row-expand-icon-spaced {
+//   overflow: visible;
+//   visibility: visible;
+//   border: none;
+//   background: transparent;
+//   box-shadow: unset;
+//   transform: scale(1);
+// }
+
+// .ant-table-row-expand-icon-collapsed,
+// .ant-table-row-expand-icon-expanded {
+//   transform: scale(1);
+//   position: relative;
+// }
+
+// .ant-table-row-indent:not([style="padding-left: 20px;"])+.ant-table-row-expand-icon-collapsed:before,
+// .ant-table-row-indent:not([style="padding-left: 20px;"])+.ant-table-row-expand-icon-expanded:before {
+//   border-left: solid 1px #f0f0f0;
+//   left: -13px;
+//   right: auto;
+//   height: 25px;
+//   top: -43px;
+//   transform: rotate(0deg);
+// }
+
+// .ant-table-tbody tr:first-child td .ant-table-row-indent:after,
+// // .ant-table-tbody tr:first-child td .ant-table-row-indent:before,
+// .ant-table-tbody tr:first-child td .ant-table-row-indent+.ant-table-row-expand-icon-expanded:before,
+// .ant-table-tbody tr:first-child td .ant-table-row-indent+.ant-table-row-expand-icon-collapsed:before,
+// .ant-table-tbody tr:nth-child(2) td .ant-table-row-indent+.ant-table-row-expand-icon-expanded:before,
+// .ant-table-tbody tr:nth-child(2) td .ant-table-row-indent+.ant-table-row-expand-icon-collapsed:before {
+//   display: none;
+// }
+
+
+// .ant-table-row-expand-icon:after,
+// .ant-table-row-expand-icon:before {
+//   background: transparent;
+// }
+
+// .ant-table-row-expand-icon-collapsed:after,
+// .ant-table-row-expand-icon.ant-table-row-expand-icon-expanded:after {
+//   content: "\f0da";
+//   font-family: 'FontAwesome';
+//   background: transparent;
+//   text-align: center;
+//   align-items: center;
+//   justify-content: center;
+//   display: flex;
+//   z-index: 9;
+// }
+
+// .ant-table-row-expand-icon-collapsed:after {
+//   transform: rotate(0deg) !important;
+// }
+
+// .ant-table-row-indent+.ant-table-row-expand-icon {
+//   width: 16px;
+//   height: 16px;
+//   margin-left: 2px;
+//   background-color: #F1F1F1;
+//   border: none;
+//   border-radius: 8px;
+//   z-index: 9;
+// }
+
+// .ant-table-row-indent+.ant-table-row-expand-icon-spaced {
+//   background: transparent;
+// }
+
+// .ant-table-row-expand-icon::after {
+//   transform-origin: center;
+//   left: 7px;
+//   top: 0px;
+//   bottom: auto;
+// }
+
+// .ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed::after {
+//   transform-origin: center;
+//   left: 8px;
+//   top: -1px;
+//   bottom: auto;
+// }
+
+// .ant-table-row-expand-icon+div {
+//   display: block;
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   max-width: 100%;
+//   line-height: 1;
+//   padding-top: 3px;
+// }
+
+// .ant-table .ant-table-tbody>tr>td>div i.anticon.anticon-plus {
+//   cursor: pointer;
+// }
+
+// end tree tạm fix.....................................................

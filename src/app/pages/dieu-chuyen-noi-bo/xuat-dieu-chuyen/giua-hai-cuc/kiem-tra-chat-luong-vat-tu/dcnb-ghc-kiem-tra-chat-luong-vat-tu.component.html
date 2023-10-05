@@ -1,0 +1,26 @@
+<nz-affix [nzOffsetTop]="100" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+      Biên bản lấy mẫu/bàn giao mẫu
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+      Phiếu kiểm nghiệm chất lượng
+    </li>
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+      Hồ sơ kỹ thuật
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-dcnb-ghc-ktclvt-bien-ban-lay-mau-ban-giao></app-dcnb-ghc-ktclvt-bien-ban-lay-mau-ban-giao>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-dcnb-ghc-ktclvt-phieu-kiem-nghiem-chat-luong></app-dcnb-ghc-ktclvt-phieu-kiem-nghiem-chat-luong>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-dcnb-ghc-ktclvt-ho-so-ky-thuat></app-dcnb-ghc-ktclvt-ho-so-ky-thuat>
+    </ng-container>
+  </div>
+</div>

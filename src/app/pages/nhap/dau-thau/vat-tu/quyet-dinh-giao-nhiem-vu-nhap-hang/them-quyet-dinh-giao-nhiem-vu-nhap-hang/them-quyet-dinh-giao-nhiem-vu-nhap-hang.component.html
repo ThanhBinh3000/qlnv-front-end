@@ -1,0 +1,242 @@
+<div>
+  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="fa fa-arrow-circle-left"></i>
+          </a>
+        </div>
+        <div class="canphai phai pd-r-46">
+          <button class="btn btn-main btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <button class="btn btn-sub btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_trinh"></i>
+            <span>Trình duyệt</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Phê duyệt</span>
+          </button>
+          <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Từ chối</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Thông tin quyết định giao nhiệm vụ nhập hàng" class="mt16 flex-card p-lr16">
+          <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Số quyết định</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày ký </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
+                    nzPlaceHolder="Ngày ký" name="ngayKy">
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-date-picker #endDatePicker [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày hiệu lực"
+                    name="ngayHieuLuc">
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Về việc </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="">
+                  <textarea rows="3" class="search__input" nz-input></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Loại QĐ </nz-form-label>
+                <nz-input-group nzAddOnAfterIcon="folder-open">
+                  <input nz-input [readonly]="true" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8" class="mb-16">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Căn cứ trên hợp đồng </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="">
+                  <nz-select nzPlaceHolder="Loại QĐ" name="loaiQd">
+                    <nz-option nzLabel="Nhập"></nz-option>
+                    <nz-option nzLabel="Xuất"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đơn vị ra QĐ </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="">
+                  <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                    <input placeholder="Đơn vị ra QĐ" nz-input [nzAutocomplete]="auto" name="donVi" />
+                  </nz-input-group>
+                  <ng-template #suffixIcon>
+                    <i nz-icon nzType="search"></i>
+                  </ng-template>
+                  <nz-autocomplete #auto>
+                    <nz-auto-option>dv
+                    </nz-auto-option>
+                  </nz-autocomplete>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+        <div class="tab__luong-thuc mt-16">
+          <nz-tabset nzType="card" class="tab__container">
+            <nz-tab [nzTitle]="'Thông tin hàng DTQG'">
+              <div nz-row [nzGutter]="[16, 12]">
+                <div nz-col [nzSpan]="12">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Hàng DTQG</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-select nzPlaceHolder="Hàng DTQG" name="loaiVTHH">
+                        <nz-option nzLabel="Thóc"></nz-option>
+                        <nz-option nzLabel="Gạo"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Loại hình nhập
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <input nz-input name="loaiNx" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Thời gian thực hiện từ ngày
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd"
+                        nzPlaceHolder="Thời gian thực hiện từ ngày" name="startValue">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đến ngày</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-date-picker #endDatePicker nzFormat="yyyy-MM-dd" nzPlaceHolder="Đến ngày" name="endValue">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Số lượng</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-input-number [nzSize]="'small'" nz-input [nzMin]="0" name="soLuong">
+                      </nz-input-number>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đơn vị tính</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-select name="loaiVTHH">
+                        <nz-option nzLabel="Tấn"></nz-option>
+                        <nz-option nzLabel="Bộ"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Danh sách chi tiết đơn vị thức hiện quyết định'">
+              <div id="table-don-vi-quyet-dinh">
+                <nz-table #editRowTable class="nowrap mt-16" nzBordered [nzFrontPagination]="false"
+                  [nzShowPagination]="false">
+                  <thead>
+                    <tr>
+                      <th class="text-center" width="60px">STT</th>
+                      <th width="45px">
+                        <label nz-checkbox></label>
+                      </th>
+                      <th width="130px">Mã đơn vị</th>
+                      <th width="175px">Tên đơn vị</th>
+                      <th width="175px">Số lượng</th>
+                      <th width="">Ghi chú</th>
+                      <th width="130px">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-center">1</td>
+                      <th width="45px">
+                        <label nz-checkbox></label>
+                      </th>
+                      <td>01.002</td>
+                      <td>Chi cục DTNN Việt Trì </td>
+                      <td>50</td>
+                      <td>Nhập kho dự trữ quốc gia năm tại Chi cục Dự trữ Nhà nước Việt Trì trực thuộc Cục Dự trữ Nhà
+                        nước khu vực Vĩnh Phú.</td>
+                      <td class="text-center">
+                        <a>
+                          <i class="fa fa-pencil" title="Sửa"></i>
+                        </a>
+                        <a>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+            </nz-tab>
+          </nz-tabset>
+          <button type="button" class="btn btn-main btn-them" (click)="themNganKho()">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-main btn-export">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button>
+          <button type="button" class="btn btn-sub btn-in">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>In</span>
+          </button>
+        </div>
+        <div class="ghi-chu">
+          <nz-form-label nzRequired [nzNoColon]="true">
+            Ghi chú
+          </nz-form-label>
+          <textarea rows="3" class="search__input" nz-input></textarea>
+          <span class="error-text"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

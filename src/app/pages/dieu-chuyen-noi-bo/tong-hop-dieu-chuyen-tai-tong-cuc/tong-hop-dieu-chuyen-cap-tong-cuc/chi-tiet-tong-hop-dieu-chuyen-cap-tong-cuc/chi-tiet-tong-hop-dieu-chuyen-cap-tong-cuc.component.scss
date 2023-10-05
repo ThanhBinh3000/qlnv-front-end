@@ -1,0 +1,92 @@
+@import './../../../../../../assets/scss/default.scss';
+@import './../../../../../../assets/scss/common/tab.scss';
+
+.bottom-right-btn {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+    // margin-bottom: 12px;
+
+    .btn.mr-12 {
+        margin-right: 12px;
+    }
+}
+
+.tong-hop-dc .btn.btn-sub {
+    margin-right: 10px
+}
+
+#id-btn-main {
+    background: $maincolor;
+    padding: 0 10px;
+    border-radius: 0px;
+    border-color: #e3f9f9;
+    margin-left: 6px;
+    color: #ffffff;
+
+    &:hover {
+        color: #353a64;
+        background: #fff;
+        border-color: #4e5484 !important;
+    }
+
+    i {
+        font-size: 10px;
+        margin-right: 4px;
+    }
+}
+
+.break {
+    white-space: break-spaces !important;
+}
+
+.nowrap.table-chi-tiet.mt-8-im {
+    margin-top: 8px;
+}
+
+.max-w-120 {
+    max-width: 120px !important;
+}
+
+.min-w-120 {
+    min-width: 120px !important;
+}
+
+.max-w-90 {
+    max-width: 90px !important;
+}
+
+.min-w-90 {
+    min-width: 90px !important;
+}
+
+.bg-selected td {
+    background-color: #ebedff;
+}
+
+.tr-cursor {
+    cursor: pointer;
+}
+
+.thdc-btn-affixc>div {
+    justify-content: flex-end;
+    display: flex;
+    margin-top: 8px;
+    padding-bottom: 6px;
+}
+
+.form.pd-l-r-10 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.table-out-tab {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #f0f0f0;
+    border-top: 1px solid #f0f0f0;
+    background: #fff;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}

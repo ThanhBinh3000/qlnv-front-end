@@ -1,0 +1,204 @@
+<div class="bg-trang">
+  <div nz-row [nzGutter]="24">
+    <div nz-col nzXs="24" nzSm="24" nzMd="10" nzLg="10">
+      <nz-card nzTitle="" class="card-tree">
+        <div class="group-button">
+          <h3>Danh sách đơn vị</h3>
+          <div class="buttons">
+            <button type="button" class="btn btn-main" (click)="create()">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </div>
+        </div>
+        <nz-input-group [nzSuffix]="suffixIcon">
+          <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue"/>
+        </nz-input-group>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-tree #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+                 (nzContextMenu)="nzClickNodeTree($event)" [nzSearchValue]="searchValue">
+        </nz-tree>
+      </nz-card>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="14" nzLg="14">
+      <nz-card>
+        <div class="group-button">
+          <h3>Thông tin chi tiết đơn vị</h3>
+          <div class="buttons">
+            <button nz-button class="btn btn-sub do" (click)="delete(detailDonVi.value.id)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              Xóa
+            </button>
+            <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(true)" *ngIf="!isEditData">
+              <i class="icon htvbdh_bosungfile"></i>
+              Sửa
+            </button>
+            <button nz-button class="btn btn-sub" (click)="showEdit(false)" *ngIf="isEditData">
+              <i class="fa fa-times"></i>
+              Hủy bỏ
+            </button>
+            <button nz-button class="btn btn-sub xanh-nhat" (click)="update()" *ngIf="isEditData">
+              <i class="fa fa-save"></i>
+              Lưu
+            </button>
+          </div>
+        </div>
+        <form nz-form [formGroup]="detailDonVi" [nzLayout]="'vertical'">
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18" *ngIf="nodeDetail?.maDviCha">
+              <nz-form-item>
+                <nz-form-label nzRequired>Đơn vị cấp trên</nz-form-label>
+                <nz-form-control>
+                  <nz-tree-select #nzTreeSelectComponent [nzNodes]="nodes" [nzDefaultExpandAll]="true"
+                                  [nzDropdownMatchSelectWidth]="true" nzShowSearch nzVirtualHeight="300px"
+                                  nzPlaceHolder="Vui lòng chọn" formControlName="maDviCha" nzDisabled>
+                  </nz-tree-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6" *ngIf="nodeDetail?.maDviCha">
+              <nz-form-item>
+                <nz-form-label nzRequired>Mã đơn vị cấp trên</nz-form-label>
+                <nz-form-control>
+                  <nz-input-group>
+                    <input nz-input readonly [(ngModel)]="detailDonVi.value.maDviCha"
+                           [ngModelOptions]="{standalone: true}"/>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
+              <nz-form-item>
+                <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
+                <nz-form-control>
+                  <nz-input-group nzErrorTip="Tên đơn vị là bắt buộc!">
+                    <input nz-input formControlName="tenDvi" [readonly]="!isEditData"/>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Mã đơn vị</nz-form-label>
+                <input nz-input formControlName="maDvi" [readonly]="true"/>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
+              <nz-form-item>
+                <nz-form-label>Địa chỉ</nz-form-label>
+                <input nz-input formControlName="diaChi" [readonly]="!isEditData"/>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+              <nz-form-item>
+                <nz-form-label>Tên viết tắt</nz-form-label>
+                <input nz-input formControlName="tenVietTat" [readonly]="!isEditData"/>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="9" nzLg="9">
+              <nz-form-item>
+                <nz-form-label>SĐT</nz-form-label>
+                <input nz-input formControlName="sdt" [readonly]="!isEditData"/>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="9" nzLg="9">
+              <nz-form-item>
+                <nz-form-label>Fax</nz-form-label>
+                <input nz-input formControlName="fax" [readonly]="!isEditData"/>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+              <nz-form-item>
+                <nz-form-label>Mã tự định nghĩa</nz-form-label>
+                <input nz-input formControlName="maTuDinhNghia" [readonly]="!isEditData"/>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+              <nz-form-item>
+                <nz-form-label>Trạng thái</nz-form-label>
+                <label nz-checkbox formControlName="trangThai" [nzDisabled]="!isEditData">Hoạt động</label>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="16"></div>
+            <div nz-col nzSpan="8" *ngIf="detailDonVi.value.capDvi == 2">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Vùng miền</nz-form-label>
+                <nz-form-control>
+                  <nz-select  formControlName="vungMien" [nzDisabled]="!isEditData">
+                    <nz-option *ngFor="let item of listVungMien" [nzValue]="item.ma" [nzLabel]="item.giaTri"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="16"  *ngIf="detailDonVi.value.capDvi == 2">
+              <nz-form-item>
+                <nz-form-label>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
+                <nz-form-control>
+                  <nz-select  [nzDisabled]="!isEditData"  nzMode="multiple"  nzAllowClear
+                              formControlName="tinhThanhList">
+                    <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.id"
+                               [nzLabel]="option.ten"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzSpan="8"  *ngIf="detailDonVi.value.capDvi == 3">
+              <nz-form-item>
+                <nz-form-label>Tỉnh, thành</nz-form-label>
+                <nz-form-control>
+                  <nz-select  [nzDisabled]="!isEditData" nzAllowClear (ngModelChange)="changeTinhThanh($event)"
+                              formControlName="tinhThanh">
+                    <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.id"
+                               [nzLabel]="option.ten"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8"  *ngIf="detailDonVi.value.capDvi == 3">
+              <nz-form-item>
+                <nz-form-label>Quận, huyện</nz-form-label>
+                <nz-form-control>
+                  <nz-select  [nzDisabled]="!isEditData"    nzAllowClear (ngModelChange)="changeQuanHuyen($event)"
+                              formControlName="quanHuyen">
+                    <nz-option *ngFor="let option of listQuanHuyen" [nzValue]="option.id"
+                               [nzLabel]="option.ten"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8"  *ngIf="detailDonVi.value.capDvi == 3">
+              <nz-form-item>
+                <nz-form-label>Phường, xã</nz-form-label>
+                <nz-form-control>
+                  <nz-select  [nzDisabled]="!isEditData"    nzAllowClear
+                              formControlName="phuongXa">
+                    <nz-option *ngFor="let option of listPhuongXa" [nzValue]="option.id"
+                               [nzLabel]="option.ten"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+              <nz-form-item *ngIf="detailDonVi.value.capDvi != 1 &&  detailDonVi.value.capDvi != 0">
+                <nz-form-label></nz-form-label>
+                <label nz-checkbox [nzDisabled]="!isEditData" formControlName="type">Là phòng ban</label>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+              <nz-form-item>
+                <nz-form-label>Ghi chú</nz-form-label>
+                <nz-form-control>
+                  <textarea nz-input [rows]="3" formControlName="ghiChu" [readonly]="!isEditData"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-card>
+    </div>
+  </div>
+</div>

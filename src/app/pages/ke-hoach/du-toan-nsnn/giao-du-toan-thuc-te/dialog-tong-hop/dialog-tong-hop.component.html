@@ -1,0 +1,44 @@
+<div class="modal__content">
+    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+        <div nz-col nzSpan="6">
+            <label class="search__label">Năm báo cáo</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.namHienTai"
+                [class]="response.namHienTai ?'' : 'input-error-validate'" (ngModelChange)="changeModel()">
+                <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="6">
+            <label class="search__label">Loại phương án</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại phương án" [(ngModel)]="response.loai"
+                [class]="response.loai ?'' : 'input-error-validate'" (ngModelChange)="changeLoai()">
+                <nz-option *ngFor="let item of lstLoaiPa" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="6">
+            <label class="search__label">Mã phương án</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã phương án" [(ngModel)]="response.maPa"
+                [class]="response.maPa ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of lstPaLoai" [nzValue]="item.maPa" [nzLabel]="item.maPa">
+                </nz-option>
+            </nz-select>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
+                <i class="icon htvbdh_tcdt_save"></i>
+                Tạo mới
+            </button>
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+                Đóng
+            </button>
+        </div>
+    </div>
+</div>

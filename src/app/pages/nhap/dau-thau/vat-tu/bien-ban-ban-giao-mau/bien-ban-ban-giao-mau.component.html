@@ -1,0 +1,112 @@
+<div class="luong-thuc__danh-sach">
+    <div class="contentBor chi-tieu__body">
+        <div class="contentDetail">
+            <div class="main-content">
+                <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
+                    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Số QĐ giao nhiệm vụ nhập hàng</label>
+                            <input class="search__input" nz-input />
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Loại hàng DTQG</label>
+                            <input class="search__input" nz-input />
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Biên bản lập từ ngày</label>
+                            <input class="search__input" nz-input />
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Đến ngày</label>
+                            <input class="search__input" nz-input />
+                        </div>
+                    </div>
+                    <div class="cangiua group-button-search">
+                        <button nz-button class="search__button--search" (click)="search()">
+                            <i nz-icon nzType="search"></i>
+                            Tìm kiếm
+                        </button>
+                        <button nz-button class="search__button--clear" (click)="clearFilter()">
+                            <i nz-icon nzType="close"></i>
+                            Xóa điều kiện
+                        </button>
+                    </div>
+                </nz-card>
+                <nz-card nzTitle="Danh sách biên bản lấy mẫu/ biên bản bàn giao mẫu" [nzExtra]="tableCard1"
+                    class="mt-16 flex-card p-lr16">
+                    <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+                        [nzShowPagination]="false">
+                        <thead>
+                            <tr>
+                                <th class="text-center" width="60px">STT</th>
+                                <th width="45px">
+                                    <label nz-checkbox></label>
+                                </th>
+                                <th width="130px">Số biên bản</th>
+                                <th width="175px">Ngày lập</th>
+                                <th width="175px">Tên biên bản</th>
+                                <th width="">Đơn vị </th>
+                                <th width="175px">Số QĐ giao nhiệm vụ nhập hàng</th>
+                                <th width="175px">Loại hàng</th>
+                                <th width="175px">Trạng thái</th>
+                                <th width="175px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center">1</td>
+                                <th width="45px">
+                                    <label nz-checkbox></label>
+                                </th>
+                                <td>DNB/CC.BBLM/2022/03</td>
+                                <td>15/03/2022</td>
+                                <td>Biên bản lấy mẫu, bàn giao mẫu</td>
+                                <td>Chi cục Dự trữ Nhà nước Bình Dương </td>
+                                <td>ĐNB/QĐGNVNH/2022/19</td>
+                                <td>Máy bơm nước chữa cháy vòi đẩy chữa cháy</td>
+                                <td>Đã duyệt</td>
+                                <td class="text-center">
+                                    <a>
+                                        <i class="fa fa-pencil" title="Sửa"></i>
+                                    </a>
+                                    <a>
+                                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                    <div class="tab-content tab-menu" id="myTabContent">
+                        <div class="tab-pane fade show active justify-content-between">
+                            <div class="trai">
+
+                            </div>
+                            <div class="canphai">
+                                <!-- begin phân trang  -->
+                                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                                    nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                                    (nzPageIndexChange)="changePageIndex($event)"
+                                    (nzPageSizeChange)="changePageSize($event)">
+                                    <ng-template #rangeTemplate let-range="range" let-total>
+                                        {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                                    </ng-template>
+                                </nz-pagination>
+                                <!-- end phân trang  -->
+                            </div>
+                        </div>
+                    </div>
+                </nz-card>
+                <ng-template #tableCard1>
+                    <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <span>Thêm</span>
+                    </button>
+                    <button type="button" class="btn btn-sub" (click)="export()">
+                        <i class="icon htvbdh_chuyen-xu-ly"></i>
+                        <span>Xuất excel</span>
+                    </button>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>

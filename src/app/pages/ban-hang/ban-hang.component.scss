@@ -1,0 +1,169 @@
+@import '../../../assets/scss/default.scss';
+@import '../../../assets/scss/common/tab.scss';
+
+::ng-deep {
+  .display-tab {
+    width: 100%;
+  }
+
+  .ant-menu-submenu-title {
+    padding: 0 !important;
+  }
+
+  .left-0 {
+    left: 0 !important;
+  }
+
+  .dau-thau-tab {
+    .ant-popover-content {
+      position: absolute;
+      width: 100vw;
+      left: 0;
+      top: 0;
+    }
+
+    .ant-popover-inner {
+      background-color: #f8fefe !important;
+    }
+  }
+
+  .content-child-menu {
+    padding: 12px 16px;
+
+    .center-url-item {
+      border-left: 1px solid #d8dde6;
+      border-right: 1px solid #d8dde6;
+    }
+
+    .icon {
+      font-size: 42px;
+      color: #4e5484;
+    }
+
+    .card-tree {
+      padding-top: 24px;
+      border-radius: 0px;
+      cursor: pointer;
+      border-color: #4e5484;
+      background: #f8fefe;
+    }
+
+    .content-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      .htvbdh_tcdt_icon-common {
+        color: $maincolor;
+        font-size: $font-size42;
+      }
+
+      &-title {
+        font-size: $font-size14;
+        line-height: $font-size16;
+        color: $maincolor;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-align: center;
+        margin-top: 18px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+      }
+
+      &-description {
+        font-size: $font-size12;
+        color: rgba(68, 68, 68, 0.5);
+        margin-top: 6px;
+        font-weight: normal;
+        font-size: $font-size12;
+        line-height: $font-size14;
+        text-align: center;
+      }
+    }
+  }
+
+  .main-content-dau-thau {
+    padding: unset !important;
+
+    .card-tree {
+      cursor: pointer;
+    }
+
+    .content-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      .htvbdh_tcdt_icon-common {
+        color: $maincolor;
+        font-size: $font-size42;
+      }
+
+      &-title {
+        font-size: $font-size14;
+        line-height: $font-size16;
+        color: $maincolor;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-align: center;
+        margin-top: 18px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+      }
+
+      &-description {
+        font-size: $font-size12;
+        color: rgba(68, 68, 68, 0.5);
+        margin-top: 6px;
+        font-weight: normal;
+        font-size: $font-size12;
+        line-height: $font-size14;
+        text-align: center;
+      }
+    }
+
+    .ant-card .ant-card-body {
+      padding: 32px 16px 0px 16px;
+    }
+  }
+
+  .dau-thau {
+    .ant-tabs-tabpane {
+      background-color: rgb(251 251 251);
+    }
+
+    .vat-tu,
+    .muoi {
+      padding: 15px;
+      padding-top: 24px;
+      background-color: #e3f9f9;
+    }
+
+    .action-top {
+      padding-right: 48px;
+    }
+  }
+
+  .ant-tabs-content-holder {
+    overflow-y: auto;
+    overflow-x: hidden;
+    // max-height: calc(100vh - 184px);
+  }
+
+  .ant-popover-inner-content {
+    padding: 0;
+  }
+
+  .main-content-dau-thau .ant-card .ant-card-body {
+    padding: 0 !important;
+  }
+
+  .card-tree .icon {
+    font-size: 42px;
+    color: #4e5484;
+  }
+}

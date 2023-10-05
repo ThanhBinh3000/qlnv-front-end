@@ -1,0 +1,178 @@
+<ng-container *ngIf="!isDetail">
+  <div class="bg-trang">
+    <nz-card class="mt16 flex-card p-lr16">
+      <div nz-row [nzGutter]="20">
+        <div nz-col nzSpan="8">
+          <label class="search__label">Công cụ dụng cụ</label>
+          <input [(ngModel)]="searchFilter.soQuyetDinhNhap" nz-input nzSize="small" placeholder="Nhập số"
+            appNumberOnly />
+        </div>
+        <div nz-col nzSpan="8">
+          <label class="search__label">Ngày hiệu lực</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayBienBan" nzFormat="dd/MM/yyyy"></nz-range-picker>
+        </div>
+        <div nz-col nzSpan="8">
+          <label class="search__label">Trạng thái</label>
+          <input class="search__input" placeholder="Nhập Trạng thái" nz-input [(ngModel)]="searchFilter.soBienBan" />
+        </div>
+      </div>
+      <div class="cangiua group-button-search">
+        <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <i class="icon  htvbdh_nhap-lai1"></i>
+          Xóa điều kiện
+        </button>
+        <button nz-button class="search__button--search" (click)="search()">
+          <i nz-icon nzType="search"></i>
+          Tìm kiếm
+        </button>
+      </div>
+    </nz-card>
+
+    <div class="group-button">
+      <h3>Danh sách định mức trang bị</h3>
+      <div class="buttons">
+        <button type="button" class="btn btn-do" (click)="deleteSelect()">
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          <span>Xóa</span>
+        </button>
+        <button type="button" class="btn btn-sub" (click)="export()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
+      </div>
+    </div>
+
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #basicTable nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+        [nzData]="dataTable">
+        <thead>
+          <tr>
+            <th width="45px" rowSpan="2">
+              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                [nzIndeterminate]="indeterminate"></label>
+            </th>
+            <th width="60px" rowSpan="2">STT</th>
+            <th rowSpan="2">Công cụ dụng cụ</th>
+            <th colSpan="3">Số lượng tối đa</th>
+            <th rowSpan="2">DVT</th>
+            <th rowSpan="2">Ngày hiệu lực</th>
+            <th rowSpan="2">Trạng thái</th>
+            <th rowSpan="2" width="300px">Ghi chú</th>
+            <th>Hành động</th>
+          </tr>
+          <tr>
+            <th width="200px" class="text-center">VP Cục DTNN KV</th>
+            <th width="200px" class="text-center">VP Chi cục DTNN</th>
+            <th width="200px" class="text-center">Chi cục DTNN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+              <nz-select>
+                <nz-option>Quạt công nghiệp</nz-option>
+              </nz-select>
+            </td>
+            <td>
+              <input nz-input nzSize="small" />
+            </td>
+            <td>
+              <input nz-input nzSize="small" />
+            </td>
+            <td>
+              <div class="chi-cuc-sl">
+                <nz-input-number [nzSize]="'small'" [nzMin]="0" class="w-50"></nz-input-number>
+                <span>/</span>
+                <nz-input-number [nzSize]="'small'" [nzMin]="0" class="w-50"></nz-input-number>
+                <span>Tấn lương thực nhập xuất</span>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <input nz-input nzSize="small" />
+            </td>
+            <td>
+              <a (click)="addRow()">
+                <i class="fa fa-plus"></i>
+              </a>
+              <a (click)="clearItemRow()">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+          </tr>
+          <tr *ngFor="let data of basicTable.data; let i = index">
+            <ng-container *ngIf="!editCache[data.stt]?.edit; else editTemplate">
+              <td width="45px">
+                <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                  [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
+              </td>
+              <td class="text-center">{{ data.stt }}</td>
+              <td>{{ data.soBienBan }}</td>
+              <td>{{ data.soQuyetDinhNhap }}</td>
+              <td>{{ data.ngayNghiemThu }}</td>
+              <td>{{ data.tenVatTuCha }}</td>
+              <td>{{ data.tenVatTu }}</td>
+              <td>{{ data.tenDiemKho }}</td>
+              <td>{{ data.tenNhaKho }}</td>
+              <td>{{ data.tenTrangThai }}</td>
+              <td>
+                <a (click)="editRow(data.stt)">
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a (click)="deleteRow(data)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </ng-container>
+            <ng-template #editTemplate>
+              <td></td>
+              <td></td>
+              <td>
+                <nz-select>
+                  <nz-option>Quạt công nghiệp</nz-option>
+                </nz-select>
+              </td>
+              <td>
+                <input nz-input nzSize="small" [(ngModel)]="editCache[data.id]?.data.soBienBan" />
+              </td>
+              <td>
+                <input nz-input nzSize="small" />
+              </td>
+              <td>
+                <div class="chi-cuc-sl">
+                  <nz-input-number [nzSize]="'small'" [nzMin]="0" class="w-50"></nz-input-number>
+                  <span>/</span>
+                  <nz-input-number [nzSize]="'small'" [nzMin]="0" class="w-50"></nz-input-number>
+                  <span>Tấn lương thực nhập xuất</span>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <input nz-input nzSize="small" />
+              </td>
+              <td>
+                <a (click)="saveEdit(data.id)" class="save">
+                  <i class="fa fa-save"></i>
+                </a>
+                <a (click)="cancelEdit(data.id)">
+                  <i class="fa fa-times do"></i>
+                </a>
+              </td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+</ng-container>
+
+<ng-container class="chi-tiet" *ngIf="isDetail">
+  <app-thong-tin-dinh-muc-trang-bi [id]="selectedId" (showListEvent)="showList()" [isView]="isView">
+  </app-thong-tin-dinh-muc-trang-bi>
+</ng-container>

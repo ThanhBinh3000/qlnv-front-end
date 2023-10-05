@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
+  <defs>
+    <clipPath id="clip-phanquyen_c">
+      <rect width="26" height="26"/>
+    </clipPath>
+  </defs>
+  <g id="phanquyen_c" clip-path="url(#clip-phanquyen_c)">
+    <g id="Group_8154" data-name="Group 8154" transform="translate(-1615.293 -359.452)">
+      <g id="Group_7955" data-name="Group 7955" transform="translate(-4347.716 -5394.091)">
+        <g id="share" transform="translate(5966.009 5756.931)">
+          <g id="Group_7953" data-name="Group 7953" transform="translate(0)">
+            <path id="Path_30354" data-name="Path 30354" d="M31.773,13.428a3.627,3.627,0,0,0-2.919,1.487l-5.737-2.938A3.434,3.434,0,0,0,23.011,9.6l6-3.613a3.62,3.62,0,1,0-.881-2.347,3.606,3.606,0,0,0,.253,1.309L22.365,8.572a3.634,3.634,0,1,0,.229,4.5L28.312,16a3.59,3.59,0,0,0-.178,1.068,3.64,3.64,0,1,0,3.64-3.64Z" transform="translate(-16)" fill="#453f71"/>
+          </g>
+        </g>
+        <g id="share-2" data-name="share" transform="translate(5966.009 5755.543)">
+          <g id="Group_7953-2" data-name="Group 7953" transform="translate(0)">
+            <path id="Path_30354-2" data-name="Path 30354" d="M31.773,13.428a3.627,3.627,0,0,0-2.919,1.487l-5.737-2.938A3.434,3.434,0,0,0,23.011,9.6l6-3.613a3.62,3.62,0,1,0-.881-2.347,3.606,3.606,0,0,0,.253,1.309L22.365,8.572a3.634,3.634,0,1,0,.229,4.5L28.312,16a3.59,3.59,0,0,0-.178,1.068,3.64,3.64,0,1,0,3.64-3.64Z" transform="translate(-16)" fill="#301570"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

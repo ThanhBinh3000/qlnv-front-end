@@ -1,0 +1,21 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+	<ul nz-menu nzMode="horizontal">
+		<li nz-menu-item (click)="selectTab('thuchien')" [nzSelected]="tabSelected == 'thuchien'">
+			Báo cáo thực hiện dự toán chi
+		</li>
+		<li nz-menu-item (click)="selectTab('ketqua')" [nzSelected]="tabSelected == 'ketqua'">
+			Báo cáo thực hiện vốn, phí
+		</li>
+	</ul>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+	<div class="contentDetail">
+		<ng-container *ngIf="tabSelected == 'thuchien'">
+			<app-bao-cao-thuc-hien-du-toan-chi></app-bao-cao-thuc-hien-du-toan-chi>
+		</ng-container>
+		<ng-container *ngIf="tabSelected == 'ketqua'">
+			<app-bao-cao-thuc-hien-von-phi></app-bao-cao-thuc-hien-von-phi>
+		</ng-container>
+	</div>
+</div>

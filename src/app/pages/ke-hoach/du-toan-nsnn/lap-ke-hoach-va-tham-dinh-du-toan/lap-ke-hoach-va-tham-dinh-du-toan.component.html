@@ -1,0 +1,41 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+    <ul nz-menu nzMode="horizontal">
+        <ng-container *ngFor="let data of tabList">
+            <li *ngIf="data.status" [nzSelected]="data.isSelected" nz-menu-item (click)="selectTab(data.code)">
+                {{data.name}}
+            </li>
+        </ng-container>
+    </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == Ltd.DANH_SACH_BAO_CAO">
+            <app-danh-sach-bao-cao (dataChange)="changeTab($event)">
+            </app-danh-sach-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == Ltd.DANH_SACH_BAO_CAO_DVCD">
+            <app-danh-sach-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
+            </app-danh-sach-bao-cao-tu-don-vi-cap-duoi>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == Ltd.DANH_SACH_TONG_HOP">
+            <app-tong-hop-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
+            </app-tong-hop-bao-cao-tu-don-vi-cap-duoi>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == Ltd.BAO_CAO_01">
+            <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
+            </app-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == Ltd.BAO_CAO_02">
+            <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
+            </app-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == Ltd.DANH_SACH_BAO_HIEM">
+            <app-danh-sach-he-so-bao-hiem (dataChange)="changeTab($event)">
+            </app-danh-sach-he-so-bao-hiem>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == Ltd.HE_SO_BAO_HIEM">
+            <app-he-so-bao-hiem [data]="data" (dataChange)="changeTab($event)">
+            </app-he-so-bao-hiem>
+        </ng-container>
+    </div>
+</div>

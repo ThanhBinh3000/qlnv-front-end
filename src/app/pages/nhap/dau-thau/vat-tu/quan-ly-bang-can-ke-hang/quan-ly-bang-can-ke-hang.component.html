@@ -1,0 +1,157 @@
+<div class="luong-thuc__danh-sach">
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Điều kiện tìm kiếm" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số bảng kê</label>
+              <input class="search__input" placeholder="Số bảng kê" nz-input [(ngModel)]="soPhieu" />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Hợp đồng</label>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogHopDong()">
+                <input nz-input [readonly]="true" [(ngModel)]="soHD" />
+              </nz-input-group>
+            </div>
+            <div nz-col nzSpan="8">
+            </div>
+            <div nz-col nzSpan="16">
+              <label class="search__label">Loại hàng hóa</label>
+              <nz-select nzPlaceHolder="Loại hàng hóa" [(ngModel)]="loaiVTHH">
+                <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Đơn vị</label>
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
+                  [nzAutocomplete]="auto" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #auto>
+                <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
+                  (click)="selectDonVi(option)">
+                  {{ option.labelDonVi }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Lập bảng kê từ ngày</label>
+              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                [(ngModel)]="startValue" nzPlaceHolder="Lập bảng kê từ ngày">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Đến ngày</label>
+              <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                [(ngModel)]="endValue" nzPlaceHolder="Đến ngày">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="8" *ngIf="isDuyet">
+              <label class="search__label">Trạng thái</label>
+              <nz-select nzPlaceHolder="Loại QĐ" [(ngModel)]="loaiVTHH">
+                <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--search" (click)="search()">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
+              <i nz-icon nzType="close"></i>
+              Xóa điều kiện
+            </button>
+          </div>
+        </nz-card>
+        <nz-card nzTitle="Danh sách bảng kê nhập hàng" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+          <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th class="text-center" width="60px">STT</th>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <th width="130px">Số bảng kê</th>
+                <th width="175px">Ngày lập</th>
+                <th width="175px">Số hợp đồng mua bán</th>
+                <th width="175px">Điểm kho</th>
+                <th width="">Nhà kho</th>
+                <th width="175px">Ngăn kho</th>
+                <th width="175px">Hàng hóa</th>
+                <th width="175px">Số lượng giao nhận</th>
+                <th width="175px">Trạng thái</th>
+                <th width="130px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <td>ĐNB/CC.ĐNT/N/2022/16</td>
+                <td>15/03/2022</td>
+                <td>18/2022/QĐ-CGNVNH</td>
+                <td>Điểm kho Tân An</td>
+                <td>Nhà kho H1</td>
+                <td>Lô số 2 Ngăn kho H1/1</td>
+                <td>Nhà bạt cứu sinh</td>
+                <td>350</td>
+                <td>Dự thảo</td>
+                <td class="text-center">
+                  <a (click)="redirectToChiTiet(data.id)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a>
+                    <i class="icon htvbdh_tcdt_print"></i>
+                  </a>
+                  <a (click)="xoaItem(data)">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+
+              </div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                  (nzPageSizeChange)="changePageSize($event)">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-card>
+        <ng-template #tableCard1>
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-main" *ngIf="isDuyet">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>Kết xuất</span>
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

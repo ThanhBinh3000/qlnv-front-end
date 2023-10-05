@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
+  <defs>
+    <clipPath id="clip-icon_pre">
+      <rect width="18" height="18"/>
+    </clipPath>
+  </defs>
+  <g id="icon_pre" clip-path="url(#clip-icon_pre)">
+    <g id="Group_8056" data-name="Group 8056" transform="translate(-1848.466 -202.009)">
+      <path id="Path_499" data-name="Path 499" d="M1853.867,919.8a.244.244,0,0,0,.1.2l3.928,2.946a.242.242,0,0,0,.148.049.244.244,0,0,0,.245-.245v-5.892a.246.246,0,0,0-.393-.2l-3.928,2.947a.244.244,0,0,0-.1.2" transform="translate(0 -709)" fill="#666"/>
+      <path id="Path_500" data-name="Path 500" d="M1857.258,927.591a7.791,7.791,0,1,0-7.792-7.791,7.79,7.79,0,0,0,7.792,7.791m0-14.608a6.825,6.825,0,1,1-6.817,6.817,6.824,6.824,0,0,1,6.817-6.817" transform="translate(0 -709)" fill="#666"/>
+    </g>
+  </g>
+</svg>

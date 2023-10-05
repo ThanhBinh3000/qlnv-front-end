@@ -1,0 +1,10 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+  <ul nz-menu nzMode="horizontal" id="mainTongCuc">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Thông tin đấu giá
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-thong-tin-dau-gia [loaiVthh]="inputLoaiVthh"></app-thong-tin-dau-gia>
+</ng-container>

@@ -1,0 +1,138 @@
+::ng-deep {
+  .trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+
+  nz-header {
+    background: #fff;
+    padding: 0;
+  }
+
+  .inner-content {
+    padding: 24px;
+    background: #fff;
+    min-height: 360px;
+  }
+
+  .activeMenu {
+    background: #4e5484;
+    color: #fff !important;
+  }
+
+  nz-footer {
+    text-align: center;
+  }
+
+  .sider-dm-dung-chung {
+    .header-menu-sidebar {
+      color: #fff;
+    }
+
+    .ant-layout-sider {
+      height: 100vh !important;
+      // max-width: 420px !important;
+      min-width: 0px !important;
+      width: 300px !important;
+    }
+
+    .text-menu {
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 300px;
+      position: fixed;
+      z-index: 1;
+      top: 38px;
+      left: 0;
+      background-color: #fff;
+      overflow-x: hidden;
+      transition: 0.5s;
+      box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .sidebar a {
+      padding: 8px 0px 8px 12px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      color: #444444;
+      display: block;
+      transition: 0.3s;
+      border-bottom: 1px solid #F3F3F3;
+    }
+
+    .sidebar a:hover {
+      color: #fff;
+      background: #4E5484;
+
+      .icon-menu,
+      .number-menu {
+        background: #353A64;
+        color: #fff;
+      }
+    }
+
+    .sidebar .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+
+    .openbtn {
+      font-size: 20px;
+      cursor: pointer;
+      background-color: #111;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+    }
+
+    .openbtn:hover {
+      background-color: #444;
+    }
+
+    #main {
+      transition: margin-left .5s;
+      //padding: 16px;
+      margin-left: 300px;
+    }
+
+    .img-collapse-open {
+      cursor: pointer;
+      transform: rotate(180deg);
+      margin-left: -16px;
+      position: absolute;
+    }
+
+    .img-collapse-close {
+      cursor: pointer;
+    }
+
+    .icon-menu {
+      background: #F3F3F3;
+      color: #BDBDBD;
+      padding: 8px;
+      border-radius: 50%;
+    }
+
+    .number-menu {
+      background: #F3F3F3;
+      border-radius: 3px;
+      padding: 2px 4px;
+      color: #2196F3;
+      font-weight: 500;
+      font-size: 16px;
+      margin-right: 12px;
+    }
+  }
+}

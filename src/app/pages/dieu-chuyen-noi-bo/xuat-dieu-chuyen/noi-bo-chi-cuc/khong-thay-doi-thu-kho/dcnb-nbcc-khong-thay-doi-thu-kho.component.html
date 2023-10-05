@@ -1,0 +1,20 @@
+<nz-affix [nzOffsetTop]="112" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)">
+      Xuất kho lương thực
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+      Xuất kho vật tư
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-nbcc-ktdtk-xuat-kho-luong-thuc></app-nbcc-ktdtk-xuat-kho-luong-thuc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-nbcc-ktdtk-xuat-kho-vat-tu></app-nbcc-ktdtk-xuat-kho-vat-tu>
+    </ng-container>
+  </div>
+</div>

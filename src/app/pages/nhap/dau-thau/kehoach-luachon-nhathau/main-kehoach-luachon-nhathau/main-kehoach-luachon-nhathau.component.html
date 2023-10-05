@@ -1,0 +1,31 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+  <ul nz-menu nzMode="horizontal" id="mainTongCuc">
+    <li nz-menu-item nzSelected (click)="selectTab(0)"
+      *ngIf="inputLoaiVthh == '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT')">
+      Đề xuất kế hoạch lựa chọn nhà thầu
+    </li>
+    <li nz-menu-item (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP') && this.userService.isTongCuc() && this.inputLoaiVthh != '02'">
+      Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu
+    </li>
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT')">
+      Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
+    </li>
+    <li nz-menu-item (click)="selectTab(3)"
+        *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT')">
+      Điều chỉnh KH lựa chọn nhà thầu
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-danhsach-kehoach-lcnt [loaiVthh]="inputLoaiVthh"></app-danhsach-kehoach-lcnt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-tong-hop-khlcnt [loaiVthh]="inputLoaiVthh"></app-tong-hop-khlcnt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-quyetdinh-pheduyet-khlcnt [loaiVthh]="inputLoaiVthh"></app-quyetdinh-pheduyet-khlcnt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 3">
+  <app-dieuchinh-luachon-nhathau [loaiVthh]="inputLoaiVthh"></app-dieuchinh-luachon-nhathau>
+</ng-container>

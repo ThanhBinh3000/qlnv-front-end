@@ -1,0 +1,127 @@
+<div class="luong-thuc__danh-sach" *ngIf="!isDetail; else templateThemmoi">
+<!--  <div class="bg-trang">-->
+<!--    <nz-card class="flex-card p-lr16">-->
+<!--      <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>-->
+<!--        <div class="search__body mt-2" nz-row [nzGutter]="[18, 12]">-->
+<!--          <div nz-col nzSpan="4">-->
+<!--            <label class="search__label">Dự án</label>-->
+<!--            <nz-input-group>-->
+<!--              <input nz-input formControlName="tenDuAn"/>-->
+<!--            </nz-input-group>-->
+<!--          </div>-->
+<!--          <div nz-col nzSpan="4">-->
+<!--            <label class="search__label">Số hợp đồng</label>-->
+<!--            <nz-input-group>-->
+<!--              <input nz-input formControlName="soHopDong"/>-->
+<!--            </nz-input-group>-->
+<!--          </div>-->
+<!--          <div nz-col nzSpan="12">-->
+<!--            <label class="search__label">Tên hợp đồng</label>-->
+<!--            <nz-input-group>-->
+<!--              <input nz-input formControlName="tenHopDong"/>-->
+<!--            </nz-input-group>-->
+<!--          </div>-->
+<!--          <div nz-col nzSpan="4">-->
+<!--            <label class="search__label">Ngày ký QĐ phê duyệt KQLCNT</label>-->
+<!--            <nz-range-picker nzFormat="yyyy-MM-dd" formControlName="ngayKyQdPdKqlct"></nz-range-picker>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--      <div class="cangiua group-button-search">-->
+<!--        <button nz-button class="search__button&#45;&#45;clear" (click)="clearForm()">-->
+<!--          <i class="icon  htvbdh_nhap-lai1"></i>-->
+<!--          Xóa điều kiện-->
+<!--        </button>-->
+<!--        <button nz-button class="search__button&#45;&#45;search" (click)="filter()">-->
+<!--          <i nz-icon nzType="search"></i>-->
+<!--          Tìm kiếm-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </nz-card>-->
+<!--    <div class="group-button">-->
+<!--      <h3 class="text-uppercase">Quản lý hợp đồng kinh tế</h3>-->
+<!--      <div class="buttons">-->
+<!--        <button type="button" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD_EXP')"-->
+<!--                class="btn btn-sub" (click)="exportData()">-->
+<!--          <i class="icon htvbdh_chuyen-xu-ly"></i>-->
+<!--          <span>Xuất file</span>-->
+<!--        </button>-->
+<!--        <button *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD_THEM')"-->
+<!--                type="button" class="btn btn-main" (click)="redirectToChiTiet(0,'addnew',false)">-->
+<!--          <i class="icon htvbdh_dau-cong"></i>-->
+<!--          <span>Thêm hợp đồng</span>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <nz-card class="mt-2px flex-card data-table card-border-content table-card">-->
+<!--      <nz-table #basicTable [nzData]="dataTable" [nzFrontPagination]="false"-->
+<!--                [nzShowPagination]="false" nzBordered>-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--          <th width="40px" class="text-center">STT</th>-->
+<!--          <th width="330px">Dự án</th>-->
+<!--          <th width="130px">Số QĐ PD DA DTXD</th>-->
+<!--          <th width="130px">QĐ PD KHLCNT</th>-->
+<!--          <th width="200px">QĐ PD KQLCNT</th>-->
+<!--          <th width="130px">Tổng số gói thầu</th>-->
+<!--          <th width="130px">Số gói thầu đã trúng</th>-->
+<!--          <th width="130px">SL hợp đồng đã ký</th>-->
+<!--          <th width="">Chủ đầu tư</th>-->
+<!--          <th width="100px">Trạng thái ký HĐ</th>-->
+<!--          <th width="100px" class="text-center">Hành động</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr *ngFor="let data of basicTable.data; let i = index">-->
+<!--          <td>{{(page - 1) * pageSize + i + 1}}</td>-->
+<!--          <td>{{ data.tenDuAn }}</td>-->
+<!--          <td class="text-blue">{{ data.soQdPdDaDtxd }}</td>-->
+<!--          <td class="text-blue">{{ data.soQd }}</td>-->
+<!--          <td class="text-blue">{{ data.soQdPdKqlcnt }}</td>-->
+<!--          <td>{{ data.soGoiThau ? data.soGoiThau : 0 }}</td>-->
+<!--          <td>{{ data.soGoiThauTc ? data.soGoiThauTc : 0 }}</td>-->
+<!--          <td>{{ data.soHopDongDaKy ? data.soHopDongDaKy : 0}}</td>-->
+<!--          <td>{{ data.chuDauTu }}</td>-->
+<!--          <td class="text-left">{{ data.tenTrangThaiHd }}</td>-->
+<!--          <td class="text-center">-->
+<!--            <a *ngIf="data.trangThaiHd == STATUS.DA_HOAN_THANH "-->
+<!--               (click)="redirectToChiTiet(data.id,'info', true)">-->
+<!--              <i class=" icon htvbdh_eye"></i>-->
+<!--            </a>-->
+<!--            <a-->
+<!--              *ngIf="(data.trangThaiHd == STATUS.DANG_THUC_HIEN || data.trangThaiHd == STATUS.CHUA_THUC_HIEN) && (userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD_THEM'))"-->
+<!--              (click)="redirectToChiTiet(data.id,'info')">-->
+<!--              <i class="fa fa-pencil" title="Sửa"></i>-->
+<!--            </a>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--      </nz-table>-->
+<!--      <div class="tab-content tab-menu">-->
+<!--        <div class="tab-pane fade show active justify-content-between">-->
+<!--          <div class="trai"></div>-->
+<!--          <div class="canphai">-->
+<!--            &lt;!&ndash; begin phân trang  &ndash;&gt;-->
+<!--            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger-->
+<!--                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"-->
+<!--                           (nzPageIndexChange)="changePageIndex($event)"-->
+<!--                           (nzPageSizeChange)="changePageSize($event)">-->
+<!--              <ng-template #rangeTemplate let-range="range" let-total>-->
+<!--                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi-->
+<!--              </ng-template>-->
+<!--            </nz-pagination>-->
+<!--            &lt;!&ndash; end phân trang  &ndash;&gt;-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </nz-card>-->
+<!--  </div>-->
+</div>
+<ng-template #templateThemmoi>
+  <app-thong-tin-hop-dong [id]="selectedId" (showListEvent)="showList()"
+                          [isViewDetail]="isViewDetail"
+                          [itemDuAn]="itemDuAn"
+                          [itemQdPdKhLcnt]="itemQdPdKhLcnt"
+                          [idInput]="selectedId" [flagThemMoi]="flagInfo"></app-thong-tin-hop-dong>
+</ng-template>
+

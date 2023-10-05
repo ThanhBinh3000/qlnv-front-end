@@ -1,0 +1,100 @@
+<div>
+  <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" nzBordered [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th class="text-center" width="40px">STT</th>
+      <th>Nội dung dự toán</th>
+      <th width="20%">Nguồn chi</th>
+      <th width="10%">Dự toán</th>
+      <th *ngIf="trangThai != STATUS.BAN_HANH" width="7%" class="text-center">Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td></td>
+      <td>
+        <nz-input-group>
+          <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.loaiChi" (ngModelChange)="onChangeNoiDung($event)"
+                     nzAllowClear>
+            <nz-option [nzValue]="item.ma" [nzLabel]="item.giaTri" *ngFor="let item of dsNoiDung">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </td>
+      <td>{{rowItem.tenNguonChi}}</td>
+      <td>
+        <nz-input-group>
+          <input class="money-input" currencyMask [(ngModel)]="rowItem.sluongDtoan" [options]="amount"/>
+          <!--          <nz-input-number nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"-->
+          <!--                           [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="isView">-->
+          <!--          </nz-input-number>-->
+        </nz-input-group>
+      </td>
+      <td style="text-align: center;" *ngIf="trangThai != STATUS.BAN_HANH">
+        <a (click)="themMoiItem()" *ngIf="!isView">
+          <i class="fa fa-plus"></i>
+        </a>
+        <a (click)="clearData()" *ngIf="!isView">
+          <i class="fa fa-refresh"></i>
+        </a>
+      </td>
+    </tr>
+    </tbody>
+    <tbody>
+    <tr *ngFor="let data of dataTable; let idx = index">
+      <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+        <td>{{ idx + 1 }}</td>
+        <td>{{ data.tenLoaiChi }}</td>
+        <td>{{ data.tenNguonChi }}</td>
+        <td>{{ data.sluongDtoan | number : '1.0-1' : 'vi_VN' }}</td>
+        <td style="text-align: center;" *ngIf="trangThai != STATUS.BAN_HANH">
+          <a (click)="editItem(idx)" *ngIf="!isView">
+            <i class=" fa fa-pencil"></i>
+          </a>
+          <a (click)="xoaItem(idx)" *ngIf="!isView">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          </a>
+        </td>
+      </ng-container>
+      <ng-template #editTemplate>
+        <td></td>
+        <td>
+          <nz-input-group>
+            <nz-select [nzDisabled]="isView" [(ngModel)]="dataEdit[idx].data.loaiChi"
+                       (ngModelChange)="onChangeNoiDung($event, dataEdit[idx].data )" nzAllowClear>
+              <nz-option [nzValue]="item.ma" [nzLabel]="item.giaTri" *ngFor="let item of dsNoiDung">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>{{dataEdit[idx].data.tenNguonChi}}</td>
+        <td>
+          <nz-input-group>
+            <input class="money-input" currencyMask [(ngModel)]="dataEdit[idx].data.sluongDtoan" [options]="amount"/>
+          </nz-input-group>
+        </td>
+        <td class="text-center" *ngIf="trangThai != STATUS.BAN_HANH">
+          <a (click)="luuEdit(idx)" class="save">
+            <i class="fa fa-save"></i>
+          </a>
+          <a (click)="huyEdit(idx)">
+            <i class="fa fa-ban do"></i> </a>
+        </td>
+      </ng-template>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr class="text-blue">
+      <td style="text-align: right; font-weight: 700" colspan="2">Tổng</td>
+      <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+      <td></td>
+    </tr>
+    <!--    <tr>-->
+    <!--      <td style="text-align: right; font-weight: 700" colspan="2">Tổng kế hoạch chi DTQG theo QĐ của TTCP</td>-->
+    <!--      <td class="xanh">{{tongGiaTri | number : '1.0-1' : 'vi_VN' }}</td>-->
+    <!--      <td></td>-->
+    <!--    </tr>-->
+    </tfoot>
+  </nz-table>
+</div>

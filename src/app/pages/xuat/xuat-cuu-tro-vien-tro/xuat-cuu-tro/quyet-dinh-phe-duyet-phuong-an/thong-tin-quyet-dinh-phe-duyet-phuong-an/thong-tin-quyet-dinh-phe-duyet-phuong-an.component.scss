@@ -1,0 +1,57 @@
+.icon-file-dinh-kem {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .input-file {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+
+.list-file {
+  .ant-input-affix-wrapper {
+    padding: 0px 11px !important;
+  }
+}
+
+.text-green {
+  color: #8BC34C;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.text-blue {
+  color: #001CFF !important;
+  font-weight: bold;
+  //background-color: #ededed;
+}
+
+.bg-selected td {
+  background-color: #ebedff;
+}
+
+.title-card {
+  width: 100%;
+
+  &>* {
+    display: inline;
+  }
+
+  button {
+    float: right;
+  }
+}
+
+:host ::ng-deep .ant-statistic-content {
+  color: #001CFF;
+  font-size: 18px;
+}
+
+tr {
+  height: 31px;
+}

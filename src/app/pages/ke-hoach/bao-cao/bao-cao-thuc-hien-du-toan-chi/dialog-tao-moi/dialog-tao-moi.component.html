@@ -1,0 +1,44 @@
+<div class="modal__content">
+    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+        <div nz-col nzSpan="6">
+            <label class="search__label">Năm báo cáo</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.namBcao"
+                [class]="response.namBcao ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="6">
+            <label class="search__label">Loại báo cáo</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="response.maLoaiBcao"
+                [class]="response.maLoaiBcao ?'' : 'input-error-validate'" (ngModelChange)="changeModel()">
+                <nz-option *ngFor="let item of Dtc.LOAI_BAO_CAO" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="6" *ngIf="response.maLoaiBcao && response.maLoaiBcao == Dtc.BC_DINH_KY">
+            <label class="search__label">Tháng báo cáo</label>
+            <nz-select nzShowSearch nzPlaceHolder="Chọn tháng báo cáo" [(ngModel)]="response.thangBcao"
+                [class]="response.thangBcao ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
+                <nz-option *ngFor="let item of lstThang" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
+                <i class="icon htvbdh_tcdt_save"></i>
+                Tạo mới
+            </button>
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+                Đóng
+            </button>
+        </div>
+    </div>
+</div>

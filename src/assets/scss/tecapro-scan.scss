@@ -1,0 +1,290 @@
+﻿#scanProgress {
+  /*width: 100%;*/
+  background-color: #ddd;
+  height: 32px;
+}
+
+#scanBar {
+  margin-top: 1px;
+  position: absolute;
+  width: 1%;
+  height: 30px;
+  background-color: #04aa6d;
+}
+
+#scan-form .modal-body {
+  position: static;
+}
+
+#scanBar,
+#scanProgress {
+  height: 6px;
+}
+
+#scan-msg-box {
+  padding: 8px 16px;
+  background: #efefef;
+  border-radius: 0px;
+  margin-top: 13px;
+  color: #585858;
+  font-size: 14px;
+  text-align: center;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#scan-msg-box .form-group {
+  padding: 0;
+}
+
+#update-scan-list .form-group {
+  font-size: 12px;
+  color: #18787a;
+  margin-bottom: 2px;
+}
+
+#scan-msg {
+  margin: 0;
+}
+
+#scan-form .modal-content {
+  overflow: hidden;
+  padding: 20px;
+}
+
+#scan-form .modal-body.modal-body-thin,
+#scan-form .modal-footer.modal-body-thin {
+  padding: 0 20px;
+  border-top: none;
+}
+
+#scan-form .modal-header.modal-body-thin {
+  border-bottom: none;
+  padding: 0 20px;
+}
+
+#scanProgress {
+  width: 100%;
+  height: 6px;
+  background: #e1e4e8;
+  overflow: hidden;
+  padding: 0;
+}
+
+#scanBar {
+  display: block;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #b2fdff,
+    #33dadf 17%,
+    #18787a 34%,
+    #33dadf 51%,
+    #b2fdff 68%,
+    #33dadf 85%,
+    #18787a
+  );
+  background-size: 300% 100%;
+  animation: progress-animation 2s linear infinite;
+  /*width: 100% !important;*/
+  left: 0 !important;
+  position: relative;
+  top: 0;
+  margin-top: 0;
+}
+
+#scan-form .modal-header.modal-body-thin button.close {
+  display: none;
+}
+
+#scan-form .modal-title {
+  font-size: 16px;
+  padding-bottom: 2px;
+}
+
+#scan-form .modal-footer.modal-body-thin button#perform-scan,
+#scan-form .modal-footer.modal-body-thin button#scan-form-cancel {
+  border: solid 1px #efefef;
+  padding: 3px 16px;
+  margin: 13px 8px 0px 8px;
+  /*background: #fdfdfd;*/
+  background: #e39a15;
+  min-width: 90px;
+}
+
+#scan-form .modal-footer.modal-body-thin button#perform-scan {
+  background: #18787a;
+  color: #fff;
+  border-color: #19696a;
+}
+
+#scan-form .modal-footer.modal-body-thin {
+  display: flex;
+  justify-content: center;
+}
+
+#scan-form .spinner-grow {
+  width: 2px;
+  height: 2px;
+  border-radius: 0;
+  margin-left: 4px;
+  margin-bottom: 2px;
+  background: #18787a;
+  animation: 0.8s infinite spinner-grow;
+}
+
+#scan-form .spinner-grow + .spinner-grow {
+  animation-delay: 0.2s;
+  margin-left: -2px;
+}
+
+#scan-form .spinner-grow + .spinner-grow + .spinner-grow {
+  animation-delay: 0.4s;
+  margin-left: -2px;
+}
+
+#scan-form .modal-content {
+  border: none;
+  box-shadow: 1px 1px 14px -4px #00000066;
+}
+
+.modal-backdrop.show {
+  background-color: #fff;
+  opacity: 0.8;
+}
+
+#scan-progress {
+  padding: 0 12px;
+}
+
+#scan-form .modal-dialog {
+  top: 25%;
+}
+
+#scan-msg b {
+  color: #18787a;
+}
+
+#scan-control-box {
+  font-size: 14px;
+  padding-top: 12px;
+}
+
+#scan-control-box .form-group label + span {
+  background: #efefef;
+  padding: 2px 8px 3px 8px;
+  border-radius: 0px;
+  line-height: 1;
+  align-items: center;
+  margin-left: 5px;
+  display: flex;
+}
+
+#scan-control-box .form-group {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: left;
+}
+
+#scan-control-box select {
+  margin-left: 8px;
+  border-color: #ccc;
+  border-radius: 0px;
+  width: 100%;
+  max-width: unset;
+  display: flex;
+  flex: auto;
+}
+
+#scan-control-box .form-group label {
+  min-width: 105px;
+  display: flex;
+}
+
+@keyframes progress-animation {
+  0% {
+    background-position: 100%;
+  }
+
+  100% {
+    background-position: 0;
+  }
+}
+
+#scan-form {
+  .modal-footer.modal-body-thin {
+    position: relative;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: -28px;
+    margin-top: 30px;
+    align-items: center;
+    justify-content: end;
+    background-color: #f8fefe !important;
+    border-top: solid 1px #e3f9f9;
+
+    &:after {
+      content: '';
+      display: block;
+      min-width: calc(100% + 40px);
+      height: 8px;
+      background: #e3f9f9;
+      margin-left: -20px;
+      margin-right: -20px;
+      position: relative;
+    }
+
+    button {
+      border: none !important;
+      border-left: 1px solid #e3f9f9 !important;
+      margin: 0px !important;
+      text-align: center !important;
+      justify-content: center;
+      border-radius: 0;
+      background: transparent !important;
+      min-width: auto !important;
+
+      &#perform-scan {
+        background: #18787a !important;
+        color: #fff !important;
+        border-color: #19696a !important;
+        &[disabled] {
+          color: #aaa !important;
+          background: transparent !important;
+          border-color: #e3f9f9 !important;
+        }
+      }
+    }
+  }
+
+  div#update-scan-list {
+    label {
+      padding-left: 15px;
+    }
+  }
+
+  label#scan-state {
+    padding-left: 15px;
+  }
+
+  #scanBar {
+    font-size: 0;
+  }
+
+  #scan-control-box {
+    margin: 0;
+
+    .form-group {
+      align-items: center;
+      min-width: 60%;
+
+      label {
+        margin: 0;
+      }
+    }
+  }
+
+  #scan-msg-box {
+    margin-top: 8px;
+  }
+}

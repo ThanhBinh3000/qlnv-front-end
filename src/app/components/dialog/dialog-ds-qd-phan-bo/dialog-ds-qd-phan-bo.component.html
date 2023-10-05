@@ -1,0 +1,38 @@
+<div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="dialog-ds-qd-phan-bo">
+  <nz-radio-group ngModel="A">
+    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+      <tbody>
+        <tr>
+          <td class="d-flex align-items-center justify-content-between">
+            <span>Quyết định phân bổ vốn và giao dự toán của BTC cho TCDTNN</span>
+            <span><label nz-radio nzValue="A"></label></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="d-flex align-items-center justify-content-between">
+            <span>Quyết định phân bổ vốn và giao dự toán của BTC cho TCDTNN</span>
+            <span><label nz-radio nzValue="B"></label></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="d-flex align-items-center justify-content-between">
+            <span>Quyết định phân bổ vốn và giao dự toán của BTC cho TCDTNN</span>
+            <span><label nz-radio nzValue="C"></label></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-radio-group>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onSave()">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

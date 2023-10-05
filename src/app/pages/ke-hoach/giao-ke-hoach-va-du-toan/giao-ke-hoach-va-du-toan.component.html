@@ -1,0 +1,48 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT')" nz-menu-item nzSelected (click)="selectTab('kehoachvondaunam')">
+      Giao kế hoạch và vốn đầu năm
+    </li>
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS')" nz-menu-item (click)="selectTab('muabumuabosung')">
+      Giao kế hoạch vốn mua bù, bổ sung
+    </li>
+    <!--<li nz-menu-item (click)="selectTab('xuatgiamxuatban')">
+      Giao kế hoạch xuất giảm. xuất bán, xuất luân phiên đổi hàng
+      &lt;!&ndash; </button> &ndash;&gt;
+    </li>-->
+  </ul>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'kehoachvondaunam'">
+      <app-ke-hoach-von-dau-nam></app-ke-hoach-von-dau-nam>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'muabumuabosung'">
+      <app-ke-hoach-von-mua-bu></app-ke-hoach-von-mua-bu>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'xuatgiamxuatban'">
+      <app-ke-hoach-xuat></app-ke-hoach-xuat>
+    </ng-container>
+    <!-- <div class="main-content tab-menu-new">
+      <nz-tabset nzType="card" class="tab-level-0" [style]="{'max-height': tabH +'px'}">
+        <nz-tab [nzTitle]="'Giao kế hoạch và vốn đầu năm'">
+          <ng-template nz-tab>
+            <app-ke-hoach-von-dau-nam></app-ke-hoach-von-dau-nam>
+          </ng-template>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Giao kế hoạch vốn mua bù, bổ sung'">
+          <ng-template nz-tab>
+            <app-ke-hoach-von-mua-bu></app-ke-hoach-von-mua-bu>
+          </ng-template>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Giao kế hoạch xuất giảm. xuất bán, xuất luân phiên đổi hàng'">
+          <ng-template nz-tab>
+            <app-ke-hoach-xuat></app-ke-hoach-xuat>
+          </ng-template>
+        </nz-tab>
+      </nz-tabset>
+    </div> -->
+  </div>
+</div>

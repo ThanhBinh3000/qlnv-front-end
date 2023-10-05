@@ -1,0 +1,128 @@
+<div class="bg-trang">
+  <nz-card class="mt16 flex-card p-lr16">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="20">
+        <div nz-col nzSpan="2">
+          <nz-form-label>Năm</nz-form-label>
+          <nz-select formControlName="nam">
+            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label>Số sổ</nz-form-label>
+          <input type="text" nz-input />
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label>Tên đơn vị</nz-form-label>
+          <input type="text" nz-input />
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label>Ngăn lô</nz-form-label>
+          <input type="text" nz-input />
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label>Loại hàng DTQG</nz-form-label>
+          <input type="text" nz-input />
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label>Chủng loại hàng DTQG</nz-form-label>
+          <input type="text" nz-input />
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label>Trạng thái</nz-form-label>
+          <input type="text" nz-input />
+        </div>
+      </div>
+    </form>
+    <div nz-col class="cangiua group-button-search pt-16">
+      <div>
+        <button nz-button class="search__button--clear" (click)="clearForm()">
+          <i class="icon  htvbdh_nhap-lai1"></i>
+          Xóa điều kiện
+        </button>
+        <button nz-button class="search__button--search" (click)="search()">
+          <i nz-icon nzType="search"></i>
+          Tìm kiếm
+        </button>
+      </div>
+    </div>
+  </nz-card>
+  <div class="group-button">
+    <h3 class="text-uppercase">Danh sách sổ nhật trình bảo quản</h3>
+    <div class="buttons">
+      <button type="button" class="btn btn-sub" (click)="exportData()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+      <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()" (click)="redirectCreate()">
+        <i class="icon htvbdh_dau-cong"></i>
+        <span>Tạo quyết định</span>
+      </button>
+    </div>
+  </div>
+  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th nzWidth="60px"> STT</th>
+          <th nzWidth="90px">Năm</th>
+          <th nzWitdh=""> Tên đơn vị</th>
+          <th nzWitdh=""> Số sổ</th>
+          <th nzWitdh=""> Tên sổ</th>
+          <th nzWitdh="">Điểm kho</th>
+          <th nzWitdh="">Nhà kho</th>
+          <th nzWitdh="">Ngăn kho</th>
+          <th nzWitdh="">Lô kho</th>
+          <th nzWitdh="">Loại hàng hóa</th>
+          <th nzWitdh="">Chủng loại hàng hóa</th>
+          <th nzWitdh="">Trạng thái</th>
+          <th nzWitdh="120px" class="text-center">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of dataTable; let i = index">
+          <td>{{(page - 1) * pageSize + i + 1}}</td>
+          <td>{{ data.nam }}</td>
+          <td>{{ data.tenDvi }}</td>
+          <td>{{ data.soSoTdbq }}</td>
+          <td>{{ data.tenSoTdbq }}</td>
+          <td>{{ data.tenDiemKho }}</td>
+          <td>{{ data.tenNhaKho }}</td>
+          <td>{{ data.tenNganKho }}</td>
+          <td>{{ data.tenLoKho }}</td>
+          <td>{{ data.tenLoaiVthh }}</td>
+          <td>{{ data.tenCloaiVthh }}</td>
+          <td>{{ data.tenTrangThai }}</td>
+          <td>
+            <a (click)="redirectDetail(data.id)">
+              <span class="icon htvbdh_eye"></span>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id)">
+              <span class="fa fa-pencil"></span>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between">
+        <div class="trai">
+        </div>
+        <div class="canphai">
+          <!-- begin phân trang  -->
+          <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+            [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+            (nzPageSizeChange)="changePageSize($event)">
+            <ng-template #rangeTemplate let-range="range" let-total>
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+            </ng-template>
+          </nz-pagination>
+          <!-- end phân trang -->
+        </div>
+      </div>
+    </div>
+  </nz-card>
+</div>

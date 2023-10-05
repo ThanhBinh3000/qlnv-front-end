@@ -1,0 +1,86 @@
+::ng-deep {
+  .title-ky-hop-dong {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    text-transform: uppercase;
+    color: #828282;
+  }
+
+  .tl-dk {
+    margin-left: 8px;
+  }
+
+  .chi-tiet-phu-luc {
+    .dieu-chinh-button {
+      top: 30px;
+      right: 0;
+    }
+
+    .contentBor {
+      margin-top: 10px;
+    }
+  }
+}
+
+.cus-start-date.ant-col {
+  padding-right: 0 !important;
+}
+
+.cus-end-date.ant-col {
+  padding-left: 0 !important;
+}
+.pointer-cursor {
+  cursor: pointer;
+}
+
+.title-chi-tieu {
+  display: flex;
+  align-items: center;
+  padding-top: 5px;
+
+  .title-form {
+    font-size: 16px;
+    color: #444444;
+    font-style: normal;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .status-do,
+  .du-thao-va-lanh-dao-duyet {
+    color: #ff4d4f;
+    font-weight: 500;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 0px;
+    border: 1px solid #FF9393;
+    text-transform: uppercase;
+    margin-right: 8px;
+    background-color: #FFF1F1;
+    line-height: 1;
+  }
+
+  .status-xanh,
+  .da-ban-hanh {
+    color: #24e837;
+    font-weight: 500;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 0px;
+    border: 1px solid #24e837;
+    text-transform: uppercase;
+    margin-right: 8px;
+    background: #EFFFEC;
+    line-height: 1;
+  }
+
+  &>span {
+    text-transform: uppercase;
+    color: #444444;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 4px;
+  }
+}

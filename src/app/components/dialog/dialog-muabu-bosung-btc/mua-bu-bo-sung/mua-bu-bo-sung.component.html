@@ -1,0 +1,127 @@
+<nz-card class="mt16 flex-card p-lr16">
+  <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th class="text-center" style="width: 5%;">STT</th>
+      <th style="width: 45%;">Tên hàng hoá</th>
+      <th style="width: 25%;">Chủng loại hàng hoá</th>
+      <th style="width: 10%;">Đơn vị tính</th>
+      <th style="width: 10%;">Kế hoạch năm</th>
+      <th style="width: 5%;">Thao tác</th>
+    </tr>
+    <tr>
+      <th class="text-center" style="width: 5%;"></th>
+      <th style="width: 45%;">
+        <nz-input-group>
+          <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
+                     (ngModelChange)="onChangeLoaiVthh($event)">
+            <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </th>
+      <th style="width: 25%;">
+        <nz-input-group>
+          <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
+                     (ngModelChange)="onChangeCloaiVthh($event)">
+            <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+            <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </th>
+      <th style="width: 10%;">
+        <nz-input-group>
+          <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="isView" />
+        </nz-input-group>
+      </th>
+      <th style="width: 10%;">
+        <nz-input-group>
+          <input nz-input [(ngModel)]="rowItem.soLuong" [readonly]="isView" />
+        </nz-input-group>
+      </th>
+      <th style="width: 5%;" style="text-align: center;">
+        <a *ngIf="!isView" (click)="themMoiItem()">
+          <i class="table-icon icon htvbdh_dau-cong"></i>
+        </a>
+        <a *ngIf="!isView" (click)="clearData()">
+          <i class="table-icon fa fa-trash-o do"></i>
+        </a>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of dataTable; let idx = index">
+      <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
+        <td>{{ idx + 1 }}</td>
+        <td>{{ data.tenVthh }}</td>
+        <td>{{ data.tenCloaiVthh }}</td>
+        <td>{{ data.dviTinh }}</td>
+        <td>{{ data.soLuong }}</td>
+        <td style="text-align: center;">
+          <a *ngIf="!isView" (click)="editItem(idx)">
+            <i class="table-icon fa fa-pencil"></i>
+          </a>
+          <a  *ngIf="!isView" (click)="xoaItem(idx)">
+            <i class="table-icon fa fa-trash-o do"></i>
+          </a>
+        </td>
+      </ng-container>
+      <ng-template #editTemplate>
+        <td></td>
+        <td>
+          <nz-input-group>
+            <nz-select [(ngModel)]="dataEdit[data.id].data.loaiVthh" [nzShowArrow]="false" nzAllowClear
+                       (ngModelChange)="onChangeLoaiVthh123($event, data.id)">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-select [(ngModel)]="dataEdit[data.id].data.cloaiVthh" [nzShowArrow]="false">
+              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzValue="{{item.id}}" nzLabel="{{item.ten}}"
+                         *ngFor="let item of dsChungLoaiHangHoa">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[data.id].data.dviTinh" [readonly]="true" />
+            </nz-input-group>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[data.id].data.soLuong" />
+            </nz-input-group>
+          </nz-input-group>
+        </td>
+        <td>
+          <a (click)="luuEdit(data.id)" class="save">
+            <i class="fa fa-save"></i>
+          </a>
+          <a (click)="huyEdit(data.id)">
+            <i class="fa fa-times do"></i>
+          </a>
+        </td>
+      </ng-template>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr *ngIf="tabName != 'LuanPhien'">
+      <td style="text-align: right; font-weight: 700" colspan="4">Tổng giá trị (Triệu đồng)</td>
+      <td><input [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()" style="text-align: left;" type="number"
+                 nz-input /></td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </nz-table>
+</nz-card>
+

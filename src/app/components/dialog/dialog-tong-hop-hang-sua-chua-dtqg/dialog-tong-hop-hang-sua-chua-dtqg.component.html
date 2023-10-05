@@ -1,0 +1,77 @@
+<nz-card class="mt16 flex-card p-lr16">
+  <form nzLayout="vertical" nz-form [formGroup]="formData">
+    <div nz-row [nzGutter]="20">
+
+      <div nz-col [nzSpan]="8">
+        <nz-form-item class="form-item">
+          <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Mã danh sách</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group  >
+              <input type="text" nz-input formControlName="maDanhSach" [readonly]="true">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="8">
+        <nz-form-item class="form-item">
+          <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Thời gian tổng hợp
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-date-picker [nzDisabled]="true"  formControlName="thoiGianTh" nzFormat="dd/MM/yyyy">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="8"></div>
+      <div nz-col [nzSpan]="8">
+        <nz-form-item class="form-item">
+          <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số tờ trình</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group nzAddOnAfter="{{maTt}}">
+              <input formControlName="soToTrinh" type="text" nz-input
+                               [nzSize]="'small'">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="16">
+        <nz-form-item class="form-item">
+          <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Tên danh sách</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group  >
+              <input type="text" nz-input formControlName="tenDanhSach">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="24">
+        <nz-form-item class="form-item">
+          <nz-form-label [nzNoColon]="true" nzRequired nzFor="ngay-qd">Nội dung</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+              <textarea rows="3" formControlName="noiDung" class="search__input" nz-input
+                       ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <ng-template #error let-control>
+        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+      </ng-template>
+    </div>
+  </form>
+</nz-card>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onCancel()">
+        <i nz-icon nzType="close" class="icon-close"></i>
+        Đóng
+      </a>
+      <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="tongHop()">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+.icon-file-dinh-kem {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .input-file {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.text-green {
+  color: #001CFF;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.text-blue {
+  color: #001CFF !important;
+  font-weight: bold;
+  background-color: #ededed;
+}
+
+.bg-selected {
+  background-color: #efefef;
+}
+
+:host ::ng-deep .ant-form-vertical .ant-form-item-label {
+  line-height: 1;
+
+  label {
+    height: 32px;
+    line-height: 16px;
+  }
+}
+
+.title-card {
+  width: 100%;
+
+  & > * {
+    display: inline;
+  }
+
+  button {
+    float: right;
+  }
+}
+

@@ -1,0 +1,18 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('00')"
+        *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT')">
+      Thông tin đấu thầu
+    </li>
+    <li nz-menu-item (click)="selectTab('01')" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">
+      Quyết định phê duyệt kết quả lựa chọn nhà thầu
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == '00'">
+  <app-thong-tin-dau-thau></app-thong-tin-dau-thau>
+</ng-container>
+<ng-container *ngIf="tabSelected == '01'">
+  <app-quyet-dinh-phe-duyet-kqlcnt></app-quyet-dinh-phe-duyet-kqlcnt>
+</ng-container>
+

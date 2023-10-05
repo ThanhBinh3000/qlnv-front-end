@@ -1,0 +1,181 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="back()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button *ngIf="!isDisableField() && !isView" (click)="save(false)"
+      class="btn btn-main btn-sm waves-effect waves-light">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</nz-affix>
+<div class="bg-trang">
+  <h3>Nhập máy móc thiết bị chuyên dụng</h3>
+  <nz-card class="mt16 flex-card p-lr16">
+    <form nz-form [formGroup]="formData" class="mt-16">
+      <nz-card class="flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 6]">
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Năm kế hoạch
+              </nz-form-label>
+              <nz-select>
+                <nz-option>
+                  1
+                </nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Số công văn
+              </nz-form-label>
+              <nz-input-group nzAddOnAfter="/KH - CDTVT">
+                <input type="text" nz-input />
+              </nz-input-group>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Số quyết định giao chỉ tiêu
+              </nz-form-label>
+              <nz-select>
+                <nz-option>
+                  1
+                </nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Trích yếu
+              </nz-form-label>
+              <input nz-input placeholder="tự động sinh số biên bản" formControlName="soBienBan" />
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Ngày ký
+              </nz-form-label>
+              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd">
+              </nz-date-picker>
+            </nz-form-item>
+          </div>
+        </div>
+      </nz-card>
+    </form>
+    <div class="group-button">
+      <h3>Danh sách dề xuất</h3>
+      <div class="buttons">
+        <button type="button" class="btn btn-do">
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          <span>Xóa</span>
+        </button>
+        <button type="button" class="btn btn-sub">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
+      </div>
+    </div>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #basicTable nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th width="45px" rowSpan="2">
+              <label nz-checkbox></label>
+            </th>
+            <th width="60px" rowSpan="2">STT</th>
+            <th rowSpan="2">Tên tài sản</th>
+            <th rowSpan="2">ĐVT</th>
+            <th colspan="4">Số lượng hiện có</th>
+            <th rowSpan="2">Chi tiết Công cụ dụng cụ </th>
+            <th rowSpan="2">Đơn giá (đồng)</th>
+            <th rowSpan="2">Thành tiền (đồng)</th>
+            <th rowSpan="2">Hành động</th>
+          </tr>
+          <tr>
+            <th>Tốt</th>
+            <th>Hỏng cần sửa chữa</th>
+            <th>Hỏng phải thanh lý</th>
+            <th>Tổng số</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <label nz-checkbox></label>
+            </td>
+            <td>1</td>
+            <td>
+              <input nz-input nzSize="small" />
+            </td>
+            <td>
+              m2
+            </td>
+            <td>
+              100
+            </td>
+            <td>
+              0
+            </td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>PVC</td>
+            <td>1.000</td>
+            <td>1.000.000</td>
+            <td>
+              <a>
+                <i class="fa fa-plus"></i>
+              </a>
+              <a>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <label nz-checkbox></label>
+            </td>
+            <td>2</td>
+            <td>
+              Pallet
+            </td>
+            <td>
+              m2
+            </td>
+            <td>
+              100
+            </td>
+            <td>
+              0
+            </td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>PVC</td>
+            <td>1.000</td>
+            <td>1.000.000</td>
+            <td>
+              <a>
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a>
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </nz-card>
+
+</div>

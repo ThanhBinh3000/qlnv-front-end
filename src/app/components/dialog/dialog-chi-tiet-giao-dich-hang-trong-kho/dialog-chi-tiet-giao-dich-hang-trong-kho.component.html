@@ -1,0 +1,142 @@
+<div nz-row [nzGutter]="[18, 6]">
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzNoColon]="true"> Loại hàng hoá</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.loaiHH" />
+  </div>
+  <div nz-col nzSpan="8">
+    <nz-form-label [nzNoColon]="true"> Chủng loại hàng hoá</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.chungLoaiHH" />
+  </div>
+  <div nz-col nzSpan="6">
+    <nz-form-label [nzNoColon]="true" disabled>Ngày</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.ngayPheDuyet" />
+  </div>
+  <div nz-col nzSpan="6">
+
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzNoColon]="true"> Cục</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.cuc" />
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzNoColon]="true">Chi cục</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.chiCuc" />
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzNoColon]="true">Điểm kho</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.diemKho" />
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzNoColon]="true">Nhà kho</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.nhaKho" />
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzNoColon]="true">Ngăn kho</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.nganKho" />
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzNoColon]="true">Lô Kho</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.loKho" />
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzNoColon]="true">Tồn Đầu Kỳ</nz-form-label>
+    <input nz-input disabled [(ngModel)]="dataView.tonKhoDauKy " />
+  </div>
+
+</div>
+<div class="group-button ">
+  <h3>Danh sách</h3>
+  <div class="buttons">
+    <button type="button" class="btn btn-sub" (click)="export()">
+      <i class="icon htvbdh_chuyen-xu-ly"></i>
+      <span>Xuất file</span>
+    </button>
+  </div>
+</div>
+<nz-card class="mt16 flex-card p-lr16 mb16 dialog-chi-tiet-giao-dich-hang-trong-kho">
+  <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th class="text-center" style="width:5%;">STT</th>
+        <th style="width: 15%;">Ngày giao dịch</th>
+        <th style="width: 15%;">Số phiếu nhập</th>
+        <th style="width: 15%;">Số phiếu xuất</th>
+        <th style="width: 15%;">Số lượng </th>
+        <th style="width: 15%;">Tồn cuối kỳ</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th class="text-center">
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayPheDuyet"
+              (ngModelChange)="filterInTable('ngayPheDuyet', filterTable.ngayPheDuyet)" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieu"
+              (ngModelChange)="filterInTable('soPhieu', filterTable.soPhieu)" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieu"
+              (ngModelChange)="filterInTable('soPhieu', filterTable.soPhieu)" />
+          </nz-input-group>
+        </th>
+        <th class="text-center">
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongSoLuong"
+              (ngModelChange)="filterInTable('tongSoLuong', filterTable.tongSoLuong)" />
+          </nz-input-group>
+        </th>
+        <th class="text-center">
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tonCuoiKy"
+              (ngModelChange)="filterInTable('tonCuoiKy', filterTable.tonCuoiKy)" />
+          </nz-input-group>
+        </th>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of rowSelectionTable.data; let idx =index">
+        <td class="text-center"> {{idx +1}}</td>
+        <td> {{data.ngayPheDuyet }}</td>
+        <td> {{data.loaiPhieu == "NHAP" ? data.soPhieu :''}}</td>
+        <td> {{data.loaiPhieu == "XUAT" ? data.soPhieu :''}}</td>
+        <td> {{data.tongSoLuong}}</td>
+        <td> {{data.tonCuoiKy}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between">
+      <div class="trai">
+      </div>
+      <div class="canphai">
+        <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+          [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+          (nzPageSizeChange)="changePageSize($event)">
+          <ng-template #rangeTemplate let-range="range" let-total>
+            {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+          </ng-template>
+        </nz-pagination>
+      </div>
+    </div>
+  </div>
+</nz-card>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-sub mb16  btn-sm waves-effect waves-light " (click)="onCancel()">
+        <i nz-icon nzType="close" class="fa fa-close"></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<!-- <p>dialog-ddiem-de-hang works!</p> -->
+<nz-card class="mt-2px flex-card data-table card-border-content table-card">
+  <nz-table  [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th style="width: 75%;">Tên chi cục</th>
+      <th style="width: 15%;">Số lượng ({{dviTinh}})</th>
+      <th style="width: 10%;">Thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngIf="!isView">
+      <td>
+        <nz-input-group>
+          <nz-select [(ngModel)]="rowItem.maDvi" [nzShowArrow]="false" nzAllowClear nzShowSearch
+                     (ngModelChange)="onChangeChiCuc($event)">
+            <nz-option *ngFor="let item of dsChiCuc" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </td>
+      <td>
+        <nz-input-group>
+          <nz-input-number class="text-right" nz-input [(ngModel)]="rowItem.soLuong" [nzMin]="1"
+                           [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </nz-input-group>
+      </td>
+      <td>
+        <a (click)="themMoiItem()">
+          <i class="fa fa-plus"></i>
+        </a>
+        <a (click)="clearData()">
+          <i class="icon  htvbdh_nhap-lai1 "></i>
+        </a>
+      </td>
+    </tr>
+    <tr *ngFor="let data of dataTable, let i = index" class="editable-row">
+      <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
+        <td>{{ data.tenDvi }}</td>
+        <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-center">
+          <a (click)="startEdit(i)">
+            <i class="fa fa-pencil" title="Sửa"></i>
+          </a>
+          <a (click)="deleteRow(i)">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          </a>
+        </td>
+      </ng-container>
+      <ng-template #editTemplate>
+        <td>
+          <nz-input-group>
+            <nz-select [(ngModel)]="editCache[i].data.maDvi" [nzShowArrow]="false" nzAllowClear
+                       (ngModelChange)="onChangeChiCuc($event, editCache[i].data)">
+              <nz-option *ngFor="let item of dsChiCuc" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-number class="text-right" nz-input [(ngModel)]="editCache[i].data.soLuong" [nzMin]="1"
+                           [nzStep]="1" [nzSize]="'small'">
+          </nz-input-number>
+        </td>
+        <td class="text-center">
+          <a (click)="saveEdit(i)" class="save">
+            <i class="icon htvbdh_tcdt_save"></i>
+          </a>
+          <a (click)="cancelEdit(i)">
+            <i class="fa fa-ban do"></i>
+          </a>
+        </td>
+      </ng-template>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td style="text-align: right; font-weight: 700" colspan="1">Cộng</td>
+      <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </nz-table>
+</nz-card>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

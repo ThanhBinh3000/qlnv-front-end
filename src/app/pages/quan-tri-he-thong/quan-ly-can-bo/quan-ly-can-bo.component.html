@@ -1,0 +1,146 @@
+<div class="bg-trang">
+  <div nz-col [nzSpan]="24" style="margin-top: 12px">
+    <nz-form-item>
+      <nz-radio-group nzSize="small" class="rdo-input" (ngModelChange)="search($event)"
+                      [(ngModel)]="formData.value.userType">
+        <label nz-radio nzValue="ALL">Tất cả</label>
+        <label nz-radio nzValue="DT">TCDT</label>
+        <label nz-radio nzValue="BN">Bộ/Ngành</label>
+      </nz-radio-group>
+    </nz-form-item>
+  </div>
+  <div class="group-button">
+    <h3>Danh sách cán bộ</h3>
+    <div class="buttons">
+      <button type="button" class="btn btn-do" (click)="xoaNhieu()">
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+        <span>Xóa</span>
+      </button>
+      <button type="button" class="btn btn-sub" (click)="exportData()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+      <button type="button" class="btn btn-main" (click)="them(null, false)">
+        <i class="icon htvbdh_dau-cong"></i>
+        <span>Thêm</span>
+      </button>
+    </div>
+  </div>
+  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <nz-table #rowSelectionTable [nzData]="dataTable" nzBordered [nzFrontPagination]="false"
+              [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th style="width: 2%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="onAllChecked($event)"></th>
+        <th style="width: 3%;">STT</th>
+        <th>Tên cán bộ</th>
+        <th>Tài khoản</th>
+        <th>Email</th>
+        <th>SĐT</th>
+        <th>Đơn vị quản lý</th>
+        <th>Chức vụ</th>
+        <th>Trạng thái</th>
+        <th style="width: 7%;">Hành động</th>
+      </tr>
+      <tr class="search-table">
+        <th></th>
+        <th></th>
+        <th>
+          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.fullName"
+                   (input)="search()"/>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.username"
+                   (input)="search()"/>
+          </nz-input-group>
+
+        </th>
+        <th>
+          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.email"
+                   (input)="search()"/>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.phoneNo"
+                   (input)="search()"/>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.dvql" (input)="search()"/>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.position"
+                   (input)="search()"/>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.status"
+                   (input)="search()"/>
+          </nz-input-group>
+        </th>
+        <th>
+
+        </th>
+        <ng-template #suffixTemplateInfo>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+        <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+        <td class="text-center">{{idx + 1}}</td>
+        <td>{{data.fullName}}</td>
+        <td>{{data.username}}</td>
+        <td>{{data.email}}</td>
+        <td>{{data.phoneNo}}</td>
+        <td>{{data.dvqlName}}</td>
+        <td>{{data.positionName}}</td>
+        <td>{{data.tenTrangThai}}</td>
+        <td>
+          <!--            <a (click)="them(data, true)">-->
+          <!--              <i class="fa fa-eye" title="Xem chi tiết"></i>-->
+          <!--            </a>-->
+          <a (click)="them(data, false)">
+            <i class="fa fa-pencil" title="Sửa"></i>
+          </a>
+          <a (click)="openPhanQuyen(data)">
+            <i class="icon htvbdh_tcdt_phan-quyen"></i>
+          </a>
+          <a (click)="xoaItem(data)">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+    <div class="tab-content tab-menu">
+      <div class="tab-pane fade show active justify-content-between">
+        <div class="trai"></div>
+        <div class="canphai">
+          <!-- begin phân trang  -->
+          <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                         [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                         (nzPageIndexChange)="changePageIndex($event)"
+                         (nzPageSizeChange)="changePageSize($event)">
+            <ng-template #rangeTemplate let-range="range" let-total>
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+            </ng-template>
+          </nz-pagination>
+          <!-- end phân trang  -->
+        </div>
+      </div>
+    </div>
+  </nz-card>
+</div>

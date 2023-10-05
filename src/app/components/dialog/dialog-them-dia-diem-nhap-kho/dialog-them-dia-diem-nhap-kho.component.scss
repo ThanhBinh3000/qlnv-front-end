@@ -1,0 +1,60 @@
+.check-box {
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+
+.chon-file {
+  border: 1px solid #c4c9cc;
+  width: 100%;
+  border-radius: 0px;
+}
+
+.w-150 {
+  width: 150px !important;
+}
+
+.area-error {
+  background: #FFF4F4;
+  border: 0.5px solid #FF4D4F;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+
+  .icon-canh-bao {
+    color: #FF4D4F;
+    font-size: 40px;
+    margin-right: 27px;
+  }
+
+  .nd-canh-bao {
+    display: flex;
+    flex-direction: column;
+
+    &>span:nth-child(1) {
+      color: #FF4D4F;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 18px;
+      margin-bottom: 6px;
+    }
+
+    &>span:nth-child(2) {
+      color: #FF4D4F;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+    }
+  }
+
+}
+
+.modal__btn-huy {
+  background: #FFF3F3;
+  border: 0.5px solid #FF4D4F !important;
+  font-size: 13px;
+  color: #FF4D4F;
+  display: flex;
+  align-items: center;
+  font-weight: 00;
+  margin-right: 5px;
+}

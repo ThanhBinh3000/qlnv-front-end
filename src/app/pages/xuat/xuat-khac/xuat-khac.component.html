@@ -1,0 +1,44 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected==0" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTBH")' (click)="selectTab(0)">
+      Kiểm tra chất lượng VT, TB trong thời gian bảo hành theo HĐ
+    </li>
+    <li nz-menu-item [nzSelected]="tabSelected==1" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTLK")' (click)="selectTab(1)">
+      Kiểm tra chất lượng VT, TB trước khi hết hạn lưu kho
+    </li>
+    <li nz-menu-item [nzSelected]="tabSelected==2" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLLTLK")' (click)="selectTab(2)">
+      Kiểm tra chất lượng LT trước khi hết hạn lưu kho
+    </li>
+    <li nz-menu-item [nzSelected]="tabSelected==3" *ngIf='userService.isAccessPermisson("XHDTQG_XK_XHBKK")' (click)="selectTab(3)">
+      Xuất hàng DTQG trong trường hợp bất khả kháng theo quy định tại HĐ bảo hiểm
+    </li>
+    <li nz-menu-item [nzSelected]="tabSelected==4" *ngIf='userService.isAccessPermisson("XHDTQG_XK_XHKDM")' (click)="selectTab(4)">
+     Xuất hàng khỏi danh mục
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-kiemtra-chatluong-vt-tb-trong-thoi-gian-bao-hanh></app-kiemtra-chatluong-vt-tb-trong-thoi-gian-bao-hanh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-kiemtra-chatluong-vt-tb-truockhi-hethan-luukho></app-kiemtra-chatluong-vt-tb-truockhi-hethan-luukho>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-kiemtra-chatluong-lt-truockhi-hethan-luukho></app-kiemtra-chatluong-lt-truockhi-hethan-luukho>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+      <app-xuat-hang-dtqg-th-bkk></app-xuat-hang-dtqg-th-bkk>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+      <app-xuat-hang-khoi-danh-muc></app-xuat-hang-khoi-danh-muc>
+    </ng-container>
+  </div>
+</div>
+
+
+
+
+
+

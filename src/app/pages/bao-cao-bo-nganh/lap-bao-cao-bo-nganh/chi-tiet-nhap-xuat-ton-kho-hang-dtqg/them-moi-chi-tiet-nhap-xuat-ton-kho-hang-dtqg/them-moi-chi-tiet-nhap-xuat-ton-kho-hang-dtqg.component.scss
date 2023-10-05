@@ -1,0 +1,23 @@
+th.colNumber {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: center;
+}
+
+th.header {
+    width: 80px;
+    text-align: center;
+}
+
+.fixed-column {
+    position: sticky;
+    right: 0;
+    background-color: #f0f0f0;
+}
+
+.dm-title {
+    font-weight: 500;
+}
+.multi-line {
+  white-space: normal !important;
+}

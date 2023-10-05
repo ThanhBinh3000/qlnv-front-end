@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
+  <defs>
+    <clipPath id="clip-phanvaitro">
+      <rect width="26" height="26"/>
+    </clipPath>
+  </defs>
+  <g id="phanvaitro" clip-path="url(#clip-phanvaitro)">
+    <g id="Group_8149" data-name="Group 8149" transform="translate(-6013 -5662)">
+      <g id="graph_3_" data-name="graph (3)" transform="translate(6018.72 5643.198)">
+        <g id="Group_7948" data-name="Group 7948" transform="translate(0 25.55)">
+          <path id="Path_30353" data-name="Path 30353" d="M12.892,25.55a1.428,1.428,0,0,0-1.03,2.423L9.246,33.207a1.176,1.176,0,0,0-.173-.017,1.429,1.429,0,0,0-.54.106L6.5,31.011a1.429,1.429,0,1,0-2.68-.688,1.421,1.421,0,0,0,.353.929L1.687,35.6a1.309,1.309,0,0,0-.255-.025,1.452,1.452,0,1,0,1.08.5L5,31.73a1.347,1.347,0,0,0,.792-.081l2.031,2.286a1.431,1.431,0,1,0,2.28-.3L12.715,28.4a1.176,1.176,0,0,0,.173.017,1.432,1.432,0,0,0,0-2.865Z" transform="translate(0 -25.55)" fill="#4d4e4e"/>
+        </g>
+      </g>
+      <path id="Path_640" data-name="Path 640" d="M13,0A13,13,0,1,0,26,13,13.014,13.014,0,0,0,13,0m0,24.375A11.375,11.375,0,1,1,24.375,13,11.388,11.388,0,0,1,13,24.375" transform="translate(6013 5662)" fill="#636363"/>
+    </g>
+  </g>
+</svg>

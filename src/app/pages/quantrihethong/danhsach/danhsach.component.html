@@ -1,0 +1,159 @@
+<div class="luong-thuc__danh-sach">
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Điều kiện Tìm kiếm" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="6">
+              <label class="search__label">Đơn vị</label>
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
+                  [nzAutocomplete]="auto" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #auto>
+                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </div>
+            <div nz-col nzSpan="12">
+              <label class="search__label">Loại NSD</label>
+              <nz-select>
+                <nz-option nzValue="{{item.id}}" nzLabel="{{item.giaTri}}" *ngFor="let item of LoaiNSD">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Mã người dung</label>
+              <input class="search__input" placeholder="Mã người dung" nz-input [(ngModel)]="searchFilter.maND" />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Nhóm người sử dụng</label>
+              <input class="search__input" placeholder="Nhóm người sử dụng" nz-input
+                [(ngModel)]="searchFilter.nhomND" />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Trạng thái</label>
+              <nz-select nzAllowClear [(ngModel)]="searchFilter.status">
+                <nz-option nzLabel="Mở khóa" nzValue="01"></nz-option>
+                <nz-option nzLabel="Khóa" nzValue="00"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--search" (click)="search()">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
+              <i class="icon  htvbdh_nhap-lai1"></i>
+              Xóa điều kiện
+            </button>
+          </div>
+          <div class="cangiua" *ngIf="errorMessage && errorMessage != ''">
+            <span class="error">{{errorMessage}}</span>
+          </div>
+        </nz-card>
+        <nz-card nzTitle="Danh sách quản lý người sử dụng" [nzExtra]="tableCard1" class="mt-16 flex-card p-lr16">
+          <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th class="text-center" width="60px">STT</th>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <th width="130px">Mã người dùng</th>
+                <th width="175px">Họ và Tên</th>
+                <th width="175px">Đơn vị quản lý</th>
+                <th width="">Nhóm người dùng</th>
+                <th width="175px">Phạm vi báo cáo</th>
+                <th width="130px">Loại NSD</th>
+                <th width="175px">Kiểu khác</th>
+                <th width="130px">Trạng thái</th>
+                <th width="175px"></th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of basicTable.data; let i = index" (click)="redirectToChiTiet(data.username ,true)">
+                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <td>{{ data.soDxuat }}</td>
+                <td>{{ data?.fullName }}</td>
+                <td>{{ data?.dvqlName }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ data?.sysType }}</td>
+                <td>{{ convertTrangThai(data?.status) }}</td>
+                <td (click)="onClick($event)" align="center">
+                  <!-- hanh dong........................ -->
+                  <!--khung hanh dong........................ -->
+                  <div *ngIf="listAction?.length > 3; then content else other_content"></div>
+                  <ng-template #content>
+                    <!-- hanh dong........................ -->
+                    <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="hanhdong">
+                      <span class="icon htvbdh_cog"></span>
+                    </a>
+                    <nz-dropdown-menu #hanhdong="nzDropdownMenu">
+                      <ul nz-menu class="hanhdong">
+                        <ng-container *ngFor="let col of listAction">
+                          <li nz-menu-item *ngIf="col.onVisible(data)" (click)="col.onClick($event, data)">
+                            <a>
+                              <span [ngClass]="col.class"></span>
+                              <span>
+                                {{col.name}}
+                              </span>
+                            </a>
+                          </li>
+                        </ng-container>
+                      </ul>
+                    </nz-dropdown-menu>
+                    <!-- hanh dong........................ -->
+                  </ng-template>
+                  <ng-template #other_content>
+                    <ng-container *ngFor="let col of listAction">
+                      <i *ngIf="col.onVisible(data)" (click)="col.onClick($event, data)" [ngClass]="col.class"
+                        nz-tooltip nzTooltipTitle="{{col.name}}">
+                      </i>
+                    </ng-container>
+                  </ng-template>
+                  <!--khung hanh dong........................ -->
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+
+              </div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                  (nzPageSizeChange)="changePageSize($event)">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-card>
+        <ng-template #tableCard1>
+          <button type="button" class="btn btn-main" (click)="redirectToThemSua()">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

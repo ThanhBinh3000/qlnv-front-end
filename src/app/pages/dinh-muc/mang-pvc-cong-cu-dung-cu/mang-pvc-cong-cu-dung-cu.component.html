@@ -1,0 +1,57 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected == 'dexuatnhucau'" (click)="selectTab('dexuatnhucau')">
+      {{userService.isChiCuc() ? 'Đề xuất nhu cầu' : 'Đề xuất nhu cầu của Chi cục'}}
+    </li>
+    <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="!userService.isChiCuc()">
+      {{userService.isTongCuc() ? 'Đề xuất nhu cầu của các Cục' : 'Tổng hợp nhu cầu của Chi cục và đề xuất lên TC'}}
+    </li>
+    <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc()">
+      Tổng hợp đề xuất nhu cầu của các Cục
+    </li>
+    <li nz-menu-item (click)="selectTab('qdmuasam')" *ngIf="!userService.isChiCuc()">
+      Quyết định mua sắm
+    </li>
+    <li nz-menu-item (click)="selectTab('ttphanbo')">
+     Thông tin phân bổ
+    </li>
+    <li nz-menu-item (click)="selectTab('hopdongmuasam')">
+      Hợp đồng mua sắm
+    </li>
+    <li nz-menu-item (click)="selectTab('bienbangiaonhan')">
+      Biên bản giao nhận
+    </li>
+    <li nz-menu-item (click)="selectTab('hientrangmaymoc')">
+      Hiện trạng công cụ,dụng cụ
+    </li>
+  </ul>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'dexuatnhucau'">
+      <app-de-xuat-nc-chi-cuc-pvc></app-de-xuat-nc-chi-cuc-pvc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'dexuatcuc'">
+     <app-tong-hop-de-xuat-nhu-cau-chi-cuc></app-tong-hop-de-xuat-nhu-cau-chi-cuc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'tonghopdexuat'">
+      <app-tong-hop-nc-cuc-pvc></app-tong-hop-nc-cuc-pvc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'qdmuasam'">
+      <app-qd-mua-sam-pvc></app-qd-mua-sam-pvc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'ttphanbo'">
+      <app-tt-phan-bo-pvc></app-tt-phan-bo-pvc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'hopdongmuasam'">
+      <app-hop-dong-mua-sam-pvc></app-hop-dong-mua-sam-pvc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'bienbangiaonhan'">
+      <app-bien-ban-giao-nhan-pvc></app-bien-ban-giao-nhan-pvc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'hientrangmaymoc'">
+      <app-hien-trang-ccdc-pvc></app-hien-trang-ccdc-pvc>
+    </ng-container>
+  </div>
+</div>

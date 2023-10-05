@@ -1,0 +1,152 @@
+<ng-container>
+  <div class="bg-trang">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span></span>
+          <span>ĐƠN VỊ LIÊN QUAN</span>
+        </div>
+      </div>
+    </div>
+    <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+      <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzSpan="4">
+            <label class="search__label">Loại đơn vị</label>
+            <nz-select formControlName="type" nzAllowClear>
+              <nz-option *ngFor="let p of listLoaiDvi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Mã số thuế/CCCD/CMND</label>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="mstCccd"/>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Tên đơn vị/cá nhân</label>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="ten"/>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Điện thoại</label>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="sdt"/>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Địa chỉ</label>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="diaChi"/>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Trạng thái</label>
+            <nz-select formControlName="trangThai" nzAllowClear>
+              <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+      <div nz-col class="cangiua group-button-search">
+        <div>
+          <button nz-button class="search__button--clear" (click)="clearForm()">
+            <i class="icon  htvbdh_nhap-lai1"></i>
+            Xóa điều kiện
+          </button>
+          <button nz-button class="search__button--search" (click)="search()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+        </div>
+      </div>
+    </nz-card>
+    <div class="group-button">
+      <h3> DANH SÁCH DANH MỤC ĐƠN VỊ LIÊN QUAN</h3>
+      <div class="buttons">
+        <button (click)="delete('multi')" type="button" class="btn btn-sub btn-xoa">
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          <span>Xóa</span>
+        </button>
+        <button type="button" class="btn btn-sub" (click)="exportData()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="themMoi(null)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+      </div>
+    </div>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzScroll]="dataTable && dataTable.length ? { x: '1000px'} : null" [nzShowPagination]="false" nzBordered>
+        <thead>
+        <tr>
+          <th nzWidth="40px">
+            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                   [nzIndeterminate]="indeterminate"></label>
+          </th>
+          <th class="text-center" nzWidth="40px">STT</th>
+          <th class="text-center" nzWidth="150px">MST/CCCD/CMND</th>
+          <th class="text-center" nzWidth="200px">Tên cá nhân/công ty</th>
+          <th class="text-center" nzWidth="120px">Loại đơn vị</th>
+          <th class="text-center" nzWidth="120px">Phân loại</th>
+          <th class="text-center" nzWidth="200px">Địa chỉ</th>
+          <th class="text-center" nzWidth="120px">Số Fax</th>
+          <th class="text-center" nzWidth="120px">Số tài khoản</th>
+          <th class="text-center" nzWidth="120px">Ngân hàng</th>
+          <th class="text-center" nzWidth="120px">Người đại diện</th>
+          <th class="text-center" nzWidth="120px">Chức vụ</th>
+          <th class="text-center" nzWidth="150px">Ghi chú</th>
+          <th class="text-center" nzWidth="120px">Ngày tạo</th>
+          <th class="text-center" nzWidth="120px">Trạng thái</th>
+          <th class="text-center" nzWidth="100px" nzRight>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+          <td nzWidth="40px">
+            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateAllChecked()"
+                   [nzDisabled]="data.trangThai == '01'"></label>
+          </td>          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+          <td class="text-center">{{data.mstCccd}}</td>
+          <td class="text-center">{{data.ten}}</td>
+          <td class="text-center">{{data.tenLoaiDvi}}</td>
+          <td class="text-center">{{data.tenPloai}}</td>
+          <td class="text-center">{{data.diaChi}}</td>
+          <td class="text-center">{{data.type == '01' ? data.fax : null}}</td>
+          <td class="text-center">{{data.stk}}</td>
+          <td class="text-center">{{data.nganHang}}</td>
+          <td class="text-center">{{ data.type == '01' ? data.nguoiDdien : null}}</td>
+          <td class="text-center">{{ data.type == '01' ?  data.chucVu : null}}</td>
+          <td class="text-center">{{data.ghiChu}}</td>
+          <td class="text-center">{{data.ngayTao | date : 'dd/MM/YYYY'}}</td>
+          <td class="text-center">{{data.tenTrangThai}}</td>
+          <td class="text-left" nzRight>
+            <a (click)="themMoi(data.id)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a (click)="delete('single', data)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <div class="tab-content tab-menu" id="myTabContent">
+        <div class="tab-pane fade show active justify-content-between">
+          <div class="trai">
+          </div>
+          <div class="canphai">
+            <!-- begin phân trang  -->
+            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
+              <ng-template #rangeTemplate let-range="range" let-total>
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+              </ng-template>
+            </nz-pagination>
+            <!-- end phân trang  -->
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</ng-container>

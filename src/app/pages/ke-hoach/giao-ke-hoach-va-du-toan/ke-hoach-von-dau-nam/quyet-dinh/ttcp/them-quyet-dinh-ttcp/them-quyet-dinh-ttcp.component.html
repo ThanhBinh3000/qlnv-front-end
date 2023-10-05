@@ -1,0 +1,197 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="quayLai()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button *ngIf="(formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU && !isView) &&
+            userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_BANHANH')" type="button" class="btn btn-sub"
+            (click)="save(true)">
+      <i class="icon htvbdh_chuyenvanthu"></i>
+      <span>Ban hành</span>
+    </button>
+    <button *ngIf="formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU && !isView" type="button"
+            class="btn btn-sub xanh"
+            (click)="save()">
+      <i class="icon htvbdh_luu"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</nz-affix>
+<div class="bg-trang">
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="header">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span
+            [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
+          </span>
+          <span>Quyết định thủ tướng chính phủ</span>
+        </div>
+      </div>
+    </div>
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="namQd" [nzDisabled]="isView">
+                <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
+                </nz-option>
+              </nz-select>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số quyết định</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
+                <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soQd" [nzMin]="1"
+                                 [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                </nz-input-number>
+              </nz-input-group>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày ký quyết định
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
+            <nz-form-control>
+              <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input
+                        [readonly]="isView"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Căn cứ pháp lý
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [isCanCuPL]="true" [isViewDetail]="isView" [data]="listCcPhapLy"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item nz-col nzSpan="24" class="form-item">
+            <nz-form-label [nzNoColon]="true" class="label-color-kh">File đính kèm quyết định của Thủ tướng chính phủ
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="taiLieuDinhKemList" [isViewDetail]="false"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+
+  <nz-collapse>
+    <nz-collapse-panel [nzActive]="true" nzHeader="KẾ HOẠCH NSNN CHI DTQG TẤT CẢ BỘ/NGÀNH"
+                       class="mg-t-10">
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <div>
+    <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Triệu đồng</h2>
+    </span>
+        </div>
+        <nz-table [nzData]="dataTableAllBn" class="nowrap table__container-tt" nzBordered [nzFrontPagination]="false"
+                  [nzShowPagination]="false">
+          <thead>
+          <tr>
+            <th class="text-center" style="width: 5%;">STT</th>
+            <th class="text-center" style="width: 75%;">Bộ/Ngành</th>
+            <th class="text-center" style="width: 15%;">Kế hoạch năm {{formData.value.namQd}}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="text-center"></td>
+            <td class="text-right"><b>Tổng số</b></td>
+            <td class="text-right bold" style="">{{totalBnKh | number : '1.0-1' : 'vi_VN'}}</td>
+          </tr>
+          <tr *ngFor="let data of dataTableAllBn; let idx = index">
+            <td class="text-center">{{ !data.maCha ? data.stt : ''}}</td>
+            <td *ngIf="data.maCha">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{ data.tenBn }}</td>
+            <td *ngIf="!data.maCha"> {{ data.tenBn }}</td>
+            <td *ngIf="!data.isSum" class="text-right">
+              <input currencyMask class="money-input" (change)="onInputNumberBNChange()"
+                     (keydown)="onInputNumberBNChange()"
+                     (keyup)="onInputNumberBNChange()" [(ngModel)]="data.tongSo" [options]="options"/>
+            </td>
+            <td *ngIf="data.isSum" class="text-right">{{totalBtcKh  | number : '1.0-1' : 'vi_VN'}}</td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </nz-collapse-panel>
+  </nz-collapse>
+  <nz-collapse>
+    <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="CHI TIẾT KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
+                       class="mg-t-10" [nzExtra]="extraTpl">
+      <ng-template #extraTpl>
+        <button type="button" *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" class="btn btn-sub xanh"
+                (click)="themKeHoach()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+      </ng-template>
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <div>
+    <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Triệu đồng</h2>
+    </span>
+        </div>
+        <nz-table [nzData]="dataTable" class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+          <thead>
+          <tr>
+            <th class="text-center" style="width: 5%;">STT</th>
+            <th style="width: 75%;">Bộ</th>
+            <th style="width: 15%;" class="text-right">Kế hoạch NSNN chi tăng</th>
+            <th class="text-center" style="width: 5%;">Hành động</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let data of dataTable; let idx = index">
+            <td class="text-center">{{ idx + 1 }}</td>
+            <td>{{ data.tenBoNganh }}</td>
+            <td class="text-right">{{ data.tongTien |number: '1.0-1': 'vi_VN'}}</td>
+            <td tyle="text-align: left; white-space: nowrap;">
+              <a *ngIf="isView" (click)="themKeHoach(data, idx,true)">
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
+              </a>
+              <a *ngIf="!isView" (click)="themKeHoach(data, idx,false)">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a *ngIf="!isView" (click)="xoaKeHoach(idx)">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>

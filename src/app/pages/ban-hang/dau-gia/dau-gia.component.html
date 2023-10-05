@@ -1,0 +1,58 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+    <!-- (nzChange)="onChange($event)" -->
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected (click)="selectTab('kehoachbandaugia')">
+            Kế hoạch bán đấu giá
+        </li>
+        <li nz-menu-item (click)="selectTab('tctklcnt')">
+            Tổ chức triển khai KH lựa chọn nhà thầu
+        </li>
+        <li nz-menu-item (click)="selectTab('dckhlcnt')">
+            Điều chỉnh KH lựa chọn nhà thầu
+        </li>
+        <li nz-menu-item (click)="selectTab('hopdong')">
+            Hợp đồng
+        </li>
+    </ul>
+</nz-affix>
+
+
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 'kehoachbandaugia'">
+            <app-ke-hoach-ban-dau-gia></app-ke-hoach-ban-dau-gia>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'tctklcnt'">
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'dckhlcnt'">
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'hopdong'">
+        </ng-container>
+    </div>
+</div>
+
+<!-- <div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <div class="main-content tab-menu-new">
+            <nz-tabset nzType="card" class="tab-level-0">
+                <nz-tab [nzTitle]="'Kế hoạch bán đấu giá'">
+                    <ng-template nz-tab>
+                        <app-ke-hoach-ban-dau-gia></app-ke-hoach-ban-dau-gia>
+                    </ng-template>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Tổ chức triển khai KH lựa chọn nhà thầu'">
+                    <ng-template nz-tab>
+                    </ng-template>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Điều chỉnh KH lựa chọn nhà thầu'">
+                    <ng-template nz-tab>
+                    </ng-template>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Hợp đồng'">
+                    <ng-template nz-tab>
+                    </ng-template>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </div>
+</div> -->

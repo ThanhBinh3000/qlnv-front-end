@@ -1,0 +1,57 @@
+<ng-container *ngIf="userService.isTongCuc()">
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+    <!-- (nzChange)="onChange($event)" -->
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item nzSelected (click)="selectTab('dinhmuctrangbi')">
+        Định mức trang bị
+      </li>
+      <li nz-menu-item (click)="selectTab('dexuatcuc')">
+        Đề xuất nhu cầu của các cục
+      </li>
+      <li nz-menu-item (click)="selectTab('tonghopdexuat')">
+        Tổng hợp đề xuất nhu cầu của các cục
+      </li>
+      <li nz-menu-item (click)="selectTab('quyetdinhmuasam')">
+        Quyết định mua sắm
+      </li>
+      <li nz-menu-item (click)="selectTab('hopdong')">
+        Hợp đồng
+      </li>
+      <li nz-menu-item (click)="selectTab('bienbangiaonhan')">
+        Biên bản giao nhận
+      </li>
+      <li nz-menu-item (click)="selectTab('hientrangmaymoc')">
+        Hiện trạng máy móc, thiết bị
+      </li>
+    </ul>
+  </nz-affix>
+
+  <div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+      <ng-container *ngIf="tabSelected == 'dinhmuctrangbi'">
+        <app-dinh-muc-trang-bi></app-dinh-muc-trang-bi>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 'dexuatcuc'">
+        <app-de-xuat-nhu-cau-cua-cac-cuc></app-de-xuat-nhu-cau-cua-cac-cuc>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 'tonghopdexuat'">
+        <app-tong-hop-de-xuat-nhu-cau-cua-cac-cuc></app-tong-hop-de-xuat-nhu-cau-cua-cac-cuc>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 'quyetdinhmuasam'">
+        <app-quyet-dinh-mua-sam></app-quyet-dinh-mua-sam>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 'hopdong'">
+        <app-hop-dong-mua-sam></app-hop-dong-mua-sam>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 'bienbangiaonhan'">
+        <app-bien-ban-giao-nhan></app-bien-ban-giao-nhan>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 'hientrangmaymoc'">
+        <app-hien-trang-may-moc-thiet-bi></app-hien-trang-may-moc-thiet-bi>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="!userService.isTongCuc()">
+  <app-danh-sach-dinh-muc-trang-bi-cong-cu></app-danh-sach-dinh-muc-trang-bi-cong-cu>
+</ng-container>

@@ -1,0 +1,90 @@
+<form nz-form [formGroup]="formGroup" [nzLayout]="'vertical'">
+  <div nz-row [nzGutter]="24">
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Tên nhóm</nz-form-label>
+        <nz-form-control nzErrorTip="Đơn vị quản lý là bắt buộc!">
+          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+            <input placeholder="Đơn vị" nz-input formControlName="dvql" (input)="onInput($event)"
+              [nzAutocomplete]="auto" />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Mô tả</nz-form-label>
+        <nz-form-control nzErrorTip="Kiểu xác thực bắt buộc!">
+          <input type="text" nz-input formControlName="groupId" />
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource">
+          <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
+            <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
+            <nz-tree-node-checkbox [nzDisabled]="node.disabled" [nzChecked]="checklistSelection.isSelected(node)"
+              (nzClick)="leafItemSelectionToggle(node)"></nz-tree-node-checkbox>
+            <nz-tree-node-option [nzDisabled]="node.disabled" (nzClick)="leafItemSelectionToggle(node)">
+              {{ node.name }}
+            </nz-tree-node-option>
+          </nz-tree-node>
+
+          <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodePadding>
+            <nz-tree-node-toggle>
+              <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
+            </nz-tree-node-toggle>
+            <nz-tree-node-checkbox [nzDisabled]="node.disabled" [nzChecked]="descendantsAllSelected(node)"
+              [nzIndeterminate]="descendantsPartiallySelected(node)" (nzClick)="itemSelectionToggle(node)">
+            </nz-tree-node-checkbox>
+            <nz-tree-node-option [nzDisabled]="node.disabled" (nzClick)="itemSelectionToggle(node)">
+              {{ node.name }}
+            </nz-tree-node-option>
+          </nz-tree-node>
+        </nz-tree-view>
+      </nz-form-item>
+
+
+    </div>
+
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label>Trạng thái</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group formControlName="trangThai">
+            <label nz-radio nzValue="01">Mở</label>
+            <label nz-radio nzValue="00">Khóa</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="m-footer">
+      <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="themmoi()">
+            <i class="icon htvbdh_luu" aria-hidden="true"></i>
+            Lưu
+          </a>
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huy()">
+            <i aria-hidden="true" class="fa fa-sign-out"></i>
+            <span>Hủy</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>

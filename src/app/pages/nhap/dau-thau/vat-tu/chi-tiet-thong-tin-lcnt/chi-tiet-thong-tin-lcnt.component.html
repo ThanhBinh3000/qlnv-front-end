@@ -1,0 +1,249 @@
+<div class="luong-thuc__danh-sach">
+  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="contentBor chi-tieu__body">
+      <div class="contentDetail">
+        <div class="main-content thong-tin-de-xuat-khlcnt">
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+              aria-labelledby="banhanh-tab">
+              <div class="trai">
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectToTTDT()">
+                  <i class="fa fa-arrow-circle-left"></i>
+                </a>
+              </div>
+              <div class="canphai phai">
+                <button class="btn btn-main btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_save"></i>
+                  <span>Lưu</span>
+                </button>
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_pheduyet"></i>
+                  <span>Nhập quyết định phê duyệt KQLCNT </span>
+                </button>
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()">
+                  <i class="icon htvbdh_tcdt_guiduyet"></i>
+                  <span>Gửi duyệt</span>
+                </button>
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()">
+                  <i class="icon htvbdh_tcdt_pheduyet"></i>
+                  <span>Phê duyệt</span>
+                </button>
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()">
+                  <i class="icon htvbdh_tcdt_tuchoi"></i>
+                  <span>Từ chối</span>
+                </a>
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_delete"></i>
+                  <span>Hủy bỏ</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Thông tin đấu thầu" class="mt16 flex-card p-lr16">
+          <form nz-form [formGroup]="formData" class="mt-16">
+            <div nz-row [nzGutter]="[16, 12]">
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Số đề xuất </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày đề xuất </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-date-picker class="search__input"></nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Số hiệu QĐ phê duyệt KHLCNT </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                      <input nz-input />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày phê duyệt KHLCNT </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-date-picker class="search__input"></nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Tên dự án </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <textarea rows="3" class="search__input" nz-input></textarea>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Tên chủ đầu tư </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Bên mời thầu </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Chi tiết nguồn vốn </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                      <input nz-input />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Hình thức dự thầu </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                      <input nz-input />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Thời gian hiệu lực của E-HSMT (ngày)
+                  </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày đăng tải E-HSDT </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày đăng tải E-HSDT">
+                    </nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Thời gian đóng thầu </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Thời gian đóng thầu">
+                    </nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Số tiền đảm bảo dự thầu (đồng)
+                  </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="6">
+                <button class="btn btn-tep btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_tep"></i>
+                  <span>Tài liệu đính kèm</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </nz-card>
+        <div class="tab__luong-thuc">
+          <nz-card [nzTitle]="'DANH SÁCH gói thầu'" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+            <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+              <thead>
+                <tr>
+                  <th width="60px">STT</th>
+                  <th width="45px">
+                    <label nz-checkbox></label>
+                  </th>
+                  <th>Tên gói thầu</th>
+                  <th>Giá gói thầu</th>
+                  <th>Phương thức LVNT</th>
+                  <th>Hình thức hợp đồng</th>
+                  <th>Thời gian thực hiện HĐ</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <label nz-checkbox></label>
+                  </td>
+                  <td>Gói thầu số 01: Mua 1.250 bộ nhà bạt cứu sinh loại 16,5m2 nhập kho DTQG thuộc chỉ tiêu kế hoạch
+                    năm 2022</td>
+                  <td>13.000.625.000</td>
+                  <td>Một giai đoạn hai túi hồ sơ</td>
+                  <td>Hợp đồng trọn gói</td>
+                  <td>13.020</td>
+                  <td>
+                    <a>
+                      <i class="icon htvbdh_tcdt_import"></i>
+                    </a>
+                    <a (click)="redirectChiTie(1)">
+                      <i class="fa fa-pencil" title="Sửa"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-card>
+          <ng-template #tableCard1>
+            <button type="button" class="btn btn-main" (click)="redirectChiTie(0)">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+            <button type="button" class="btn btn-sub">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Export</span>
+            </button>
+          </ng-template>
+          <div class="ghi-chu">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Ghi chú
+              </nz-form-label>
+              <textarea nz-input [rows]="3"></textarea>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+<div class="luong-thuc__danh-sach">
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Điều kiện tìm kiếm" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số phiếu</label>
+              <input class="search__input" placeholder="Số phiếu" nz-input [(ngModel)]="soPhieu" />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Từ ngày lập</label>
+              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                [(ngModel)]="startValue" nzPlaceHolder="Từ ngày lập">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Đến ngày lập</label>
+              <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                [(ngModel)]="endValue" nzPlaceHolder="Đến ngày lập">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Ngăn/ lô kho</label>
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input />
+              </nz-input-group>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Loại hàng hóa</label>
+              <nz-select nzPlaceHolder="Loại hàng hóa" [(ngModel)]="loaiVTHH">
+                <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="8" *ngIf="isDuyet">
+              <label class="search__label">Trạng thái</label>
+              <nz-select nzPlaceHolder="Loại QĐ" [(ngModel)]="loaiVTHH">
+                <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--search" (click)="search()">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
+              <i nz-icon nzType="close"></i>
+              Xóa điều kiện
+            </button>
+          </div>
+          <div class="cangiua" *ngIf="errorMessage && errorMessage != ''">
+            <span class="error">{{errorMessage}}</span>
+          </div>
+        </nz-card>
+        <nz-card nzTitle="Danh sách biên bản kết thúc nhập kho" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+          <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th class="text-center" width="60px">STT</th>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <th width="130px">Số phiếu</th>
+                <th width="175px">Ngày lập</th>
+                <th width="175px">Tên hàng hóa</th>
+                <th width="">Ngày bắt đầu nhập</th>
+                <th width="175px">Ngày kết thúc nhập</th>
+                <th width="175px">Tổng số</th>
+                <th width="175px">Ngăn/ lô kho</th>
+                <th width="175px">Trạng thái</th>
+                <th width="130px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <td>ĐNB/CC.ĐNT/N/2022/16</td>
+                <td>15/03/2022</td>
+                <td>Phao áo cứu sinh</td>
+                <td>13/03/2022</td>
+                <td>22/03/2022</td>
+                <td>10.000</td>
+                <td>Lô số 2 Ngăn kho H1/2</td>
+                <td>Chờ duyệt</td>
+                <td class="text-center">
+                  <a (click)="redirectToChiTiet(data.id)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a>
+                    <i class="icon htvbdh_tcdt_print"></i>
+                  </a>
+                  <a (click)="xoaItem(data)">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+
+              </div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                  (nzPageSizeChange)="changePageSize($event)">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-card>
+        <ng-template #tableCard1>
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-main" *ngIf="isDuyet">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <!-- <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Kết xuất</span>
+          </button> -->
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

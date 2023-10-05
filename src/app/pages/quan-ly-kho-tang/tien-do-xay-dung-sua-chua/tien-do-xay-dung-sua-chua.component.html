@@ -1,0 +1,28 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('dautu-xaydung')"
+        *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD')">
+      Tiến độ đầu tư xây dựng
+    </li>
+    <li nz-menu-item (click)="selectTab('sua-chua-lon')" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL')">
+      Tiến độ sửa chữa lớn hàng năm
+    </li>
+    <li nz-menu-item (click)="selectTab('sua-chua-thuong-xuyen')"
+        *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX')">
+      Tiến độ sửa chữa thường xuyên
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'dautu-xaydung'">
+      <app-tien-do-dau-tu-xay-dung></app-tien-do-dau-tu-xay-dung>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'sua-chua-lon'">
+      <app-tien-do-sua-chua-lon-hang-nam></app-tien-do-sua-chua-lon-hang-nam>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'sua-chua-thuong-xuyen'">
+      <app-tien-do-sua-chua-thuong-xuyen></app-tien-do-sua-chua-thuong-xuyen>
+    </ng-container>
+  </div>
+</div>

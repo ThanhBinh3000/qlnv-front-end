@@ -1,0 +1,137 @@
+<div class="bg-trang">
+  <div nz-row [nzGutter]="[24]">
+    <div nz-col [nzSpan]="16">
+      <div class="group-button">
+        <h3>Quản lý nhóm quyền</h3>
+        <div class="buttons">
+          <button type="button" class="btn btn-do">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            <span>Xóa</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_tcdt_import"></i>
+            <span>Tải về</span>
+          </button>
+          <button type="button" class="btn btn-main" (click)="themNhomQuyen()">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+        </div>
+      </div>
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table id="table-ql-nhom-quyen" #rowSelectionTable class="nowrap" [nzData]="dataTable"
+          [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+          <thead>
+            <tr>
+              <th nzWidth="35px" [nzChecked]="false"></th>
+              <th nzWidth="35px">STT</th>
+              <th nzWidth="300px">Tên nhóm quyền</th>
+              <th nzWidth="80px">Trạng thái</th>
+              <th nzWidth="160px">Ghi chú</th>
+              <th nzWidth="70px">Hành động</th>
+            </tr>
+            <tr class="search-table">
+              <th></th>
+              <th></th>
+              <th>
+                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                  <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                    [(ngModel)]="formData.value.name" />
+                </nz-input-group>
+              </th>
+              <th>
+                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                  <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                    [(ngModel)]="formData.value.status" />
+                </nz-input-group>
+              </th>
+              <th>
+                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                  <input (input)="search()" type="text" nz-input placeholder="Tìm kiếm"
+                    [(ngModel)]="formData.value.ghiChu" />
+                </nz-input-group>
+              </th>
+              <th [nzRight]="true"></th>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="showDetail($event,data.id)">
+              <td [nzChecked]="false"></td>
+              <td class="text-center">{{idx + 1}}</td>
+              <td>{{data.name}}</td>
+              <td>{{data.tenTrangThai}}</td>
+              <td>{{data.ghiChu}}</td>
+              <td>
+                <a (click)="themNhomQuyen(data)">
+                  <i class="fa fa-eye" title="Xem chi tiết"></i>
+                </a>
+                <a (click)="themNhomQuyen(data)">
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a (click)="xoaNhomQuyen(data)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu paging-phan-quyen">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai"></div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                (nzPageSizeChange)="changePageSize($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </div>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <div class="group-button">
+        <h3>Danh sách các quyền</h3>
+        <button type="button" class="btn btn-main" (click)="savePermission()">
+          <i class="fa fa-save"></i>
+          <span>Lưu</span>
+        </button>
+      </div>
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed" nzBordered>
+          <thead>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchFilter"
+                  (input)="filterInTable(searchFilter)" size="small" />
+              </nz-input-group>
+            </th>
+            <td width="45px">
+            </td>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of listOfMapData">
+              <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+                <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                  <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
+                    (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
+                    {{ item.name }}
+                  </td>
+                  <td width="45px" class="text-right">
+                    <label nz-checkbox [ngModel]="isCheckedData(item.key)" (ngModelChange)="checkData(item)"></label>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </div>
+  </div>
+</div>

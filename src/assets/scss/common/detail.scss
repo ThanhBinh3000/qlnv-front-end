@@ -1,0 +1,19 @@
+.detail__info {
+  display: flex;
+}
+
+.detail__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: $dark-gray;
+  width: 200px;
+  margin-bottom: 0px;
+}
+
+.detail__text {
+  background-color: $color-f9;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px 2px 8px;
+  width: 100%;
+}

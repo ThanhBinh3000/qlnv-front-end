@@ -1,0 +1,32 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD')" nz-menu-item (click)="selectTab('quyetdinh')">
+      Quyết định
+    </li>
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH')" nz-menu-item (click)="selectTab('chiteukehoach')">
+      Chỉ tiêu kế hoạch
+    </li>
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH')" nz-menu-item (click)="selectTab('dieuchinhchitieukh')">
+      Điều chỉnh chỉ tiêu KH
+    </li>
+    <!--<li nz-menu-item (click)="selectTab('dutoannsnn')">
+      Dự toán NSNN
+    </li>-->
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 'quyetdinh'">
+  <app-quyet-dinh></app-quyet-dinh>
+</ng-container>
+<!--<ng-container *ngIf="tabSelected == 'chiteukehoach'">-->
+<!--  <app-pa-chi-tieu-ke-hoach-nam></app-pa-chi-tieu-ke-hoach-nam>-->
+<!--</ng-container>-->
+<ng-container *ngIf="tabSelected == 'chiteukehoach'">
+  <app-giao-chi-tieu-ke-hoach></app-giao-chi-tieu-ke-hoach>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'dieuchinhchitieukh'">
+  <app-dieu-chinh-ke-hoach></app-dieu-chinh-ke-hoach>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'dutoannsnn'">
+  <app-du-toan-nsnn></app-du-toan-nsnn>
+</ng-container>

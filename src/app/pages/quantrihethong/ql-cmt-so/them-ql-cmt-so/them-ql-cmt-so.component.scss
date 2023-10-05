@@ -1,0 +1,17 @@
+::ng-deep {
+    .display-tab {
+        width: 100%;
+    }
+    .ant-menu-submenu-title {
+        padding: 0 !important;
+    }
+    .left-0 {
+        left: 0 !important;
+    }
+    .dau-thau-tab .ant-popover-content {
+        position: absolute;
+        width: 100vw;
+        left: 0;
+        top: 0;
+    }
+}

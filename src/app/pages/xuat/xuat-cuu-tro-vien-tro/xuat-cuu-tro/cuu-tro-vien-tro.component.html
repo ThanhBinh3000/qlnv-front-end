@@ -1,0 +1,59 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA')">
+      Xây dựng phương án
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA') && userService.isTongCuc()">
+      Tổng hợp phương án
+    </li>
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA')">
+      Quyết định phê duyệt phương án
+    </li>
+    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH')">
+      Quyết định giao nhiệm vụ xuất hàng
+    </li>
+    <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL')">
+      Kiểm tra chất lượng
+    </li>
+    <li [nzSelected]="tabSelected==5" nz-menu-item (click)="selectTab(5)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK')">
+      Xuất kho
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-de-xuat></app-de-xuat>
+    </ng-container>
+    <!--<ng-container *ngIf="tabSelected == 0">
+      <app-xay-dung-phuong-an (eventTaoQd)="taoQd($event)"></app-xay-dung-phuong-an>
+    </ng-container>-->
+    <ng-container *ngIf="tabSelected == 1">
+      <!--      <app-tong-hop-phuong-an (eventTaoQd)="taoQd($event)"></app-tong-hop-phuong-an>-->
+      <app-tong-hop></app-tong-hop>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <!--      <app-quyet-dinh-phe-duyet-phuong-an [isDetail]="isDetail" [dataInit]="dataInit"-->
+      <!--                                          (showListEvent)="quayLai()"></app-quyet-dinh-phe-duyet-phuong-an>-->
+      <app-quyet-dinh-pd></app-quyet-dinh-pd>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+      <!--      <app-quyet-dinh-gnv-xuat-hang></app-quyet-dinh-gnv-xuat-hang>-->
+      <!-- <app-quyet-dinh-gnv [loaiXuat]="'CTVT'"></app-quyet-dinh-gnv> -->
+      <app-quyet-dinh-gnv></app-quyet-dinh-gnv>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+      <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 5">
+      <app-xuat-kho></app-xuat-kho>
+    </ng-container>
+  </div>
+</div>

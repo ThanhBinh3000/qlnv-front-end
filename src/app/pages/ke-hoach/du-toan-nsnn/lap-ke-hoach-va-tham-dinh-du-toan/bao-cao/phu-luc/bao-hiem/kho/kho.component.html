@@ -1,0 +1,316 @@
+<ng-container *ngIf="isDataAvailable">
+    <div class="modal__content">
+        <nz-tabset>
+            <nz-tab nzTitle="Dữ liệu">
+                <div id="tablePrint">
+                    <div class="nut" style="margin-top: 10px;">
+                        <div class="cantrai">
+                            <div> Đơn vị: </div>
+                            <div style="margin-left: 10px;">
+                                <ng-container *ngIf="status.general || !editMoneyUnit; else editMoney">
+                                    <span (click)="editMoneyUnit=true">{{Utils.moneyUnitName(maDviTien)}}</span>
+                                </ng-container>
+                                <ng-template #editMoney>
+                                    <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                        (ngModelChange)="editMoneyUnit=false; Op.setMoneyUnit(maDviTien)">
+                                        <nz-option *ngFor="let item of Utils.DVI_TIEN" [nzValue]="item.id"
+                                            [nzLabel]="item.tenDm">
+                                        </nz-option>
+                                    </nz-select>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
+                        <thead>
+                            <tr>
+                                <th scope="col" rowspan="3" nzWidth="50px" nzLeft>STT</th>
+                                <th scope="col" rowspan="3" nzWidth="150px" nzLeft>Tên cục DTNNKV,<br> chi cục DTNN
+                                </th>
+                                <th scope="col" rowspan="3" nzWidth="150px" nzLeft>Tên địa điểm, địa chỉ </th>
+                                <th scope="col" rowspan="3" nzWidth="150px" nzLeft>Tên nhà kho </th>
+                                <th scope="colgroup" colspan="2">Khối tích kho (m3)</th>
+                                <th scope="colgroup" colspan="3">Số lượng nhà kho</th>
+                                <th scope="colgroup" colspan="7">Giá trị kho (VND)</th>
+                                <th scope="colgroup" rowspan="3" style="width: 60px;" *ngIf="status.general" nzRight>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th scope="col" rowspan="2">Từ {{khoiTich}} m3 trở lên</th>
+                                <th scope="col" rowspan="2">Dưới {{khoiTich}} m3</th>
+                                <th scope="col" rowspan="2">Từ {{khoiTich}} m3 trở lên</th>
+                                <th scope="col" rowspan="2">Dưới {{khoiTich}} m3</th>
+                                <th scope="col" rowspan="2">Tổng</th>
+                                <th scope="colgroup" colspan="3">Từ {{khoiTich}} m3 trở lên</th>
+                                <th scope="colgroup" colspan="3">Dưới {{khoiTich}} m3</th>
+                                <th scope="col" rowspan="2">Tổng</th>
+                            </tr>
+                            <tr>
+                                <th scope="col">Kho lấy theo <br> giá trị còn lại</th>
+                                <th scope="col">Kho hết khấu hao, <br> giá trị lấy theo ...</th>
+                                <th scope="col">Tổng giá trị kho <br> từ {{khoiTich}} m3</th>
+                                <th scope="col">Kho lấy theo <br> giá trị còn lại</th>
+                                <th scope="col">Kho hết khấu hao, <br> giá trị lấy theo ...</th>
+                                <th scope="col">Tổng giá trị kho <br> dưới {{khoiTich}} m3</th>
+                            </tr>
+                            <tr>
+                                <th scope="col" nzLeft>A</th>
+                                <th scope="col" nzLeft>B</th>
+                                <th scope="col" nzLeft>C</th>
+                                <th scope="col" nzLeft>D</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5=3+4</th>
+                                <th scope="col">6</th>
+                                <th scope="col">7</th>
+                                <th scope="col">8=6+7</th>
+                                <th scope="col">9</th>
+                                <th scope="col">10</th>
+                                <th scope="col">11=9+10</th>
+                                <th scope="col">12=8+11</th>
+                                <th scope="col" *ngIf="status.general" nzRight></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td nzLeft></td>
+                                <td nzLeft>Tổng cộng</td>
+                                <td nzLeft></td>
+                                <td nzLeft></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{Op.fmtNum(total.slTren)}}</td>
+                                <td>{{Op.fmtNum(total.slDuoi)}}</td>
+                                <td>{{Op.fmtNum(total.slTong)}}</td>
+                                <td>{{Op.fmtVal(total.gtTrenGtConLai)}}</td>
+                                <td>{{Op.fmtVal(total.gtTrenHetKhauHao)}}</td>
+                                <td>{{Op.fmtVal(total.gtTrenTong)}}</td>
+                                <td>{{Op.fmtVal(total.gtDuoiGtConLai)}}</td>
+                                <td>{{Op.fmtVal(total.gtDuoiHetKhauHao)}}</td>
+                                <td>{{Op.fmtVal(total.gtDuoiTong)}}</td>
+                                <td>{{Op.fmtVal(total.tong)}}</td>
+                                <td *ngIf="status.general" nzRight></td>
+                            </tr>
+                            <tr *ngFor="let data of lstCtietBcao; let i = index">
+                                <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                                    <td [attr.rowspan]="data.unitSpan" [hidden]="!data.unitSpan" nzLeft>
+                                        {{getIndex(data.stt)}}
+                                    </td>
+                                    <td [attr.rowspan]="data.unitSpan" [hidden]="!data.unitSpan" nzLeft>
+                                        {{data.tenDvi}}
+                                    </td>
+                                    <td [attr.rowspan]="data.locationSpan" [hidden]="!data.locationSpan" nzLeft>
+                                        {{data.tenDiaChiKho}}
+                                    </td>
+                                    <td nzLeft>
+                                        {{data.tenNhaKho}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtNum(data.khoiTichTren)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtNum(data.khoiTichDuoi)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtNum(data.slTren)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtNum(data.slDuoi)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtNum(data.slTong)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(data.gtTrenGtConLai)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(data.gtTrenHetKhauHao)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(data.gtTrenTong)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(data.gtDuoiGtConLai)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(data.gtDuoiHetKhauHao)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(data.gtDuoiTong)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(data.tong)}}
+                                    </td>
+                                    <td *ngIf="status.general" nzRight>
+                                        <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil"
+                                            (click)="startEdit(data.id)"></i>
+                                    </td>
+                                </ng-container>
+                                <ng-template #editTemplate>
+                                    <td [attr.rowspan]="data.unitSpan" [hidden]="!data.unitSpan" nzLeft>
+                                        {{getIndex(editCache[data.id].data.stt)}}
+                                    </td>
+                                    <td [attr.rowspan]="data.unitSpan" [hidden]="!data.unitSpan" nzLeft>
+                                        {{editCache[data.id].data.tenDvi}}
+                                    </td>
+                                    <td [attr.rowspan]="data.locationSpan" [hidden]="!data.locationSpan" nzLeft>
+                                        {{editCache[data.id].data.tenDiaChiKho}}
+                                    </td>
+                                    <td nzLeft>
+                                        {{editCache[data.id].data.tenNhaKho}}
+                                    </td>
+                                    <td>
+                                        <ng-container
+                                            *ngIf="!editCache[data.id].data.khoiTichDuoi && editCache[data.id].data.khoiTichDuoi !== 0; else disableTren">
+                                            <input class="money-input" currencyMask [options]="Op.amount"
+                                                [(ngModel)]="editCache[data.id].data.khoiTichTren"
+                                                (ngModelChange)="countWarehouse(data.id)" />
+                                        </ng-container>
+                                        <ng-template #disableTren>
+                                            {{Op.fmtNum(editCache[data.id].data.khoiTichTren)}}
+                                        </ng-template>
+                                    </td>
+                                    <td>
+                                        <ng-container
+                                            *ngIf="!editCache[data.id].data.khoiTichTren && editCache[data.id].data.khoiTichTren !== 0; else disableDuoi">
+                                            <input class="money-input" currencyMask [options]="Op.amount"
+                                                [(ngModel)]="editCache[data.id].data.khoiTichDuoi"
+                                                (ngModelChange)="countWarehouse(data.id)" />
+                                        </ng-container>
+                                        <ng-template #disableDuoi>
+                                            {{Op.fmtNum(editCache[data.id].data.khoiTichDuoi)}}
+                                        </ng-template>
+
+                                    </td>
+                                    <td>
+                                        {{Op.fmtNum(editCache[data.id].data.slTren)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtNum(editCache[data.id].data.slDuoi)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtNum(editCache[data.id].data.slTong)}}
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.gtTrenGtConLai"
+                                            (ngModelChange)="changeModel(data.id)" />
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.gtTrenHetKhauHao"
+                                            (ngModelChange)="changeModel(data.id)" />
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(editCache[data.id].data.gtTrenTong)}}
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.gtDuoiGtConLai"
+                                            (ngModelChange)="changeModel(data.id)" />
+                                    </td>
+                                    <td>
+                                        <input class="money-input" currencyMask [options]="Op.amount"
+                                            [(ngModel)]="editCache[data.id].data.gtDuoiHetKhauHao"
+                                            (ngModelChange)="changeModel(data.id)" />
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(editCache[data.id].data.gtDuoiTong)}}
+                                    </td>
+                                    <td>
+                                        {{Op.fmtVal(editCache[data.id].data.tong)}}
+                                    </td>
+                                    <td nzRight>
+                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                                            Hủy
+                                        </a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-tab>
+            <nz-tab nzTitle="Thuyết minh">
+                <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
+                    [disabled]="!status.general"></textarea>
+            </nz-tab>
+            <nz-tab nzTitle="Tài liệu đính kèm">
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="3">
+                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true"
+                            *ngIf="status.general">
+                            <button nz-button>
+                                <i nz-icon nzType="upload"></i>
+                                Chọn tài liệu đính kèm
+                            </button>
+                        </nz-upload>
+                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                            [disabled]="fileList.length === 0" *ngIf="status.general" style="margin-top: 16px">
+                            Thêm vào danh sách
+                        </button>
+                    </div>
+                </div>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="13">
+                        <nz-table nzBordered class="table__body">
+                            <thead>
+                                <tr>
+                                    <th scope="col" nzWidth="7%">STT</th>
+                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="15%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of formDetail.lstFiles; let i = index">
+                                    <td>{{ i + 1 }} </td>
+                                    <td>{{ data.fileName }}</td>
+                                    <td>
+                                        <a (click)="downloadFile(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="status.general" (click)="deleteFile(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+    <div class="modal-footer">
+        <div class="nut">
+            <div class="cantrai">
+                <button type="button" class="btn btn-main" *ngIf="status.export" (click)="exportToExcel()">
+                    <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                    <span>Xuất</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)="save('5', null)" *ngIf="status.finish">
+                    <i nz-icon nzType="check" nzTheme="outline"></i>
+                    <span>Hoàn tất nhập liệu</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)="save('4', null)" *ngIf="status.finish">
+                    <i class="icon htvbdh_tcdt_save"></i>
+                    <span>Lưu</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)="save('1', null)" *ngIf="status.ok">
+                    <i nz-icon nzType="check" nzTheme="outline"></i>
+                    <span>Chấp nhận</span>
+                </button>
+            </div>
+            <div class="canphai">
+                <button type="button" class="btn btn-do" (click)="tuChoi('0')" *ngIf="status.ok">
+                    <i nz-icon nzType="close" nzTheme="outline"></i>
+                    <span>Không chấp nhận</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-container>

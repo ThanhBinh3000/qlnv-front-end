@@ -1,0 +1,39 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG')" (click)="selectTab(0)">
+      Đề nghị cấp vốn các đơn vị
+    </li>
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN')" (click)="selectTab(2)">
+      Đề nghị cấp vốn Bộ/Ngành
+    </li>
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP')" (click)="selectTab(3)">
+      Tổng hợp cấp vốn Bộ/Ngành
+    </li>
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI')" (click)="selectTab(4)">
+      Thông tri duyệt y dự toán
+    </li>
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TDCAPPHI')" (click)="selectTab(5)">
+      Tổng hợp theo dõi cấp vốn
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-de-nghi-cap-von-cac-don-vi></app-de-nghi-cap-von-cac-don-vi>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-de-nghi-cap-von-bo-nganh></app-de-nghi-cap-von-bo-nganh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+      <app-tong-hop-de-nghi-cap-von-bo-nganh></app-tong-hop-de-nghi-cap-von-bo-nganh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+      <app-thong-tri-duyet-y-du-toan></app-thong-tri-duyet-y-du-toan>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 5">
+      <app-tong-hop-theo-doi-cap-von></app-tong-hop-theo-doi-cap-von>
+    </ng-container>
+  </div>
+</div>

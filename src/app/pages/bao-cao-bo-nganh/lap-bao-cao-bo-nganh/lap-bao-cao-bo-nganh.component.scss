@@ -1,0 +1,15 @@
+.left-menu {
+  ul > li > span:nth-child(2) {
+    width: 95%;
+    white-space: normal;
+    float: left;
+    /* word-wrap: break-word; */
+    height: auto;
+    line-height: normal;
+  }
+  .ant-menu-inline .ant-menu-item{
+    padding-left: 25px;
+    height: auto;
+    min-height: 45px;
+  }
+}

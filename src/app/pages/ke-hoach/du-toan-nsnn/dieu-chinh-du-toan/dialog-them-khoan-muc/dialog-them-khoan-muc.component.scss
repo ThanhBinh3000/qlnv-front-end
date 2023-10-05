@@ -1,0 +1,21 @@
+.check-box {
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+
+button.xanh {
+  background-color: #4E5484;
+  color: #fff;
+}
+
+.modal__content {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.modal__content::-webkit-scrollbar {
+  display: none;
+}

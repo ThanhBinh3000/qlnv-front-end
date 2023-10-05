@@ -1,0 +1,54 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="typeVthh == '02'" (click)="selectTab(0)"
+      *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+      Phiếu nhập kho tạm gửi
+    </li>
+    <li nz-menu-item (click)="selectTab(1)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+      Biên bản gửi hàng
+    </li>
+    <li nz-menu-item [nzSelected]="typeVthh != '02'" (click)="selectTab(2)">
+      Phiếu nhập kho
+    </li>
+    <li nz-menu-item (click)="selectTab(3)" *ngIf="typeVthh != '02'">
+      Bảng kê cân hàng
+    </li>
+    <li nz-menu-item (click)="selectTab(4)" *ngIf="typeVthh != '02'">
+      Biên bản nhập đầy kho
+    </li>
+    <li nz-menu-item (click)="selectTab(5)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+      Bảng kê nhập vật tư
+    </li>
+    <li nz-menu-item (click)="selectTab(6)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+      Biên bản kết thúc nhập kho
+    </li>
+    <li nz-menu-item (click)="selectTab(7)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+      Biên bản giao nhận
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-phieu-nhap-kho-tam-gui [loaiVthh]="typeVthh"></app-phieu-nhap-kho-tam-gui>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-bien-ban-gui-hang [loaiVthh]="typeVthh"></app-bien-ban-gui-hang>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <quan-ly-phieu-nhap-kho [loaiVthh]="typeVthh"></quan-ly-phieu-nhap-kho>
+</ng-container>
+<ng-container *ngIf="tabSelected == 3">
+  <quan-ly-bang-ke-can-hang [typeVthh]="typeVthh"></quan-ly-bang-ke-can-hang>
+</ng-container>
+<ng-container *ngIf="tabSelected == 4">
+  <quan-ly-phieu-nhap-day-kho [loaiVthh]="typeVthh"></quan-ly-phieu-nhap-day-kho>
+</ng-container>
+<ng-container *ngIf="tabSelected == 5">
+  <app-bang-ke-nhap-vat-tu [loaiVthh]="typeVthh"></app-bang-ke-nhap-vat-tu>
+</ng-container>
+<ng-container *ngIf="tabSelected == 6">
+  <quan-ly-phieu-nhap-day-kho [loaiVthh]="typeVthh"></quan-ly-phieu-nhap-day-kho>
+</ng-container>
+<ng-container *ngIf="tabSelected == 7">
+  <app-bien-ban-giao-nhan [loaiVthh]="typeVthh"></app-bien-ban-giao-nhan>
+</ng-container>

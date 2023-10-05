@@ -1,0 +1,585 @@
+<div class="luong-thuc__danh-sach">
+  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="contentBor chi-tieu__body">
+      <div class="contentDetail">
+        <div class="main-content thong-tin-de-xuat-khlcnt">
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+              aria-labelledby="banhanh-tab">
+              <div class="trai">
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectToTTDT()">
+                  <i class="fa fa-arrow-circle-left"></i>
+                </a>
+              </div>
+              <div class="canphai phai">
+                <button class="btn btn-main btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_save"></i>
+                  <span>Lưu</span>
+                </button>
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_delete"></i>
+                  <span>Hủy bỏ</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Thông tin gói thầu" class="mt16 flex-card p-lr16">
+          <form nz-form [formGroup]="formData" class="mt-16">
+            <div nz-row [nzGutter]="[16, 12]">
+              <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Tên gói thầu </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Mã hàng hóa </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="16">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Số lượng </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đơn giá (đồng) </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Thành tiền (đồng) </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Thành tiền bằng chữ </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-select>
+                      <nz-option nzValue="Ngân sách nhà nước" nzLabel="Ngân sách nhà nước"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Phương thức LCNT </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-select>
+                      <nz-option nzValue="Một giai đoạn hai túi hồ sơ" nzLabel="Một giai đoạn hai túi hồ sơ">
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày)
+                  </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Hình thức hợp đồng </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-select>
+                      <nz-option nzValue="Hợp đồng trọn gói" nzLabel="Hợp đồng trọn gói"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="8">
+                <button class="btn btn-tep btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_tep"></i>
+                  <span>Tài liệu đính kèm</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </nz-card>
+        <div class="tab__luong-thuc">
+          <nz-tabset nzType="card" class="tab__container">
+            <nz-tab [nzTitle]="'Danh sách địa điểm nhập'" class="tt-chung__container">
+              <nz-card class="mt16 flex-card p-lr16">
+                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+                  <thead>
+                    <tr>
+                      <th width="60px">STT</th>
+                      <th width="45px">
+                        <label nz-checkbox></label>
+                      </th>
+                      <th>Tên đơn vị nhập </th>
+                      <th width="171px">Số lượng nhập</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        <label nz-checkbox></label>
+                      </td>
+                      <td>Chi cục DTNN Hưng Hà</td>
+                      <td>350</td>
+                      <td>
+                        <a>
+                          <i class="fa fa-pencil" title="Sửa"></i>
+                        </a>
+                        <a>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+                <div class="tab-content tab-menu">
+                  <div class="tab-pane fade show active justify-content-between">
+                    <div class="trai"></div>
+                    <div class="canphai">
+                      <!-- begin phân trang  -->
+                      <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                        [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                        <ng-template #rangeTemplate let-range="range" let-total>
+                          3-3 of 4 items
+                        </ng-template>
+                      </nz-pagination>
+                      <!-- end phân trang  -->
+                    </div>
+                  </div>
+                </div>
+              </nz-card>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Danh sách nhà thầu nộp hồ sơ dự thầu'" class="tt-chung__container">
+              <nz-card class="mt16 flex-card p-lr16">
+                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+                  <thead>
+                    <tr>
+                      <th width="60px">STT</th>
+                      <th>Tên nhà thầu</th>
+                      <th>Địa chỉ</th>
+                      <th>Số ĐT</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Công ty CP SX và KD phụ liệu ngành may Hà Nội</td>
+                      <td>Số 41, ngõ 208, đường Nguyễn Văn Cừ, Gia Lâm, Hà Nội</td>
+                      <td>024.37260664</td>
+                      <td>
+                        <a>
+                          <i class="fa fa-pencil" title="Sửa"></i>
+                        </a>
+                        <a>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+                <div class="tab-content tab-menu">
+                  <div class="tab-pane fade show active justify-content-between">
+                    <div class="trai"></div>
+                    <div class="canphai">
+                      <!-- begin phân trang  -->
+                      <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                        [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                        <ng-template #rangeTemplate let-range="range" let-total>
+                          3-3 of 4 items
+                        </ng-template>
+                      </nz-pagination>
+                      <!-- end phân trang  -->
+                    </div>
+                  </div>
+                </div>
+              </nz-card>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Đánh giá hồ sơ dự thầu'" class="tt-chung__container">
+              <div class="header-detail-tab">Hồ sơ đề xuất kỹ thuật</div>
+              <nz-tabset nzType="card" class="tab__container">
+                <nz-tab [nzTitle]="'Nhà thầu đáp ứng YCKT'" class="tt-chung__container">
+                  <nz-card class="mt16 flex-card p-lr16">
+                    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+                      <thead>
+                        <tr>
+                          <th width="60px">STT</th>
+                          <th width="">Tên nhà thầu</th>
+                          <th width="100px">Điểm</th>
+                          <th width="100px"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Cục DTNNKV Tây Nam Bộ</td>
+                          <td>5</td>
+                          <td class="text-center">
+                            <a>
+                              <i class="fa fa-pencil" title="Sửa"></i>
+                            </a>
+                            <a>
+                              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                    <div class="tab-content tab-menu">
+                      <div class="tab-pane fade show active justify-content-between">
+                        <div class="trai"></div>
+                        <div class="canphai">
+                          <!-- begin phân trang  -->
+                          <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                            [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                            <ng-template #rangeTemplate let-range="range" let-total>
+                              3-3 of 4 items
+                            </ng-template>
+                          </nz-pagination>
+                          <!-- end phân trang  -->
+                        </div>
+                      </div>
+                    </div>
+                  </nz-card>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Nhà thầu không đáp ứng YCKT'" class="tt-chung__container">
+                  <nz-card class="mt16 flex-card p-lr16">
+                    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+                      <thead>
+                        <tr>
+                          <th width="60px">STT</th>
+                          <th width="">Tên nhà thầu</th>
+                          <th width="100px">Điểm</th>
+                          <th width="300px">Lý do</th>
+                          <th width="100px"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Cục DTNNKV Tây Nam Bộ</td>
+                          <td>5</td>
+                          <td>abc</td>
+                          <td class="text-center">
+                            <a>
+                              <i class="fa fa-pencil" title="Sửa"></i>
+                            </a>
+                            <a>
+                              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                    <div class="tab-content tab-menu">
+                      <div class="tab-pane fade show active justify-content-between">
+                        <div class="trai"></div>
+                        <div class="canphai">
+                          <!-- begin phân trang  -->
+                          <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                            [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                            <ng-template #rangeTemplate let-range="range" let-total>
+                              3-3 of 4 items
+                            </ng-template>
+                          </nz-pagination>
+                          <!-- end phân trang  -->
+                        </div>
+                      </div>
+                    </div>
+                  </nz-card>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Tài liệu đề xuất kỹ thuật'" class="tt-chung__container">
+                  <nz-card class="mt16 flex-card p-lr16">
+                    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+                      <thead>
+                        <tr>
+                          <th width="60px">STT</th>
+                          <th width="">Tên tài liệu</th>
+                          <th width="100px"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Cục DTNNKV Tây Nam Bộ</td>
+                          <td class="text-center">
+                            <a>
+                              <i class="icon htvbdh_tcdt_import"></i>
+                            </a>
+                            <a>
+                              <i class="fa fa-pencil" title="Sửa"></i>
+                            </a>
+                            <a>
+                              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                    <div class="tab-content tab-menu">
+                      <div class="tab-pane fade show active justify-content-between">
+                        <div class="trai"></div>
+                        <div class="canphai">
+                          <!-- begin phân trang  -->
+                          <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                            [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                            <ng-template #rangeTemplate let-range="range" let-total>
+                              3-3 of 4 items
+                            </ng-template>
+                          </nz-pagination>
+                          <!-- end phân trang  -->
+                        </div>
+                      </div>
+                    </div>
+                  </nz-card>
+                </nz-tab>
+              </nz-tabset>
+              <div class="header-detail-tab">Hồ sơ đề xuất tài chính</div>
+              <div nz-row [nzGutter]="[16, 12]" class="pd-b-6">
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true" class="pd-b-6"> Thời gian mở HSDXTC
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Thời gian mở HSDXTC">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> </nz-form-label>
+                    <button class="btn btn-tep btn-sm waves-effect waves-light">
+                      <i class="icon htvbdh_tcdt_tep"></i>
+                      <span>Tài liệu đính kèm quyết định phê duyệt nhà thầu</span>
+                    </button>
+                  </nz-form-item>
+                </div>
+              </div>
+              <nz-card class="mt16 flex-card p-lr16">
+                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+                  <thead>
+                    <tr>
+                      <th width="60px">STT</th>
+                      <th width="">Tên nhà thầu</th>
+                      <th width="100px">Điểm</th>
+                      <th width="100px">Xếp hạng</th>
+                      <th width="200px">Đơn giá dự thầu</th>
+                      <th width="200px">Giá dự thầu</th>
+                      <th width="100px"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Cục DTNNKV Tây Nam Bộ</td>
+                      <td>5</td>
+                      <td>5</td>
+                      <td>0978198420</td>
+                      <td>0978198420</td>
+                      <td class="text-center">
+                        <a>
+                          <i class="fa fa-pencil" title="Sửa"></i>
+                        </a>
+                        <a>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+                <div class="tab-content tab-menu">
+                  <div class="tab-pane fade show active justify-content-between">
+                    <div class="trai"></div>
+                    <div class="canphai">
+                      <!-- begin phân trang  -->
+                      <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                        [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                        <ng-template #rangeTemplate let-range="range" let-total>
+                          3-3 of 4 items
+                        </ng-template>
+                      </nz-pagination>
+                      <!-- end phân trang  -->
+                    </div>
+                  </div>
+                </div>
+              </nz-card>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Thương thảo hợp đồng'" class="tt-chung__container">
+              <div class="header-detail-tab">Thương thảo hợp đồng</div>
+              <div nz-row [nzGutter]="[16, 12]">
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày ký biên bản thương thảo
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd"
+                        nzPlaceHolder="Ngày ký biên bản thương thảo">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="16">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Tên nhà thầu thương thảo
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-select>
+                        <nz-option nzValue="Cục DTNNKV Tây Nam Bộ" nzLabel="Cục DTNNKV Tây Nam Bộ"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đơn giá hợp đồng trước thuế
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <input class="search__input" nz-input />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> VAT
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <input class="search__input" nz-input />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đơn giá hợp đồng sau thuế
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <input class="search__input" nz-input />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Giá hợp đồng trước thuế
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <input class="search__input" nz-input />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> VAT
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <input class="search__input" nz-input />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Giá hợp đồng sau thuế
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <input class="search__input" nz-input />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="8">
+                  <nz-form-item>
+                    <button class="btn btn-tep btn-sm waves-effect waves-light">
+                      <i class="icon htvbdh_tcdt_tep"></i>
+                      <span>Tài liệu đính kèm quyết định phê duyệt nhà thầu</span>
+                    </button>
+                  </nz-form-item>
+                </div>
+              </div>
+              <nz-card nzTitle="Danh sách địa điểm nhập" class="mt16 flex-card p-lr16">
+                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+                  <thead>
+                    <tr>
+                      <th width="60px">STT</th>
+                      <th width="">Tên đơn vị </th>
+                      <th width="100px">Số lượng nhập</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Cục DTNNKV Tây Nam Bộ</td>
+                      <td>500</td>
+                      <td class="text-center">
+                        <a>
+                          <i class="fa fa-pencil" title="Sửa"></i>
+                        </a>
+                        <a>
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+                <div class="tab-content tab-menu">
+                  <div class="tab-pane fade show active justify-content-between">
+                    <div class="trai"></div>
+                    <div class="canphai">
+                      <!-- begin phân trang  -->
+                      <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                        [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                        <ng-template #rangeTemplate let-range="range" let-total>
+                          3-3 of 4 items
+                        </ng-template>
+                      </nz-pagination>
+                      <!-- end phân trang  -->
+                    </div>
+                  </div>
+                </div>
+              </nz-card>
+            </nz-tab>
+          </nz-tabset>
+          <div class="ghi-chu">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true">
+                Ghi chú
+              </nz-form-label>
+              <textarea nz-input [rows]="3"></textarea>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

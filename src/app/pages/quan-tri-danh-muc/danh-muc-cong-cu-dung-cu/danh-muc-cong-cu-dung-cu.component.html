@@ -1,0 +1,290 @@
+<div class="bg-trang">
+  <h3 class="label_dm text-uppercase">Danh mục công cụ, dụng cụ</h3>
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="search__body mt-2" nz-row [nzGutter]="[18, 12]">
+      <div nz-col [nzSpan]="6">
+        <label class="search__label">Tên CCDC</label>
+        <nz-input-group id="ma">
+          <input type="text" nz-input [(ngModel)]="searchForm.tenCcdc"/>
+        </nz-input-group>
+      </div>
+      <div nz-col [nzSpan]="14">
+        <label class="search__label">Mô tả</label>
+        <nz-input-group id="mo-ta">
+          <input type="text" nz-input [(ngModel)]="searchForm.moTa"/>
+        </nz-input-group>
+      </div>
+      <div nz-col nzSpan="6">
+        <label class="search__label">Nhóm CCDC</label>
+        <nz-input-group>
+          <nz-select nzAllowClear [(ngModel)]="searchForm.nhomCcdc">
+            <nz-option *ngFor="let p of listNhomCcdc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </div>
+      <div nz-col nzSpan="6">
+        <label class="search__label">Trạng thái</label>
+        <nz-input-group>
+          <nz-select nzAllowClear [(ngModel)]="searchForm.trangThai">
+            <nz-option nzValue="01" nzLabel="Hoạt động">
+            </nz-option>
+            <nz-option nzValue="00" nzLabel="Không hoạt động">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </div>
+    </div>
+    <div class="cangiua group-button-search">
+      <button nz-button class="search__button--clear" (click)="resetFilter()">
+        <i class="icon  htvbdh_nhap-lai1"></i>
+        Xóa điều kiện
+      </button>
+      <button nz-button class="search__button--search" (click)="filter()">
+        <i nz-icon nzType="search"></i>
+        Tìm kiếm
+      </button>
+    </div>
+  </nz-card>
+  <div class="group-button">
+    <h3 class="label_dm text-uppercase">DANH SÁCH danh mục công cụ, dụng cụ</h3>
+    <div class="buttons">
+      <!--      <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">-->
+      <!--        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+      <!--        <span>Xóa</span>-->
+      <!--      </button>-->
+            <button type="button" class="btn btn-sub" (click)="exportData()">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Xuất file</span>
+            </button>
+    </div>
+  </div>
+  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <form nz-form nzLayout="vertical" [formGroup]="formData">
+      <nz-table #basicTable nzBordered  [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered [nzScroll]="{ x: '1150px'}">
+        <thead>
+        <tr>
+          <th class="text-center" style="width: 3%;">STT</th>
+          <th class="text-center"  nzWidth="80px">Mã CCDC</th>
+          <th class="text-center" style="width: 15%;">Tên CCDC</th>
+          <th class="text-center">Mô tả CCDC</th>
+          <th class="text-center" nzWidth="300px">Yêu cầu kỹ thuật</th>
+          <th class="text-center" nzWidth="80px">Đơn vị tính</th>
+          <th class="text-center" nzWidth="300px">Nhóm CCDC</th>
+          <th class="text-center" style="width: 8%;">Trạng thái</th>
+          <th class="text-center" style="width: 8%;">Hành động</th>
+        </tr>
+        <tr class="search-table">
+          <th></th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" nz-input formControlName="maCcdc"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" nz-input formControlName="tenCcdc"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" nz-input formControlName="moTa"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="inputYcKyThuat()">
+                <input type="text" class="search__input" nz-input [readonly]="true" formControlName="yeuCauKt"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" nz-input formControlName="donViTinh"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <nz-select nzAllowClear formControlName="nhomCcdc">
+                  <nz-option *ngFor="let p of listNhomCcdc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <nz-select formControlName="trangThai" nzAllowClear>
+                  <nz-option nzValue="01" nzLabel="Hoạt động">
+                  </nz-option>
+                  <nz-option nzValue="00" nzLabel="Không hoạt động">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th class="text-center">
+            <a (click)="saveDmCc()" [ngClass]="{'isDisabled': formData.invalid}">
+              <i class="icon htvbdh_dau-cong"></i>
+            </a>
+            <a>
+              <i class="icon htvbdh_nhap-lai1" (click)="clearForm()"></i>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of dataTable; let i = index">
+          <ng-container *ngIf="!dataEdit[i].edit; else editTemplate">
+            <td class="text-center">{{i + 1}}</td>
+            <td>{{ data.maCcdc }}</td>
+            <td>{{ data.tenCcdc }}</td>
+            <td>{{ data.moTa }}</td>
+            <td>{{ data.yeuCauKt }}</td>
+            <td>{{ data.donViTinh }}</td>
+            <td>{{data.tenNhomCcdc}}</td>
+            <td>{{ data.trangThai == '01' ? 'Hoạt động' : 'Không hoạt động'}}</td>
+            <td style="text-align: center;">
+              <a (click)="startEdit(i)">
+                <i class="table-icon fa fa-pencil"></i>
+              </a>
+              <a (click)="xoaItem(data)">
+                <i class="table-icon fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td class="text-center">{{i + 1}}</td>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <input [ngModelOptions]="{standalone: true}"
+                         type="text" nz-input [(ngModel)]=dataEdit[i].data.maCcdc>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <input [ngModelOptions]="{standalone: true}"
+                         type="text" nz-input [(ngModel)]=dataEdit[i].data.tenCcdc>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <input [ngModelOptions]="{standalone: true}"
+                         type="text" nz-input [(ngModel)]=dataEdit[i].data.moTa>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="inputYcKyThuatEdit(dataEdit[i].data)">
+                  <input [ngModelOptions]="{standalone: true}"
+                         type="text" [readonly]="true" nz-input [(ngModel)]=dataEdit[i].data.yeuCauKt>
+                </nz-input-group>
+                <!--                <nz-input-group  nzAddOnAfterIcon="folder-open"  (click)="inputYcKyThuat()" >-->
+                <!--                  <input type="text" [ngModelOptions]="{standalone: true}" class="search__input" nz-input  [readonly]="true" formControlName="yeuCauKt"/>-->
+                <!--                </nz-input-group>-->
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <input [ngModelOptions]="{standalone: true}"
+                         type="text" nz-input [(ngModel)]=dataEdit[i].data.donViTinh>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear
+                             [(ngModel)]=dataEdit[i].data.nhomCcdc>
+                    <nz-option *ngFor="let p of listNhomCcdc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
+                <nz-input-group>
+                  <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]=dataEdit[i].data.trangThai>
+                    <nz-option nzValue="01" nzLabel="Hoạt động">
+                    </nz-option>
+                    <nz-option nzValue="00" nzLabel="Không hoạt động">
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </nz-form-control>
+            </th>
+            <th style="text-align: center;">
+              <a (click)="saveDmCc(dataEdit[i].data, data.id)">
+                <i class="fa fa-save mr-3"></i>
+              </a>
+              <a (click)="huyEdit(i)">
+                <i class="fa fa-times do mr-3"></i>
+              </a>
+            </th>
+          </ng-template>
+        </tr>
+        </tbody>
+      </nz-table>
+    </form>
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between">
+        <div class="trai">
+        </div>
+        <div class="canphai">
+          <!-- begin phân trang  -->
+          <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                         [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                         (nzPageIndexChange)="changePageIndex($event)"
+                         (nzPageSizeChange)="changePageSize($event)">
+            <ng-template #rangeTemplate let-range="range" let-total>
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+            </ng-template>
+          </nz-pagination>
+          <!-- end phân trang  -->
+        </div>
+      </div>
+    </div>
+  </nz-card>
+</div>
+<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()" nzTitle="Nhập yêu cầu kỹ thuật">
+  <ng-container *nzModalContent>
+    <nz-form-item>
+      <nz-form-label [nzXs]="7">Yêu cầu kỹ thuật</nz-form-label>
+      <nz-form-control>
+        <textarea [(ngModel)]="yeuCauKt" rows="20" nz-input></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+</nz-modal>
+
+<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisibleEdit" nzTitle="The first Modal" (nzOnCancel)="handleCancelEdit()"
+          (nzOnOk)="handleOkEdit()" nzTitle="Sửa yêu cầu kỹ thuật">
+  <ng-container *nzModalContent>
+    <nz-form-item>
+      <nz-form-label [nzXs]="7">Yêu cầu kỹ thuật</nz-form-label>
+      <nz-form-control>
+        <textarea [(ngModel)]="yeuCauKtEdit" rows="20" nz-input></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+</nz-modal>

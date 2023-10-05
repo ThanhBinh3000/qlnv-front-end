@@ -1,0 +1,26 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('01')"
+        *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX')"
+    >
+      Đề xuất kế hoạch sửa chữa thường xuyên
+    </li>
+    <li nz-menu-item (click)="selectTab('02')"
+        *ngIf="userService.isTongCuc && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH')">
+      Tổng hợp KH sửa chữa thường xuyên
+    </li>
+    <li nz-menu-item (click)="selectTab('03')">
+      Quyết định phê duyệt kế hoạch, danh mục
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == '01'">
+  <app-de-xuat-ke-hoach-sua-chua-thuong-xuyen></app-de-xuat-ke-hoach-sua-chua-thuong-xuyen>
+</ng-container>
+<ng-container *ngIf="tabSelected == '02'">
+  <app-tong-hop-kh-sua-chua-thuong-xuyen></app-tong-hop-kh-sua-chua-thuong-xuyen>
+</ng-container>
+<ng-container *ngIf="tabSelected == '03'">
+  <app-quyet-dinh-phe-duyet-ke-hoach-danh-muc></app-quyet-dinh-phe-duyet-ke-hoach-danh-muc>
+</ng-container>
+

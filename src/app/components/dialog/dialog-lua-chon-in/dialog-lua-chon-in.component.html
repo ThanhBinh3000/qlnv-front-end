@@ -1,0 +1,21 @@
+<div class="modal__content">
+  <label nz-checkbox [(ngModel)]="options.luongThuc" class="check-box">Kế hoạch lương thực dự trữ nhà nước</label>
+  <label nz-checkbox [(ngModel)]="options.muoi" class="check-box">Kế hoạch muối dữ trự nhà nước</label>
+  <label nz-checkbox [(ngModel)]="options.vatTu" class="check-box">Kế hoạch nhập vật tư, thiết bị</label>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i nz-icon nzType="printer"></i>
+        In
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

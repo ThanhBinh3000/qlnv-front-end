@@ -1,0 +1,92 @@
+.text-green {
+    color: #8BC34C;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 140%;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .header-text {
+        display: flex;
+        align-items: center;
+
+
+        .text-container {
+            padding: 0 10px;
+
+
+            .title-chi-tieu {
+                display: flex;
+                align-items: center;
+                padding-left: 0px !important;
+
+                .du-thao-va-lanh-dao-duyet {
+                    color: #ff4d4f;
+                    font-weight: 500;
+                    font-size: 13px;
+                    padding: 4px;
+                    border-radius: 0px;
+                    border: 1px solid #FF9393;
+                    text-transform: uppercase;
+                    margin-right: 8px;
+                    background-color: #FFF1F1;
+                }
+
+                .da-ban-hanh {
+                    color: #24e837;
+                    font-weight: 500;
+                    font-size: 13px;
+                    padding: 4px;
+                    border-radius: 0px;
+                    border: 1px solid #24e837;
+                    text-transform: uppercase;
+                    margin-right: 8px;
+                    background: #efffec;
+                }
+
+                &>span:nth-child(2) {
+                    text-transform: uppercase;
+                    color: #444444;
+                    font-weight: 500;
+                    font-size: 16px;
+                    padding: 4px;
+                }
+            }
+        }
+    }
+
+    .btn-group {
+        .btn-sub {
+            margin-right: 10px;
+        }
+    }
+}
+
+.icon-file-dinh-kem {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .input-file {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+}
+
+.list-file {
+    .ant-input-affix-wrapper {
+        padding: 0px 11px !important;
+    }
+}
+.bg-selected td {
+  background-color: #ebedff;
+}

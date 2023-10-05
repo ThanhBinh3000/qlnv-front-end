@@ -1,0 +1,16 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item nzSelected (click)="selectTab(0)">
+        Chào giá/Ủy quyền/Mua lẻ
+      </li>
+<!--      <li nz-menu-item (click)="selectTab(1)">-->
+<!--        Quyết định phê duyệt kết quả chào giá-->
+<!--      </li>-->
+    </ul>
+  </nz-affix>
+  <ng-container *ngIf="tabSelected == 0">
+    <app-chaogia-uyquyen-muale></app-chaogia-uyquyen-muale>
+  </ng-container>
+<!--  <ng-container *ngIf="tabSelected == 1">-->
+<!--    <app-quyetdinh-pheduyet-kqcg></app-quyetdinh-pheduyet-kqcg>-->
+<!--  </ng-container>-->

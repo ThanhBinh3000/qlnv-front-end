@@ -1,0 +1,37 @@
+<div class="multiple-box" *ngIf="type != 'show-data'">
+    <div class="input-multiple">
+        <div *ngIf="!data || data.length == 0" class="placegolder-multi-tag">{{ placeHolder }}</div>
+        <div *ngIf="data && data.length > 0">
+            <div class="item-tag" *ngFor="let item of data" title="{{item.text}}">
+                <div class="text-item-tag">{{item.text}}</div>
+                <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel-tag" (click)="removeData(item)"
+                    *ngIf="!disable &&( !trangThai || trangThai === globals.prop.DU_THAO || trangThai === globals.prop.TU_CHOI || trangThai !== 'view-detail')"></i>
+            </div>
+        </div>
+        <div class="download-file" (click)="downloadFile()" *ngIf="showDowloadFile"
+            [readonly]="disable || trangThai === globals.prop.BAN_HANH || trangThai === globals.prop.LANH_DAO_DUYET || trangThai === globals.prop.DU_THAO_TRINH_DUYET || trangThai === 'view-detail'">
+            <i class="icon htvbdh_tcdt_import"></i>
+            <span>Tài liệu đính kèm</span>
+        </div>
+    </div>
+    <div class="select-tag" (click)="selectData()">
+        <i class="icon" [ngClass]="icon"></i>
+        <input type="file" name="abc" class="multi-file-tag" *ngIf="type === 'file'" (change)="getNameFile($event)"
+            [readonly]="disable || trangThai === globals.prop.BAN_HANH || trangThai === globals.prop.LANH_DAO_DUYET || trangThai === globals.prop.DU_THAO_TRINH_DUYET || trangThai === 'view-detail'">
+    </div>
+    <!-- <div class="select-tag" (click)="selectDataCanCu()" nz-col [nzSpan]="2"
+        *ngIf="typeFile === 'can-cu' && userService.isCuc()">
+        <i class="icon" [ngClass]="icon"></i>
+        Chọn căn cứ
+    </div> -->
+</div>
+<div class="multiple-box box-show-data" nz-row *ngIf="type == 'show-data'">
+    <div class="input-multiple" nz-col [nzSpan]="24">
+        <div *ngIf="data && data.length > 0">
+            <div class="item-tag" *ngFor="let item of data" title="{{item.text}}">
+                <div class="text-item-tag">{{item.text}}</div>
+                <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel-tag"></i>
+            </div>
+        </div>
+    </div>
+</div>

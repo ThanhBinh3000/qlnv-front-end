@@ -1,0 +1,162 @@
+<nz-card class="pd-10">
+  <div class="title-popup">Tổng hợp số lượng đề xuất điều chỉnh của toàn Cục</div>
+  <nz-table #deXuatCucTable nzBordered [nzData]="deXuatCuc" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th>Tên chi cục</th>
+        <th>Số lượng đề xuất điều chỉnh tăng</th>
+        <th>Số lượng đề xuất điều chỉnh giảm</th>
+        <th [width]="90" nzRight>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of deXuatCucTable.data, let i = index">
+        <td>{{data.title}}</td>
+        <td>{{data.sumTang ?? 0 | number: '1.0-1'}}</td>
+        <td>{{data.sumGiam ?? 0 | number: '1.0-1'}}</td>
+        <td>
+          <a (click)="editDeXuat(data)">
+            <i class="fa fa-pencil" title="Sửa"></i>
+          </a>
+          <a (click)="deleteDeXuat(data)">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+<nz-card class="pd-10 mt-16">
+  <div class="title-popup">Địa điểm điều chỉnh</div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="16">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Chi cục </nz-form-label>
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+          <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
+            [nzAutocomplete]="auto" />
+        </nz-input-group>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
+            (click)="selectDonVi(option)">
+            {{ option.labelDonVi }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Điểm kho </nz-form-label>
+        <nz-select [(ngModel)]="searchData.maDiemKho" (ngModelChange)="changeDiemKho()">
+          <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Nhà kho </nz-form-label>
+        <nz-select [(ngModel)]="searchData.maNhaKho" (ngModelChange)="changeNhaKho()">
+          <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Ngăn kho </nz-form-label>
+        <nz-select [(ngModel)]="searchData.maNganKho" (ngModelChange)="changeNganKho()">
+          <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Lô kho </nz-form-label>
+        <nz-select [(ngModel)]="searchData.maNganLo">
+          <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+  </div>
+  <div class="cangiua group-button-search">
+    <button nz-button class="search__button--clear" (click)="clearFilter()">
+      <i class="icon  htvbdh_nhap-lai1"></i>
+      Xóa điều kiện
+    </button>
+    <button nz-button class="search__button--search" (click)="search()">
+      <i nz-icon nzType="search"></i>
+      Tìm kiếm
+    </button>
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="mt-16">
+    <nz-table #expandTable [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false"
+      class="table__container-vat-tu" id="table-diem-kho">
+      <thead>
+        <tr>
+          <th>Tên đơn vị</th>
+          <th>Số lượng đề xuất điều chỉnh tăng</th>
+          <th>Số lượng đề xuất điều chỉnh giảm</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of expandTable.data, let i = index">
+          <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
+            <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+              <td [nzIndentSize]="item.level! * 20"
+                [nzShowExpand]="!!item.children && item.children.length !== 0 || !item?.children"
+                [(nzExpand)]="item.expand" (nzExpandChange)="collapse(mapOfExpandedData[data.id], item, $event)">
+                {{ item.title }}
+              </td>
+              <td>
+                <nz-input-number *ngIf="item?.children?.length == 0 || !item?.children" type="text" nz-input
+                  class="w-120 input-tang" [nzSize]="'small'" [(ngModel)]="item.slTang" [nzMin]="0"
+                  [nzMax]="globals.prop.MAX_INPUT" (input)="changeValue('tang', item, data)">
+                </nz-input-number>
+              </td>
+              <td>
+                <nz-input-number *ngIf="item?.children?.length == 0 || !item?.children" type="text" nz-input
+                  class="w-120 input-giam" [nzSize]="'small'" [(ngModel)]="item.slGiam" [nzMin]="0"
+                  [nzMax]="globals.prop.MAX_INPUT" (input)="changeValue('giam', item, data)">
+                </nz-input-number>
+              </td>
+              <td>
+                <a class="save" (click)="saveDataTree(data)" *ngIf="item.level == 0">
+                  <i class="icon htvbdh_dau-cong"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
+        <tr>
+          <td class="text-right">Tổng</td>
+          <td>{{sumTang | number: '1.0-1'}}</td>
+          <td>{{sumGiam | number: '1.0-1'}}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</nz-card>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Hủy
+      </button>
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="14" viewBox="0 0 17 14">
+  <defs>
+    <clipPath id="clip-thumuccha">
+      <rect width="17" height="14"/>
+    </clipPath>
+  </defs>
+  <g id="thumuccha" clip-path="url(#clip-thumuccha)">
+    <g id="folder" transform="translate(0 -5.5)">
+      <path id="Path_30253" data-name="Path 30253" d="M13.328,30.419H.45a.45.45,0,0,1-.434-.568l2.925-8.019a.45.45,0,0,1,.434-.333H16.253c.3,0,.434.283.434.568l-2.925,8.019A.45.45,0,0,1,13.328,30.419Z" transform="translate(0 -11.397)" fill="#efce4a"/>
+      <g id="Group_7918" data-name="Group 7918" transform="translate(0 5.5)">
+        <path id="Path_30254" data-name="Path 30254" d="M14.463,7.514H7.193L5.754,5.5H.5A.5.5,0,0,0,0,6V18.292l.059,0L2.94,10.436a.45.45,0,0,1,.434-.333H14.961V8.012A.5.5,0,0,0,14.463,7.514Z" transform="translate(0 -5.5)" fill="#ebba16"/>
+      </g>
+    </g>
+  </g>
+</svg>

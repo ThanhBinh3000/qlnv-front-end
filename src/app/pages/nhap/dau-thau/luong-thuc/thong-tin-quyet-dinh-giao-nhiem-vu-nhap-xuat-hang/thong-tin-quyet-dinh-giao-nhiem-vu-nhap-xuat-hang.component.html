@@ -1,0 +1,241 @@
+<div>
+  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-circle-left"></i>
+          </a>
+        </div>
+        <div class="canphai phai pd-r-46">
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
+            [disabled]="errorGhiChu || !chiTiet.ghiChu">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="trinhDuyet()" *ngIf="id > 0">
+            <i class="icon htvbdh_trinh"></i>
+            <span>Trình duyệt</span>
+          </button>
+          <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="tuChoi()" *ngIf="id > 0">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Từ chối</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Thông tin quyết định giao nhiệm vụ nhập xuất hàng" class="mt16 flex-card p-lr16">
+          <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Số quyết định</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input nz-input [(ngModel)]="chiTiet.soQd" name="soQD" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày ký </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
+                    nzPlaceHolder="Ngày ký" [(ngModel)]="ngayKy" name="ngayKy">
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-date-picker #endDatePicker [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày hiệu lực"
+                    [(ngModel)]="ngayHieuLuc" name="ngayHieuLuc">
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Về việc </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="">
+                  <input nz-input [(ngModel)]="chiTiet.veViec" name="veViec" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Căn cứ trên hợp đồng </nz-form-label>
+                <nz-input-group nzAddOnAfterIcon="folder-open" *ngIf="id != 0">
+                  <input nz-input [readonly]="true" [(ngModel)]="chiTiet.soHd" name="soHd" />
+                </nz-input-group>
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogHopDong()" *ngIf="id == 0">
+                  <input nz-input [readonly]="true" [(ngModel)]="chiTiet.soHd" name="soHd" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đơn vị ra QĐ </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="">
+                  <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                    <input placeholder="Đơn vị ra QĐ" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
+                      [nzAutocomplete]="auto" name="donVi" />
+                  </nz-input-group>
+                  <ng-template #suffixIcon>
+                    <i nz-icon nzType="search"></i>
+                  </ng-template>
+                  <nz-autocomplete #auto>
+                    <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
+                      (click)="selectDonVi(option)">{{ option.labelDonVi }}
+                    </nz-auto-option>
+                  </nz-autocomplete>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6" class="mb-16">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Loại QĐ </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="">
+                  <nz-select nzPlaceHolder="Loại QĐ" [(ngModel)]="chiTiet.loaiQd" name="loaiQd">
+                    <nz-option [nzValue]="nhapIdDefault" nzLabel="Nhập"></nz-option>
+                    <nz-option [nzValue]="xuatIdDefault" nzLabel="Xuất"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+        <div class="tab__luong-thuc mt-16">
+          <nz-tabset nzType="card" class="tab__container">
+            <nz-tab [nzTitle]="'Thông tin hàng DTQG'" (nzClick)="tabSelected = 'thong-tin-hang'">
+              <div nz-row [nzGutter]="[16, 12]">
+                <div nz-col [nzSpan]="12">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Hàng DTQG</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-select nzPlaceHolder="Hàng DTQG" [(ngModel)]="loaiVTHH" name="loaiVTHH">
+                        <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
+                        <nz-option [nzValue]="gaoIdDefault" nzLabel="Gạo"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Loại hình nhập xuất
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-select (ngModelChange)="selectLoaiNX($event)" [(ngModel)]="loaiNx" name="loaiNx">
+                        <nz-option *ngFor="let nx of optionsLoaiNX" [nzValue]="nx.ma" [nzLabel]="nx.ten">
+                        </nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Thời gian thực hiện từ ngày
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                        [(ngModel)]="startValue" nzPlaceHolder="Thời gian thực hiện từ ngày" name="startValue">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đến ngày</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                        [(ngModel)]="endValue" nzPlaceHolder="Đến ngày" name="endValue">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Số lượng</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-input-number [nzSize]="'small'" nz-input [nzMin]="0" [(ngModel)]="soLuong" name="soLuong">
+                      </nz-input-number>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                  <nz-form-item>
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đơn vị tính</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                      <nz-select (ngModelChange)="selectDonViTinh($event)" [(ngModel)]="donViTinh" name="donViTinh">
+                        <nz-option *ngFor="let donVi of optionsDonViTinh" [nzValue]="donVi.tenDviTinh"
+                          [nzLabel]="donVi.tenDviTinh">
+                        </nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Danh sách chi tiết đơn vị thức hiện quyết định'"
+              (nzClick)="tabSelected = 'danh-sach-chi-tiet'">
+              <div id="table-don-vi-quyet-dinh">
+                <nz-table #editRowTable class="nowrap mt-16" nzBordered [nzData]="chiTiet?.detail1"
+                  [nzFrontPagination]="false" [nzShowPagination]="false">
+                  <thead>
+                    <tr>
+                      <th class="text-center" width="60px">STT</th>
+                      <th width="130px">Mã đơn vị DTNN</th>
+                      <th width="175px">Tên đơn vị DTNN</th>
+                      <th width="175px">Số lượng (Tấn)</th>
+                      <th width="">Ghi chú</th>
+                      <th width="130px"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of editRowTable.data; let i = index">
+                      <td class="text-center">{{ i+1 }}</td>
+                      <td>{{ data.maDvi }}</td>
+                      <td>{{ data.tenDvi }}</td>
+                      <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td>{{ data.ghiChu }}</td>
+                      <td class="text-center">
+                        <a (click)="reactToDonViThuchienQuyetDinh(data)">
+                          <i class="fa fa-pencil" title="Sửa"></i>
+                        </a>
+                        <a (click)="deleteItem(data)">
+                          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+            </nz-tab>
+          </nz-tabset>
+          <button type="button" class="btn btn-main btn-them" (click)="reactToDonViThuchienQuyetDinh()"
+            *ngIf="tabSelected == 'danh-sach-chi-tiet'">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub btn-in" (click)="inFile()"
+            *ngIf="tabSelected == 'danh-sach-chi-tiet'">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>In</span>
+          </button>
+        </div>
+        <div class="ghi-chu">
+          <nz-form-label nzRequired [nzNoColon]="true">
+            Ghi chú
+          </nz-form-label>
+          <textarea rows="3" class="search__input" [(ngModel)]="chiTiet.ghiChu" nz-input></textarea>
+          <span class="error-text" *ngIf="errorGhiChu">{{errorInputRequired}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+.them-quyet-dinh-ttcp {
+  background-color: #fff;
+  padding-top: 20px;
+  padding-bottom: 10px;
+
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .header-text {
+      display: flex;
+      align-items: center;
+
+
+      .text-container {
+        padding: 0 10px;
+
+        h2 {
+          font-size: 16px;
+          font-weight: 700;
+          text-transform: uppercase;
+          padding: 6px 10px;
+          border-radius: 5px;
+          margin-bottom: 0;
+        }
+
+        .du-thao {
+          color: #FF4D4F;
+          border: 1px solid #EAEAEA;
+        }
+      }
+    }
+
+    .btn-group {
+      .btn-sub {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .hang-theo-doi-dac-thu {
+    .form-item {
+      padding: 6px 10px;
+    }
+  }
+
+
+  .data-table {
+    padding: 10px;
+    border: 1px solid #f0f0f0 !important;
+
+    .nowrap {
+      padding: 0 10px !important;
+    }
+
+    .table-icon {
+      border: solid 1px #e4e4e4;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #fefefe !important;
+      margin: 0 2px;
+    }
+  }
+
+  .flex-card {
+    background-color: #fff;
+  }
+
+  .group-button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 10px;
+    margin-top: 12px;
+
+    h3 {
+      margin-bottom: 0;
+      font-size: 16px;
+    }
+
+    .buttons {
+      padding: 0 10px;
+
+      .btn-xoa {
+        background-color: rgba($color: #e00606, $alpha: 0.2);
+        color: #e00606;
+        border: 1px solid #e00606 !important;
+      }
+    }
+
+    .xanh {
+      background-color: #4E5484;
+      color: #fff;
+    }
+
+  }
+
+  button.xanh {
+    background-color: #4E5484;
+    color: #fff;
+  }
+
+  .btn-xoa {
+    background-color: rgba(224, 6, 6, 0.2);
+    color: #e00606;
+    border: 1px solid #e00606 !important;
+  }
+}

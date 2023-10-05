@@ -1,0 +1,232 @@
+@import '../../../../../../../assets/scss/default.scss';
+
+::ng-deep {
+    .thong-tin-de-xuat-khlcnt {
+        .ant-form-item-no-colon {
+            margin-bottom: 0px;
+        }
+
+        .btn-tep {
+            margin-bottom: 24px;
+        }
+
+        .tab-menu.tab-content {
+            background: none !important;
+            border-bottom: none !important;
+        }
+
+        .trai,
+        .phai {
+            padding: 0px !important;
+        }
+
+        .btn-export {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .tab__luong-thuc {
+            position: relative;
+            margin-top: 6px;
+
+            .action {
+                position: absolute;
+                top: 6px;
+                right: 6px;
+            }
+
+            .ant-tabs-content-holder {
+                .ant-card-body {
+                    padding: 0px !important;
+                    border: 0 !important;
+                }
+            }
+
+            .ant-table.ant-table-bordered>.ant-table-container {
+                border-left: 0px !important;
+                border-right: 0px !important;
+            }
+
+            .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+                color: #444 !important;
+                font-size: unset !important;
+            }
+
+            .flex-card.ant-card {
+                border: none !important;
+                background: transparent;
+                box-shadow: unset;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            nz-tabset.ant-tabs.ant-tabs-card.ant-tabs-top.ant-tabs-default {
+                border-radius: unset;
+            }
+
+            .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab,
+            .ant-tabs-card.ant-tabs-top>div>.ant-tabs-nav .ant-tabs-tab {
+                border-top-left-radius: 0px !important;
+                border-top-right-radius: 0px !important;
+            }
+
+            .ant-tabs-tab-btn {
+                color: unset !important;
+                font-size: unset !important;
+                font-weight: unset !important;
+                text-transform: unset !important;
+            }
+
+            .ant-tabs-tab.ng-star-inserted {
+                width: unset !important;
+                justify-content: center;
+                padding: 8px 16px !important;
+                height: unset !important;
+                margin-right: unset !important;
+            }
+
+            .ant-tabs .ant-tabs-nav-wrap {
+                margin-top: 0px !important;
+            }
+
+            .ant-card.card-tree {
+                margin: 0px 0px 0px 0px;
+                padding: 0 16px 16px 16px;
+                border: solid 1px #4e5484 !important;
+                border-radius: 0px;
+                margin-bottom: 24px;
+            }
+
+            .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab-active {
+                background-color: unset !important;
+            }
+
+            .ant-tabs-content-holder {
+                padding: 10px !important;
+                border: 1px solid #ececec !important;
+                background: #fff !important;
+            }
+
+            .ant-tabs-tabpane {
+                background-color: #fff !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+        }
+
+        .ant-table-body {
+            .ant-table-row {
+                .action {
+                    text-align: right !important;
+                }
+            }
+        }
+    }
+
+    .title-tab {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        text-transform: uppercase;
+        color: #828282;
+        margin-top: 16px;
+    }
+
+    .group-infonation {
+        border: 1px solid #f1f1f1;
+        box-sizing: border-box;
+        border-radius: 0px;
+        padding: 12px;
+    }
+
+    .left-group-info {
+        background: #fbfbfb;
+        margin-right: 6px;
+    }
+
+    .right-group-info {
+        background: #fff;
+        margin-left: 6px;
+    }
+
+    .error-text {
+        color: red;
+        font-size: 12px;
+    }
+
+    .thong-tin-chi-tieu {
+        border: 1px solid #e0e0e0;
+        border-radius: 0px;
+        padding: 16px;
+        margin: 10px;
+
+        .title-chi-tieu {
+            display: flex;
+            align-items: center;
+
+            .du-thao-va-lanh-dao-duyet {
+                color: #ff4d4f;
+                font-weight: 500;
+                font-size: 13px;
+                padding: 4px;
+                border-radius: 0px;
+                border: 1px solid #eaeaea;
+                text-transform: uppercase;
+                margin-right: 8px;
+                background: #fff;
+            }
+
+            .da-ban-hanh {
+                color: #24e837;
+                font-weight: 500;
+                font-size: 13px;
+                padding: 4px;
+                border-radius: 0px;
+                border: 1px solid #24e837;
+                text-transform: uppercase;
+                margin-right: 8px;
+                background: #efffec;
+            }
+
+            &>span:nth-child(2) {
+                text-transform: uppercase;
+                color: #444444;
+                font-weight: 500;
+                font-size: 16px;
+                padding: 4px;
+            }
+        }
+    }
+
+    .tl-dk {
+        margin-left: 8px;
+    }
+
+    .ant-tabs-content-holder {
+        max-height: unset !important;
+    }
+
+    .chi-tiet-hop-dong {
+        .dieu-chinh-button {
+            top: $bnt-h;
+        }
+
+        .contentBor {
+            margin-top: 10px;
+        }
+    }
+
+    .hop-dong-title {
+        padding-left: 0px !important;
+    }
+
+    .btn-file-dinh-kem {
+        width: 100%;
+    }
+
+    .flex-card.ant-card.card-nhap-hang {
+        border: none !important;
+        padding-top: 10px !important;
+    }
+}

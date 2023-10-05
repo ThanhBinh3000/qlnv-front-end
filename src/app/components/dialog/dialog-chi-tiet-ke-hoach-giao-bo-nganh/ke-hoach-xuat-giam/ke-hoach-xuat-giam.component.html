@@ -1,0 +1,259 @@
+<div nzGutter="24">
+  <div class="header header-green-background" nzSpan="24" *ngIf="tabRadio =='BTC' && tab =='MT'">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span>Kế hoạch mua tăng vật tư</span>
+      </div>
+    </div>
+  </div>
+  <div>
+    <nz-form-label [nzNoColon]="true" nzFor="gia-tri" *ngIf="tab == 'MT'">Tổng giá trị (Triệu đồng):
+      &nbsp;<span *ngIf="maBoNganh == '01' && tabRadio =='BTC'"
+                  class="text-primary"> {{tongSoVT | number : '1.0-1' : 'vi_VN'}}</span>
+      <span *ngIf="tabRadio !='BTC'"
+            class="text-primary"> {{maBoNganh == '01' ? 0 : listTongGiaTriBnKhac[maBoNganh].tongSo | number : '1.0-1' : 'vi_VN'}}</span>
+    </nz-form-label>
+    <nz-form-label [nzNoColon]="true" nzFor="gia-tri" *ngIf="tab !== 'MT' && tab !== 'LPDH'">Tổng giá trị (Triệu đồng):
+      <input style="width: 200px" class="ml-2" currencyMask [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()"
+             [options]="amount"/>
+      <!--      <nz-input-number class="text-left ml-2" [nzDisabled]="isView" [(ngModel)]="tongGtri"-->
+      <!--                       (ngModelChange)="onChangeTongGtri()"-->
+      <!--                       [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
+      <!--                       [nzParser]="globals.parserInput" [nzMin]="0">-->
+      <!--      </nz-input-number>-->
+    </nz-form-label>
+  </div>
+
+  <!--  <nz-table #editRowTable [nzData]="dataTable" nzBordered [nzPageSize]="15" [nzScroll]="{ y: '500px' }">-->
+  <!--    <thead>-->
+  <!--    <tr>-->
+  <!--      <th class="text-center" nzWidth="40px">STT</th>-->
+  <!--      <th>Tên hàng hoá</th>-->
+  <!--      <th nzWidth="250px">Chủng loại hàng hoá</th>-->
+  <!--      <th nzWidth="120px">Đơn vị tính</th>-->
+  <!--      <th nzWidth="120px">Kế hoạch năm <br/> {{namHienTai}}</th>-->
+  <!--      <th nzWidth="100px">Hành động</th>-->
+  <!--    </tr>-->
+  <!--    </thead>-->
+  <!--    <tbody>-->
+  <!--    <tr *ngIf="!isView">-->
+  <!--      <td class="text-center"></td>-->
+  <!--      <td>-->
+  <!--        <nz-input-group>-->
+  <!--          <nz-select nzShowSearch nzAllowClear [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear-->
+  <!--                     (ngModelChange)="onChangeLoaiVthh($event)">-->
+  <!--            <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">-->
+  <!--            </nz-option>-->
+  <!--          </nz-select>-->
+  <!--        </nz-input-group>-->
+  <!--      </td>-->
+  <!--      <td>-->
+  <!--        <nz-input-group>-->
+  <!--          <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"-->
+  <!--                     (ngModelChange)="onChangeCloaiVthh($event)">-->
+  <!--            <nz-option nzValue="null" nzDisabled nzHide></nz-option>-->
+  <!--            <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">-->
+  <!--            </nz-option>-->
+  <!--          </nz-select>-->
+  <!--        </nz-input-group>-->
+  <!--      </td>-->
+  <!--      <td>-->
+  <!--        <nz-input-group>-->
+  <!--          <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true"/>-->
+  <!--        </nz-input-group>-->
+  <!--      </td>-->
+  <!--      <td>-->
+  <!--        <nz-input-group>-->
+  <!--          <input class="money-input" currencyMask [(ngModel)]="rowItem.soLuong" [options]="amount"/>-->
+  <!--          &lt;!&ndash;          <nz-input-number [disabled]="isView" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"&ndash;&gt;-->
+  <!--          &lt;!&ndash;                           [(ngModel)]="rowItem.soLuong">&ndash;&gt;-->
+  <!--          &lt;!&ndash;          </nz-input-number>&ndash;&gt;-->
+  <!--        </nz-input-group>-->
+  <!--      </td>-->
+  <!--      <td>-->
+  <!--        <a (click)="themMoiItem()">-->
+  <!--          <i class="fa fa-plus"></i>-->
+  <!--        </a>-->
+  <!--        <a (click)="clearData()">-->
+  <!--          <i class="fa fa-refresh"></i>-->
+  <!--        </a>-->
+  <!--      </td>-->
+  <!--    </tr>-->
+  <!--    <tr *ngFor="let data of dataTable; let idx = index">-->
+  <!--      <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">-->
+  <!--        <td>{{ idx + 1 }}</td>-->
+  <!--        <td>{{ data.tenVthh }}</td>-->
+  <!--        <td>{{ data.tenCloaiVthh }}</td>-->
+  <!--        <td>{{ data.dviTinh }}</td>-->
+  <!--        <td>{{ data.soLuong |  number : '1.0-1' : 'vi_VN'}}</td>-->
+  <!--        <td>-->
+  <!--          <a *ngIf="!isView" (click)="editItem(idx)">-->
+  <!--            <i class=" fa fa-pencil"></i>-->
+  <!--          </a>-->
+  <!--          <a *ngIf="!isView" (click)="xoaItem(idx)">-->
+  <!--            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+  <!--          </a>-->
+  <!--        </td>-->
+  <!--      </ng-container>-->
+  <!--      <ng-template #editTemplate>-->
+  <!--        <td></td>-->
+  <!--        <td>-->
+  <!--          <nz-input-group>-->
+  <!--            <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" [nzShowArrow]="false" nzAllowClear-->
+  <!--                       (ngModelChange)="onChangeLoaiVthh($event, dataEdit[idx].data)">-->
+  <!--              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">-->
+  <!--              </nz-option>-->
+  <!--            </nz-select>-->
+  <!--          </nz-input-group>-->
+  <!--        </td>-->
+  <!--        <td>-->
+  <!--          <nz-input-group>-->
+  <!--            <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh" [nzShowArrow]="false"-->
+  <!--                       (ngModelChange)="onChangeCloaiVthh($event, dataEdit[idx].data)">-->
+  <!--              <nz-option nzValue="null" nzDisabled nzHide></nz-option>-->
+  <!--              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">-->
+  <!--              </nz-option>-->
+  <!--            </nz-select>-->
+  <!--          </nz-input-group>-->
+  <!--        </td>-->
+  <!--        <td>-->
+  <!--          <nz-input-group>-->
+  <!--            <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true"/>-->
+  <!--          </nz-input-group>-->
+  <!--        </td>-->
+  <!--        <td>-->
+  <!--          <nz-input-group>-->
+  <!--            <input class="money-input" currencyMask [(ngModel)]="dataEdit[idx].data.soLuong" [options]="amount"/>-->
+  <!--          </nz-input-group>-->
+  <!--        </td>-->
+  <!--        <td class="text-center">-->
+  <!--          <a (click)="luuEdit(idx)" class="save">-->
+  <!--            <i class="fa fa-save"></i>-->
+  <!--          </a>-->
+  <!--          <a (click)="huyEdit(idx)">-->
+  <!--            <i class="fa fa-ban do"></i> </a>-->
+  <!--        </td>-->
+  <!--      </ng-template>-->
+  <!--    </tr>-->
+  <!--    </tbody>-->
+  <!--  </nz-table>-->
+  <!--  -->
+
+  <nz-table nzBordered [nzPageSize]="15" [nzScroll]="{ y: '500px' }" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th class="text-center" nzWidth="40px">STT</th>
+      <th>Tên hàng hoá</th>
+      <th nzWidth="250px">Chủng loại hàng hoá</th>
+      <th nzWidth="120px">Đơn vị tính</th>
+      <th nzWidth="120px">Kế hoạch năm <br/> {{namHienTai}}</th>
+      <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngIf="!isView">
+      <td class="text-center"></td>
+      <td>
+        <nz-input-group>
+          <nz-select nzShowSearch nzAllowClear [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
+                     (ngModelChange)="onChangeLoaiVthh($event)">
+            <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </td>
+      <td>
+        <nz-input-group>
+          <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
+                     (ngModelChange)="onChangeCloaiVthh($event)">
+            <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+            <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </td>
+      <td>
+        <nz-input-group>
+          <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true"/>
+        </nz-input-group>
+      </td>
+      <td>
+        <nz-input-group>
+          <input class="money-input" currencyMask [(ngModel)]="rowItem.soLuong" [options]="amount"/>
+          <!--          <nz-input-number [disabled]="isView" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"-->
+          <!--                           [(ngModel)]="rowItem.soLuong">-->
+          <!--          </nz-input-number>-->
+        </nz-input-group>
+      </td>
+      <td>
+        <a (click)="themMoiItem()">
+          <i class="fa fa-plus"></i>
+        </a>
+        <a (click)="clearData()">
+          <i class="fa fa-refresh"></i>
+        </a>
+      </td>
+    </tr>
+    <ng-container *ngFor="let data of dataTableView , let idx = index">
+      <tr>
+        <td>{{idx + 1}}</td>
+        <td [nzExpand]="expandSet.has(data.idVirtual)"
+            (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{data.tenVthh}}</td>
+        <ng-container *ngIf="!data.isLeaf">
+          <td>{{data.tenCloaiVthh}}</td>
+          <td>{{data.dviTinh}}</td>
+          <td>{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
+        </ng-container>
+        <ng-container *ngIf="data.isLeaf">
+          <td>{{data.dataChild[0].tenCloaiVthh}}</td>
+          <td>{{data.dataChild[0].dviTinh}}</td>
+          <td>{{data.dataChild[0].soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
+        </ng-container>
+        <td class="font-weight-bold text-center" nzRight *ngIf="!isView">
+          <a *ngIf="data.isLeaf"  (click)="suaIem(data.dataChild[0],true)">
+            <i class="fa fa-pencil" title="Sửa"></i>
+          </a>
+          <a (click)="xoaItem(data,true)">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          </a>
+        </td>
+      </tr>
+      <ng-container *ngIf="expandSet.has(data.idVirtual) &&  !data.isLeaf">
+        <tr *ngFor="let item of data.dataChild, let y = index">
+          <td></td>
+          <td></td>
+          <td>{{item.tenCloaiVthh}}</td>
+          <td>{{item.dviTinh}}</td>
+          <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-center" nzRight *ngIf="!isView">
+            <a (click)="suaIem(item,false)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a (click)="xoaItem(item,false)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </nz-table>
+
+
+  <div *ngIf="tabRadio =='BTC'  && tab =='MT'">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span>Kế hoạch mua tăng lương thực</span>
+        </div>
+      </div>
+    </div>
+    <nz-form-item nz-col nzSpan="8" class="form-item">
+      <nz-form-label [nzNoColon]="true" nzFor="gia-tri">Tổng giá trị (Triệu đồng): &nbsp;<span
+        class="text-primary"> {{tongSoLT | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
+    </nz-form-item>
+  </div>
+</div>

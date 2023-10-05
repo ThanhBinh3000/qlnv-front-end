@@ -1,0 +1,45 @@
+.check-box {
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+
+.chon-file {
+  border: 1px solid #c4c9cc;
+  width: 100%;
+  border-radius: 0px;
+}
+
+.blue-text {
+  color: #001CFF;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.root-input td {
+  background-color: #BDBDBD;
+}
+
+.body-tree td {
+  background-color: #EAEAEA;
+}
+
+.body-input td {
+  background-color: #EBEDFF;
+}
+
+.root-tree td {
+  background-color: #D9D9D9;
+}
+
+th.wrap-text {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+::ng-deep .dialog-vat-tu .ant-modal-content .ant-modal-body {
+  padding: 0px 20px 5px 20px;
+}
+
+::ng-deep .ant-modal-body .ant-row .ant-form-item-label.ant-col label, .ant-col-24.ant-form-item-label > label {
+  height: 40px !important;
+}

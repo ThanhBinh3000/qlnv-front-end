@@ -1,0 +1,33 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="The first Modal"
+  (nzOnOk)="(handleOk)"
+  (nzOnCancel)="(handleCancel)"
+  nzClosable="false"
+  [nzWidth]="600"
+>
+  <div *nzModalTitle>
+    <span class="modal__title"> Lựa chọn in </span>
+  </div>
+  <div *nzModalContent class="modal__content">
+    <label nz-checkbox [(ngModel)]="options.luongThuc"
+      >Kế hoạch lương thực dự trữ nhà nước</label
+    >
+    <label nz-checkbox [(ngModel)]="options.muoi"
+      >Kế hoạch muối dữ trự nhà nước</label
+    >
+    <label nz-checkbox [(ngModel)]="options.vatTu"
+      >Kế hoạch nhập vật tư, thiết bị</label
+    >
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="handleOk()" class="modal__button--save">
+      <i nz-icon nzType="printer"></i>
+      In
+    </button>
+    <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+      <i nz-icon nzType="close"></i>
+      Hủy
+    </button>
+  </div>
+</nz-modal>

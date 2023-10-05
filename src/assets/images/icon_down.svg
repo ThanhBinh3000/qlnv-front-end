@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="8" viewBox="0 0 12 8">
+  <defs>
+    <clipPath id="clip-icon_down">
+      <rect width="12" height="8"/>
+    </clipPath>
+  </defs>
+  <g id="icon_down" clip-path="url(#clip-icon_down)">
+    <path id="Polygon_98" data-name="Polygon 98" d="M5.2,1.067a1,1,0,0,1,1.6,0l4,5.333A1,1,0,0,1,10,8H2a1,1,0,0,1-.8-1.6Z" transform="translate(12 8) rotate(180)" fill="#6b6b6b"/>
+  </g>
+</svg>

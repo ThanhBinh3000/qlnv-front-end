@@ -1,0 +1,211 @@
+<form nz-form [formGroup]="formData">
+  <div nz-row [nzGutter]="[16, 24]">
+    <div nz-col [nzSpan]="16">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Đơn vị
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Vui lòng nhập đơn vị" class="mb-3">
+          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input donvi__input">
+            <input placeholder="Đơn vị" nz-input formControlName="tenDonVi" (input)="onInput($event)"
+              [nzAutocomplete]="auto" />
+          </nz-input-group>
+          <ng-template #suffixIcon>
+            <i nz-icon nzType="search"></i>
+          </ng-template>
+          <nz-autocomplete #auto>
+            <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi" (click)="selectDonVi(option)">
+              {{ option.labelDonVi }}
+            </nz-auto-option>
+          </nz-autocomplete>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <!-- <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+          <input placeholder="Đơn vị tính" nz-input formControlName="donViTinh" (input)="onInputDonViTinh($event)"
+            [nzAutocomplete]="autoDVT" />
+        </nz-input-group>
+
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #autoDVT>
+          <nz-auto-option *ngFor="let option of optionsDVT" [nzValue]="option.labelDonViTinh"
+            (click)="selectDonViTinh(option)">{{
+            option.labelDonViTinh }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item> -->
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
+          <nz-select formControlName="donViTinh" (ngModelChange)="selectDonViTinh($event)">
+            <nz-option *ngFor="let donVi of listDonViTinh" [nzValue]="donVi.value" [nzLabel]="donVi.text"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Hàng hóa
+        </nz-form-label>
+        <nz-form-control nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click">
+          <nz-input-group nzAddOnAfterIcon="folder-open" class="ma-hang-hoa">
+            <input nz-input formControlName="tenHangHoa" [readonly]="true" />
+          </nz-input-group>
+        </nz-form-control>
+        <!-- dropdown -->
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <div class="dropdown__container">
+            <h6 class="modal__title">Danh sách vật tư hàng hóa</h6>
+            <p style="margin-bottom: 0px; font-weight: 500">Tìm kiếm</p>
+            <div style="margin-bottom: 6px">
+              <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                <input type="text" nz-input (input)="search($event)" />
+              </nz-input-group>
+              <ng-template #suffixIconButton>
+                <button nz-button nzSearch>
+                  <i nz-icon nzType="search"></i>
+                </button>
+              </ng-template>
+            </div>
+            <nz-table #expandTable [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false"
+              class="table__container-vat-tu">
+              <thead>
+                <tr>
+                  <th>Tên vật tư</th>
+                  <th>Mã vật tư</th>
+                  <th>Chọn</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let data of expandTable.data, let i = index">
+                  <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
+                    <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                      <td [nzIndentSize]="item.level! * 20"
+                        [nzShowExpand]="!!item.child && item.child.length !== 0 || !item?.child"
+                        [(nzExpand)]="item.expand" (nzExpandChange)="
+                              collapse(mapOfExpandedData[data.id], item, $event)
+                            ">
+                        {{ item.ten }}
+                      </td>
+                      <td>{{ item.ma }}</td>
+                      <td style="text-align: center">
+                        <div *ngIf="item?.child?.length == 0 || !item?.child">
+                          <i nz-icon nzType="plus" nzTheme="outline" nzColo nz-menu-item
+                            (click)="selectHangHoa(item)"></i>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </tbody>
+            </nz-table>
+          </div>
+        </nz-dropdown-menu>
+      </nz-form-item>
+    </div>
+    <!-- <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="tenHangHoa" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="donViTinh" />
+        </nz-form-control>
+      </nz-form-item>
+    </div> -->
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Số lượng </nz-form-label>
+        <nz-form-control>
+          <nz-input-number formControlName="soLuong" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="16"></div>
+    <!-- 1. Chỉ tiêu nhập các năm khác chuyển sang  -->
+    <div nz-col [nzSpan]="24">
+      <span class="form__section-title">
+        1. Chỉ tiêu nhập các năm khác chuyển sang
+      </span>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="tongSo" readonly />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true">
+          Số lượng - VT1601
+        </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow - 3}} ">
+            <nz-input-number formControlName="soLuongTheoNam1" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              [nzDisabled]="true" (input)="calculatorTongVatTu()">
+            </nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true">
+          Số lượng - VT1601
+        </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow - 2}} ">
+            <nz-input-number formControlName="soLuongTheoNam2" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              [nzDisabled]="true" (input)="calculatorTongVatTu()">
+            </nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true">
+          Số lượng - VT1601
+        </nz-form-label>
+        <nz-form-control class="mb-16">
+          <nz-input-group nzAddOnAfter=" {{yearNow - 1}} ">
+            <nz-input-number formControlName="soLuongTheoNam3" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              [nzDisabled]="true" (input)="calculatorTongVatTu()">
+            </nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()"
+        [disabled]="!formData.valid">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

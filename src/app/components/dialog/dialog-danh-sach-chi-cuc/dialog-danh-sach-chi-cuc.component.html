@@ -1,0 +1,48 @@
+<div class="header-chi-tiet-cuc">
+
+</div>
+<nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed">
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th [width]="320">Tên Cục / Chi cục / Điểm kho DTNNKV</th>
+      <th>Tổng số lượng</th>
+      <th>Mã</th>
+      <th>SL thực hiện</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let data of expandTable.data">
+      <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+        <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+          <td>1</td>
+          <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
+            (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
+            {{ item.name }}
+          </td>
+          <td>{{ item.age }}</td>
+          <td>{{ item.age }}</td>
+          <td>{{ item.age }}</td>
+          <td><label nz-checkbox></label></td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </tbody>
+</nz-table>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="capNhat()">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Cập nhật
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huy()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

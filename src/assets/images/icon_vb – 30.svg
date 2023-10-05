@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <clipPath id="clip-icon_vb_30">
+      <rect width="20" height="20"/>
+    </clipPath>
+  </defs>
+  <g id="icon_vb_30" data-name="icon_vb – 30" clip-path="url(#clip-icon_vb_30)">
+    <g id="Group_7565" data-name="Group 7565" transform="translate(-1682.554 -106.554)">
+      <g id="eye" transform="translate(1686.558 113.64)">
+        <g id="Group_2735" data-name="Group 2735" transform="translate(0 0)">
+          <g id="Group_2734" data-name="Group 2734" transform="translate(0 0)">
+            <path id="Path_26138" data-name="Path 26138" d="M12.8,124.148C12.685,124.02,9.916,121,6.448,121S.211,124.02.1,124.148a.378.378,0,0,0,0,.5c.115.128,2.884,3.148,6.352,3.148s6.237-3.02,6.352-3.148A.378.378,0,0,0,12.8,124.148Zm-6.352,2.9A2.645,2.645,0,1,1,9.093,124.4,2.648,2.648,0,0,1,6.448,127.045Z" transform="translate(0.001 -121)" fill="#0a1972"/>
+          </g>
+        </g>
+        <g id="Group_2737" data-name="Group 2737" transform="translate(4.559 1.511)">
+          <g id="Group_2736" data-name="Group 2736" transform="translate(0 0)">
+            <path id="Path_26139" data-name="Path 26139" d="M183.267,182.134a1.13,1.13,0,0,1,.476-.92,1.865,1.865,0,0,0-.854-.213,1.889,1.889,0,1,0,1.857,2.208A1.127,1.127,0,0,1,183.267,182.134Z" transform="translate(-181 -181)" fill="#0a1972"/>
+          </g>
+        </g>
+      </g>
+      <path id="Path_640" data-name="Path 640" d="M9.452,0A9.452,9.452,0,1,0,18.9,9.452,9.462,9.462,0,0,0,9.452,0m0,17.722a8.27,8.27,0,1,1,8.27-8.27,8.279,8.279,0,0,1-8.27,8.27" transform="translate(1683.554 107.554)" fill="#0a1972"/>
+    </g>
+  </g>
+</svg>

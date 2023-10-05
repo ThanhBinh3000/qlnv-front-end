@@ -1,0 +1,26 @@
+<nz-affix  class="btn-affix">
+  <div class="btn-group">
+    <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-affix>
+<div class="bg-trang">
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="input-group-search" nz-row [nzGutter]="24">
+      <nz-form-item nz-col nzSpan="10" class="form-item ml-2">
+        <nz-form-label [nzNoColon]="true"  >TÊN DỰ ÁN</nz-form-label>
+        <nz-form-label [nzNoColon]="true" style="margin-top: 10px"  >Giai đoạn {{item.tgKhoiCongTu}}-{{item.tgHoanThanhDen}}</nz-form-label>
+        <nz-form-label [nzNoColon]="true" style="margin-top: 10px"  >Năm {{item.tgKhoiCongTu}}</nz-form-label>
+        <nz-form-label [nzNoColon]="true" style="margin-top: 10px"  >Năm {{item.tgHoanThanhDen}}</nz-form-label>
+      </nz-form-item>
+      <nz-form-item nz-col nzSpan="10" class="form-item ml-2">
+        <nz-form-label [nzNoColon]="true"  >{{item.tenDuAn}}</nz-form-label>
+        <nz-form-label [nzNoColon]="true" style="margin-top: 10px"  >{{item.tmdtDuyet}}</nz-form-label>
+        <nz-form-label [nzNoColon]="true" style="margin-top: 10px"  >{{item.tmdtDuyet}}</nz-form-label>
+        <nz-form-label [nzNoColon]="true" style="margin-top: 10px"  >{{item.tmdtDuyet}}</nz-form-label>
+      </nz-form-item>
+    </div>
+  </nz-card>
+</div>

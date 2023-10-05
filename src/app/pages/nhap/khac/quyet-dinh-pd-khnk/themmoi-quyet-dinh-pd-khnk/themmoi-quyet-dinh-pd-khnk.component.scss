@@ -1,0 +1,31 @@
+.rdo-input {
+  display: flex;
+
+  .ant-form-item {
+    margin-right: 20px;
+
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+
+  label {
+    padding-top: 8px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+.bg-selected td {
+  background-color: #ebedff;
+}
+
+.number-input {
+  color: black;
+}
+
+//nz-form-item.ant-form-item
+//
+//nz-form-item.ant-form-item.ant-row:last-child {
+//  margin-right: 0px;
+//}

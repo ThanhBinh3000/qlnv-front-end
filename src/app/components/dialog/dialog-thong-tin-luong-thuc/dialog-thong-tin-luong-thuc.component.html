@@ -1,0 +1,292 @@
+<form nz-form [formGroup]="formData" class="form__thong-tin-luong-thuc">
+  <div nz-row [nzGutter]="[16, 24]">
+    <div nz-col [nzSpan]="16">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Đơn vị
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
+          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input donvi__input">
+            <input placeholder="Đơn vị" nz-input formControlName="tenDonvi" (input)="onInput($event)"
+              [nzAutocomplete]="auto" [readonly]="this.keHoachLuongThuc" />
+          </nz-input-group>
+          <ng-template #suffixIcon>
+            <i nz-icon nzType="search"></i>
+          </ng-template>
+          <nz-autocomplete #auto>
+            <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi" (click)="selectDonVi(option)">
+              {{ option.labelDonVi }}
+            </nz-auto-option>
+          </nz-autocomplete>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <!-- <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+          <input placeholder="Đơn vị tính" nz-input formControlName="donViTinh" (input)="onInputDonViTinh($event)"
+            [nzAutocomplete]="autoDVT" />
+        </nz-input-group>
+
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #autoDVT>
+          <nz-auto-option *ngFor="let option of optionsDVT" [nzValue]="option.labelDonViTinh"
+            (click)="selectDonViTinh(option)">{{
+            option.labelDonViTinh }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item> -->
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <input nz-input formControlName="donViTinh" [readonly]="true" />
+      </nz-form-item>
+    </div>
+    <!--1. ton kho dau nam -->
+    <div nz-col [nzSpan]="24" style="padding: 0px">
+      <span class="form__section-title">1. Tồn kho đầu năm</span>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
+        <nz-form-control>
+          <input nz-input type="number" formControlName="tkdnTongSoQuyThoc" [readonly]="true" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter="{{yearNow-3}}">
+            <nz-input-number formControlName="tkdnThocSoLuong3" [nzMin]="0" [nzStep]="0.1"
+              (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow-2}} ">
+            <nz-input-number formControlName="tkdnThocSoLuong2" [nzMin]="0" [nzStep]="0.1"
+              (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow-1}} ">
+            <nz-input-number formControlName="tkdnThocSoLuong1" [nzMin]="0" [nzStep]="0.1"
+              (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow-2}} ">
+            <nz-input-number formControlName="tkdnGaoSoLuong2" [nzMin]="0" [nzStep]="0.1"
+              (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow-1}} ">
+            <nz-input-number formControlName="tkdnGaoSoLuong1" [nzMin]="0" [nzStep]="0.1"
+              (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <!-- <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" 2019 ">
+            <input nz-input formControlName="slGao3" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div> -->
+    <!-- 2. nhap trong nam -->
+    <div nz-col [nzSpan]="24">
+      <span class="form__section-title">2. Nhập trong năm</span>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="ntnTongSoQuyThoc" [readonly]="true" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
+        <nz-form-control>
+          <nz-input-group>
+            <nz-input-number formControlName="ntnThoc" [nzMin]="0" [nzStep]="0.1" (input)="calculatorNtnTongQuyThoc()"
+              [nzSize]="'small'"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
+        <nz-form-control>
+          <nz-input-group>
+            <nz-input-number formControlName="ntnGao" [nzMin]="0" [nzStep]="0.1" (input)="calculatorNtnTongQuyThoc()"
+              [nzSize]="'small'"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <!-- 3. xuat trong nam -->
+    <div nz-col [nzSpan]="24">
+      <span class="form__section-title">3. Xuất trong năm</span>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="xtnTongSoQuyThoc" [readonly]="true" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow - 3}} ">
+            <nz-input-number formControlName="xtnThocSoLuong3" [nzMin]="0"
+              [nzMax]="+this.formData.get('tkdnThocSoLuong3').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
+              [nzSize]="'small'"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow - 2}} ">
+            <nz-input-number formControlName="xtnThocSoLuong2" [nzMin]="0"
+              [nzMax]="+this.formData.get('tkdnThocSoLuong2').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
+              [nzSize]="'small'"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow - 1}} ">
+            <nz-input-number formControlName="xtnThocSoLuong1" [nzMin]="0"
+              [nzMax]="+this.formData.get('tkdnThocSoLuong1').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
+              [nzSize]="'small'"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow - 2}} ">
+            <nz-input-number formControlName="xtnGaoSoLuong2" [nzMin]="0"
+              [nzMax]="+this.formData.get('tkdnGaoSoLuong2').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
+              [nzSize]="'small'"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" {{yearNow - 1}} ">
+            <nz-input-number formControlName="xtnGaoSoLuong1" [nzMin]="0"
+              [nzMax]="+this.formData.get('tkdnGaoSoLuong1').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
+              [nzSize]="'small'"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <!-- <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter=" 2019 ">
+            <input nz-input formControlName="xuatSlGao3" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div> -->
+    <!-- 4. ton kho cuoi nam -->
+    <div nz-col [nzSpan]="24">
+      <span class="form__section-title">4. Tồn kho cuối năm</span>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="tkcnTongSoQuyThoc" [readonly]="true" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
+        <nz-form-control>
+          <nz-input-group>
+            <nz-input-number formControlName="tkcnTongThoc" [nzMin]="0" [nzStep]="0.1"
+              (input)="calculatorTkcnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12" class="mb-16">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
+        <nz-form-control>
+          <nz-input-group>
+            <nz-input-number formControlName="tkcnTongGao" [nzMin]="0" [nzStep]="0.1"
+              (input)="calculatorTkcnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()"
+        [disabled]="!formData.valid">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="cancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

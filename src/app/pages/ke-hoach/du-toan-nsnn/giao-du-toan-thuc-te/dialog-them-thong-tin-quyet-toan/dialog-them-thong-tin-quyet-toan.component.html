@@ -1,0 +1,96 @@
+<div class="modal__content">
+    <nz-table #basicTable class="nowrap">
+        <thead>
+            <tr>
+                <th scope="col" nzWidth="20%">Ngày tạo QĐ/CV</th>
+                <th scope="col" nzWidth="30%">Số QĐ/CV</th>
+                <th scope="col" nzWidth="30%">Mã PA</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ngayTao}}</td>
+                <td>
+                    <nz-upload [nzBeforeUpload]="beforeUploadCV">
+                        <button nz-button>
+                            <i nz-icon nzType="upload"></i>
+                            Chọn tệp
+                        </button>
+                    </nz-upload>
+                    <div class="tep__sqd" (click)="downloadFileCv()">
+                        <span>{{soQd?.fileName}}</span>
+                    </div>
+                </td>
+                <td>
+                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn phương án" [(ngModel)]="maPa"
+                        [class]="maPa ?'' : 'input-error-validate'">
+                        <nz-option *ngFor="let item of phuongAns" [nzValue]="item.maPa" [nzLabel]="item.maPa">
+                        </nz-option>
+                    </nz-select>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+        <div nz-col class="gutter-row" [nzSpan]="24">
+            <span>Danh sách văn bản đính kèm</span>
+        </div>
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+        <div nz-col class="gutter-row" [nzSpan]="3">
+            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+                <button nz-button>
+                    <i nz-icon nzType="upload"></i>
+                    Chọn tệp
+                </button>
+            </nz-upload>
+            <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
+                style="margin-top: 16px">
+                Thêm vào danh sách
+            </button>
+        </div>
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+        <div nz-col class="gutter-row" [nzSpan]="18">
+            <nz-table nzBordered class="table__body">
+                <thead>
+                    <tr>
+                        <th scope="col" nzWidth="7%">STT</th>
+                        <th scope="col">Tên file</th>
+                        <th scope="col" nzWidth="10%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of lstFiles; let i = index">
+                        <td>{{ i + 1 }} </td>
+                        <td>{{ data.fileName }}</td>
+                        <td>
+                            <a (click)="downloadFile(data.id)">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a (click)="deleteFile(data.id)">
+                                <i class="fa fa-trash-o do"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button (click)="save()" type="button" class="btn btn-main">
+                <i class="icon htvbdh_tcdt_save"></i>
+                Lưu
+            </button>
+            <button nz-button class="search__button--clear" (click)="handleCancel()">
+                <i nz-icon nzType="close" nzTheme="outline"></i>
+                Đóng
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,172 @@
+<nz-card class="mt16 flex-card p-lr16 table-card">
+  <nz-table #expandTable [nzData]="listOfData" nzTableLayout="fixed">
+    <thead>
+      <tr>
+        <th [width]="218">Chi cục</th>
+        <th>Tên gói thầu</th>
+        <th>Địa điểm nhập kho</th>
+        <th>Số lượng theo chỉ tiêu theo kế hoạch</th>
+        <th>Đã lên kế hoạch mua</th>
+        <th>Số lượng tấn</th>
+        <th>Đơn giá đã bao gồm VAT (đồng/kg)</th>
+        <th>Thành tiền</th>
+        <th>Bằng chữ</th>
+      </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let item of listOfData , let i = index">
+    </ng-container>
+<!--    <ng-container *ngFor="let data of expandTable.data">-->
+<!--        <ng-container *ngFor="let item of mapOfExpandedData2[data.idVirtual]">-->
+<!--          <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">-->
+<!--            <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"-->
+<!--              (nzExpandChange)="collapse2(mapOfExpandedData2[data.idVirtual], item, $event)">-->
+<!--              {{ item.tenDvi }}-->
+<!--            </td>-->
+<!--            <td (click)="editRow(item.id)">{{ item.goiThau }}</td>-->
+<!--            <td>{{ item.tenDiemKho }}</td>-->
+<!--            <td>{{ item.soLuongTheoChiTieu }}</td>-->
+<!--            <td>{{ item.soLuongTheoChiTieu }}</td>-->
+<!--            <td>{{ item.soLuong }}</td>-->
+<!--            <td>{{ item.donGia }}</td>-->
+<!--            <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>-->
+<!--            <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>-->
+<!--          </tr>-->
+<!--        </ng-container>-->
+<!--      </ng-container>-->
+    </tbody>
+  </nz-table>
+</nz-card>
+<nz-card *ngIf="isEdit" class="pd-10 mb-16">
+  <div class="specical-title">
+    Chỉnh sửa thông tin phụ lục QĐ phê duyệt khlcnt
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="18">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tên gói thầu </nz-form-label>
+        <input nz-input [(ngModel)]="dataEdit.tenGthau" />
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Chi Cục </nz-form-label>
+        <input nz-input [(ngModel)]="dataEdit.tenDvi" />
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
+        <input nz-input [(ngModel)]="dataEdit.soLuong" />
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng) </nz-form-label>
+        <input nz-input [(ngModel)]="dataEdit.donGia" />
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Thành tiền (đồng) </nz-form-label>
+        <input nz-input [(ngModel)]="dataEdit.tongTien" />
+      </nz-form-item>
+    </div>
+  </div>
+  <nz-table #groupingTable #editRowTable nzBordered class="nowrap mt-16 flex-card p-lr16 pd-10"
+    [nzData]="dataEdit?.children" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th [width]="300"> Điểm kho </th>
+        <th> Địa điểm kho </th>
+        <th [width]="150"> Số lượng </th>
+        <th [width]="60"> Hành động </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <nz-select [(ngModel)]="addGoiThau.maDiemKho" (ngModelChange)="changeDiemKhoAdd()">
+            <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          </nz-select>
+        </td>
+        <td>{{addGoiThau.diaDiemNhap}}</td>
+        <td>
+          <nz-input-number nz-input [(ngModel)]="addGoiThau.soLuong" [nzMin]="1" [nzStep]="1" [nzSize]="'small'">
+          </nz-input-number>
+        </td>
+        <td>
+          <a (click)="addNew()" class="save">
+            <i class="icon htvbdh_dau-cong"></i>
+          </a>
+          <a (click)="clearData()">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          </a>
+        </td>
+      </tr>
+      <tr *ngFor="let data of editRowTable.data; let i = index" class="editable-row">
+        <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
+          <td>{{ data.maDiemKho }}</td>
+          <td>{{ data.diaDiemNhap }}</td>
+          <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>
+            <a (click)="startEdit(i)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a (click)="deleteRow(i)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <td>
+            <nz-select [(ngModel)]="editCache[i].data.maDiemKho" (ngModelChange)="changeDiemKho(i)">
+              <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </td>
+          <td>{{editCache[i].data.diaDiemNhap}}</td>
+          <td>
+            <nz-input-number nz-input [(ngModel)]="editCache[i].data.soLuong" [nzMin]="1" [nzStep]="1"
+              [nzSize]="'small'">
+            </nz-input-number>
+          </td>
+          <td>
+            <a (click)="saveEdit(i)" class="save">
+              <i class="icon htvbdh_tcdt_save"></i>
+            </a>
+            <a (click)="cancelEdit(i)">
+              <i class="fa fa-ban do"></i>
+            </a>
+          </td>
+        </ng-template>
+      </tr>
+      <tr *ngIf="editRowTable.data.length > 0">
+        <td colspan="2" class="background-last-row text-left">Tổng</td>
+        <td class="background-last-row">{{ (tableExist ? reduceRowData(0, 2, 1, ',','table-goi-thau') : 0) |
+          number:
+          '1.0-1'}}</td>
+        <td class="background-last-row"></td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="onCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Hủy bỏ
+      </button>
+      <button *ngIf="isEdit" nz-button (click)="onApplyEdit()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Áp dụng chỉnh sửa
+      </button>
+      <button *ngIf="isEdit" nz-button (click)="onCancel()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

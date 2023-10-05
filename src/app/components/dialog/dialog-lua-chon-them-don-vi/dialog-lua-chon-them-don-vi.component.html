@@ -1,0 +1,38 @@
+<div class="modal__content">
+	<nz-table #headerTable [nzPageSize]="50" [nzScroll]="{ y: '600px' }">
+		<tbody>
+			<tr *ngFor="let item of donVis">
+				<td>
+					<ng-container *ngIf="multi; else one">
+						<label nz-checkbox [(ngModel)]="item.status" class="check-box">
+							{{item.ten}}
+						</label>
+					</ng-container>
+					<ng-template #one>
+						<label nz-checkbox [(ngModel)]="item.status" class="check-box"
+							(ngModelChange)="changeModel(item)">
+							{{item.ten}}
+						</label>
+					</ng-template>
+				</td>
+			</tr>
+		</tbody>
+	</nz-table>
+	<!-- <label *ngFor="let item of donVis" nz-checkbox [(ngModel)]="item.status" class="check-box">{{item.ten}}</label> -->
+</div>
+<div class="modal-footer">
+	<div class="nut">
+		<div class="cantrai">
+		</div>
+		<div class="canphai">
+			<button nz-button (click)="handleOk()" class="modal__button--save">
+				<i nz-icon nzType="plus"></i>
+				Thêm
+			</button>
+			<button nz-button (click)="handleCancel()" class="modal__button--cancel">
+				<i nz-icon nzType="close"></i>
+				Hủy
+			</button>
+		</div>
+	</div>
+</div>
