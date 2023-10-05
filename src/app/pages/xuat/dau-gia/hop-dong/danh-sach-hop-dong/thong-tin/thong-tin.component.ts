@@ -254,10 +254,12 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       trangThai: STATUS.BAN_HANH
     };
     const res = await this.qdPdKetQuaBanDauGiaService.search(body)
-    if (res.msg === MESSAGE.SUCCESS) {
+    if (res && res.msg === MESSAGE.SUCCESS) {
       this.listDataQdKq = res.data.content || [];
-    } else {
+    } else if (res && res.msg) {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    } else {
+      this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
     }
     const modalQD = this.modal.create({
       nzTitle: 'THÔNG TIN QUYẾT ĐỊNH KẾT QUẢ BÁN ĐẤU GIÁ',

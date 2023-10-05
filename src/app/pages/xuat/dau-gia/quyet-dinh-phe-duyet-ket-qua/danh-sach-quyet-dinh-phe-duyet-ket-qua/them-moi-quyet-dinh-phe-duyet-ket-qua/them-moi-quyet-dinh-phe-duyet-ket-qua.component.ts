@@ -200,16 +200,14 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       };
       await this.loadQuyetDinhKetQua();
       const res = await this.thongTinDauGiaService.search(body)
-      if (res.msg !== MESSAGE.SUCCESS) {
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        const maThongBaoSet = new Set(this.loadDsQuyetDinhKq.map(item => item.maThongBao));
+        this.dataMaThongBao = res.data.content.filter(item => !maThongBaoSet.has(item.maThongBao));
+      } else if (res && res.msg) {
         this.notification.error(MESSAGE.ERROR, res.msg);
-        return;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
-      const data = res.data.content;
-      if (!data || data.length === 0) {
-        return;
-      }
-      const maThongBaoSet = new Set(this.loadDsQuyetDinhKq.map(item => item.maThongBao));
-      this.dataMaThongBao = data.filter(item => !maThongBaoSet.has(item.maThongBao));
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH THÔNG BÁO BÁN ĐẤU GIÁ',
         nzContent: DialogTableSelectionComponent,
@@ -268,7 +266,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
-        moTaHangHoa:  dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.moTaHangHoa : dataQd.xhQdDchinhKhBdgHdr.moTaHangHoa,
+        moTaHangHoa: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.moTaHangHoa : dataQd.xhQdDchinhKhBdgHdr.moTaHangHoa,
         phuongThucGiaoNhan: dataQd.pthucGnhan,
         tgianGiaoNhanNgay: dataQd.tgianGnhan,
         tgianGnhanGhiChu: dataQd.tgianGnhanGhiChu,

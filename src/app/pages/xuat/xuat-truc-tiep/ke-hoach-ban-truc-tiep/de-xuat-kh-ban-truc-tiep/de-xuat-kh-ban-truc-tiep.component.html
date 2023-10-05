@@ -120,8 +120,8 @@
           <th class="text-left"> Số QĐ duyệt KH bán TT</th>
           <th class="text-left"> Ngày ký QĐ</th>
           <th class="text-left"> Trích yếu</th>
-          <th class="text-left"> Loại hàng hóa</th>
-          <th class="text-left"> Chủng loại hàng hóa</th>
+          <th class="text-left"> Loại hàng DTQG</th>
+          <th class="text-left"> Chủng loại hàng DTQG</th>
           <th class="text-left"> Số ĐV tài sản</th>
           <th class="text-center"> SL HĐ đã ký</th>
           <th class="text-center"> Số QĐ giao chỉ tiêu</th>
@@ -236,7 +236,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != '00'"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-left">{{ data.namKh }}</td>

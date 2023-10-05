@@ -171,8 +171,23 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     this.dataTable = children;
     await Promise.all([this.getGiaToiThieu(), this.donGiaDuocDuyet()]);
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      await this.onChangeLoaiVthh(loaiVthh);
+      await this.selectVthh(data);
     }
+  }
+
+  async selectVthh(data) {
+    this.listVatTuCha = [
+      {
+        maVatTuCha: data.loaiVthh,
+        tenVatTuCha: data.tenLoaiVthh
+      },
+    ]
+    this.listVatTu = [
+      {
+        maVatTu: data.cloaiVthh,
+        tenVatTu: data.tenCloaiVthh
+      },
+    ]
   }
 
   async loadDsVthh() {
