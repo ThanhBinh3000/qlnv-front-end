@@ -40,6 +40,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
   @Input() typeVthh: string;
   @Input() title: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() dataDdiem: any;
   @Output() showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = [];
   listDiaDiemNhap: any[] = [];
@@ -503,8 +504,21 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
       nguoiTao: this.userInfo.sub,
       tenNguoiTao: this.userInfo.TEN_DAY_DU,
     });
-    if (this.idQdGiaoNvNh) {
+    if (this.dataDdiem && this.idQdGiaoNvNh) {
+      console.log(this.dataDdiem)
+      // this.formData.patchValue({
+      //   tenNganLoKho: this.dataDdiem.tenLoKho ? `${this.dataDdiem.tenLoKho} - ${this.dataDdiem.tenNganKho}` : this.dataDdiem.tenNganKho,
+      //   maLoKho: this.dataDdiem.maLoKho,
+      //   tenLoKho: this.dataDdiem.tenLoKho,
+      //   maNganKho: this.dataDdiem.maNganKho,
+      //   tenNganKho: this.dataDdiem.tenNganKho,
+      //   maNhaKho: this.dataDdiem.maNhaKho,
+      //   tenNhaKho: this.dataDdiem.tenNhaKho,
+      //   maDiemKho: this.dataDdiem.maDiemKho,
+      //   tenDiemKho: this.dataDdiem.tenDiemKho,
+      // });
       await this.bindingDataQd(this.idQdGiaoNvNh, true);
+      await this.bindingDataDdNhap(this.listDiaDiemNhap.find(x => x.id == this.dataDdiem.id))
     }
   }
 
@@ -592,6 +606,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
   async loadDataComboBox() {
     if (this.formData.value.cloaiVthh) {
       let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
+      console.log(res, "000")
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq

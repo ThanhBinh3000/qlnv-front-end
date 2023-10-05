@@ -48,7 +48,12 @@ export class ThongTu1452013Component implements OnInit {
       }
     );
   }
-
+  listQuy: any[] = [
+    { text: 'Quý I', value: 1 },
+    { text: 'Quý II', value: 2 },
+    { text: 'Quý III', value: 3 },
+    { text: 'Quý IV', value: 4 },
+  ]
   ngOnInit(): void {
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -121,5 +126,11 @@ export class ThongTu1452013Component implements OnInit {
     } finally {
       this.spinner.hide();
     }
+  }
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      quy:null,
+    })
   }
 }
