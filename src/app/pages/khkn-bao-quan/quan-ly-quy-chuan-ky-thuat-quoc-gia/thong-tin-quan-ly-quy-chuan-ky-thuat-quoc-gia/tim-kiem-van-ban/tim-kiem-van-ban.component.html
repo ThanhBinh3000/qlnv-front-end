@@ -34,17 +34,17 @@
   </div>
   <nz-card class='mt-16 flex-card'>
     <nz-table #basicTable nzBordered [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false'
-              [nzScroll]="{ y: '200px' }">
+              [nzScroll]="{ y: '700px' }">
       <thead>
       <tr>
         <th width='50px'>STT</th>
-        <th>Số văn bản</th>
+        <th width='120px'>Số văn bản</th>
         <th>Loại hàng DTQG</th>
         <th>Ngày HL</th>
         <th width='250px'>Ngày hết HL</th>
         <th width='250px'>Trạng thái HL</th>
         <!--        <th>Trích yếu</th>-->
-        <th>Chọn</th>
+        <th class='text-center'>Chọn</th>
       </tr>
       </thead>
       <tbody>
@@ -57,7 +57,7 @@
           <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenTrangThaiHl}}</td>
           <!--          <td>{{ data.trichYeu }}</td>-->
-          <td class='text-left'>
+          <td class='text-center'>
             <label nz-checkbox [(ngModel)]='data.checked' (ngModelChange)='updateSingleChecked()'></label>
           </td>
         </tr>
@@ -92,7 +92,7 @@
         </button>
         <button (click)='handleOk()' type='button' class='btn btn-sub xanh'>
           <i class='icon htvbdh_dau-cong mr-2'></i>
-          Chọn
+          Lưu
         </button>
       </div>
     </div>
