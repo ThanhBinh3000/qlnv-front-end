@@ -85,7 +85,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số đề xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input formControlName="soCongVan" [readonly]="checkTrangThaiRecord()" nz-input nzSize="small"
+                <input formControlName="soCongVan" [readonly]="isViewDetail" nz-input nzSize="small"
                   placeholder="Nhập số công văn/tờ trình" />
               </nz-input-group>
             </nz-form-control>
@@ -97,7 +97,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayKy"
-                nzPlaceHolder="Ngày ký">
+                [nzDisabled]="isViewDetail" nzPlaceHolder="Ngày ký">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -109,7 +109,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayHieuLuc"
-                nzPlaceHolder="Ngày hiệu lực">
+                [nzDisabled]="isViewDetail" nzPlaceHolder="Ngày hiệu lực">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -639,7 +639,7 @@
                   <a (click)="startEditMuoi(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a (click)="deleteKeHoachMuoi(dataMuoi.stt)">
+                  <a (click)="deleteKeHoachMuoi(i)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
@@ -679,7 +679,7 @@
               <th class="text-right"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</th>
               <th class="text-right"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</th>
               <th class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
+              <th *ngIf="!this.isViewDetail"></th>
             </tr>
             <tr *ngIf="userService.isTongCuc()">
               <td></td>
@@ -689,7 +689,7 @@
               <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}
               </th>
               <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
+              <th *ngIf="!this.isViewDetail"></th>
             </tr>
 
           </tfoot>

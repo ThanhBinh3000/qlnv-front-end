@@ -1720,7 +1720,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     console.log("body", body)
 
     console.log('thongTinChiTieuKeHoachNam', this.thongTinChiTieuKeHoachNam, this.dataVatTuNhap, this.dataVatTuNhapTree, this.dataVatTuXuatTree, this.dataVatTuXuat)
-
+    if (this.thongTinChiTieuKeHoachNam.id) {
+      body.id = this.thongTinChiTieuKeHoachNam.id
+    }
 
 
     this.spinner.show();
