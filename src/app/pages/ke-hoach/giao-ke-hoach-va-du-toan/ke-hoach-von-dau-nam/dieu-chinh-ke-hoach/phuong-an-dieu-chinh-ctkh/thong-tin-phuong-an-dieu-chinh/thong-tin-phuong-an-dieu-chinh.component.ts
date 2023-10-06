@@ -229,7 +229,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       //   namKeHoach: dayjs().get('year')-1,
       // });
       // this.thongTinChiTieuKeHoachNam.capDvi = this.userInfo.CAP_DVI;
-      // this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
+      this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
       // await this.initDataThemMoi();
       await this.findCanCuByYear(this.yearNow);
     }
