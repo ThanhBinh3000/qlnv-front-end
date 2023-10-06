@@ -213,7 +213,7 @@
             <th>Chi cục DTNN KV</th>
             <th>Điểm kho</th>
             <th>Ngăn/Lô kho</th>
-            <th>Chủng loại hàng hóa</th>
+            <th>Chủng loại hàng DTQG</th>
             <th>SL tồn kho</th>
             <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">SL hao dôi theo định mức</th>
             <th *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">SL dôi thừa</th>
@@ -506,13 +506,13 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Loại hàng hóa</nz-form-label>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Loại hàng DTQG</nz-form-label>
         <nz-form-control>
           <span>{{rowThemMoi.tenLoaiVthh}}</span>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng DTQG</nz-form-label>
         <nz-form-control>
           <span>{{rowThemMoi.tenCloaiVthh}}</span>
         </nz-form-control>

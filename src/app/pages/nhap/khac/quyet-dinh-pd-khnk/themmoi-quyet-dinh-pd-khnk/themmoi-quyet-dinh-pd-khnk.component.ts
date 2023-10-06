@@ -152,6 +152,8 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       ngayPduyet: [null],
       tongThanhTien: [null],
       lastest: [''],
+      tongSlNhap: [''],
+      noiDung: [''],
       loaiHinhNx: [null]
     })
   }
@@ -615,7 +617,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     await this.spinner.show()
     if (event) {
       const data = event;
-      console.log(data)
+      console.log(data, "0000000")
       this.formData.patchValue({
         loaiVthh: data.dxHdr[0].loaiVthh,
         tenLoaiVthh: data.dxHdr[0].tenLoaiVthh,
@@ -625,6 +627,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         kieuNx: data.dxHdr[0].kieuNx,
         idTh: data.id,
         maTh: data.maTh,
+        noiDung: data.noiDungTh,
         idDx: null,
         soTrHdr: null,
         dvt: data.dvt
@@ -633,6 +636,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.danhsachDxCache = cloneDeep(this.danhsachDx);
       this.dataInput = null;
       this.dataInputCache = null;
+      await this.calTongSlNhap();
       await this.showFirstRow(Event, this.danhsachDx[0]);
 
     }
@@ -710,6 +714,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
         this.dataInputCache = null;
+      await this.calTongSlNhap();
       await this.showFirstRow(Event, this.danhsachDx[0]);
     }
     await this.spinner.hide();
@@ -734,6 +739,18 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
       await this.spinner.hide();
+    }
+  }
+
+  async calTongSlNhap() {
+    if (this.danhsachDx) {
+      let sum = 0
+      this.danhsachDx.forEach(item => {
+        sum += item.tongSlNhap;
+      })
+      this.formData.patchValue({
+        tongSlNhap: sum,
+      })
     }
   }
 

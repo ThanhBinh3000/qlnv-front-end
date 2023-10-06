@@ -781,27 +781,48 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
 
   pheDuyet() {
     let trangThai = ''
-    switch (this.formData.value.trangThai) {
-      case STATUS.TU_CHOI_LDCC:
-      case STATUS.TU_CHOI_KT:
-      case STATUS.TU_CHOI_TK:
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TK;
-        break;
+    if(!this.formData.value.loaiVthh.startsWith('02')){
+      switch (this.formData.value.trangThai) {
+        case STATUS.TU_CHOI_LDCC:
+        case STATUS.TU_CHOI_KT:
+        case STATUS.TU_CHOI_TK:
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.CHO_DUYET_TK;
+          break;
+        }
+        case STATUS.CHO_DUYET_TK: {
+          trangThai = STATUS.CHO_DUYET_KT;
+          break;
+        }
+        case STATUS.CHO_DUYET_KT: {
+          trangThai = STATUS.CHO_DUYET_LDCC;
+          break;
+        }
+        case STATUS.CHO_DUYET_LDCC: {
+          trangThai = STATUS.DA_DUYET_LDCC;
+          break;
+        }
       }
-      case STATUS.CHO_DUYET_TK: {
-        trangThai = STATUS.CHO_DUYET_KT;
-        break;
-      }
-      case STATUS.CHO_DUYET_KT: {
-        trangThai = STATUS.CHO_DUYET_LDCC;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.DA_DUYET_LDCC;
-        break;
+    }else{
+      switch (this.formData.value.trangThai) {
+        case STATUS.TU_CHOI_LDCC:
+        case STATUS.TU_CHOI_KT:
+        case STATUS.TU_CHOI_TK:
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.CHO_DUYET_TK;
+          break;
+        }
+        case STATUS.CHO_DUYET_TK: {
+          trangThai = STATUS.CHO_DUYET_LDCC;
+          break;
+        }
+        case STATUS.CHO_DUYET_LDCC: {
+          trangThai = STATUS.DA_DUYET_LDCC;
+          break;
+        }
       }
     }
+
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
