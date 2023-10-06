@@ -302,20 +302,20 @@
                   <tr>
                     <td>{{i+1}}</td>
                     <td>{{item.noiDungDx}}</td>
-                    <td>{{item.soLuongDx}}</td>
+                    <td>{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                     <ng-container *ngIf="isVthhGao()">
-                      <td>{{item.soLuongNhuCauXuat}}</td>
-                      <td>{{item.soLuongChuyenCapThoc}}</td>
+                      <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                      <td>{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                     </ng-container>
                   </tr>
                 </ng-container>
                 <tr>
                   <td></td>
                   <td class="text-blue uppercase text-right">Tổng</td>
-                  <td class="text-blue">{{tongSoLuongDx}}</td>
+                  <td class="text-blue">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
                   <ng-container *ngIf="isVthhGao()">
-                    <td class="text-blue">{{tongSoLuongNhuCauXuat}}</td>
-                    <td class="text-blue">{{tongSoLuongChuyenCapThoc}}</td>
+                    <td class="text-blue">{{tongSoLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-blue">{{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                   </ng-container>
                 </tr>
               </ng-container>

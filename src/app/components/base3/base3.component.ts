@@ -724,6 +724,9 @@ export class Base3Component implements OnInit {
     printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
+  isAccessPermisson(roles){
+    return this.userService.isAccessPermisson(roles);
+  }
 
 
 

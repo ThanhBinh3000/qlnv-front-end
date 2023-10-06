@@ -30,12 +30,12 @@ export class KiemTraComponent implements OnInit {
           {
             url: '/xtl-bb-lm',
             name: 'Biên bản lấy mẫu/bàn giao mẫu',
-            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT_BBLMBGM'
           },
           {
             url: '/xtl-phieu-ktra-cl',
             name: 'Phiếu kiểm nghiệm chất lượng',
-            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT_KNCL'
           },
         ]
       }else{
@@ -43,17 +43,17 @@ export class KiemTraComponent implements OnInit {
           {
             url: '/xtl-bb-lm',
             name: 'Biên bản lấy mẫu/bàn giao mẫu',
-            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT_BBLMBGM'
           },
           {
             url: '/xtl-phieu-ktra-cl',
             name: 'Phiếu kiểm nghiệm chất lượng',
-            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT_KNCL'
           },
           {
             url: '/xtl-hs-kt',
             name: 'Hồ sơ kỹ thật',
-            accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT_HSKT'
           },
         ]
       }
