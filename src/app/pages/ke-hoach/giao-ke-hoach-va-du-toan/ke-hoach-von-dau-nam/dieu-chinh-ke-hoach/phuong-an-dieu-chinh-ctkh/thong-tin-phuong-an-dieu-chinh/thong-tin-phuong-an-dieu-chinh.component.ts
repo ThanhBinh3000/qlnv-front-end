@@ -235,6 +235,14 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     }
   }
 
+  isCuc() {
+    return this.userService.isCuc()
+  }
+
+  isTongCuc() {
+    return this.userService.isTongCuc()
+  }
+
   async initDataThemMoi() {
     this.spinner.show();
     try {
