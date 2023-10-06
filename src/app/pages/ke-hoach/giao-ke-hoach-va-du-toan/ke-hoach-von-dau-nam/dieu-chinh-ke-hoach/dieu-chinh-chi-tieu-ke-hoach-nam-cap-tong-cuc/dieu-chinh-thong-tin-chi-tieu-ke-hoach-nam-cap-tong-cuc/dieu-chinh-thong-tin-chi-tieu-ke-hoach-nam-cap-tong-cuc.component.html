@@ -189,7 +189,7 @@
           </nz-form-item>
         </div>
 
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="24" *ngIf="isTongCuc()">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số đề xuất điều chỉnh của Cục DTNN KV</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
