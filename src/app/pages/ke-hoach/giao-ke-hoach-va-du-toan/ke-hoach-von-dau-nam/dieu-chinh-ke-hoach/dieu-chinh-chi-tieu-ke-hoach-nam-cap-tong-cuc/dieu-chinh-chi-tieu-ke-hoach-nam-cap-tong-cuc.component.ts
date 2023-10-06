@@ -230,9 +230,9 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
         this.quyetDinhDieuChinhCTKHService
-          .export(body)
+          .exportlist(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),
+            saveAs(blob, 'quyet-dinh-dieu-chinh-chi-tieu-kh.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

@@ -19,25 +19,25 @@
         <!--          <i class="icon htvbdh_chuyenvanthu"></i>-->
         <!--          <span>Tạo quyết định</span>-->
         <!--        </button>-->
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+        <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
           *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))"
           (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
-        </button>
+        </button> -->
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU')"
+          *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV)"
           (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
-        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))">
+        <!-- <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
+          *ngIf="userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_LDV">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
-        </a>
+        </a> -->
         <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU') )">
+          *ngIf="userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
@@ -73,16 +73,16 @@
             <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" [nzDisabled]="isViewDetail"
-                nzAllowClear>
+              <!-- <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" [nzDisabled]="true" nzAllowClear>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
+              </nz-select> -->
+              <input [readonly]="true" nz-input formControlName="namKeHoach" readonly="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số đề xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số Công văn/tờ trình</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <input formControlName="soCongVan" [readonly]="isViewDetail" nz-input nzSize="small"
