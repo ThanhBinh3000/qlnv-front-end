@@ -230,9 +230,9 @@ export class PhuongAnDieuChinhCtkhComponent extends Base2Component implements On
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
         this.phuongAnDieuChinhCTKHService
-          .export(body)
+          .exportlist(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),
+            saveAs(blob, 'phuong-an-dieu-chinh-chi-tieu-kh.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
