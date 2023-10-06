@@ -117,6 +117,7 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
         if (res.msg == MESSAGE.SUCCESS) {
           const dataDetail = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, dataDetail.hdr);
+          console.log(this.formData, "get detail")
           this.formData.patchValue({
             soDxuat: dataDetail.hdr.soDxuat?.split('/')[0]
           })
@@ -251,6 +252,13 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     body.details = this.listOfData;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLy = this.canCuPhapLy;
+    if(!await this.validateCloaiVthh(body)){
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Loại hàng DTQG không khớp với Ngăn/lô kho.',
+      );
+      return;
+    }
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dxKhNhapKhacService.update(body);
@@ -275,6 +283,20 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async validateCloaiVthh(data){
+    let value = true;
+    console.log(this.formData.value, "formData")
+    data.details.forEach(item =>{
+      if(!item.cloaiVthh.includes(this.formData.value.loaiVthh)){
+        value = false;
+        return value;
+      }else{
+        return value;
+      }
+    })
+    return value;
   }
 
   clearValidatorLuuDuThao() {
@@ -407,6 +429,18 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async hoanThanh() {
+    this.setValidator();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
+    if (this.listOfData.length == 0) {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Chi tiết đề xuất kế hoạch nhập khác không được để trống.',
+      );
+      return;
+    }
     let body: any = {};
     if (this.formData.get('soDxuat').value) {
       this.formData.get('soDxuat').setValue(this.formData.get('soDxuat').value + this.maTrinh);
