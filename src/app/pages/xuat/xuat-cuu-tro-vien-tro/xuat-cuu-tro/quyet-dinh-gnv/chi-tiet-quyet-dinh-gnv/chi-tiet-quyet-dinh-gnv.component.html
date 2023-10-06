@@ -4,6 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button type="button" class="btn btn-sub" (click)="xemTruocPd(idSelected)">
+      <i class="icon htvbdh_totrinh"></i>
+      <span> In/Xem trước </span>
+    </button>
     <ng-container *ngIf="userService.isCuc()">
       <button (click)="reject(idSelected,STATUS.TU_CHOI_LDC)"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
@@ -56,7 +60,7 @@
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-      <button *ngIf="formData.value.trangThaiXh == STATUS.CHUA_THUC_HIEN" type="button" class="btn btn-sub xanh-nhat"
+      <button *ngIf="formData.value.trangThaiXh !== STATUS.DA_HOAN_THANH" type="button" class="btn btn-sub xanh-nhat"
         (click)="updateProcess(STATUS.DA_HOAN_THANH)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành phân bổ</span>
