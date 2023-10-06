@@ -208,7 +208,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             }
             res.data.quyetDinhPdDtl.forEach(s => s.idVirtual = uuidv4());
             this.formData.patchValue(res.data);
-            console.log("111", this.formData.value)
 
             //get cache
             if (this.formData.value.type == 'TTr') {
@@ -228,6 +227,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                 ...element,
                 soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc, soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
               })));
+              this.loaiNhapXuat = detail.loaiNhapXuat;
+              this.kieuNhapXuat = detail.kieuNhapXuat;
+              this.mucDichXuat = detail.mucDichXuat
             } else {
               let res = await this.tongHopPhuongAnCuuTroService.getDetail(this.formData.value.idTongHop);
               let detail = res.data;
@@ -235,6 +237,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                 ...element,
                 soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc, soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
               })));
+
             }
             await this.buildTableView();
             if (this.phuongAnHdrView && this.formData.value.type === "TH" && this.phuongAnHdrView[0]) {
@@ -285,7 +288,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async openDialogTh() {
-    if (this.formData.get('type').value != 'TH' || this.formData.value.trangThai !== STATUS.DU_THAO) {
+    if (this.formData.get('type').value != 'TH' || this.isView) {
       return;
     }
     try {
@@ -358,7 +361,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async openDialogTr() {
-    if (this.formData.get('type').value != 'TTr') {
+    if (this.formData.get('type').value != 'TTr' || this.isView) {
       return
     }
     await this.spinner.show();

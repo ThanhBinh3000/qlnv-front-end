@@ -25,6 +25,7 @@ import { cloneDeep } from 'lodash';
 import { PREVIEW } from '../../../../../constants/fileType';
 import printJS from 'print-js';
 import { MA_QUYEN_PKNCL } from './../phieu-kiem-nghiem-chat-luong.component';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-chi-tiet-phieu-kiem-nghiem-chat-luong',
@@ -69,7 +70,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
       id: [],
-      nam: [],
+      nam: [dayjs().get('year')],
       maDvi: [],
       soBbQd: [, [Validators.required]],
       maDiaDiem: [],
@@ -207,10 +208,18 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-    } else if (this.inputData) {
-      await this.bindingQdGnv(this.inputData.idQdGnv);
     } else {
-      this.formData.patchValue({ type: this.loaiXuat })
+      this.formData.patchValue({
+        maDvi: this.userInfo.MA_DVI,
+        tenChiCuc: this.userInfo.TEN_DVI,
+        maQhns: this.userInfo.DON_VI.maQhns,
+        ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+      })
+      if (this.inputData) {
+        await this.bindingQdGnv(this.inputData.idQdGnv);
+      } else {
+        this.formData.patchValue({ type: this.loaiXuat })
+      }
     }
   }
 

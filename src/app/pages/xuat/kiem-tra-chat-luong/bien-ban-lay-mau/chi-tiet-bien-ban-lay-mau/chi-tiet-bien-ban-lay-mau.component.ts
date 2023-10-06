@@ -1,29 +1,30 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {DonviService} from 'src/app/services/donvi.service';
-import {MESSAGE} from 'src/app/constants/message';
-import {BBLM_LOAI_DOI_TUONG, HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG} from 'src/app/constants/status';
-import {v4 as uuidv4} from 'uuid';
-import {cloneDeep} from 'lodash';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {KhCnQuyChuanKyThuat} from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
-import {BaseService} from 'src/app/services/base.service';
-import {saveAs} from 'file-saver';
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DonviService } from 'src/app/services/donvi.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { BBLM_LOAI_DOI_TUONG, HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG } from 'src/app/constants/status';
+import { v4 as uuidv4 } from 'uuid';
+import { cloneDeep } from 'lodash';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import { BaseService } from 'src/app/services/base.service';
+import { saveAs } from 'file-saver';
 import {
   DialogTableSelectionComponent,
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import {
   BienBanLayMauComponent,
 } from 'src/app/pages/xuat/kiem-tra-chat-luong/bien-ban-lay-mau/bien-ban-lay-mau.component';
-import {Validators} from '@angular/forms';
-import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {PREVIEW} from '../../../../../constants/fileType';
+import { Validators } from '@angular/forms';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { PREVIEW } from '../../../../../constants/fileType';
 import printJS from 'print-js';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-chi-tiet-bien-ban-lay-mau',
@@ -53,18 +54,18 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   templateName = 'bien-ban-lay-mau';
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
-              private danhMucService: DanhMucService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
+    private danhMucService: DanhMucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
       id: [],
-      nam: [],
+      nam: [dayjs().get("year")],
       maDvi: [],
       soBbQd: [, [Validators.required]],
       maDiaDiem: [],
@@ -155,10 +156,18 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-    } else if (this.inputData) {
-      await this.bindingQdGnv(this.inputData.idQdGnv);
     } else {
-      this.formData.patchValue({type: this.loaiXuat})
+      this.formData.patchValue({
+        maDvi: this.userInfo.MA_DVI,
+        tenChiCuc: this.userInfo.TEN_DVI,
+        maQhns: this.userInfo.DON_VI.maQhns,
+        ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+      })
+      if (this.inputData) {
+        await this.bindingQdGnv(this.inputData.idQdGnv);
+      } else {
+        this.formData.patchValue({ type: this.loaiXuat })
+      }
     }
   }
 
@@ -167,7 +176,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       this.daiDienRow.type = HSKT_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN;
       this.daiDienRow.idVirtual = uuidv4();
       let newData = [...this.formData.value.xhBienBanLayMauDtl, this.daiDienRow];
-      this.formData.patchValue({xhBienBanLayMauDtl: newData});
+      this.formData.patchValue({ xhBienBanLayMauDtl: newData });
       await this.buildTableView();
       this.daiDienRow = {};
     }
@@ -189,7 +198,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     let index = newValue.findIndex(s => s.idVirtual == item.idVirtual);
     item.edit = false;
     newValue.splice(index, 1, item);
-    this.formData.patchValue({xhBienBanLayMauDtl: newValue});
+    this.formData.patchValue({ xhBienBanLayMauDtl: newValue });
     await this.buildTableView();
   }
 
@@ -202,12 +211,11 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     let newValue = cloneDeep(this.formData.value.xhBienBanLayMauDtl);
     let index = newValue.findIndex(s => s.idVirtual == item.idVirtual);
     newValue.splice(index, 1);
-    this.formData.patchValue({xhBienBanLayMauDtl: newValue});
+    this.formData.patchValue({ xhBienBanLayMauDtl: newValue });
     await this.buildTableView();
   }
 
   async buildTableView() {
-    console.log(this.formData.value, 'this.formData.value');
     //thanh phan lay mau
     this.viewTableDaiDien = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN));
 
@@ -221,7 +229,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
         s.checked = false;
       }
     });
-    this.formData.patchValue({ppLayMau: this.dsPpLayMau})
+    this.formData.patchValue({ ppLayMau: this.dsPpLayMau })
 
     //chi tieu can kiem tra
     let ctChatLuongDtl = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG));
@@ -233,7 +241,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
         s.checked = false;
       }
     });
-    this.formData.patchValue({ctChatLuong: this.dsCtChatLuong})
+    this.formData.patchValue({ ctChatLuong: this.dsCtChatLuong })
   }
 
   async loadDsPpLayMau() {
@@ -245,7 +253,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
               let option = {
                 label: item.giaTri,
                 value: item.ma,
-                checked: true,
+                // checked: true,
+                checked: false,
               };
               this.dsPpLayMau.push(option);
             });
@@ -370,7 +379,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
 
         let filter = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN);
         let defaultPp = this.dsPpLayMau.map(s => {
-          return {ten: s.label, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU}
+          return { ten: s.label, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }
         });
         let defaultCt = this.dsCtChatLuong.map(s => {
           return {
@@ -381,7 +390,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           }
         });
         filter.push(...defaultPp, ...defaultCt);
-        this.formData.patchValue({xhBienBanLayMauDtl: filter})
+        this.formData.patchValue({ xhBienBanLayMauDtl: filter })
         await this.buildTableView();
       }
     });
@@ -406,7 +415,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    let body = {...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo};
+    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo };
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -444,9 +453,9 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     xhBienBanLayMauDtl = xhBienBanLayMauDtl.filter(s => s.type = LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU);
     let newData = [];
     $event.forEach(s => {
-      xhBienBanLayMauDtl = [...xhBienBanLayMauDtl, {ten: s, type: LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU}];
+      xhBienBanLayMauDtl = [...xhBienBanLayMauDtl, { ten: s, type: LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }];
     });
-    this.formData.patchValue({xhPhieuKnclDtl: xhBienBanLayMauDtl});
+    this.formData.patchValue({ xhPhieuKnclDtl: xhBienBanLayMauDtl });
     await this.buildTableView();
   }
 
@@ -456,12 +465,11 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     xhBienBanLayMauDtl = xhBienBanLayMauDtl.filter(s => s.type != LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU);
     let newData = [];
     $event.forEach(s => {
-      xhBienBanLayMauDtl = [...xhBienBanLayMauDtl, {ten: s, type: LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU}];
+      xhBienBanLayMauDtl = [...xhBienBanLayMauDtl, { ten: s, type: LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }];
     });
-    this.formData.patchValue({xhPhieuKnclDtl: xhBienBanLayMauDtl});
+    this.formData.patchValue({ xhPhieuKnclDtl: xhBienBanLayMauDtl });
     await this.buildTableView();
   }
-
   async preview(id) {
     this.spinner.show();
     await this.service.preview({
@@ -489,6 +497,6 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true});
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
   }
 }

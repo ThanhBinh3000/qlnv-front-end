@@ -36,7 +36,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span> QUYẾT ĐỊNH PHÊ DUYỆT PHƯƠNG ÁN XUẤT VIỆN TRỢ, CỨU TRỢ </span>
+        <span> QUYẾT ĐỊNH PHÊ DUYỆT PHƯƠNG ÁN XUẤT CỨU TRỢ, VIỆN TRỢ </span>
       </div>
     </div>
   </div>
@@ -306,7 +306,7 @@
                   <ng-container *ngIf="!isVthhVatuThietBi()">
                     <div nz-col [nzSpan]="3">
                       <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+                        <nz-form-label [nzNoColon]="true">Tổng số lượng <br />đề xuất cứu trợ</nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
                           <span
                             style="color: #001CFF"><strong>{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}
@@ -317,7 +317,7 @@
                   </ng-container>
                   <div nz-col *ngIf="isVthhGao()">
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ chuyển sang xuất cấp</nz-form-label>
+                      <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ <br />chuyển sang xuất cấp</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
                         <span
                           style="color: red;"><strong>{{tongSoLuongChuyenCapThocDx|number:globals.numberFormat:globals.locale}}
@@ -325,30 +325,32 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col>
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Loại hình nhập xuất</nz-form-label>
-                      <nz-form-control nz-col [nzSpan]="24">
-                        <span style="color: #001CFF"><strong>{{formData.value.loaiNhapXuat}}</strong></span>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col>
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Kiểu nhập xuất</nz-form-label>
-                      <nz-form-control nz-col [nzSpan]="24">
-                        <span style="color: #001CFF"><strong>{{formData.value.kieuNhapXuat}}</strong></span>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col>
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Mục đích xuất</nz-form-label>
-                      <nz-form-control nz-col [nzSpan]="24">
-                        <span style="color: #001CFF"><strong>{{mucDichXuat}}</strong></span>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
+                  <ng-container *ngIf="!isVthhVatuThietBi()">
+                    <div nz-col>
+                      <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">Loại hình nhập xuất</nz-form-label>
+                        <nz-form-control nz-col [nzSpan]="24">
+                          <span style="color: #001CFF"><strong>{{formData.value.loaiNhapXuat}}</strong></span>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col>
+                      <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">Kiểu nhập xuất</nz-form-label>
+                        <nz-form-control nz-col [nzSpan]="24">
+                          <span style="color: #001CFF"><strong>{{formData.value.kieuNhapXuat}}</strong></span>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col>
+                      <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">Mục đích xuất</nz-form-label>
+                        <nz-form-control nz-col [nzSpan]="24">
+                          <span style="color: #001CFF"><strong>{{mucDichXuat}}</strong></span>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </ng-container>
                   <!-- <div nz-col [nzSpan]="3">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true">Thời gian thực hiện đến ngày</nz-form-label>
@@ -506,7 +508,7 @@
                 <ng-container *ngIf="!isVthhVatuThietBi()">
                   <div nz-col>
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+                      <nz-form-label [nzNoColon]="true">Tổng số lượng <br />đề xuất cứu trợ</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
                         <span style="color: #001CFF"><strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}}
                             {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
@@ -516,7 +518,7 @@
                 </ng-container>
                 <div nz-col *ngIf="isVthhGao()">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ chuyển sang xuất cấp</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ <br />chuyển sang xuất cấp</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span
                         style="color: red;"><strong>{{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
@@ -684,10 +686,16 @@
                     </ng-container>
                   </tbody>
                 </nz-table>
-                <label nz-checkbox *ngIf="formData.value.tenVthh=='Gạo tẻ'" [nzDisabled]="isView"
-                  [(ngModel)]="formData.value.xuatCap">
-                  Đồng ý duyệt xuất cấp
-                </label>
+                <form nzLayout="vertical" nz-form [formGroup]="formData">
+                  <nz-form-item>
+                    <nz-form-control>
+                      <label nz-checkbox *ngIf="formData.value.tenVthh=='Gạo tẻ'" [nzDisabled]="isView"
+                        formControlName="xuatCap">
+                        Đồng ý duyệt xuất cấp
+                      </label>
+                    </nz-form-control>
+                  </nz-form-item>
+                </form>
               </div>
             </ng-container>
           </nz-card>
@@ -712,7 +720,7 @@
                   <ng-container *ngIf="!isVthhVatuThietBi()">
                     <div nz-col [nzSpan]="3">
                       <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+                        <nz-form-label [nzNoColon]="true">Tổng số lượng <br />đề xuất cứu trợ</nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
                           <span
                             style="color: #001CFF"><strong>{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}
@@ -723,7 +731,7 @@
                   </ng-container>
                   <div nz-col *ngIf="isVthhGao()">
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ chuyển sang xuất cấp</nz-form-label>
+                      <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ <br />chuyển sang xuất cấp</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
                         <span
                           style="color: red;"><strong>{{tongSoLuongChuyenCapThocDx|number:globals.numberFormat:globals.locale}}
@@ -870,7 +878,7 @@
                 <ng-container *ngIf="!isVthhVatuThietBi()">
                   <div nz-col>
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+                      <nz-form-label [nzNoColon]="true">Tổng số lượng <br />đề xuất cứu trợ</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
                         <span style="color: #001CFF"><strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}}
                             {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
@@ -880,7 +888,7 @@
                 </ng-container>
                 <div nz-col *ngIf="isVthhGao()">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ chuyển sang xuất cấp</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ<br />chuyển sang xuất cấp</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span
                         style="color: red;"><strong>{{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
