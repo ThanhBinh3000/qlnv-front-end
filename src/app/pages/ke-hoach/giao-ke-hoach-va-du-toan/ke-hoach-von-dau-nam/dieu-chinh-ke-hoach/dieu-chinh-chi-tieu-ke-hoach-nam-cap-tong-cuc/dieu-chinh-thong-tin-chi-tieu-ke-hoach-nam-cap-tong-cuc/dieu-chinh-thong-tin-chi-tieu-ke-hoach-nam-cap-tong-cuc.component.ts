@@ -233,6 +233,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.cap = this.userInfo.CAP_DVI;
       this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
       this.findCanCuByYear(this.yearNow);
+      if (this.userService.isCuc()) {
+        this.findCanCuByYearCuc(this.yearNow)
+      }
       await this.initDataThemMoi();
     }
   }
@@ -286,8 +289,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         if (data) {
           this.dataQdTCDTGiaoCuc = {};
           this.formData.patchValue({
-            soQuyetDinhGiaoNam: data.soQuyetDinh,
-            quyetDinhGiaoNamId: data.id,
+            soQuyetDinhGiaoCuaTc: data.soQuyetDinh,
+            quyetDinhGiaoCuaTcId: data.id,
             soCongVan: data.qdGocId
           });
           // Lấy kế hoạch tổng cục giao cho cục đang login
@@ -313,6 +316,51 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             xuatTrongNamMuoi: xuatTrongNamMuoi,
             tonKhoCuoiNamMuoi: tonKhoCuoiNam,
           }
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+      }
+    }
+
+  }
+
+  async findCanCuByYearCuc(year: number, chiTieuKhNam?) {
+    if (year) {
+
+      let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachCucNam(year)
+      if (res.msg == MESSAGE.SUCCESS) {
+        console.log("loadThongTinChiTieuKeHoachCucNam", res)
+        let data = res.data
+        if (data) {
+          this.dataQdTCDTGiaoCuc = {};
+          this.formData.patchValue({
+            soQuyetDinhGiaoNam: data.soQuyetDinh,
+            quyetDinhGiaoNamId: data.id,
+            // soCongVan: data.qdGocId
+          });
+          // // Lấy kế hoạch tổng cục giao cho cục đang login
+          // let dataLuongThuc = data.khLuongThuc;
+          // const ntnThoc = dataLuongThuc.reduce((prev, cur) => prev + cur.ntnThoc, 0)
+          // const ntnGao = dataLuongThuc.reduce((prev, cur) => prev + cur.ntnGao, 0)
+          // const xtnTongThoc = dataLuongThuc.reduce((prev, cur) => prev + cur.xtnTongThoc, 0)
+          // const xtnTongGao = dataLuongThuc.reduce((prev, cur) => prev + cur.xtnTongGao, 0)
+
+          // let dataMuoi = data.khMuoiDuTru
+          // const tonKhoDauNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoDauNam, 0)
+          // const nhapTrongNam = dataMuoi.reduce((prev, cur) => prev + cur.nhapTrongNam, 0)
+          // const xuatTrongNamMuoi = dataMuoi.reduce((prev, cur) => prev + cur.xuatTrongNamMuoi, 0)
+          // const tonKhoCuoiNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoCuoiNam, 0)
+
+          // this.dataQdTCDTGiaoCuc = {
+          //   "ltThocMua": ntnThoc,
+          //   "ltGaoMua": ntnGao,
+          //   "ltThocXuat": xtnTongThoc,
+          //   "ltGaoXuat": xtnTongGao,
+          //   tonKhoDauNammuoi: tonKhoDauNam,
+          //   nhapTrongNamMuoi: nhapTrongNam,
+          //   xuatTrongNamMuoi: xuatTrongNamMuoi,
+          //   tonKhoCuoiNamMuoi: tonKhoCuoiNam,
+          // }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
@@ -577,6 +625,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       ],
       ngayKy: [dayjs().format('YYYY-MM-DD')],
       ngayHieuLuc: [dayjs().format('YYYY-MM-DD')],
+      soQuyetDinhGiaoCuaTc: [],
+      quyetDinhGiaoCuaTcId: [],
       soQuyetDinhGiaoNam: [],
       quyetDinhGiaoNamId: [],
       soCongVan: [],

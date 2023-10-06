@@ -2346,27 +2346,27 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   loadData() {
-    if (this.tabSelected == this.tab.luongThuc) {
-      this.dsKeHoachLuongThucClone =
-        this.thongTinChiTieuKeHoachNam.khLuongThuc.slice(
-          this.pageSize * (this.page - 1),
-          this.pageSize * this.page,
-        );
-      this.totalRecord = this.thongTinChiTieuKeHoachNam.khLuongThuc?.length;
-    } else if (this.tabSelected == this.tab.muoi) {
-      this.dsMuoiClone = this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.slice(
-        this.pageSize * (this.page - 1),
-        this.pageSize * this.page,
-      );
-      this.totalRecord = this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.length;
-    } else if (this.tabSelected == this.tab.vatTu) {
-      this.dsVatTuClone = this.thongTinChiTieuKeHoachNam.khVatTu?.slice(
-        this.pageSize * (this.page - 1),
-        this.pageSize * this.page,
-      );
-      this.totalRecord = this.thongTinChiTieuKeHoachNam.khVatTu?.length;
-    }
-    this.cdr.detectChanges();
+    // if (this.tabSelected == this.tab.luongThuc) {
+    //   this.dsKeHoachLuongThucClone =
+    //     this.thongTinChiTieuKeHoachNam.khLuongThuc.slice(
+    //       this.pageSize * (this.page - 1),
+    //       this.pageSize * this.page,
+    //     );
+    //   this.totalRecord = this.thongTinChiTieuKeHoachNam.khLuongThuc?.length;
+    // } else if (this.tabSelected == this.tab.muoi) {
+    //   this.dsMuoiClone = this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.slice(
+    //     this.pageSize * (this.page - 1),
+    //     this.pageSize * this.page,
+    //   );
+    //   this.totalRecord = this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.length;
+    // } else if (this.tabSelected == this.tab.vatTu) {
+    //   this.dsVatTuClone = this.thongTinChiTieuKeHoachNam.khVatTu?.slice(
+    //     this.pageSize * (this.page - 1),
+    //     this.pageSize * this.page,
+    //   );
+    //   this.totalRecord = this.thongTinChiTieuKeHoachNam.khVatTu?.length;
+    // }
+    // this.cdr.detectChanges();
   }
 
   checkTrangThaiRecord(): boolean {
