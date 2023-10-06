@@ -48,4 +48,9 @@ export class PhuongAnDieuChinhCTKHService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' });
   }
 
+  search(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

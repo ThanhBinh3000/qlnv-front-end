@@ -210,18 +210,20 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       })
     }
 
-    await this.loadDonVi();
-    await this.loadDanhMucHang()
+
+    // await this.loadDanhMucHang()
 
     // await Promise.all([
     //   this.loadDanhMucHang(),
     // ]);
+    await this.findCanCuByYear(this.yearNow);
     if (this.id > 0) {
       await this.loadThongTinChiTieuKeHoachNam(this.id);
     } else {
       this.thongTinChiTieuKeHoachNam.capDvi = this.userInfo.CAP_DVI;
       this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
-      this.findCanCuByYear(this.yearNow);
+      await this.loadDonVi();
+
       await this.initDataThemMoi();
     }
   }
