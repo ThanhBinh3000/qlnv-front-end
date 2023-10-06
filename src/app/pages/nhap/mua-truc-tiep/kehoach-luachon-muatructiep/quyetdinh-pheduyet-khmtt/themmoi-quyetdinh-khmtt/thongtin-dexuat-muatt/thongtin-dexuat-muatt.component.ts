@@ -122,6 +122,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
   }
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
+    console.log(this.formData.value, "formData")
     const modalGT = this.modal.create({
       nzTitle: 'THÊM ĐỊA ĐIỂM NHẬP KHO',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,

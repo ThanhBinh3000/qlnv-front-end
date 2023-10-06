@@ -73,18 +73,15 @@
     <div class="group-button">
       <h3 class="text-uppercase">DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="checkRoleXoaDs()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_EXP')">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="checkRoleExport()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM') && userService.isCuc()">
+        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="checkRoleAdd()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -202,7 +199,7 @@
 <div class="chi-tiet" *ngIf="isDetail">
   <app-chi-tiet-phieu-kiem-nghiem-chat-luong [idSelected]="idSelected" [isView]="isView" [inputService]="inputService"
     [inputServiceGnv]="inputServiceGnv" [inputServiceBbLayMau]="inputServiceBbLayMau" [inputData]="inputData"
-    [loaiXuat]="loaiXuat" (showListEvent)="showList()">
+    [maQuyen]="maQuyen" [loaiXuat]="loaiXuat" (showListEvent)="showList()">
   </app-chi-tiet-phieu-kiem-nghiem-chat-luong>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="showQdGnv" (nzOnCancel)="closeQdGnvModal()">

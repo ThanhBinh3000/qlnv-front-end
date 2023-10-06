@@ -178,7 +178,7 @@ export class PhuLuc03Component implements OnInit {
 		if (this.formDetail.trangThai == Status.NEW) {
 			this.lstCtietBcao.forEach(item => {
 				if (!item.tenMatHang) {
-					const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.matHang && e.loaiBaoQuan == item.maDmuc);
+					const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.matHang || e.loaiVthh == item.matHang) && e.htBaoQuan == item.maDmuc);
 					item.tenMatHang = dinhMuc?.tenDinhMuc;
 					item.dmucNamDtoan = dinhMuc?.tongDmuc;
 					item.dvTinh = dinhMuc?.donViTinh;
@@ -447,13 +447,13 @@ export class PhuLuc03Component implements OnInit {
 						tenMatHang: data.ten,
 						level: 0,
 					}))
-					const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
+					const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
 					for (let i = 1; i <= lstTemp.length; i++) {
 						this.lstCtietBcao.push(new ItemData({
 							id: uuid.v4() + 'FE',
 							stt: stt + '.' + i.toString(),
 							matHang: data.ma,
-							maDmuc: lstTemp[i - 1].loaiBaoQuan,
+							maDmuc: lstTemp[i - 1].htBaoQuan,
 							tenMatHang: lstTemp[i - 1].tenDinhMuc,
 							dvTinh: lstTemp[i - 1].donViTinh,
 							level: 1,

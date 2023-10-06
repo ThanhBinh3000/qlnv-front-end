@@ -501,7 +501,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
   setValidator(isGuiDuyet) {
     debugger
     if (isGuiDuyet) {
-      if (this.formData.value.trangThai == STATUS.DU_THAO) {
+      if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
         this.formData.controls["soQd"].setValidators([Validators.required]);
         this.formData.controls["trichYeu"].setValidators([Validators.required]);
         this.formData.controls["ngayQd"].setValidators([Validators.required]);
@@ -555,7 +555,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
     let trangThai = ''
     let mesg = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO: {
+      case STATUS.DANG_NHAP_DU_LIEU: {
         trangThai = STATUS.BAN_HANH;
         mesg = 'Bạn có muốn ban hành ?'
         break;

@@ -33,11 +33,9 @@ import {
 })
 export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit {
 
-  dataTableDiaDiem: any[] = [];
   fileCanCu: any[] = []
   rowItem: any = {};
   phanLoai : string;
-  dropdownLoaiDaiDien: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -133,7 +131,7 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
     } else {
       await this.userService.getId("XH_TL_TINH_KHO_HDR_SEQ").then((res) => {
         this.formData.patchValue({
-          soBbTinhKho: res + '/' + this.formData.value.nam + '/BBNĐK',
+          soBbTinhKho: res + '/' + this.formData.value.nam + '/BBTK',
           maQhns: this.userInfo.DON_VI.maQhns,
           tenDvi: this.userInfo.TEN_DVI,
           ngayLapBienBan: dayjs().format('YYYY-MM-DD'),
@@ -254,7 +252,7 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
   showSave() {
     let trangThai = this.formData.value.trangThai;
     return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_KTVBQ
-      || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC) && this.userService.isAccessPermisson('SCHDTQG_NH_BBGN_THEM');
+      || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC);
   }
 
   save(isGuiDuyet?) {
@@ -334,9 +332,9 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('SCHDTQG_NH_BBGN_DUYETLDCCUC'))
-      || (trangThai == STATUS.CHO_DUYET_KTVBQ && this.userService.isAccessPermisson('SCHDTQG_NH_BBGN_DUYETKTVBQ'))
-      || (trangThai == STATUS.CHO_DUYET_KT && this.userService.isAccessPermisson('SCHDTQG_NH_BBGN_DUYETKT'));
+    return (trangThai == STATUS.CHO_DUYET_LDCC)
+      || (trangThai == STATUS.CHO_DUYET_KTVBQ )
+      || (trangThai == STATUS.CHO_DUYET_KT);
   }
 
   addRow() {

@@ -336,8 +336,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   async tonKho(item, index?) {
     const body = {
       maDvi: item.maDvi,
-      loaiVthh: this.loaiVthh,
-      cloaiVthh: this.cloaiVthh,
+      loaiVthh: this.loaiVthh === LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
+      ...(this.loaiVthh === LOAI_HANG_DTQG.MUOI ? {} : {cloaiVthh: this.cloaiVthh}),
     };
     try {
       const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
@@ -352,8 +352,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       } else {
         console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho');
       }
-    } catch (error) {
-      console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho', error);
+    } catch (e) {
+      console.error('Error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 

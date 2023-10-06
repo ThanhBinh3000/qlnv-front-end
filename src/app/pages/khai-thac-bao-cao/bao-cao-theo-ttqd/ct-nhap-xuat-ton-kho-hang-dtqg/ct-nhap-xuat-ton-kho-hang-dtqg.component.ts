@@ -52,7 +52,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        quy: [dayjs().get("year"), [Validators.required]],
+        quy:  null,
         boNganh: null,
         dviBaoCao: null,
         maDvqhns: null,
@@ -62,7 +62,12 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
       }
     );
   }
-
+  listQuy: any[] = [
+    { text: 'Quý I', value: 1 },
+    { text: 'Quý II', value: 2 },
+    { text: 'Quý III', value: 3 },
+    { text: 'Quý IV', value: 4 },
+  ]
   async ngOnInit() {
     await this.spinner.show();
     try {
@@ -208,5 +213,11 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
 
   deleteRow(index: number) {
     this.rows.splice(index, 1)
+  }
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      quy:null,
+    })
   }
 }

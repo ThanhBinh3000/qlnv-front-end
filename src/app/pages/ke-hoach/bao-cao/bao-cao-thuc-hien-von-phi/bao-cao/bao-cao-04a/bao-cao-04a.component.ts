@@ -390,8 +390,8 @@ export class BaoCao04aComponent implements OnInit {
                         this.dinhMucs[this.para.loaiDm] = res.data;
                     } else {
                         res.data.forEach(item => {
-                            if (['LD', 'LDM', 'LDBS'].includes(item.loaiBaoQuan)) {
-                                this.dinhMucs[item.loaiBaoQuan].push(item);
+                            if (['LD', 'LDM', 'LDBS'].includes(item.htBaoQuan)) {
+                                this.dinhMucs[item.htBaoQuan].push(item);
                             }
                         })
                     }
@@ -634,7 +634,7 @@ export class BaoCao04aComponent implements OnInit {
         if (index && index != -1) {
             this.lstCtietBcao[index].listCtiet.forEach(item => {
                 const gtri = sl.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm).gtri;
-                const dm = this.dinhMucs[item.loaiDm].find(e => e.cloaiVthh == item.maVtu);
+                const dm = this.dinhMucs[item.loaiDm].find(e => e.cloaiVthh == item.maVtu || e.loaiVthh == item.maVtu);
                 if (dm) {
                     item.gtri = keyVp ? Operator.mul(gtri, this.getDmValue(dm[keyDvi], dm[keyVp])) : Operator.mul(gtri, dm[keyDvi]);
                 }

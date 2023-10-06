@@ -136,7 +136,8 @@
                     <td></td>
                     <td></td>
                     <td>
-                      <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')" (click)="add(row2)">
+                      <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM') || userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNK_THEM')"
+                         (click)="add(row2)">
                         <i class="icon htvbdh_dau-cong"></i>
                       </a>
                     </td>

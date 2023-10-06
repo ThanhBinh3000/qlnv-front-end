@@ -63,7 +63,7 @@
   <div class="group-button">
     <h3 class="text-uppercase">Quản lý thông tin đấu giá</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData('XHDTQG_XTL_QDTL_EXP')">
+      <button type="button" class="btn btn-sub" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
@@ -163,10 +163,10 @@
           <a (click)="redirectDetail(data.id)">
             <span class="icon htvbdh_eye"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTL_QDTL_THEM')">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id)">
             <span class="fa fa-pencil"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTL_QDTL_XOA')">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>

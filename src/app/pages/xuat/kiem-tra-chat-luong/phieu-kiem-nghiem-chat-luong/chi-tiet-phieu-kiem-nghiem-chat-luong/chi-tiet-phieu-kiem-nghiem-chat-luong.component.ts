@@ -24,6 +24,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep } from 'lodash';
 import { PREVIEW } from '../../../../../constants/fileType';
 import printJS from 'print-js';
+import { MA_QUYEN_PKNCL } from './../phieu-kiem-nghiem-chat-luong.component';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-chi-tiet-phieu-kiem-nghiem-chat-luong',
@@ -37,6 +39,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   @Input() inputServiceBbLayMau: BaseService;
   @Input() inputData: any;
   @Input() isView: any = false;
+  @Input() maQuyen: MA_QUYEN_PKNCL = { THEM: '', XOA: '', XEM: '', DUYET_TP: '', DUYET_LDC: '', IN: '', EXPORT: '' };
   radioValue: any;
   listFileDinhKem: any;
   canCu: any;
@@ -67,7 +70,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
       id: [],
-      nam: [],
+      nam: [dayjs().get('year')],
       maDvi: [],
       soBbQd: [, [Validators.required]],
       maDiaDiem: [],
@@ -205,10 +208,18 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-    } else if (this.inputData) {
-      await this.bindingQdGnv(this.inputData.idQdGnv);
     } else {
-      this.formData.patchValue({ type: this.loaiXuat })
+      this.formData.patchValue({
+        maDvi: this.userInfo.MA_DVI,
+        tenChiCuc: this.userInfo.TEN_DVI,
+        maQhns: this.userInfo.DON_VI.maQhns,
+        ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+      })
+      if (this.inputData) {
+        await this.bindingQdGnv(this.inputData.idQdGnv);
+      } else {
+        this.formData.patchValue({ type: this.loaiXuat })
+      }
     }
   }
 
@@ -590,14 +601,20 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     this.reject(this.idSelected, trangThai);
   }
   checkRoleDuyet(trangThai: STATUS): boolean {
-    if (trangThai === this.STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP") || trangThai === this.STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCUC")) {
+    if (trangThai === this.STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson(this.maQuyen.DUYET_TP) || trangThai === this.STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson(this.maQuyen.DUYET_LDC)) {
       return true
     }
 
     return false
   }
   checkRoleLuu(trangThai: STATUS): boolean {
-    if ([this.STATUS.DU_THAO, this.STATUS.TU_CHOI_TP, this.STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM")) {
+    if ([this.STATUS.DU_THAO, this.STATUS.TU_CHOI_TP, this.STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson(this.maQuyen.THEM)) {
+      return true
+    }
+    return false
+  }
+  checkRoleIn(): boolean {
+    if (this.userService.isAccessPermisson(this.maQuyen.IN)) {
       return true
     }
     return false
