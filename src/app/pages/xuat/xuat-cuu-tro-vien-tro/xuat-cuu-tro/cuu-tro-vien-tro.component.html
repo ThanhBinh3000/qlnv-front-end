@@ -49,8 +49,11 @@
       <!-- <app-quyet-dinh-gnv [loaiXuat]="'CTVT'"></app-quyet-dinh-gnv> -->
       <app-quyet-dinh-gnv></app-quyet-dinh-gnv>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 4">
+    <!-- <ng-container *ngIf="tabSelected == 4">
       <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+    </ng-container> -->
+    <ng-container *ngIf="tabSelected == 4">
+      <app-chuc-nang-kiem-tra-chat-luong></app-chuc-nang-kiem-tra-chat-luong>
     </ng-container>
     <ng-container *ngIf="tabSelected == 5">
       <app-xuat-kho></app-xuat-kho>

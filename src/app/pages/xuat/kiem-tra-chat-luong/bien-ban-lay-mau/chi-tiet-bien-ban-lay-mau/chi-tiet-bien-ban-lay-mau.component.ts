@@ -108,12 +108,18 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       type: [],
       fileDinhKem: [new Array<FileDinhKem>()],
       canCu: [new Array<FileDinhKem>()],
-      anhChupMauNiemPhong: [new Array<FileDinhKem>()],
+      anhChupMauNiemPhong: [new Array<FileDinhKem>(), [Validators.required, Validators.minLength(1)]],
       xhBienBanLayMauDtl: [new Array()],
       ppLayMau: [new Array()],
       ctChatLuong: [new Array()],
       ngayTao: [],
     });
+    this.formData.controls['ppLayMau'].valueChanges.subscribe(value => {
+      const ppLayMau = Array.isArray(value) ? value.filter(f => !!f.checked).map(s => ({ ...s, ten: s.label, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU })) : [];
+      const xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type !== BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).concat(ppLayMau)
+      this.formData.controls['xhBienBanLayMauDtl'].setValue(xhBienBanLayMauDtl)
+      // this.buildTableView();
+    })
   }
 
   async ngOnInit() {
@@ -215,7 +221,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     await this.buildTableView();
   }
 
-  async buildTableView() {
+  async buildTableView(isSelectKho?: boolean) {
     //thanh phan lay mau
     this.viewTableDaiDien = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN));
 
@@ -223,7 +229,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     let ppLayMauDtl = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU));
     let ppLayMauArr = ppLayMauDtl.map(s => s.ten);
     this.dsPpLayMau.forEach(s => {
-      if (ppLayMauArr.includes(s.label)) {
+      if (ppLayMauArr.includes(s.label) && !isSelectKho) {
         s.checked = true;
       } else {
         s.checked = false;
@@ -245,27 +251,39 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   }
 
   async loadDsPpLayMau() {
-    if (this.dsPpLayMau.length <= 0) {
-      await this.danhMucService.loadDanhMucHangChiTiet(this.formData.value.cloaiVthh || this.formData.value.loaiVthh).then(res => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data && res.data.ppLayMau && res.data.ppLayMau?.length > 0) {
-            res.data.ppLayMau.forEach(item => {
-              let option = {
-                label: item.giaTri,
-                value: item.ma,
-                // checked: true,
-                checked: false,
-              };
-              this.dsPpLayMau.push(option);
-            });
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
+    // if (this.dsPpLayMau.length <= 0) {
+    //   await this.danhMucService.loadDanhMucHangChiTiet(this.formData.value.cloaiVthh || this.formData.value.loaiVthh).then(res => {
+    //     if (res.msg == MESSAGE.SUCCESS) {
+    //       if (res.data && res.data.ppLayMau && res.data.ppLayMau?.length > 0) {
+    //         res.data.ppLayMau.forEach(item => {
+    //           let option = {
+    //             label: item.giaTri,
+    //             value: item.giaTri,
+    //             // checked: true,
+    //             checked: false,
+    //           };
+    //           this.dsPpLayMau.push(option);
+    //         });
+    //       }
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, res.msg);
+    //     }
+    //   }).catch(err => {
+    //     this.notification.error(MESSAGE.ERROR, err.msg);
+    //   });
+    // }
+    this.dsPpLayMau = [];
+    await this.danhMucService.loadDanhMucHangChiTiet(this.formData.value.cloaiVthh || this.formData.value.loaiVthh).then(res => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.ppLayMau && res.data.ppLayMau?.length > 0) {
+          this.dsPpLayMau = res.data.ppLayMau.map(item => ({ label: item.giaTri, value: item.ma, checked: false }))
         }
-      }).catch(err => {
-        this.notification.error(MESSAGE.ERROR, err.msg);
-      });
-    }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }).catch(err => {
+      this.notification.error(MESSAGE.ERROR, err.msg);
+    });
   }
 
   async loadDsCtChatLuong() {
@@ -391,7 +409,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
         });
         filter.push(...defaultPp, ...defaultCt);
         this.formData.patchValue({ xhBienBanLayMauDtl: filter })
-        await this.buildTableView();
+        await this.buildTableView(true);
       }
     });
   }
@@ -404,14 +422,13 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   }
 
   async save() {
-    await this.helperService.ignoreRequiredForm(this.formData);
+    // await this.helperService.ignoreRequiredForm(this.formData);
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null,
     };
-    console.log(body);
     await this.createUpdate(body);
-    await this.helperService.restoreRequiredForm(this.formData);
+    // await this.helperService.restoreRequiredForm(this.formData);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
