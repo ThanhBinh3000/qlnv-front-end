@@ -254,6 +254,22 @@
           </nz-form-control>
         </nz-form-item>
       </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Tên chủ đầu tư </nz-form-label>
+          <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+            <input [readonly]="true" nz-input formControlName="tenDvi"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Nguồn vốn </nz-form-label>
+          <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+            <input [readonly]="true" nz-input formControlName="tenNguonVon"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
 
       <div nz-col [nzSpan]="12">
         <nz-form-item>
@@ -286,64 +302,78 @@
 <nz-card class="flex-card p-lr16 card-table">
   <nz-collapse nzAccordion>
     <nz-collapse-panel [nzHeader]="'Phụ lục đề xuất KH LCNT của Cục DTNN KV'" [nzActive]="true" [nzExtra]="themMoiGt">
-    <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
+    <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzScroll]="{ x: '1000px' }">
         <thead>
             <tr>
-                <th>STT</th>
-                <th style="min-width: 300px;">Chi cục DTNN</th>
-                <th>Tên gói thầu</th>
-                <th>Địa điểm nhập kho</th>
-                <th>Số lượng (Tấn)</th>
-                <th>Thành tiền (giá gói thầu) (đ)</th>
-                <th *ngIf="!isView"></th>
+              <th class="text-center" nzWidth="40px" nzLeft></th>
+              <th class="text-center multi-line" nzWidth="150px"  nzLeft>Tên gói thầu</th>
+              <th class="text-center multi-line" nzWidth="150px"  nzLeft>Chi cục DTNN</th>
+              <th class="text-center multi-line" nzWidth="150px"  nzLeft>Điểm kho</th>
+              <th class="text-center multi-line" nzWidth="150px"  >Số phê duyệt<br/>(tấn)</th>
+              <th class="text-center multi-line" nzWidth="150px"  >Đơn giá đề xuất<br/> có VAT (đ/kg)</th>
+              <th class="text-center multi-line" nzWidth="150px"  >Thành tiền tạm tính<br/> theo giá đề xuất (đ)</th>
+              <th class="text-center multi-line" nzWidth="150px"  >Đơn được duyệt<br/> có VAT (đ/kg)</th>
+              <th class="text-center multi-line" nzWidth="180px"  >Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>
+              <th class="text-center multi-line" nzWidth="150px"  >Tiền bảo lãnh <br/>dự thầu (đ)</th>
+              <th class="text-center multi-line" nzWidth="150px"  >Trạng thái<br/>đấu thầu</th>
+              <th class="text-center multi-line" nzWidth="100px"  *ngIf="!isView">Hành động</th>
             </tr>
         </thead>
       <tbody>
-      <ng-container *ngFor="let item of listDataGroup , let i = index">
+      <ng-container *ngFor="let item of listOfData , let i = index">
         <tr>
-          <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
-          <td>{{item.tenDvi}}</td>
-          <td></td>
-          <td></td>
+          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)" nzLeft></td>
+          <td nzLeft class="multi-line">{{item.goiThau}}</td>
+          <td nzLeft></td>
+          <td nzLeft></td>
           <td class="text-right bold-700">{{(isCache ? item.soLuong : this.sumDataSoLuong[i]) | number : '1.0-1' :
             'vi_VN'
             }}</td>
+          <td></td>
           <td class="text-right bold-700">{{ (this.sumThanhTienTamTinh[i]) | number
             :
               '1.0-1' : 'vi_VN' }}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{item.tenTrangThaiDt}}</td>
           <td *ngIf="!isView"></td>
         </tr>
-        <ng-container *ngFor="let dtGoiThau of item.dataChild, let y = index">
-          <tr>
-            <td></td>
-            <td></td>
-            <td>{{dtGoiThau.goiThau}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <ng-container>
-            <tr *ngFor="let res of dtGoiThau.children, let k = index">
+        <ng-container *ngIf="expandSet.has(i)">
+          <ng-container *ngFor="let chiCuc of item.children, let y = index">
+            <tr>
+              <td nzLeft></td>
+              <td nzLeft [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+              <td nzLeft>{{chiCuc.tenDvi}}</td>
+              <td nzLeft></td>
               <td></td>
               <td></td>
               <td></td>
-              <td>{{res.tenDvi}}</td>
-              <td class="text-right" [contentEditable]="isEditing" (input)="onInput($event.target['textContent'])"
-                  (blur)="onBlur(res)" [class.editing]="isEditing">
-                {{res.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-<!--              <td>{{dtGoiThau.donGia ? dtGoiThau.donGia : dtGoiThau.donGiaTamTinh}}</td>-->
-              <td class="text-right">{{(dtGoiThau.donGiaTamTinh != null ?
-                dtGoiThau.donGiaTamTinh * res.soLuong : (dtGoiThau.donGiaVat != null ? dtGoiThau.donGiaVat *
-                  res.soLuong : (dtGoiThau.donGia != null ? dtGoiThau.donGia * res.soLuong : 0)))
-                | number: '1.0-1' : 'vi_VN'}}</td>
-<!--              <td>{{isCache ? dtGoiThau.donGiaVat : giaVat}}</ td>-->
-              <td *ngIf="!isView">
-                <a (click)="editRow(res)">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td *ngIf="!isView"></td>
             </tr>
+            <ng-container>
+              <tr *ngFor="let diemKho of chiCuc.children, let k = index">
+                <td nzLeft></td>
+                <td nzLeft></td>
+                <td nzLeft></td>
+                <td nzLeft>{{diemKho.tenDvi}}</td>
+                <td>{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+                <td>{{item.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
+                <td>{{ diemKho.soLuong * item.donGiaTamTinh * 1000| number :'1.0-99' : 'vi_VN' }}</td>
+                <td>{{item.donGiaVat | number : '1.0-99' : 'vi_VN'}}</td>
+                <td>{{ diemKho.soLuong * item.donGiaTamTinh * 1000| number :'1.0-99' : 'vi_VN' }}</td>
+                <td>{{ diemKho.soLuong * (formData.value.gtriDthau / 100) * 1000| number :'1.0-99' : 'vi_VN' }}</td>
+                <td></td>
+                <td *ngIf="!isView">
+                  <a (click)="editRow(diemKho)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                </td>
+              </tr>
+            </ng-container>
           </ng-container>
         </ng-container>
       </ng-container>

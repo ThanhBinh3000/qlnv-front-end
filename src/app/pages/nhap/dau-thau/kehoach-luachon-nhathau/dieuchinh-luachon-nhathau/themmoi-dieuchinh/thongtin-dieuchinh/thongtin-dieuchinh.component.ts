@@ -17,6 +17,7 @@ import {
   DieuChinhQuyetDinhPdKhlcntService
 } from "../../../../../../../services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service";
 import * as dayjs from "dayjs";
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-thongtin-dieuchinh',
@@ -54,11 +55,13 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   formData: FormGroup
   listDataGroup: any[] = [];
   listOfData: any[] = [];
+  listOfDataCache: any[] = [];
   dataTable: any[] = [];
   listNam: any[] = [];
   listThuHoachVu: any[] = [];
   listQuocGia: any[] = [];
   listQuy: any[] = [];
+  dataChiTieu: any;
 
   STATUS: STATUS
 
@@ -72,6 +75,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     private modal: NzModalService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
   ) {
     this.formData = this.fb.group({
       id: [],
@@ -137,6 +141,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       tongMucDtLamTron: [],
       tongMucDtDx: [],
       tongMucDtDxLamTron: [],
+      tenNguonVon: [],
 
     });
   }
@@ -149,18 +154,18 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       if (this.dataInput) {
         if (!this.isCache && this.dataInput.idDcDxHdr != undefined) {
           data = await this.dieuChinhQuyetDinhPdKhlcntService.getDetail(this.dataInput.idDcDxHdr);
-          console.log("hihi ", data)
           if (this.dataInput.soLuong) {
             this.formData.patchValue({
               soLuong: this.dataInput.soLuong,
               tongMucDt: this.dataInput.soLuong * this.dataInput.donGiaVat
             })
           }
-          this.listOfData = data.data.children
+          this.listOfData = [...data.data.children]
+          // this.listOfDataCache = data.data.children
         }else{
           res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(this.dataInput.idQdHdr);
-          console.log("haha ", res)
-          this.listOfData = this.dataInput.children;
+          this.listOfData = [...this.dataInput.children];
+          // this.listOfData = this.dataInput.children;
         }
         if (data != null && data.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, data.data);
@@ -178,10 +183,10 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
           //   tenDvi: data.data.children[0].tenDvi,
           // });
         } else if (res != null && res.msg == MESSAGE.SUCCESS) {
-          console.log(this.dataInput)
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           this.formData.patchValue({
             tenDuAn: this.dataInput.dxuatKhLcntHdr?.tenDuAn,
+            tenDvi: this.dataInput.dxuatKhLcntHdr?.tenDvi,
             tenHangHoa: this.dataInput.dxuatKhLcntHdr?.moTaHangHoa,
             tchuanCluong: this.dataInput.dxuatKhLcntHdr?.tchuanCluong,
             ctietTccl: this.dataInput.dxuatKhLcntHdr?.ctietTccl,
@@ -202,8 +207,9 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         this.initListQuy();
         this.tinhTongMucDtDx();
         this.objectChange.emit(this.formData.value)
-        this.helperService.setIndexArray(this.listOfData);
-        this.convertListDataLuongThuc()
+        // this.helperService.setIndexArray(this.listOfData);
+        // this.convertListDataLuongThuc()
+        console.log(this.listOfData, 'listOfData')
       }
     }
     await this.spinner.hide()
@@ -446,5 +452,15 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       tongMucDtDx: tongMucDtDx,
       soLuong: tongSl,
     });
+  }
+
+  async getDataChiTieu() {
+    let res2 =  await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+      +this.formData.get('namKhoach').value,)
+    if (res2.msg == MESSAGE.SUCCESS) {
+      this.dataChiTieu = res2.data;
+    } else {
+      this.dataChiTieu = null;
+    }
   }
 }

@@ -273,11 +273,14 @@
           <tr>
             <th [width]="30">STT</th>
             <th>Cục DTNN KV</th>
-            <th>Số gói thầu</th>
-            <th>Số tờ trình</th>
-            <th>Ngày ký</th>
+            <th>Địa chỉ</th>
+            <th>Số kế hoạch/tờ trình</th>
+            <th>Ngày lập KH</th>
+            <th>Ngày duyệt KH</th>
+            <th>Trích yếu</th>
+            <th>Tên dự án</th>
             <th>Số lượng (Tấn)</th>
-            <th>Tổng tiền gồm thuế (đồng)</th>
+            <th>Tổng tiền đã bao gồm thuế (đồng)</th>
           </tr>
           </thead>
           <tbody>
@@ -285,9 +288,12 @@
               [ngClass]="{'bg-selected': i == 0 && this.selected}">
             <td class="text-center">{{i + 1}} </td>
             <td>{{ data.tenDvi }}</td>
-            <td>{{ data.soGthau }}</td>
+            <td>{{ data.diaChiDvi }}</td>
             <td>{{ data.soDxuat }}</td>
-            <td>{{ data.ngayDxuat | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.trichYeu }}</td>
+            <td>{{ data.tenDuAn }}</td>
             <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
             <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN'}}</td>
           </tr>
