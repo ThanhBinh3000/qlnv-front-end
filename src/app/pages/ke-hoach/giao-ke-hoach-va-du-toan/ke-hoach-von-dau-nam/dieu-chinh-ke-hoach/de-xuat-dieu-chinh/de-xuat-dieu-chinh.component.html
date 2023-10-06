@@ -102,8 +102,8 @@
               <th>
                 <nz-input-group>
                   <nz-input-group>
-                    <nz-select nzAllowClear [(ngModel)]="filterTable.nam"
-                      (ngModelChange)="filterInTable('nam',filterTable.nam)">
+                    <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                      (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
                       <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                   </nz-input-group>
@@ -111,24 +111,22 @@
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinh"
-                    (input)="filterInTable('soQdinh',filterTable.soQdinh)" size="small" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDeXuat"
+                    (input)="filterInTable('soDeXuat',filterTable.soDeXuat)" size="small" />
                 </nz-input-group>
 
               </th>
               <th>
                 <nz-input-group>
-                  <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdinh"
-                    (ngModelChange)="filterInTable('ngayKyQdinh', convertDateToString(filterTable.ngayKyQdinh))">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKy"
+                    (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
                   </nz-date-picker>
                 </nz-input-group>
               </th>
               <th>
                 <nz-input-group>
-                  <nz-select nzAllowClear [(ngModel)]="filterTable.tenLoaiDc"
-                    (ngModelChange)="filterInTable('tenLoaiDc',filterTable.tenLoaiDc)">
-                    <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ten" [nzLabel]="p.ten"></nz-option>
-                  </nz-select>
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                    (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
                 </nz-input-group>
               </th>
               <th>

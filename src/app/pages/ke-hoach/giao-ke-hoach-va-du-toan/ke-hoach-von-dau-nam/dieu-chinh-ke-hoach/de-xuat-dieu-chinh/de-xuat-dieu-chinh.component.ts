@@ -45,8 +45,8 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, deXuatDieuChinhCTKHService);
     this.formData = this.fb.group({
       namKeHoach: [],
-      soDeXuat: [],
       tenDonVi: [],
+      soDeXuat: [],
       ngayKyTu: [],
       ngayKyDen: [],
       trichYeu: [],
@@ -54,14 +54,14 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
       cap: [],
     })
     this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      tenLoaiDc: '',
-      tenLoaiQdinh: '',
+      namKeHoach: '',
+      soDeXuat: '',
+      ngayKy: '',
       trichYeu: '',
-      soDxuat: '',
+      soQuyetDinhGiao: '',
+      tenTrangThaiDX: '',
       tenTrangThai: '',
+      soQuyetDinh: '',
     };
   }
 
@@ -230,11 +230,11 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        // this.deXuatDieuChinhCTKHService
-        //   .export(body)
-        //   .subscribe((blob) =>
-        //     saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),
-        //   );
+        this.deXuatDieuChinhCTKHService
+          .exportlist(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'de-xuat-dieu-chinh-chi-tieu-kh.xlsx'),
+          );
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
