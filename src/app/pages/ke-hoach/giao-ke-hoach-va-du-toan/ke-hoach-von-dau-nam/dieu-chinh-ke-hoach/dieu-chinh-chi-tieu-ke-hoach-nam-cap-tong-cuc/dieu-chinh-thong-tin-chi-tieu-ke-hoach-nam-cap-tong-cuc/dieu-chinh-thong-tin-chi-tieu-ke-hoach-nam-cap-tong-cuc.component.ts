@@ -226,10 +226,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (this.id > 0) {
       await this.loadThongTinChiTieuKeHoachNam(this.id);
     } else {
-      this.formData.patchValue({
-        loaiCanCu: "OTHER",
-        namKeHoach: dayjs().get('year'),
-      });
+      // this.formData.patchValue({
+      //   loaiCanCu: "OTHER",
+      //   namKeHoach: dayjs().get('year'),
+      // });
       this.thongTinChiTieuKeHoachNam.cap = this.userInfo.CAP_DVI;
       this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
       this.findCanCuByYear(this.yearNow);
