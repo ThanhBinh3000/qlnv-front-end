@@ -41,7 +41,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   @Input() loaiVthh: string;
   @Input() isView: boolean;
   @Input() idInput: number;
-  @Input() idQdGnv: number;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   dataTableChange = new EventEmitter<any>();
@@ -274,6 +273,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       }
       const data = res.data;
       this.formData.patchValue({
+        nam: data.nam,
         idQdNv: data.id,
         soQdNv: data.soQdNv,
         ngayKyQdNv: data.ngayKy,
@@ -398,7 +398,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       this.formData.patchValue({
         idPhieuXuatKho: firstItem.id,
         soPhieuXuatKho: firstItem.soPhieuXuatKho,
-        ngayXuatKho: firstItem. ngayLapPhieu,
+        ngayXuatKho: firstItem.ngayLapPhieu,
         tenNguoiGiao: firstItem.tenNguoiGiao,
         cmtNguoiGiao: firstItem.cmtNguoiGiao,
         congTyNguoiGiao: firstItem.congTyNguoiGiao,
@@ -409,7 +409,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         cloaiVthh: firstItem.cloaiVthh,
         tenCloaiVthh: firstItem.tenCloaiVthh,
         tenHangHoa: firstItem.tenHangHoa,
-        soLuong: firstItem.soLuong,
+        soLuong: firstItem.thucXuat,
         donGia: firstItem.donGia,
         donViTinh: firstItem.donViTinh,
         idPhieuKiemNghiem: firstItem.idPhieuKiemNghiem,
@@ -555,23 +555,32 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   setValidForm() {
-    this.formData.controls["tenDvi"].setValidators([Validators.required]);
-    this.formData.controls["maQhNs"].setValidators([Validators.required]);
-    this.formData.controls["ngayLapBangKe"].setValidators([Validators.required]);
-    this.formData.controls["soHopDong"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyHopDong"].setValidators([Validators.required]);
-    this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganLoKho"].setValidators([Validators.required]);
-    this.formData.controls["diaDiemKho"].setValidators([Validators.required]);
-    this.formData.controls["nguoiGiamSat"].setValidators([Validators.required]);
-    this.formData.controls["tenNguoiGiao"].setValidators([Validators.required]);
-    this.formData.controls["cmtNguoiGiao"].setValidators([Validators.required]);
-    this.formData.controls["congTyNguoiGiao"].setValidators([Validators.required]);
-    this.formData.controls["diaChiNguoiGiao"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    const requiredFields = [
+      "nam",
+      "tenDvi",
+      "maQhNs",
+      "ngayLapBangKe",
+      "soHopDong",
+      "ngayKyHopDong",
+      "tenNganLoKho",
+      "tenNhaKho",
+      "tenDiemKho",
+      "diaDiemKho",
+      "nguoiGiamSat",
+      "tenThuKho",
+      "tenNguoiGiao",
+      "cmtNguoiGiao",
+      "congTyNguoiGiao",
+      "diaChiNguoiGiao",
+      "thoiGianGiaoNhan",
+      "tenLoaiVthh",
+      "tenCloaiVthh",
+      "donViTinh",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 
   async preview(id) {
@@ -590,14 +599,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     });
   }
 
-  // downloadPdf() {
-  //   saveAs(this.pdfSrc, "phieu-xuat-kho-ke-hoach-ban-dau-gia.pdf");
-  // }
-  //
-  // downloadWord() {
-  //   saveAs(this.wordSrc, "phieu-xuat-kho-ke-hoach-ban-dau-gia.docx");
-  // }
-
   closeDlg() {
     this.showDlgPreview = false;
   }
@@ -606,4 +607,3 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
-

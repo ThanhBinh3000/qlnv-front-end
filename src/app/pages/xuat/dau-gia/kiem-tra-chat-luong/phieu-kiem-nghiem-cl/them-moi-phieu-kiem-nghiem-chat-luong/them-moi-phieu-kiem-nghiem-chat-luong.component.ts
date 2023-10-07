@@ -405,6 +405,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
+      this.formData.controls["soPhieuKiemNghiem"].setValidators([Validators.required]);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soBbLayMau"].setValidators([Validators.required]);
       const body = {
@@ -460,19 +461,24 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   setValidForm() {
-    this.formData.controls["tenDvi"].setValidators([Validators.required]);
-    this.formData.controls["maQhNs"].setValidators([Validators.required]);
-    this.formData.controls["soPhieuKiemNghiem"].setValidators([Validators.required]);
-    this.formData.controls["ngayLapPhieu"].setValidators([Validators.required]);
-    this.formData.controls["ngayLayMau"].setValidators([Validators.required]);
-    this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganKho"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["hinhThucBaoQuan"].setValidators([Validators.required]);
-    this.formData.controls["ngayKiemNghiemMau"].setValidators([Validators.required]);
-    this.formData.controls["ketQua"].setValidators([Validators.required]);
-    this.formData.controls["nhanXet"].setValidators([Validators.required]);
+    const requiredFields = [
+      "nam",
+      "tenDvi",
+      "maQhNs",
+      "ngayLapPhieu",
+      "ngayLayMau",
+      "tenNganLoKho",
+      "tenNhaKho",
+      "tenDiemKho",
+      "tenLoaiVthh",
+      "tenCloaiVthh",
+      "hinhThucBaoQuan",
+      "ngayKiemNghiemMau",
+      "tenNguoiKiemNghiem",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 }
