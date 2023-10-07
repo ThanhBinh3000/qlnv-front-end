@@ -4,6 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button *ngIf="idInput" type="button" class="btn btn-sub" (click)="preview(idInput)">
+      <i class="icon htvbdh_totrinh"></i>
+      <span> Xem trước </span>
+    </button>
     <ng-container>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && isView
                && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_DUYET_LDCCUC') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET'))"
@@ -344,7 +348,7 @@
             <th colSpan="2">Số lượng</th>
             <th rowSpan="2">Đơn giá (3)</th>
             <th rowSpan="2">Thành tiền (4) = (2) x (3)</th>
-            <th rowSpan="2">Hành động</th>
+            <th rowSpan="2" *ngIf="!isView">Hành động</th>
           </tr>
           <tr>
             <th>Theo chứng từ (1)</th>
@@ -391,7 +395,7 @@
             </td>
             <td>{{formData.value.donGia|number:globals.numberFormat:globals.locale}}</td>
             <td>{{formData.value.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-            <td>
+            <td *ngIf="!isView">
               <a (click)="clear()">
                 <i class="fa fa-refresh"></i>
               </a>
@@ -467,16 +471,6 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <!--    <button nz-button (click)="downloadPdf()"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-pdf"></i>-->
-    <!--      Xuất .pdf-->
-    <!--    </button>-->
-    <!--    <button nz-button (click)="downloadWord()"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-word"></i>-->
-    <!--      Xuất .docx-->
-    <!--    </button>-->
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
