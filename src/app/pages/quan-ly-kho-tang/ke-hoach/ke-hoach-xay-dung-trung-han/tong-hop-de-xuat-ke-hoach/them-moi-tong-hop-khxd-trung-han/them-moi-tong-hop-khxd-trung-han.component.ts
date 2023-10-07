@@ -163,9 +163,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   setValidators() {
     this.helperService.removeValidators(this.formData);
     if (this.formData.value.trangThai == STATUS.DU_THAO) {
-      this.formData.controls["noiDung"].setValidators([Validators.required]);
-    }
-    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
       this.formData.controls["maToTrinh"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoTt"].setValidators([Validators.required]);
     }
@@ -190,8 +187,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     }
     let body = this.formData.value;
     body.tgTongHop = body.tgTongHop ? dayjs(body.tgTongHop) : null;
-    body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : this.maTt;
-    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : this.soQd;
+    body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : null;
+    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : null;
     body.ctiets = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;
@@ -208,6 +205,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
           id: res.data.id,
           trangThai: res.data.trangThai
         });
+        this.idInput= this.formData.value.id;
         this.guiDuyet();
       } else {
         if (this.idInput > 0) {
@@ -284,6 +282,9 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
+      },
+      nzOnCancel: async () =>{
+
       }
     });
 
