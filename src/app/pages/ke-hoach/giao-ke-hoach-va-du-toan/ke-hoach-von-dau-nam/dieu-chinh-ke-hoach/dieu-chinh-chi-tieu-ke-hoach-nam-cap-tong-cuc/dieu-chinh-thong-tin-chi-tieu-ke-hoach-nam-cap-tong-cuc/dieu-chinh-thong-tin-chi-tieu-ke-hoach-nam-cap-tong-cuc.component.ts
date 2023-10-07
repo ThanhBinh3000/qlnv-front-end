@@ -308,78 +308,75 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.dsKeHoachLuongThucClone = data.dcKeHoachNamLtDtl.map((khlt) => {
 
             // gạo tồn
-            const tkdnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "01")
-            //  khlt.tkdnGao.map((tk) => {
-            //   return {
-            //     namKeHoach: tk.nam,
-            //     soLuong: tk.soLuong,
-            //     type: "01",
-            //   }
-            // })
+            const tkdnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "01").map((item) => {
+              return {
+                ...item,
+                keHoachDieuChuyenLtDtlId: undefined,
+                id: undefined
+              }
+            })
 
             // thóc tồn
-            const tkdnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "00")
-            // .tkdnThoc.map((tk) => {
-            //   return {
-            //     namKeHoach: tk.nam,
-            //     soLuong: tk.soLuong,
-            //     type: "00",
-            //   }
-            // })
+            const tkdnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "00").map((item) => {
+              return {
+                ...item,
+                keHoachDieuChuyenLtDtlId: undefined,
+                id: undefined
+              }
+            })
 
             // gạo nhập trong năm
-            const ntnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "10")
-            // [{
-            //   namKeHoach: "",
-            //   soLuong: khlt.ntnGao,
-            //   type: "11",
-            // }]
+            const ntnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "10").map((item) => {
+              return {
+                ...item,
+                keHoachDieuChuyenLtDtlId: undefined,
+                id: undefined
+              }
+            })
+
             // thóc nhập trong năm
-            const ntnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "10")
-            // [
-            //   {
-            //     namKeHoach: "",
-            //     soLuong: khlt.ntnThoc,
-            //     type: "10",
-            //   }
-            // ]
+            const ntnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "10").map((item) => {
+              return {
+                ...item,
+                keHoachDieuChuyenLtDtlId: undefined,
+                id: undefined
+              }
+            })
 
             // gạo xuất trong năm
-            let xtnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "21")
-            // khlt.xtnGao.map((xuat) => {
-            //   return {
-            //     namKeHoach: xuat.nam,
-            //     soLuong: xuat.soLuong,
-            //     type: "21",
-            //   }
-            // })
+            let xtnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "21").map((item) => {
+              return {
+                ...item,
+                keHoachDieuChuyenLtDtlId: undefined,
+                id: undefined
+              }
+            })
 
             // thóc xuất trong năm
-            let xtnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "20")
-            // khlt.xtnThoc.map((xuat) => {
-            //   return {
-            //     namKeHoach: xuat.nam,
-            //     soLuong: xuat.soLuong,
-            //     type: "20",
-            //   }
-            // })
+            let xtnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "20").map((item) => {
+              return {
+                ...item,
+                keHoachDieuChuyenLtDtlId: undefined,
+                id: undefined
+              }
+            })
 
             // gạo tồn kho cuối kỳ
-            const tkcnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "31")
-            // [{
-            //   namKeHoach: "",
-            //   soLuong: khlt.tkcnTongGao,
-            //   type: "31",
-            // }]
+            const tkcnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "31").map((item) => {
+              return {
+                ...item,
+                keHoachDieuChuyenLtDtlId: undefined,
+                id: undefined
+              }
+            })
             // thóc tông kho cuối kỳ
-            const tkcnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "30")
-            // [
-            //   {
-            //     namKeHoach: "",
-            //     soLuong: khlt.tkcnTongThoc,
-            //     type: "30",
-            //   }
-            // ]
+            const tkcnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "30").map((item) => {
+              return {
+                ...item,
+                keHoachDieuChuyenLtDtlId: undefined,
+                id: undefined
+              }
+            })
 
 
 
@@ -388,6 +385,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
             return {
               ...khlt,
+              id: undefined,
+              hdrId: undefined,
               dcKeHoachNamLtTtDtl,
               tkdnGao,
               tkdnThoc,
@@ -1179,13 +1178,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   changeRadioLoaiCanCu(event) {
-    if (event == 'OTHER') {
-      this.formData.patchValue({
-        canCu: null
-      })
-    } else {
-      this.findCanCuByYear(this.yearNow);
-    }
+    // if (event == 'OTHER') {
+    //   this.formData.patchValue({
+    //     canCu: null
+    //   })
+    // } else {
+    //   this.findCanCuByYear(this.yearNow);
+    // }
   }
 
   redirectChiTieuKeHoachNam() {
@@ -1238,7 +1237,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
 
-          this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
+          // this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
           // this.loadData();
           this.sumRowDetailMuoi();
           this.sumRowDetailLuongThuc();
@@ -1975,13 +1974,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   };
 
   selectNam() {
-    this.yearNow = this.formData.get('namKeHoach').value;
-    if (!this.id) {
-      if ((this.thongTinChiTieuKeHoachNam.cap == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.cap == "2") {
-        this.findCanCuByYear(this.yearNow);
-      }
-      this.initDataThemMoi();
-    }
+    // this.yearNow = this.formData.get('namKeHoach').value;
+    // if (!this.id) {
+    //   if ((this.thongTinChiTieuKeHoachNam.cap == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.cap == "2") {
+    //     this.findCanCuByYear(this.yearNow);
+    //   }
+    //   this.initDataThemMoi();
+    // }
   }
 
   convertTrangThai(status: string) {
