@@ -157,6 +157,7 @@ export class ThongTinTonghopComponent implements OnInit {
             'ngayTongHop': data.ngayTongHop,
             'maToTrinh': data.maToTrinh,
             'noiDung': data.noiDung,
+            'lyDoTuChoi': data.lyDoTuChoi,
             // nameFilePhuongAn: data.fileDinhKem.fileName,
             khDnCapVonIds: data.ct1s.map(s => s.khDnCapVonId),
           });
