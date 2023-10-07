@@ -22,6 +22,7 @@ import { MESSAGE } from "src/app/constants/message";
 import { v4 as uuidv4 } from "uuid";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
+import { PREVIEW } from 'src/app/constants/fileType';
 
 
 @Component({
@@ -583,5 +584,19 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     } else {
       return "cứu trợ"
     }
+  }
+  async xemTruocPd(id: number) {
+    await this.service.preview({
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
   }
 }
