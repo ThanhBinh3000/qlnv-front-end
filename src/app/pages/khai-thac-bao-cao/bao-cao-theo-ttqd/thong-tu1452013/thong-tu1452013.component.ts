@@ -39,6 +39,7 @@ export class ThongTu1452013Component implements OnInit {
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
+        quy: [],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: [],
