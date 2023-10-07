@@ -1127,7 +1127,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         canCu: null
       })
     } else {
-      this.findCanCuByYear(this.yearNow);
+      // this.findCanCuByYear(this.yearNow);
     }
   }
 
@@ -1187,7 +1187,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
 
-          this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
+          // this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
           // this.loadData();
           this.sumRowDetailMuoi();
           this.sumRowDetailLuongThuc();
@@ -1965,13 +1965,13 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   };
 
   selectNam() {
-    this.yearNow = this.formData.get('namKeHoach').value;
-    if (!this.id) {
-      if ((this.thongTinChiTieuKeHoachNam.capDvi == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.capDvi == "2") {
-        this.findCanCuByYear(this.yearNow);
-      }
-      this.initDataThemMoi();
-    }
+    // this.yearNow = this.formData.get('namKeHoach').value;
+    // if (!this.id) {
+    //   if ((this.thongTinChiTieuKeHoachNam.capDvi == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.capDvi == "2") {
+    //     this.findCanCuByYear(this.yearNow);
+    //   }
+    //   this.initDataThemMoi();
+    // }
   }
 
   convertTrangThai(status: string) {
