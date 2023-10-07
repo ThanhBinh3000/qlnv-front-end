@@ -53,4 +53,9 @@ export class PhuongAnDieuChinhCTKHService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  getPhuongAn(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }
