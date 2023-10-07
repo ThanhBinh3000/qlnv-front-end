@@ -15,6 +15,8 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class KhongBanHanhComponent extends Base2Component implements OnInit {
 
+  fileDinhKems: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -26,10 +28,10 @@ export class KhongBanHanhComponent extends Base2Component implements OnInit {
 
 
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
+    super(httpClient, storageService, notification, spinner, modal, phuongAnDieuChinhCTKHService);
     this.formData = this.fb.group({
-      maChiCucNhan: [, [Validators.required]],
-      tenChiCucNhan: [, [Validators.required]],
+      soCongVan: [, [Validators.required]],
+      ngayKy: [, [Validators.required]],
       maDiemKho: [, [Validators.required]],
       tenDiemKho: [, [Validators.required]],
       maNhaKho: [, [Validators.required]],
@@ -69,6 +71,20 @@ export class KhongBanHanhComponent extends Base2Component implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+
+  handleOk(item: any) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
+    this._modalRef.close({
+      ...item,
+      // isUpdate: !!this.data
+    });
+  }
+
+  onCancel() {
+    this._modalRef.close();
   }
 
 }

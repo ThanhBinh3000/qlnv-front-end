@@ -1,308 +1,66 @@
-<!-- <div>
+<div>
   <div>
     <form nz-form nzLayout="vertical" [formGroup]="formData">
       <nz-card class="pd-t-16">
-        <h3 class="mg-t-10">Thông tin chi cục nhận điều chuyển</h3>
         <div nz-row [nzGutter]="24" class="mg-t-16">
-          <div nz-col nzSpan="5">
-            <span>Chi cục điều chuyển</span>
-          </div>
-          <div nz-col nzSpan="19">
+          <div nz-col nzSpan="12">
             <nz-form-item>
-              <nz-form-control>
-                <nz-select [nzDisabled]="this.data && !!this.data.maChiCucNhan" formControlName="maChiCucNhan"
-                  nzAllowClear (ngModelChange)="onChangeChiCucDC($event)">
-                  <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.title"
-                    [nzDisabled]="checkDisabledOption(p.key,'maChiCucNhan')"></nz-option>
-                </nz-select>
+              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số Công văn/tờ trình</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group>
+                  <input formControlName="soCongVan" [readonly]="false" nz-input nzSize="small"
+                    placeholder="Nhập số công văn/tờ trình" />
+                </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true" class="text-left"> Ngày ký
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayKy"
+                  [nzDisabled]="false" nzPlaceHolder="Ngày ký">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Nội dung văn bản
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input nzSize="small"
+                  placeholder="Nhập text" [readonly]="false"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Lý do không điều chỉnh
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input nzSize="small"
+                  placeholder="Nhập text" [readonly]="false"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="24">
+            <nz-form-item class="form-item">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> File văn bản không đồng ý điều
+                chỉnh</nz-form-label>
+              <div class="list-file">
+                <file-list [isCanCuPL]="true" [isViewDetail]="false" [data]="fileDinhKems"></file-list>
+              </div>
+            </nz-form-item>
+          </div>
+
         </div>
 
       </nz-card>
-      <div nz-row [nzGutter]="24" class="mg-t-16">
-        <div nz-col nzSpan="12">
-          <nz-card class="pd-t-10">
-            <h3 class="mg-t-10">Ngăn kho đang bảo quản hàng cần ĐC</h3>
-            <div nz-row [nzGutter]="24" class="mg-t-16">
-              <div nz-col nzSpan="10">
-                <span>Điểm kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-select [nzDisabled]="this.data && !!this.data.maDiemKho" formControlName="maDiemKho"
-                      nzAllowClear (ngModelChange)="getListNhaKho($event)">
-                      <nz-option *ngFor="let p of dsDiemKho" [nzValue]="p.key" [nzLabel]="p.title"
-                        [nzDisabled]="checkDisabledDiemKho(p.key)"></nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Nhà kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-select [nzDisabled]="this.data && !!this.data.maNhaKho" formControlName="maNhaKho" nzAllowClear
-                      (ngModelChange)="getListNganKho($event)">
-                      <nz-option *ngFor="let p of dsNhaKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Ngăn kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-select [nzDisabled]="this.data && !!this.data.maNganKho" formControlName="maNganKho"
-                      nzAllowClear (ngModelChange)="getListLoKho($event)">
-                      <nz-option *ngFor="let p of dsNganKho" [nzValue]="p.key" [nzLabel]="p.title"
-                        [nzDisabled]="checkDisabledNganKho(p.key)"></nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div *ngIf="dsLoKho.length > 0" nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Lô kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-select [nzDisabled]="this.data && !!this.data.maLoKho" formControlName="maLoKho" nzAllowClear
-                      (ngModelChange)="onChangeLoKho($event)">
-                      <nz-option *ngFor="let p of dsLoKho" [nzValue]="p.key" [nzLabel]="p.title"
-                        [nzDisabled]="checkDisabledLoKho(p.key)"></nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Thủ kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <input formControlName="thuKho" nz-input [readonly]="true" />
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Loại hàng</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <span>{{formData.value.tenLoaiVthh}}</span>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Chủng loại hàng</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <span>{{formData.value.tenCloaiVthh}}</span>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Tồn kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <span class="text-blue">{{formData.value.tonKho | number:'1.0-1':'vi_VN'}}</span>
-                <span *ngIf="!!formData.value.donViTinh"> ({{formData.value.donViTinh}})</span>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>SL điều chuyển</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-input-number [nzDisabled]="!formData.value.tonKho || (this.data && !!this.data.soLuongDc)"
-                      formControlName="soLuongDc" [nzMin]="1" [nzMax]="formData.value.tonKho || 99" [nzStep]="1"
-                      [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      (ngModelChange)="onChangSLDC($event)">
-                    </nz-input-number>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Dự toán kinh phí (triệu đồng)</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <input class="money-input" currencyMask formControlName="duToanKphi" [options]="AMOUNT" />
 
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Thời gian dự kiến điều chuyển</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-date-picker [nzDisabled]="this.data && !!this.data.thoiGianDkDc" formControlName="thoiGianDkDc"
-                      nzFormat="dd/MM/yyyy">
-                    </nz-date-picker>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-          </nz-card>
-
-        </div>
-        <div nz-col nzSpan="12">
-          <nz-card class="pd-t-16">
-            <h3 class="mg-t-10">Ngăn kho nhận điều chuyển</h3>
-            <div nz-row [nzGutter]="24" class="mg-t-16">
-              <div nz-col nzSpan="10">
-                <span>Điểm kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-select formControlName="maDiemKhoNhan" nzAllowClear (ngModelChange)="getListNhaKhoNhan($event)">
-                      <nz-option *ngFor="let p of dsDiemKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Nhà kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-select formControlName="maNhaKhoNhan" nzAllowClear (ngModelChange)="getListNganKhoNhan($event)">
-                      <nz-option *ngFor="let p of dsNhaKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Ngăn kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-select formControlName="maNganKhoNhan" nzAllowClear (ngModelChange)="getListLoKhoNhan($event)">
-                      <nz-option *ngFor="let p of dsNganKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"
-                        [nzDisabled]="checkDisabledNganKhoNhan(p.key)"></nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div *ngIf="dsLoKhoNhan.length > 0" nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Lô kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-select formControlName="maLoKhoNhan" nzAllowClear (ngModelChange)="onChangeLoKhoNhan($event)">
-                      <nz-option *ngFor="let p of dsLoKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"
-                        [nzDisabled]="checkDisabledLoKhoNhan(p.key)"></nz-option>
-                    </nz-select>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Thủ kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <input formControlName="thuKhoNhan" nz-input [readonly]="true" />
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Thay đổi thủ kho</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <span>{{formData.value.thayDoiThuKho ? 'Có' : 'Không'}}</span>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>SL điều chuyển còn lại</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <span>{{formData.value.slDcConLai | number:'1.0-1':'vi_VN'}}</span>
-                <span *ngIf="formData.value.slDcConLai"> ({{formData.value.donViTinhNhap}})</span>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>Tích lượng khả dụng</span>
-              </div>
-              <div nz-col nzSpan="14" *ngIf="formData.value.tichLuongKd">
-                <span>{{formData.value.tichLuongKd | number: '1.0-1':'vi_VN'}}</span>
-                <span> ({{formData.value.donViTinhNhap}})</span>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span>SL nhập ĐC</span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-                    <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1" [nzMax]="max" [nzStep]="1"
-                      [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      (ngModelChange)="onChangeSLNhapDc($event)">
-                    </nz-input-number>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-
-            <div nz-row [nzGutter]="24" class="mg-t-10">
-              <div nz-col nzSpan="10">
-                <span></span>
-              </div>
-              <div nz-col nzSpan="14">
-                <nz-form-item>
-                  <nz-form-control>
-
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-
-          </nz-card>
-
-        </div>
-      </div>
     </form>
   </div>
   <div class="modal-footer">
@@ -321,4 +79,7 @@
       </div>
     </div>
   </div>
-</div> -->
+  <ng-template #error let-control>
+    <app-template-error #error [control]="control"></app-template-error>
+  </ng-template>
+</div>
