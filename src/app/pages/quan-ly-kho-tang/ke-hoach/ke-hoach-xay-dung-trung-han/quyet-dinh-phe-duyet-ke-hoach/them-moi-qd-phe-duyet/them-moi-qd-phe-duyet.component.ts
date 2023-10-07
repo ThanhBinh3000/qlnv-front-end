@@ -176,7 +176,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soQuyetDinh = body.soQuyetDinh + this.maQd;
+    body.soQuyetDinh = body.soQuyetDinh?body.soQuyetDinh + this.maQd:null;
     body.ctiets = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;

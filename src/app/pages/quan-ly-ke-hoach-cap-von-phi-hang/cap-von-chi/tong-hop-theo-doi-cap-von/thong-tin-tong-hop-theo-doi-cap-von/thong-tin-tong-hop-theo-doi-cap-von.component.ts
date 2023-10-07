@@ -94,7 +94,6 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
         if (res.data) {
           this.itemThTheoDoi = res.data;
           this.initForm();
-          this.formData.patchValue({soThongTri: +this.itemThTheoDoi.soThongTri})
           if (this.itemThTheoDoi.fileDinhKems) {
             this.listFileDinhKem = this.itemThTheoDoi.fileDinhKems;
           }
@@ -112,7 +111,6 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   }
 
   initForm() {
-    console.log(this.itemThTheoDoi,'12312312');
     this.formData = this.fb.group({
       soThongTri: [this.itemThTheoDoi ? this.itemThTheoDoi.soThongTri : null, [Validators.required]],
       dviThongTri: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThongTri : null],
