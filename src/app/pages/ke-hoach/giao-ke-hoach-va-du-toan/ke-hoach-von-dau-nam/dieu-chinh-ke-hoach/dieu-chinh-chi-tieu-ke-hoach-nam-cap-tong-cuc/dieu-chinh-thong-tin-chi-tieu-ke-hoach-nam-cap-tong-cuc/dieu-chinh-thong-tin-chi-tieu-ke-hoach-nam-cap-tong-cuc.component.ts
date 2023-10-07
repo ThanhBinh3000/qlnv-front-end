@@ -402,37 +402,31 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
           this.sumRowDetailLuongThuc();
 
-          this.dsMuoiClone = data.dcKeHoachNamMuoiDtl
-          // .map((khmuoi) => {
-          //   return {
-          //     donViTinh: khmuoi.donViTinh,
-          //     maDvi: khmuoi.maDonVi,
-          //     stt: khmuoi.stt,
-          //     tenDvi: khmuoi.tenDonVi,
-          //     soLuongNhap: khmuoi.nhapTrongNam,
-          //     soLuongXuat: khmuoi.xuatTrongNamMuoi,
-          //     tonKhoCuoiNam: khmuoi.tonKhoDauNam,
-          //     tonKhoDauNam: khmuoi.tonKhoCuoiNam,
-          //   }
-          // })
+          this.dsMuoiClone = data.dcKeHoachNamMuoiDtl.map((item) => {
+            return {
+              ...item,
+              hdrId: undefined,
+              id: undefined
+            }
+          })
           this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
           this.sumRowDetailMuoi()
 
-          const dataVatTuNhap = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "NHAP")
-          const dataVatTuXuat = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "XUAT")
+          const dataVatTuNhap = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "NHAP").map((item) => {
+            return {
+              ...item,
+              hdrId: undefined,
+              id: undefined
+            }
+          })
+          const dataVatTuXuat = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "XUAT").map((item) => {
+            return {
+              ...item,
+              hdrId: undefined,
+              id: undefined
+            }
+          })
 
-          // this.dataVatTuNhap = khVatTuNhap.map((vattu) => {
-          //   return {
-          //     ...vattu,
-          //     loai: "NHAP",
-          //   }
-          // })
-          // this.dataVatTuXuat = khVatTuXuat.map((vattu) => {
-          //   return {
-          //     ...vattu,
-          //     loai: "XUAT",
-          //   }
-          // })
           this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
           this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
 
