@@ -1760,7 +1760,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
             lyDoTuChoi: text,
             trangThai: trangThai,
           };
-          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+          const res = await this.phuongAnDieuChinhCTKHService.duyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.redirectChiTieuKeHoachNam();
@@ -1774,6 +1774,10 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         }
       }
     });
+  }
+
+  khongBH() {
+
   }
 
   huyBo() {

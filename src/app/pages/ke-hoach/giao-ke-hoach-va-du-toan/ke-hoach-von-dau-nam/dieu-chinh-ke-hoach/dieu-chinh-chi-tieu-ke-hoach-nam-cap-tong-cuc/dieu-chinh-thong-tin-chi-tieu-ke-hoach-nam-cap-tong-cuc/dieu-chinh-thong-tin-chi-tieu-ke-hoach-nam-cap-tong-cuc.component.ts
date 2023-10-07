@@ -335,7 +335,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             })
 
             // thóc nhập trong năm
-            const ntnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "10").map((item) => {
+            const ntnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "11").map((item) => {
               return {
                 ...item,
                 keHoachDieuChuyenLtDtlId: undefined,
