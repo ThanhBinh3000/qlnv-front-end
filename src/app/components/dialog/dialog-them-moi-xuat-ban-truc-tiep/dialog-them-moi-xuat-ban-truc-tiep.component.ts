@@ -137,7 +137,13 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         })) || []
       );
     } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      const data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh && item.maVatTu == this.cloaiVthh);
+      const data = this.dataChiTieu.khVatTuXuat.filter(item => {
+        if (item.maVatTu === null) {
+          return item.maVatTuCha == this.loaiVthh;
+        } else {
+          return item.maVatTu == this.cloaiVthh && item.maVatTuCha == this.loaiVthh;
+        }
+      });
       const soLuongXuat = data.reduce((acc, item) => acc + item.soLuongXuat, 0);
       itemsToAdd.push({
         maDvi: data[0].maDvi,

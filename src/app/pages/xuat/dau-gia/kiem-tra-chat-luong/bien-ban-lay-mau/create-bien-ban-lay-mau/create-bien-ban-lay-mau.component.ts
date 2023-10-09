@@ -164,7 +164,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async onChangeNam(event) {
-    if (event){
+    if (event) {
       this.formData.patchValue({
         soBbLayMau: `${this.maTuSinh}/${event}${this.maHauTo}`,
       });
@@ -524,27 +524,40 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   setValidator() {
-    this.formData.controls["soQdNv"].setValidators([Validators.required]);
-    this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganLoKho"].setValidators([Validators.required]);
+    const requiredFields = [
+      "soBbLayMau",
+      "soQdNv",
+      "tenDiemKho",
+      "tenNhaKho",
+      "tenNganKho",
+      "tenNganLoKho",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 
   setValidForm() {
-    this.formData.controls["loaiBienBan"].setValidators([Validators.required]);
-    this.formData.controls["tenDvi"].setValidators([Validators.required]);
-    this.formData.controls["maQhNs"].setValidators([Validators.required]);
-    this.formData.controls["soBbLayMau"].setValidators([Validators.required]);
-    this.formData.controls["ngayLayMau"].setValidators([Validators.required]);
-    this.formData.controls["soHopDong"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyHopDong"].setValidators([Validators.required]);
-    this.formData.controls["toChucCaNhan"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["truongBpKtbq"].setValidators([Validators.required]);
-    this.formData.controls["donViKnghiem"].setValidators([Validators.required]);
-    this.formData.controls["diaDiemLayMau"].setValidators([Validators.required]);
-    this.formData.controls["soLuongKiemTra"].setValidators([Validators.required]);
+    const requiredFields = [
+      "loaiBienBan",
+      "nam",
+      "tenDvi",
+      "maQhNs",
+      "ngayLayMau",
+      "soHopDong",
+      "ngayKyHopDong",
+      "toChucCaNhan",
+      "tenLoaiVthh",
+      "tenCloaiVthh",
+      "tenKtvBaoQuan",
+      "truongBpKtbq",
+      "donViKnghiem",
+      "soLuongKiemTra",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 }

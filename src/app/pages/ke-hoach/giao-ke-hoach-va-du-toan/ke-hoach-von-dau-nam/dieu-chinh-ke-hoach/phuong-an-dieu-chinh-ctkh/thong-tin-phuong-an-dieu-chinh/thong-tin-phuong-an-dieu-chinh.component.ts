@@ -69,6 +69,7 @@ import { FILETYPE } from "../../../../../../../constants/fileType";
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { PhuongAnDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/phuong-an-dieu-chinh-ctkh';
 import { DeXuatDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/de-xuat-dieu-chinh-ctkh';
+import { KhongBanHanhComponent } from '../khong-ban-hanh/khong-ban-hanh.component';
 
 @Component({
   selector: 'app-thong-tin-phuong-an-dieu-chinh',
@@ -229,7 +230,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       //   namKeHoach: dayjs().get('year')-1,
       // });
       // this.thongTinChiTieuKeHoachNam.capDvi = this.userInfo.CAP_DVI;
-      // this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
+      this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
       // await this.initDataThemMoi();
       await this.findCanCuByYear(this.yearNow);
     }
@@ -1127,7 +1128,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         canCu: null
       })
     } else {
-      this.findCanCuByYear(this.yearNow);
+      // this.findCanCuByYear(this.yearNow);
     }
   }
 
@@ -1187,7 +1188,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
 
-          this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
+          // this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
           // this.loadData();
           this.sumRowDetailMuoi();
           this.sumRowDetailLuongThuc();
@@ -1760,7 +1761,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
             lyDoTuChoi: text,
             trangThai: trangThai,
           };
-          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+          const res = await this.phuongAnDieuChinhCTKHService.duyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.redirectChiTieuKeHoachNam();
@@ -1772,6 +1773,34 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
+      }
+    });
+  }
+
+  async khongBH(row?: any) {
+    await this.spinner.show();
+
+    await this.spinner.hide();
+
+    const keHoachDcHdrId = row ? row.hdrId : undefined
+
+    const modalQD = this.modal.create({
+      nzTitle: 'THÔNG BÁO KHÔNG BAN HÀNH',
+      nzContent: KhongBanHanhComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {
+
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+
+      if (data) {
+
+
+
       }
     });
   }
@@ -1965,13 +1994,13 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   };
 
   selectNam() {
-    this.yearNow = this.formData.get('namKeHoach').value;
-    if (!this.id) {
-      if ((this.thongTinChiTieuKeHoachNam.capDvi == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.capDvi == "2") {
-        this.findCanCuByYear(this.yearNow);
-      }
-      this.initDataThemMoi();
-    }
+    // this.yearNow = this.formData.get('namKeHoach').value;
+    // if (!this.id) {
+    //   if ((this.thongTinChiTieuKeHoachNam.capDvi == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.capDvi == "2") {
+    //     this.findCanCuByYear(this.yearNow);
+    //   }
+    //   this.initDataThemMoi();
+    // }
   }
 
   convertTrangThai(status: string) {
