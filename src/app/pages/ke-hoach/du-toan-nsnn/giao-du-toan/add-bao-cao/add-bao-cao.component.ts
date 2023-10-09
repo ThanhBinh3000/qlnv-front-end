@@ -1,34 +1,36 @@
-import { ComponentType } from '@angular/cdk/portal';
-import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {ComponentType} from '@angular/cdk/portal';
+import {DatePipe} from '@angular/common';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import * as fileSaver from 'file-saver';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Roles, Status, Utils } from 'src/app/Utility/utils';
-import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
-import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NzUploadFile} from 'ng-zorro-antd/upload';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Roles, Status, Utils} from 'src/app/Utility/utils';
+import {
+    DialogChonThemBieuMauComponent
+} from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import {DialogCongVanComponent} from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {MESSAGEVALIDATE} from 'src/app/constants/messageValidate';
+import {GiaoDuToanChiService} from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import {QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
 import * as uuid from 'uuid';
-import { BtnStatus, Doc, Form, Gdt, Report } from '../giao-du-toan.constant';
-import { PHU_LUC } from './add-bao-cao.constant';
-import { PhuLuc01NhapComponent } from './phu-luc-01-nhap/phu-luc-01-nhap.component';
-import { PhuLuc01XuatComponent } from './phu-luc-01-xuat/phu-luc-01-xuat.component';
-import { PhuLuc02Component } from './phu-luc-02/phu-luc-02.component';
-import { PhuLuc03Component } from './phu-luc-03/phu-luc-03.component';
-import { PhuLucDaoTaoComponent } from './phu-luc-dao-tao/phu-luc-dao-tao.component';
-import { PhuLucKhoaHocCongNgheComponent } from './phu-luc-khoa-hoc-cong-nghe/phu-luc-khoa-hoc-cong-nghe.component';
-import { PhuLucPhanBoComponent } from './phu-luc-phan-bo/phu-luc-phan-bo.component';
-import { PhuLucQuyLuongComponent } from './phu-luc-quy-luong/phu-luc-quy-luong.component';
-import { PhuLucSuaChuaComponent } from './phu-luc-sua-chua/phu-luc-sua-chua.component';
-import { PhuLucTaiSanComponent } from './phu-luc-tai-san/phu-luc-tai-san.component';
+import {BtnStatus, Doc, Form, Gdt, Report} from '../giao-du-toan.constant';
+import {PHU_LUC} from './add-bao-cao.constant';
+import {PhuLuc01NhapComponent} from './phu-luc-01-nhap/phu-luc-01-nhap.component';
+import {PhuLuc01XuatComponent} from './phu-luc-01-xuat/phu-luc-01-xuat.component';
+import {PhuLuc02Component} from './phu-luc-02/phu-luc-02.component';
+import {PhuLuc03Component} from './phu-luc-03/phu-luc-03.component';
+import {PhuLucDaoTaoComponent} from './phu-luc-dao-tao/phu-luc-dao-tao.component';
+import {PhuLucKhoaHocCongNgheComponent} from './phu-luc-khoa-hoc-cong-nghe/phu-luc-khoa-hoc-cong-nghe.component';
+import {PhuLucPhanBoComponent} from './phu-luc-phan-bo/phu-luc-phan-bo.component';
+import {PhuLucQuyLuongComponent} from './phu-luc-quy-luong/phu-luc-quy-luong.component';
+import {PhuLucSuaChuaComponent} from './phu-luc-sua-chua/phu-luc-sua-chua.component';
+import {PhuLucTaiSanComponent} from './phu-luc-tai-san/phu-luc-tai-san.component';
 
 @Component({
     selector: 'app-add-bao-cao',
@@ -100,7 +102,7 @@ export class AddBaoCaoComponent implements OnInit {
     handleUpload(): void {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
-            this.baoCao.lstFiles.push({ id: id, fileName: file?.name });
+            this.baoCao.lstFiles.push({id: id, fileName: file?.name});
             this.listFile.push(file);
         });
         this.fileList = [];
@@ -115,7 +117,8 @@ export class AddBaoCaoComponent implements OnInit {
         private notification: NzNotificationService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private datePipe: DatePipe,
-    ) { }
+    ) {
+    }
 
     async ngOnInit() {
         this.action('init');
@@ -294,7 +297,7 @@ export class AddBaoCaoComponent implements OnInit {
         const modalIn = this.modal.create({
             nzTitle: title,
             nzContent: DialogChonThemBieuMauComponent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+            nzBodyStyle: {overflowY: 'auto', maxHeight: 'calc(100vh - 200px)'},
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '600px',
@@ -308,7 +311,7 @@ export class AddBaoCaoComponent implements OnInit {
                 res.forEach(item => {
                     if (item.status) {
                         const newItem: Form = {
-                            ... new Form(),
+                            ...new Form(),
                             id: uuid.v4() + 'FE',
                             maBieuMau: item.id,
                             tenPl: item.tenPl,
@@ -327,7 +330,8 @@ export class AddBaoCaoComponent implements OnInit {
         let header = '';
         if (maBieuMau.startsWith('pl')) {
             header = 'pl';
-        };
+        }
+        ;
         let index = 0;
         for (let i = 0; i < this.baoCao.lstCtiets.length; i++) {
             if (this.baoCao.lstCtiets[i].maBieuMau.startsWith(header)) {
@@ -339,6 +343,7 @@ export class AddBaoCaoComponent implements OnInit {
         }
         return index;
     };
+
     getListUser() {
         this.quanLyVonPhiService.getListUser().toPromise().then(
             res => {
@@ -412,7 +417,7 @@ export class AddBaoCaoComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: bieuMau.tenDm,
             nzContent: nzContent,
-            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+            nzBodyStyle: {overflowY: 'auto', maxHeight: 'calc(100vh - 200px)'},
             nzMaskClosable: false,
             nzWidth: '90%',
             nzFooter: null,
@@ -560,12 +565,12 @@ export class AddBaoCaoComponent implements OnInit {
                 }
             }
         }
-
-        if (!baoCaoTemp.soQd?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
+        if (this.userInfo.DON_VI.CAP_DVI !== "2") {
+            if (!baoCaoTemp.soQd?.fileUrl) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+                return;
+            }
         }
-
         // replace nhung ban ghi dc them moi id thanh null
         baoCaoTemp.lstCtiets.forEach(item => {
             if (item.id?.length == 38) {
@@ -690,6 +695,7 @@ export class AddBaoCaoComponent implements OnInit {
             localStorage.removeItem("idChiTiet");
         }
     }
+
     statusDeleteCv() {
         if (!this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP)) {
             return false;
@@ -722,22 +728,24 @@ export class AddBaoCaoComponent implements OnInit {
         }
         await this.quanLyVonPhiService.downFile(file, doc);
     }
+
     isChild: boolean;
     isParent: boolean;
     status: BtnStatus = new BtnStatus();
+
     //check role cho các nut trinh duyet
     getStatusButton() {
         const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
         this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP);
-        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.TRINHDUYET_BC) : this.userService.isAccessPermisson(Roles.GSTC.TRINHDUYET_BC_TONGHOP);
-        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC) : this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC_TH);
-        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC) : this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC_TH);
+        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.SUA_BC);
+        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.TRINHDUYET_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.TRINHDUYET_BC);
+        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC_TH) : this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC);
+        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC_TH) : this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC);
         const checkAccept = this.userService.isAccessPermisson(Roles.GSTC.TIEPNHAN_TUCHOI_BC);
-        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.IN_BC) : this.userService.isAccessPermisson(Roles.GSTC.IN_BC_TONGHOP);
-        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.XUAT_BC) : this.userService.isAccessPermisson(Roles.GSTC.XUAT_BC_TONGHOP)
+        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.IN_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.IN_BC);
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.XUAT_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.XUAT_BC);
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
         this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.GSTC.LAP_BC) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
@@ -810,7 +818,7 @@ export class AddBaoCaoComponent implements OnInit {
             );
         } else {
             const file: any = this.fileDetail;
-            const blob = new Blob([file], { type: "application/octet-stream" });
+            const blob = new Blob([file], {type: "application/octet-stream"});
             fileSaver.saveAs(blob, file.name);
         }
     };

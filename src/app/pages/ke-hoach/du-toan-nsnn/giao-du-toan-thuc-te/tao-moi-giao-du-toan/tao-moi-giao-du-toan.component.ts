@@ -264,7 +264,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		if (this.id) {
 			// call chi tiết bản ghi khi có id
 			await this.getDetailReport();
-      this.sum1();
+			this.sum1();
 		} else {
 			this.maDonViTao = this.userInfo?.MA_DVI;
 			this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -788,7 +788,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	//check role cho các nut trinh duyet
 	getStatusButton() {
-		if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
+		if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GTT.SUA_PA_PBDT)) {
 			this.status = false;
 		} else {
 			this.status = true;
@@ -808,24 +808,24 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			checkParent = true;
 		}
 		const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
-		const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
+		const checkSave = this.userService.isAccessPermisson(Roles.GTT.SUA_PA_PBDT);
 		this.statusBtnSave = Status.check('saveWOHist', this.trangThaiBanGhi) && checkSave && checkChirld;
 
 
-		this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.COPY_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.PRINT_REPORT, checkChirld);
-		this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
+		this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GTT.TRINHDUYET_PA_PBDT, checkChirld);
+		this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GTT.DUYET_TUCHOI_PA_PBDT, checkChirld);
+		this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GTT.PHEDUYET_TUCHOI_PA_PBDT, checkChirld);
+		this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.COPY_PA_PBDT, checkChirld);
+		this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.IN_PA_PBDT, checkChirld);
+		this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-		if (this.userService.isAccessPermisson(Roles.GDT.GIAO_PA_PBDT) && this.soQd) {
+		if (this.userService.isAccessPermisson(Roles.GTT.GIAO_PA_PBDT) && this.soQd) {
 			this.statusBtnGiao = false;
 		} else {
 			this.statusBtnGiao = true;
 			this.statusGiaoToanBo = true;
 		}
-		if (this.userService.isAccessPermisson(Roles.GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
+		if (this.userService.isAccessPermisson(Roles.GTT.TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
 			this.statusBtnGuiDVCT = false;
 		}
 		if (this.trangThaiBanGhi == "7") {
@@ -935,10 +935,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		}
 	};
 
-	// lấy tên đơn vị
-	getUnitName(maDvi: string) {
-		return this.lstDvi.find((item) => item.maDvi == maDvi)?.tenDvi;
-	}
 
 	// lấy thông tin trạng thái PA
 	getStatusName() {
@@ -978,34 +974,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		return xau;
 	};
 
-	// lấy phần đuôi của stt
-	getTail(str: string): number {
-		return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
-	}
-
-	//tìm vị trí cần để thêm mới
-	findVt(str: string): number {
-		const start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
-		let index: number = start;
-		for (let i = start + 1; i < this.lstCtietBcao.length; i++) {
-			if (this.lstCtietBcao[i].stt.startsWith(str)) {
-				index = i;
-			}
-		}
-		return index;
-	}
-
-	//thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
-	replaceIndex(lstIndex: number[], heSo: number) {
-		//thay doi lai stt cac vi tri vua tim duoc
-		lstIndex.forEach(item => {
-			const str = Table.preIndex(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
-			const nho = this.lstCtietBcao[item].stt;
-			this.lstCtietBcao.forEach(item => {
-				item.stt = item.stt.replace(nho, str);
-			})
-		})
-	}
 
 	// kiểm tra cấp quyền sửa nếu phần tử chọn có phần tử con
 	getLowStatus(stt: string) {
@@ -1102,32 +1070,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		return nho;
 	}
 
-	// update lại list obj được chọn
-	updateChecked(id: string) {
-		const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
-		//đặt các phần tử con có cùng trạng thái với nó
-		this.lstCtietBcao.forEach(item => {
-			if (item.stt.startsWith(data.stt)) {
-				item.checked = data.checked;
-			}
-		})
-		//thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-		let index: number = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(data.stt));
-		if (index == -1) {
-			this.allChecked = this.checkAllChild('0');
-		} else {
-			let nho: boolean = this.lstCtietBcao[index].checked;
-			while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
-				this.lstCtietBcao[index].checked = !nho;
-				index = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(this.lstCtietBcao[index].stt));
-				if (index == -1) {
-					this.allChecked = !nho;
-					break;
-				}
-				nho = this.lstCtietBcao[index].checked;
-			}
-		}
-	};
 
 	// lắng nghe thay đổi của dòng
 	changeModel(id: string) {
@@ -1324,23 +1266,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		this.listIdFilesDelete.push(id);
 	};
 
-	// update list checked
-	updateAllChecked() {
-		this.lstCtietBcao.forEach(item => {
-			item.checked = this.allChecked;
-		})
-	};
-
-	// xóa cột
-	deleteCol(maDvi: string) {
-		this.lstCtietBcao.forEach(data => {
-			data.lstCtietDvis = data.lstCtietDvis.filter(e => e.maDviNhan != maDvi);
-		})
-		this.lstDviChon.push(this.lstDvi.find(e => e.maDvi == maDvi));
-		this.lstDvi = this.lstDvi.filter(e => e.maDvi != maDvi);
-
-	};
-
 	// thêm cột
 	addCol(maDvi: string) {
 		this.lstDvi.push(this.lstDviChon.find(e => e.maDvi == maDvi));
@@ -1353,35 +1278,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				trangThai: "0",
 			})
 		})
-	}
-
-	// thêm nhiều cột
-	addAllCol() {
-		const obj = {
-			danhSachDonVi: this.lstDviChon,
-			multi: true,
-		}
-		const modalIn = this.modal.create({
-			nzTitle: 'Danh sách đơn vị',
-			nzContent: DialogLuaChonThemDonViComponent,
-			nzMaskClosable: false,
-			nzClosable: false,
-			nzWidth: '65%',
-			nzFooter: null,
-			nzComponentParams: {
-				obj: obj
-			},
-		});
-		modalIn.afterClose.subscribe((res) => {
-			if (res) {
-				res.forEach(item => {
-					if (item.status) {
-						this.addCol(item.maDvi);
-					}
-				})
-				this.updateEditCache();
-			}
-		});
 	}
 
 	// gán editCache.data = lstCtietBcao
@@ -1480,7 +1376,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	}
 
 	statusDeleteCv() {
-		if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
+		if (!this.userService.isAccessPermisson(Roles.GTT.SUA_CV_QD_GIAO_PA_PBDT)) {
 			return false;
 		}
 		if (!this.soQd?.fileName) {
@@ -1496,67 +1392,71 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		return check;
 	};
 
-  sum1() {
-    this.lstCtietBcao.forEach(item => {
-      this.sum(item.stt);
-    })
-  }
+	sum1() {
+		this.lstCtietBcao.forEach(item => {
+			this.sum(item.stt);
+		})
+	}
 
-  exportToExcel() {
-    if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-      return;
-    }
-    const header = [
-      { t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
-      { t: 0, b: 0, l: 0, r: 1, val: "Phương án giao dự toán nsnn" },
-      { t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+	exportToExcel() {
+		if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+			return;
+		}
+		const header = [
+			{ t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
+			{ t: 0, b: 0, l: 0, r: 1, val: `Phương án giao dự toán nsnn năm ${this.namDtoan}` },
+			{ t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+			{ t: 2, b: 2, l: 1, r: 1, val: `Ngày ${this.ngayTao} ` },
+			{ t: 2, b: 2, l: 2, r: 2, val: `Mã phương án ${this.maPa} ` },
+			{ t: 2, b: 2, l: 3, r: 3, val: `Loại phương án: Phương án giao NSNN ` },
+			{ t: 2, b: 2, l: 4, r: 4, val: `Trạng thái ${this.getStatusName()} ` },
 
-      { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
-      { t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
-      { t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi giao từ cấp trên' },
-      { t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
-      { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
-    ]
-    this.lstDvi.forEach((item, index ) => {
-      const left = 4 + index
-      header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
-    })
+			{ t: 5, b: 7, l: 0, r: 0, val: 'STT' },
+			{ t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
+			{ t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi giao từ cấp trên' },
+			{ t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
+			{ t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
+		]
+		this.lstDvi.forEach((item, index) => {
+			const left = 4 + index
+			header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
+		})
 
-    const headerBot = 7;
-    this.lstCtietBcao.forEach((item, index) => {
-      const row = headerBot + index + 1;
-      const tenNdung =  this.getTenNdung(item.maNdung);
-      header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
-      header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung})
-      header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
-      header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCongSoTranChi?.toString() })
+		const headerBot = 7;
+		this.lstCtietBcao.forEach((item, index) => {
+			const row = headerBot + index + 1;
+			const tenNdung = this.getTenNdung(item.maNdung);
+			header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
+			header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung })
+			header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
+			header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCongSoTranChi?.toString() })
 
-      item.lstCtietDvis.forEach((e, ind) => {
-        const col = 4 + ind ;
-        header.push({ t: row, b: row, l: col , r: col, val: e.soTranChi?.toString() })
-      })
-    })
+			item.lstCtietDvis.forEach((e, ind) => {
+				const col = 4 + ind;
+				header.push({ t: row, b: row, l: col, r: col, val: e.soTranChi?.toString() })
+			})
+		})
 
-    const workbook = XLSX.utils.book_new();
-    const worksheet = Table.initExcel(header);
-    // XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+		const workbook = XLSX.utils.book_new();
+		const worksheet = Table.initExcel(header);
+		// XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
 
-    let excelName = this.maPa;
-    excelName = excelName + '_GDTTT_PA.xlsx'
-    XLSX.writeFile(workbook, excelName);
-  }
+		let excelName = this.maPa;
+		excelName = excelName + '_GDTTT_PA.xlsx'
+		XLSX.writeFile(workbook, excelName);
+	}
 
-  getTenNdung(maNdung: number): any{
-    let tenNdung: string;
-    this.noiDungs.forEach(itm => {
-      if(itm.ma == maNdung){
-        return tenNdung = itm.giaTri;
-      }
-    })
-    return tenNdung
-  }
+	getTenNdung(maNdung: number): any {
+		let tenNdung: string;
+		this.noiDungs.forEach(itm => {
+			if (itm.ma == maNdung) {
+				return tenNdung = itm.giaTri;
+			}
+		})
+		return tenNdung
+	}
 
 
 

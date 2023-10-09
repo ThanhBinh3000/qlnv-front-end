@@ -121,12 +121,6 @@ export class Gdt {
             status: false,
         },
     ];
-
-    static appendixName(id: string, nam: number) {
-        const appendix = Gdt.PHU_LUC.find(e => e.id == id);
-        return [appendix.tenPl, Utils.getName(nam, appendix.tenDm)];
-    }
-
 }
 
 export const TAB_LIST = [
@@ -233,11 +227,11 @@ export class Form {
 export class Report {
     id: string;
     maPa: string;
-    maBcao: string; // Thêm trường maBcao	
+    maBcao: string; // Thêm trường maBcao
     namPa: number;
     trangThai: string;
     maDvi: string;
-    maDviCha: string; // chưa dùng	
+    maDviCha: string; // chưa dùng
     maGiao: string;
     soQd: Doc;
     ngayCongVan: string;

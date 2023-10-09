@@ -68,6 +68,7 @@
                     </th>
                     <th scope="col" nzWidth="60px" class="text-center">STT</th>
                     <th scope="col">Mã phương án </th>
+                    <th scope="col">Loại phương án </th>
                     <th scope="col">Mã phương án TH</th>
                     <th scope="col">Ngày tạo</th>
                     <th scope="col">Năm báo cáo</th>
@@ -93,6 +94,14 @@
                     </td>
                     <td>
                         {{ data.maPa }}
+                    </td>
+                    <td>
+                        <ng-template [ngIf]="data.maLoaiDan == '1'">
+                            Giao dự toán
+                        </ng-template>
+                        <ng-template [ngIf]="data.maLoaiDan == '2'">
+                            Giao điều chỉnh dự toán
+                        </ng-template>
                     </td>
                     <td>
                         {{ data.ngayTao }}

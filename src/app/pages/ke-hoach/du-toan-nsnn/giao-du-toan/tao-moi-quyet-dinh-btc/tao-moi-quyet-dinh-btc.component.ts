@@ -295,6 +295,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         }
         await this.getChildUnit();
         this.getStatusButton();
+        await this.checkPlanBTC();
         this.updateEditCache();
         this.spinner.hide();
     };
@@ -369,6 +370,71 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             this.statusBtnNew = true;
         }
     };
+
+    async checkPlanBTC() {
+        const searchFilterTemp =
+        {
+            loaiTimKiem: "0",
+            maPhanGiao: '2',
+            maLoai: '2',
+            namPa: null,
+            ngayTaoTu: "",
+            ngayTaoDen: "",
+            donViTao: this.userInfo.MA_DVI,
+            loai: null,
+            maPa: "",
+            maLoaiDan: [3],
+            soQd: "",
+            trangThaiGiaos: [
+                "0",
+                "1",
+                "2"
+            ],
+            trangThais: [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
+            ],
+            paggingReq: {
+                limit: 10,
+                page: 1
+            },
+        }
+        let lstCheck = [];
+        await this.giaoDuToanChiService.timPhuongAnGiao(searchFilterTemp).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    lstCheck = data.data.content
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+            }, (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        )
+        let lstCheckMaPa = []
+        lstCheck.forEach(item => {
+            lstCheckMaPa.push(item.maPaCha)
+        })
+
+        if (this.userService.isAccessPermisson(Roles.GTT.SUA_QUYETDINH_BTC)) {
+            if (lstCheckMaPa.includes(this.maPa)) {
+                this.status = true;
+                this.statusBtnEdit = true;
+                this.statusBtnSave = true;
+            } else {
+                this.status = false;
+                this.statusBtnEdit = false;
+                this.statusBtnSave = false;
+            }
+        }
+    }
 
     // all api get chi tiết màn hình
     async getDetailReport() {
@@ -927,8 +993,11 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         const header = [
             { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 8, val: null },
 
-            { t: 0, b: 0, l: 0, r: 1, val: "Quyết định bộ tài chính" },
-            { t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+            { t: 0, b: 0, l: 0, r: 1, val: `Quyết định Bộ Tài Chính năm ${this.namPa}` },
+            { t: 2, b: 2, l: 0, r: 0, val: `số quyết định ${this.soQd.fileName} ` },
+            { t: 2, b: 2, l: 1, r: 1, val: `Ngày ${this.ngayTao} ` },
+            { t: 2, b: 2, l: 2, r: 2, val: `Mã phương án BTC ${this.maPa} ` },
+            { t: 2, b: 2, l: 4, r: 4, val: `Trạng thái ${this.getStatusName(this.isStatus)} ` },
 
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
