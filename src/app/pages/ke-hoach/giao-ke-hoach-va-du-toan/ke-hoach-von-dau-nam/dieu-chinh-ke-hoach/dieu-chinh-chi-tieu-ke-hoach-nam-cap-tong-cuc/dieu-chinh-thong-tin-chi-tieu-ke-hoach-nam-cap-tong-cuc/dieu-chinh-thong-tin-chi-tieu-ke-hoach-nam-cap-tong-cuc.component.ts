@@ -225,6 +225,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       await Promise.all([
         this.loadDanhMucHang(),
       ]);
+
+    if (this.isTongCuc()) {
+      await this.getDSDXDC(this.yearNow)
+    }
+
     if (this.id > 0) {
       await this.loadThongTinChiTieuKeHoachNam(this.id);
     } else {
@@ -237,8 +242,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
       if (this.userService.isCuc()) {
         await this.findCanCuByYearCuc(this.yearNow)
-      } else {
-        await this.getDSDXDC(this.yearNow)
       }
 
       await this.findCanCuByYear(this.yearNow);
@@ -634,12 +637,14 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.dataVatTuNhap = khVatTuNhap.map((vattu) => {
             return {
               ...vattu,
+              id: undefined,
               loai: "NHAP",
             }
           })
           this.dataVatTuXuat = khVatTuXuat.map((vattu) => {
             return {
               ...vattu,
+              id: undefined,
               loai: "XUAT",
             }
           })
@@ -907,8 +912,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   initForm() {
     this.formData = this.fb.group({
       id: [],
-      trangThai: STATUS.DU_THAO,
-      tenTrangThai: 'Dự thảo',
+      trangThai: STATUS.DANG_NHAP_DU_LIEU,
+      tenTrangThai: 'Đang nhập dữ liệu',
       tenDonVi: [],
       soQuyetDinh: [, [Validators.required],
       ],
