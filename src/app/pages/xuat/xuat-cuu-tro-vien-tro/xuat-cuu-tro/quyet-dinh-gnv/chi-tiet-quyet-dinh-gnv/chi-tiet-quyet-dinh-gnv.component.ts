@@ -343,11 +343,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   async openDialogQdPd() {
     try {
       await this.spinner.show();
-      let res
+      let res;
       if (this.formData.value.type == 'XC') {
         res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
-          trangThai: STATUS.DA_DUYET_LDTC,
-          idQdGnvNull: true,
+          trangThai: STATUS.BAN_HANH,
+          types: ["XC"],
           paggingReq: {
             limit: this.globals.prop.MAX_INTERGER,
             page: 0
@@ -356,7 +356,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       } else {
         res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
           trangThai: STATUS.BAN_HANH,
-          idQdGnvNull: true,
+          types: ['TH', 'TTr'],
           paggingReq: {
             limit: this.globals.prop.MAX_INTERGER,
             page: 0
@@ -396,7 +396,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               loaiNhapXuat: detail.loaiNhapXuat,
               kieuNhapXuat: detail.kieuNhapXuat,
               tenVthh: detail.tenVthh,
-              dataDtl: detail.quyetDinhPdDtl
+              dataDtl: detail.quyetDinhPdDtl,
+              type: detail.type
             })
             await this.buildTableView();
           }
@@ -421,7 +422,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
     });
     let data = this.formData.value.dataDtl;
-    if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC) {
+    if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC || this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CUC) {
       data = this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*"));
     }
     this.phuongAnView = chain(data)
@@ -758,46 +759,83 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let soLuongGiao = this.formDataDtl.value.soLuongGiao;
     let soLuongDx = this.formDataDtl.value.soLuongDx;
     if (maDvi) {
-      await this.quanLyHangTrongKhoService.getTrangThaiHt({
-        maDvi: maDvi,
-        loaiVthh: loaiVthh,
-        cloaiVthh: cloaiVthh ?? null
-      }).then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data;
-          if (data.length > 0) {
-            // if (loaiVthh == '0101' || loaiVthh == '0102') {
-            //   this.formDataDtl.patchValue({
-            //     cloaiVthh: data[0].cloaiVthh,
-            //     // tonKhoCloaiVthh:data[0].slHienThoi
-            //   });
-            // }
-            let tonKhoDvi = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-            let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
-            if (dataCloai.length == 0) {
-              dataCloai = data;
-            }
-            let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-            this.formDataDtl.patchValue({
-              tonKhoDvi: tonKhoDvi,
-              tonKhoCloaiVthh: tonKhoCloaiVthh
-            });
-            if (this.userService.isCuc()) {
-              cloaiVthh ? this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoCloaiVthh))]) :
-                this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);
-              this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
-            }
-            if (this.userService.isChiCuc()) {
-              cloaiVthh ?
-                this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]) :
-                this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoDvi))]);
-              this.formDataDtl.controls['soLuong'].updateValueAndValidity();
-            }
-          } else {
-            this.formDataDtl.patchValue({ tonKhoDvi: 0, tonKhoCloaiVthh: 0 });
-          }
+      // await this.quanLyHangTrongKhoService.getTrangThaiHt({
+      //   maDvi: maDvi,
+      //   loaiVthh: loaiVthh,
+      //   cloaiVthh: cloaiVthh ?? null
+      // }).then((res) => {
+      //   if (res.msg == MESSAGE.SUCCESS) {
+      //     let data = res.data;
+      //     if (data.length > 0) {
+      //       // if (loaiVthh == '0101' || loaiVthh == '0102') {
+      //       //   this.formDataDtl.patchValue({
+      //       //     cloaiVthh: data[0].cloaiVthh,
+      //       //     // tonKhoCloaiVthh:data[0].slHienThoi
+      //       //   });
+      //       // }
+      //       let tonKhoDvi = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+      //       let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
+      //       if (dataCloai.length == 0) {
+      //         dataCloai = data;
+      //       }
+      //       let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+      //       this.formDataDtl.patchValue({
+      //         tonKhoDvi: tonKhoDvi,
+      //         tonKhoCloaiVthh: tonKhoCloaiVthh
+      //       });
+      //       if (this.userService.isCuc()) {
+      //         cloaiVthh ? this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoCloaiVthh))]) :
+      //           this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);
+      //         this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
+      //       }
+      //       if (this.userService.isChiCuc()) {
+      //         cloaiVthh ?
+      //           this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]) :
+      //           this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoDvi))]);
+      //         this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      //       }
+      //     } else {
+      //       this.formDataDtl.patchValue({ tonKhoDvi: 0, tonKhoCloaiVthh: 0 });
+      //     }
+      //   }
+      // });
+      const body = {
+        maDvi, loaiVthh, cloaiVthh
+
+      }
+      let tonKhoDvi: number = 0;
+      let tonKhoCloaiVthh: number = 0;
+      const res = await this.mangLuoiKhoService.slTon(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const slTon = res.data;
+        tonKhoDvi = slTon;
+        tonKhoCloaiVthh = slTon;
+        this.formDataDtl.patchValue({
+          tonKhoDvi: slTon,
+          tonKhoCloaiVthh: slTon
+        })
+        if (this.userService.isCuc()) {
+          cloaiVthh ? this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoCloaiVthh))]) :
+            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);
+          this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
         }
-      });
+        if (this.userService.isChiCuc()) {
+          cloaiVthh ?
+            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]) :
+            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoDvi))]);
+          this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+        }
+      }
+      else {
+        this.formDataDtl.patchValue({
+          tonKhoDvi: 0,
+          tonKhoCloaiVthh: 0
+        });
+        cloaiVthh ?
+          this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, 0))]) :
+          this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, 0))]);
+        this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      }
     }
   }
   isVthhGao() {

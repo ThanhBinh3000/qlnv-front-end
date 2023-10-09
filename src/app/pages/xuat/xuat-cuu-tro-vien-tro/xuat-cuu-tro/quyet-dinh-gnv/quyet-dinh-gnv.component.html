@@ -92,9 +92,9 @@
             <th class="text-center">Năm xuất</th>
             <th class="text-center">Số QĐ giao NV XH</th>
             <th class="text-center">Ngày quyết định</th>
-            <th class="text-center">Số QĐ PD PA</th>
-            <th class="text-center">Loại hàng hóa</th>
-            <th class="text-center">Thời gian giao nhận hàng</th>
+            <th class="text-center">{{loaiXuat ==='XC'? 'Số QĐ xuất cấp': 'Số QĐ PD PA'}}</th>
+            <!-- <th class="text-center">Loại hàng hóa</th> -->
+            <th class="text-center">{{loaiXuat ==='XC'? 'Thời hạn xuất CT, VT':'Thời gian giao nhận hàng'}}</th>
             <th class="text-center">Trích yếu quyết định</th>
             <th class="text-center">Số BB tịnh kho</th>
             <th class="text-center">Số BB hao dôi</th>
@@ -135,12 +135,12 @@
                   (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <!-- <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                   (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
               </nz-input-group>
-            </th>
+            </th> -->
             <th>
               <nz-input-group>
                 <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.thoiGianGiaoNhan"
@@ -196,7 +196,7 @@
             <td><a nz-button nzType="link" (click)="openQdGnvModal(data.id)">{{ data.soBbQd }}</a></td>
             <td>{{ data.ngayKy | date: globals.dateFormat }}</td>
             <td><a nz-button nzType="link" (click)="openQdPdModal(data.idQdPd)">{{ data.soQdPd }}</a></td>
-            <td>{{ data.tenLoaiVthh}}</td>
+            <!-- <td>{{ data.tenLoaiVthh}}</td> -->
             <td>{{ data.thoiGianGiaoNhan | date: globals.dateFormat }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.soBbTinhKho }}</td>
