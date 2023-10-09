@@ -96,10 +96,10 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số Công văn/tờ trình</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
-                <input formControlName="soCongVan" [readonly]="isViewDetail" nz-input nzSize="small"
-                  placeholder="Nhập số công văn/tờ trình" />
-              </nz-input-group>
+              <!-- <nz-input-group nzAddOnAfter="/{{qdTCDT}}"> -->
+              <input formControlName="soCongVan" [readonly]="isViewDetail" nz-input nzSize="small"
+                placeholder="Nhập số công văn/tờ trình" />
+              <!-- </nz-input-group> -->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -188,7 +188,7 @@
             <nz-form-label [nzNoColon]="true"> Số đề xuất điều chỉnh của Cục DTNN KV</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select [nzDisabled]="isViewDetail" nzMode="multiple" nzPlaceHolder="Chọn số đề xuất" nzAllowClear
-                formControlName="soQuyetDinhDcCuaCs">
+                formControlName="soQuyetDinhDcCuaCs" (ngModelChange)="onChangeDX($event)">
                 <nz-option *ngFor="let dx of listDeXuat" [nzValue]="dx" [nzLabel]="dx"></nz-option>
               </nz-select>
             </nz-form-control>
