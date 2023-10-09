@@ -227,9 +227,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       // await this.findCanCuByYearCuc(this.yearNow);
 
       // await this.initDataThemMoi();
+      await this.findCanCuByYear(this.yearNow);
     }
 
-    await this.findCanCuByYear(this.yearNow);
   }
 
   async initDataThemMoi() {
@@ -588,9 +588,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
 
 
-          const khVatTuNhap = data.khVatTuNhap.filter((cuc) => cuc.maDonVi == this.userInfo.MA_DVI)
-          const khVatTuXuat = data.khVatTuXuat.filter((cuc) => cuc.maDonVi == this.userInfo.MA_DVI)
-
+          const khVatTuNhap = data.khVatTuNhap.filter((cuc) => cuc.maDvi == this.userInfo.MA_DVI)
+          const khVatTuXuat = data.khVatTuXuat.filter((cuc) => cuc.maDvi == this.userInfo.MA_DVI)
+          // debugger
           this.dataVatTuNhap = khVatTuNhap.map((vattu) => {
             return {
               ...vattu,
