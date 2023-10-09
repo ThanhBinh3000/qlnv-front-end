@@ -97,8 +97,8 @@
           </nz-date-picker>
         </th>
         <th>
-          <nz-date-picker nzFormat='dd-MM-yyyy' [(ngModel)]='filterTable.ngayCapNhap'
-                          (ngModelChange)="filterInTable('ngayCapNhap',filterTable.ngayCapNhap, true)">
+          <nz-date-picker nzFormat='dd-MM-yyyy' [(ngModel)]='filterTable.ngaySua'
+                          (ngModelChange)="filterInTable('ngaySua',filterTable.ngaySua, true)">
           </nz-date-picker>
         </th>
         <th>
@@ -134,15 +134,15 @@
         <td>{{ data.tenTrangThai }}</td>
         <td>{{ data.tenTrangThaiBtc }}</td>
         <td class='text-center'>
-          <a *ngIf='data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV'
+          <a *ngIf='(data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV) &&  userService.isAccessPermisson("QTOANVONPHI_BONGANH_XEM")'
              (click)='viewDetail(data.id, true)'>
             <i class='fa fa-eye' title='Xem chi tiết'></i>
           </a>
-          <a *ngIf='data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV '
+          <a *ngIf='(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV) &&  userService.isAccessPermisson("QTOANVONPHI_BONGANH_THEM")'
              (click)='viewDetail(data.id, false)'>
             <i class='fa fa-pencil' title='Sửa'></i>
           </a>
-          <a *ngIf='data.trangThai == STATUS.DU_THAO' (click)='xoaItem(data)'>
+          <a *ngIf='data.trangThai == STATUS.DU_THAO &&  userService.isAccessPermisson("QTOANVONPHI_BONGANH_XOA")' (click)='xoaItem(data)'>
             <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
           </a>
         </td>
