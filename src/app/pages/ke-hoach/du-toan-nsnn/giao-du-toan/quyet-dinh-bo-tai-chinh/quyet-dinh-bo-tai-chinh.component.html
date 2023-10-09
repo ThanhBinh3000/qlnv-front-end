@@ -114,11 +114,11 @@
                     </td>
                     <td class="text-left">
                         <a (click)="viewDetail(data)">
-                            <ng-container *ngIf="data.isEdit; else view">
-                                <i class="fa fa-pencil"></i>
+                            <ng-container *ngIf="checkEditStatus(data.trangThai, data.maPa) ; else view">
+                                <i class="fa fa-eye"></i>
                             </ng-container>
                             <ng-template #view>
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-pencil"></i>
                             </ng-template>
                         </a>
                         <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">

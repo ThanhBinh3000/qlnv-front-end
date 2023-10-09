@@ -1559,6 +1559,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
 
             { t: 0, b: 0, l: 0, r: 1, val: `Báo cáo quyết toán vốn phí hàng DTQG quý ${this.quyQtoan}, năm ${this.namQtoan}` },
             { t: 1, b: 1, l: 0, r: 1, val: `Kèm theo công văn số ${this.congVan.fileName}/TCDT, ngày ${dateExcel} của ${this.userInfo.TEN_DVI} ` },
+            { t: 2, b: 2, l: 0, r: 1, val: `Trạng thái báo cáo ${this.getStatusName(this.isStatus)}` },
 
             { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 4, l: 1, r: 1, val: 'Tên hàng dự trữ quốc gia' },

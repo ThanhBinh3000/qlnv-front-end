@@ -1394,8 +1394,11 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         }
         const header = [
             { t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
-            { t: 0, b: 0, l: 0, r: 1, val: "Phương án giao dự toán nsnn" },
+            { t: 0, b: 0, l: 0, r: 1, val: `Phương án giao trần chi dự toán nsnn năm ${this.namDtoan}` },
             { t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+            { t: 2, b: 2, l: 1, r: 1, val: `Ngày ${this.ngayTao} ` },
+            { t: 2, b: 2, l: 2, r: 2, val: `Mã phương án ${this.maPa} ` },
+            { t: 2, b: 2, l: 4, r: 4, val: `Trạng thái ${this.getStatusName()} ` },
 
             { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
             { t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },

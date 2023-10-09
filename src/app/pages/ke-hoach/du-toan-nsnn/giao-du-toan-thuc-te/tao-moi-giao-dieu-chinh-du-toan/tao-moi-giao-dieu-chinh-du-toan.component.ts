@@ -277,7 +277,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		if (this.id) {
 			// call chi tiết bản ghi khi có id
 			await this.getDetailReport();
-      this.sum1();
+			this.sum1();
 		} else {
 			this.maDonViTao = this.userInfo?.MA_DVI;
 			this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -802,7 +802,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
 	//check role cho các nut trinh duyet
 	getStatusButton() {
-		if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
+		if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GTT.SUA_PA_PBDT)) {
 			this.status = false;
 		} else {
 			this.status = true;
@@ -822,24 +822,24 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			checkParent = true;
 		}
 		const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
-		const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
+		const checkSave = this.userService.isAccessPermisson(Roles.GTT.SUA_PA_PBDT);
 		this.statusBtnSave = Status.check('saveWOHist', this.trangThaiBanGhi) && checkSave && checkChirld;
 
 
-		this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.COPY_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.PRINT_REPORT, checkChirld);
-		this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
+		this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GTT.TRINHDUYET_PA_PBDT, checkChirld);
+		this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GTT.DUYET_TUCHOI_PA_PBDT, checkChirld);
+		this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GTT.PHEDUYET_TUCHOI_PA_PBDT, checkChirld);
+		this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.COPY_PA_PBDT, checkChirld);
+		this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.IN_PA_PBDT, checkChirld);
+		this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-		if (this.userService.isAccessPermisson(Roles.GDT.GIAO_PA_PBDT) && this.soQd) {
+		if (this.userService.isAccessPermisson(Roles.GTT.GIAO_PA_PBDT) && this.soQd) {
 			this.statusBtnGiao = false;
 		} else {
 			this.statusBtnGiao = true;
 			this.statusGiaoToanBo = true;
 		}
-		if (this.userService.isAccessPermisson(Roles.GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
+		if (this.userService.isAccessPermisson(Roles.GTT.TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
 			this.statusBtnGuiDVCT = false;
 		}
 		if (this.trangThaiBanGhi == "7") {
@@ -1494,7 +1494,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	}
 
 	statusDeleteCv() {
-		if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
+		if (!this.userService.isAccessPermisson(Roles.GTT.SUA_CV_QD_GIAO_PA_PBDT)) {
 			return false;
 		}
 		if (!this.soQd?.fileName) {
@@ -1511,66 +1511,70 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	};
 
 
-  sum1() {
-    this.lstCtietBcao.forEach(item => {
-      this.sum(item.stt);
-    })
-  }
-  exportToExcel() {
-    if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-      return;
-    }
-    const header = [
-      { t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
-      { t: 0, b: 0, l: 0, r: 1, val: "Phương án giao dự toán nsnn" },
-      { t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+	sum1() {
+		this.lstCtietBcao.forEach(item => {
+			this.sum(item.stt);
+		})
+	}
+	exportToExcel() {
+		if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+			return;
+		}
+		const header = [
+			{ t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
+			{ t: 0, b: 0, l: 0, r: 1, val: `Phương án giao điều chỉnh dự toán nsnn năm ${this.namDtoan}` },
+			{ t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+			{ t: 2, b: 2, l: 1, r: 1, val: `Ngày ${this.ngayTao} ` },
+			{ t: 2, b: 2, l: 2, r: 2, val: `Mã phương án ${this.maPa} ` },
+			{ t: 2, b: 2, l: 3, r: 3, val: `Loại phương án: Phương án giao NSNN ` },
+			{ t: 2, b: 2, l: 4, r: 4, val: `Trạng thái ${this.getStatusName()} ` },
 
-      { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
-      { t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
-      { t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi giao từ cấp trên' },
-      { t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
-      { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
-    ]
-    this.lstDvi.forEach((item, index ) => {
-      const left = 4 + index
-      header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
-    })
+			{ t: 5, b: 7, l: 0, r: 0, val: 'STT' },
+			{ t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
+			{ t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi giao từ cấp trên' },
+			{ t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
+			{ t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
+		]
+		this.lstDvi.forEach((item, index) => {
+			const left = 4 + index
+			header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
+		})
 
-    const headerBot = 7;
-    this.lstCtietBcao.forEach((item, index) => {
-      const row = headerBot + index + 1;
-      const tenNdung =  this.getTenNdung(item.maNdung);
-      header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
-      header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung})
-      header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
-      header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCongSoTranChi?.toString() })
+		const headerBot = 7;
+		this.lstCtietBcao.forEach((item, index) => {
+			const row = headerBot + index + 1;
+			const tenNdung = this.getTenNdung(item.maNdung);
+			header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
+			header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung })
+			header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
+			header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCongSoTranChi?.toString() })
 
-      item.lstCtietDvis.forEach((e, ind) => {
-        const col = 4 + ind ;
-        header.push({ t: row, b: row, l: col , r: col, val: e.soTranChi?.toString() })
-      })
-    })
+			item.lstCtietDvis.forEach((e, ind) => {
+				const col = 4 + ind;
+				header.push({ t: row, b: row, l: col, r: col, val: e.soTranChi?.toString() })
+			})
+		})
 
-    const workbook = XLSX.utils.book_new();
-    const worksheet = Table.initExcel(header);
-    // XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+		const workbook = XLSX.utils.book_new();
+		const worksheet = Table.initExcel(header);
+		// XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
 
-    let excelName = this.maPa;
-    excelName = excelName + '_GDTTT_PA.xlsx'
-    XLSX.writeFile(workbook, excelName);
-  }
+		let excelName = this.maPa;
+		excelName = excelName + '_GDTTT_PA.xlsx'
+		XLSX.writeFile(workbook, excelName);
+	}
 
-  getTenNdung(maNdung: number): any{
-    let tenNdung: string;
-    this.noiDungs.forEach(itm => {
-      if(itm.ma == maNdung){
-        return tenNdung = itm.giaTri;
-      }
-    })
-    return tenNdung
-  }
+	getTenNdung(maNdung: number): any {
+		let tenNdung: string;
+		this.noiDungs.forEach(itm => {
+			if (itm.ma == maNdung) {
+				return tenNdung = itm.giaTri;
+			}
+		})
+		return tenNdung
+	}
 
 
 

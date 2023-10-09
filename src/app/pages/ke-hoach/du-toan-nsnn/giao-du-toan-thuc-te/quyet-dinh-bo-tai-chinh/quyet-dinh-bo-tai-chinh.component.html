@@ -56,50 +56,15 @@
             [nzShowPagination]="false" nzBordered>
             <thead>
                 <tr>
-                    <th scope="col" nzWidth="45px">
-                        <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
-                    </th>
                     <th scope="col" nzWidth="60px">STT</th>
                     <th scope="col" nzWidth="150px">Mã phương án</th>
                     <th scope="col" nzWidth="150px">Ngày tạo</th>
                     <th scope="col" nzWidth="150px">Năm phương án</th>
                     <th scope="col" nzWidth="150px">Hành động </th>
                 </tr>
-                <tr class="search-table">
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col">
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPa"
-                                (input)="filterInTable('maPa',filterTable.maPa, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th scope="col">
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTaoTu"
-                            (ngModelChange)="filterInTable('ngayTaoTu',filterTable.ngayTaoTu, true)">
-                        </nz-date-picker>
-                    </th>
-                    <th scope="col">
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namPa"
-                                (input)="filterInTable('namPa',filterTable.namPa, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th scope="col"></th>
-                </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
-                    <td nzWidth="45px">
-                        <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                            [nzDisabled]="!data.isDelete"></label>
-                    </td>
                     <td class="text-center">
                         {{ (i + 1) + (pages.page - 1)*pages.size }}
                     </td>
@@ -114,11 +79,11 @@
                     </td>
                     <td class="text-left">
                         <a (click)="viewDetail(data)">
-                            <ng-container *ngIf="data.isEdit; else view">
-                                <i class="fa fa-pencil"></i>
+                            <ng-container *ngIf="checkEditStatus(data.trangThai, data.maPa) ; else view">
+                                <i class="fa fa-eye"></i>
                             </ng-container>
                             <ng-template #view>
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-pencil"></i>
                             </ng-template>
                         </a>
                         <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">
