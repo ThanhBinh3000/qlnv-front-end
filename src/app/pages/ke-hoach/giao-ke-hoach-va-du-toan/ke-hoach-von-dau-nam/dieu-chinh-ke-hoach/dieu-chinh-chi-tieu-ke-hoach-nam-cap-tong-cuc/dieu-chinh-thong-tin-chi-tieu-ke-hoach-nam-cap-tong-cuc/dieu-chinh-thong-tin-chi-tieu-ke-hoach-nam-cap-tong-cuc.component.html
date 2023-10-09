@@ -162,10 +162,11 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số đề xuất điều chỉnh của Cục DTNN KV</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isViewDetail" nzMode="multiple" nzPlaceHolder="Chọn số đề xuất" nzAllowClear
+              <input [readonly]="true" nz-input formControlName="soQuyetDinhDcCuaCs" readonly="true" />
+              <!-- <nz-select [nzDisabled]="isViewDetail" nzMode="multiple" nzPlaceHolder="Chọn số đề xuất" nzAllowClear
                 formControlName="soQuyetDinhDcCuaCs">
                 <nz-option *ngFor="let dx of listDeXuat" [nzValue]="dx" [nzLabel]="dx"></nz-option>
-              </nz-select>
+              </nz-select> -->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -253,9 +254,9 @@
             </tr>
             <tr>
               <th class="text-center">Tổng</th>
-              <th class="text-center">Nhập <br> {{yearNow - 4}}</th>
               <th class="text-center">Nhập <br> {{yearNow - 3}}</th>
               <th class="text-center">Nhập <br> {{yearNow - 2}}</th>
+              <th class="text-center">Nhập <br> {{yearNow - 1}}</th>
               <th class="text-center">Tổng</th>
               <th class="text-center">Nhập <br> {{yearNow - 3}}</th>
               <th class="text-center">Nhập <br> {{yearNow - 2}}</th>
