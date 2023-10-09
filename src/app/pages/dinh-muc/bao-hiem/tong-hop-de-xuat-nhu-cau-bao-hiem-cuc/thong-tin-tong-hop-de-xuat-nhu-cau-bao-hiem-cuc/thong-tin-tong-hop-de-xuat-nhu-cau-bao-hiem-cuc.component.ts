@@ -118,6 +118,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     if (listHh.listQlDinhMucThGiaTriBaoHiem && listHh.listQlDinhMucThGiaTriBaoHiem.length > 0) {
       this.tableGiaTriBh = listHh.listQlDinhMucThGiaTriBaoHiem
     }
+    this.expandAll(this.dataHang);
   }
 
   async tongHop() {
@@ -469,6 +470,34 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
+    }
+  }
+
+  expandAll(table: any[]) {
+    if (table && table.length > 0) {
+      table.forEach(s => {
+        if (s && s.dataChildKho && s.dataChildKho.length > 0) {
+          s.dataChildKho.forEach(itemKho => {
+            this.expandSet.add(itemKho.idVirtual);
+          })
+        }
+
+        if (s && s.dataChildHang && s.dataChildHang.length > 0) {
+          s.dataChildHang.forEach(itemHang => {
+            this.expandSet.add(itemHang.idVirtual);
+            if (itemHang.childData && itemHang.childData.length > 0 ) {
+              itemHang.childData.forEach(child1 => {
+                this.expandSet.add(child1.idVirtual);
+                if (child1.childData && child1.childData.length > 0 ) {
+                  child1.childData.forEach(child2 => {
+                    this.expandSet.add(child2.idVirtual);
+                  })
+                }
+              })
+            }
+          })
+        }
+      });
     }
   }
 }

@@ -459,7 +459,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.formData.patchValue({
           soCongVan: data.soDeXuat
         });
-        if (this.userService.isTongCuc()) {
+        if (this.userService.isCuc()) {
           this.dsKeHoachLuongThucClone = data.dcKeHoachNamLtDtl.map((khlt) => {
 
             // gạo tồn
@@ -590,7 +590,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
         }
-        console.log("getPhuongAn", data)
+        console.log("getDeXuat", data)
       }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
