@@ -30,6 +30,7 @@ import { NzTreeNodeOptions } from "ng-zorro-antd/core/tree";
 import { DANH_MUC_LEVEL } from "src/app/pages/luu-kho/luu-kho.constant";
 import { NzTreeSelectComponent } from "ng-zorro-antd/tree-select";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
+import { PREVIEW } from 'src/app/constants/fileType';
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-gnv',
@@ -265,8 +266,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let res = await this.danhMucService.loadDanhMucHangHoaAsync();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listVatTuHangHoa = res.data;
-      //
-      debugger;
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
       let filterLuongThuc = cloneDeep(listLuongThuc.children.filter(s => s.key == '0101' || s.key == '0102'));
       let listVatTu = cloneDeep(this.listVatTuHangHoa.find(s => s.key == '02'));
@@ -482,11 +481,12 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           }).value().filter(f => !!f);
         if (!noiDungDxRow) return;
         const soLuong = rs.reduce((sum, cur) => sum += cur.soLuong, 0);
+        const soLuongDx = rs.reduce((sum, cur) => sum += cur.soLuongDx, 0);
         return {
           idVirtual: uuidv4(),
           noiDungDx: key,
           soLuong,
-          soLuongDx: noiDungDxRow.soLuongDx,
+          soLuongDx: soLuongDx,
           childData: rs,
           mId: noiDungDxRow.mId
         };
@@ -820,5 +820,19 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       return true;
     }
     return false
+  }
+  async xemTruocPd(id: number) {
+    await this.service.preview({
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
   }
 }

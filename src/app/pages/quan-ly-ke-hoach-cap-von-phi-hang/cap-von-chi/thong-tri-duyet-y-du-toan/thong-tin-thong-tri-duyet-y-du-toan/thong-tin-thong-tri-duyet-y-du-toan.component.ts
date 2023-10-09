@@ -144,6 +144,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       tenDviThuHuong: [this.itemThongTri ? this.itemThongTri.tenDviThuHuong : null],
       dviThuHuongStk: [this.itemThongTri ? this.itemThongTri.dviThuHuongStk : null],
       dviThuHuongNganHang: [this.itemThongTri ? this.itemThongTri.dviThuHuongNganHang : null],
+      lyDoTuChoi: [this.itemThongTri ? this.itemThongTri.lyDoTuChoi : null],
     });
   }
 

@@ -4,6 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button type="button" class="btn btn-sub" (click)="xemTruocPd(idSelected)">
+      <i class="icon htvbdh_totrinh"></i>
+      <span> In/Xem trước </span>
+    </button>
     <ng-container *ngIf="userService.isCuc()">
       <button (click)="reject(idSelected,STATUS.TU_CHOI_LDC)"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
@@ -56,7 +60,7 @@
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-      <button *ngIf="formData.value.trangThaiXh == STATUS.CHUA_THUC_HIEN" type="button" class="btn btn-sub xanh-nhat"
+      <button *ngIf="formData.value.trangThaiXh !== STATUS.DA_HOAN_THANH" type="button" class="btn btn-sub xanh-nhat"
         (click)="updateProcess(STATUS.DA_HOAN_THANH)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành phân bổ</span>
@@ -287,7 +291,7 @@
                 <td>{{i + 1}}</td>
                 <td>{{ item.noiDungDx }}</td>
                 <td></td>
-                <td>{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                <td class="bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                 <td></td>
                 <td>{{item.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                 <td></td>
@@ -317,7 +321,7 @@
                     <td>{{lv1.tenHang}}</td>
                     <td>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                     <td></td>
-                    <td>{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="bold">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                     <td></td>
                     <td>{{lv1.donViTinh}}</td>
                     <td></td>
@@ -351,7 +355,7 @@
                         <td></td>
                         <td></td>
                         <td>{{lv2.tonKho}}</td>
-                        <td><strong>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
+                        <td class="bold">{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
                         <td>{{lv2.tenTrangThai}}</td>
                         <ng-container *ngIf="showAction()">
                           <td>

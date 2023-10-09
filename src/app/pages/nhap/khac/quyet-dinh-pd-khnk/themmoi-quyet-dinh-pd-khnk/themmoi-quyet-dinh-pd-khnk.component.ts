@@ -19,7 +19,6 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -153,6 +152,8 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       ngayPduyet: [null],
       tongThanhTien: [null],
       lastest: [''],
+      tongSlNhap: [''],
+      noiDung: [''],
       loaiHinhNx: [null]
     })
   }
@@ -206,7 +207,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
 
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
+    if (this.userService.isAccessPermisson("NHDTQG_NK_QDNH_THEM")) {
       return true;
     }
     return false;
@@ -327,10 +328,11 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    debugger
     await this.spinner.show();
-    if (!this.isDetailPermission()) {
-      return;
-    }
+    // if (!this.isDetailPermission()) {
+    //   return;
+    // }
     this.setValidator(isGuiDuyet)
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -615,7 +617,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     await this.spinner.show()
     if (event) {
       const data = event;
-      console.log(data)
+      console.log(data, "0000000")
       this.formData.patchValue({
         loaiVthh: data.dxHdr[0].loaiVthh,
         tenLoaiVthh: data.dxHdr[0].tenLoaiVthh,
@@ -625,6 +627,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         kieuNx: data.dxHdr[0].kieuNx,
         idTh: data.id,
         maTh: data.maTh,
+        noiDung: data.noiDungTh,
         idDx: null,
         soTrHdr: null,
         dvt: data.dvt
@@ -633,6 +636,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.danhsachDxCache = cloneDeep(this.danhsachDx);
       this.dataInput = null;
       this.dataInputCache = null;
+      await this.calTongSlNhap();
       await this.showFirstRow(Event, this.danhsachDx[0]);
 
     }
@@ -710,6 +714,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
         this.dataInputCache = null;
+      await this.calTongSlNhap();
       await this.showFirstRow(Event, this.danhsachDx[0]);
     }
     await this.spinner.hide();
@@ -734,6 +739,18 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
       await this.spinner.hide();
+    }
+  }
+
+  async calTongSlNhap() {
+    if (this.danhsachDx) {
+      let sum = 0
+      this.danhsachDx.forEach(item => {
+        sum += item.tongSlNhap;
+      })
+      this.formData.patchValue({
+        tongSlNhap: sum,
+      })
     }
   }
 

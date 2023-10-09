@@ -104,13 +104,13 @@
                    [nzIndeterminate]="indeterminate"></label>
           </th>
           <th class="text-center" nzWidth="40px">STT</th>
-          <th class="text-center" nzWidth="120px">Năm kế hoạch</th>
-          <th class="text-center" nzWidth="120px">Giai đoạn quy hoạch</th>
+          <th class="text-center" nzWidth="120px">Năm KH</th>
+          <th class="text-center" nzWidth="120px">Giai đoạn KC - HT</th>
           <th class="text-center" nzWidth="120px">Mã tổng hợp</th>
           <th class="text-center" nzWidth="120px">Ngày tổng hợp</th>
           <th class="text-center" nzWidth="120px">Số tờ trình</th>
           <th class="text-center" nzWidth="120px">Số quyết định</th>
-          <th class="text-center">Nội dung tổng hợp</th>
+          <th class="text-center">Nội dung tổng hợp/Trích yếu</th>
           <th class="text-center" nzWidth="120px">Trạng thái</th>
           <th class="text-center" nzWidth="100px">Hành động</th>
         </tr>
@@ -145,7 +145,7 @@
               ></nz-date-picker>
             </nz-input-group>
           </th>
-          <th>
+          <th >
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maToTrinh"
                      (input)="filterInTable('maToTrinh',filterTable.maToTrinh)" size="small" />
@@ -185,8 +185,8 @@
           <td>{{ data.namBatDau && data.namKetThuc ?  data.namBatDau + ' - ' + data.namKetThuc : ''}}</td>
           <td>{{ data.id }}</td>
           <td>{{ data.tgTongHop | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.maToTrinh }}</td>
-          <td>{{ data.soQuyetDinh }}</td>
+          <td class="text-blue">{{ data.maToTrinh }}</td>
+          <td class="text-blue">{{ data.soQuyetDinh }}</td>
           <td>{{ data.noiDung}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">

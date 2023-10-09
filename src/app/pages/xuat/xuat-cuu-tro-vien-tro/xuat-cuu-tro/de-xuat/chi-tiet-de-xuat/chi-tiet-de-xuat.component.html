@@ -4,6 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button type="button" class="btn btn-sub" (click)="xemTruocPd(idSelected)">
+      <i class="icon htvbdh_totrinh"></i>
+      <span> In/Xem trước </span>
+    </button>
     <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
       class="btn btn-sub" (click)="reject(idSelected,STATUS.TU_CHOI_LDV)">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
@@ -80,7 +84,7 @@
             [ngClass]="(formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDV||formData.value.trangThai == STATUS.DA_TAO_CBV) ? 'status-xanh' : 'status-do'">
             {{ formData.value.tenTrangThai }}
           </span>
-          <span>Đề xuất đề xuất xuất cứu trợ, viện trợ</span>
+          <span>Đề xuất cứu trợ, viện trợ</span>
         </div>
       </div>
     </div>

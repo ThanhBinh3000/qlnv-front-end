@@ -19,25 +19,7 @@ export class DieuChinhKeHoachComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.isCuc())
-      this.tabSelected = 'DXDC';
-    else
-      this.tabSelected = 'PADC';
-  }
 
-  // selectTabDieuChinh(item) {
-  //   this.tabSelect = 1;
-  //   this.isDetail = true;
-  //   this.isView = item.isView;
-  //   this.deXuatId = item.deXuatId;
-  // }
-
-  isCuc() {
-    return this.userService.isCuc();
-  }
-
-  isTongCuc() {
-    return this.userService.isTongCuc();
   }
 
   selectTab(tab) {

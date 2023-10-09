@@ -87,7 +87,7 @@
           <span> Xuất file </span>
         </button>
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BKCH_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BKXVT_THEM')"
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BKXVT_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BKCH_THEM')"
           type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
           <i class=" icon htvbdh_dau-cong"></i>
           <span> Thêm </span>
@@ -245,7 +245,7 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-bdg-chi-tiet-bang-ke-can [idInput]="idSelected" [idQdGnv]="idQdNv" [loaiVthh]="loaiVthh" [isView]="isView"
+  <app-bdg-chi-tiet-bang-ke-can [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
                                 (showListEvent)="showList()">
   </app-bdg-chi-tiet-bang-ke-can>
 </div>
