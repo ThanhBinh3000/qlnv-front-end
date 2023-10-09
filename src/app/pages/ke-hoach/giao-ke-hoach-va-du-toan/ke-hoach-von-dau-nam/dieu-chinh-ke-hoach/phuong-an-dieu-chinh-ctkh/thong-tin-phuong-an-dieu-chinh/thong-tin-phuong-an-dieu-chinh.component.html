@@ -9,6 +9,11 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
+        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="khongBH()"
+          *ngIf="userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Không ban hành</span>
+        </a>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
           *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && !isViewDetail">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -41,6 +46,8 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
+
+
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
           *ngIf="!this.isViewDetail && (thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
           <i class="icon htvbdh_tcdt_save"></i>
@@ -50,6 +57,11 @@
     </div>
   </div>
 </nz-affix>
+
+<nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV" nzShowIcon nzType="error"
+  nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+</nz-alert>
+
 <div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header">
@@ -84,7 +96,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số Công văn/tờ trình</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
+              <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
                 <input formControlName="soCongVan" [readonly]="isViewDetail" nz-input nzSize="small"
                   placeholder="Nhập số công văn/tờ trình" />
               </nz-input-group>

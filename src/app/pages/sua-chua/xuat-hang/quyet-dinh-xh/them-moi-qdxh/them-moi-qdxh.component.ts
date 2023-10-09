@@ -176,8 +176,6 @@ export class ThemMoiQdxhComponent extends Base3Component implements OnInit {
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_TP:
       case STATUS.TU_CHOI_LDC:
-        trangThai = STATUS.DU_THAO;
-        break;
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_TP;
         break;

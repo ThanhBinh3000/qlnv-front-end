@@ -48,4 +48,9 @@ export class DeXuatDieuChinhCTKHService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' });
   }
 
+  getDeXuat(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }
