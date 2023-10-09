@@ -165,6 +165,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   }
   LOAI_QD = LOAI_QD_CTKH;
 
+  dsDeXuatCuc: any[] = [];
   listDeXuat: any[] = [];
   listNamKH: any[] = [];
 
@@ -261,6 +262,266 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     }
   }
 
+  async onChangeDX(values) {
+    const dsDX = this.dsDeXuatCuc.filter(item => values.includes(item.soDeXuat));
+    if (dsDX.length > 0) {
+      console.log("this.dsKeHoachLuongThucClone", this.dsKeHoachLuongThucClone, dsDX)
+      // let dataLuongThuc = []
+      // let dataMuoi = []
+      // let khVatTuNhap = []
+      // let khVatTuXuat = []
+      dsDX.forEach((dx) => {
+        console.log('dx', dx)
+        this.dsKeHoachLuongThucClone = this.dsKeHoachLuongThucClone.filter((item) => item.maDvi !== dx.maDvi)
+        const lt = dx.dcKeHoachNamLtDtl[0]
+        let dcKeHoachNamLtTtDtl = lt.dcKeHoachNamLtTtDtl
+        const tkdnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "01").map((item) => {
+          return {
+            ...item,
+            id: undefined,
+            keHoachDieuChuyenLtDtlId: undefined,
+          }
+        })
+        const tkdnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "00").map((item) => {
+          return {
+            ...item,
+            id: undefined,
+            keHoachDieuChuyenLtDtlId: undefined,
+          }
+        })
+        const ntnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "11").map((item) => {
+          return {
+            ...item,
+            id: undefined,
+            keHoachDieuChuyenLtDtlId: undefined,
+          }
+        })
+        const ntnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "10").map((item) => {
+          return {
+            ...item,
+            id: undefined,
+            keHoachDieuChuyenLtDtlId: undefined,
+          }
+        })
+        const xtnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "21").map((item) => {
+          return {
+            ...item,
+            id: undefined,
+            keHoachDieuChuyenLtDtlId: undefined,
+          }
+        })
+        const xtnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "20").map((item) => {
+          return {
+            ...item,
+            id: undefined,
+            keHoachDieuChuyenLtDtlId: undefined,
+          }
+        })
+        const tkcnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "31").map((item) => {
+          return {
+            ...item,
+            id: undefined,
+            keHoachDieuChuyenLtDtlId: undefined,
+          }
+        })
+        const tkcnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "30").map((item) => {
+          return {
+            ...item,
+            id: undefined,
+            keHoachDieuChuyenLtDtlId: undefined,
+          }
+        })
+        dcKeHoachNamLtTtDtl = [...tkdnGao, ...tkdnThoc, ...ntnGao, ...ntnThoc, ...xtnGao, ...xtnThoc, ...tkcnGao, ...tkcnThoc]
+        this.dsKeHoachLuongThucClone.push(
+          {
+            ...lt,
+            hdrId: undefined,
+            id: undefined,
+            dcKeHoachNamLtTtDtl,
+            tkdnGao,
+            tkdnThoc,
+            ntnGao,
+            ntnThoc,
+            xtnGao,
+            xtnThoc,
+            tkcnGao,
+            tkcnThoc
+          }
+        )
+
+
+        this.dsMuoiClone = this.dsMuoiClone.filter((item) => item.maDvi !== dx.maDvi)
+        const khmuoi = dx.dcKeHoachNamMuoiDtl[0]
+        this.dsMuoiClone.push(
+          {
+            ...khmuoi,
+            hdrId: undefined,
+            id: undefined
+          }
+        )
+
+        this.dataVatTuNhap = this.dataVatTuNhap.filter((item) => item.maDvi !== dx.maDvi)
+        const dsVTN = dx.dcKeHoachNamVatTuDtl.filter((item) => item.loai == "NHAP").map((vattu) => {
+          return {
+            ...vattu,
+            hdrId: undefined,
+            id: undefined,
+            loai: "NHAP",
+          }
+        })
+        this.dataVatTuNhap.concat(dsVTN)
+
+        const dsVTX = dx.dcKeHoachNamVatTuDtl.filter((item) => item.loai == "XUAT").map((vattu) => {
+          return {
+            ...vattu,
+            hdrId: undefined,
+            id: undefined,
+            loai: "XUAT",
+          }
+        })
+        this.dataVatTuXuat = this.dataVatTuXuat.filter((item) => item.maDvi !== dx.maDvi)
+        this.dataVatTuXuat.concat(dsVTX)
+
+        this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
+        this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
+
+        // dataLuongThuc = dataLuongThuc.concat(dx.dcKeHoachNamLtDtl)
+        // dataMuoi = dataMuoi.concat(dx.dcKeHoachNamMuoiDtl)
+        // khVatTuNhap = khVatTuNhap.concat(dx.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai === "NHAP"))
+        // khVatTuXuat = khVatTuXuat.concat(dx.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai === "XUAT"))
+      })
+
+      console.log("this.dsKeHoachLuongThucClone", this.dsKeHoachLuongThucClone)
+      console.log("this.dsMuoiClone", this.dsMuoiClone)
+      console.log("this.dataVatTuNhap", this.dataVatTuNhap)
+      console.log("this.dataVatTuXuat", this.dataVatTuXuat)
+      // console.log("onChangeDX", dsDX)
+      // console.log("dataLuongThuc", dataLuongThuc)
+      // console.log("dataMuoi", dataMuoi)
+      // console.log("khVatTuNhap", khVatTuNhap)
+      // console.log("khVatTuXuat", khVatTuXuat)
+
+      // this.dsKeHoachLuongThucClone = dataLuongThuc.map((lt) => {
+      //   let dcKeHoachNamLtTtDtl = lt.dcKeHoachNamLtTtDtl
+      //   const tkdnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "01").map((item) => {
+      //     return {
+      //       ...item,
+      //       id: undefined,
+      //       keHoachDieuChuyenLtDtlId: undefined,
+      //     }
+      //   })
+      //   const tkdnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "00").map((item) => {
+      //     return {
+      //       ...item,
+      //       id: undefined,
+      //       keHoachDieuChuyenLtDtlId: undefined,
+      //     }
+      //   })
+      //   const ntnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "11").map((item) => {
+      //     return {
+      //       ...item,
+      //       id: undefined,
+      //       keHoachDieuChuyenLtDtlId: undefined,
+      //     }
+      //   })
+      //   const ntnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "10").map((item) => {
+      //     return {
+      //       ...item,
+      //       id: undefined,
+      //       keHoachDieuChuyenLtDtlId: undefined,
+      //     }
+      //   })
+      //   const xtnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "21").map((item) => {
+      //     return {
+      //       ...item,
+      //       id: undefined,
+      //       keHoachDieuChuyenLtDtlId: undefined,
+      //     }
+      //   })
+      //   const xtnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "20").map((item) => {
+      //     return {
+      //       ...item,
+      //       id: undefined,
+      //       keHoachDieuChuyenLtDtlId: undefined,
+      //     }
+      //   })
+      //   const tkcnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "31").map((item) => {
+      //     return {
+      //       ...item,
+      //       id: undefined,
+      //       keHoachDieuChuyenLtDtlId: undefined,
+      //     }
+      //   })
+      //   const tkcnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "30").map((item) => {
+      //     return {
+      //       ...item,
+      //       id: undefined,
+      //       keHoachDieuChuyenLtDtlId: undefined,
+      //     }
+      //   })
+      //   dcKeHoachNamLtTtDtl = [...tkdnGao, ...tkdnThoc, ...ntnGao, ...ntnThoc, ...xtnGao, ...xtnThoc, ...tkcnGao, ...tkcnThoc]
+
+      //   return {
+      //     ...lt,
+      //     hdrId: undefined,
+      //     id: undefined,
+      //     dcKeHoachNamLtTtDtl,
+      //     tkdnGao,
+      //     tkdnThoc,
+      //     ntnGao,
+      //     ntnThoc,
+      //     xtnGao,
+      //     xtnThoc,
+      //     tkcnGao,
+      //     tkcnThoc
+      //   }
+      // })
+
+      // this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
+      // this.sumRowDetailLuongThuc();
+
+      // this.dsMuoiClone = dataMuoi.map((khmuoi) => {
+      //   return {
+      //     ...khmuoi,
+      //     hdrId: undefined,
+      //     id: undefined
+      //   }
+      // })
+      // this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
+      // this.sumRowDetailMuoi()
+
+
+      // this.dataVatTuNhap = khVatTuNhap.map((vattu) => {
+      //   return {
+      //     ...vattu,
+      //     hdrId: undefined,
+      //     id: undefined,
+      //     loai: "NHAP",
+      //   }
+      // })
+      // this.dataVatTuXuat = khVatTuXuat.map((vattu) => {
+      //   return {
+      //     ...vattu,
+      //     hdrId: undefined,
+      //     id: undefined,
+      //     loai: "XUAT",
+      //   }
+      // })
+      // this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
+      // this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
+
+      // this.convertListDataVatTuNhap(this.dataVatTuNhap);
+      // this.convertListDataVatTuXuat(this.dataVatTuXuat);
+      // this.expandAll(this.dataVatTuNhapTree);
+      // this.expandAllVatTuXuat(this.dataVatTuXuatTree);
+    } else {
+      await this.findCanCuByYear(this.yearNow);
+    }
+
+
+  }
+
+
   async getDSDXDC(year) {
     const body = {
       namKeHoach: year,
@@ -271,8 +532,8 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data
       if (data) {
-        const dsDX = data.content
-        this.listDeXuat = dsDX.map((dx) => dx.soDeXuat)
+        this.dsDeXuatCuc = data.content
+        this.listDeXuat = data.content.map((dx) => dx.soDeXuat)
         console.log("listDeXuat", this.listDeXuat)
       }
     } else {
@@ -442,12 +703,14 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           this.dataVatTuNhap = khVatTuNhap.map((vattu) => {
             return {
               ...vattu,
+              id: undefined,
               loai: "NHAP",
             }
           })
           this.dataVatTuXuat = khVatTuXuat.map((vattu) => {
             return {
               ...vattu,
+              id: undefined,
               loai: "XUAT",
             }
           })
@@ -1124,8 +1387,8 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data
           console.log('data', data)
-          if (data.soCongVan)
-            data.soCongVan = data.soCongVan.split("/")[0]
+          // if (data.soCongVan)
+          //   data.soCongVan = data.soCongVan.split("/")[0]
           this.formData.patchValue(data)
           this.thongTinChiTieuKeHoachNam = res.data;
           this.fileDinhKems = data.fileDinhKems
@@ -1802,7 +2065,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
-        soCongVan: this.thongTinChiTieuKeHoachNam.soCongVan
+        soCongVan: this.thongTinChiTieuKeHoachNam.soCongVan//`${this.thongTinChiTieuKeHoachNam.soCongVan}/${this.qdTCDT}`
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -1810,6 +2073,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       if (data) {
 
         let body = this.formData.value
+        // body.soCongVan = `${body.soCongVan}/${this.qdTCDT}`
         body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
           return {
             ...lt,
@@ -1860,7 +2124,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     }
 
     let body = this.formData.value
-    body.soCongVan = `${body.soCongVan}/${this.qdTCDT}`
+    // body.soCongVan = `${body.soCongVan}/${this.qdTCDT}`
     body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
       return {
         ...lt,

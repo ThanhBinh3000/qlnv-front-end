@@ -60,7 +60,7 @@
             {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai
             }}
           </span>
-          <span>THÔNG TIN ĐỀ XUẤT ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.capDvi == "1" ?
+          <span>THÔNG TIN ĐỀ XUẤT ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.cap == "1" ?
             'TỔNG CỤC' : 'CỤC'}}
           </span>
         </div>
@@ -85,10 +85,10 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số đề xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="/TTr-CDTNN">
-                <input formControlName="soDeXuat" [readonly]="isViewDetail" nz-input nzSize="small"
-                  placeholder="Nhập số công văn/tờ trình" />
-              </nz-input-group>
+              <!-- <nz-input-group nzAddOnAfter="/TTr-CDTNN"> -->
+              <input formControlName="soDeXuat" [readonly]="isViewDetail" nz-input nzSize="small"
+                placeholder="Nhập số công văn/tờ trình" />
+              <!-- </nz-input-group> -->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -114,6 +114,17 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+
+        <!-- <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao chỉ tiêu của Cục</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
+              <input [readonly]="true" nz-input formControlName="soQuyetDinhDcCuaC" readonly="true" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div> -->
 
         <!-- <div nz-col [nzSpan]="12" *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1'">
           <div nz-col [nzSpan]="24" style="margin-top: 12px">
@@ -204,7 +215,7 @@
             <tr>
               <th rowspan="4" class="text-center" width="40px" nzLeft>STT</th>
               <th rowspan="4" class="text-center" width="330px" nzLeft>
-                {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}</th>
+                CỤC DTNN KHU VỰC
               <th colspan="9" class="text-center" width="1200px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
               <th colspan="3" class="text-center" width="400px">Nhập trong năm (2)</th>
               <th colspan="9" class="text-center" width="1200px">Xuất trong năm (3)</th>
@@ -439,7 +450,7 @@
               </ng-template>
             </tr>
           </tbody>
-          <tfoot>
+          <!-- <tfoot>
             <tr>
               <th nzLeft></th>
               <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
@@ -539,7 +550,7 @@
                 (sumTotalKhDuTruLuongThuc.tkcnTongGao) : 0) |
                 number: '1.0-3': 'vi_VN'}}
               </th>
-              <!-- <td class="background-last-row"></td> -->
+
               <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                   thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
             </tr>
@@ -576,7 +587,7 @@
               <th></th>
               <th></th>
             </tr>
-          </tfoot>
+          </tfoot> -->
         </nz-table>
       </div>
     </nz-tab>
@@ -590,7 +601,7 @@
             <tr>
               <th class="text-center" width="40px" nzLeft>STT</th>
               <th class="text-center" nzLeft>
-                {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
+                CỤC DTNN KHU VỰC
               </th>
               <th class="text-center" width="200px">Tồn kho đầu năm</th>
               <th class="text-center" width="200px">Nhập trong năm</th>
@@ -681,7 +692,7 @@
               <thead>
                 <tr>
                   <th rowSpan="2" class="text-center">STT</th>
-                  <th rowSpan="2">Cục DTNN khu vực</th>
+                  <th rowSpan="2">CỤC DTNN KHU VỰC</th>
                   <th rowSpan="2" class="text-center">Mã hàng</th>
                   <th rowSpan="2" class="text-center">Ký hiệu</th>
                   <th rowSpan="2" class="text-center">Tên hàng</th>
@@ -801,7 +812,7 @@
               <thead>
                 <tr>
                   <th>STT</th>
-                  <th>Cục DTNN khu vực</th>
+                  <th>CỤC DTNN KHU VỰC</th>
                   <th>Mã hàng</th>
                   <th>Ký hiệu</th>
                   <th>Tên hàng</th>

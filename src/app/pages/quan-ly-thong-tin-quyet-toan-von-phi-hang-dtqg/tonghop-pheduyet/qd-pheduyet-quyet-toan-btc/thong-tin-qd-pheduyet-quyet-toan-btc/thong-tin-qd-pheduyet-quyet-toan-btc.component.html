@@ -22,7 +22,7 @@
         <i class='icon htvbdh_totrinh'></i>
         <span> In/Xem trước </span>
       </button>
-      <button *ngIf='!isView && dataDetail.trangThaiBtc == STATUS.CHODUYET_BTC'
+      <button *ngIf='!isView && dataDetail.trangThaiBtc == STATUS.CHODUYET_BTC && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_QDPDQTBTC_CAPNHAT_BTC")'
               type='button' class='btn btn-main ml-2' (click)='save()'>
         <i class='icon htvbdh_tcdt_save'></i>
         <span>Lưu</span>
@@ -36,8 +36,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]='true'> Mã tổng hợp
             </nz-form-label>
-            <nz-input-group id='id'>
-              <input type='text' [readonly]='true' nz-input formControlName='id' />
+            <nz-input-group id='idVpBnGoc'>
+              <input type='text' [readonly]='true' nz-input formControlName='idVpBnGoc' />
             </nz-input-group>
           </nz-form-item>
         </div>

@@ -11,7 +11,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/quyet-dinh-dieu-chinh-ctkh';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { StorageService } from 'src/app/services/storage.service';
-
+import { chain, cloneDeep } from 'lodash';
 @Component({
   selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -32,6 +32,8 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
     { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
     { ma: "CUC", ten: "Giữa 2 cục DTNN KV" }
   ];
+
+  indexTab: number = 0;
 
 
   constructor(
@@ -91,6 +93,17 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
     this.userInfo = this.userService.getUserLogin();
   }
 
+  selectTab(cap: number) {
+    this.indexTab = cap;
+    this.timKiem();
+  }
+
+  isButton() {
+    if (this.isTongCuc() && this.indexTab == 0) return true
+    if (this.isCuc() && this.indexTab == 1) return true
+    return false
+  }
+
   disabledStartNgayQD = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKyDen) {
       return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
@@ -134,7 +147,46 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
       this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')
     }
     if (this.formData.value.soQdinh) this.formData.value.soQdinh = `${this.formData.value.soQdinh}/DCNB`
-    await this.search();
+    if (this.indexTab == 0) {
+      await this.searchTc();
+    } else {
+      await this.search();
+    }
+
+  }
+
+  async searchTc(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    await this.spinner.show();
+    try {
+      let body = this.formData.value
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
+      }
+      let res = await this.quyetDinhDieuChinhCTKHService.searchTc(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        this.totalRecord = data.totalElements;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   xoa(item: any, roles?) {
