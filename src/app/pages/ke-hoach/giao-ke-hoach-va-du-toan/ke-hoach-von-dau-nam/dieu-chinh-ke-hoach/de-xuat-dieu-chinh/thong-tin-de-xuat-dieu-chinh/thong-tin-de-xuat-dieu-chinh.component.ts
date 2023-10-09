@@ -1253,8 +1253,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data
           console.log('data', data)
-          if (data.soDeXuat)
-            data.soDeXuat = data.soDeXuat.split("/")[0]
+          // if (data.soDeXuat)
+          //   data.soDeXuat = data.soDeXuat.split("/")[0]
           this.formData.patchValue(data)
           this.thongTinChiTieuKeHoachNam = res.data;
           this.fileDinhKems = data.fileDinhKems
@@ -1930,7 +1930,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     }
 
     let body = this.formData.value
-    body.soDeXuat = `${body.soDeXuat}/TTr-CDTNN`
+    // body.soDeXuat = `${body.soDeXuat}/TTr-CDTNN`
     body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
       return {
         ...lt,
