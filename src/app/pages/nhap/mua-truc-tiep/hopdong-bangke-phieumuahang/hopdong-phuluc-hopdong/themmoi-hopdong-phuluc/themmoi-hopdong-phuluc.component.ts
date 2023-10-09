@@ -149,6 +149,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     await Promise.all([
       this.loadDataComboBox()
     ]);
+    console.log(this.idQdKh)
     if (this.idQdKh) {
       await this.onChangeQdKh(this.idQdKh);
     }
@@ -297,8 +298,8 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataHeader: ['Số QĐ kế hoạch', 'Tên loại hàng DTQG', 'Chủng loại hàng DTQG'],
-        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh'],
+        dataHeader: ['Số QĐ kế hoạch', 'Số QĐ điều chỉnh (nếu có)', 'Tên loại hàng DTQG', 'Chủng loại hàng DTQG'],
+        dataColumn: ['soQd', 'soQdDc', 'tenLoaiVthh', 'tenCloaiVthh'],
         dataTable: listQdKh
       },
     });
@@ -320,7 +321,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
             // this.dataTable = dataKq.danhSachCtiet;
             this.formData.patchValue({
               idQdKh: dataKq.idQdHdr,
-              soQdKh: dataKq.soQd,
+              soQdKh: dataKq.hhQdPheduyetKhMttHdr.isChange ? dataKq.hhQdPheduyetKhMttHdr.soQdDc : dataKq.hhQdPheduyetKhMttHdr.soQd,
               idQdGiaoNvNh: dataKq.hhQdPheduyetKhMttHdr.idQdGnvu,
               soQdGiaoNvNh: dataKq.hhQdPheduyetKhMttHdr.soQdGnvu,
               soQd: dataKq.hhQdPheduyetKhMttHdr.soQdGnvu,

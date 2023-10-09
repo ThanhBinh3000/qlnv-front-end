@@ -61,6 +61,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
         idQdDtl: [],
         namKh: [dayjs().get("year"), [Validators.required]],
         soQd: ['', [Validators.required]],
+        soQdDc: [''],
         maDvi: [''],
         tenDvi: ['', [Validators.required]],
         pthucMuaTrucTiep: [''],
@@ -118,6 +119,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           this.formData.patchValue({
             idQdDtl: id,
             soQd: dataDtl.hhQdPheduyetKhMttHdr.soQd,
+            soQdDc: dataDtl.hhQdPheduyetKhMttHdr.soQdDc,
             trangThai: dataDtl.trangThai,
             tenTrangThai: dataDtl.tenTrangThai,
             tenCloaiVthh: dataDtl.hhQdPheduyetKhMttHdr.tenCloaiVthh,

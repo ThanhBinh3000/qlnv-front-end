@@ -55,46 +55,46 @@
 <!--            </nz-form-control>-->
 <!--          </nz-form-item>-->
 <!--        </div>-->
-        <div nz-col [nzSpan]="7">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Giá chưa có thuế
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="đ/kg">
-                <nz-input-number [nzDisabled]="isView" formControlName="giaMua" nz-input [nzMin]="1"
-                                 [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
-                </nz-input-number>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="14">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"></nz-form-label>
-            <input class="text-green" [ngModel]="convertTienTobangChu(formData.value.giaMua)" nz-input
-                   readonly [ngModelOptions]="{standalone: true}" />
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="7">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Giá đã có thuế
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="đ/kg">
-                <nz-input-number [nzDisabled]="isView" formControlName="donGiaVat" nz-input [nzMin]="1"
-                                 [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
-                </nz-input-number>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="14">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"></nz-form-label>
-            <input class="text-green" [ngModel]="convertTienTobangChu(formData.value.donGiaVat)" nz-input
-                   readonly [ngModelOptions]="{standalone: true}" />
-          </nz-form-item>
-        </div>
+<!--        <div nz-col [nzSpan]="7">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label nzRequired [nzNoColon]="true"> Giá chưa có thuế-->
+<!--            </nz-form-label>-->
+<!--            <nz-form-control [nzErrorTip]="error">-->
+<!--              <nz-input-group nzAddOnAfter="đ/kg">-->
+<!--                <nz-input-number [nzDisabled]="isView" formControlName="giaMua" nz-input [nzMin]="1"-->
+<!--                                 [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">-->
+<!--                </nz-input-number>-->
+<!--              </nz-input-group>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
+<!--        <div nz-col [nzSpan]="14">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label [nzNoColon]="true"></nz-form-label>-->
+<!--            <input class="text-green" [ngModel]="convertTienTobangChu(formData.value.giaMua)" nz-input-->
+<!--                   readonly [ngModelOptions]="{standalone: true}" />-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
+<!--        <div nz-col [nzSpan]="7">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label nzRequired [nzNoColon]="true"> Giá đã có thuế-->
+<!--            </nz-form-label>-->
+<!--            <nz-form-control [nzErrorTip]="error">-->
+<!--              <nz-input-group nzAddOnAfter="đ/kg">-->
+<!--                <nz-input-number [nzDisabled]="isView" formControlName="donGiaVat" nz-input [nzMin]="1"-->
+<!--                                 [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">-->
+<!--                </nz-input-number>-->
+<!--              </nz-input-group>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
+<!--        <div nz-col [nzSpan]="14">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label [nzNoColon]="true"></nz-form-label>-->
+<!--            <input class="text-green" [ngModel]="convertTienTobangChu(formData.value.donGiaVat)" nz-input-->
+<!--                   readonly [ngModelOptions]="{standalone: true}" />-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
         <div nz-col [nzSpan]="7">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> %Thuế GTGT </nz-form-label>
