@@ -17,7 +17,7 @@
         <i class='fa fa-arrow-left'></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf='!isView && formData.value.trangThai == STATUS.DU_THAO ' type='button'
+      <button *ngIf='!isView && (formData.value.trangThai == STATUS.DU_THAO  || formData.value.trangThai == STATUS.TU_CHOI_LDV )' type='button'
               class='btn btn-sub xanh-nhat ml-2' (click)='save(true)'>
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Lưu và gửi duyệt</span>
@@ -32,10 +32,10 @@
         <i class='icon htvbdh_tcdt_tuchoi'></i>
         <span>Từ chối</span>
       </button>
-      <button *ngIf='!isView'
+      <button *ngIf='!isView && (formData.value.trangThai == STATUS.DU_THAO  || formData.value.trangThai == STATUS.TU_CHOI_LDV )'
               type='button' class='btn btn-main ml-2' (click)='save()'>
         <i class='icon htvbdh_tcdt_save'></i>
-        <span>Lưu 11</span>
+        <span>Lưu</span>
       </button>
     </div>
   </div>

@@ -85,32 +85,36 @@
         <th></th>
         <th>
           <nz-input-group>
-            <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.namQt'
-                   (input)="filterInTable('namQt',filterTable.namQt)" size='small' />
+            <nz-select nzAllowClear [(ngModel)]='filterTable.namQt'
+                       (ngModelChange)="filterInTable('namQt',filterTable.namQt, false)">
+              <nz-option *ngFor='let p of dsNam' [nzValue]='p' [nzLabel]='p'></nz-option>
+            </nz-select>
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-date-picker nzFormat='dd-MM-yyyy' [(ngModel)]='filterTable.ngayNhap'
+                          (ngModelChange)="filterInTable('ngayNhap',filterTable.ngayNhap, true)">
+          </nz-date-picker>
+        </th>
+        <th>
+          <nz-date-picker nzFormat='dd-MM-yyyy' [(ngModel)]='filterTable.ngayCapNhap'
+                          (ngModelChange)="filterInTable('ngayCapNhap',filterTable.ngayCapNhap, true)">
+          </nz-date-picker>
+        </th>
+        <th>
+          <nz-input-group>
+            <nz-select nzAllowClear [(ngModel)]='filterTable.trangThai'
+                       (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, false)">
+              <nz-option *ngFor='let p of listTrangThai' [nzValue]='p.ma' [nzLabel]='p.giaTri'></nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.ngayNhap'
-                   (input)="filterInTable('ngayNhap',filterTable.ngayNhap)" size='small' />
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.ngayCapNhap'
-                   (input)="filterInTable('ngayCapNhap',filterTable.ngayCapNhap)" size='small' />
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.trangThai'
-                   (input)="filterInTable('trangThai',filterTable.trangThai)" size='small' />
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.trangThaiPdBtc'
-                   (input)="filterInTable('trangThaiPdBtc',filterTable.trangThaiPdBtc)" size='small' />
+            <nz-select nzAllowClear [(ngModel)]='filterTable.trangThaiPdBtc'
+                       (ngModelChange)="filterInTable('trangThaiPdBtc',filterTable.trangThaiPdBtc, false)">
+              <nz-option *ngFor='let p of listTrangThaiBtc' [nzValue]='p.ma' [nzLabel]='p.giaTri'></nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>
@@ -128,9 +132,10 @@
         <td>{{ data.ngayNhap | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.ngaySua | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.tenTrangThai }}</td>
-        <td></td>
+        <td>{{ data.tenTrangThaiBtc }}</td>
         <td class='text-center'>
-          <a *ngIf='data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV' (click)='viewDetail(data.id, true)'>
+          <a *ngIf='data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV'
+             (click)='viewDetail(data.id, true)'>
             <i class='fa fa-eye' title='Xem chi tiết'></i>
           </a>
           <a *ngIf='data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV '

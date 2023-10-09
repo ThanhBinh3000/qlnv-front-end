@@ -82,6 +82,7 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
+      idVpBnGoc : [null],
       namQuyetToan: [dayjs().get('year'), [Validators.required]],
       ngayNhap: ['', [Validators.required]],
       trangThai: ['00'],
@@ -113,7 +114,7 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         this.dataDetail = data;
         this.formData.patchValue({
-          id: data.id,
+          idVpBnGoc: data.idVpBnGoc,
           namQuyetToan: data.namQt,
           ngayNhap: data.ngayNhap,
           ngayTongHop: data.ngayTao,
@@ -121,6 +122,8 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
           trangThai: data.trangThai,
           trangThaiBtc: data.trangThaiBtc,
           soToTrinh: data.soToTrinh,
+          ngayQdBtc: data.ngayQdBtc,
+          soQdBtc: data.soQdBtc,
         });
         this.dsQtNsChiTw = data.dsQtNsChiTw;
         this.dsQtNsKpChiNvDtqg = data.dsQtNsKpChiNvDtqg;
