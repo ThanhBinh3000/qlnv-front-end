@@ -610,8 +610,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         if (data) {
           this.dataQdTCDTGiaoCuc = {};
           this.formData.patchValue({
-            soQuyetDinhGiaoCuaTc: data.soQuyetDinh,
-            quyetDinhGiaoCuaTcId: data.id,
+            soQuyetDinhGiaoCuaTc: data.soQdDcChiTieu,
+            quyetDinhGiaoCuaTcId: data.dcChiTieuId,
             soQuyetDinhDcCuaCs: data.soQuyetDinhDcCuaC
           });
 
@@ -642,9 +642,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           console.log("dataQdTCDTGiaoCuc", this.dataQdTCDTGiaoCuc)
 
           if (this.isTongCuc()) {
-            await this.getPhuongAn(data.soQuyetDinh)
+            await this.getPhuongAn(data.soQdDcChiTieu)
           } else {
-            await this.getDeXuat(data.soQuyetDinh)
+            await this.getDeXuat(data.soQdDcChiTieu)
           }
 
 
