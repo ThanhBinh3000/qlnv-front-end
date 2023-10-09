@@ -255,8 +255,6 @@ export class ThemMoiBkComponent extends Base3Component implements OnInit {
     let trangThai
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
-        trangThai = STATUS.DU_THAO;
-        break;
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_LDCC;
         break;

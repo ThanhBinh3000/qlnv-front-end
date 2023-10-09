@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
+import dayjs from 'dayjs';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import { MESSAGE } from 'src/app/constants/message';
 import { PhuongAnDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/phuong-an-dieu-chinh-ctkh';
 import { StorageService } from 'src/app/services/storage.service';
 
@@ -15,7 +17,8 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class KhongBanHanhComponent extends Base2Component implements OnInit {
 
-  fileDinhKems: any[] = [];
+  soCongVan: string
+  fileDinhKemKhongBhs: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -30,57 +33,34 @@ export class KhongBanHanhComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, phuongAnDieuChinhCTKHService);
     this.formData = this.fb.group({
-      soCongVan: [, [Validators.required]],
-      ngayKy: [, [Validators.required]],
-      maDiemKho: [, [Validators.required]],
-      tenDiemKho: [, [Validators.required]],
-      maNhaKho: [, [Validators.required]],
-      tenNhaKho: [, [Validators.required]],
-      maNganKho: [, [Validators.required]],
-      tenNganKho: [, [Validators.required]],
-      maLoKho: [, [Validators.required]],
-      tenLoKho: [, [Validators.required]],
-      maThuKho: [, [Validators.required]],
-      thuKho: [, [Validators.required]],
-      loaiVthh: [, [Validators.required]],
-      tenLoaiVthh: [, [Validators.required]],
-      cloaiVthh: [, [Validators.required]],
-      tenCloaiVthh: [, [Validators.required]],
-      tonKho: [, [Validators.required]],
-      donViTinh: [, [Validators.required]],
-      donViTinhNhap: [, [Validators.required]],
-      soLuongDc: [, [Validators.required]],
-      duToanKphi: [0],
-      thoiGianDkDc: [, [Validators.required]],
-      maDiemKhoNhan: [, [Validators.required]],
-      tenDiemKhoNhan: [, [Validators.required]],
-      maNhaKhoNhan: [, [Validators.required]],
-      tenNhaKhoNhan: [, [Validators.required]],
-      maNganKhoNhan: [, [Validators.required]],
-      tenNganKhoNhan: [, [Validators.required]],
-      maLoKhoNhan: [, [Validators.required]],
-      tenLoKhoNhan: [, [Validators.required]],
-      maThuKhoNhan: [, [Validators.required]],
-      thuKhoNhan: [, [Validators.required]],
-      thayDoiThuKho: [, [Validators.required]],
-      slDcConLai: [, [Validators.required]],
-      tichLuongKd: [, [Validators.required]],
-      soLuongPhanBo: [, [Validators.required]],
+      soVanBanKhongBh: [, [Validators.required]],
+      ngayKyKhongBh: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
+      noiDungVanBanKhongBh: [],
+      lyDoKhongBh: [],
+      // fileDinhKemKhongBhs: [, [Validators.required]],
     }
     );
   }
 
   ngOnInit(): void {
+    this.formData.patchValue({
+      soVanBanKhongBh: this.soCongVan
+    })
   }
 
 
   handleOk(item: any) {
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return
-    this._modalRef.close({
-      ...item,
-      // isUpdate: !!this.data
-    });
+    if (this.fileDinhKemKhongBhs.length > 0) {
+      this._modalRef.close({
+        ...item,
+        fileDinhKemKhongBhs: this.fileDinhKemKhongBhs
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa thêm file đính kèm");
+    }
+
   }
 
   onCancel() {

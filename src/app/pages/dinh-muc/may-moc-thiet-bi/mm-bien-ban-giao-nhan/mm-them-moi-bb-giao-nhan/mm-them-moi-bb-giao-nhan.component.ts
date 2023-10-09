@@ -251,7 +251,6 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          console.log(data,222)
           this.formData.patchValue({
             benGiaoHang : data.banTenDvi
           })

@@ -10,7 +10,7 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV)">
+          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV)">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Ban hành</span>
         </button>
@@ -38,7 +38,7 @@
           <span>Từ chối</span>
         </a> -->
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
+          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -53,10 +53,11 @@
         <div class="title-chi-tieu">
           <span
             [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
-            {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai
+            {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' :
+            thongTinChiTieuKeHoachNam.tenTrangThai
             }}
           </span>
-          <span>THÔNG TIN QUYẾT ĐỊNH ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.cap == "1" ?
+          <span>QUYẾT ĐỊNH ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.cap == "1" ?
             'TỔNG CỤC' : 'CỤC'}}
           </span>
         </div>
@@ -64,7 +65,7 @@
     </div>
     <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
       <div nz-row [nzGutter]="[16, 12]">
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
             </nz-form-label>
@@ -81,7 +82,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
+              <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
                 <input formControlName="soQuyetDinh" [readonly]="checkTrangThaiRecord()" nz-input nzSize="small"
                   placeholder="Nhập số công văn/tờ trình" />
               </nz-input-group>
@@ -94,7 +95,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayKy"
-                nzPlaceHolder="Ngày ký">
+                [nzDisabled]="isViewDetail" nzPlaceHolder="Ngày ký">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -106,7 +107,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayHieuLuc"
-                nzPlaceHolder="Ngày hiệu lực">
+                [nzDisabled]="isViewDetail" nzPlaceHolder="Ngày hiệu lực">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -145,40 +146,7 @@
           </nz-form-item>
         </div>
 
-        <!-- <div nz-col [nzSpan]="12" *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1'">
-          <div nz-col [nzSpan]="24" style="margin-top: 12px">
-            <nz-form-item>
-              <nz-radio-group [nzDisabled]="disableSelect()" nzSize="small"
-                (ngModelChange)="changeRadioLoaiCanCu($event)" class="rdo-input" formControlName="loaiCanCu">
-                <label nz-radio nzValue="OTHER">Căn cứ khác</label>
-                <label nz-radio nzValue="TTCP">Căn cứ QĐ của TTCP</label>
-                <label nz-radio nzValue="BTC">Căn cứ QĐ của BTC</label>
-              </nz-radio-group>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group>
-                  <input [readonly]="formData.value.loaiCanCu == 'TTCP' || formData.value.loaiCanCu == 'BTC'" nz-input
-                    formControlName="canCu" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-        <div nz-col nzSpan="13" *ngIf="thongTinChiTieuKeHoachNam.capDvi == '2'">
-          <nz-form-item>
-            <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left">
-              Căn cứ
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input formControlName="canCu" nz-input nzSize="small" [readonly]="true" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div> -->
+
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Trích yếu
@@ -202,16 +170,7 @@
           </nz-form-item>
         </div>
 
-        <!-- <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Nội dung và nguyên nhân điều chỉnh
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <textarea rows="3" formControlName="noiDung" class="search__input" nz-input nzSize="small"
-                placeholder="Nhập text" [readonly]="isViewDetail"></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </div> -->
+
 
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
@@ -223,8 +182,8 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm quyết định đã ký, đóng dấu
-              ký</nz-form-label>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm quyết định đã ký, đóng
+              dấu</nz-form-label>
             <nz-form-control>
               <div class="list-file">
                 <file-list [disabled]="isViewDetail" [data]="fileDinhKems" [isViewDetail]="isViewDetail"></file-list>

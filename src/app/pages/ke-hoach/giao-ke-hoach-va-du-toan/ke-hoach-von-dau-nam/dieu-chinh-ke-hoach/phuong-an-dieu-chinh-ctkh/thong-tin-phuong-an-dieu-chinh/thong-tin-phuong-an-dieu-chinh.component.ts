@@ -846,42 +846,22 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
       tenDonVi: [],
-      soCongVan: [, [Validators.required],
-      ],
+      soCongVan: [, [Validators.required]],
       ngayKy: [dayjs().format('YYYY-MM-DD')],
       ngayHieuLuc: [dayjs().format('YYYY-MM-DD')],
       soQuyetDinhGiaoNamTruoc: [],
       quyetDinhGiaoNamTruocId: [],
       namKeHoach: [dayjs().get("year"), [Validators.required]],
-      trichYeu: [, [Validators.required],
-      ],
+      trichYeu: [, [Validators.required]],
       soQuyetDinhDcCuaCs: [],
       type: ["01"],
       cap: [],
       dcKeHoachNamLtDtl: [],
       dcKeHoachNamMuoiDtl: [],
-      dcKeHoachNamVatTuDtl: []
-      // loaiCanCu: [
-      //   this.thongTinChiTieuKeHoachNam
-      //     ? this.thongTinChiTieuKeHoachNam.loaiCanCu
-      //     : null,
-      //   [Validators.required],
-      // ],
-      // canCu: [
-      //   this.thongTinChiTieuKeHoachNam
-      //     ? this.thongTinChiTieuKeHoachNam.canCu
-      //     : null,
-      //   [Validators.required]
-      // ],
-      // idCanCu: [
-      //   this.thongTinChiTieuKeHoachNam
-      //     ? this.thongTinChiTieuKeHoachNam.idCanCu
-      //     : null,
-      //   []
-      // ],
-      // arrCanCu: []
+      dcKeHoachNamVatTuDtl: [],
+      lyDoTuChoi: [],
     });
-    // this.formData.markAsPristine();
+    this.formData.markAsPristine();
   }
 
   themMoi(data?: any) {
@@ -1144,6 +1124,8 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data
           console.log('data', data)
+          if (data.soCongVan)
+            data.soCongVan = data.soCongVan.split("/")[0]
           this.formData.patchValue(data)
           this.thongTinChiTieuKeHoachNam = res.data;
           this.fileDinhKems = data.fileDinhKems
@@ -1777,12 +1759,40 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     });
   }
 
+  confirmKhongBH(body) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn không ban hành phương án?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          const res = await this.phuongAnDieuChinhCTKHService.duyet(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+
+  }
+
   async khongBH(row?: any) {
     await this.spinner.show();
 
     await this.spinner.hide();
 
-    const keHoachDcHdrId = row ? row.hdrId : undefined
 
     const modalQD = this.modal.create({
       nzTitle: 'THÔNG BÁO KHÔNG BAN HÀNH',
@@ -1792,14 +1802,28 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
-
+        soCongVan: this.thongTinChiTieuKeHoachNam.soCongVan
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
 
       if (data) {
 
-
+        let body = this.formData.value
+        body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
+          return {
+            ...lt,
+            dcKeHoachNamLtTtDtl: [...lt.tkdnGao, ...lt.tkdnThoc, ...lt.ntnGao, ...lt.ntnThoc, ...lt.xtnGao, ...lt.xtnThoc, ...lt.tkcnGao, ...lt.tkcnThoc]
+          }
+        })
+        body.dcKeHoachNamMuoiDtl = this.dsMuoiClone
+        body.dcKeHoachNamVatTuDtl = [...this.dataVatTuNhap, ...this.dataVatTuXuat]
+        body.fileDinhKemReq = this.fileDinhKems
+        body.canCus = this.listCcPhapLy
+        body.id = this.thongTinChiTieuKeHoachNam.id
+        body.trangThai = STATUS.KHONG_BAN_HANH
+        console.log("KhongBanHanhComponent", { ...data, ...body })
+        this.confirmKhongBH({ ...data, ...body })
 
       }
     });
@@ -1836,6 +1860,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     }
 
     let body = this.formData.value
+    body.soCongVan = `${body.soCongVan}/${this.qdTCDT}`
     body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
       return {
         ...lt,
