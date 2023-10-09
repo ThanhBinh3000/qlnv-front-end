@@ -270,7 +270,10 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
               cloaiVthh: data.formData.cloaiVthh ? data.formData.cloaiVthh : null,
               loaiGia: data.formData.loaiGia ? data.formData.loaiGia : null,
               listIdPag: thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
-              loai: "01"
+              listStt: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuat) : [],
+              listSttDc: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuatDc) : [],
+              loai: "01",
+              type : this.type
             }
             this.tongHopData(body);
           }
@@ -347,7 +350,9 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
             tenLoaiVthh: pagTh.tenLoaiVthh ? pagTh.tenLoaiVthh : null,
             tenCloaiVthh: pagTh.tenCloaiVthh ? pagTh.tenCloaiVthh : null,
             loaiGia: pagTh.loaiGia ? pagTh.loaiGia : null,
-            tenLoaiGia: pagTh.tenLoaiGia ? pagTh.tenLoaiGia : null
+            tenLoaiGia: pagTh.tenLoaiGia ? pagTh.tenLoaiGia : null,
+            soToTrinh: body.listStt && body.listStt.length ? body.listStt.toString() : null,
+            soQdCanDc: body.listSttDc && body.listSttDc.length ? body.listSttDc.toString() : null,
           })
           this.dataTable = res.data?.pagChiTiets;
           this.buildTreePagCt();
