@@ -73,6 +73,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
       trichYeu: [''],
       trangThai: [''],
       type: [''],
+      types: ['']
       // types: [['TH', 'TTr']]
     });
     this.filterTable = {
@@ -137,6 +138,11 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
   }
 
   async timKiem() {
+    if (this.formData.value.type === "XC") {
+      this.formData.patchValue({ types: ['XC'] })
+    } else {
+      this.formData.patchValue({ types: ['TH', 'TTr'] })
+    }
     await this.spinner.show();
     try {
       await this.search();

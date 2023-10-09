@@ -23,6 +23,7 @@ import { v4 as uuidv4 } from "uuid";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
 import { PREVIEW } from 'src/app/constants/fileType';
+import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 
 
 @Component({
@@ -58,6 +59,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     private dmTieuChuanService: DanhMucTieuChuanService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     private cdr: ChangeDetectorRef,) {
 
     super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
@@ -242,6 +244,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
 
   async themPhuongAn(data?: any, level?: any) {
+    console.log("aaa them")
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
@@ -443,6 +446,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
 
   async changeMaDviDtl($event) {
+    console.log("eve")
     if ($event) {
       let item = this.listDonVi.find(s => s.maDvi === $event);
       this.formDataDtl.patchValue({
@@ -453,36 +457,55 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
 
   async kiemTraTonKho() {
-    let maDvi = this.formDataDtl.value.maDvi || this.userInfo.MA_DVI;
+    // let maDvi = this.formDataDtl.value.maDvi || this.userInfo.MA_DVI;
+    let maDvi = this.formDataDtl.value.maDvi;
     let loaiVthh = this.formDataDtl.value.loaiVthh;
     let cloaiVthh = this.formDataDtl.value.cloaiVthh;
     if (maDvi) {
-      await this.quanLyHangTrongKhoService.getTrangThaiHt({
-        maDvi: maDvi,
-        loaiVthh: loaiVthh,
-        // cloaiVthh: cloaiVthh
-      }).then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data;
-          if (data.length > 0) {
-            let tonKhoLoaiVthh = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-            let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
-            let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-            this.formDataDtl.patchValue({
-              tonKhoLoaiVthh: tonKhoLoaiVthh,
-              tonKhoCloaiVthh: tonKhoCloaiVthh
-            });
-            cloaiVthh ?
-              this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoCloaiVthh)]) :
-              this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoLoaiVthh)]);
-            this.formDataDtl.controls['soLuong'].updateValueAndValidity();
-          } else {
-            this.formDataDtl.patchValue({ tonKhoLoaiVthh: 0, tonKhoCloaiVthh: 0 });
-            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(0)]);
-            this.formDataDtl.controls['soLuong'].updateValueAndValidity();
-          }
-        }
-      });
+      // await this.quanLyHangTrongKhoService.getTrangThaiHt({
+      //   maDvi: maDvi,
+      //   loaiVthh: loaiVthh,
+      //   // cloaiVthh: cloaiVthh
+      // }).then((res) => {
+      //   if (res.msg == MESSAGE.SUCCESS) {
+      //     let data = res.data;
+      //     if (data.length > 0) {
+      //       let tonKhoLoaiVthh = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+      //       let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
+      //       let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+      //       this.formDataDtl.patchValue({
+      //         tonKhoLoaiVthh: tonKhoLoaiVthh,
+      //         tonKhoCloaiVthh: tonKhoCloaiVthh
+      //       });
+      //       cloaiVthh ?
+      //         this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoCloaiVthh)]) :
+      //         this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoLoaiVthh)]);
+      //       this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      //     } else {
+      //       this.formDataDtl.patchValue({ tonKhoLoaiVthh: 0, tonKhoCloaiVthh: 0 });
+      //       this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(0)]);
+      //       this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      //     }
+      //   }
+      // });
+      const body = { maDvi, loaiVthh, cloaiVthh }
+      const res = await this.mangLuoiKhoService.slTon(body);
+      let tonKhoLoaiVthh: number = 0;
+      let tonKhoCloaiVthh: number = 0
+      if (res.msg === MESSAGE.SUCCESS) {
+        const slTon = res.data;
+        tonKhoLoaiVthh = slTon;
+        tonKhoCloaiVthh = slTon;
+        this.formDataDtl.patchValue({ tonKhoLoaiVthh, tonKhoCloaiVthh });
+        cloaiVthh ?
+          this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoCloaiVthh)]) :
+          this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoLoaiVthh)]);
+        this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      } else {
+        this.formData.patchValue({ tonKhoLoaiVthh: 0 });
+        this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(0)]);
+        this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      }
     }
   }
 
@@ -501,14 +524,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     } else if ($event == TEN_LOAI_VTHH.MUOI) {
       let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == LOAI_HANG_DTQG.MUOI));
       Object.assign(this.listLoaiHangHoa, filter.children);
-      this.formDataDtl.patchValue({ loaiVthh: null, donViTinh: "kg" });
+      this.formDataDtl.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg" });
     } else {
       let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == LOAI_HANG_DTQG.VAT_TU));
       Object.assign(this.listLoaiHangHoa, filter.children);
-      this.formDataDtl.patchValue({ loaiVthh: null, donViTinh: null });
+      this.formDataDtl.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
     }
     this.formData.patchValue({ deXuatPhuongAn: [] });
-    await this.kiemTraTonKho();
+    // await this.kiemTraTonKho();
   }
 
   async changeLoaiVthh($event) {
