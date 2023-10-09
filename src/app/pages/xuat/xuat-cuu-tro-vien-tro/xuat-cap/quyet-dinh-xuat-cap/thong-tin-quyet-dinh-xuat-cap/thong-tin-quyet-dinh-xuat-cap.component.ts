@@ -522,7 +522,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     if (trangThaiHienTai == STATUS.CHO_DUYET_LDV) {
       trangThai = STATUS.CHO_DUYET_LDTC;
     } else if (trangThaiHienTai == STATUS.CHO_DUYET_LDTC) {
-      trangThai = STATUS.DA_DUYET_LDTC;
+      trangThai = STATUS.BAN_HANH;
     }
     return super.approve(id, trangThai, msg, roles, msgSuccess);
   }
@@ -592,7 +592,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     try {
       let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
         xuatCap: true,
-        trangThai: "29",
+        trangThai: STATUS.BAN_HANH,
         paggingReq: {
           limit: this.globals.prop.MAX_INTERGER,
           page: 0

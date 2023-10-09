@@ -347,8 +347,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       if (this.formData.value.type == 'XC') {
         res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
           trangThai: STATUS.BAN_HANH,
-          idQdGnvNull: true,
-          type: ["XC"],
+          types: ["XC"],
           paggingReq: {
             limit: this.globals.prop.MAX_INTERGER,
             page: 0
@@ -357,7 +356,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       } else {
         res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
           trangThai: STATUS.BAN_HANH,
-          idQdGnvNull: true,
           types: ['TH', 'TTr'],
           paggingReq: {
             limit: this.globals.prop.MAX_INTERGER,
@@ -398,7 +396,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               loaiNhapXuat: detail.loaiNhapXuat,
               kieuNhapXuat: detail.kieuNhapXuat,
               tenVthh: detail.tenVthh,
-              dataDtl: detail.quyetDinhPdDtl
+              dataDtl: detail.quyetDinhPdDtl,
+              type: detail.type
             })
             await this.buildTableView();
           }
@@ -423,7 +422,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
     });
     let data = this.formData.value.dataDtl;
-    if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC) {
+    if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC || this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CUC) {
       data = this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*"));
     }
     this.phuongAnView = chain(data)
@@ -809,16 +808,12 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       const res = await this.mangLuoiKhoService.slTon(body);
       if (res.msg === MESSAGE.SUCCESS) {
         const slTon = res.data;
-        if (cloaiVthh) {
-          tonKhoDvi = slTon;
-          tonKhoCloaiVthh = slTon;
-          this.formDataDtl.patchValue({
-            tonKhoDvi: slTon,
-            tonKhoCloaiVthh: slTon
-          })
-        } else {
-          this.formDataDtl.patchValue({ tonKhoDvi })
-        }
+        tonKhoDvi = slTon;
+        tonKhoCloaiVthh = slTon;
+        this.formDataDtl.patchValue({
+          tonKhoDvi: slTon,
+          tonKhoCloaiVthh: slTon
+        })
         if (this.userService.isCuc()) {
           cloaiVthh ? this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoCloaiVthh))]) :
             this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);

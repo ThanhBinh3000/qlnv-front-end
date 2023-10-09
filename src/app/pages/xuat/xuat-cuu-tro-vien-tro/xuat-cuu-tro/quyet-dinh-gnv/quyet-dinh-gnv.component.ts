@@ -73,6 +73,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
       trichYeu: [''],
       trangThai: [''],
       type: [''],
+      types: ['']
       // types: [['TH', 'TTr']]
     });
     this.filterTable = {
