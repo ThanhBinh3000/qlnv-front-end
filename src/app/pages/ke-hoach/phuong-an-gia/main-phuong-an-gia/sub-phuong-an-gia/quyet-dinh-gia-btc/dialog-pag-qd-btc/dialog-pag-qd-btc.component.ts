@@ -104,6 +104,14 @@ export class DialogPagQdBtcComponent implements OnInit {
   }
 
   luu() {
+    if (this.formData.value.loaiQd == '01' && this.pagType == 'LT') {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+        this.spinner.hide()
+        return;
+      }
+    }
     if ((this.formData.value.loaiQd == '01' && this.pagType == 'LT') || this.pagType == 'VT' ) {
       this.dataResponse = {
         data : null,
