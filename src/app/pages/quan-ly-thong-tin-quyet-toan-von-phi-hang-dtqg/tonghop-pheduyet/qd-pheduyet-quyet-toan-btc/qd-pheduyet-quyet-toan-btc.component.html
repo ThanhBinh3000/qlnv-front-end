@@ -77,43 +77,45 @@
         <th>
           <nz-input-group>
             <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.id'
-                   (input)="filterInTable('id',filterTable.id)" size='small' />
+                   (input)="filterInTable('id',filterTable.id,false)" size='small' />
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.namQuyetToan'
-                   (input)="filterInTable('namQuyetToan',filterTable.namQuyetToan)" size='small' />
+            <nz-select nzAllowClear [(ngModel)]='filterTable.namQt'
+                       (ngModelChange)="filterInTable('namQt',filterTable.namQt, false)">
+              <nz-option *ngFor='let p of dsNam' [nzValue]='p' [nzLabel]='p'></nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>
-          <nz-input-group>
-            <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.ngayTao'
-                   (input)="filterInTable('ngayTao',filterTable.ngayTao)" size='small' />
-          </nz-input-group>
+          <nz-date-picker nzFormat='dd-MM-yyyy' [(ngModel)]='filterTable.ngayTao'
+                          (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao, true)">
+          </nz-date-picker>
         </th>
         <th>
           <nz-input-group>
             <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.soToTrinh'
-                   (input)="filterInTable('soToTrinh',filterTable.soToTrinh)" size='small' />
+                   (input)="filterInTable('soToTrinh',filterTable.soToTrinh,false)" size='small' />
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
             <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.soQdBtc'
-                   (input)="filterInTable('soQdBtc',filterTable.soQdBtc)" size='small' />
+                   (input)="filterInTable('soQdBtc',filterTable.soQdBtc,false)" size='small' />
           </nz-input-group>
         </th>
         <th>
-          <nz-input-group>
-            <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.ngayQdBtc'
-                   (input)="filterInTable('ngayQdBtc',filterTable.ngayQdBtc)" size='small' />
-          </nz-input-group>
+          <nz-date-picker nzFormat='dd-MM-yyyy' [(ngModel)]='filterTable.ngayQdBtc'
+                          (ngModelChange)="filterInTable('ngayQdBtc',filterTable.ngayQdBtc, true)">
+          </nz-date-picker>
         </th>
         <th>
           <nz-input-group>
-            <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.tenTrangThaiBtc'
-                   (input)="filterInTable('tenTrangThaiBtc',filterTable.tenTrangThaiBtc)" size='small' />
+            <nz-select nzAllowClear [(ngModel)]='filterTable.trangThaiBtc'
+                       (ngModelChange)="filterInTable('trangThaiBtc',filterTable.trangThaiBtc, false)">
+              <nz-option *ngFor='let p of listTrangThaiBtc' [nzValue]='p.ma' [nzLabel]='p.giaTri'></nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>
@@ -138,7 +140,7 @@
           <a (click)='viewDetail(data.id, true)'>
             <i class='fa fa-eye' title='Xem chi tiết'></i>
           </a>
-          <a *ngIf='data.trangThaiBtc == STATUS.CHODUYET_BTC' (click)='viewDetail(data.id, false)'>
+          <a *ngIf='data.trangThaiBtc == STATUS.CHODUYET_BTC  && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_QDPDQTBTC_CAPNHAT_BTC")' (click)='viewDetail(data.id, false)'>
             <i class='fa fa-pencil' title='Sửa'></i>
           </a>
         </td>
