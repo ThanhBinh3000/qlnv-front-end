@@ -612,7 +612,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.patchValue({
             soQuyetDinhGiaoCuaTc: data.soQuyetDinh,
             quyetDinhGiaoCuaTcId: data.id,
-            // soCongVan: data.qdGocId
+            soQuyetDinhDcCuaCs: data.soQuyetDinhDcCuaC
           });
 
           // Lấy kế hoạch tổng cục giao cho cục đang login
@@ -1071,15 +1071,14 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       trangThai: STATUS.DANG_NHAP_DU_LIEU,
       tenTrangThai: 'Đang nhập dữ liệu',
       tenDonVi: [],
-      soQuyetDinh: [, [Validators.required],
-      ],
+      soQuyetDinh: [, [Validators.required]],
       ngayKy: [dayjs().format('YYYY-MM-DD')],
       ngayHieuLuc: [dayjs().format('YYYY-MM-DD')],
       soQuyetDinhGiaoCuaTc: [],
       quyetDinhGiaoCuaTcId: [],
       soQuyetDinhGiaoNam: [],
       quyetDinhGiaoNamId: [],
-      soCongVan: [],
+      soCongVan: [, [Validators.required]],
       namKeHoach: [dayjs().get("year"), [Validators.required]],
       trichYeu: [, [Validators.required],
       ],

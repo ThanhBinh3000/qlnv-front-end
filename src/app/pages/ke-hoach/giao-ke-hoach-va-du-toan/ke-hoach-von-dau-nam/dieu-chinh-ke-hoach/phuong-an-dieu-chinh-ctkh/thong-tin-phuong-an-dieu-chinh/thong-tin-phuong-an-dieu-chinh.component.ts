@@ -442,12 +442,14 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           this.dataVatTuNhap = khVatTuNhap.map((vattu) => {
             return {
               ...vattu,
+              id: undefined,
               loai: "NHAP",
             }
           })
           this.dataVatTuXuat = khVatTuXuat.map((vattu) => {
             return {
               ...vattu,
+              id: undefined,
               loai: "XUAT",
             }
           })
@@ -1802,7 +1804,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
-        soCongVan: this.thongTinChiTieuKeHoachNam.soCongVan
+        soCongVan: `${this.thongTinChiTieuKeHoachNam.soCongVan}/${this.qdTCDT}`
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -1810,6 +1812,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       if (data) {
 
         let body = this.formData.value
+        body.soCongVan = `${body.soCongVan}/${this.qdTCDT}`
         body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
           return {
             ...lt,
