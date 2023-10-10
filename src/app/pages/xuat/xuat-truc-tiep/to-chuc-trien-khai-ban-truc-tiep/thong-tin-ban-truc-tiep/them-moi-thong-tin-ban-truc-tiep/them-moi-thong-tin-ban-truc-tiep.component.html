@@ -5,7 +5,7 @@
       <span> Quay lại </span>
     </button>
     <button
-      *ngIf="formData.value.trangThai != STATUS.CHUA_CAP_NHAT && idInput && formData.value.pthucBanTrucTiep == '01' "
+      *ngIf="formData.value.trangThai != STATUS.CHUA_CAP_NHAT && idInput && formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA "
       type="button" class="btn btn-sub"
       (click)="preview(idInput)">
       <i class="icon htvbdh_totrinh"></i>
@@ -13,14 +13,16 @@
     </button>
     <ng-container>
       <button
-        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA') && (formData.value.trangThai !=STATUS.DA_HOAN_THANH)"
+        *ngIf="(formData.value.trangThai != STATUS.DA_HOAN_THANH) && !isView
+        && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_TBBTT_SUA') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA'))"
         type="button" class="btn btn-sub xanh-nhat"
-        (click)="save(true)">
+        (click)="saveAndSend(STATUS.DA_HOAN_THANH, 'Bạn có muốn hoàn thành cập nhập ?','Bạn đã hoàn thành cập nhập thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span> Hoàn thành cập nhập </span>
       </button>
       <button
-        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA') && (formData.value.trangThai !=STATUS.DA_HOAN_THANH)"
+        *ngIf="(formData.value.trangThai != STATUS.DA_HOAN_THANH) && !isView
+        && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_TBBTT_SUA') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA'))"
         type="button" class="btn btn-main btn-sm waves-effect waves-light"
         (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
@@ -48,9 +50,9 @@
             <div nz-col [nzSpan]="24">
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-radio-group formControlName="pthucBanTrucTiep" [nzDisabled]="isView">
-                  <label nz-radio nzValue="01"> Chào giá </label>
-                  <label nz-radio nzValue="02"> Ủy quyền </label>
-                  <label nz-radio nzValue="03"> Bán lẻ </label>
+                  <label nz-radio [nzValue]="TRUC_TIEP.CHAO_GIA"> Chào giá </label>
+                  <label nz-radio [nzValue]="TRUC_TIEP.UY_QUYEN"> Ủy quyền </label>
+                  <label nz-radio [nzValue]="TRUC_TIEP.BAN_LE"> Bán lẻ </label>
                 </nz-radio-group>
               </nz-form-control>
             </div>
@@ -84,7 +86,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep != '01'">
+            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep !== TRUC_TIEP.CHAO_GIA">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn bán</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -93,9 +95,9 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep != '01'">
+            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep !== TRUC_TIEP.CHAO_GIA">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open">
                     <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly/>
@@ -103,7 +105,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep == '01'">
+            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Địa điểm chào giá</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -111,7 +113,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]=" formData.value.pthucBanTrucTiep == '01' ? 3 : 6">
+            <div nz-col [nzSpan]=" formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA ? 3 : 6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -119,7 +121,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]=" formData.value.pthucBanTrucTiep == '01' ? 3 : 6">
+            <div nz-col [nzSpan]=" formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA ? 3 : 6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
                 <nz-form-control nz-col>
@@ -147,9 +149,9 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3" *ngIf="formData.value.pthucBanTrucTiep == '01'">
+            <div nz-col [nzSpan]="3" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open">
                     <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly/>
@@ -157,9 +159,9 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3" *ngIf="formData.value.pthucBanTrucTiep == '01'">
+            <div nz-col [nzSpan]="3" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open">
                     <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly/>
@@ -167,15 +169,15 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep == '01'">
+            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Tên hàng DTQG</nz-form-label>
                 <nz-form-control nz-col>
                   <input nz-input formControlName="moTaHangHoa" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="24" *ngIf="formData.value.pthucBanTrucTiep == '02'">
+            <div nz-col [nzSpan]="24" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.UY_QUYEN">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">
                   File đính kèm QĐ ủy quyền (nếu
@@ -187,7 +189,7 @@
                 </div>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="24" *ngIf="formData.value.pthucBanTrucTiep == '03'">
+            <div nz-col [nzSpan]="24" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.BAN_LE">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">
                   File đính kèm QĐ giao chi cục bán lẻ (nếu có)
@@ -212,7 +214,7 @@
         </form>
       </nz-collapse-panel>
     </nz-collapse>
-    <nz-collapse *ngIf="formData.value.pthucBanTrucTiep == '01'">
+    <nz-collapse *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA">
       <nz-collapse-panel nzActive="true" nzHeader="CHI TIẾT THÔNG TIN CHÀO GIÁ">
         <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
           <thead>
@@ -253,7 +255,7 @@
                 <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
                 <td class="text-left">{{ children.donViTinh}}</td>
                 <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
-                <td class="text-right">{{ children.thanhTien|number:globals.numberFormat:globals.locale}}</td>
+                <td class="text-right">{{ children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
               </tr>
             </ng-container>
           </ng-container>
@@ -312,7 +314,7 @@
               </nz-form-control>
             </th>
             <th>
-              <label nz-checkbox [(ngModel)]="rowItem.luaChon" (ngModelChange)="changeLuaChon(true)">
+              <label nz-checkbox [(ngModel)]="rowItem.luaChon">
               </label>
             </th>
             <th style="text-align: center">

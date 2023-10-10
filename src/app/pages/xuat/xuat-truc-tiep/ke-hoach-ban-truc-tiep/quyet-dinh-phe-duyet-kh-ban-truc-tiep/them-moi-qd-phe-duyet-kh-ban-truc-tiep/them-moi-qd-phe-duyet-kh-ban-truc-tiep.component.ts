@@ -465,8 +465,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       if (data.hasOwnProperty('tongSoLuong')) {
         this.danhsachDx[this.index].tongSoLuong = data.tongSoLuong;
       }
-      if (data.hasOwnProperty('tongTien')) {
-        this.danhsachDx[this.index].tongTien = data.tongTien;
+      if (data.hasOwnProperty('thanhTien')) {
+        this.danhsachDx[this.index].thanhTien = data.thanhTien;
       }
       if (data.hasOwnProperty('tgianDkienTu')) {
         this.danhsachDx[this.index].tgianDkienTu = data.tgianDkienTu;

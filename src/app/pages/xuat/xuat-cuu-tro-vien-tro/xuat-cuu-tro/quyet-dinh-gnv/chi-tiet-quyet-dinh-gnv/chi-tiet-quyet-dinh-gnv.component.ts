@@ -803,8 +803,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       //   }
       // });
       const body = {
-        maDvi, loaiVthh, cloaiVthh
-
+        maDvi, maVthh: cloaiVthh ? cloaiVthh : loaiVthh
       }
       let tonKhoDvi: number = 0;
       let tonKhoCloaiVthh: number = 0;

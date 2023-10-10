@@ -262,19 +262,21 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           this.dsKeHoachLuongThucClone = dataLuongThuc.map((khlt) => {
 
             // gạo tồn
-            const tkdnGao = khlt.tkdnGao.map((tk) => {
+            const tkdnGao = this.listNamKH.map((nkh) => {
+              const tdk = khlt.tkdnGao.find((item) => item.nam == nkh)
               return {
-                namKeHoach: tk.nam,
-                soLuong: tk.soLuong,
+                namKeHoach: nkh,
+                soLuong: tdk ? tdk.soLuong : 0,
                 type: "01",
               }
             })
 
             // thóc tồn
-            const tkdnThoc = khlt.tkdnThoc.map((tk) => {
+            const tkdnThoc = this.listNamKH.map((nkh) => {
+              const tdk = khlt.tkdnThoc.find((item) => item.nam == nkh)
               return {
-                namKeHoach: tk.nam,
-                soLuong: tk.soLuong,
+                namKeHoach: nkh,
+                soLuong: tdk ? tdk.soLuong : 0,
                 type: "00",
               }
             })
@@ -295,19 +297,21 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             ]
 
             // gạo xuất trong năm
-            let xtnGao = khlt.xtnGao.map((xuat) => {
+            let xtnGao = this.listNamKH.map((nkh) => {
+              const xtn = khlt.xtnGao.find((item) => item.nam == nkh)
               return {
-                namKeHoach: xuat.nam,
-                soLuong: xuat.soLuong,
+                namKeHoach: nkh,
+                soLuong: xtn ? xtn.soLuong : 0,
                 type: "21",
               }
             })
 
             // thóc xuất trong năm
-            let xtnThoc = khlt.xtnThoc.map((xuat) => {
+            let xtnThoc = this.listNamKH.map((nkh) => {
+              const xtn = khlt.xtnThoc.find((item) => item.nam == nkh)
               return {
-                namKeHoach: xuat.nam,
-                soLuong: xuat.soLuong,
+                namKeHoach: nkh,
+                soLuong: xtn ? xtn.soLuong : 0,
                 type: "20",
               }
             })
@@ -441,19 +445,21 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             this.dsKeHoachLuongThucClone = [dataLuongThuc].map((khlt) => {
 
               // gạo tồn
-              const tkdnGao = khlt.tkdnGao.map((tk) => {
+              const tkdnGao = this.listNamKH.map((nkh) => {
+                const tdk = khlt.tkdnGao.find((item) => item.nam == nkh)
                 return {
-                  namKeHoach: tk.nam,
-                  soLuong: tk.soLuong,
+                  namKeHoach: nkh,
+                  soLuong: tdk ? tdk.soLuong : 0,
                   type: "01",
                 }
               })
 
               // thóc tồn
-              const tkdnThoc = khlt.tkdnThoc.map((tk) => {
+              const tkdnThoc = this.listNamKH.map((nkh) => {
+                const tdk = khlt.tkdnThoc.find((item) => item.nam == nkh)
                 return {
-                  namKeHoach: tk.nam,
-                  soLuong: tk.soLuong,
+                  namKeHoach: nkh,
+                  soLuong: tdk ? tdk.soLuong : 0,
                   type: "00",
                 }
               })
@@ -474,19 +480,21 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               ]
 
               // gạo xuất trong năm
-              let xtnGao = khlt.xtnGao.map((xuat) => {
+              let xtnGao = this.listNamKH.map((nkh) => {
+                const xtn = khlt.xtnGao.find((item) => item.nam == nkh)
                 return {
-                  namKeHoach: xuat.nam,
-                  soLuong: xuat.soLuong,
+                  namKeHoach: nkh,
+                  soLuong: xtn ? xtn.soLuong : 0,
                   type: "21",
                 }
               })
 
               // thóc xuất trong năm
-              let xtnThoc = khlt.xtnThoc.map((xuat) => {
+              let xtnThoc = this.listNamKH.map((nkh) => {
+                const xtn = khlt.xtnThoc.find((item) => item.nam == nkh)
                 return {
-                  namKeHoach: xuat.nam,
-                  soLuong: xuat.soLuong,
+                  namKeHoach: nkh,
+                  soLuong: xtn ? xtn.soLuong : 0,
                   type: "20",
                 }
               })
@@ -1257,10 +1265,10 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             const dcKeHoachNamLtTtDtl = lt.dcKeHoachNamLtTtDtl
             const tkdnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "01")
             const tkdnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "00")
-            const ntnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "11")
-            const ntnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "10")
-            const xtnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "21")
-            const xtnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "20")
+            const ntnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "11").sort((item1, item2) => item1.namKeHoach - item2.namKeHoach);
+            const ntnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "10").sort((item1, item2) => item1.namKeHoach - item2.namKeHoach);
+            const xtnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "21").sort((item1, item2) => item1.namKeHoach - item2.namKeHoach);
+            const xtnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "20").sort((item1, item2) => item1.namKeHoach - item2.namKeHoach);
             const tkcnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "31")
             const tkcnThoc = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "30")
             return {

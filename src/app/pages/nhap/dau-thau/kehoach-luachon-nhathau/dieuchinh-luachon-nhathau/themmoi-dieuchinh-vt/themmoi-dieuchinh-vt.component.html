@@ -18,7 +18,7 @@
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU')"
-      class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
+      class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i [class]="'icon htvbdh_chuyenvanthu'"></i>
       <span>Duyệt</span>
     </button>
