@@ -32,7 +32,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   expandSet = new Set<number>();
-  typeQd: string
+  typeQd: string = "TH";
 
   constructor(
     httpClient: HttpClient,
@@ -49,7 +49,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
       id: [null],
       maDvi: [null],
       namKeHoach: [dayjs().get('year'), Validators.required],
-      maTh: [null],
+      maTh: [null, Validators.required],
       maDx: [null],
       soQd: [null, Validators.required],
       trichYeu: [null, Validators.required],
@@ -68,7 +68,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     try {
       this.maQd = '/QĐ-TCDT'
       await this.loadDsDxCc();
-      await this.loadDxCuc();
+      // await this.loadDxCuc();
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -113,37 +113,37 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
-  async loadDxCuc() {
-    this.spinner.show();
-    try {
-      let body = {
-        "capDvi": "2",
-        "paggingReq": {
-          "limit": 10,
-          "page": 0
-        }
-      }
-      let res = await this.dxChiCucService.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.listDxCuc = data.content;
-        if (this.listDxCuc) {
-          this.listDxCuc = this.listDxCuc.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && !item.qdMuaSamId && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
-          )
-        }
-      } else {
-        this.listDxCuc = [];
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
-    } catch (e) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
-  }
+  // async loadDxCuc() {
+  //   this.spinner.show();
+  //   try {
+  //     let body = {
+  //       "capDvi": "2",
+  //       "paggingReq": {
+  //         "limit": 10,
+  //         "page": 0
+  //       }
+  //     }
+  //     let res = await this.dxChiCucService.search(body);
+  //     if (res.msg == MESSAGE.SUCCESS) {
+  //       let data = res.data;
+  //       this.listDxCuc = data.content;
+  //       if (this.listDxCuc) {
+  //         this.listDxCuc = this.listDxCuc.filter(
+  //           (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && !item.qdMuaSamId && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
+  //         )
+  //       }
+  //     } else {
+  //       this.listDxCuc = [];
+  //       this.notification.error(MESSAGE.ERROR, res.msg);
+  //     }
+  //     this.spinner.hide();
+  //   } catch (e) {
+  //     this.spinner.hide();
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //   } finally {
+  //     this.spinner.hide();
+  //   }
+  // }
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
@@ -347,31 +347,31 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
-  chonSoDxCuc() {
-    if (!this.isView && this.typeQd == 'DX') {
-      let modalQD = this.modal.create({
-        nzTitle: 'DANH SÁCH ĐỀ XUẤT CỦA CỤC',
-        nzContent: DialogMmMuaSamComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          listTh: this.listDxCuc,
-          type: "02"
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            maDx: data.soCv,
-            maTh: null,
-          })
-          await this.changSoTh(data.id, 'DX');
-        }
-      })
-    }
-  }
+  // chonSoDxCuc() {
+  //   if (!this.isView && this.typeQd == 'DX') {
+  //     let modalQD = this.modal.create({
+  //       nzTitle: 'DANH SÁCH ĐỀ XUẤT CỦA CỤC',
+  //       nzContent: DialogMmMuaSamComponent,
+  //       nzMaskClosable: false,
+  //       nzClosable: false,
+  //       nzWidth: '700px',
+  //       nzFooter: null,
+  //       nzComponentParams: {
+  //         listTh: this.listDxCuc,
+  //         type: "02"
+  //       },
+  //     });
+  //     modalQD.afterClose.subscribe(async (data) => {
+  //       if (data) {
+  //         this.formData.patchValue({
+  //           maDx: data.soCv,
+  //           maTh: null,
+  //         })
+  //         await this.changSoTh(data.id, 'DX');
+  //       }
+  //     })
+  //   }
+  // }
 
   async loadSlThuaThieu(item: MmThongTinNcChiCuc) {
     if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
