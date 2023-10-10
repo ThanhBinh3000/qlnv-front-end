@@ -87,14 +87,6 @@ export enum STATUS {
   DA_DONG = '87'
 }
 
-export enum LoaiTaiLieu {
-  VanBanDen = 1,
-  VanBanDi = 3,
-  ToTrinh = 4,
-  VanBanNoiBo = 5,
-  VanBanTraLoi = 6,
-}
-
 export enum LoaiDanhMuc {
   VAI_TRO = "VAI_TRO"
 }
