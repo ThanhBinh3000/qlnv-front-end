@@ -15,28 +15,6 @@
           <span>Ban hành</span>
         </button>
 
-        <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))"
-          (click)="pheDuyet()">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Duyệt</span>
-        </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU')"
-          (click)="pheDuyet()">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Duyệt</span>
-        </button>
-        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a>
-        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU') )">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a> -->
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
           *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
           <i class="icon htvbdh_tcdt_save"></i>
@@ -115,7 +93,7 @@
 
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao chỉ tiêu KH năm của TC</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Số QĐ điều chỉnh chỉ tiêu KH năm của TC</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()"> -->
               <input [readonly]="true" nz-input formControlName="soQuyetDinhGiaoCuaTc" readonly="true" />
@@ -126,7 +104,7 @@
 
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Căn cứ trên số công văn/tờ trình</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Căn cứ trên số công văn/tờ trình</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()"> -->
               <input [readonly]="true" nz-input formControlName="soCongVan" readonly="true" />
@@ -162,7 +140,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số đề xuất điều chỉnh của Cục DTNN KV</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <input [readonly]="true" nz-input formControlName="soQuyetDinhDcCuaCs" readonly="true" />
+              <input [readonly]="true" nz-input formControlName="soQuyetDinhDcCuaC" readonly="true" />
               <!-- <nz-select [nzDisabled]="isViewDetail" nzMode="multiple" nzPlaceHolder="Chọn số đề xuất" nzAllowClear
                 formControlName="soQuyetDinhDcCuaCs">
                 <nz-option *ngFor="let dx of listDeXuat" [nzValue]="dx" [nzLabel]="dx"></nz-option>
@@ -558,7 +536,8 @@
               <th></th>
               <th></th>
               <th></th>
-              <th class="first-last-row-table background-last-row"> Chỉ tiêu của TCDT</th>
+              <th class="first-last-row-table background-last-row">{{userService.isTongCuc() ? 'Chỉ tiêu của TCDT' :
+                'Chỉ tiêu của TCDT sau điều chỉnh'}} </th>
               <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)| number:
                 '1.0-1': 'vi_VN'}}</th>
               <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) | number:
@@ -684,7 +663,9 @@
               <thead>
                 <tr>
                   <th rowSpan="2" class="text-center">STT</th>
-                  <th rowSpan="2">Cục DTNN khu vực</th>
+                  <th rowSpan="2">
+                    {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
+                  </th>
                   <th rowSpan="2" class="text-center">Mã hàng</th>
                   <th rowSpan="2" class="text-center">Ký hiệu</th>
                   <th rowSpan="2" class="text-center">Tên hàng</th>
@@ -804,7 +785,9 @@
               <thead>
                 <tr>
                   <th>STT</th>
-                  <th>Cục DTNN khu vực</th>
+                  <th>
+                    {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
+                  </th>
                   <th>Mã hàng</th>
                   <th>Ký hiệu</th>
                   <th>Tên hàng</th>

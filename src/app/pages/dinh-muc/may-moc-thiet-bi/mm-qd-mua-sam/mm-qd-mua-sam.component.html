@@ -139,7 +139,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.soQd }}</td>
@@ -154,11 +154,11 @@
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_XEM') &&(((data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.BAN_HANH) && userService.isTongCuc()) || userService.isCuc())">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_SUA') && ((data.trangThai == STATUS.TU_CHOI_LDTC || data.trangThai == STATUS.DU_THAO) && userService.isTongCuc())"
+            <a *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_SUA') && ((data.trangThai == STATUS.TU_CHOI_LDTC || data.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isTongCuc())"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="(data.trangThai ==STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_XOA')" (click)="delete(data)">
+            <a *ngIf="(data.trangThai ==STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

@@ -52,7 +52,7 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
       pthucGnhan: [''],
       thongBao: [],
       tongSoLuong: [],
-      tongTien: [],
+      thanhTien: [],
       donViTinh: [''],
     });
   }
@@ -122,12 +122,16 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
 
   calculatorTable() {
     this.dataTable.forEach(item => {
-      item.soLuongChiCuc = item.children.reduce((acc, child) => acc + child.soLuongDeXuat, 0);
-      item.tienChiCuc = item.children.reduce((acc, child) => acc + child.thanhTien, 0);
+      item.tienChiCuc = 0;
+      item.children.forEach(child => {
+        child.thanhTienDuocDuyet = child.donGiaDuocDuyet * child.soLuongDeXuat;
+        child.thanhTienDeXuat = child.soLuongDeXuat * child.donGiaDeXuat;
+      });
+      item.tienChiCuc = item.children.map(child => child.thanhTienDuocDuyet).reduce((prev, cur) => prev + cur, 0);
     });
     this.formData.patchValue({
       tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.soLuongChiCuc, 0),
-      tongTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
+      thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
     });
   }
 

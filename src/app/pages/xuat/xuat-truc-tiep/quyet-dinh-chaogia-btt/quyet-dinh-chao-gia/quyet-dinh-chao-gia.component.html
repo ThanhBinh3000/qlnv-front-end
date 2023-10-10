@@ -72,8 +72,8 @@
         <th class="text-left"> Ngày ký QĐ</th>
         <th class="text-left"> Đơn vị</th>
         <th class="text-left"> Số QĐ PDKH bán trực tiếp</th>
-        <th class="text-left"> Loại hàng hóa</th>
-        <th class="text-left"> Chủng loại hàng hóa</th>
+        <th class="text-left"> Loại hàng DTQG</th>
+        <th class="text-left"> Chủng loại hàng DTQG</th>
         <th class="text-left"> Trạng thái</th>
         <th class="text-center"> Hành động</th>
       </tr>
@@ -132,7 +132,7 @@
       <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
         <td width="45px">
           <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                 [nzDisabled]="data.trangThai != '00'"></label>
+                 [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
         </td>
         <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
         <td class="text-left">{{ data.soQdKq }}</td>

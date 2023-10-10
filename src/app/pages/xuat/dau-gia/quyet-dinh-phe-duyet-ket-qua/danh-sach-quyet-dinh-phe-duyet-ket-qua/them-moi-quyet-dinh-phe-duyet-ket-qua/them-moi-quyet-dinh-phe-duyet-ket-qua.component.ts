@@ -315,14 +315,15 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       maDvi: this.userInfo.MA_DVI,
     }
     let res = await this.qdPdKetQuaBanDauGiaService.search(body)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data
-      if (data && data.content && data.content.length > 0) {
-        this.loadDsQuyetDinhKq = data.content
-      }
-    } else {
+    if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
+    const data = res.data.content;
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.loadDsQuyetDinhKq = data
   }
 
   setValidForm() {

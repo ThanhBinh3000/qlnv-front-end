@@ -78,8 +78,8 @@ export class ThemMoiScTcdtComponent implements OnInit {
       maToTrinh: [null],
       soQuyetDinh: [null],
       ngayKyQd: [null],
-      trangThai: ["78"],
-      tenTrangThai: ["Đang nhập dữ liệu"],
+      trangThai: ["00"],
+      tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
       loaiTmdt: ['DUOI15TY']
     });
@@ -234,7 +234,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DANG_NHAP_DU_LIEU : {
+            case STATUS.DU_THAO : {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }

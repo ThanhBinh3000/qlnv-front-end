@@ -64,6 +64,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   listKieuNhapXuat: any;
   maHauTo: any;
   selectedNode: any;
+  templateName: string = "Quyết định giao nhiệm vụ xuất cứu trợ, viện trợ";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -193,7 +194,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             }
             // res.data.dataDtl.forEach(s => s.idVirtual = uuidv4());
             res.data.dataDtl.forEach(s => s.mId = uuidv4());
-            this.formData.patchValue(res.data);
+            this.formData.patchValue({ ...res.data, trangThaiXh: res.data.trangThaiXh ? res.data.trangThaiXh : STATUS.CHUA_THUC_HIEN });
             await this.buildTableView();
           }
         })
@@ -345,7 +346,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       await this.spinner.show();
       let res;
       if (this.formData.value.type == 'XC') {
-        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
+        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDanhSach({
           trangThai: STATUS.BAN_HANH,
           types: ["XC"],
           paggingReq: {
@@ -354,7 +355,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           },
         });
       } else {
-        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
+        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDanhSach({
           trangThai: STATUS.BAN_HANH,
           types: ['TH', 'TTr'],
           paggingReq: {
@@ -373,7 +374,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           nzWidth: '900px',
           nzFooter: null,
           nzComponentParams: {
-            dataTable: res.data.content,
+            dataTable: res.data,
             dataHeader: ['Số quyết định', 'Ngày phê duyệt', 'Trích yếu'],
             dataColumn: ['soBbQd', 'ngayPduyet', 'trichYeu']
           },
@@ -397,7 +398,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               kieuNhapXuat: detail.kieuNhapXuat,
               tenVthh: detail.tenVthh,
               dataDtl: detail.quyetDinhPdDtl,
-              type: detail.type
+              type: detail.type,
+              loaiVthh: detail.loaiVthh,
+              tenLoaiVthh: detail.tenLoaiVthh
             })
             await this.buildTableView();
           }
@@ -424,7 +427,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let data = this.formData.value.dataDtl;
     if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC || this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CUC) {
       data = this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*"));
-    }
+    };
     this.phuongAnView = chain(data)
       .groupBy("noiDungDx")
       .map((value, key) => {
@@ -800,8 +803,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       //   }
       // });
       const body = {
-        maDvi, loaiVthh, cloaiVthh
-
+        maDvi, maVthh: cloaiVthh ? cloaiVthh : loaiVthh
       }
       let tonKhoDvi: number = 0;
       let tonKhoCloaiVthh: number = 0;
@@ -854,7 +856,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (this.userService.isCuc() && this.formData.value.trangThai === STATUS.DU_THAO && !this.isView) {
       return true;
     }
-    else if (this.userService.isChiCuc() && this.formData.value.trangThaiXh !== STATUS.DA_HOAN_THANH) {
+    else if (this.userService.isChiCuc() && [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN].includes(this.formData.value.trangThaiXh)) {
       return true;
     }
     return false

@@ -11,6 +11,7 @@ import {MESSAGE} from "../../../../../constants/message";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {DonviService} from "../../../../../services/donvi.service";
 import {DanhMucTaiSanService} from "../../../../../services/danh-muc-tai-san.service";
+import { STATUS } from '../../../../../constants/status';
 
 @Component({
   selector: 'app-mm-them-moi-dm-trang-bi',
@@ -42,8 +43,8 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     this.formData = this.fb.group({
       id: [''],
       soQd: ['', [Validators.required]],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       ngayKy: ['', [Validators.required]],
       ngayHieuLuc: ['', [Validators.required]],
       ngayHetHieuLuc: [''],
