@@ -100,7 +100,7 @@
         </div>
         <div nz-col [nzSpan]="4" *ngIf="isGiaMuaToiDa">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hóa
+            <nz-form-label nzRequired [nzNoColon]="true">Loại hàng DTQG
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true"
@@ -179,7 +179,7 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="4" *ngIf="!isGiaMuaToiDa">
             <nz-form-item class="form-item">
-              <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hóa
+              <nz-form-label nzRequired [nzNoColon]="true">Loại hàng DTQG
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true"
@@ -192,7 +192,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                 <nz-select formControlName="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true"
                            (ngModelChange)="onChangeCloaiVthh($event)">
@@ -206,7 +206,7 @@
                [nzSpan]="isGiaMuaToiDa ? (formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03') ? 18 : 20  : (formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03') ? 10 : 12 ">
             <nz-form-item>
               <nz-form-label>
-                Mô tả chi tiết chủng loại hàng hóa
+                Mô tả chi tiết chủng loại hàng DTQG
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>

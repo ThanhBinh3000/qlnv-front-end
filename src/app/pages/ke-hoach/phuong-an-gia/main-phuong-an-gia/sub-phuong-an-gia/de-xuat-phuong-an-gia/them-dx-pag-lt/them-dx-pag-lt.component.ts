@@ -733,7 +733,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.listDxCanSua,
-          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
           dataColumn: ['soDeXuat', 'ngayKy', 'tenLoaiVthh', 'tenCloaiVthh'],
         },
       })

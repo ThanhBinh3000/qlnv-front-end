@@ -15,7 +15,7 @@
         <span>Quay lại</span>
       </button>
       <button class="btn btn-sub ml-2"  (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
-              *ngIf="(id && id > 0) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)">
+              *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)">
         <i class="icon htvbdh_trinh"></i>
         <span>Đã ký</span>
       </button>

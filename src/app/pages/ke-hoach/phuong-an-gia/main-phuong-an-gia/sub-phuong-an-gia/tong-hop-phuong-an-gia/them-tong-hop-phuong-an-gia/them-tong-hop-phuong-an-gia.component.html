@@ -53,7 +53,7 @@
           </div>
           <div nz-col [nzSpan]="3">
             <nz-form-item class="form-item">
-              <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
+              <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại hàng DTQG
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select formControlName="loaiVthh" [nzDisabled]="idInput > 0" nzAllowClear="true"
@@ -66,7 +66,7 @@
           </div>
           <div nz-col [nzSpan]="3">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                 <nz-select formControlName="cloaiVthh" [nzDisabled]="idInput > 0" nzAllowClear="true"
                            (ngModelChange)="onChangeCloaiVthh($event)">
