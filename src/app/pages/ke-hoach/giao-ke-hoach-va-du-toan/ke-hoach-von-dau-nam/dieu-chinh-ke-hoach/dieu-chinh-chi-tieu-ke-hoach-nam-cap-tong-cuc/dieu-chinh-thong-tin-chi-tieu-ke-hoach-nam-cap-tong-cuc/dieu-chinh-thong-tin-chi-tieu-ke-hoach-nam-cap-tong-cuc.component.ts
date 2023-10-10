@@ -459,7 +459,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.formData.patchValue({
           soCongVan: data.soDeXuat
         });
-        if (this.userService.isTongCuc()) {
+        if (this.userService.isCuc()) {
           this.dsKeHoachLuongThucClone = data.dcKeHoachNamLtDtl.map((khlt) => {
 
             // gạo tồn
@@ -567,14 +567,14 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
           this.sumRowDetailMuoi()
 
-          const dataVatTuNhap = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "NHAP").map((item) => {
+          this.dataVatTuNhap = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "NHAP").map((item) => {
             return {
               ...item,
               hdrId: undefined,
               id: undefined
             }
           })
-          const dataVatTuXuat = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "XUAT").map((item) => {
+          this.dataVatTuXuat = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "XUAT").map((item) => {
             return {
               ...item,
               hdrId: undefined,
@@ -590,7 +590,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
         }
-        console.log("getPhuongAn", data)
+        console.log("getDeXuat", data)
       }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
@@ -610,8 +610,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         if (data) {
           this.dataQdTCDTGiaoCuc = {};
           this.formData.patchValue({
-            soQuyetDinhGiaoCuaTc: data.soQuyetDinh,
-            quyetDinhGiaoCuaTcId: data.id,
+            soQuyetDinhGiaoCuaTc: data.soQdDcChiTieu,
+            quyetDinhGiaoCuaTcId: data.dcChiTieuId,
             soQuyetDinhDcCuaCs: data.soQuyetDinhDcCuaC
           });
 
@@ -642,9 +642,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           console.log("dataQdTCDTGiaoCuc", this.dataQdTCDTGiaoCuc)
 
           if (this.isTongCuc()) {
-            await this.getPhuongAn(data.soQuyetDinh)
+            await this.getPhuongAn(data.soQdDcChiTieu)
           } else {
-            await this.getDeXuat(data.soQuyetDinh)
+            await this.getDeXuat(data.soQdDcChiTieu)
           }
 
 
@@ -1078,7 +1078,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       quyetDinhGiaoCuaTcId: [],
       soQuyetDinhGiaoNam: [],
       quyetDinhGiaoNamId: [],
-      soCongVan: [, [Validators.required]],
+      soCongVan: [],
       namKeHoach: [dayjs().get("year"), [Validators.required]],
       trichYeu: [, [Validators.required],
       ],
