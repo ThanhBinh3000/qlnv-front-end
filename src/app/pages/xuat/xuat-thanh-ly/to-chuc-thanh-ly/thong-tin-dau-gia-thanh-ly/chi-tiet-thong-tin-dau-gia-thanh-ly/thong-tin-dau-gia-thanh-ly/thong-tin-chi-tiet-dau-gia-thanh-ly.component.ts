@@ -138,6 +138,7 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
   async ngOnInit() {
     try {
       this.spinner.show();
+      await this.loadDataComboBox();
       // Is create
       if(this.idQdTl){
         let idThongBao = await this.helperService.getId("XH_TL_TO_CHUC_HDR_SEQ");
@@ -151,7 +152,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
       if (this.idInput > 0 && this.idInput) {
         this.getDetail(this.idInput)
       }
-      await this.loadDataComboBox();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
       this.spinner.hide();
