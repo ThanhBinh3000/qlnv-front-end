@@ -301,7 +301,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       let data = res.data
       if (data) {
         this.formData.patchValue({
-          soCongVan: data.soCongVan
+          soCongVan: data.soCongVan,
+          soQuyetDinhDcCuaC: data.soQuyetDinhDcCuaC
         });
         if (this.userService.isTongCuc()) {
           this.dsKeHoachLuongThucClone = data.dcKeHoachNamLtDtl.map((khlt) => {
@@ -638,7 +639,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           console.log("dataQdTCDTGiaoCuc", this.dataQdTCDTGiaoCuc)
 
           if (this.isTongCuc()) {
-            await this.getPhuongAn(data.soQdDcChiTieu)
+            await this.getPhuongAn(data.soQuyetDinh)
           } else {
             await this.getDeXuat(data.soQdDcChiTieu)
           }
@@ -1078,7 +1079,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       namKeHoach: [dayjs().get("year"), [Validators.required]],
       trichYeu: [, [Validators.required],
       ],
-      soQuyetDinhDcCuaCs: [],
+      soQuyetDinhDcCuaC: [],
       type: ["02"],
       cap: [],
       dcKeHoachNamLtDtl: [],
@@ -2061,19 +2062,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.thongTinChiTieuKeHoachNam = res.data
             if (isGuiDuyet) {
-              let body;
-              if (this.userService.isTongCuc()) {
-                body = {
-                  id: res.data.id,
-                  trangThai: STATUS.CHO_DUYET_LDV,
-                };
-              }
-              if (this.userService.isCuc()) {
-                body = {
-                  id: res.data.id,
-                  trangThai: STATUS.CHO_DUYET_TP,
-                };
-              }
+              let trangThai = STATUS.BAN_HANH;
+              let body = {
+                id: res.data.id,
+                trangThai: trangThai
+              };
               this.quyetDinhDieuChinhCTKHService.duyet(body)
                 .then((resp) => {
                   if (resp.msg == MESSAGE.SUCCESS) {
