@@ -1,25 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ThongTinQuyetDinh } from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import { Router } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { UserService } from "../../../../../../services/user.service";
-import { Globals } from "../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { HelperService } from "../../../../../../services/helper.service";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {Router} from "@angular/router";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {UserService} from "../../../../../../services/user.service";
+import {Globals} from "../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {HelperService} from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
 import {
   DialogQdXdTrungHanComponent
 } from "../../../../../../components/dialog/dialog-qd-xd-trung-han/dialog-qd-xd-trung-han.component";
-import { MESSAGE } from "../../../../../../constants/message";
-import { STATUS } from "../../../../../../constants/status";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { KtQdXdHangNamService } from "../../../../../../services/kt-qd-xd-hang-nam.service";
-import { KtTongHopXdHnService } from "../../../../../../services/kt-tong-hop-xd-hn.service";
+import {MESSAGE} from "../../../../../../constants/message";
+import {STATUS} from "../../../../../../constants/status";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
+import {KtTongHopXdHnService} from "../../../../../../services/kt-tong-hop-xd-hn.service";
 import {
   DialogThemMoiDxkhthComponent
 } from "../../../ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
@@ -36,6 +36,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
   @Input() isViewQd: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
+  @Input() idTongHop: number;
   @Output()
   showListEvent = new EventEmitter<any>();
   formData: FormGroup;
@@ -67,8 +68,8 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private tongHopDxXdTh: KtTongHopXdHnService,
-    private quyetDinhService:    KtQdXdHangNamService,
-  private fb: FormBuilder,
+    private quyetDinhService: KtQdXdHangNamService,
+    private fb: FormBuilder,
     private modal: NzModalService,
     private helperService: HelperService
   ) {
@@ -101,6 +102,9 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
     this.maQd = "/QĐ-BTC";
     this.loadDsNam();
     await this.getDetail(this.idInput);
+    if (this.idTongHop && this.idTongHop > 0) {
+      await this.loadDsChiTiet(this.idTongHop);
+    }
   }
 
   async getDetail(id) {
@@ -286,6 +290,11 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
         this.selectRow(this.listDx[0]);
       }
     }
+    if (this.idTongHop && this.idTongHop>0){
+      this.formData.patchValue({
+        phuongAnTc: res.data.soQuyetDinh,
+      });
+    }
   }
 
   selectRow(item: any) {
@@ -317,7 +326,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
                   idVirtual: uuidv4(),
                   tenKhoi: k,
                   dataChild: v,
-                  khoi : v && v[0] && v[0].khoi ? v[0].khoi : null
+                  khoi: v && v[0] && v[0].khoi ? v[0].khoi : null
                 };
               }
             ).value();
@@ -407,12 +416,12 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
 
   themMoiItem(data: any, type: string, idx: number, list?: any) {
     let modalQD = this.modal.create({
-      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
+      nzTitle: "Chỉnh sửa chi tiết kế hoạch",
       nzContent: DialogThemMoiDxkhthComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: "1200px",
-      nzStyle: { top: "200px" },
+      nzStyle: {top: "200px"},
       nzFooter: null,
       nzComponentParams: {
         dataTable: list && list.dataChild ? list.dataChild : [],

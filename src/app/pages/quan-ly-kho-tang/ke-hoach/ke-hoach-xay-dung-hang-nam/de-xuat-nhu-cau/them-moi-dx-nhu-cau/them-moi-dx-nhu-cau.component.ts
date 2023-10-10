@@ -159,7 +159,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   }
 
 
-  async save(isOther: boolean) {
+  async save(isOther: boolean,trangThai?) {
     this.helperService.removeValidators(this.formData);
     this.formData.controls["soCongVan"].setValidators(Validators.required);
     this.formData.controls["soQdTrunghan"].setValidators(Validators.required);
@@ -177,74 +177,61 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     body.fileDinhKems = this.fileDinhKem;
     body.ctiets = this.dataTableRes;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isOther) {
-        let trangThai;
-        switch (this.formData.value.trangThai) {
-          case STATUS.DU_THAO :
-          case STATUS.TU_CHOI_LDV:
-          case STATUS.TU_CHOI_TP : {
-            trangThai = STATUS.CHO_DUYET_TP;
-            break;
-          }
-          case STATUS.TU_CHOI_LDC:
-          case STATUS.CHO_DUYET_TP : {
-            trangThai = STATUS.CHO_DUYET_LDC;
-            break;
-          }
-        }
-        if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
-          this.duyet()
-        } else {
-          await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
-        }
-      } else {
-        this.idInput = data.id;
-        this.formData.patchValue({
-          id: data.id,
-          trangThai: data.trangThai
-        });
-      }
+    if(isOther){
+      await super.saveAndSend(body, trangThai,'Bạn có muốn gửi duyệt đề xuất này ?','Gửi duyệt thành công.');
+    }else {
+      await this.createUpdate(body);
     }
   }
 
-  async duyet() {
-    let trangThai;
-    switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_TP : {
+  pheDuyet() {
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_CBV:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.TU_CHOI_TP:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_LDC : {
+      case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_LDC;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.DA_DUYET_LDC : {
+      case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_CBV;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
     }
-    await this.approve(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn duyệt?");
+    this.approve(this.idInput, trangThai, msg,null,"Bạn đã lưu và gửi duyệt thành công!");
   }
 
-  async tuChoi() {
-    let trangThai;
+  tuChoi() {
+    let trangThai = '';
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_TP : {
-        trangThai = STATUS.TU_CHOI_TP;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDC : {
+      case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.TU_CHOI_LDC;
         break;
       }
-      case STATUS.DA_DUYET_LDC : {
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+      case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.TU_CHOI_CBV;
         break;
       }
     }
-    await this.reject(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn từ chối?");
+    this.reject(this.idInput, trangThai)
   }
 
   sumSoLuong(data: any, row: string, type?: any) {
