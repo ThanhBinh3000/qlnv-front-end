@@ -114,7 +114,8 @@
             <nz-form-label [nzNoColon]="true">Giá trị dự toán hoặc khái toán TMĐT
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-radio-group formControlName="loai" [nzDisabled]="true">
+              <nz-radio-group [(ngModel)]="formData.value.loai"
+                              [ngModelOptions]="{standalone: true}"  [nzDisabled]="true">
                 <label nz-radio nzValue="00"> <= 15 tỷ </label>
                 <label nz-radio nzValue="01"> > 15 tỷ </label>
               </nz-radio-group>
@@ -300,15 +301,15 @@
         <td></td>
         <td></td>
         <td></td>
-        <td class="font-weight-bold text-right"
-            style="color: blue">{{sumSoLuong(null, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right"
-            style="color: blue">{{sumSoLuong(null, 'giaTriPd', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right"
-            style="color: blue">{{sumSoLuong(null, 'luyKeVon', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right"
-            style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td></td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong('tmdt') | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong( 'giaTriPd') | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong( 'luyKeVon') | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong('vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
         <td></td>
         <td  *ngIf="!isViewDetail" nzRight></td>
       </tr>
