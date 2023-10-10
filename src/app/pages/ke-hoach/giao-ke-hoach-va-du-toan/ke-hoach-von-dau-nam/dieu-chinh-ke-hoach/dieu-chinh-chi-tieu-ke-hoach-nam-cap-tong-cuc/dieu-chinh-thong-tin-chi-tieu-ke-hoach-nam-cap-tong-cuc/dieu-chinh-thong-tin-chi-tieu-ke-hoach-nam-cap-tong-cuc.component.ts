@@ -1078,7 +1078,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       quyetDinhGiaoCuaTcId: [],
       soQuyetDinhGiaoNam: [],
       quyetDinhGiaoNamId: [],
-      soCongVan: [, [Validators.required]],
+      soCongVan: [],
       namKeHoach: [dayjs().get("year"), [Validators.required]],
       trichYeu: [, [Validators.required],
       ],
