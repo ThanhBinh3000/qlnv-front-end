@@ -27,7 +27,7 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
   isDetail: boolean = false;
 
   listTrangThai: any[] = [
-    {ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu'},
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
     {ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục'},
     {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối LĐ-Vụ'},

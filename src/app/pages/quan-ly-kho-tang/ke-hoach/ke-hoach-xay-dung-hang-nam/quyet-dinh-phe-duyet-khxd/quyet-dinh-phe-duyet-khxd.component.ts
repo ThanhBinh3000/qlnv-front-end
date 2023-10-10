@@ -1,4 +1,4 @@
-import {Component, Input, OnInit,} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
 import dayjs from 'dayjs';
 import {cloneDeep} from 'lodash';
 import {NzModalService} from 'ng-zorro-antd/modal';
@@ -24,6 +24,8 @@ import {Router} from "@angular/router";
 export class QuyetDinhPheDuyetKhxdComponent implements OnInit {
 
   @Input() typeVthh: string;
+  @Input() dataTongHop: any;
+  @Output() removeData=new EventEmitter<any>();
   isDetail: boolean = false;
 
   STATUS = STATUS;
@@ -80,6 +82,11 @@ export class QuyetDinhPheDuyetKhxdComponent implements OnInit {
     if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD')) {
       this.router.navigateByUrl('/error/401')
     }
+    if(this.dataTongHop && this.dataTongHop.id >0){
+      this.isDetail=this.dataTongHop.quyetDinh;
+      this.idTongHop=this.dataTongHop.id;
+    }
+    this.removeData.emit()
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

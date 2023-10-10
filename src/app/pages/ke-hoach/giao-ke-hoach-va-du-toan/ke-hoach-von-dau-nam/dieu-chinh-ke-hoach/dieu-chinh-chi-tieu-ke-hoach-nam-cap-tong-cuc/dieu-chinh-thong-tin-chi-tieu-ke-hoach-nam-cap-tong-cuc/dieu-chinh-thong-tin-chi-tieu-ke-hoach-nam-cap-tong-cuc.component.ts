@@ -456,137 +456,137 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.formData.patchValue({
           soCongVan: data.soDeXuat
         });
-        if (this.userService.isCuc()) {
-          this.dsKeHoachLuongThucClone = data.dcKeHoachNamLtDtl.map((khlt) => {
+        // if (this.userService.isCuc()) {
+        //   this.dsKeHoachLuongThucClone = data.dcKeHoachNamLtDtl.map((khlt) => {
 
-            // gạo tồn
-            const tkdnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "01").map((item) => {
-              return {
-                ...item,
-                keHoachDieuChuyenLtDtlId: undefined,
-                id: undefined
-              }
-            })
+        //     // gạo tồn
+        //     const tkdnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "01").map((item) => {
+        //       return {
+        //         ...item,
+        //         keHoachDieuChuyenLtDtlId: undefined,
+        //         id: undefined
+        //       }
+        //     })
 
-            // thóc tồn
-            const tkdnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "00").map((item) => {
-              return {
-                ...item,
-                keHoachDieuChuyenLtDtlId: undefined,
-                id: undefined
-              }
-            })
+        //     // thóc tồn
+        //     const tkdnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "00").map((item) => {
+        //       return {
+        //         ...item,
+        //         keHoachDieuChuyenLtDtlId: undefined,
+        //         id: undefined
+        //       }
+        //     })
 
-            // gạo nhập trong năm
-            const ntnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "11").map((item) => {
-              return {
-                ...item,
-                keHoachDieuChuyenLtDtlId: undefined,
-                id: undefined
-              }
-            })
+        //     // gạo nhập trong năm
+        //     const ntnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "11").map((item) => {
+        //       return {
+        //         ...item,
+        //         keHoachDieuChuyenLtDtlId: undefined,
+        //         id: undefined
+        //       }
+        //     })
 
-            // thóc nhập trong năm
-            const ntnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "10").map((item) => {
-              return {
-                ...item,
-                keHoachDieuChuyenLtDtlId: undefined,
-                id: undefined
-              }
-            })
+        //     // thóc nhập trong năm
+        //     const ntnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "10").map((item) => {
+        //       return {
+        //         ...item,
+        //         keHoachDieuChuyenLtDtlId: undefined,
+        //         id: undefined
+        //       }
+        //     })
 
-            // gạo xuất trong năm
-            let xtnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "21").map((item) => {
-              return {
-                ...item,
-                keHoachDieuChuyenLtDtlId: undefined,
-                id: undefined
-              }
-            })
+        //     // gạo xuất trong năm
+        //     let xtnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "21").map((item) => {
+        //       return {
+        //         ...item,
+        //         keHoachDieuChuyenLtDtlId: undefined,
+        //         id: undefined
+        //       }
+        //     })
 
-            // thóc xuất trong năm
-            let xtnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "20").map((item) => {
-              return {
-                ...item,
-                keHoachDieuChuyenLtDtlId: undefined,
-                id: undefined
-              }
-            })
+        //     // thóc xuất trong năm
+        //     let xtnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "20").map((item) => {
+        //       return {
+        //         ...item,
+        //         keHoachDieuChuyenLtDtlId: undefined,
+        //         id: undefined
+        //       }
+        //     })
 
-            // gạo tồn kho cuối kỳ
-            const tkcnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "31").map((item) => {
-              return {
-                ...item,
-                keHoachDieuChuyenLtDtlId: undefined,
-                id: undefined
-              }
-            })
-            // thóc tông kho cuối kỳ
-            const tkcnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "30").map((item) => {
-              return {
-                ...item,
-                keHoachDieuChuyenLtDtlId: undefined,
-                id: undefined
-              }
-            })
-
-
-
-            const dcKeHoachNamLtTtDtl = [...tkdnGao, ...tkdnThoc, ...ntnGao, ...ntnThoc, ...xtnGao, ...xtnThoc, ...tkcnGao, ...tkcnThoc]
+        //     // gạo tồn kho cuối kỳ
+        //     const tkcnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "31").map((item) => {
+        //       return {
+        //         ...item,
+        //         keHoachDieuChuyenLtDtlId: undefined,
+        //         id: undefined
+        //       }
+        //     })
+        //     // thóc tông kho cuối kỳ
+        //     const tkcnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "30").map((item) => {
+        //       return {
+        //         ...item,
+        //         keHoachDieuChuyenLtDtlId: undefined,
+        //         id: undefined
+        //       }
+        //     })
 
 
-            return {
-              ...khlt,
-              id: undefined,
-              hdrId: undefined,
-              dcKeHoachNamLtTtDtl,
-              tkdnGao,
-              tkdnThoc,
-              ntnGao,
-              ntnThoc,
-              xtnGao,
-              xtnThoc,
-              tkcnGao,
-              tkcnThoc
-            }
-          })
 
-          this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
-          this.sumRowDetailLuongThuc();
+        //     const dcKeHoachNamLtTtDtl = [...tkdnGao, ...tkdnThoc, ...ntnGao, ...ntnThoc, ...xtnGao, ...xtnThoc, ...tkcnGao, ...tkcnThoc]
 
-          this.dsMuoiClone = data.dcKeHoachNamMuoiDtl.map((item) => {
-            return {
-              ...item,
-              hdrId: undefined,
-              id: undefined
-            }
-          })
-          this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
-          this.sumRowDetailMuoi()
 
-          this.dataVatTuNhap = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "NHAP").map((item) => {
-            return {
-              ...item,
-              hdrId: undefined,
-              id: undefined
-            }
-          })
-          this.dataVatTuXuat = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "XUAT").map((item) => {
-            return {
-              ...item,
-              hdrId: undefined,
-              id: undefined
-            }
-          })
+        //     return {
+        //       ...khlt,
+        //       id: undefined,
+        //       hdrId: undefined,
+        //       dcKeHoachNamLtTtDtl,
+        //       tkdnGao,
+        //       tkdnThoc,
+        //       ntnGao,
+        //       ntnThoc,
+        //       xtnGao,
+        //       xtnThoc,
+        //       tkcnGao,
+        //       tkcnThoc
+        //     }
+        //   })
 
-          this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
-          this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
+        //   this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
+        //   this.sumRowDetailLuongThuc();
 
-          this.convertListDataVatTuNhap(this.dataVatTuNhap);
-          this.convertListDataVatTuXuat(this.dataVatTuXuat);
-          this.expandAll(this.dataVatTuNhapTree);
-          this.expandAllVatTuXuat(this.dataVatTuXuatTree);
-        }
+        //   this.dsMuoiClone = data.dcKeHoachNamMuoiDtl.map((item) => {
+        //     return {
+        //       ...item,
+        //       hdrId: undefined,
+        //       id: undefined
+        //     }
+        //   })
+        //   this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
+        //   this.sumRowDetailMuoi()
+
+        //   this.dataVatTuNhap = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "NHAP").map((item) => {
+        //     return {
+        //       ...item,
+        //       hdrId: undefined,
+        //       id: undefined
+        //     }
+        //   })
+        //   this.dataVatTuXuat = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "XUAT").map((item) => {
+        //     return {
+        //       ...item,
+        //       hdrId: undefined,
+        //       id: undefined
+        //     }
+        //   })
+
+        //   this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
+        //   this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
+
+        //   this.convertListDataVatTuNhap(this.dataVatTuNhap);
+        //   this.convertListDataVatTuXuat(this.dataVatTuXuat);
+        //   this.expandAll(this.dataVatTuNhapTree);
+        //   this.expandAllVatTuXuat(this.dataVatTuXuatTree);
+        // }
         console.log("getDeXuat", data)
       }
     } else {
@@ -810,7 +810,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+        this.notification.error(MESSAGE.ERROR, res.msg)
       }
     }
 

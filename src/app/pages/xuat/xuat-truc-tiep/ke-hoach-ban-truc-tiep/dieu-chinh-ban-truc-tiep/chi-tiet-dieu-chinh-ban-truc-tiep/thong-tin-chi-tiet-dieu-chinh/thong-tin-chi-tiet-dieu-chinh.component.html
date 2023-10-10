@@ -157,7 +157,7 @@
         <th nzWidth="80px" class="text-right wrap"> SL xuất bán TT đề xuâ</th>
         <th class="text-left"> ĐVT</th>
         <th nzWidth="80px" class="text-right wrap"> Đơn giá được duyệt (đ)</th>
-        <th nzWidth="80px" class="text-right wrap"> Giá khởi điểm (đ)</th>
+        <th nzWidth="80px" class="text-right wrap"> Thành tiền (đ)</th>
         <th class="text-center" *ngIf="!isView"> Hành động</th>
       </tr>
       </thead>
@@ -191,7 +191,7 @@
             <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-left">{{ children.donViTinh}}</td>
             <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-right">{{ children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-right">{{ children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
             <td *ngIf="!isView"></td>
           </tr>
         </ng-container>

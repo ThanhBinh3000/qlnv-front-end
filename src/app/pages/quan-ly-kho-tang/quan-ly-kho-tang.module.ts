@@ -319,6 +319,7 @@ import { QuyetDinhDieuChinhQuyHoachBkComponent } from './ke-hoach/quy-hoach-kho-
 import { QuyetDinhQuyHoachBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-quy-hoach-bk/quyet-dinh-quy-hoach-bk.component';
 import { ThemMoiQdBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-quy-hoach-bk/them-moi-qd-bk/them-moi-qd-bk.component';
 import { ThemMoiQdDcBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-dieu-chinh-quy-hoach-bk/them-moi-qd-dc-bk/them-moi-qd-dc-bk.component';
+import {CuuTroVienTroModule} from "../xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
 @NgModule({
   declarations: [
     QuanLyKhoTangComponent,
@@ -454,7 +455,7 @@ import { ThemMoiQdDcBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-d
     ThemMoiQdBkComponent,
     ThemMoiQdDcBkComponent
   ],
-  imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, KiemtraChatluongVtTbTrongThbhComponentModule],
+    imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, KiemtraChatluongVtTbTrongThbhComponentModule, CuuTroVienTroModule],
 })
 
 export class QuanLyKhoTangModule {
