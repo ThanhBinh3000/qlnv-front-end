@@ -135,26 +135,12 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     async initialization() {
         this.spinner.show()
 
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
         if (this.userService.isAccessPermisson(Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT)) {
             this.isCanbotc = true;
         }
-
-        //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
-
+        await this.getChildUnit();
         if (this.userService.isAccessPermisson(Roles.GTT.TIEPNHAN_TUCHOI_BC) || this.userService.isAccessPermisson(Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT)) {
             this.trangThai = '9';
             this.status = false;
@@ -166,6 +152,25 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
         }
         this.onSubmit();
         this.spinner.hide();
+    };
+
+    async getChildUnit() {
+        const request = {
+            maDviCha: this.maDviTao,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.donVis = data?.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
     }
 
 

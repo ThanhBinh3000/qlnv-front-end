@@ -12,6 +12,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { DialogTongHopComponent } from '../dialog-tong-hop/dialog-tong-hop.component';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 export const TRANG_THAI_TIM_KIEM_GIAO = [
     {
@@ -100,6 +101,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private userService: UserService,
         private modal: NzModalService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
     ) {
     }
     ngOnInit() {
@@ -126,25 +128,12 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     async initialization() {
         this.spinner.show()
 
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
         if (this.userService.isAccessPermisson(Roles.GSTC.TIEPNHAN_TUCHOI_BC)) {
             this.isCanbotc = true;
         }
-
-        //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
+        await this.getChildUnit()
 
         if (this.userService.isAccessPermisson(Roles.GSTC.TIEPNHAN_TUCHOI_BC) || this.userService.isAccessPermisson(Roles.GSTC.XEM_BC_TONGHOP)) {
             this.trangThai = '9';
@@ -172,6 +161,27 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
             '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
             id,
         ]);
+    }
+
+    async getChildUnit() {
+        const request = {
+            maDviCha: this.maDviTao,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.donVis = data?.data;
+                    // this.capDvi = this.dataInfo?.capDvi;
+
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
     }
 
     //search list bao cao theo tieu chi

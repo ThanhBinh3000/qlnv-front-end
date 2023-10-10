@@ -161,6 +161,7 @@ export class Status {
     'ok': [Status.TT_02, Status.TT_04, Status.TT_06, Status.TT_07],
     'export': [Status.TT_09],
     'appraisal': [Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09],
+    'appraisalGiaoDuToan': [Status.TT_07, Status.TT_08, Status.TT_09],
     'reject': [Status.TT_03, Status.TT_05, Status.TT_08],
   }
 
@@ -1113,7 +1114,7 @@ export class Roles {
     NHAP_SO_KIEMTRA_BTC: "KHVDTNSNN_DTNSNN_GIAOKTTC_NHAP_SO_KIEMTRA_BTC", 	//Nhập số kiểm tra từ BTC,
     SUA_SO_KIEMTRA_BTC: "KHVDTNSNN_DTNSNN_GIAOKTTC_SUA_SO_KIEMTRA_BTC", 	//Sửa quyết định từ BTC,
     XOA_SO_KIEMTRA_BTC: "KHVDTNSNN_DTNSNN_GIAOKTTC_XOA_SO_KIEMTRA_BTC", 	//Xóa quyết định từ BTC,
-    XEM_SO_KIEMTRA_BTC : "KHVDTNSNN_DTNSNN_GIAOKTTC_XEM_SO_KIEMTRA_BTC",//	Xem quyết định từ BTC
+    XEM_SO_KIEMTRA_BTC: "KHVDTNSNN_DTNSNN_GIAOKTTC_XEM_SO_KIEMTRA_BTC",//	Xem quyết định từ BTC
 
     LAP_PA_GIAO_SOKIEMTRA: "KHVDTNSNN_DTNSNN_GIAOKTTC_LAP_PA_GIAO_SOKIEMTRA", 	//Lập phương án,
     SUA_PA_GIAO_SOKIEMTRA: "KHVDTNSNN_DTNSNN_GIAOKTTC_SUA_PA_GIAO_SOKIEMTRA", 	//Sửa phương án,

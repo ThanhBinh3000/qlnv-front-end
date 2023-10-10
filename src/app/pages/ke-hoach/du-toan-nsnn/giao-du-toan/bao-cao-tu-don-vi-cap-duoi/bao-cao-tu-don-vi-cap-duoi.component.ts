@@ -128,7 +128,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     async initialization() {
         this.spinner.show()
 
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
         await this.getChildUnit()
         if (this.userService.isAccessPermisson(Roles.GSTC.TIEPNHAN_TUCHOI_BC)) {
@@ -151,7 +151,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
 
     async getChildUnit() {
         const request = {
-            maDviCha: this.userInfo.maDvi,
+            maDviCha: this.maDviTao,
             trangThai: '01',
         }
         await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(

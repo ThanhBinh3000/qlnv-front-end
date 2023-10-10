@@ -358,10 +358,10 @@ export class AddBaoCaoComponent implements OnInit {
             this.fileDetail = null;
         }
 
-        if (!baoCaoTemp.congVan || !baoCaoTemp.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
+        // if (!baoCaoTemp.congVan || !baoCaoTemp.congVan?.fileUrl) {
+        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        //     return;
+        // }
 
         // replace nhung ban ghi dc them moi id thanh null
         baoCaoTemp.lstDchinh.forEach(item => {

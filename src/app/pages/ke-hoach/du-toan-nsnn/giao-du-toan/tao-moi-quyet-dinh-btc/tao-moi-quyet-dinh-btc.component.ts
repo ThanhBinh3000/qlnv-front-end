@@ -241,7 +241,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             this.noiDungs = category.data;
         }
         this.id = this.data?.id;
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.maDonViTao = this.userInfo?.MA_DVI;
         if (this.id) {
             await this.getDetailReport();

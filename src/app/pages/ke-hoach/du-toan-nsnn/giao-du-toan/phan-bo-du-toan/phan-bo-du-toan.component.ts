@@ -128,8 +128,6 @@ export class PhanBoDuToanComponent implements OnInit {
     date: any = new Date()
 
     userInfo: any;
-    donVis: any[] = [];
-    donViTaos: any[] = [];
     listIdDelete: string[] = [];
 
     checkVP: boolean;
@@ -177,20 +175,6 @@ export class PhanBoDuToanComponent implements OnInit {
         } else if (this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_PA_GIAO_SKT)) {
             this.trangThai = '4';
         }
-        //lay danh sach danh muc
-        this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                    this.donViTaos = this.donVis.filter(e => e?.maDviCha === this.userInfo?.MA_DVI);
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
         this.search()
     }
 

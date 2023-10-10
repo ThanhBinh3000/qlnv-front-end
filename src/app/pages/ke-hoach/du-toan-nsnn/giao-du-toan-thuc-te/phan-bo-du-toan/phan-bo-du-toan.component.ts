@@ -165,7 +165,7 @@ export class PhanBoDuToanComponent implements OnInit {
     }
 
     async initialization() {
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         this.checkVP = this.userInfo.DON_VI.type.indexOf('PB') != -1;
 
@@ -173,27 +173,35 @@ export class PhanBoDuToanComponent implements OnInit {
             this.statusTaoMoi = false;
         }
         if (this.userService.isAccessPermisson(Roles.GTT.NHAP_CV_QD_GIAO_PA_PBDT)) {
-            this.trangThai = '1';
+            this.trangThai = '';
         } else if (this.userService.isAccessPermisson(Roles.GTT.DUYET_TUCHOI_PA_PBDT)) {
             this.trangThai = '2';
         } else if (this.userService.isAccessPermisson(Roles.GTT.PHEDUYET_TUCHOI_PA_PBDT)) {
             this.trangThai = '4';
         }
-        //lay danh sach danh muc
-        this.danhMuc.dMDonVi().toPromise().then(
+        await this.getChildUnit()
+        this.search()
+    }
+
+    async getChildUnit() {
+        const request = {
+            maDviCha: this.searchFilter.donViTao,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                    this.donViTaos = this.donVis.filter(e => e?.maDviCha === this.userInfo?.MA_DVI);
+                    this.donVis = data?.data;
+                    // this.capDvi = this.dataInfo?.capDvi;
+
                 } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
             },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
-        );
-        this.search()
+        )
     }
 
     clearFilter() {
