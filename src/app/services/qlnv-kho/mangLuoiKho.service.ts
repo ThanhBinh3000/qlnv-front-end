@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BaseService} from '../base.service';
-import {environment} from 'src/environments/environment';
-import {OldResponseData} from "../../interfaces/response";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BaseService } from '../base.service';
+import { environment } from 'src/environments/environment';
+import { OldResponseData } from "../../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +42,10 @@ export class MangLuoiKhoService extends BaseService {
 
   dsNganLoKhoTheoCloaiVthh(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-nganlokho-theo-cloaivthh`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+  slTon(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/sl-ton`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 }

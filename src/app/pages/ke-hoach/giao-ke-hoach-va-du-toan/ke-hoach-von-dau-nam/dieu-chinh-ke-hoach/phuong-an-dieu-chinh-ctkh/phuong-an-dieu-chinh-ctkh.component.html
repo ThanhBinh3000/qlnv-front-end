@@ -68,7 +68,7 @@
           </button>
           <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="isTongCuc()">
             <i class="icon htvbdh_tcdt_tao-qd"></i>
-            <span>Tạo quyết định</span>
+            <span>Thêm</span>
           </button>
         </div>
       </div>
@@ -169,15 +169,15 @@
               <td>{{ data.soCongVan }}</td>
               <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.trichYeu}}</td>
-              <td>{{ data.soQuyetDinh }}</td>
-              <td>{{ data.soCanCu }}</td>
-              <!-- <td>{{ data.soDxuat }}</td> -->
+              <td>{{ data.soQuyetDinhGiaoNamTruoc }}</td>
+              <td>{{ data.soQuyetDinhDcCuaC }}</td>
               <td>{{ data.tenTrangThai }}</td>
               <td class="text-center">
                 <a *ngIf="data.trangThai === STATUS.CHO_DUYET_LDV" (click)="redirectDetail(data.id, true)">
                   <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                 </a>
-                <a *ngIf="data.trangThai === STATUS.DA_DUYET_LDV" (click)="redirectDetail(data.id, true)">
+                <a *ngIf="data.trangThai === STATUS.DA_DUYET_LDV || data.trangThai === STATUS.KHONG_BAN_HANH"
+                  (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV"

@@ -44,6 +44,11 @@ export class QdPheduyetQuyetToanBtcComponent implements OnInit {
     trangThai: '',
     trangThaiPdBtc: '',
   };
+  listTrangThaiBtc: any[] = [
+    { ma: this.STATUS.CHODUYET_BTC, giaTri: 'Chờ duyệt - BTC' },
+    { ma: this.STATUS.DADUYET_BTC, giaTri: 'Đã duyệt - BTC' },
+    { ma: this.STATUS.TUCHOI_BTC, giaTri: 'Từ chối - BTC' },
+  ];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -241,16 +246,24 @@ export class QdPheduyetQuyetToanBtcComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(dayjs(value).format('YYYY-MM-DD')) != -1 ) {
+              temp.push(item);
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item);
+            }
+          });
+        }
       }
       this.dataTable = [...this.dataTable, ...temp];
     } else {
@@ -276,10 +289,11 @@ export class QdPheduyetQuyetToanBtcComponent implements OnInit {
         let body = this.formData.value;
         body.ngayTaoTu = body.ngayTongHop[0];
         body.ngayTaoDen = body.ngayTongHop[1];
+        body.loai = '02';
         this.vonPhiService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'du-lieu-tong-hop-tcdt.xlsx'),
+            saveAs(blob, 'quyet-dinh-phe-duyet-quyet-toan-btc.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

@@ -23,6 +23,7 @@ import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMu
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
+import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
 
 export class QuyetDinhPdDtl {
   idVirtual: string;
@@ -106,6 +107,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     private cdr: ChangeDetectorRef,) {
 
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
@@ -469,27 +471,39 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     let maDvi = this.formDataDtl.value.maDvi;
     let loaiVthh = this.formDataDtl.value.loaiVthh;
     if (maDvi) {
-      await this.quanLyHangTrongKhoService.getTrangThaiHt({
-        maDvi: maDvi,
-        loaiVthh: loaiVthh,
-        // cloaiVthh: cloaiVthh
-      }).then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data;
-          if (data.length > 0) {
-            let tonKhoLoaiVthh = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-            this.formDataDtl.patchValue({
-              tonKhoLoaiVthh: tonKhoLoaiVthh,
-            });
-            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoLoaiVthh)]);
-            this.formDataDtl.controls['soLuong'].updateValueAndValidity();
-          } else {
-            this.formDataDtl.patchValue({ tonKhoLoaiVthh: 0, tonKhoCloaiVthh: 0 });
-            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(0)]);
-            this.formDataDtl.controls['soLuong'].updateValueAndValidity();
-          }
-        }
-      });
+      // await this.quanLyHangTrongKhoService.getTrangThaiHt({
+      //   maDvi: maDvi,
+      //   loaiVthh: loaiVthh,
+      //   // cloaiVthh: cloaiVthh
+      // }).then((res) => {
+      //   if (res.msg == MESSAGE.SUCCESS) {
+      //     let data = res.data;
+      //     if (data.length > 0) {
+      //       let tonKhoLoaiVthh = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+      //       this.formDataDtl.patchValue({
+      //         tonKhoLoaiVthh: tonKhoLoaiVthh,
+      //       });
+      //       this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoLoaiVthh)]);
+      //       this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      //     } else {
+      //       this.formDataDtl.patchValue({ tonKhoLoaiVthh: 0, tonKhoCloaiVthh: 0 });
+      //       this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(0)]);
+      //       this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      //     }
+      //   }
+      // });
+      const body = { maDvi, loaiVthh }
+      const res = await this.mangLuoiKhoService.slTon(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const slTon = res.data;
+        this.formDataDtl.patchValue({ tonKhoLoaiVthh: slTon });
+        this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(slTon)]);
+        this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      } else {
+        this.formDataDtl.patchValue({ tonKhoLoaiVthh: 0 });
+        this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(0)]);
+        this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      }
     }
   }
 
@@ -508,7 +522,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     if (trangThaiHienTai == STATUS.CHO_DUYET_LDV) {
       trangThai = STATUS.CHO_DUYET_LDTC;
     } else if (trangThaiHienTai == STATUS.CHO_DUYET_LDTC) {
-      trangThai = STATUS.DA_DUYET_LDTC;
+      trangThai = STATUS.BAN_HANH;
     }
     return super.approve(id, trangThai, msg, roles, msgSuccess);
   }
@@ -578,7 +592,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     try {
       let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
         xuatCap: true,
-        trangThai: "29",
+        trangThai: STATUS.BAN_HANH,
         paggingReq: {
           limit: this.globals.prop.MAX_INTERGER,
           page: 0

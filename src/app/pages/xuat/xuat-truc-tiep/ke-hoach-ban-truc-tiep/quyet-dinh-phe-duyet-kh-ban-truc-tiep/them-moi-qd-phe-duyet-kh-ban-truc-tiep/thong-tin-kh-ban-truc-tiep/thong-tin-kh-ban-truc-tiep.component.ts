@@ -57,8 +57,8 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
       tgianGnhanGhiChu: [''],
       pthucGnhan: [''],
       thongBao: [''],
-      tongSoLuong: [null],
-      tongTien: [null],
+      tongSoLuong: [],
+      thanhTien: [],
       donViTinh: [''],
     });
   }
@@ -141,13 +141,14 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
         }
         item.children.forEach((child) => {
           child.donGiaDuocDuyet = donGiaDuocDuyet || null;
-          child.thanhTien = child.soLuongDeXuat * (donGiaDuocDuyet || 0);
+          child.thanhTienDuocDuyet = (donGiaDuocDuyet || 0) * child.soLuongDeXuat;
+          child.thanhTienDeXuat = child.soLuongDeXuat * child.donGiaDeXuat;
         });
-        item.tienChiCuc = item.children.reduce((acc, child) => acc + child.thanhTien, 0);
+        item.tienChiCuc = item.children.map(child => child.thanhTienDuocDuyet).reduce((prev, cur) => prev + cur, 0);
       });
       this.formData.patchValue({
         tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
-        tongTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
+        thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
       });
     }
   }

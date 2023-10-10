@@ -14,6 +14,7 @@ import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
 import {ThongTu1302018Service} from "../../../../services/bao-cao/ThongTu1302018.service";
+import {NumberToRoman} from "../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-sl-gia-tri-hang-dtqg',
@@ -31,6 +32,8 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
   listNam: any[] = [];
   dsDonVi: any;
   listChiCuc: any[] = [];
+  listLoaiKyBc: any[] = [];
+  listKyBc: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
@@ -44,6 +47,7 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
               spinner: NgxSpinnerService,
               modal: NzModalService,
               private thongTu1302018Service: ThongTu1302018Service,
+              private danhMucSv: DanhMucService,
               public userService: UserService,
               private donViService: DonviService,
               private danhMucService: DanhMucService,
@@ -57,6 +61,7 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
         dviBaoCao: null,
         dviNhanBaoCao: null,
         loaiBc: null,
+        loaiKyBc: '02',
       }
     );
   }
@@ -72,7 +77,9 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
       }
       await Promise.all([
         this.loadDsDonVi(),
-        this.loadDsVthh()
+        this.loadDsVthh(),
+        this.loadDsKyBc(),
+        this.changLoaiKyBc('02')
       ]);
     } catch (e) {
       console.log("error: ", e);
@@ -80,6 +87,38 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
+  }
+
+  async loadDsKyBc() {
+    let res = await this.danhMucSv.danhMucChungGetAll("KY_BAO_CAO");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "3333")
+      this.listLoaiKyBc = res.data.filter(x => x.ma !== '01' && x.ma !== '04');
+      if (this.listLoaiKyBc && this.listLoaiKyBc.length > 0) {
+        this.listLoaiKyBc.sort((a, b) => (a.ma - b.ma))
+      }
+    }
+  }
+
+  async changLoaiKyBc(event: any) {
+    if (event) {
+      this.listKyBc = [];
+      switch (event) {
+        case '02': {
+          for (let i = 1; i <= 4; i++) {
+            let item = {
+              ma: 'Quý ' + NumberToRoman(i),
+              giaTri: i
+            }
+            this.listKyBc = [...this.listKyBc, item].flat();
+          }
+          break;
+        }
+        case '03': {
+          break;
+        }
+      }
+    }
   }
 
   downloadPdf() {

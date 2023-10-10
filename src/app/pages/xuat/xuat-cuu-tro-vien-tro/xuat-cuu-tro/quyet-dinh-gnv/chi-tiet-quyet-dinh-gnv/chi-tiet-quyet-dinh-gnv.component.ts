@@ -64,6 +64,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   listKieuNhapXuat: any;
   maHauTo: any;
   selectedNode: any;
+  templateName: string = "Quyết định giao nhiệm vụ xuất cứu trợ, viện trợ";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -193,7 +194,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             }
             // res.data.dataDtl.forEach(s => s.idVirtual = uuidv4());
             res.data.dataDtl.forEach(s => s.mId = uuidv4());
-            this.formData.patchValue(res.data);
+            this.formData.patchValue({ ...res.data, trangThaiXh: res.data.trangThaiXh ? res.data.trangThaiXh : STATUS.CHUA_THUC_HIEN });
             await this.buildTableView();
           }
         })
@@ -343,20 +344,20 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   async openDialogQdPd() {
     try {
       await this.spinner.show();
-      let res
+      let res;
       if (this.formData.value.type == 'XC') {
-        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
-          trangThai: STATUS.DA_DUYET_LDTC,
-          idQdGnvNull: true,
+        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDanhSach({
+          trangThai: STATUS.BAN_HANH,
+          types: ["XC"],
           paggingReq: {
             limit: this.globals.prop.MAX_INTERGER,
             page: 0
           },
         });
       } else {
-        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
+        res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDanhSach({
           trangThai: STATUS.BAN_HANH,
-          idQdGnvNull: true,
+          types: ['TH', 'TTr'],
           paggingReq: {
             limit: this.globals.prop.MAX_INTERGER,
             page: 0
@@ -373,7 +374,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           nzWidth: '900px',
           nzFooter: null,
           nzComponentParams: {
-            dataTable: res.data.content,
+            dataTable: res.data,
             dataHeader: ['Số quyết định', 'Ngày phê duyệt', 'Trích yếu'],
             dataColumn: ['soBbQd', 'ngayPduyet', 'trichYeu']
           },
@@ -396,7 +397,10 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               loaiNhapXuat: detail.loaiNhapXuat,
               kieuNhapXuat: detail.kieuNhapXuat,
               tenVthh: detail.tenVthh,
-              dataDtl: detail.quyetDinhPdDtl
+              dataDtl: detail.quyetDinhPdDtl,
+              type: detail.type,
+              loaiVthh: detail.loaiVthh,
+              tenLoaiVthh: detail.tenLoaiVthh
             })
             await this.buildTableView();
           }
@@ -421,9 +425,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
     });
     let data = this.formData.value.dataDtl;
-    if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC) {
+    if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC || this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CUC) {
       data = this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*"));
-    }
+    };
     this.phuongAnView = chain(data)
       .groupBy("noiDungDx")
       .map((value, key) => {
@@ -758,46 +762,82 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let soLuongGiao = this.formDataDtl.value.soLuongGiao;
     let soLuongDx = this.formDataDtl.value.soLuongDx;
     if (maDvi) {
-      await this.quanLyHangTrongKhoService.getTrangThaiHt({
-        maDvi: maDvi,
-        loaiVthh: loaiVthh,
-        cloaiVthh: cloaiVthh ?? null
-      }).then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data;
-          if (data.length > 0) {
-            // if (loaiVthh == '0101' || loaiVthh == '0102') {
-            //   this.formDataDtl.patchValue({
-            //     cloaiVthh: data[0].cloaiVthh,
-            //     // tonKhoCloaiVthh:data[0].slHienThoi
-            //   });
-            // }
-            let tonKhoDvi = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-            let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
-            if (dataCloai.length == 0) {
-              dataCloai = data;
-            }
-            let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-            this.formDataDtl.patchValue({
-              tonKhoDvi: tonKhoDvi,
-              tonKhoCloaiVthh: tonKhoCloaiVthh
-            });
-            if (this.userService.isCuc()) {
-              cloaiVthh ? this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoCloaiVthh))]) :
-                this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);
-              this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
-            }
-            if (this.userService.isChiCuc()) {
-              cloaiVthh ?
-                this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]) :
-                this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoDvi))]);
-              this.formDataDtl.controls['soLuong'].updateValueAndValidity();
-            }
-          } else {
-            this.formDataDtl.patchValue({ tonKhoDvi: 0, tonKhoCloaiVthh: 0 });
-          }
+      // await this.quanLyHangTrongKhoService.getTrangThaiHt({
+      //   maDvi: maDvi,
+      //   loaiVthh: loaiVthh,
+      //   cloaiVthh: cloaiVthh ?? null
+      // }).then((res) => {
+      //   if (res.msg == MESSAGE.SUCCESS) {
+      //     let data = res.data;
+      //     if (data.length > 0) {
+      //       // if (loaiVthh == '0101' || loaiVthh == '0102') {
+      //       //   this.formDataDtl.patchValue({
+      //       //     cloaiVthh: data[0].cloaiVthh,
+      //       //     // tonKhoCloaiVthh:data[0].slHienThoi
+      //       //   });
+      //       // }
+      //       let tonKhoDvi = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+      //       let dataCloai = data.filter(s => s.cloaiVthh == cloaiVthh);
+      //       if (dataCloai.length == 0) {
+      //         dataCloai = data;
+      //       }
+      //       let tonKhoCloaiVthh = dataCloai.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+      //       this.formDataDtl.patchValue({
+      //         tonKhoDvi: tonKhoDvi,
+      //         tonKhoCloaiVthh: tonKhoCloaiVthh
+      //       });
+      //       if (this.userService.isCuc()) {
+      //         cloaiVthh ? this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoCloaiVthh))]) :
+      //           this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);
+      //         this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
+      //       }
+      //       if (this.userService.isChiCuc()) {
+      //         cloaiVthh ?
+      //           this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]) :
+      //           this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoDvi))]);
+      //         this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      //       }
+      //     } else {
+      //       this.formDataDtl.patchValue({ tonKhoDvi: 0, tonKhoCloaiVthh: 0 });
+      //     }
+      //   }
+      // });
+      const body = {
+        maDvi, maVthh: cloaiVthh ? cloaiVthh : loaiVthh
+      }
+      let tonKhoDvi: number = 0;
+      let tonKhoCloaiVthh: number = 0;
+      const res = await this.mangLuoiKhoService.slTon(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const slTon = res.data;
+        tonKhoDvi = slTon;
+        tonKhoCloaiVthh = slTon;
+        this.formDataDtl.patchValue({
+          tonKhoDvi: slTon,
+          tonKhoCloaiVthh: slTon
+        })
+        if (this.userService.isCuc()) {
+          cloaiVthh ? this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoCloaiVthh))]) :
+            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);
+          this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
         }
-      });
+        if (this.userService.isChiCuc()) {
+          cloaiVthh ?
+            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]) :
+            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoDvi))]);
+          this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+        }
+      }
+      else {
+        this.formDataDtl.patchValue({
+          tonKhoDvi: 0,
+          tonKhoCloaiVthh: 0
+        });
+        cloaiVthh ?
+          this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, 0))]) :
+          this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, 0))]);
+        this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      }
     }
   }
   isVthhGao() {
@@ -816,7 +856,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (this.userService.isCuc() && this.formData.value.trangThai === STATUS.DU_THAO && !this.isView) {
       return true;
     }
-    else if (this.userService.isChiCuc() && this.formData.value.trangThaiXh !== STATUS.DA_HOAN_THANH) {
+    else if (this.userService.isChiCuc() && [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN].includes(this.formData.value.trangThaiXh)) {
       return true;
     }
     return false

@@ -7,9 +7,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DonviService } from 'src/app/services/donvi.service';
 import { MESSAGE } from 'src/app/constants/message';
-import { BBLM_LOAI_DOI_TUONG, HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG } from 'src/app/constants/status';
+import { BBLM_LOAI_DOI_TUONG, HSKT_LOAI_DOI_TUONG, LOAI_DOI_TUONG, STATUS } from 'src/app/constants/status';
 import { v4 as uuidv4 } from 'uuid';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, includes } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { BaseService } from 'src/app/services/base.service';
@@ -25,6 +25,7 @@ import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { PREVIEW } from '../../../../../constants/fileType';
 import printJS from 'print-js';
 import dayjs from 'dayjs';
+import { uniqBy } from 'lodash';
 
 @Component({
   selector: 'app-chi-tiet-bien-ban-lay-mau',
@@ -33,6 +34,7 @@ import dayjs from 'dayjs';
 })
 export class ChiTietBienBanLayMauComponent extends Base2Component implements OnInit {
   @Input() loaiXuat: any;
+  @Input() loaiVthh: string;
   @Input() inputService: any;
   @Input() inputServiceGnv: BaseService;
   @Input() inputData: any;
@@ -315,6 +317,10 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
 
   async loadDsQdGnv() {
     await this.inputServiceGnv.search({
+      loaiVthh: this.loaiVthh,
+      trangThai: STATUS.BAN_HANH,
+      trangThaiXh: STATUS.DA_HOAN_THANH,
+      types: this.loaiXuat === "XC" ? ["XC"] : ["TH", "TTr"],
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
@@ -382,7 +388,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          maDiaDiem: data.maDiaDiem || data.maLoKho || data.maNganKho || data.maDvi,
+          maDiaDiem: data.maDiaDiem || data.maDvi || data.maLoKho || data.maNganKho || data.maDvi,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
@@ -454,7 +460,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           ngayKyQdGnv: res.data.ngayKy,
         });
       } else if (res.data.dataDtl) {
-        this.dsDiaDiem = res.data.dataDtl;
+        this.dsDiaDiem = uniqBy(res.data.dataDtl, "maDvi").filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI));
         this.formData.patchValue({
           idQdGnv: res.data.id,
           soQdGnv: res.data.soBbQd,

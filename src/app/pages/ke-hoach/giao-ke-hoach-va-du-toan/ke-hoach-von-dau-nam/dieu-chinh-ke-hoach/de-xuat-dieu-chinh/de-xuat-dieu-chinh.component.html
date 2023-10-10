@@ -58,7 +58,7 @@
       <div class="group-button">
         <h3 class="text-uppercase">Danh sách đề xuất điều chỉnh chỉ tiêu kế hoạch năm</h3>
         <div class="buttons">
-          <button type="button" class="btn btn-do" (click)="xoaMulti()">
+          <button type="button" class="btn btn-do" (click)="xoaMulti()" *ngIf="isCuc()">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
@@ -66,9 +66,9 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)">
+          <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="isCuc()">
             <i class="icon htvbdh_tcdt_tao-qd"></i>
-            <span>Tạo quyết định</span>
+            <span>Thêm</span>
           </button>
         </div>
       </div>

@@ -253,7 +253,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC ;
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC) && this.isAccessPermisson('LKQLCL_TDBQ_THEM') ;
   }
 
   save(isGuiDuyet?) {
@@ -314,7 +314,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.CHO_DUYET_KT || trangThai == STATUS.CHO_DUYET_LDCC;
+    return (trangThai == STATUS.CHO_DUYET_KT && this.isAccessPermisson('LKQLCL_TDBQ_DUYET_KT'))
+      || (trangThai == STATUS.CHO_DUYET_LDCC && this.isAccessPermisson('LKQLCL_TDBQ_DUYET_LDCC'));
   }
   addRow() {
 

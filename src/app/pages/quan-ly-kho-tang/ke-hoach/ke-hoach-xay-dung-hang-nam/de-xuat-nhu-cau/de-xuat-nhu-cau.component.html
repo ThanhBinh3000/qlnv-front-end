@@ -60,7 +60,7 @@
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_EXP')">
+        <button type="button" class="btn btn-sub" (click)="exportData('danh-sach-de-xuat-nhu-cau-dtxd-kho-tang-dtqg.xlsx')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -171,6 +171,13 @@
             <a
               (click)="redirectToChiTiet(data.id,false)"  *ngIf="( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_CBV) && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_THEM')">
               <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a
+              *ngIf="( data.trangThai== STATUS.CHO_DUYET_TP && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_DUYETTP'))
+              || data.trangThai== STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_DUYETLDCUC')
+              || data.trangThai== STATUS.DA_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_DUYETCBVU')"
+              (click)="redirectToChiTiet(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_XOA') " (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

@@ -320,7 +320,8 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
               cloaiVthh: data.formData.cloaiVthh ? data.formData.cloaiVthh : null,
               loaiGia: data.formData.loaiGia ? data.formData.loaiGia : null,
               listIdPag: thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
-              loai: "01"
+              loai: "01",
+              type : this.type
             }
             this.tongHopData(body);
           }

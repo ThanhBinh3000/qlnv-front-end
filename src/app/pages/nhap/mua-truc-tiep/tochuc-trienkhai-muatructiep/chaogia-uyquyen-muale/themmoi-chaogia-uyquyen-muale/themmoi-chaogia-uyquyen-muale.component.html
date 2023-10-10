@@ -55,11 +55,19 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ phê duyệt/điều chỉnh KH mua trực
-                  tiếp
+                <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ phê duyệt KH mua trực tiếp
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input readonly formControlName="soQd"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ điều chỉnh KH mua trực tiếp (nếu có)
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <input nz-input readonly formControlName="soQdDc"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
