@@ -33,6 +33,20 @@
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
           <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="4">
+              <nz-form-item class="form-item">
+                <nz-form-label [nzNoColon]="true">Giá trị dự toán hoặc khái toán TMĐT
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-radio-group formControlName="loai" [nzDisabled]="isViewDetail">
+                    <label nz-radio nzValue="00">QĐ của TCDT giao kế hoạch danh mục</label>
+                    <label nz-radio nzValue="01">Thông báo của TCDT</label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="20">
+            </div>
             <div nz-col nzSpan="3">
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true" nzRequired> Năm kế hoạch
@@ -88,7 +102,7 @@
                   Căn cứ pháp lý
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="fileDinhKem"></file-list>
+                  <file-list [data]="canCuPhapLy"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -107,7 +121,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse>
-      <nz-collapse-panel [nzHeader]="'THÔNG BÁO CỦA TỔNG CỤC DỮ TRỮ'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="formData.value.loai == '01' ? 'THÔNG BÁO CỦA TỔNG CỤC DỮ TRỮ' : 'QUYẾT ĐỊNH CỦA TỔNG CỤC DỮ TRỮ'" [nzActive]="true">
         <nz-collapse class="pd-15" *ngIf="dataTableDuoi && dataTableDuoi.length > 0">
           <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 15 tỷ đồng'" [nzActive]="true">
             <div>

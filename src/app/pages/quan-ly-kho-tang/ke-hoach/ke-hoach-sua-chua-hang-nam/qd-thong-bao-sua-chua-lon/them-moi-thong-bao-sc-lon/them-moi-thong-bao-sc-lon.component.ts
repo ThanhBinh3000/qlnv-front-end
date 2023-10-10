@@ -64,7 +64,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       qdBtc : [null, Validators.required],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
-      type : ['01']
+      type : ['01'],
+      loai: ['00']
     });
   }
 
@@ -173,6 +174,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
     body.maDvi = this.userInfo.MA_DVI
     body.soQuyetDinh = body.soQuyetDinh + this.maQd
     body.fileDinhKems = this.fileDinhKem
+    body.canCuPhapLys = this.canCuPhapLy
     body.chiTiets = this.dataTableReq
     let data = await this.createUpdate(body);
     if (data) {
@@ -202,6 +204,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
   }
 
   chonMaTongHop() {
+    if (!this.isViewDetail && this.formData.value.loai) {
       let modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT CỦA BỘ TÀI CHÍNH',
         nzContent: DialogQdScBtcComponent,
@@ -222,6 +225,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
           this.changSoTh(data.id)
         }
       })
+    }
+
   }
 
   convertListData(table: any[]): any[] {

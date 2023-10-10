@@ -28,7 +28,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   listDxCuc: any[] = [];
   maQd: string
   expandSet = new Set<number>();
-  typeQd : string
+  typeQd : string = 'TH';
   amount = AMOUNT_ONE_DECIMAL;
   constructor(
     httpClient: HttpClient,
@@ -45,7 +45,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       id: [null],
       maDvi: [null],
       namKeHoach: [dayjs().get('year'), Validators.required],
-      maTh: [null],
+      maTh: [null, Validators.required],
       maDx: [null],
       tongGiaTri: [null],
       soQd: [null, Validators.required],
@@ -65,7 +65,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
     try {
       this.maQd = '/QĐ-TCDT'
       await this.loadDsTongHop();
-      await this.loadDxCuc();
+      // await this.loadDxCuc();
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -110,37 +110,37 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
     }
   }
 
-  async loadDxCuc() {
-    this.spinner.show();
-    try {
-      let body = {
-        "capDvi": "2",
-        "paggingReq": {
-          "limit": 99,
-          "page": 0
-        }
-      }
-      let res = await this.deXuatBaoHiemSv.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.listDxCuc = data.content;
-        if (this.listDxCuc) {
-          this.listDxCuc =  this.listDxCuc.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP && item.qdMuaSamBhId == null )
-          )
-        }
-      } else {
-        this.listDxCuc = [];
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
-    } catch (e) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
-  }
+  // async loadDxCuc() {
+  //   this.spinner.show();
+  //   try {
+  //     let body = {
+  //       "capDvi": "2",
+  //       "paggingReq": {
+  //         "limit": 99,
+  //         "page": 0
+  //       }
+  //     }
+  //     let res = await this.deXuatBaoHiemSv.search(body);
+  //     if (res.msg == MESSAGE.SUCCESS) {
+  //       let data = res.data;
+  //       this.listDxCuc = data.content;
+  //       if (this.listDxCuc) {
+  //         this.listDxCuc =  this.listDxCuc.filter(
+  //           (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP && item.qdMuaSamBhId == null )
+  //         )
+  //       }
+  //     } else {
+  //       this.listDxCuc = [];
+  //       this.notification.error(MESSAGE.ERROR, res.msg);
+  //     }
+  //     this.spinner.hide();
+  //   } catch (e) {
+  //     this.spinner.hide();
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //   } finally {
+  //     this.spinner.hide();
+  //   }
+  // }
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
@@ -344,33 +344,33 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       })
     }
   }
-  chonSoDxCuc() {
-    if (!this.isView && this.typeQd == 'DX') {
-      this.formData.controls["maTh"].clearValidators();
-      this.formData.controls["maDx"].setValidators([Validators.required]);
-      let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CCDCCỦA CỤC',
-        nzContent: DialogMmMuaSamComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          listTh:  this.listDxCuc ,
-          type : "02"
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            maDx :  data.soCv,
-            maTh :  null,
-          })
-          await this.changSoTh(data.id, 'DX');
-        }
-      })
-    }
-  }
+  // chonSoDxCuc() {
+  //   if (!this.isView && this.typeQd == 'DX') {
+  //     this.formData.controls["maTh"].clearValidators();
+  //     this.formData.controls["maDx"].setValidators([Validators.required]);
+  //     let modalQD = this.modal.create({
+  //       nzTitle:'DANH SÁCH ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CCDCCỦA CỤC',
+  //       nzContent: DialogMmMuaSamComponent,
+  //       nzMaskClosable: false,
+  //       nzClosable: false,
+  //       nzWidth: '700px',
+  //       nzFooter: null,
+  //       nzComponentParams: {
+  //         listTh:  this.listDxCuc ,
+  //         type : "02"
+  //       },
+  //     });
+  //     modalQD.afterClose.subscribe(async (data) => {
+  //       if (data) {
+  //         this.formData.patchValue({
+  //           maDx :  data.soCv,
+  //           maTh :  null,
+  //         })
+  //         await this.changSoTh(data.id, 'DX');
+  //       }
+  //     })
+  //   }
+  // }
 
   protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }

@@ -115,7 +115,7 @@
 
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao chỉ tiêu KH năm của TC</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Số QĐ điều chỉnh chỉ tiêu KH năm của TC</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()"> -->
               <input [readonly]="true" nz-input formControlName="soQuyetDinhGiaoCuaTc" readonly="true" />
@@ -126,7 +126,7 @@
 
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Căn cứ trên số công văn/tờ trình</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Căn cứ trên số công văn/tờ trình</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()"> -->
               <input [readonly]="true" nz-input formControlName="soCongVan" readonly="true" />
@@ -207,7 +207,8 @@
             <tr>
               <th rowspan="4" class="text-center" width="40px" nzLeft>STT</th>
               <th rowspan="4" class="text-center" width="330px" nzLeft>
-                {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}</th>
+                CỤC DTNN KHU VỰC
+              </th>
               <th colspan="9" class="text-center" width="1200px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
               <th colspan="3" class="text-center" width="400px">Nhập trong năm (2)</th>
               <th colspan="9" class="text-center" width="1200px">Xuất trong năm (3)</th>
@@ -558,7 +559,7 @@
               <th></th>
               <th></th>
               <th></th>
-              <th class="first-last-row-table background-last-row"> Chỉ tiêu của TCDT</th>
+              <th class="first-last-row-table background-last-row"> Chỉ tiêu của TCDT sau điều chỉnh</th>
               <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)| number:
                 '1.0-1': 'vi_VN'}}</th>
               <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) | number:
@@ -593,7 +594,7 @@
             <tr>
               <th class="text-center" width="40px" nzLeft>STT</th>
               <th class="text-center" nzLeft>
-                {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
+                CỤC DTNN KHU VỰC
               </th>
               <th class="text-center" width="200px">Tồn kho đầu năm</th>
               <th class="text-center" width="200px">Nhập trong năm</th>
@@ -684,7 +685,7 @@
               <thead>
                 <tr>
                   <th rowSpan="2" class="text-center">STT</th>
-                  <th rowSpan="2">Cục DTNN khu vực</th>
+                  <th rowSpan="2">CỤC DTNN KHU VỰC</th>
                   <th rowSpan="2" class="text-center">Mã hàng</th>
                   <th rowSpan="2" class="text-center">Ký hiệu</th>
                   <th rowSpan="2" class="text-center">Tên hàng</th>

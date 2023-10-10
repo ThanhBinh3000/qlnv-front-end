@@ -68,8 +68,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.formData = this.fb.group({
       id: [''],
       soQd: ['', [Validators.required]],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       ngayKy: ['', [Validators.required]],
       ngayHieuLuc: ['', [Validators.required]],
       ngayHetHieuLuc: [''],
