@@ -186,7 +186,8 @@
             style="color: black ;font-weight: bold;"> {{item.soLuongChiCuc|number:globals.numberFormat:globals.locale }}</td>
           <td></td>
           <td></td>
-          <td></td>
+          <td
+            style="color: black ;font-weight: bold;"> {{item.tienChiCuc|number:globals.numberFormat:globals.locale }}</td>
           <td *ngIf="!isView">
             <a (click)="themMoiBangPhanLoTaiSan(item,i)">
               <i class="fa fa-pencil" title="Sửa"></i>
@@ -204,7 +205,7 @@
             <td>{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
             <td>{{ children.donViTinh}}</td>
             <td>{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-            <td>{{ children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
+            <td>{{ children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-right" *ngIf="!isView">
             </td>
           </tr>
