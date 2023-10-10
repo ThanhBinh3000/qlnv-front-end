@@ -49,7 +49,7 @@ export class KeHoachNhapXuatLtComponent implements OnInit, OnChanges {
     if (type && type == 'row1' && this.keHoachNhapXuat.soLuongMuaThoc && this.keHoachNhapXuat.donGiaMuaThoc) {
       let num = 0;
       if (stt) {
-        num = (stt == 1 ? ($event * this.keHoachNhapXuat.donGiaMuaThoc) : (this.keHoachNhapXuat.donGiaMuaThoc * $event));
+        num = (stt == 1 ? ($event * this.keHoachNhapXuat.donGiaMuaThoc) : (this.keHoachNhapXuat.soLuongMuaThoc * $event));
       }
       this.keHoachNhapXuat.tienMuaThoc = num ? (num / 1000) : 0;
     }
