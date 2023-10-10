@@ -398,7 +398,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               kieuNhapXuat: detail.kieuNhapXuat,
               tenVthh: detail.tenVthh,
               dataDtl: detail.quyetDinhPdDtl,
-              type: detail.type
+              type: detail.type,
+              loaiVthh: detail.loaiVthh,
+              tenLoaiVthh: detail.tenLoaiVthh
             })
             await this.buildTableView();
           }
