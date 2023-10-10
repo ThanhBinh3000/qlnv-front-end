@@ -1,26 +1,26 @@
-import { cloneDeep } from "lodash";
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Router } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { UserService } from "../../../../../../services/user.service";
-import { Globals } from "../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { HelperService } from "../../../../../../services/helper.service";
+import {chain, cloneDeep} from "lodash";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {Router} from "@angular/router";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {UserService} from "../../../../../../services/user.service";
+import {Globals} from "../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {HelperService} from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../../constants/message";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { KeHoachXayDungTrungHan } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
-import { STATUS } from "../../../../../../constants/status";
-import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import { KtTongHopXdHnService } from "../../../../../../services/kt-tong-hop-xd-hn.service";
+import {MESSAGE} from "../../../../../../constants/message";
+import {v4 as uuidv4} from "uuid";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
+import {STATUS} from "../../../../../../constants/status";
+import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {KtTongHopXdHnService} from "../../../../../../services/kt-tong-hop-xd-hn.service";
 import {
   DialogThemMoiDxkhthComponent
 } from "../../../ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
+import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 
 @Component({
   selector: 'app-them-moi-tong-hop-dx-nhu-cau',
@@ -55,9 +55,11 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
   maTt: string;
   soQd: string;
   isEdit: string = "";
-
   vonDauTu: number;
-
+  idTongHop: number;
+  quyetDinh = false;
+  hidden = false;
+  @Output() tabFocus = new EventEmitter<object>();
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -68,14 +70,15 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     private tongHopDxXdTh: KtTongHopXdHnService,
     private fb: FormBuilder,
     private modal: NzModalService,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private quyetDinhService: KtQdXdHangNamService,
   ) {
     this.formData = this.fb.group({
       id: [null],
       loaiDuAn: [null],
       namBatDau: [null],
       namKetThuc: [null],
-      ngayTaoTt: [null],
+      ngayTaoTt: [dayjs().format('YYYY-MM-DD')],
       tgTongHop: [null],
       namKeHoach: [null],
       noiDung: [null],
@@ -90,7 +93,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    if(!this.idInput) {
+    if (!this.idInput) {
       this.maTt = "/" + this.userInfo.MA_TR;
       this.soQd = "/" + this.userInfo.MA_QD;
     }
@@ -122,22 +125,22 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       const data = res.data;
       this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
         this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
-      this.formData.patchValue({
-        id: data.id,
-        namBatDau: data.namBatDau,
-        namKeHoach: data.namKeHoach,
-        namKetThuc: data.namKetThuc,
-        ngayTaoTt: data.ngayTaoTt,
-        ngayKyQd: data.ngayKyQd,
-        noiDung: data.noiDung,
-        maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
-        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
-        trangThai: data.trangThai,
-        tenTrangThai: data.tenTrangThai,
-        lyDoTuChoi: data.lyDoTuChoi,
-        loaiDuAn: data.loaiDuAn,
-        tgTongHop: data.tgTongHop
-      });
+        this.formData.patchValue({
+          id: data.id,
+          namBatDau: data.namBatDau,
+          namKeHoach: data.namKeHoach,
+          namKetThuc: data.namKetThuc,
+          ngayTaoTt: data.ngayTaoTt,
+          ngayKyQd: data.ngayKyQd,
+          noiDung: data.noiDung,
+          maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
+          soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
+          trangThai: data.trangThai,
+          tenTrangThai: data.tenTrangThai,
+          lyDoTuChoi: data.lyDoTuChoi,
+          loaiDuAn: data.loaiDuAn,
+          tgTongHop: data.tgTongHop
+        });
       this.dataTableReq = data.ctiets;
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
@@ -148,6 +151,13 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
         if (this.listDx && this.listDx.length > 0) {
           this.selectRow(this.listDx[0]);
         }
+      }
+      let body = {
+        phuongAnTc : this.formData.value.soQuyetDinh,
+      };
+      let dataQd = await this.quyetDinhService.search(body);
+      if (dataQd.data && dataQd.data.length>0){
+        this.hidden == true;
       }
     }
   }
@@ -183,8 +193,8 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     }
     let body = this.formData.value;
     body.tgTongHop = body.tgTongHop ? dayjs(body.tgTongHop) : null;
-    body.maToTrinh =  body.maToTrinh ?   body.maToTrinh + this.maTt : this.maTt;
-    body.soQuyetDinh = body.soQuyetDinh ?  body.soQuyetDinh + this.soQd : this.soQd;
+    body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : this.maTt;
+    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : this.soQd;
     body.ctiets = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;
@@ -225,7 +235,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
-      nzContent: (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV || this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) ? "Bạn có chắc chắn muốn duyệt?" :  "Bạn có chắc chắn muốn gửi duyệt?",
+      nzContent: (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV || this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) ? "Bạn có chắc chắn muốn duyệt?" : "Bạn có chắc chắn muốn gửi duyệt?",
       nzOkText: "Đồng ý",
       nzCancelText: "Không",
       nzOkDanger: true,
@@ -235,19 +245,13 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
+            case STATUS.TU_CHOI_LDV :
+            case STATUS.TU_CHOI_LDTC :
             case STATUS.DU_THAO : {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_LDV : {
-              trangThai = STATUS.CHO_DUYET_LDV;
-              break;
-            }
             case STATUS.CHO_DUYET_LDV : {
-              trangThai = STATUS.CHO_DUYET_LDTC;
-              break;
-            }
-            case STATUS.TU_CHOI_LDTC : {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
@@ -266,7 +270,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
               body
             );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV || this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) ? MESSAGE.PHE_DUYET_SUCCESS :  MESSAGE.GUI_DUYET_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV || this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) ? MESSAGE.PHE_DUYET_SUCCESS : MESSAGE.GUI_DUYET_SUCCESS);
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -500,12 +504,12 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   themMoiItem(data: any, type: string, idx: number, list?: any) {
     let modalQD = this.modal.create({
-      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
+      nzTitle: "Chỉnh sửa chi tiết kế hoạch",
       nzContent: DialogThemMoiDxkhthComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: "1200px",
-      nzStyle: { top: "200px" },
+      nzStyle: {top: "200px"},
       nzFooter: null,
       nzComponentParams: {
         dataTable: list && list.dataChild ? list.dataChild : [],
@@ -532,5 +536,14 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
         this.expandAll(this.dataTable);
       }
     });
+  }
+
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+  openQdPheDuyet(id, b: boolean) {
+    this.idTongHop=id
+    this.quyetDinh = !this.quyetDinh;
+    this.emitTab({tab: "qdpd", id: this.idTongHop,quyetDinh:this.quyetDinh});
   }
 }
