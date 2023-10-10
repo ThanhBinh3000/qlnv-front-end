@@ -172,3 +172,9 @@ export enum BBLM_LOAI_DOI_TUONG {
   PHUONG_PHAP_LAY_MAU = "PPLM",
   CHI_TIEU_CHAT_LUONG = "CTCL"
 }
+
+export enum THONG_TIN_BAN_TRUC_TIEP {
+  CHAO_GIA = "01",
+  UY_QUYEN = "02",
+  BAN_LE = "03"
+}
