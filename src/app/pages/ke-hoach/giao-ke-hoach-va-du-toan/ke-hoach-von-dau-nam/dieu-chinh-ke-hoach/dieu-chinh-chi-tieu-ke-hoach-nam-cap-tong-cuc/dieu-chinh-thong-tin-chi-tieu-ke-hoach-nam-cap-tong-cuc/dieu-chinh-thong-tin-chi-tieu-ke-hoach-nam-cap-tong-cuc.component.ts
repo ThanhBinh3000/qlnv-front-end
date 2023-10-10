@@ -670,23 +670,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           let dataLuongThuc = data.khLuongThuc;
           this.dsKeHoachLuongThucClone = dataLuongThuc.map((khlt) => {
 
-            // // gạo tồn
-            // const tkdnGao = khlt.tkdnGao.map((tk) => {
-            //   return {
-            //     namKeHoach: tk.nam,
-            //     soLuong: tk.soLuong,
-            //     type: "01",
-            //   }
-            // })
-
-            // // thóc tồn
-            // const tkdnThoc = khlt.tkdnThoc.map((tk) => {
-            //   return {
-            //     namKeHoach: tk.nam,
-            //     soLuong: tk.soLuong,
-            //     type: "00",
-            //   }
-            // })
             // gạo tồn
             const tkdnGao = this.listNamKH.map((nkh) => {
               const tdk = khlt.tkdnGao.find((item) => item.nam == nkh)
@@ -721,24 +704,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 type: "10",
               }
             ]
-
-            // // gạo xuất trong năm
-            // let xtnGao = khlt.xtnGao.map((xuat) => {
-            //   return {
-            //     namKeHoach: xuat.nam,
-            //     soLuong: xuat.soLuong,
-            //     type: "21",
-            //   }
-            // })
-
-            // // thóc xuất trong năm
-            // let xtnThoc = khlt.xtnThoc.map((xuat) => {
-            //   return {
-            //     namKeHoach: xuat.nam,
-            //     soLuong: xuat.soLuong,
-            //     type: "20",
-            //   }
-            // })
 
             // gạo xuất trong năm
             let xtnGao = this.listNamKH.map((nkh) => {
