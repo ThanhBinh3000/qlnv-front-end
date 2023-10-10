@@ -87,7 +87,7 @@
             <nz-form-control [nzErrorTip]="error">
               <!-- <nz-input-group nzAddOnAfter="/TTr-CDTNN"> -->
               <input formControlName="soDeXuat" [readonly]="isViewDetail" nz-input nzSize="small"
-                placeholder="Nhập số công văn/tờ trình" />
+                placeholder="Nhập số đề xuất" />
               <!-- </nz-input-group> -->
             </nz-form-control>
           </nz-form-item>
@@ -115,51 +115,7 @@
           </nz-form-item>
         </div>
 
-        <!-- <div nz-col [nzSpan]="4">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao chỉ tiêu của Cục</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
-              <input [readonly]="true" nz-input formControlName="soQuyetDinhDcCuaC" readonly="true" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div> -->
 
-        <!-- <div nz-col [nzSpan]="12" *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1'">
-          <div nz-col [nzSpan]="24" style="margin-top: 12px">
-            <nz-form-item>
-              <nz-radio-group [nzDisabled]="disableSelect()" nzSize="small"
-                (ngModelChange)="changeRadioLoaiCanCu($event)" class="rdo-input" formControlName="loaiCanCu">
-                <label nz-radio nzValue="OTHER">Căn cứ khác</label>
-                <label nz-radio nzValue="TTCP">Căn cứ QĐ của TTCP</label>
-                <label nz-radio nzValue="BTC">Căn cứ QĐ của BTC</label>
-              </nz-radio-group>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group>
-                  <input [readonly]="formData.value.loaiCanCu == 'TTCP' || formData.value.loaiCanCu == 'BTC'" nz-input
-                    formControlName="canCu" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-        <div nz-col nzSpan="13" *ngIf="thongTinChiTieuKeHoachNam.capDvi == '2'">
-          <nz-form-item>
-            <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left">
-              Căn cứ
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input formControlName="canCu" nz-input nzSize="small" [readonly]="true" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div> -->
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Trích yếu
@@ -182,14 +138,7 @@
           </nz-form-item>
         </div>
 
-        <!-- <div nz-col [nzSpan]="24">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ pháp lý</nz-form-label>
-            <div class="list-file">
-              <file-list [isCanCuPL]="true" [isViewDetail]="isViewDetail" [data]="listCcPhapLy"></file-list>
-            </div>
-          </nz-form-item>
-        </div> -->
+
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
@@ -203,7 +152,7 @@
       </div>
     </form>
   </nz-card>
-  <!-- <nz-affix class="menu-lv3" [nzOffsetTop]="100"> -->
+
   <nz-tabset nzType="card" class="mt16 flex-card p-lr16" nz>
     <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'">
       <div id="table-luong-thuc"
@@ -450,144 +399,7 @@
               </ng-template>
             </tr>
           </tbody>
-          <!-- <tfoot>
-            <tr>
-              <th nzLeft></th>
-              <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc ?
-                (sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongThoc ?
-                (sumTotalKhDuTruLuongThuc.tkdnTongThoc) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 ?
-                (sumTotalKhDuTruLuongThuc.tkdnThoc_nam1) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 ?
-                (sumTotalKhDuTruLuongThuc.tkdnThoc_nam2) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 ?
-                (sumTotalKhDuTruLuongThuc.tkdnThoc_nam3) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongGao ?
-                (sumTotalKhDuTruLuongThuc.tkdnTongGao) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam1 ?
-                (sumTotalKhDuTruLuongThuc.tkdnGao_nam1) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam2 ?
-                (sumTotalKhDuTruLuongThuc.tkdnGao_nam2) : 0)|
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam3 ?
-                (sumTotalKhDuTruLuongThuc.tkdnGao_nam3) : 0)|
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc ?
-                sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnThoc ?
-                sumTotalKhDuTruLuongThuc.ntnThoc : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnGao ?
-                sumTotalKhDuTruLuongThuc.ntnGao : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc ?
-                sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongThoc ?
-                sumTotalKhDuTruLuongThuc.xtnTongThoc : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam1 ?
-                sumTotalKhDuTruLuongThuc.xtnThoc_nam1 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam2 ?
-                sumTotalKhDuTruLuongThuc.xtnThoc_nam2 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam3 ?
-                sumTotalKhDuTruLuongThuc.xtnThoc_nam3 : 0)|
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongGao ?
-                sumTotalKhDuTruLuongThuc.xtnTongGao : 0)|
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam1 ?
-                sumTotalKhDuTruLuongThuc.xtnGao_nam1 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam2 ?
-                sumTotalKhDuTruLuongThuc.xtnGao_nam2 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam3 ?
-                sumTotalKhDuTruLuongThuc.xtnGao_nam3 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc ?
-                (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongThoc ?
-                (sumTotalKhDuTruLuongThuc.tkcnTongThoc) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongGao ?
-                (sumTotalKhDuTruLuongThuc.tkcnTongGao) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
 
-              <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                  thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
-            </tr>
-            <tr>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="first-last-row-table background-last-row"> Chỉ tiêu của TCDT</th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)| number:
-                '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) | number:
-                '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)| number:
-                '1.0-1' : 'vi_VN'}}</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) | number:
-                '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </tfoot> -->
         </nz-table>
       </div>
     </nz-tab>
