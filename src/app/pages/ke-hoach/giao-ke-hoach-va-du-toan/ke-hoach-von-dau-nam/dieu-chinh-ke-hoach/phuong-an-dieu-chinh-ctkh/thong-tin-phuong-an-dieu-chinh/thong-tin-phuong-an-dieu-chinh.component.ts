@@ -268,6 +268,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   }
 
   async onChangeDX(values) {
+    if (this.isViewDetail) return
     const dsDX = this.dsDeXuatCuc.filter(item => values.includes(item.soDeXuat));
     if (dsDX.length > 0) {
       this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThuc)
@@ -371,6 +372,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         this.dsMuoiClone[iKHM].soLuongXuat = khmuoi.soLuongXuat
         this.dsMuoiClone[iKHM].tonKhoCuoiNam = khmuoi.tonKhoCuoiNam
         this.dsMuoiClone[iKHM].tonKhoDauNam = khmuoi.tonKhoDauNam
+        this.dsMuoiClone[iKHM].isSelected = true
 
         this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
         this.sumRowDetailMuoi()
@@ -380,6 +382,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         const dsVTN = dx.dcKeHoachNamVatTuDtl.filter((item) => item.loai == "NHAP").map((vattu) => {
           return {
             ...vattu,
+            isSelected: true,
             hdrId: undefined,
             id: undefined,
             loai: "NHAP",
@@ -392,6 +395,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         const dsVTX = dx.dcKeHoachNamVatTuDtl.filter((item) => item.loai == "XUAT").map((vattu) => {
           return {
             ...vattu,
+            isSelected: true,
             hdrId: undefined,
             id: undefined,
             loai: "XUAT",

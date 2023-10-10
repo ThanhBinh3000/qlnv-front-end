@@ -440,20 +440,39 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
             this.dsKeHoachLuongThucClone = [dataLuongThuc].map((khlt) => {
 
+              // // gạo tồn
+              // const tkdnGao = khlt.tkdnGao.map((tk) => {
+              //   return {
+              //     namKeHoach: tk.nam,
+              //     soLuong: tk.soLuong,
+              //     type: "01",
+              //   }
+              // })
+
+              // // thóc tồn
+              // const tkdnThoc = khlt.tkdnThoc.map((tk) => {
+              //   return {
+              //     namKeHoach: tk.nam,
+              //     soLuong: tk.soLuong,
+              //     type: "00",
+              //   }
+              // })
               // gạo tồn
-              const tkdnGao = khlt.tkdnGao.map((tk) => {
+              const tkdnGao = this.listNamKH.map((nkh) => {
+                const tdk = khlt.tkdnGao.find((item) => item.nam == nkh)
                 return {
-                  namKeHoach: tk.nam,
-                  soLuong: tk.soLuong,
+                  namKeHoach: nkh,
+                  soLuong: tdk ? tdk.soLuong : 0,
                   type: "01",
                 }
               })
 
               // thóc tồn
-              const tkdnThoc = khlt.tkdnThoc.map((tk) => {
+              const tkdnThoc = this.listNamKH.map((nkh) => {
+                const tdk = khlt.tkdnThoc.find((item) => item.nam == nkh)
                 return {
-                  namKeHoach: tk.nam,
-                  soLuong: tk.soLuong,
+                  namKeHoach: nkh,
+                  soLuong: tdk ? tdk.soLuong : 0,
                   type: "00",
                 }
               })
@@ -474,22 +493,42 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               ]
 
               // gạo xuất trong năm
-              let xtnGao = khlt.xtnGao.map((xuat) => {
+              let xtnGao = this.listNamKH.map((nkh) => {
+                const xtn = khlt.xtnGao.find((item) => item.nam == nkh)
                 return {
-                  namKeHoach: xuat.nam,
-                  soLuong: xuat.soLuong,
+                  namKeHoach: nkh,
+                  soLuong: xtn ? xtn.soLuong : 0,
                   type: "21",
                 }
               })
 
               // thóc xuất trong năm
-              let xtnThoc = khlt.xtnThoc.map((xuat) => {
+              let xtnThoc = this.listNamKH.map((nkh) => {
+                const xtn = khlt.xtnThoc.find((item) => item.nam == nkh)
                 return {
-                  namKeHoach: xuat.nam,
-                  soLuong: xuat.soLuong,
+                  namKeHoach: nkh,
+                  soLuong: xtn ? xtn.soLuong : 0,
                   type: "20",
                 }
               })
+
+              // // gạo xuất trong năm
+              // let xtnGao = khlt.xtnGao.map((xuat) => {
+              //   return {
+              //     namKeHoach: xuat.nam,
+              //     soLuong: xuat.soLuong,
+              //     type: "21",
+              //   }
+              // })
+
+              // // thóc xuất trong năm
+              // let xtnThoc = khlt.xtnThoc.map((xuat) => {
+              //   return {
+              //     namKeHoach: xuat.nam,
+              //     soLuong: xuat.soLuong,
+              //     type: "20",
+              //   }
+              // })
 
               // gạo tồn kho cuối kỳ
               const tkcnGao = [{
