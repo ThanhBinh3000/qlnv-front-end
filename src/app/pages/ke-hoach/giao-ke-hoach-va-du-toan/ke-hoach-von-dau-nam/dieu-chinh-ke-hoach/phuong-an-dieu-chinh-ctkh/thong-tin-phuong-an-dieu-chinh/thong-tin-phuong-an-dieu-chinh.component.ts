@@ -211,13 +211,13 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         cap: this.userInfo.CAP_DVI
       })
     }
-    if (this.userService.isTongCuc()) {
-      this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-    } else if (this.userService.isChiCuc()) {
-      this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-    } else if (this.userService.isCuc()) {
-      this.lastBreadcrumb = LEVEL.CUC_SHOW;
-    }
+    // if (this.userService.isTongCuc()) {
+    //   this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+    // } else if (this.userService.isChiCuc()) {
+    //   this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+    // } else if (this.userService.isCuc()) {
+    //   this.lastBreadcrumb = LEVEL.CUC_SHOW;
+    // }
     this.getDSDXDC(this.yearNow)
     await this.loadDonVi(),
       await Promise.all([
@@ -266,13 +266,10 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     const dsDX = this.dsDeXuatCuc.filter(item => values.includes(item.soDeXuat));
     if (dsDX.length > 0) {
       console.log("this.dsKeHoachLuongThucClone", this.dsKeHoachLuongThucClone, dsDX)
-      // let dataLuongThuc = []
-      // let dataMuoi = []
-      // let khVatTuNhap = []
-      // let khVatTuXuat = []
+
       dsDX.forEach((dx) => {
         console.log('dx', dx)
-        this.dsKeHoachLuongThucClone = this.dsKeHoachLuongThucClone.filter((item) => item.maDvi !== dx.maDvi)
+
         const lt = dx.dcKeHoachNamLtDtl[0]
         let dcKeHoachNamLtTtDtl = lt.dcKeHoachNamLtTtDtl
         const tkdnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "01").map((item) => {
@@ -332,33 +329,72 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           }
         })
         dcKeHoachNamLtTtDtl = [...tkdnGao, ...tkdnThoc, ...ntnGao, ...ntnThoc, ...xtnGao, ...xtnThoc, ...tkcnGao, ...tkcnThoc]
-        this.dsKeHoachLuongThucClone.push(
-          {
-            ...lt,
-            hdrId: undefined,
-            id: undefined,
-            dcKeHoachNamLtTtDtl,
-            tkdnGao,
-            tkdnThoc,
-            ntnGao,
-            ntnThoc,
-            xtnGao,
-            xtnThoc,
-            tkcnGao,
-            tkcnThoc
-          }
-        )
+
+        const iKHLT = this.dsKeHoachLuongThucClone.findIndex((item) => item.maDvi === dx.maDvi)
+        this.dsKeHoachLuongThucClone[iKHLT].tkdnGao = tkdnGao
+        this.dsKeHoachLuongThucClone[iKHLT].tkdnThoc = tkdnThoc
+        this.dsKeHoachLuongThucClone[iKHLT].ntnGao = ntnGao
+        this.dsKeHoachLuongThucClone[iKHLT].ntnThoc = ntnThoc
+        this.dsKeHoachLuongThucClone[iKHLT].xtnGao = xtnGao
+        this.dsKeHoachLuongThucClone[iKHLT].xtnThoc = xtnThoc
+        this.dsKeHoachLuongThucClone[iKHLT].tkcnGao = tkcnGao
+        this.dsKeHoachLuongThucClone[iKHLT].tkcnThoc = tkcnThoc
+        this.dsKeHoachLuongThucClone[iKHLT].dcKeHoachNamLtTtDtl = dcKeHoachNamLtTtDtl
+        this.dsKeHoachLuongThucClone[iKHLT].tongSoCuoiNam = lt.tongSoCuoiNam,
+          this.dsKeHoachLuongThucClone[iKHLT].tongSoTon = lt.tongSoTon,
+          this.dsKeHoachLuongThucClone[iKHLT].tongGaoTon = lt.tongGaoTon,
+          this.dsKeHoachLuongThucClone[iKHLT].tongThocTon = lt.tongThocTon,
+          this.dsKeHoachLuongThucClone[iKHLT].tongSoXuat = lt.tongSoXuat,
+          this.dsKeHoachLuongThucClone[iKHLT].tongGaoXuat = lt.tongGaoXuat,
+          this.dsKeHoachLuongThucClone[iKHLT].tongThocXuat = lt.tongThocXuat,
+          this.dsKeHoachLuongThucClone[iKHLT].tongSoNhap = lt.tongSoNhap,
+
+          console.log("iKHLT", iKHLT)
+        console.log("lt", lt)
+        console.log("this.dsKeHoachLuongThucClone[iKHLT]", this.dsKeHoachLuongThucClone[iKHLT])
+
+        this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
+
+        this.sumRowDetailLuongThuc();
 
 
-        this.dsMuoiClone = this.dsMuoiClone.filter((item) => item.maDvi !== dx.maDvi)
+        // this.dsKeHoachLuongThucClone = this.dsKeHoachLuongThucClone.filter((item) => item.maDvi !== dx.maDvi)
+        // this.dsKeHoachLuongThucClone.push(
+        //   {
+        //     ...lt,
+        //     hdrId: undefined,
+        //     id: undefined,
+        //     dcKeHoachNamLtTtDtl,
+        //     tkdnGao,
+        //     tkdnThoc,
+        //     ntnGao,
+        //     ntnThoc,
+        //     xtnGao,
+        //     xtnThoc,
+        //     tkcnGao,
+        //     tkcnThoc
+        //   }
+        // )
+
+        const iKHM = this.dsMuoiClone.findIndex((item) => item.maDvi === dx.maDvi)
         const khmuoi = dx.dcKeHoachNamMuoiDtl[0]
-        this.dsMuoiClone.push(
-          {
-            ...khmuoi,
-            hdrId: undefined,
-            id: undefined
-          }
-        )
+        this.dsMuoiClone[iKHM].soLuongNhap = khmuoi.soLuongNhap
+        this.dsMuoiClone[iKHM].soLuongXuat = khmuoi.soLuongXuat
+        this.dsMuoiClone[iKHM].tonKhoCuoiNam = khmuoi.tonKhoCuoiNam
+        this.dsMuoiClone[iKHM].tonKhoDauNam = khmuoi.tonKhoDauNam
+
+        this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
+        this.sumRowDetailMuoi()
+
+        // this.dsMuoiClone = this.dsMuoiClone.filter((item) => item.maDvi !== dx.maDvi)
+        // const khmuoi = dx.dcKeHoachNamMuoiDtl[0]
+        // this.dsMuoiClone.push(
+        //   {
+        //     ...khmuoi,
+        //     hdrId: undefined,
+        //     id: undefined
+        //   }
+        // )
 
         this.dataVatTuNhap = this.dataVatTuNhap.filter((item) => item.maDvi !== dx.maDvi)
         const dsVTN = dx.dcKeHoachNamVatTuDtl.filter((item) => item.loai == "NHAP").map((vattu) => {
@@ -384,6 +420,10 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
 
         this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
         this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
+        this.convertListDataVatTuNhap(this.dataVatTuNhap);
+        this.convertListDataVatTuXuat(this.dataVatTuXuat);
+        this.expandAll(this.dataVatTuNhapTree);
+        this.expandAllVatTuXuat(this.dataVatTuXuatTree);
 
         // dataLuongThuc = dataLuongThuc.concat(dx.dcKeHoachNamLtDtl)
         // dataMuoi = dataMuoi.concat(dx.dcKeHoachNamMuoiDtl)
@@ -532,7 +572,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data
       if (data) {
-        this.dsDeXuatCuc = data.content
+        this.dsDeXuatCuc = data.content.filter((item) => item.trangThai == STATUS.DA_DUYET_LDC)
         this.listDeXuat = data.content.map((dx) => dx.soDeXuat)
         console.log("listDeXuat", this.listDeXuat)
       }
@@ -2624,7 +2664,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.soLuongNhap, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.soLuongXuat, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
+    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);//this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
   }
 
 
