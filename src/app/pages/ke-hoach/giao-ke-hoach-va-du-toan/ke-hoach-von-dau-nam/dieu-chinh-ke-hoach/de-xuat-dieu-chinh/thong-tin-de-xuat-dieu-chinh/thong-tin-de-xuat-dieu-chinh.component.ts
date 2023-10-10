@@ -201,7 +201,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     }
     this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
     this.userInfo = this.userService.getUserLogin();
-    // this.maQd = '/QĐ-BTC'
+
     if (this.userInfo) {
       this.qdTCDT = this.userInfo.MA_QD;
       this.formData.patchValue({
@@ -210,12 +210,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       })
     }
 
-
-    // await this.loadDanhMucHang()
-
-    // await Promise.all([
-    //   this.loadDanhMucHang(),
-    // ]);
+    if (!this.isViewDetail)
+      await this.loadDanhMucHang()
 
     if (this.id > 0) {
       await this.loadThongTinChiTieuKeHoachNam(this.id);
@@ -426,8 +422,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           this.formData.patchValue({
             soQuyetDinhGiaoCuaTc: data.soQuyetDinh,
             quyetDinhGiaoCuaTcId: data.id
-            // canCu: data.soQuyetDinh,
-            // chiTieuId: data.id
           });
 
 

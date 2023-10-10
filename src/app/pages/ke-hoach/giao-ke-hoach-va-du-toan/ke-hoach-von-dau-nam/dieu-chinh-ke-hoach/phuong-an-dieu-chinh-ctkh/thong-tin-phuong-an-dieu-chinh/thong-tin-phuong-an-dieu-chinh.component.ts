@@ -211,13 +211,13 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         cap: this.userInfo.CAP_DVI
       })
     }
-    if (this.userService.isTongCuc()) {
-      this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-    } else if (this.userService.isChiCuc()) {
-      this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-    } else if (this.userService.isCuc()) {
-      this.lastBreadcrumb = LEVEL.CUC_SHOW;
-    }
+    // if (this.userService.isTongCuc()) {
+    //   this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+    // } else if (this.userService.isChiCuc()) {
+    //   this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+    // } else if (this.userService.isCuc()) {
+    //   this.lastBreadcrumb = LEVEL.CUC_SHOW;
+    // }
     this.getDSDXDC(this.yearNow)
     await this.loadDonVi(),
       await Promise.all([
@@ -532,7 +532,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data
       if (data) {
-        this.dsDeXuatCuc = data.content
+        this.dsDeXuatCuc = data.content.filter((item) => item.trangThai == STATUS.DA_DUYET_LDC)
         this.listDeXuat = data.content.map((dx) => dx.soDeXuat)
         console.log("listDeXuat", this.listDeXuat)
       }
