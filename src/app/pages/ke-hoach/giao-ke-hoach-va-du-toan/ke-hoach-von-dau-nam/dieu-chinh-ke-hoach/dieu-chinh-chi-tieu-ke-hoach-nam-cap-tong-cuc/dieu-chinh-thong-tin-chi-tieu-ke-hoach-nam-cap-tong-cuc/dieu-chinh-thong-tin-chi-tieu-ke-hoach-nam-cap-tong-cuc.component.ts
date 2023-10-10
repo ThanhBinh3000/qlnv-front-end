@@ -213,13 +213,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         cap: this.userInfo.CAP_DVI
       })
     }
-    if (this.userService.isTongCuc()) {
-      this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-    } else if (this.userService.isChiCuc()) {
-      this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-    } else if (this.userService.isCuc()) {
-      this.lastBreadcrumb = LEVEL.CUC_SHOW;
-    }
+    // if (this.userService.isTongCuc()) {
+    //   this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+    // } else if (this.userService.isChiCuc()) {
+    //   this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+    // } else if (this.userService.isCuc()) {
+    //   this.lastBreadcrumb = LEVEL.CUC_SHOW;
+    // }
 
     await this.loadDonVi(),
       await Promise.all([
@@ -233,10 +233,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (this.id > 0) {
       await this.loadThongTinChiTieuKeHoachNam(this.id);
     } else {
-      // this.formData.patchValue({
-      //   loaiCanCu: "OTHER",
-      //   namKeHoach: dayjs().get('year'),
-      // });
       this.thongTinChiTieuKeHoachNam.cap = this.userInfo.CAP_DVI;
       this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DANG_NHAP_DU_LIEU;
 
@@ -245,7 +241,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
 
       await this.findCanCuByYear(this.yearNow);
-      // await this.initDataThemMoi();
+
     }
   }
 
@@ -415,14 +411,14 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
           this.sumRowDetailMuoi()
 
-          const dataVatTuNhap = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "NHAP").map((item) => {
+          this.dataVatTuNhap = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "NHAP").map((item) => {
             return {
               ...item,
               hdrId: undefined,
               id: undefined
             }
           })
-          const dataVatTuXuat = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "XUAT").map((item) => {
+          this.dataVatTuXuat = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "XUAT").map((item) => {
             return {
               ...item,
               hdrId: undefined,
@@ -610,8 +606,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         if (data) {
           this.dataQdTCDTGiaoCuc = {};
           this.formData.patchValue({
-            soQuyetDinhGiaoCuaTc: data.soQdDcChiTieu,
-            quyetDinhGiaoCuaTcId: data.dcChiTieuId,
+            soQuyetDinhGiaoCuaTc: data.soQuyetDinh,
+            quyetDinhGiaoCuaTcId: data.id,
             soQuyetDinhDcCuaCs: data.soQuyetDinhDcCuaC
           });
 
@@ -1354,7 +1350,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           if (data.soQuyetDinh)
             data.soQuyetDinh = data.soQuyetDinh.split("/")[0]
           this.formData.patchValue(data)
-          this.thongTinChiTieuKeHoachNam = res.data;
+          this.thongTinChiTieuKeHoachNam = data;
           this.fileDinhKems = data.fileDinhKems
           let dsLT = this.thongTinChiTieuKeHoachNam.dcKeHoachNamLtDtl.map((lt) => {
             const dcKeHoachNamLtTtDtl = lt.dcKeHoachNamLtTtDtl
@@ -1379,12 +1375,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             }
           })
           this.dsKeHoachLuongThucClone = cloneDeep(dsLT);
+          this.sumRowDetailLuongThuc();
+
           this.dsMuoiClone = cloneDeep(
             this.thongTinChiTieuKeHoachNam.dcKeHoachNamMuoiDtl,
           );
-          // if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
-          //   this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
-          // }
+          this.sumRowDetailMuoi();
+
           // Xử lý vật tư to tree
           this.dataVatTuNhap = this.thongTinChiTieuKeHoachNam.dcKeHoachNamVatTuDtl.filter((vattu) => vattu.loai == "NHAP")
           this.dataVatTuXuat = this.thongTinChiTieuKeHoachNam.dcKeHoachNamVatTuDtl.filter((vattu) => vattu.loai == "XUAT")
@@ -1393,10 +1390,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
 
-          // this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
-          // this.loadData();
-          this.sumRowDetailMuoi();
-          this.sumRowDetailLuongThuc();
+
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
