@@ -785,7 +785,9 @@
               <thead>
                 <tr>
                   <th>STT</th>
-                  <th>Cục DTNN khu vực</th>
+                  <th>
+                    {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
+                  </th>
                   <th>Mã hàng</th>
                   <th>Ký hiệu</th>
                   <th>Tên hàng</th>
