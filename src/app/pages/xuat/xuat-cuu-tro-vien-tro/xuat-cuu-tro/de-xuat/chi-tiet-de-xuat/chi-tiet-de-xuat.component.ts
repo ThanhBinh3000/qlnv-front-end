@@ -46,7 +46,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
   listMucDichXuat: any[] = [];
-
+  templateName: string = "Đề xuất cứu trợ, viện trợ";
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
