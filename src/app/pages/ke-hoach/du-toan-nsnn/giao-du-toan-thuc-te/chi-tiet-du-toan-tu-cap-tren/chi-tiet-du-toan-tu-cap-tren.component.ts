@@ -170,6 +170,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.lstDvi = data.data;
                     this.donVis = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -372,6 +373,8 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
                 return;
             },
         );
+
+        this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CCDT") || e.tenVietTat.includes("_VP")))
 
         this.lstDvi.forEach(item => {
             listCtietDvi.push({

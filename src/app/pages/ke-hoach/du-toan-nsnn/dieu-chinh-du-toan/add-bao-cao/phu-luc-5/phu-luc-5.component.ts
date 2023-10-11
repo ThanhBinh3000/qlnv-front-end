@@ -679,7 +679,9 @@ export class PhuLuc5Component implements OnInit {
 
     changeModel(id: string): void {
         this.editCache[id].data.tongCong = Operator.sum([this.editCache[id].data.sluongThien, this.editCache[id].data.soluongUocThien]);
-        this.editCache[id].data.thanhTien = Operator.mul(this.editCache[id].data.dinhMuc, this.editCache[id].data.tongCong);
+        if (this.editCache[id].data.dinhMuc) {
+            this.editCache[id].data.thanhTien = Operator.mul(this.editCache[id].data.dinhMuc, this.editCache[id].data.tongCong);
+        }
         this.editCache[id].data.dtoanDchinh = Operator.sum([this.editCache[id].data.thanhTien, - this.editCache[id].data.dtoanDaGiaoLke])
         this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDchinh])
 
@@ -780,6 +782,7 @@ export class PhuLuc5Component implements OnInit {
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu' + Status.reportStatusName(this.dataInfo.trangThai) },
 
                 { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },

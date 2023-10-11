@@ -32,7 +32,9 @@ export class ItemData {
     }
 
     changeModel() {
-        this.namDtTtien = Operator.mul(this.namDtDmuc, this.namDtSluong);
+        if (this.namDtDmuc) {
+            this.namDtTtien = Operator.mul(this.namDtDmuc, this.namDtSluong);
+        }
     }
 
     upperBound() {
@@ -160,17 +162,18 @@ export class PhuLuc02Component implements OnInit {
         this.namBcao = this.dataInfo.namBcao;
 
         await this.getDinhMuc();
-        if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
-            this.lstCtietBcaos.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
-                if (!item.tenDanhMuc) {
-                    item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-                }
-                item.namDtDmuc = dinhMuc?.tongDmuc;
-                item.maDviTinh = dinhMuc?.donViTinh;
-                item.changeModel();
-            })
-        }
+        // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
+        this.lstCtietBcaos.forEach(item => {
+            // debugger
+            const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc) || (e.loaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc));
+            if (!item.tenDanhMuc) {
+                item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+            }
+            item.namDtDmuc = dinhMuc?.tongDmuc;
+            item.maDviTinh = dinhMuc?.donViTinh;
+            item.changeModel();
+        })
+        // }
         if (!this.lstCtietBcaos[0]?.stt) {
             this.setIndex();
         }

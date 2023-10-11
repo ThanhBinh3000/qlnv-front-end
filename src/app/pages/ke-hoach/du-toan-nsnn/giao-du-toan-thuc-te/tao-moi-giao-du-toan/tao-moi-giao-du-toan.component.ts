@@ -5,20 +5,19 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Operator, Roles, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { Roles, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as XLSX from "xlsx";
 // khai báo class data request
 export class ItemData {
@@ -110,8 +109,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	fileList: NzUploadFile[] = []; // danh sách file upload
 	lstFiles: any[] = []; //list file show ra màn hình
 	listIdFilesDelete: any[] = []; // list id file khi xóa file
-	donVis: any[] = []; // list đơn vị
-	donVis1: any[] = []; // list đơn vị
 	trangThais: any[] = Status.TRANG_THAI_FULL; // danh sách trạng thái
 	listFile: File[] = []; // list file chua ten va id de hien tai o input
 	lstDviChon: any[] = []; //danh sach don vi chua duoc chon
@@ -287,7 +284,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		}
 		await this.getChildUnit();
 
-		if ((this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) && this.lstDvi.length == 0) {
+		// await this.getChildUnitUser()
+		if ((this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP") || this.userInfo.DON_VI.tenVietTat.includes("BQLDA")) && this.lstDvi.length == 0) {
 			this.lstDvi.push(
 				{
 					maDvi: this.maDvi,
@@ -295,11 +293,15 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				}
 			)
 		}
+
+
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {
 			this.scrollX = (400 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		}
+		console.log(this.lstDvi);
+
 		this.updateEditCache();
 		this.getStatusButton();
 		this.spinner.hide();
@@ -339,7 +341,22 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			data => {
 				if (data.statusCode == 0) {
 					this.lstDvi = data.data;
-					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+					switch (this.userInfo.CAP_DVI) {
+						case "1":
+							// this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP") || e.tenVietTat.includes("BQLDA")))
+							if (!Status.check('appraisalGiaoDuToan', this.trangThaiBanGhi)) {
+								this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP") || e.tenVietTat.includes("BQLDA")))
+							} else {
+								this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CCDT") || e.tenVietTat.includes("_VP")))
+							}
+							break;
+						case "2":
+							this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CCDT") || e.tenVietTat.includes("_VP")))
+							break;
+						default:
+							this.lstDvi = []
+							break;
+					}
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -348,6 +365,32 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 			}
 		)
+
+		if (this.userInfo.CAP_DVI == "1" && this.lstDvi.length == 0 && Status.check('appraisalGiaoDuToan', this.trangThaiBanGhi)) {
+			const request = {
+				maDviCha: this.userInfo.MA_DVI,
+				trangThai: '01',
+			}
+			await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+				data => {
+					if (data.statusCode == 0) {
+						console.log("data.data", data.data);
+						data.data.forEach(el => {
+							if (el.maDvi == this.maDonViTao) {
+								this.lstDvi.push(el)
+							}
+						});
+
+					} else {
+						this.notification.error(MESSAGE.ERROR, data?.msg);
+					}
+				},
+				(err) => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			)
+		}
+
 		this.spinner.hide();
 	}
 
@@ -540,13 +583,25 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	}
 
 	// đóng
+	// back() {
+	// 	const obj = {
+	// 		id: this.data?.idPaBTC,
+	// 		tabSelected: this.data?.preTab,
+	// 	}
+	// 	this.dataChange.emit(obj);
+	// };
+
 	back() {
-		const obj = {
-			id: this.data?.idPaBTC,
-			tabSelected: this.data?.preTab,
+		if (this.data?.preData) {
+			this.dataChange.emit(this.data?.preData)
+		} else {
+			const obj = {
+				id: this.data?.idPaBTC,
+				tabSelected: this.data?.preTab,
+			}
+			this.dataChange.emit(obj);
 		}
-		this.dataChange.emit(obj);
-	};
+	}
 
 	// in
 	doPrint() {
@@ -802,9 +857,9 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 
 
-		const dVi = this.lstDvi.find(e => e.maDvi == this.maDonViTao);
+		// const dVi = this.lstDvi.find(e => e.maDvi == this.maDonViTao);
 		let checkParent = false;
-		if (dVi && dVi?.maDviCha == this.userInfo.MA_DVI) {
+		if (this.maDviCha == this.userInfo.MA_DVI) {
 			checkParent = true;
 		}
 		const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
@@ -828,9 +883,9 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		if (this.userService.isAccessPermisson(Roles.GTT.TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
 			this.statusBtnGuiDVCT = false;
 		}
-		if (this.trangThaiBanGhi == "7") {
+		if (Status.check('appraisalGiaoDuToan', this.trangThaiBanGhi)) {
 			this.statusBtnGuiDVCT = true;
-			this.statusGiaoToanBo = true;
+			// this.statusGiaoToanBo = true;
 		}
 
 	}

@@ -473,6 +473,10 @@ export class AddQuyetToanComponent implements OnInit {
 	}
 
 	async onSubmit(mcn: string, lyDoTuChoi: string) {
+		if (!this.congVan) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+			return;
+		}
 		if (this.submitStatus != true && mcn < '2') {
 			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
 			return;
@@ -728,10 +732,10 @@ export class AddQuyetToanComponent implements OnInit {
 			lstCtietBcaoTemp.congVan = this.congVan;
 		}
 
-		if (!lstCtietBcaoTemp?.congVan || !this.congVan?.fileName) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-			return;
-		}
+		// if (!lstCtietBcaoTemp?.congVan || !this.congVan?.fileName) {
+		// 	this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+		// 	return;
+		// }
 
 		const request = JSON.parse(JSON.stringify({
 			id: this.idInput,

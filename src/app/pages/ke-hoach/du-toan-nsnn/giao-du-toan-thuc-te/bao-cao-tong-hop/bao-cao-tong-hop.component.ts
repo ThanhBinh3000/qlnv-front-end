@@ -794,12 +794,14 @@ export class BaoCaoTongHopComponent implements OnInit {
             const obj = {
                 id: id,
                 tabSelected: 'phuongAnGiaoDuToan',
+                preData: this.data,
             }
             this.dataChange.emit(obj);
         } else if (maLoaiDan == "2") {
             const obj = {
                 id: id,
                 tabSelected: 'phuongAnGiaoDieuChinh',
+                preData: this.data,
             }
             this.dataChange.emit(obj);
         } else {

@@ -72,55 +72,11 @@
                     <th scope="col" nzWidth="100px">Đơn vị tạo</th>
                     <th scope="col" nzWidth="150px">Mã phương án của Tổng Cục</th>
                     <th scope="col" nzWidth="150px">Mã phương án</th>
+                    <th scope="col" nzWidth="150px">Loại phương án</th>
                     <th scope="col" nzWidth="150px">Ngày tạo</th>
                     <th scope="col" nzWidth="150px">Năm dự toán</th>
                     <th scope="col" nzWidth="150px" style="text-align:center;">Trạng thái</th>
                     <th scope="col" nzWidth="50px" class="text-center"></th>
-                </tr>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col">
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPaCha"
-                                (input)="filterInTable('maPaCha',filterTable.maPaCha, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th scope="col">
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPa"
-                                (input)="filterInTable('maPa',filterTable.maPa, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th scope="col">
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTao"
-                            (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao, true)">
-                        </nz-date-picker>
-                    </th>
-                    <th scope="col">
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namPa"
-                                (input)="filterInTable('namPa',filterTable.namPa, false)" size="small" />
-                        </nz-input-group>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </th>
-                    <th scope="col">
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
-                            [(ngModel)]="filterTable.trangThai"
-                            (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, false)">
-                            <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                            </nz-option>
-                        </nz-select>
-                    </th>
-                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -131,6 +87,14 @@
                     </td>
                     <td>{{item.maPaCha}}</td>
                     <td>{{item.maPa}}</td>
+                    <td>
+                        <ng-template [ngIf]="item.maLoaiDan == '1'">
+                            Giao dự toán
+                        </ng-template>
+                        <ng-template [ngIf]="item.maLoaiDan == '2'">
+                            Giao điều chỉnh dự toán
+                        </ng-template>
+                    </td>
                     <td>{{item.ngayTao}}</td>
                     <td>
                         {{item.namPa}}

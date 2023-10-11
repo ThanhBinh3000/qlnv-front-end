@@ -277,7 +277,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         this.maDonViTao = this.userInfo?.MA_DVI;
 
         // lấy role người dùng
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
 
         // set năm tạo PA
         this.namPa = this.newDate.getFullYear();
@@ -307,7 +307,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
             this.sum1()
         } else {
             // khi không có id thì thực hiện tạo mới
-            this.maDonViTao = this.userInfo?.MA_DVI;
+            this.maDonViTao = this.userInfo?.MA_DVI
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.maDviTien = '1'
             this.listIdFilesDelete = this.data?.listIdDeleteFiles;
