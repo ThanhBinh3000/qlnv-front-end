@@ -337,7 +337,8 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           tenDvi: tenDvi,
           pageNumber: null,
           pageSize: null,
-          loai: this.LOAI_QD.PA,
+          // loai: this.LOAI_QD.PA,
+          loaiQuyetDinh: this.LOAI_QD.QD,
           soQD: this.searchFilter.soQD,
           trichYeu: this.searchFilter.trichYeu,
           ngayKyTuNgay: this.startValue
@@ -347,7 +348,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         this.chiTieuKeHoachNamService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx'),
+            saveAs(blob, 'danh-sach-quyet-dinh-chi-tieu-ke-hoach-nam.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

@@ -341,6 +341,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
           tenDvi: tenDvi,
           pageNumber: null,
           pageSize: null,
+          loaiQuyetDinh: this.LOAI_QD.PA,
           soQD: this.searchFilter.soQD,
           trichYeu: this.searchFilter.trichYeu,
           ngayKyTuNgay: this.startValue
@@ -350,7 +351,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
         this.chiTieuKeHoachNamService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx'),
+            saveAs(blob, 'danh-sach-phuong-an-chi-tieu-ke-hoach-nam.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
