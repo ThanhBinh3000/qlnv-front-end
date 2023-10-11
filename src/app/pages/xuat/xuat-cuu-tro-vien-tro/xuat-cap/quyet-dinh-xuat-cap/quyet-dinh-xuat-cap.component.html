@@ -68,6 +68,8 @@
             <th width="">Số QĐ xuất cấp</th>
             <th width="">Ngày hiệu lực QĐ xuất cấp</th>
             <th width="">Số QĐ chuyển xuất cấp</th>
+            <th width="">Ngày hiệu lực<br />QĐ chuyển xuất cấp</th>
+            <th>Số lượng gạo<br />chuyển sang xuất cấp</th>
             <th width="">Trích yếu</th>
             <th width="">Trạng thái QĐ xuất cấp</th>
             <th width="90px">Hành động</th>
@@ -84,6 +86,8 @@
             <td>{{ data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
             <!-- <td>{{ data.soXc }}</td> -->
             <td>{{data.qdPaXuatCap}}</td>
+            <td></td>
+            <td>{{data.soLuongXc}}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">

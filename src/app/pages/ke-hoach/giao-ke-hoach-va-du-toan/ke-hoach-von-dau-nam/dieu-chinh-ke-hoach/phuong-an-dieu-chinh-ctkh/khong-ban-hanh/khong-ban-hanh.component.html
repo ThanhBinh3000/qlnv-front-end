@@ -7,7 +7,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số văn bản</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
+              <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
                 <input formControlName="soVanBanKhongBh" [readonly]="false" nz-input nzSize="small"
                   placeholder="Nhập số văn bản" />
               </nz-input-group>

@@ -24,6 +24,7 @@ import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
+import { LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
 
 export class QuyetDinhPdDtl {
   idVirtual: string;
@@ -76,7 +77,6 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   @Input() isView: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   formDataDtl: FormGroup;
-  formDataDefault: FormGroup;
   maHauTo: any;
   STATUS = STATUS;
   phuongAnView = [];
@@ -182,20 +182,12 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         donViTinh: [''],
         soLuong: [0, [Validators.required, Validators.min(1)]],
         mapVthh: [''],
-        tenLoaiVthh: [''],
+        tenLoaiVthh: [],
         tenCloaiVthh: [''],
         mapDmucDvi: [''],
         tenDvi: [''],
         edit: []
       });
-    this.formDataDefault = this.fb.group(
-      {
-        loaiVthhPd: "Gạo tẻ",
-        loaiVthh: "Thóc tẻ",
-        loaiNhapXuat: "Xuất cấp",
-        kieuNhapXuat: "Xuất không thu tiền"
-      }
-    )
   }
 
   async ngOnInit() {
@@ -252,11 +244,14 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         });
     } else {
       this.formData.patchValue({
-        tenVthh: 'Thóc tẻ',
+        tenVthh: TEN_LOAI_VTHH.GAO,
+        tenLoaiVthh: TEN_LOAI_VTHH.GAO,
+        loaiVthh: LOAI_HANG_DTQG.GAO,
         tenDvi: this.userInfo.TEN_DVI,
         kieuNhapXuat: 'Xuất không thu tiền',
         loaiNhapXuat: 'Xuất cấp',
-        type: 'XC'
+        type: 'XC',
+        donViTinh: "kg"
       })
     }
   }
@@ -274,13 +269,15 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     }
   }
   tinhTong() {
-    const { tongSoLuongDx, tongSlXuatCap, tongNhuCauXuat } = this.phuongAnView.reduce((obj, cur) => {
+    const { tongSoLuongDx, tongSoLuong, tongSlXuatCap, tongNhuCauXuat } = this.phuongAnView.reduce((obj, cur) => {
       obj.tongSoLuongDx += cur.soLuongDx ? cur.soLuongDx : 0;
+      obj.tongSoLuong += cur.soLuong ? cur.soLuong : 0;
       obj.tongSlXuatCap += cur.soLuongXc ? cur.soLuongXc : 0;
       obj.tongNhuCauXuat += cur.soLuongXc ? cur.soLuongNhuCauXuat : 0;
       return obj
-    }, { tongSoLuongDx: 0, tongSlXuatCap: 0, tongNhuCauXuat: 0 });
+    }, { tongSoLuongDx: 0, tongSoLuong: 0, tongSlXuatCap: 0, tongNhuCauXuat: 0 });
     this.tongSoLuongDx = tongSoLuongDx;
+    this.tongSoLuong = tongSoLuong;
     this.tongSlXuatCap = tongSlXuatCap;
     this.tongNhuCauXuat = tongNhuCauXuat;
   }
@@ -333,8 +330,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     } else {
       this.formDataDtl.patchValue({
         idVirtual: uuidv4(),
-        loaiVthh: '0101',
-        tenLoaiVthh: 'Thóc tẻ',
+        loaiVthh: LOAI_HANG_DTQG.GAO,
+        tenLoaiVthh: TEN_LOAI_VTHH.GAO,
       });
     }
     this.modalChiTiet = true;
@@ -409,7 +406,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       .map((value, key) => {
         const row = value.find(f => f.soDx === key);
         if (!row) return;
-        const soLuong = value.reduce((sum, cur) => sum += cur.soLuong);
+        const soLuong = value.reduce((sum, cur) => sum += cur.soLuong, 0);
         return {
           idVirtual: uuidv4(),
           soDx: key,
@@ -492,7 +489,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       //     }
       //   }
       // });
-      const body = { maDvi, loaiVthh }
+      const body = { maDvi, maVthh: loaiVthh }
       const res = await this.mangLuoiKhoService.slTon(body);
       if (res.msg === MESSAGE.SUCCESS) {
         const slTon = res.data;
@@ -618,7 +615,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             let detail = res.data;
             detail.quyetDinhPdDtl = detail.quyetDinhPdDtl.filter(item => item.soLuongXc > 0);
             detail.quyetDinhPdDtl.forEach(s => {
-              s.soLuong = s.soLuongXc;
+              // s.soLuong = s.soLuongXc;
               s.tenVthh = detail.tenVthh;
             });
             // if (!this.formData.value.id) {
@@ -651,9 +648,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             const qdPaXuatCapId = detail.id;
 
             // this.formData.patchValue(data);
-            this.formData.patchValue({ idDx, paXuatGaoChuyenXc, qdPaXuatCap, qdPaXuatCapId, quyetDinhPdDtl: detail.quyetDinhPdDtl });
+            this.formData.patchValue({ idDx, paXuatGaoChuyenXc, qdPaXuatCap, qdPaXuatCapId, quyetDinhPdDtl: detail.quyetDinhPdDtl, ngayKetThuc: detail.ngayKetThuc });
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
-            console.log(" this.formData.value.quyetDinhPdDtl", this.formData.value.quyetDinhPdDtl)
             // await this.buildTableView();
             await this.buildTableViewChuyenXc();
             if (this.phuongAnHdrView[0]) {

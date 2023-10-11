@@ -134,7 +134,7 @@
         <td>{{ data.tenTrangThai }}</td>
         <td>{{ data.tenTrangThaiBtc }}</td>
         <td class='text-center'>
-          <a *ngIf='(data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV) &&  userService.isAccessPermisson("QTOANVONPHI_BONGANH_XEM")'
+          <a *ngIf='(data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV) &&  userService.isAccessPermisson("QTOANVONPHI_BONGANH_XEM")'
              (click)='viewDetail(data.id, true)'>
             <i class='fa fa-eye' title='Xem chi tiết'></i>
           </a>

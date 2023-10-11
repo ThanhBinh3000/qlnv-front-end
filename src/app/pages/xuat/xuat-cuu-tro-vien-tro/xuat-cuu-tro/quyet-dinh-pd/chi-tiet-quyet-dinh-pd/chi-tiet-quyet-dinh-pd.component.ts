@@ -262,24 +262,22 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   async save() {
     // await this.helperService.ignoreRequiredForm(this.formData);
     // this.formData.controls.soQdGnv.setValidators([Validators.required]);
-    if (this.formData.value.type === "TH") {
-      this.formData.controls["ngayKetThuc"].clearValidators();
-      this.formData.controls["mucDichXuat"].clearValidators();
+    if (this.formData.value.type !== "TH") {
+      this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
+      this.formData.controls["mucDichXuat"].setValidators(Validators.required);
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return;
     if (!this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
       return this.notification.error(MESSAGE.ERROR, "Thông tin chi tiết đề xuất cứu trợ, viện trợ của các đơn vị không tồn tại.")
     }
-    let xuatCap = this.formData.value.xuatCap;
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
     await this.createUpdate(body);
-    this.formData.patchValue({ xuatCap: xuatCap });
-    this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
-    this.formData.controls["mucDichXuat"].setValidators(Validators.required);
+    // this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
+    // this.formData.controls["mucDichXuat"].setValidators(Validators.required);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
