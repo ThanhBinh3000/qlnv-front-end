@@ -17,6 +17,7 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class KhongBanHanhComponent extends Base2Component implements OnInit {
 
+  qdTCDT: string
   soCongVan: string
   fileDinhKemKhongBhs: any[] = [];
 
@@ -43,9 +44,10 @@ export class KhongBanHanhComponent extends Base2Component implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formData.patchValue({
-      soVanBanKhongBh: this.soCongVan
-    })
+    this.qdTCDT = this.userInfo.MA_QD;
+    // this.formData.patchValue({
+    //   soVanBanKhongBh: this.soCongVan
+    // })
   }
 
 
@@ -55,6 +57,7 @@ export class KhongBanHanhComponent extends Base2Component implements OnInit {
     if (this.fileDinhKemKhongBhs.length > 0) {
       this._modalRef.close({
         ...item,
+        soVanBanKhongBh: `${item.soVanBanKhongBh}/${this.qdTCDT}`,
         fileDinhKemKhongBhs: this.fileDinhKemKhongBhs
       });
     } else {
