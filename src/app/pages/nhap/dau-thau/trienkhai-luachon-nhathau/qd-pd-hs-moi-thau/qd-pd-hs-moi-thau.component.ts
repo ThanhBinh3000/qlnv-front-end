@@ -43,6 +43,7 @@ export class QdPdHsMoiThauComponent implements OnInit {
     soQdPdKhlcnt: '',
     tenLoaiVthh: '',
     trangThai: '',
+    lanDieuChinh: '',
   };
   listTrangThai: any[] = [
     { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
@@ -159,7 +160,6 @@ export class QdPdHsMoiThauComponent implements OnInit {
       }
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
-      console.log(this.dataTable, 'a')
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
