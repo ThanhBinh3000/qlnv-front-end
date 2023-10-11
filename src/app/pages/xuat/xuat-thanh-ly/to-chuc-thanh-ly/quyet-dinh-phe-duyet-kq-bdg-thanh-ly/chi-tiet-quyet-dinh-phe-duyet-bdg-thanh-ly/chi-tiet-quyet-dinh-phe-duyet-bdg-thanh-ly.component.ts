@@ -192,7 +192,6 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
 
   async getDetailThongBao(idThongBao){
     await this.toChucThucHienThanhLyService.getDetail(idThongBao).then((res)=>{
-      console.log(res);
       if(res.data){
         const data = res.data;
         this.formData.patchValue({
