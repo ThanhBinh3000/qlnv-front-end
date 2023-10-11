@@ -89,14 +89,6 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
   }
 
   async timKiem() {
-    if (this.formData.value.ngayHieuLuc) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format("YYYY-MM-DD");
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format("YYYY-MM-DD");
-    }
-    if (this.formData.value.ngayXuatCtvt) {
-      this.formData.value.ngayXuatCtvtTu = dayjs(this.formData.value.ngayXuatCtvt[0]).format("YYYY-MM-DD");
-      this.formData.value.ngayXuatCtvtDen = dayjs(this.formData.value.ngayXuatCtvt[1]).format("YYYY-MM-DD");
-    }
     await this.search();
   }
 

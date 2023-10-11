@@ -320,6 +320,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.BAN_HANH,
       trangThaiXh: STATUS.DA_HOAN_THANH,
+      listTrangThaiXh: [STATUS.DA_HOAN_THANH],
       types: this.loaiXuat === "XC" ? ["XC"] : ["TH", "TTr"],
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,

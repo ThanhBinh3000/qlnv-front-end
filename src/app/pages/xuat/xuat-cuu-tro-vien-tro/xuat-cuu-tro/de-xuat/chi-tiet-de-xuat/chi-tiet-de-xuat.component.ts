@@ -198,6 +198,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
       this.formData.patchValue({
         tenVthh: TEN_LOAI_VTHH.GAO,
+        loaiVthh: LOAI_HANG_DTQG.GAO,
         tenDvi: this.userInfo.TEN_DVI,
         kieuNhapXuat: 'Xuất không thu tiền',
         loaiNhapXuat: 'Xuất cứu trợ',
@@ -488,7 +489,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       //     }
       //   }
       // });
-      const body = { maDvi, loaiVthh, cloaiVthh }
+      const body = { maDvi, maVthh: cloaiVthh ? cloaiVthh : loaiVthh }
       const res = await this.mangLuoiKhoService.slTon(body);
       let tonKhoLoaiVthh: number = 0;
       let tonKhoCloaiVthh: number = 0
@@ -516,19 +517,23 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == LOAI_HANG_DTQG.THOC));
       Object.assign(this.listLoaiHangHoa, filter);
       this.formDataDtl.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
     } else if ($event == TEN_LOAI_VTHH.GAO) {
       let listLuongThuc = this.listVatTuHangHoa.find(s => s.key == '01');
       let filter = cloneDeep(listLuongThuc.children.filter(s => s.key == LOAI_HANG_DTQG.GAO));
       Object.assign(this.listLoaiHangHoa, filter);
       this.formDataDtl.patchValue({ loaiVthh: LOAI_HANG_DTQG.GAO, donViTinh: "kg" });
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.GAO, donViTinh: "kg" });
     } else if ($event == TEN_LOAI_VTHH.MUOI) {
       let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == LOAI_HANG_DTQG.MUOI));
       Object.assign(this.listLoaiHangHoa, filter.children);
       this.formDataDtl.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg" });
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg" });
     } else {
       let filter = cloneDeep(this.listVatTuHangHoa.find(s => s.key == LOAI_HANG_DTQG.VAT_TU));
       Object.assign(this.listLoaiHangHoa, filter.children);
       this.formDataDtl.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
     }
     this.formData.patchValue({ deXuatPhuongAn: [] });
     // await this.kiemTraTonKho();

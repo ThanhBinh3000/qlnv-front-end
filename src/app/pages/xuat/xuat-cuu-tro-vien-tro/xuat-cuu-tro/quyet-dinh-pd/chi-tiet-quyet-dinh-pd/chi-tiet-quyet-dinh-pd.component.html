@@ -182,7 +182,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item class="form-item">
-                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> ĐVT</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
                   <nz-input-group>
                     <input [readonly]="true" nz-input formControlName="donViTinh" />
@@ -1015,10 +1015,16 @@
                     </ng-container>
                   </tbody>
                 </nz-table>
-                <label nz-checkbox *ngIf="formData.value.tenVthh=='Gạo tẻ'" [nzDisabled]="isView"
-                  [(ngModel)]="!!formData.value.xuatCap">
-                  Đồng ý duyệt xuất cấp
-                </label>
+                <form nzLayout="vertical" nz-form [formGroup]="formData">
+                  <nz-form-item>
+                    <nz-form-control>
+                      <label nz-checkbox *ngIf="formData.value.tenVthh=='Gạo tẻ'" [nzDisabled]="isView"
+                        formControlName="xuatCap">
+                        Đồng ý duyệt xuất cấp
+                      </label>
+                    </nz-form-control>
+                  </nz-form-item>
+                </form>
               </div>
             </ng-container>
           </nz-card>
