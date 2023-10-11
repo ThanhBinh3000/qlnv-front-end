@@ -609,7 +609,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           console.log('dataQdTCDTGiaoCuc', this.dataQdTCDTGiaoCuc)
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+        this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Tổng Cục")
       }
     }
 

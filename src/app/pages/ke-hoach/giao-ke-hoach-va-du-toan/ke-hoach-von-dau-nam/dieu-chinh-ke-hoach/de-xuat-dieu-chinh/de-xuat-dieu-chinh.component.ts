@@ -56,10 +56,11 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     this.filterTable = {
       namKeHoach: '',
       soDeXuat: '',
+      tenDonVi: '',
       ngayKy: '',
       trichYeu: '',
-      soQuyetDinhGiao: '',
-      tenTrangThaiDX: '',
+      soQuyetDinhGiaoCuaTc: '',
+      // tenTrangThaiDX: '',
       tenTrangThai: '',
       soQuyetDinh: '',
     };
