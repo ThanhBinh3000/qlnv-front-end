@@ -194,7 +194,7 @@ export class PhuLuc8Component implements OnInit {
 
         this.lstCtietBcao.forEach(item => {
             if (!item.matHang) {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.matHang && e.loaiBaoQuan == item.maDmuc);
+                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.matHang && e.htBaoQuan == item.maDmuc);
                 item.matHang = dinhMuc?.tenDinhMuc;
                 item.dinhMuc = dinhMuc?.tongDmuc;
                 item.maDviTinh = dinhMuc?.donViTinh;
@@ -607,7 +607,7 @@ export class PhuLuc8Component implements OnInit {
                                 id: uuid.v4() + 'FE',
                                 stt: stt + '.' + i.toString(),
                                 maMatHang: data.ma,
-                                maDmuc: lstTemp[i - 1].loaiBaoQuan,
+                                maDmuc: lstTemp[i - 1].htBaoQuan,
                                 matHang: lstTemp[i - 1].tenDinhMuc,
                                 maDviTinh: lstTemp[i - 1].donViTinh,
                                 level: 1,

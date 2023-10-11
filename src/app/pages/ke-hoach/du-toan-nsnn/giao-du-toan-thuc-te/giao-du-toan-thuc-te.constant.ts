@@ -33,7 +33,8 @@ export const TAB_LIST = [
         code: 'baoCaoCapDuoi',
         status: true,
         role: [
-            Roles.GTT.XEM_PA_TONGHOP_PBDT,
+            // Roles.GTT.XEM_PA_TONGHOP_PBDT,
+            Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT,
         ],
         isSelected: false,
     },
@@ -42,8 +43,7 @@ export const TAB_LIST = [
         code: 'tongHopBaoCaoCapDuoi',
         status: true,
         role: [
-            Roles.GTT.XEM_PA_TONGHOP_PBDT,
-            Roles.GTT.XEM_BC,
+            Roles.GTT.TONGHOP_PA_PBDT,
         ],
         isSelected: false,
     },
@@ -52,9 +52,7 @@ export const TAB_LIST = [
         code: 'danhSachBaoCao',
         status: true,
         role: [
-            // Roles.GTT.EDIT_REPORT_TH,
-            // Roles.GTT.XOA_REPORT_TH,
-            Roles.GTT.XEM_BC,
+            Roles.GTT.XEM_PA_TONGHOP_PBDT,
         ],
         isSelected: false,
     },

@@ -189,11 +189,12 @@ export class AddBaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.baoCao.trangThai = this.data?.trangThai;
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.getListUser();
 
         this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
         //lay danh sach danh muc don vi
+        this.baoCao.maDvi = this.data?.maDvi ? this.data?.maDvi : this.userInfo?.MA_DVI;
         await this.getChildUnit();
         await this.getListUser();
 

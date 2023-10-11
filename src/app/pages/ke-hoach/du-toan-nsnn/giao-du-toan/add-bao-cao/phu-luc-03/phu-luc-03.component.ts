@@ -189,7 +189,7 @@ export class PhuLuc03Component implements OnInit {
 
         await this.getDinhMuc();
         this.lstCtietBcaos.forEach(item => {
-            const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc);
+            const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.danhMuc));
             if (!item.tenDanhMuc) {
                 item.tenDanhMuc = dinhMuc?.tenDinhMuc;
                 item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;

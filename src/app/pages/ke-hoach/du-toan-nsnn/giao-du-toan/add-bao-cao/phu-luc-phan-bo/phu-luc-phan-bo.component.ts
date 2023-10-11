@@ -162,6 +162,9 @@ export class PhuLucPhanBoComponent implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         await this.getChildUnit();
+        // if (!this.dataInfo?.isSynthetic) {
+        await this.getChildUnitVP();
+        // }
         this.namBcao = this.dataInfo?.namBcao;
 
         if (this.status.general) {
@@ -185,7 +188,6 @@ export class PhuLucPhanBoComponent implements OnInit {
                 }
             )
             this.lstDvi = this.donVis;
-            //
             this.lstCtietBcaos.forEach(item => {
                 if (item.maNdung) {
                     const index = this.lstCtietBcaos.findIndex(e => e.maNdung == item.maNdung);
@@ -200,8 +202,6 @@ export class PhuLucPhanBoComponent implements OnInit {
         } else {
             this.formDetail.lstCtietBcaos[0]?.lstCtietDvis.forEach(s => {
                 this.lstDvi.push(this.donVis.filter(v => v.maDvi === s.maDviNhan)[0])
-
-
             })
         }
 
@@ -224,7 +224,36 @@ export class PhuLucPhanBoComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.donVis = data?.data;
                     this.capDvi = this.dataInfo?.capDvi;
+                    if (this.donVis.length == 0) {
+                        this.donVis.push(
+                            {
+                                tenDvi: this.dataInfo?.tenDvi,
+                                maDvi: this.dataInfo?.maDvi
+                            }
+                        )
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+    }
 
+    async getChildUnitVP() {
+        const request = {
+            maDviCha: this.dataInfo.maDvi,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    let itemVP = data.data.filter(item => item.tenVietTat && (item.tenVietTat.includes("_VP") || item.tenVietTat.includes("CCDT") || item.tenVietTat?.includes("CCNTT") || item.tenVietTat.includes("BQLDA")))
+                    itemVP.forEach(element => {
+                        this.donVis.push(element)
+                    });
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

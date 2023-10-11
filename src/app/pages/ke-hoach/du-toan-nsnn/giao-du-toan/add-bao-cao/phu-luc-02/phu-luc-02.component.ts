@@ -164,8 +164,7 @@ export class PhuLuc02Component implements OnInit {
         await this.getDinhMuc();
         // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
         this.lstCtietBcaos.forEach(item => {
-            // debugger
-            const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc) || (e.loaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc));
+            const dinhMuc = this.dsDinhMuc.find(e => ((!e.cloaiVthh && e.loaiVthh == item.danhMuc) && e.htBaoQuan == item.maDmuc));
             if (!item.tenDanhMuc) {
                 item.tenDanhMuc = dinhMuc?.tenDinhMuc;
             }
@@ -427,7 +426,7 @@ export class PhuLuc02Component implements OnInit {
                             id: uuid.v4() + 'FE',
                             stt: stt + '.' + i.toString(),
                             danhMuc: data.ma,
-                            maDmuc: lstTemp[i - 1].loaiBaoQuan,
+                            maDmuc: lstTemp[i - 1].htBaoQuan,
                             tenDanhMuc: lstTemp[i - 1].tenDinhMuc,
                             maDviTinh: lstTemp[i - 1].donViTinh,
                             level: 1,
