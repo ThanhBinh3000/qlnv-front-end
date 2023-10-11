@@ -20,6 +20,11 @@
               <!-- </nz-input-group> -->
             </div>
 
+            <div nz-col nzSpan="14">
+              <label class="search__label">Đơn vị</label>
+              <input nz-input formControlName="tenDonVi" />
+            </div>
+
             <div nz-col nzSpan="4">
               <label class="search__label">Ngày ký</label>
               <div nz-row>
@@ -36,8 +41,8 @@
             </div>
 
 
-            <div nz-col nzSpan="14">
-              <label class="search__label">Trích yếu</label>
+            <div nz-col nzSpan="24">
+              <label class="search__label">Trích yếu văn bản đề xuất</label>
               <input nz-input formControlName="trichYeu" />
             </div>
           </div>
@@ -58,7 +63,7 @@
       <div class="group-button">
         <h3 class="text-uppercase">Danh sách đề xuất điều chỉnh chỉ tiêu kế hoạch năm</h3>
         <div class="buttons">
-          <button type="button" class="btn btn-do" (click)="xoaMulti()">
+          <button type="button" class="btn btn-do" (click)="xoaMulti()" *ngIf="isCuc()">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
@@ -66,7 +71,7 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)">
+          <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="isCuc()">
             <i class="icon htvbdh_tcdt_tao-qd"></i>
             <span>Thêm</span>
           </button>
@@ -88,12 +93,13 @@
               <th width="60px" class="text-center">STT</th>
               <th>Năm kế hoạch</th>
               <th>Số đề xuất</th>
+              <th>Đơn vị</th>
               <th>Ngày ký</th>
               <th>Trích yếu</th>
               <th>Số QĐ giao chỉ tiêu</th>
-              <th>Trạng thái của đề xuất</th>
-              <th>Trạng thái xử lý của TC</th>
-              <th>Số QĐ điều chỉnh</th>
+              <th>Trạng thái</th>
+              <!-- <th>Trạng thái xử lý của TC</th> -->
+              <th>QĐ điều chỉnh/TB từ chối</th>
               <th width="90px">Hành động</th>
             </tr>
             <tr class="search-table">
@@ -118,6 +124,13 @@
               </th>
               <th>
                 <nz-input-group>
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDonVi"
+                    (input)="filterInTable('tenDonVi',filterTable.tenDonVi)" size="small" />
+                </nz-input-group>
+
+              </th>
+              <th>
+                <nz-input-group>
                   <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKy"
                     (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
                   </nz-date-picker>
@@ -131,20 +144,8 @@
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiQdinh"
-                    (input)="filterInTable('tenLoaiQdinh',filterTable.tenLoaiQdinh)" size="small" />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                    (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDxuat"
-                    (input)="filterInTable('soDxuat',filterTable.soDxuat)" size="small" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhGiaoCuaTc"
+                    (input)="filterInTable('soQuyetDinhGiaoCuaTc',filterTable.soQuyetDinhGiaoCuaTc)" size="small" />
                 </nz-input-group>
               </th>
               <th>
@@ -153,6 +154,15 @@
                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
                 </nz-input-group>
               </th>
+
+              <th>
+                <nz-input-group>
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                    (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+                </nz-input-group>
+              </th>
+
+
               <th></th>
             </tr>
           </thead>
@@ -165,11 +175,12 @@
               <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
               <td>{{ data.namKeHoach }}</td>
               <td>{{ data.soDeXuat }}</td>
+              <td>{{ data.tenDonVi }}</td>
               <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.trichYeu}}</td>
-              <td>{{ data.soQuyetDinh }}</td>
+              <td>{{ data.soQuyetDinhGiaoCuaTc }}</td>
               <td>{{ data.tenTrangThai }}</td>
-              <td>{{ data.tenTrangThai }}</td>
+              <!-- <td>{{ data.tenTrangThai }}</td> -->
               <td>{{ data.soQuyetDinh }}</td>
               <td class="text-center">
                 <a *ngIf="data.trangThai === STATUS.CHO_DUYET_TP || data.trangThai === STATUS.CHO_DUYET_LDC"

@@ -91,7 +91,8 @@
           <th class="text-center multi-line" nzWidth="10%">Số QĐ PD HSMT</th>
           <th class="text-center multi-line" nzWidth="10%">Ngày ký QĐ PD HSMT</th>
           <th class="text-center multi-line" nzWidth="20%">Trích yếu</th>
-          <th class="text-center multi-line" nzWidth="10%">Số QĐ PD KHLCNT</th>
+          <th class="text-center multi-line" nzWidth="10%">Số QĐ PD/ĐC KHLCNT</th>
+          <th class="text-center multi-line" nzWidth="10%">Lần điều chỉnh</th>
           <th class="text-center multi-line" nzWidth="10%">Loại hàng DTQG</th>
           <th class="text-center multi-line" nzWidth="10%">Trạng thái</th>
           <th class="text-center multi-line" nzWidth="10%">Hành động</th>
@@ -136,6 +137,12 @@
           </th>
           <th>
             <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.lanDieuChinh"
+                     (input)="filterInTable('lanDieuChinh',filterTable.lanDieuChinh)" size="small" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
             </nz-input-group>
@@ -160,7 +167,10 @@
           <td>{{ data.soQd }}</td>
           <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td><a style="color: blue">{{ data.qdKhlcntHdr?.soQd}}</a></td>
+          <td *ngIf="loaiVthh.startsWith('02')"><a style="color: blue">{{ data.qdKhlcntHdr?.dieuChinh ? data.qdKhlcntHdr?.soQdDc :data.qdKhlcntHdr?.soQd}}</a></td>
+          <td *ngIf="loaiVthh.startsWith('02')">{{ data.qdKhlcntHdr?.dchinhDxKhLcntHdr?.lanDieuChinh}}</td>
+          <td *ngIf="!loaiVthh.startsWith('02')"><a style="color: blue">{{ data.qdKhlcntHdr?.soQd }}</a></td>
+          <td *ngIf="!loaiVthh.startsWith('02')"></td>
           <td>{{ data.qdKhlcntHdr.tenLoaiVthh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">

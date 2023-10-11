@@ -35,13 +35,11 @@
         </nz-form-control>
       </div>
       <div nz-col [nzSpan]="24">
-        <nz-form-item>
+        <nz-form-control [nzErrorTip]="error">
           <nz-form-label>Thời gian đề xuất thanh lý</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianTl" [nzFormat]="globals.dateFormat"
-              (ngModelChange)="chonNgayXuatThanhLy($event)"></nz-range-picker>
+          <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianTl" [nzFormat]="globals.dateFormat"
+            (ngModelChange)="chonNgayXuatThanhLy($event)"></nz-range-picker>
           </nz-form-control>
-        </nz-form-item>
       </div>
     </div>
   </form>

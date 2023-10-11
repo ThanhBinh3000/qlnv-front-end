@@ -331,8 +331,13 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
         // });
       });
     });
-    this.formData.get('tongSlNhap').setValue(this.sumSlNhap);
+    this.calculatorSl();
     console.log(this.listDataGroup)
+  }
+
+  calculatorSl(){
+    const total = this.dataTable.reduce((acc, item) => acc + (item.slTonKhoThucTe - item.slTonKho), 0);
+    this.formData.get('tongSlNhap').setValue(total);
   }
 
   convertTrangThai(status: string) {

@@ -53,13 +53,12 @@ export class PhuongAnDieuChinhCtkhComponent extends Base2Component implements On
       cap: [],
     })
     this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      tenLoaiDc: '',
-      tenLoaiQdinh: '',
+      namKeHoach: '',
+      soCongVan: '',
+      ngayKy: '',
       trichYeu: '',
-      soDxuat: '',
+      soQuyetDinhGiaoNamTruoc: '',
+      soQuyetDinhDcCuaC: '',
       tenTrangThai: '',
     };
   }
