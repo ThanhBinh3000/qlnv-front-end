@@ -75,7 +75,6 @@
                     <th scope="col">Ngày trình duyệt</th>
                     <th scope="col">Ngày TBP duyệt</th>
                     <th scope="col">Ngày lãnh đạo duyệt</th>
-                    <th scope="col">Ngày cấp trên trả kết quả</th>
                     <th scope="col" class="text-center">Trạng thái</th>
                     <th scope="col" nzWidth="90px">Hành động</th>
                 </tr>
@@ -117,9 +116,6 @@
                     </td>
                     <td>
                         {{ data.ngayPheDuyet }}
-                    </td>
-                    <td>
-                        {{ data.ngayTraKq }}
                     </td>
                     <td>
                         {{getStatusName(data.trangThai)}}

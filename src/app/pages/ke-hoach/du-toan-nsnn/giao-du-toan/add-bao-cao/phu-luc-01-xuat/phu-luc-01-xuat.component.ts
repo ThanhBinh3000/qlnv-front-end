@@ -177,24 +177,24 @@ export class PhuLuc01XuatComponent implements OnInit {
         await this.getFormDetail();
         this.namBcao = this.dataInfo.namBcao;
         this.maDviTao = this.dataInfo?.maDvi;
+        await this.getDinhMucPL2X();
 
         if (this.status.general) {
-            await this.getDinhMucPL2X();
             this.scrollX = Table.tableWidth(350, 7, 1, 90);
         } else {
             this.scrollX = Table.tableWidth(350, 7, 1, 0);
         }
-        // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
-        this.lstCtietBcaos.forEach(item => {
-            const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc) && e.loaiDinhMuc == item.maDmuc);
-            if (!item.tenDanhMuc) {
-                item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-            }
-            item.namDtDmuc = dinhMuc?.tongDmuc;
-            item.maDviTinh = dinhMuc?.donViTinh;
-            item.changeModel();
-        })
-        // }
+        if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
+            this.lstCtietBcaos.forEach(item => {
+                const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc) && e.loaiDinhMuc == item.maDmuc);
+                if (!item.tenDanhMuc) {
+                    item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+                }
+                item.namDtDmuc = dinhMuc?.tongDmuc;
+                item.maDviTinh = dinhMuc?.donViTinh;
+                item.changeModel();
+            })
+        }
         if (!this.lstCtietBcaos[0]?.stt) {
             this.setIndex();
         }

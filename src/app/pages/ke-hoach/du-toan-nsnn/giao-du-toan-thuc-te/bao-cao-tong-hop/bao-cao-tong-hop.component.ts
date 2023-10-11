@@ -855,7 +855,7 @@ export class BaoCaoTongHopComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GTT.SUA_BC)) {
+        if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GTT.SUA_PA_TONGHOP_PBDT)) {
             this.status = false;
         } else {
             this.status = true;
@@ -874,14 +874,14 @@ export class BaoCaoTongHopComponent implements OnInit {
         const utils = new Utils();
         const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 
-        const checkSave = this.userService.isAccessPermisson(Roles.GTT.SUA_BC);
+        const checkSave = this.userService.isAccessPermisson(Roles.GTT.SUA_PA_TONGHOP_PBDT);
         // this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GTT.EDIT_REPORT_PA_PBDT, checkChirld);
         this.statusBtnSave = Status.check('saveWHist', this.trangThaiBanGhi) && checkSave && checkChirld;
-        this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GTT.TRINH_DUYET_BC, checkChirld);
-        this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GTT.DUYET_TUCHOI_BC, checkChirld);
-        this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GTT.PHEDUYET_TUCHOI_BC, checkChirld);
-        this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.COPY_BC, checkChirld);
-        this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.IN_BC, checkChirld);
+        this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GTT.TRINHDUYET_PA_TONGHOP_PBDT, checkChirld);
+        this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GTT.DUYET_TUCHOI_PA_TH_PBDT, checkChirld);
+        this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GTT.PHEDUYET_TUCHOI_PA_TH_PBDT, checkChirld);
+        this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.COPY_PA_TONGHOP_PBDT, checkChirld);
+        this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.IN_PA_TONGHOP_PBDT, checkChirld);
         this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
         if (this.userService.isAccessPermisson(Roles.GTT.GIAO_PA_PBDT) && this.soQd) {
@@ -1352,11 +1352,16 @@ export class BaoCaoTongHopComponent implements OnInit {
             { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 8, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: `Báo cáo tổng hợp ${loaiPa}` },
-            { t: 2, b: 2, l: 0, r: 0, val: `số quyết định ${this.soQd.fileName} ` },
-            { t: 2, b: 2, l: 1, r: 1, val: `Ngày ${this.ngayTao} ` },
-            { t: 2, b: 2, l: 2, r: 2, val: `Mã phương án ${this.maPa} ` },
-            { t: 2, b: 2, l: 3, r: 3, val: `Loại phương án ${loaiPa} ` },
-            { t: 2, b: 2, l: 4, r: 4, val: `Trạng thái ${this.getStatusName()} ` },
+
+            { t: 1, b: 1, l: 1, r: 1, val: `Ngày ` },
+            { t: 1, b: 1, l: 2, r: 2, val: `Mã phương án ` },
+            { t: 1, b: 1, l: 3, r: 3, val: `Loại phương án ` },
+            { t: 1, b: 1, l: 4, r: 4, val: `Trạng thái ` },
+
+            { t: 2, b: 2, l: 1, r: 1, val: ` ${this.ngayTao} ` },
+            { t: 2, b: 2, l: 2, r: 2, val: ` ${this.maPa} ` },
+            { t: 2, b: 2, l: 3, r: 3, val: ` ${loaiPa} ` },
+            { t: 2, b: 2, l: 4, r: 4, val: ` ${this.getStatusName()} ` },
 
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Nhóm' },

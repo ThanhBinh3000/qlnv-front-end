@@ -181,19 +181,19 @@ export class PhuLuc6Component implements OnInit {
         }
 
         await this.getDinhMucPL2X()
-        if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
-            this.lstCtietBcao.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
-                if (!item.noiDung) {
-                    item.noiDung = dinhMuc?.tenDinhMuc;
-                }
-                item.sluongThienDmuc = dinhMuc?.tongDmuc;
-                item.maDviTinh = dinhMuc?.donViTinh;
-                item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
-                item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
-                item.dtoanVuTvqtDnghi = item.sluongThienTtien - item.dtoanGiaoLke;
-            })
-        }
+        // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
+        this.lstCtietBcao.forEach(item => {
+            const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.maNdung) || (!e.cloaiVthh && e.loaiVthh == item.maDmuc));
+            if (!item.noiDung) {
+                item.noiDung = dinhMuc?.tenDinhMuc;
+            }
+            item.sluongThienDmuc = dinhMuc?.tongDmuc;
+            item.maDviTinh = dinhMuc?.donViTinh;
+            item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
+            item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
+            item.dtoanVuTvqtDnghi = item.sluongThienTtien - item.dtoanGiaoLke;
+        })
+        // }
         if (!this.lstCtietBcao[0]?.stt) {
             this.setIndex();
         }

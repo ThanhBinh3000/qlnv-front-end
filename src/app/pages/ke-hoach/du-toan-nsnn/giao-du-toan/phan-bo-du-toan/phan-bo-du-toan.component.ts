@@ -118,8 +118,8 @@ export class PhanBoDuToanComponent implements OnInit {
 
     statusCreate = true;
     statusTaoMoi = true;
-    statusDelete = true;
-    statusNewReport = true;
+    statusDelete: boolean;
+    statusNewReport: boolean;
     allChecked = false;
     isDataAvailable = false;
 
@@ -162,11 +162,15 @@ export class PhanBoDuToanComponent implements OnInit {
     }
 
     async initialization() {
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         this.checkVP = this.userInfo.DON_VI.type.indexOf('PB') != -1;
         if (this.userService.isAccessPermisson(Roles.GSTC.NHAP_CV_QD_GIAO_SOKIEMTRA)) {
             this.statusTaoMoi = false;
+            this.statusNewReport = true;
+        }
+        if (this.userService.isAccessPermisson(Roles.GSTC.XOA_CV_QD_GIAO_SOKIEMTRA)) {
+            this.statusDelete = true;
         }
         if (this.userService.isAccessPermisson(Roles.GSTC.NHAP_CV_QD_GIAO_SOKIEMTRA)) {
             this.trangThai = '1';

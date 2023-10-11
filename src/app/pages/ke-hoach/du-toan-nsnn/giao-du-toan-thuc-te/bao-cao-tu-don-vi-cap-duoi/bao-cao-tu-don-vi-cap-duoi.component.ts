@@ -132,7 +132,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
             this.isCanbotc = true;
         }
 
-        if (this.userService.isAccessPermisson(Roles.GTT.TIEPNHAN_TUCHOI_BC) || this.userService.isAccessPermisson(Roles.GTT.XEM_PA_TONGHOP_PBDT)) {
+        if (this.userService.isAccessPermisson(Roles.GTT.XEM_PA_TONGHOP_PBDT)) {
             this.trangThai = '7';
             this.status = false;
             this.searchFilter.loaiTimKiem = '1';

@@ -30,7 +30,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     };
 
     userInfo: any;
-    trangThais: any = Status.TRANG_THAI_FULL;
+    trangThais: any = Status.TRANG_THAI_DVCD;
     dataTable: any[] = [];
     dataTableAll: any[] = [];
     loaiDuAns: any[] = [
@@ -80,11 +80,11 @@ export class DanhSachBaoCaoComponent implements OnInit {
         this.searchFilter.tuNgay = newDate;
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
-        this.statusDelete = this.userService.isAccessPermisson(Roles.GTT.XOA_BC) || this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT);
-        if (this.userService.isAccessPermisson(Roles.GTT.DUYET_TUCHOI_BC) || this.userService.isAccessPermisson(Roles.GTT.DUYET_TUCHOI_PA_TH_PBDT)) {
+        this.statusDelete = this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT) || this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT);
+        if (this.userService.isAccessPermisson(Roles.GTT.DUYET_TUCHOI_PA_TH_PBDT) || this.userService.isAccessPermisson(Roles.GTT.DUYET_TUCHOI_PA_TH_PBDT)) {
             this.searchFilter.trangThai = Status.TT_02;
         } else {
-            if (this.userService.isAccessPermisson(Roles.GTT.PHEDUYET_TUCHOI_BC) || this.userService.isAccessPermisson(Roles.GTT.PHEDUYET_TUCHOI_PA_TH_PBDT)) {
+            if (this.userService.isAccessPermisson(Roles.GTT.PHEDUYET_TUCHOI_PA_TH_PBDT) || this.userService.isAccessPermisson(Roles.GTT.PHEDUYET_TUCHOI_PA_TH_PBDT)) {
                 this.searchFilter.trangThai = Status.TT_04;
             }
         }
@@ -194,13 +194,13 @@ export class DanhSachBaoCaoComponent implements OnInit {
     checkEditStatus(item: any) {
         const isSynthetic = item.tongHopTu != "[]";
         return [Status.TT_01].includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.GTT.SUA_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GTT.SUA_BC));
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GTT.SUA_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GTT.SUA_PA_TONGHOP_PBDT));
     }
 
     checkDeleteStatus(item: any) {
         const isSynthetic = item.tongHopTu != "[]";
         return [Status.TT_01].includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GTT.XOA_BC));
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT));
     }
 
     getStatusName(trangThai: string) {
