@@ -224,7 +224,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       await this.getDSDXDC(this.yearNow)
     }
 
+
+
     if (this.id > 0) {
+      // await this.findCanCuByYear(this.yearNow);
       await this.loadThongTinChiTieuKeHoachNam(this.id);
     } else {
       this.thongTinChiTieuKeHoachNam.cap = this.userInfo.CAP_DVI;
@@ -233,10 +236,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       if (this.userService.isCuc()) {
         await this.findCanCuByYearCuc(this.yearNow)
       }
-
+      await this.findCanCuByYear(this.yearNow);
     }
 
-    await this.findCanCuByYear(this.yearNow);
+
   }
 
 
@@ -604,18 +607,24 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           const xuatTrongNamMuoi = dataMuoi.reduce((prev, cur) => prev + cur.xuatTrongNamMuoi, 0)
           const tonKhoCuoiNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoCuoiNam, 0)
 
-          this.dataQdTCDTGiaoCuc = {
-            "ltThocMua": ntnThoc,
-            "ltGaoMua": ntnGao,
-            "ltThocXuat": xtnTongThoc,
-            "ltGaoXuat": xtnTongGao,
-            tonKhoDauNammuoi: tonKhoDauNam,
-            nhapTrongNamMuoi: nhapTrongNam,
-            xuatTrongNamMuoi: xuatTrongNamMuoi,
-            tonKhoCuoiNamMuoi: tonKhoCuoiNam,
-          }
+          // this.dataQdTCDTGiaoCuc = {
+          //   // "ltThocMua": ntnThoc,
+          //   // "ltGaoMua": ntnGao,
+          //   // "ltThocXuat": xtnTongThoc,
+          //   // "ltGaoXuat": xtnTongGao,
+          //   tonKhoDauNammuoi: tonKhoDauNam,
+          //   nhapTrongNamMuoi: nhapTrongNam,
+          //   xuatTrongNamMuoi: xuatTrongNamMuoi,
+          //   tonKhoCuoiNamMuoi: tonKhoCuoiNam,
+          // }
 
-          console.log("dataQdTCDTGiaoCuc", this.dataQdTCDTGiaoCuc)
+          this.formData.patchValue({
+            slThocNhap: ntnThoc,
+            slGaoNhap: ntnGao,
+            slTongXuatThoc: xtnTongThoc,
+            slTongXuatGao: xtnTongGao
+          })
+
 
           if (!this.isViewDetail) {
             if (this.isTongCuc()) {
@@ -846,7 +855,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       cap: [],
       dcKeHoachNamLtDtl: [],
       dcKeHoachNamMuoiDtl: [],
-      dcKeHoachNamVatTuDtl: []
+      dcKeHoachNamVatTuDtl: [],
+      slThocNhap: [],
+      slGaoNhap: [],
+      slTongXuatThoc: [],
+      slTongXuatGao: []
 
     });
     this.formData.markAsPristine();
