@@ -5,13 +5,13 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="status.save" type="button" class="btn btn-sub" (click)="action('save')">
-                <i class="icon htvbdh_tcdt_save"></i>
-                <span>Lưu</span>
-            </button>
             <button *ngIf="status.export" type="button" class="btn btn-sub" (click)="exportToExcel()">
                 <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
                 <span>Xuất</span>
+            </button>
+            <button *ngIf="status.save" type="button" class="btn btn-sub" (click)="action('save')">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Lưu</span>
             </button>
             <button *ngIf="status.submit" type="button" class="btn btn-sub" (click)="action('submit')">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -367,10 +367,10 @@
                                         <td nzLeft>
                                             {{ data.tenDvi }}
                                         </td>
+                                        <td>
+                                            {{ Op.fmtNum(data.slKeHoach) }}
+                                        </td>
                                         <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                            <td>
-                                                {{ Op.fmtNum(data.slKeHoach) }}
-                                            </td>
                                             <td>
                                                 {{ Op.fmtNum(data.slThucHien) }}
                                             </td>
@@ -422,39 +422,22 @@
                                             </td>
                                         </ng-container>
                                         <ng-template #editTemplate>
-                                            <ng-container *ngIf="userService.isChiCuc(); else capTren">
-                                                <td>
-                                                    <input class="money-input" currencyMask [options]="Op.amount"
-                                                        [(ngModel)]="editCache[data.id].data.slKeHoach" />
-                                                </td>
-                                                <td>
+                                            <td>
+                                                <ng-container *ngIf="userService.isChiCuc(); else capTren">
                                                     <input class="money-input" currencyMask [options]="Op.amount"
                                                         [(ngModel)]="editCache[data.id].data.slThucHien"
                                                         (ngModelChange)="changeTien(data.id)" />
-                                                </td>
-                                                <td>
-                                                    <input class="money-input" currencyMask [options]="Op.amount"
-                                                        [(ngModel)]="editCache[data.id].data.donGia"
-                                                        (ngModelChange)="changeTien(data.id)" />
-                                                </td>
-                                                <td>
-                                                    {{ Op.fmtVal(editCache[data.id].data.gtThucHien) }}
-                                                </td>
-                                            </ng-container>
-                                            <ng-template #capTren>
-                                                <td>
-                                                    {{ Op.fmtNum(editCache[data.id].data.slKeHoach) }}
-                                                </td>
-                                                <td>
+                                                </ng-container>
+                                                <ng-template #capTren>
                                                     {{ Op.fmtNum(editCache[data.id].data.slThucHien) }}
-                                                </td>
-                                                <td>
-                                                    {{ Op.fmtVal(editCache[data.id].data.donGia) }}
-                                                </td>
-                                                <td>
-                                                    {{ Op.fmtVal(editCache[data.id].data.gtThucHien) }}
-                                                </td>
-                                            </ng-template>
+                                                </ng-template>
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(editCache[data.id].data.donGia) }}
+                                            </td>
+                                            <td>
+                                                {{ Op.fmtVal(editCache[data.id].data.gtThucHien) }}
+                                            </td>
                                             <td>
                                                 <input class="money-input" currencyMask [options]="Op.amount"
                                                     [(ngModel)]="editCache[data.id].data.dtoanDaGiao"

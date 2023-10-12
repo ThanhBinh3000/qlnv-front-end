@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as XLSX from 'xlsx';
 import { BtnStatus, Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import { Tab } from '../von-ban.constant';
+import { Tab, Vb } from '../von-ban.constant';
 
 @Component({
     selector: 'app-von-ban-theo-hop-dong-trung-thau',
@@ -27,6 +27,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
     Op = new Operator('1');
     Utils = Utils;
     Cvmb = Cvmb;
+    Vb = Vb;
     //thong tin dang nhap
     userInfo: any;
     //thong tin chung bao cao

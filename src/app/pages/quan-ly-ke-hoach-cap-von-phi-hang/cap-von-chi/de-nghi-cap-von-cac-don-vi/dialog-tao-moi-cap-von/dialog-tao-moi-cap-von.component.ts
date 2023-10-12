@@ -26,7 +26,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     loaiDns: any[] = [];
     donVis: any[];
     lstNam: number[] = [];
-    lstQuyetDinh: string[] = [];
+    lstQuyetDinh: any[] = [];
 
     constructor(
         private _modalRef: NzModalRef,
@@ -108,11 +108,16 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         await this.getMaDnghi();
         if (!id) {
             if (this.response.canCuVeGia == Cvnc.DON_GIA) {
+                const quyetDinh = this.lstQuyetDinh.find(e => e.soQd == this.response.soQdChiTieu);
                 this.response.lstCtiets.push(new CapVon({
                     id: uuid.v4() + 'FE',
                     stt: '0.1',
                     maDvi: this.userInfo.MA_DVI,
                     tenDvi: this.userInfo?.TEN_DVI,
+                    slKeHoach: quyetDinh.slKeHoach,
+                    slThucHien: quyetDinh.slThucHien,
+                    donGia: quyetDinh.donGia,
+                    gtThucHien: Operator.mul(quyetDinh.slThucHien, quyetDinh.donGia),
                 }))
             } else {
                 this.getContractData();
@@ -184,6 +189,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         const request = {
             namKHoach: this.response.namDnghi,
             maDvi: this.userInfo?.MA_DVI,
+            maLoai: this.response.maLoai,
         }
         this.spinner.show();
         this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(

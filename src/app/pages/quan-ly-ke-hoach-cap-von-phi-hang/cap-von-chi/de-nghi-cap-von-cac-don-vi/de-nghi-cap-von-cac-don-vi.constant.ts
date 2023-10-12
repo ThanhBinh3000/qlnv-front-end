@@ -69,7 +69,7 @@ export class Cvnc {
     static readonly CAN_CU_GIA = [
         {
             id: Cvnc.HOP_DONG,
-            tenDm: "Hợp đồng trúng thầu",
+            tenDm: "Hợp đồng đấu thầu",
         },
         {
             id: Cvnc.DON_GIA,
