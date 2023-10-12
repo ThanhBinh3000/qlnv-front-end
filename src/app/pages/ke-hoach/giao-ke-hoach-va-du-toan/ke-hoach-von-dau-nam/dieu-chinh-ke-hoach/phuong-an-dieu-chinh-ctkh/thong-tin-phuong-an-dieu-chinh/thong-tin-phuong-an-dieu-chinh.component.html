@@ -251,8 +251,8 @@
           <tbody>
             <tr *ngFor="let data of groupingTable.data, let i = index">
               <ng-container *ngIf="!dsKeHoachLuongThucClone[i]?.isEdit; else editTemplate">
-                <td nzLeft [ngClass]="data.isSelected ?'bg-selected':''" class="text-right">{{i+1}}</td>
-                <td nzLeft [ngClass]="data.isSelected ?'bg-selected':''" class="text-left">{{data.tenDvi}}</td>
+                <td nzLeft [ngClass]="data.thayDoi ?'bg-selected':''" class="text-right">{{i+1}}</td>
+                <td nzLeft [ngClass]="data.thayDoi ?'bg-selected':''" class="text-left">{{data.tenDvi}}</td>
                 <td class="text-right">{{(data.tongSoTon) | number:
                   '1.0-3': 'vi_VN'}}</td>
                 <td class="text-right">{{(data.tongThocTon)| number: '1.0-3': 'vi_VN'}}
@@ -322,8 +322,8 @@
                 <td *ngIf="data.stt ==  null" class="background-last-row"></td>
               </ng-container>
               <ng-template #editTemplate>
-                <td nzLeft [ngClass]="data.isSelected ?'bg-selected':''" class="text-right">{{i+1}}</td>
-                <td nzLeft [ngClass]="data.isSelected ?'bg-selected':''" class="text-left">{{data.tenDvi}}</td>
+                <td nzLeft [ngClass]="data.thayDoi ?'bg-selected':''" class="text-right">{{i+1}}</td>
+                <td nzLeft [ngClass]="data.thayDoi ?'bg-selected':''" class="text-left">{{data.tenDvi}}</td>
                 <td class="text-right">{{(data.tongSoTon) | number:
                   '1.0-1'}}</td>
                 <td class="text-right">{{(data.tongThocTon)| number: '1.0-3': 'vi_VN'}}
@@ -418,7 +418,7 @@
               </ng-template>
             </tr>
           </tbody>
-          <tfoot>
+          <tfoot *ngIf="isTongCuc()">
             <tr>
               <th nzLeft></th>
               <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
@@ -583,8 +583,8 @@
           <tbody>
             <tr *ngFor="let dataMuoi of groupingTableMuoi.data, let i = index">
               <ng-container *ngIf="!dsMuoiClone[i]?.isEdit; else editTemplateMuoi">
-                <td [ngClass]="dataMuoi.isSelected ?'bg-selected':''" class="text-center">{{i+1}}</td>
-                <td [ngClass]="dataMuoi.isSelected ?'bg-selected':''" class="text-left">{{dataMuoi.tenDvi}}</td>
+                <td [ngClass]="dataMuoi.thayDoi ?'bg-selected':''" class="text-center">{{i+1}}</td>
+                <td [ngClass]="dataMuoi.thayDoi ?'bg-selected':''" class="text-left">{{dataMuoi.tenDvi}}</td>
                 <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">{{dataMuoi.soLuongNhap | number: '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">{{dataMuoi.soLuongXuat | number: '1.0-1': 'vi_VN'}}</td>
@@ -600,8 +600,8 @@
                 </td>
               </ng-container>
               <ng-template #editTemplateMuoi>
-                <td [ngClass]="dataMuoi.isSelected ?'bg-selected':''" class="text-right">{{dataMuoi.stt}}</td>
-                <td [ngClass]="dataMuoi.isSelected ?'bg-selected':''" class="text-left">{{dataMuoi.tenDvi}}</td>
+                <td [ngClass]="dataMuoi.thayDoi ?'bg-selected':''" class="text-right">{{dataMuoi.stt}}</td>
+                <td [ngClass]="dataMuoi.thayDoi ?'bg-selected':''" class="text-left">{{dataMuoi.tenDvi}}</td>
                 <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">
                   <input class="money-input" currencyMask
@@ -613,7 +613,7 @@
                     [options]="{allowZero: true, allowNegative: false,precision: 0,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsMuoiClone[i].tonKhoDauNam,inputMode: 1}"
                     [(ngModel)]="dataMuoi.soLuongXuat" />
                 </td>
-                <td class="text-right">{{(dataMuoi.tonKhoCuoiNam) | number: '1.0-1': 'vi_VN'}}</td>
+                <td class="text-right">{{calculatortkcnMuoi(i)}}</td>
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                   <a (click)="saveEditMuoi(i)" class="save">
                     <i class="fa fa-save"></i>
@@ -625,7 +625,7 @@
               </ng-template>
             </tr>
           </tbody>
-          <tfoot>
+          <tfoot *ngIf="isTongCuc()">
             <tr>
               <th></th>
               <th style="text-align: center; font-weight: 700">Cộng</th>
@@ -681,8 +681,8 @@
               <tbody>
                 <ng-container *ngFor="let data of dataVatTuNhapTree , let idx = index">
                   <tr>
-                    <td [ngClass]="data.isSelected ?'bg-selected':''" class="bg-parent1">{{idx + 1}}</td>
-                    <td [ngClass]="data.isSelected ?'bg-selected':''" class="bg-parent1"
+                    <td [ngClass]="data.thayDoi ?'bg-selected':''" class="bg-parent1">{{idx + 1}}</td>
+                    <td [ngClass]="data.thayDoi ?'bg-selected':''" class="bg-parent1"
                       [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{data.tenDvi}}</td>
                     <td class="bg-parent1"></td>
@@ -798,8 +798,8 @@
               <tbody>
                 <ng-container *ngFor="let data of dataVatTuXuatTree , let idx = index">
                   <tr>
-                    <td [ngClass]="data.isSelected ?'bg-selected':''" class="bg-parent1">{{idx + 1}}</td>
-                    <td [ngClass]="data.isSelected ?'bg-selected':''" class="bg-parent1"
+                    <td [ngClass]="data.thayDoi ?'bg-selected':''" class="bg-parent1">{{idx + 1}}</td>
+                    <td [ngClass]="data.thayDoi ?'bg-selected':''" class="bg-parent1"
                       [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{data.tenDvi}}</td>
                     <td class="bg-parent1"></td>
