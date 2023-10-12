@@ -241,6 +241,11 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
     }
     // trình duyệt
     async submitReport() {
+        // kiểm tra file công văn có được upload thành công không
+        if (!this.baoCao.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -336,11 +341,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                 }
             }
         }
-        // kiểm tra file công văn có được upload thành công không
-        if (!request.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
+
         // nếu không tồn tại id thì thêm mới, ngược lại thì cập nhật
         if (!this.baoCao.id) {
             this.CapVonNguonChiService.taoMoiDeNghi(request).toPromise().then(

@@ -231,6 +231,11 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     async submitReport() {
+        // kiểm tra file cong văn đã được thêm hoặc upload thành công chưa
+        if (!this.baoCao.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -328,11 +333,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 }
             }
         }
-        // kiểm tra file cong văn đã được thêm hoặc upload thành công chưa
-        if (!request.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
+
         // nếu chưa có id thì tạo mới báo cáo, ngược lại update
         if (!this.baoCao.id) {
             this.capVonNguonChiService.taoMoiDeNghi(request).toPromise().then(

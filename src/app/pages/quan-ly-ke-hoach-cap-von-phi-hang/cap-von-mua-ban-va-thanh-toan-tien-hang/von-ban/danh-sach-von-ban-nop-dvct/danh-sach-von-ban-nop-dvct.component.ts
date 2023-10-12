@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
 import { Cvmb, Perm, Search } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import { Tab } from '../von-ban.constant';
+import { Tab, Vb } from '../von-ban.constant';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 // import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 
@@ -24,6 +24,7 @@ export class DanhSachVonBanNopDvctComponent implements OnInit {
     Utils = Utils;
     Status = Status;
     Cvmb = Cvmb;
+    Vb = Vb;
     //thong tin user
     userInfo: any;
     //thong tin tim kiem

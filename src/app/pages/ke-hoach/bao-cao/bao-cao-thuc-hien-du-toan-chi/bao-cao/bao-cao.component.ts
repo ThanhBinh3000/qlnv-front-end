@@ -312,6 +312,10 @@ export class BaoCaoComponent implements OnInit {
     }
 
     async submitReport() {
+        if (!this.baoCao.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -423,10 +427,6 @@ export class BaoCaoComponent implements OnInit {
                     fileName: this.baoCao.congVan.fileName,
                 }
             }
-        }
-        if (!baoCaoTemp.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
         }
 
         // replace nhung ban ghi dc them moi id thanh null
