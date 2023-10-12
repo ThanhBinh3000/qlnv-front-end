@@ -184,7 +184,9 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
       body.fileName = "bc_sl_gia_tri_hang_dtqg_130.jrxml";
       body.tenBaoCao = "Báo cáo số lượng giá trị hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1302018Service.bcKhMuaHangDtqg(body).then(async s => {
+      body.maCuc = this.maCuc;
+      body.maChiCuc = this.maChiCuc;
+      await this.thongTu1302018Service.bcSlGtriHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bc_sl_gia_tri_hang_dtqg_130.xlsx");

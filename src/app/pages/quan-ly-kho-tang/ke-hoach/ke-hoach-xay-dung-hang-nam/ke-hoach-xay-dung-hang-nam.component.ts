@@ -10,7 +10,7 @@ import { Router } from "@angular/router";
 export class KeHoachXayDungHangNamComponent implements OnInit {
 
   tabSelected: string = "dxnc";
-  dataObject: any;
+  dataObject: any={};
   constructor(
     public  userService : UserService,
     private router : Router

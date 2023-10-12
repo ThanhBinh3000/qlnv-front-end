@@ -207,7 +207,7 @@
 </ng-container>
 
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-them-moi-sc-tcdt  [idInput]="selectedId" (showListEvent)="showList()" [isViewQd]="false"
+  <app-them-moi-sc-tcdt (tabFocus)="receivedTab($event)"  [idInput]="selectedId" (showListEvent)="showList()" [isViewQd]="false"
                          [isViewDetail]="isViewDetail"></app-them-moi-sc-tcdt>
 </ng-container>
 

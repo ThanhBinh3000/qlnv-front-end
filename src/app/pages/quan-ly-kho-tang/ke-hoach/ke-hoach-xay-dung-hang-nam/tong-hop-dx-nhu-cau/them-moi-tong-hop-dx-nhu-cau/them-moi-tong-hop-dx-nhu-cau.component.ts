@@ -153,11 +153,16 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
         }
       }
       let body = {
-        phuongAnTc : this.formData.value.soQuyetDinh,
+        maDvi: this.userInfo.MA_DVI,
+        soTt : data.soQuyetDinh,
+        paggingReq: {
+          "limit": 999,
+          "page": 0
+        }
       };
       let dataQd = await this.quyetDinhService.search(body);
-      if (dataQd.data && dataQd.data.length>0){
-        this.hidden == true;
+      if (dataQd.data.content && dataQd.data.content.length>0){
+        this.hidden = !this.hidden;
       }
     }
   }
@@ -182,7 +187,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
-    if (isGuiDuyet && this.idInput > 0) {
+    if (isGuiDuyet ) {
       this.setValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);

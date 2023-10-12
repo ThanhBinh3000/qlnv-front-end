@@ -250,7 +250,7 @@
       <th class="text-center" rowSpan="2">Số lượng (tấn)</th>
       <th class="text-center" colSpan="2">Giá khảo sát</th>
       <th class="text-center" colSpan="2">Giá Cục đề nghị</th>
-      <th class="text-center" colSpan="2">Giá mua tối đa ban hành của BTC</th>
+      <th class="text-center" colSpan="2" *ngIf="!isMuaToiDa">Giá mua tối đa ban hành của BTC</th>
       <th class="text-center" colSpan="2">Giá TC đề xuất</th>
       <th class="text-center" colSpan="2" *ngIf="isMuaToiDa">Giá QĐ của BTC</th>
     </tr>
@@ -293,8 +293,8 @@
                            [nzParser]="globals.parser">
           </nz-input-number>
         </td>
-        <td class="text-right">
-          {{ data.vat ? (data.giaQdTcdt * data.vat + data.giaQdTcdt | number : '1.0-1' : 'vi_VN') : ''}}
+        <td class="text-right" >
+          {{ data.apDungTatCa ? ( data.vat ? (data.giaQdTcdt * data.vat + data.giaQdTcdt | number : '1.0-1' : 'vi_VN') : '') : ''}}
         </td>
         <td  *ngIf="isMuaToiDa"></td>
         <td  *ngIf="isMuaToiDa"></td>

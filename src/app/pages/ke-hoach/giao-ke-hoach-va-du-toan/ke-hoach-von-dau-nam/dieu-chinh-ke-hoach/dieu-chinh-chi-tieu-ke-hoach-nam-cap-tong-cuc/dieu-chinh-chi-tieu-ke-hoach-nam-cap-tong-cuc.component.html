@@ -163,7 +163,7 @@
                     <td>{{ data.soCongVan }}</td>
                     <td>{{ data.soQuyetDinhDcCuaC }}</td>
                     <td>{{ data.tenTrangThai }}</td>
-                    <td class="text-center">
+                    <td class="text-center" *ngIf="isTongCuc()">
                       <a *ngIf="data.trangThai === STATUS.BAN_HANH" (click)="redirectDetail(data.id, true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
@@ -172,6 +172,11 @@
                       </a>
                       <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU" (click)="xoa(data,'')">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                      </a>
+                    </td>
+                    <td class="text-center" *ngIf="isCuc()">
+                      <a (click)="redirectDetail(data.id, true)">
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                     </td>
                   </tr>
@@ -300,7 +305,7 @@
                     <td>{{ data.soCongVan }}</td>
                     <td>{{ data.soQuyetDinhDcCuaC }}</td>
                     <td>{{ data.tenTrangThai }}</td>
-                    <td class="text-center">
+                    <td class="text-center" *ngIf="isCuc()">
                       <a *ngIf="data.trangThai === STATUS.BAN_HANH" (click)="redirectDetail(data.id, true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
@@ -310,6 +315,12 @@
                       <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU" (click)="xoa(data,'')">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
+                    </td>
+                    <td class="text-center" *ngIf="isTongCuc()">
+                      <a (click)="redirectDetail(data.id, true)">
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
+                      </a>
+
                     </td>
                   </tr>
                 </tbody>

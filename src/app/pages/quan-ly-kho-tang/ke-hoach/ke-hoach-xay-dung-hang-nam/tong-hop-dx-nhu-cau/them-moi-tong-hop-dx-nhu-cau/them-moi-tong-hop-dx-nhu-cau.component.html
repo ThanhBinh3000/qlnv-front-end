@@ -16,7 +16,7 @@
         <span>Quay lại</span>
       </button>
       <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')
-         && formData.value.trangThai == STATUS.CHO_DUYET_LDTC && hidden" type="button" class="btn btn-main ml-2"
+         && formData.value.trangThai == STATUS.DA_DUYET_LDTC && !hidden" type="button" class="btn btn-main ml-2"
               (click)="openQdPheDuyet(formData.value.id, false)">
         <i class="icon htvbdh_soanthao"></i>
         <span>Dự thảo QĐ của BTC/Bộ KHĐT</span>

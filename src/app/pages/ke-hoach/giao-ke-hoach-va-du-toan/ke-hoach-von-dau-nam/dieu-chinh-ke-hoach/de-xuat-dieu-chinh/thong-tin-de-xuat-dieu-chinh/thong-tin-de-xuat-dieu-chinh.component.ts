@@ -1808,6 +1808,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
   selectNam() {
     this.yearNow = this.formData.get('namKeHoach').value;
+    this.findCanCuByYear(this.yearNow);
     if (!this.id) {
       if ((this.thongTinChiTieuKeHoachNam.capDvi == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.capDvi == "2") {
         this.findCanCuByYear(this.yearNow);
@@ -1854,6 +1855,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   calculatorxtnTongThoc(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true
     this.dsKeHoachLuongThucClone[i].tongThocXuat = this.dsKeHoachLuongThucClone[i].xtnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.dsKeHoachLuongThucClone[i].tongThocXuat
       ? Intl.NumberFormat('vi-VN').format(
@@ -1863,6 +1865,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   calculatorxtnTongGao(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true
     this.dsKeHoachLuongThucClone[i].tongGaoXuat = this.dsKeHoachLuongThucClone[i].xtnGao.reduce((a, b) => a + +b.soLuong, 0);
     return this.dsKeHoachLuongThucClone[i].tongGaoXuat
       ? Intl.NumberFormat('vi-VN').format(
@@ -1872,6 +1875,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   calculatortkcnTongThoc(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true
     this.dsKeHoachLuongThucClone[i].tkcnThoc[0].soLuong =
       (this.dsKeHoachLuongThucClone[i].tongThocTon) + this.dsKeHoachLuongThucClone[i].ntnThoc[0].soLuong - this.dsKeHoachLuongThucClone[i].tongThocXuat;
 
@@ -1883,6 +1887,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   calculatortkcnTongGao(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true
     this.dsKeHoachLuongThucClone[i].tkcnGao[0].soLuong =
       (this.dsKeHoachLuongThucClone[i].tongGaoTon) +
       this.dsKeHoachLuongThucClone[i].ntnGao[0].soLuong -
@@ -1895,6 +1900,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   calculatorxtnTongSoQuyThoc(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true
     this.dsKeHoachLuongThucClone[i].tongSoXuat =
       +this.dsKeHoachLuongThucClone[i].tongThocXuat +
       +this.dsKeHoachLuongThucClone[i].tongGaoXuat * 2;
@@ -1906,6 +1912,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   calculatortkcnTongSoQuyThoc(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true
     this.dsKeHoachLuongThucClone[i].tongSoCuoiNam =
       this.dsKeHoachLuongThucClone[i].tkcnThoc[0].soLuong +
       this.dsKeHoachLuongThucClone[i].tkcnGao[0].soLuong * 2;
@@ -1918,12 +1925,27 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   calculatorntnTongSoQuyThoc(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true
     this.dsKeHoachLuongThucClone[i].tongSoNhap =
       +this.dsKeHoachLuongThucClone[i].ntnThoc[0].soLuong +
       +this.dsKeHoachLuongThucClone[i].ntnGao[0].soLuong * 2;
     return this.dsKeHoachLuongThucClone[i].tongSoNhap
       ? Intl.NumberFormat('vi-VN').format(
         this.dsKeHoachLuongThucClone[i].tongSoNhap,
+      )
+      : '0';
+  }
+
+
+  calculatortkcnMuoi(i: number): string {
+    this.dsMuoiClone[i].thayDoi = true
+    this.dsMuoiClone[i].tonKhoCuoiNam =
+      this.dsMuoiClone[i].tonKhoDauNam +
+      this.dsMuoiClone[i].soLuongNhap -
+      this.dsMuoiClone[i].soLuongXuat;
+    return this.dsMuoiClone[i].tonKhoCuoiNam
+      ? Intl.NumberFormat('vi-VN').format(
+        (this.dsMuoiClone[i].tonKhoCuoiNam),
       )
       : '0';
   }

@@ -16,7 +16,7 @@
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
               *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_THEM') && ((formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV) && userService.isCuc()) "
-              (click)="save(true)">
+              (click)="save(true,STATUS.CHO_DUYET_TP)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -33,7 +33,7 @@
                (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETTP'))) && userService.isCuc()) ||
                 ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETCBVU') &&
                  userService.isTongCuc())" type="button" class="btn btn-sub ml-2"
-        (click)="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.CHO_DUYET_TP  ? save(true) : duyet()">
+        (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>

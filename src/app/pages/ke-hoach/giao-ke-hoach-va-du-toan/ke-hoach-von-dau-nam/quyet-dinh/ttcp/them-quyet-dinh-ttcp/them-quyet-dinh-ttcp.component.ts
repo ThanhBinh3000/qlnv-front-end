@@ -288,7 +288,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
-    debugger;
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
