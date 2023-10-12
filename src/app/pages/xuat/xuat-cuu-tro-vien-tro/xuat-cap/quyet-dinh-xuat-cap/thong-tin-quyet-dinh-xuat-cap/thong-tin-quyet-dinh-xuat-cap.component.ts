@@ -283,6 +283,10 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
+    if (!this.formData.value.paXuatGaoChuyenXc) {
+      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0);
+      this.formData.patchValue({ soLuongXuatCap })
+    }
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null

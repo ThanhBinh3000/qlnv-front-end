@@ -42,6 +42,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   @ViewChild('NzTreeSelectComponent', { static: false }) nzTreeSelectComponent!: NzTreeSelectComponent;
   @Input() isView: boolean;
   @Input() loaiXuat: any;
+  @Input() isViewOnModal: boolean;
   formDataDtl: FormGroup;
   modalChiTiet: boolean = false;
   listDiaDanh: any[] = [];
@@ -351,8 +352,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
-    await this.createUpdate(body);
+    const data = await this.createUpdate(body);
     await this.buildTableView();
+    this.formData.patchValue({ trangThaiXh: data.trangThaiXh })
   }
 
 
@@ -441,7 +443,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
             (s.tenLoKho ?? '');
         }
-        s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
+        s.tenHang = this.formData.value.tenVthh !== LOAI_HANG_DTQG.VAT_TU ? s.tenLoaiVthh : s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
       });
       let data = this.formData.value.dataDtl;
       if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC || this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CUC) {

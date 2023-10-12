@@ -361,16 +361,11 @@
             <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <!-- <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group> -->
-              <nz-checkbox-group formControlName="ppLayMau" class="grid-1" [nzDisabled]="isView"></nz-checkbox-group>
-              <!--<nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onChangePpLayMau($event)"
-                                   formControlName="chiTieuKiemTra">
-                <div nz-row>
-                  <ng-container *ngFor="let item of dsPpLayMau">
-                    <div nz-col nzSpan="24"><label nz-checkbox [nzChecked]="item.selected"
-                                                   [nzValue]="item.label">{{item.label}}</label></div>
-                  </ng-container>
-                </div>
-              </nz-checkbox-wrapper>-->
+              <nz-checkbox-group formControlName="ppLayMau" class="grid-1" [nzDisabled]="isView"
+                *ngIf="loaiChon !=='radio'"></nz-checkbox-group>
+              <nz-radio-group formControlName="ppLayMau" *ngIf="loaiChon==='radio'" class="grid-1">
+                <label nz-radio *ngFor="let item of dsPpLayMau" [nzValue]="item.label">{{item.label}}</label>
+              </nz-radio-group>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -381,14 +376,6 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-checkbox-group formControlName="ctChatLuong" nzDisabled="true"></nz-checkbox-group>
-              <!--<nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onChangeCtChatLuong($event)">
-                <div nz-row>
-                  <ng-container *ngFor="let item of dsCtChatLuong">
-                    <div nz-col nzSpan="24"><label nz-checkbox [nzChecked]="item.selected"
-                                                   [nzValue]="item.label">{{item.label}}</label></div>
-                  </ng-container>
-                </div>
-              </nz-checkbox-wrapper>-->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -403,8 +390,8 @@
               <div class="list-file" nz-col nzSpan="24">
                 <file-list [data]="formData.value.anhChupMauNiemPhong" [isViewDetail]="isView" [isViewDetail]="isView">
                 </file-list>
-                <input nz-input formControlName="anhChupMauNiemPhong" readonly style="display: none;" />
               </div>
+              <input nz-input formControlName="anhChupMauNiemPhong" readonly style="display: none;" />
             </nz-form-control>
           </nz-form-item>
         </div>
