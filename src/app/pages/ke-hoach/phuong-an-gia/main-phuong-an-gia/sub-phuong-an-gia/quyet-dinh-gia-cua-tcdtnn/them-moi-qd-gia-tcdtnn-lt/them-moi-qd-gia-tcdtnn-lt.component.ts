@@ -84,7 +84,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.maQd = "/QĐ-TCDT"
-    this.getDataDetail(this.idInput)
+    await this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
@@ -114,6 +114,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       this.dataTable = data.thongTinGiaLt;
       this.buildTreePagCt();
       this.fileDinhKem = data.fileDinhKems;
+      console.log(this.formData.value.loaiGia,1111)
     }
   }
 

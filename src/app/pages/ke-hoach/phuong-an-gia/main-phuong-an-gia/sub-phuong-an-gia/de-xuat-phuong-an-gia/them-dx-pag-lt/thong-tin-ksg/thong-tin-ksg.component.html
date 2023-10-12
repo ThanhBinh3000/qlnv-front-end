@@ -13,7 +13,7 @@
     <th *ngIf="isTableKetQua && !isTabNdKhac" class="text-center">Thời hạn báo giá</th>
     <th *ngIf="!isTableKetQua && !isTabNdKhac" class="text-center">Thời hạn thẩm định</th>
     <th class="text-center">File đính kèm</th>
-    <th *ngIf="isTableKetQua && !isTabNdKhac" class="text-center">Ghi chú</th>
+    <th class="text-center">Ghi chú</th>
     <th class="text-center" nzWidth="120px">Hành động</th>
   </tr>
   <tr *ngIf="!isView">
@@ -81,7 +81,7 @@
       </nz-form-control>
     </th>
 
-    <th *ngIf="isTableKetQua && !isTabNdKhac">
+    <th>
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
     </th>
     <th style="text-align: center">
@@ -108,7 +108,7 @@
         <td *ngIf="!isTabNdKhac">{{data.thoiHanBaoGia }}</td>
         <td *ngIf="isTabNdKhac">{{data.chiSoCpi }}</td>
         <td>{{data.fileDinhKem?.fileName }}</td>
-        <td *ngIf="isTableKetQua && !isTabNdKhac">{{data.ghiChu }}</td>
+        <td>{{data.ghiChu }}</td>
         <td style="text-align: center">
           <a (click)="downloadFile(data.fileDinhKem)">
             <i class="icon htvbdh_tcdt_import "></i>
@@ -167,7 +167,7 @@
             </ng-template>
           </nz-form-control>
         </td>
-        <td *ngIf="isTableKetQua && !isTabNdKhac">
+        <td>
           <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
         </td>
         <td style="text-align: center">
@@ -198,7 +198,7 @@
       <td *ngIf="!isTabNdKhac"></td>
       <td *ngIf="isTabNdKhac"></td>
       <td></td>
-      <td *ngIf="isTableKetQua && !isTabNdKhac"></td>
+      <td></td>
       <td></td>
     </tr>
     <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -215,7 +215,7 @@
           <td *ngIf="!isTabNdKhac">{{item.thoiHanBaoGia }}</td>
           <td *ngIf="isTabNdKhac">{{item.chiSoCpi }}</td>
           <td>{{item.fileDinhKem?.fileName }}</td>
-          <td *ngIf="isTableKetQua && !isTabNdKhac">{{item.ghiChu }}</td>
+          <td>{{item.ghiChu }}</td>
           <td style="text-align: center">
             <a (click)="downloadFile(item.fileDinhKem)">
               <i class="icon htvbdh_tcdt_import "></i>

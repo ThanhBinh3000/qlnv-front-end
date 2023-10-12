@@ -39,6 +39,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   @Input() inputServiceGnv: BaseService;
   @Input() inputData: any;
   @Input() isView: any = false;
+  @Input() loaiChon: string;
   radioValue: any;
   listFileDinhKem: any;
   canCu: any;
@@ -110,17 +111,23 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       type: [],
       fileDinhKem: [new Array<FileDinhKem>()],
       canCu: [new Array<FileDinhKem>()],
-      anhChupMauNiemPhong: [new Array<FileDinhKem>(), [Validators.required, Validators.minLength(1)]],
+      anhChupMauNiemPhong: [new Array<FileDinhKem>()],
       xhBienBanLayMauDtl: [new Array()],
       ppLayMau: [new Array()],
       ctChatLuong: [new Array()],
       ngayTao: [],
     });
     this.formData.controls['ppLayMau'].valueChanges.subscribe(value => {
-      const ppLayMau = Array.isArray(value) ? value.filter(f => !!f.checked).map(s => ({ ...s, ten: s.label, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU })) : [];
-      const xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type !== BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).concat(ppLayMau)
-      this.formData.controls['xhBienBanLayMauDtl'].setValue(xhBienBanLayMauDtl)
-      // this.buildTableView();
+      if (this.loaiChon === "radio") {
+        const ppLayMau = [{ ten: value, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }]
+        const xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type !== BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).concat(ppLayMau)
+        this.formData.controls['xhBienBanLayMauDtl'].setValue(xhBienBanLayMauDtl)
+      } else {
+        const ppLayMau = Array.isArray(value) ? value.filter(f => !!f.checked).map(s => ({ ...s, ten: s.label, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU })) : [];
+        const xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type !== BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).concat(ppLayMau)
+        this.formData.controls['xhBienBanLayMauDtl'].setValue(xhBienBanLayMauDtl)
+        // this.buildTableView();
+      }
     })
   }
 
@@ -226,19 +233,24 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   async buildTableView(isSelectKho?: boolean) {
     //thanh phan lay mau
     this.viewTableDaiDien = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN));
-
     //phuong phap lay mau
-    let ppLayMauDtl = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU));
-    let ppLayMauArr = ppLayMauDtl.map(s => s.ten);
-    this.dsPpLayMau.forEach(s => {
-      if (ppLayMauArr.includes(s.label) && !isSelectKho) {
-        s.checked = true;
-      } else {
-        s.checked = false;
-      }
-    });
-    this.formData.patchValue({ ppLayMau: this.dsPpLayMau })
-
+    if (this.loaiChon === "radio") {
+      // Chi chon 1 phuong phap lay mau
+      const ppLayMau = this.formData.value.xhBienBanLayMauDtl.find(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU) ?
+        this.formData.value.xhBienBanLayMauDtl.find(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).ten : "";
+      this.formData.patchValue({ ppLayMau })
+    } else {
+      let ppLayMauDtl = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU));
+      let ppLayMauArr = ppLayMauDtl.map(s => s.ten);
+      this.dsPpLayMau.forEach(s => {
+        if (ppLayMauArr.includes(s.label) && !isSelectKho) {
+          s.checked = true;
+        } else {
+          s.checked = false;
+        }
+      });
+      this.formData.patchValue({ ppLayMau: this.dsPpLayMau })
+    }
     //chi tieu can kiem tra
     let ctChatLuongDtl = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG));
     let ctChatLuongArr = ctChatLuongDtl.map(s => s.ten);
@@ -401,21 +413,34 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
         });
         await this.loadDsPpLayMau();
         await this.loadDsCtChatLuong();
-
-        let filter = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN);
-        let defaultPp = this.dsPpLayMau.map(s => {
-          return { ten: s.label, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }
-        });
-        let defaultCt = this.dsCtChatLuong.map(s => {
-          return {
-            ten: s.label,
-            phuongPhap: s.phuongPhap,
-            chiSoCl: s.chiSoCl,
-            type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
-          }
-        });
-        filter.push(...defaultPp, ...defaultCt);
-        this.formData.patchValue({ xhBienBanLayMauDtl: filter })
+        if (this.loaiChon === "radio") {
+          // Chi chon 1 phuong phap lay mau duy nhat
+          let filter = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN);
+          let defaultCt = this.dsCtChatLuong.map(s => {
+            return {
+              ten: s.label,
+              phuongPhap: s.phuongPhap,
+              chiSoCl: s.chiSoCl,
+              type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
+            }
+          });
+          filter.push(...defaultCt);
+          this.formData.patchValue({ xhBienBanLayMauDtl: filter })
+        } else {
+          let filter = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN);
+          let defaultPp = this.dsPpLayMau.map(s => {
+            return { ten: s.label, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }
+          });
+          let defaultCt = this.dsCtChatLuong.map(s => {
+            return {
+              ten: s.label,
+              phuongPhap: s.phuongPhap,
+              chiSoCl: s.chiSoCl,
+              type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
+            }
+          });
+          filter.push(...defaultPp, ...defaultCt);
+        }
         await this.buildTableView(true);
       }
     });

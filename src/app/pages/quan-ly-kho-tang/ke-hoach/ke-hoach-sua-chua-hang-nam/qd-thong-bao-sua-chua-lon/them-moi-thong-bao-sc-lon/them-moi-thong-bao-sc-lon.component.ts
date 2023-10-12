@@ -191,7 +191,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : '',
-        soTt : data.soTt
+        soTt : data.soTt ? data.soTt : "",
+        qdBtc : data.qdBtc ? data.qdBtc : ""
       })
       this.fileDinhKem = data.fileDinhKems
       this.canCuPhapLy = data.canCuPhapLys
@@ -312,25 +313,17 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
   }
 
 
-  sumSoLuong(data: any, row: string, type ?: any) {
+  sumSoLuong(row: string) {
     let sl = 0;
-    if (!type) {
-      if (data && data.dataChild && data.dataChild.length > 0) {
-        const sum = data.dataChild.reduce((prev, cur) => {
-          prev += cur[row];
-          return prev;
-        }, 0);
-        sl = sum;
+      if (this.dataTableReq && this.dataTableReq.length > 0) {
+        if (this.dataTableReq && this.dataTableReq.length > 0) {
+          const sum = this.dataTableReq.reduce((prev, cur) => {
+            prev += cur[row];
+            return prev;
+          }, 0);
+          sl = sum;
+        }
       }
-    } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        let sum = 0;
-        this.dataTable.forEach(item => {
-          sum += this.sumSoLuong(item, row);
-        });
-        sl = sum;
-      }
-    }
     return sl;
   }
 

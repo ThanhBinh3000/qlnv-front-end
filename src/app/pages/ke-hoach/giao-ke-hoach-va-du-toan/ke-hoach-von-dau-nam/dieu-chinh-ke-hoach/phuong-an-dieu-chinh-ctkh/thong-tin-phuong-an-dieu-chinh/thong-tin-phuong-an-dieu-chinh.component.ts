@@ -230,6 +230,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
 
       await this.findCanCuByYear(this.yearNow);
     }
+
   }
 
   isCuc() {
@@ -238,6 +239,56 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
 
   isTongCuc() {
     return this.userService.isTongCuc()
+  }
+
+  async chiTieuTCDT(year: number) {
+    if (year) {
+      const body = {
+        namKeHoach: year
+      }
+
+      let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachTongCucGiao(body)
+      if (res.msg == MESSAGE.SUCCESS) {
+        console.log("loadThongTinChiTieuKeHoachTongCucGiao", res)
+        let data = res.data
+
+        if (data) {
+          this.dataQdTCDTGiaoCuc = {};
+          this.formData.patchValue({
+            soQuyetDinhGiaoNamTruoc: data.soQuyetDinh,
+            quyetDinhGiaoNamTruocId: data.id
+          });
+          // Lấy kế hoạch tổng cục giao cho cục đang login
+          let dataLuongThuc = data.khLuongThuc;
+          const ntnThoc = dataLuongThuc.reduce((prev, cur) => prev + cur.ntnThoc, 0)
+          const ntnGao = dataLuongThuc.reduce((prev, cur) => prev + cur.ntnGao, 0)
+          const xtnTongThoc = dataLuongThuc.reduce((prev, cur) => prev + cur.xtnTongThoc, 0)
+          const xtnTongGao = dataLuongThuc.reduce((prev, cur) => prev + cur.xtnTongGao, 0)
+
+          let dataMuoi = data.khMuoiDuTru
+          const tonKhoDauNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoDauNam, 0)
+          const nhapTrongNam = dataMuoi.reduce((prev, cur) => prev + cur.nhapTrongNam, 0)
+          const xuatTrongNamMuoi = dataMuoi.reduce((prev, cur) => prev + cur.xuatTrongNamMuoi, 0)
+          const tonKhoCuoiNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoCuoiNam, 0)
+
+          this.dataQdTCDTGiaoCuc = {
+            "ltThocMua": ntnThoc,
+            "ltGaoMua": ntnGao,
+            "ltThocXuat": xtnTongThoc,
+            "ltGaoXuat": xtnTongGao,
+            tonKhoDauNammuoi: tonKhoDauNam,
+            nhapTrongNamMuoi: nhapTrongNam,
+            xuatTrongNamMuoi: xuatTrongNamMuoi,
+            tonKhoCuoiNamMuoi: tonKhoCuoiNam,
+          }
+
+
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Tổng Cục")
+      }
+    }
+
   }
 
   async onChangeDX(values) {
@@ -453,15 +504,22 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           const tonKhoCuoiNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoCuoiNam, 0)
 
           this.dataQdTCDTGiaoCuc = {
-            "ltThocMua": ntnThoc,
-            "ltGaoMua": ntnGao,
-            "ltThocXuat": xtnTongThoc,
-            "ltGaoXuat": xtnTongGao,
+            // "ltThocMua": ntnThoc,
+            // "ltGaoMua": ntnGao,
+            // "ltThocXuat": xtnTongThoc,
+            // "ltGaoXuat": xtnTongGao,
             tonKhoDauNammuoi: tonKhoDauNam,
             nhapTrongNamMuoi: nhapTrongNam,
             xuatTrongNamMuoi: xuatTrongNamMuoi,
             tonKhoCuoiNamMuoi: tonKhoCuoiNam,
           }
+
+          this.formData.patchValue({
+            slThocNhap: ntnThoc,
+            slGaoNhap: ntnGao,
+            slTongXuatThoc: xtnTongThoc,
+            slTongXuatGao: xtnTongGao
+          })
 
           this.dsKeHoachLuongThucClone = dataLuongThuc.map((khlt) => {
 
@@ -718,6 +776,10 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       dcKeHoachNamMuoiDtl: [],
       dcKeHoachNamVatTuDtl: [],
       lyDoTuChoi: [],
+      slThocNhap: [],
+      slGaoNhap: [],
+      slTongXuatThoc: [],
+      slTongXuatGao: []
     });
     this.formData.markAsPristine();
   }
