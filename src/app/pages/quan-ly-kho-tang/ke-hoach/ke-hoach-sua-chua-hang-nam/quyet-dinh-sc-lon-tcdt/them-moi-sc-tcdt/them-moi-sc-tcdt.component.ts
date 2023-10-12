@@ -1,28 +1,30 @@
-import {cloneDeep} from "lodash";
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {Router} from "@angular/router";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {UserService} from "../../../../../../services/user.service";
-import {Globals} from "../../../../../../shared/globals";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {HelperService} from "../../../../../../services/helper.service";
+import { cloneDeep } from "lodash";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Router } from "@angular/router";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { UserService } from "../../../../../../services/user.service";
+import { Globals } from "../../../../../../shared/globals";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { HelperService } from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
-import {MESSAGE} from "../../../../../../constants/message";
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {UserLogin} from "../../../../../../models/userlogin";
-import {STATUS} from "../../../../../../constants/status";
-import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { MESSAGE } from "../../../../../../constants/message";
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { UserLogin } from "../../../../../../models/userlogin";
+import { STATUS } from "../../../../../../constants/status";
+import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {
   TongHopDxScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
-import {log} from "ng-zorro-antd/core/logger";
+import {
+  KtKhSuaChuaBtcService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 
 @Component({
   selector: "app-them-moi-sc-tcdt",
@@ -56,7 +58,10 @@ export class ThemMoiScTcdtComponent implements OnInit {
   STATUS = STATUS;
   maTt: string;
   soQd: string;
-
+  idTongHop: number;
+  quyetDinh = false;
+  hidden = false;
+  @Output() tabFocus = new EventEmitter<object>();
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -67,19 +72,20 @@ export class ThemMoiScTcdtComponent implements OnInit {
     private tongHopDxScLon: TongHopDxScLonService,
     private fb: FormBuilder,
     private modal: NzModalService,
-    private helperService: HelperService
+    private helperService: HelperService,
+  private qdScBtcService: KtKhSuaChuaBtcService,
   ) {
     this.formData = this.fb.group({
       id: [null],
-      ngayTaoTt: [null],
+      ngayTaoTt: [dayjs().format('YYYY-MM-DD')],
       tgTongHop: [null],
       namKeHoach: [null],
       noiDung: [null],
       maToTrinh: [null],
       soQuyetDinh: [null],
       ngayKyQd: [null],
-      trangThai: ["00"],
-      tenTrangThai: ["Dự thảo"],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ["Đang nhập dữ liệu"],
       lyDoTuChoi: [],
       loaiTmdt: ['DUOI15TY']
     });
@@ -134,7 +140,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
           lyDoTuChoi: data.lyDoTuChoi,
           loaiDuAn: data.loaiDuAn,
           tgTongHop: data.tgTongHop,
-          loaiTmdt: data.loaiTmdt
+          loaiTmdt : data.loaiTmdt
         });
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
@@ -146,7 +152,20 @@ export class ThemMoiScTcdtComponent implements OnInit {
         this.dataTableDxTren = this.convertListData(resultDx?.filter(item => item.tmdt > 15000000000));
       }
       this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
-      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
+      this.dataTableDuoi= this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
+
+      let body = {
+        maDvi: this.userInfo.MA_DVI,
+        soTt : data.soQuyetDinh,
+        paggingReq: {
+          "limit": 999,
+          "page": 0
+        }
+      };
+      let dataQd = await this.qdScBtcService.search(body);
+      if (dataQd.data.content && dataQd.data.content.length>0){
+        this.hidden = !this.hidden;
+      }
     }
   }
 
@@ -157,7 +176,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   setValidators() {
     this.helperService.removeValidators(this.formData);
-    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
+    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
       this.formData.controls["maToTrinh"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoTt"].setValidators([Validators.required]);
     }
@@ -170,7 +189,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
-    if (isGuiDuyet && this.idInput > 0) {
+    if (isGuiDuyet ) {
       this.setValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);
@@ -234,7 +253,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DANG_NHAP_DU_LIEU : {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
@@ -353,7 +372,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
         this.dataTableDxDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
         this.dataTableDxTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
         this.dataTableTren = cloneDeep(this.dataTableDxTren);
-        this.dataTableDuoi = cloneDeep(this.dataTableDxDuoi);
+        this.dataTableDuoi= cloneDeep(this.dataTableDxDuoi);
       } else {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu!");
         this.isTongHop = false;
@@ -425,28 +444,37 @@ export class ThemMoiScTcdtComponent implements OnInit {
   }
 
 
-  sumSoLuong(type: string, row: string) {
+  sumSoLuong(data: any, row: string, type?: any) {
     let sl = 0;
-    let dataFilters = [];
-    if (this.dataTableReq && this.dataTableReq.length > 0) {
-      if (type == 'tren') {
-        dataFilters = this.dataTableReq?.filter(item => item.tmdt > 15000000000);
-      } else {
-        dataFilters = this.dataTableReq?.filter(item => item.tmdt <= 15000000000);
+    if (!type) {
+      if (data && data.dataChild && data.dataChild.length > 0) {
+        const sum = data.dataChild.reduce((prev, cur) => {
+          prev += cur[row];
+          return prev;
+        }, 0);
+        sl = sum;
       }
-      const sum = dataFilters.reduce((prev, cur) => {
-        prev += cur[row];
-        return prev;
-      }, 0);
-      sl = sum;
+    } else {
+      let sum = 0;
+      if(data==true){
+          this.dataTableReq?.filter(item => item.tmdt > 15000000000)
+          this.dataTableReq.forEach(item => {
+            sum += item[row];
+          });
+          sl = sum;
+        }else {
+        this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
+        this.dataTableReq.forEach(item => {
+          sum += item[row];
+        });
+        sl = sum;
+      }
+
     }
     return sl;
   }
 
-  deleteRow(item
-              :
-              any
-  ) {
+  deleteRow(item: any) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -472,58 +500,41 @@ export class ThemMoiScTcdtComponent implements OnInit {
     });
   }
 
-  themMoiItem(data
-                :
-                any, tmdt
-                :
-                string, type
-                :
-                string, idx
-                :
-                number, list ?: any
-  ) {
-    let modalQD = this.modal.create({
-      nzTitle: "CHI TIẾT DANH MỤC SỬA CHỮA LỚN",
-      nzContent: DialogDxScLonComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: "1200px",
-      nzStyle: {top: "100px"},
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
-        dataInput: data,
-        type: type,
-        page: tmdt
-      }
-    });
-    modalQD.afterClose.subscribe(async (detail) => {
-      if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
+  themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
+      let modalQD = this.modal.create({
+        nzTitle: "CHI TIẾT DANH MỤC SỬA CHỮA LỚN",
+        nzContent: DialogDxScLonComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: "1200px",
+        nzStyle: { top: "100px" },
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: list && list.dataChild ? list.dataChild : [],
+          dataInput: data,
+          type: type,
+          page: tmdt
         }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == "them") {
-          data.dataChild.push(detail);
-        } else {
-          if (list) {
-            Object.assign(list.dataChild[idx], detail);
+      });
+      modalQD.afterClose.subscribe(async (detail) => {
+        if (detail) {
+          if (!data.dataChild) {
+            data.dataChild = [];
+          }
+          if (!data.idVirtual) {
+            data.idVirtual = uuidv4();
+          }
+          if (type == "them") {
+            data.dataChild.push(detail);
+          } else {
+            if (list) {
+              Object.assign(list.dataChild[idx], detail);
+            }
           }
         }
-      }
-    });
+      });
   }
-
-  deleteItem(index
-               :
-               any, y
-               :
-               any, table
-               :
-               any[]
-  ) {
+  deleteItem(index: any, y: any, table : any[]) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -545,5 +556,12 @@ export class ThemMoiScTcdtComponent implements OnInit {
       }
     });
   }
-
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+  openQdPheDuyet(id, b: boolean) {
+    this.idTongHop=id
+    this.quyetDinh = !this.quyetDinh;
+    this.emitTab({tab: "qdbtc", id: this.idTongHop,quyetDinh:this.quyetDinh});
+  }
 }

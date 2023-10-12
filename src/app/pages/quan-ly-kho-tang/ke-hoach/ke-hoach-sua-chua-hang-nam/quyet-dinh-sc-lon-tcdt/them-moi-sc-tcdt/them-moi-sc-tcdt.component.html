@@ -2,18 +2,24 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span *ngIf="isTongHop"
+        <span *ngIf="isTongHop && formData.value.id != null"
               [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDTC ?  'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-        <span *ngIf="!isTongHop"></span>
-        <span>TỔNG HỢP PHƯƠNG ÁN ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM</span>
+        <span *ngIf="!(isTongHop && formData.value.id != null)"></span>
+        <span>TỔNG HỢP PHƯƠNG ÁN ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</span>
       </div>
     </div>
     <div class="btn-group">
       <button type="button" class="btn btn-sub ml-2" (click)="quayLai()" *ngIf="!isViewQd">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
+      </button>
+      <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')
+         && formData.value.trangThai == STATUS.DA_DUYET_LDTC && !hidden" type="button" class="btn btn-main ml-2"
+              (click)="openQdPheDuyet(formData.value.id, false)">
+        <i class="icon htvbdh_soanthao"></i>
+        <span>Dự thảo QĐ của BTC/Bộ KHĐT</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
               *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') && !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
@@ -156,7 +162,7 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Ngày tạo tờ trình
+                <nz-form-label nzRequired [nzNoColon]="true">Ngày tạo tờ trình
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker
@@ -195,7 +201,7 @@
                   Căn cứ pháp lý
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isViewDetail" [data]="canCuPhapLys"></file-list>
+                  <file-list [disabled]="isViewDetail" [isViewDetail]="isViewDetail" [data]="canCuPhapLys"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -205,7 +211,7 @@
                   File đính kèm QĐ đã ký của Tổng cục DTNN
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isViewDetail" [data]="fileDinhKems"></file-list>
+                  <file-list [disabled]="isViewDetail" [isViewDetail]="isViewDetail" [data]="fileDinhKems"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -223,7 +229,7 @@
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 15 tỷ đồng: &nbsp; <span
+                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trình có TMĐT dưới 15 tỷ đồng: &nbsp; <span
                     class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
                 </div>
                 <div nz-col nzSpan="4">
@@ -425,7 +431,7 @@
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 15 tỷ đồng: &nbsp; <span
+                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trình có TMĐT dưới 15 tỷ đồng: &nbsp; <span
                     class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
                 </div>
                 <div nz-col nzSpan="4">
@@ -631,7 +637,7 @@
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 15 tỷ đồng: &nbsp; <span
+                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trình có TMĐT dưới 15 tỷ đồng: &nbsp; <span
                     class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
                 </div>
                 <div nz-col nzSpan="4">
@@ -854,7 +860,7 @@
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 15 tỷ đồng: &nbsp; <span
+                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trình có TMĐT dưới 15 tỷ đồng: &nbsp; <span
                     class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
                 </div>
                 <div nz-col nzSpan="4">

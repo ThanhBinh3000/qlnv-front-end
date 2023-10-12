@@ -200,6 +200,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       res = await this.tongHopDxXdTh.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      console.log(1)
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
@@ -220,6 +221,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         }
       }
     } else {
+      console.log(2)
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
