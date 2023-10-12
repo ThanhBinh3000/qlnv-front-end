@@ -1887,35 +1887,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
-              // let trangThai = STATUS.BAN_HANH;
-              // if (this.userService.isTongCuc()) {
-              //   switch (this.thongTinChiTieuKeHoachNam.trangThai) {
-              //     case STATUS.DANG_NHAP_DU_LIEU: {
-              //       trangThai = STATUS.CHO_DUYET_LDV
-              //       break;
-              //     }
-              //     case STATUS.TU_CHOI_LDV: {
-              //       trangThai = STATUS.CHO_DUYET_LDV
-              //       break;
-              //     }
-              //   }
-              // }
-              // if (this.userService.isCuc()) {
-              //   switch (this.thongTinChiTieuKeHoachNam.trangThai) {
-              //     case STATUS.DU_THAO: {
-              //       trangThai = STATUS.CHO_DUYET_TP
-              //       break;
-              //     }
-              //     case STATUS.TU_CHOI_TP: {
-              //       trangThai = STATUS.CHO_DUYET_TP
-              //       break;
-              //     }
-              //     case STATUS.TU_CHOI_LDC: {
-              //       trangThai = STATUS.CHO_DUYET_TP
-              //       break;
-              //     }
-              //   }
-              // }
               let body = {
                 id: res.data.id,
                 trangThai: STATUS.BAN_HANH
@@ -1986,6 +1957,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                   }
                 })
             } else {
+              this.thongTinChiTieuKeHoachNam = res.data;
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             }
           } else {

@@ -1664,6 +1664,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                   }
                 });
             } else {
+              this.thongTinChiTieuKeHoachNam = res.data;
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             }
           } else {
