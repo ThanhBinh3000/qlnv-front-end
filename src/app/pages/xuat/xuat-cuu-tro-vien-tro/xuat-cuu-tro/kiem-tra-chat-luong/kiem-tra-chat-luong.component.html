@@ -25,7 +25,7 @@
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
   <app-bien-ban-lay-mau [loaiVthh]="typeVthh" [loaiXuat]="'CTVT'" [inputService]="bienBanLayMauService"
-    [inputServiceGnv]="quyetDinhGiaoNvCuuTroService">
+    [inputServiceGnv]="quyetDinhGiaoNvCuuTroService" [loaiChon]="'radio'">
   </app-bien-ban-lay-mau>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">

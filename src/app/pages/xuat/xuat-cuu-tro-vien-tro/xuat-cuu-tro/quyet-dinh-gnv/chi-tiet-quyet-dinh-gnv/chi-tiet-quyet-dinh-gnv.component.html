@@ -1,5 +1,5 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-  <div class="btn-group">
+  <div class="btn-group" *ngIf="!isViewOnModal">
     <button (click)="quayLai()" class="btn btn-sub" type="button">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
