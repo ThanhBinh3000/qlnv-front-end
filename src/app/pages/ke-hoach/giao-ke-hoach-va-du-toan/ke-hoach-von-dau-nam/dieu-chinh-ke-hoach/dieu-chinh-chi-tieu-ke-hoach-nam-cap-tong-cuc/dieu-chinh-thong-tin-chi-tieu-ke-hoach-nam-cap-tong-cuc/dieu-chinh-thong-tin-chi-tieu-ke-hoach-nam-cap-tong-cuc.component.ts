@@ -227,7 +227,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
 
     if (this.id > 0) {
-      // await this.findCanCuByYear(this.yearNow);
       await this.loadThongTinChiTieuKeHoachNam(this.id);
     } else {
       this.thongTinChiTieuKeHoachNam.cap = this.userInfo.CAP_DVI;
@@ -622,17 +621,165 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             slThocNhap: ntnThoc,
             slGaoNhap: ntnGao,
             slTongXuatThoc: xtnTongThoc,
-            slTongXuatGao: xtnTongGao
+            slTongXuatGao: xtnTongGao,
+            slTonKhoDauNam: tonKhoDauNam,
+            slNhapTrongNam: nhapTrongNam,
+            slXuatTrongNam: xuatTrongNamMuoi,
+            slTonKhoCuoiNam: tonKhoCuoiNam
           })
 
+          if (this.isTongCuc()) {
+            this.dsKeHoachLuongThucClone = dataLuongThuc.map((khlt) => {
 
-          if (!this.isViewDetail) {
-            if (this.isTongCuc()) {
-              await this.getPhuongAn(data.soQuyetDinh)
-            } else {
-              await this.getDeXuat(data.soQdDcChiTieu)
-            }
+              // gạo tồn
+              const tkdnGao = this.listNamKH.map((nkh) => {
+                const tdk = khlt.tkdnGao.find((item) => item.nam == nkh)
+                return {
+                  namKeHoach: nkh,
+                  soLuong: tdk ? tdk.soLuong : 0,
+                  type: "01",
+                }
+              })
 
+              // thóc tồn
+              const tkdnThoc = this.listNamKH.map((nkh) => {
+                const tdk = khlt.tkdnThoc.find((item) => item.nam == nkh)
+                return {
+                  namKeHoach: nkh,
+                  soLuong: tdk ? tdk.soLuong : 0,
+                  type: "00",
+                }
+              })
+
+              // gạo nhập trong năm
+              const ntnGao = [{
+                namKeHoach: "",
+                soLuong: khlt.ntnGao,
+                type: "11",
+              }]
+              // thóc nhập trong năm
+              const ntnThoc = [
+                {
+                  namKeHoach: "",
+                  soLuong: khlt.ntnThoc,
+                  type: "10",
+                }
+              ]
+
+              // gạo xuất trong năm
+              let xtnGao = this.listNamKH.map((nkh) => {
+                const xtn = khlt.xtnGao.find((item) => item.nam == nkh)
+                return {
+                  namKeHoach: nkh,
+                  soLuong: xtn ? xtn.soLuong : 0,
+                  type: "21",
+                }
+              })
+
+              // thóc xuất trong năm
+              let xtnThoc = this.listNamKH.map((nkh) => {
+                const xtn = khlt.xtnThoc.find((item) => item.nam == nkh)
+                return {
+                  namKeHoach: nkh,
+                  soLuong: xtn ? xtn.soLuong : 0,
+                  type: "20",
+                }
+              })
+
+              // gạo tồn kho cuối kỳ
+              const tkcnGao = [{
+                namKeHoach: "",
+                soLuong: khlt.tkcnTongGao,
+                type: "31",
+              }]
+              // thóc tông kho cuối kỳ
+              const tkcnThoc = [
+                {
+                  namKeHoach: "",
+                  soLuong: khlt.tkcnTongThoc,
+                  type: "30",
+                }
+              ]
+
+
+
+              const dcKeHoachNamLtTtDtl = [...tkdnGao, ...tkdnThoc, ...ntnGao, ...ntnThoc, ...xtnGao, ...xtnThoc, ...tkcnGao, ...tkcnThoc]
+
+
+              return {
+                donViTinh: khlt.donViTinh,
+                maDvi: khlt.maDonVi,
+                tenDvi: khlt.tenDonvi,
+                tongSoCuoiNam: khlt.tkcnTongSoQuyThoc,
+                tongSoTon: khlt.tkdnTongSoQuyThoc,
+                tongGaoTon: khlt.tkdnTongGao,
+                tongThocTon: khlt.tkdnTongThoc,
+                tongSoXuat: khlt.xtnTongSoQuyThoc,
+                tongGaoXuat: khlt.xtnTongGao,
+                tongThocXuat: khlt.xtnTongThoc,
+                tongSoNhap: khlt.ntnTongSoQuyThoc,
+                dcKeHoachNamLtTtDtl,
+                tkdnGao,
+                tkdnThoc,
+                ntnGao,
+                ntnThoc,
+                xtnGao,
+                xtnThoc,
+                tkcnGao,
+                tkcnThoc
+              }
+            })
+
+
+            this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
+            console.log("this.dsKeHoachLuongThucClone", this.dsKeHoachLuongThucClone)
+            this.sumRowDetailLuongThuc();
+
+            this.dsMuoiClone = dataMuoi.map((khmuoi) => {
+              return {
+                donViTinh: khmuoi.donViTinh,
+                maDvi: khmuoi.maDonVi,
+                stt: khmuoi.stt,
+                tenDvi: khmuoi.tenDonVi,
+                soLuongNhap: khmuoi.nhapTrongNam,
+                soLuongXuat: khmuoi.xuatTrongNamMuoi,
+                tonKhoCuoiNam: khmuoi.tonKhoDauNam,
+                tonKhoDauNam: khmuoi.tonKhoCuoiNam,
+              }
+            })
+
+            this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
+            this.sumRowDetailMuoi()
+
+            const khVatTuNhap = data.khVatTuNhap
+            const khVatTuXuat = data.khVatTuXuat
+
+            this.dataVatTuNhap = khVatTuNhap.map((vattu) => {
+              return {
+                ...vattu,
+                id: undefined,
+                loai: "NHAP",
+              }
+            })
+            this.dataVatTuXuat = khVatTuXuat.map((vattu) => {
+              return {
+                ...vattu,
+                id: undefined,
+                loai: "XUAT",
+              }
+            })
+
+            this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
+            this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
+
+            this.convertListDataVatTuNhap(this.dataVatTuNhap);
+            this.convertListDataVatTuXuat(this.dataVatTuXuat);
+            this.expandAll(this.dataVatTuNhapTree);
+            this.expandAllVatTuXuat(this.dataVatTuXuatTree);
+            console.log('dataQdTCDTGiaoCuc', this.dataQdTCDTGiaoCuc)
+            await this.getPhuongAn(data.soQuyetDinh)
+          } else {
+            await this.getDeXuat(data.soQdDcChiTieu)
           }
 
         }
@@ -859,7 +1006,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       slThocNhap: [],
       slGaoNhap: [],
       slTongXuatThoc: [],
-      slTongXuatGao: []
+      slTongXuatGao: [],
+      slTonKhoDauNam: [],
+      slNhapTrongNam: [],
+      slXuatTrongNam: [],
+      slTonKhoCuoiNam: [],
 
     });
     this.formData.markAsPristine();
@@ -1191,6 +1342,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           ).value();
         return {
           tenDvi: key,
+          isSelected: value[0]?.isSelected || value[1]?.isSelected || value[2]?.isSelected,
           maDvi: value[0].maDvi,
           donViId: value[0].donViId,
           dataChild: rs,
@@ -1251,6 +1403,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           ).value();
         return {
           tenDvi: key,
+          isSelected: value[0]?.isSelected || value[1]?.isSelected || value[2]?.isSelected,
           maDvi: value[0].maDvi,
           donViId: value[0].donViId,
           dataChild: rs,
@@ -1575,7 +1728,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -1584,7 +1737,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.spinner.show();
         try {
           this.save(true);
-          // this.redirectChiTieuKeHoachNam()
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -1926,13 +2078,14 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   saveEdit(i: number): void {
     this.dsKeHoachLuongThucClone[i].isEdit = false;
-    this.dsKeHoachLuongThucClone[i].tkcnTongGao = this.dsKeHoachLuongThucClone[i].tkdnTongGao + (this.dsKeHoachLuongThucClone[i].ntnGao) - this.dsKeHoachLuongThucClone[i].xtnTongGao;
-    this.dsKeHoachLuongThucClone[i].tkcnTongThoc = this.dsKeHoachLuongThucClone[i].tkdnTongThoc + (this.dsKeHoachLuongThucClone[i].ntnThoc) - this.dsKeHoachLuongThucClone[i].xtnTongThoc;
-    this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc = (this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2) + this.dsKeHoachLuongThucClone[i].tkcnTongThoc;
-    Object.assign(
-      this.thongTinChiTieuKeHoachNam.khLuongThuc[i],
-      this.dsKeHoachLuongThucClone[i],
-    );
+    this.dsKeHoachLuongThucClone[i].isSelected = true;
+    // this.dsKeHoachLuongThucClone[i].tkcnTongGao = this.dsKeHoachLuongThucClone[i].tkdnTongGao + (this.dsKeHoachLuongThucClone[i].ntnGao) - this.dsKeHoachLuongThucClone[i].xtnTongGao;
+    // this.dsKeHoachLuongThucClone[i].tkcnTongThoc = this.dsKeHoachLuongThucClone[i].tkdnTongThoc + (this.dsKeHoachLuongThucClone[i].ntnThoc) - this.dsKeHoachLuongThucClone[i].xtnTongThoc;
+    // this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc = (this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2) + this.dsKeHoachLuongThucClone[i].tkcnTongThoc;
+    // Object.assign(
+    //   this.thongTinChiTieuKeHoachNam.khLuongThuc[i],
+    //   this.dsKeHoachLuongThucClone[i],
+    // );
     this.sumRowDetailLuongThuc();
     this.cdr.detectChanges();
   }
@@ -2010,6 +2163,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.dsKeHoachLuongThucClone[i].tongSoNhap,
       )
       : '0';
+
+
   }
 
   onInput(e: Event, data: string): void {
@@ -2073,64 +2228,75 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   soSanhCtCapTrenGiao(action, isGuiDuyet?) {
     let totalNtnThoc, totalNtnGao = 0;
     let checkFlag = true;
-    if (this.userService.isTongCuc()) {
-      if (action == 'add') {
-        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
-        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
-        if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc > (this.dataQdCanCu?.ltThocMua ? this.dataQdCanCu.ltThocMua : 0)) {
-            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc BTC giao");
-            return false
-          }
-          if (totalNtnGao > (this.dataQdCanCu?.ltGaoMua ? this.dataQdCanCu.ltGaoMua : 0)) {
-            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo BTC giao");
-            return false;
-          }
-        }
-      } else {
-        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
-        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
-        if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc < (this.dataQdCanCu?.ltThocMua ? this.dataQdCanCu.ltThocMua : 0) && isGuiDuyet) {
-            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc BTC giao");
-            return false;
-          }
-          if (totalNtnGao < (this.dataQdCanCu?.ltGaoMua ? this.dataQdCanCu.ltGaoMua : 0) && isGuiDuyet) {
-            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo BTC giao");
-            return false;
-          }
-        }
-      }
-    } else {
-      if (action == 'add') {
-        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
-        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
-        if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc > (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0)) {
-            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc TCDT giao");
-            return false;
-          }
-          if (totalNtnGao > (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0)) {
-            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo TCDT giao");
-            return false;
-          }
-        }
-      } else {
-        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
-        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
-        if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc < (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0) && isGuiDuyet) {
-            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc TCDT giao");
-            return false;
-          }
-          if (totalNtnGao < (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0) && isGuiDuyet) {
-            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo TCDT giao");
-            return false;
-            ;
-          }
-        }
-      }
+    if (this.sumTotalKhDuTruLuongThuc.ntnThoc !== this.formData.value.slThocNhap && isGuiDuyet) {
+      this.notification.error(MESSAGE.ERROR, "Số thóc nhập khác chỉ tiêu của TCDT");
+      checkFlag = false
+      return
     }
+
+    if (this.sumTotalKhDuTruLuongThuc.ntnGao !== this.formData.value.slGaoNhap && isGuiDuyet) {
+      this.notification.error(MESSAGE.ERROR, "Số gạo nhập khác chỉ tiêu của TCDT");
+      checkFlag = false
+      return
+    }
+    // if (this.userService.isTongCuc()) {
+    //   if (action == 'add') {
+    //     totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
+    //     totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
+    //     if (totalNtnThoc || totalNtnGao) {
+    //       if (totalNtnThoc > (this.dataQdCanCu?.ltThocMua ? this.dataQdCanCu.ltThocMua : 0)) {
+    //         this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc BTC giao");
+    //         return false
+    //       }
+    //       if (totalNtnGao > (this.dataQdCanCu?.ltGaoMua ? this.dataQdCanCu.ltGaoMua : 0)) {
+    //         this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo BTC giao");
+    //         return false;
+    //       }
+    //     }
+    //   } else {
+    //     totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+    //     totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+    //     if (totalNtnThoc || totalNtnGao) {
+    //       if (totalNtnThoc < (this.dataQdCanCu?.ltThocMua ? this.dataQdCanCu.ltThocMua : 0) && isGuiDuyet) {
+    //         this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc BTC giao");
+    //         return false;
+    //       }
+    //       if (totalNtnGao < (this.dataQdCanCu?.ltGaoMua ? this.dataQdCanCu.ltGaoMua : 0) && isGuiDuyet) {
+    //         this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo BTC giao");
+    //         return false;
+    //       }
+    //     }
+    //   }
+    // } else {
+    //   if (action == 'add') {
+    //     totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
+    //     totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
+    //     if (totalNtnThoc || totalNtnGao) {
+    //       if (totalNtnThoc > (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0)) {
+    //         this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc TCDT giao");
+    //         return false;
+    //       }
+    //       if (totalNtnGao > (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0)) {
+    //         this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo TCDT giao");
+    //         return false;
+    //       }
+    //     }
+    //   } else {
+    //     totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+    //     totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+    //     if (totalNtnThoc || totalNtnGao) {
+    //       if (totalNtnThoc < (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0) && isGuiDuyet) {
+    //         this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc TCDT giao");
+    //         return false;
+    //       }
+    //       if (totalNtnGao < (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0) && isGuiDuyet) {
+    //         this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo TCDT giao");
+    //         return false;
+    //         ;
+    //       }
+    //     }
+    //   }
+    // }
     return checkFlag;
   }
 
@@ -2217,6 +2383,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   saveEditMuoi(i: number) {
     this.dsMuoiClone[i].isEdit = false;
+    this.dsMuoiClone[i].isSelected = true;
     // Object.assign(
     //   this.thongTinChiTieuKeHoachNam.khMuoiDuTru[i],
     //   this.dsMuoiClone[i],
@@ -2462,6 +2629,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     modalGT.afterClose.subscribe((item) => {
       if (item) {
         item.sttDonVi = sttDonVi + 1;
+        item.isSelected = true
         if (tab == 'NHAP') {
           //NHAP
           if (type == 'them') {
