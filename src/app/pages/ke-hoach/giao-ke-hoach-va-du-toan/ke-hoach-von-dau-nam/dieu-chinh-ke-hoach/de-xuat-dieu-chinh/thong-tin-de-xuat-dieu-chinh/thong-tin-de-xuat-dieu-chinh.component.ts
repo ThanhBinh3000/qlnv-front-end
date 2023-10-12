@@ -1928,6 +1928,19 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       : '0';
   }
 
+
+  calculatortkcnMuoi(i: number): string {
+    this.dsMuoiClone[i].tonKhoCuoiNam =
+      this.dsMuoiClone[i].tonKhoDauNam +
+      this.dsMuoiClone[i].soLuongNhap -
+      this.dsMuoiClone[i].soLuongXuat;
+    return this.dsMuoiClone[i].tonKhoCuoiNam
+      ? Intl.NumberFormat('vi-VN').format(
+        (this.dsMuoiClone[i].tonKhoCuoiNam),
+      )
+      : '0';
+  }
+
   onInput(e: Event, data: string): void {
     switch (data) {
       case 'luong-thuc':
