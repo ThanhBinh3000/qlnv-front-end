@@ -42,7 +42,7 @@
     <div class="group-button">
       <h3>DANH SÁCH THÔNG TIN PHÂN BỔ CHO VP CỤC, CHI CỤC</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
@@ -51,7 +51,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)"
-                *ngIf="userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM')">
+                *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
