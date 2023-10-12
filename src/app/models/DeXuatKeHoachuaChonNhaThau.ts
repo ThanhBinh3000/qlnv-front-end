@@ -107,6 +107,7 @@ export class DanhSachGoiThau {
   diaDiemNhap: string;
   donGia: number;
   donGiaVat: number;
+  donGiaTamTinh: number;
   donGiaDx: number;
   goiThau: string;
   id: number;
