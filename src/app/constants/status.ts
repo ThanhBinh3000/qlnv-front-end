@@ -178,3 +178,13 @@ export enum THONG_TIN_BAN_TRUC_TIEP {
   UY_QUYEN = "02",
   BAN_LE = "03"
 }
+
+export enum BAN_TRUC_TIEP {
+  CHAO_GIA = "CG",
+  UY_QUYEN_BAN_LE = "UQBL"
+}
+
+export enum TRUC_TIEP {
+  HOP_DONG = "HĐ",
+  BAN_LE = "BL"
+}
