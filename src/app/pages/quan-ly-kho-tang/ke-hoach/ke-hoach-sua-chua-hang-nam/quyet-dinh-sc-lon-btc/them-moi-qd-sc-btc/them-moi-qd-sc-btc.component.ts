@@ -47,6 +47,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   listDxCuc: any[] = [];
   listTongHop: any[] = [];
   dataTableReq: any[] = [];
+  listDx: any;
 
   constructor(
     private httpClient: HttpClient,
@@ -243,11 +244,17 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       });
       this.fileDinhKem = data.fileDinhKems;
       this.canCuPhapLy = data.canCuPhapLys;
-      this.dataTableReq = data.chiTiets;
-      let listDx = data.chiTietDxs;
-      if (listDx && listDx.length > 0) {
-        this.tablePaTcTren = this.convertListData(listDx?.filter(item => item.tmdt > 15000000000));
-        this.tablePaTcDuoi = this.convertListData(listDx?.filter(item => item.tmdt <= 15000000000));
+      if(this.userService.isTongCuc()){
+        this.dataTableReq = data.chiTiets;
+        this.listDx = data.chiTietDxs;
+      }else {
+        this.dataTableReq = data.chiTiets?.filter(f=>f.maDvi==this.userInfo.MA_DVI);
+        this.listDx = data.chiTietDxs?.filter(f=>f.maDvi==this.userInfo.MA_DVI);
+      }
+
+      if (this.listDx && this.listDx.length > 0) {
+        this.tablePaTcTren = this.convertListData(this.listDx?.filter(item => item.tmdt > 15000000000));
+        this.tablePaTcDuoi = this.convertListData(this.listDx?.filter(item => item.tmdt <= 15000000000));
       }
       this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
       this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
