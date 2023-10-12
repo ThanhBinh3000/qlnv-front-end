@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="98" class="level2-border">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level1">
     <ul nz-menu nzMode="horizontal">
         <li *ngFor="let tab of tabs,let i = index" [nzSelected]="i == 0" nz-menu-item (click)="selectTab(tab.ma)">
             {{tab.giaTri}}

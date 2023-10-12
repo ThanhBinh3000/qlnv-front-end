@@ -194,16 +194,18 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
-                <span style="color: #001CFF;">{{formData.value.tenVthh}}</span>
+                <span style="color: #001CFF;" class="bold">{{formData.value.tenVthh}}</span>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="userService.isCuc()">
+          <div nz-col [nzSpan]="4"
+            *ngIf="!this.formData.value.id && userService.isCuc() || this.formData.value.id && this.formData.value.maDviDx.length === 6">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"></nz-form-label>
+              <nz-form-label [nzNoColon]="true">Tồn kho:</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
-                <span>Tồn kho: <strong>{{formDataDtl.value.tonKhoLoaiVthh|number:globals.numberFormat:globals.locale}}
-                    {{formData.value.donViTinh? " ("+ formData.value.donViTinh+ " )" : ""}}</strong></span>
+                <span style="color: #001CFF" class="bold">
+                  {{formData.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}
+                  {{formData.value.donViTinh? " ("+ formData.value.donViTinh+ " )" : ""}}</span>
               </nz-form-control>
             </nz-form-item>
           </div>

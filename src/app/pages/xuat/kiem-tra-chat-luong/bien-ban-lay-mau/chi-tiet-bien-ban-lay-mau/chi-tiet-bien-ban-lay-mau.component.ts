@@ -105,7 +105,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       ktvBaoQuan: [],
       dviKiemNghiem: [],
       diaDiemLayMau: [],
-      soLuongMau: [],
+      soLuongMau: [0, [Validators.required, Validators.min(1)]],
       niemPhong: [],
       loaiBb: ['LMBGM'],
       type: [],
