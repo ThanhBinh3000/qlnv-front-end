@@ -220,9 +220,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.loadDanhMucHang(),
       ]);
 
-    if (this.isTongCuc()) {
-      await this.getDSDXDC(this.yearNow)
-    }
+    // if (this.isTongCuc()) {
+    //   await this.getDSDXDC(this.yearNow)
+    // }
 
 
 
@@ -575,7 +575,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  async findCanCuByYear(year: number, chiTieuKhNam?) {
+  async findCanCuByYear(year: number) {
     if (year) {
       const body = {
         namKeHoach: year
@@ -2052,8 +2052,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     return endValue.getTime() <= this.formData.controls['ngayKy'].value;
   };
 
-  selectNam() {
-    // this.yearNow = this.formData.get('namKeHoach').value;
+  async selectNam() {
+    this.formData.patchValue({ soQuyetDinhGiaoCuaTc: "", soCongVan: "" })
+    this.yearNow = this.formData.get('namKeHoach').value;
+    if (this.userService.isCuc()) {
+      await this.findCanCuByYearCuc(this.yearNow)
+    }
+    await this.findCanCuByYear(this.yearNow);
     // if (!this.id) {
     //   if ((this.thongTinChiTieuKeHoachNam.cap == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.cap == "2") {
     //     this.findCanCuByYear(this.yearNow);

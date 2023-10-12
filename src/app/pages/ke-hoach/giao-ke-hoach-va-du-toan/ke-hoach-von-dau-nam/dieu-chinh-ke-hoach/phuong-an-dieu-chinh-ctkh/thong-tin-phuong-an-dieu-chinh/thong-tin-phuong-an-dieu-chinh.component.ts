@@ -227,7 +227,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
 
       this.thongTinChiTieuKeHoachNam.cap = this.userInfo.CAP_DVI;
       this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
-
+      await this.getDSDXDC(this.yearNow)
       await this.findCanCuByYear(this.yearNow);
     }
 
@@ -993,7 +993,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   loadThongTinChiTieuKeHoachNam(id: number) {
     this.phuongAnDieuChinhCTKHService
       .getDetail(id)
-      .then((res) => {
+      .then(async (res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data
           console.log('data', data)
@@ -1047,6 +1047,10 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           this.convertListDataVatTuXuat(this.dataVatTuXuat);
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
+
+          if (!this.isViewDetail) {
+            await this.getDSDXDC(this.yearNow)
+          }
 
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1883,13 +1887,16 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     return endValue.getTime() <= this.formData.controls['ngayKy'].value;
   };
 
-  selectNam() {
-    // this.yearNow = this.formData.get('namKeHoach').value;
+  async selectNam() {
+    this.formData.patchValue({ soQuyetDinhGiaoNamTruoc: "" })
+    this.yearNow = this.formData.get('namKeHoach').value;
+    await this.getDSDXDC(this.yearNow)
+    await this.findCanCuByYear(this.yearNow);
     // if (!this.id) {
     //   if ((this.thongTinChiTieuKeHoachNam.capDvi == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.capDvi == "2") {
     //     this.findCanCuByYear(this.yearNow);
     //   }
-    //   this.initDataThemMoi();
+    //   // this.initDataThemMoi();
     // }
   }
 
