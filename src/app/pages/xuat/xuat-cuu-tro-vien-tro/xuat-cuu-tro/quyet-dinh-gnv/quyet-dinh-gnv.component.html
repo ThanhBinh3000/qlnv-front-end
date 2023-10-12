@@ -272,9 +272,9 @@
 <nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [(nzVisible)]="openQdPd"
   (nzOnCancel)="closeQdPdModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an class="modal-content-detail" [idSelected]="idQdPd"
-      [loaiVthh]="loaiVthh" [isView]="true">
-    </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>
+    <app-chi-tiet-quyet-dinh-pd class="modal-content-detail" [idSelected]="idQdPd" [loaiVthh]="loaiVthh"
+      [isView]="true">
+    </app-chi-tiet-quyet-dinh-pd>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeQdPdModal()" class="modal__button--cancel">
@@ -286,8 +286,8 @@
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin-qd-gnv-xuat-hang [id]="id" (showListEvent)="showList()" [isView]="true" [loaiVthh]="loaiVthh">
-    </app-thong-tin-qd-gnv-xuat-hang>
+    <app-chi-tiet-quyet-dinh-gnv [idSelected]="id" (showListEvent)="showList()" [isView]="true">
+    </app-chi-tiet-quyet-dinh-gnv>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeQdGnvModal()" class="modal__button--cancel">

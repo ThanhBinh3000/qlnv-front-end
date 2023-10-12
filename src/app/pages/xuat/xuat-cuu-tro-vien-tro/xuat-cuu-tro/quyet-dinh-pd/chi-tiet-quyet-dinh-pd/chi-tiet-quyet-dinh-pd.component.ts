@@ -41,6 +41,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() loaiXuat: any;
+  @Input() isViewOnModal: boolean;
   radioValue: any;
   cacheData: any[] = [];
   fileDinhKem: Array<FileDinhKem> = [];

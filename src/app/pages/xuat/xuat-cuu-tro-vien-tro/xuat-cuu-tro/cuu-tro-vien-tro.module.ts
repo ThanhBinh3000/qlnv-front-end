@@ -120,7 +120,6 @@ import { ChucNangKiemTraChatLuongComponent } from './chuc-nang-kiem-tra-chat-luo
     QuyetDinhPdComponent,
     QuyetDinhGnvComponent,
     ChiTietQuyetDinhPdComponent,
-    ChiTietQuyetDinhGnvComponent,
   ],
   imports: [
     CommonModule,
