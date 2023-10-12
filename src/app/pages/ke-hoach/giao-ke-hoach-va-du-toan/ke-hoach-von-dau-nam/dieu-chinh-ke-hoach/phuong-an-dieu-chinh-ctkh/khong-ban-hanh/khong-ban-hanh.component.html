@@ -5,11 +5,11 @@
       <div nz-row [nzGutter]="24" class="mg-t-16">
         <div nz-col nzSpan="12">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số Công văn/tờ trình</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số văn bản</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input formControlName="soVanBanKhongBh" [readonly]="true" nz-input nzSize="small"
-                  placeholder="Nhập số công văn/tờ trình" />
+              <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
+                <input formControlName="soVanBanKhongBh" [readonly]="false" nz-input nzSize="small"
+                  placeholder="Nhập số văn bản" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -33,7 +33,7 @@
             <nz-form-label [nzNoColon]="true" class="text-left"> Nội dung văn bản
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea rows="3" formControlName="noiDungVanBanKhongBh" class="search__input" nz-input nzSize="small"
+              <textarea rows="5" formControlName="noiDungVanBanKhongBh" class="search__input" nz-input nzSize="small"
                 placeholder="Nhập text" [readonly]="false"></textarea>
             </nz-form-control>
           </nz-form-item>
@@ -43,7 +43,7 @@
             <nz-form-label [nzNoColon]="true" class="text-left"> Lý do không điều chỉnh
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea rows="3" formControlName="lyDoKhongBh" class="search__input" nz-input nzSize="small"
+              <textarea rows="5" formControlName="lyDoKhongBh" class="search__input" nz-input nzSize="small"
                 placeholder="Nhập text" [readonly]="false"></textarea>
             </nz-form-control>
           </nz-form-item>

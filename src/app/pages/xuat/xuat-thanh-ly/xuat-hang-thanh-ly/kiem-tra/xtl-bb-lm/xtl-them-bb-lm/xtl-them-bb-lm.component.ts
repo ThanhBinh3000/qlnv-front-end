@@ -216,7 +216,9 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
       if (res.data) {
         console.log(res.data);
         res.data.children.forEach( item => {
-          dataDiemKho.push(item.xhTlDanhSachHdr);
+          if(item.phanLoai == this.phanLoai){
+             dataDiemKho.push(item.xhTlDanhSachHdr);
+          }
         })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách quyết định giao nhiệm vụ xuất hàng',

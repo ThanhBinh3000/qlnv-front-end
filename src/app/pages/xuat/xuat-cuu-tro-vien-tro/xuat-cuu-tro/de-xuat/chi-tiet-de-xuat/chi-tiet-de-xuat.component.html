@@ -283,7 +283,7 @@
       <div class="title-card">
         <div class="title-chi-tieu">
           <span></span>
-          <span>Chi tiết đề xuất xuất cứu trợ, viện trợ</span>
+          <span>{{userService.isTongCuc() ?"Chi tiết phương án": "Chi tiết phương án xuất cứu trợ, viện trợ"}}</span>
         </div>
         <div>
           <button type="button" class="btn btn-main" (click)="themPhuongAn(null,0)" *ngIf="!isView">
@@ -313,7 +313,8 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+              <nz-form-label [nzNoColon]="true">{{userService.isTongCuc() ? "Tổng SL giao Cục thực hiện": "Tổng SL đề
+                xuất cứu trợ"}}</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <span
                   style="color: #001CFF"><strong>{{formData.value.tongSoLuongDeXuat|number:globals.numberFormat:globals.locale}}
@@ -346,7 +347,7 @@
                 <th [rowspan]="userService.isTongCuc()? 2 : 1">Địa phương/cơ quan/đơn vị nhận {{genCuuTroVienTro()}}
                 </th>
                 <ng-container *ngIf="userService.isTongCuc()">
-                  <th [colspan]="3">Cục DTNN KV</th>
+                  <th [colspan]="3">Giao Cục DTNN KV thực hiện</th>
                 </ng-container>
                 <ng-container *ngIf="!userService.isTongCuc()">
                   <th>SL xuất cứu trợ đề xuất</th>
@@ -462,7 +463,7 @@
                 <th [rowspan]="2">Loại hàng DTQG</th>
                 <ng-container *ngIf="userService.isTongCuc()">
                   <th [colspan]="3">Chủng loại hàng DTQG</th>
-                  <th [colspan]="2">Cục DTNN KV</th>
+                  <th [colspan]="2">Giao Cục DTNN KV thực hiện</th>
                   <th [rowspan]="2">SL xuất cứu trợ giao Cục thực hiện</th>
                 </ng-container>
                 <ng-container *ngIf="!userService.isTongCuc()">

@@ -362,7 +362,7 @@
               <td>{{item.soDx}}</td>
               <td>{{item.ngayKyDx}}</td>
               <td>{{item.trichYeuDx}}</td>
-              <td>{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+              <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
             </tr>
           </ng-container>
         </tbody>
@@ -380,14 +380,14 @@
                 </div>
               </div>
             </div>
-            <form nzLayout="vertical" nz-form [formGroup]="formDataDefault">
+            <form nzLayout="vertical" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="24">
                 <div nz-col nzSpan="8">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true">Loại hàng hóa</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <nz-input-group>
-                        <input nz-input [readonly]="true" formControlName="loaiVthhPd" />
+                        <input nz-input [readonly]="true" formControlName="tenVthh" />
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
@@ -416,20 +416,20 @@
               <div nz-row [nzGutter]="24">
                 <div nz-col>
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ chuyển sang xuất cấp</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <span style="color: #001CFF">
-                        <strong>{{tongSoLuongDx|number:globals.numberFormat:globals.locale}} kg</strong>
+                      <span style="color: red;">
+                        <strong>{{tongSlXuatCap|number:globals.numberFormat:globals.locale}} kg</strong>
                       </span>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
                 <div nz-col>
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Sl đề xuất cứu trợ chuyển sang xuất cấp</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">Tổng SL gạo phê duyệt giao Cục xuất</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <span style="color: red;">
-                        <strong>{{tongSlXuatCap|number:globals.numberFormat:globals.locale}} kg</strong>
+                      <span style="color: #001CFF">
+                        <strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}} kg</strong>
                       </span>
                     </nz-form-control>
                   </nz-form-item>
@@ -461,7 +461,7 @@
                       <tr>
                         <td>{{i+1}}</td>
                         <td>{{item.noiDungDx}}</td>
-                        <td style="height: 31.5px">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}
+                        <td style="height: 31.5px">{{item.soLuong|number:globals.numberFormat:globals.locale}}
                         </td>
                         <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                         <td>{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
@@ -470,7 +470,7 @@
                     <tr>
                       <td></td>
                       <td class="text-blue">Tổng</td>
-                      <td class="text-blue">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-blue">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
                       <td class="text-blue">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                       <td class="text-blue">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
                     </tr>
@@ -494,14 +494,14 @@
               </div>
             </div>
           </div>
-          <form nzLayout="vertical" nz-form [formGroup]="formDataDefault">
+          <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="24">
               <div nz-col nzSpan="8">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">Loại hàng hóa</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
                     <nz-input-group>
-                      <input nz-input [readonly]="true" formControlName="loaiVthh" />
+                      <input nz-input [readonly]="true" formControlName="tenVthh" />
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -583,7 +583,7 @@
                   <tr>
                     <td></td>
                     <td class="text-blue">Tổng</td>
-                    <td class="text-blue">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-blue">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
                     <td class="text-blue">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                     <td class="text-blue">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
                   </tr>

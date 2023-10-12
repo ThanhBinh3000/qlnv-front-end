@@ -147,20 +147,26 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
         body.id = this.idInput;
         let res = await this.vonPhiService.update(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (isGuiDuyet) {
+          if (!isGuiDuyet) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
             this.pheDuyet();
-          } else
-            this.quayLai();
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
         let res = await this.vonPhiService.create(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (isGuiDuyet) {
+          if (!isGuiDuyet) {
+            this.formData.patchValue({
+              id: res.data.id,
+            });
+            this.idInput = res.data.id;
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          } else {
             this.pheDuyet(res.data.id);
-          } else
-            this.quayLai();
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
