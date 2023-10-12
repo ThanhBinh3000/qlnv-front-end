@@ -219,9 +219,10 @@
                            [nzParser]="globals.parser">
           </nz-input-number>
         </td>
-        <td class="text-right">
+        <td class="text-right" *ngIf="data.apDungTatCa">
           {{ data.vat ? (data.giaQdTcdt * data.vat + data.giaQdTcdt | number : '1.0-1' : 'vi_VN') : ''}}
         </td>
+        <td class="text-right" *ngIf="!data.apDungTatCa"></td>
         <td *ngIf="!(formData.value.loaiDeXuat == '00')"></td>
         <td *ngIf="!(formData.value.loaiDeXuat == '00')"></td>
       </tr>

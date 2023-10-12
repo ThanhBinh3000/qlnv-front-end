@@ -112,10 +112,9 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         loaiDeXuat: data.loaiDeXuat,
       });
       this.dataTable = data.thongTinGiaLt;
-      console.log(this.dataTable,111)
       this.buildTreePagCt();
-      console.log(this.dataTableView,222)
       this.fileDinhKem = data.fileDinhKems;
+      console.log(this.formData.value.loaiGia,1111)
     }
   }
 

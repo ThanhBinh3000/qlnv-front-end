@@ -126,9 +126,9 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Số công văn cần điều chỉnh
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control [nzErrorTip]="error" (click)="openModalSoDx()">
               <nz-input-group nzAddOnAfterIcon="folder-open">
-                <input type="text" nz-input formControlName="soDeXuatDc" [readonly]="true" (click)="openModalSoDx()">
+                <input type="text" nz-input formControlName="soDeXuatDc" [readonly]="true" >
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -646,6 +646,11 @@
                            [isTabNdKhac]="false"
                            [isTableKetQua]="false" [(dataTable)]="dataTableKqGia">
         </app-thong-tin-ksg>
+        <span class="sub-title mb-10">CÁC THÔNG TIN KHÁC</span>
+        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+                           [isTabNdKhac]="true"
+                           [isTableKetQua]="false" [(dataTable)]="dataTableTtThamKhao"
+        ></app-thong-tin-ksg>
       </nz-card>
     </nz-tab>
   </nz-tabset>
