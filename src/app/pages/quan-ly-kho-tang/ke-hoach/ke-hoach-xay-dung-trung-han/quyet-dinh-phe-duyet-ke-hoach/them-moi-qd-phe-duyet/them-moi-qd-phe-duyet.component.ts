@@ -305,7 +305,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         namKetThuc: detailTh.namKetThuc
       });
       this.listDx = detailTh.listDx.dtlList;
-      this.dataTableReq = detailTh.listDx.ctietList;
+      this.dataTableReq = detailTh.ctiets;
       if (this.listDx.length > 0) {
         this.selectRow(this.listDx[0]);
       }

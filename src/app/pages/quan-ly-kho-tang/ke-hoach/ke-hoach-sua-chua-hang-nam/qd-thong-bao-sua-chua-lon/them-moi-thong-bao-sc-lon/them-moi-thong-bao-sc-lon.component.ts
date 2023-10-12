@@ -101,9 +101,10 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
           "limit": 999,
           "page": 0
         },
-        "namKeHoach": this.formData.value.namKeHoach,
+        // "namKeHoach": this.formData.value.namKeHoach,
       }
       let res = await this.qdScBtcService.search(body);
+      console.log(res,"ress")
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.listQdBtc = []
@@ -149,6 +150,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
           this.listToTrinh = this.listToTrinh.filter(item => item.loaiTmdt == 'DUOI15TY' && item.trangThai ==  STATUS.DA_DUYET_LDTC && !item.soQdTcdt);
         }
       } else {
+        console.log(1)
         this.listQdBtc = [];
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
