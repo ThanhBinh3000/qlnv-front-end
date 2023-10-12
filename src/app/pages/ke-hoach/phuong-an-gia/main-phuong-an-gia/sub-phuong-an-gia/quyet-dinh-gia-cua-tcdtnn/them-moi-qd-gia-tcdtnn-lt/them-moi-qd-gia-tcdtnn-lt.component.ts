@@ -84,7 +84,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.maQd = "/QĐ-TCDT"
-    this.getDataDetail(this.idInput)
+    await this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
@@ -112,7 +112,9 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         loaiDeXuat: data.loaiDeXuat,
       });
       this.dataTable = data.thongTinGiaLt;
+      console.log(this.dataTable,111)
       this.buildTreePagCt();
+      console.log(this.dataTableView,222)
       this.fileDinhKem = data.fileDinhKems;
     }
   }

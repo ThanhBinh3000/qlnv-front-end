@@ -7,7 +7,7 @@
           <span>Đề nghị cấp vốn chi dự trữ quốc gia của Bộ/Ngành</span>
         </div>
       </div>
-      <div class='btn-group'>
+      <div class='btn-group ml-2'>
         <button type='button' class='btn btn-sub' (click)='quayLai()'>
           <i class='fa fa-arrow-left'></i>
           <span>Quay lại</span>
@@ -23,7 +23,7 @@
           <i class='icon htvbdh_tcdt_save'></i>
           <span>Lưu</span>
         </button>
-        <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+        <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="preview(previewName)">
           <i class=" icon htvbdh_tcdt_print"></i>
           <span>In/xem trước</span>
         </button>
@@ -97,7 +97,9 @@
       <th width='200px' rowspan='2'>Đơn vị cung cấp hàng</th>
       <th rowspan='2' width='100px'>Số tài khoản</th>
       <th rowspan='2' width='150px'>Ngân hàng</th>
-      <th colspan='2' width='300px'>Tổng tiền</th>
+      <th colspan='2' width='300px'>Tổng tiền các mặt hàng</th>
+      <th colspan='2' width='300px'>Chi phí thực hiện hợp đồng</th>
+      <th colspan='2' width='300px'>Tổng tiền giá trị hợp đồng</th>
       <th rowspan='2' width='150px'>Dự toán được giao</th>
       <th rowspan='2' width='120px'>Tỷ giá hiện tại</th>
       <th colspan='2' width='300px'>Kinh phí đã cấp</th>
@@ -106,6 +108,10 @@
       <th *ngIf='!isView' rowspan='2' width='100px'>Hành động</th>
     </tr>
     <tr>
+      <th class='text-center' width='150px'>Ngoại tệ</th>
+      <th class='text-center' width='150px'>VNĐ</th>
+      <th class='text-center' width='150px'>Ngoại tệ</th>
+      <th class='text-center' width='150px'>VNĐ</th>
       <th class='text-center' width='150px'>Ngoại tệ</th>
       <th class='text-center' width='150px'>VNĐ</th>
       <th class='text-center' width='150px'>Ngoại tệ</th>
@@ -154,20 +160,54 @@
           <input type='text' [readOnly]='rowItem.maHopDong != null' nz-input [(ngModel)]='rowItem.nganHang' />
         </nz-input-group>
       </th>
+
+
       <th>
         <nz-input-group>
           <input class='money-input' [readOnly]="rowItem.loaiTien == '01' || rowItem.maHopDong != null"
                  currencyMask [options]='amount'
-                 (keyup)='calCulateKinhPhiChuaCap()'
-                 (keydown)='calCulateKinhPhiChuaCap()'
-                 [(ngModel)]='rowItem.tongTienNt' />
+                 (keyup)='calCulateTongTienGiaTriHd()'
+                 (keydown)='calCulateTongTienGiaTriHd()'
+                 [(ngModel)]='rowItem.tongTienHangNt' />
         </nz-input-group>
       </th>
       <th>
         <nz-input-group>
           <input class='money-input' currencyMask [options]='amount' [readOnly]='rowItem.maHopDong != null'
-                 (keyup)='calCulateKinhPhiChuaCap()'
-                 (keydown)='calCulateKinhPhiChuaCap()'
+                 (keyup)='calCulateTongTienGiaTriHd()'
+                 (keydown)='calCulateTongTienGiaTriHd()'
+                 [(ngModel)]='rowItem.tongTienHang' />
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <input class='money-input' [readOnly]="rowItem.loaiTien == '01' || rowItem.maHopDong != null"
+                 (keyup)='calCulateTongTienGiaTriHd()'
+                 (keydown)='calCulateTongTienGiaTriHd()'
+                 currencyMask [options]='amount'
+                 [(ngModel)]='rowItem.tienThHdNt' />
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <input class='money-input' currencyMask [options]='amount' [readOnly]='rowItem.maHopDong != null'
+                 (keyup)='calCulateTongTienGiaTriHd()'
+                 (keydown)='calCulateTongTienGiaTriHd()'
+                 [(ngModel)]='rowItem.tienThHd' />
+        </nz-input-group>
+      </th>
+
+
+      <th>
+        <nz-input-group>
+          <input class='money-input' [readOnly]="true"
+                 currencyMask [options]='amount'
+                 [(ngModel)]='rowItem.tongTienNt' />
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
                  [(ngModel)]='rowItem.tongTien' />
         </nz-input-group>
       </th>
@@ -248,6 +288,10 @@
         <td>{{item.dvCungCapHang}}</td>
         <td>{{item.soTaiKhoan}}</td>
         <td>{{item.nganHang}}</td>
+        <td>{{item.tongTienHangNt |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.tongTienHang |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.tienThHdNt |number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{item.tienThHd |number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.tongTienNt |number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.tongTien |number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.duToanDuocGiao |number : '1.0-1' : 'vi_VN'}}</td>
@@ -281,6 +325,40 @@
         </td>
         <td>
           <input type='text' nz-input [readOnly]='true' [(ngModel)]='item.nganHang' />
+        </td>
+        <td>
+          <nz-input-group>
+            <input class='money-input'
+                   currencyMask [options]='amount'
+                   (keyup)='calCulateTongTienGiaTriHd(item)'
+                   (keydown)='calCulateTongTienGiaTriHd(item)'
+                   [(ngModel)]='item.tongTienHangNt' />
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <input class='money-input' currencyMask [options]='amount'
+                   (keyup)='calCulateTongTienGiaTriHd(item)'
+                   (keydown)='calCulateTongTienGiaTriHd(item)'
+                   [(ngModel)]='item.tongTienHang' />
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <input class='money-input'
+                   currencyMask [options]='amount'
+                   (keyup)='calCulateTongTienGiaTriHd(item)'
+                   (keydown)='calCulateTongTienGiaTriHd(item)'
+                   [(ngModel)]='item.tienThHdNt' />
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <input class='money-input' currencyMask [options]='amount'
+                   (keyup)='calCulateTongTienGiaTriHd(item)'
+                   (keydown)='calCulateTongTienGiaTriHd(item)'
+                   [(ngModel)]='item.tienThHd' />
+          </nz-input-group>
         </td>
         <td>
           <nz-input-group>
@@ -365,6 +443,10 @@
       </ng-template>
     </tr>
     <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>

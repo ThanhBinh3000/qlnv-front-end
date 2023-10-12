@@ -230,6 +230,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
 
       await this.findCanCuByYear(this.yearNow);
     }
+
   }
 
   isCuc() {
@@ -240,7 +241,58 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     return this.userService.isTongCuc()
   }
 
+  async chiTieuTCDT(year: number) {
+    if (year) {
+      const body = {
+        namKeHoach: year
+      }
+
+      let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachTongCucGiao(body)
+      if (res.msg == MESSAGE.SUCCESS) {
+        console.log("loadThongTinChiTieuKeHoachTongCucGiao", res)
+        let data = res.data
+
+        if (data) {
+          this.dataQdTCDTGiaoCuc = {};
+          this.formData.patchValue({
+            soQuyetDinhGiaoNamTruoc: data.soQuyetDinh,
+            quyetDinhGiaoNamTruocId: data.id
+          });
+          // Lấy kế hoạch tổng cục giao cho cục đang login
+          let dataLuongThuc = data.khLuongThuc;
+          const ntnThoc = dataLuongThuc.reduce((prev, cur) => prev + cur.ntnThoc, 0)
+          const ntnGao = dataLuongThuc.reduce((prev, cur) => prev + cur.ntnGao, 0)
+          const xtnTongThoc = dataLuongThuc.reduce((prev, cur) => prev + cur.xtnTongThoc, 0)
+          const xtnTongGao = dataLuongThuc.reduce((prev, cur) => prev + cur.xtnTongGao, 0)
+
+          let dataMuoi = data.khMuoiDuTru
+          const tonKhoDauNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoDauNam, 0)
+          const nhapTrongNam = dataMuoi.reduce((prev, cur) => prev + cur.nhapTrongNam, 0)
+          const xuatTrongNamMuoi = dataMuoi.reduce((prev, cur) => prev + cur.xuatTrongNamMuoi, 0)
+          const tonKhoCuoiNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoCuoiNam, 0)
+
+          this.dataQdTCDTGiaoCuc = {
+            "ltThocMua": ntnThoc,
+            "ltGaoMua": ntnGao,
+            "ltThocXuat": xtnTongThoc,
+            "ltGaoXuat": xtnTongGao,
+            tonKhoDauNammuoi: tonKhoDauNam,
+            nhapTrongNamMuoi: nhapTrongNam,
+            xuatTrongNamMuoi: xuatTrongNamMuoi,
+            tonKhoCuoiNamMuoi: tonKhoCuoiNam,
+          }
+
+
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Tổng Cục")
+      }
+    }
+
+  }
+
   async onChangeDX(values) {
+
     if (this.isViewDetail) return
     const dsDX = this.dsDeXuatCuc.filter(item => values.includes(item.soDeXuat));
     if (dsDX.length > 0) {
@@ -316,40 +368,44 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         dcKeHoachNamLtTtDtl = [...tkdnGao, ...tkdnThoc, ...ntnGao, ...ntnThoc, ...xtnGao, ...xtnThoc, ...tkcnGao, ...tkcnThoc]
 
         const iKHLT = this.dsKeHoachLuongThucClone.findIndex((item) => item.maDvi === dx.maDvi)
-        this.dsKeHoachLuongThucClone[iKHLT].tkdnGao = tkdnGao
-        this.dsKeHoachLuongThucClone[iKHLT].tkdnThoc = tkdnThoc
-        this.dsKeHoachLuongThucClone[iKHLT].ntnGao = ntnGao
-        this.dsKeHoachLuongThucClone[iKHLT].ntnThoc = ntnThoc
-        this.dsKeHoachLuongThucClone[iKHLT].xtnGao = xtnGao
-        this.dsKeHoachLuongThucClone[iKHLT].xtnThoc = xtnThoc
-        this.dsKeHoachLuongThucClone[iKHLT].tkcnGao = tkcnGao
-        this.dsKeHoachLuongThucClone[iKHLT].tkcnThoc = tkcnThoc
-        this.dsKeHoachLuongThucClone[iKHLT].dcKeHoachNamLtTtDtl = dcKeHoachNamLtTtDtl
-        this.dsKeHoachLuongThucClone[iKHLT].tongSoCuoiNam = lt.tongSoCuoiNam
-        this.dsKeHoachLuongThucClone[iKHLT].tongSoTon = lt.tongSoTon
-        this.dsKeHoachLuongThucClone[iKHLT].tongGaoTon = lt.tongGaoTon
-        this.dsKeHoachLuongThucClone[iKHLT].tongThocTon = lt.tongThocTon
-        this.dsKeHoachLuongThucClone[iKHLT].tongSoXuat = lt.tongSoXuat
-        this.dsKeHoachLuongThucClone[iKHLT].tongGaoXuat = lt.tongGaoXuat
-        this.dsKeHoachLuongThucClone[iKHLT].tongThocXuat = lt.tongThocXuat
-        this.dsKeHoachLuongThucClone[iKHLT].tongSoNhap = lt.tongSoNhap
-        this.dsKeHoachLuongThucClone[iKHLT].isSelected = true
+        if (iKHLT >= 0) {
+          this.dsKeHoachLuongThucClone[iKHLT].tkdnGao = tkdnGao
+          this.dsKeHoachLuongThucClone[iKHLT].tkdnThoc = tkdnThoc
+          this.dsKeHoachLuongThucClone[iKHLT].ntnGao = ntnGao
+          this.dsKeHoachLuongThucClone[iKHLT].ntnThoc = ntnThoc
+          this.dsKeHoachLuongThucClone[iKHLT].xtnGao = xtnGao
+          this.dsKeHoachLuongThucClone[iKHLT].xtnThoc = xtnThoc
+          this.dsKeHoachLuongThucClone[iKHLT].tkcnGao = tkcnGao
+          this.dsKeHoachLuongThucClone[iKHLT].tkcnThoc = tkcnThoc
+          this.dsKeHoachLuongThucClone[iKHLT].dcKeHoachNamLtTtDtl = dcKeHoachNamLtTtDtl
+          this.dsKeHoachLuongThucClone[iKHLT].tongSoCuoiNam = lt.tongSoCuoiNam
+          this.dsKeHoachLuongThucClone[iKHLT].tongSoTon = lt.tongSoTon
+          this.dsKeHoachLuongThucClone[iKHLT].tongGaoTon = lt.tongGaoTon
+          this.dsKeHoachLuongThucClone[iKHLT].tongThocTon = lt.tongThocTon
+          this.dsKeHoachLuongThucClone[iKHLT].tongSoXuat = lt.tongSoXuat
+          this.dsKeHoachLuongThucClone[iKHLT].tongGaoXuat = lt.tongGaoXuat
+          this.dsKeHoachLuongThucClone[iKHLT].tongThocXuat = lt.tongThocXuat
+          this.dsKeHoachLuongThucClone[iKHLT].tongSoNhap = lt.tongSoNhap
+          this.dsKeHoachLuongThucClone[iKHLT].isSelected = true
 
-        this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
+          this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
 
-        this.sumRowDetailLuongThuc();
+          this.sumRowDetailLuongThuc();
+        }
 
         const iKHM = this.dsMuoiClone.findIndex((item) => item.maDvi === dx.maDvi)
-        const khmuoi = dx.dcKeHoachNamMuoiDtl[0]
-        this.dsMuoiClone[iKHM].soLuongNhap = khmuoi.soLuongNhap
-        this.dsMuoiClone[iKHM].soLuongXuat = khmuoi.soLuongXuat
-        this.dsMuoiClone[iKHM].tonKhoCuoiNam = khmuoi.tonKhoCuoiNam
-        this.dsMuoiClone[iKHM].tonKhoDauNam = khmuoi.tonKhoDauNam
-        this.dsMuoiClone[iKHM].isSelected = true
+        if (iKHM >= 0) {
+          const khmuoi = dx.dcKeHoachNamMuoiDtl[0]
+          this.dsMuoiClone[iKHM].soLuongNhap = khmuoi.soLuongNhap
+          this.dsMuoiClone[iKHM].soLuongXuat = khmuoi.soLuongXuat
+          this.dsMuoiClone[iKHM].tonKhoCuoiNam = khmuoi.tonKhoCuoiNam
+          this.dsMuoiClone[iKHM].tonKhoDauNam = khmuoi.tonKhoDauNam
+          this.dsMuoiClone[iKHM].isSelected = true
 
-        this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
-        this.sumRowDetailMuoi()
-
+          this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
+          this.sumRowDetailMuoi()
+        }
+        // debugger
         console.log("this.dataVatTuNhap", this.dataVatTuNhap)
         this.dataVatTuNhap = this.dataVatTuNhap.filter((item) => item.maDvi !== dx.maDvi)
         const dsVTN = dx.dcKeHoachNamVatTuDtl.filter((item) => item.loai == "NHAP").map((vattu) => {
@@ -362,7 +418,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           }
         })
         console.log("dsVTN", dsVTN)
-        this.dataVatTuNhap.concat(dsVTN)
+        this.dataVatTuNhap = [...dsVTN, ...this.dataVatTuNhap]
 
         console.log("this.dataVatTuXuat", this.dataVatTuXuat)
         const dsVTX = dx.dcKeHoachNamVatTuDtl.filter((item) => item.loai == "XUAT").map((vattu) => {
@@ -376,7 +432,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         })
         console.log("dsVTX", dsVTX)
         this.dataVatTuXuat = this.dataVatTuXuat.filter((item) => item.maDvi !== dx.maDvi)
-        this.dataVatTuXuat.concat(dsVTX)
+        this.dataVatTuXuat = [...dsVTX, ...this.dataVatTuXuat]
 
         this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
         this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
@@ -448,15 +504,22 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           const tonKhoCuoiNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoCuoiNam, 0)
 
           this.dataQdTCDTGiaoCuc = {
-            "ltThocMua": ntnThoc,
-            "ltGaoMua": ntnGao,
-            "ltThocXuat": xtnTongThoc,
-            "ltGaoXuat": xtnTongGao,
+            // "ltThocMua": ntnThoc,
+            // "ltGaoMua": ntnGao,
+            // "ltThocXuat": xtnTongThoc,
+            // "ltGaoXuat": xtnTongGao,
             tonKhoDauNammuoi: tonKhoDauNam,
             nhapTrongNamMuoi: nhapTrongNam,
             xuatTrongNamMuoi: xuatTrongNamMuoi,
             tonKhoCuoiNamMuoi: tonKhoCuoiNam,
           }
+
+          this.formData.patchValue({
+            slThocNhap: ntnThoc,
+            slGaoNhap: ntnGao,
+            slTongXuatThoc: xtnTongThoc,
+            slTongXuatGao: xtnTongGao
+          })
 
           this.dsKeHoachLuongThucClone = dataLuongThuc.map((khlt) => {
 
@@ -713,6 +776,10 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       dcKeHoachNamMuoiDtl: [],
       dcKeHoachNamVatTuDtl: [],
       lyDoTuChoi: [],
+      slThocNhap: [],
+      slGaoNhap: [],
+      slTongXuatThoc: [],
+      slTongXuatGao: []
     });
     this.formData.markAsPristine();
   }
@@ -1043,6 +1110,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           ).value();
         return {
           tenDvi: key,
+          isSelected: value[0].isSelected,
           maDvi: value[0].maDvi,
           donViId: value[0].donViId,
           dataChild: rs,
@@ -1103,6 +1171,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           ).value();
         return {
           tenDvi: key,
+          isSelected: value[0].isSelected,
           maDvi: value[0].maDvi,
           donViId: value[0].donViId,
           dataChild: rs,
