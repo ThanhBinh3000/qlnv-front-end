@@ -1271,7 +1271,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.patchValue(data)
           this.thongTinChiTieuKeHoachNam = data;
           this.fileDinhKems = data.fileDinhKems
-          let dsLT = this.thongTinChiTieuKeHoachNam.dcKeHoachNamLtDtl.map((lt) => {
+
+          const maDV = this.userInfo.MA_DVI
+          const dsKHLT = this.isTongCuc() ? this.thongTinChiTieuKeHoachNam.dcKeHoachNamLtDtl : this.thongTinChiTieuKeHoachNam.dcKeHoachNamLtDtl.filter((item) => item.maDvi == maDV)
+          let dsLT = dsKHLT.map((lt) => {
             const dcKeHoachNamLtTtDtl = lt.dcKeHoachNamLtTtDtl
             const tkdnGao = dcKeHoachNamLtTtDtl.filter((dtl) => dtl.type === "01").sort((item1, item2) => {
               if (item1.nam > item2.nam) {
@@ -1302,14 +1305,21 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.dsKeHoachLuongThucClone = cloneDeep(dsLT);
           this.sumRowDetailLuongThuc();
 
+          const dcKeHoachNamMuoiDtl = this.isTongCuc() ? this.thongTinChiTieuKeHoachNam.dcKeHoachNamMuoiDtl : this.thongTinChiTieuKeHoachNam.dcKeHoachNamMuoiDtll.filter((item) => item.maDvi == maDV)
           this.dsMuoiClone = cloneDeep(
-            this.thongTinChiTieuKeHoachNam.dcKeHoachNamMuoiDtl,
+            dcKeHoachNamMuoiDtl
           );
           this.sumRowDetailMuoi();
 
           // Xử lý vật tư to tree
           this.dataVatTuNhap = this.thongTinChiTieuKeHoachNam.dcKeHoachNamVatTuDtl.filter((vattu) => vattu.loai == "NHAP")
           this.dataVatTuXuat = this.thongTinChiTieuKeHoachNam.dcKeHoachNamVatTuDtl.filter((vattu) => vattu.loai == "XUAT")
+
+          if (this.isCuc()) {
+            this.dataVatTuNhap = this.dataVatTuNhap.filter((item) => item.maDvi == maDV)
+            this.dataVatTuXuat = this.dataVatTuXuat.filter((item) => item.maDvi == maDV)
+          }
+
           this.convertListDataVatTuNhap(this.dataVatTuNhap);
           this.convertListDataVatTuXuat(this.dataVatTuXuat);
           this.expandAll(this.dataVatTuNhapTree);
@@ -1342,7 +1352,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           ).value();
         return {
           tenDvi: key,
-          isSelected: value[0]?.isSelected || value[1]?.isSelected || value[2]?.isSelected,
+          thayDoi: value[0]?.thayDoi || value[1]?.thayDoi || value[2]?.thayDoi,
           maDvi: value[0].maDvi,
           donViId: value[0].donViId,
           dataChild: rs,
@@ -1403,7 +1413,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           ).value();
         return {
           tenDvi: key,
-          isSelected: value[0]?.isSelected || value[1]?.isSelected || value[2]?.isSelected,
+          thayDoi: value[0]?.thayDoi || value[1]?.thayDoi || value[2]?.thayDoi,
           maDvi: value[0].maDvi,
           donViId: value[0].donViId,
           dataChild: rs,
@@ -2078,7 +2088,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   saveEdit(i: number): void {
     this.dsKeHoachLuongThucClone[i].isEdit = false;
-    this.dsKeHoachLuongThucClone[i].isSelected = true;
+    this.dsKeHoachLuongThucClone[i].thayDoi = true;
     // this.dsKeHoachLuongThucClone[i].tkcnTongGao = this.dsKeHoachLuongThucClone[i].tkdnTongGao + (this.dsKeHoachLuongThucClone[i].ntnGao) - this.dsKeHoachLuongThucClone[i].xtnTongGao;
     // this.dsKeHoachLuongThucClone[i].tkcnTongThoc = this.dsKeHoachLuongThucClone[i].tkdnTongThoc + (this.dsKeHoachLuongThucClone[i].ntnThoc) - this.dsKeHoachLuongThucClone[i].xtnTongThoc;
     // this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc = (this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2) + this.dsKeHoachLuongThucClone[i].tkcnTongThoc;
@@ -2091,6 +2101,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   calculatorxtnTongThoc(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true;
     this.dsKeHoachLuongThucClone[i].tongThocXuat = this.dsKeHoachLuongThucClone[i].xtnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.dsKeHoachLuongThucClone[i].tongThocXuat
       ? Intl.NumberFormat('vi-VN').format(
@@ -2100,6 +2111,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   calculatorxtnTongGao(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true;
     this.dsKeHoachLuongThucClone[i].tongGaoXuat = this.dsKeHoachLuongThucClone[i].xtnGao.reduce((a, b) => a + +b.soLuong, 0);
     return this.dsKeHoachLuongThucClone[i].tongGaoXuat
       ? Intl.NumberFormat('vi-VN').format(
@@ -2109,6 +2121,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   calculatortkcnTongThoc(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true;
     this.dsKeHoachLuongThucClone[i].tkcnThoc[0].soLuong =
       (this.dsKeHoachLuongThucClone[i].tongThocTon) + this.dsKeHoachLuongThucClone[i].ntnThoc[0].soLuong - this.dsKeHoachLuongThucClone[i].tongThocXuat;
 
@@ -2120,6 +2133,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   calculatortkcnTongGao(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true;
     this.dsKeHoachLuongThucClone[i].tkcnGao[0].soLuong =
       (this.dsKeHoachLuongThucClone[i].tongGaoTon) +
       this.dsKeHoachLuongThucClone[i].ntnGao[0].soLuong -
@@ -2143,6 +2157,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   calculatortkcnTongSoQuyThoc(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true;
     this.dsKeHoachLuongThucClone[i].tongSoCuoiNam =
       this.dsKeHoachLuongThucClone[i].tkcnThoc[0].soLuong +
       this.dsKeHoachLuongThucClone[i].tkcnGao[0].soLuong * 2;
@@ -2155,6 +2170,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   calculatorntnTongSoQuyThoc(i: number): string {
+    this.dsKeHoachLuongThucClone[i].thayDoi = true;
     this.dsKeHoachLuongThucClone[i].tongSoNhap =
       +this.dsKeHoachLuongThucClone[i].ntnThoc[0].soLuong +
       +this.dsKeHoachLuongThucClone[i].ntnGao[0].soLuong * 2;
@@ -2165,6 +2181,19 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       : '0';
 
 
+  }
+
+  calculatortkcnMuoi(i: number): string {
+    this.dsMuoiClone[i].thayDoi = true
+    this.dsMuoiClone[i].tonKhoCuoiNam =
+      this.dsMuoiClone[i].tonKhoDauNam +
+      this.dsMuoiClone[i].soLuongNhap -
+      this.dsMuoiClone[i].soLuongXuat;
+    return this.dsMuoiClone[i].tonKhoCuoiNam
+      ? Intl.NumberFormat('vi-VN').format(
+        (this.dsMuoiClone[i].tonKhoCuoiNam),
+      )
+      : '0';
   }
 
   onInput(e: Event, data: string): void {
@@ -2229,13 +2258,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     let totalNtnThoc, totalNtnGao = 0;
     let checkFlag = true;
     if (this.sumTotalKhDuTruLuongThuc.ntnThoc !== this.formData.value.slThocNhap && isGuiDuyet) {
-      this.notification.error(MESSAGE.ERROR, "Số thóc nhập khác chỉ tiêu của TCDT");
+      this.notification.error(MESSAGE.ERROR, "Số thóc nhập khác chỉ tiêu mua thóc của TCDT giao");
       checkFlag = false
       return
     }
 
     if (this.sumTotalKhDuTruLuongThuc.ntnGao !== this.formData.value.slGaoNhap && isGuiDuyet) {
-      this.notification.error(MESSAGE.ERROR, "Số gạo nhập khác chỉ tiêu của TCDT");
+      this.notification.error(MESSAGE.ERROR, "Số gạo nhập khác chỉ tiêu mua gạo của TCDT giao");
       checkFlag = false
       return
     }
@@ -2383,7 +2412,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   saveEditMuoi(i: number) {
     this.dsMuoiClone[i].isEdit = false;
-    this.dsMuoiClone[i].isSelected = true;
+    this.dsMuoiClone[i].thayDoi = true;
     // Object.assign(
     //   this.thongTinChiTieuKeHoachNam.khMuoiDuTru[i],
     //   this.dsMuoiClone[i],
@@ -2629,7 +2658,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     modalGT.afterClose.subscribe((item) => {
       if (item) {
         item.sttDonVi = sttDonVi + 1;
-        item.isSelected = true
+        item.thayDoi = true
         if (tab == 'NHAP') {
           //NHAP
           if (type == 'them') {
