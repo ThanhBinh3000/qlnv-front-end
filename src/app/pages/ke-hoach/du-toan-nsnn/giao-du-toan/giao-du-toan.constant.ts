@@ -164,7 +164,7 @@ export const TAB_LIST = [
         code: 'tongHopBaoCaoCapDuoi',
         status: true,
         role: [
-            Roles.GSTC.XEM_BC_TONGHOP,
+            Roles.GSTC.TONGHOP_BC,
         ],
         isSelected: false,
     },
