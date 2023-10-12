@@ -22,7 +22,9 @@ import {
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
-import {log} from "ng-zorro-antd/core/logger";
+import {
+  KtKhSuaChuaBtcService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 
 @Component({
   selector: "app-them-moi-sc-tcdt",
@@ -56,7 +58,10 @@ export class ThemMoiScTcdtComponent implements OnInit {
   STATUS = STATUS;
   maTt: string;
   soQd: string;
-
+  idTongHop: number;
+  quyetDinh = false;
+  hidden = false;
+  @Output() tabFocus = new EventEmitter<object>();
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -67,18 +72,19 @@ export class ThemMoiScTcdtComponent implements OnInit {
     private tongHopDxScLon: TongHopDxScLonService,
     private fb: FormBuilder,
     private modal: NzModalService,
-    private helperService: HelperService
+    private helperService: HelperService,
+  private qdScBtcService: KtKhSuaChuaBtcService,
   ) {
     this.formData = this.fb.group({
       id: [null],
-      ngayTaoTt: [null],
+      ngayTaoTt: [dayjs().format('YYYY-MM-DD')],
       tgTongHop: [null],
       namKeHoach: [null],
       noiDung: [null],
       maToTrinh: [null],
       soQuyetDinh: [null],
       ngayKyQd: [null],
-      trangThai: ["78"],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ["Đang nhập dữ liệu"],
       lyDoTuChoi: [],
       loaiTmdt: ['DUOI15TY']
@@ -147,6 +153,19 @@ export class ThemMoiScTcdtComponent implements OnInit {
       }
       this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
       this.dataTableDuoi= this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
+
+      let body = {
+        maDvi: this.userInfo.MA_DVI,
+        soTt : data.soQuyetDinh,
+        paggingReq: {
+          "limit": 999,
+          "page": 0
+        }
+      };
+      let dataQd = await this.qdScBtcService.search(body);
+      if (dataQd.data.content && dataQd.data.content.length>0){
+        this.hidden = !this.hidden;
+      }
     }
   }
 
@@ -157,7 +176,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   setValidators() {
     this.helperService.removeValidators(this.formData);
-    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
+    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
       this.formData.controls["maToTrinh"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoTt"].setValidators([Validators.required]);
     }
@@ -170,7 +189,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
-    if (isGuiDuyet && this.idInput > 0) {
+    if (isGuiDuyet ) {
       this.setValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);
@@ -537,5 +556,12 @@ export class ThemMoiScTcdtComponent implements OnInit {
       }
     });
   }
-
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+  openQdPheDuyet(id, b: boolean) {
+    this.idTongHop=id
+    this.quyetDinh = !this.quyetDinh;
+    this.emitTab({tab: "qdbtc", id: this.idTongHop,quyetDinh:this.quyetDinh});
+  }
 }

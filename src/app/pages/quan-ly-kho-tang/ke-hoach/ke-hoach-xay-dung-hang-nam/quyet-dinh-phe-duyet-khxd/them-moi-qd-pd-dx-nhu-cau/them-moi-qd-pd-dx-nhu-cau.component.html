@@ -110,7 +110,7 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="canCuPhapLys"></file-list>
+              <file-list [data]="canCuPhapLys" [isViewDetail]="isViewDetail"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -120,7 +120,7 @@
               File đính kèm QĐ phê duyệt của BTC
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKems"></file-list>
+              <file-list [data]="fileDinhKems" [isViewDetail]="isViewDetail"></file-list>
             </div>
           </nz-form-item>
         </div>

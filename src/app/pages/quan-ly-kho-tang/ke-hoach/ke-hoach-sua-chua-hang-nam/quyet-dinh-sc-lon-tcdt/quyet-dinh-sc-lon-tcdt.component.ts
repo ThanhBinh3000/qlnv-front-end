@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -25,6 +25,7 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+  @Output() tabFocus: EventEmitter<number> = new EventEmitter<number>();
 
   listTrangThai: any[] = [
     {ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu'},
@@ -159,4 +160,13 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
       }
     }
   };
+
+  receivedTab(tab) {
+    if (tab) {
+      this.emitTab(tab);
+    }
+  }
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
 }

@@ -11,7 +11,6 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
-import dayjs from "dayjs";
 import {DialogQdScBtcComponent} from "./dialog-qd-sc-btc/dialog-qd-sc-btc.component";
 import {STATUS} from "../../../../../../constants/status";
 import {
@@ -35,6 +34,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   @Input() isViewDetail: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
+  @Input() idTongHop: number;
   maQd: string;
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
@@ -56,7 +56,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private qdScBtcService: KtKhSuaChuaBtcService,
     private dexuatService: DeXuatScLonService,
-    private tongHopDxScLon : TongHopDxScLonService
+    private tongHopDxScLon: TongHopDxScLonService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdScBtcService);
     super.ngOnInit();
@@ -65,12 +65,12 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       maDvi: [null],
       tenDvi: [null],
       soQuyetDinh: [null, Validators.required],
-      namKeHoach: [dayjs().get("year"), Validators.required],
-      trichYeu: [null],
+      namKeHoach: [null, Validators.required],
+      trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       ngayTrinhBtc: [null, Validators.required],
       maTh: [null],
-      soTt: [null],
+      soTt: [null, Validators.required],
       trangThai: ["78"],
       tenTrangThai: ["Đang nhập dữ liệu"],
       type: ["00"]
@@ -85,8 +85,11 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       if (this.idInput > 0) {
         await this.getDataDetail(this.idInput);
       } else {
-        this.loadDxCuc();
-        this.loadListTh();
+        await this.loadDxCuc();
+        await this.loadListTh();
+        if (this.idTongHop && this.idTongHop > 0) {
+          await this.changSoTh(this.idTongHop);
+        }
       }
     } catch (e) {
       console.log("error: ", e);
@@ -133,7 +136,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "namKeHoach" : this.formData.value.namKeHoach,
+        // "namKeHoach" : this.formData.value.namKeHoach,
         "paggingReq": {
           "limit": 999,
           "page": 0
@@ -182,6 +185,11 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
             this.dataTableDuoi = cloneDeep(this.tablePaTcDuoi);
           }
         }
+        if (this.idTongHop && this.idTongHop > 0) {
+          this.formData.patchValue({
+            soTt: res.data.soQuyetDinh
+          });
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -224,13 +232,12 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   }
 
 
-
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.qdScBtcService.getDetail(id);
       const data = res.data;
       this.maQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
-      this.helperService.bidingDataInFormGroup(this.formData, data);
+        this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : ""
       });
@@ -260,7 +267,6 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     body.fileDinhKems = this.fileDinhKem;
     body.canCuPhapLys = this.canCuPhapLy;
     body.chiTiets = this.dataTableReq;
-    console.log(this.dataTableReq,222)
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -342,7 +348,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: "1200px",
-      nzStyle: { top: "100px" },
+      nzStyle: {top: "100px"},
       nzFooter: null,
       nzComponentParams: {
         dataTable: list && list.dataChild ? list.dataChild : [],
@@ -384,11 +390,12 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         try {
           const idx = this.dataTableReq.findIndex(it => it.id == id);
           if (idx) {
-            this.dataTableReq.splice(idx,1);
+            this.dataTableReq.splice(idx, 1);
             this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
-            this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));          }
+            this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
+          }
         } catch (e) {
-;          console.log("error", e);
+          ;console.log("error", e);
         }
       }
     });

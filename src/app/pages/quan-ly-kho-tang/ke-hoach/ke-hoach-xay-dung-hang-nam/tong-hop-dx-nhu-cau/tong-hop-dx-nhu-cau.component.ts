@@ -398,7 +398,6 @@ export class TongHopDxNhuCauComponent implements OnInit {
     }
   }
   emitTab(tab) {
-    console.log(tab,123)
     this.tabFocus.emit(tab);
   }
 }

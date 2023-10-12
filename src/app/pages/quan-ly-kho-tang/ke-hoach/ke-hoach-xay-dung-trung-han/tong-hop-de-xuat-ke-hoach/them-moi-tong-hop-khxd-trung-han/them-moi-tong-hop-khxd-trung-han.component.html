@@ -2,11 +2,11 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span *ngIf="isTongHop"
+        <span *ngIf="isTongHop && formData.value.id != null"
               [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDTC ?  'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-        <span *ngIf="!isTongHop"></span>
+        <span *ngIf="!(isTongHop && formData.value.id != null)"></span>
         <span>TỔNG HỢP PHƯƠNG ÁN ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</span>
       </div>
     </div>
@@ -226,7 +226,7 @@
                   Căn cứ pháp lý
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isViewDetail" [data]="canCuPhapLys"></file-list>
+                  <file-list [disabled]="isViewDetail" [isViewDetail]="isViewDetail" [data]="canCuPhapLys"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -236,7 +236,7 @@
                   File đính kèm QĐ đã ký của Tổng cục DTNN
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isViewDetail" [data]="fileDinhKems"></file-list>
+                  <file-list [disabled]="isViewDetail" [isViewDetail]="isViewDetail" [data]="fileDinhKems"></file-list>
                 </div>
               </nz-form-item>
             </div>
