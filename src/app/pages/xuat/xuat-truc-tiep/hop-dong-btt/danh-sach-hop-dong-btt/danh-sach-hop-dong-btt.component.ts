@@ -20,9 +20,9 @@ import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 })
 export class DanhSachHopDongBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isQuanLy: boolean;
   isAddNew: boolean;
-  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
 
@@ -104,7 +104,6 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
@@ -112,15 +111,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     })
   }
 
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([
-      this.timKiem(),
-      this.search()
-    ]);
-  }
-
-  goDetail(id: number, boolean?: boolean) {
+  redirectDetail(id: number, boolean?: boolean) {
     this.idSelected = id;
     this.isDetail = true;
     this.isQuanLy = boolean;

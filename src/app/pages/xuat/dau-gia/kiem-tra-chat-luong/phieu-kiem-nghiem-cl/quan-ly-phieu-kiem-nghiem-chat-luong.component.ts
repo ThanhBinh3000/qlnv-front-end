@@ -12,7 +12,6 @@ import {
 import * as uuid from "uuid";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import _ from 'lodash';
-import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -177,11 +176,11 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
     return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
-  disabledStartngayKnghiem = (startValue: Date): boolean => {
+  disabledStartngayKnghiemTu = (startValue: Date): boolean => {
     return this.isInvalidDateRange(startValue, this.formData.value.ngayKiemNghiemMauDen, 'ngayKiemNghiemMau');
   };
 
-  disabledEndngayKnghiem = (endValue: Date): boolean => {
+  disabledStartngayKnghiemDen = (endValue: Date): boolean => {
     return this.isInvalidDateRange(endValue, this.formData.value.ngayKiemNghiemMauDen, 'ngayKiemNghiemMau');
   };
 

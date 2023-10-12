@@ -12,7 +12,6 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import _ from 'lodash';
-import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-table-bien-ban-lay-mau',
@@ -175,11 +174,11 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   };
 
   disabledNgayLayMauTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQd, 'ngayKyQd');
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayLayMauTu, 'ngayLayMau');
   };
 
   disabledNgayLayMauDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdTu, 'ngayKyQd');
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayLayMauTu, 'ngayLayMau');
   };
 
   isActionAllowed(action: string, data: any): boolean {

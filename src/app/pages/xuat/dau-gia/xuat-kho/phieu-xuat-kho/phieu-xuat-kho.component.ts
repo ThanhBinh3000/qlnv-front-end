@@ -10,7 +10,6 @@ import * as uuid from "uuid";
 import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
 import _ from 'lodash';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-bdg-phieu-xuat-kho',
@@ -191,11 +190,11 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
-  disabledStartNgayXk = (startValue: Date): boolean => {
+  disabledStartNgayXkTu = (startValue: Date): boolean => {
     return this.isInvalidDateRange(startValue, this.formData.value.ngayLapPhieuTu, 'ngayLapPhieu');
   };
 
-  disabledEndNgayXk = (endValue: Date): boolean => {
+  disabledStartNgayXkDen = (endValue: Date): boolean => {
     return this.isInvalidDateRange(endValue, this.formData.value.ngayLapPhieuDen, 'ngayLapPhieu');
   };
 
@@ -249,4 +248,3 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     }
   }
 }
-

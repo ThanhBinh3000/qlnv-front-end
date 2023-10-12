@@ -9,9 +9,8 @@ import {HttpClient} from '@angular/common/http';
 import {
   QuyetDinhNvXuatBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
-import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-qd-giao-nv-xuat-btt',
@@ -21,10 +20,15 @@ import {STATUS} from "../../../../../constants/status";
 export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() listVthh: any[] = [];
-  listClVthh: any[] = [];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
+  listLoaiHangHoa: any[] = [];
   isView = false;
-  idHd: number = 0;
-  isViewHd: boolean = false;
+  idHopDong: number = 0;
+  isViewHopDong: boolean = false;
+  idTinhKho: number = 0;
+  isViewTinhKho: boolean = false;
+  idHaoDoi: number = 0;
+  isViewHaoDoi: boolean = false
   listTrangThai: any = [];
   listTrangThaiXh: any = [];
 
@@ -124,7 +128,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       loaiVthh: this.loaiVthh,
     })
     if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-     await this.loadDsVthh();
+      await this.loadDsVthh();
     }
   }
 
@@ -136,7 +140,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   async loadDsVthh() {
     const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg === MESSAGE.SUCCESS) {
-      this.listClVthh = res.data?.filter(x => x.ma.length === 4) || [];
+      this.listLoaiHangHoa = res.data?.filter(x => x.ma.length === 4) || [];
     }
   }
 
@@ -146,14 +150,42 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     this.isView = isView;
   }
 
-  openModalHd(id: number) {
-    this.idHd = id;
-    this.isViewHd = true;
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'hopDong' :
+        this.idHopDong = id;
+        this.isViewHopDong = true;
+        break;
+      case 'tinhKho' :
+        this.idTinhKho = id;
+        this.isViewTinhKho = true;
+        break;
+      case 'haoDoi' :
+        this.idHaoDoi = id;
+        this.isViewHaoDoi = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closeModalHd() {
-    this.idHd = null;
-    this.isViewHd = false;
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'hopDong' :
+        this.idHopDong = null;
+        this.isViewHopDong = false;
+        break;
+      case 'tinhKho' :
+        this.idTinhKho = null;
+        this.isViewTinhKho = false;
+        break;
+      case 'haoDoi' :
+        this.idHaoDoi = null;
+        this.isViewHaoDoi = false;
+        break;
+      default:
+        break;
+    }
   }
 
   isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
@@ -171,7 +203,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   };
 
   isActionAllowed(action: string, data: any): boolean {
-    const permissionMapping = {
+    const permissions = {
       XEM: 'XHDTQG_PTTT_QDGNVXH_XEM',
       THEM: 'XHDTQG_PTTT_QDGNVXH_THEM',
       XOA: 'XHDTQG_PTTT_QDGNVXH_XOA',
@@ -180,29 +212,41 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     };
     switch (action) {
       case 'XEM':
-        return this.userService.isAccessPermisson(permissionMapping.XEM) &&
-          (data.trangThai !== STATUS.DU_THAO &&
-            data.trangThai !== STATUS.TU_CHOI_TP &&
-            data.trangThai !== STATUS.TU_CHOI_LDC);
-      case 'SUA':
         return (
-          (data.trangThai === STATUS.DU_THAO ||
-            data.trangThai === STATUS.TU_CHOI_TP ||
-            data.trangThai === STATUS.TU_CHOI_LDC) &&
-          this.userService.isAccessPermisson(permissionMapping.THEM)
+          this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
+              [
+                this.STATUS.CHO_DUYET_TP,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.BAN_HANH,
+              ].includes(data.trangThai)) ||
+            (!this.userService.isAccessPermisson(permissions.THEM) && [
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_TP,
+                this.STATUS.TU_CHOI_LDC,
+                this.STATUS.BAN_HANH
+              ].includes(data.trangThai) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_TP &&
+                !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_LDC &&
+                !this.userService.isAccessPermisson(permissions.DUYET_LDCUC))))
         );
+      case 'SUA':
+        return [
+          this.STATUS.DU_THAO,
+          this.STATUS.TU_CHOI_TP,
+          this.STATUS.TU_CHOI_LDC
+        ].includes(data.trangThai) && this.userService.isAccessPermisson(permissions.THEM);
       case 'PHEDUYET':
         return (
-          (this.userService.isAccessPermisson(permissionMapping.DUYET_TP) &&
-            data.trangThai === STATUS.CHO_DUYET_TP) ||
-          (this.userService.isAccessPermisson(permissionMapping.DUYET_LDCUC) &&
-            data.trangThai === STATUS.CHO_DUYET_LDC)
+          (this.userService.isAccessPermisson(permissions.DUYET_TP) &&
+            data.trangThai === this.STATUS.CHO_DUYET_TP) ||
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCUC) &&
+            data.trangThai === this.STATUS.CHO_DUYET_LDC)
         );
       case 'XOA':
-        return (
-          data.trangThai === STATUS.DU_THAO &&
-          this.userService.isAccessPermisson(permissionMapping.XOA)
-        );
+        return data.trangThai === this.STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA);
       default:
         return false;
     }

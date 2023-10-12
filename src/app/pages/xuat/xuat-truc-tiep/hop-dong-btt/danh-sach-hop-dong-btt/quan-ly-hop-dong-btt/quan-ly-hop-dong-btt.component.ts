@@ -19,6 +19,7 @@ import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {formatNumber} from "@angular/common";
 
 @Component({
   selector: 'app-quan-ly-hop-dong-btt',
@@ -34,7 +35,8 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   isEditHopDong: boolean
   selected: boolean = false;
   loadDanhSachHdongDaKy: any[] = [];
-
+  idQdNv: number = 0;
+  isViewQdNv: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -51,16 +53,18 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     this.formData = this.fb.group({
       id: [],
       namKh: [],
-      soQdKq: [],
-      soQdPd: [],
-      tenHd: [],
-      tenDvi: [],
+      soQdKq: [''],
+      soQdPd: [''],
+      tenDuAn: [''],
+      tenDvi: [''],
+      nguonVon: [''],
       tongGiaTriHdong: [],
       tongSlXuatBanQdKh: [],
       tongSlDaKyHdong: [],
       tongSlChuaKyHdong: [],
-      tenLoaiVthh: [],
-      tenCloaiVthh: [],
+      donViTinh: [''],
+      tenLoaiVthh: [''],
+      tenCloaiVthh: [''],
       vat: [''],
       tenLoaiHinhNx: [''],
       tenKieuNx: [''],
@@ -101,6 +105,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         namKh: data.namKh,
         soQdPd: data.soQdPd,
         soQdKq: data.soQdKq,
+        tenDvi: data.tenDvi,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
@@ -113,9 +118,10 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tongSlChuaKyHdong: data.tongSlChuaKyHdong,
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
+        donViTinh: data.children[0]?.donViTinh,
       });
       const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idQdKq === data.id);
-      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuongBanTrucTiep, 0);
+      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
       const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
       this.formData.patchValue({
         tongSlDaKyHdong: tongSlDaKyHdong,
@@ -152,12 +158,13 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tenKieuNx: data.tenKieuNx,
         tongSlXuatBanQdKh: data.tongSoLuong,
         tongGiaTriHdong: data.tongGiaTriHdong,
+        donViTinh: data.donViTinh,
         vat: '5 %',
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
       };
       const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idChaoGia === data.id);
-      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuongBanTrucTiep, 0);
+      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
       const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
       this.formData.patchValue({
         tongSlDaKyHdong:tongSlDaKyHdong,
@@ -180,7 +187,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     let body = {
       namKh: this.formData.value.namKh,
       loaiVthh: this.loaiVthh,
-      trangThai: STATUS.DA_KY,
+      trangThai: STATUS.DA_KY
     };
     const res = await this.hopDongBttService.search(body);
     if (res.msg !== MESSAGE.SUCCESS) {
@@ -355,5 +362,27 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   calcTong(column) {
     if (!this.dataTable) return 0;
     return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
+  }
+
+  formatterTien = (value: number) => {
+    const donViTien = '(đ)';
+    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+    return `${formattedValue} ${donViTien}`;
+  }
+
+  formatterSoLuong = (value: number) => {
+    const donViTinh = this.formData.value.donViTinh? this.formData.value.donViTinh : ''
+    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+    return `${formattedValue} ${donViTinh}`;
+  }
+
+  openModal(id: number) {
+    this.idQdNv = id;
+    this.isViewQdNv = true;
+  }
+
+  closeModal() {
+    this.idQdNv = null;
+    this.isViewQdNv = false;
   }
 }
