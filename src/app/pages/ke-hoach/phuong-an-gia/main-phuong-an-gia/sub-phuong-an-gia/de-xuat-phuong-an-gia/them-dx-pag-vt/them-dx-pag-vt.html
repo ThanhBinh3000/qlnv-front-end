@@ -105,7 +105,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true">Loại hàng hóa
+            <nz-form-label nzRequired [nzNoColon]="true">Loại hàng DTQG
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true"
@@ -150,9 +150,9 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Số công văn cần điều chỉnh
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control [nzErrorTip]="error" (click)="openModalSoDx()">
               <nz-input-group nzAddOnAfterIcon="folder-open">
-                <input type="text" nz-input formControlName="soDeXuatDc" [readonly]="true" (click)="openModalSoDx()">
+                <input type="text" nz-input formControlName="soDeXuatDc" [readonly]="true" >
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -199,7 +199,7 @@
           <thead>
           <tr>
             <th class="text-center" nzWidth="45px">STT</th>
-            <th class="text-center" >Loại hàng hóa</th>
+            <th class="text-center" >Loại hàng DTQG</th>
             <th class="text-center" >Chủng loại hàng DTQG</th>
             <th class="text-center">Tiêu chuẩn, quy chuẩn</th>
             <th class="text-center" >Số lượng</th>
@@ -477,7 +477,7 @@
             <thead>
             <tr>
               <th class="text-center" style="width: 4%;">STT</th>
-              <th style="width: 35%;">Chủng loại hàng hóa</th>
+              <th style="width: 35%;">Chủng loại hàng DTQG</th>
               <th
                 style="width: 15%;">{{formData.value.loaiHangXdg == 'XDG_LH02' ? 'Giá vốn trực tiếp (đồng/kg)' : ' Giá vốn nhập khẩu (đồng/kg) '}}
               </th>

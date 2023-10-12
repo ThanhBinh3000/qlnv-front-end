@@ -79,9 +79,10 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th width="30px">STT</th>
-            <th>Năm kế hoạch</th>
-            <th>Số công văn/tờ trình</th>
-            <th>Số QĐ PD KHLCNT</th>
+            <th>Năm KH</th>
+            <th>Số công văn/đề xuất</th>
+            <th>Số QĐ PD/ĐC KHLCNT</th>
+            <th>Lần điều chỉnh</th>
             <th>Số QĐ PD KQLCNT</th>
             <th>Ngày QĐ PD KQLCNT</th>
             <th>Tổng số gói thầu</th>
@@ -90,7 +91,7 @@
             <th>Thời gian thực hiện dự án</th>
             <th>Phương thức LCNT</th>
             <th *ngIf="loaiVthh.startsWith('02')">Loại hàng DTQG</th>
-            <th *ngIf="!loaiVthh.startsWith('02')">Chủng loại hàng DTQG</th>
+            <th *ngIf="!loaiVthh.startsWith('02')">Chủng loại hàng</th>
             <th>Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -115,6 +116,12 @@
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
                   (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.lanDieuChinh"
+                       (input)="filterInTable('lanDieuChinh',filterTable.lanDieuChinh)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -203,12 +210,10 @@
                 {{ data.soDxuat ? data.soDxuat : data.soTrHdr }}
               </a>
             </td>
-            <td>
-              <a style="color: blue; font-weight: bold;"
-                (click)="openQdKqKhlcntModal(data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.id : data.id)">
-                {{ data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.soQd : data.soQd }}
-              </a>
-            </td>
+            <td *ngIf="loaiVthh.startsWith('02')"><a style="color: blue">{{ data.dieuChinh ? data.soQdDc :data.soQd}}</a></td>
+            <td *ngIf="loaiVthh.startsWith('02')">{{ data.dchinhDxKhLcntHdr?.lanDieuChinh}}</td>
+            <td *ngIf="!loaiVthh.startsWith('02')"><a style="color: blue">{{ data.soQd }}</a></td>
+            <td *ngIf="!loaiVthh.startsWith('02')">{{ data.lanDieuChinh }}</td>
             <td>
               <a style="color: blue; font-weight: bold;"
                 (click)="data.hhQdPduyetKqlcntHdr ? openQdPdKqKhlcntModal(data.hhQdPduyetKqlcntHdr.id) : openQdPdKqKhlcntModal(null, data.soQdPdKqLcnt)">

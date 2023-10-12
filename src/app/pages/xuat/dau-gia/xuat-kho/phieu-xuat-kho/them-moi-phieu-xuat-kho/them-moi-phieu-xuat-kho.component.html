@@ -4,6 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button *ngIf="idInput" type="button" class="btn btn-sub" (click)="preview(idInput)">
+      <i class="icon htvbdh_totrinh"></i>
+      <span> Xem trước </span>
+    </button>
     <ng-container>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && isView
                && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_PXK_DUYET_LDCCUC') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET'))"
@@ -48,8 +52,9 @@
       </div>
     </div>
   </div>
-  <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
-            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  <nz-alert class="mg-t-10"
+            *ngIf=" formData.value.trangThai == STATUS.TU_CHOI_LDCC"
+            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{ formData.value.lyDoTuChoi }}">
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
@@ -58,7 +63,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="nam" [nzDisabled]="isView">
+              <nz-select formControlName="nam" (ngModelChange)="onChangeNam($event)" [nzDisabled]="isView">
                 <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -194,7 +199,7 @@
             <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open">
-                <input nz-input formControlName="tenLoKho" readonly/>
+                <input nz-input formControlName="tenNganLoKho" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -343,7 +348,7 @@
             <th colSpan="2">Số lượng</th>
             <th rowSpan="2">Đơn giá (3)</th>
             <th rowSpan="2">Thành tiền (4) = (2) x (3)</th>
-            <th rowSpan="2">Hành động</th>
+            <th rowSpan="2" *ngIf="!isView">Hành động</th>
           </tr>
           <tr>
             <th>Theo chứng từ (1)</th>
@@ -390,7 +395,7 @@
             </td>
             <td>{{formData.value.donGia|number:globals.numberFormat:globals.locale}}</td>
             <td>{{formData.value.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-            <td>
+            <td *ngIf="!isView">
               <a (click)="clear()">
                 <i class="fa fa-refresh"></i>
               </a>
@@ -440,6 +445,14 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item class="form-item display-block">
+            <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú</nz-form-label>
+            <nz-form-control>
+              <textarea [readonly]="isView" nz-input [rows]="3" formControlName="ghiChu"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
     </form>
   </nz-card>
@@ -458,16 +471,6 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <!--    <button nz-button (click)="downloadPdf()"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-pdf"></i>-->
-    <!--      Xuất .pdf-->
-    <!--    </button>-->
-    <!--    <button nz-button (click)="downloadWord()"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-word"></i>-->
-    <!--      Xuất .docx-->
-    <!--    </button>-->
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng

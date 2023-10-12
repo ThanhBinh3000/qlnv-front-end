@@ -140,7 +140,13 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         })) || []
       );
     } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      const data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh && item.maVatTu == this.cloaiVthh);
+      const data = this.dataChiTieu.khVatTuXuat.filter(item => {
+        if (item.maVatTu === null) {
+          return item.maVatTuCha == this.loaiVthh;
+        } else {
+          return item.maVatTu == this.cloaiVthh && item.maVatTuCha == this.loaiVthh;
+        }
+      });
       const soLuongXuat = data.reduce((acc, item) => acc + item.soLuongXuat, 0);
       itemsToAdd.push({
         maDvi: data[0].maDvi,
@@ -186,7 +192,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     ]);
     this.listDiemKho = [];
     if (res.msg === MESSAGE.SUCCESS && chiCuc?.soLuongXuat) {
-      const soLuongChiTieu = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc.soLuongXuat : chiCuc.soLuongXuat * 1000;
+      const soLuongChiTieu = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc.soLuongXuat : chiCuc.soLuongXuat;
       this.formData.patchValue({
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
@@ -336,8 +342,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   async tonKho(item, index?) {
     const body = {
       maDvi: item.maDvi,
-      loaiVthh: this.loaiVthh,
-      cloaiVthh: this.cloaiVthh,
+      loaiVthh: this.loaiVthh === LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
+      ...(this.loaiVthh === LOAI_HANG_DTQG.MUOI ? {} : {cloaiVthh: this.cloaiVthh}),
     };
     try {
       const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
@@ -352,8 +358,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       } else {
         console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho');
       }
-    } catch (error) {
-      console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho', error);
+    } catch (e) {
+      console.error('Error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 

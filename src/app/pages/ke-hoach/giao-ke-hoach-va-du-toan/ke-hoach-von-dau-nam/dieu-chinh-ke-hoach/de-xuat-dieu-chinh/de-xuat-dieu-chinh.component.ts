@@ -40,13 +40,13 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    deXuatDieuChinhCTKHService: DeXuatDieuChinhCTKHService
+    private deXuatDieuChinhCTKHService: DeXuatDieuChinhCTKHService
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatDieuChinhCTKHService);
     this.formData = this.fb.group({
       namKeHoach: [],
-      soDeXuat: [],
       tenDonVi: [],
+      soDeXuat: [],
       ngayKyTu: [],
       ngayKyDen: [],
       trichYeu: [],
@@ -54,14 +54,15 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
       cap: [],
     })
     this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      tenLoaiDc: '',
-      tenLoaiQdinh: '',
+      namKeHoach: '',
+      soDeXuat: '',
+      tenDonVi: '',
+      ngayKy: '',
       trichYeu: '',
-      soDxuat: '',
+      soQuyetDinhGiaoCuaTc: '',
+      // tenTrangThaiDX: '',
       tenTrangThai: '',
+      soQuyetDinh: '',
     };
   }
 
@@ -138,6 +139,83 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     await this.search();
   }
 
+  xoaMulti(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.deXuatDieuChinhCTKHService.xoa({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  xoa(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            // id: item.id,
+            ids: [item.id]
+          };
+          this.deXuatDieuChinhCTKHService.xoa(body).then(async () => {
+            await this.search();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
   exportDataCuc() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -153,11 +231,11 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        // this.deXuatDieuChinhCTKHService
-        //   .export(body)
-        //   .subscribe((blob) =>
-        //     saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),
-        //   );
+        this.deXuatDieuChinhCTKHService
+          .exportlist(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'de-xuat-dieu-chinh-chi-tieu-kh.xlsx'),
+          );
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);

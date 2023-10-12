@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Globals} from "../../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
@@ -12,6 +12,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {
   DialogThemMoiXuatBanTrucTiepComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-chi-tiet-dieu-chinh',
@@ -22,8 +23,8 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
   @Input() title;
   @Input() dataInput;
   @Input() isView;
-  @Input() isCaChe;
-
+  @Input() isCache;
+  @Output() countChanged: EventEmitter<any> = new EventEmitter();
   formData: FormGroup
   dataTable: any[] = [];
 
@@ -51,6 +52,7 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
       pthucGnhan: [''],
       thongBao: [],
       tongSoLuong: [],
+      thanhTien: [],
       donViTinh: [''],
     });
   }
@@ -92,6 +94,7 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
       if (updatedData && index >= 0) {
         this.dataTable[index] = updatedData;
         await this.calculatorTable();
+        await this.sendDataToParent();
       }
     });
   }
@@ -109,6 +112,7 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
         try {
           this.dataTable = this.dataTable.filter((item, index) => index != i);
           await this.calculatorTable();
+          await this.sendDataToParent();
         } catch (e) {
           console.log('error', e);
         }
@@ -118,20 +122,40 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
 
   calculatorTable() {
     this.dataTable.forEach(item => {
-      item.soLuongChiCuc = item.children.reduce((acc, child) => acc + child.soLuongDeXuat, 0);
+      item.tienChiCuc = 0;
+      item.children.forEach(child => {
+        child.thanhTienDuocDuyet = child.donGiaDuocDuyet * child.soLuongDeXuat;
+        child.thanhTienDeXuat = child.soLuongDeXuat * child.donGiaDeXuat;
+      });
+      item.tienChiCuc = item.children.map(child => child.thanhTienDuocDuyet).reduce((prev, cur) => prev + cur, 0);
     });
     this.formData.patchValue({
       tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.soLuongChiCuc, 0),
+      thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
     });
   }
 
   expandSet = new Set<number>();
 
   onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
+    checked ? this.expandSet.add(id) : this.expandSet.delete(id);
+  }
+
+  async onChangeThoiGian(event) {
+    if (event) {
+      this.formData.patchValue({
+        tgianDkienTu: this.formatDate(event, 0),
+        tgianDkienDen: this.formatDate(event, 1)
+      })
     }
+    await this.sendDataToParent();
+  }
+
+  formatDate(dateRange, index) {
+    return dateRange ? dayjs(dateRange[index]).format('YYYY-MM-DD') : null;
+  }
+
+  async sendDataToParent() {
+    this.countChanged.emit(this.formData.value);
   }
 }

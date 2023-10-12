@@ -537,7 +537,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       "tenCloaiVthh",
       "tenLoaiHinhNx",
       "tenKieuNx",
-      "tchuanCluong"
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

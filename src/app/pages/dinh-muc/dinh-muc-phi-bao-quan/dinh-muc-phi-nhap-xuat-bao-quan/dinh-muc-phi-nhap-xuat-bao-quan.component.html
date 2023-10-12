@@ -50,12 +50,12 @@
         quản {{capDvi == 1 ? 'tổng cục' : 'cục'}} giao</h3>
       <div class="buttons">
         <button type="button"
-                class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_ĐMTBCCDC_EXP')" >
+                class="btn btn-sub" (click)="exportData()" *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_EXP') && capDvi == 1) || ((userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_EXP') && capDvi == 2)) " >
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button
-          type="button" class="btn btn-main" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_THEM')" (click)="redirectToChiTiet(0,false)">
+          type="button" class="btn btn-main" *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_THEM') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_THEM') && userService.isCuc() && capDvi == 2)" (click)="redirectToChiTiet(0,false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -123,7 +123,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td>{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.soQd }}</td>
@@ -132,14 +132,14 @@
           <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center">
-            <a *ngIf="userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_XEM') &&  !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)"
+            <a *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_XEM') && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_XEM') && capDvi == 2) &&  !((data.trangThai == STATUS.DANG_NHAP_DU_LIEU) && data.nguoiTaoId == userInfo.ID)"
                (click)="redirectToChiTiet(data.id, true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_SUA')  " (click)="redirectToChiTiet(data.id)">
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_THEM') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_THEM') && userService.isCuc() && capDvi == 2)  " (click)="redirectToChiTiet(data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_XOA')  " (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_XOA') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_XOA') && userService.isCuc() && capDvi == 2)  " (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

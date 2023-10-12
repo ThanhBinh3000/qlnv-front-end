@@ -22,7 +22,7 @@
         <span>Dự thảo QĐ của BTC/Bộ KHĐT</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
-              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') && !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
+              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') && !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
@@ -42,7 +42,7 @@
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
-              *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') &&  !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
+              *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') &&  !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
               (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -409,14 +409,16 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('duoi', 'tmdt') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'giaTriPd', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('duoi', 'giaTriPd') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'luyKeVon', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('duoi', 'luyKeVon') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('duoi', 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
               </tr>
               </tfoot>
@@ -607,14 +609,16 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('tren', 'tmdt') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'giaTriPd', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('tren', 'giaTriPd') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'luyKeVon', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('tren', 'luyKeVon') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('tren', 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
               </tr>
               </tfoot>
@@ -703,7 +707,7 @@
                 <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>
                 <th class="text-center">Ghi chú</th>
                 <th class="text-center" nzWidth="120px"
-                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                     nzRight>Hành động
                 </th>
               </tr>
@@ -730,7 +734,7 @@
                   <td></td>
                   <td></td>
                   <td
-                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                     nzRight></td>
                 </tr>
                 <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -755,7 +759,7 @@
                       <td></td>
                       <td></td>
                       <td
-                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                         nzRight></td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(item.idVirtual)">
@@ -780,7 +784,7 @@
                           <td></td>
                           <td></td>
                           <td
-                            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                             nzRight></td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(child.idVirtual)">
@@ -804,7 +808,7 @@
                               <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ child1.ghiChu }}</td>
                               <td class="text-center" nzRight
-                                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                               >
                                 <a (click)="themMoiItem(child1,'tren', 'sua', y1, child)">
                                   <i class="fa fa-pencil" title="Sửa"></i>
@@ -837,13 +841,13 @@
                 <td></td>
                 <td></td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(false, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('duoi', 'tmdt') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(false, 'giaTriPd', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('duoi', 'giaTriPd') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(false, 'luyKeVon', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('duoi', 'luyKeVon') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(false, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('duoi', 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
               </tr>
               </tfoot>
@@ -926,7 +930,7 @@
                 <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>
                 <th class="text-center">Ghi chú</th>
                 <th class="text-center" nzWidth="120px"
-                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                     nzRight>Hành động
                 </th>
               </tr>
@@ -953,7 +957,7 @@
                   <td></td>
                   <td></td>
                   <td
-                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                    *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                     nzRight></td>
                 </tr>
                 <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -978,7 +982,7 @@
                       <td></td>
                       <td></td>
                       <td
-                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                         nzRight></td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(item.idVirtual)">
@@ -1003,7 +1007,7 @@
                           <td></td>
                           <td></td>
                           <td
-                            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                             nzRight></td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(child.idVirtual)">
@@ -1027,7 +1031,7 @@
                               <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ child1.ghiChu }}</td>
                               <td class="text-center" nzRight
-                                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                               >
                                 <a (click)="themMoiItem(child1,'tren', 'sua', y1, child)">
                                   <i class="fa fa-pencil" title="Sửa"></i>
@@ -1062,16 +1066,16 @@
                 <td></td>
                 <td></td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(true, 'tmdt', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('tren', 'tmdt') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(true, 'giaTriPd', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('tren', 'giaTriPd') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(true, 'luyKeVon', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('tren', 'luyKeVon') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
-                    style="color: blue">{{sumSoLuong(true, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
+                    style="color: blue">{{sumSoLuong('tren', 'vonDauTu' | number : '1.0-1' : 'vi_VN')}}</td>
                 <td></td>
                 <td
-                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
+                  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DU_THAO"
                   nzRight></td>
               </tr>
               </tfoot>

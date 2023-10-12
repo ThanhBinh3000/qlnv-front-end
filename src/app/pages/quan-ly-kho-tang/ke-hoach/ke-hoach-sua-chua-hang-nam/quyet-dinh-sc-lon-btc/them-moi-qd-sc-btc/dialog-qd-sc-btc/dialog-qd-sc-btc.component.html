@@ -4,13 +4,14 @@
     <tr>
       <th [width]="35">STT</th>
       <th *ngIf="type=='00'">Số quyết định</th>
+      <th *ngIf="type=='01'">Số thông báo</th>
       <th [width]="35" class=" text-center">Chọn</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let data of basicTable.data; let i = index">
       <td class="text-center">{{i+1}}</td>
-      <td  *ngIf="type=='00'" >{{ data.soQuyetDinh}}</td>
+      <td>{{ data.maToTrinh ? data.maToTrinh : data.soQuyetDinh}}</td>
       <td  class="text-center">
         <a (click)="handleOk(data)">
           <i class="icon htvbdh_dau-cong"></i>

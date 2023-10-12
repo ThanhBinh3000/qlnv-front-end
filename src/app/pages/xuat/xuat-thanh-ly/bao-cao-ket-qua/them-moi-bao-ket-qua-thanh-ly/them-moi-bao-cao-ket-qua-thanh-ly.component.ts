@@ -42,7 +42,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
     private quyetDinhThanhLyService: QuyetDinhThanhLyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
-    this.defaultURL = 'xuat/xuat-thanh-ly/thong-bao-kq'
+    this.defaultURL = 'xuat/xuat-thanh-ly/bao-cao-kq'
     this.getId();
     this.formData = this.fb.group({
       id: [],
@@ -54,6 +54,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
       ngayBaoCao: [null],
       soQd: [null, [Validators.required]],
       idQd: [null, [Validators.required]],
+      ngayQd : [null,[Validators.required]],
       noiDung: [null, [Validators.required]],
       lyDoTuChoi: [null, [Validators.required]],
     })
@@ -123,18 +124,15 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
     })
   }
 
-  getDetailQuyetDinh(idHoSo) {
+  getDetailQuyetDinh(idQD) {
     this.spinner.show();
-    this.quyetDinhThanhLyService.getDetail(idHoSo).then((res) => {
+    this.quyetDinhThanhLyService.getDetail(idQD).then((res) => {
       this.spinner.hide();
       if (res.data) {
         const dataHs = res.data
         this.formData.patchValue({
-          soHoSo: dataHs.soHoSo,
-          idHoSo: dataHs.id,
-          ngayTrinhDuyet: dataHs.ngayDuyetLdc,
-          ngayThamDinh: dataHs.ngayDuyetLdtc,
-          tenTrangThaiHs: dataHs.tenTrangThai
+          soQd: dataHs.soQd,
+          idQd: dataHs.id,
         })
       }
     });
@@ -142,7 +140,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO;
+    return (trangThai == STATUS.DU_THAO || this.isAccessPermisson('XHDTQG_XTL_BCKQ_THEM'));
   }
 
   save(isGuiDuyet?) {
@@ -171,13 +169,8 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETTP'))
-        || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDC'));
-    }
-    if (this.userService.isTongCuc()) {
-      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDV'))
-        || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC'))
-        || (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETBTC'));
+      return (trangThai == STATUS.CHO_DUYET_TP && this.isAccessPermisson('XHDTQG_XTL_BCKQ_DUYETTP'))
+        || (trangThai == STATUS.CHO_DUYET_LDC && this.isAccessPermisson('XHDTQG_XTL_BCKQ_DUYETLDC'));
     }
     return false
   }

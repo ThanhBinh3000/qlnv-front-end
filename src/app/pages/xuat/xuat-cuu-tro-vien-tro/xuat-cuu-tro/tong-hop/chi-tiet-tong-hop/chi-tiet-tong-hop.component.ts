@@ -27,7 +27,7 @@ import { STATUS } from 'src/app/constants/status';
 import { chain, cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from "uuid";
 import { PREVIEW } from "../../../../../../constants/fileType";
-import { TEN_LOAI_VTHH } from "src/app/constants/config";
+import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop',
@@ -130,7 +130,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         noiDungThop: ['', [Validators.required]],
         loaiNhapXuat: [''],
         kieuNhapXuat: [''],
-        loaiVthh: [''],
+        loaiVthh: [LOAI_HANG_DTQG.GAO],
         cloaiVthh: [''],
         tenVthh: [TEN_LOAI_VTHH.GAO, [Validators.required]],
         trangThai: [STATUS.DU_THAO],
@@ -518,6 +518,15 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   }
 
   async changeVthh($event: any) {
+    if ($event == TEN_LOAI_VTHH.THOC) {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
+    } else if ($event == TEN_LOAI_VTHH.GAO) {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.GAO, donViTinh: "kg" });
+    } else if ($event == TEN_LOAI_VTHH.MUOI) {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg" });
+    } else {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
+    };
     this.phuongAnHdrView = [];
     this.phuongAnView = [];
     this.tongSoLuongDx = 0;

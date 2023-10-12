@@ -8,7 +8,7 @@
   <div nz-row [nzGutter]="24" *ngIf="formData.value.loaiQd == '01' && pagType == 'LT'">
     <div nz-col [nzSpan]="7">
       <nz-form-item class="form-item">
-        <nz-form-label nzRequired [nzNoColon]="true" >Loại hàng hóa
+        <nz-form-label nzRequired [nzNoColon]="true" >Loại hàng DTQG
         </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-select nzAllowClear="true" formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
@@ -20,7 +20,7 @@
     </div>
     <div nz-col [nzSpan]="7">
       <nz-form-item class="form-item">
-        <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng hóa
+        <nz-form-label nzRequired [nzNoColon]="true">Chủng loại hàng DTQG
         </nz-form-label>
         <nz-form-control  [nzErrorTip]="error">
           <nz-select nzAllowClear="true" formControlName="cloaiVthh">
@@ -64,8 +64,8 @@
     <th class=" text-center">Số tờ trình</th>
     <th class=" text-center">Mã tổng hợp</th>
     <th class=" text-center">Ngày ký tờ trình</th>
-    <th class=" text-center">Loại hàng hóa</th>
-    <th class=" text-center">Chủng loại hàng hóa</th>
+    <th class=" text-center">Loại hàng DTQG</th>
+    <th class=" text-center">Chủng loại hàng DTQG</th>
     <th class=" text-center">Loại giá</th>
     <th nzWidth="45px" class=" text-center">Chọn</th>
   </tr>

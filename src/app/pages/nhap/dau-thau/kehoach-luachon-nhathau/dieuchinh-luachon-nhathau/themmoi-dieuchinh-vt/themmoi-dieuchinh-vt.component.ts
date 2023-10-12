@@ -285,12 +285,6 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
     this.dataInput.dsGthau = this.dataLoadDetail;
   }
 
-  async pheDuyet() {
-    let trangThai = STATUS.BAN_HANH;
-    let mesg = "Văn bản sẵn sàng ban hành ?";
-    await this.approve(this.formData.value.id, trangThai, mesg);
-  }
-
   quayLai() {
     this.showListEvent.emit();
   }

@@ -271,6 +271,7 @@ export class ThemMoiTtcpComponent implements OnInit {
     });
     this.formData.get('listBoNganh').setValue(this.dataTable);
   }
+
   async onChangeNamQd(namQd) {
     this.formData.get('soQdUbtvqh').setValue(null);
     let body = {
@@ -280,7 +281,12 @@ export class ThemMoiTtcpComponent implements OnInit {
     let res = await this.quyetDinhUbtvqhMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content;
-      this.listUbtvqh = data
+      this.listUbtvqh = data;
+      if(this.listUbtvqh && this.listUbtvqh.length > 0){
+        this.formData.patchValue({
+          soQdUbtvqh : this.listUbtvqh[0].soQd
+        })
+      }
     }
   }
 

@@ -21,13 +21,13 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub do ml-2"
-              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC ) && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDV')"
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC ) && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDTC')"
               (click)="reject(id, STATUS.TU_CHOI_LDTC)">
         <i class="icon htvbdh_tcdt_tuchoi "></i>
         <span>Từ chối</span>
       </button>
       <button class="btn btn-sub btn-sm waves-effect waves-light xanh-nhat ml-2"
-              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDV')" (click)="approve(id, STATUS.DA_DUYET_LDTC, 'Bạn có chắc chắn muốn duyệt?')">
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDTC')" (click)="approve(id, STATUS.DA_DUYET_LDTC, 'Bạn có chắc chắn muốn duyệt?')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -213,7 +213,7 @@
             <th nzWidth="220px">Giá trị còn lại tại thời điểm hiện tại (đ)</th>
             <th nzWidth="220px">Giá trị còn lại dự kiến đến hết 31/12 (đ)</th>
             <th nzWidth="220px">Giá trị bảo hiểm đề xuất (đ)</th>
-            <th nzWidth="220px">Giá trị bảo hiểm TC phê duyệt (đ)</th>
+            <th nzWidth="220px">Giá trị bảo hiểm Vụ TVQT đề xuất (đ)</th>
           </tr>
           </thead>
           <tbody>
@@ -304,7 +304,7 @@
             <th colSpan="2" nzWidth="15%">Dự kiến đến hết 31/12(đ)</th>
             <th colSpan="2" nzWidth="15%">Tại thời điểm tổng hợp</th>
             <th rowSpan="2" nzWidth="10%">Giá trị bảo hiểm đề xuất(đ)</th>
-            <th rowSpan="2" nzWidth="10%">Giá trị bảo hiểm TC phê duyệt(đ)</th>
+            <th rowSpan="2" nzWidth="10%">Giá trị bảo hiểm Vụ TVQT đề xuất (đ)</th>
           </tr>
           <tr>
             <th class="text-center">Số lượng</th>

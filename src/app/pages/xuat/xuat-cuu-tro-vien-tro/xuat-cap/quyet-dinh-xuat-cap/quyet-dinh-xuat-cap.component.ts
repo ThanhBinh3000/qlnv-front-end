@@ -1,22 +1,22 @@
-import {Component, OnInit} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DatePipe} from "@angular/common";
-import {DonviService} from "../../../../../services/donvi.service";
-import {UserLogin} from "../../../../../models/userlogin";
-import {MESSAGE} from "../../../../../constants/message";
+import { Component, OnInit } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DatePipe } from "@angular/common";
+import { DonviService } from "../../../../../services/donvi.service";
+import { UserLogin } from "../../../../../models/userlogin";
+import { MESSAGE } from "../../../../../constants/message";
 import dayjs from "dayjs";
-import {Utils} from "../../../../../Utility/utils";
-import {cloneDeep} from "lodash";
-import {Base2Component} from "../../../../../components/base2/base2.component";
+import { Utils } from "../../../../../Utility/utils";
+import { cloneDeep } from "lodash";
+import { Base2Component } from "../../../../../components/base2/base2.component";
 import {
   QuyetDinhXuatCapService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-cap/quyet-dinh-xuat-cap.service";
-import {CHUC_NANG} from "src/app/constants/status";
-import {XuatCuuTroVienTroComponent} from "../../xuat-cuu-tro-vien-tro.component";
+import { CHUC_NANG, STATUS } from "src/app/constants/status";
+import { XuatCuuTroVienTroComponent } from "../../xuat-cuu-tro-vien-tro.component";
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
@@ -31,14 +31,14 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
   public CHUC_NANG = CHUC_NANG;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private datePipe: DatePipe,
-              private donviService: DonviService,
-              private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
-              private xuatCuuTroVienTroComponent: XuatCuuTroVienTroComponent) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private datePipe: DatePipe,
+    private donviService: DonviService,
+    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
+    private xuatCuuTroVienTroComponent: XuatCuuTroVienTroComponent) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.vldTrangThai = xuatCuuTroVienTroComponent;
     this.formData = this.fb.group({
@@ -50,7 +50,7 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
       ngayHieuLucTu: null,
       ngayHieuLucDen: null,
       ngayXuatCtvtDen: null,
-      type:'XC'
+      type: 'XC'
     });
     this.filterTable = {
       soQdXc: "",
@@ -89,14 +89,6 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
   }
 
   async timKiem() {
-    if (this.formData.value.ngayHieuLuc) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format("YYYY-MM-DD");
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format("YYYY-MM-DD");
-    }
-    if (this.formData.value.ngayXuatCtvt) {
-      this.formData.value.ngayXuatCtvtTu = dayjs(this.formData.value.ngayXuatCtvt[0]).format("YYYY-MM-DD");
-      this.formData.value.ngayXuatCtvtDen = dayjs(this.formData.value.ngayXuatCtvt[1]).format("YYYY-MM-DD");
-    }
     await this.search();
   }
 
@@ -123,4 +115,19 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   };
+  checkRoleView(trangThai: STATUS) {
+    return !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_XEM');
+  }
+  checkRoleAdd() {
+    return this.userService.isAccessPermisson("XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC")
+  }
+  checkRoleEdit(trangThai: STATUS) {
+    return [STATUS.DU_THAO, STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDTC].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC")
+  }
+  checkRoleApprove(trangThai: STATUS) {
+    return [STATUS.CHO_DUYET_LDV].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU") || [STATUS.CHO_DUYET_LDTC].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC")
+  }
+  checkRoleDelete(trangThai: STATUS) {
+    return [STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_XC_QDXC_XOA")
+  }
 }

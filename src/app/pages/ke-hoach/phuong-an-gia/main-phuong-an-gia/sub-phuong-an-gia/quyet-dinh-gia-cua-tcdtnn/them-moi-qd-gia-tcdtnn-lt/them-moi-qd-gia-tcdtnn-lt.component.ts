@@ -84,7 +84,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.maQd = "/QĐ-TCDT"
-    this.getDataDetail(this.idInput)
+    await this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
@@ -114,6 +114,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       this.dataTable = data.thongTinGiaLt;
       this.buildTreePagCt();
       this.fileDinhKem = data.fileDinhKems;
+      console.log(this.formData.value.loaiGia,1111)
     }
   }
 
@@ -320,7 +321,8 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
               cloaiVthh: data.formData.cloaiVthh ? data.formData.cloaiVthh : null,
               loaiGia: data.formData.loaiGia ? data.formData.loaiGia : null,
               listIdPag: thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
-              loai: "01"
+              loai: "01",
+              type : this.type
             }
             this.tongHopData(body);
           }

@@ -146,7 +146,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
           // this.danhSachCtiet = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2
           this.formData.patchValue({
             idQdDtl: id,
-            soQd: dataDtl.hhQdPheduyetKhMttHdr.soQd,
+            soQd: dataDtl.hhQdPheduyetKhMttHdr.isChange ? dataDtl.hhQdPheduyetKhMttHdr.soQdDc : dataDtl.hhQdPheduyetKhMttHdr.soQd,
             trangThai: dataDtl.trangThai,
             tenTrangThai: dataDtl.tenTrangThai,
             tenCloaiVthh: dataDtl.hhQdPheduyetKhMttHdr.tenCloaiVthh,
@@ -203,7 +203,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
     let setActive = elem.getElementsByClassName('ant-menu-item')[1];
     setActive.classList.add('ant-menu-item-selected');
     this.isHopDong = true
-    this.idSelected = this.formData.value.id
+    this.idSelected = this.formData.value.idQdDtl
   }
   async themMoiBangKeMuaLe($event, data?: null, index?: number) {
     let res = await this.quyetDinhGiaoNvNhapHangService.getDetail(this.idQdGnvu);

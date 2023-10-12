@@ -143,7 +143,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td>{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.soQd }}</td>
@@ -153,13 +153,13 @@
           <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td >
-            <a *ngIf="((data.trangThai != STATUS.DU_THAO && userService.isTongCuc()) || userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_XEM')" (click)="redirectToChiTiet(data.id, true)">
+            <a *ngIf="((data.trangThai != STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) || userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_XEM')" (click)="redirectToChiTiet(data.id, true)">
               <i class="icon htvbdh_eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_SUA')" (click)="redirectToChiTiet(data.id)">
+            <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_SUA')" (click)="redirectToChiTiet(data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_XOA')" (click)="delete(data)">
+            <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

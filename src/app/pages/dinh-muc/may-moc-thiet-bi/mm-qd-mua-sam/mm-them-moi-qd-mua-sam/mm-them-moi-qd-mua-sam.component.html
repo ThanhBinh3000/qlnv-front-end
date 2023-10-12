@@ -15,7 +15,7 @@
         <span>Quay lại</span>
       </button>
       <button class="btn btn-sub ml-2" (click)="save(true)"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc()">
+              *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc()">
         <i class="icon htvbdh_trinh"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -32,7 +32,7 @@
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save(false)"
-              *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc() ">
+              *ngIf=" !isView && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc() ">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -68,26 +68,27 @@
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
-          <nz-radio-group
-            [nzDisabled]="formData.value.trangThai !== '00'"
-            nzSize="small" class="rdo-input" [(ngModel)]="typeQd"   [ngModelOptions]="{standalone: true}">
+<!--          <nz-radio-group-->
+<!--            [nzDisabled]="formData.value.trangThai !== '00'"-->
+<!--            nzSize="small" class="rdo-input" [(ngModel)]="typeQd"   [ngModelOptions]="{standalone: true}">-->
             <nz-form-item >
-              <label nz-radio nzValue="TH">Số tổng hợp</label>
+<!--              <label nz-radio nzValue="TH">Số tổng hợp</label>-->
+              <nz-form-label nzRequired>Căn cứ bản tổng hợp</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
                   <input [readonly]="true" nz-input formControlName="maTh" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
-              <label nz-radio nzValue="DX">Số đề xuất của Cục</label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoDxCuc()">
-                  <input [readonly]="true" nz-input formControlName="maDx" readonly="true" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </nz-radio-group>
+<!--            <nz-form-item>-->
+<!--              <label nz-radio nzValue="DX">Số đề xuất của Cục</label>-->
+<!--              <nz-form-control [nzErrorTip]="error">-->
+<!--                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoDxCuc()">-->
+<!--                  <input [readonly]="true" nz-input formControlName="maDx" readonly="true" />-->
+<!--                </nz-input-group>-->
+<!--              </nz-form-control>-->
+<!--            </nz-form-item>-->
+<!--          </nz-radio-group>-->
         </div>
         <div nz-col [nzSpan]="9">
           <nz-form-item>

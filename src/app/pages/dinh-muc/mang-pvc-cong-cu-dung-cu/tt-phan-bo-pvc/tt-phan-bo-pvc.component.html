@@ -42,7 +42,7 @@
     <div class="group-button">
       <h3>DANH SÁCH THÔNG TIN PHÂN BỔ CHO VP CỤC, CHI CỤC</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XOA') && !userService.isChiCuc()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
@@ -51,7 +51,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)"
-                *ngIf="userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM')">
+                *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && !userService.isChiCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -142,11 +142,11 @@
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XEM') && !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DU_THAO )&& userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM')"
+            <a *ngIf="(data.trangThai == STATUS.DU_THAO )&& userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && !userService.isChiCuc()"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a  (click)="delete(data)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && data.trangThai == STATUS.DU_THAO">
+            <a  (click)="delete(data)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && data.trangThai == STATUS.DU_THAO && !userService.isChiCuc()">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

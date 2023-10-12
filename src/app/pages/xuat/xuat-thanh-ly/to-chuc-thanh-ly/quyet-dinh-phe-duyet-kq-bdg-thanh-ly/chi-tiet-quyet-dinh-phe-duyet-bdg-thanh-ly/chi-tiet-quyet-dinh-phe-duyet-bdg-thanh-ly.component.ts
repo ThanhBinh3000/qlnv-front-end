@@ -192,7 +192,6 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
 
   async getDetailThongBao(idThongBao){
     await this.toChucThucHienThanhLyService.getDetail(idThongBao).then((res)=>{
-      console.log(res);
       if(res.data){
         const data = res.data;
         this.formData.patchValue({
@@ -218,7 +217,7 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO;
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC ) && this.isAccessPermisson('XHDTQG_XTL_TCKHBDG_QDKQDG_THEM');
   }
 
   save(isGuiDuyet?) {
@@ -247,13 +246,8 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETTP'))
-        || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDC'));
-    }
-    if (this.userService.isTongCuc()) {
-      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDV'))
-        || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC'))
-        || (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETBTC'));
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTL_TCKHBDG_QDKQDG_DUYET_TP'))
+        || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTL_TCKHBDG_QDKQDG_DUYET_LDC'));
     }
     return false
   }

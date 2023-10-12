@@ -147,7 +147,7 @@
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="detail(data, true)"
-               *ngIf="!((data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_VU) && userInfo.MA_DVI == data.maDvi)">
+               *ngIf="!((data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC ) && userInfo.MA_DVI == data.maDvi)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a

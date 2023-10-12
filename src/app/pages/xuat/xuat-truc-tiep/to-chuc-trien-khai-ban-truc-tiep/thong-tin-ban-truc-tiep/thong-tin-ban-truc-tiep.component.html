@@ -52,7 +52,7 @@
       <h3 class="text-uppercase"> THÔNG TIN TRIỂN KHAI KẾ HOẠCH BÁN TRỰC TIẾP </h3>
       <div class="buttons">
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_TBBDG_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_TBBDG_EXP')"
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_XEM') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_XEM')"
           type="button" class="btn btn-sub"
           (click)="exportData('Danh-sach-thong-tin-trien-khai-ke-hoach-ban-truc-tiep.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -73,8 +73,8 @@
           <th class="text-left"> Phương thức bán trực tiếp</th>
           <th class="text-left"> Ngày nhận chào giá/Ngày ủy quyền</th>
           <th class="text-left"> Số QĐ PD KQ chào giá</th>
-          <th class="text-left"> Loại hàng hóa</th>
-          <th class="text-left"> Chủng loại hành hóa</th>
+          <th class="text-left"> Loại hàng DTQG</th>
+          <th class="text-left"> Chủng loại hàng DTQG</th>
           <th class="text-left"> Trạng thái</th>
           <th class="text-center"> Hành động</th>
         </tr>

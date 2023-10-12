@@ -13,6 +13,7 @@ import { DanhMucService } from '../../../../services/danhmuc.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { MESSAGE } from '../../../../constants/message';
 import { DanhMucCongCuDungCuService } from '../../../../services/danh-muc-cong-cu-dung-cu.service';
+import { STATUS } from '../../../../constants/status';
 
 @Component({
   selector: 'app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu',
@@ -51,8 +52,8 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     this.formData = this.fb.group({
       id: [''],
       soQd: ['', [Validators.required]],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       ngayKy: ['', [Validators.required]],
       ngayHieuLuc: ['', [Validators.required]],
       ngayHetHieuLuc: [''],

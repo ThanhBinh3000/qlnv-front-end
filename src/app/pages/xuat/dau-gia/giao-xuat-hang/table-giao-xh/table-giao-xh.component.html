@@ -13,13 +13,13 @@
             <label class="search__label"> Số quyết định </label>
             <input placeholder="" nz-input formControlName="soQdNv"/>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
             <label class="search__label"> Loại hàng DTQG </label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith('02')">
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
             <label class="search__label"> Loại hàng DTQG </label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
@@ -93,8 +93,8 @@
           <th class="text-left"> Số quyết định</th>
           <th class="text-left"> Ngày quyết định</th>
           <th class="text-left"> Số hợp đồng</th>
-          <th class="text-left" *ngIf="loaiVthh.startsWith('02')">Loại hàng hóa</th>
-          <th class="text-left"> Chủng loại hàng hóa</th>
+          <th class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">Loại hàng DTQG</th>
+          <th class="text-left"> Chủng loại hàng DTQG</th>
           <th class="text-left"> Thời gian giao nhận hàng</th>
           <th class="text-left"> Trích yếu quyết định</th>
           <th class="text-left"> Số BB tịnh kho</th>
@@ -134,7 +134,7 @@
                      (input)="filterInTable('soHopDong',filterTable.soHopDong)" size="small"/>
             </nz-input-group>
           </th>
-          <th *ngIf="loaiVthh.startsWith('02')">
+          <th *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -203,16 +203,16 @@
           <td><a *ngIf="data.soHopDong && data.idHopDong" nz-button nzType="link"
                  (click)="openModal(data.idHopDong, 'hopDong')">
             {{ data.soHopDong }}</a></td>
-          <td *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>
+          <td *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.tgianGiaoHang|date:'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td><a *ngIf="data.BienBanTinhKho && data.idTinhKho" nz-button nzType="link"
+          <td><a *ngIf="data.bienBanTinhKho && data.idTinhKho" nz-button nzType="link"
                  (click)="openModal(data.idTinhKho, 'tinhKho')">
-            {{ data.BienBanTinhKho }}</a></td>
-          <td><a *ngIf="data.BienBanHaoDoi && data.idHaoDoi" nz-button nzType="link"
+            {{ data.bienBanTinhKho }}</a></td>
+          <td><a *ngIf="data.bienBanHaoDoi && data.idHaoDoi" nz-button nzType="link"
                  (click)="openModal(data.idHaoDoi, 'haoDoi')">
-            {{ data.BienBanHaoDoi }}</a></td>
+            {{ data.bienBanHaoDoi }}</a></td>
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-center">
@@ -265,6 +265,18 @@
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('hopDong')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewTinhKho" (nzOnCancel)="closeModal('tinhKho')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <!--    <app-bdg-them-moi-bien-ban-tinh-kho [idInput]="idTinhKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">-->
+    <!--    </app-bdg-them-moi-bien-ban-tinh-kho>-->
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('tinhKho')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

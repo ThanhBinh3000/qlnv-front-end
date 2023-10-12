@@ -3,31 +3,61 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
-          <div nz-col nzSpan="3">
+          <div nz-col [nzSpan]="3">
             <label class="search__label"> Năm kế hoạch </label>
             <nz-select formControlName="nam">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="3">
-            <label class="search__label"> Số QĐ giao NV xuất hàng</label>
+          <div nz-col [nzSpan]="3">
+            <label
+              class="search__label"> {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số QĐ giao NV XH' : 'Số QĐ giao NV xuất hàng'}}</label>
             <input placeholder="Nhập nội dung" nz-input formControlName="soQdNv"/>
           </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label"> Số bảng kê cân hàng</label>
+          <div nz-col [nzSpan]="4">
+            <label
+              class="search__label"> {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số bảng kê xuất vật tư' : 'Số bảng kê cân hàng'}}</label>
             <input placeholder="Nhập nội dung" nz-input formControlName="soBangKeHang"/>
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
             <label class="search__label"> Ngày tạo bảng kê</label>
             <div nz-row>
               <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledStartNgayTaoBangKe" nzFormat="dd/MM/yyyy"
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayTaoBangKeTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayLapBangKeTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
               <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledEndNgayTaoBangKe" nzFormat="dd/MM/yyyy"
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayTaoBangKeDen" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayLapBangKeDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
+          </div>
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
+            <label class="search__label"> Thơi hạn xuất kho trước ngày</label>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartThoiHanGiaoNhanTu" nzFormat="dd/MM/yyyy"
+                                formControlName="thoiGianGiaoNhanTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartThoiHanGiaoNhanDen" nzFormat="dd/MM/yyyy"
+                                formControlName="thoiGianGiaoNhanDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
+          </div>
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
+            <label class="search__label"> Ngày xuất kho</label>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayXuatKhoTu" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayXuatKhoTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayXuatKhoDen" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayXuatKho" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
             </div>
           </div>
@@ -47,7 +77,8 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">{{loaiVthh == '02' ? 'Bảng kê vật tư' : 'Danh sách bảng kê cân hàng'}}</h3>
+      <h3
+        class="text-uppercase">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'DANH SÁCH BẢNG KÊ XUẤT VẬT TƯ' : 'DANH SÁCH BẢNG KÊ CÂN HÀNG'}}</h3>
       <div class="buttons">
         <button
           *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BKXVT_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BKCH_EXP')"
@@ -56,8 +87,8 @@
           <span> Xuất file </span>
         </button>
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BKCH_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BKXVT_THEM')"
-          type="button" class="btn btn-main" (click)="redirectDetail(0, false, 0)">
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BKXVT_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BKCH_THEM')"
+          type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
           <i class=" icon htvbdh_dau-cong"></i>
           <span> Thêm </span>
         </button>
@@ -146,12 +177,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-center">
-                      <a (click)="redirectDetail(0, false, item.idQdNv)"
-                         *ngIf="userService.isChiCuc()">
-                        <i class="fa fa-plus"></i>
-                      </a>
-                    </td>
+                    <td></td>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(lv2.idVirtual)">
                     <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
@@ -174,13 +200,13 @@
                         <td>{{lv3.ngayLapBangKe|date:'dd/MM/YYYY'}}</td>
                         <td>{{lv3.tenTrangThai}}</td>
                         <td class="text-center">
-                          <a *ngIf="isActionAllowed('XEM', lv3)" (click)="redirectDetail(lv3.id,true, 0)">
+                          <a *ngIf="isActionAllowed('XEM', lv3)" (click)="redirectDetail(lv3.id,true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
-                          <a *ngIf="isActionAllowed('SUA', lv3)" (click)="redirectDetail(lv3.id,false, 0)">
+                          <a *ngIf="isActionAllowed('SUA', lv3)" (click)="redirectDetail(lv3.id,false)">
                             <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
-                          <a *ngIf="isActionAllowed('PHEDUYET', lv3)" (click)="redirectDetail(lv3.id,true, 0)">
+                          <a *ngIf="isActionAllowed('PHEDUYET', lv3)" (click)="redirectDetail(lv3.id,true)">
                             <i class="icon htvbdh_tcdt_pheduyet"></i>
                           </a>
                           <a *ngIf="isActionAllowed('XOA', lv3)" (click)="delete(lv3)">
@@ -219,7 +245,7 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-bdg-chi-tiet-bang-ke-can [idInput]="idSelected" [idQdGnv]="idQdNv" [loaiVthh]="loaiVthh" [isView]="isView"
+  <app-bdg-chi-tiet-bang-ke-can [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
                                 (showListEvent)="showList()">
   </app-bdg-chi-tiet-bang-ke-can>
 </div>

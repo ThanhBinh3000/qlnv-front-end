@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Roles, Operator, Utils, Status } from 'src/app/Utility/utils';
+import {Roles, Operator, Utils, Status, Table} from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -17,6 +17,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import * as XLSX from "xlsx";
 
 
 export const TRANG_THAI_TIM_KIEM = [
@@ -1334,6 +1335,53 @@ export class BaoCaoTongHopComponent implements OnInit {
         })
         return check;
     };
+
+  exportToExcel() {
+    if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    const header = [
+      { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 8, val: null },
+
+      { t: 0, b: 0, l: 0, r: 1, val: "Quyết định bộ tài chính" },
+      { t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+
+      { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+      { t: 4, b: 5, l: 1, r: 1, val: 'Nhóm' },
+      { t: 4, b: 5, l: 2, r: 2, val: 'Tổng số' },
+      { t: 4, b: 5, l: 3, r: 3, val: 'Đơn vị cấp dưới đã thực hiện' },
+      { t: 4, b: 5, l: 4, r: 4, val: 'Chênh lệch' },
+    ]
+
+    const headerBot = 5;
+    this.lstCtietBcao.forEach((item, index) => {
+      const row = headerBot + index + 1;
+      const tenNdung =  this.getTenNdung(item.maNdung);
+      header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
+      header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung})
+      header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
+      header.push({ t: row, b: row, l: 3, r: 3, val: item.dviCapDuoiTh?.toString() })
+      header.push({ t: row, b: row, l: 4, r: 4, val: item.chenhLech?.toString() })
+    })
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = Table.initExcel(header);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+    let excelName = this.maPa;
+    excelName = excelName + '_GTT_BCTH.xlsx'
+    XLSX.writeFile(workbook, excelName);
+  }
+
+  getTenNdung(maNdung: number): any{
+    let tenNdung: string;
+    this.noiDungs.forEach(itm => {
+      if(itm.ma == maNdung){
+        return tenNdung = itm.giaTri;
+      }
+    })
+    return tenNdung
+  }
 
 }
 

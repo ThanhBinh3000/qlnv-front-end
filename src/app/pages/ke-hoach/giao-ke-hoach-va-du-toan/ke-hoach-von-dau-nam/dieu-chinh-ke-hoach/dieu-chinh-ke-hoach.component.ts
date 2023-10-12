@@ -19,14 +19,8 @@ export class DieuChinhKeHoachComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  }
 
-  // selectTabDieuChinh(item) {
-  //   this.tabSelect = 1;
-  //   this.isDetail = true;
-  //   this.isView = item.isView;
-  //   this.deXuatId = item.deXuatId;
-  // }
+  }
 
   selectTab(tab) {
     this.tabSelected = tab;

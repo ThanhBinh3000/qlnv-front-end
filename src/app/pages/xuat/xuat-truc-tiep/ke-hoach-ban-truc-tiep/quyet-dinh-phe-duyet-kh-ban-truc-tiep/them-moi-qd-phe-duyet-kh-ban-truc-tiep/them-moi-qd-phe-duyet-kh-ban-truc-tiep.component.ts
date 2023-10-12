@@ -55,9 +55,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   danhsachDx: any[] = [];
   dataInput: any;
   dataInputCache: any;
-  isTongHop: boolean
   selected: boolean = false;
-  dataDonGiaDuocDuyet: any;
 
   constructor(
     httpClient: HttpClient,
@@ -136,8 +134,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     })
   }
 
-  async showFirstRow($event, dataDxBtt: any) {
-    await this.showDetail($event, dataDxBtt);
+  async showFirstRow($event, index: number) {
+    await this.showDetail($event, index);
   }
 
   async bindingDataTongHop(dataTongHop?) {
@@ -229,9 +227,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileDinhKem = data.fileDinhKem;
     this.danhsachDx = this.userService.isCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children;
-    if (this.danhsachDx && this.danhsachDx.length > 0) {
-      await this.showFirstRow(event, this.danhsachDx[0]);
-    }
+    await this.showFirstRow(event, 0);
   }
 
   async openDialogTh() {
@@ -280,53 +276,46 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async onChangeIdThHdr(idTh) {
+    if (idTh <= 0) return;
+    this.danhsachDx = [];
     try {
       await this.spinner.show();
-      if (idTh <= 0) {
-        return;
-      }
       const res = await this.tongHopKhBanTrucTiepService.getDetail(idTh);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
         return;
       }
       const data = res.data;
-      if (data.idSoQdPd) {
-        await this.loadDetail(data.idSoQdPd);
-      } else {
-        const soLuongDviTsan = data.children.reduce((total, item) => total + item.slDviTsan, 0);
-        this.formData.patchValue({
-          cloaiVthh: data.cloaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          loaiVthh: data.loaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          slDviTsan: soLuongDviTsan,
-          nam: this.formData.value.namKh,
-          idThHdr: data.id,
-          idTrHdr: null,
-          soTrHdr: null,
-        });
-        await this.getDataChiTieu();
-        for (const item of data.children) {
-          const resDx = await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr);
-          if (resDx.msg === MESSAGE.SUCCESS) {
-            const dataDx = resDx.data;
-            this.formData.patchValue({
-              tchuanCluong: dataDx.tchuanCluong,
-              loaiHinhNx: dataDx.loaiHinhNx,
-              tenLoaiHinhNx: dataDx.tenLoaiHinhNx,
-              kieuNx: dataDx.kieuNx,
-              tenKieuNx: dataDx.tenKieuNx,
-            });
-            dataDx.idDxHdr = dataDx.id;
-            this.danhsachDx.push(dataDx);
-            if (this.danhsachDx && this.danhsachDx.length > 0) {
-              this.showFirstRow(event, this.danhsachDx[0]);
-            }
-          }
+      const soLuongDviTsan = data.children.reduce((total, item) => total + item.slDviTsan, 0);
+      this.formData.patchValue({
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        slDviTsan: soLuongDviTsan,
+        nam: this.formData.value.namKh,
+        idThHdr: data.id,
+        idTrHdr: null,
+        soTrHdr: null,
+      });
+      await this.getDataChiTieu();
+      for (const item of data.children) {
+        const resDx = await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr);
+        if (resDx.msg !== MESSAGE.SUCCESS || !resDx.data) {
+          this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
+          return;
         }
-        this.dataInput = null;
-        this.dataInputCache = null;
+        const dataDx = resDx.data
+        this.formData.patchValue({
+          tchuanCluong: dataDx.tchuanCluong,
+          loaiHinhNx: dataDx.loaiHinhNx,
+          tenLoaiHinhNx: dataDx.tenLoaiHinhNx,
+          kieuNx: dataDx.kieuNx,
+          tenKieuNx: dataDx.tenKieuNx,
+        });
+        dataDx.idDxHdr = dataDx.id;
+        this.danhsachDx.push(dataDx);
+        await this.showFirstRow(event, 0);
       }
     } catch (error) {
       console.error('error:', error);
@@ -398,13 +387,10 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async onChangeIdTrHdr(idDx) {
+    if (idDx <= 0) return;
+    this.danhsachDx = [];
     try {
       await this.spinner.show();
-      this.danhsachDx = [];
-      if (idDx <= 0) {
-        await this.spinner.hide();
-        return;
-      }
       const res = await this.deXuatKhBanTrucTiepService.getDetail(idDx);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
@@ -440,11 +426,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       });
       await this.getDataChiTieu();
       this.danhsachDx.push(data);
-      if (this.danhsachDx && this.danhsachDx.length > 0) {
-        this.showFirstRow(event, this.danhsachDx[0]);
-      }
-      this.dataInput = null;
-      this.dataInputCache = null;
+      await this.showFirstRow(event, 0);
     } catch (error) {
       console.error('error:', error);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -468,15 +450,31 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       this.index = index;
     } else {
       this.selected = true;
-      this.index = 0;
     }
-    this.isTongHop = this.formData.value.phanLoai === 'TH';
-    this.dataInput = this.danhsachDx[this.index];
+    this.dataInput = this.danhsachDx[index];
     if (this.dataInput) {
-      const res = await this.deXuatKhBanTrucTiepService.getDetail(this.dataInput.idDxHdr);
+      let idDx = this.dataInput.idDxHdr
+      const res = await this.deXuatKhBanTrucTiepService.getDetail(idDx);
       this.dataInputCache = res.data;
     }
     await this.spinner.hide();
+  }
+
+  async receiveDataFromChild(data: any) {
+    if (this.danhsachDx[this.index]) {
+      if (data.hasOwnProperty('tongSoLuong')) {
+        this.danhsachDx[this.index].tongSoLuong = data.tongSoLuong;
+      }
+      if (data.hasOwnProperty('thanhTien')) {
+        this.danhsachDx[this.index].thanhTien = data.thanhTien;
+      }
+      if (data.hasOwnProperty('tgianDkienTu')) {
+        this.danhsachDx[this.index].tgianDkienTu = data.tgianDkienTu;
+      }
+      if (data.hasOwnProperty('tgianDkienDen')) {
+        this.danhsachDx[this.index].tgianDkienDen = data.tgianDkienDen;
+      }
+    }
   }
 
   async preview(id) {
@@ -518,15 +516,13 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   setValidator() {
     const thHdrValidators = this.formData.get('phanLoai').value === 'TH' ? [Validators.required] : [];
     const trHdrValidators = this.formData.get('phanLoai').value === 'TTr' ? [Validators.required] : [];
-
     this.formData.controls["idThHdr"].setValidators(thHdrValidators);
     this.formData.controls["idThHdr"].updateValueAndValidity();
-
     this.formData.controls["idTrHdr"].setValidators(trHdrValidators);
     this.formData.controls["idTrHdr"].updateValueAndValidity();
-
     this.formData.controls["soTrHdr"].setValidators(trHdrValidators);
     this.formData.controls["soTrHdr"].updateValueAndValidity();
+    this.formData.controls["soQdPd"].setValidators([Validators.required]);
   }
 
   setValidForm() {
@@ -541,7 +537,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       "tenCloaiVthh",
       "tenLoaiHinhNx",
       "tenKieuNx",
-      "tchuanCluong"
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

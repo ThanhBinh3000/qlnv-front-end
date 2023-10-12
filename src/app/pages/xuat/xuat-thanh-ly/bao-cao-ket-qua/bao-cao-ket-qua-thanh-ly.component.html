@@ -61,18 +61,18 @@
     </div>
   </nz-card>
   <div class="group-button">
-    <h3 class="text-uppercase">Danh sách quyết định sửa chữa hàng DTQG</h3>
+    <h3 class="text-uppercase">Danh sách báo cáo kết quả bán thanh lý DTQG</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-do" (click)="deleteMulti('XHDTQG_XTL_QDTL_XOA')">
+      <button type="button" class="btn btn-do" (click)="deleteMulti('XHDTQG_XTL_BCKQ_XOA')">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData('XHDTQG_XTL_QDTL_EXP')">
+      <button type="button" class="btn btn-sub" (click)="exportData('XHDTQG_XTL_BCKQ_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
       <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
-              (click)="redirectCreate('XHDTQG_XTL_QDTL_THEM')">
+              (click)="redirectCreate('XHDTQG_XTL_BCKQ_THEM')">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Tạo quyết định</span>
       </button>
@@ -88,10 +88,10 @@
         </th>
         <th nzWidth="30px">STT</th>
         <th nzWidth="30px">Năm</th>
-        <th nzWidth="150px"> Số quyết định</th>
-        <th> Trích yếu</th>
-        <th nzWidth="80px"> Ngày ký</th>
-        <th nzWidth="80px"> Số tờ trình</th>
+        <th nzWidth="150px">Số báo cáo</th>
+        <th> Nội dung báo cáo</th>
+        <th nzWidth="80px"> Ngày báo cáo</th>
+        <th nzWidth="80px"> Số quyết định thanh lý</th>
         <th nzWidth="100px"> Trạng thái</th>
         <th nzWidth="55px"> Hành động</th>
       </tr>
@@ -112,10 +112,17 @@
         </th>
         <th>
           <nz-input-group>
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                   (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+          </nz-input-group>
+        </th>
+        <th>
+          <nz-input-group>
             <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
                             (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy),'date')"></nz-date-picker>
           </nz-input-group>
         </th>
+
         <th>
           <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTtr"
@@ -148,10 +155,10 @@
           <a (click)="redirectDetail(data.id)">
             <span class="icon htvbdh_eye"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTL_QDTL_THEM')">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTL_BCKQ_XEM')">
             <span class="fa fa-pencil"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTL_QDTL_XOA')">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTL_BCKQ_XOA')">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>

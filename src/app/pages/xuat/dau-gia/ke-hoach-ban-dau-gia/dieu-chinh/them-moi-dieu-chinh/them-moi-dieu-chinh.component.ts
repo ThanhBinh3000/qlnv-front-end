@@ -145,7 +145,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       await this.loadDanhSachDieuChinh();
       const res = await this.quyetDinhPdKhBdgService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
-        const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
+        const danhSachDieuChinhFiltered = this.danhSachDieuChinh.filter(item => item.trangThai === STATUS.BAN_HANH);
+        const soQdPdSet = new Set(danhSachDieuChinhFiltered.map(item => item.soQdPd));
         this.danhSachQdPdKeHoach = res.data.content.filter(item => !soQdPdSet.has(item.soQdPd));
       } else if (res && res.msg) {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -223,14 +224,18 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       trangThai: STATUS.BAN_HANH,
     }
     const res = await this.quyetDinhDchinhKhBdgService.search(body)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data
-      if (data && data.content && data.content.length > 0) {
-        this.danhSachDieuChinh = data.content
-      }
-    } else {
+    if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
+    const data = res.data.content;
+    this.formData.patchValue({
+      lanDieuChinh: data.length + 1
+    })
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.danhSachDieuChinh = data
   }
 
   resetIds(data) {
@@ -292,6 +297,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   index = 0;
+
   async showDetail($event, index: number) {
     if ($event.type == 'click') {
       const selectedRow = $event.target.parentElement;
@@ -317,7 +323,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   async receiveDataFromChild(data: any) {
-    console.log(data, 999)
     if (this.dataTable[this.index]) {
       if (data.hasOwnProperty('tongSoLuong')) {
         this.dataTable[this.index].tongSoLuong = data.tongSoLuong;

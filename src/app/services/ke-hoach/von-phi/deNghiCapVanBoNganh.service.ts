@@ -12,7 +12,7 @@ export class DeNghiCapVonBoNganhService extends BaseService {
   GATEWAY = '/qlnv-khoach';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'DeNghiCapVonBoNganh', '');
+    super(httpClient, 'de-nghi-cap-von-bo-nganh', '');
   }
 
   timKiem(body: any): Promise<any> {

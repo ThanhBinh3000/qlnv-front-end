@@ -91,7 +91,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         this.formData.patchValue({
           tongMucDt: this.dataInput.tongSoLuong * this.dataInput.donGiaVat * 1000
         })
-        console.log(this.formData.value)
+        console.log(this.dataInput.children, "123")
         this.dataTable = this.dataInput.children
         this.calculatorTable();
       } else {
@@ -122,6 +122,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
   }
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
+    console.log(this.formData.value, "formData")
     const modalGT = this.modal.create({
       nzTitle: 'THÊM ĐỊA ĐIỂM NHẬP KHO',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
