@@ -538,17 +538,17 @@
               <th></th>
               <th class="first-last-row-table background-last-row">{{userService.isTongCuc() ? 'Chỉ tiêu của TCDT' :
                 'Chỉ tiêu của TCDT sau điều chỉnh'}} </th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)| number:
+              <th class="text-right text-btc "> {{(formData.value.slThocNhap || 0)| number:
                 '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) | number:
+              <th class="text-right text-btc "> {{(formData.value.slGaoNhap || 0) | number:
                 '1.0-1': 'vi_VN'}}</th>
               <th></th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)| number:
+              <th class="text-right text-btc "> {{(formData.value.slTongXuatThoc || 0)| number:
                 '1.0-1' : 'vi_VN'}}</th>
               <th></th>
               <th></th>
               <th></th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) | number:
+              <th class="text-right text-btc "> {{(formData.value.slTongXuatGao || 0) | number:
                 '1.0-1': 'vi_VN'}}</th>
               <th></th>
               <th></th>
