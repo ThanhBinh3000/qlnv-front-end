@@ -60,7 +60,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách nghị quyết của ủy ban thường vụ quốc hội</h3>
+      <h3 class='text-uppercase'>Danh sách nghị quyết của ủy ban thường vụ quốc hội</h3>
       <div class="buttons">
         <button *ngIf=" userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_XOA')"
           type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
