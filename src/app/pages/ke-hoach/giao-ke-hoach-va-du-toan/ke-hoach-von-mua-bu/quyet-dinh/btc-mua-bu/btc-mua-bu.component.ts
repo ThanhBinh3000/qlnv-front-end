@@ -86,8 +86,8 @@ export class BtcMuaBuComponent implements OnInit {
 
   loadDsNam() {
     let thisYear = dayjs().get('year');
-    for (let i = -3; i < 23; i++) {
-      this.dsNam.push((thisYear - i).toString());
+    for (let i = -3; i <= 5; i++) {
+      this.dsNam.push((thisYear + i).toString());
     }
   }
 
@@ -210,7 +210,7 @@ export class BtcMuaBuComponent implements OnInit {
 
   onAllChecked(checked) {
     this.dataTable.forEach((item) => {
-      if (item.trangThai == '00') {
+      if (item.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
         this.updateCheckedSet(item.id, checked);
       }
     })
