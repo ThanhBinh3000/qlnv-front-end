@@ -46,7 +46,8 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH/THÔNG BÁO SỬA CHỮA LỚN CỦA TCDT</h3>
       <div class="buttons">
-        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDTCDT_XOA')" type="button" class="btn btn-sub btn-xoa">
+        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDTCDT_XOA')" type="button" class="btn btn-sub btn-xoa"
+        (click)="deleteMulti()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
@@ -128,7 +129,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != '00'"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.soQuyetDinh }}</td>
