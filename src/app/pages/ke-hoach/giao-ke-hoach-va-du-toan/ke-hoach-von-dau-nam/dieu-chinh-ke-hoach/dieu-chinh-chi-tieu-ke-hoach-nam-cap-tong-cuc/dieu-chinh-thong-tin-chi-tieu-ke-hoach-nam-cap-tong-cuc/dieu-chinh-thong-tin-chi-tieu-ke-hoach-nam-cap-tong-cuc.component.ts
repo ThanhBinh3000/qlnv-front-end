@@ -2054,6 +2054,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   async selectNam() {
     this.formData.patchValue({ soQuyetDinhGiaoCuaTc: "", soCongVan: "" })
     this.yearNow = this.formData.get('namKeHoach').value;
+    this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
     if (this.userService.isCuc()) {
       await this.findCanCuByYearCuc(this.yearNow)
     }

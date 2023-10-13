@@ -1811,6 +1811,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       soQuyetDinhGiaoCuaTc: ""
     })
     this.yearNow = this.formData.get('namKeHoach').value;
+    this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
     this.findCanCuByYear(this.yearNow);
     // if (!this.id) {
     //   if ((this.thongTinChiTieuKeHoachNam.capDvi == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.capDvi == "2") {
