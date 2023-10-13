@@ -104,7 +104,7 @@ export class ThemMoiTtcpComponent implements OnInit {
 
 
   loadDsNam() {
-    for (let i =  -3; i <= 5; i++) {
+    for (let i = -3; i <= 5; i++) {
       this.dsNam.push({
         value: dayjs().get('year') + i,
         text: dayjs().get('year') + i,
@@ -291,6 +291,12 @@ export class ThemMoiTtcpComponent implements OnInit {
         this.formData.patchValue({
           soQdUbtvqh: this.listUbtvqh[0].soQd,
         });
+        let res = await this.quyetDinhUbtvqhMuBuBoSung.getDetail(this.listUbtvqh[0].id);
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.dataTable = res.data.listBoNganh;
+        }else {
+          this.notification.error(MESSAGE.ERROR, "Không tìm thấy thông tin chi tiết Nghị quyết của UBTVQH");
+        }
       }
     }
   }
