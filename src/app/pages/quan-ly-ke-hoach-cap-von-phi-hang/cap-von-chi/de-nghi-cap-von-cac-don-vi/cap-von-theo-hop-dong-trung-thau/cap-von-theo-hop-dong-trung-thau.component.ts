@@ -486,6 +486,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
+        const congVan = this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '';
         const workbook = XLSX.utils.book_new();
         // export sheet hợp đồng
         let headerHD = [];
@@ -495,7 +496,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             headerHD = [
                 { t: 0, b: 5, l: 0, r: 11, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Hợp đồng" },
-                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 1, b: 1, l: 0, r: 8, val: congVan },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Tên khách hàng' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
                 { t: 4, b: 4, l: 2, r: 4, val: 'Số lượng' },
@@ -518,7 +519,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             headerHD = [
                 { t: 0, b: 5, l: 0, r: 9, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Hợp đồng" },
-                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 1, b: 1, l: 0, r: 8, val: congVan },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
                 { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
@@ -560,7 +561,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             header = [
                 { t: 0, b: 5, l: 0, r: 22, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Cấp vốn" },
-                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 1, b: 1, l: 0, r: 8, val: congVan },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
                 { t: 4, b: 4, l: 1, r: 3, val: 'Số lượng' },
                 { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
@@ -596,7 +597,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             header = [
                 { t: 0, b: 5, l: 0, r: 18, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Cấp vốn" },
-                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 1, b: 1, l: 0, r: 8, val: congVan },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
                 { t: 4, b: 4, l: 1, r: 2, val: 'Số lượng' },
                 { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
