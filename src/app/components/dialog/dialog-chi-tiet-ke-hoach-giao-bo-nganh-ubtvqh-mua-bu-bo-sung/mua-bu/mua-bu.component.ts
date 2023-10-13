@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ThongTinQuyetDinh } from '../../../../models/DeXuatKeHoachuaChonNhaThau';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { AMOUNT_THREE_DECIMAL } from '../../../../Utility/utils';
+import { AMOUNT_NO_DECIMAL, AMOUNT_THREE_DECIMAL } from '../../../../Utility/utils';
 import { MESSAGE } from '../../../../constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
@@ -25,6 +25,7 @@ export class MuaBuComponent implements OnInit {
   @Input()
   tongGtri: number;
   amount = AMOUNT_THREE_DECIMAL;
+  amountSL = AMOUNT_NO_DECIMAL;
   @Output()
   tongGtriChange = new EventEmitter<number>();
 
@@ -185,4 +186,6 @@ export class MuaBuComponent implements OnInit {
 
   validate() {
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }

@@ -164,7 +164,7 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td style="text-align: left; white-space: nowrap;">
-              <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_XEM')"
+              <a *ngIf="data.trangThai != STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV_XEM')"
                 (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>

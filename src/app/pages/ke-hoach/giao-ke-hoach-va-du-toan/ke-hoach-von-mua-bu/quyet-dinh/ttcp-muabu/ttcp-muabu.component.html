@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="20">
           <div nz-col [nzSpan]="3">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="nam-qd">Năm Quyết Định</nz-form-label>
+              <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="namQd" id="nam-qd">
                   <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
@@ -16,7 +16,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="so-qd">Số Quyết Định</nz-form-label>
+              <nz-form-label nzFor="so-qd">Số quyết Định</nz-form-label>
               <nz-form-control>
                 <nz-input-group id="so-qd">
                   <input type="text" nz-input formControlName="soQd"/>
@@ -26,7 +26,7 @@
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="ngay-qd">Ngày Quyết Định</nz-form-label>
+              <nz-form-label nzFor="ngay-qd">Ngày quyết Định</nz-form-label>
               <nz-form-control>
                 <nz-form-control>
                   <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
@@ -37,7 +37,7 @@
           </div>
           <div nz-col [nzSpan]="11">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
+              <nz-form-label nzRequired nzFor="trich-yeu">Trích yếu</nz-form-label>
               <nz-form-control>
                 <nz-input-group id="trich-yeu">
                   <input type="text" nz-input formControlName="trichYeu" placeholder="Tiêu đề văn bản"/>
@@ -88,9 +88,9 @@
           <th width="45px" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
               (nzCheckedChange)="onAllChecked($event)"></th>
           <th class="text-center" style="width: 2%;">STT</th>
-          <th style="width: 10%;">Số QĐ</th>
-          <th style="width: 10%;">Năm QĐ</th>
-          <th style="width: 10%;">Ngày QĐ</th>
+          <th style="width: 10%;">Số quyết định</th>
+          <th style="width: 10%;">Năm kế hoạch</th>
+          <th style="width: 10%;">Ngày quyết định</th>
           <th style="width: 25%;">Trích yếu</th>
           <th style="width: 10%;">Trạng thái</th>
           <th class="text-center" width="width: 5%;">Hành động</th>
