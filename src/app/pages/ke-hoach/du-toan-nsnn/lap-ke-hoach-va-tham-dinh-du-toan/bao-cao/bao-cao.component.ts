@@ -585,7 +585,7 @@ export class BaoCaoComponent implements OnInit {
             namBcao: this.baoCao.namBcao,
             tenPl: bieuMau.tenPl,
             tieuDe: bieuMau.tenDm,
-            congVan: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
+            congVan: this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '',
             path: this.path,
             status: new BtnStatus(),
             isSynthetic: isSynthetic,
