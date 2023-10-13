@@ -3,6 +3,7 @@ import {ThongTinQuyetDinh} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {NzModalService} from "ng-zorro-antd/modal";
 import { MESSAGE } from '../../../../constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { AMOUNT_NO_DECIMAL, AMOUNT_THREE_DECIMAL } from '../../../../Utility/utils';
 
 @Component({
   selector: 'app-muabu-bosung',
@@ -33,7 +34,8 @@ export class MuabuBosungComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
   dsDonViTinh = [];
-
+  amount = AMOUNT_THREE_DECIMAL;
+  amountSL = AMOUNT_NO_DECIMAL;
   constructor(
     private readonly modal: NzModalService,
     private notification: NzNotificationService,
@@ -164,4 +166,7 @@ export class MuabuBosungComponent implements OnInit {
       }
     }
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
+  protected readonly AMOUNT_THREE_DECIMAL = AMOUNT_THREE_DECIMAL;
 }
