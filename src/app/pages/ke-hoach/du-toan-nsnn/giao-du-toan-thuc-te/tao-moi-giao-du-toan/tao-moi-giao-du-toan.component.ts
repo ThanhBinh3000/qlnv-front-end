@@ -1458,6 +1458,11 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
+
+		if (!this.soQd || !this.soQd?.fileName) {
+			this.soQd.fileName = ''
+		}
+
 		const header = [
 			{ t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
 			{ t: 0, b: 0, l: 0, r: 1, val: `Phương án giao dự toán nsnn năm ${this.namDtoan}` },
@@ -1468,7 +1473,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			{ t: 1, b: 1, l: 3, r: 3, val: `Mã phương án BTC` },
 			{ t: 1, b: 1, l: 3, r: 3, val: `Trạng thái ` },
 
-			{ t: 2, b: 2, l: 0, r: 0, val: this.soQd.fileName },
+			{ t: 2, b: 2, l: 0, r: 0, val: `${this.soQd.fileName}` },
 			{ t: 2, b: 2, l: 1, r: 1, val: ` ${this.ngayTao} ` },
 			{ t: 2, b: 2, l: 2, r: 2, val: ` ${this.maPa} ` },
 			{ t: 2, b: 2, l: 3, r: 3, val: ` ${this.maPaCha} ` },

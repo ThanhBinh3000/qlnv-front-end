@@ -990,14 +990,25 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
+
+        if (!this.soQd || !this.soQd?.fileName) {
+            this.soQd.fileName = ''
+        }
+
         const header = [
             { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 8, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: `Quyết định Bộ Tài Chính năm ${this.namPa}` },
-            { t: 2, b: 2, l: 0, r: 0, val: `số quyết định ${this.soQd.fileName} ` },
-            { t: 2, b: 2, l: 1, r: 1, val: `Ngày ${this.ngayTao} ` },
-            { t: 2, b: 2, l: 2, r: 2, val: `Mã phương án BTC ${this.maPa} ` },
-            { t: 2, b: 2, l: 4, r: 4, val: `Trạng thái ${this.getStatusName(this.isStatus)} ` },
+
+            { t: 1, b: 1, l: 0, r: 0, val: `Số qđ ` },
+            { t: 1, b: 1, l: 1, r: 1, val: `Ngày ` },
+            { t: 1, b: 1, l: 2, r: 2, val: `Mã phương án BTC` },
+            { t: 1, b: 1, l: 3, r: 3, val: `Trạng thái ` },
+
+            { t: 2, b: 2, l: 0, r: 0, val: `${this.soQd.fileName}` },
+            { t: 2, b: 2, l: 1, r: 1, val: ` ${this.ngayTao} ` },
+            { t: 2, b: 2, l: 2, r: 2, val: ` ${this.maPa} ` },
+            { t: 2, b: 2, l: 3, r: 3, val: ` ${this.getStatusName(this.isStatus)} ` },
 
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
