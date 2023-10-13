@@ -1738,7 +1738,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: STATUS.BAN_HANH,
           };
-          await this.save();
+          // await this.save();
           const res = await this.chiTieuKeHoachNamService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);

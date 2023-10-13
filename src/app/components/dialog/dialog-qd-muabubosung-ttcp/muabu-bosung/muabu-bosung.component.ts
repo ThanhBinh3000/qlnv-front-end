@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ThongTinQuyetDinh} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {NzModalService} from "ng-zorro-antd/modal";
+import { MESSAGE } from '../../../../constants/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-muabu-bosung',
@@ -34,6 +36,7 @@ export class MuabuBosungComponent implements OnInit {
 
   constructor(
     private readonly modal: NzModalService,
+    private notification: NzNotificationService,
   ) {
   }
 
@@ -77,7 +80,19 @@ export class MuabuBosungComponent implements OnInit {
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    this.dataTable = [...this.dataTable, this.rowItem]
+    if (!this.rowItem.loaiVthh || !this.rowItem.soLuong) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn phải nhập hàng DTQG và số lượng.');
+      return;
+    }
+    // Check hàng hóa đã có trong list chưa
+    let indexItem = this.dataTable.findIndex(item => item.loaiVthh == this.rowItem.loaiVthh && item.cloaiVthh == this.rowItem.cloaiVthh);
+    if (indexItem != -1) {
+      let itemOld = this.dataTable[indexItem];
+      itemOld.soLuong = +itemOld.soLuong + +this.rowItem.soLuong;
+      this.dataTable[indexItem] = itemOld;
+    } else {
+      this.dataTable = [...this.dataTable, this.rowItem];
+    }
     this.rowItem = new ThongTinQuyetDinh();
     this.updateEditCache()
     this.emitDataTable()
@@ -111,26 +126,6 @@ export class MuabuBosungComponent implements OnInit {
   }
 
   onChangeLoaiVthh(event, typeData?: any) {
-    // if (typeData) {
-    //   this.dsChungLoaiHangHoa = [];
-    //   typeData.dviTinh = null;
-    //   const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-    //   if (loaiVthh.length > 0) {
-    //     typeData.cloaiVthh = null;
-    //     typeData.dviTinh = loaiVthh[0].maDviTinh;
-    //     typeData.tenVthh = loaiVthh[0].ten;
-    //     this.dsChungLoaiHangHoa = loaiVthh[0].child;
-    //   }
-    // } else  {
-    //   this.dsChungLoaiHangHoa = [];
-    //   this.rowItem.dviTinh = null;
-    //   const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-    //   if (loaiVthh.length > 0) {
-    //     this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
-    //     this.rowItem.tenVthh = loaiVthh[0].ten;
-    //     this.dsChungLoaiHangHoa = loaiVthh[0].child;
-    //   }
-    // }
     if (typeData) {
       this.dsChungLoaiHangHoa = [];
       typeData.cloaiVthh = null;
@@ -155,17 +150,6 @@ export class MuabuBosungComponent implements OnInit {
   }
 
   onChangeCloaiVthh(event, typeData?: any) {
-    //   if (typeData) {
-    //     const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
-    //     if (cloaiVthh.length > 0) {
-    //       typeData.tenCloaiVthh = cloaiVthh[0].ten;
-    //     }
-    //   } else  {
-    //     const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
-    //     if (cloaiVthh.length > 0) {
-    //       this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
-    //     }
-    //   }
     if (typeData) {
       const cloaiVthh = this.dsChungLoaiHangHoa.find(item => item.ma == event);
       if (cloaiVthh) {
