@@ -141,7 +141,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
             this.isCanbotc = true;
         }
         await this.getChildUnit();
-        if (this.userService.isAccessPermisson(this.userService.isAccessPermisson(Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT))) {
+        if (this.userService.isAccessPermisson(Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT)) {
             this.trangThai = '9';
             this.status = false;
             this.searchFilter.loaiTimKiem = '1';

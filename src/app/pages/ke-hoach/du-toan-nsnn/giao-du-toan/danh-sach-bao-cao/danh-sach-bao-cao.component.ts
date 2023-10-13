@@ -198,6 +198,8 @@ export class DanhSachBaoCaoComponent implements OnInit {
                     })
                 })
                 this.dataTableAll = cloneDeep(this.dataTable);
+                console.log(this.dataTableAll);
+
                 this.totalElements = res.data.totalElements;
                 this.totalPages = res.data.totalPages;
             } else {
@@ -233,15 +235,17 @@ export class DanhSachBaoCaoComponent implements OnInit {
     }
 
     checkEditStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
-        return Status.TT_01 == item.trangThai &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.SUA_BC) : this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP));
+        const isSynthetic = item.tongHopTu != "[]" && item.tongHopTu != null;
+        console.log(isSynthetic);
+
+        return Status.check('saveWHist', item.trangThai) &&
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.SUA_BC));
     }
 
     checkDeleteStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
-        return Status.TT_01 == item.trangThai &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.XOA_BC) : this.userService.isAccessPermisson(Roles.GSTC.XOA_BC_TONGHOP));
+        const isSynthetic = item.tongHopTu != "[]" && item.tongHopTu != null;
+        return Status.check('saveWHist', item.trangThai) &&
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.XOA_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.XOA_BC));
     }
 
     getStatusName(trangThai: string) {

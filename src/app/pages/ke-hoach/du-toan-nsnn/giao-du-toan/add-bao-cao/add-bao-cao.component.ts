@@ -370,7 +370,7 @@ export class AddBaoCaoComponent implements OnInit {
             namBcao: this.baoCao.namBcao,
             tenPl: bieuMau.tenPl,
             tieuDe: bieuMau.tenDm,
-            congVan: Utils.getDocName(this.baoCao.soQd.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
+            congVan: this.baoCao.soQd?.fileName ? Utils.getDocName(this.baoCao.soQd.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '',
             path: this.path,
             status: new BtnStatus(),
             isSynthetic: isSynthetic,
