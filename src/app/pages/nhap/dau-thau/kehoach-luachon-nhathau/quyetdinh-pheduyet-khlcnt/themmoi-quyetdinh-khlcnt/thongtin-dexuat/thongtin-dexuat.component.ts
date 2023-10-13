@@ -22,6 +22,7 @@ import {
 } from "../../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
 import {UserService} from "../../../../../../../services/user.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 
 @Component({
@@ -47,6 +48,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   formData: FormGroup
   listNguonVon: any[] = [];
   listThuHoachVu: any[] = [];
+  listQuocGia: any[] = [];
   listDataGroup: any[] = [];
   listOfData: any[] = [];
   isEditing: boolean = false;
@@ -61,6 +63,19 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   sumThanhTienTamTinh: any[] = [];
   STATUS = STATUS;
   listQuy: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
@@ -104,7 +119,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       gtriHdong: [null,],
       soLuong: [],
       donGiaVat: [''],
-      vat: [5],
       tongMucDt: [null],
       tongMucDtLamTron: [null],
       tongMucDtDx: [null, [Validators.required]],
@@ -120,6 +134,15 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       vu: [''],
       thuHoachVu: [''],
       namThuHoach: [''],
+      quocGiaSx: [''],
+      giaBanHoSo: [''],
+      tgianMoHoSo: [''],
+      soQdPdGiaCuThe: [''],
+      ngayKyQdPdGiaCuThe: [''],
+      tgianMthauTime: [],
+      tgianDthauTime: [],
+      tgianMoHoSoTime: [],
+      thueVat: [],
     });
   }
 
@@ -166,6 +189,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
             vu: this.dataInput.dxuatKhLcntHdr?.vu,
             thuHoachVu: this.dataInput.dxuatKhLcntHdr?.thuHoachVu,
             namThuHoach: this.dataInput.dxuatKhLcntHdr?.namThuHoach,
+            quocGiaSx: this.dataInput.dxuatKhLcntHdr?.quocGiaSx,
             quy: this.dataInput.dxuatKhLcntHdr?.quy,
           });
           this.initListQuy();
@@ -216,6 +240,11 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     let resVu = await this.danhMucService.danhMucChungGetAll('VU_THU_HOACH');
     if (resVu.msg == MESSAGE.SUCCESS) {
       this.listThuHoachVu = resVu.data;
+    }
+    this.listQuocGia = [];
+    let resQg = await this.danhMucService.danhMucChungGetAll('QUOC_GIA');
+    if (resQg.msg == MESSAGE.SUCCESS) {
+      this.listQuocGia = resQg.data;
     }
   }
 
@@ -288,7 +317,35 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaTamTinh;
+          prev += cur.soLuong * item.donGia;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum * 1000;
+    }
+  }
+
+  calcTongThanhTienDx() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * cur.donGiaTamTinh;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum * 1000;
+    }
+  }
+
+  calcTongThanhTienBaoLanh() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * cur.donGiaTamTinh * this.formData.value.gtriDthau / 100;
           return prev;
         }, 0);
         sum += sumChild;
@@ -403,8 +460,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     let tongMucDtDx: number = 0;
     let tongSl: number = 0;
     this.listOfData.forEach((item) => {
-      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
-      tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
+      tongMucDt = tongMucDt + item.thanhTien;
+      tongMucDtDx = tongMucDtDx + item.thanhTienDx;
       tongSl += item.soLuong
     });
     this.formData.patchValue({
