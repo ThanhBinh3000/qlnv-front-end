@@ -91,8 +91,8 @@
                     <th>
                       <nz-input-group>
                         <nz-input-group>
-                          <nz-select nzAllowClear [(ngModel)]="filterTable.nam"
-                            (ngModelChange)="filterInTable('nam',filterTable.nam)">
+                          <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                            (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                           </nz-select>
                         </nz-input-group>
@@ -100,31 +100,16 @@
                     </th>
                     <th>
                       <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinh"
-                          (input)="filterInTable('soQdinh',filterTable.soQdinh)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinh"
+                          (input)="filterInTable('soQuyetDinh',filterTable.soQuyetDinh)" size="small" />
                       </nz-input-group>
 
                     </th>
                     <th>
                       <nz-input-group>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdinh"
-                          (ngModelChange)="filterInTable('ngayKyQdinh', convertDateToString(filterTable.ngayKyQdinh))">
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKy"
+                          (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
                         </nz-date-picker>
-                      </nz-input-group>
-                    </th>
-                    <th>
-                      <nz-input-group>
-                        <nz-select nzAllowClear [(ngModel)]="filterTable.tenLoaiDc"
-                          (ngModelChange)="filterInTable('tenLoaiDc',filterTable.tenLoaiDc)">
-                          <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ten"
-                            [nzLabel]="p.ten"></nz-option>
-                        </nz-select>
-                      </nz-input-group>
-                    </th>
-                    <th>
-                      <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiQdinh"
-                          (input)="filterInTable('tenLoaiQdinh',filterTable.tenLoaiQdinh)" size="small" />
                       </nz-input-group>
                     </th>
                     <th>
@@ -135,8 +120,22 @@
                     </th>
                     <th>
                       <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDxuat"
-                          (input)="filterInTable('soDxuat',filterTable.soDxuat)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm"
+                          [(ngModel)]="filterTable.soQuyetDinhGiaoCuaTc"
+                          (input)="filterInTable('soQuyetDinhGiaoCuaTc',filterTable.soQuyetDinhGiaoCuaTc)"
+                          size="small" />
+                      </nz-input-group>
+                    </th>
+                    <th>
+                      <nz-input-group>
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
+                          (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small" />
+                      </nz-input-group>
+                    </th>
+                    <th>
+                      <nz-input-group>
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhDcCuaC"
+                          (input)="filterInTable('soQuyetDinhDcCuaC',filterTable.soQuyetDinhDcCuaC)" size="small" />
                       </nz-input-group>
                     </th>
                     <th>
@@ -233,8 +232,8 @@
                     <th>
                       <nz-input-group>
                         <nz-input-group>
-                          <nz-select nzAllowClear [(ngModel)]="filterTable.nam"
-                            (ngModelChange)="filterInTable('nam',filterTable.nam)">
+                          <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                            (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                           </nz-select>
                         </nz-input-group>
@@ -242,31 +241,16 @@
                     </th>
                     <th>
                       <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinh"
-                          (input)="filterInTable('soQdinh',filterTable.soQdinh)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinh"
+                          (input)="filterInTable('soQuyetDinh',filterTable.soQuyetDinh)" size="small" />
                       </nz-input-group>
 
                     </th>
                     <th>
                       <nz-input-group>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdinh"
-                          (ngModelChange)="filterInTable('ngayKyQdinh', convertDateToString(filterTable.ngayKyQdinh))">
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKy"
+                          (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
                         </nz-date-picker>
-                      </nz-input-group>
-                    </th>
-                    <th>
-                      <nz-input-group>
-                        <nz-select nzAllowClear [(ngModel)]="filterTable.tenLoaiDc"
-                          (ngModelChange)="filterInTable('tenLoaiDc',filterTable.tenLoaiDc)">
-                          <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ten"
-                            [nzLabel]="p.ten"></nz-option>
-                        </nz-select>
-                      </nz-input-group>
-                    </th>
-                    <th>
-                      <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiQdinh"
-                          (input)="filterInTable('tenLoaiQdinh',filterTable.tenLoaiQdinh)" size="small" />
                       </nz-input-group>
                     </th>
                     <th>
@@ -277,8 +261,22 @@
                     </th>
                     <th>
                       <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDxuat"
-                          (input)="filterInTable('soDxuat',filterTable.soDxuat)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm"
+                          [(ngModel)]="filterTable.soQuyetDinhGiaoCuaTc"
+                          (input)="filterInTable('soQuyetDinhGiaoCuaTc',filterTable.soQuyetDinhGiaoCuaTc)"
+                          size="small" />
+                      </nz-input-group>
+                    </th>
+                    <th>
+                      <nz-input-group>
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
+                          (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small" />
+                      </nz-input-group>
+                    </th>
+                    <th>
+                      <nz-input-group>
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhDcCuaC"
+                          (input)="filterInTable('soQuyetDinhDcCuaC',filterTable.soQuyetDinhDcCuaC)" size="small" />
                       </nz-input-group>
                     </th>
                     <th>

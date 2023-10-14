@@ -989,14 +989,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       soQuyetDinh: [, [Validators.required]],
       ngayKy: [dayjs().format('YYYY-MM-DD')],
       ngayHieuLuc: [dayjs().format('YYYY-MM-DD')],
-      soQuyetDinhGiaoCuaTc: [],
-      quyetDinhGiaoCuaTcId: [],
+      soQuyetDinhGiaoCuaTc: [, [Validators.required]],
+      quyetDinhGiaoCuaTcId: [, [Validators.required]],
       soQuyetDinhGiaoNam: [],
       quyetDinhGiaoNamId: [],
       soCongVan: [],
       namKeHoach: [dayjs().get("year"), [Validators.required]],
-      trichYeu: [, [Validators.required],
-      ],
+      trichYeu: [, [Validators.required]],
       soQuyetDinhDcCuaC: [],
       type: ["02"],
       cap: [],
@@ -2055,6 +2054,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   async selectNam() {
     this.formData.patchValue({ soQuyetDinhGiaoCuaTc: "", soCongVan: "" })
     this.yearNow = this.formData.get('namKeHoach').value;
+    this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
     if (this.userService.isCuc()) {
       await this.findCanCuByYearCuc(this.yearNow)
     }

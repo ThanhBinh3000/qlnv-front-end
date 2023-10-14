@@ -91,10 +91,10 @@ export class ThemMoiUbtvqhComponent implements OnInit {
 
 
   loadDsNam() {
-    for (let i = -3; i < 23; i++) {
+    for (let i = -3; i <=5; i++) {
       this.dsNam.push({
-        value: dayjs().get('year') - i,
-        text: dayjs().get('year') - i,
+        value: dayjs().get('year') + i,
+        text: dayjs().get('year') + i,
       });
     }
   }
@@ -183,9 +183,9 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     body.soQd = body.soQd;
     body.listBoNganh = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
-    let res
+    // console.log(body,'bodybodybodybody');return;
+    let res;
     if (this.idInput > 0) {
-
       res = await this.quyetDinhUbtvqhMuBuBoSung.update(body);
     } else {
       res = await this.quyetDinhUbtvqhMuBuBoSung.create(body);

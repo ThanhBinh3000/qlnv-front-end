@@ -242,8 +242,8 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       soCongVan: [, [Validators.required]],
       ngayKy: [dayjs().format('YYYY-MM-DD')],
       ngayHieuLuc: [dayjs().format('YYYY-MM-DD')],
-      soQuyetDinhGiaoNamTruoc: [],
-      quyetDinhGiaoNamTruocId: [],
+      soQuyetDinhGiaoNamTruoc: [, [Validators.required]],
+      quyetDinhGiaoNamTruocId: [, [Validators.required]],
       namKeHoach: [dayjs().get("year"), [Validators.required]],
       trichYeu: [, [Validators.required]],
       soQuyetDinhDcCuaCs: [],
@@ -1890,6 +1890,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   async selectNam() {
     this.formData.patchValue({ soQuyetDinhGiaoNamTruoc: "" })
     this.yearNow = this.formData.get('namKeHoach').value;
+    this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
     await this.getDSDXDC(this.yearNow)
     await this.findCanCuByYear(this.yearNow);
     // if (!this.id) {
