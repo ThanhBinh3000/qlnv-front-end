@@ -12,14 +12,13 @@
           </div>
         </div>
         <nz-input-group [nzSuffix]="suffixIcon">
-          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchValue"/>
+          <input type="text" nz-input placeholder="Tìm kiếm" [value]="inputSearch" (change)="beforeSearch($event)"/>
         </nz-input-group>
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
         <nz-tree #nzTreeSelectComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
-                 (nzExpandChange)="loadChildren($event)"
-                 (nzContextMenu)="nzClickNodeTree($event)" [nzSearchValue]="searchValue">
+                 [nzSearchValue]="searchValue">
         </nz-tree>
       </nz-card>
     </div>
