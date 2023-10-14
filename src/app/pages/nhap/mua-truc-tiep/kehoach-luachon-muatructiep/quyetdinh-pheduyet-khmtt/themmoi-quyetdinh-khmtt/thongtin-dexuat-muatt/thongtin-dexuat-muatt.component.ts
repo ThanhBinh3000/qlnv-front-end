@@ -20,6 +20,9 @@ import {
   DialogThemMoiKeHoachMuaTrucTiepComponent
 } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
 import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import {
+  QuyetDinhGiaTCDTNNService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-thongtin-dexuat-muatt',
@@ -52,6 +55,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
     private spinner: NgxSpinnerService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private helperService: HelperService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
     private modal: NzModalService,
     private notification: NzNotificationService,
   ) {
@@ -93,6 +97,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         })
         console.log(this.dataInput.children, "123")
         this.dataTable = this.dataInput.children
+        await this.getGiaCuThe(this.formData.value.maDvi);
         this.calculatorTable();
       } else {
         this.formData.reset();
@@ -233,6 +238,32 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
       this.formData.get('tgianKthuc').setValue(value);
     }
     this.objectChange.emit(this.formData.value)
+  }
+
+  async getGiaCuThe(maDvi?: any) {
+    let body = {
+      loaiGia: "LG03",
+      namKeHoach: this.formData.get('namKh').value,
+      maDvi: maDvi,
+      loaiVthh: this.formData.get('loaiVthh').value,
+      cloaiVthh: this.formData.get('cloaiVthh').value
+    }
+    let pag = await this.quyetDinhGiaTCDTNNService.getPag(body)
+    if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
+      const data = pag.data;
+      this.dataTable.forEach(item => {
+        let dataVat = data.find(x => x.maChiCuc == item.maDvi)
+        let donGiaVatQd = 0;
+        if (dataVat != null && dataVat.giaQdDcTcdtVat != null && dataVat.giaQdDcTcdtVat > 0) {
+          donGiaVatQd = dataVat.giaQdDcTcdtVat
+        } else {
+          donGiaVatQd = dataVat.giaQdTcdtVat
+        }
+        item.donGiaVat = donGiaVatQd
+        console.log(item.donGiaVat, "1")
+      })
+    }
+
   }
 
 

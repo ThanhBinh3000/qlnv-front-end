@@ -28,7 +28,7 @@
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24">Thời gian đề xuất thanh lý</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
-          <nz-range-picker nzDisabled [nzRanges]="ranges" ngModel formControlName="thoiGianTl" [nzFormat]="globals.dateFormat"></nz-range-picker>
+          <nz-range-picker nzDisabled [nzRanges]="ranges" ngModel formControlName="thoiGianTh" [nzFormat]="globals.dateFormat"></nz-range-picker>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
@@ -59,104 +59,104 @@
 
     <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
-        <tr>
-          <th></th>
-          <th>STT</th>
-          <th>Năm KH</th>
-          <th>Mã danh sách</th>
-          <th>Chi cục DTNN</th>
-          <th>Loại hàng</th>
-          <th>Chủng loại</th>
-          <th>Điểm kho</th>
-          <th>Nhà/Ngăn/Lô kho</th>
-          <th>Ngày nhập kho</th>
-          <th>Tồn kho</th>
-          <th>SL đề xuất thanh lý</th>
-          <th>SL thanh lý đã duyệt</th>
-          <th>SL còn lại cần thanh lý</th>
-          <th>ĐVT</th>
-          <th>Ngày đề xuất</th>
-          <th>Lý do cần thanh lý</th>
-          <th>Thời hạn đề xuất thanh lý</th>
-          <th>Trạng thái</th>
-          <th>Trạng thái thanh lý</th>
-        </tr>
+      <tr>
+        <th></th>
+        <th>STT</th>
+        <th>Năm KH</th>
+        <th>Mã danh sách</th>
+        <th>Chi cục DTNN</th>
+        <th>Loại hàng</th>
+        <th>Chủng loại</th>
+        <th>Điểm kho</th>
+        <th>Nhà/Ngăn/Lô kho</th>
+        <th>Ngày nhập kho</th>
+        <th>Tồn kho</th>
+        <th>SL đề xuất thanh lý</th>
+        <th>SL thanh lý đã duyệt</th>
+        <th>SL còn lại cần thanh lý</th>
+        <th>ĐVT</th>
+        <th>Ngày đề xuất</th>
+        <th>Lý do cần thanh lý</th>
+        <th>Thời hạn đề xuất thanh lý</th>
+        <th>Trạng thái</th>
+        <th>Trạng thái thanh lý</th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let item of dataTable , let i = index">
-          <tr>
-            <td nzShowExpand="true" [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(item, $event)"></td>
-            <td>{{(page-1)*pageSize+i+1}}</td>
-            <td>{{item.nam}}</td>
-            <td>{{item.maDanhSach}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
-            <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
-            <td>{{item.tenTrangThai}}</td>
-            <td></td>
-          </tr>
-          <ng-container *ngIf="item.expandSet">
-            <ng-container *ngFor="let chiCuc of item.groupChiCuc , let i = index">
+      <ng-container *ngFor="let item of dataTable , let i = index">
+        <tr>
+          <td nzShowExpand="true" [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(item, $event)"></td>
+          <td>{{(page-1)*pageSize+i+1}}</td>
+          <td>{{item.nam}}</td>
+          <td>{{item.maDanhSach}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy'}}</td>
+          <td>{{item.thoiHanNhap | date : 'dd/MM/yyyy'}}</td>
+          <td>{{item.tenTrangThai}}</td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="item.expandSet">
+          <ng-container *ngFor="let chiCuc of item.groupChiCuc , let i = index">
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{{chiCuc.tenDonVi}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngFor="let data of chiCuc.children , let i = index">
               <tr>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{chiCuc.tenDonVi}}</td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{data.xhThDanhSachHdr.tenLoaiVthh}}</td>
+                <td>{{data.xhThDanhSachHdr.tenCloaiVthh}}</td>
+                <td>{{data.xhThDanhSachHdr.tenDiemKho}}</td>
+                <td>{{data.xhThDanhSachHdr.tenNhaKho}}/{{data.xhThDanhSachHdr.tenNganKho}}/{{data.xhThDanhSachHdr.tenLoKho}}</td>
+                <td>{{data.xhThDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
+                <td>{{data.xhThDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{data.xhThDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{data.xhThDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{data.xhThDanhSachHdr.slDeXuat - data.xhThDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{data.xhThDanhSachHdr.donViTinh }}</td>
+                <td>{{data.xhThDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
+                <td>{{data.xhThDanhSachHdr.lyDo}}</td>
+                <td>{{item.thoiGianThTu | date : 'dd/MM/yyyy'}} - {{item.thoiGianThDen | date : 'dd/MM/yyyy'}}</td>
                 <td></td>
                 <td></td>
               </tr>
-              <ng-container *ngFor="let data of chiCuc.children , let i = index">
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>{{data.xhTlDanhSachHdr.tenLoaiVthh}}</td>
-                  <td>{{data.xhTlDanhSachHdr.tenCloaiVthh}}</td>
-                  <td>{{data.xhTlDanhSachHdr.tenDiemKho}}</td>
-                  <td>{{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}/{{data.xhTlDanhSachHdr.tenLoKho}}</td>
-                  <td>{{data.xhTlDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
-                  <td>{{data.xhTlDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.slDeXuat - data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
-                  <td>{{data.xhTlDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
-                  <td>{{data.xhTlDanhSachHdr.lyDo}}</td>
-                  <td>{{item.thoiGianTlTu | date : 'dd/MM/yyyy'}} - {{item.thoiGianTlDen | date : 'dd/MM/yyyy'}}</td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </ng-container>
             </ng-container>
           </ng-container>
         </ng-container>
+      </ng-container>
       </tbody>
     </nz-table>
   </ng-container>
@@ -181,7 +181,7 @@
         <span>In</span>
       </button> -->
       <button nz-button *ngIf="formData.value.trangThai == STATUS.DU_THAO" (click)="handleOk()"
-        class="modal__button--save ml-2">
+              class="modal__button--save ml-2">
         <i nz-icon nzType="save"></i>
         Gửi duyệt
       </button>
