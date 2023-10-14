@@ -1,5 +1,4 @@
-import {cloneDeep} from 'lodash';
-import {chain} from "lodash";
+import {chain} from 'lodash';
 import {v4 as uuidv4} from "uuid";
 import {Component, Input, OnInit,} from '@angular/core';
 import {Validators} from "@angular/forms";
@@ -14,9 +13,6 @@ import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 import dayjs from "dayjs";
-import {
-  DeXuatScLonService
-} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 import {
   DialogQdScBtcComponent
 } from "../../quyet-dinh-sc-lon-btc/them-moi-qd-sc-btc/dialog-qd-sc-btc/dialog-qd-sc-btc.component";
@@ -63,9 +59,9 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       soQuyetDinh: [null, Validators.required],
       namKeHoach: [dayjs().get('year'), Validators.required],
       trichYeu: [null],
-      ngayKy: [null, Validators.required],
-      qdBtc: [null],
-      soTt: [null],
+      ngayKy: [null],
+      qdBtc: [null , Validators.required],
+      soTt: [null , Validators.required],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       type: ['01'],
@@ -104,7 +100,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         // "namKeHoach": this.formData.value.namKeHoach,
       }
       let res = await this.qdScBtcService.search(body);
-      console.log(res,"ress")
+      console.log(res, "ress")
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.listQdBtc = []
@@ -116,7 +112,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         }
       } else {
         this.listQdBtc = [];
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        // this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
     } catch (e) {
@@ -133,7 +129,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       let body = {
         "maDvi": this.userInfo.MA_DVI,
         "capDvi": this.userInfo.CAP_DVI,
-        "namKeHoach": this.formData.value.namKeHoach,
+        // "namKeHoach": this.formData.value.namKeHoach,
         "maTongHop": "",
         "noiDung": "",
         "ngayTongHopTu": "",
@@ -147,12 +143,12 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         this.listToTrinh = []
         this.listToTrinh = data.content;
         if (this.listToTrinh) {
-          this.listToTrinh = this.listToTrinh.filter(item => item.loaiTmdt == 'DUOI15TY' && item.trangThai ==  STATUS.DA_DUYET_LDTC && !item.soQdTcdt);
+          this.listToTrinh = this.listToTrinh.filter(item => item.loaiTmdt == 'DUOI15TY' && item.trangThai == STATUS.DA_DUYET_LDTC && !item.soQdTcdt);
         }
       } else {
         console.log(1)
         this.listQdBtc = [];
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        // this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
     } catch (e) {
@@ -193,8 +189,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : '',
-        soTt : data.soTt ? data.soTt : "",
-        qdBtc : data.qdBtc ? data.qdBtc : ""
+        soTt: data.soTt ? data.soTt : "",
+        qdBtc: data.qdBtc ? data.qdBtc : ""
       })
       this.fileDinhKem = data.fileDinhKems
       this.canCuPhapLy = data.canCuPhapLys
@@ -207,6 +203,9 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
 
 
   async save(isOther: boolean) {
+    if(isOther){
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -265,10 +264,12 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
             this.formData.patchValue({
               soTt: data.maToTrinh
             })
+            this.formData.controls["qdBtc"].clearValidators();
           } else {
             this.formData.patchValue({
               qdBtc: data.soQuyetDinh
             })
+            this.formData.controls["soTt"].clearValidators();
           }
           this.changSoTh(data.id)
         }
@@ -317,15 +318,15 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
 
   sumSoLuong(row: string) {
     let sl = 0;
+    if (this.dataTableReq && this.dataTableReq.length > 0) {
       if (this.dataTableReq && this.dataTableReq.length > 0) {
-        if (this.dataTableReq && this.dataTableReq.length > 0) {
-          const sum = this.dataTableReq.reduce((prev, cur) => {
-            prev += cur[row];
-            return prev;
-          }, 0);
-          sl = sum;
-        }
+        const sum = this.dataTableReq.reduce((prev, cur) => {
+          prev += cur[row];
+          return prev;
+        }, 0);
+        sl = sum;
       }
+    }
     return sl;
   }
 
