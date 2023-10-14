@@ -1,44 +1,12 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
-  <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
-      Toàn bộ DS hàng DTQG cần tiêu hủy
-    </li>
-    <li nz-menu-item [nzSelected]="tabSelected==1" (click)="selectTab(1)">
-      Tổng hợp DS hàng DTQG cần tiêu hủy
-    </li>
-    <li nz-menu-item (click)="selectTab(2)">
-      Trình và thẩm định HS tiêu hủy
-    </li>
-    <li nz-menu-item (click)="selectTab(3)">
-      Quyết định tiêu hủy
-    </li>
-    <li nz-menu-item (click)="selectTab(4)">
-      Thông báo KQ trình hồ sơ
-    </li>
-    <li nz-menu-item (click)="selectTab(7)">
-      Báo cáo kết quả tiêu hủy
-    </li>
+  <ul nz-menu nzMode="horizontal" id="mainTongCuc">
+    <ng-container *ngFor="let route of routes">
+      <li *ngIf="userService.isAccessPermisson(route.accessPermisson)" nz-menu-item
+          [class]="route.url && routerUrl.includes(route.url) ? 'ant-menu-item ng-star-inserted ant-menu-item-selected' : 'ant-menu-item ng-star-inserted'"
+          (click)="redirectUrl(route.url)">
+        {{route.name}}
+      </li>
+    </ng-container>
   </ul>
 </nz-affix>
-<div class="contentBor chi-tieu__body giao-ke-hoach">
-  <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
-      <app-danh-sach-hang-tieu-huy (tabFocus)="receivedTab($event)"></app-danh-sach-hang-tieu-huy>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
-      <app-tong-hop-tieu-huy (tabFocus)="receivedTab($event)"></app-tong-hop-tieu-huy>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 2">
-      <app-ho-so-tieu-huy></app-ho-so-tieu-huy>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 3">
-      <app-quyet-dinh-tieu-huy></app-quyet-dinh-tieu-huy>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 4">
-      <app-th-thong-bao-ket-qua></app-th-thong-bao-ket-qua>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 7">
-      <app-bao-cao-ket-qua-tieu-huy></app-bao-cao-ket-qua-tieu-huy>
-    </ng-container>
-  </div>
-</div>
+<router-outlet></router-outlet>

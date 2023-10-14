@@ -8,10 +8,9 @@ import { OldResponseData } from "src/app/interfaces/response";
   providedIn: 'root'
 })
 export class TongHopTieuHuyService extends BaseService {
-  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-tieu-huy/tong-hop', '');
+    super(httpClient, 'xuat-hang/xuat-tieu-huy/tong-hop', '/qlnv-hang');
   }
 
   getDsTaoHoSo(body) {

@@ -13,13 +13,15 @@ import {DanhMucService} from "src/app/services/danhmuc.service";
 import {v4 as uuidv4} from "uuid";
 import {XuatTieuHuyComponent} from "../xuat-tieu-huy.component";
 import {DanhSachTieuHuyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
+import {Base3Component} from "../../../../components/base3/base3.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-danh-sach-hang-tieu-huy',
   templateUrl: './danh-sach-hang-tieu-huy.component.html',
   styleUrls: ['./danh-sach-hang-tieu-huy.component.scss']
 })
-export class DanhSachHangTieuHuyComponent extends Base2Component implements OnInit {
+export class DanhSachHangTieuHuyComponent extends Base3Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
@@ -35,11 +37,13 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
               notification: NzNotificationService,
               spinner: NgxSpinnerService,
               modal: NzModalService,
+              route: ActivatedRoute,
+              router: Router,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
               private danhSachTieuHuyService: DanhSachTieuHuyService,
               private XuatTieuHuyComponent: XuatTieuHuyComponent) {
-    super(httpClient, storageService, notification, spinner, modal, danhSachTieuHuyService);
+    super(httpClient, storageService, notification, spinner, modal,route,router, danhSachTieuHuyService);
     this.vldTrangThai = XuatTieuHuyComponent;
     this.formData = this.fb.group({
       id: [],
