@@ -17,6 +17,8 @@ import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-
 import { cloneDeep } from 'lodash';
 import {AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../Utility/utils";
 import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {STATUS} from "../../../constants/status";
+import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 
 @Component({
@@ -65,7 +67,8 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     private danhMucService: DanhMucService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
-    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -208,6 +211,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
+    await this.getGiaCuThe(event)
     let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
     console.log(this.dataChiTieu)
     let resChiTieu = this.dataChiTieu?.khLuongThuc.find(x => x.maDonVi == event);
@@ -422,6 +426,40 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         })
         this.formData.get('donGiaTdVat').setValue(giaToiDa);
       }
+    }
+  }
+
+
+  async getGiaCuThe(maDvi?:any){
+    let dvi;
+    if (maDvi != null) {
+      dvi = maDvi;
+    } else {
+      dvi = this.userInfo.MA_DVI
+    }
+    let body = {
+      loaiGia: "LG03",
+      namKeHoach: this.namKh,
+      maDvi: dvi,
+      loaiVthh: this.loaiVthh,
+      cloaiVthh: this.cloaiVthh
+    }
+    let pag = await this.quyetDinhGiaTCDTNNService.getPag(body)
+    if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
+      const data = pag.data[0];
+      let donGiaVatQd = 0;
+      if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
+        donGiaVatQd = data.giaQdDcTcdtVat
+      } else {
+        donGiaVatQd = data.giaQdTcdtVat
+      }
+      this.formData.patchValue({
+        donGiaVat: donGiaVatQd
+      })
+    } else {
+      this.formData.patchValue({
+        donGiaVat: null
+      })
     }
   }
 }
