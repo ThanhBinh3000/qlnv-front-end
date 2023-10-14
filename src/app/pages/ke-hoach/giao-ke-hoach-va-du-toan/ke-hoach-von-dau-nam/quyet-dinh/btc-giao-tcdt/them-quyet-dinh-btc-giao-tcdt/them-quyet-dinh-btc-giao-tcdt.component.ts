@@ -142,6 +142,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
 
   async loadQdTtcpGiaoBoNganh(nam) {
     const res = await this.quyetDinhTtcpService.chiTietTheoNam(nam);
+    debugger
     if (res.msg == MESSAGE.SUCCESS) {
       // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
       this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
