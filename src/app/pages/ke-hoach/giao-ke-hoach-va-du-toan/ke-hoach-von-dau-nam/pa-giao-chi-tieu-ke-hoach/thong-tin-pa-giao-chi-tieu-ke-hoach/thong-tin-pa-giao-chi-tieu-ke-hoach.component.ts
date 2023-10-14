@@ -221,7 +221,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.capDvi = this.userInfo.CAP_DVI;
       this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
       this.findCanCuByYear(this.yearNow);
-      await this.initDataThemMoi();
+      // await this.initDataThemMoi();
     }
   }
 
