@@ -102,10 +102,10 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
   showSave() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_THEM');
+      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_THEM');
     }
     if (this.userService.isTongCuc()) {
-      return (trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU) && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_THEM');
+      return (trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU) && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_THEM');
     }
     return false
   }
@@ -125,7 +125,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
     })
     body.children = children;
     if (this.formData.value.soHoSo) {
-      body.soHoSo = this.formData.value.soHoSo + '/' + this.symbol
+      body.soHoSo = this.formData.value.soHoSo + this.symbol
     }
     this.createUpdate(body).then((res) => {
       if (res) {
@@ -208,19 +208,19 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
 
   disabledThamDinh() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC;
+    return trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC || trangThai == STATUS.CHODUYET_BTC || trangThai == STATUS.DADUYET_BTC ;
   }
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETTP'))
-        || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDC'));
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETTP'))
+        || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDC'));
     }
     if (this.userService.isTongCuc()) {
-      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDV'))
-        || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC'))
-        || (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETBTC'));
+      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDV'))
+        || (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETLDTC'))
+        || (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_DUYETBTC'));
     }
     return false
   }
@@ -228,7 +228,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
   showTrinhBtc() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isTongCuc()) {
-      return (trangThai == STATUS.DA_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_TRINHDUYETBTC'));
+      return (trangThai == STATUS.DA_DUYET_LDTC && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_TRINHDUYETBTC'));
     }
     return false
   }
@@ -304,5 +304,11 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
     return this.userService.isTongCuc();
   }
 
+  onChangeTimeQd($event){
+    this.formData.patchValue({
+      thoiGianPdTu : $event[0],
+      thoiGianPdDen : $event[1]
+    })
+  }
 
 }

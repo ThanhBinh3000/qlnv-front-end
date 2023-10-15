@@ -86,16 +86,16 @@
   <div class="group-button">
     <h3 class="text-uppercase">Thẩm định danh sách hàng dự trữ quốc gia cần tiêu hủy</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-do" (click)="deleteMulti('XHDTQG_XTL_HSTL_XOA')">
+      <button type="button" class="btn btn-do" (click)="deleteMulti('XHDTQG_XTH_HSTH_XOA')">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData('XHDTQG_XTL_HSTL_EXP')">
+      <button type="button" class="btn btn-sub" (click)="exportData('XHDTQG_XTH_HSTH_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
       <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
-              (click)="redirectCreate('XHDTQG_XTL_HSTL_THEM')">
+              (click)="redirectCreate('XHDTQG_XTH_HSTH_THEM')">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Tạo tờ trình thẩm định</span>
       </button>
@@ -116,7 +116,7 @@
         <th class="text-center" nzWidth="90px">Ngày duyệt LĐ Cục</th>
         <th class="text-center" nzWidth="90px">Ngày duyệt LĐ Vụ</th>
         <th class="text-center" nzWidth="90px">Ngày duyệt LĐ TC</th>
-        <th class="text-center" nzWidth="90px">Số QĐ thanh lý</th>
+        <th class="text-center" nzWidth="90px">Số QĐ tiêu hủy</th>
         <th class="text-center" nzWidth="90px">Số thông báo KQ trình hồ sơ</th>
         <th class="text-center" nzWidth="120px">Trạng thái</th>
         <th class="text-center" nzWidth="35px">Hành động</th>
@@ -189,17 +189,17 @@
         <td>{{ data.ngayDuyetLdc | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.ngayDuyetLdv | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.ngayDuyetLdtc | date: 'dd/MM/YYYY' }}</td>
-        <td>{{ data.soQdTl }}</td>
-        <td>{{ data.soThongBaoKq }}</td>
+        <td>{{ data.soQd }}</td>
+        <td>{{ data.soTb }}</td>
         <td>{{ data.tenTrangThai }}</td>
         <td>
           <a (click)="redirectDetail(data.id)">
             <span class="icon htvbdh_eye"></span>
           </a>
-          <a *ngIf="showEdit(data)" (click)="redirectDetail(data.id,'XHDTQG_XTL_HSTL_THEM')">
+          <a *ngIf="showEdit(data)" (click)="redirectDetail(data.id,'XHDTQG_XTH_HSTH_THEM')">
             <span class="fa fa-pencil"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTL_HSTL_XOA')">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTH_HSTH_XOA')">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>

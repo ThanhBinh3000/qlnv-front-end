@@ -29,7 +29,7 @@ export class QuyetDinhTieuHuyComponent extends Base3Component implements OnInit 
     private _service: QuyetDinhTieuHuyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
-    this.defaultURL = 'xuat/xuat-thanh-ly/quyet-dinh'
+    this.defaultURL = 'xuat/xuat-tieu-huy/quyet-dinh'
     this.formData = this.fb.group({
       nam: null,
       maSc: null,
