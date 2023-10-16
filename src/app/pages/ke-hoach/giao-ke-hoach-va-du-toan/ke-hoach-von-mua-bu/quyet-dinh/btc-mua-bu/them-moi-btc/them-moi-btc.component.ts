@@ -291,7 +291,7 @@ export class ThemMoiBtcComponent implements OnInit {
     };
     let res = await this.quyetDinhTtcpMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content;
+      const data = res.data.content.filter(item => !item.soQdBtc);
       this.listTtcp = data;
       if (this.listTtcp && this.listTtcp.length > 0) {
         this.formData.patchValue({
