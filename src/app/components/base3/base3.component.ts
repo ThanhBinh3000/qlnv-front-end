@@ -54,6 +54,7 @@ export class Base3Component implements OnInit {
   allChecked = false;
   indeterminate = false;
   defaultURL: string = '';
+  defaultPermisson: string = '';
 
   @Input() isDetail: boolean = false;
   @Input() dataInit: any = {};
@@ -728,6 +729,36 @@ export class Base3Component implements OnInit {
     return this.userService.isAccessPermisson(roles);
   }
 
+  showDelete(data?){
+    if(data){
+      return data.trangThai == STATUS.DU_THAO && this.isAccessPermisson(this.defaultPermisson+"_XOA");
+    }
+    return this.isAccessPermisson(this.defaultPermisson+"_XOA");
+  }
+
+  showExport(){
+    return this.isAccessPermisson(this.defaultPermisson+"_EXP");
+  }
+
+  showCreate(){
+    return this.isAccessPermisson(this.defaultPermisson+"_THEM");
+  }
+
+  showEdit(data){
+    if(data){
+      let trangThai = data.trangThai;
+      let result;
+      if (this.userService.isCuc()) {
+        result = trangThai == this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_TP || trangThai == this.STATUS.TU_CHOI_LDC
+        || trangThai == this.STATUS.TU_CHOI_CBV || trangThai == this.STATUS.TU_CHOI_LDV
+      }
+      if (this.userService.isTongCuc()) {
+        result = trangThai == this.STATUS.DU_THAO || trangThai == this.STATUS.DA_DUYET_LDC || trangThai == this.STATUS.DANG_DUYET_CB_VU;
+      }
+      return result && this.isAccessPermisson(this.defaultPermisson+"_THEM");
+    }
+    return false
+  }
 
 
 }

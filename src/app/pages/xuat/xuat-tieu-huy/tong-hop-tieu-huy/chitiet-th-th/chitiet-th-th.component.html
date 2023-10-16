@@ -26,7 +26,7 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24">Thời gian đề xuất thanh lý</nz-form-label>
+        <nz-form-label [nzSm]="6" [nzXs]="24">Thời gian đề xuất tiêu hủy</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
           <nz-range-picker nzDisabled [nzRanges]="ranges" ngModel formControlName="thoiGianTh" [nzFormat]="globals.dateFormat"></nz-range-picker>
         </nz-form-control>
@@ -34,7 +34,7 @@
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24"></nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
-          <a (click)="showDetail()" class="link">Xem toàn bộ danh sách hàng cần thanh lý -
+          <a (click)="showDetail()" class="link">Xem toàn bộ danh sách hàng cần tiêu hủy -
             {{formData.value.maDanhSach}}</a>
         </nz-form-control>
       </nz-form-item>
@@ -71,15 +71,15 @@
         <th>Nhà/Ngăn/Lô kho</th>
         <th>Ngày nhập kho</th>
         <th>Tồn kho</th>
-        <th>SL đề xuất thanh lý</th>
-        <th>SL thanh lý đã duyệt</th>
-        <th>SL còn lại cần thanh lý</th>
+        <th>SL đề xuất tiêu hủy</th>
+        <th>SL tiêu hủy đã duyệt</th>
+        <th>SL còn lại cần tiêu hủy</th>
         <th>ĐVT</th>
         <th>Ngày đề xuất</th>
-        <th>Lý do cần thanh lý</th>
-        <th>Thời hạn đề xuất thanh lý</th>
+        <th>Lý do cần tiêu hủy</th>
+        <th>Thời hạn đề xuất tiêu hủy</th>
         <th>Trạng thái</th>
-        <th>Trạng thái thanh lý</th>
+        <th>Trạng thái tiêu hủy</th>
       </tr>
       </thead>
       <tbody>
