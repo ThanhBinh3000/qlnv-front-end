@@ -28,10 +28,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   @Input()
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
-
   @ViewChild('nhapXuatLt') keHoachNhapXuatLtComponent: KeHoachNhapXuatLtComponent;
-
-
   userInfo: UserLogin;
   formData: FormGroup;
   maQd: string = '/QĐ-BTC';
@@ -86,6 +83,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   dtMuaLuongThuc: number = 0;
   dtMuaVatTu: number = 0;
   dtMuaMuoi: number = 0;
+  yearCurrentView: number = 0;
 
 
   constructor(
@@ -162,6 +160,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhBtcTcdtService.getDetail(id);
       const data = res.data;
+      this.yearCurrentView = data.namQd;
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
@@ -195,9 +194,10 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     }
   }
 
-  changeNam() {
-    this.yearSelected = this.formData.get('namQd').value;
-    this.loadQdTtcpGiaoBoNganh(this.yearSelected);
+  changeNam($event) {
+    if (!this.yearCurrentView || (this.yearCurrentView && this.yearCurrentView != $event)) {
+      this.loadQdTtcpGiaoBoNganh($event);
+    }
   }
 
   deleteTaiLieuDinhKemTag(data: any) {

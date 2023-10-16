@@ -63,7 +63,7 @@ export class ThemMoiTtcpComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        namQd: [, [Validators.required]],
+        namQd: [dayjs().get('year'), [Validators.required]],
         soQd: [, [Validators.required]],
         soQdUbtvqh: [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
@@ -81,6 +81,7 @@ export class ThemMoiTtcpComponent implements OnInit {
       this.loadDsNam(),
       this.getDataDetail(this.idInput),
     ]);
+
     this.spinner.hide();
   }
 
@@ -99,6 +100,8 @@ export class ThemMoiTtcpComponent implements OnInit {
       });
       this.dataTable = data.listBoNganh;
       this.taiLieuDinhKemList = data.fileDinhkems;
+    } else {
+      this.onChangeNamQd(this.formData.get('namQd').value);
     }
   }
 
@@ -278,10 +281,11 @@ export class ThemMoiTtcpComponent implements OnInit {
   }
 
   async onChangeNamQd(namQd) {
+    this.dataTable = [];
     this.formData.get('soQdUbtvqh').setValue(null);
     let body = {
       namQd: namQd,
-      trangThai: STATUS.BAN_HANH,
+      // trangThai: STATUS.BAN_HANH,
     };
     let res = await this.quyetDinhUbtvqhMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -294,8 +298,8 @@ export class ThemMoiTtcpComponent implements OnInit {
         let res = await this.quyetDinhUbtvqhMuBuBoSung.getDetail(this.listUbtvqh[0].id);
         if (res.msg == MESSAGE.SUCCESS) {
           this.dataTable = res.data.listBoNganh;
-        }else {
-          this.notification.error(MESSAGE.ERROR, "Không tìm thấy thông tin chi tiết Nghị quyết của UBTVQH");
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin chi tiết Nghị quyết của UBTVQH');
         }
       }
     }
