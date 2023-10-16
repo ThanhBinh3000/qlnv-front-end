@@ -152,9 +152,9 @@ export class ThemMoiQdBkComponent implements OnInit {
         this.rowItemDTM.tenCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maChiCuc = null;
         this.rowItemDTM.maDiemKho = null;
-        this.rowItemDTM.diaDiem = null;
-        this.rowItemDTM.dienTich = null;
-        this.rowItemDTM.tongTichLuong = null;
+        // this.rowItemDTM.diaDiem = null;
+        // this.rowItemDTM.dienTich = null;
+        // this.rowItemDTM.tongTichLuong = null;
       }
     }
   }

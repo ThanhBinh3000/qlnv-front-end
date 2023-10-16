@@ -78,7 +78,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số tờ trình đề xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số tờ trình đề xuất11</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogToTrinh()">
                 <input nz-input readonly formControlName="soToTrinh"/>
@@ -297,8 +297,7 @@
       <th class="text-center" >Giá khảo sát</th>
       <th class="text-center" >Giá Cục đề nghị</th>
       <th class="text-center" >Giá TC đề xuất</th>
-      <th class="text-center"
-          > {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
+      <th class="text-center"> {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
       <th class="text-center"  *ngIf="!(formData.value.loaiDeXuat == '00')">Giá sau điều chỉnh của BTC</th>
     </tr>
     </thead>
