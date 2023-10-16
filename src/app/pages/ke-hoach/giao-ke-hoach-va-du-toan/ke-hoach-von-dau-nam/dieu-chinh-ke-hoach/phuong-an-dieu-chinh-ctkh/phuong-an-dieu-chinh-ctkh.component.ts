@@ -218,16 +218,14 @@ export class PhuongAnDieuChinhCtkhComponent extends Base2Component implements On
       this.spinner.show();
       try {
 
+        if (this.formData.value.ngayKyTu) {
+          this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.ngayKyDen) {
+          this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')
+        }
         let body = this.formData.value;
-        debugger
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
+
         this.phuongAnDieuChinhCTKHService
           .exportlist(body)
           .subscribe((blob) =>
