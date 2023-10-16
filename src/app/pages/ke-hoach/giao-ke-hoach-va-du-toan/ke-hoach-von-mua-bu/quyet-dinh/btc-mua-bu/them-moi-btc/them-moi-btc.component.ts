@@ -1,39 +1,39 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import {
-  DialogChiTietKeHoachGiaoBoNganhComponent
+  DialogChiTietKeHoachGiaoBoNganhComponent,
 } from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Globals} from 'src/app/shared/globals';
-import {MESSAGE} from 'src/app/constants/message';
-import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {UserService} from 'src/app/services/user.service';
-import {UserLogin} from 'src/app/models/userlogin';
-import {HelperService} from 'src/app/services/helper.service';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Globals } from 'src/app/shared/globals';
+import { MESSAGE } from 'src/app/constants/message';
+import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { UserService } from 'src/app/services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { HelperService } from 'src/app/services/helper.service';
 import {
-  DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent
-} from "../../../../../../../components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component";
+  DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent,
+} from '../../../../../../../components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component';
 import {
-  QuyetDinhUbtvqhMuaBuBoSungService
-} from "../../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
+  QuyetDinhUbtvqhMuaBuBoSungService,
+} from '../../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service';
 import {
-  DialogQdMuabubosungTtcpComponent
-} from "../../../../../../../components/dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component";
-import {MuaBuBoSungTtcpServiceService} from "../../../../../../../services/mua-bu-bo-sung-ttcp-service.service";
-import {MuaBuBoSungBtcService} from "../../../../../../../services/mua-bu-bo-sung-btc.service";
+  DialogQdMuabubosungTtcpComponent,
+} from '../../../../../../../components/dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component';
+import { MuaBuBoSungTtcpServiceService } from '../../../../../../../services/mua-bu-bo-sung-ttcp-service.service';
+import { MuaBuBoSungBtcService } from '../../../../../../../services/mua-bu-bo-sung-btc.service';
 import {
-  DialogMuabuBosungBtcComponent
-} from "../../../../../../../components/dialog/dialog-muabu-bosung-btc/dialog-muabu-bosung-btc.component";
-import {STATUS} from "../../../../../../../constants/status";
+  DialogMuabuBosungBtcComponent,
+} from '../../../../../../../components/dialog/dialog-muabu-bosung-btc/dialog-muabu-bosung-btc.component';
+import { STATUS } from '../../../../../../../constants/status';
 
 @Component({
   selector: 'app-them-moi-btc',
   templateUrl: './them-moi-btc.component.html',
-  styleUrls: ['./them-moi-btc.component.scss']
+  styleUrls: ['./them-moi-btc.component.scss'],
 })
 export class ThemMoiBtcComponent implements OnInit {
 
@@ -46,11 +46,12 @@ export class ThemMoiBtcComponent implements OnInit {
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
-  maQd: string
+  maQd: string;
   userInfo: UserLogin;
   dataTable: any[] = [];
   listTtcp: any[] = [];
   STATUS = STATUS;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -71,8 +72,8 @@ export class ThemMoiBtcComponent implements OnInit {
         ngayQd: [null, [Validators.required]],
         trichYeu: [null],
         trangThai: [STATUS.DANG_NHAP_DU_LIEU],
-        listBoNganh: []
-      }
+        listBoNganh: [],
+      },
     );
   }
 
@@ -81,10 +82,9 @@ export class ThemMoiBtcComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = "/QĐ-BTC",
-      this.getDataDetail(this.idInput),
-      this.onChangeNamQd(this.formData.get("namQd").value)
-    ])
+      this.maQd = '/QĐ-BTC',
+      await this.getDataDetail(this.idInput),
+    ]);
     this.spinner.hide();
   }
 
@@ -99,18 +99,20 @@ export class ThemMoiBtcComponent implements OnInit {
         ngayQd: data.ngayQd,
         soQd: data.soQd.split('/')[0],
         trangThai: data.trangThai,
-        trichYeu: data.trichYeu
-      })
-      this.dataTable = data.listBoNganh
-      this.taiLieuDinhKemList = data.fileDinhkems
+        trichYeu: data.trichYeu,
+      });
+      this.dataTable = data.listBoNganh;
+      this.taiLieuDinhKemList = data.fileDinhkems;
+    } else {
+      this.onChangeNamQd(this.formData.get('namQd').value);
     }
   }
 
 
   loadDsNam() {
-    for (let i =  -3; i <= 5; i++) {
+    for (let i = -3; i <= 5; i++) {
       this.dsNam.push({
-        value: dayjs().get('year') +i,
+        value: dayjs().get('year') + i,
         text: dayjs().get('year') + i,
       });
     }
@@ -217,7 +219,7 @@ export class ThemMoiBtcComponent implements OnInit {
       return;
     }
     if (this.dataTable.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Danh sách kế hoạch không được để trống");
+      this.notification.error(MESSAGE.ERROR, 'Danh sách kế hoạch không được để trống');
       this.spinner.hide();
       return;
     }
@@ -225,7 +227,7 @@ export class ThemMoiBtcComponent implements OnInit {
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
-    let res
+    let res;
     if (this.idInput > 0) {
       res = await this.qdBtcService.update(body);
     } else {
@@ -236,8 +238,8 @@ export class ThemMoiBtcComponent implements OnInit {
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
-          trangThai: STATUS.BAN_HANH
-        })
+          trangThai: STATUS.BAN_HANH,
+        });
         this.pheDuyet();
       } else {
         if (this.idInput > 0) {
@@ -285,12 +287,23 @@ export class ThemMoiBtcComponent implements OnInit {
     this.formData.get('soQdTtcp').setValue(null);
     let body = {
       namQd: namQd,
-      trangThai: STATUS.BAN_HANH
-    }
+      trangThai: STATUS.BAN_HANH,
+    };
     let res = await this.quyetDinhTtcpMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data.content;
-      this.listTtcp = data
+      this.listTtcp = data;
+      if (this.listTtcp && this.listTtcp.length > 0) {
+        this.formData.patchValue({
+          soQdTtcp: this.listTtcp[0].soQd,
+        });
+        let res = await this.quyetDinhTtcpMuBuBoSung.getDetail(this.listTtcp[0].id);
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.dataTable = res.data.listBoNganh;
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin chi tiết quyết định của TTCP');
+        }
+      }
     }
   }
 
