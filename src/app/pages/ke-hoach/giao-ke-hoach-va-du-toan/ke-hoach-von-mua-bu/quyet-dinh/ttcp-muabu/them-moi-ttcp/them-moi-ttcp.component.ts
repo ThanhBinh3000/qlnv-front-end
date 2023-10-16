@@ -285,11 +285,11 @@ export class ThemMoiTtcpComponent implements OnInit {
     this.formData.get('soQdUbtvqh').setValue(null);
     let body = {
       namQd: namQd,
-      // trangThai: STATUS.BAN_HANH,
+      trangThai: STATUS.BAN_HANH,
     };
     let res = await this.quyetDinhUbtvqhMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content;
+      const data = res.data.content.filter(item => !item.soQdTtcp);
       this.listUbtvqh = data;
       if (this.listUbtvqh && this.listUbtvqh.length > 0) {
         this.formData.patchValue({
