@@ -112,13 +112,28 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     }
   }
 
+  // async getAllQdTrungHan() {
+  //   let res = await this.qdTrungHanSv.getListQd();
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.listQdKhTh = res.data;
+  //   }
+  // }
   async getAllQdTrungHan() {
-    let res = await this.qdTrungHanSv.getListQd();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdKhTh = res.data;
+    let body = {
+      "paggingReq": {
+        "limit": this.globals.prop.MAX_INTERGER,
+        "page": 0
+      },
     }
-  }
-
+    let res = await this.qdTrungHanSv.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listQdKhTh = data.content;
+      console.log(this.listQdKhTh,"v")
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    }
 
   async getDataDetail(id) {
     if (id > 0) {

@@ -85,7 +85,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       soQuyetDinh: [null],
       ngayKyQd: [null],
       trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ["Đang nhập dữ liệu"],
+      tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
       loaiTmdt: ['DUOI15TY']
     });
