@@ -132,6 +132,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
         if (isGuiDuyet) {
           this.id = res.id;
           this.formData.patchValue({
+            id : res.id,
             trangThai: res.trangThai,
             tenTrangThai: res.tenTrangThai
           })

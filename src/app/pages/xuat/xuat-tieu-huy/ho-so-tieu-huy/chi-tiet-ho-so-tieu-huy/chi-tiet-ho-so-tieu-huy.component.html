@@ -39,7 +39,7 @@
     </div>
   </div>
   <nz-alert class="mg-t-10"
-            *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.TU_CHOI_CBV "
+            *ngIf="showLyDoTuChoi()"
             nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 
@@ -262,7 +262,6 @@
               <td nzShowExpand="true" [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(item, $event)">
               </td>
               <td>{{ item.tenDonVi }}</td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>

@@ -178,6 +178,9 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base3Component implemen
       if (res) {
         if (isGuiDuyet) {
           this.id = res.id;
+          this.formData.patchValue({
+            id : res.id,
+          })
           this.pheDuyet();
         } else {
           this.redirectDefault();
