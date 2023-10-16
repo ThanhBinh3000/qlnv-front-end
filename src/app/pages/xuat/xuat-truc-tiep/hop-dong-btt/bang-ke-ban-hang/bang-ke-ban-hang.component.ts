@@ -11,8 +11,7 @@ import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-ti
 import {
   DialogThemMoiBangKeBanLeComponent
 } from 'src/app/components/dialog/dialog-them-moi-bang-ke-ban-le/dialog-them-moi-bang-ke-ban-le.component';
-import {XuatTrucTiepComponent} from "../../xuat-truc-tiep.component";
-import {CHUC_NANG} from "../../../../../constants/status";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-bang-ke-ban-hang',
@@ -21,8 +20,7 @@ import {CHUC_NANG} from "../../../../../constants/status";
 })
 export class BangKeBanHangComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  CHUC_NANG = CHUC_NANG;
-  public vldTrangThai: XuatTrucTiepComponent
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
 
@@ -34,10 +32,8 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private bangKeBttService: BangKeBttService,
-    private xuatTrucTiepComponent: XuatTrucTiepComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeBttService);
-    this.vldTrangThai = this.xuatTrucTiepComponent;
     this.formData = this.fb.group({
       namKh: [],
       soBangKe: [],

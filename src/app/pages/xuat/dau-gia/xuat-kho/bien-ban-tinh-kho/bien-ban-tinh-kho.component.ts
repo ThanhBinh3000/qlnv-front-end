@@ -106,17 +106,17 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
       const childData = _(soQdNvGroup).groupBy("tenDiemKho").map((tenDiemKhoGroup, tenDiemKhoKey) => {
         const lv1IdVirtual = uuid.v4();
         this.expandSetString.add(lv1IdVirtual);
-        const lv1ChildData = _(tenDiemKhoGroup).groupBy((row) => row.tenLoKho || row.tenNganKho).map((group, key) => {
+        const lv1ChildData = _(tenDiemKhoGroup).groupBy((row) => row.soBbTinhKho).map((group, key) => {
           const lv2IdVirtual = uuid.v4();
           this.expandSetString.add(lv2IdVirtual);
           return {
             idVirtual: lv2IdVirtual,
-            tenLoKho: key || "",
+            tenLoKho: group[0].tenLoKho || "",
             tenNganKho: group[0].tenNganKho || "",
             soPhieuKiemNghiem: group[0].soPhieuKiemNghiem || "",
             idPhieuKiemNghiem: group[0].idPhieuKiemNghiem || "",
             id: group[0].id || "",
-            soBbTinhKho: group[0].soBbTinhKho || "",
+            soBbTinhKho: key || "",
             ngayLapBienBan: group[0].ngayLapBienBan || "",
             trangThai: group[0].trangThai || "",
             tenTrangThai: group[0].tenTrangThai || "",

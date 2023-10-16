@@ -292,6 +292,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       await this.changeMaDviDtl(this.userInfo.MA_DVI);
     }
     this.modalChiTiet = true;
+
+    this.listDiaDanh.forEach(f => {
+      if (!this.isVthhVatuThietBi()) {
+        f.disabled = this.formData.value.deXuatPhuongAn.some(s => s.noiDung === f.ten && (!data?.noiDung || f.ten !== data.noiDung));
+      } else {
+        delete f.disabled;
+      }
+    });
   }
 
   async luuPhuongAn() {
@@ -529,8 +537,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
     }
     this.formData.patchValue({ deXuatPhuongAn: [] });
-    if (this.userService.isCuc && !this.formData.value.id && this.formData.value.deXuatPhuongAn.length <= 0) {
+    if (this.userService.isCuc && this.formData.value.deXuatPhuongAn.length <= 0 && [TEN_LOAI_VTHH.GAO, TEN_LOAI_VTHH.THOC, TEN_LOAI_VTHH.MUOI].includes($event)) {
       await this.checkTonKhoDonViTaoDeXuat();
+    }
+    if (![TEN_LOAI_VTHH.GAO, TEN_LOAI_VTHH.THOC, TEN_LOAI_VTHH.MUOI].includes($event)) {
+      this.formData.patchValue({ tonKhoDvi: 0 })
     }
   }
 
@@ -585,6 +596,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.formDataDtl.patchValue({
         soLuongConThieu: soLuongConThieu,
         soLuongChuyenCapThoc: soLuongConThieu
+      });
+    } else {
+      this.formDataDtl.patchValue({
+        soLuongConThieu: 0,
+        soLuongChuyenCapThoc: 0
       });
     }
   }

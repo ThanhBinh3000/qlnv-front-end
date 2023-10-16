@@ -1807,18 +1807,15 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   };
 
   selectNam() {
-    this.formData.patchValue({
-      soQuyetDinhGiaoCuaTc: ""
-    })
-    this.yearNow = this.formData.get('namKeHoach').value;
-    this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
-    this.findCanCuByYear(this.yearNow);
-    // if (!this.id) {
-    //   if ((this.thongTinChiTieuKeHoachNam.capDvi == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.capDvi == "2") {
-    //     this.findCanCuByYear(this.yearNow);
-    //   }
+    if (!this.id) {
+      this.formData.patchValue({
+        soQuyetDinhGiaoCuaTc: ""
+      })
+      this.yearNow = this.formData.get('namKeHoach').value;
+      this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
+      this.findCanCuByYear(this.yearNow);
 
-    // }
+    }
   }
 
   convertTrangThai(status: string) {
