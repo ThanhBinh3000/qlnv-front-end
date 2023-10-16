@@ -84,6 +84,7 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
           });
         } else {
           this.dsHangHoa = hangHoa.data.filter(item => item.cap == 2);
+          console.log(this.dsHangHoa,'this.dsHangHoa');
         }
       }
     });

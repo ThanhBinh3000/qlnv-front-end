@@ -98,8 +98,8 @@
           </th>
           <th class='text-left'>STT</th>
           <th class='text-left'>Số quyết định</th>
-          <th class='text-left'>Ngày quyết định</th>
-          <th class='text-left'>Năm kế hoạch</th>
+          <th class='text-center'>Ngày quyết định</th>
+          <th class='text-center'>Năm kế hoạch</th>
           <th class='text-left'>Trích yếu</th>
           <th class='text-left'>Trạng thái</th>
           <th class='text-left'>Hành động</th>
@@ -203,9 +203,9 @@
           </td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''"
               class='text-center'>{{(page - 1) * pageSize + idx + 1}}</td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.soQd }}</td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.namQd}}</td>
+          <td class='text-left' [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.soQd }}</td>
+          <td class='text-center' [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+          <td class='text-center' [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.namQd}}</td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.trichYeu }}</td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenTrangThai }}</td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">
