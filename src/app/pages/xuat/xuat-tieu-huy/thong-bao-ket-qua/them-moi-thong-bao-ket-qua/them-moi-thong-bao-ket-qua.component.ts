@@ -1,30 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "../../../../../services/donvi.service";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
 import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { STATUS } from "../../../../../constants/status";
-import { FileDinhKem } from "../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import { MESSAGE } from "../../../../../constants/message";
-import * as uuid from "uuid";
-import {
-  QuyetDinhTieuHuyService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/QuyetDinhTieuHuyService.service";
 import {
   ThongBaoKqTieuHuyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/ThongBaoKqTieuHuy.service";
 import { HoSoTieuHuyService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-tieu-huy/HoSoTieuHuy.service';
 import {ActivatedRoute, Router} from "@angular/router";
-import {
-  ThongBaoKqThanhLyService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/ThongBaoKqThanhLy.service";
-import {HoSoThanhLyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoThanhLy.service";
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";

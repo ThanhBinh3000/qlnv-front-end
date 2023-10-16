@@ -76,7 +76,7 @@ export class TongHopTieuHuyComponent extends Base3Component implements OnInit {
       return
     }
     const modalGT = this.modal.create({
-      nzTitle: 'TỔNG HỢP DANH SÁCH HÀNG CẦN THANH LÝ',
+      nzTitle: 'TỔNG HỢP DANH SÁCH HÀNG CẦN TIÊU HỦY',
       nzContent: ThemmoiThThComponent,
       nzMaskClosable: false,
       nzClosable: false,
