@@ -26,7 +26,6 @@ import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-t
 import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import {saveAs} from 'file-saver';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 
@@ -549,7 +548,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
   setValidForm() {
     const phanLoai = this.formData.get('phanLoai').value;
     const requiredFields = [
-      "nam",
+      "namKh",
       "tenDvi",
       "maQhNs",
       "ngayLapPhieu",

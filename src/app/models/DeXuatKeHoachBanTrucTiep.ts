@@ -1,4 +1,4 @@
-import { Validators } from "@angular/forms";
+import {Validators} from "@angular/forms";
 
 export class FileDinhKem {
   createDate: string;
@@ -41,13 +41,6 @@ export class ChiTietCacChiCucHopDong {
 export class chiTietBangCanKeHang {
   id: number;
   maCan: string;
-  trongLuongBaoBi: number;
-  trongLuongCaBaoBi: number;
-  soBaoBi: number;
+  soBaoBi: string;
   trongLuongCaBi: number;
 }
-
-
-
-
-
