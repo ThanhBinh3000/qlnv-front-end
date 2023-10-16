@@ -89,8 +89,8 @@
               (nzCheckedChange)="onAllChecked($event)"></th>
             <th class="text-center" style="width: 2%;">STT</th>
             <th style="width: 10%;">Số quyết định</th>
-            <th style="width: 10%;">Năm kế hoạch</th>
-            <th style="width: 10%;">Ngày quyết định</th>
+            <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
+            <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th style="width: 25%;">Trích yếu</th>
             <th style="width: 10%;">Trạng thái</th>
             <th class="text-center" width="width: 5%;">Hành động</th>
@@ -158,8 +158,8 @@
               (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
             <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.namQd }}</td>
-            <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">{{ data.namQd }}</td>
+            <td class="text-center">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td style="text-align: center; white-space: nowrap;">
