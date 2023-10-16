@@ -744,6 +744,31 @@ export class Base3Component implements OnInit {
     return this.isAccessPermisson(this.defaultPermisson+"_THEM");
   }
 
+  showSaveUpdate(trangThai){
+    let result = false
+    if (this.userService.isCuc()) {
+      result = trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV
+    }
+    if (this.userService.isTongCuc()) {
+      result = trangThai == STATUS.DU_THAO || trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU
+    }
+    return result && this.userService.isAccessPermisson(this.defaultPermisson+"_THEM");
+  }
+
+  showApproveReject(trangThai){
+    if(this.userService.isCuc()){
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETTP')) ||
+        (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETLDC'));
+    }
+    if (this.userService.isTongCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETLDV')) ||
+        (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETLDTC')) ||
+        (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETBTC'));
+    }
+  }
+
+
+
   showEdit(data){
     if(data){
       let trangThai = data.trangThai;

@@ -91,6 +91,7 @@ export class HoSoTieuHuyComponent extends Base3Component implements OnInit {
       if (this.userService.isTongCuc()) {
         result = trangThai == this.STATUS.DA_DUYET_LDC || trangThai == this.STATUS.DANG_DUYET_CB_VU;
       }
+      console.log(result,this.isAccessPermisson(this.defaultPermisson+"_THEM"))
       return result && this.isAccessPermisson(this.defaultPermisson+"_THEM");
     }
     return false
