@@ -122,7 +122,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         this.getDataDetail(this.idInput),
         this.loadDanhMucHang(),
       ]);
-    if (this.idInput == 0) {
+    if (!this.idInput) {
       await this.loadQdTtcpGiaoBoNganh(dayjs().get('year'));
     }
     this.sumAllDataTable();
@@ -142,7 +142,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
 
   async loadQdTtcpGiaoBoNganh(nam) {
     const res = await this.quyetDinhTtcpService.chiTietTheoNam(nam);
-    debugger
     if (res.msg == MESSAGE.SUCCESS) {
       // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
       this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
@@ -198,9 +197,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
 
   changeNam() {
     this.yearSelected = this.formData.get('namQd').value;
-    if (!this.idInput) {
-      this.loadQdTtcpGiaoBoNganh(this.yearSelected);
-    }
+    this.loadQdTtcpGiaoBoNganh(this.yearSelected);
   }
 
   deleteTaiLieuDinhKemTag(data: any) {
