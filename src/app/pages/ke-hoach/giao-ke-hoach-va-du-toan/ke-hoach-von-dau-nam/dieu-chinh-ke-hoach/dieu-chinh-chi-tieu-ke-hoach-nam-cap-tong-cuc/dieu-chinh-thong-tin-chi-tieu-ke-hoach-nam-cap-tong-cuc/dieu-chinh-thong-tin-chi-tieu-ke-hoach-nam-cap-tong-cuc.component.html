@@ -61,8 +61,11 @@
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
-                <input formControlName="soQuyetDinh" [readonly]="isViewDetail" nz-input nzSize="small"
-                  placeholder="Nhập số công văn/tờ trình" />
+                <!-- <nz-input-number formControlName="soQuyetDinh" [nzDisabled]="isViewDetail" nz-input nzSize="small"
+                  placeholder="Nhập số công văn/tờ trình" /> -->
+                <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                  [nzSize]="'small'" [nzDisabled]="isViewDetail" placeholder="Nhập số quyết định">
+                </nz-input-number>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
