@@ -84,6 +84,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     namKeHoach: null,
     trichYeu: null,
   };
+  //xem trước
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  showDlgPreview = false;
+
+
   sumTotalKhDuTruMuoi = {
     tonKhoDauNam: 0,
     nhapTrongNam: 0,
@@ -3516,6 +3524,69 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
     }
     return sl;
+  }
+
+  async preView(type?) {
+    try {
+      this.spinner.show();
+      if (type === 'MUOI') {
+        let body = {
+          'typeFile': 'pdf',
+          'nam': this.thongTinChiTieuKeHoachNam.namKeHoach,
+          'idHdr': this.thongTinChiTieuKeHoachNam.id,
+          'fileName': 'xemtruoc_chi_tieu_kh_muoi.jrxml',
+        };
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamMuoi(body).then(async s => {
+          this.pdfBlob = s;
+          this.pdfSrc = await new Response(s).arrayBuffer();
+        });
+        // this.showDlgPreview = true;
+      } else if (type === 'LT') {
+        //todo
+      } else if (type === 'VT') {
+        //todo
+      }
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+  downloadPdf() {
+    saveAs(this.pdfBlob, 'baocao.pdf');
+  }
+
+  async downloadExcel(type?) {
+    try {
+      this.spinner.show();
+      if (type === 'MUOI') {
+        let body = {
+          'typeFile': 'xlsx',
+          'nam': this.thongTinChiTieuKeHoachNam.namKeHoach,
+          'idHdr': this.thongTinChiTieuKeHoachNam.id,
+          'fileName': 'xemtruoc_chi_tieu_kh_muoi.jrxml',
+        };
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamMuoi(body).then(async s => {
+          this.pdfBlob = s;
+          this.pdfSrc = await new Response(s).arrayBuffer();
+        });
+        // this.showDlgPreview = true;
+      } else if (type === 'LT') {
+        //todo
+      } else if (type === 'VT') {
+        //todo
+      }
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 
 }
