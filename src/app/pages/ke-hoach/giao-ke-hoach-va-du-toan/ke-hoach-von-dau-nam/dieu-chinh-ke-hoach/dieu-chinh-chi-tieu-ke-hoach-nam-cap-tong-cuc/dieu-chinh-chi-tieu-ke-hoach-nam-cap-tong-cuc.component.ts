@@ -94,8 +94,28 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
   }
 
   selectTab(cap: number) {
+    this.allChecked = false
     this.indexTab = cap;
     this.timKiem();
+  }
+
+  updateAllCheckedDC(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == this.STATUS.DANG_NHAP_DU_LIEU) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
   }
 
   isButton() {

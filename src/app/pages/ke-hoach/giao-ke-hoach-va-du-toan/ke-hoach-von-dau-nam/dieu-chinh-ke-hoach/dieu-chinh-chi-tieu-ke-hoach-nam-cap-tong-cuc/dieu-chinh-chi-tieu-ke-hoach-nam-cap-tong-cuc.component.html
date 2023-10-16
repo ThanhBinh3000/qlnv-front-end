@@ -71,7 +71,7 @@
                 <thead>
                   <tr>
                     <th width="45px">
-                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllCheckedDC()"
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="60px" class="text-center">STT</th>
@@ -151,7 +151,7 @@
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                        [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
                     </th>
                     <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                     <td>{{ data.namKeHoach }}</td>
@@ -212,7 +212,7 @@
                 <thead>
                   <tr>
                     <th width="45px">
-                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllCheckedDC()"
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="60px" class="text-center">STT</th>
@@ -292,7 +292,7 @@
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                        [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
                     </th>
                     <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                     <td>{{ data.namKeHoach }}</td>

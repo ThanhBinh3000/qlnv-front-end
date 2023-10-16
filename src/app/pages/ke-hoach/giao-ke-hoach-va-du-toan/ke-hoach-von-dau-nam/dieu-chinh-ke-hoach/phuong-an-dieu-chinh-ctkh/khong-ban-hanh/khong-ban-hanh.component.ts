@@ -38,16 +38,12 @@ export class KhongBanHanhComponent extends Base2Component implements OnInit {
       ngayKyKhongBh: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       noiDungVanBanKhongBh: [],
       lyDoKhongBh: [],
-      // fileDinhKemKhongBhs: [, [Validators.required]],
     }
     );
   }
 
   ngOnInit(): void {
     this.qdTCDT = this.userInfo.MA_QD;
-    // this.formData.patchValue({
-    //   soVanBanKhongBh: this.soCongVan
-    // })
   }
 
 
