@@ -177,6 +177,11 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
             tgianDthau: this.dataInput.tgianDthau,
             tgianMthau: this.dataInput.tgianMthau,
             tgianNhang: this.dataInput.tgianNhang,
+            tgianDthauTime: this.dataInput.tgianDthauTime,
+            tgianMthauTime: this.dataInput.tgianMthauTime,
+            tgianMoHoSoTime: this.dataInput.tgianMoHoSoTime,
+            tgianMoHoSo: this.dataInput.tgianMoHoSo,
+            giaBanHoSo: this.dataInput.giaBanHoSo,
             tgianBdauTchuc: this.dataInput.tgianBdauTchuc,
             gtriDthau: this.dataInput.dxuatKhLcntHdr?.gtriDthau,
             gtriHdong: this.dataInput.dxuatKhLcntHdr?.gtriHdong,
@@ -191,6 +196,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
             namThuHoach: this.dataInput.dxuatKhLcntHdr?.namThuHoach,
             quocGiaSx: this.dataInput.dxuatKhLcntHdr?.quocGiaSx,
             quy: this.dataInput.dxuatKhLcntHdr?.quy,
+            thueVat: this.dataInput.dxuatKhLcntHdr?.thueVat,
           });
           this.initListQuy();
           this.tinhTongMucDtDx();
@@ -202,9 +208,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
         this.objectChange.emit(this.formData.value)
       } else {
         this.formData.reset();
-        this.formData.patchValue({
-          vat: 5
-        });
       }
     }
     await this.spinner.hide()
@@ -460,9 +463,11 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     let tongMucDtDx: number = 0;
     let tongSl: number = 0;
     this.listOfData.forEach((item) => {
-      tongMucDt = tongMucDt + item.thanhTien;
-      tongMucDtDx = tongMucDtDx + item.thanhTienDx;
-      tongSl += item.soLuong
+      item.children.forEach(i => {
+        tongMucDt = tongMucDt + (i.soLuong * i.donGia *1000);
+        tongMucDtDx = tongMucDtDx + (i.soLuong * i.donGiaTamTinh * 1000);
+        tongSl += i.soLuong
+      })
     });
     this.formData.patchValue({
       tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),
