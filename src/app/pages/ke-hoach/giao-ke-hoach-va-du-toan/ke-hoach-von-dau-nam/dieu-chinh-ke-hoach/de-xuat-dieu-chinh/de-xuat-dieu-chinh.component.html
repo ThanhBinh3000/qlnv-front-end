@@ -29,12 +29,11 @@
               <label class="search__label">Ngày ký</label>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledEndNgayQD" nzFormat="dd/MM/yyyy" formControlName="ngayKyTu"
-                    nzPlaceHolder="Ngày bắt đầu">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyTu" nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledEndNgayQD" nzFormat="dd/MM/yyyy" formControlName="ngayKyDen"
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyDen"
                     nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
                 </div>
               </div>

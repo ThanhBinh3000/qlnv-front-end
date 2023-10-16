@@ -1,19 +1,19 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { Validators } from "@angular/forms";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { DanhMucKho } from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
-import { MESSAGE } from "../../../../../../constants/message";
-import { STATUS } from "../../../../../../constants/status";
+import {Component, Input, OnInit} from "@angular/core";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {Validators} from "@angular/forms";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
+import {MESSAGE} from "../../../../../../constants/message";
+import {STATUS} from "../../../../../../constants/status";
 import dayjs from "dayjs";
-import { DialogDxScLonComponent } from "./dialog-dx-sc-lon/dialog-dx-sc-lon.component";
+import {DialogDxScLonComponent} from "./dialog-dx-sc-lon/dialog-dx-sc-lon.component";
 import {
   DeXuatScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
@@ -119,7 +119,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           ngayTaoDx: data.ngayTaoDx,
           loaiDuAn: data.loaiDuAn,
           trichYeu: data.trichYeu,
-          ngayDuyet: data.ngayDuyet,
+          ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDTC ? dayjs().get("year") : data.ngayDuyet,
           trangThai: data.trangThai,
           tenTrangThai: data.tenTrangThai
         });
@@ -161,9 +161,9 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     body.canCuPhapLys = this.canCuPhapLy;
     this.conVertTreToList();
     body.chiTiets = this.dataTableRes;
-    if(isOther){
-      await super.saveAndSend(body, trangThai,'Bạn có muốn gửi duyệt đề xuất này ?','Gửi duyệt thành công.');
-    }else {
+    if (isOther) {
+      await super.saveAndSend(body, trangThai, 'Bạn có muốn gửi duyệt đề xuất này ?', 'Gửi duyệt thành công.');
+    } else {
       await this.createUpdate(body);
     }
   }
@@ -196,7 +196,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg,null,"Bạn đã lưu và gửi duyệt thành công!");
+    this.approve(this.idInput, trangThai, msg, null, "Bạn đã lưu và gửi duyệt thành công!");
   }
 
   tuChoi() {
@@ -229,7 +229,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         sl = sum;
       }
     } else {
-      if(type == 'duoi') {
+      if (type == 'duoi') {
         if (this.dataTable && this.dataTable.length > 0) {
           let sum = 0;
           this.dataTable.forEach(item => {
@@ -257,40 +257,40 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   }
 
   themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
-      let modalQD = this.modal.create({
-        nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
-        nzContent: DialogDxScLonComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: "1200px",
-        nzStyle: { top: "100px" },
-        nzFooter: null,
-        nzComponentParams: {
-          dataTable: list && list.dataChild ? list.dataChild : [],
-          dataInput: data,
-          type: type,
-          page: tmdt
+    let modalQD = this.modal.create({
+      nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
+      nzContent: DialogDxScLonComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: {top: "100px"},
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: tmdt
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
         }
-      });
-      modalQD.afterClose.subscribe(async (detail) => {
-        if (detail) {
-          if (!data.dataChild) {
-            data.dataChild = [];
-          }
-          if (!data.idVirtual) {
-            data.idVirtual = uuidv4();
-          }
-          if (type == "them") {
-            data.dataChild.push(detail);
-          } else {
-            if (list) {
-              Object.assign(list.dataChild[idx], detail);
-            }
-          }
-          this.expandAll(this.tableDuoi);
-          this.expandAll(this.tableTren);
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
         }
-      });
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list.dataChild[idx], detail);
+          }
+        }
+        this.expandAll(this.tableDuoi);
+        this.expandAll(this.tableTren);
+      }
+    });
   }
 
   expandAll(table: any[]) {
@@ -310,7 +310,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     }
   }
 
-  deleteItemCha(idx, table : any[]) {
+  deleteItemCha(idx, table: any[]) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -329,7 +329,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     });
   }
 
-  deleteItem(y: any, table : any[]) {
+  deleteItem(y: any, table: any[]) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -377,12 +377,12 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 15000000000);
     if (this.tableTren && this.tableTren.length > 0) {
       this.tableTren = chain(this.tableTren).groupBy("tenKhoi")
-        .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))
+        .map((value, key) => ({tenKhoi: key, dataChild: value, idVirtual: uuidv4()}))
         .value();
     }
     if (this.tableDuoi && this.tableDuoi.length > 0) {
       this.tableDuoi = chain(this.tableDuoi).groupBy("tenKhoi")
-        .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))
+        .map((value, key) => ({tenKhoi: key, dataChild: value, idVirtual: uuidv4()}))
         .value();
     }
     this.expandAll(this.tableTren);
