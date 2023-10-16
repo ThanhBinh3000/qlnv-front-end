@@ -670,7 +670,8 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'">
               <nz-select nzAllowClear formControlName="noiDung" nzPlaceHolder="Vui lòng chọn" nzShowSearch>
-                <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"></nz-option>
+                <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"
+                  [nzDisabled]="p.disabled"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
