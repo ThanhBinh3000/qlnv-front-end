@@ -6,9 +6,8 @@ import { BaseService } from "../../../base.service";
   providedIn: 'root'
 })
 export class BaoCaoKqTieuHuyService extends BaseService {
-  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-tieu-huy/bao-cao-ket-qua', '');
+    super(httpClient, 'xuat-hang/xuat-tieu-huy/bao-cao-ket-qua', '/qlnv-hang');
   }
 }

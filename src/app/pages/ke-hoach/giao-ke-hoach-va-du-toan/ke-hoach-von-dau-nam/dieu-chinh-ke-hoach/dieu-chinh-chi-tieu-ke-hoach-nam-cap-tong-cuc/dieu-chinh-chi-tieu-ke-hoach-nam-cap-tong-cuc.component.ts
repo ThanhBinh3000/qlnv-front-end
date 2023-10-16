@@ -55,13 +55,13 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
       cap: [],
     })
     this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      tenLoaiDc: '',
-      tenLoaiQdinh: '',
+      namKeHoach: '',
+      soQuyetDinh: '',
+      ngayKy: '',
       trichYeu: '',
-      soDxuat: '',
+      soQuyetDinhGiaoCuaTc: '',
+      soCongVan: '',
+      soQuyetDinhDcCuaC: '',
       tenTrangThai: '',
     };
   }

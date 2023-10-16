@@ -34,7 +34,7 @@
       <div nz-row [nzGutter]='24'>
         <div nz-col [nzSpan]='3'>
           <nz-form-item class='form-item'>
-            <nz-form-label nzFor='nam-qd' nzRequired>Năm Quyết Định</nz-form-label>
+            <nz-form-label nzFor='nam-qd' nzRequired>Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
               <nz-select formControlName='namQd' [nzDisabled]='isView' (ngModelChange)='onChangeNamQd($event)'>
                 <nz-option *ngFor='let p of dsNam' [nzValue]='p.value' [nzLabel]='p.text'>
@@ -48,7 +48,7 @@
         </div>
         <div nz-col [nzSpan]='4'>
           <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzFor='so-qd' nzRequired>Số Quyết Định</nz-form-label>
+            <nz-form-label [nzNoColon]='true' nzFor='so-qd' nzRequired>Số quyết Định</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
               <nz-input-group nzAddOnAfter='{{maQd}}' id='so-qd'>
                 <!--                <input nz-input formControlName='soQd' [readOnly]='isView' />-->
@@ -63,7 +63,7 @@
         </div>
         <div nz-col [nzSpan]='5'>
           <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzFor='ngay-qd' nzRequired>Ngày Quyết Định</nz-form-label>
+            <nz-form-label [nzNoColon]='true' nzFor='ngay-qd' nzRequired>Ngày quyết Định</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
               <nz-date-picker [nzDisabled]='isView' formControlName='ngayQd' nzFormat='dd/MM/yyyy'>
               </nz-date-picker>
@@ -89,7 +89,7 @@
         </div>
         <div nz-col [nzSpan]='24'>
           <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzFor='ngay-qd'>Trích yếu</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]='true' nzFor='ngay-qd'>Trích yếu</nz-form-label>
             <nz-form-control>
               <textarea rows='3' formControlName='trichYeu' class='search__input' nz-input placeholder='Nhập text'
                         [readonly]='isView'></textarea>
@@ -119,7 +119,7 @@
   </div>
 
   <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
-    <nz-table [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false'>
+    <nz-table [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false' nzBordered>
       <thead>
       <tr>
         <th class='text-center' style='width: 3%;'>STT</th>

@@ -60,7 +60,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="3">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true"
                            nzRequired> {{formData.value.loai == '00' ? 'Số thông báo' : 'Số quyết định'}}
@@ -72,27 +72,15 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4" *ngIf="formData.value.loai == '00'">
+        <div nz-col nzSpan="6">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired>Căn cứ trên tờ trình TC đã duyệt</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                <input [readonly]="true" nz-input formControlName="soTt" readonly="true"/>
-              </nz-input-group>
+              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4" *ngIf="formData.value.loai == '01'">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired>Số QĐ của BTC</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                <input [readonly]="true" nz-input formControlName="qdBtc" readonly="true"/>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="9">
+        <div nz-col nzSpan="6">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true"> Trích yếu
             </nz-form-label>
@@ -103,10 +91,24 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="6" *ngIf="formData.value.loai == '00'">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
-            <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
+            <nz-form-label [nzNoColon]="true" nzRequired>Căn cứ trên tờ trình TC đã duyệt</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
+                <input [readonly]="true" nz-input formControlName="soTt" readonly="true"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6" *ngIf="formData.value.loai == '01'">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired>Số QĐ của BTC</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
+                <input [readonly]="true" nz-input formControlName="qdBtc" readonly="true"/>
+              </nz-input-group>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="24">
@@ -128,7 +130,7 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKem"></file-list>
+              <file-list [data]="fileDinhKem" [isViewDetail]="isViewDetail"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -138,7 +140,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="canCuPhapLy"></file-list>
+              <file-list [data]="canCuPhapLy" [isViewDetail]="isViewDetail"></file-list>
             </div>
           </nz-form-item>
         </div>

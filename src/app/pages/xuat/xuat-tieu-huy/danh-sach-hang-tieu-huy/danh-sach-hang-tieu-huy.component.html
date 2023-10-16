@@ -72,7 +72,7 @@
       <h3 class="text-uppercase">Danh sách hàng cần tiêu hủy</h3>
       <div class="buttons">
         <button type="button" class="btn btn-main"
-                *ngIf="userService.isCuc()" (click)="openTongHop()">
+                *ngIf="userService.isCuc()" (click)="redirectUrl('xuat/xuat-tieu-huy/tong-hop')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tổng hợp DS hàng cần tiêu hủy</span>
         </button>
