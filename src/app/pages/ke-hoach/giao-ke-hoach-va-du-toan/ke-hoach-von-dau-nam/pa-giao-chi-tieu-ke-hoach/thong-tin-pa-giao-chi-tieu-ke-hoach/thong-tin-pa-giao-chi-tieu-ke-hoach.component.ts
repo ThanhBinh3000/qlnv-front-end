@@ -162,6 +162,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
     inputMode: CurrencyMaskInputMode.NATURAL,
   };
   LOAI_QD = LOAI_QD_CTKH;
+
   //
 
   constructor(
@@ -220,7 +221,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.capDvi = this.userInfo.CAP_DVI;
       this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
       this.findCanCuByYear(this.yearNow);
-      await this.initDataThemMoi();
+      // await this.initDataThemMoi();
     }
   }
 
@@ -400,27 +401,28 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
         i++;
       }
       //get số dư đầu kỳ của các đơn vị
-      await this.quanLyHangTrongKhoService.getTrangThaiHt({
+      await this.quanLyHangTrongKhoService.getTrangThaiHtNew({
         listMaDvi: this.arrayDonVi,
         listLoaiVthh: ['0101', '0102'],
+        capDvi: this.userInfo.CAP_DVI,
       }).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
             this.dsKeHoachLuongThucClone.forEach((item) => {
-              let dataTonKho = res.data.filter(dt => dt.nam && Number(dt.nam) < this.yearNow && Number(dt.nam) >= this.yearNow - 3 && item.maDonVi == dt.maDonVi);
+              let dataTonKho = res.data.filter(dt => dt.nam && dt.nam < this.yearNow && dt.nam >= this.yearNow - 3 && item.maDonVi == dt.maDonVi);
               if (dataTonKho && dataTonKho.length > 0) {
                 dataTonKho.forEach((tonKho) => {
                   if (tonKho.loaiVthh == '0101') {
                     switch (tonKho.nam) {
-                      case (this.yearNow - 1).toString():
+                      case this.yearNow - 1:
                         item.tkdnThoc[2].soLuong +=
                           tonKho.duDau;
                         break;
-                      case (this.yearNow - 2).toString():
+                      case this.yearNow - 2:
                         item.tkdnThoc[1].soLuong +=
                           tonKho.duDau;
                         break;
-                      case (this.yearNow - 3).toString():
+                      case this.yearNow - 3:
                         item.tkdnThoc[0].soLuong +=
                           tonKho.duDau;
                         break;
@@ -429,15 +431,15 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                     }
                   } else if (tonKho.loaiVthh == '0102') {
                     switch (tonKho.nam) {
-                      case (this.yearNow - 1).toString():
+                      case this.yearNow - 1:
                         item.tkdnGao[2].soLuong +=
                           tonKho.duDau;
                         break;
-                      case (this.yearNow - 2).toString():
+                      case this.yearNow - 2:
                         item.tkdnGao[1].soLuong +=
                           tonKho.duDau;
                         break;
-                      case (this.yearNow - 3).toString():
+                      case this.yearNow - 3:
                         item.tkdnGao[0].soLuong +=
                           tonKho.duDau;
                         break;
@@ -479,9 +481,10 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
         this.dsMuoiClone.push(this.keHoachMuoiCreate);
         i++;
       }
-      await this.quanLyHangTrongKhoService.getTrangThaiHt({
+      await this.quanLyHangTrongKhoService.getTrangThaiHtNew({
         listMaDvi: this.arrayDonVi,
         listLoaiVthh: ['04'],
+        capDvi: this.userInfo.CAP_DVI,
       }).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
