@@ -29,6 +29,7 @@ export class HoSoTieuHuyComponent extends Base3Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.defaultURL = 'xuat/xuat-tieu-huy/trinh-tham-dinh'
+    this.defaultPermisson = 'XHDTQG_XTH_HSTH'
     this.formData = this.fb.group({
       soTtr: null,
       soQdScSr: null,
@@ -79,14 +80,21 @@ export class HoSoTieuHuyComponent extends Base3Component implements OnInit {
     this.search();
   }
 
-  showEdit(data) {
-    let trangThai = data.trangThai
-    if (this.userService.isCuc()) {
-      this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_TP || trangThai == this.STATUS.TU_CHOI_LDC
-      || trangThai == this.STATUS.TU_CHOI_CBV || trangThai == this.STATUS.TU_CHOI_LDV
+  showEdit(data){
+    if(data){
+      let trangThai = data.trangThai;
+      let result;
+      if (this.userService.isCuc()) {
+        result = trangThai == this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_TP || trangThai == this.STATUS.TU_CHOI_LDC
+          || trangThai == this.STATUS.TU_CHOI_CBV || trangThai == this.STATUS.TU_CHOI_LDV
+      }
+      if (this.userService.isTongCuc()) {
+        result = trangThai == this.STATUS.DA_DUYET_LDC || trangThai == this.STATUS.DANG_DUYET_CB_VU;
+      }
+      return result && this.isAccessPermisson(this.defaultPermisson+"_THEM");
     }
-    if (this.userService.isTongCuc()) {
-      return trangThai == this.STATUS.DA_DUYET_LDC || trangThai == this.STATUS.DANG_DUYET_CB_VU;
-    }
+    return false
   }
+
+
 }

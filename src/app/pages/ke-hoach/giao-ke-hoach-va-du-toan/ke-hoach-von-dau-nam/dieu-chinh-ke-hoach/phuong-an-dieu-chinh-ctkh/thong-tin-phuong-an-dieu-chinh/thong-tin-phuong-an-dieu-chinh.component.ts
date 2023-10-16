@@ -1888,17 +1888,13 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   };
 
   async selectNam() {
-    this.formData.patchValue({ soQuyetDinhGiaoNamTruoc: "" })
-    this.yearNow = this.formData.get('namKeHoach').value;
-    this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
-    await this.getDSDXDC(this.yearNow)
-    await this.findCanCuByYear(this.yearNow);
-    // if (!this.id) {
-    //   if ((this.thongTinChiTieuKeHoachNam.capDvi == "1" && this.formData.get("loaiCanCu").value != 'OTHER') || this.thongTinChiTieuKeHoachNam.capDvi == "2") {
-    //     this.findCanCuByYear(this.yearNow);
-    //   }
-    //   // this.initDataThemMoi();
-    // }
+    if (!this.id) {
+      this.formData.patchValue({ soQuyetDinhGiaoNamTruoc: "" })
+      this.yearNow = this.formData.get('namKeHoach').value;
+      this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
+      await this.getDSDXDC(this.yearNow)
+      await this.findCanCuByYear(this.yearNow);
+    }
   }
 
   convertTrangThai(status: string) {

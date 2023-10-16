@@ -54,23 +54,22 @@
       <h3> DANH SÁCH BẢNG KÊ BÁN LẺ </h3>
       <div class="buttons">
         <button
-          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
                      userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_SUA')"
           type="button" class="btn btn-do" (click)="deleteMulti()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-
         <button
-          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_EXP'):
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_EXP'):
            userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_EXP')"
           type="button" class="btn btn-sub" (click)="exportData('Danh-sach-bang-ke-ban-le.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button
-          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_THEM'):
-           userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM')"
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_THEM'):
+           userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_THEM')"
           type="button" class="btn btn-main" (click)="themMoiBangKeBanLe($event, false, 0)">
           <i class=" icon htvbdh_dau-cong"></i>
           <span>Thêm bảng kê</span>
@@ -86,18 +85,18 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate" nzDisabled="userService.isChiCuc()"></label>
           </th>
-          <th class="text-center" style="width: 2%;">STT</th>
-          <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
-          <th class="text-center" style="width: 7%;">Số bảng kê</th>
-          <th class="text-center" style="width: 7%;">Số quyết định</th>
-          <th class="text-center" style="width: 5%;">Tên người mua</th>
-          <th class="text-center" style="width: 9%;">Địa chỉ</th>
-          <th class="text-center" style="width: 10%;">Số CMT/CCCD</th>
-          <th class="text-center" style="width: 10%;">Loại hàng hóa</th>
-          <th class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
-          <th class="text-center" style="width: 5%;">Số Lượng</th>
-          <th class="text-center" style="width: 5%;">Đơn giá (đ)</th>
-          <th class="text-center" style="width: 5%;">Thành tiền (đ)</th>
+          <th class="text-center" nzWidth="50px"> STT</th>
+          <th class="text-center">Năm kế hoạch</th>
+          <th class="text-center">Số bảng kê</th>
+          <th class="text-center">Số quyết định</th>
+          <th class="text-center">Tên người mua</th>
+          <th class="text-center">Địa chỉ</th>
+          <th class="text-center">Số CMT/CCCD</th>
+          <th class="text-center">Loại hàng hóa</th>
+          <th class="text-center">Chủng loại hàng hóa</th>
+          <th class="text-center">Số Lượng</th>
+          <th class="text-center">Đơn giá (đ)</th>
+          <th class="text-center">Thành tiền (đ)</th>
           <th width="90px">Hành động</th>
         </tr>
         <tr class="search-table">
@@ -194,21 +193,21 @@
                (click)="openModalQdNv(data.idQdNv)">
               {{ data.soQdNv }}</a>
           </td>
-          <td>{{ data.tenNguoiMua }}</td>
-          <td>{{ data.diaChiNguoiMua }}</td>
-          <td>{{ data.cmt }}</td>
+          <td>{{ data.tenBenMua }}</td>
+          <td>{{ data.diaChiBenMua }}</td>
+          <td>{{ data.cmtBenMua }}</td>
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
-          <td>{{ data.soLuongBanLe|number:globals.numberFormat:globals.locale}}</td>
+          <td>{{ data.soLuong|number:globals.numberFormat:globals.locale}}</td>
           <td>{{ data.donGia|number:globals.numberFormat:globals.locale}}</td>
-          <td>{{ data.soLuongBanLe * data.donGia|number:globals.numberFormat:globals.locale}}</td>
+          <td>{{ data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-left">
-            <a *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_XEM'):
-                userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_XEM')"
+            <a *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_XEM'):
+                userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_XEM')"
                (click)="themMoiBangKeBanLe($event,true, data.id, idx)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
+            <a *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
                 userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_SUA')"
                (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
