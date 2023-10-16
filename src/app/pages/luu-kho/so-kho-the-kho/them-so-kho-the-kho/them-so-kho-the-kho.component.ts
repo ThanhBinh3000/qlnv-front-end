@@ -88,7 +88,8 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       loai: ['00'],
-      ngayMoSoKho : []
+      ngayMoSoKho : [],
+      lyDoTuChoi : []
     });
   }
 
