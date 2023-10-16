@@ -272,7 +272,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
               listIdPag: thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
               listStt: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuat) : [],
               listSttDc: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuatDc) : [],
-              loai: "01",
+              loaiDeXuat: data.formData.loaiQd,
               type : this.type
             }
             this.tongHopData(body);
