@@ -91,10 +91,6 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base3Component implements 
     this.hoSoTieuHuyService.getHoSoToQuyetDinh({}).then((res) => {
       this.spinner.hide();
       if (res.data) {
-        res.data?.forEach(item => {
-          item.ngayDen = item.thoiGianPdDen
-          item.ngayTu = item.thoiGianPdTu
-        })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách số hồ sơ',
           nzContent: DialogTableSelectionComponent,
@@ -104,8 +100,8 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base3Component implements 
           nzFooter: null,
           nzComponentParams: {
             dataTable: res.data,
-            dataHeader: ['Số hồ sơ', 'Trích yếu', 'Thời gian phê duyệt từ', 'Thời gian phê duyệt đến'],
-            dataColumn: ['soHoSo', 'trichYeu', 'ngayTu', 'ngayDen']
+            dataHeader: ['Số hồ sơ', 'Trích yếu'],
+            dataColumn: ['soHoSo', 'trichYeu']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -155,6 +151,9 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base3Component implements 
       if (res) {
         if (isGuiDuyet) {
           this.id = res.id;
+          this.formData.patchValue({
+            id : res.id,
+          })
           this.pheDuyet();
         } else {
           this.redirectDefault();

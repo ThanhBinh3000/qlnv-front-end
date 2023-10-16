@@ -47,6 +47,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   listKhoi: any[] = [];
   listLoaiDuAn: any[] = [];
   STATUS = STATUS;
+  listSoDx: any;
 
 
   constructor(
@@ -89,7 +90,6 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
        this.maQd = "/" + this.userInfo.MA_TCKT;
      }
       this.getDsKhoi();
-      this.getAllQdTrungHan();
       if (this.idInput) {
         await this.getDataDetail(this.idInput);
       } else {
@@ -112,13 +112,51 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     }
   }
 
-  async getAllQdTrungHan() {
-    let res = await this.qdTrungHanSv.getListQd();
+  // async getAllQdTrungHan() {
+  //   let res = await this.qdTrungHanSv.getListQd();
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.listQdKhTh = res.data;
+  //   }
+  // }
+  async getAllSoDeXuat(){
+    let body = {
+      "maDvi": this.userInfo.MA_DVI,
+      "paggingReq": {
+        "limit": this.globals.prop.MAX_INTERGER,
+        "page": 0
+      },
+    }
+    let res = await this.dexuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdKhTh = res.data;
+      let data = res.data;
+      this.listSoDx = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-
+  async getAllQdTrungHan() {
+    let body = {
+      "maDvi": this.userInfo.MA_DVI,
+      "paggingReq": {
+        "limit": this.globals.prop.MAX_INTERGER,
+        "page": 0
+      },
+    }
+    let res = await this.qdTrungHanSv.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data.content.filter(f=>f.trangThai=STATUS.BAN_HANH);
+      let QuyetDinh = [
+        ...data.filter((e) => {
+          return !this.listSoDx.some((dx) => {
+            return e.soQuyetDinh === dx.soQdTrunghan;
+          });
+        }),
+      ];
+      this.listQdKhTh = QuyetDinh;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    }
 
   async getDataDetail(id) {
     if (id > 0) {
@@ -378,7 +416,9 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     this.dataTableRes = arr;
   }
 
-  openDialogToTrinh() {
+  async openDialogToTrinh() {
+   await this.getAllSoDeXuat();
+   await this.getAllQdTrungHan();
     if (!this.isViewDetail) {
       const modal = this.modal.create({
         nzTitle: "Danh sách quyết định kế hoạch trung hạn",

@@ -102,7 +102,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
   showSave() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_THEM');
+      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_THEM');
     }
     if (this.userService.isTongCuc()) {
       return (trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU) && this.userService.isAccessPermisson('XHDTQG_XTH_HSTH_THEM');
@@ -132,6 +132,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
         if (isGuiDuyet) {
           this.id = res.id;
           this.formData.patchValue({
+            id : res.id,
             trangThai: res.trangThai,
             tenTrangThai: res.tenTrangThai
           })

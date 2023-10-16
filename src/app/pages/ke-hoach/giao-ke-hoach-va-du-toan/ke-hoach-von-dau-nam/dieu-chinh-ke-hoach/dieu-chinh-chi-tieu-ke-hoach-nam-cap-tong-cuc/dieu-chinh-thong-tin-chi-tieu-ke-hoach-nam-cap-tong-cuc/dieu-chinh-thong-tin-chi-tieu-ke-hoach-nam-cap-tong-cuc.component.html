@@ -48,8 +48,8 @@
             <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" [nzDisabled]="isViewDetail"
-                nzAllowClear>
+              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
+                [nzDisabled]="isViewDetail || !!this.id" nzAllowClear>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
               <!-- <input [readonly]="true" nz-input formControlName="namKeHoach" readonly="true" /> -->
@@ -61,8 +61,9 @@
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
-                <input formControlName="soQuyetDinh" [readonly]="isViewDetail" nz-input nzSize="small"
-                  placeholder="Nhập số công văn/tờ trình" />
+                <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                  [nzSize]="'small'" [nzDisabled]="isViewDetail" placeholder="Nhập số quyết định">
+                </nz-input-number>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -156,7 +157,8 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ pháp lý</nz-form-label>
             <div class="list-file">
-              <file-list [disabled]="isViewDetail" [isViewDetail]="isViewDetail" [data]="listCcPhapLy"></file-list>
+              <file-list [isCanCuPL]="true" [disabled]="isViewDetail" [isViewDetail]="isViewDetail"
+                [data]="listCcPhapLy"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -421,7 +423,7 @@
               </ng-template>
             </tr>
           </tbody>
-          <tfoot *ngIf="isTongCuc()">
+          <tfoot>
             <tr>
               <th nzLeft></th>
               <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
@@ -629,7 +631,7 @@
               </ng-template>
             </tr>
           </tbody>
-          <tfoot *ngIf="isTongCuc()">
+          <tfoot>
             <tr>
               <th></th>
               <th style="text-align: center; font-weight: 700">Cộng</th>
@@ -641,7 +643,7 @@
             </tr>
             <tr *ngIf="userService.isTongCuc()">
               <td></td>
-              <th style="text-align: right; font-weight: 700">Chỉ tiêu của BTC</th>
+              <th style="text-align: right; font-weight: 700">Chỉ tiêu của TCDT</th>
               <th class="text-right text-btc"> {{(formData.value.slTonKhoDauNam || 0) | number: '1.0-1': 'vi_VN'}}</th>
               <th class="text-right text-btc"> {{(formData.value.slNhapTrongNam || 0) | number: '1.0-1': 'vi_VN'}}</th>
               <th class="text-right text-btc"> {{(formData.value.slXuatTrongNam || 0) | number: '1.0-1': 'vi_VN'}}
