@@ -57,7 +57,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         soQd: [null],
         ngayKy: [null],
         ngayHieuLuc: [null],
-        soQdCanDc: [null],
+        soQdDc: [null],
         tenLoaiGia: [null],
         soToTrinh: [null],
         loaiVthh: [null],
@@ -118,6 +118,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh,
         loaiDeXuat: data.loaiDeXuat,
+        soQdDc  :data.soQdDc
       });
       this.fileDinhKem = data.fileDinhKems;
       this.dataTable = data.thongTinGiaLt;
@@ -134,7 +135,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     }
   }
 
-   quayLai() {
+  quayLai() {
     this.onClose.emit();
   }
 
@@ -188,7 +189,11 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
         this.dataTable.forEach(item => {
           if (item.vat) {
-            item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+            if (this.formData.value.loaiDeXuat == '00') {
+              item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+            } else {
+              item.giaQdDcBtcVat = item.giaQdDcBtc + item.giaQdDcBtc * item.vat
+            }
           }
         })
       }
@@ -238,7 +243,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         nzWidth: '1200px',
         nzFooter: null,
         nzComponentParams: {
-          pagType : this.pagType,
+          pagType: this.pagType,
           type: this.type,
           namKeHoach: this.formData.value.namKeHoach
         },
@@ -246,37 +251,31 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       modalQD.afterClose.subscribe((data) => {
         if (data) {
           let chiTietToTrinh = data.data;
-          if (data.formData && data.formData.loaiQd == '00') {
-            if (chiTietToTrinh) {
-              this.formData.patchValue({
-                loaiDeXuat: data.formData.loaiQd,
-                loaiVthh: chiTietToTrinh.loaiVthh ? chiTietToTrinh.loaiVthh : null,
-                cloaiVthh: chiTietToTrinh.cloaiVthh ? chiTietToTrinh.cloaiVthh : null,
-                tenLoaiVthh: chiTietToTrinh.tenLoaiVthh ? chiTietToTrinh.tenLoaiVthh : null,
-                tenCloaiVthh: chiTietToTrinh.tenCloaiVthh ? chiTietToTrinh.tenCloaiVthh : null,
-                loaiGia: chiTietToTrinh.loaiGia ? chiTietToTrinh.loaiGia : null,
-                tenLoaiGia: chiTietToTrinh.tenLoaiGia ? chiTietToTrinh.tenLoaiGia : null,
-                soToTrinh: chiTietToTrinh.soToTrinh ? chiTietToTrinh.soToTrinh : null,
-                tieuChuanCl: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
-              })
-              this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
+          if (chiTietToTrinh) {
+            this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
+            const uniqueSoDeXuat = new Set<string>();
+            for (const record of this.dataTable) {
+              // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
+              if (!uniqueSoDeXuat.has(record.soDx)) {
+                // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
+                uniqueSoDeXuat.add(record.soDx.toString());
+              }
             }
-            this.buildTreePagCt();
-          } else {
-            let thRes = data.listDx;
-            let body = {
-              namTongHop: this.formData.value.namKeHoach,
-              loaiVthh: data.formData.loaiVthh ? data.formData.loaiVthh : null,
-              cloaiVthh: data.formData.cloaiVthh ? data.formData.cloaiVthh : null,
-              loaiGia: data.formData.loaiGia ? data.formData.loaiGia : null,
-              listIdPag: thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
-              listStt: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuat) : [],
-              listSttDc: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuatDc) : [],
-              loai: "01",
-              type : this.type
-            }
-            this.tongHopData(body);
+            const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
+            this.formData.patchValue({
+              loaiDeXuat: data.formData.loaiQd,
+              loaiVthh: chiTietToTrinh.loaiVthh ? chiTietToTrinh.loaiVthh : null,
+              cloaiVthh: chiTietToTrinh.cloaiVthh ? chiTietToTrinh.cloaiVthh : null,
+              tenLoaiVthh: chiTietToTrinh.tenLoaiVthh ? chiTietToTrinh.tenLoaiVthh : null,
+              tenCloaiVthh: chiTietToTrinh.tenCloaiVthh ? chiTietToTrinh.tenCloaiVthh : null,
+              loaiGia: chiTietToTrinh.loaiGia ? chiTietToTrinh.loaiGia : null,
+              tenLoaiGia: chiTietToTrinh.tenLoaiGia ? chiTietToTrinh.tenLoaiGia : null,
+              soToTrinh: chiTietToTrinh.soToTrinh ? chiTietToTrinh.soToTrinh : null,
+              tieuChuanCl: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
+              soQdDc : uniqueSoDeXuatArray && data.formData?.loaiQd == '01' ? uniqueSoDeXuatArray.join(', ') : ""
+            })
           }
+          this.buildTreePagCt();
         }
       });
     }
@@ -293,9 +292,10 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value,
-            apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
-            vat : value && value[0] && value[0].vat ? value[0].vat : null,
-            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : 0,
+            apDungTatCa: value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
+            vat: value && value[0] && value[0].vat ? value[0].vat : null,
+            giaQdBtc: value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : 0,
+            giaQdDcBtc: value && value[0] && value[0].giaQdDcBtc ? value[0].giaQdDcBtc : 0,
           };
         }).value();
     }
@@ -309,9 +309,10 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         if (item.children && item.children.length > 0) {
           item.children.forEach(child => {
             if (child.apDungTatCa) {
-              child.giaQdBtc = item.giaQdBtc;
-              if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
-                child.giaQdBtcVat = child.giaQdBtc + child.giaQdBtc * child.vat
+              if (this.formData.value.loaiDeXuat == '00') {
+                child.giaQdBtc = item.giaQdBtc;
+              } else {
+                child.giaQdDcBtc = item.giaQdDcBtc;
               }
             }
             this.dataTable.push(child);
@@ -334,37 +335,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       this.dataTableView.forEach(s => {
         this.expandSet.add(s.idVirtual);
       });
-    }
-  }
-
-  async tongHopData(body) {
-    try {
-      this.spinner.show();
-      let res = await this.tongHopPhuongAnGiaService.tongHop(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let pagTh = res.data;
-        if (pagTh) {
-          this.formData.patchValue({
-            loaiVthh: pagTh.loaiVthh ? pagTh.loaiVthh : null,
-            cloaiVthh: pagTh.cloaiVthh ? pagTh.cloaiVthh : null,
-            tenLoaiVthh: pagTh.tenLoaiVthh ? pagTh.tenLoaiVthh : null,
-            tenCloaiVthh: pagTh.tenCloaiVthh ? pagTh.tenCloaiVthh : null,
-            loaiGia: pagTh.loaiGia ? pagTh.loaiGia : null,
-            tenLoaiGia: pagTh.tenLoaiGia ? pagTh.tenLoaiGia : null,
-            soToTrinh: body.listStt && body.listStt.length ? body.listStt.toString() : null,
-            soQdCanDc: body.listSttDc && body.listSttDc.length ? body.listSttDc.toString() : null,
-          })
-          this.dataTable = res.data?.pagChiTiets;
-          this.buildTreePagCt();
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
-    } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.spinner.hide();
     }
   }
 }

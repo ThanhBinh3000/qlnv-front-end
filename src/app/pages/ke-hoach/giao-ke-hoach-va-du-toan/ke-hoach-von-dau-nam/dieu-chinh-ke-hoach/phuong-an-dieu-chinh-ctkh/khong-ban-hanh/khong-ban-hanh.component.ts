@@ -38,31 +38,23 @@ export class KhongBanHanhComponent extends Base2Component implements OnInit {
       ngayKyKhongBh: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       noiDungVanBanKhongBh: [],
       lyDoKhongBh: [],
-      // fileDinhKemKhongBhs: [, [Validators.required]],
     }
     );
   }
 
   ngOnInit(): void {
     this.qdTCDT = this.userInfo.MA_QD;
-    // this.formData.patchValue({
-    //   soVanBanKhongBh: this.soCongVan
-    // })
   }
 
 
   handleOk(item: any) {
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return
-    if (this.fileDinhKemKhongBhs.length > 0) {
-      this._modalRef.close({
-        ...item,
-        soVanBanKhongBh: `${item.soVanBanKhongBh}/${this.qdTCDT}`,
-        fileDinhKemKhongBhs: this.fileDinhKemKhongBhs
-      });
-    } else {
-      this.notification.error(MESSAGE.ERROR, "Bạn chưa thêm file đính kèm");
-    }
+    this._modalRef.close({
+      ...item,
+      soVanBanKhongBh: `${item.soVanBanKhongBh}/${this.qdTCDT}`,
+      fileDinhKemKhongBhs: this.fileDinhKemKhongBhs
+    });
 
   }
 

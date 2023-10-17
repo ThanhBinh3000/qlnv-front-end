@@ -400,7 +400,6 @@ export class TtcpComponent implements OnInit {
   async getDetailRow(id) {
     if (id) {
       let res = await this.quyetDinhTtcpService.getDetail(id);
-      console.log(res, 'aaaaaaaaaaaaaaaaaaa')
       if (res.msg == MESSAGE.SUCCESS) {
         this.listBoNganh = res.data.listBoNganh ? res.data.listBoNganh : [];
         this.namDataSelect = res.data.namQd

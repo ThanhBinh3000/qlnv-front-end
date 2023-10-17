@@ -17,6 +17,8 @@ import { formatNumber } from "@angular/common";
 import { DanhMucService } from "../../../services/danhmuc.service";
 import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {STATUS} from "../../../constants/status";
+import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -62,7 +64,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     private dxuatKhLcntService: DxuatKhLcntService,
     private notification: NzNotificationService,
     private dmDonViService: DonviService,
-    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -113,19 +116,13 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Tên gói thầu không được để trống.")
       return;
     }
-    if (this.formData.get('donGiaTamTinh').value == null) {
-      this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được để trống.")
-      return;
-    }
     if (this.listOfData.length <= 0) {
       this.notification.error(MESSAGE.ERROR, "Địa điểm nhập hàng và số lượng không được để trống.")
       return;
     }
     if (this.validateGiaDeXuat()) {
       this.listOfData.forEach(item => {
-        item.donGiaTamTinh = this.formData.get('donGiaTamTinh').value;
         item.goiThau = this.formData.get('goiThau').value;
-        item.donGiaVat = this.formData.get('donGiaVat').value;
       })
       this.formData.patchValue({
         children: this.listOfData,
@@ -226,16 +223,11 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     if (this.dataEdit.length > 0) {
       this.formData.patchValue({
         goiThau: this.dataEdit[0].goiThau,
-        donGiaVat: this.dataEdit[0].donGiaVat,
-        donGiaTamTinh: this.dataEdit[0].donGiaTamTinh,
-        soLuongChiTieu: this.dataEdit[0].soLuongChiTieu,
-        soLuongDaMua: this.dataEdit[0].soLuongDaMua,
       })
     }
     this.formData.patchValue({
       tenCloaiVthh: this.tenCloaiVthh
     })
-    this.formattedDonGiaVat = this.formData.get('donGiaVat') ? formatNumber(this.formData.get('donGiaVat').value, 'vi_VN', '1.0-1') : '';
     this.dataEdit.forEach(item => {
       item.children.forEach(i => {
         this.listOfData.push(i)
@@ -321,6 +313,27 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listDiemKho.push(item);
       }
     }
+    let bodyPag = {
+      namKeHoach: this.namKhoach,
+      loaiVthh: this.loaiVthh,
+      cloaiVthh: this.cloaiVthh,
+      trangThai: STATUS.BAN_HANH,
+      maDvi: event,
+      loaiGia: 'LG03'
+    }
+    let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+    if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
+      const data = pag.data[0];
+      let donGiaVatQd = 0;
+      if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
+        donGiaVatQd = data.giaQdDcTcdtVat
+      } else {
+        donGiaVatQd = data.giaQdTcdtVat
+      }
+      this.thongTinChiCuc.donGia = donGiaVatQd
+    } else {
+      this.thongTinChiCuc.donGia = null
+    }
   }
 
   async addChiCuc() {
@@ -386,6 +399,14 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       if (data.length > 0) {
         this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
         return false
+      }
+      if (this.thongTinChiCuc.donGiaTamTinh > this.giaToiDa) {
+        this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn giá tối đa (" + this.giaToiDa + " đ)")
+        return false
+      }
+      if (this.thongTinChiCuc.donGiaTamTinh == null) {
+        this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được để trống.")
+        return false;
       }
       return true;
     }
@@ -453,9 +474,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     if (this.giaToiDa == null) {
       this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
       return;
-    } else if (this.formData.get('donGiaTamTinh').value > this.giaToiDa) {
-      this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn giá tối đa (" + this.giaToiDa + " đ)")
-      return false
     } else {
       return true;
     }
@@ -471,43 +489,27 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.thongTinChiCuc.soLuong = null
   }
 
-  calculatorThanhTien() {
-    if(this.formData.get('donGiaVat').value != undefined){
-      this.formData.patchValue({
-        thanhTien:
-          +this.formData.get('soLuong').value *
-          +this.formData.get('donGiaVat').value * 1000,
-      });
-
-      this.formData.patchValue({
-        bangChu: VNnum2words(+this.formData.get('thanhTien').value),
-      });
-      this.formattedThanhTien = this.formData.get('thanhTien') ? formatNumber(this.formData.get('thanhTien').value, 'vi_VN', '1.0-1') : '0';
-    }
-  }
-
-  calculatorThanhTienDx() {
-    this.formData.patchValue({
-      thanhTienDx:
-        +this.formData.get('soLuong').value *
-        +this.formData.get('donGiaTamTinh').value *1000,
-    });
-    this.formattedThanhTienDx = this.formData.get('thanhTienDx') ? formatNumber(this.formData.get('thanhTienDx').value, 'vi_VN', '1.0-1') : '0';
-  }
-
   calcTong() {
     if (this.listOfData) {
-      const sum = this.listOfData.reduce((prev, cur) => {
-        if (cur.soLuong == undefined && cur.soLuong == null) {
-          cur.soLuong = 0
+      let sum = 0;
+      let thanhTienDx = 0;
+      let thanhTien = 0;
+      for (let chiCuc of this.listOfData) {
+        if (chiCuc.soLuong == undefined && chiCuc.soLuong == null) {
+          chiCuc.soLuong = 0
         }
-        prev += cur.soLuong;
-        return prev;
-      }, 0);
-      this.formData.get('soLuong').setValue(sum);
+        sum += chiCuc.soLuong
+        thanhTienDx += chiCuc.soLuong * chiCuc.donGiaTamTinh * 1000
+        thanhTien += chiCuc.donGia * 1000
+      }
+      this.formData.patchValue({
+        soLuong: sum,
+        thanhTienDx: thanhTienDx,
+        thanhTien: thanhTien
+      });
       this.formattedSoLuong = this.formData.get('soLuong') ? formatNumber(this.formData.get('soLuong').value, 'vi_VN', '1.0-1') : '0';
-      this.calculatorThanhTien();
-      this.calculatorThanhTienDx();
+      this.formattedThanhTien = this.formData.get('thanhTien') ? formatNumber(this.formData.get('thanhTien').value, 'vi_VN', '1.0-1') : '0';
+      this.formattedThanhTienDx = this.formData.get('thanhTienDx') ? formatNumber(this.formData.get('thanhTienDx').value, 'vi_VN', '1.0-1') : '0';
       return sum;
     }
   }

@@ -13,16 +13,16 @@
             <label class="search__label"> Số quyết định </label>
             <input placeholder="Nhập số quyết định" nz-input formControlName="soQdNv"/>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
             <label class="search__label">Loại hàng DTQG</label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let item of listVthh" [nzValue]="item.ma" [nzLabel]="item.giaTri"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith('02')">
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
             <label class="search__label">Loại hàng DTQG</label>
             <nz-select formControlName="loaiVthh">
-              <nz-option *ngFor="let item of listClVthh" [nzValue]="item.ma" [nzLabel]="item.ten"></nz-option>
+              <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="10">
@@ -90,7 +90,7 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center"> STT</th>
+          <th class="text-center" nzWidth="50px"> STT</th>
           <th class="text-center"> Năm xuất</th>
           <th class="text-center"> Số quyết định</th>
           <th class="text-center"> Ngày quyết định</th>
@@ -198,23 +198,26 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != '00'"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.namKh }}</td>
           <td>{{ data.soQdNv }}</td>
-          <td>{{ data.ngayTao|date: 'dd/MM/YYYY' }}</td>
-          <td>
-            <a *ngIf="data.soHd && data.idHd" nz-button nzType="link"
-               (click)="openModalHd(data.idHd)">
-              {{ data.soHd }}</a>
-          </td>
+          <td>{{ data.ngayKyQdNv|date: 'dd/MM/YYYY' }}</td>
+          <td><a *ngIf="data.soHopDong && data.idHopDong" nz-button nzType="link"
+                 (click)="openModal(data.idHopDong, 'hopDong')">
+            {{ data.soHopDong }}</a></td>
+
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
-          <td>{{ data.tgianGnhan|date: 'dd/MM/YYYY'}}</td>
+          <td>{{ data.tgianGiaoNhan|date: 'dd/MM/YYYY'}}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.bbTinhKho }}</td>
-          <td>{{ data.bbHaoDoi }}</td>
+          <td><a *ngIf="data.soTinhKho && data.idTinhKho" nz-button nzType="link"
+                 (click)="openModal(data.idTinhKho, 'tinhKho')">
+            {{ data.soTinhKho }}</a></td>
+          <td><a *ngIf="data.soHaoDoi && data.idHaoDoi" nz-button nzType="link"
+                 (click)="openModal(data.soHaoDoi, 'haoDoi')">
+            {{ data.bienBanHaoDoi }}</a></td>
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-center">
@@ -260,13 +263,13 @@
   </app-them-moi-qd-giao-nv-xuat-btt>
 </div>
 
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewHd" (nzOnCancel)="closeModalHd()">
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewHopDong" (nzOnCancel)="closeModal('hopDong')">
   <ng-container *nzModalContent class="modal__content">
-    <app-thong-tin-hop-dong-btt [idHopDong]="idHd" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    <app-thong-tin-hop-dong-btt [idHopDong]="idHopDong" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
     </app-thong-tin-hop-dong-btt>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalHd()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('hopDong')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

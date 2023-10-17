@@ -24,12 +24,11 @@
               <label class="search__label">Ngày ký</label>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledEndNgayQD" nzFormat="dd/MM/yyyy" formControlName="ngayKyTu"
-                    nzPlaceHolder="Ngày bắt đầu">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyTu" nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledEndNgayQD" nzFormat="dd/MM/yyyy" formControlName="ngayKyDen"
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyDen"
                     nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
                 </div>
               </div>
@@ -71,7 +70,7 @@
                 <thead>
                   <tr>
                     <th width="45px">
-                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllCheckedDC()"
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="60px" class="text-center">STT</th>
@@ -91,8 +90,8 @@
                     <th>
                       <nz-input-group>
                         <nz-input-group>
-                          <nz-select nzAllowClear [(ngModel)]="filterTable.nam"
-                            (ngModelChange)="filterInTable('nam',filterTable.nam)">
+                          <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                            (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                           </nz-select>
                         </nz-input-group>
@@ -100,31 +99,16 @@
                     </th>
                     <th>
                       <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinh"
-                          (input)="filterInTable('soQdinh',filterTable.soQdinh)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinh"
+                          (input)="filterInTable('soQuyetDinh',filterTable.soQuyetDinh)" size="small" />
                       </nz-input-group>
 
                     </th>
                     <th>
                       <nz-input-group>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdinh"
-                          (ngModelChange)="filterInTable('ngayKyQdinh', convertDateToString(filterTable.ngayKyQdinh))">
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKy"
+                          (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
                         </nz-date-picker>
-                      </nz-input-group>
-                    </th>
-                    <th>
-                      <nz-input-group>
-                        <nz-select nzAllowClear [(ngModel)]="filterTable.tenLoaiDc"
-                          (ngModelChange)="filterInTable('tenLoaiDc',filterTable.tenLoaiDc)">
-                          <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ten"
-                            [nzLabel]="p.ten"></nz-option>
-                        </nz-select>
-                      </nz-input-group>
-                    </th>
-                    <th>
-                      <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiQdinh"
-                          (input)="filterInTable('tenLoaiQdinh',filterTable.tenLoaiQdinh)" size="small" />
                       </nz-input-group>
                     </th>
                     <th>
@@ -135,8 +119,22 @@
                     </th>
                     <th>
                       <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDxuat"
-                          (input)="filterInTable('soDxuat',filterTable.soDxuat)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm"
+                          [(ngModel)]="filterTable.soQuyetDinhGiaoCuaTc"
+                          (input)="filterInTable('soQuyetDinhGiaoCuaTc',filterTable.soQuyetDinhGiaoCuaTc)"
+                          size="small" />
+                      </nz-input-group>
+                    </th>
+                    <th>
+                      <nz-input-group>
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
+                          (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small" />
+                      </nz-input-group>
+                    </th>
+                    <th>
+                      <nz-input-group>
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhDcCuaC"
+                          (input)="filterInTable('soQuyetDinhDcCuaC',filterTable.soQuyetDinhDcCuaC)" size="small" />
                       </nz-input-group>
                     </th>
                     <th>
@@ -152,7 +150,7 @@
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                        [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
                     </th>
                     <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                     <td>{{ data.namKeHoach }}</td>
@@ -163,7 +161,7 @@
                     <td>{{ data.soCongVan }}</td>
                     <td>{{ data.soQuyetDinhDcCuaC }}</td>
                     <td>{{ data.tenTrangThai }}</td>
-                    <td class="text-center">
+                    <td class="text-center" *ngIf="isTongCuc()">
                       <a *ngIf="data.trangThai === STATUS.BAN_HANH" (click)="redirectDetail(data.id, true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
@@ -172,6 +170,11 @@
                       </a>
                       <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU" (click)="xoa(data,'')">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                      </a>
+                    </td>
+                    <td class="text-center" *ngIf="isCuc()">
+                      <a (click)="redirectDetail(data.id, true)">
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                     </td>
                   </tr>
@@ -208,7 +211,7 @@
                 <thead>
                   <tr>
                     <th width="45px">
-                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                      <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllCheckedDC()"
                         [nzIndeterminate]="indeterminate"></label>
                     </th>
                     <th width="60px" class="text-center">STT</th>
@@ -228,8 +231,8 @@
                     <th>
                       <nz-input-group>
                         <nz-input-group>
-                          <nz-select nzAllowClear [(ngModel)]="filterTable.nam"
-                            (ngModelChange)="filterInTable('nam',filterTable.nam)">
+                          <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                            (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                           </nz-select>
                         </nz-input-group>
@@ -237,31 +240,16 @@
                     </th>
                     <th>
                       <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinh"
-                          (input)="filterInTable('soQdinh',filterTable.soQdinh)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinh"
+                          (input)="filterInTable('soQuyetDinh',filterTable.soQuyetDinh)" size="small" />
                       </nz-input-group>
 
                     </th>
                     <th>
                       <nz-input-group>
-                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdinh"
-                          (ngModelChange)="filterInTable('ngayKyQdinh', convertDateToString(filterTable.ngayKyQdinh))">
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKy"
+                          (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
                         </nz-date-picker>
-                      </nz-input-group>
-                    </th>
-                    <th>
-                      <nz-input-group>
-                        <nz-select nzAllowClear [(ngModel)]="filterTable.tenLoaiDc"
-                          (ngModelChange)="filterInTable('tenLoaiDc',filterTable.tenLoaiDc)">
-                          <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ten"
-                            [nzLabel]="p.ten"></nz-option>
-                        </nz-select>
-                      </nz-input-group>
-                    </th>
-                    <th>
-                      <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiQdinh"
-                          (input)="filterInTable('tenLoaiQdinh',filterTable.tenLoaiQdinh)" size="small" />
                       </nz-input-group>
                     </th>
                     <th>
@@ -272,8 +260,22 @@
                     </th>
                     <th>
                       <nz-input-group>
-                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDxuat"
-                          (input)="filterInTable('soDxuat',filterTable.soDxuat)" size="small" />
+                        <input type="text" nz-input placeholder="Tìm kiếm"
+                          [(ngModel)]="filterTable.soQuyetDinhGiaoCuaTc"
+                          (input)="filterInTable('soQuyetDinhGiaoCuaTc',filterTable.soQuyetDinhGiaoCuaTc)"
+                          size="small" />
+                      </nz-input-group>
+                    </th>
+                    <th>
+                      <nz-input-group>
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
+                          (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small" />
+                      </nz-input-group>
+                    </th>
+                    <th>
+                      <nz-input-group>
+                        <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhDcCuaC"
+                          (input)="filterInTable('soQuyetDinhDcCuaC',filterTable.soQuyetDinhDcCuaC)" size="small" />
                       </nz-input-group>
                     </th>
                     <th>
@@ -289,7 +291,7 @@
                   <tr *ngFor="let data of basicTable.data; let i = index">
                     <th width="45px">
                       <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                        [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                        [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
                     </th>
                     <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                     <td>{{ data.namKeHoach }}</td>
@@ -300,7 +302,7 @@
                     <td>{{ data.soCongVan }}</td>
                     <td>{{ data.soQuyetDinhDcCuaC }}</td>
                     <td>{{ data.tenTrangThai }}</td>
-                    <td class="text-center">
+                    <td class="text-center" *ngIf="isCuc()">
                       <a *ngIf="data.trangThai === STATUS.BAN_HANH" (click)="redirectDetail(data.id, true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
@@ -310,6 +312,12 @@
                       <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU" (click)="xoa(data,'')">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
+                    </td>
+                    <td class="text-center" *ngIf="isTongCuc()">
+                      <a (click)="redirectDetail(data.id, true)">
+                        <i class="fa fa-eye" title="Xem chi tiết"></i>
+                      </a>
+
                     </td>
                   </tr>
                 </tbody>

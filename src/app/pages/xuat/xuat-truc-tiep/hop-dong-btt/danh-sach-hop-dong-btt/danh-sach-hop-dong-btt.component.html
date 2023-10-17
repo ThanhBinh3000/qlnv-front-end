@@ -39,7 +39,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <button nz-button class="search__button--clear" (click)="clearForm()">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -55,13 +55,14 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_EXP') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_EXP')"
-          type="button" class="btn btn-sub" (click)="exportDataHopDong('quan-ly-ky-hop-dong-ban-hang-dtqg-theo-phuong-thuc-truc-tiep.xlsx')">
+          type="button" class="btn btn-sub"
+          (click)="exportDataHopDong('quan-ly-ky-hop-dong-ban-hang-dtqg-theo-phuong-thuc-truc-tiep.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_THEM')"
-          type="button" class="btn btn-main" (click)="goDetail(0, false)">
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_THEM')"
+          type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
           <i class=" icon htvbdh_dau-cong"></i>
           <span> Thêm hợp đồng </span>
         </button>
@@ -83,8 +84,8 @@
           <th width="175px" class="wrap">SL HĐ cần ký</th>
           <th width="175px" class="wrap">SL HĐ đã ký</th>
           <th width="175px" class="wrap">Thời hạn xuất kho</th>
-          <th width="175px" class="wrap">Loại hàng hóa</th>
-          <th width="175px">Chủng loại hàng hóa</th>
+          <th width="175px" class="wrap">Loại hàng DTQG</th>
+          <th width="175px">Chủng loại hàng DTQG</th>
           <th width="175px">Tổng giá trị hợp đồng</th>
           <th width="175px" class="wrap">Trạng thái ký HĐ</th>
           <th width="175px" class="wrap">Trạng thái XH</th>
@@ -193,15 +194,15 @@
           <td class="text-left">
             <a *ngIf="(data.trangThaiHd == STATUS.CHUA_THUC_HIEN || data.trangThaiHd == STATUS.DANG_THUC_HIEN) ?
                   (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? (userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_XEM') && !userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM'))
-                  : (userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_XEM') && !userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_THEM')))
-                  : (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_XEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_XEM'))"
-               (click)="goDetail(data.id, true)">
+                  : (userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_XEM') && !userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_THEM')))
+                  : (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_XEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_XEM'))"
+               (click)="redirectDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
               *ngIf="data.trangThaiHd != STATUS.DA_HOAN_THANH
-                     && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_THEM'))"
-              (click)="goDetail(data.id, true)">
+                     && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_THEM'))"
+              (click)="redirectDetail(data.id, true)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
           </td>

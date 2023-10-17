@@ -92,7 +92,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         ngayDxTu: [],
         ngayDxDen: [],
         ngayTongHop: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-        noiDung: [null, [Validators.required]],
+        noiDung: [null],
         ghiChu: [],
         giaKsTt: [],
         giaKsTtVat: [],
@@ -105,6 +105,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         trangThaiTt: [],
         tenTrangThaiTh: [],
         tenTrangThaiTt: [],
+        kieuTongHop: [],
       }
     );
     this.formTraCuu = this.fb.group(
@@ -118,6 +119,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         ngayDxTu: [null],
         ngayDxDen: [null],
         loai: ['00'],
+        kieuTongHop: ['00'],
       }
     );
   }
@@ -125,14 +127,12 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.isMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA ? true : false;
-    await Promise.all([
-      this.userInfo = this.userService.getUserLogin(),
-      this.loadDsNam(),
-      this.getListCuc(),
-      this.loadDsVthh(),
-      this.loadDsLoaiGia(),
-      this.getDataDetail(this.idInput),
-    ])
+    this.userInfo = this.userService.getUserLogin();
+    this.loadDsNam();
+    this.getListCuc();
+    this.loadDsVthh();
+    this.loadDsLoaiGia();
+    await this.getDataDetail(this.idInput);
     this.spinner.hide();
   }
 
@@ -164,7 +164,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         maDvis: data.maDvis,
         ngayDxTu: data.ngayDxTu,
         ngayDxDen: data.ngayDxDen,
-        loaiGia: data.loaiGia
+        loaiGia: data.loaiGia,
+        kieuTongHop: data.kieuTongHop,
       });
       this.listCucSelected = data.maDvis && data.maDvis.length > 0 ? data.maDvis : []
       this.bindingDataTongHop(res.data, null)
@@ -219,8 +220,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.type = this.type;
-    body.pagChiTiets = this.dataTable
-    body.tchuanCluong = this.tieuChuanCl
+    body.pagChiTiets = this.dataTable;
+    body.tchuanCluong = this.tieuChuanCl;
+    body.kieuTongHop = this.formTraCuu.value.kieuTongHop;
     let res = await this.tongHopPhuongAnGiaService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -278,7 +280,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       }
       let body = this.formTraCuu.value;
       body.type = this.type;
-      body.maDvis = this.listCucSelected
+      body.maDvis = this.listCucSelected && this.listCucSelected.length > 0 ? this.listCucSelected.toString() : "";
       let res = await this.tongHopPhuongAnGiaService.tongHop(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.isTongHop = true;
@@ -398,11 +400,11 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   downloadPdf() {
-   if (this.type == 'GCT') {
-     saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gct.pdf");
-   } else {
-     saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gmtdbtt.pdf");
-   }
+    if (this.type == 'GCT') {
+      saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gct.pdf");
+    } else {
+      saveAs(this.pdfSrc, "tong_hop_phuong_an_gia_gmtdbtt.pdf");
+    }
   }
 
   async downloadExcel() {

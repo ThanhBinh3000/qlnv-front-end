@@ -194,16 +194,18 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
-                <span style="color: #001CFF;">{{formData.value.tenVthh}}</span>
+                <span style="color: #001CFF;" class="bold">{{formData.value.tenVthh}}</span>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="userService.isCuc()">
+          <div nz-col [nzSpan]="4"
+            *ngIf="!this.formData.value.id && userService.isCuc() || this.formData.value.id && this.formData.value.maDviDx.length === 6">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"></nz-form-label>
+              <nz-form-label [nzNoColon]="true">Tồn kho:</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
-                <span>Tồn kho: <strong>{{formDataDtl.value.tonKhoLoaiVthh|number:globals.numberFormat:globals.locale}}
-                    {{formData.value.donViTinh? " ("+ formData.value.donViTinh+ " )" : ""}}</strong></span>
+                <span style="color: #001CFF" class="bold">
+                  {{formData.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}
+                  {{formData.value.donViTinh? " ("+ formData.value.donViTinh+ " )" : ""}}</span>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -352,7 +354,7 @@
                 <ng-container *ngIf="!userService.isTongCuc()">
                   <th>SL xuất cứu trợ đề xuất</th>
                 </ng-container>
-                <ng-container *ngIf="isVthhGao() && formData.value.loaiNhapXuat === 'Xuất cứu trợ'">
+                <ng-container *ngIf="isVthhGao()">
                   <th [rowspan]="userService.isTongCuc()? 2 : 1">Nhu cầu xuất cứu trợ</th>
                   <th [rowspan]="userService.isTongCuc()? 2 : 1">SL gạo cần chuyển cấp thóc</th>
                 </ng-container>
@@ -379,7 +381,7 @@
                     <td></td>
                     <td></td>
                     <td class="bold">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
-                    <ng-container *ngIf="isVthhGao() && formData.value.loaiNhapXuat === 'Xuất cứu trợ'">
+                    <ng-container *ngIf="isVthhGao()">
                       <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                       <td class="bold">{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                     </ng-container>
@@ -406,7 +408,7 @@
                         <td>{{lv1.tonKhoLoaiVthh || lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
                         </td>
                         <td>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
-                        <ng-container *ngIf="isVthhGao() && formData.value.loaiNhapXuat === 'Xuất cứu trợ'">
+                        <ng-container *ngIf="isVthhGao()">
                           <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                           <td>{{lv1.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                         </ng-container>
@@ -432,7 +434,7 @@
                     <td>{{i +1}}</td>
                     <td>{{item.noiDung}}</td>
                     <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
-                    <ng-container *ngIf="isVthhGao() && formData.value.loaiNhapXuat === 'Xuất cứu trợ'">
+                    <ng-container *ngIf="isVthhGao()">
                       <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                       <td>{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                     </ng-container>
@@ -668,7 +670,8 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'">
               <nz-select nzAllowClear formControlName="noiDung" nzPlaceHolder="Vui lòng chọn" nzShowSearch>
-                <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"></nz-option>
+                <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"
+                  [nzDisabled]="p.disabled"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>

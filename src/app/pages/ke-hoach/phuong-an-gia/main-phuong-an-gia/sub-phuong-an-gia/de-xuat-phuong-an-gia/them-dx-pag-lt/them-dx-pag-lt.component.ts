@@ -171,7 +171,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.loadDsHangHoaPag();
     this.loadDsVthh();
     this.loadDsDxCanSua();
-    this.loadDsChiCuc();
     this.getDataChiTieu(this.formData.value.namKeHoach);
     await this.getDataDetail(this.idInput)
     this.spinner.hide();
@@ -310,6 +309,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async onChangeLoaiVthh(event) {
     if (event) {
+      await this.loadDsChiCuc();
       if (event.startsWith("01")) {
         this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khLuongThuc && this.dataChiTieu.khLuongThuc.length > 0 ? this.dataChiTieu.khLuongThuc : [];
       }
@@ -323,7 +323,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
             pagTtChung.soLuongCtieu = ''
             let ctieuChiCuc = this.listCtieuKeHoach.find(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
             if (ctieuChiCuc) {
-              console.log(ctieuChiCuc)
               if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG02' || this.formData.value.loaiGia == 'LG04'))) {
                 if (event.startsWith("0101")) {
                   pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongThoc ?  ctieuChiCuc.xtnTongThoc : 0
@@ -345,7 +344,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
                 if (event.startsWith("04")) {
                   pagTtChung.soLuongCtieu = ctieuChiCuc.nhapTrongNam ? ctieuChiCuc.nhapTrongNam : 0
                 }
-
                 if (ctieuChiCuc && ctieuChiCuc.xtnThoc && ctieuChiCuc.xtnThoc.length > 0) {
                   let xtn = ctieuChiCuc.xtnThoc.filter(xuat => xuat.nam == this.formData.value.namKeHoach);
                   if (xtn && xtn.length > 0) {
@@ -355,6 +353,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
               }
             }
           })
+          this.pagTtChungs = this.pagTtChungs.filter(pagTtChung => !(pagTtChung.soLuongCtieu == null || pagTtChung.soLuongCtieu == 0 || pagTtChung.soLuongCtieu == '' ));
         }
       }
       let body = {
@@ -369,6 +368,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+    } else {
+      this.pagTtChungs = [];
     }
   }
 
@@ -707,7 +708,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       let body = {
         namKh: this.formData.value.namKeHoach,
         type: this.type,
-        loaiDeXuat: "02",
+        loaiDeXuat: "01",
         maDvi: this.userInfo.MA_DVI,
         pagType: this.pagType
       }
@@ -752,47 +753,16 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       namKeHoach: data.namKeHoach,
       soDeXuatDc: data.soDeXuat,
       loaiVthh: data.loaiVthh,
-      ngayKy: data.ngayKy,
       loaiGia: data.loaiGia,
-      trichYeu: data.trichYeu,
       cloaiVthh: data.cloaiVthh,
-      moTa: data.moTa,
       tchuanCluong: data.tchuanCluong,
       vat: data.vat ? data.vat.toString() : '',
-      ghiChu: data.ghiChu,
-      maPphapXdg: data.maPphapXdg,
-      loaiHangXdg: data.loaiHangXdg,
-      giaVonNk: data.giaVonNk,
-      chiPhiChung: data.chiPhiChung,
-      chiPhiPbo: data.chiPhiPbo,
-      tongChiPhi: data.tongChiPhi,
-      noiDung: data.noiDung,
-      tgianNhang: data.tgianNhang,
       soCanCu: data.soCanCu,
       qdCtKhNam: data.qdCtKhNam,
       type: data.type,
       lanDeXuat: data.lanDeXuat > 0 ? data.lanDeXuat + 1 : 1
     })
-    this.dataTableCanCuXdg = data.canCuPhapLy;
-    this.dataTableCanCuXdg.forEach(item => {
-      item.id = null;
-    })
     this.pagTtChungs = data.pagTtChungs;
-    this.pagTtChungs.forEach(item => {
-      item.id = null;
-    })
-    this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
-    this.dataTableKsGia.forEach(item => {
-      item.id = null;
-    })
-    this.dataTableKqGia = data.ketQuaThamDinhGia;
-    this.dataTableKqGia.forEach(item => {
-      item.id = null;
-    })
-    this.dataTableTtThamKhao = data.ketQuaKhaoSatTtThamKhao;
-    this.dataTableTtThamKhao.forEach(item => {
-      item.id = null;
-    })
     this.isApDungTatCa = data.apDungTatCa;
     if (this.isApDungTatCa == true) {
       this.giaDn = this.pagTtChungs[0]?.giaDn
@@ -809,15 +779,15 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.formData.patchValue({
       apDungTatCa: event
     })
-    console.log(this.formData.value.vat,222)
   }
 
   async loadDsChiCuc() {
     if (!this.idInput) {
       let res = await this.donViService.layTatCaDonViByLevel(3);
       if (res && res.data) {
-        this.dsChiCuc = res.data
-        this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+        this.dsChiCuc = res.data;
+        this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI));
+        this.pagTtChungs = [];
         this.dsChiCuc.forEach(item => {
           this.rowItemTtc.maChiCuc = item.maDvi;
           this.rowItemTtc.tenChiCuc = item.tenDvi;

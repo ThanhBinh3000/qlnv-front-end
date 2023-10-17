@@ -91,7 +91,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         break;
       case '/luu-kho/hang-trong-kho/da-het-han':
         typeBpxl = '8';
-        this.title = 'sửa chữa'
+        this.title = 'đã hết hạn bảo hành, chưa hết hạn lưu kho'
         vaiTro = null;
         trangThai = null;
         break;

@@ -42,7 +42,7 @@
             </nz-form-label>
             <nz-form-control nz-col>
                     <span
-                      style="color: blue">{{formData.value.soLuongBanTrucTiep|number:globals.numberFormat:globals.locale}}</span>
+                      style="color: blue">{{formData.value.slXuatBanQdPd|number:globals.numberFormat:globals.locale}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -117,7 +117,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số lượng bán trực tiếp (kg)</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-number formControlName="soLuongBanLe" (ngModelChange)="changeSoLuong($event)" [nzMin]="1"
+              <nz-input-number formControlName="soLuong" (ngModelChange)="changeSoLuong($event)" [nzMin]="1"
                                [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
               </nz-input-number>
@@ -147,7 +147,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tên người mua</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input formControlName="tenNguoiMua" [readonly]="isView"/>
+              <input placeholder="" nz-input formControlName="tenBenMua" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -155,7 +155,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Địa chỉ người mua</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input formControlName="diaChiNguoiMua" [readonly]="isView"/>
+              <input placeholder="" nz-input formControlName="diaChiBenMua" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -163,7 +163,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số CMT/CCCD</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input type="number" formControlName="cmt" [readonly]="isView"/>
+              <input placeholder="" nz-input type="number" formControlName="cmtBenMua" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>

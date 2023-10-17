@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -21,7 +21,7 @@ import { StorageService } from 'src/app/services/storage.service';
   templateUrl: './so-kho-the-kho.component.html',
   styleUrls: ['./so-kho-the-kho.component.scss'],
 })
-export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
+export class SoKhoTheKhoComponent extends Base2Component implements OnInit , AfterViewInit {
   isView: boolean;
   formData: FormGroup;
   STATUS = STATUS;
@@ -32,6 +32,8 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   openPhieuNx = false;
   idPhieuNx: any;
   isThuKho: boolean;
+
+  offSetTop : string;
 
   constructor(
     private httpClient: HttpClient,
@@ -45,7 +47,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLySoKhoTheKhoService);
-    super.ngOnInit()
+    super.ngOnInit();
     this.formData = this.fb.group({
       nam: [null],
       maDvi: [null],
@@ -60,6 +62,11 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
       tenTheKho: [null],
     })
     this.filterTable = {};
+  }
+
+  getOffSetTop(){
+    this.offSetTop = (window.innerHeight - document.getElementById("tableView").getBoundingClientRect().top - 150) + 'px';
+    console.log(this.offSetTop,window.innerHeight,document.getElementById("tableView").getBoundingClientRect().top)
   }
 
   async ngOnInit() {
@@ -329,5 +336,9 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
         }
       },
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.getOffSetTop();
   }
 }

@@ -70,10 +70,11 @@
             <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <!-- <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" [nzDisabled]="true" nzAllowClear>
+              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
+                [nzDisabled]="isViewDetail || !!this.id" nzAllowClear>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select> -->
-              <input [readonly]="true" nz-input formControlName="namKeHoach" readonly="true" />
+              </nz-select>
+              <!-- <input [readonly]="true" nz-input formControlName="namKeHoach" readonly="true" /> -->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -251,8 +252,8 @@
           <tbody>
             <tr *ngFor="let data of groupingTable.data, let i = index">
               <ng-container *ngIf="!dsKeHoachLuongThucClone[i]?.isEdit; else editTemplate">
-                <td nzLeft [ngClass]="data.isSelected ?'bg-selected':''" class="text-right">{{i+1}}</td>
-                <td nzLeft [ngClass]="data.isSelected ?'bg-selected':''" class="text-left">{{data.tenDvi}}</td>
+                <td nzLeft [ngClass]="data.thayDoi ?'bg-selected':''" class="text-right">{{i+1}}</td>
+                <td nzLeft [ngClass]="data.thayDoi ?'bg-selected':''" class="text-left">{{data.tenDvi}}</td>
                 <td class="text-right">{{(data.tongSoTon) | number:
                   '1.0-3': 'vi_VN'}}</td>
                 <td class="text-right">{{(data.tongThocTon)| number: '1.0-3': 'vi_VN'}}
@@ -322,8 +323,8 @@
                 <td *ngIf="data.stt ==  null" class="background-last-row"></td>
               </ng-container>
               <ng-template #editTemplate>
-                <td nzLeft [ngClass]="data.isSelected ?'bg-selected':''" class="text-right">{{i+1}}</td>
-                <td nzLeft [ngClass]="data.isSelected ?'bg-selected':''" class="text-left">{{data.tenDvi}}</td>
+                <td nzLeft [ngClass]="data.thayDoi ?'bg-selected':''" class="text-right">{{i+1}}</td>
+                <td nzLeft [ngClass]="data.thayDoi ?'bg-selected':''" class="text-left">{{data.tenDvi}}</td>
                 <td class="text-right">{{(data.tongSoTon) | number:
                   '1.0-1'}}</td>
                 <td class="text-right">{{(data.tongThocTon)| number: '1.0-3': 'vi_VN'}}
@@ -418,7 +419,7 @@
               </ng-template>
             </tr>
           </tbody>
-          <tfoot>
+          <tfoot *ngIf="isTongCuc()">
             <tr>
               <th nzLeft></th>
               <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
@@ -583,8 +584,8 @@
           <tbody>
             <tr *ngFor="let dataMuoi of groupingTableMuoi.data, let i = index">
               <ng-container *ngIf="!dsMuoiClone[i]?.isEdit; else editTemplateMuoi">
-                <td [ngClass]="dataMuoi.isSelected ?'bg-selected':''" class="text-center">{{i+1}}</td>
-                <td [ngClass]="dataMuoi.isSelected ?'bg-selected':''" class="text-left">{{dataMuoi.tenDvi}}</td>
+                <td [ngClass]="dataMuoi.thayDoi ?'bg-selected':''" class="text-center">{{i+1}}</td>
+                <td [ngClass]="dataMuoi.thayDoi ?'bg-selected':''" class="text-left">{{dataMuoi.tenDvi}}</td>
                 <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">{{dataMuoi.soLuongNhap | number: '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">{{dataMuoi.soLuongXuat | number: '1.0-1': 'vi_VN'}}</td>
@@ -600,8 +601,8 @@
                 </td>
               </ng-container>
               <ng-template #editTemplateMuoi>
-                <td [ngClass]="dataMuoi.isSelected ?'bg-selected':''" class="text-right">{{dataMuoi.stt}}</td>
-                <td [ngClass]="dataMuoi.isSelected ?'bg-selected':''" class="text-left">{{dataMuoi.tenDvi}}</td>
+                <td [ngClass]="dataMuoi.thayDoi ?'bg-selected':''" class="text-right">{{dataMuoi.stt}}</td>
+                <td [ngClass]="dataMuoi.thayDoi ?'bg-selected':''" class="text-left">{{dataMuoi.tenDvi}}</td>
                 <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">
                   <input class="money-input" currencyMask
@@ -613,7 +614,7 @@
                     [options]="{allowZero: true, allowNegative: false,precision: 0,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsMuoiClone[i].tonKhoDauNam,inputMode: 1}"
                     [(ngModel)]="dataMuoi.soLuongXuat" />
                 </td>
-                <td class="text-right">{{(dataMuoi.tonKhoCuoiNam) | number: '1.0-1': 'vi_VN'}}</td>
+                <td class="text-right">{{calculatortkcnMuoi(i)}}</td>
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                   <a (click)="saveEditMuoi(i)" class="save">
                     <i class="fa fa-save"></i>
@@ -625,7 +626,7 @@
               </ng-template>
             </tr>
           </tbody>
-          <tfoot>
+          <tfoot *ngIf="isTongCuc()">
             <tr>
               <th></th>
               <th style="text-align: center; font-weight: 700">Cộng</th>
@@ -635,14 +636,18 @@
               <th class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</th>
               <th *ngIf="!this.isViewDetail"></th>
             </tr>
-            <tr *ngIf="userService.isTongCuc()">
+            <tr>
               <td></td>
-              <th style="text-align: right; font-weight: 700">Chỉ tiêu của BTC</th>
-              <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}
+              <th style="text-align: right; font-weight: 700">Chỉ tiêu của TCDT</th>
+              <th class="text-right text-btc"> {{(formData.value.slTonKhoDauNam || 0)| number:
+                '1.0-1': 'vi_VN'}}</th>
+              <th class="text-right text-btc"> {{(formData.value.slNhapTrongNam || 0)| number:
+                '1.0-1': 'vi_VN'}}</th>
+              <th class="text-right text-btc"> {{(formData.value.slXuatTrongNam || 0)| number:
+                '1.0-1': 'vi_VN'}}
               </th>
-              <th class="text-right text-btc"> {{0 | number: '1.0-1': 'vi_VN'}}</th>
+              <th class="text-right text-btc"> {{(formData.value.slTonKhoCuoiNam || 0)| number:
+                '1.0-1': 'vi_VN'}}</th>
               <th *ngIf="!this.isViewDetail"></th>
             </tr>
 
@@ -677,8 +682,8 @@
               <tbody>
                 <ng-container *ngFor="let data of dataVatTuNhapTree , let idx = index">
                   <tr>
-                    <td [ngClass]="data.isSelected ?'bg-selected':''" class="bg-parent1">{{idx + 1}}</td>
-                    <td [ngClass]="data.isSelected ?'bg-selected':''" class="bg-parent1"
+                    <td [ngClass]="data.thayDoi ?'bg-selected':''" class="bg-parent1">{{idx + 1}}</td>
+                    <td [ngClass]="data.thayDoi ?'bg-selected':''" class="bg-parent1"
                       [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{data.tenDvi}}</td>
                     <td class="bg-parent1"></td>
@@ -727,11 +732,11 @@
                         </ng-container>
                         <td class="text-left" nzRight>
                           <a *ngIf="item && item.dataChild && item.dataChild.length > 0"
-                            (click)="themSuaVatTu(item,'them','NHAP',false,idx,data.donViId)">
+                            (click)="themSuaVatTu(item,'them','NHAP',false,idx)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
                           <a *ngIf="item && (!item.dataChild || item.dataChild.length == 0)"
-                            (click)="themSuaVatTu(item,'sua','NHAP',true,idx,data.donViId)">
+                            (click)="themSuaVatTu(item,'sua','NHAP',true,idx,item.donViId)">
                             <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
                           <a (click)="xoaKeHoachVatTu(item,true)">
@@ -755,7 +760,7 @@
                             <td>{{itemLoaiHang.soLuongChuyenSang |number: '1.0-1': 'vi_VN'}}</td>
                             <td>{{itemLoaiHang.soLuongNhap |number: '1.0-1': 'vi_VN'}}</td>
                             <td class="text-left" nzRight>
-                              <a (click)="themSuaVatTu(itemLoaiHang,'sua','NHAP',false,idx,data.donViId)">
+                              <a (click)="themSuaVatTu(itemLoaiHang,'sua','NHAP',false,idx,itemLoaiHang.donViId)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
                               <a (click)="xoaKeHoachVatTu(itemLoaiHang,false)">
@@ -794,8 +799,8 @@
               <tbody>
                 <ng-container *ngFor="let data of dataVatTuXuatTree , let idx = index">
                   <tr>
-                    <td [ngClass]="data.isSelected ?'bg-selected':''" class="bg-parent1">{{idx + 1}}</td>
-                    <td [ngClass]="data.isSelected ?'bg-selected':''" class="bg-parent1"
+                    <td [ngClass]="data.thayDoi ?'bg-selected':''" class="bg-parent1">{{idx + 1}}</td>
+                    <td [ngClass]="data.thayDoi ?'bg-selected':''" class="bg-parent1"
                       [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{data.tenDvi}}</td>
                     <td class="bg-parent1"></td>
@@ -831,7 +836,7 @@
                         </td>
                         <td class="text-left bg-parent2" nzRight>
                           <a *ngIf="item && item.dataChild && item.dataChild.length > 0"
-                            (click)="themSuaVatTu(item,'them','XUAT',false,idx,data.donViId)">
+                            (click)="themSuaVatTu(item,'them','XUAT',false,idx)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
                           <a *ngIf="item && (!item.dataChild || item.dataChild.length == 0)"
@@ -865,7 +870,7 @@
                               <td class="text-right">{{itemLoaiHang.soLuongXuat}}</td>
                             </ng-container>
                             <td class="text-left" nzRight>
-                              <a (click)="themSuaVatTu(itemLoaiHang,'them','XUAT',false,idx,data.donViId)">
+                              <a (click)="themSuaVatTu(itemLoaiHang,'them','XUAT',false,idx)">
                                 <i class="icon htvbdh_dau-cong"></i>
                               </a>
                               <a (click)="xoaKeHoachVatTuXuat(itemLoaiHang,2)">

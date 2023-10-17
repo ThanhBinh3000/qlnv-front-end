@@ -386,7 +386,6 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   }
 
   async buildTableView(data?: any) {
-    console.log(data,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     this.dataTableTree = chain(data)
       .groupBy("tenDviThongTri")
       .map((v, k) => {

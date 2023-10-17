@@ -90,19 +90,19 @@
     <div class="group-button">
       <h3> DANH SÁCH SỔ KHO/THẺ KHO</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" *ngIf="this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_EXP')" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="openModalCreate(null, false)">
+        <button type="button" class="btn btn-sub xanh" *ngIf="this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_THEM')" (click)="openModalCreate(null, false)">
           <i class="icon htvbdh_dau-cong xanh"></i>
           <span>Tạo sổ kho/thẻ kho</span>
         </button>
       </div>
     </div>
     <nz-card class="flex-card p-lr16">
-      <nz-table nzBordered class="pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
-        [nzScroll]="dataTable && dataTable.length > 0 ? {x: '2500px'} : null">
+      <nz-table id="tableView" nzBordered class="pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
+        [nzScroll]="dataTable && dataTable.length > 0 ? {x: '2500px',y : offSetTop }: null">
         <thead>
           <tr>
             <th nzWidth="45px" rowSpan="2" class="text-center">STT</th>
@@ -269,10 +269,13 @@
                                 <a (click)="openModalCreate(soKho.id, true)">
                                   <i class="fa fa-eye"></i>
                                 </a>
-                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="openModalCreate(null, false,true,soKho.id)">
+                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_THEM')" (click)="openModalCreate(null, false,true,soKho.id)">
                                   <i class="fa fa-plus"></i>
                                 </a>
-                                <a *ngIf="soKho.trangThai == STATUS.DU_THAO" (click)="delete(soKho)">
+                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DONGSO')" (click)="this.approve(soKho.id,STATUS.DA_DONG,'Bạn có muốn đóng sổ ?',null,'Đóng sổ thành công')">
+                                  <i class="fa fa-book"></i>
+                                </a>
+                                <a *ngIf="soKho.trangThai == STATUS.DU_THAO  && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_XOA')" (click)="delete(soKho)">
                                   <i class="fa fa-trash-o do"></i>
                                 </a>
                               </td>
@@ -305,6 +308,9 @@
                                   <td class="bg-parent2 font-weight-bold" nzRight>
                                     <a (click)="openModalCreate(theKho.id, true)">
                                       <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a *ngIf="soKho.trangThai == STATUS.DU_THAO  && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_XOA')" (click)="delete(theKho)">
+                                      <i class="fa fa-trash-o do"></i>
                                     </a>
                                   </td>
                                 </tr>

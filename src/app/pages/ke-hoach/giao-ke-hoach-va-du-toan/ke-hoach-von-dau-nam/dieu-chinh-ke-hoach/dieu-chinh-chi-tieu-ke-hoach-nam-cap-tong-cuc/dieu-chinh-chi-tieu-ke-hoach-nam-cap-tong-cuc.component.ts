@@ -52,16 +52,16 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
       ngayKyDen: [],
       trichYeu: [],
       type: ["02"],
-      cap: [],
+      // cap: [],
     })
     this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      tenLoaiDc: '',
-      tenLoaiQdinh: '',
+      namKeHoach: '',
+      soQuyetDinh: '',
+      ngayKy: '',
       trichYeu: '',
-      soDxuat: '',
+      soQuyetDinhGiaoCuaTc: '',
+      soCongVan: '',
+      soQuyetDinhDcCuaC: '',
       tenTrangThai: '',
     };
   }
@@ -94,8 +94,28 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
   }
 
   selectTab(cap: number) {
+    this.allChecked = false
     this.indexTab = cap;
     this.timKiem();
+  }
+
+  updateAllCheckedDC(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == this.STATUS.DANG_NHAP_DU_LIEU) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
   }
 
   isButton() {
@@ -104,21 +124,21 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
     return false
   }
 
-  disabledStartNgayQD = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayKyDen) {
-      return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
-    } else {
-      return false;
-    }
-  };
+  // disabledStartNgayQD = (startValue: Date): boolean => {
+  //   if (startValue && this.formData.value.ngayKyDen) {
+  //     return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
-  disabledEndNgayQD = (endValue: Date): boolean => {
-    if (endValue && this.formData.value.ngayKyTu) {
-      return endValue.getTime() < this.formData.value.ngayKyTu.getTime();
-    } else {
-      return false;
-    }
-  };
+  // disabledEndNgayQD = (endValue: Date): boolean => {
+  //   if (endValue && this.formData.value.ngayKyTu) {
+  //     return endValue.getTime() < this.formData.value.ngayKyTu.getTime();
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   isShowDS() {
     if (this.isChiCuc()) return true
@@ -146,7 +166,7 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
     if (this.formData.value.ngayKyDen) {
       this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')
     }
-    if (this.formData.value.soQdinh) this.formData.value.soQdinh = `${this.formData.value.soQdinh}/DCNB`
+    // if (this.formData.value.soQdinh) this.formData.value.soQdinh = `${this.formData.value.soQdinh}/DCNB`
     if (this.indexTab == 0) {
       await this.searchTc();
     } else {
@@ -270,17 +290,14 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-
+        if (this.formData.value.ngayKyTu) {
+          this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.ngayKyDen) {
+          this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')
+        }
         let body = this.formData.value;
-        debugger
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
+
         this.quyetDinhDieuChinhCTKHService
           .exportlist(body)
           .subscribe((blob) =>

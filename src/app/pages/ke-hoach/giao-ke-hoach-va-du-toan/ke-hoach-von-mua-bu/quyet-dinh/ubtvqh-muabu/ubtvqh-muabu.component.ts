@@ -99,8 +99,8 @@ export class UbtvqhMuabuComponent implements OnInit {
 
   loadDsNam() {
     let thisYear = dayjs().get('year');
-    for (let i = -3; i < 23; i++) {
-      this.dsNam.push((thisYear - i).toString());
+    for (let i = -3; i <= 5; i++) {
+      this.dsNam.push((thisYear + i).toString());
     }
   }
 
@@ -146,7 +146,7 @@ export class UbtvqhMuabuComponent implements OnInit {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
-        if (item.trangThai == "00") {
+        if (item.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
           dataDelete.push(item.id);
         }
       });
@@ -163,6 +163,7 @@ export class UbtvqhMuabuComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
+            console.log(dataDelete,'dataDeletedataDelete');return
             let res = await this.quyetDinhUbtvqhMuBuBoSung.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
@@ -224,7 +225,7 @@ export class UbtvqhMuabuComponent implements OnInit {
 
   onAllChecked(checked) {
     this.dataTable.forEach((item) => {
-      if (item.trangThai == '00') {
+      if (item.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
         this.updateCheckedSet(item.id, checked);
       }
     })

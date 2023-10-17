@@ -99,10 +99,10 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
     this.spinner.show();
     try {
       let dayNow = dayjs().get('year');
-      for (let i = -3; i < 23; i++) {
+      for (let i = -3; i <= 5; i++) {
         this.listNam.push({
-          value: dayNow - i,
-          text: dayNow - i,
+          value: dayNow + i,
+          text: dayNow + i,
         });
       }
       const res = await this.donViService.layDonViCon();
