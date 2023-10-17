@@ -78,7 +78,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số tờ trình đề xuất11</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số tờ trình đề xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogToTrinh()">
                 <input nz-input readonly formControlName="soToTrinh"/>
@@ -92,7 +92,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input readonly formControlName="soQdCanDc"/>
+                <input nz-input readonly formControlName="soQdDc"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -183,7 +183,7 @@
       <th class="text-center" colSpan="2">Giá TC đề xuất</th>
       <th class="text-center"
           colSpan="2"> {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
-      <th class="text-center" colSpan="2" *ngIf="!(formData.value.loaiDeXuat == '00')">Giá sau điều chỉnh của BTC</th>
+      <th class="text-center" colSpan="2" *ngIf="formData.value.loaiDeXuat != '00'">Giá sau điều chỉnh của BTC</th>
     </tr>
     <tr>
       <th class="text-center">Giá chưa VAT</th>
@@ -194,8 +194,8 @@
       <th class="text-center">Giá có VAT</th>
       <th class="text-center">Giá chưa VAT</th>
       <th class="text-center">Giá có VAT</th>
-      <th class="text-center" *ngIf="!(formData.value.loaiDeXuat == '00')">Giá chưa VAT</th>
-      <th class="text-center" *ngIf="!(formData.value.loaiDeXuat == '00')">Giá có VAT</th>
+      <th class="text-center" *ngIf="formData.value.loaiDeXuat != '00'">Giá chưa VAT</th>
+      <th class="text-center" *ngIf="formData.value.loaiDeXuat != '00'">Giá có VAT</th>
     </tr>
     </thead>
     <tbody>
@@ -213,17 +213,22 @@
         <td></td>
         <td></td>
         <td></td>
-        <td>
-          <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdBtc" *ngIf="data.apDungTatCa"
+        <td *ngIf="(formData.value.loaiDeXuat == '00' && data.apDungTatCa)">
+          <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdBtc"
                            [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </td>
-        <td class="text-right">
-          {{ data.vat ? (data.giaQdBtc * data.vat + data.giaQdBtc | number : '1.0-1' : 'vi_VN') : ''}}
+        <td *ngIf="(formData.value.loaiDeXuat == '00' && !data.apDungTatCa) ||  formData.value.loaiDeXuat != '00' "></td>
+        <td class="text-right"></td>
+        <td *ngIf="formData.value.loaiDeXuat != '00' && data.apDungTatCa">
+          <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdDcBtc"
+                           [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
         </td>
-        <td *ngIf="!(formData.value.loaiDeXuat == '00')"></td>
-        <td *ngIf="!(formData.value.loaiDeXuat == '00')"></td>
+        <td *ngIf="formData.value.loaiDeXuat != '00' && !data.apDungTatCa"></td>
+        <td *ngIf="formData.value.loaiDeXuat != '00'"></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
         <ng-container *ngFor="let item of data.children, let y = index">
@@ -260,25 +265,21 @@
               </nz-input-number>
             </td>
             <td class="text-right"
-                *ngIf="!(formData.value.loaiDeXuat == '00')">{{item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-                *ngIf="(formData.value.loaiGia == 'LG01' )">
+                *ngIf="formData.value.loaiDeXuat != '00'">{{item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">
               {{ !item.apDungTatCa ? (item.giaQdBtc * item.vat + item.giaQdBtc | number : '1.0-1' : 'vi_VN') : (data.giaQdBtc * item.vat + data.giaQdBtc | number : '1.0-1' : 'vi_VN') }}
             </td>
-            <td class="text-right"
-                *ngIf="!(formData.value.loaiGia == 'LG01' ) && (formData.value.loaiDeXuat == '00')"></td>
-            <td class="text-right" *ngIf="!(formData.value.loaiDeXuat == '00')">
-              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdDcBtc" [nzMin]="0"
+            <td class="text-right" *ngIf="formData.value.loaiDeXuat != '00'">
+              <nz-input-number [nzDisabled]="isView || item.apDungTatCa" [nzSize]="'small'" [(ngModel)]="item.apDungTatCa ? data.giaQdDcBtc : item.giaQdDcBtc"
+                               [nzMin]="0"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
-            <td class="text-right"
-                *ngIf="(formData.value.loaiGia == 'LG01' ) && !(formData.value.loaiDeXuat == '00')">
-              {{ item.vat ? (item.giaQdDcBtc * item.vat + item.giaQdDcBtc | number : '1.0-1' : 'vi_VN') : ''}}
-
             </td>
             <td class="text-right"
-                *ngIf="!(formData.value.loaiGia == 'LG01' ) && !(formData.value.loaiDeXuat == '00')"></td>
+                *ngIf="formData.value.loaiDeXuat != '00'">
+              {{ item.vat ? (item.giaQdDcBtc * item.vat + item.giaQdDcBtc | number : '1.0-1' : 'vi_VN') : ''}}
+            </td>
           </tr>
         </ng-container>
       </ng-container>
@@ -298,7 +299,7 @@
       <th class="text-center" >Giá Cục đề nghị</th>
       <th class="text-center" >Giá TC đề xuất</th>
       <th class="text-center"> {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
-      <th class="text-center"  *ngIf="!(formData.value.loaiDeXuat == '00')">Giá sau điều chỉnh của BTC</th>
+      <th class="text-center"  *ngIf="formData.value.loaiDeXuat != '00'">Giá sau điều chỉnh của BTC</th>
     </tr>
     </thead>
     <tbody>
@@ -313,13 +314,20 @@
         <td></td>
         <td></td>
         <td></td>
-        <td>
+        <td *ngIf="formData.value.loaiDeXuat == '00' && data.apDungTatCa">
           <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdBtc" *ngIf="data.apDungTatCa"
                            [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </td>
-        <td *ngIf="!(formData.value.loaiDeXuat == '00')"></td>
+        <td *ngIf=" (formData.value.loaiDeXuat == '00' && !data.apDungTatCa) ||  formData.value.loaiDeXuat != '00' "></td>
+        <td *ngIf="formData.value.loaiDeXuat != '00' && data.apDungTatCa">
+          <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdDcBtc"
+                           [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </td>
+        <td *ngIf="formData.value.loaiDeXuat != '00' && !data.apDungTatCa"></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
         <ng-container *ngFor="let item of data.children, let y = index">
@@ -339,13 +347,14 @@
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td class="text-right"
-                *ngIf="!(formData.value.loaiDeXuat == '00')">{{item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right" *ngIf="!(formData.value.loaiDeXuat == '00')">
-              <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="item.giaQdDcBtc" [nzMin]="0"
+            <td class="text-right" *ngIf="formData.value.loaiDeXuat != '00'">{{item.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right" *ngIf="formData.value.loaiDeXuat != '00'">
+              <nz-input-number [nzDisabled]="isView || item.apDungTatCa" [nzSize]="'small'" [(ngModel)]="item.apDungTatCa ? data.giaQdDcBtc : item.giaQdDcBtc"
+                               [nzMin]="0"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
+            </td>
           </tr>
         </ng-container>
       </ng-container>

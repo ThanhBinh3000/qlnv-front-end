@@ -448,14 +448,14 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
   themItemcha() {
-    if (!this.rowItemCha.khoi) {
-      this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
-      return;
-    }
-    if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
-      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
-      return;
-    }
+    // if (!this.rowItemCha.khoi) {
+    //   this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
+    //   return;
+    // }
+    // if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
+    //   this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
+    //   return;
+    // }
     this.rowItemCha.idVirtual = uuidv4();
     this.dataTable.push(this.rowItemCha);
     this.rowItemCha = new DanhMucKho();
