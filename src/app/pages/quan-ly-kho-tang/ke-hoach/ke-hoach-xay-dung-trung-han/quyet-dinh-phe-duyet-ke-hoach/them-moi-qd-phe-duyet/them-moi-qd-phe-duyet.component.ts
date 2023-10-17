@@ -128,7 +128,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split('/')[0] : '',
         ngayTrinhBtc: data.ngayTrinhBtc,
         ngayKyBtc: data.ngayKyBtc,
-        ngayHieuLuc: data.ngayKyBtc,
         trichYeu: data.trichYeu,
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
@@ -221,7 +220,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     this.formData.controls['ngayKyBtc'].setValidators([Validators.required]);
     this.formData.controls['soQuyetDinh'].setValidators([Validators.required]);
     this.formData.controls['namKeHoach'].setValidators([Validators.required]);
-    this.formData.controls['ngayHieuLuc'].setValidators([Validators.required]);
+    // this.formData.controls['ngayHieuLuc'].setValidators([Validators.required]);
   }
 
 
