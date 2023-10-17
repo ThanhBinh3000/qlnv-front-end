@@ -1,3 +1,4 @@
+import { MangLuoiKhoService } from './../../../../../services/qlnv-kho/mangLuoiKho.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
@@ -66,6 +67,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     private donviService: DonviService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private danhMucService: DanhMucService,
+    private mangLuoiKhoService: MangLuoiKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
@@ -118,7 +120,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       xhPhieuKnclDtl: [new Array()],
       ppLayMau: [new Array()],
       ctChatLuong: [new Array()],
-      ngayTao: [],
+      ngayTao: [dayjs().format("YYYY-MM-DD")],
+      tenThuKho: [],
     });
   }
 
@@ -211,9 +214,10 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     } else {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
+        tenDvi: this.userInfo.TEN_DVI,
         tenChiCuc: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
-        ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+        dviKiemNghiem: this.userInfo.TEN_DAY_DU,
       })
       if (this.inputData) {
         await this.bindingQdGnv(this.inputData.idQdGnv);
@@ -518,9 +522,13 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
             tenNhaKho: data.tenNhaKho,
             tenNganKho: data.tenNganKho,
             tenLoKho: data.tenLoKho,
-            xhPhieuKnclDtl: data.xhBienBanLayMauDtl
+            xhPhieuKnclDtl: data.xhBienBanLayMauDtl,
+            // donViTinh: data.donViTinh
           });
-          await this.buildTableView();
+          this.buildTableView();
+          if (data.maDiaDiem) {
+            this.tenThuKho(data.maDiaDiem)
+          }
 
         }
       }
@@ -529,6 +537,24 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
+    }
+  }
+  async tenThuKho(event) {
+    let body = {
+      maDvi: event,
+      capDvi: (event?.length / 2 - 1),
+    };
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (detail.statusCode == 0) {
+      const detailThuKho = detail.data.object.detailThuKho;
+      if (detailThuKho) {
+        this.formData.patchValue({
+          tenThuKho: detailThuKho.fullName,
+        });
+      }
+      this.formData.patchValue({
+        donViTinh: detail.data.object.dviTinh
+      })
     }
   }
 
