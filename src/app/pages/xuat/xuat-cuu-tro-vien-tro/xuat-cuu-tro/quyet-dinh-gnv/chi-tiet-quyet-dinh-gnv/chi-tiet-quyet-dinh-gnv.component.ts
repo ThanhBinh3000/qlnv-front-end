@@ -352,7 +352,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
-  async updateProcess(trangThai: string) {
+  async updateProcess(trangThai: STATUS) {
     this.formData.value.dataDtl.forEach(s => {
       if (s.maDvi.match(this.userInfo.MA_DVI + ".*")) {
         s.trangThai = trangThai;
@@ -363,8 +363,10 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
     const data = await this.createUpdate(body);
+    if (data) {
+      this.formData.patchValue({ trangThaiXh: data.trangThai })
+    }
     await this.buildTableView();
-    this.formData.patchValue({ trangThaiXh: data.trangThaiXh })
   }
 
 
@@ -825,16 +827,16 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         if (s.mId === data.mId) {
           s.tenChiCuc = '';
           s.soLuongGiao = 0;
-          s.maDvi = '';
+          s.maDvi = data.maDvi.substring(0, 6);
         }
         return s
       });
     } else if (parent.childData.length == 1 && lv === 3) {
       this.formData.value.dataDtl = this.formData.value.dataDtl.map(s => {
         if (s.mId === data.mId) {
-          s.slGaoThuHoiSauXayXat = 0,
-            s.slThocDeXayXat = 0,
-            s.tyLeThuHoiSauXayXat = 0
+          s.slGaoThuHoiSauXayXat = 0;
+          s.slThocDeXayXat = 0;
+          s.tyLeThuHoiSauXayXat = 0;
           s.maDvi = data.maDvi.substring(0, 8);
           s.tenDiemKho = '';
           s.tenNhaKho = '';
@@ -895,7 +897,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         if (s.mId === data.mId) {
           s.tenChiCuc = '';
           s.soLuongGiao = 0;
-          s.maDvi = '';
+          s.maDvi = data.maDvi.substring(0, 6);
         }
         return s
       });
@@ -1032,7 +1034,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     return false
   }
   showAction(): boolean {
-    if (this.userService.isCuc() && this.formData.value.trangThai === STATUS.DU_THAO && !this.isView) {
+    if (this.userService.isCuc() && [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC].includes(this.formData.value.trangThai) && !this.isView) {
       return true;
     }
     else if (this.userService.isChiCuc() && [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN].includes(this.formData.value.trangThaiXh)) {
