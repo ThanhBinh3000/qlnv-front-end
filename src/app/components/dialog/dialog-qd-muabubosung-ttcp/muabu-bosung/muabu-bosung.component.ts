@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ThongTinQuyetDinh} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {NzModalService} from "ng-zorro-antd/modal";
+import {AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
 
 @Component({
   selector: 'app-muabu-bosung',
@@ -31,6 +32,7 @@ export class MuabuBosungComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
   dsDonViTinh = [];
+  amount = AMOUNT_ONE_DECIMAL;
 
   constructor(
     private readonly modal: NzModalService,

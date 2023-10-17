@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ThongTinQuyetDinh} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {AMOUNT_THREE_DECIMAL} from "../../../../Utility/utils";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
 
 @Component({
   selector: 'app-mua-bu',
@@ -22,13 +22,14 @@ export class MuaBuComponent implements OnInit {
   dataTableChange = new EventEmitter<any[]>();
   @Input()
   tongGtri: number
-  amount = AMOUNT_THREE_DECIMAL
   @Output()
   tongGtriChange = new EventEmitter<number>();
 
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
-  dsChungLoaiHangHoa : any[] = [];
+  dsChungLoaiHangHoa: any[] = [];
+  amount = AMOUNT_ONE_DECIMAL;
+
   constructor(
     private readonly modal: NzModalService,
   ) {
@@ -65,7 +66,7 @@ export class MuaBuComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.dataTable.splice(index,1);
+        this.dataTable.splice(index, 1);
       },
     });
   }
@@ -106,6 +107,7 @@ export class MuaBuComponent implements OnInit {
       });
     }
   }
+
   onChangeLoaiVthh(event, typeData?: any) {
     // if (typeData) {
     //   this.dsChungLoaiHangHoa = [];
@@ -150,7 +152,7 @@ export class MuaBuComponent implements OnInit {
     }
   }
 
-  onChangeCloaiVthh(event, typeData?: any ) {
+  onChangeCloaiVthh(event, typeData?: any) {
     if (typeData) {
       const cloaiVthh = this.dsChungLoaiHangHoa.find(item => item.ma == event);
       if (cloaiVthh) {

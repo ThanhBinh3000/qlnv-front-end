@@ -37,7 +37,7 @@
         </th>
         <th style="width: 10%;">
           <nz-input-group>
-            <input [readonly]="isView" nz-input [(ngModel)]="rowItem.soLuong" />
+            <input class="money-input" currencyMask [(ngModel)]="rowItem.soLuong" [options]="amount"/>
           </nz-input-group>
         </th>
         <th style="width: 5%;" style="text-align: center;">
