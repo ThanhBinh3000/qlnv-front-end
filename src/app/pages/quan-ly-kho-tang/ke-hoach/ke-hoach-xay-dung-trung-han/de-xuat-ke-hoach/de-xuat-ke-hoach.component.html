@@ -19,19 +19,19 @@
           <label class="search__label">Số công văn</label>
           <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.soCongVan"/>
         </div>
-        <div nz-col nzSpan="5">
-          <label class="search__label">Ngày duyệt đề xuất</label>
-          <div nz-row>
-            <div nz-col nzSpan="11">
-              <nz-date-picker nzPlaceHolder="Ngày ký từ" [(ngModel)]="searchFilter.ngayDuyetTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
-            </div>
-            <div nz-col nzSpan="1">
-            </div>
-            <div nz-col nzSpan="11">
-              <nz-date-picker nzPlaceHolder="Ngày ký đến" [(ngModel)]="searchFilter.ngayDuyetDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
-            </div>
-          </div>
-        </div>
+<!--        <div nz-col nzSpan="5">-->
+<!--          <label class="search__label">Ngày duyệt đề xuất</label>-->
+<!--          <div nz-row>-->
+<!--            <div nz-col nzSpan="11">-->
+<!--              <nz-date-picker nzPlaceHolder="Ngày ký từ" [(ngModel)]="searchFilter.ngayDuyetTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>-->
+<!--            </div>-->
+<!--            <div nz-col nzSpan="1">-->
+<!--            </div>-->
+<!--            <div nz-col nzSpan="11">-->
+<!--              <nz-date-picker nzPlaceHolder="Ngày ký đến" [(ngModel)]="searchFilter.ngayDuyetDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
         <div nz-col nzSpan="5">
           <label class="search__label">Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</label>
           <div nz-row>
@@ -128,7 +128,7 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày duyệt"
                                [(ngModel)]="filterTable.ngayDuyet"
                                (ngModelChange)="filterInTable('ngayDuyet', convertDateToString(filterTable.ngayDuyet))"
               ></nz-date-picker>
