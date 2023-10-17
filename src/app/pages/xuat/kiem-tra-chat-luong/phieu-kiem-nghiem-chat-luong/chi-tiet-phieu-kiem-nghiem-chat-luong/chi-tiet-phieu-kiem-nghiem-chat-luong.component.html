@@ -77,7 +77,8 @@
                   Đơn vị
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input [placeholder]="this.userInfo.TEN_PHONG_BAN" nz-input readonly formControlName="tenDvi" />
+                  <!-- <input [placeholder]="this.userInfo.TEN_PHONG_BAN" nz-input readonly formControlName="tenDvi" /> -->
+                  <input nz-input readonly formControlName="tenDvi" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -102,22 +103,6 @@
                 </nz-form-label>
                 <nz-date-picker [nzFormat]="globals.dateFormat" formControlName="ngayTao" [nzDisabled]="isView">
                 </nz-date-picker>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired> Người kiểm nghiệm</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="dviKiemNghiem" [readonly]="isView" />
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired> Trưởng phòng KTBQ</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="ktvBaoQuan" [readonly]="isView" />
-                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="4">
@@ -210,6 +195,32 @@
                   <nz-input-group nzAddOnAfterIcon="folder-open">
                     <input nz-input formControlName="tenLoKho" [readonly]="true" />
                   </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Thủ kho</nz-form-label>
+                <nz-form-control>
+                  <nz-input-group>
+                    <input nz-input formControlName="tenThuKho" [readonly]="true" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" nzRequired> Người kiểm nghiệm</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <input nz-input formControlName="dviKiemNghiem" [readonly]="isView" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" nzRequired> Trưởng phòng KTBQ</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <input nz-input formControlName="ktvBaoQuan" [readonly]="isView" />
                 </nz-form-control>
               </nz-form-item>
             </div>

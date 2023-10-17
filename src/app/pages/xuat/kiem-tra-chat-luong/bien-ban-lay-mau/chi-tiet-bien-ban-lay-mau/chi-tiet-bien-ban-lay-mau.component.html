@@ -356,7 +356,16 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="8">
+        <div nz-col nzSpan="3">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Đơn vị tính</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <!-- <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group> -->
+              <span style="color: #001CFF">{{formData.value.donViTinh}}</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
