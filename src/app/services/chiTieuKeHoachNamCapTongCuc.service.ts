@@ -170,5 +170,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
+  xemTruocCtKhNamVatTu(body) {
+    const url = `${environment.SERVICE_API}/qlnv-report/ct-kh-preview/xem-truoc-ct-kh-vat-tu`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
 
 }

@@ -3,19 +3,19 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input, OnChanges,
+  Input,
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as dayjs from 'dayjs';
-import { saveAs } from 'file-saver';
-import { chain, cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
+import {saveAs} from 'file-saver';
+import {chain, cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogLuaChonInComponent} from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
 import {
   DialogQuyetDinhGiaoChiTieuComponent,
 } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
@@ -28,37 +28,33 @@ import {
 import {
   DialogThongTinLuongThucComponent,
 } from 'src/app/components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { LEVEL, LEVEL_USER, LOAI_QD_CTKH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { ItemDetail } from 'src/app/models/itemDetail';
-import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
-import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
-import { KeHoachVatTu, KeHoachVatTuCustom, KhVatTu, VatTuThietBi } from 'src/app/models/KeHoachVatTu';
-import { ThongTinChiTieuKeHoachNam } from 'src/app/models/ThongTinChiTieuKHNam';
-import { UserLogin } from 'src/app/models/userlogin';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {LEVEL, LEVEL_USER, LOAI_QD_CTKH} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {ItemDetail} from 'src/app/models/itemDetail';
+import {KeHoachLuongThuc} from 'src/app/models/KeHoachLuongThuc';
+import {KeHoachMuoi} from 'src/app/models/KeHoachMuoi';
+import {KeHoachVatTu, KeHoachVatTuCustom, KhVatTu, VatTuThietBi} from 'src/app/models/KeHoachVatTu';
+import {ThongTinChiTieuKeHoachNam} from 'src/app/models/ThongTinChiTieuKHNam';
+import {UserLogin} from 'src/app/models/userlogin';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
 import * as XLSX from 'xlsx';
-import { v4 as uuidv4 } from 'uuid';
-import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
-import { STATUS } from '../../../../../../constants/status';
-import { QuyetDinhBtcTcdtService } from '../../../../../../services/quyetDinhBtcTcdt.service';
-import { QuanLyHangTrongKhoService } from '../../../../../../services/quanLyHangTrongKho.service';
-import { QuyetDinhTtcpService } from '../../../../../../services/quyetDinhTtcp.service';
-import { AMOUNT_THREE_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../../Utility/utils';
-import { CurrencyMaskInputMode } from 'ngx-currency';
-import {
-  ThemSuaMuaTangComponent,
-} from '../../quyet-dinh/btc-giao-tcdt/them-quyet-dinh-btc-giao-tcdt/ke-hoach-mua-tang/them-sua-mua-tang/them-sua-mua-tang.component';
-import { ThemSuaKeHoachVatTuComponent } from './them-sua-ke-hoach-vat-tu/them-sua-ke-hoach-vat-tu.component';
-import { FILETYPE } from '../../../../../../constants/fileType';
+import {v4 as uuidv4} from 'uuid';
+import {TAB_SELECTED} from './thong-tin-chi-tieu-ke-hoach-nam.constant';
+import {STATUS} from '../../../../../../constants/status';
+import {QuyetDinhBtcTcdtService} from '../../../../../../services/quyetDinhBtcTcdt.service';
+import {QuanLyHangTrongKhoService} from '../../../../../../services/quanLyHangTrongKho.service';
+import {QuyetDinhTtcpService} from '../../../../../../services/quyetDinhTtcp.service';
+import {CurrencyMaskInputMode} from 'ngx-currency';
+import {ThemSuaKeHoachVatTuComponent} from './them-sua-ke-hoach-vat-tu/them-sua-ke-hoach-vat-tu.component';
+import {FILETYPE} from '../../../../../../constants/fileType';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -179,6 +175,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     inputMode: CurrencyMaskInputMode.NATURAL,
   };
   LOAI_QD = LOAI_QD_CTKH;
+  subTabVatTu = 0;
+  subTab = '';
 
   //
 
@@ -493,7 +491,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   calculateAndConvertDataKHLT() {
     if (this.dsKeHoachLuongThucClone && this.dsKeHoachLuongThucClone.length > 0) {
-      this.dsKeHoachLuongThucClone.forEach(function(item) {
+      this.dsKeHoachLuongThucClone.forEach(function (item) {
         if (item.tkdnThoc && item.tkdnThoc.length > 0) {
           item.tkdnThoc.forEach(tkdnThoc => {
             tkdnThoc.soLuong = tkdnThoc.soLuong ? (tkdnThoc.soLuong / 1000) : 0;
@@ -1356,8 +1354,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (tableLuongThuc && tableLuongThuc.length > 0) {
       let sheetLuongThuc = XLSX.utils.table_to_sheet(tableLuongThuc[0]);
       sheetLuongThuc['!cols'] = [];
-      sheetLuongThuc['!cols'][24] = { hidden: true };
-      sheetLuongThuc['!cols'][25] = { hidden: true };
+      sheetLuongThuc['!cols'][24] = {hidden: true};
+      sheetLuongThuc['!cols'][25] = {hidden: true};
       XLSX.utils.book_append_sheet(workbook, sheetLuongThuc, 'sheetLuongThuc');
     }
     const tableMuoi = document
@@ -1366,8 +1364,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (tableMuoi && tableMuoi.length > 0) {
       let sheetMuoi = XLSX.utils.table_to_sheet(tableMuoi[0]);
       sheetMuoi['!cols'] = [];
-      sheetMuoi['!cols'][12] = { hidden: true };
-      sheetMuoi['!cols'][13] = { hidden: true };
+      sheetMuoi['!cols'][12] = {hidden: true};
+      sheetMuoi['!cols'][13] = {hidden: true};
       XLSX.utils.book_append_sheet(workbook, sheetMuoi, 'sheetMuoi');
     }
     const tableVatTu = document
@@ -2222,7 +2220,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.tenDonvi = donVi.tenDvi;
     this.keHoachLuongThucCreate.donViId = donVi.id;
     this.chiTieuKeHoachNamService
-      .tonKhoDauNam({ maDvi: donVi.maDvi, maVthhList: ['010103', '010101'] })
+      .tonKhoDauNam({maDvi: donVi.maDvi, maVthhList: ['010103', '010101']})
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
@@ -3508,6 +3506,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     try {
       this.spinner.show();
       if (type === 'MUOI') {
+        this.subTab = 'MUOI';
         let body = {
           'typeFile': 'pdf',
           'nam': this.thongTinChiTieuKeHoachNam.namKeHoach,
@@ -3522,7 +3521,17 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       } else if (type === 'LT') {
         //todo
       } else if (type === 'VT') {
-        //todo
+        this.subTab = 'VT-' + (this.subTabVatTu == 0 ? 'NHAP' : 'XUAT');
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamVatTu({
+          typeFile: 'pdf',
+          nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          idHdr: this.thongTinChiTieuKeHoachNam.id,
+          fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
+          loaiNhapXuat: this.subTabVatTu == 0 ? 'NHAP' : 'XUAT'
+        }).then(async s => {
+          this.pdfBlob = s;
+          this.pdfSrc = await new Response(s).arrayBuffer();
+        });
       }
       this.showDlgPreview = true;
     } catch (e) {
@@ -3536,25 +3545,43 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     saveAs(this.pdfBlob, 'baocao.pdf');
   }
 
-  async downloadExcel(type?) {
+  async downloadExcel() {
     try {
       this.spinner.show();
-      if (type === 'MUOI') {
-        let body = {
-          'typeFile': 'xlsx',
-          'nam': this.thongTinChiTieuKeHoachNam.namKeHoach,
-          'idHdr': this.thongTinChiTieuKeHoachNam.id,
-          'fileName': 'xemtruoc_chi_tieu_kh_muoi.jrxml',
-        };
-        await this.chiTieuKeHoachNamService.xemTruocCtKhNamMuoi(body).then(async s => {
-          this.pdfBlob = s;
-          this.pdfSrc = await new Response(s).arrayBuffer();
+      if (this.subTab === 'LT') {
+        //todo
+      } else if (this.subTab === 'MUOI') {
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamMuoi({
+          typeFile: 'xlsx',
+          nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          idHdr: this.thongTinChiTieuKeHoachNam.id,
+          fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
+        }).then(async s => {
+          this.excelBlob = s;
+          saveAs(this.excelBlob, "chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
         });
-        // this.showDlgPreview = true;
-      } else if (type === 'LT') {
-        //todo
-      } else if (type === 'VT') {
-        //todo
+      } else if (this.subTab === 'VT-NHAP') {
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamVatTu({
+          typeFile: 'xlsx',
+          nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          idHdr: this.thongTinChiTieuKeHoachNam.id,
+          fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
+          loaiNhapXuat: 'NHAP'
+        }).then(async s => {
+          this.excelBlob = s;
+          saveAs(this.excelBlob, "chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
+        });
+      } else if (this.subTab === 'VT-XUAT') {
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamVatTu({
+          typeFile: 'xlsx',
+          nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          idHdr: this.thongTinChiTieuKeHoachNam.id,
+          fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
+          loaiNhapXuat: 'XUAT'
+        }).then(async s => {
+          this.excelBlob = s;
+          saveAs(this.excelBlob, "chi-tieu-xuat-vat-tu-thiet-bi.xlsx");
+        });
       }
       this.showDlgPreview = true;
     } catch (e) {
@@ -3567,5 +3594,4 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   closeDlg() {
     this.showDlgPreview = false;
   }
-
 }
