@@ -26,6 +26,7 @@ import { PREVIEW } from '../../../../../constants/fileType';
 import printJS from 'print-js';
 import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
+import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 
 @Component({
   selector: 'app-chi-tiet-bien-ban-lay-mau',
@@ -64,6 +65,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     private donviService: DonviService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private danhMucService: DanhMucService,
+    private mangLuoiKhoService: MangLuoiKhoService
   ) {
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
@@ -116,6 +118,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       ppLayMau: [new Array()],
       ctChatLuong: [new Array()],
       ngayTao: [],
+      donViTinh: [],
+      thuKho: []
     });
     this.formData.controls['ppLayMau'].valueChanges.subscribe(value => {
       if (this.loaiChon === "radio") {
@@ -328,27 +332,46 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   }
 
   async loadDsQdGnv() {
-    await this.inputServiceGnv.search({
-      loaiVthh: this.loaiVthh,
-      trangThai: STATUS.BAN_HANH,
-      trangThaiXh: STATUS.DA_HOAN_THANH,
-      listTrangThaiXh: [STATUS.DA_HOAN_THANH],
-      types: this.loaiXuat === "XC" ? ["XC"] : ["TH", "TTr"],
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0,
-      },
-    }).then(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.dsQdGnv = res.data.content;
+    if (['XC', 'CTVT'].includes(this.loaiXuat)) {
+      await this.inputServiceGnv.danhSach({
+        loaiVthh: this.loaiVthh,
+        trangThai: STATUS.BAN_HANH,
+        listTrangThaiXh: [STATUS.DA_HOAN_THANH],
+        types: this.loaiXuat === "XC" ? ["XC"] : ["TH", "TTr"],
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0,
+        },
+      }).then(res => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (res.data) {
+            this.dsQdGnv = Array.isArray(res.data) ? res.data : [];
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }).catch(err => {
-      this.notification.error(MESSAGE.ERROR, err.msg);
-    });
+      }).catch(err => {
+        this.notification.error(MESSAGE.ERROR, err.msg);
+      });
+    }
+    else {
+      await this.inputServiceGnv.search({
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0,
+        },
+      }).then(res => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (res.data) {
+            this.dsQdGnv = res.data.content;
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      }).catch(err => {
+        this.notification.error(MESSAGE.ERROR, err.msg);
+      });
+    }
   }
 
   openDialogSoQdGnv() {
@@ -401,7 +424,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          maDiaDiem: data.maDiaDiem || data.maDvi || data.maLoKho || data.maNganKho || data.maDvi,
+          maDiaDiem: data.maDiaDiem || data.maLoKho || data.maNganKho || data.maDvi,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
@@ -410,9 +433,11 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           tenNhaKho: data.tenNhaKho,
           tenNganKho: data.tenNganKho,
           tenLoKho: data.tenLoKho,
+          donViTinh: data.donViTinh
         });
         await this.loadDsPpLayMau();
         await this.loadDsCtChatLuong();
+        this.tenThuKho()
         if (this.loaiChon === "radio") {
           // Chi chon 1 phuong phap lay mau duy nhat
           let filter = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN);
@@ -445,7 +470,26 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       }
     });
   }
-
+  async tenThuKho() {
+    const maDiaDiem = this.formData.value.maDiaDiem;
+    if (!maDiaDiem) return;
+    let body = {
+      maDvi: maDiaDiem,
+      capDvi: (maDiaDiem?.length / 2 - 1),
+    };
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (detail.statusCode == 0) {
+      const detailThuKho = detail.data.object.detailThuKho;
+      if (detailThuKho) {
+        this.formData.patchValue({
+          tenThuKho: detailThuKho.fullName,
+        });
+      }
+      // this.formData.patchValue({
+      //   donViTinh: detail.data.object.donViTinh
+      // })
+    }
+  }
   async changeValueQdGnv($event) {
     if ($event) {
       await this.inputServiceGnv.search({});

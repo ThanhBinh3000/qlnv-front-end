@@ -18,5 +18,9 @@ export class QuyetDinhGiaoNvCuuTroService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat-ddiem-nhap`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+  danhSach(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
 
 }
