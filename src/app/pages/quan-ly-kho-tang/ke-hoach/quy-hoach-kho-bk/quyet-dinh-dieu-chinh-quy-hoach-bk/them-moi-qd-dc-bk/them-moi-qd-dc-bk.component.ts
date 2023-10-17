@@ -384,7 +384,7 @@ export class ThemMoiQdDcBkComponent implements OnInit {
     let arr = [];
     let check = true;
     arr.push(
-      rowItem.maCuc, rowItem.maChiCuc, rowItem.tenDiemKho, rowItem.diaDiem, rowItem.dienTich, rowItem.tongTichLuong, rowItem.phuongAnQuyHoach,
+      rowItem.maCuc, rowItem.maChiCuc, rowItem.maDiemKho, rowItem.diaDiem, rowItem.dienTich, rowItem.tongTichLuong, rowItem.phuongAnQuyHoach,
     );
     if (arr && arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {
