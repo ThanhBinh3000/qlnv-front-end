@@ -453,16 +453,19 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          let result = this.dataTableReq.filter(data => data.id == item.id);
-          if (result && result.length > 0) {
-            let idx = this.dataTableReq.indexOf(result[0]);
+          console.log();
+          let result = this.dataTableReq.find(data => data.id == item.id);
+          if (result) {
+            let idx = this.dataTableReq.indexOf(result);
             this.dataTableReq.splice(idx, 1);
-            let itemSelected = this.listDx.filter(item => item.selected == true);
-            if (itemSelected && itemSelected.length > 0) {
-              itemSelected[0].selected = false;
-              this.selectRow(itemSelected[0]);
-              this.notification.success(MESSAGE.SUCCESS, 'Xóa thành công');
-            }
+            this.dataTable = this.convertListData(this.dataTableReq);
+            this.expandAll(this.dataTable);
+            // let itemSelected = this.listDx.filter(item => item.selected == true);
+            // if (itemSelected && itemSelected.length > 0) {
+            //   itemSelected[0].selected = false;
+            //   this.selectRow(itemSelected[0]);
+            this.notification.success(MESSAGE.SUCCESS, 'Xóa thành công');
+            // }
           } else {
             this.notification.error(MESSAGE.ERROR, 'Xóa thất bại');
           }
