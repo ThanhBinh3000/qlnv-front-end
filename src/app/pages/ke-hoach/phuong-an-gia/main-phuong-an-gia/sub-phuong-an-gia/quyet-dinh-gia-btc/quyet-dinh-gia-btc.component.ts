@@ -50,6 +50,10 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
     {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
     {ma: this.STATUS.BAN_HANH, giaTri: "Ban hành"}
   ];
+  listLoaiDx= [
+    {ma: "00", giaTri: "Lần đầu"},
+    {ma: "01", giaTri: "Điều chỉnh"}
+  ];
   constructor(private readonly fb: FormBuilder,
               private spinner: NgxSpinnerService,
               private notification: NzNotificationService,
@@ -67,6 +71,7 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
       namKeHoach: [null],
       trangThai: [null],
       maDvi : [],
+      loaiDeXuat : [],
     });
   }
 

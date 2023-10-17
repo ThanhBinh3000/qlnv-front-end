@@ -192,12 +192,12 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       namThuHoach: [''],
       quocGiaSx: [''],
       giaBanHoSo: [''],
-      tgianMoHoSo: [''],
+      tgianMoHoSo: [null],
       soQdPdGiaCuThe: [''],
       ngayKyQdPdGiaCuThe: [''],
-      tgianMthauTime: [],
-      tgianDthauTime: [],
-      tgianMoHoSoTime: [],
+      tgianMthauTime: [null],
+      tgianDthauTime: [null],
+      tgianMoHoSoTime: [null],
     });
   }
 
@@ -623,25 +623,27 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async luuVaGuiDuyet(isGuiDuyet) {
-    this.formData.patchValue({
-      ykienThamGia: this.ykienThamGia,
-      ghiChu: this.ghiChu,
-    })
     let pipe = new DatePipe('en-US');
-    if (this.formData.value.tgianMthauTime != null) {
-      this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMthauTime, 'HH:mm') + ":00"
-    } else {
-      this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+    if (this.formData.value.tgianMthau != null) {
+      if (this.formData.value.tgianMthauTime != null) {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+      }
     }
-    if (this.formData.value.tgianDthauTime != null) {
-      this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianDthauTime, 'HH:mm') + ":00"
-    } else {
-      this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+    if (this.formData.value.tgianDthau != null) {
+      if (this.formData.value.tgianDthauTime != null) {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianDthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+      }
     }
-    if (this.formData.value.tgianMoHoSoTime != null) {
-      this.formData.value.tgianMoHoSo = pipe.transform(this.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMoHoSoTime, 'HH:mm') + ":00"
-    } else {
-      this.formData.value.tgianMoHoSo =   pipe.transform(this.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " 23:59:59"
+    if (this.formData.value.tgianMoHoSo != null) {
+      if (this.formData.value.tgianMoHoSoTime != null) {
+        this.formData.value.tgianMoHoSo = pipe.transform(this.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMoHoSoTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianMoHoSo =   pipe.transform(this.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " 23:59:59"
+      }
     }
     let body = this.formData.value;
     if (this.formData.get('soDxuat').value) {

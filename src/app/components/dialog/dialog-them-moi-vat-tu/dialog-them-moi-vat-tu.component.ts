@@ -322,7 +322,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       loaiGia: 'LG03'
     }
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-    if (pag.msg == MESSAGE.SUCCESS && pag.data.size > 0) {
+    if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
       const data = pag.data[0];
       let donGiaVatQd = 0;
       if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {

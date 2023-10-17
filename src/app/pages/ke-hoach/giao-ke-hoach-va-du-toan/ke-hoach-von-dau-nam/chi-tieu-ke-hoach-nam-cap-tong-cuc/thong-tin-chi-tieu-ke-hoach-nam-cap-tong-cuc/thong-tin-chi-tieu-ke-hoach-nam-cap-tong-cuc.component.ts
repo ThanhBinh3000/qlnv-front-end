@@ -84,6 +84,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     namKeHoach: null,
     trichYeu: null,
   };
+  //xem trước
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  showDlgPreview = false;
+
+
   sumTotalKhDuTruMuoi = {
     tonKhoDauNam: 0,
     nhapTrongNam: 0,
@@ -1733,20 +1741,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzWidth: 310,
       nzOnOk: async () => {
         try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: STATUS.BAN_HANH,
-          };
-          // await this.save();
-          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
-            this.redirectChiTieuKeHoachNam();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
+          await this.save(true);
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
@@ -1897,7 +1892,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     if (res.msg == MESSAGE.SUCCESS) {
                       this.notification.success(
                         MESSAGE.SUCCESS,
-                        MESSAGE.UPDATE_SUCCESS,
+                        MESSAGE.BAN_HANH_SUCCESS,
                       );
                       this.redirectChiTieuKeHoachNam();
                     } else {
@@ -1927,26 +1922,17 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
-              let body;
-              if (this.userService.isTongCuc()) {
-                body = {
-                  id: res.data.id,
-                  trangThai: STATUS.CHO_DUYET_LDV,
-                };
-              }
-              if (this.userService.isCuc()) {
-                body = {
-                  id: res.data.id,
-                  trangThai: STATUS.CHO_DUYET_TP,
-                };
-              }
+              let body = {
+                id: res.data.id,
+                trangThai: STATUS.BAN_HANH,
+              };
               this.chiTieuKeHoachNamService.updateStatus(body)
                 .then((resp) => {
                   if (resp.msg == MESSAGE.SUCCESS) {
                     if (res.msg == MESSAGE.SUCCESS) {
                       this.notification.success(
                         MESSAGE.SUCCESS,
-                        MESSAGE.ADD_SUCCESS,
+                        MESSAGE.BAN_HANH_SUCCESS,
                       );
                       this.redirectChiTieuKeHoachNam();
                     } else {
@@ -3516,6 +3502,70 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
     }
     return sl;
+  }
+
+  async preView(type?) {
+    try {
+      this.spinner.show();
+      if (type === 'MUOI') {
+        let body = {
+          'typeFile': 'pdf',
+          'nam': this.thongTinChiTieuKeHoachNam.namKeHoach,
+          'idHdr': this.thongTinChiTieuKeHoachNam.id,
+          'fileName': 'xemtruoc_chi_tieu_kh_muoi.jrxml',
+        };
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamMuoi(body).then(async s => {
+          this.pdfBlob = s;
+          this.pdfSrc = await new Response(s).arrayBuffer();
+        });
+        // this.showDlgPreview = true;
+      } else if (type === 'LT') {
+        //todo
+      } else if (type === 'VT') {
+        //todo
+      }
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfBlob, 'baocao.pdf');
+  }
+
+  async downloadExcel(type?) {
+    try {
+      this.spinner.show();
+      if (type === 'MUOI') {
+        let body = {
+          'typeFile': 'xlsx',
+          'nam': this.thongTinChiTieuKeHoachNam.namKeHoach,
+          'idHdr': this.thongTinChiTieuKeHoachNam.id,
+          'fileName': 'xemtruoc_chi_tieu_kh_muoi.jrxml',
+        };
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamMuoi(body).then(async s => {
+          this.pdfBlob = s;
+          this.pdfSrc = await new Response(s).arrayBuffer();
+        });
+        // this.showDlgPreview = true;
+      } else if (type === 'LT') {
+        //todo
+      } else if (type === 'VT') {
+        //todo
+      }
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 
 }
