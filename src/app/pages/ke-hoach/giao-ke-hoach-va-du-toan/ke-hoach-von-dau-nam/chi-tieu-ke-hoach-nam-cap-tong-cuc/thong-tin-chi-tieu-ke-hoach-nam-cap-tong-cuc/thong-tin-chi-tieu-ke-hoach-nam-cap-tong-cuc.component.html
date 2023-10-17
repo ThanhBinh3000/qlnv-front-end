@@ -9,44 +9,11 @@
           <i class='fa fa-arrow-left'></i>
           <span>Quay lại</span>
         </button>
-        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"-->
-        <!--                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && !isViewDetail">-->
-        <!--          <i class="icon htvbdh_tcdt_guiduyet"></i>-->
-        <!--          <span>Lưu và gửi duyệt</span>-->
-        <!--        </button>-->
         <button class='btn btn-outline-grey btn-sm waves-effect waves-light' (click)='banHanh()'
                 *ngIf='thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU'>
           <i class='icon htvbdh_chuyenvanthu'></i>
           <span>Ban hành</span>
         </button>
-        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"-->
-        <!--                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))"-->
-        <!--                (click)="pheDuyet()">-->
-        <!--          <i class="icon htvbdh_tcdt_pheduyet"></i>-->
-        <!--          <span>Duyệt</span>-->
-        <!--        </button>-->
-        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"-->
-        <!--                *ngIf="() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_TP')"-->
-        <!--                (click)="pheDuyet()">-->
-        <!--          <i class="icon htvbdh_tcdt_pheduyet"></i>-->
-        <!--          <span>Duyệt</span>-->
-        <!--        </button>-->
-        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"-->
-        <!--                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU')"-->
-        <!--                (click)="pheDuyet()">-->
-        <!--          <i class="icon htvbdh_tcdt_pheduyet"></i>-->
-        <!--          <span>Duyệt</span>-->
-        <!--        </button>-->
-        <!--        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"-->
-        <!--           *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))">-->
-        <!--          <i class="icon htvbdh_tcdt_tuchoi"></i>-->
-        <!--          <span>Từ chối</span>-->
-        <!--        </a>-->
-        <!--        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"-->
-        <!--           *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU') )">-->
-        <!--          <i class="icon htvbdh_tcdt_tuchoi"></i>-->
-        <!--          <span>Từ chối</span>-->
-        <!--        </a>-->
         <button class='btn btn-main btn-sm waves-effect waves-light' (click)='save(false)'
                 *ngIf='!this.isViewDetail && thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU'>
           <i class='icon htvbdh_tcdt_save'></i>
@@ -604,15 +571,17 @@
       <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'">
         <div id='table-muoi'
              [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-          <div class='btn-group'>
-            <button type='button' class='btn btn-sub xanh-nhat'
+          <div class='btn-group mt-2'>
+            <div class='trai'></div>
+            <button type='button' class='btn btn-sub do phai'
                     (click)='preView("MUOI")'>
               <i class=' icon htvbdh_tcdt_print'></i>
               <span>In/xem trước</span>
             </button>
           </div>
           <div class='ghichu_tab'>Đơn vị tính:Kg</div>
-          <nz-table #groupingTableMuoi [nzData]='dsMuoiClone' nzBordered class='table__body' [nzFrontPagination]='false'
+          <nz-table #groupingTableMuoi [nzData]='dsMuoiClone' nzBordered class='table__body'
+                    [nzFrontPagination]='false'
                     [nzShowPagination]='false' style='max-height: 700px; overflow: scroll;'>
             <thead>
             <tr>
@@ -690,7 +659,8 @@
               <th style='text-align: right; font-weight: 700'>Chỉ tiêu của BTC</th>
               <th class='text-right text-btc'> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</th>
               <th class='text-right text-btc'> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class='text-right text-btc'> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</th>
+              <th
+                class='text-right text-btc'> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</th>
               <th class='text-right text-btc'> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</th>
               <th></th>
             </tr>
@@ -699,7 +669,8 @@
               <th style='text-align: right; font-weight: 700'>Chỉ tiêu của TCDT</th>
               <th class='text-right text-btc'> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</th>
               <th class='text-right text-btc'> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class='text-right text-btc'> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</th>
+              <th
+                class='text-right text-btc'> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</th>
               <th class='text-right text-btc'> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</th>
               <th></th>
             </tr>
@@ -1034,9 +1005,9 @@
   <!-- ========== -->
   <!--  end dialog place-->
 
-  <nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Báo cáo" nzWidth="100%">
-    <div *nzModalContent class="modal__content">
-      <pdf-viewer [src]="pdfSrc" [original-size]="false" [render-text]="true" style="width: 100%; height: 600px;">
+  <nz-modal [(nzVisible)]='showDlgPreview' nzTitle='Báo cáo' nzWidth='100%'>
+    <div *nzModalContent class='modal__content'>
+      <pdf-viewer [src]='pdfSrc' [original-size]='false' [render-text]='true' style='width: 100%; height: 600px;'>
       </pdf-viewer>
     </div>
     <div *nzModalFooter>
@@ -1050,8 +1021,8 @@
         <i class='icon htvbdh_nhap-excel'></i>
         Xuất Excel
       </button>
-      <button nz-button (click)="closeDlg()" class="modal__button--cancel">
-        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+        <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
         Đóng
       </button>
     </div>
