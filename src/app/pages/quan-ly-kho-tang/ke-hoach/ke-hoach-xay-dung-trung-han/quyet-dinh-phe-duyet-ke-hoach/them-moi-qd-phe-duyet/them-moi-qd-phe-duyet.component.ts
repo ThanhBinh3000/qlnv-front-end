@@ -126,7 +126,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         id: data.id,
         phuongAnTc: data.phuongAnTc,
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split('/')[0] : '',
-        ngayTrinhBtc: data.ngayTrinhBtc,
+        // ngayTrinhBtc: data.ngayTrinhBtc,
         ngayKyBtc: data.ngayKyBtc,
         trichYeu: data.trichYeu,
         namBatDau: data.namBatDau,
