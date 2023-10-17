@@ -10,17 +10,17 @@ import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { HelperService } from 'src/app/services/helper.service';
 import {
-  DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent
-} from "../../../../../../../components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component";
+  DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent,
+} from '../../../../../../../components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component';
 import {
-  QuyetDinhUbtvqhMuaBuBoSungService
-} from "../../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
-import {STATUS} from "../../../../../../../constants/status";
+  QuyetDinhUbtvqhMuaBuBoSungService,
+} from '../../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service';
+import { STATUS } from '../../../../../../../constants/status';
 
 @Component({
   selector: 'app-them-moi-ubtvqh',
   templateUrl: './them-moi-ubtvqh.component.html',
-  styleUrls: ['./them-moi-ubtvqh.component.scss']
+  styleUrls: ['./them-moi-ubtvqh.component.scss'],
 })
 export class ThemMoiUbtvqhComponent implements OnInit {
 
@@ -42,7 +42,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
     public globals: Globals,
-    private quyetDinhUbtvqhMuBuBoSung : QuyetDinhUbtvqhMuaBuBoSungService,
+    private quyetDinhUbtvqhMuBuBoSung: QuyetDinhUbtvqhMuaBuBoSungService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
@@ -56,8 +56,8 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
         trangThai: [STATUS.DANG_NHAP_DU_LIEU],
-        listBoNganh: []
-      }
+        listBoNganh: [],
+      },
     );
   }
 
@@ -66,9 +66,8 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      // this.maQd = "/NQ-UBTVQH14",
       this.getDataDetail(this.idInput),
-    ])
+    ]);
     this.spinner.hide();
   }
 
@@ -82,16 +81,17 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         ngayQd: data.ngayQd,
         soQd: data.soQd,
         trangThai: data.trangThai,
-        trichYeu: data.trichYeu
-      })
-      this.dataTable = data.listBoNganh
+        trichYeu: data.trichYeu,
+      });
+      this.dataTable = data.listBoNganh;
+      console.log(this.dataTable, 'this.dataTablethis.dataTable');
       this.taiLieuDinhKemList = data.fileDinhkems;
     }
   }
 
 
   loadDsNam() {
-    for (let i = -3; i <=5; i++) {
+    for (let i = -3; i <= 5; i++) {
       this.dsNam.push({
         value: dayjs().get('year') + i,
         text: dayjs().get('year') + i,
@@ -107,7 +107,8 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) { }
+  downloadFileKeHoach(event) {
+  }
 
 
   xoaItem(id: number) {
@@ -120,7 +121,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-       this.dataTable.splice(id, 1);
+        this.dataTable.splice(id, 1);
       },
     });
   }
@@ -175,7 +176,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
       return;
     }
     if (this.dataTable.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Danh sách kế hoạch không được để trống");
+      this.notification.error(MESSAGE.ERROR, 'Danh sách kế hoạch không được để trống');
       this.spinner.hide();
       return;
     }
@@ -194,8 +195,8 @@ export class ThemMoiUbtvqhComponent implements OnInit {
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
-          trangThai: STATUS.BAN_HANH
-        })
+          trangThai: STATUS.BAN_HANH,
+        });
         this.pheDuyet();
       } else {
         if (this.idInput > 0) {
@@ -211,7 +212,8 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     this.spinner.hide();
   }
 
-  exportData() { }
+  exportData() {
+  }
 
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({

@@ -60,7 +60,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   async ngOnInit() {
     await this.spinner.show();
     try {
-      for (let i = -3; i < 23; i++) {
+      for (let i = 0; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i

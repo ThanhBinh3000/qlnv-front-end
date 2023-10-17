@@ -725,7 +725,7 @@
       </tr>
       </tbody>
     </nz-table>
-    <nz-table *ngIf="loaiVthh == LOAI_HANG_DTQG.MUOI" class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+    <nz-table *ngIf="loaiVthh?.startsWith(LOAI_HANG_DTQG.MUOI)" class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
       <thead>
       <tr>

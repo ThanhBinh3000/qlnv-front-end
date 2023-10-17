@@ -39,7 +39,7 @@
     </div>
   </div>
   <nz-alert class="mg-t-10"
-            *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.TU_CHOI_CBV "
+            *ngIf="showLyDoTuChoi()"
             nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 
@@ -50,7 +50,7 @@
           <div nz-row [nzGutter]="[18]">
             <div nz-col [nzSpan]="2">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Năm </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Năm</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-select formControlName="nam" [nzDisabled]="true">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
@@ -83,7 +83,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true">Mã danh sách tiêu hủy</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDanhSach()">
-                    <input nz-input [readonly]="true" formControlName="maDanhSach" />
+                    <input nz-input [readonly]="true" formControlName="maDanhSach"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -110,17 +110,18 @@
               <nz-form-item>
                 <nz-form-label>Thời gian phê duyệt tiêu hủy</nz-form-label>
                 <nz-form-control>
-                  <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianPd" (ngModelChange)="onChangeTimeQd($event)" [nzDisabled]="disabledThamDinh()"
+                  <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianPd"
+                                   (ngModelChange)="onChangeTimeQd($event)" [nzDisabled]="disabledThamDinh()"
                                    [nzFormat]="globals.dateFormat"></nz-range-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Tên hồ sơ/trích yếu </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Tên hồ sơ/trích yếu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="trichYeu" [readonly]="disabledTrinh()" />
+                    <input nz-input formControlName="trichYeu" [readonly]="disabledTrinh()"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -131,7 +132,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="ketQua" [readOnly]="disabledThamDinh()" />
+                    <input nz-input formControlName="ketQua" [readOnly]="disabledThamDinh()"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -200,6 +201,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <ng-container *ngIf="item.expandSet">
               <tr *ngFor="let data of item.children">
@@ -209,27 +211,31 @@
                 <td>{{data.xhThDanhSachHdr.tenCloaiVthh}}</td>
                 <td>{{data.xhThDanhSachHdr.tenDiemKho}}</td>
                 <td>
-                  {{data.xhThDanhSachHdr.tenNhaKho}}/{{data.xhThDanhSachHdr.tenNganKho}}/{{data.xhThDanhSachHdr.tenLoKho}}
+                  {{data.xhThDanhSachHdr.tenNhaKho}}/{{data.xhThDanhSachHdr.tenNganKho}}
+                  /{{data.xhThDanhSachHdr.tenLoKho}}
                 </td>
                 <td>{{data.xhThDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
                 <td>{{data.xhThDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
                 <td>{{data.xhThDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                 <td>{{data.xhThDanhSachHdr.donViTinh }}</td>
-                <td><nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                     nz-input [(ngModel)]="data.xhThDanhSachHdr.donGiaDk"
-                                     [nzDisabled]="disabledTrinh()"></nz-input-number>
+                <td>
+                  <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   nz-input [(ngModel)]="data.xhThDanhSachHdr.donGiaDk"
+                                   [nzDisabled]="disabledTrinh()"></nz-input-number>
                 </td>
                 <td>{{data.xhThDanhSachHdr.slDeXuat * data.xhThDanhSachHdr.donGiaDk | number : '1.0-1' :
                   'vi_VN' }}</td>
                 <td>{{data.xhThDanhSachHdr.lyDo}}</td>
-                <td><input nz-input [(ngModel)]="data.xhThDanhSachHdr.ketQua" [readOnly]="disabledTrinh()" /></td>
+                <td><input nz-input [(ngModel)]="data.xhThDanhSachHdr.ketQua" [readOnly]="disabledTrinh()"/></td>
               </tr>
             </ng-container>
           </ng-container>
           </tbody>
         </nz-table>
       </nz-collapse-panel>
-      <nz-collapse-panel *ngIf="viewTongCuc()" nzActive="true" nzHeader="Kết quả thẩm của Vụ QlHDT">
+    </nz-collapse>
+    <nz-collapse>
+      <nz-collapse-panel *ngIf="viewTongCuc()" nzActive="true" nzHeader="Kết quả thẩm định của Vụ QLHDT">
         <nz-table class="mt-2px pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                   [nzShowPagination]="false">
           <thead>
@@ -268,7 +274,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
             </tr>
             <ng-container *ngIf="item.expandSet">
               <tr *ngFor="let data of item.children">
@@ -278,18 +283,21 @@
                 <td>{{data.xhThDanhSachHdr.tenCloaiVthh}}</td>
                 <td>{{data.xhThDanhSachHdr.tenDiemKho}}</td>
                 <td>
-                  {{data.xhThDanhSachHdr.tenNhaKho}}/{{data.xhThDanhSachHdr.tenNganKho}}/{{data.xhThDanhSachHdr.tenLoKho}}
+                  {{data.xhThDanhSachHdr.tenNhaKho}}/{{data.xhThDanhSachHdr.tenNganKho}}
+                  /{{data.xhThDanhSachHdr.tenLoKho}}
                 </td>
                 <td>{{data.xhThDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
                 <td>{{data.xhThDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
-                <td><nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                     nz-input [(ngModel)]="data.xhThDanhSachHdr.slDaDuyet"
-                                     [nzDisabled]="disabledThamDinh()"></nz-input-number>
+                <td>
+                  <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   nz-input [(ngModel)]="data.xhThDanhSachHdr.slDaDuyet"
+                                   [nzDisabled]="disabledThamDinh()"></nz-input-number>
                 </td>
                 <td>{{data.xhThDanhSachHdr.donViTinh }}</td>
-                <td><nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                     nz-input [(ngModel)]="data.xhThDanhSachHdr.donGiaPd"
-                                     [nzDisabled]="disabledThamDinh()"></nz-input-number>
+                <td>
+                  <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   nz-input [(ngModel)]="data.xhThDanhSachHdr.donGiaPd"
+                                   [nzDisabled]="disabledThamDinh()"></nz-input-number>
                 </td>
                 <td>{{data.xhThDanhSachHdr.slDaDuyet * data.xhThDanhSachHdr.donGiaPd | number : '1.0-1'
                   : 'vi_VN' }}</td>

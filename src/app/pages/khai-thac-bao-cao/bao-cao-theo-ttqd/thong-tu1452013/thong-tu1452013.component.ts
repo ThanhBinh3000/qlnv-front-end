@@ -24,7 +24,7 @@ export class ThongTu1452013Component implements OnInit {
   showDlgPreview = false;
   listNam: any[] = [];
   formData: FormGroup;
-
+  listQuy = [];
 
   constructor(private spinner: NgxSpinnerService,
               private notification: NzNotificationService,
@@ -49,20 +49,26 @@ export class ThongTu1452013Component implements OnInit {
       }
     );
   }
-  listQuy: any[] = [
-    { text: 'Quý I', value: 1 },
-    { text: 'Quý II', value: 2 },
-    { text: 'Quý III', value: 3 },
-    { text: 'Quý IV', value: 4 },
-  ]
+
   ngOnInit(): void {
-    for (let i = -3; i < 23; i++) {
+    for (let i = 0; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
     }
-//do stuff here to give the blob some data...
+    const quyData = [
+      { text: 'Quý I', value: 1 },
+      { text: 'Quý II', value: 2 },
+      { text: 'Quý III', value: 3 },
+      { text: 'Quý IV', value: 4 },
+    ];
+    const month = dayjs().get("month");
+    for (let i = 0; i <= Math.floor(month / 3); i++) {
+      if(i>=1){
+        this.listQuy.push(quyData[i-1]);
+      }
+    }
   }
 
   private blobToFile = (theBlob: Blob, fileName: string): File => {

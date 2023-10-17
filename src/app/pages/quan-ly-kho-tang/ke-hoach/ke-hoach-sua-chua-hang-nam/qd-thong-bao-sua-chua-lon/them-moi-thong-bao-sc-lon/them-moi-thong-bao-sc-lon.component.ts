@@ -60,8 +60,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       namKeHoach: [dayjs().get('year'), Validators.required],
       trichYeu: [null],
       ngayKy: [null],
-      qdBtc: [null , Validators.required],
-      soTt: [null , Validators.required],
+      qdBtc: [null, Validators.required],
+      soTt: [null, Validators.required],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       type: ['01'],
@@ -196,6 +196,11 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       this.canCuPhapLy = data.canCuPhapLys
       this.dataTableReq = data.chiTiets;
       if (this.dataTableReq && this.dataTableReq.length > 0) {
+        if (this.userService.isTongCuc()) {
+          this.dataTableReq = data.chiTiets;
+        } else {
+          this.dataTableReq = data.chiTiets?.filter(f => f.maDvi == this.userInfo.MA_DVI);
+        }
         this.dataTable = this.convertListData(this.dataTableReq);
       }
     }
@@ -203,7 +208,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
 
 
   async save(isOther: boolean) {
-    if(isOther){
+    if (isOther) {
       this.formData.controls["ngayKy"].setValidators([Validators.required]);
     }
     this.helperService.markFormGroupTouched(this.formData);
