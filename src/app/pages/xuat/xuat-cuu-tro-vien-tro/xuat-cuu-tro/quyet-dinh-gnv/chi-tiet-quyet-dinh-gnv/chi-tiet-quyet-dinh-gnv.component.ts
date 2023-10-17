@@ -95,7 +95,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       cloaiVthh: [],
       tenVthh: [, [Validators.required]],
       soLuong: [],
-      thoiGianGiaoNhan: [],
+      thoiGianGiaoNhan: [, [Validators.required]],
       trichYeu: [],
       trangThai: [],
       lyDoTuChoi: [],
@@ -438,7 +438,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               });
             }
             const soLuong = detail.quyetDinhPdDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => sum += cur.soLuongXc ? cur.soLuongXc : 0, 0);
-            const thoiGianGiaoNhan = detail.type === "TH" ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI) ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI).ngayKetThuc : null : detail.ngayKetThuc;
+            // const thoiGianGiaoNhan = detail.type === "TH" ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI) ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI).ngayKetThuc : null : detail.ngayKetThuc;
             this.formData.patchValue({
               idQdPd: detail.id,
               soQdPd: detail.soBbQd,
@@ -449,7 +449,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               type: detail.type,
               loaiVthh: detail.loaiVthh,
               tenLoaiVthh: detail.tenLoaiVthh,
-              thoiGianGiaoNhan,
+              // thoiGianGiaoNhan,
               soLuong,
               paXuatGaoChuyenXc: detail.paXuatGaoChuyenXc
 

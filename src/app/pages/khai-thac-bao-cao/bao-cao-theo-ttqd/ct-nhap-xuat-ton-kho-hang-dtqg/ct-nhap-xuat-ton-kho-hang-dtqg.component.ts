@@ -35,7 +35,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
-
+  listQuy = [];
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -62,12 +62,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
       }
     );
   }
-  listQuy: any[] = [
-    { text: 'Quý I', value: 1 },
-    { text: 'Quý II', value: 2 },
-    { text: 'Quý III', value: 3 },
-    { text: 'Quý IV', value: 4 },
-  ]
+
   async ngOnInit() {
     await this.spinner.show();
     try {
@@ -76,6 +71,18 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i
         });
+      }
+      const quyData = [
+        { text: 'Quý I', value: 1 },
+        { text: 'Quý II', value: 2 },
+        { text: 'Quý III', value: 3 },
+        { text: 'Quý IV', value: 4 },
+      ];
+      const month = dayjs().get("month");
+      for (let i = 0; i <= Math.floor(month / 3); i++) {
+        if(i>=1){
+          this.listQuy.push(quyData[i-1]);
+        }
       }
       await Promise.all([
         this.loadDsDonVi(),
