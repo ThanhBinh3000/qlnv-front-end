@@ -91,7 +91,6 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(this.dataTable);
     this.tableDataView = chain(this.dataTable)
       .groupBy("soQdGnv")
       .map((value, key) => {
@@ -120,7 +119,6 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
           childData: rs
         };
       }).value();
-    console.log(this.tableDataView, 'tableDataView')
     this.expandAll()
 
   }
