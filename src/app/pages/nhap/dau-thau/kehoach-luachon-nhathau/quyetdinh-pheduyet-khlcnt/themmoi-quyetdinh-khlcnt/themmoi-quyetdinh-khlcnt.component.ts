@@ -38,6 +38,7 @@ import { saveAs } from "file-saver";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {ThongtinDexuatComponent} from "./thongtin-dexuat/thongtin-dexuat.component";
 import printJS from "print-js";
+import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khlcnt',
@@ -124,6 +125,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     private helperService: HelperService,
     private dauThauService: DanhSachDauThauService,
     public globals: Globals,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -194,6 +196,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     data.forEach(item => {
       item.children.forEach(res => {
         res.children.forEach(elm => {
+          if (elm.donGia == null) {
+            this.notification.error(MESSAGE.ERROR, elm.tenDvi + " chưa được phê duyệt giá mua cụ thể.");
+            shouldStop = true;
+            return;
+          }
           elm.children.forEach(i => {
             if (i.soLuong > res.soLuong) {
               this.notification.error(MESSAGE.ERROR, "Số lượng của Điểm kho không được lớn hơn số lượng gói thầu");
@@ -339,6 +346,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       return;
     }
     this.setValidator(isGuiDuyet)
+    await this.setDonGiaVat();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       await this.spinner.hide();
@@ -349,15 +357,32 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     let pipe = new DatePipe('en-US');
+    if (this.thongtinDexuatComponent.formData.value.tgianMthauTime != null) {
+      this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthauTime, 'HH:mm') + ":00"
+    } else {
+      this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+    }
+    if (this.thongtinDexuatComponent.formData.value.tgianDthauTime != null) {
+      this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthauTime, 'HH:mm') + ":00"
+    } else {
+      this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+    }
+    if (this.thongtinDexuatComponent.formData.value.tgianMoHoSoTime != null) {
+      this.danhsachDx[this.index].tgianMoHoSo = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSoTime, 'HH:mm') + ":00"
+    } else {
+      this.danhsachDx[this.index].tgianMoHoSo =   pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " 23:59:59"
+    }
     this.danhsachDx[this.index].tgianBdauTchuc = this.thongtinDexuatComponent.formData.value.tgianBdauTchuc
     this.danhsachDx[this.index].tgianNhang = this.thongtinDexuatComponent.formData.value.tgianNhang
-    this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthau, 'yyyy-MM-dd HH:mm')
-    this.danhsachDx[this.index].tgianDthau = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthau, 'yyyy-MM-dd HH:mm')
     this.danhsachDx[this.index].tongTien = this.thongtinDexuatComponent.formData.value.tongMucDtDx
     this.danhsachDx[this.index].children = this.thongtinDexuatComponent.listOfData;
+    this.danhsachDx[this.index].tgianMthauTime = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthauTime, 'yyyy-MM-dd HH:mm')
+    this.danhsachDx[this.index].tgianDthauTime = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthauTime, 'yyyy-MM-dd HH:mm')
+    this.danhsachDx[this.index].tgianMoHoSoTime = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSoTime, 'yyyy-MM-dd HH:mm')
+    this.danhsachDx[this.index].giaBanHoSo = this.thongtinDexuatComponent.formData.value.giaBanHoSo
     body.children = this.danhsachDx;
     body.fileDinhKems = this.listFileDinhKem;
-    if (await !this.isValidate(body.children)) {
+    if (isGuiDuyet && !this.isValidate(body.children)) {
       await this.spinner.hide();
       return;
     }
@@ -831,5 +856,36 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   printPreview(){
     printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  }
+
+  async setDonGiaVat() {
+    for (const dx of this.danhsachDx) {
+      for (const gthau of dx.children) {
+        for (const chiCuc of gthau.children) {
+          let bodyPag = {
+            namKeHoach: this.formData.value.namKhoach,
+            loaiVthh: dx.loaiVthh,
+            cloaiVthh: dx.cloaiVthh,
+            trangThai: STATUS.BAN_HANH,
+            maDvi: chiCuc.maDvi,
+            loaiGia: 'LG03'
+          }
+          let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+          if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
+            const data = pag.data[0];
+            let donGiaVatQd = 0;
+            if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
+              donGiaVatQd = data.giaQdDcTcdtVat
+            } else {
+              donGiaVatQd = data.giaQdTcdtVat
+            }
+            chiCuc.donGia = donGiaVatQd
+          } else {
+            chiCuc.donGia = null
+          }
+        }
+      }
+    }
+
   }
 }

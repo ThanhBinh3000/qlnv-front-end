@@ -623,10 +623,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async luuVaGuiDuyet(isGuiDuyet) {
-    this.formData.patchValue({
-      ykienThamGia: this.ykienThamGia,
-      ghiChu: this.ghiChu,
-    })
     let pipe = new DatePipe('en-US');
     if (this.formData.value.tgianMthauTime != null) {
       this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMthauTime, 'HH:mm') + ":00"

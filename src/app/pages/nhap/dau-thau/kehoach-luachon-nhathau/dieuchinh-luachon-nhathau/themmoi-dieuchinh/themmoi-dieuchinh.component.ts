@@ -20,6 +20,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import {DatePipe} from "@angular/common";
 import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 
 @Component({
@@ -44,6 +45,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   listCcPhapLy: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  dataChiTieu: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -54,6 +56,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
     private danhMucService: DanhMucService,
     private dauThauGoiThauService: dauThauGoiThauService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, dieuChinhQuyetDinhPdKhlcntService)
     this.formData = this.fb.group({
@@ -208,15 +211,24 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     if (this.id > 0) {
       let data = await this.detail(this.id);
       if (data) {
+        this.helperService.bidingDataInFormGroup(this.formData, data);
         this.formData.patchValue({
           soQdDc: data.soQdDc?.split("/")[0],
           soTtrDc: data.soTtrDc?.split("/")[0]
         })
-        this.danhsachDx = data.hhQdKhlcntDtlList
+        this.danhsachDx = cloneDeep(data.children);
+        let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(data.idQdGoc);
+        if (res.msg == MESSAGE.SUCCESS) {
+          const dataQd = res.data;
+          this.danhsachDxCache = cloneDeep(dataQd.children);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
         this.fileDinhKems = data.fileDinhKems;
         this.listCcPhapLy = data.listCcPhapLy;
         this.fileDinhKemsTtr = data.fileDinhKemsTtr;
-        await this.onChangeSoQdGoc(data.idQdGoc);
+        await this.getDataChiTieu();
+        await this.showDetail(event, this.danhsachDx[0])
       }
     }
   }
@@ -294,7 +306,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
             tgianThienHd: data.tgianThienHd
           })
         }
-        this.showDetail(event, this.danhsachDx[0])
+        await this.getDataChiTieu();
+        await this.showDetail(event, this.danhsachDx[0])
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -450,6 +463,13 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     if (this.formData.value.soTtrDc) {
       body.soTtrDc = this.formData.value.soTtrDc + "/" + this.maTrinh;
     }
+    let pipe = new DatePipe('en-US');
+    this.danhsachDx[this.index].tgianBdauTchuc = this.thongtinDieuchinhComponent.formData.value.tgianBdauTchuc
+    this.danhsachDx[this.index].tgianNhang = this.thongtinDieuchinhComponent.formData.value.tgianNhang
+    this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthau, 'yyyy-MM-dd HH:mm')
+    this.danhsachDx[this.index].tgianDthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthau, 'yyyy-MM-dd HH:mm')
+    this.danhsachDx[this.index].tongTien = this.thongtinDieuchinhComponent.formData.value.tongMucDtDx
+    this.danhsachDx[this.index].children = this.thongtinDieuchinhComponent.listOfData;
     body.children = this.danhsachDx;
     body.id = this.id;
     body.fileDinhKems = this.fileDinhKems;
@@ -551,5 +571,15 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       return !(this.formData.get('trangThai').value == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU"));
     }
     return true;
+  }
+
+  async getDataChiTieu() {
+    let res2 =  await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+      +this.formData.get('nam').value,)
+    if (res2.msg == MESSAGE.SUCCESS) {
+      this.dataChiTieu = res2.data;
+    } else {
+      this.dataChiTieu = null;
+    }
   }
 }
