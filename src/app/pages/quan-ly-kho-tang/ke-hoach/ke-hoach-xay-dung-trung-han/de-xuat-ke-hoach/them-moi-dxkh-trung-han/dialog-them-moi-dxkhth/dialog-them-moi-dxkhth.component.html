@@ -12,7 +12,7 @@
       <div nz-col nzSpan="6">
         <nz-form-item>
           <nz-form-label nzNoColon="true">Khối dự án/công trình</nz-form-label>
-              <nz-select nzAllowClear [(ngModel)]="item.khoi" nzDisabled>
+              <nz-select nzAllowClear [(ngModel)]="item.khoi">
                 <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>

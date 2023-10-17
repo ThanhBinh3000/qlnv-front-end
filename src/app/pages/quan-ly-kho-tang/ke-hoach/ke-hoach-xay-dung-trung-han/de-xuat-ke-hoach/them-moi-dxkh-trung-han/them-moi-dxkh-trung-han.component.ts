@@ -41,7 +41,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   dataTable: any[] = [];
   dataTableRes: any[] = [];
   rowItem: DanhMucKho = new DanhMucKho();
-  rowItemCha: DanhMucKho = new DanhMucKho();
   listNam: any[] = [];
   listFileDinhKem: any[] = [];
   listKhoi: any[] = [];
@@ -446,21 +445,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         }
       });
   }
-
-  themItemcha() {
-    // if (!this.rowItemCha.khoi) {
-    //   this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
-    //   return;
-    // }
-    // if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
-    //   this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
-    //   return;
-    // }
-    this.rowItemCha.idVirtual = uuidv4();
-    this.dataTable.push(this.rowItemCha);
-    this.rowItemCha = new DanhMucKho();
-  }
-
   deleteItem(index: any, y: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -547,15 +531,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       ).value();
     }
     this.expandAll();
-  }
-
-  changeKhoi(event) {
-    if (event) {
-      let result = this.listKhoi.filter(item => item.ma == event);
-      if (result && result.length > 0) {
-        this.rowItemCha.tenKhoi =  result[0].giaTri
-      }
-    }
   }
 
 }

@@ -108,7 +108,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     let body = {
       "type" : "DMK",
       "maDvi" : this.userInfo.MA_DVI,
-      "khoi" : this.dataInput.khoi,
+      "khoi" : null,
       "trangThai" : STATUS.CHUA_THUC_HIEN
     }
     let res = await this.dmKhoService.getAllDmKho(body);
@@ -119,7 +119,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
 
   getDetail() {
     this.item.namKeHoach = dayjs().get('year');
-    this.item.khoi = this.dataInput.khoi;
     if (this.type == 'sua') {
       this.item.maDuAn = this.dataInput.maDuAn;
       this.item.diaDiem = this.dataInput.diaDiem;
