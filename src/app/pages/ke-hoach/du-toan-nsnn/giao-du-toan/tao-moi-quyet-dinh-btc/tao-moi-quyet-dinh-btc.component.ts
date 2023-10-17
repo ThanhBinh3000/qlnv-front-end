@@ -991,8 +991,11 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             return;
         }
 
+        let tenSqd
         if (!this.soQd || !this.soQd?.fileName) {
-            this.soQd.fileName = ''
+            tenSqd = ''
+        } else {
+            tenSqd = this.soQd.fileName
         }
 
         const header = [
@@ -1005,7 +1008,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             { t: 1, b: 1, l: 2, r: 2, val: `Mã phương án BTC` },
             { t: 1, b: 1, l: 3, r: 3, val: `Trạng thái ` },
 
-            { t: 2, b: 2, l: 0, r: 0, val: `${this.soQd.fileName}` },
+            { t: 2, b: 2, l: 0, r: 0, val: `${tenSqd}` },
             { t: 2, b: 2, l: 1, r: 1, val: ` ${this.ngayTao} ` },
             { t: 2, b: 2, l: 2, r: 2, val: ` ${this.maPa} ` },
             { t: 2, b: 2, l: 3, r: 3, val: ` ${this.getStatusName(this.isStatus)} ` },
