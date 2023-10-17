@@ -434,7 +434,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
     changeVb(id: string) {
         this.editCache[id].data.cong = Operator.sum([this.editCache[id].data.ung, this.editCache[id].data.cap]);
         this.editCache[id].data.lkSauLanNay = Operator.sum([this.editCache[id].data.lkCong, this.editCache[id].data.cong]);
-        this.editCache[id].data.soConPhaiNop = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.phatViPham, -this.editCache[id].data.lkSauLanNay]);
+        this.editCache[id].data.soConPhaiNop = Operator.sum([this.editCache[id].data.gtThucHien, -this.editCache[id].data.lkSauLanNay]);
     }
 
     viewDetail(id: string) {

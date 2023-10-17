@@ -71,7 +71,7 @@ export class Vm {
     static readonly CAN_CU_GIA = [
         {
             id: Cvmb.HOP_DONG,
-            tenDm: "Hợp đồng đấu giá",
+            tenDm: "Hợp đồng đấu thầu",
         },
         {
             id: Cvmb.DON_GIA,
