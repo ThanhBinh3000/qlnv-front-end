@@ -468,6 +468,38 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thủ kho</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <input placeholder="" nz-input formControlName="tenThuKho" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> KTV bảo quản</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <input placeholder="" nz-input formControlName="tenKtvBaoQuan" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Kế toán/Kế toán trưởng</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <input placeholder="" nz-input formControlName="tenKeToan" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Lãnh đạo Chi cục</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <input placeholder="" nz-input formControlName="tenLanhDaoChiCuc" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> File đính kèm bảng kê đã ký</nz-form-label>
