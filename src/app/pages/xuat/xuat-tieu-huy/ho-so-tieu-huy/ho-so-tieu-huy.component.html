@@ -12,7 +12,7 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-control>
-            <nz-form-label>Số QĐ thanh lý</nz-form-label>
+            <nz-form-label>Số QĐ tiêu hủy</nz-form-label>
             <nz-form-item>
               <input nz-input formControlName="soQdScSr" />
             </nz-form-item>
@@ -86,16 +86,16 @@
   <div class="group-button">
     <h3 class="text-uppercase">Thẩm định danh sách hàng dự trữ quốc gia cần tiêu hủy</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-do" (click)="deleteMulti('XHDTQG_XTH_HSTH_XOA')">
+      <button type="button" class="btn btn-do" *ngIf="showDelete()" (click)="deleteMulti()">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData('XHDTQG_XTH_HSTH_EXP')">
+      <button type="button" class="btn btn-sub" *ngIf="showExport()" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
-              (click)="redirectCreate('XHDTQG_XTH_HSTH_THEM')">
+      <button type="button" class="btn btn-main" *ngIf="userService.isCuc() && showCreate()"
+              (click)="redirectCreate()">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Tạo tờ trình thẩm định</span>
       </button>
@@ -196,10 +196,10 @@
           <a (click)="redirectDetail(data.id)">
             <span class="icon htvbdh_eye"></span>
           </a>
-          <a *ngIf="showEdit(data)" (click)="redirectDetail(data.id,'XHDTQG_XTH_HSTH_THEM')">
+          <a *ngIf="showEdit(data)" (click)="redirectDetail(data.id)">
             <span class="fa fa-pencil"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTH_HSTH_XOA')">
+          <a *ngIf="showDelete(data)" (click)="delete(data)">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>

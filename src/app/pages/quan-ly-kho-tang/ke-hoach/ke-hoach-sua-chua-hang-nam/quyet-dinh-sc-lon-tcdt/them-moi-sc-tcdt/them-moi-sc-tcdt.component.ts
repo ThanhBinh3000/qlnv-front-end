@@ -84,8 +84,8 @@ export class ThemMoiScTcdtComponent implements OnInit {
       maToTrinh: [null],
       soQuyetDinh: [null],
       ngayKyQd: [null],
-      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
-      tenTrangThai: ["Đang nhập dữ liệu"],
+      trangThai: [STATUS.DU_THAO],
+      tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
       loaiTmdt: ['DUOI15TY']
     });
@@ -176,7 +176,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   setValidators() {
     this.helperService.removeValidators(this.formData);
-    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
+    if (this.formData.value.trangThai == STATUS.DU_THAO) {
       this.formData.controls["maToTrinh"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoTt"].setValidators([Validators.required]);
     }
@@ -253,7 +253,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DANG_NHAP_DU_LIEU : {
+            case STATUS.DU_THAO : {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }

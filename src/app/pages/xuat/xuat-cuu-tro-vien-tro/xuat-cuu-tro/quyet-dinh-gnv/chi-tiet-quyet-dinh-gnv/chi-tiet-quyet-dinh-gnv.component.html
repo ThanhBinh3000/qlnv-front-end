@@ -184,10 +184,10 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
-              {{formData.value.type ==="XC"?"Thời hạn xuất CT, VT" : "Thờigian giao nhận hàng"}}
+              {{formData.value.type ==="XC"?"Thời hạn xuất CT, VT" : "Thời gian giao nhận hàng"}}
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <nz-date-picker class="search__input" formControlName="thoiGianGiaoNhan" [nzDisabled]="true"
+              <nz-date-picker class="search__input" formControlName="thoiGianGiaoNhan" [nzDisabled]="isView"
                 [nzFormat]="globals.dateFormat">
               </nz-date-picker>
             </nz-form-control>
@@ -631,10 +631,11 @@
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương/cơ quan/đơn vị nhận cứu trợ
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'">
-              <nz-select nzAllowClear formControlName="noiDungDx" [nzDisabled]="true" nzPlaceHolder="Chọn địa danh"
+              <!-- <nz-select nzAllowClear formControlName="noiDungDx" [nzDisabled]="true" nzPlaceHolder="Chọn địa danh"
                 nzShowSearch>
                 <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"></nz-option>
-              </nz-select>
+              </nz-select> -->
+              <input nz-input formControlName="noiDungDx" readonly />
             </nz-form-control>
           </nz-form-item>
           <ng-container>

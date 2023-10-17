@@ -28,10 +28,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   @Input()
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
-
   @ViewChild('nhapXuatLt') keHoachNhapXuatLtComponent: KeHoachNhapXuatLtComponent;
-
-
   userInfo: UserLogin;
   formData: FormGroup;
   maQd: string = '/QĐ-BTC';
@@ -86,6 +83,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   dtMuaLuongThuc: number = 0;
   dtMuaVatTu: number = 0;
   dtMuaMuoi: number = 0;
+  yearCurrentView: number = 0;
 
 
   constructor(
@@ -122,7 +120,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         this.getDataDetail(this.idInput),
         this.loadDanhMucHang(),
       ]);
-    if (this.idInput == 0) {
+    if (!this.idInput) {
       await this.loadQdTtcpGiaoBoNganh(dayjs().get('year'));
     }
     this.sumAllDataTable();
@@ -142,14 +140,13 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
 
   async loadQdTtcpGiaoBoNganh(nam) {
     const res = await this.quyetDinhTtcpService.chiTietTheoNam(nam);
-    debugger
     if (res.msg == MESSAGE.SUCCESS) {
       // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
       this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
-      this.muaTangList = cloneDeep(this.dataQdTtcpGiaoBTC?.muaTangList ? this.dataQdTtcpGiaoBTC.muaTangList : []);
-      this.xuatGiamList = cloneDeep(this.dataQdTtcpGiaoBTC?.xuatGiamList ? this.dataQdTtcpGiaoBTC.xuatGiamList : []);
-      this.xuatBanList = cloneDeep(this.dataQdTtcpGiaoBTC?.xuatBanList ? this.dataQdTtcpGiaoBTC.xuatBanList : []);
-      this.luanPhienList = cloneDeep(this.dataQdTtcpGiaoBTC?.luanPhienList ? this.dataQdTtcpGiaoBTC.luanPhienList : []);
+      this.muaTangList = this.dataQdTtcpGiaoBTC?.muaTangList ? cloneDeep(this.dataQdTtcpGiaoBTC.muaTangList) : [];
+      this.xuatGiamList = this.dataQdTtcpGiaoBTC?.xuatGiamList ? cloneDeep(this.dataQdTtcpGiaoBTC.xuatGiamList) : [];
+      this.xuatBanList = this.dataQdTtcpGiaoBTC?.xuatBanList ? cloneDeep(this.dataQdTtcpGiaoBTC.xuatBanList) : [];
+      this.luanPhienList = this.dataQdTtcpGiaoBTC?.luanPhienList ? cloneDeep(this.dataQdTtcpGiaoBTC.luanPhienList) : [];
       //Chi tăng,xuat giam, xuat ban vật tư ttcp giao bộ tài chính
       this.chiTang = res.data.listChiTangToanBoNganh.find(item => item.maBn == '01' && item.tenBn == 'Vật tư, thiết bị').tongSo;
       this.xuatBan = this.dataQdTtcpGiaoBTC.ttXuatBan;
@@ -163,6 +160,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhBtcTcdtService.getDetail(id);
       const data = res.data;
+      this.yearCurrentView = data.namQd;
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
@@ -196,10 +194,9 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     }
   }
 
-  changeNam() {
-    this.yearSelected = this.formData.get('namQd').value;
-    if (!this.idInput) {
-      this.loadQdTtcpGiaoBoNganh(this.yearSelected);
+  changeNam($event) {
+    if (!this.yearCurrentView || (this.yearCurrentView && this.yearCurrentView != $event)) {
+      this.loadQdTtcpGiaoBoNganh($event);
     }
   }
 

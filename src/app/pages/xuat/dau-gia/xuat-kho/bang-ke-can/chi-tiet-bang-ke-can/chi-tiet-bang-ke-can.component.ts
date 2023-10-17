@@ -68,16 +68,16 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, bangKeCanService);
     this.formData = this.fb.group(
       {
-        id: [''],
+        id: [],
         nam: [dayjs().get('year'), [Validators.required]],
         maDvi: [''],
         maQhNs: [''],
         soBangKeHang: [''],
         ngayLapBangKe: [''],
-        idQdNv: [''],
+        idQdNv: [],
         soQdNv: [''],
         ngayKyQdNv: [''],
-        idHopDong: [''],
+        idHopDong: [],
         soHopDong: [''],
         ngayKyHopDong: [''],
         maDiemKho: [''],
@@ -87,12 +87,12 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maLoKho: [''],
         loaiHinhKho: [''],
         nguoiGiamSat: [''],
-        idThuKho: [''],
-        idLanhDaoChiCuc: [''],
-        idPhieuXuatKho: [''],
+        idThuKho: [],
+        idLanhDaoChiCuc: [],
+        idPhieuXuatKho: [],
         soPhieuXuatKho: [''],
         ngayXuatKho: [''],
-        idPhieuKiemNghiem: [''],
+        idPhieuKiemNghiem: [],
         soPhieuKiemNghiem: [''],
         ngayKiemNghiemMau: [''],
         tenNguoiGiao: [''],
@@ -104,23 +104,15 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         cloaiVthh: [''],
         tenHangHoa: [''],
         donViTinh: [''],
-        tongTrongLuongBi: [''],
-        tongTrongLuongCaBi: [''],
-        tongTrongTruBi: [''],
+        tongTrongLuongBi: [],
+        tongTrongLuongCaBi: [],
+        tongTrongTruBi: [],
         loaiHinhNx: [''],
         kieuNhapXuat: [''],
         soLuong: [''],
         donGia: [''],
         trangThai: [''],
         lyDoTuChoi: [''],
-        ngayTao: [''],
-        nguoiTaoId: [''],
-        ngaySua: [''],
-        nguoiSuaId: [''],
-        ngayGuiDuyet: [''],
-        nguoiGuiDuyetId: [''],
-        ngayPduyet: [''],
-        nguoiPduyetId: [''],
         tenDvi: [''],
         tenDiemKho: [''],
         tenNhaKho: [''],
@@ -259,7 +251,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tenCloaiVthh: null,
         tenHangHoa: null,
         donViTinh: null,
+        tongTrongLuongBi: null,
+        tongTrongLuongCaBi: null,
+        tongTrongTruBi: null,
       });
+      this.dataTable = [];
     }
   }
 
@@ -362,7 +358,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tenCloaiVthh: null,
         tenHangHoa: null,
         donViTinh: null,
+        tongTrongLuongBi: null,
+        tongTrongLuongCaBi: null,
+        tongTrongTruBi: null,
       })
+      this.dataTable = [];
     }
   }
 

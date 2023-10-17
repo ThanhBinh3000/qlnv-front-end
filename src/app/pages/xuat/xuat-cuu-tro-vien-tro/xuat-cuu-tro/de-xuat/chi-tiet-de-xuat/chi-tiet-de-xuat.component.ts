@@ -47,6 +47,9 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   listChungLoaiHangHoa: any[] = [];
   listMucDichXuat: any[] = [];
   templateName: string = "Đề xuất cứu trợ, viện trợ";
+  listDviNhan: any[] = [];
+  listQuocGia: any[] = [];
+  listDiaDanhHanhChinh: any[] = [];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -153,6 +156,22 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.formData.controls["tongSoLuongNhuCauXuat"].setValue(tongSoLuongNhuCauXuat)
 
     });
+    this.formData.controls["loaiNhapXuat"].valueChanges.subscribe(async (value) => {
+      if (value === "Xuất cứu trợ") {
+        if (Array.isArray(this.listDiaDanhHanhChinh) && this.listDiaDanhHanhChinh.length <= 0) {
+          await Promise.all([this.loadDsDiaDanh(), this.loadDsDonViNhanCTVT("DON_VI_NHAN_CTVT")]);
+        }
+        this.listDiaDanh = [...this.listDiaDanhHanhChinh, ...this.listDviNhan]
+
+      } else if (value === "Xuất viện trợ") {
+        if (Array.isArray(this.listQuocGia) && this.listQuocGia.length <= 0) {
+        } await this.loadDsQuocGiaNhanCTVT("QUOC_GIA");
+
+        this.listDiaDanh = [...this.listQuocGia]
+      } else {
+        this.listDiaDanh = [];
+      }
+    })
   }
 
   async ngOnInit() {
@@ -161,7 +180,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.maHauTo = '/ĐXCTVT-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsDonVi(),
-        this.loadDsDiaDanh(),
+        // this.loadDsDiaDanh(),
         this.loadDsVthh(),
         this.loadDsMucDichXuat()
       ]);
@@ -292,6 +311,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       await this.changeMaDviDtl(this.userInfo.MA_DVI);
     }
     this.modalChiTiet = true;
+
+    this.listDiaDanh.forEach(f => {
+      if (!this.isVthhVatuThietBi()) {
+        f.disabled = this.formData.value.deXuatPhuongAn.some(s => s.noiDung === f.ten && (!data?.noiDung || f.ten !== data.noiDung));
+      } else {
+        delete f.disabled;
+      }
+    });
   }
 
   async luuPhuongAn() {
@@ -416,7 +443,24 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     };
     let res = await this.danhMucService.loadDsDiaDanhByCap(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDiaDanh = res.data;
+      // this.listDiaDanh = res.data;
+      this.listDiaDanhHanhChinh = Array.isArray(res.data) ? res.data : [];
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+  async loadDsDonViNhanCTVT(loai) {
+    let res = await this.danhMucService.danhMucChungGetAll(loai);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDviNhan = Array.isArray(res.data) ? res.data.map(f => ({ ...f, ten: f.giaTri })) : [];
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+  async loadDsQuocGiaNhanCTVT(loai) {
+    let res = await this.danhMucService.danhMucChungGetAll(loai);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listQuocGia = Array.isArray(res.data) ? res.data.filter(f => f.ma !== "VN").map(f => ({ ...f, ten: f.giaTri })) : [];
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -529,8 +573,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
     }
     this.formData.patchValue({ deXuatPhuongAn: [] });
-    if (this.userService.isCuc && !this.formData.value.id && this.formData.value.deXuatPhuongAn.length <= 0) {
+    if (this.userService.isCuc && this.formData.value.deXuatPhuongAn.length <= 0 && [TEN_LOAI_VTHH.GAO, TEN_LOAI_VTHH.THOC, TEN_LOAI_VTHH.MUOI].includes($event)) {
       await this.checkTonKhoDonViTaoDeXuat();
+    }
+    if (![TEN_LOAI_VTHH.GAO, TEN_LOAI_VTHH.THOC, TEN_LOAI_VTHH.MUOI].includes($event)) {
+      this.formData.patchValue({ tonKhoDvi: 0 })
     }
   }
 
@@ -585,6 +632,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.formDataDtl.patchValue({
         soLuongConThieu: soLuongConThieu,
         soLuongChuyenCapThoc: soLuongConThieu
+      });
+    } else {
+      this.formDataDtl.patchValue({
+        soLuongConThieu: 0,
+        soLuongChuyenCapThoc: 0
       });
     }
   }

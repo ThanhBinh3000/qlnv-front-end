@@ -27,6 +27,9 @@ import {
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 import {PREVIEW} from "../../../../../../../constants/fileType";
 import printJS from "print-js";
+import {
+  TongHopPhuongAnGiaService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
@@ -99,6 +102,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private uploadFileService: UploadFileService,
     private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
+    private tongHopPagService: TongHopPhuongAnGiaService,
   ) {
     this.formData = this.fb.group(
       {
@@ -321,31 +325,33 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.dataTableTtThamKhao.forEach(item => {
       item.id = null;
     })
+
+    this.updateEditCache('ttc')
+    this.updateEditCache('ccXdg')
+    this.updateEditCache('ppxdg')
   }
 
 
   async loadDsDxCanSua() {
     this.spinner.show();
-
-    let body = {
-      namKh: this.formData.value.namKeHoach,
-      type: this.type,
-      pagType: this.loaiVthh,
-      maDvi: this.userInfo.MA_DVI,
-      paggingReq: {
-        limit: 99999,
-        page: 0,
+    this.listDxCanSua = [];
+    try {
+      let body = {
+        namKh: this.formData.value.namKeHoach,
+        type: this.type,
+        loaiDeXuat: "02",
+        maDvi: this.userInfo.MA_DVI,
+        pagType: this.loaiVthh
       }
-    }
-    let res = await this.giaDeXuatGiaService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listDxCanSua = data.content;
-      if (this.listDxCanSua && this.listDxCanSua.length > 0) {
-        this.listDxCanSua = this.listDxCanSua.filter(item => item.trangThai == STATUS.DA_DUYET_CBV);
+      let res = await this.tongHopPagService.loadToTrinhDeXuat(body);
+      if (res.msg = MESSAGE.SUCCESS) {
+        this.listDxCanSua = res.data;
       }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
-    this.spinner.hide();
   }
 
   deleteItem(index: number, page: string) {
