@@ -77,7 +77,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       diaChi: [null],
       soLuongChiTieu: [null],
       soLuongKhDd: [null],
-      donGia: [null, [Validators.required]],
+      donGia: [null],
       donGiaVat: [null],
       tongSoLuong: [null, [Validators.required]],
       tongThanhTien: [null],
