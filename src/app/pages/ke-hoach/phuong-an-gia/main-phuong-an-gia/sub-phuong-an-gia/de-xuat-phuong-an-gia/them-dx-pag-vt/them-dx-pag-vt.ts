@@ -339,7 +339,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       let body = {
         namKh: this.formData.value.namKeHoach,
         type: this.type,
-        loaiDeXuat: "02",
+        loaiDeXuat: "01",
         maDvi: this.userInfo.MA_DVI,
         pagType: this.loaiVthh
       }

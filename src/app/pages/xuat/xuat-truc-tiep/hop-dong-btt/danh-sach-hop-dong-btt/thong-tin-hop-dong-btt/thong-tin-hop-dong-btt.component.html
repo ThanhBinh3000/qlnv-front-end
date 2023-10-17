@@ -5,17 +5,23 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub btn-sm waves-effect xanh-nhat"
-              (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký hợp đồng ?','Bạn đã ký hợp đồng thành công!')"
-              *ngIf="formData.value.trangThai == STATUS.DU_THAO && !userService.isTongCuc()">
-        <i class="icon htvbdh_trinh"></i>
-        <span>Ký</span>
+      <button *ngIf="idHopDong" type="button" class="btn btn-sub" (click)="preview(idHopDong)">
+        <i class="icon htvbdh_totrinh"></i>
+        <span> Xem trước </span>
       </button>
-      <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
-              *ngIf="formData.value.trangThai == STATUS.DU_THAO && !userService.isTongCuc() ">
-        <i class="icon  htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
-      </button>
+      <ng-container>
+        <button class="btn btn-sub btn-sm waves-effect xanh-nhat"
+                (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký hợp đồng ?','Bạn đã ký hợp đồng thành công!')"
+                *ngIf="formData.value.trangThai == STATUS.DU_THAO && !userService.isTongCuc()">
+          <i class="icon htvbdh_trinh"></i>
+          <span>Ký</span>
+        </button>
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
+                *ngIf="formData.value.trangThai == STATUS.DU_THAO && !userService.isTongCuc() ">
+          <i class="icon  htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+      </ng-container>
     </div>
   </nz-affix>
   <div class="bg-trang">
@@ -1389,3 +1395,20 @@
   <app-phu-luc-btt [isViewPhuLuc]="isViewPhuLuc" [idPhuLuc]="idPhuLuc" [loaiVthh]="loaiVthh"
                    (showListEvent)="showChiTiet()" [objHopDongHdr]="objHopDongHdr"></app-phu-luc-btt>
 </ng-container>
+<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview"
+          nzTitle="HỢP ĐỒNG BÁN TRỰC TIẾP" nzWidth="100%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

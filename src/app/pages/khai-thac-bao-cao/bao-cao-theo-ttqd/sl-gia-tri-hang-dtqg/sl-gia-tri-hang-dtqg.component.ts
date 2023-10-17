@@ -127,6 +127,9 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
   }
 
   clearRequired(){
+    this.formData.patchValue({
+      quy: null
+    })
     this.formData.controls["quy"].clearValidators()
     this.formData.controls["quy"].updateValueAndValidity();
   }

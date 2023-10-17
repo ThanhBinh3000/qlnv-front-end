@@ -28,6 +28,8 @@ import {
 import {chain, cloneDeep} from 'lodash';
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {FileDinhKem} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
 
 @Component({
   selector: 'app-them-moi-qd-giao-nv-xuat-btt',
@@ -466,6 +468,30 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       return 0;
     }
     return this.dataTable.reduce((sum, item) => sum + (item[column] || 0), 0);
+  }
+
+  async preview(id) {
+    await this.quyetDinhNvXuatBttService.preview({
+      tenBaoCao: 'Quyết định kết quả bán trực tiếp',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidForm() {
