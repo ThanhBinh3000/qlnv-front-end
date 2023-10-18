@@ -15,8 +15,8 @@
         <i class='fa fa-arrow-left'></i>
         <span>Quay lại</span>
       </button>
-      <button class='btn btn-sub ml-2' (click)='pheDuyet()'
-              *ngIf="(id && id > 0) && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV)  && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCC_THEM')">
+      <button class='btn btn-sub ml-2' (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV)  && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCC_THEM')">
         <i class='icon htvbdh_trinh'></i>
         <span>Đã ký</span>
       </button>
@@ -57,7 +57,7 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan='4'>
-          <nz-form-label>Số công văn</nz-form-label>
+          <nz-form-label>Số công văn đề xuất của các Chi cục</nz-form-label>
           <nz-form-control [nzErrorTip]='error'>
             <nz-select [nzDisabled]='isTongHop' nzMode='multiple' nzPlaceHolder='Chọn số công văn' nzAllowClear
                        formControlName='listSoCv'>

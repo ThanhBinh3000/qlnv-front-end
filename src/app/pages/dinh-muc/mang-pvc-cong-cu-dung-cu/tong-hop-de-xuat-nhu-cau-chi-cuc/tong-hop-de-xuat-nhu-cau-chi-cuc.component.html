@@ -36,7 +36,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>DANH SÁCH ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CÔNG CỤ DỤNG CỤ CỦA CỤC 111</h3>
+      <h3>DANH SÁCH ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CÔNG CỤ DỤNG CỤ CỦA CỤC</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
                 *ngIf="userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCC_XOA')">
@@ -72,7 +72,6 @@
           <th>Trích yếu</th>
           <th width="130px">Số QĐ giao chỉ tiêu</th>
           <th width="130px">Số QĐ mua sắm của TC</th>
-          <th width="130px">Số TB từ chối của TC</th>
           <th width="130px">Trạng thái</th>
           <th width="120px">Hành động</th>
         </tr>
@@ -121,12 +120,6 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tbTcTc"
-                     (input)="filterInTable('tbTcTc',filterTable.tbTcTc)"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
                          (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
                 <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
@@ -150,7 +143,6 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.soQdGiaoCt }}</td>
           <td>{{ data.qdMuaSam }}</td>
-          <td>{{ data.soQdGiaoCt }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCC_XEM')
