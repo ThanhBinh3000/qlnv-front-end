@@ -89,7 +89,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     let body = {
       "type" : "DMK",
       "maDvi" : this.userInfo.MA_DVI,
-      "khoi" : null,
       "trangThai" : STATUS.CHUA_THUC_HIEN
     }
     let res = await this.dmKhoService.getAllDmKho(body);
@@ -99,9 +98,9 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   }
 
   getDetail() {
-    this.item.namKeHoach = dayjs().get('year');
     if (this.type == 'sua') {
       this.item.maDuAn = this.dataInput.maDuAn;
+      this.item.namKeHoach = this.dataInput.namKeHoach;
       this.item.khoi = this.dataInput.khoi;
       this.item.diaDiem = this.dataInput.diaDiem;
       this.item.loaiDuAn = this.dataInput.loaiDuAn;
@@ -115,18 +114,17 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.item.ncKhNstw = this.dataInput.ncKhNstw;
       this.item.tgKhoiCong = this.dataInput.tgKhoiCong;
       this.item.tgHoanThanh = this.dataInput.tgHoanThanh;
-      this.item.ghiChu = this.dataInput.ghiChu;
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
     }
   }
 
   changeDmucDuAn(event: any) {
     if (event) {
-      let result = this.listDmKho.filter(item => item.maDuAn == event)
-      if (result && result.length > 0) {
-        this.item = result[0];
+      let result = this.listDmKho.find(item => item.maDuAn == event)
+      if (result) {
+        console.log(result,111)
+        this.item = result;
         this.item.tgKcHt = this.item.tgKhoiCong + ' - ' + this.item.tgHoanThanh
-        this.item.namKeHoach = dayjs().get('year')
       }
     }
   }

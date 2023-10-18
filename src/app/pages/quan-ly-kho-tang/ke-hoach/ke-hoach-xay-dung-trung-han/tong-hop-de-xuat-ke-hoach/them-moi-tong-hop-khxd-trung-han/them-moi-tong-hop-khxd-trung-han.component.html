@@ -245,7 +245,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'NỘI DUNG QUYẾT ĐỊNH'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHI TIẾT'" [nzActive]="true">
         <nz-table #dataTbl class="nowrap mt-16 table-chi-tiet pd-10" [nzData]="listDx" nzBordered>
           <thead>
           <tr>
@@ -371,7 +371,7 @@
           </div>
           <div nz-col nzSpan="12">
             <nz-collapse nzAccordion *ngIf="formData.value.trangThai != STATUS.DU_THAO">
-              <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
+              <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA TỔNG CỤC DTNN'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                   <div>
     <span class="text-right">

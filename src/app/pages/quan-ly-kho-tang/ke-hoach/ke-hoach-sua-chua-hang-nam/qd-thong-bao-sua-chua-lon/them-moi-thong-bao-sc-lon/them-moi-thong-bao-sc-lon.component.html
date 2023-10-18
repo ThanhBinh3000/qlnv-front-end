@@ -119,6 +119,15 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" >Nội dung quyết định</nz-form-label>
+                <nz-form-control >
+                   <textarea id="trichYeu" formControlName="noiDung" rows="3" class="search__input" nz-input
+                             [readonly]="isViewDetail"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
