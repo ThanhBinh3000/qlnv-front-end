@@ -181,11 +181,11 @@
           <td>{{ data.soQd }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td></td>
-          <td></td>
-          <td>{{data.maThongBao}}</td>
-          <td>{{ data.tenHthucDgia }}</td>
-          <td>{{ data.tenPthucDgia }}</td>
+          <td>{{ data.xhTlToChucHdr?.ngayTao | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.xhTlToChucHdr?.soQdTl }}</td>
+          <td>{{ data.maThongBao}}</td>
+          <td>{{ data.xhTlToChucHdr?.tenHthucDgia }}</td>
+          <td>{{ data.xhTlToChucHdr?.tenPthucDgia }}</td>
           <td>{{ data.thongBaoKhongThanh }}</td>
           <td>{{ data.soBienBan}}</td>
           <td>{{ data.tenTrangThai }}</td>
