@@ -39,9 +39,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
   STATUS = STATUS;
   dataTable: any[] = [];
-  dataTableRes: any[] = [];
+  dataTableReq: any[] = [];
   rowItem: DanhMucKho = new DanhMucKho();
-  rowItemCha: DanhMucKho = new DanhMucKho();
   listNam: any[] = [];
   listFileDinhKem: any[] = [];
   listKhoi: any[] = [];
@@ -120,19 +119,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
   }
 
-  checkExitsData(item, dataItem): boolean {
-    let rs = false;
-    if (dataItem && dataItem.length > 0) {
-      dataItem.forEach(it => {
-        if (it.tenKhoi == item.tenKhoi) {
-          rs = true;
-          return;
-        }
-      });
-    }
-    return rs;
-  }
-
   quayLai() {
     this.showListEvent.emit();
   }
@@ -181,10 +167,9 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    this.conVertTreToList();
     let body = this.formData.value;
     body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd : this.maQd;
-    body.chiTietsReq = this.dataTableRes;
+    body.chiTietsReq = this.dataTableReq;
     body.maDvi = this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
     body.fileDinhKems = this.listFileDinhKem;
@@ -393,9 +378,9 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           namKeHoach: data.namKeHoach
         });
       this.listFileDinhKem = data.fileDinhKems;
-      this.dataTable = data.chiTiets;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach(item => {
+      this.dataTableReq = data.chiTiets;
+      if (this.dataTableReq && this.dataTableReq.length > 0) {
+        this.dataTableReq.forEach(item => {
           item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
         });
       }
@@ -411,7 +396,22 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
 
-  themMoiItem(data: any, type: string, idx: number, list?: any) {
+  checkExitsData(item : any, table: any[]): boolean {
+    let rs = false;
+    if (table && table.length > 0) {
+      table.forEach(it => {
+        if (it.maDuAn == item.maDuAn) {
+          rs = true;
+          return;
+        }
+      });
+    }
+    return rs;
+  }
+
+
+  themMoiItem(type: string, data? : any) {
+    console.log(data,6666)
       let modalQD = this.modal.create({
         nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
         nzContent: DialogThemMoiDxkhthComponent,
@@ -421,7 +421,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         nzStyle: {top: "200px"},
         nzFooter: null,
         nzComponentParams: {
-          dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
           page: "DXTH"
@@ -429,39 +428,29 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       });
       modalQD.afterClose.subscribe(async (detail) => {
         if (detail) {
-          if (!data.dataChild) {
-            data.dataChild = [];
-          }
-          if (!data.idVirtual) {
-            data.idVirtual = uuidv4();
-          }
           if (type == "them") {
-            data.dataChild.push(detail);
+            if (this.checkExitsData(detail , this.dataTableReq)) {
+              this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục dự án");
+              this.spinner.hide();
+              return;
+            }
+            detail.idVirtual = uuidv4();
+            this.dataTableReq = [...this.dataTableReq, detail];
           } else {
-            if (list) {
-              Object.assign(list.dataChild[idx], detail);
+            if (data) {
+              const idx = this.dataTableReq.findIndex(item => item.maDuAn = data.maDuAn);
+              if (idx > -1) {
+                Object.assign(this.dataTableReq[idx], detail);
+              }
             }
           }
-          this.expandAll();
+          await this.convertListData();
         }
       });
   }
 
-  themItemcha() {
-    // if (!this.rowItemCha.khoi) {
-    //   this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
-    //   return;
-    // }
-    // if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
-    //   this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
-    //   return;
-    // }
-    this.rowItemCha.idVirtual = uuidv4();
-    this.dataTable.push(this.rowItemCha);
-    this.rowItemCha = new DanhMucKho();
-  }
 
-  deleteItem(index: any, y: any) {
+  deleteItem(data) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -472,28 +461,16 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          if (this.dataTable && this.dataTable.length > 0 && this.dataTable[index]) {
-            if (this.dataTable[index] && this.dataTable[index].dataChild && this.dataTable[index].dataChild[y]) {
-              this.dataTable[index].dataChild.splice(y, 1);
-            }
+          const idx = this.dataTableReq.findIndex(item => item.maDuAn == data.maDuAn);
+          if (idx > -1) {
+            this.dataTableReq.splice(idx,1);
+            this.convertListData();
           }
         } catch (e) {
           console.log("error", e);
         }
       }
     });
-  }
-
-  conVertTreToList() {
-    let arr = [];
-    this.dataTable.forEach(item => {
-      if (item.dataChild && item.dataChild.length > 0) {
-        item.dataChild.forEach(data => {
-          arr.push(data);
-        });
-      }
-    });
-    this.dataTableRes = arr;
   }
 
   sumSoLuong(data: any, row: string, type?: any) {
@@ -507,9 +484,9 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         sl = sum;
       }
     } else {
-      if (this.dataTable && this.dataTable.length > 0) {
+      if (this.dataTableReq && this.dataTableReq.length > 0) {
         let sum = 0;
-        this.dataTable.forEach(item => {
+        this.dataTableReq.forEach(item => {
           sum += this.sumSoLuong(item, row);
         });
         sl = sum;
@@ -518,28 +495,9 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     return sl;
   }
 
-  deleteItemCha(idx) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn xóa?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable.splice(idx, 1);
-        } catch (e) {
-          console.log("error", e);
-        }
-      }
-    });
-  }
-
-  convertListData() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy("tenKhoi").map((value, key) => ({
+  async convertListData() {
+    if (this.dataTableReq && this.dataTableReq.length > 0) {
+      this.dataTable = chain(this.dataTableReq).groupBy("tenKhoi").map((value, key) => ({
           tenKhoi: key,
           dataChild: value,
           idVirtual: uuidv4()
@@ -548,14 +506,4 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
     this.expandAll();
   }
-
-  changeKhoi(event) {
-    if (event) {
-      let result = this.listKhoi.filter(item => item.ma == event);
-      if (result && result.length > 0) {
-        this.rowItemCha.tenKhoi =  result[0].giaTri
-      }
-    }
-  }
-
 }

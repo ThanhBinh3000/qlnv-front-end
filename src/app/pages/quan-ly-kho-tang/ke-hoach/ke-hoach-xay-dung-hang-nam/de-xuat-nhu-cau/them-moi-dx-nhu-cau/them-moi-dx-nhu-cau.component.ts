@@ -41,8 +41,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
   listQdKhTh: any[] = [];
   dataTable: any[] = [];
-  dataTableRes: any[] = [];
-  rowItemCha: DanhMucKho = new DanhMucKho();
+  dataTableReq: any[] = [];
   listFileDinhKem: any[] = [];
   listKhoi: any[] = [];
   listLoaiDuAn: any[] = [];
@@ -180,7 +179,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         tenTrangThai: data.tenTrangThai
       });
       this.fileDinhKem = data.fileDinhKems;
-      this.dataTableRes = data.ctiets;
+      this.dataTableReq = data.ctiets;
       await this.convertListToTree();
     }
   }
@@ -213,7 +212,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     body.maDvi = this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi;
     body.soCongVan = body.soCongVan ?  body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
-    body.ctiets = this.dataTableRes;
+    body.ctiets = this.dataTableReq;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
     if(isOther){
       await super.saveAndSend(body, trangThai,'Bạn có muốn gửi duyệt đề xuất này ?','Gửi duyệt thành công.');
@@ -294,11 +293,11 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     return sl;
   }
 
-  checkExitsData(item, dataItem): boolean {
+  checkExitsData(item : any, table: any[]): boolean {
     let rs = false;
-    if (dataItem && dataItem.length > 0) {
-      dataItem.forEach(it => {
-        if (it.tenKhoi == item.tenKhoi) {
+    if (table && table.length > 0) {
+      table.forEach(it => {
+        if (it.maDuAn == item.maDuAn) {
           rs = true;
           return;
         }
@@ -307,7 +306,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     return rs;
   }
 
-  themMoiItem(data: any, type: string, idx: number, list?: any) {
+  themMoiItem(type: string, data? : any) {
     if (!this.isViewDetail) {
       let modalQD = this.modal.create({
         nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
@@ -318,7 +317,6 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         nzStyle: { top: "200px" },
         nzFooter: null,
         nzComponentParams: {
-          dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
           page : "DXNC"
@@ -326,20 +324,23 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       });
       modalQD.afterClose.subscribe(async (detail) => {
         if (detail) {
-          if (!data.dataChild) {
-            data.dataChild = [];
-          }
-          if (!data.idVirtual) {
-            data.idVirtual = uuidv4();
-          }
           if (type == "them") {
-            data.dataChild.push(detail);
+            if (this.checkExitsData(detail , this.dataTableReq)) {
+              this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục dự án");
+              this.spinner.hide();
+              return;
+            }
+            detail.idVirtual = uuidv4();
+            this.dataTableReq = [...this.dataTableReq, detail];
           } else {
-            if (list) {
-              Object.assign(list.dataChild[idx], detail);
+            if (data) {
+              const idx = this.dataTableReq.findIndex(item => item.maDuAn = data.maDuAn);
+              if (idx > -1) {
+                Object.assign(this.dataTableReq[idx], detail);
+              }
             }
           }
-          this.expandAll();
+          await this.convertListToTree();
         }
       });
     }
@@ -362,7 +363,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     }
   }
 
-  deleteItemCha(idx) {
+  deleteItem(data) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -373,47 +374,16 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(idx, 1);
-        } catch (e) {
-          console.log("error", e);
-        }
-      }
-    });
-  }
-
-  deleteItem(index: any, y: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn xóa?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          if (this.dataTable && this.dataTable.length > 0 && this.dataTable[index]) {
-            if (this.dataTable[index] && this.dataTable[index].dataChild && this.dataTable[index].dataChild[y]) {
-              this.dataTable[index].dataChild.splice(y, 1);
-            }
+          const idx = this.dataTableReq.findIndex(item => item.maDuAn == data.maDuAn);
+          if (idx > -1) {
+            this.dataTableReq.splice(idx,1);
+            this.convertListToTree();
           }
         } catch (e) {
           console.log("error", e);
         }
       }
     });
-  }
-
-  conVertTreToList() {
-    let arr = [];
-    this.dataTable.forEach(item => {
-      if (item.dataChild && item.dataChild.length > 0) {
-        item.dataChild.forEach(data => {
-          arr.push(data);
-        });
-      }
-    });
-    this.dataTableRes = arr;
   }
 
   async openDialogToTrinh() {
@@ -447,7 +417,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   }
 
   convertListToTree() {
-    this.dataTable = chain(this.dataTableRes).groupBy("tenKhoi")
+    this.dataTable = chain(this.dataTableReq).groupBy("tenKhoi")
       .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
     this.expandAll();
@@ -458,38 +428,11 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.dataTable = [];
       let detail = res.data;
-      this.dataTableRes = detail.ctRes?.ctietList;
-      if (this.dataTableRes && this.dataTableRes.length > 0) {
-        this.dataTableRes = this.dataTableRes.filter(item => item.maDvi == this.userInfo.MA_DVI);
+      this.dataTableReq = detail.ctRes?.ctietList;
+      if (this.dataTableReq && this.dataTableReq.length > 0) {
+        this.dataTableReq = this.dataTableReq.filter(item => item.maDvi == this.userInfo.MA_DVI);
       }
       this.convertListToTree() ;
-    }
-  }
-
-  themItemcha() {
-    if (!this.rowItemCha.khoi) {
-      this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
-      return;
-    }
-    if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
-      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
-      return;
-    }
-    if (!this.formData.value.soQdTrunghan) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn kế hoạch trung hạn");
-      return;
-    }
-    this.rowItemCha.idVirtual = uuidv4();
-    this.dataTable.push(this.rowItemCha);
-    this.rowItemCha = new DanhMucKho();
-  }
-
-  changeKhoi(event) {
-    if (event) {
-      let result = this.listKhoi.filter(item => item.ma == event);
-      if (result && result.length > 0) {
-        this.rowItemCha.tenKhoi =  result[0].giaTri
-      }
     }
   }
 
