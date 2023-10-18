@@ -200,7 +200,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       res = await this.tongHopDxXdTh.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      console.log(1)
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
@@ -221,7 +220,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         }
       }
     } else {
-      console.log(2)
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
@@ -388,12 +386,16 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         item.selected = false;
       });
       item.selected = true;
-
       // dx cuc
       if (this.dataTableDxAll && this.dataTableDxAll.length > 0) {
         let arr = this.dataTableDxAll.filter(data => data.idType == item.id);
         if (arr && arr.length > 0) {
           this.dataTableDx = arr;
+          if (this.dataTableDx && this.dataTableDx.length > 0) {
+            this.dataTableDx.forEach(item => {
+              item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+            });
+          }
           this.dataTableDx = this.convertListData(this.dataTableDx);
           this.expandAll(this.dataTableDx);
         }
@@ -402,6 +404,9 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
       if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+          item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+        });
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
       }
