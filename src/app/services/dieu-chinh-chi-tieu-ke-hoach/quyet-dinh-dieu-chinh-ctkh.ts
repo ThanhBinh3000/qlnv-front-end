@@ -53,4 +53,19 @@ export class QuyetDinhDieuChinhCTKHService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  xemTruocCtKhNamLuongThuc(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/preview/ke-hoach-luong-thuc`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  xemTruocCtKhNamMuoi(body) {
+    const url = `${environment.SERVICE_API}/qlnv-report/dc-ct-kh-preview/xem-truoc-ct-kh-muoi`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  xemTruocCtKhNamVatTu(body) {
+    const url = `${environment.SERVICE_API}/qlnv-report/dc-ct-kh-preview/xem-truoc-ct-kh-vat-tu`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
 }
