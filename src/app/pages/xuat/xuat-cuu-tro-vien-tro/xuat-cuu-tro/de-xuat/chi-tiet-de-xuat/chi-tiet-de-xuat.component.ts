@@ -177,7 +177,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      this.maHauTo = '/ĐXCTVT-' + this.userInfo.DON_VI.tenVietTat;
+      if (this.userService.isTongCuc()) {
+        this.maHauTo = 'TTr-QLHDT';
+      } else {
+        this.maHauTo = '/ĐXCTVT-' + this.userInfo.DON_VI.tenVietTat;
+      }
       await Promise.all([
         this.loadDsDonVi(),
         // this.loadDsDiaDanh(),

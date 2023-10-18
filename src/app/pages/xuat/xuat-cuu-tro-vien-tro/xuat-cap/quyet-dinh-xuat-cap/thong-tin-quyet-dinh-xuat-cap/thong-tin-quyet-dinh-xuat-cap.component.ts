@@ -188,6 +188,15 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         tenDvi: [''],
         edit: []
       });
+    this.formData.controls["paXuatGaoChuyenXc"].valueChanges.subscribe((value) => {
+      this.formData.controls["qdPaXuatCap"].setValue("", { emitEvent: false });
+      this.phuongAnHdrView = [];
+      this.phuongAnView = [];
+      this.loaiNhapXuat = '';
+      this.kieuNhapXuat = '';
+      this.formData.patchValue({ idDx: "", qdPaXuatCap: "", qdPaXuatCapId: "", quyetDinhPdDtl: [], ngayKetThuc: "" });
+      this.tinhTong();
+    })
   }
 
   async ngOnInit() {
