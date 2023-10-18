@@ -123,6 +123,9 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
   }
 
   clearRequired(){
+    this.formData.patchValue({
+      quy: null
+    })
     this.formData.controls["quy"].clearValidators()
     this.formData.controls["quy"].updateValueAndValidity();
   }
