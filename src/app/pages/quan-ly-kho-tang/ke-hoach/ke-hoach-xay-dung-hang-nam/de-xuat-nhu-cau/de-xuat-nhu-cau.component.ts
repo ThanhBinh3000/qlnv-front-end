@@ -117,6 +117,7 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
   async openModalCttongHop(data: any) {
     let body = {
       namKeHoach : data.namKeHoach,
+      maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: 100,
         page: this.page - 1,

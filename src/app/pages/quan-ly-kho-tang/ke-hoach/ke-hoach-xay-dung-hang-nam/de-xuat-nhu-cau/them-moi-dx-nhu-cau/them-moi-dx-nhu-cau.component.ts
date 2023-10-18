@@ -135,6 +135,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   }
   async getAllQdTrungHan() {
     let body = {
+      "namKeHoach": this.formData.value.namKeHoach,
       "maDvi": this.userInfo.MA_DVI,
       "paggingReq": {
         "limit": this.globals.prop.MAX_INTERGER,
@@ -417,6 +418,9 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   }
 
   convertListToTree() {
+    this.dataTableReq.forEach(item => {
+      item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+    });
     this.dataTable = chain(this.dataTableReq).groupBy("tenKhoi")
       .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
@@ -435,6 +439,5 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       this.convertListToTree() ;
     }
   }
-
 }
 
