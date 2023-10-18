@@ -411,7 +411,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
 
   themMoiItem(type: string, data? : any) {
-    console.log(data,6666)
       let modalQD = this.modal.create({
         nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
         nzContent: DialogThemMoiDxkhthComponent,
