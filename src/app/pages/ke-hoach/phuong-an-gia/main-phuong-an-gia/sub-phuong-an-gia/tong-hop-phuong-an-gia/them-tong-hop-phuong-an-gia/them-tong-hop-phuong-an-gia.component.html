@@ -88,7 +88,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="8">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Cục DTNNKV</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -104,7 +104,7 @@
           </div>
           <div nz-col nzSpan="5">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd"> Ngày đề
+              <nz-form-label [nzNoColon]="true" nzFor="ngay-qd"> Ngày đề
                 xuất
               </nz-form-label>
               <div nz-row>
@@ -119,6 +119,18 @@
                                   nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
                 </div>
               </div>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true" >
+              </nz-form-label>
+              <nz-form-control>
+                <nz-radio-group formControlName="kieuTongHop" [nzDisabled]="idInput > 0">
+                  <label nz-radio nzValue="00">Đề xuất PAG lần đầu</label>
+                  <label nz-radio nzValue="01">Đề xuất PAG điều chỉnh</label>
+                </nz-radio-group>
+              </nz-form-control>
             </nz-form-item>
           </div>
         </div>

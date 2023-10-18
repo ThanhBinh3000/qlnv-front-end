@@ -187,6 +187,11 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       let res = await this.qdScBtcService.getDetail(id);
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
+      if (data.soTt){
+        this.formData.controls["qdBtc"].clearValidators();
+      }else if(data.qdBtc) {
+        this.formData.controls["soTt"].clearValidators();
+      }
       this.formData.patchValue({
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : '',
         soTt: data.soTt ? data.soTt : "",

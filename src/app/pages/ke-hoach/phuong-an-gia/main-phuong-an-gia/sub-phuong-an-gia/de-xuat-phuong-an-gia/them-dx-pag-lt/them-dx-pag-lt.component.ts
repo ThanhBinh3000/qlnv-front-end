@@ -708,7 +708,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       let body = {
         namKh: this.formData.value.namKeHoach,
         type: this.type,
-        loaiDeXuat: "02",
+        loaiDeXuat: "01",
         maDvi: this.userInfo.MA_DVI,
         pagType: this.pagType
       }
@@ -762,6 +762,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       type: data.type,
       lanDeXuat: data.lanDeXuat > 0 ? data.lanDeXuat + 1 : 1
     })
+    this.pagTtChungs = data.pagTtChungs;
     this.isApDungTatCa = data.apDungTatCa;
     if (this.isApDungTatCa == true) {
       this.giaDn = this.pagTtChungs[0]?.giaDn

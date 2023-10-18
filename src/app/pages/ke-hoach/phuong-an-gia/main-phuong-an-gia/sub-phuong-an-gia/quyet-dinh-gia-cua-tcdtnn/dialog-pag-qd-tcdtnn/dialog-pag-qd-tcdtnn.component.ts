@@ -20,6 +20,7 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
   type: string;
   namKeHoach: any;
   dataTableToTrinh: any[] = [];
+  dataTableToTrinhView: any[] = [];
   pagType : string
   loaiGia : string
   dataTablleDxCs: any[] = [];
@@ -141,13 +142,9 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
         loaiGia: this.pagType == 'LT' ? this.formData.value.loaiGia : this.loaiGia,
         pagType : this.pagType
       }
-      let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
-      if (res.msg = MESSAGE.SUCCESS) {
-        if (this.formData.value.loaiQd == '00' && this.pagType == 'LT') {
-          this.dataTableToTrinh = res.data;
-        } else {
-          this.dataTablleDxCs = res.data;
-        }
+      let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body); if (res.msg = MESSAGE.SUCCESS) {
+        this.dataTableToTrinh = res.data;
+        this.dataTableToTrinhView = this.dataTableToTrinh.filter(item => item.kieuTongHop == this.formData.value.loaiQd);
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -161,6 +158,12 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
       this.listData.push(data);
     } else {
       this.listData.splice(idx, 1);
+    }
+  }
+
+  changLoaiQd(event) {
+    if (event && this.pagType == 'LT') {
+      this.dataTableToTrinhView = this.dataTableToTrinh.filter(item => item.kieuTongHop == event);
     }
   }
 }
