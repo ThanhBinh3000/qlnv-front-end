@@ -68,13 +68,13 @@
                     </th>
                     <th scope="col" nzWidth="60px" class="text-center">STT</th>
                     <th scope="col">Mã phương án </th>
+                    <th scope="col">Loại phương án </th>
                     <th scope="col">Mã phương án TH</th>
                     <th scope="col">Ngày tạo</th>
                     <th scope="col">Năm báo cáo</th>
                     <th scope="col">Ngày trình duyệt</th>
                     <th scope="col">Ngày TBP duyệt</th>
                     <th scope="col">Ngày lãnh đạo duyệt</th>
-                    <th scope="col">Ngày cấp trên trả kết quả</th>
                     <th scope="col" class="text-center">Trạng thái</th>
                     <th scope="col" nzWidth="90px">Hành động</th>
                 </tr>
@@ -95,6 +95,14 @@
                         {{ data.maPa }}
                     </td>
                     <td>
+                        <ng-template [ngIf]="data.maLoaiDan == '1'">
+                            Giao dự toán
+                        </ng-template>
+                        <ng-template [ngIf]="data.maLoaiDan == '2'">
+                            Giao điều chỉnh dự toán
+                        </ng-template>
+                    </td>
+                    <td>
                         {{ data.ngayTao }}
                     </td>
                     <td>
@@ -108,9 +116,6 @@
                     </td>
                     <td>
                         {{ data.ngayPheDuyet }}
-                    </td>
-                    <td>
-                        {{ data.ngayTraKq }}
                     </td>
                     <td>
                         {{getStatusName(data.trangThai)}}

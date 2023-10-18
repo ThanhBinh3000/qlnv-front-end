@@ -164,9 +164,9 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tenCloaiVthh: [''],
         tenTrangThai: ['Dự thảo'],
         tenChiCuc: [''],
-        tenDiemKho:  [''],
-        tenNhaKho:  [''],
-        tenNganKho:  [''],
+        tenDiemKho: [''],
+        tenNhaKho: [''],
+        tenNganKho: [''],
         tenLoKho: [''],
         nguoiPduyet: [''],
         nguoiGduyet: [''],
@@ -442,7 +442,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   async save() {
     this.formData.disable()
     let body = this.formData.value;
-    let res ;
+    let res;
     if (body.id && body.id > 0) {
       res = await this.bangKeCanCtvtService.update(body);
     } else {

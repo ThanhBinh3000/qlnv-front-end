@@ -4,8 +4,7 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </a>
-        <button type="button" class="btn btn-sub" *ngIf="!isView" (click)="save(true)"
-            [disabled]="!formData.valid">
+        <button type="button" class="btn btn-sub" *ngIf="!isView" (click)="save(true)" [disabled]="!formData.valid">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
         </button>
@@ -15,20 +14,18 @@
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
-      <button type="button" class="btn btn-sub"
-              *ngIf="detail.trangThai == globals.prop.NHAP_DA_DUYET_LD_CUC"
-              (click)="pheDuyet()">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Ban hành</span>
-      </button>
+        <button type="button" class="btn btn-sub" *ngIf="detail.trangThai == globals.prop.NHAP_DA_DUYET_LD_CUC"
+            (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Ban hành</span>
+        </button>
         <a type="button" class="btn btn-sub"
             *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC"
             (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </a>
-        <button type="button" class="btn btn-main" *ngIf="!isView" (click)="save(false)"
-            [disabled]="!formData.valid">
+        <button type="button" class="btn btn-main" *ngIf="!isView" (click)="save(false)" [disabled]="!formData.valid">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>

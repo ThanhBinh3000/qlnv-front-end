@@ -1,37 +1,37 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Validators} from "@angular/forms";
-import {UserLogin} from "src/app/models/userlogin";
-import {DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan} from "src/app/models/KeHoachBanDauGia";
-import {DatePipe} from "@angular/common";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {DeXuatKeHoachBanDauGiaService} from "src/app/services/deXuatKeHoachBanDauGia.service";
-import {DonviService} from "src/app/services/donvi.service";
-import {TinhTrangKhoHienThoiService} from "src/app/services/tinhTrangKhoHienThoi.service";
-import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Validators } from "@angular/forms";
+import { UserLogin } from "src/app/models/userlogin";
+import { DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan } from "src/app/models/KeHoachBanDauGia";
+import { DatePipe } from "@angular/common";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { DeXuatKeHoachBanDauGiaService } from "src/app/services/deXuatKeHoachBanDauGia.service";
+import { DonviService } from "src/app/services/donvi.service";
+import { TinhTrangKhoHienThoiService } from "src/app/services/tinhTrangKhoHienThoi.service";
+import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.service";
+import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import * as dayjs from "dayjs";
-import {MESSAGE} from "src/app/constants/message";
-import {STATUS} from 'src/app/constants/status';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {v4 as uuidv4} from 'uuid';
-import {chain, cloneDeep} from 'lodash';
+import { MESSAGE } from "src/app/constants/message";
+import { STATUS } from 'src/app/constants/status';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { v4 as uuidv4 } from 'uuid';
+import { chain, cloneDeep } from 'lodash';
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {
   PhieuKiemNghiemChatLuongService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
-import {PhieuXuatKhoService} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service";
-import {BangKeCanCtvtService} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import { PhieuXuatKhoService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service";
+import { BangKeCanCtvtService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import {
   QuyetDinhGiaoNvCuuTroService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
@@ -294,7 +294,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
 
   async selectHangHoa(event: any) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listChungLoaiHangHoa = res.data;
@@ -332,17 +332,17 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         let rs = chain(value)
           .groupBy("tenCuc")
           .map((v, k) => {
-              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-              let rowCuc = v.find(s => s.tenCuc === k);
-              return {
-                idVirtual: uuidv4(),
-                tenCuc: k,
-                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-                tenCloaiVthh: v[0].tenCloaiVthh,
-                childData: v
-              }
+            let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+            let rowCuc = v.find(s => s.tenCuc === k);
+            return {
+              idVirtual: uuidv4(),
+              tenCuc: k,
+              soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+              soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+              tenCloaiVthh: v[0].tenCloaiVthh,
+              childData: v
             }
+          }
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
@@ -614,7 +614,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           donViTinh: data.donViTinh,
           bangKeDtl: this.formData.value.bangKeDtl
         });
-        this.formData.patchValue({donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh})
+        this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh })
       }
     });
   }

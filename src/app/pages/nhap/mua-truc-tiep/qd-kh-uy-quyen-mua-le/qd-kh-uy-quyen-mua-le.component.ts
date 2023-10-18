@@ -12,8 +12,8 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty } from 'lodash';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
-import {ChaogiaUyquyenMualeService} from "../../../../services/chaogia-uyquyen-muale.service";
-import {STATUS} from "../../../../constants/status";
+import { ChaogiaUyquyenMualeService } from "../../../../services/chaogia-uyquyen-muale.service";
+import { STATUS } from "../../../../constants/status";
 
 @Component({
   selector: 'app-qd-kh-uy-quyen-mua-le',
@@ -167,7 +167,7 @@ export class QdKhUyQuyenMuaLeComponent extends Base2Component implements OnInit 
     }
   }
 
-  export(){
+  export() {
 
   }
 

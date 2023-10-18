@@ -124,12 +124,12 @@ export class DanhSachBaoCaoComponent implements OnInit {
         this.searchFilter.tuNgay = newDate;
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT);
-        this.statusDelete = this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_PA_PBDT) || this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_PA_PBDT);
-        if (this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_PA_PBDT) || this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_TH)) {
+        this.statusNewReport = this.userService.isAccessPermisson(Roles.GSTC.LAP_BC);
+        this.statusDelete = this.userService.isAccessPermisson(Roles.GSTC.XOA_BC) || this.userService.isAccessPermisson(Roles.GSTC.XOA_BC_TONGHOP);
+        if (this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC) || this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC_TH)) {
             this.searchFilter.trangThai = Status.TT_02;
         } else {
-            if (this.userService.isAccessPermisson(Roles.GDT.PHE_DUYET_REPORT_PA_PBDT) || this.userService.isAccessPermisson(Roles.GDT.PHE_DUYET_REPORT_PA_PBDT)) {
+            if (this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC) || this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC_TH)) {
                 this.searchFilter.trangThai = Status.TT_04;
             }
         }
@@ -198,6 +198,8 @@ export class DanhSachBaoCaoComponent implements OnInit {
                     })
                 })
                 this.dataTableAll = cloneDeep(this.dataTable);
+                console.log(this.dataTableAll);
+
                 this.totalElements = res.data.totalElements;
                 this.totalPages = res.data.totalPages;
             } else {
@@ -233,15 +235,17 @@ export class DanhSachBaoCaoComponent implements OnInit {
     }
 
     checkEditStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
-        return Status.TT_01 == item.trangThai &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH));
+        const isSynthetic = item.tongHopTu != "[]" && item.tongHopTu != null;
+        console.log(isSynthetic);
+
+        return Status.check('saveWHist', item.trangThai) &&
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.SUA_BC));
     }
 
     checkDeleteStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
-        return Status.TT_01 == item.trangThai &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.XOA_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.XOA_REPORT_TH));
+        const isSynthetic = item.tongHopTu != "[]" && item.tongHopTu != null;
+        return Status.check('saveWHist', item.trangThai) &&
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.XOA_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.XOA_BC));
     }
 
     getStatusName(trangThai: string) {

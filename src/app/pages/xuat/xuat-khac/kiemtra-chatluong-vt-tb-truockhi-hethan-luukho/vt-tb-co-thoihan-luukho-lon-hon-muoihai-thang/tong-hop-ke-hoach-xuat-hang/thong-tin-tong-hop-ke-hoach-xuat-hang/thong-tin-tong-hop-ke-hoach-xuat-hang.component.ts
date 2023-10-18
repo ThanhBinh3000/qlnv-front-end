@@ -56,14 +56,14 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
   templateName = 'xuat_khac_ktcl_vat_tu_12_thang_th_kh_xuat_hang';
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private keHoachXuatHangService: KeHoachXuatHangService,
-              private tongHopKeHoachXuatHangService: TongHopKeHoachXuatHangService) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private keHoachXuatHangService: KeHoachXuatHangService,
+    private tongHopKeHoachXuatHangService: TongHopKeHoachXuatHangService) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKeHoachXuatHangService);
     super.ngOnInit();
     this.formData = this.fb.group({

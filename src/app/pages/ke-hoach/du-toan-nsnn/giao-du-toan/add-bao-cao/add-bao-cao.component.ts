@@ -7,7 +7,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Roles, Status, Utils } from 'src/app/Utility/utils';
-import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import {
+    DialogChonThemBieuMauComponent
+} from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -115,7 +117,8 @@ export class AddBaoCaoComponent implements OnInit {
         private notification: NzNotificationService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private datePipe: DatePipe,
-    ) { }
+    ) {
+    }
 
     async ngOnInit() {
         this.action('init');
@@ -186,11 +189,12 @@ export class AddBaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.baoCao.trangThai = this.data?.trangThai;
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.getListUser();
 
         this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
         //lay danh sach danh muc don vi
+        this.baoCao.maDvi = this.data?.maDvi ? this.data?.maDvi : this.userInfo?.MA_DVI;
         await this.getChildUnit();
         await this.getListUser();
 
@@ -308,7 +312,7 @@ export class AddBaoCaoComponent implements OnInit {
                 res.forEach(item => {
                     if (item.status) {
                         const newItem: Form = {
-                            ... new Form(),
+                            ...new Form(),
                             id: uuid.v4() + 'FE',
                             maBieuMau: item.id,
                             tenPl: item.tenPl,
@@ -327,7 +331,8 @@ export class AddBaoCaoComponent implements OnInit {
         let header = '';
         if (maBieuMau.startsWith('pl')) {
             header = 'pl';
-        };
+        }
+        ;
         let index = 0;
         for (let i = 0; i < this.baoCao.lstCtiets.length; i++) {
             if (this.baoCao.lstCtiets[i].maBieuMau.startsWith(header)) {
@@ -339,6 +344,7 @@ export class AddBaoCaoComponent implements OnInit {
         }
         return index;
     };
+
     getListUser() {
         this.quanLyVonPhiService.getListUser().toPromise().then(
             res => {
@@ -364,7 +370,7 @@ export class AddBaoCaoComponent implements OnInit {
             namBcao: this.baoCao.namBcao,
             tenPl: bieuMau.tenPl,
             tieuDe: bieuMau.tenDm,
-            congVan: Utils.getDocName(this.baoCao.soQd.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
+            congVan: this.baoCao.soQd?.fileName ? Utils.getDocName(this.baoCao.soQd.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '',
             path: this.path,
             status: new BtnStatus(),
             isSynthetic: isSynthetic,
@@ -560,12 +566,12 @@ export class AddBaoCaoComponent implements OnInit {
                 }
             }
         }
-
-        if (!baoCaoTemp.soQd?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
-
+        // if (this.userInfo.DON_VI.CAP_DVI !== "2") {
+        //     if (!baoCaoTemp.soQd?.fileUrl) {
+        //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        //         return;
+        //     }
+        // }
         // replace nhung ban ghi dc them moi id thanh null
         baoCaoTemp.lstCtiets.forEach(item => {
             if (item.id?.length == 38) {
@@ -690,8 +696,9 @@ export class AddBaoCaoComponent implements OnInit {
             localStorage.removeItem("idChiTiet");
         }
     }
+
     statusDeleteCv() {
-        if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH)) {
+        if (!this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP)) {
             return false;
         }
         if (!this.baoCao.soQd?.fileName) {
@@ -722,25 +729,27 @@ export class AddBaoCaoComponent implements OnInit {
         }
         await this.quanLyVonPhiService.downFile(file, doc);
     }
+
     isChild: boolean;
     isParent: boolean;
     status: BtnStatus = new BtnStatus();
+
     //check role cho các nut trinh duyet
     getStatusButton() {
         const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
         this.isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         this.isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         //kiem tra quyen cua cac user
-        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_TH);
-        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.TRINHDUYET_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.APPROVE_REPORT_TH);
-        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.DUYET_TUCHOI_PA_TH_PBDT) : this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_TH);
-        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_TUCHOI_PA_TH_PBDT) : this.userService.isAccessPermisson(Roles.GDT.PHEDUYET_REPORT_TH);
-        const checkAccept = this.userService.isAccessPermisson(Roles.GDT.TIEP_NHAN_TC_REPORT_TH);
-        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.IN_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.PRINT_REPORT);
-        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.XUAT_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GDT.XUAT_PA_TONGHOP_PBDT)
+        const checkSave = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.SUA_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.SUA_BC);
+        const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.TRINHDUYET_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.TRINHDUYET_BC);
+        const checkPass = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC_TH) : this.userService.isAccessPermisson(Roles.GSTC.DUYET_TUCHOI_BC);
+        const checkApprove = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC_TH) : this.userService.isAccessPermisson(Roles.GSTC.PHEDUYET_TUCHOI_BC);
+        const checkAccept = this.userService.isAccessPermisson(Roles.GSTC.TIEPNHAN_TUCHOI_BC);
+        const checkPrint = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.IN_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.IN_BC);
+        const checkExport = isSynthetic ? this.userService.isAccessPermisson(Roles.GSTC.XUAT_BC_TONGHOP) : this.userService.isAccessPermisson(Roles.GSTC.XUAT_BC);
 
         this.status.general = Status.check('saveWHist', this.baoCao.trangThai) && checkSave;
-        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_TH) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
+        this.status.new = Status.check('reject', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.GSTC.LAP_BC) && this.isChild && this.data.preTab == Gdt.DANH_SACH_BAO_CAO;
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && checkSave && this.isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && checkSunmit && this.isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && checkPass && this.isChild;
@@ -813,11 +822,6 @@ export class AddBaoCaoComponent implements OnInit {
             const blob = new Blob([file], { type: "application/octet-stream" });
             fileSaver.saveAs(blob, file.name);
         }
-    };
-
-    // xem phuong an cha
-    xemCtietPaBTC() {
-
     };
 
 

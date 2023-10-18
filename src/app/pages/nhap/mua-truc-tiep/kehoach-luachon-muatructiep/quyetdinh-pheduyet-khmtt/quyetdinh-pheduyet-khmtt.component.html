@@ -154,7 +154,8 @@
             <td>
               <a style="color: blue; font-weight: bold;" (click)="openDxMttModal(data.idTrHdr)">{{ data.soTrHdr }}</a>
             </td>
-            <td class="text-blue" *ngIf="userService.isTongCuc()"><a style="color: blue; font-weight: bold;" (click)="openThMttModal(data.idThHdr)">{{ data.idThHdr }}</a></td>
+            <td class="text-blue" *ngIf="userService.isTongCuc()"><a style="color: blue; font-weight: bold;"
+                (click)="openThMttModal(data.idThHdr)">{{ data.idThHdr }}</a></td>
             <td>{{ data.trichYeu }}</td>
             <td *ngIf="!userService.isTongCuc()">{{data.tenPtMuaTrucTiep}}</td>
             <td>{{ data.tenTrangThai }}</td>
@@ -217,8 +218,8 @@
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openThMtt" (nzOnCancel)="closeThMttModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-themmoi-tonghop-khmtt [id]="thMttId" [loaiVthh]="loaiVthh" [isView]="true"
-                                     [isViewOnModal]="true" (showListEvent)="showList()">
+    <app-themmoi-tonghop-khmtt [id]="thMttId" [loaiVthh]="loaiVthh" [isView]="true" [isViewOnModal]="true"
+      (showListEvent)="showList()">
     </app-themmoi-tonghop-khmtt>
   </ng-container>
   <div *nzModalFooter>

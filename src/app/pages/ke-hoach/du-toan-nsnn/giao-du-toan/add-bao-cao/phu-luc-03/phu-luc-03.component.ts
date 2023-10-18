@@ -36,7 +36,9 @@ export class ItemData {
     }
 
     changeModel() {
-        this.namDtCphiTaiCkhoTt = Operator.mul(this.namDtCphiTaiCkhoSl, this.namDtCphiTaiCkhoDm);
+        if (this.namDtCphiTaiCkhoDm) {
+            this.namDtCphiTaiCkhoTt = Operator.mul(this.namDtCphiTaiCkhoSl, this.namDtCphiTaiCkhoDm);
+        }
         this.namDtCphiNgoaiCkhoTt = Operator.mul(this.namDtCphiNgoaiCkhoBq, this.namDtCphiTaiCkhoSl);
         this.namDtTcong = Operator.sum([this.namDtCphiNgoaiCkhoTt, this.namDtCphiTaiCkhoTt]);
     }
@@ -187,7 +189,7 @@ export class PhuLuc03Component implements OnInit {
 
         await this.getDinhMuc();
         this.lstCtietBcaos.forEach(item => {
-            const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc);
+            const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.danhMuc));
             if (!item.tenDanhMuc) {
                 item.tenDanhMuc = dinhMuc?.tenDinhMuc;
                 item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
@@ -199,7 +201,7 @@ export class PhuLuc03Component implements OnInit {
 
         if (this.dataInfo?.isSynthetic) {
             this.lstCtietBcaos.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc);
+                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc);
                 // item.namDtCphiNgoaiCkhoBq = 0;
                 item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
                 item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
@@ -516,7 +518,8 @@ export class PhuLuc03Component implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (data) => {
             if (data) {
-                const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma);
+                // const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma);
+                const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
                 if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma) == -1) {
                     let stt: any;
                     const index = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.2');

@@ -37,17 +37,17 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
   rows: any[] = [];
   listQuy = [];
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private thongTu1452013Service: ThongTu1452013Service,
-              public userService: UserService,
-              private donViService: DonviService,
-              private danhMucService: DanhMucService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private thongTu1452013Service: ThongTu1452013Service,
+    public userService: UserService,
+    private donViService: DonviService,
+    private danhMucService: DanhMucService,
 
-              private donviService: DonviService,
-              public globals: Globals) {
+    private donviService: DonviService,
+    public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
@@ -214,7 +214,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
   changeNuocSX(event) {
 
   }
-  addRow () {
+  addRow() {
     this.rows.push({})
   }
 

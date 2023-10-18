@@ -301,6 +301,10 @@ export class BaoCaoComponent implements OnInit {
     }
 
     async submitReport() {
+        if (!this.baoCao.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -404,10 +408,6 @@ export class BaoCaoComponent implements OnInit {
                     fileName: this.baoCao.congVan.fileName,
                 }
             }
-        }
-        if (!baoCaoTemp.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
         }
 
         baoCaoTemp.maPhanBcao = '1';
@@ -524,7 +524,7 @@ export class BaoCaoComponent implements OnInit {
             maLoai: bieuMau.maLoai,
             tenPl: bieuMau.tenPhuLuc,
             tieuDe: bieuMau.tieuDe,
-            congVan: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
+            congVan: this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '',
             luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
             isOffice: this.isOffice,
             isSynth: this.baoCao.lstBcaoDviTrucThuocs.length > 0,

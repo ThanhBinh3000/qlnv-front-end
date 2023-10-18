@@ -185,46 +185,46 @@
                 </div>
             </div>
 
-<!--          <div nz-col nzSpan="5">-->
-<!--            <nz-form-item class="form-item">-->
-<!--              <nz-form-label [nzNoColon]="true"> Căn cứ giao chỉ tiêu của TCDTNN </nz-form-label>-->
-<!--              <nz-form-control>-->
-<!--                <input-->
-<!--                  [readonly]="true"-->
-<!--                  nz-input formControlName="trichYeu" readonly="true" />-->
-<!--              </nz-form-control>-->
-<!--            </nz-form-item>-->
-<!--          </div>-->
-<!--          <div nz-col nzSpan="5">-->
-<!--            <nz-form-item class="form-item">-->
-<!--              <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>-->
-<!--              <nz-form-control>-->
-<!--                <input-->
-<!--                  [readonly]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"-->
-<!--                  nz-input formControlName="trichYeu" readonly="true" />-->
-<!--              </nz-form-control>-->
-<!--            </nz-form-item>-->
-<!--          </div>-->
-<!--          <div nz-col nzSpan="5">-->
-<!--            <nz-form-item class="form-item">-->
-<!--              <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>-->
-<!--              <nz-form-control>-->
-<!--                <input-->
-<!--                  [readonly]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"-->
-<!--                  nz-input formControlName="trichYeu" readonly="true" />-->
-<!--              </nz-form-control>-->
-<!--            </nz-form-item>-->
-<!--          </div>-->
-<!--          <div nz-col nzSpan="5">-->
-<!--            <nz-form-item class="form-item">-->
-<!--              <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>-->
-<!--              <nz-form-control>-->
-<!--                <input-->
-<!--                  [readonly]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"-->
-<!--                  nz-input formControlName="trichYeu" readonly="true" />-->
-<!--              </nz-form-control>-->
-<!--            </nz-form-item>-->
-<!--          </div>-->
+            <!--          <div nz-col nzSpan="5">-->
+            <!--            <nz-form-item class="form-item">-->
+            <!--              <nz-form-label [nzNoColon]="true"> Căn cứ giao chỉ tiêu của TCDTNN </nz-form-label>-->
+            <!--              <nz-form-control>-->
+            <!--                <input-->
+            <!--                  [readonly]="true"-->
+            <!--                  nz-input formControlName="trichYeu" readonly="true" />-->
+            <!--              </nz-form-control>-->
+            <!--            </nz-form-item>-->
+            <!--          </div>-->
+            <!--          <div nz-col nzSpan="5">-->
+            <!--            <nz-form-item class="form-item">-->
+            <!--              <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>-->
+            <!--              <nz-form-control>-->
+            <!--                <input-->
+            <!--                  [readonly]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"-->
+            <!--                  nz-input formControlName="trichYeu" readonly="true" />-->
+            <!--              </nz-form-control>-->
+            <!--            </nz-form-item>-->
+            <!--          </div>-->
+            <!--          <div nz-col nzSpan="5">-->
+            <!--            <nz-form-item class="form-item">-->
+            <!--              <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>-->
+            <!--              <nz-form-control>-->
+            <!--                <input-->
+            <!--                  [readonly]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"-->
+            <!--                  nz-input formControlName="trichYeu" readonly="true" />-->
+            <!--              </nz-form-control>-->
+            <!--            </nz-form-item>-->
+            <!--          </div>-->
+            <!--          <div nz-col nzSpan="5">-->
+            <!--            <nz-form-item class="form-item">-->
+            <!--              <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>-->
+            <!--              <nz-form-control>-->
+            <!--                <input-->
+            <!--                  [readonly]="formData.value.trangThai !==STATUS.DU_THAO && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"-->
+            <!--                  nz-input formControlName="trichYeu" readonly="true" />-->
+            <!--              </nz-form-control>-->
+            <!--            </nz-form-item>-->
+            <!--          </div>-->
 
         </form>
     </nz-card>
@@ -243,8 +243,8 @@
                 </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,i)"
-                [ngClass]="{'bg-selected': i == 0 && this.selected}">
+                <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,i)"
+                    [ngClass]="{'bg-selected': i == 0 && this.selected}">
                     <td class="text-center">{{i + 1}} </td>
                     <td>{{ data.tenDvi }}</td>
                     <td>{{ data.soGthau }}</td>
@@ -270,9 +270,10 @@
             </div>
             <div nz-col [nzSpan]="12">
                 <nz-card class="mg-t-10 flex-card p-lr16 ">
-                    <app-thongtin-dieuchinh #thongTinDc [isView]="isViewDetail" [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
-                        [listLoaiHopDong]="listLoaiHopDong" [listHinhThucDauThau]="listHinhThucDauThau"
-                        [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon" (objectChange)="setNewData($event)">
+                    <app-thongtin-dieuchinh #thongTinDc [isView]="isViewDetail" [title]="'Quyết định điều chỉnh'"
+                        [dataInput]="dataInput" [listLoaiHopDong]="listLoaiHopDong"
+                        [listHinhThucDauThau]="listHinhThucDauThau" [listPhuongThucDauThau]="listPhuongThucDauThau"
+                        [listNguonVon]="listNguonVon" (objectChange)="setNewData($event)">
                     </app-thongtin-dieuchinh>
                 </nz-card>
             </div>

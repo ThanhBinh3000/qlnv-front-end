@@ -119,7 +119,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
       else {
         this.isTongHop = false;
       }
-    }else{
+    } else {
       this.formTraCuu.get('tenLoaiVthh').setValue("Thóc tẻ")
       this.formTraCuu.get('loaiVthh').setValue("0101")
     }
@@ -165,7 +165,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
     body.fileDinhKems = this.listFileDinhKem;
     let data = await this.createUpdate(body, 'NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')
     if (data) {
-      if(isTaoQd){
+      if (isTaoQd) {
         this.isQuyetDinh = true;
         this.disableField = true;
       }

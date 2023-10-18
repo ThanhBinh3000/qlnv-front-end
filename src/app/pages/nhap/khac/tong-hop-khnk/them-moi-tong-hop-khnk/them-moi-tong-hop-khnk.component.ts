@@ -13,7 +13,7 @@ import {
   TongHopDxKhNhapKhacService
 } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/tongHopDxKhNhapKhac.service";
 import { STATUS } from "../../../../../constants/status";
-import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { DialogTuChoiComponent } from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: "app-them-moi-tong-hop-khnk",

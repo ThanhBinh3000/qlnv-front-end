@@ -119,8 +119,8 @@ export class PhanBoDuToanComponent implements OnInit {
 
     statusCreate = true;
     statusTaoMoi = true;
-    statusDelete = true;
-    statusNewReport = true;
+    statusDelete: boolean;
+    statusNewReport: boolean;
     allChecked = false;
     isDataAvailable = false;
 
@@ -165,35 +165,47 @@ export class PhanBoDuToanComponent implements OnInit {
     }
 
     async initialization() {
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         this.checkVP = this.userInfo.DON_VI.type.indexOf('PB') != -1;
 
-        if (this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
-            this.statusTaoMoi = false;
+        if (this.userService.isAccessPermisson(Roles.GTT.XOA_CV_QD_GIAO_PA_PBDT)) {
+            this.statusDelete = true;
         }
-        if (this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
-            this.trangThai = '1';
-        } else if (this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_PA_PBDT)) {
+        if (this.userService.isAccessPermisson(Roles.GTT.NHAP_CV_QD_GIAO_PA_PBDT)) {
+            this.statusTaoMoi = false;
+            this.statusNewReport = true;
+        }
+        if (this.userService.isAccessPermisson(Roles.GTT.NHAP_CV_QD_GIAO_PA_PBDT)) {
+            this.trangThai = '';
+        } else if (this.userService.isAccessPermisson(Roles.GTT.DUYET_TUCHOI_PA_PBDT)) {
             this.trangThai = '2';
-        } else if (this.userService.isAccessPermisson(Roles.GDT.PHE_DUYET_REPORT_PA_PBDT)) {
+        } else if (this.userService.isAccessPermisson(Roles.GTT.PHEDUYET_TUCHOI_PA_PBDT)) {
             this.trangThai = '4';
         }
-        //lay danh sach danh muc
-        this.danhMuc.dMDonVi().toPromise().then(
+        await this.getChildUnit()
+        this.search()
+    }
+
+    async getChildUnit() {
+        const request = {
+            maDviCha: this.searchFilter.donViTao,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                    this.donViTaos = this.donVis.filter(e => e?.maDviCha === this.userInfo?.MA_DVI);
+                    this.donVis = data?.data;
+                    // this.capDvi = this.dataInfo?.capDvi;
+
                 } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
             },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
-        );
-        this.search()
+        )
     }
 
     clearFilter() {
@@ -273,12 +285,12 @@ export class PhanBoDuToanComponent implements OnInit {
 
     checkEditStatus(trangThai: string) {
         return [Status.TT_01].includes(trangThai) &&
-            (this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT));
+            (this.userService.isAccessPermisson(Roles.GTT.SUA_PA_PBDT));
     };
 
     checkDeleteStatus(trangThai: string) {
         return [Status.TT_01].includes(trangThai) &&
-            (this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_PA_PBDT));
+            (this.userService.isAccessPermisson(Roles.GTT.XOA_PA_PBDT));
     };
 
     updateSingleChecked(): void {

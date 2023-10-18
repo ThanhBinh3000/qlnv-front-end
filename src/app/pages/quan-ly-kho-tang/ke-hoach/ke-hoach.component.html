@@ -6,16 +6,16 @@
     <li nz-menu-item (click)="selectTab('qhk')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_QHK')">
       Quy hoạch kho
     </li>
-    <li nz-menu-item (click)="selectTab('khxdth')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN')" >
+    <li nz-menu-item (click)="selectTab('khxdth')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN')">
       Kế hoạch đầu tư xây dựng trung hạn (5 năm)
     </li>
-    <li nz-menu-item (click)="selectTab('khxdhn')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM')" >
+    <li nz-menu-item (click)="selectTab('khxdhn')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM')">
       Kế hoạch đầu tư xây dựng theo năm
     </li>
-    <li nz-menu-item (click)="selectTab('khsclhn')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON')" >
+    <li nz-menu-item (click)="selectTab('khsclhn')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON')">
       Kế hoạch sửa chữa lớn hàng năm
     </li>
-    <li nz-menu-item (click)="selectTab('khsctx')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX')" >
+    <li nz-menu-item (click)="selectTab('khsctx')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX')">
       Kế hoạch sửa chữa thường xuyên
     </li>
   </ul>

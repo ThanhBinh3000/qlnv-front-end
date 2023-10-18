@@ -170,6 +170,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.lstDvi = data.data;
                     this.donVis = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -189,23 +190,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         }
     };
 
-
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
-    }
 
     //download file về máy tính
     async downloadFileCv() {
@@ -247,7 +231,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
                     if (this.isStatus == "1") {
                         this.statusBtnNew = true;
                     } else {
-                        if (this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT)) {
+                        if (this.userService.isAccessPermisson(Roles.GTT.LAP_PA_PBDT)) {
                             this.statusBtnNew = false;
                         } else {
                             this.statusBtnNew = true;
@@ -263,13 +247,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
             },
         );
         this.spinner.hide();
-    }
-
-    redirectkehoachvonphi() {
-        const obj = {
-            tabSelected: 'giaodutoan',
-        }
-        this.dataSource.changeData(obj);
     }
 
 
@@ -349,29 +326,10 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         this.lstCtietBcao = lstTemp;
     }
 
-    setDetail() {
-        this.lstCtietBcao.forEach(item => {
-            item.level = this.noiDungs.find(e => e.id == item.maNdung)?.level;
-        })
-    }
-
-
-    //lay ten don vi tạo
-    getUnitName() {
-        return this.donVis.find((item) => item.maDvi == this.maDviTao)?.tenDvi;
-    }
-
 
     getStatusName(status: string) {
         return this.trangThais.find(e => e.id == status)?.tenDm;
     };
-
-    checkAddReport() {
-        return this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT);
-    }
-    checkTiepNhan() {
-        return this.userService.isAccessPermisson(Roles.GDT.NHAN_PA_PBDT)
-    }
     // luu
     async save() {
         const request = {
@@ -415,6 +373,8 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
                 return;
             },
         );
+
+        this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CCDT") || e.tenVietTat.includes("_VP")))
 
         this.lstDvi.forEach(item => {
             listCtietDvi.push({
@@ -486,100 +446,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
             }
 
             if (loaiPa === 2) {
-                this.dataChange.emit(request2);
-            }
-        }
-    };
-
-    async taoMoiBaoCao(loaiPa) {
-        const listCtietDvi: any[] = [];
-        let maBcao
-        await this.giaoDuToanChiService.SinhMaBaoCao().toPromise().then(
-            (res) => {
-                if (res.statusCode == 0) {
-                    maBcao = res.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                    return;
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                return;
-            },
-        );
-
-
-
-        listCtietDvi.push({
-            id: uuid.v4() + 'FE',
-            maDviNhan: this.userInfo.MA_DVI,
-            soTranChi: 0,
-        })
-
-        const lstCtietBcaoTemp: any[] = [];
-        // gui du lieu trinh duyet len server
-        this.lstCtietBcao.forEach(item => {
-            lstCtietBcaoTemp.push({
-                ...item,
-                dtoanGiao: item.soTien,
-                nguonNsnn: item.nguonNsnn,
-                nguonKhac: item.nguonKhac,
-                tongCong: item.soTien,
-                lstCtietDvis: listCtietDvi,
-                id: uuid.v4() + 'FE',
-            })
-        })
-        const request1 = {
-            id: null,
-            fileDinhKems: [],
-            listIdDeleteFiles: [],
-            lstCtiets: lstCtietBcaoTemp,
-            lstCtiets1: lstCtietBcaoTemp,
-            maDvi: this.maDviTao,
-            maDviTien: this.maDviTien,
-            maBcao: maBcao,
-            maPa: this.maPa,
-            maPaCha: this.maPaCha,
-            namPa: this.namDtoan,
-            soQd: this.soQd,
-            maPhanGiao: "2",
-            maLoaiDan: '1',
-            trangThai: "1",
-            thuyetMinh: "",
-            idPaBTC: this.id,
-            tabSelected: 'addBaoCao',
-        };
-
-        const request2 = {
-            id: null,
-            fileDinhKems: [],
-            listIdDeleteFiles: [],
-            lstCtiets: lstCtietBcaoTemp,
-            lstCtiets1: lstCtietBcaoTemp,
-            maDvi: this.maDviTao,
-            maDviTien: this.maDviTien,
-            maBcao: maBcao,
-            maPa: this.maPa,
-            maPaCha: this.maPaCha,
-            namPa: this.namDtoan,
-            soQd: this.soQd,
-            maPhanGiao: "2",
-            maLoaiDan: '2',
-            trangThai: "1",
-            thuyetMinh: "",
-            idPaBTC: this.id,
-            tabSelected: 'addBaoCao',
-        };
-
-        if (loaiPa) {
-            if (loaiPa === 1) {
-                localStorage.setItem("idChiTiet", this.id);
-                this.dataChange.emit(request1);
-            }
-
-            if (loaiPa === 2) {
-                localStorage.setItem("idChiTiet", this.id);
                 this.dataChange.emit(request2);
             }
         }

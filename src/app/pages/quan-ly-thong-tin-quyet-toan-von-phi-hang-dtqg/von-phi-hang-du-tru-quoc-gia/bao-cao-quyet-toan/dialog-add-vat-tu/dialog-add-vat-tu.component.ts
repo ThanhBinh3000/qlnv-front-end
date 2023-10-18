@@ -68,13 +68,15 @@ export class DialogAddVatTuComponent implements OnInit {
                     if (this.data && this.data.length > 2) {
                         item.child = item.child.filter(item => item.ma == this.data);
                     }
-                    // if (this.isCaseSpecial) {
-                    //     item.child.forEach(item => {
-                    //         if (item.ma.startsWith("02")) {
-                    //             item.child = [];
-                    //         }
-                    //     })
-                    // }
+                    if (this.obj.tab == "dieu chinh") {
+                        if (this.isCaseSpecial) {
+                            item.child.forEach(item => {
+                                if (item.ma.startsWith("02")) {
+                                    item.child = [];
+                                }
+                            })
+                        }
+                    }
                     this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
                 });
             }
@@ -144,33 +146,65 @@ export class DialogAddVatTuComponent implements OnInit {
     }
 
     isSelect(item: any) {
-        if (item.ma.startsWith('02') || item.ma.startsWith('01')) {
-            if (item?.child?.length == 0 || !item?.child || item.level == 2) {
-                return true
+        if (this.obj.tab == "dieu chinh") {
+            if (item.ma.startsWith('02')) {
+                if (item?.child?.length == 0 || !item?.child || item.level == 2) {
+                    return true
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                if (item?.child?.length == 0 || !item?.child || item.level == 1) {
+                    return true
+                } else {
+                    return false;
+                }
             }
         } else {
-            if (item?.child?.length == 0 || !item?.child || item.level == 1) {
-                return true
+            if (item.ma.startsWith('02') || item.ma.startsWith('01')) {
+                if (item?.child?.length == 0 || !item?.child || item.level == 2) {
+                    return true
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                if (item?.child?.length == 0 || !item?.child || item.level == 1) {
+                    return true
+                } else {
+                    return false;
+                }
             }
         }
     }
 
     isExpand(item) {
-        if (item.ma.startsWith('02') || item.ma.startsWith('01')) {
-            if ((!!item.child && item.child.length !== 0) && item.level < 2) {
-                return true;
+        if (this.obj.tab == "dieu chinh") {
+            if (item.ma.startsWith('02')) {
+                if ((!!item.child && item.child.length !== 0) && item.level < 2) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                if ((!!item.child && item.child.length !== 0) && item.level < 1) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         } else {
-            if ((!!item.child && item.child.length !== 0) && item.level < 1) {
-                return true;
+            if (item.ma.startsWith('02') || item.ma.startsWith('01')) {
+                if ((!!item.child && item.child.length !== 0) && item.level < 2) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                return false;
+                if ((!!item.child && item.child.length !== 0) && item.level < 1) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     }

@@ -1,29 +1,29 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { FileDinhKem } from "../../../../../../models/FileDinhKem";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   BbNghiemThuBaoQuanService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import {
   QuyetDinhGiaoNhapHangKhacService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhGiaoNhapHangKhac.service";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {DanhMucCongCuDungCuService} from "../../../../../../services/danh-muc-cong-cu-dung-cu.service";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import { DanhMucCongCuDungCuService } from "../../../../../../services/danh-muc-cong-cu-dung-cu.service";
 import * as dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {STATUS} from "../../../../../../constants/status";
-import {MESSAGE} from "../../../../../../constants/message";
+import { Validators } from "@angular/forms";
+import { STATUS } from "../../../../../../constants/status";
+import { MESSAGE } from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import {convertMaCcdc,convertTienTobangChu} from "../../../../../../shared/commonFunction";
-import {cloneDeep} from 'lodash';
+import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { convertMaCcdc, convertTienTobangChu } from "../../../../../../shared/commonFunction";
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'app-lap-bien-ban-chuan-bi-kho',
   templateUrl: './lap-bien-ban-chuan-bi-kho.component.html',
