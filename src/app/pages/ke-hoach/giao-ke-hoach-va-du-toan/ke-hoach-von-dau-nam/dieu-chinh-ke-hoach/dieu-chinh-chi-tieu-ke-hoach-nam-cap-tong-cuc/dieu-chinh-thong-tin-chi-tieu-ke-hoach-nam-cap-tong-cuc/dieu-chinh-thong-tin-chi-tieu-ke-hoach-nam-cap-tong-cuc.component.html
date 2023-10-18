@@ -181,6 +181,16 @@
     <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'">
       <div id="table-luong-thuc"
         [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+        <div class='d-flex justify-content-between header-tab'>
+          <div class='trai'>
+          </div>
+          <div class='canphai phai'>
+            <button type='button' class='btn btn-main' (click)='preView("LT")'>
+              <i class=' icon htvbdh_tcdt_print'></i>
+              <span>In/xem trước</span>
+            </button>
+          </div>
+        </div>
         <div class="ghichu_tab">Đơn vị tính:Tấn</div>
         <nz-table #groupingTable [nzData]="dsKeHoachLuongThucClone" nzBordered [nzFrontPagination]="false"
           [nzShowPagination]="false" style="overflow: scroll;" [nzScroll]="{ x: '1700px' }">
@@ -568,6 +578,16 @@
     <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'">
       <div id="table-muoi"
         [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+        <div class='d-flex justify-content-between header-tab'>
+          <div class='trai'>
+          </div>
+          <div class='canphai phai'>
+            <button type='button' class='btn btn-main' (click)='preView("MUOI")'>
+              <i class=' icon htvbdh_tcdt_print'></i>
+              <span>In/xem trước</span>
+            </button>
+          </div>
+        </div>
         <div class="ghichu_tab">Đơn vị tính:Kg</div>
         <nz-table #groupingTableMuoi [nzData]="dsMuoiClone" nzBordered class="table__body" [nzFrontPagination]="false"
           [nzShowPagination]="false" style="overflow: scroll;">
@@ -657,7 +677,7 @@
       </div>
     </nz-tab>
     <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị dự trữ nhà nước'">
-      <nz-tabset>
+      <nz-tabset [(nzSelectedIndex)]="subTabVatTu" [nzTabBarExtraContent]="extraTemplate">
         <!-- nhapvattu-->
         <nz-tab nzTitle="Chỉ tiêu nhập">
           <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -918,6 +938,15 @@
           </nz-card>
         </nz-tab>
       </nz-tabset>
+
+      <ng-template #extraTemplate>
+        <div class='btn-group mt-2'>
+          <button type="button" class="btn btn-main" (click)="preView('VT')">
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In/xem trước</span>
+          </button>
+        </div>
+      </ng-template>
     </nz-tab>
 
   </nz-tabset>
@@ -977,6 +1006,27 @@
       </button>
       <button nz-button (click)="handleCanCuCancel()" class="modal__button--cancel">
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+    </div>
+  </nz-modal>
+
+  <nz-modal [(nzVisible)]='showDlgPreview' nzTitle='Kế hoạch' nzWidth='100%'>
+    <div *nzModalContent class='modal__content'>
+      <pdf-viewer [src]='pdfSrc' [original-size]='false' [render-text]='true' style='width: 100%; height: 600px;'>
+      </pdf-viewer>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button (click)='downloadPdf()' class='modal__button--save'>
+        <i class='icon htvbdh_tcdt_tuchoi'></i>
+        Tải Pdf
+      </button>
+      <button nz-button (click)='downloadExcel()' class='modal__button--save'>
+        <i class='icon htvbdh_nhap-excel'></i>
+        Xuất Excel
+      </button>
+      <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+        <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
         Đóng
       </button>
     </div>
