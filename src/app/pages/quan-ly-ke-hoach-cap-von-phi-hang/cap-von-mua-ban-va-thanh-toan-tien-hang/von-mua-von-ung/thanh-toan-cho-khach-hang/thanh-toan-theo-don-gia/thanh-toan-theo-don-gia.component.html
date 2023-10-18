@@ -80,7 +80,7 @@
                                 {{ baoCao.quyetDinh }}
                             </td>
                             <td>
-                                {{ Cvmb.priceBasisName(baoCao.canCuVeGia) }}
+                                {{ Vm.priceBasisName(baoCao.canCuVeGia) }}
                             </td>
                             <td>
                                 {{ Cvmb.suggestionName(baoCao.loaiDnghi)}}
@@ -211,16 +211,16 @@
                             <td nzLeft>
                                 {{ data.tenDvi }}
                             </td>
+                            <td>
+                                {{ Op.fmtNum(data.slKeHoach) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtVal(data.donGia) }}
+                            </td>
+                            <td>
+                                {{ Op.fmtVal(data.gtKeHoach) }}
+                            </td>
                             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                <td>
-                                    {{ Op.fmtNum(data.slKeHoach) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.donGia) }}
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(data.gtKeHoach) }}
-                                </td>
                                 <td>
                                     {{ Op.fmtVal(data.lkUng) }}
                                 </td>
@@ -259,19 +259,6 @@
                                 </td>
                             </ng-container>
                             <ng-template #editTemplate>
-                                <td>
-                                    <input class="money-input" currencyMask [options]="Op.amount"
-                                        [(ngModel)]="editCache[data.id].data.slKeHoach"
-                                        (ngModelChange)="changeModel(data)" />
-                                </td>
-                                <td>
-                                    <input class="money-input" currencyMask [options]="Op.amount"
-                                        [(ngModel)]="editCache[data.id].data.donGia"
-                                        (ngModelChange)="changeModel(data)" />
-                                </td>
-                                <td>
-                                    {{ Op.fmtVal(editCache[data.id].data.gtKeHoach) }}
-                                </td>
                                 <td>
                                     {{ Op.fmtVal(editCache[data.id].data.lkUng) }}
                                 </td>

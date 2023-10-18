@@ -260,7 +260,7 @@
                         </td>
                         <td class="text-left">
                             <a (click)="xemChiTiet(data.id, true,'NHDTQG_PTMTT_KHMTT_LT_DEXUAT_XEM')"
-                               *ngIf="checkQuyenXem(data.trangThai)">
+                                *ngIf="checkQuyenXem(data.trangThai)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')"

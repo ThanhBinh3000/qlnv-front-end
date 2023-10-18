@@ -272,7 +272,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhieuXuatKho = this.idInput > 0 ? res.data.content : res.data.content.filter(item => !item.soBbLayMau,
         )
-        ;
+          ;
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);

@@ -19,8 +19,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
-import {DatePipe} from "@angular/common";
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { DatePipe } from "@angular/common";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khmtt',
@@ -416,7 +416,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
 
   setNewTableData($event) {
     debugger
-    this.danhsachDx.forEach(item =>{
+    this.danhsachDx.forEach(item => {
       item.children = $event.filter(x => x.maDvi.includes(item.maDvi));
       item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
       item.tongTienGomThue = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)

@@ -315,6 +315,10 @@ export class BaoCaoComponent implements OnInit {
     }
 
     async submitReport() {
+        if (!this.baoCao.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -428,11 +432,6 @@ export class BaoCaoComponent implements OnInit {
                     fileName: this.baoCao.congVan?.fileName,
                 }
             }
-        }
-
-        if (!baoCaoTemp.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
         }
 
         // replace nhung ban ghi dc them moi id thanh null
@@ -586,7 +585,7 @@ export class BaoCaoComponent implements OnInit {
             namBcao: this.baoCao.namBcao,
             tenPl: bieuMau.tenPl,
             tieuDe: bieuMau.tenDm,
-            congVan: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
+            congVan: this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '',
             path: this.path,
             status: new BtnStatus(),
             isSynthetic: isSynthetic,

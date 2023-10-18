@@ -9,7 +9,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { Cvmb, Report, ThanhToan } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import { Tab } from '../../von-mua-von-ung.constant';
+import { Tab, Vm } from '../../von-mua-von-ung.constant';
 
 @Component({
     selector: 'dialog-tao-moi-thanh-toan',
@@ -20,6 +20,7 @@ import { Tab } from '../../von-mua-von-ung.constant';
 export class DialogTaoMoiThanhToanComponent implements OnInit {
     @Input() request: any;
     Cvmb = Cvmb;
+    Vm = Vm;
 
     userInfo: any;
     response: Report = new Report();
@@ -27,7 +28,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
     loaiDns: any[] = [];
     donVis: any[];
     lstNam: number[] = [];
-    lstQuyetDinh: string[] = [];
+    lstQuyetDinh: any[] = [];
 
     constructor(
         private _modalRef: NzModalRef,
@@ -41,13 +42,13 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.response.maLoai = this.request.maLoai;
         if (this.userService.isChiCuc()) {
-            this.canCuGias = Cvmb.CAN_CU_GIA.filter(e => e.id == Cvmb.DON_GIA);
+            this.canCuGias = Vm.CAN_CU_GIA.filter(e => e.id == Cvmb.DON_GIA);
             this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.THOC);
         } else if (this.userService.isTongCuc()) {
-            this.canCuGias = Cvmb.CAN_CU_GIA.filter(e => e.id == Cvmb.HOP_DONG);
+            this.canCuGias = Vm.CAN_CU_GIA.filter(e => e.id == Cvmb.HOP_DONG);
             this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id == Cvmb.VTU);
         } else {
-            this.canCuGias = Cvmb.CAN_CU_GIA;
+            this.canCuGias = Vm.CAN_CU_GIA;
             this.loaiDns = Cvmb.LOAI_DE_NGHI.filter(e => e.id != Cvmb.VTU);
         }
         this.lstNam = Utils.getListYear(5, 10);
@@ -124,10 +125,14 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         await this.getMaDnghi();
         if (!id) {
             if (this.response.canCuVeGia == Cvmb.DON_GIA) {
+                const qd = this.lstQuyetDinh.find(e => e.soQd == this.response.quyetDinh);
                 this.response.lstCtiets.push(new ThanhToan({
                     id: uuid.v4() + 'FE',
                     maDvi: this.userInfo.MA_DVI,
                     tenDvi: this.userInfo?.TEN_DVI,
+                    slKeHoach: qd.slKeHoach,
+                    donGia: qd.donGia,
+                    gtKeHoach: Operator.mul(qd.slKeHoach, qd.donGia),
                 }))
             } else {
                 this.getContractData();
@@ -188,6 +193,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         const request = {
             namKHoach: this.response.namDnghi,
             maDvi: this.userInfo?.MA_DVI,
+            maLoai: this.response.maLoai,
         }
         this.spinner.show();
         this.capVonMuaBanTtthService.soQdChiTieu(request).toPromise().then(
@@ -212,6 +218,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
             namKHoach: this.response.namDnghi,
             maDvi: this.userInfo.MA_DVI,
             loaiVthh: null,
+            maLoai: this.response.maLoai,
         }
         switch (this.response.loaiDnghi) {
             case Cvmb.THOC:
@@ -231,11 +238,11 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
             (data) => {
                 if (data.statusCode == 0) {
                     data.data.forEach(item => {
-                        if (this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQdPdKhlcnt) == -1) {
+                        if (this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQd) == -1) {
                             const temp: ThanhToan = new ThanhToan({
                                 id: uuid.v4() + 'FE',
-                                tenKhachHang: item.tenNhaThau,
-                                qdPheDuyet: item.soQdPdKhlcnt,
+                                tenKhachHang: item.tenKhachHang,
+                                qdPheDuyet: item.soQd,
                             })
                             if (this.response.lstCtiets.length == 0) {
                                 this.response.lstCtiets = Table.addHead(temp, this.response.lstCtiets)
@@ -246,13 +253,13 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
                         }
                         const temp: ThanhToan = new ThanhToan({
                             id: uuid.v4() + 'FE',
-                            qdPheDuyet: item.tenGoiThau + '/' + item.soHd,
-                            slKeHoach: item.soLuongKehoach,
-                            slHopDong: item.soLuong,
+                            qdPheDuyet: item.tenGoiThau + '/' + item.soHopDong,
+                            slKeHoach: item.slKeHoach,
+                            slHopDong: item.slHopDong,
                             donGia: item.donGia,
-                            gtHopDong: Operator.mul(item.soLuong, item.donGia),
+                            gtHopDong: Operator.mul(item.slHopDong, item.donGia),
                         })
-                        const index = this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQdPdKhlcnt);
+                        const index = this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQd);
                         this.response.lstCtiets = Table.addChild(this.response.lstCtiets[index].id, temp, this.response.lstCtiets);
                         this.response.lstCtiets[index].slKeHoach = Operator.sum([this.response.lstCtiets[index].slKeHoach, temp.slKeHoach]);
                         this.response.lstCtiets[index].slHopDong = Operator.sum([this.response.lstCtiets[index].slHopDong, temp.slHopDong]);

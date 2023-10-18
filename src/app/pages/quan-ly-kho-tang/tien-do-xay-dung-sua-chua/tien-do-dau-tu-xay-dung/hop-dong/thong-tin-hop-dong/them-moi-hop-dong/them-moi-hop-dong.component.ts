@@ -1,13 +1,13 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {FormGroup, Validators} from "@angular/forms";
-import {STATUS} from "../../../../../../../constants/status";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormGroup, Validators } from "@angular/forms";
+import { STATUS } from "../../../../../../../constants/status";
+import { Base2Component } from "../../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import dayjs from 'dayjs';
 import {
   QuyetdinhpheduyetKhlcntService
@@ -15,15 +15,15 @@ import {
 import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {HopdongService} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { HopdongService } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
+import { convertTienTobangChu } from "../../../../../../../shared/commonFunction";
 import {
   DialogQdPdKqlcntComponent
 } from "../../../../../../../components/dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
-import {CurrencyMaskInputMode} from "ngx-currency";
-import {PhuLucHopDongComponent} from "../phu-luc-hop-dong/phu-luc-hop-dong.component";
-import {NzCollapsePanelComponent} from "ng-zorro-antd/collapse";
+import { CurrencyMaskInputMode } from "ngx-currency";
+import { PhuLucHopDongComponent } from "../phu-luc-hop-dong/phu-luc-hop-dong.component";
+import { NzCollapsePanelComponent } from "ng-zorro-antd/collapse";
 
 @Component({
   selector: 'app-them-moi-hop-dong',
@@ -31,7 +31,7 @@ import {NzCollapsePanelComponent} from "ng-zorro-antd/collapse";
   styleUrls: ['./them-moi-hop-dong.component.scss']
 })
 export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
-  @ViewChild('collapseExpand', {static: false}) collapseExpand!: NzCollapsePanelComponent;
+  @ViewChild('collapseExpand', { static: false }) collapseExpand!: NzCollapsePanelComponent;
   formData: FormGroup;
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
@@ -402,8 +402,8 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
   }
 
   deleteDetail(item
-                 :
-                 any, roles ?
+    :
+    any, roles?
   ) {
     if (!this.checkPermission(roles)) {
       return
@@ -465,8 +465,8 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
   }
 
   convertTien(tien
-                :
-                number
+    :
+    number
   ):
     string {
     return convertTienTobangChu(tien);
@@ -480,7 +480,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       this.dataKlcv.forEach((item, index) => {
         this.dataKlcvEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
         item.thanhTien = item.khoiLuong * item.donGia;
       });
@@ -541,7 +541,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
 
   cancelEditKLCongViec(idx) {
     this.dataKlcvEdit[idx] = {
-      data: {...this.dataKlcv[idx]},
+      data: { ...this.dataKlcv[idx] },
       edit: false
     };
   }

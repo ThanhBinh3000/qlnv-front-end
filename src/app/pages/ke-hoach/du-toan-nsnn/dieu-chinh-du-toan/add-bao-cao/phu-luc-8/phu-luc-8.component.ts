@@ -194,7 +194,7 @@ export class PhuLuc8Component implements OnInit {
 
         this.lstCtietBcao.forEach(item => {
             if (!item.matHang) {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.matHang && e.loaiBaoQuan == item.maDmuc);
+                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.matHang && e.htBaoQuan == item.maDmuc);
                 item.matHang = dinhMuc?.tenDinhMuc;
                 item.dinhMuc = dinhMuc?.tongDmuc;
                 item.maDviTinh = dinhMuc?.donViTinh;
@@ -545,7 +545,9 @@ export class PhuLuc8Component implements OnInit {
 
     changeModel(id: string): void {
         this.editCache[id].data.luongSlBquanTcong = Operator.sum([this.editCache[id].data.luongSlBquanTte, this.editCache[id].data.luongSlBquanUocThien]);
-        this.editCache[id].data.tongNcauDtoan = Operator.mul(this.editCache[id].data.dinhMuc, this.editCache[id].data.luongSlBquanTcong);
+        if (this.editCache[id].data.dinhMuc) {
+            this.editCache[id].data.tongNcauDtoan = Operator.mul(this.editCache[id].data.dinhMuc, this.editCache[id].data.luongSlBquanTcong);
+        }
         this.editCache[id].data.kphiCong = Operator.sum([this.editCache[id].data.kphiDtoanGiaoTnam, this.editCache[id].data.kphiDtoanNtruoc])
         this.editCache[id].data.dtoanDchinhDnghi = Operator.sum([this.editCache[id].data.tongNcauDtoan, - this.editCache[id].data.kphiCong]);
         this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDchinhDnghi]);
@@ -599,13 +601,13 @@ export class PhuLuc8Component implements OnInit {
                             matHang: data.ten,
                             level: 0,
                         }))
-                        const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
+                        const lstTemp = this.dsDinhMuc.filter(e => (!e.cloaiVthh && e.loaiVthh == data.ma) || e.cloaiVthh == data.ma);
                         for (let i = 1; i <= lstTemp.length; i++) {
                             this.lstCtietBcao.push(new ItemData({
                                 id: uuid.v4() + 'FE',
                                 stt: stt + '.' + i.toString(),
                                 maMatHang: data.ma,
-                                maDmuc: lstTemp[i - 1].loaiBaoQuan,
+                                maDmuc: lstTemp[i - 1].htBaoQuan,
                                 matHang: lstTemp[i - 1].tenDinhMuc,
                                 maDviTinh: lstTemp[i - 1].donViTinh,
                                 level: 1,
@@ -678,6 +680,7 @@ export class PhuLuc8Component implements OnInit {
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu' + Status.reportStatusName(this.dataInfo.trangThai) },
 
                 { t: 4, b: 6, l: 0, r: 0, val: "STT" },
                 { t: 4, b: 6, l: 1, r: 1, val: "Mặt hàng" },

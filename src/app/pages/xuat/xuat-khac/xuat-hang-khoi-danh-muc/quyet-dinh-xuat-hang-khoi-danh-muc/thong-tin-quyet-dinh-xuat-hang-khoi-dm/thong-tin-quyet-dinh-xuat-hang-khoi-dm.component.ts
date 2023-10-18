@@ -57,14 +57,14 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
   numberToRoman = NumberToRoman;
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private danhSachHangDtqgService: DanhSachHangDtqgService,
-              private quyetDinhXuatHangKhoiDmService: QuyetDinhXuatHangKhoiDmService) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private danhSachHangDtqgService: DanhSachHangDtqgService,
+    private quyetDinhXuatHangKhoiDmService: QuyetDinhXuatHangKhoiDmService) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhXuatHangKhoiDmService);
     this.formData = this.fb.group({
       id: [],

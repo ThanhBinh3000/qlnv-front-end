@@ -1,19 +1,19 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {PhuongPhapLayMau} from "../../../../../../../models/PhuongPhapLayMau";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {KhCnQuyChuanKyThuat} from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import {MangLuoiKhoService} from "../../../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {STATUS} from "../../../../../../../constants/status";
-import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
-import {MESSAGE} from "../../../../../../../constants/message";
+import { Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../../../components/base2/base2.component";
+import { PhuongPhapLayMau } from "../../../../../../../models/PhuongPhapLayMau";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../../services/storage.service";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import { KhCnQuyChuanKyThuat } from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import { MangLuoiKhoService } from "../../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import { STATUS } from "../../../../../../../constants/status";
+import { FileDinhKem } from "../../../../../../../models/FileDinhKem";
+import { MESSAGE } from "../../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -61,8 +61,8 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
   fileDinhKems: any[] = [];
   listBbBaoHanh: any = [];
   LIST_DANH_GIA: any[] = [
-    {value: 0, label: "Không đạt"},
-    {value: 1, label: "Đạt"}
+    { value: 0, label: "Không đạt" },
+    { value: 1, label: "Đạt" }
   ]
   dataTableChiTieu: any[] = [];
   templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
@@ -170,7 +170,7 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
               let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : Array.from(data.ppLayMau);
-              ppLayMauOptions = ppLayMauOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
+              ppLayMauOptions = ppLayMauOptions.map((str, index) => ({ label: str, value: index + 1, checked: true }));
               this.formData.patchValue({
                 ppLayMauList: ppLayMauOptions,
               });
@@ -348,7 +348,7 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
     if (isDetail) {
       if (data.ppLayMau) {
         let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : Array.from(data.ppLayMau);
-        ppLayMauOptions = ppLayMauOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
+        ppLayMauOptions = ppLayMauOptions.map((str, index) => ({ label: str, value: index + 1, checked: true }));
         this.formData.patchValue({
           ppLayMauList: ppLayMauOptions,
         });
@@ -381,7 +381,7 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
 
   async loadChiTieuCl(itemBbLayMau) {
     let [dmTieuChuan] = await Promise.all([this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(itemBbLayMau.cloaiVthh)])
-    console.log(dmTieuChuan.data,"dmTieuChuan.data")
+    console.log(dmTieuChuan.data, "dmTieuChuan.data")
     if (dmTieuChuan.data) {
       this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({
         edit: false,
@@ -451,7 +451,7 @@ export class ThongTinPhieuKiemTraChatLuongVtTbComponent extends Base2Component i
 
   saveEdit(index: number): void {
     this.dataTableChiTieu[index].edit = false;
-    console.log(this.dataTableChiTieu[index],"123")
+    console.log(this.dataTableChiTieu[index], "123")
   }
 
   deleteRow(data: any) {

@@ -15,7 +15,7 @@ import {
   DialogThemMoiKeHoachMuaTrucTiepComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import {
   QuyetDinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
@@ -189,7 +189,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     }
   }
 
-  async getPag(data:any){
+  async getPag(data: any) {
     let bodyPag = {
       namKeHoach: data.namKh,
       loaiVthh: data.loaiVthh,
@@ -248,9 +248,9 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       }
       if (index && index >= 0) {
         this.dataTable[index] = data;
-      }else{
+      } else {
         for (let i = 0; i < this.dataTable.length; i++) {
-          if(this.dataTable[i].maDvi == data.maDvi){
+          if (this.dataTable[i].maDvi == data.maDvi) {
             this.dataTable[i] = data
           }
         }

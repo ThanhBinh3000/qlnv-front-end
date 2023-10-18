@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {Subject} from "rxjs";
-import {UserService} from "../../../services/user.service";
-import {Globals} from "../../../shared/globals";
-import {STATUS} from "../../../constants/status";
-import {cloneDeep} from 'lodash';
+import { Component, OnInit } from "@angular/core";
+import { Subject } from "rxjs";
+import { UserService } from "../../../services/user.service";
+import { Globals } from "../../../shared/globals";
+import { STATUS } from "../../../constants/status";
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: "app-xuat-cuu-tro-vien-tro",

@@ -1,24 +1,24 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 
 import dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import { Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../../../components/base2/base2.component";
+import { StorageService } from "../../../../../../../services/storage.service";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import {
   BckqKiemDinhMauService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service";
-import {STATUS} from "../../../../../../../constants/status";
-import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
-import {MESSAGE} from "../../../../../../../constants/message";
+import { STATUS } from "../../../../../../../constants/status";
+import { FileDinhKem } from "../../../../../../../models/FileDinhKem";
+import { MESSAGE } from "../../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
+import { convertTienTobangChu } from "../../../../../../../shared/commonFunction";
 import {
   BienBanKetThucNhapKhoBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BienBanKetThucNhapKhoBaoHanh.service";
@@ -253,7 +253,7 @@ export class ThongTinBienBanKetThucNhapKhoBaoHanhComponent extends Base2Componen
   async bindingDataDdNhap(data) {
     if (data) {
       console.log(1)
-      this.listPhieuNhapKho = this.dataPhieuNhapKho.filter(f=>f.maDiaDiem==data.maDiaDiem);
+      this.listPhieuNhapKho = this.dataPhieuNhapKho.filter(f => f.maDiaDiem == data.maDiaDiem);
       this.formData.patchValue({
         maDiaDiem: data.maDiaDiem,
         tenDiemKho: data.tenDiemKho,

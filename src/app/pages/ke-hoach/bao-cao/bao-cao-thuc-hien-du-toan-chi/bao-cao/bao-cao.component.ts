@@ -312,6 +312,10 @@ export class BaoCaoComponent implements OnInit {
     }
 
     async submitReport() {
+        if (!this.baoCao.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -424,10 +428,6 @@ export class BaoCaoComponent implements OnInit {
                 }
             }
         }
-        if (!baoCaoTemp.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
 
         // replace nhung ban ghi dc them moi id thanh null
         baoCaoTemp.lstBcaos.forEach(item => {
@@ -537,7 +537,7 @@ export class BaoCaoComponent implements OnInit {
             status: new BtnStatus(),
             tieuDe: bieuMau.tieuDe,
             tenPl: bieuMau.tenPhuLuc,
-            congVan: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi),
+            congVan: this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '',
             luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
         }
         Object.assign(dataInfo.status, this.status);

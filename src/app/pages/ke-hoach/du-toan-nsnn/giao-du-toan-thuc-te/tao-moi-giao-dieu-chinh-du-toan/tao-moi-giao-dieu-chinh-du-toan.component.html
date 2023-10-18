@@ -51,8 +51,8 @@
                 <span>Tiếp nhận</span>
             </button>
             <button type="button" class="btn btn-main" (click)="exportToExcel()">
-              <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
-              <span>Xuất</span>
+                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                <span>Xuất</span>
             </button>
         </div>
     </nz-affix>
@@ -223,7 +223,7 @@
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
                                             <div *ngIf="e.maDviNhan == item.maDvi">
-                                                <ng-container *ngIf="e.trangThai == null">
+                                                <ng-container *ngIf="e.trangThai == null && trangThaiBanGhi !=='7'">
                                                     <a (click)="giaoSoTranChi(e.maDviNhan)">
                                                         Giao
                                                     </a>

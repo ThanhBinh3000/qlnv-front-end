@@ -37,19 +37,6 @@
             <app-tong-hop-bao-cao-cap-duoi (dataChange)="changeTab($event)">
             </app-tong-hop-bao-cao-cap-duoi>
         </ng-container>
-
-        <ng-container *ngIf="tabSelected == 'phuongAnGiaoDieuChinh'">
-            <app-tao-moi-giao-dieu-chinh-du-toan [data]="data" (dataChange)="changeTab($event)">
-            </app-tao-moi-giao-dieu-chinh-du-toan>
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 'nextphuongAnGiaoDieuChinh'">
-            <app-tao-moi-giao-dieu-chinh-du-toan [data]="data" (dataChange)="changeTab($event)">
-            </app-tao-moi-giao-dieu-chinh-du-toan>
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 'nextnextphuongAnGiaoDieuChinh'">
-            <app-tao-moi-giao-dieu-chinh-du-toan [data]="data" (dataChange)="changeTab($event)">
-            </app-tao-moi-giao-dieu-chinh-du-toan>
-        </ng-container>
         <ng-container *ngIf="tabSelected == 'phuongAnGiaoDuToan'">
             <app-tao-moi-giao-du-toan [data]="data" (dataChange)="changeTab($event)">
             </app-tao-moi-giao-du-toan>

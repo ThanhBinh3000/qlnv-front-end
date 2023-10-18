@@ -199,13 +199,12 @@
   </div>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-themmoi-tonghop-khmtt [id]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-    (showListEvent)="showList()">
+  <app-themmoi-tonghop-khmtt [id]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView" (showListEvent)="showList()">
   </app-themmoi-tonghop-khmtt>
 </div>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khmtt [idInput]="qdPdMttId" [disableField]="disableField" [loaiVthh]="loaiVthh" [dataTongHop]="formDataQd.value"
-    (showListEvent)="showTongHop()">
+  <app-themmoi-quyetdinh-khmtt [idInput]="qdPdMttId" [disableField]="disableField" [loaiVthh]="loaiVthh"
+    [dataTongHop]="formDataQd.value" (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khmtt>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">

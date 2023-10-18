@@ -11,7 +11,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhGiaoNvNhapHangService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { async } from '@angular/core/testing';
 import { MttBienBanLayMauService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttBienBanLayMauService.service';
-import {STATUS} from "../../../../../constants/status";
+import { STATUS } from "../../../../../constants/status";
 @Component({
   selector: 'app-bien-ban-lay-ban-giao-mau',
   templateUrl: './bien-ban-lay-ban-giao-mau.component.html',
