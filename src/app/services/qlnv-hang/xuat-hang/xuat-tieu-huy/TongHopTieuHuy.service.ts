@@ -18,8 +18,4 @@ export class TongHopTieuHuyService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
-  getDsTaoHoSo(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-tong-hop-tao-hs`;
-    return this._httpClient.post<OldResponseData>(url, body).toPromise();
-  }
 }
