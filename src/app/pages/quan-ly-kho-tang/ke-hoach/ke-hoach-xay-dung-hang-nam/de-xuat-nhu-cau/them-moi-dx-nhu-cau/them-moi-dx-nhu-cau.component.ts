@@ -251,7 +251,8 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg, null, "Bạn đã lưu và gửi duyệt thành công!");
+    this.approve(this.idInput, trangThai, msg, null, trangThai==STATUS.DA_DUYET_LDC || trangThai==STATUS.DA_DUYET_CBV
+      ?"Bạn đã gửi duyệt thành công!":"Bạn đã lưu và gửi duyệt thành công!");
   }
 
   tuChoi() {
