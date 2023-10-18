@@ -1,13 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
 import Cleave from 'cleave.js';
 import * as XLSX from 'xlsx';
-import { environment } from 'src/environments/environment';
-import { ResponseData } from '../interfaces/response';
-import { MESSAGE } from "../constants/message";
-import { NzNotificationService } from "ng-zorro-antd/notification";
+import {environment} from 'src/environments/environment';
+import {ResponseData} from '../interfaces/response';
+import {MESSAGE} from "../constants/message";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 
 declare var vgcapluginObject: any;
 
@@ -55,7 +55,7 @@ export class HelperService {
 
   dateValidator = (control: FormControl): { [s: string]: boolean } => {
     if (control.value && !moment(control.value, 'DD/MM/YYYY', true).isValid()) {
-      return { invalid: true };
+      return {invalid: true};
     }
     return;
   };

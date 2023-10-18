@@ -1,28 +1,29 @@
-import { cloneDeep } from "lodash";
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Router } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { UserService } from "../../../../../../services/user.service";
-import { Globals } from "../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { HelperService } from "../../../../../../services/helper.service";
+import {chain, cloneDeep} from "lodash";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {Router} from "@angular/router";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {UserService} from "../../../../../../services/user.service";
+import {Globals} from "../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {HelperService} from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../../constants/message";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { STATUS } from "../../../../../../constants/status";
-import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {MESSAGE} from "../../../../../../constants/message";
+import {v4 as uuidv4} from "uuid";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {STATUS} from "../../../../../../constants/status";
+import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {
   TongHopDxScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
-import { log } from "ng-zorro-antd/core/logger";
+import {
+  KtKhSuaChuaBtcService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 
 @Component({
   selector: "app-them-moi-sc-tcdt",
@@ -56,6 +57,11 @@ export class ThemMoiScTcdtComponent implements OnInit {
   STATUS = STATUS;
   maTt: string;
   soQd: string;
+  idTongHop: number;
+  quyetDinh = false;
+  hidden = false;
+  @Output() tabFocus = new EventEmitter<object>();
+  resultDx: any;
 
   constructor(
     private router: Router,
@@ -67,19 +73,20 @@ export class ThemMoiScTcdtComponent implements OnInit {
     private tongHopDxScLon: TongHopDxScLonService,
     private fb: FormBuilder,
     private modal: NzModalService,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private qdScBtcService: KtKhSuaChuaBtcService,
   ) {
     this.formData = this.fb.group({
       id: [null],
-      ngayTaoTt: [null],
+      ngayTaoTt: [dayjs().format('YYYY-MM-DD')],
       tgTongHop: [null],
       namKeHoach: [null],
       noiDung: [null],
       maToTrinh: [null],
       soQuyetDinh: [null],
       ngayKyQd: [null],
-      trangThai: ["78"],
-      tenTrangThai: ["Đang nhập dữ liệu"],
+      trangThai: [STATUS.DU_THAO],
+      tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
       loaiTmdt: ['DUOI15TY']
     });
@@ -140,13 +147,26 @@ export class ThemMoiScTcdtComponent implements OnInit {
       this.canCuPhapLys = data.canCuPhapLys;
 
       this.dataTableReq = data.chiTiets;
-      let resultDx = data.chiTietDxs
-      if (resultDx && resultDx.length > 0) {
-        this.dataTableDxDuoi = this.convertListData(resultDx?.filter(item => item.tmdt <= 15000000000));
-        this.dataTableDxTren = this.convertListData(resultDx?.filter(item => item.tmdt > 15000000000));
+      this.resultDx = data.chiTietDxs
+      if (this.resultDx && this.resultDx.length > 0) {
+        this.dataTableDxDuoi = this.convertListData(this.resultDx?.filter(item => item.tmdt <= 15000000000));
+        this.dataTableDxTren = this.convertListData(this.resultDx?.filter(item => item.tmdt > 15000000000));
       }
       this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
       this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
+
+      let body = {
+        maDvi: this.userInfo.MA_DVI,
+        soTt: data.soQuyetDinh,
+        paggingReq: {
+          "limit": 999,
+          "page": 0
+        }
+      };
+      let dataQd = await this.qdScBtcService.search(body);
+      if (dataQd.data.content && dataQd.data.content.length > 0) {
+        this.hidden = !this.hidden;
+      }
     }
   }
 
@@ -157,7 +177,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   setValidators() {
     this.helperService.removeValidators(this.formData);
-    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
+    if (this.formData.value.trangThai == STATUS.DU_THAO) {
       this.formData.controls["maToTrinh"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoTt"].setValidators([Validators.required]);
     }
@@ -170,7 +190,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
-    if (isGuiDuyet && this.idInput > 0) {
+    if (isGuiDuyet) {
       this.setValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);
@@ -234,23 +254,23 @@ export class ThemMoiScTcdtComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DANG_NHAP_DU_LIEU: {
+            case STATUS.DU_THAO : {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_LDV: {
+            case STATUS.TU_CHOI_LDV : {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_LDV: {
+            case STATUS.CHO_DUYET_LDV : {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.TU_CHOI_LDTC: {
+            case STATUS.TU_CHOI_LDTC : {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDTC: {
+            case STATUS.CHO_DUYET_LDTC : {
               trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
@@ -401,12 +421,12 @@ export class ThemMoiScTcdtComponent implements OnInit {
               let rs1 = chain(v)
                 .groupBy("tenKhoi")
                 .map((v1, k1) => {
-                  return {
-                    idVirtual: uuidv4(),
-                    tenKhoi: k1,
-                    dataChild: v1
-                  };
-                }
+                    return {
+                      idVirtual: uuidv4(),
+                      tenKhoi: k1,
+                      dataChild: v1
+                    };
+                  }
                 ).value();
               return {
                 idVirtual: uuidv4(),
@@ -427,33 +447,45 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   sumSoLuong(data: any, row: string, type?: any) {
     let sl = 0;
-    if (!type) {
-      if (data && data.dataChild && data.dataChild.length > 0) {
-        const sum = data.dataChild.reduce((prev, cur) => {
-          prev += cur[row];
-          return prev;
-        }, 0);
-        sl = sum;
-      }
-    } else {
-      let sum = 0;
-      if (data == true) {
-        this.dataTableReq?.filter(item => item.tmdt > 15000000000)
-        this.dataTableReq.forEach(item => {
-          sum += item[row];
-        });
-        sl = sum;
+    let dataTable;
+    if (this.formData.value.id) {
+      if (type) {
+        if (data == 'tren') {
+          dataTable = this.resultDx?.filter(item => item.tmdt > 15000000000);
+        } else {
+          dataTable = this.resultDx?.filter(item => item.tmdt <= 15000000000);
+        }
       } else {
-        this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
-        this.dataTableReq.forEach(item => {
-          sum += item[row];
-        });
-        sl = sum;
+        if (data == 'tren') {
+          dataTable = this.dataTableReq?.filter(item => item.tmdt > 15000000000);
+        } else {
+          dataTable = this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
+        }
       }
-
+    }else {
+      if (data == 'tren') {
+        dataTable = this.dataTableReq?.filter(item => item.tmdt > 15000000000);
+      } else {
+        dataTable = this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
+      }
+    }
+    if (dataTable) {
+      const filteredData = dataTable.filter(item => {
+        if (data == 'tren') {
+          return item.tmdt > 15000000000;
+        } else {
+          return item.tmdt <= 15000000000;
+        }
+      });
+      sl = filteredData.reduce((prev, cur) => {
+        prev += cur[row];
+        return prev;
+      }, 0);
+      console.log(sl, 55)
     }
     return sl;
   }
+
 
   deleteRow(item: any) {
     this.modal.confirm({
@@ -488,7 +520,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: "1200px",
-      nzStyle: { top: "100px" },
+      nzStyle: {top: "100px"},
       nzFooter: null,
       nzComponentParams: {
         dataTable: list && list.dataChild ? list.dataChild : [],
@@ -515,6 +547,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       }
     });
   }
+
   deleteItem(index: any, y: any, table: any[]) {
     this.modal.confirm({
       nzClosable: false,
@@ -538,4 +571,13 @@ export class ThemMoiScTcdtComponent implements OnInit {
     });
   }
 
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+
+  openQdPheDuyet(id, b: boolean) {
+    this.idTongHop = id
+    this.quyetDinh = !this.quyetDinh;
+    this.emitTab({tab: "qdbtc", id: this.idTongHop, quyetDinh: this.quyetDinh});
+  }
 }

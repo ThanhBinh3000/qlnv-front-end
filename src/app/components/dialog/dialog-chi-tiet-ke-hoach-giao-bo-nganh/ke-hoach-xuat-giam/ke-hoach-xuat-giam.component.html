@@ -178,12 +178,9 @@
           <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true"/>
         </nz-input-group>
       </td>
-      <td>
+      <td class="text-right">
         <nz-input-group>
           <input class="money-input" currencyMask [(ngModel)]="rowItem.soLuong" [options]="amount"/>
-          <!--          <nz-input-number [disabled]="isView" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"-->
-          <!--                           [(ngModel)]="rowItem.soLuong">-->
-          <!--          </nz-input-number>-->
         </nz-input-group>
       </td>
       <td>

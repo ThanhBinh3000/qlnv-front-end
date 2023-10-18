@@ -1,16 +1,16 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Globals } from "../../../../../../../shared/globals";
-import { NgxSpinnerService } from 'ngx-spinner';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Globals} from "../../../../../../../shared/globals";
+import {NgxSpinnerService} from 'ngx-spinner';
+import {HelperService} from 'src/app/services/helper.service';
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {
   DialogThemMoiXuatBanTrucTiepComponent
 } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
-import { STATUS } from "../../../../../../../constants/status";
-import { LOAI_HANG_DTQG } from "../../../../../../../constants/config";
-import { MESSAGE } from "../../../../../../../constants/message";
+import {STATUS} from "../../../../../../../constants/status";
+import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
+import {MESSAGE} from "../../../../../../../constants/message";
 import {
   QuyetDinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
@@ -57,8 +57,8 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
       tgianGnhanGhiChu: [''],
       pthucGnhan: [''],
       thongBao: [''],
-      tongSoLuong: [null],
-      tongTien: [null],
+      tongSoLuong: [],
+      thanhTien: [],
       donViTinh: [''],
     });
   }
@@ -141,13 +141,14 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
         }
         item.children.forEach((child) => {
           child.donGiaDuocDuyet = donGiaDuocDuyet || null;
-          child.thanhTien = child.soLuongDeXuat * (donGiaDuocDuyet || 0);
+          child.thanhTienDuocDuyet = (donGiaDuocDuyet || 0) * child.soLuongDeXuat;
+          child.thanhTienDeXuat = child.soLuongDeXuat * child.donGiaDeXuat;
         });
-        item.tienChiCuc = item.children.reduce((acc, child) => acc + child.thanhTien, 0);
+        item.tienChiCuc = item.children.map(child => child.thanhTienDuocDuyet).reduce((prev, cur) => prev + cur, 0);
       });
       this.formData.patchValue({
         tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
-        tongTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
+        thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
       });
     }
   }

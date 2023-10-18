@@ -88,7 +88,8 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       loai: ['00'],
-      ngayMoSoKho : []
+      ngayMoSoKho : [],
+      lyDoTuChoi : []
     });
   }
 
@@ -207,6 +208,10 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
   goBack() {
     this._modalRef.close();
+  }
+
+  showDongSo(){
+    return this.formData.value.trangThai == STATUS.DA_DUYET_LDCC && this.formData.value.loai == '00' && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DONGSO')
   }
 
   tuChoi() {
@@ -484,9 +489,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    // && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_KT')
-  // && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_LDCCUC')
-    return (trangThai == STATUS.CHO_DUYET_KT )
-      || (trangThai == STATUS.CHO_DUYET_LDCC)
+    return (trangThai == STATUS.CHO_DUYET_KT && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_KT') )
+      || (trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_LDCCUC'))
   }
 }

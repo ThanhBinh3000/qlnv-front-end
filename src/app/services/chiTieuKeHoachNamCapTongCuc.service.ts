@@ -1,4 +1,4 @@
-import { OldResponseData, ResponseData } from "./../interfaces/response";
+import { OldResponseData, ResponseData } from './../interfaces/response';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -124,6 +124,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}/${maDvi}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
+
   loadThongTinChiTieuKeHoachTongCucGiao(body: any): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/chi-tieu-cua-tong-cuc`;
     return this.httpClient.post(url_, body).toPromise();
@@ -163,4 +164,19 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}/qlnv-luukho/hang-trong-kho/trang-thai-ht`;
     return this.httpClient.post(url, body).toPromise();
   }
+  xemTruocCtKhNamLuongThuc(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/preview/ke-hoach-luong-thuc`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  xemTruocCtKhNamMuoi(body) {
+    const url = `${environment.SERVICE_API}/qlnv-report/ct-kh-preview/xem-truoc-ct-kh-muoi`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  xemTruocCtKhNamVatTu(body) {
+    const url = `${environment.SERVICE_API}/qlnv-report/ct-kh-preview/xem-truoc-ct-kh-vat-tu`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
 }

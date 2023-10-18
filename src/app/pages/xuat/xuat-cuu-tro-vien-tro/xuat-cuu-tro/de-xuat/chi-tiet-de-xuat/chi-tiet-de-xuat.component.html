@@ -4,6 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button type="button" class="btn btn-sub" (click)="xemTruocPd(idSelected)">
+      <i class="icon htvbdh_totrinh"></i>
+      <span> In/Xem trước </span>
+    </button>
     <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
       class="btn btn-sub" (click)="reject(idSelected,STATUS.TU_CHOI_LDV)">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
@@ -80,7 +84,7 @@
             [ngClass]="(formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDV||formData.value.trangThai == STATUS.DA_TAO_CBV) ? 'status-xanh' : 'status-do'">
             {{ formData.value.tenTrangThai }}
           </span>
-          <span>Đề xuất đề xuất xuất cứu trợ, viện trợ</span>
+          <span>Đề xuất cứu trợ, viện trợ</span>
         </div>
       </div>
     </div>
@@ -190,16 +194,18 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
-                <span style="color: #001CFF;">{{formData.value.tenVthh}}</span>
+                <span style="color: #001CFF;" class="bold">{{formData.value.tenVthh}}</span>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="userService.isCuc()">
+          <div nz-col [nzSpan]="4"
+            *ngIf="!this.formData.value.id && userService.isCuc() || this.formData.value.id && this.formData.value.maDviDx.length === 6">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"></nz-form-label>
+              <nz-form-label [nzNoColon]="true">Tồn kho:</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
-                <span>Tồn kho: <strong>{{formDataDtl.value.tonKhoLoaiVthh|number:globals.numberFormat:globals.locale}}
-                    {{formData.value.donViTinh? " ("+ formData.value.donViTinh+ " )" : ""}}</strong></span>
+                <span style="color: #001CFF" class="bold">
+                  {{formData.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}
+                  {{formData.value.donViTinh? " ("+ formData.value.donViTinh+ " )" : ""}}</span>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -279,7 +285,7 @@
       <div class="title-card">
         <div class="title-chi-tieu">
           <span></span>
-          <span>Chi tiết đề xuất xuất cứu trợ, viện trợ</span>
+          <span>{{userService.isTongCuc() ?"Chi tiết phương án": "Chi tiết phương án xuất cứu trợ, viện trợ"}}</span>
         </div>
         <div>
           <button type="button" class="btn btn-main" (click)="themPhuongAn(null,0)" *ngIf="!isView">
@@ -309,7 +315,8 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+              <nz-form-label [nzNoColon]="true">
+                {{userService.isTongCuc() ? "Tổng SL giao Cục thực hiện": "Tổng SL đề xuất cứu trợ"}}</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <span
                   style="color: #001CFF"><strong>{{formData.value.tongSoLuongDeXuat|number:globals.numberFormat:globals.locale}}
@@ -342,12 +349,12 @@
                 <th [rowspan]="userService.isTongCuc()? 2 : 1">Địa phương/cơ quan/đơn vị nhận {{genCuuTroVienTro()}}
                 </th>
                 <ng-container *ngIf="userService.isTongCuc()">
-                  <th [colspan]="3">Cục DTNN KV</th>
+                  <th [colspan]="3">Giao Cục DTNN KV thực hiện</th>
                 </ng-container>
                 <ng-container *ngIf="!userService.isTongCuc()">
                   <th>SL xuất cứu trợ đề xuất</th>
                 </ng-container>
-                <ng-container *ngIf="isVthhGao() && formData.value.loaiNhapXuat === 'Xuất cứu trợ'">
+                <ng-container *ngIf="isVthhGao()">
                   <th [rowspan]="userService.isTongCuc()? 2 : 1">Nhu cầu xuất cứu trợ</th>
                   <th [rowspan]="userService.isTongCuc()? 2 : 1">SL gạo cần chuyển cấp thóc</th>
                 </ng-container>
@@ -374,7 +381,7 @@
                     <td></td>
                     <td></td>
                     <td class="bold">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
-                    <ng-container *ngIf="isVthhGao() && formData.value.loaiNhapXuat === 'Xuất cứu trợ'">
+                    <ng-container *ngIf="isVthhGao()">
                       <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                       <td class="bold">{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                     </ng-container>
@@ -401,7 +408,7 @@
                         <td>{{lv1.tonKhoLoaiVthh || lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
                         </td>
                         <td>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
-                        <ng-container *ngIf="isVthhGao() && formData.value.loaiNhapXuat === 'Xuất cứu trợ'">
+                        <ng-container *ngIf="isVthhGao()">
                           <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                           <td>{{lv1.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                         </ng-container>
@@ -427,7 +434,7 @@
                     <td>{{i +1}}</td>
                     <td>{{item.noiDung}}</td>
                     <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
-                    <ng-container *ngIf="isVthhGao() && formData.value.loaiNhapXuat === 'Xuất cứu trợ'">
+                    <ng-container *ngIf="isVthhGao()">
                       <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                       <td>{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                     </ng-container>
@@ -458,7 +465,7 @@
                 <th [rowspan]="2">Loại hàng DTQG</th>
                 <ng-container *ngIf="userService.isTongCuc()">
                   <th [colspan]="3">Chủng loại hàng DTQG</th>
-                  <th [colspan]="2">Cục DTNN KV</th>
+                  <th [colspan]="2">Giao Cục DTNN KV thực hiện</th>
                   <th [rowspan]="2">SL xuất cứu trợ giao Cục thực hiện</th>
                 </ng-container>
                 <ng-container *ngIf="!userService.isTongCuc()">
@@ -663,7 +670,8 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'">
               <nz-select nzAllowClear formControlName="noiDung" nzPlaceHolder="Vui lòng chọn" nzShowSearch>
-                <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"></nz-option>
+                <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"
+                  [nzDisabled]="p.disabled"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -794,3 +802,27 @@
     <button nz-button class="btn btn-main" (click)="handleOkSuaNoiDung()">Lưu</button>
   </ng-template>
 </nz-modal>-->
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()" class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(templateName)" class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(templateName)" class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

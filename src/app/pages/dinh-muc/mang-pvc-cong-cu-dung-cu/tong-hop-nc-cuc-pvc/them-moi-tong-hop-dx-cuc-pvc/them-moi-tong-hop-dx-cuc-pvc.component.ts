@@ -122,7 +122,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
           }
           item.id = null;
           item.ghiChu = null;
-          idVirtual: uuidv4();
+          idVirtual:uuidv4();
         });
         this.convertListData();
       }
@@ -229,11 +229,11 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_LDTC: {
+      case STATUS.CHO_DUYET_LDTC : {
         trangThai = STATUS.DA_DUYET_LDTC;
         break;
       }
-      case STATUS.DU_THAO: {
+      case STATUS.DU_THAO : {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;
       }
@@ -244,7 +244,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   async tuChoi() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_LDTC: {
+      case STATUS.CHO_DUYET_LDTC : {
         trangThai = STATUS.TU_CHOI_LDTC;
       }
     }

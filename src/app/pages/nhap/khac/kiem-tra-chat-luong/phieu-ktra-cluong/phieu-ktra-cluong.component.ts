@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { STATUS } from "../../../../../constants/status";
-import { PAGE_SIZE_DEFAULT } from "../../../../../constants/config";
-import { UserLogin } from "../../../../../models/userlogin";
-import { NgxSpinnerService } from "ngx-spinner";
-import { DonviService } from "../../../../../services/donvi.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { Router } from "@angular/router";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { UserService } from "../../../../../services/user.service";
-import { Globals } from "../../../../../shared/globals";
+import {Component, Input, OnInit} from '@angular/core';
+import {STATUS} from "../../../../../constants/status";
+import {PAGE_SIZE_DEFAULT} from "../../../../../constants/config";
+import {UserLogin} from "../../../../../models/userlogin";
+import {NgxSpinnerService} from "ngx-spinner";
+import {DonviService} from "../../../../../services/donvi.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {Router} from "@angular/router";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {UserService} from "../../../../../services/user.service";
+import {Globals} from "../../../../../shared/globals";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../constants/message";
-import { PhieuKtraCluongService } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/phieuKtraCluong.service";
+import {MESSAGE} from "../../../../../constants/message";
+import {PhieuKtraCluongService} from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/phieuKtraCluong.service";
 
 @Component({
   selector: 'app-phieu-ktra-cluong',
@@ -128,7 +128,7 @@ export class PhieuKtraCluongComponent implements OnInit {
     await this.search();
   }
 
-  async search() {
+  async search(){
     await this.spinner.show();
     let body = {
       "paggingReq": {
@@ -253,9 +253,9 @@ export class PhieuKtraCluongComponent implements OnInit {
     }
   }
 
-  hienThiXem(data) {
+  hienThiXem(data){
     if (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_XEM') && data != null) {
-      if (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+      if(this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
         return false;
       } else if (this.userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_PKTCL_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
         return false;

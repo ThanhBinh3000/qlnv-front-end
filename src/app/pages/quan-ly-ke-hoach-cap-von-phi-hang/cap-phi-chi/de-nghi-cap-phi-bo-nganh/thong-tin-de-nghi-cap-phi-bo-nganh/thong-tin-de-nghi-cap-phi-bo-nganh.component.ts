@@ -31,6 +31,7 @@ export class DeNghiCapPhi {
   isEdit: boolean;
   idVirtual: number;
 }
+
 export class ChiTietDeNghiCapPhi {
   loaiChiPhi: string;
   namPhatSinh: number;

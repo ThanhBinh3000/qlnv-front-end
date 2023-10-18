@@ -9,13 +9,13 @@
       </li>
       <ng-container *ngFor="let route of routes">
         <li class="nav-item" *ngIf="userService.isAccessPermisson(route.accessPermisson)">
-          <span class="nav-link" [ngClass]="
+                    <span class="nav-link" [ngClass]="
                 route.url && routerUrl.indexOf(route.url) != -1 ? 'active' : ''
               " nz-popover title nzPopoverPlacement="leftBottom" [nzPopoverOverlayClassName]="'dau-thau-tab'"
-            (mouseenter)="updateCssOverlay()" (click)="redirect(route.url)">
-            <i class="icon" [ngClass]="route.icon"></i>
-            <span class="text"> {{ route.title }}</span>
-          </span>
+                          (mouseenter)="updateCssOverlay()" (click)="redirect(route.url)">
+                        <i class="icon" [ngClass]="route.icon"></i>
+                        <span class="text"> {{ route.title }}</span>
+                    </span>
         </li>
       </ng-container>
       <li nz-submenu class="nav-item prev" (click)="endSlide()">

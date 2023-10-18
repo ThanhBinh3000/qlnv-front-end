@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   TongHopKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
-import { STATUS } from "../../../../../constants/status";
-import { LOAI_HANG_DTQG } from "../../../../../constants/config";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
+import {STATUS} from "../../../../../constants/status";
+import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-tong-hop-ke-hoach-ban-truc-tiep',

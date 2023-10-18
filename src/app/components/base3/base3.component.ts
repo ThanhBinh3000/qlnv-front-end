@@ -1,26 +1,26 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT, STATUS_DA_DUYET } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS, STATUS_LABEL } from 'src/app/constants/status';
-import { UserLogin } from 'src/app/models/userlogin';
-import { BaseService } from 'src/app/services/base.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { endOfMonth } from 'date-fns';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PREVIEW } from 'src/app/constants/fileType';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {UserLogin} from 'src/app/models/userlogin';
+import {BaseService} from 'src/app/services/base.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {StorageService} from 'src/app/services/storage.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {DialogTuChoiComponent} from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
+import {endOfMonth} from 'date-fns';
+import {ActivatedRoute, Router} from '@angular/router';
+import {PREVIEW} from 'src/app/constants/fileType';
 import printJS from 'print-js';
 
 @Component({
@@ -54,6 +54,7 @@ export class Base3Component implements OnInit {
   allChecked = false;
   indeterminate = false;
   defaultURL: string = '';
+  defaultPermisson: string = '';
 
   @Input() isDetail: boolean = false;
   @Input() dataInit: any = {};
@@ -669,13 +670,7 @@ export class Base3Component implements OnInit {
   }
 
 
-  showLyDoTuChoi(): boolean {
-    if (this.formData.controls.hasOwnProperty('trangThai')) {
-      let trangThai = this.formData.value.trangThai;
-      return trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_LDCC || trangThai == STATUS.TU_CHOI_LDTC
-    }
-    return false;
-  }
+
 
   showDlgPreview = false;
   pdfSrc: any;
@@ -724,7 +719,78 @@ export class Base3Component implements OnInit {
     printJS({ printable: this.printSrc, type: 'pdf', base64: true })
   }
 
+  isAccessPermisson(roles){
+    return this.userService.isAccessPermisson(roles);
+  }
 
+  showLyDoTuChoi(): boolean {
+    let trangThaiTc = [STATUS.TU_CHOI_TP,STATUS.TU_CHOI_LDC,STATUS.TU_CHOI_LDCC,STATUS.TU_CHOI_LDTC,STATUS.TU_CHOI_LDV,STATUS.TU_CHOI_CBV,STATUS.TUCHOI_BTC]
+    if (this.formData.controls.hasOwnProperty('trangThai')) {
+      let trangThai = this.formData.value.trangThai;
+      return trangThaiTc.includes(trangThai);
+    }
+    return false;
+  }
+
+  showDelete(data?){
+    if(data){
+      return data.trangThai == STATUS.DU_THAO && this.isAccessPermisson(this.defaultPermisson+"_XOA");
+    }
+    return this.isAccessPermisson(this.defaultPermisson+"_XOA");
+  }
+
+  showExport(){
+    return this.isAccessPermisson(this.defaultPermisson+"_EXP");
+  }
+
+  showCreate(){
+    return this.isAccessPermisson(this.defaultPermisson+"_THEM");
+  }
+
+  showSaveUpdate(){
+    if (this.formData.controls.hasOwnProperty('trangThai')) {
+      let trangThai = this.formData.value.trangThai;
+      let result = false
+      if (this.userService.isCuc()) {
+        let listTrangThai = [STATUS.TU_CHOI_TP,STATUS.TU_CHOI_LDC,STATUS.TU_CHOI_LDCC,STATUS.TU_CHOI_LDTC,STATUS.TU_CHOI_LDV,STATUS.TU_CHOI_CBV,STATUS.TUCHOI_BTC]
+        result = listTrangThai.includes(trangThai);
+      }
+      if (this.userService.isTongCuc()) {
+        let listTrangThai = [STATUS.DU_THAO,STATUS.DA_DUYET_LDC,STATUS.DANG_DUYET_CB_VU]
+        result = listTrangThai.includes(trangThai);
+      }
+      return result && this.userService.isAccessPermisson(this.defaultPermisson+"_THEM");
+    }
+  }
+
+  showApproveReject(trangThai){
+    if(this.userService.isCuc()){
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETTP')) ||
+        (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETLDC'));
+    }
+    if (this.userService.isTongCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETLDV')) ||
+        (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETLDTC')) ||
+        (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson(this.defaultPermisson+'_DUYETBTC'));
+    }
+  }
+
+  showEdit(data){
+    if(data){
+      let trangThai = data.trangThai;
+      let result;
+      if (this.userService.isCuc()) {
+        let listTrangThai = [STATUS.DU_THAO,STATUS.TU_CHOI_TP,STATUS.TU_CHOI_LDC,STATUS.TU_CHOI_CBV,STATUS.TU_CHOI_LDV]
+        result = listTrangThai.includes(trangThai);
+      }
+      if (this.userService.isTongCuc()) {
+        let listTrangThai = [STATUS.DU_THAO,STATUS.DA_DUYET_LDC,STATUS.DANG_DUYET_CB_VU]
+        result = listTrangThai.includes(trangThai);
+      }
+      return result && this.isAccessPermisson(this.defaultPermisson+"_THEM");
+    }
+    return false
+  }
 
 
 }

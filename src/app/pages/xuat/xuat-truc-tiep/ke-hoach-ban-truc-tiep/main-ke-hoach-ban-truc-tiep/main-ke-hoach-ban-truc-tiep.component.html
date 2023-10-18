@@ -1,11 +1,11 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
   <ul nz-menu nzMode="horizontal" id="mainTongCuc">
     <li nz-menu-item nzSelected (click)="selectTab(0)"
-      *ngIf="inputLoaiVthh == '02' ? userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT') : userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT')">
+        *ngIf="inputLoaiVthh == '02' ? userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT') : userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT')">
       Đề xuất KH bán trực tiếp
     </li>
     <li nz-menu-item (click)="selectTab(1)"
-      *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP') && this.userService.isTongCuc()">
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP') && this.userService.isTongCuc()">
       Tổng hợp đề xuất KH bán trực tiếp
     </li>
     <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT')">
@@ -21,7 +21,7 @@
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
   <app-tong-hop-ke-hoach-ban-truc-tiep [loaiVthh]="inputLoaiVthh"
-    [listVthh]="listVthh"></app-tong-hop-ke-hoach-ban-truc-tiep>
+                                       [listVthh]="listVthh"></app-tong-hop-ke-hoach-ban-truc-tiep>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
   <app-quyet-dinh-phe-duyet-kh-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-quyet-dinh-phe-duyet-kh-ban-truc-tiep>

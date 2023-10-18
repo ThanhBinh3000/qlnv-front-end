@@ -1,24 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { Globals } from 'src/app/shared/globals';
-import { UserService } from 'src/app/services/user.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { HelperService } from 'src/app/services/helper.service';
-import { UserLogin } from 'src/app/models/userlogin';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DanhSachPhanLo, DanhSachXuatBanTrucTiep } from 'src/app/models/KeHoachBanDauGia';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
+import {Globals} from 'src/app/shared/globals';
+import {UserService} from 'src/app/services/user.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {HelperService} from 'src/app/services/helper.service';
+import {UserLogin} from 'src/app/models/userlogin';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {DanhSachPhanLo, DanhSachXuatBanTrucTiep} from 'src/app/models/KeHoachBanDauGia';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {QuanLyHangTrongKhoService} from 'src/app/services/quanLyHangTrongKho.service';
 import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { cloneDeep } from 'lodash';
-import { QuyetDinhGiaTCDTNNService } from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {cloneDeep} from 'lodash';
+import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-dialog-them-dia-diem-phan-lo',
@@ -103,7 +102,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   initForm() {
     this.userInfo = this.userService.getUserLogin();
     this.thongtinPhanLo = new DanhSachPhanLo();
-    this.formData.patchValue({ donViTinh: this.donViTinh });
+    this.formData.patchValue({donViTinh: this.donViTinh});
     this.loadDonVi();
     if (this.dataEdit) {
       this.helperService.bidingDataInFormGroup(this.formData, this.dataEdit);
@@ -141,7 +140,13 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         })) || []
       );
     } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      const data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh && item.maVatTu == this.cloaiVthh);
+      const data = this.dataChiTieu.khVatTuXuat.filter(item => {
+        if (item.maVatTu === null) {
+          return item.maVatTuCha == this.loaiVthh;
+        } else {
+          return item.maVatTu == this.cloaiVthh && item.maVatTuCha == this.loaiVthh;
+        }
+      });
       const soLuongXuat = data.reduce((acc, item) => acc + item.soLuongXuat, 0);
       itemsToAdd.push({
         maDvi: data[0].maDvi,
@@ -183,7 +188,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     const [soLuongDaLenKh, chiCuc, res] = await Promise.all([
       this.deXuatKhBanDauGiaService.getSoLuongAdded(body),
       this.listChiCuc.find(item => item.maDvi === event),
-      this.donViService.getDonVi({ str: event }),
+      this.donViService.getDonVi({str: event}),
     ]);
     this.listDiemKho = [];
     if (res.msg === MESSAGE.SUCCESS && chiCuc?.soLuongXuat) {
@@ -337,8 +342,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   async tonKho(item, index?) {
     const body = {
       maDvi: item.maDvi,
-      loaiVthh: this.loaiVthh,
-      cloaiVthh: this.cloaiVthh,
+      loaiVthh: this.loaiVthh === LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
+      ...(this.loaiVthh === LOAI_HANG_DTQG.MUOI ? {} : {cloaiVthh: this.cloaiVthh}),
     };
     try {
       const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
@@ -353,8 +358,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       } else {
         console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho');
       }
-    } catch (error) {
-      console.error('Lỗi trong quá trình lấy dữ liệu trạng thái hàng tồn kho', error);
+    } catch (e) {
+      console.error('Error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -376,7 +382,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   validateDiemKho(): boolean {
-    const { maDiemKho, maNhaKho, maNganKho, maDviTsan, soLuongDeXuat, donGiaDeXuat, } = this.thongtinPhanLo;
+    const {maDiemKho, maNhaKho, maNganKho, maDviTsan, soLuongDeXuat, donGiaDeXuat,} = this.thongtinPhanLo;
     if (maDiemKho && maNhaKho && maNganKho && maDviTsan && soLuongDeXuat && donGiaDeXuat) {
       const data = this.listOfData.find(
         item => item.maDiemKho === maDiemKho && item.maNhaKho === maNhaKho && item.maNganKho === maNganKho);
@@ -399,8 +405,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   validateSoLuong() {
-    const { slChiTieu, tongSlKeHoachDd } = this.formData.value;
-    const { tonKho, soLuongDeXuat, donGiaDeXuat, maDviTsan } = this.thongtinPhanLo;
+    const {slChiTieu, tongSlKeHoachDd} = this.formData.value;
+    const {tonKho, soLuongDeXuat, donGiaDeXuat, maDviTsan} = this.thongtinPhanLo;
     const tongSoLuong = this.listOfData.reduce((total, item) => total + item.soLuongDeXuat, 0);
     const maDonViTsan = this.listOfData.find(item => item.maDviTsan)?.maDviTsan;
     if (maDonViTsan == maDviTsan) {
@@ -501,7 +507,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.listOfData.forEach((item, index) => {
       this.editCache[index] = {
         edit: false,
-        data: { ...item }
+        data: {...item}
       };
     });
   }

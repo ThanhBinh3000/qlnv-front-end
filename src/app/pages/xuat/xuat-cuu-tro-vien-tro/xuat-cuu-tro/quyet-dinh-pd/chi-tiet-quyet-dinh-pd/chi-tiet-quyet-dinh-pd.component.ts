@@ -41,6 +41,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() loaiXuat: any;
+  @Input() isViewOnModal: boolean;
   radioValue: any;
   cacheData: any[] = [];
   fileDinhKem: Array<FileDinhKem> = [];
@@ -104,6 +105,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   loaiNhapXuat: string;
   kieuNhapXuat: string;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  ngayKetThuc: string;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -143,7 +145,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       kieuNhapXuat: [],
       mucDichXuat: [],
       trichYeu: [],
-      trangThai: [STATUS.DU_THAO],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       lyDoTuChoi: [],
       xuatCap: [false],
       type: [],
@@ -155,7 +157,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       tenDvi: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
-      tenTrangThai: ['Dự thảo'],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       quyetDinhPdDtl: [new Array()],
       fileDinhKem: [new Array<FileDinhKem>()],
       canCu: [new Array<FileDinhKem>()],
@@ -168,9 +170,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         text: dayjs().get('year') - i,
       });
     };
-    this.formData.controls['ngayHluc'].valueChanges.subscribe((value) => {
-      console.log("value", value)
-    })
+    // this.formData.controls['ngayHluc'].valueChanges.subscribe((value) => {
+    // })
   }
 
   async ngOnInit() {
@@ -208,7 +209,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             }
             res.data.quyetDinhPdDtl.forEach(s => s.idVirtual = uuidv4());
             this.formData.patchValue(res.data);
-            console.log("111", this.formData.value)
 
             //get cache
             if (this.formData.value.type == 'TTr') {
@@ -223,18 +223,25 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                 s.loaiNhapXuat = detail.loaiNhapXuat;
                 s.kieuNhapXuat = detail.kieuNhapXuat;
                 s.mucDichXuat = detail.mucDichXuat;
+                s.ngayKetThuc = detail.ngayKetThuc;
               });
               this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatPhuongAn.map(element => ({
-                ...element,
-                soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc, soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
+                ...element, soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc,
+                soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
               })));
+              // this.loaiNhapXuat = detail.loaiNhapXuat;
+              // this.kieuNhapXuat = detail.kieuNhapXuat;
+              // this.mucDichXuat = detail.mucDichXuat
+              this.mucDichXuat = detail.mucDichXuat;
+              this.ngayKetThuc = detail.ngayKetThuc;
             } else {
               let res = await this.tongHopPhuongAnCuuTroService.getDetail(this.formData.value.idTongHop);
               let detail = res.data;
               this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatCuuTro.map(element => ({
                 ...element,
                 soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc, soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
-              })));
+              }))).sort((a, b) => b.id - a.id);
+
             }
             await this.buildTableView();
             if (this.phuongAnHdrView && this.formData.value.type === "TH" && this.phuongAnHdrView[0]) {
@@ -259,24 +266,22 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   async save() {
     // await this.helperService.ignoreRequiredForm(this.formData);
     // this.formData.controls.soQdGnv.setValidators([Validators.required]);
-    if (this.formData.value.type === "TH") {
-      this.formData.controls["ngayKetThuc"].clearValidators();
-      this.formData.controls["mucDichXuat"].clearValidators();
-    }
+    // if (this.formData.value.type !== "TH") {
+    //   this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
+    //   this.formData.controls["mucDichXuat"].setValidators(Validators.required);
+    // }
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return;
     if (!this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
       return this.notification.error(MESSAGE.ERROR, "Thông tin chi tiết đề xuất cứu trợ, viện trợ của các đơn vị không tồn tại.")
     }
-    let xuatCap = this.formData.value.xuatCap;
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
     await this.createUpdate(body);
-    this.formData.patchValue({ xuatCap: xuatCap });
-    this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
-    this.formData.controls["mucDichXuat"].setValidators(Validators.required);
+    // this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
+    // this.formData.controls["mucDichXuat"].setValidators(Validators.required);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
@@ -285,7 +290,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async openDialogTh() {
-    if (this.formData.get('type').value != 'TH' || this.formData.value.trangThai !== STATUS.DU_THAO) {
+    if (this.formData.get('type').value != 'TH' || this.isView) {
       return;
     }
     try {
@@ -358,7 +363,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async openDialogTr() {
-    if (this.formData.get('type').value != 'TTr') {
+    if (this.formData.get('type').value != 'TTr' || this.isView) {
       return
     }
     await this.spinner.show();
@@ -402,6 +407,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               s.loaiNhapXuat = detail.loaiNhapXuat;
               s.kieuNhapXuat = detail.kieuNhapXuat;
               s.mucDichXuat = detail.mucDichXuat;
+              s.ngayKetThuc = detail.ngayKetThuc;
               s.tenVthh = detail.tenVthh;
               s.soLuongXc = s.soLuongChuyenCapThoc;
             });
@@ -425,7 +431,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh', 'quyetDinhPdDtl']);
             this.loaiNhapXuat = detail.loaiNhapXuat;
             this.kieuNhapXuat = detail.kieuNhapXuat;
-            this.mucDichXuat = detail.mucDichXuat
+            this.mucDichXuat = detail.mucDichXuat;
+            this.ngayKetThuc = detail.ngayKetThuc;
             await this.buildTableView();
             // await this.selectRow(this.phuongAnHdrViewCache[0]);
             await this.expandAll();
@@ -454,6 +461,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     this.tongSoLuongDx = 0;
     this.tongSoLuongChuyenCapThocDx = 0;
     this.mucDichXuat = "";
+    this.ngayKetThuc = "";
     this.tongSoLuong = 0;
     this.tongSoLuongChuyenCapThoc = 0;
     this.loaiNhapXuat = "";
@@ -522,8 +530,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
-              ngayKyDx: row.ngayKyDx,
               ngayKetThuc: row.ngayKetThuc,
+              ngayKyDx: row.ngayKyDx,
               soLuong,
               soLuongDx,
               soLuongNhuCauXuat: soLuongNhuCauXuat,
@@ -560,6 +568,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
               soLuongDx: soLuongDx,
@@ -624,6 +633,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
               soLuongDx: soLuongDx,
@@ -646,6 +656,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
               soLuongDx: soLuongDx,
@@ -690,6 +701,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
               soLuongDx: soLuongDx,
@@ -716,6 +728,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
               soLuongDx: soLuongDx,
@@ -766,6 +779,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
               soLuong,
@@ -791,6 +805,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
               soLuongDx,
@@ -824,6 +839,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.loaiNhapXuat = this.phuongAnHdrView[findndex]?.loaiNhapXuat;
       this.kieuNhapXuat = this.phuongAnHdrView[findndex]?.kieuNhapXuat;
       this.mucDichXuat = this.phuongAnHdrView[findndex]?.mucDichXuat;
+      this.ngayKetThuc = this.phuongAnHdrView[findndex]?.ngayKetThuc;
       await this.tinhTong();
     }
   }
@@ -873,7 +889,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async tinhTong() {
-    console.log("aaa", this.phuongAnView, this.phuongAnViewCache);
     const { tongSoLuongDx, tongSoLuongChuyenCapThocDx } = this.phuongAnViewCache.reduce((obj, cur) => {
       obj.tongSoLuongDx += cur.soLuongDx;
       obj.tongSoLuongChuyenCapThocDx += cur.soLuongXc ? cur.soLuongXc : 0;

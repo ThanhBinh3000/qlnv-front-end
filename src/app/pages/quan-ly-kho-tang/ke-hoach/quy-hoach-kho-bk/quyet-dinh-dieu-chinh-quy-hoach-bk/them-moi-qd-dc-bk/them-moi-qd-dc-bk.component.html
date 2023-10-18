@@ -381,11 +381,7 @@
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItemDTM.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event,'DTM')">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of danhSachDiemKho">
-              </nz-option>
-            </nz-select>
+            <input nz-input [(ngModel)]="rowItemDTM.maDiemKho"/>
           </nz-input-group>
         </td>
         <td style="width: 9%;">

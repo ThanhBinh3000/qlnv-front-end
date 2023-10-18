@@ -62,6 +62,10 @@
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
+        <!-- <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="userService.isChiCuc()">
+          <i class="icon htvbdh_tcdt_tao-qd"></i>
+          <span>Thêm</span>
+        </button> -->
       </div>
     </div>
 
@@ -283,13 +287,16 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-chi-tiet-bien-ban-lay-mau [idSelected]="idSelected" [isView]="isView" [inputService]="inputService"
-    [loaiXuat]="loaiXuat" [inputServiceGnv]="inputServiceGnv" [inputData]="inputData" (showListEvent)="showList()">
+    [loaiXuat]="loaiXuat" [loaiVthh]="loaiVthh" [inputServiceGnv]="inputServiceGnv" [inputData]="inputData"
+    [loaiChon]="loaiChon" (showListEvent)="showList()">
   </app-chi-tiet-bien-ban-lay-mau>
 </div>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="showQdGnv" (nzOnCancel)="closeQdGnvModal()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="showQdGnv" (nzOnCancel)="closeQdGnvModal()"
+  *ngIf="loaiXuat ==='CTVT'">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--<app-thong-tin-qd-gnv-xuat-hang [id]="idQdGnv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
-    </app-thong-tin-qd-gnv-xuat-hang>-->
+    <app-chi-tiet-quyet-dinh-gnv [idSelected]="idQdGnv" (showListEvent)="showList()" [isView]="true"
+      [isViewOnModal]="true">
+    </app-chi-tiet-quyet-dinh-gnv>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeQdGnvModal()" class="modal__button--cancel">

@@ -1,24 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import dayjs from 'dayjs';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from "src/app/constants/status";
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from "src/app/constants/status";
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { DonviService } from "../../../../../../../services/donvi.service";
-import { DialogPagQdTcdtnnComponent } from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {DonviService} from "../../../../../../../services/donvi.service";
+import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-lt',
@@ -62,7 +62,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         ngayKy: [null, [Validators.required]],
         ngayHieuLuc: [null, [Validators.required]],
         soToTrinh: [null],
-        soQdCanDc: [null],
+        soQdDc: [null],
         loaiVthh: [null],
         tenLoaiVthh: [null],
         loaiDeXuat: [null],
@@ -84,7 +84,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.maQd = "/QĐ-TCDT"
-    this.getDataDetail(this.idInput)
+    await this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
@@ -110,6 +110,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         ghiChu: data.noiDung,
         soToTrinh: data.soToTrinh,
         loaiDeXuat: data.loaiDeXuat,
+        soQdDc  :data.soQdDc
       });
       this.dataTable = data.thongTinGiaLt;
       this.buildTreePagCt();
@@ -189,6 +190,19 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       return;
     }
     this.convertTreeToList();
+    if (this.dataTable && this.dataTable.length > 0) {
+      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+        this.dataTable.forEach(item => {
+          if (item.vat) {
+            if (this.formData.value.loaiDeXuat == '00') {
+              item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            } else {
+              item.giaQdDcTcdtVat = item.giaQdDcTcdt + item.giaQdDcTcdt * item.vat
+            }
+          }
+        })
+      }
+    }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.pagType = this.pagType;
@@ -233,10 +247,11 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value,
-            apDungTatCa: value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
-            vat: value && value[0] && value[0].vat ? value[0].vat : null,
-            giaQdBtc: value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
-            giaQdTcdt: value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
+            apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
+            vat : value && value[0] && value[0].vat ? value[0].vat : null,
+            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
+            giaQdTcdt : value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
+            giaQdDcTcdt : value && value[0] && value[0].giaQdDcTcdt ? value[0].giaQdDcTcdt : null,
           };
         }).value();
     }
@@ -250,9 +265,10 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         if (item.children && item.children.length > 0) {
           item.children.forEach(child => {
             if (child.apDungTatCa) {
-              child.giaQdTcdt = item.giaQdTcdt;
-              if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
-                child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
+              if (this.formData.value.loaiDeXuat == '00') {
+                child.giaQdTcdt = item.giaQdTcdt;
+              } else {
+                child.giaQdDcTcdt = item.giaQdDcTcdt;
               }
             }
             this.dataTable.push(child);
@@ -290,14 +306,23 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         nzComponentParams: {
           type: this.type,
           namKeHoach: this.formData.value.namKeHoach,
-          pagType: this.pagType,
+          pagType : this.pagType,
         },
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
           let chiTietToTrinh = data.data;
-          if (data.formData && data.formData.loaiQd == '00') {
             if (chiTietToTrinh) {
+              this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
+              const uniqueSoDeXuat = new Set<string>();
+              for (const record of this.dataTable) {
+                // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
+                if (!uniqueSoDeXuat.has(record.soDx)) {
+                  // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
+                  uniqueSoDeXuat.add(record.soDx.toString());
+                }
+              }
+              const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
               this.formData.patchValue({
                 loaiDeXuat: data.formData.loaiQd,
                 loaiVthh: chiTietToTrinh.loaiVthh ? chiTietToTrinh.loaiVthh : null,
@@ -308,22 +333,11 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
                 tenLoaiGia: chiTietToTrinh.tenLoaiGia ? chiTietToTrinh.tenLoaiGia : null,
                 soToTrinh: chiTietToTrinh.soToTrinh ? chiTietToTrinh.soToTrinh : null,
                 tchuanCluong: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
+                soQdDc : uniqueSoDeXuatArray && data.formData?.loaiQd == '01' ? uniqueSoDeXuatArray.join(', ') : ""
               })
               this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
             }
             this.buildTreePagCt();
-          } else {
-            let thRes = data.listDx;
-            let body = {
-              namTongHop: this.formData.value.namKeHoach,
-              loaiVthh: data.formData.loaiVthh ? data.formData.loaiVthh : null,
-              cloaiVthh: data.formData.cloaiVthh ? data.formData.cloaiVthh : null,
-              loaiGia: data.formData.loaiGia ? data.formData.loaiGia : null,
-              listIdPag: thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
-              loai: "01"
-            }
-            this.tongHopData(body);
-          }
         }
       });
     }

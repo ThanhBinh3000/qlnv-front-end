@@ -1,35 +1,35 @@
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { STATUS } from "../../../../constants/status";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {STATUS} from "../../../../constants/status";
 import dayjs from "dayjs";
-import { UserLogin } from "../../../../models/userlogin";
-import { MESSAGE } from "../../../../constants/message";
-import { DANH_MUC_LEVEL } from "../../luu-kho.constant";
-import { DonviService } from "../../../../services/donvi.service";
-import { TheoDoiBqService } from "../../../../services/luu-kho/theo-doi-bq.service";
-import { DialogTuChoiComponent } from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../services/storage.service";
-import { BangKeNhapScService } from "../../../../services/sua-chua/bangKeNhapSc.service";
-import { PhieuNhapKhoScService } from "../../../../services/sua-chua/phieuNhapKhoSc.service";
-import { QuyetDinhNhService } from "../../../../services/sua-chua/quyetDinhNh.service";
+import {UserLogin} from "../../../../models/userlogin";
+import {MESSAGE} from "../../../../constants/message";
+import {DANH_MUC_LEVEL} from "../../luu-kho.constant";
+import {DonviService} from "../../../../services/donvi.service";
+import {TheoDoiBqService} from "../../../../services/luu-kho/theo-doi-bq.service";
+import {DialogTuChoiComponent} from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../services/storage.service";
+import {BangKeNhapScService} from "../../../../services/sua-chua/bangKeNhapSc.service";
+import {PhieuNhapKhoScService} from "../../../../services/sua-chua/phieuNhapKhoSc.service";
+import {QuyetDinhNhService} from "../../../../services/sua-chua/quyetDinhNh.service";
 import {
   DialogTableSelectionComponent
 } from "../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { convertTienTobangChu } from "../../../../shared/commonFunction";
-import { Base3Component } from "../../../../components/base3/base3.component";
+import {convertTienTobangChu} from "../../../../shared/commonFunction";
+import {Base3Component} from "../../../../components/base3/base3.component";
 import { cloneDeep, chain } from 'lodash';
-import { QuanLySoKhoTheKhoService } from "../../../../services/quan-ly-so-kho-the-kho.service";
-import { DanhMucService } from "../../../../services/danhmuc.service";
-import { ThemmoiThComponent } from "../../../sua-chua/tong-hop/themmoi-th/themmoi-th.component";
-import { ThemMoiCtietTdbqComponent } from "./them-moi-ctiet-tdbq/them-moi-ctiet-tdbq.component";
-import { TheoDoiBqDtlService } from "../../../../services/luu-kho/theoDoiBqDtl.service";
-import { QuanLyHangTrongKhoService } from "../../../../services/quanLyHangTrongKho.service";
+import {QuanLySoKhoTheKhoService} from "../../../../services/quan-ly-so-kho-the-kho.service";
+import {DanhMucService} from "../../../../services/danhmuc.service";
+import {ThemmoiThComponent} from "../../../sua-chua/tong-hop/themmoi-th/themmoi-th.component";
+import {ThemMoiCtietTdbqComponent} from "./them-moi-ctiet-tdbq/them-moi-ctiet-tdbq.component";
+import {TheoDoiBqDtlService} from "../../../../services/luu-kho/theoDoiBqDtl.service";
+import {QuanLyHangTrongKhoService} from "../../../../services/quanLyHangTrongKho.service";
 
 @Component({
   selector: 'app-them-moi-so-theo-doi-bq',
@@ -40,10 +40,10 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   rowItem: any = {};
 
-  listPhuongThucBaoQuan: any[] = []
-  listHinhThucBaoQuan: any[] = []
+  listPhuongThucBaoQuan : any[] = []
+  listHinhThucBaoQuan : any[] = []
   monthFormat = 'MM/yyyy'
-  monthSelect = new Date().getDate() >= 25 ? new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()) : new Date();
+  monthSelect = new Date().getDate() >= 25 ? new Date(new Date().getFullYear(),new Date().getMonth()+1,new Date().getDate()) : new Date();
 
   constructor(
     httpClient: HttpClient,
@@ -56,8 +56,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
     private theoDoiBqService: TheoDoiBqService,
     private theoDoiBqDtlService: TheoDoiBqDtlService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
-    private danhMucService: DanhMucService,
-    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService
+    private danhMucService : DanhMucService,
+    private quanLyHangTrongKhoService : QuanLyHangTrongKhoService
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, theoDoiBqService);
     this.defaultURL = 'luu-kho/theo-doi-bao-quan'
@@ -74,20 +74,20 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       soKho: ['', [Validators.required]],
       idSoKho: ['', [Validators.required]],
       ngayLapSoKho: ['', [Validators.required]],
-      maDiemKho: [''],
+      maDiemKho : [''],
       tenDiemKho: ['',],
-      maNhaKho: [''],
+      maNhaKho : [''],
       tenNhaKho: ['',],
-      maNganKho: [''],
+      maNganKho : [''],
       tenNganKho: ['',],
-      maLoKho: [''],
+      maLoKho : [''],
       tenLoKho: ['',],
-      tenThuKho: [''],
-      loaiVthh: [''],
+      tenThuKho : [''],
+      loaiVthh : [''],
       tenLoaiVthh: [''],
-      cloaiVthh: [''],
+      cloaiVthh : [''],
       tenCloaiVthh: [''],
-      tenHangHoa: [''],
+      tenHangHoa : [''],
       soLuong: [''],
       dviTinh: [''],
       ngayNhapDayKho: [''],
@@ -144,11 +144,11 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq
         this.formData.patchValue({
-          thoiHanLk: res.data.thoiHanLk,
-          thoiHanBh: res.data.thoiHanBh
+          thoiHanLk : res.data.thoiHanLk,
+          thoiHanBh : res.data.thoiHanBh
         })
       }
-    } else {
+    }else{
       if (this.formData.value.loaiVthh) {
         let res = await this.danhMucService.getDetail(this.formData.value.loaiVthh);
         if (res.msg == MESSAGE.SUCCESS) {
@@ -156,8 +156,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
           this.listHinhThucBaoQuan = res.data?.hinhThucBq
         }
         this.formData.patchValue({
-          thoiHanLk: res.data.thoiHanLk,
-          thoiHanBh: res.data.thoiHanBh
+          thoiHanLk : res.data.thoiHanLk,
+          thoiHanBh : res.data.thoiHanBh
         })
       }
     }
@@ -231,21 +231,21 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   }
 
 
-  async loadThongTinKho(maDiaDiem) {
-    this.quanLyHangTrongKhoService.getTrangThaiHt({ maDvi: maDiaDiem }).then((res) => {
+  async loadThongTinKho(maDiaDiem){
+    this.quanLyHangTrongKhoService.getTrangThaiHt({maDvi : maDiaDiem}).then((res)=>{
       console.log(res)
-      if (res.data && res.data.length > 0) {
+      if(res.data && res.data.length > 0){
         const data = res.data[0];
         let date = new Date(data.ngayNhapDayKho);
         let date2 = new Date(data.ngayNhapDayKho);
-        const dateHetHanLk = new Date(date.setMonth(date.getMonth() + this.formData.value.thoiHanLk));
-        const dateHetHanBh = new Date(date2.setMonth(date2.getMonth() + this.formData.value.thoiHanBh));
+        const dateHetHanLk = new Date(date.setMonth(date.getMonth()+this.formData.value.thoiHanLk));
+        const dateHetHanBh = new Date(date2.setMonth(date2.getMonth()+this.formData.value.thoiHanBh));
         this.formData.patchValue({
-          ngayNhapDayKho: data.ngayNhapDayKho,
-          ngayNhapTu: data.thoiGianNhapDayTu,
-          ngayNhapDen: data.thoiGianNhapDayDen,
-          ngayHetHanLk: dateHetHanLk,
-          ngayHetHanBh: dateHetHanBh
+          ngayNhapDayKho : data.ngayNhapDayKho,
+          ngayNhapTu : data.thoiGianNhapDayTu,
+          ngayNhapDen : data.thoiGianNhapDayDen,
+          ngayHetHanLk : dateHetHanLk,
+          ngayHetHanBh : dateHetHanBh
         })
       }
     })
@@ -253,7 +253,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC;
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC) && this.isAccessPermisson('LKQLCL_TDBQ_THEM') ;
   }
 
   save(isGuiDuyet?) {
@@ -276,15 +276,15 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   pheDuyet() {
     let trangThai
     switch (this.formData.value.trangThai) {
-      case STATUS.TU_CHOI_KT:
-      case STATUS.TU_CHOI_LDCC:
-      case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_KT :
+      case STATUS.TU_CHOI_LDCC :
+      case STATUS.DU_THAO :
         trangThai = STATUS.CHO_DUYET_KT;
         break;
-      case STATUS.CHO_DUYET_KT:
+      case STATUS.CHO_DUYET_KT :
         trangThai = STATUS.CHO_DUYET_LDCC;
         break;
-      case STATUS.CHO_DUYET_LDCC:
+      case STATUS.CHO_DUYET_LDCC :
         trangThai = STATUS.DA_DUYET_LDCC;
         break;
     }
@@ -294,10 +294,10 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   tuChoi() {
     let trangThai
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_KT:
+      case STATUS.CHO_DUYET_KT :
         trangThai = STATUS.TU_CHOI_KT;
         break;
-      case STATUS.CHO_DUYET_LDCC:
+      case STATUS.CHO_DUYET_LDCC :
         trangThai = STATUS.TU_CHOI_LDCC;
         break;
     }
@@ -314,13 +314,14 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.CHO_DUYET_KT || trangThai == STATUS.CHO_DUYET_LDCC;
+    return (trangThai == STATUS.CHO_DUYET_KT && this.isAccessPermisson('LKQLCL_TDBQ_DUYET_KT'))
+      || (trangThai == STATUS.CHO_DUYET_LDCC && this.isAccessPermisson('LKQLCL_TDBQ_DUYET_LDCC'));
   }
   addRow() {
 
   }
 
-  deleteRow(item, i: number): void {
+  deleteRow(item,i: number): void {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -339,9 +340,9 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
             this.spinner.hide();
             if (res.msg == MESSAGE.SUCCESS) {
               this.dataTable = this.dataTable.filter((d, index) => index !== i);
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
+              this.notification.success(MESSAGE.SUCCESS,MESSAGE.DELETE_SUCCESS);
+            }else{
+              this.notification.error(MESSAGE.ERROR,res.msg);
             }
           });
         } catch (e) {
@@ -353,8 +354,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
     });
   }
 
-  editRow(item) {
-    if (item) {
+  editRow(item){
+    if(item){
       const date1 = new Date();
       const date2 = new Date(this.formData.value.ngayHetHanBh);
       // @ts-ignore
@@ -368,15 +369,15 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         nzWidth: '1500px',
         nzFooter: null,
         nzComponentParams: {
-          id: item.id,
-          isXacNhan: item.vaiTro == 'LDCHICUC' || item.vaiTro == 'LDCUC',
-          dataTk: item.dataTk,
-          dataKtv: item.dataKtv,
-          dataLdcc: item.dataLdcc,
-          thoiGianConLaiBh: daysDiff,
+          id : item.id,
+          isXacNhan : item.vaiTro == 'LDCHICUC' || item.vaiTro == 'LDCUC',
+          dataTk : item.dataTk,
+          dataKtv : item.dataKtv,
+          dataLdcc : item.dataLdcc,
+          thoiGianConLaiBh : daysDiff,
         },
       })
-      modalGT.afterClose.subscribe((data) => {
+      modalGT.afterClose.subscribe((data)=>{
         this.changeMonth(this.monthSelect)
       });
     }
@@ -387,32 +388,32 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       console.log(event)
       this.spinner.show();
       let body = {
-        idHdr: this.id,
-        monthSearch: event,
-        detail: true
+        idHdr : this.id,
+        monthSearch : event,
+        detail : true
       }
-      this.theoDoiBqDtlService.search(body).then((res) => {
+      this.theoDoiBqDtlService.search(body).then((res)=>{
         this.spinner.hide();
-        if (res.msg == MESSAGE.SUCCESS) {
-          this.dataTable = res.data;
-        }
+        if(res.msg == MESSAGE.SUCCESS){
+            this.dataTable = res.data;
+          }
       });
     }
   }
 
-  themMoiCtiet($event, isXacNhan?: boolean) {
+  themMoiCtiet($event,isXacNhan?:boolean){
     $event.stopPropagation()
-    if (isXacNhan && this.dataTable.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Không thể xác nhận khi chưa có danh sách chi tiết");
-      return;
+    if(isXacNhan && this.dataTable.length == 0){
+        this.notification.error(MESSAGE.ERROR,"Không thể xác nhận khi chưa có danh sách chi tiết");
+        return;
     }
     let dataTk
     let dataKtv
     let dataLdcc
-    if (isXacNhan) {
-      dataTk = this.dataTable.filter(item => item.vaiTro == 'CBTHUKHO').sort((a, b) => a.ngayKtra - b.ngayKtra);
-      dataKtv = this.dataTable.filter(item => item.vaiTro == 'CBKTVBQ').sort((a, b) => a.ngayKtra - b.ngayKtra);
-      dataLdcc = this.dataTable.filter(item => item.vaiTro == 'LDCHICUC').sort((a, b) => a.ngayKtra - b.ngayKtra);
+    if(isXacNhan){
+      dataTk = this.dataTable.filter(item => item.vaiTro == 'CBTHUKHO').sort((a,b)=>a.ngayKtra-b.ngayKtra);
+      dataKtv = this.dataTable.filter(item => item.vaiTro == 'CBKTVBQ').sort((a,b)=>a.ngayKtra-b.ngayKtra);
+      dataLdcc = this.dataTable.filter(item => item.vaiTro == 'LDCHICUC').sort((a,b)=>a.ngayKtra-b.ngayKtra);
     }
     const date1 = new Date();
     const date2 = new Date(this.formData.value.ngayHetHanBh);
@@ -427,16 +428,16 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
-        dataHdr: this.formData.value,
-        isXacNhan: isXacNhan,
-        dataTk: dataTk?.length > 0 ? dataTk[0] : null,
-        dataKtv: dataKtv?.length > 0 ? dataKtv[0] : null,
-        dataLdcc: dataLdcc?.length > 0 ? dataLdcc[0] : null,
-        thoiGianConLaiBh: daysDiff
+        dataHdr : this.formData.value,
+        isXacNhan : isXacNhan,
+        dataTk : dataTk?.length > 0 ? dataTk[0] : null,
+        dataKtv : dataKtv?.length > 0 ? dataKtv[0] : null,
+        dataLdcc : dataLdcc?.length > 0 ? dataLdcc[0] : null,
+        thoiGianConLaiBh : daysDiff
       },
     });
-    modalGT.afterClose.subscribe((data) => {
-      this.changeMonth(this.monthSelect)
+    modalGT.afterClose.subscribe((data)=>{
+        this.changeMonth(this.monthSelect)
     })
   }
 }

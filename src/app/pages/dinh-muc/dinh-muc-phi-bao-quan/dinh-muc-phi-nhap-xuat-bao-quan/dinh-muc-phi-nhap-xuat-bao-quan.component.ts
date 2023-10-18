@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { QlDinhMucPhiService } from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
-import { Base2Component } from "../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../services/storage.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
+import {Base2Component} from "../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../services/storage.service";
 
 ;
 

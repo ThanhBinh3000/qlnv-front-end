@@ -1,21 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { FormGroup, Validators } from "@angular/forms";
-import { Base2Component } from "../../../../../components/base2/base2.component";
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormGroup, Validators} from "@angular/forms";
+import {Base2Component} from "../../../../../components/base2/base2.component";
 import { chain } from 'lodash';
 import * as uuid from "uuid";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {
   MmThongTinNcChiCuc
 } from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
-import { MmDxChiCucService } from "../../../../../services/mm-dx-chi-cuc.service";
-import { MESSAGE } from "../../../../../constants/message";
+import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
+import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
-import { STATUS } from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-mm-dx-cuc',
@@ -25,11 +25,11 @@ import { STATUS } from "../../../../../constants/status";
 export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  @Input() listDxChiCuc: any[] = [];
+  @Input()   listDxChiCuc : any[] = [];
   isTongHop: boolean = false;
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
-  formDataTongHop: FormGroup
+  formDataTongHop : FormGroup
   expandSet = new Set<number>();
   constructor(
     httpClient: HttpClient,
@@ -42,26 +42,26 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
     this.formData = this.fb.group({
-      id: [null],
-      maDvi: [null],
-      namKeHoach: [dayjs().get('year')],
-      soCv: [null, Validators.required],
+      id : [null],
+      maDvi : [null],
+      namKeHoach : [dayjs().get('year')],
+      soCv : [null, Validators.required],
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
-      trichYeu: [null, Validators.required],
-      ngayKy: [null, Validators.required],
-      trangThai: ['00'],
+      trichYeu : [null, Validators.required],
+      ngayKy : [null, Validators.required],
+      trangThai : ['00'],
       trangThaiTh: [],
-      tenTrangThai: ['Dự thảo'],
-      fileDinhKems: [null],
-      lyDoTuChoi: [null],
-      listQlDinhMucDxTbmmTbcdDtl: [null],
+      tenTrangThai : ['Dự thảo'],
+      fileDinhKems : [null],
+      lyDoTuChoi : [null],
+      listQlDinhMucDxTbmmTbcdDtl : [null],
     });
     this.formDataTongHop = this.fb.group({
-      namKeHoach: [dayjs().get('year'), Validators.required],
-      ngayDx: [null],
-      listSoCv: [null]
+      namKeHoach : [dayjs().get('year'), Validators.required],
+      ngayDx : [null],
+      listSoCv : [null]
     });
   }
 
@@ -98,8 +98,8 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
-    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
-    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0]: null
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1]: null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     body.MA_DVI = this.userInfo.MA_DVI;
@@ -108,10 +108,10 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       let detail = res.data;
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
         this.formData.patchValue({
-          namKeHoach: this.formDataTongHop.value.namKeHoach,
-          klLtBaoQuan: detail.klLtBaoQuan,
-          klLtNhap: detail.klLtNhap,
-          klLtXuat: detail.klLtXuat
+          namKeHoach : this.formDataTongHop.value.namKeHoach,
+          klLtBaoQuan : detail.klLtBaoQuan,
+          klLtNhap : detail.klLtNhap,
+          klLtXuat : detail.klLtXuat
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {
@@ -125,7 +125,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
           }
           item.id = null;
           item.ghiChu = null;
-          idVirtual: uuidv4();
+          idVirtual:uuidv4();
         })
         this.convertListData()
       }
@@ -136,14 +136,14 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     }
   }
 
-  async loadSlThuaThieu(item: MmThongTinNcChiCuc) {
+  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
     if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
       item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
     } else {
       item.chenhLechThieu = 0
     }
-    if ((item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
-      item.chenhLechThua = item.slNhapThem + item.slHienCo - item.slTieuChuan
+    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
     } else {
       item.chenhLechThua = 0
     }
@@ -181,7 +181,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
 
   async save() {
     this.formData.patchValue({
-      namKeHoach: this.formDataTongHop.value.namKeHoach
+      namKeHoach : this.formDataTongHop.value.namKeHoach
     })
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
@@ -197,7 +197,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     let res = await this.createUpdate(this.formData.value)
     if (res) {
       this.goBack();
-    } else {
+    }   else {
       this.convertListData()
     }
   }
@@ -231,12 +231,12 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO:
-      case STATUS.TU_CHOI_CBV: {
+      case STATUS.DU_THAO :
+      case STATUS.TU_CHOI_CBV : {
         trangThai = STATUS.DA_KY;
         break;
       }
-      case STATUS.DA_KY: {
+      case STATUS.DA_KY : {
         trangThai = STATUS.DA_DUYET_CBV
       }
     }
@@ -245,18 +245,18 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
 
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({ tenTaiSan: key, dataChild: value, idVirtual: uuidv4(), })
+      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({ tenTaiSan: key, dataChild: value, idVirtual: uuidv4(),})
       ).value()
     }
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach(item => {
-        if (item && item.dataChild && item.dataChild.length > 0) {
-          item.dataChild.forEach(data => {
-            this.loadSlThuaThieu(data)
-            item.donViTinh = data.donViTinh
-            item.donGiaTd = data.donGiaTd
-          })
-        }
+          if (item && item.dataChild && item.dataChild.length > 0) {
+            item.dataChild.forEach(data => {
+              this.loadSlThuaThieu(data)
+              item.donViTinh = data.donViTinh
+              item.donGiaTd = data.donGiaTd
+            })
+          }
       })
     }
     this.expandAll();
@@ -276,7 +276,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     console.log(this.dataTable)
   }
 
-  sumSoLuong(data: any) {
+  sumSoLuong(data : any) {
     let sl = 0;
     if (data && data.dataChild && data.dataChild.length > 0) {
       data.dataChild.forEach(item => {

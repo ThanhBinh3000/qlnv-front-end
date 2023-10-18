@@ -367,6 +367,7 @@ export class ThongTinBangKeNhapKhacNhapVatTuComponent extends Base2Component imp
 
       const data = res.data
       if (data) {
+        console.log(data, "dataaaa")
         this.formData.patchValue({
 
           tenLoKho: data.tenLoKho,
@@ -471,11 +472,13 @@ export class ThongTinBangKeNhapKhacNhapVatTuComponent extends Base2Component imp
     // }
   }
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC;
+    return (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BKNVT_DUYET_TP'))
+      || (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BKNVT_DUYET_LDCCUC'));
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC;
+    return (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BKNVT_DUYET_TP'))
+      || (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BKNVT_DUYET_LDCCUC'));
   }
 
   async pheDuyet(isPheDuyet?: boolean) {

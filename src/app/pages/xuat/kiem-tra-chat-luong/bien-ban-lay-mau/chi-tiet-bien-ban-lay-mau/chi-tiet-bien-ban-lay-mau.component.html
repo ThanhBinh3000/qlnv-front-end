@@ -61,10 +61,10 @@
             <div nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Loại biên bản</nz-form-label>
-                <nz-radio-group [nzDisabled]="isView" nzSize="small" class="rdo-input" formControlName="loaiBb">
+                <nz-radio-group [nzDisabled]="true" nzSize="small" class="rdo-input" formControlName="loaiBb">
                   <label nz-radio nzValue="LMBGM">Lấy và bàn giao mẫu</label>
-                  <label nz-radio nzValue="LM">Lấy mẫu</label>
-                  <label nz-radio nzValue="BGM">Bàn giao mẫu</label>
+                  <!-- <label nz-radio nzValue="LM">Lấy mẫu</label> -->
+                  <!-- <label nz-radio nzValue="BGM">Bàn giao mẫu</label> -->
                 </nz-radio-group>
               </nz-form-item>
             </div>
@@ -356,39 +356,51 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="8">
+        <div nz-col nzSpan="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Đơn vị tính</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group>
-
-              <!--<nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onChangePpLayMau($event)"
-                                   formControlName="chiTieuKiemTra">
-                <div nz-row>
-                  <ng-container *ngFor="let item of dsPpLayMau">
-                    <div nz-col nzSpan="24"><label nz-checkbox [nzChecked]="item.selected"
-                                                   [nzValue]="item.label">{{item.label}}</label></div>
-                  </ng-container>
-                </div>
-              </nz-checkbox-wrapper>-->
+              <!-- <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group> -->
+              <span style="color: #001CFF">{{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="8">
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <!-- <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group> -->
+              <nz-checkbox-group formControlName="ppLayMau" class="grid-1" [nzDisabled]="isView"
+                *ngIf="loaiChon !=='radio'"></nz-checkbox-group>
+              <nz-radio-group formControlName="ppLayMau" *ngIf="loaiChon==='radio'" class="grid-1">
+                <label nz-radio *ngFor="let item of dsPpLayMau" [nzValue]="item.label">{{item.label}}</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>
               Các chỉ tiêu cần kiểm tra
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-checkbox-group formControlName="ctChatLuong" nzDisabled="true"></nz-checkbox-group>
-              <!--<nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onChangeCtChatLuong($event)">
-                <div nz-row>
-                  <ng-container *ngFor="let item of dsCtChatLuong">
-                    <div nz-col nzSpan="24"><label nz-checkbox [nzChecked]="item.selected"
-                                                   [nzValue]="item.label">{{item.label}}</label></div>
-                  </ng-container>
-                </div>
-              </nz-checkbox-wrapper>-->
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="20">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzSpan="24" nzRequired>
+              File đính kèm ảnh lấy mẫu đã niêm phong
+            </nz-form-label>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="'Vui lòng chọn file đính kèm'">
+              <div class="list-file" nz-col nzSpan="24">
+                <file-list [data]="formData.value.anhChupMauNiemPhong" [isViewDetail]="isView" [isViewDetail]="isView">
+                </file-list>
+              </div>
+              <!-- <input nz-input formControlName="anhChupMauNiemPhong" readonly style="display: none;" /> -->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -398,19 +410,6 @@
             </nz-form-label>
             <label nz-checkbox formControlName="niemPhong" [nzDisabled]="isView">Đã
               niêm phong mẫu</label>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzSpan="24">
-              File đính kèm biên bản lấy mẫu/bàn giao đã ký
-            </nz-form-label>
-          </nz-form-item>
-          <nz-form-item>
-            <div class="list-file" nz-col nzSpan="24">
-              <file-list [data]="formData.value.anhChupMauNiemPhong" [isViewDetail]="isView">
-              </file-list>
-            </div>
           </nz-form-item>
         </div>
       </div>

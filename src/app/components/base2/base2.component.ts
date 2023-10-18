@@ -440,7 +440,7 @@ export class Base2Component implements OnInit {
 
   // Approve
   async approve(id: number, trangThai: string, msg: string, roles?: any, msgSuccess?: string) {
-    if (!this.checkPermission(roles)) {
+    if (roles && !this.checkPermission(roles)) {
       return
     }
     this.modal.confirm({

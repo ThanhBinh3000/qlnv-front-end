@@ -128,17 +128,36 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO:
-      case STATUS.TUCHOI_CB_CUC: {
-        trangThai = STATUS.DA_KY;
-        break;
-      }
-      case STATUS.DA_KY: {
+      case STATUS.DA_KY : {
         trangThai = STATUS.DADUYET_CB_CUC;
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?');
   }
+
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      if (this.dataTable.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết đề xuất');
+        return;
+      }
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      this.formData.value.capDvi = this.userInfo.CAP_DVI;
+      this.formData.value.soCv = this.formData.value.soCv + this.maQd;
+      await super.saveAndSend( this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
 
   async themMoiCtiet() {
     let msgRequired = this.required(this.rowItem);

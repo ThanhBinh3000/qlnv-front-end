@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetDinhPdKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
@@ -13,10 +13,10 @@ import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../constants/status";
-import { MESSAGE } from "../../../../../../constants/message";
-import { FileDinhKem } from "../../../../../../models/FileDinhKem";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -124,7 +124,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       console.error('Không tìm thấy dữ liệu');
       return;
     }
-    const { soCongVan, soQdDc, children } = data;
+    const {soCongVan, soQdDc, children} = data;
     this.formData.patchValue({
       soCongVan: soCongVan?.split('/')[0],
       soQdDc: soQdDc?.split('/')[0],
@@ -145,7 +145,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       await this.loadDanhSachDieuChinh();
       const res = await this.quyetDinhPdKhBdgService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
-        const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
+        const danhSachDieuChinhFiltered = this.danhSachDieuChinh.filter(item => item.trangThai === STATUS.BAN_HANH);
+        const soQdPdSet = new Set(danhSachDieuChinhFiltered.map(item => item.soQdPd));
         this.danhSachQdPdKeHoach = res.data.content.filter(item => !soQdPdSet.has(item.soQdPd));
       } else if (res && res.msg) {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -223,14 +224,18 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       trangThai: STATUS.BAN_HANH,
     }
     const res = await this.quyetDinhDchinhKhBdgService.search(body)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data
-      if (data && data.content && data.content.length > 0) {
-        this.danhSachDieuChinh = data.content
-      }
-    } else {
+    if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
+    const data = res.data.content;
+    this.formData.patchValue({
+      lanDieuChinh: data.length + 1
+    })
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.danhSachDieuChinh = data
   }
 
   resetIds(data) {

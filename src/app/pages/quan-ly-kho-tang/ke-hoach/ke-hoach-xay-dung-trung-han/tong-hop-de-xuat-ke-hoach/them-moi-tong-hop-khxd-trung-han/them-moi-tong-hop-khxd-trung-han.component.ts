@@ -92,10 +92,10 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    if (!this.idInput) {
+    // if (!this.idInput) {
       this.maTt = "/" + this.userInfo.MA_TR;
       this.soQd = "/" + this.userInfo.MA_QD;
-    }
+    // }
     this.loadDsNam();
     await this.getDataDetail(this.idInput);
     await this.getAllLoaiDuAn();
@@ -123,8 +123,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       let res = await this.tongHopDxXdTh.getDetail(id);
       const data = res.data;
       this.dataDetail = cloneDeep(data)
-      this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
-        this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
+      // this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
+      //   this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
         this.formData.patchValue({
           id: data.id,
           namBatDau: data.namBatDau,
@@ -163,9 +163,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   setValidators() {
     this.helperService.removeValidators(this.formData);
     if (this.formData.value.trangThai == STATUS.DU_THAO) {
-      this.formData.controls["noiDung"].setValidators([Validators.required]);
-    }
-    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
       this.formData.controls["maToTrinh"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoTt"].setValidators([Validators.required]);
     }
@@ -190,8 +187,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     }
     let body = this.formData.value;
     body.tgTongHop = body.tgTongHop ? dayjs(body.tgTongHop) : null;
-    body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : this.maTt;
-    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : this.soQd;
+    body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : null;
+    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : null;
     body.ctiets = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;
@@ -203,11 +200,13 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       res = await this.tongHopDxXdTh.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      console.log(1)
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
           trangThai: res.data.trangThai
         });
+        this.idInput= this.formData.value.id;
         this.guiDuyet();
       } else {
         if (this.idInput > 0) {
@@ -222,6 +221,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         }
       }
     } else {
+      console.log(2)
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
@@ -284,6 +284,9 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
+      },
+      nzOnCancel: async () =>{
+
       }
     });
 
@@ -508,7 +511,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     });
   }
 
-  themMoiItem(data: any, type: string, idx: number, list?: any) {
+  themMoiItem(type: string, data: any, idx : number, list: any) {
     let modalQD = this.modal.create({
       nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
       nzContent: DialogThemMoiDxkhthComponent,
@@ -518,28 +521,14 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       nzStyle: { top: "200px" },
       nzFooter: null,
       nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
         dataInput: data,
         type: type,
         page: "DXTH"
       }
     });
     modalQD.afterClose.subscribe(async (detail) => {
-      if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
-        }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == "them") {
-          data.dataChild.push(detail);
-        } else {
-          if (list) {
-            Object.assign(list.dataChild[idx], detail);
-          }
-        }
-        this.expandAll(this.dataTable);
+      if (detail && list) {
+        Object.assign(list[idx], detail);
       }
     });
   }

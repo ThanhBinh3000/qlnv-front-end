@@ -53,7 +53,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       thoiGianTlTu: [null],
       thoiGianTlDen: [null],
     });
-    this.symbol = '/' + this.userInfo.DON_VI.tenVietTat + "-KH&QLHDT";
+    this.symbol = '/'+this.userInfo.DON_VI.tenVietTat+"-KH&QLHDT";
   }
 
   async ngOnInit() {
@@ -86,7 +86,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
   showSave() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_THEM');
+      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_THEM');
     }
     if (this.userService.isTongCuc()) {
       return (trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU) && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_THEM');
@@ -107,13 +107,14 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
     })
     body.children = children;
     if (this.formData.value.soHoSo) {
-      body.soHoSo = this.formData.value.soHoSo + '/' + this.symbol
+      body.soHoSo = this.formData.value.soHoSo + this.symbol
     }
     this.createUpdate(body).then((res) => {
       if (res) {
         if (isGuiDuyet) {
           this.id = res.id;
           this.formData.patchValue({
+            id : res.id,
             trangThai: res.trangThai,
             tenTrangThai: res.tenTrangThai
           })

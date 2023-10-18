@@ -17,8 +17,7 @@
               đấu giá đến hết ngày
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-range-picker formControlName="thoiGianDuKien" (ngModelChange)="onChangeThoiGian($event)"
-                nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
+              <nz-range-picker formControlName="thoiGianDuKien" (ngModelChange)="onChangeThoiGian($event)" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>
@@ -56,7 +55,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn thanh toán (ngày)</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-input-number formControlName="tgianTtoan" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
+                               [nzStep]="1" [nzSize]="'small'"
+                               [nzDisabled]="isView">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -73,7 +73,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="hidden-label"> Thời gian thanh toán ghi chú</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="tgianTtoanGhiChu" readonly />
+              <input nz-input formControlName="tgianTtoanGhiChu" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -81,7 +81,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Phương thức thanh toán</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="tenPthucTtoan" readonly />
+              <input nz-input formControlName="tenPthucTtoan" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -90,7 +90,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn giao nhận (ngày)</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-input-number formControlName="tgianGnhan" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
+                               [nzStep]="1" [nzSize]="'small'"
+                               [nzDisabled]="isView">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -107,7 +108,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="hidden-label"> Thời hạn giao nhận ghi chú</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="tgianGnhanGhiChu" readonly />
+              <input nz-input formControlName="tgianGnhanGhiChu" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -115,7 +116,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Phương thức giao nhận</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="pthucGnhan" readonly />
+              <input nz-input formControlName="pthucGnhan" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -133,7 +134,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="%">
                 <nz-input-number formControlName="khoanTienDatTruoc" nz-input [nzMin]="1"
-                  [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" nzDisabled>
+                                 [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -144,7 +145,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <span style="color: blue"
-                nzDisabled>{{formData.value.tongSoLuong|number:globals.numberFormat:globals.locale }}
+                    nzDisabled>{{formData.value.tongSoLuong|number:globals.numberFormat:globals.locale }}
                 {{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>
@@ -153,8 +154,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm theo đơn giá được duyệt</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span style="color: blue">{{ formData.value.tongTienKhoiDiem == 0 ? null :
-                formData.value.tongTienKhoiDiem|number:globals.numberFormat:globals.locale }}
+              <span
+                style="color: blue">{{ formData.value.tongTienKhoiDiem == 0 ? null : formData.value.tongTienKhoiDiem|number:globals.numberFormat:globals.locale }}
                 (vnd)</span>
             </nz-form-control>
           </nz-form-item>
@@ -163,8 +164,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span style="color: blue">{{ formData.value.tongTienDatTruoc == 0 ? null :
-                formData.value.tongTienDatTruoc|number:globals.numberFormat:globals.locale }}
+              <span
+                style="color: blue">{{ formData.value.tongTienDatTruoc == 0 ? null : formData.value.tongTienDatTruoc|number:globals.numberFormat:globals.locale }}
                 (vnd)</span>
             </nz-form-control>
           </nz-form-item>
@@ -176,55 +177,55 @@
 <nz-collapse nzAccordion class="pd-10">
   <nz-collapse-panel [nzHeader]="'DANH MỤC BẢNG PHÂN LÔ TÀI SẢN'" [nzActive]="true">
     <nz-table class="nowrap pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-      [nzShowPagination]="false">
+              [nzShowPagination]="false">
       <thead>
-        <tr>
-          <th class="text-center"></th>
-          <th nzWidth="80px" class="text-left wrap"> Chi cục</th>
-          <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
-          <th nzWidth="150px" class="text-left wrap"> Lô kho</th>
-          <th nzWidth="90px" class="text-left wrap"> Mã ĐVTS</th>
-          <th class="text-left"> ĐVT</th>
-          <th nzWidth="80px" class="text-right wrap"> SL xuất bán đề xuất</th>
-          <th nzWidth="80px" class="text-right wrap"> Đơn giá được duyệt (đ)</th>
-          <th nzWidth="80px" class="text-right wrap"> Giá khởi điểm (đ)</th>
-          <th class="text-center" *ngIf="!isView"> Hành động</th>
-        </tr>
+      <tr>
+        <th class="text-center"></th>
+        <th nzWidth="80px" class="text-left wrap"> Chi cục</th>
+        <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
+        <th nzWidth="150px" class="text-left wrap"> Lô kho</th>
+        <th nzWidth="90px" class="text-left wrap"> Mã ĐVTS</th>
+        <th class="text-left"> ĐVT</th>
+        <th nzWidth="80px" class="text-right wrap"> SL xuất bán đề xuất</th>
+        <th nzWidth="80px" class="text-right wrap"> Đơn giá được duyệt (đ)</th>
+        <th nzWidth="80px" class="text-right wrap"> Giá khởi điểm (đ)</th>
+        <th class="text-center" *ngIf="!isView"> Hành động</th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let data of dataTable , let idx = index">
-          <tr>
-            <td [nzExpand]="expandSet.has(idx)" (nzExpandChange)="onExpandChange(idx, $event)"></td>
-            <td class="text-left" colspan="5">{{ data.tenDvi }}</td>
-            <td class="text-right" style="color: black; font-weight: bold">{{
-              data.tongSlXuatBanDx|number:globals.numberFormat:globals.locale }}</td>
+      <ng-container *ngFor="let data of dataTable , let idx = index">
+        <tr>
+          <td [nzExpand]="expandSet.has(idx)" (nzExpandChange)="onExpandChange(idx, $event)"></td>
+          <td class="text-left" colspan="5">{{ data.tenDvi }}</td>
+          <td class="text-right"
+              style="color: black; font-weight: bold">{{ data.tongSlXuatBanDx|number:globals.numberFormat:globals.locale }}</td>
+          <td></td>
+          <td></td>
+          <td class="text-center" *ngIf="!isView">
+            <a (click)="themMoiBangPhanLoTaiSan(data, idx)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <!--            <a (click)="deleteRow(idx)">-->
+            <!--              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+            <!--            </a>-->
+          </td>
+        </tr>
+        <ng-container *ngIf="expandSet.has(idx)">
+          <tr *ngFor="let children of data.children, let i = index">
             <td></td>
             <td></td>
-            <td class="text-center" *ngIf="!isView">
-              <a (click)="themMoiBangPhanLoTaiSan(data, idx)">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-              <!--            <a (click)="deleteRow(idx)">-->
-              <!--              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-              <!--            </a>-->
-            </td>
+            <td class="text-left">{{ children.tenDiemKho}}</td>
+            <td class="text-left">{{ children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }}
+              , {{ children.tenNhaKho }}</td>
+            <td class="text-left">{{ children.maDviTsan}}</td>
+            <td class="text-left">{{ children.donViTinh}}</td>
+            <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-right">{{ children.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
+            <td *ngIf="!isView"></td>
           </tr>
-          <ng-container *ngIf="expandSet.has(idx)">
-            <tr *ngFor="let children of data.children, let i = index">
-              <td></td>
-              <td></td>
-              <td class="text-left">{{ children.tenDiemKho}}</td>
-              <td class="text-left">{{ children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }}
-                , {{ children.tenNhaKho }}</td>
-              <td class="text-left">{{ children.maDviTsan}}</td>
-              <td class="text-left">{{ children.donViTinh}}</td>
-              <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
-              <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-              <td class="text-right">{{ children.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
-              <td *ngIf="!isView"></td>
-            </tr>
-          </ng-container>
         </ng-container>
+      </ng-container>
       </tbody>
     </nz-table>
   </nz-collapse-panel>

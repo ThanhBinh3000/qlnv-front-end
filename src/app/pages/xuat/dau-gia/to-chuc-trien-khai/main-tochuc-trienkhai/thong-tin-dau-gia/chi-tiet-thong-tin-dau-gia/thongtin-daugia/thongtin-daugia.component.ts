@@ -1,23 +1,23 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
 import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { chain } from 'lodash'
+import {StorageService} from 'src/app/services/storage.service';
+import {chain} from 'lodash'
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { STATUS } from 'src/app/constants/status';
-import { FileDinhKem } from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import { Validators } from "@angular/forms";
+import {MESSAGE} from 'src/app/constants/message';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {STATUS} from 'src/app/constants/status';
+import {FileDinhKem} from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {Validators} from "@angular/forms";
 import _ from 'lodash';
 
 @Component({
@@ -255,7 +255,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       this.dataNguoiTgia = data.listNguoiTgia;
       this.dataNguoiShow = chain(this.dataNguoiTgia)
         .groupBy('loai')
-        .map((value, key) => ({ loai: key, dataChild: value }))
+        .map((value, key) => ({loai: key, dataChild: value}))
         .value();
     } catch (e) {
       console.log('error: ', e);
@@ -358,7 +358,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     });
     formData.listNguoiTgia = this.dataNguoiTgia;
     formData.children = this.dataTable;
-    const { ketQua, ketQuaSl, soDviTsan } = this.calculateKetQua();
+    const {ketQua, ketQuaSl, soDviTsan} = this.calculateKetQua();
     formData.ketQua = ketQua;
     formData.ketQuaSl = ketQuaSl;
     formData.soDviTsan = soDviTsan;
@@ -391,16 +391,16 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         ? `${totalMatching}/${totalItems}`
         : `${totalNotMatching}/${totalItems}`;
     const soDviTsan = this.formData.value.ketQua == 1 ? totalMatching : totalNotMatching;
-    return { ketQua, ketQuaSl, soDviTsan };
+    return {ketQua, ketQuaSl, soDviTsan};
   }
 
   addRow(item, name) {
     if (this.validateThanhPhanThamDu(item, name)) {
-      const data = { ...item, loai: name, idVirtual: new Date().getTime() };
+      const data = {...item, loai: name, idVirtual: new Date().getTime()};
       this.dataNguoiTgia.push(data);
       this.dataNguoiShow = _.chain(this.dataNguoiTgia)
         .groupBy('loai')
-        .map((value, key) => ({ loai: key, dataChild: value }))
+        .map((value, key) => ({loai: key, dataChild: value}))
         .value();
       const resetItems = {
         KM: 'rowItemKhach',
@@ -417,13 +417,13 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     if (!this.dataNguoiShow) {
       return null;
     }
-    return this.dataNguoiShow.find(({ loai }) => loai === name) || null;
+    return this.dataNguoiShow.find(({loai}) => loai === name) || null;
   }
 
   validateThanhPhanThamDu(data, name) {
     const requirements = {
-      KM: { fields: ['hoVaTen', 'chucVu', 'diaChi'], errorMessage: "Vui lòng điền đủ thông tin khách mời chứng kiến" },
-      DGV: { fields: ['hoVaTen', 'chucVu', 'diaChi'], errorMessage: "Vui lòng điền đủ thông tin đấu giá viên" },
+      KM: {fields: ['hoVaTen', 'chucVu', 'diaChi'], errorMessage: "Vui lòng điền đủ thông tin khách mời chứng kiến"},
+      DGV: {fields: ['hoVaTen', 'chucVu', 'diaChi'], errorMessage: "Vui lòng điền đủ thông tin đấu giá viên"},
       NTG: {
         fields: ['hoVaTen', 'soCccd', 'diaChi'],
         errorMessage: "Vui lòng điền đủ thông tin tổ chức cá nhân tham giá đấu giá"
@@ -468,7 +468,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
           this.dataNguoiTgia = this.dataNguoiTgia.filter(item => item.idVirtual != idVirtual);
           this.dataNguoiShow = _.chain(this.dataNguoiTgia)
             .groupBy('loai')
-            .map((value, key) => ({ loai: key, dataChild: value }))
+            .map((value, key) => ({loai: key, dataChild: value}))
             .value();
         } catch (e) {
           console.log('error', e);
@@ -483,7 +483,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     currentRow.isEdit = true;
     this.dataNguoiShow = _.chain(this.dataNguoiTgia)
       .groupBy('loai')
-      .map((value, key) => ({ loai: key, dataChild: value }))
+      .map((value, key) => ({loai: key, dataChild: value}))
       .value();
   }
 

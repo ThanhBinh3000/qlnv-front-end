@@ -1,19 +1,15 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('dxkh')"
-      *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX')">
-      Đề xuất kế hoạch sửa chữa lớn của Cục
+    <li nz-menu-item [nzSelected]="tabSelected == 'dxkh'" (click)="selectTab('dxkh')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX')">
+     Đề xuất kế hoạch sửa chữa lớn hàng năm
     </li>
-    <li nz-menu-item (click)="selectTab('qdtcdt')"
-      *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH')">
+    <li nz-menu-item [nzSelected]="tabSelected == 'qdtcdt'" (click)="selectTab('qdtcdt')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH')">
       Tổng hợp phương án sửa chữa lớn hàng năm
     </li>
-    <li nz-menu-item (click)="selectTab('qdbtc')"
-      *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC')">
+    <li nz-menu-item [nzSelected]="tabSelected == 'qdbtc'" (click)="selectTab('qdbtc')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC')" >
       Quyết định PD KH sửa chữa lớn hàng năm của BTC
     </li>
-    <li nz-menu-item (click)="selectTab('qdtbscl')"
-      *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDTCDT')">
+    <li nz-menu-item [nzSelected]="tabSelected == 'qdtbscl'" (click)="selectTab('qdtbscl')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDTCDT')">
       Quyết định/Thông báo KH sửa chữa lớn của TCDT
     </li>
   </ul>
@@ -22,11 +18,11 @@
   <app-de-xuat-kh-sc-lon></app-de-xuat-kh-sc-lon>
 </ng-container>
 <ng-container *ngIf="tabSelected == 'qdtcdt'">
-  <app-quyet-dinh-sc-lon-tcdt></app-quyet-dinh-sc-lon-tcdt>
+<app-quyet-dinh-sc-lon-tcdt (tabFocus)="selectData($event)"></app-quyet-dinh-sc-lon-tcdt>
 </ng-container>
 <ng-container *ngIf="tabSelected == 'qdbtc'">
-  <app-quyet-dinh-sc-lon-btc></app-quyet-dinh-sc-lon-btc>
+  <app-quyet-dinh-sc-lon-btc [dataTongHop]="dataObject" (removeData)="removeData()"></app-quyet-dinh-sc-lon-btc>
 </ng-container>
 <ng-container *ngIf="tabSelected == 'qdtbscl'">
-  <app-qd-thong-bao-sua-chua-lon></app-qd-thong-bao-sua-chua-lon>
+  <app-qd-thong-bao-sua-chua-lon ></app-qd-thong-bao-sua-chua-lon>
 </ng-container>

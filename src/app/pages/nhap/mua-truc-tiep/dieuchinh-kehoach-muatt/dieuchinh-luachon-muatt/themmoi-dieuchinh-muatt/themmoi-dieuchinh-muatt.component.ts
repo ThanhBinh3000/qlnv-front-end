@@ -21,7 +21,7 @@ import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
 import { filter } from 'rxjs/operators';
-import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 
 @Component({
@@ -326,6 +326,9 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     if (data) {
       this.dataInput = data;
       let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(data?.idQdHdr);
+      if(res.msg == MESSAGE.SUCCESS){
+        await this.getDataChiTieu(res.data.idSoQdCc);
+      }
       this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
     }
     await this.spinner.hide();
@@ -477,5 +480,23 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       this.dataChiTieu = res2.data;
     }
   }
+  // async getDataChiTieu() {
+  //   let res2 =
+  //     await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+  //       +this.formData.get('namKh').value,
+  //     );
+  //   if (res2.msg == MESSAGE.SUCCESS) {
+  //     this.dataChiTieu = res2.data;
+  //     console.log(this.dataChiTieu, "00000")
+  //     this.formData.patchValue({
+  //       soQdCc: res2.data.soQuyetDinh,
+  //       idSoQdCc: res2.data.id
+  //     });
+  //   } else {
+  //     this.formData.patchValue({
+  //       soQdCc: null
+  //     });
+  //   }
+  // }
 
 }

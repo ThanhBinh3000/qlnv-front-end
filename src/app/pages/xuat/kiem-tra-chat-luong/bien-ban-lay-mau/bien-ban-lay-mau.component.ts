@@ -22,6 +22,7 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: any;
   @Input() inputService: any;
   @Input() inputServiceGnv: any;
+  @Input() loaiChon: string;
   inputData: any;
   expandSetString = new Set<string>();
   isView: any = false;
@@ -90,7 +91,6 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(this.dataTable);
     this.tableDataView = chain(this.dataTable)
       .groupBy("soQdGnv")
       .map((value, key) => {
@@ -119,7 +119,6 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
           childData: rs
         };
       }).value();
-    console.log(this.tableDataView, 'tableDataView')
     this.expandAll()
 
   }

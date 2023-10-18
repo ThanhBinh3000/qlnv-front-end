@@ -1,12 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { STATUS } from "../../../../../constants/status";
-import { MESSAGE } from "../../../../../constants/message";
-import { HopdongTdscService } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {STATUS} from "../../../../../constants/status";
+import {MESSAGE} from "../../../../../constants/message";
+import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
 
 @Component({
   selector: 'app-hop-dong-sctx',
@@ -22,7 +22,7 @@ export class HopDongSctxComponent implements OnInit {
   @Input()
   itemQdPdKhLcnt: any;
   @Input() itemQdPdKtkt: any;
-  @Input() itemDuAn: any;
+  @Input()   itemDuAn: any;
   @Input()
   itemTtdt: any;
 
@@ -52,7 +52,7 @@ export class HopDongSctxComponent implements OnInit {
         "idDuAn": this.itemTtdt.idDuAn,
         "idQdPdKtkt": this.itemQdPdKtkt.id,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
-        "loai": "01"
+        "loai" : "01"
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {

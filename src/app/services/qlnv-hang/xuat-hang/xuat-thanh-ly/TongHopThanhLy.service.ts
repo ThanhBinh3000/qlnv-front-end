@@ -8,10 +8,9 @@ import { environment } from "src/environments/environment";
   providedIn: 'root'
 })
 export class TongHopThanhLyService extends BaseService {
-  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-thanh-ly/tong-hop', '');
+    super(httpClient, 'xuat-hang/xuat-thanh-ly/tong-hop', '/qlnv-hang');
   }
 
   getDanhSachTrinhThamDinh(body): Promise<OldResponseData> {

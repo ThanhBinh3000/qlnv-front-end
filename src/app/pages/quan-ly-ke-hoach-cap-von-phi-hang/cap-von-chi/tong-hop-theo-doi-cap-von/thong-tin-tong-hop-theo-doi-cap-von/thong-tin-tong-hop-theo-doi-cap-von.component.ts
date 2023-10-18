@@ -5,21 +5,21 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
-import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { STATUS } from "../../../../../constants/status";
-import { ThongTriDuyetYCapVonService } from "../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapVon.service";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {TongHopTheoDoiCapVonService} from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
+import {UserService} from 'src/app/services/user.service';
+import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {STATUS} from "../../../../../constants/status";
+import {ThongTriDuyetYCapVonService} from "../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapVon.service";
 import dayjs from "dayjs";
 import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
 
@@ -50,7 +50,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   dsBoNganh: any[] = [];
   dsThongTri: any[] = [];
   chiTietList: any[] = [];
-  STATUS = STATUS
+  STATUS  = STATUS
   amount = AMOUNT_NO_DECIMAL;
   constructor(
     private modal: NzModalService,
@@ -94,7 +94,6 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
         if (res.data) {
           this.itemThTheoDoi = res.data;
           this.initForm();
-          this.formData.patchValue({ soThongTri: +this.itemThTheoDoi.soThongTri })
           if (this.itemThTheoDoi.fileDinhKems) {
             this.listFileDinhKem = this.itemThTheoDoi.fileDinhKems;
           }
@@ -112,7 +111,6 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   }
 
   initForm() {
-    console.log(this.itemThTheoDoi, '12312312');
     this.formData = this.fb.group({
       soThongTri: [this.itemThTheoDoi ? this.itemThTheoDoi.soThongTri : null, [Validators.required]],
       dviThongTri: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThongTri : null],

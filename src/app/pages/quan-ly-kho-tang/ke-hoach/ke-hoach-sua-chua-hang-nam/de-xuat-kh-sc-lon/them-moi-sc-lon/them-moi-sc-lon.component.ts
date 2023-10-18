@@ -1,19 +1,19 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { Validators } from "@angular/forms";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { DanhMucKho } from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
-import { MESSAGE } from "../../../../../../constants/message";
-import { STATUS } from "../../../../../../constants/status";
+import {Component, Input, OnInit} from "@angular/core";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {Validators} from "@angular/forms";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
+import {MESSAGE} from "../../../../../../constants/message";
+import {STATUS} from "../../../../../../constants/status";
 import dayjs from "dayjs";
-import { DialogDxScLonComponent } from "./dialog-dx-sc-lon/dialog-dx-sc-lon.component";
+import {DialogDxScLonComponent} from "./dialog-dx-sc-lon/dialog-dx-sc-lon.component";
 import {
   DeXuatScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
@@ -67,7 +67,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       namBatDau: [null],
       namKetThuc: [null],
       loaiDuAn: [null],
-      trangThai: ["78"],
+      trangThai: [STATUS.DU_THAO],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [null]
     });
@@ -119,7 +119,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           ngayTaoDx: data.ngayTaoDx,
           loaiDuAn: data.loaiDuAn,
           trichYeu: data.trichYeu,
-          ngayDuyet: data.ngayDuyet,
+          ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDTC ? dayjs().get("year") : data.ngayDuyet,
           trangThai: data.trangThai,
           tenTrangThai: data.tenTrangThai
         });
@@ -134,7 +134,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   setValidators() {
     this.formData.controls["trichYeu"].setValidators(Validators.required);
     this.formData.controls["namKeHoach"].setValidators(Validators.required);
-    if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
+    if (this.formData.value.trangThai == STATUS.DU_THAO) {
       this.formData.controls["ngayTaoDx"].setValidators(Validators.required);
     }
     if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC) {
@@ -143,7 +143,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   }
 
 
-  async save(isOther: boolean) {
+  async save(isOther: boolean, trangThai?) {
     this.helperService.removeValidators(this.formData);
     this.formData.controls["soCongVan"].setValidators(Validators.required);
     if (isOther || this.idInput > 0) {
@@ -161,64 +161,53 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     body.canCuPhapLys = this.canCuPhapLy;
     this.conVertTreToList();
     body.chiTiets = this.dataTableRes;
-    let data = await this.createUpdate(body);
-    if (data) {
-      this.idInput = data.id;
-      this.formData.patchValue({
-        id: data.id,
-      });
-      if (isOther) {
-        let trangThai;
-        switch (this.formData.value.trangThai) {
-          case STATUS.DANG_NHAP_DU_LIEU:
-          case STATUS.TU_CHOI_LDV:
-          case STATUS.TU_CHOI_TP: {
-            trangThai = STATUS.CHO_DUYET_TP;
-            break;
-          }
-          case STATUS.TU_CHOI_LDC:
-          case STATUS.CHO_DUYET_TP: {
-            trangThai = STATUS.CHO_DUYET_LDC;
-            break;
-          }
-        }
-        if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
-          this.duyet();
-        } else {
-          await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
-        }
-      }
+    if (isOther) {
+      await super.saveAndSend(body, trangThai, 'Bạn có muốn gửi duyệt đề xuất này ?', 'Gửi duyệt thành công.');
+    } else {
+      await this.createUpdate(body);
     }
   }
 
-  async duyet() {
-    let trangThai;
-    switch (this.formData.value.trangThai) {
+  pheDuyet() {
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_CBV:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.TU_CHOI_TP:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
       case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
       case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_LDC;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
       case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_CBV;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
     }
-    await this.approve(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn duyệt?");
+    this.approve(this.idInput, trangThai, msg, null, "Bạn đã lưu và gửi duyệt thành công!");
   }
 
-  async tuChoi() {
-    let trangThai;
+  tuChoi() {
+    let trangThai = '';
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.TU_CHOI_TP;
-        break;
-      }
       case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
         break;
       }
       case STATUS.DA_DUYET_LDC: {
@@ -226,7 +215,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         break;
       }
     }
-    await this.approve(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn từ chối?");
+    this.reject(this.idInput, trangThai)
   }
 
   sumSoLuong(data: any, row: string, type?: any) {
@@ -274,7 +263,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: "1200px",
-      nzStyle: { top: "100px" },
+      nzStyle: {top: "100px"},
       nzFooter: null,
       nzComponentParams: {
         dataTable: list && list.dataChild ? list.dataChild : [],
@@ -388,12 +377,12 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 15000000000);
     if (this.tableTren && this.tableTren.length > 0) {
       this.tableTren = chain(this.tableTren).groupBy("tenKhoi")
-        .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))
+        .map((value, key) => ({tenKhoi: key, dataChild: value, idVirtual: uuidv4()}))
         .value();
     }
     if (this.tableDuoi && this.tableDuoi.length > 0) {
       this.tableDuoi = chain(this.tableDuoi).groupBy("tenKhoi")
-        .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))
+        .map((value, key) => ({tenKhoi: key, dataChild: value, idVirtual: uuidv4()}))
         .value();
     }
     this.expandAll(this.tableTren);

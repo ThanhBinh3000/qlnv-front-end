@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
+import {FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import {
   DialogDanhSachHangHoaComponent
@@ -11,15 +11,15 @@ import {
 import {
   TongHopDeXuatKeHoachBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
-import { DatePipe } from '@angular/common';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { STATUS } from 'src/app/constants/status';
-import { LOAI_HANG_DTQG } from "../../../../../../constants/config";
-import { PREVIEW } from "src/app/constants/fileType";
-import { saveAs } from 'file-saver';
+import {DatePipe} from '@angular/common';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {STATUS} from 'src/app/constants/status';
+import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
+import {PREVIEW} from "src/app/constants/fileType";
+import {saveAs} from 'file-saver';
 import printJS from "print-js";
 
 @Component({
@@ -124,7 +124,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
     this.isTongHop = true;
     this.helperService.bidingDataInFormGroup(this.formTraCuu, data);
-    this.formData.patchValue({ idTh: data.id });
+    this.formData.patchValue({idTh: data.id});
     if (data.children && data.children.length > 0) {
       this.showFirstRow(event, data.children[0].idDxHdr);
     }
@@ -223,7 +223,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     });
     modal.afterClose.subscribe(data => {
       if (data) {
-        const { ma, ten, parent } = data;
+        const {ma, ten, parent} = data;
         this.formTraCuu.patchValue({
           cloaiVthh: ma,
           tenCloaiVthh: ten,
@@ -264,10 +264,10 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       const tenLoaiVthh = res.data
         .flatMap(item => item.children || [])
         .find(s => s.ma === this.loaiVthh)?.ten;
-      this.formTraCuu.patchValue({ tenLoaiVthh });
+      this.formTraCuu.patchValue({tenLoaiVthh});
     } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
       const tenLoaiVthh = res.data.find(s => s.ma === this.loaiVthh)?.ten;
-      this.formTraCuu.patchValue({ tenLoaiVthh });
+      this.formTraCuu.patchValue({tenLoaiVthh});
     }
   }
 
@@ -348,7 +348,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   }
 
   printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
 

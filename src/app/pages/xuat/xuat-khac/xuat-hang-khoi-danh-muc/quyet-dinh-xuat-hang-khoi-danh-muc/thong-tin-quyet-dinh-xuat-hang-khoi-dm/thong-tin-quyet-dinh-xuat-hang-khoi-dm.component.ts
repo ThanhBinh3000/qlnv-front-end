@@ -98,6 +98,7 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   openDialogDsHangNgoaiMuc() {
     this.dataTable = [];
     const modalQD = this.modal.create({

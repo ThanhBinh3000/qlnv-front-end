@@ -1,12 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ThongTinQuyetDinh} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
-import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {AMOUNT_THREE_DECIMAL} from "../../../../Utility/utils";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ThongTinQuyetDinh } from '../../../../models/DeXuatKeHoachuaChonNhaThau';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import {AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_THREE_DECIMAL} from '../../../../Utility/utils';
+import { MESSAGE } from '../../../../constants/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-mua-bu',
   templateUrl: './mua-bu.component.html',
-  styleUrls: ['./mua-bu.component.scss']
+  styleUrls: ['./mua-bu.component.scss'],
 })
 export class MuaBuComponent implements OnInit {
 
@@ -21,21 +23,24 @@ export class MuaBuComponent implements OnInit {
   @Output()
   dataTableChange = new EventEmitter<any[]>();
   @Input()
-  tongGtri: number
-  amount = AMOUNT_THREE_DECIMAL
+  tongGtri: number;
+  amount = AMOUNT_THREE_DECIMAL;
+  amountSL = AMOUNT_ONE_DECIMAL;
   @Output()
   tongGtriChange = new EventEmitter<number>();
 
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
-  dsChungLoaiHangHoa : any[] = [];
+  dsChungLoaiHangHoa: any[] = [];
+
   constructor(
     private readonly modal: NzModalService,
+    private notification: NzNotificationService,
   ) {
   }
 
   ngOnInit(): void {
-    this.updateEditCache()
+    this.updateEditCache();
     this.emitDataTable();
   }
 
@@ -44,11 +49,11 @@ export class MuaBuComponent implements OnInit {
   }
 
   onChangeTongGtri() {
-    this.tongGtriChange.emit(this.tongGtri)
+    this.tongGtriChange.emit(this.tongGtri);
   }
 
   emitDataTable() {
-    this.dataTableChange.emit(this.dataTable)
+    this.dataTableChange.emit(this.dataTable);
   }
 
   editItem(idx: number): void {
@@ -65,7 +70,7 @@ export class MuaBuComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.dataTable.splice(index,1);
+        this.dataTable.splice(index, 1);
       },
     });
   }
@@ -74,10 +79,22 @@ export class MuaBuComponent implements OnInit {
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    this.dataTable = [...this.dataTable, this.rowItem]
+    if (!this.rowItem.loaiVthh || !this.rowItem.soLuong) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn phải nhập hàng DTQG và số lượng.');
+      return;
+    }
+    // Check hàng hóa đã có trong list chưa
+    let indexItem = this.dataTable.findIndex(item => item.loaiVthh == this.rowItem.loaiVthh && item.cloaiVthh == this.rowItem.cloaiVthh);
+    if (indexItem != -1) {
+      let itemOld = this.dataTable[indexItem];
+      itemOld.soLuong = +itemOld.soLuong + +this.rowItem.soLuong;
+      this.dataTable[indexItem] = itemOld;
+    } else {
+      this.dataTable = [...this.dataTable, this.rowItem];
+    }
     this.rowItem = new ThongTinQuyetDinh();
-    this.updateEditCache()
-    this.emitDataTable()
+    this.updateEditCache();
+    this.emitDataTable();
   }
 
   clearData() {
@@ -86,7 +103,7 @@ export class MuaBuComponent implements OnInit {
 
   huyEdit(idx: number): void {
     this.dataEdit[idx] = {
-      data: {...this.dataTable[idx]},
+      data: { ...this.dataTable[idx] },
       edit: false,
     };
   }
@@ -101,11 +118,12 @@ export class MuaBuComponent implements OnInit {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
   }
+
   onChangeLoaiVthh(event, typeData?: any) {
     // if (typeData) {
     //   this.dsChungLoaiHangHoa = [];
@@ -150,7 +168,7 @@ export class MuaBuComponent implements OnInit {
     }
   }
 
-  onChangeCloaiVthh(event, typeData?: any ) {
+  onChangeCloaiVthh(event, typeData?: any) {
     if (typeData) {
       const cloaiVthh = this.dsChungLoaiHangHoa.find(item => item.ma == event);
       if (cloaiVthh) {
@@ -168,4 +186,6 @@ export class MuaBuComponent implements OnInit {
 
   validate() {
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }

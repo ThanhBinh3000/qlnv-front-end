@@ -98,7 +98,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
           this.optionsDonVi.push(item);
           this.optionsPhongBan.push(item);
         }
-        this.optionsDonVi = this.optionsDonVi.filter(s => s.type != 'PB' || (s.type == 'PB' && s.capDvi == 3));
+        this.optionsDonVi = this.optionsDonVi.filter(s => s.type != 'MLK');
         this.optionsPhongBan = this.optionsPhongBan.filter(s => s.type == 'PB');
         // nếu dữ liệu detail có
         // if (this.dataEdit?.dvql && this.dataEdit?.department) {
@@ -262,7 +262,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
         phoneNo: dataDt.phoneNo,
         status: dataDt.status,
         sysType: dataDt.sysType,
-        userType: dataDt.userType,
+        userType : dataDt.userType,
         dvql: dv ? dv.maDvi + ' - ' + dv.tenDvi : '',
         department: pb ? pb.maDvi + ' - ' + pb.tenDvi : '',
         ghiChu: dataDt.ghiChu,

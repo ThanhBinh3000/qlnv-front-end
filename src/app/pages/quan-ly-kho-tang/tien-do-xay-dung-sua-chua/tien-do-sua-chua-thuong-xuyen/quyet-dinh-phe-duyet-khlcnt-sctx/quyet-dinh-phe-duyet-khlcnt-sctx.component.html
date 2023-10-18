@@ -4,8 +4,8 @@
       <div class="row">
         <div class="col text-center">
           <button type="submit" style="width: 200px;height: 50px;"
-            *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_QDPDKHLCNT_THEM')"
-            class="btn btn-lg big-btn-them" (click)="redirectToChiTiet(0,false)">
+                  *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_QDPDKHLCNT_THEM')"
+                  class="btn btn-lg big-btn-them" (click)="redirectToChiTiet(0,false)">
             <div class="btn-text-them">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
@@ -17,9 +17,12 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <app-thong-tin-quyet-dinh-phe-duyet-khlcnt-sctx [id]="selectedId" (showListEvent)="showList()"
-    [isViewDetail]="isViewDetail" [itemQdPdBcKtkt]="itemQdPdBcKtkt" (dataItemKhLcnt)="receivedData($event)"
-    [itemDuAn]="itemDuAn" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_QDPDKHLCNT_XEM')"
-    [idInput]="selectedId">
+  <app-thong-tin-quyet-dinh-phe-duyet-khlcnt-sctx  [id]="selectedId" (showListEvent)="showList()"
+                                                   [isViewDetail]="isViewDetail"
+                                                   [itemQdPdBcKtkt]="itemQdPdBcKtkt"
+                                                   (dataItemKhLcnt)="receivedData($event)"
+                                                   [itemDuAn]="itemDuAn"
+                                                   *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_QDPDKHLCNT_XEM')"
+                                                   [idInput]="selectedId">
   </app-thong-tin-quyet-dinh-phe-duyet-khlcnt-sctx>
 </ng-template>

@@ -17,9 +17,9 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
-import { convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai } from "../../../../../../shared/commonFunction";
+import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
 import { saveAs } from "file-saver";
-import { PREVIEW } from "../../../../../../constants/fileType";
+import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
 
 @Component({
@@ -122,7 +122,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     }
   }
 
-  convertTenVthh() {
+  convertTenVthh(){
     let data = convertIdToTenLoaiVthh(this.loaiVthh);
     this.formTraCuu.get('tenLoaiVthh').setValue(data)
     this.formTraCuu.get('loaiVthh').setValue(this.loaiVthh)
@@ -333,8 +333,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   closeDlg() {
     this.showDlgPreview = false;
   }
-  printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
 

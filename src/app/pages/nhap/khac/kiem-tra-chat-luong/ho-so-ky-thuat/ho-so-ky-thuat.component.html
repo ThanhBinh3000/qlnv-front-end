@@ -6,29 +6,27 @@
           <label class="search__label">Số hồ sơ kỹ thuật</label>
           <input class="search__input" placeholder="Nhập Số phiếu" nz-input [(ngModel)]="searchFilter.soHoSoKyThuat" />
         </div>
-        <!--        <div nz-col nzSpan="4">-->
-        <!--          <label class="search__label">Loại hàng hóa</label>-->
-        <!--          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">-->
-        <!--            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVatTuCha"-->
-        <!--              readonly="true" />-->
-        <!--          </nz-input-group>-->
-        <!--        </div>-->
-        <!--        <div nz-col nzSpan="4">-->
-        <!--          <label class="search__label">Chủng loại hàng hóa</label>-->
-        <!--          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">-->
-        <!--            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVatTu"-->
-        <!--              readonly="true" />-->
-        <!--          </nz-input-group>-->
-        <!--        </div>-->
+<!--        <div nz-col nzSpan="4">-->
+<!--          <label class="search__label">Loại hàng hóa</label>-->
+<!--          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">-->
+<!--            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVatTuCha"-->
+<!--              readonly="true" />-->
+<!--          </nz-input-group>-->
+<!--        </div>-->
+<!--        <div nz-col nzSpan="4">-->
+<!--          <label class="search__label">Chủng loại hàng hóa</label>-->
+<!--          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">-->
+<!--            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVatTu"-->
+<!--              readonly="true" />-->
+<!--          </nz-input-group>-->
+<!--        </div>-->
         <div nz-col nzSpan="4">
           <label class="search__label">Số biên bản kiểm tra ngoại quan</label>
-          <input class="search__input" placeholder="Nhập Số phiếu" nz-input
-            [(ngModel)]="searchFilter.soBbKtraNgoaiQuan" />
+          <input class="search__input" placeholder="Nhập Số phiếu" nz-input [(ngModel)]="searchFilter.soBbKtraNgoaiQuan" />
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Số biên bản vận hành</label>
-          <input class="search__input" placeholder="Nhập Số phiếu" nz-input
-            [(ngModel)]="searchFilter.soBbKtraVanHanh" />
+          <input class="search__input" placeholder="Nhập Số phiếu" nz-input [(ngModel)]="searchFilter.soBbKtraVanHanh" />
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Số biên bản kiểm tra hồ sơ kỹ thuật</label>
@@ -81,7 +79,7 @@
             <th width="161px">Ngày tạp HSKT</th>
             <th width="161px">Số BB lấy mẫu/bàn giao mẫu</th>
             <th width="161px">Số QĐ Giao NV NH</th>
-            <!--            <th width="161px">Số hợp đồng</th>-->
+<!--            <th width="161px">Số hợp đồng</th>-->
             <th>Số BB kiểm tra ngoại quan</th>
             <th>Số BB kiểm tra vận hành</th>
             <th>Số BB kiểm tra HSKT</th>
@@ -118,12 +116,12 @@
                   (input)="filterInTable('tenVatTuCha',filterTable.tenVatTuCha)" />
               </nz-input-group>
             </th>
-            <!--            <th>-->
-            <!--              <nz-input-group>-->
-            <!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVatTu"-->
-            <!--                  (input)="filterInTable('tenVatTu',filterTable.tenVatTu)" />-->
-            <!--              </nz-input-group>-->
-            <!--            </th>-->
+<!--            <th>-->
+<!--              <nz-input-group>-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVatTu"-->
+<!--                  (input)="filterInTable('tenVatTu',filterTable.tenVatTu)" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ketLuan"
@@ -162,7 +160,7 @@
             <td>{{data.ngayTao | date : 'dd/MM/yyyy'}}</td>
             <td>{{data.soBbLayMau}}</td>
             <td>{{data.soQdGiaoNvNh}}</td>
-            <!--            <td>{{data.soHd}}</td>-->
+<!--            <td>{{data.soHd}}</td>-->
             <td>{{data.soBbKtraNgoaiQuan}}</td>
             <td>{{data.soBbKtraVanHanh}}</td>
             <td>{{data.soBbKtraHskt}}</td>
@@ -178,7 +176,7 @@
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_DUYET_TP') || data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_DUYET_LDCUC') ) && userService.isCuc() "
-                (click)="redirectToChiTiet(false, data.id)">
+                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_HSKT_XOA')"

@@ -1,19 +1,19 @@
-import { Component, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
-import { UserService } from "../../../../services/user.service";
-import { DonviService } from "../../../../services/donvi.service";
-import { DanhMucService } from "../../../../services/danhmuc.service";
-import { Globals } from "../../../../shared/globals";
+import {Component, OnInit} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {ThongTu1452013Service} from "../../../../services/bao-cao/ThongTu1452013.service";
+import {UserService} from "../../../../services/user.service";
+import {DonviService} from "../../../../services/donvi.service";
+import {DanhMucService} from "../../../../services/danhmuc.service";
+import {Globals} from "../../../../shared/globals";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { MESSAGE } from "../../../../constants/message";
-import { Base2Component } from "../../../../components/base2/base2.component";
-import { saveAs } from "file-saver";
+import {Validators} from "@angular/forms";
+import {MESSAGE} from "../../../../constants/message";
+import {Base2Component} from "../../../../components/base2/base2.component";
+import {saveAs} from "file-saver";
 
 @Component({
   selector: "app-thuc-hien-kh-nhap-xuat-ctvt-bao-quan",
@@ -34,7 +34,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
-
+  listQuy = [];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -49,6 +49,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
+        quy: [],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: [],
@@ -60,14 +61,34 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
     );
   }
 
+  // listQuy: any[] = [
+  //   {
+  //     text: dayjs().get("month") >= 10 ? 'Quý IV' : (dayjs().get("month") >= 7 ? 'Quý III' : (dayjs().get("month") >= 4 ? 'Quý II' : 'Quý I')),
+  //     value: dayjs().get("month") >= 10 ? 4 : (dayjs().get("month") >= 7 ? 3 : (dayjs().get("month") >= 4 ? 2 : 1)),
+  //   },
+  // ];
+
+
   async ngOnInit() {
     await this.spinner.show();
     try {
-      for (let i = -3; i < 23; i++) {
+      for (let i = 0; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i
         });
+      }
+      const quyData = [
+        { text: 'Quý I', value: 1 },
+        { text: 'Quý II', value: 2 },
+        { text: 'Quý III', value: 3 },
+        { text: 'Quý IV', value: 4 },
+      ];
+      const month = dayjs().get("month");
+      for (let i = 0; i <= Math.floor(month / 3); i++) {
+        if(i>=1){
+          this.listQuy.push(quyData[i-1]);
+        }
       }
       await Promise.all([
         this.loadDsDonVi(),
@@ -176,7 +197,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
   }
 
   async changeLoaiVthh(event) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listCloaiVthh = res.data;
@@ -206,5 +227,12 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
     });
     // this.formData.get("loaiVthh").setValue(listVthhCondition);
     this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
+  }
+
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      quy: null,
+    })
   }
 }

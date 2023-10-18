@@ -13,7 +13,7 @@ import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMu
 import { MESSAGE } from "src/app/constants/message";
 import dayjs from "dayjs";
 import { Base2Component } from "src/app/components/base2/base2.component";
-import { CHUC_NANG } from "src/app/constants/status";
+import { CHUC_NANG, STATUS } from "src/app/constants/status";
 
 @Component({
   selector: 'app-quyet-dinh-gnv',
@@ -73,6 +73,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
       trichYeu: [''],
       trangThai: [''],
       type: [''],
+      types: ['']
       // types: [['TH', 'TTr']]
     });
     this.filterTable = {
@@ -137,6 +138,11 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
   }
 
   async timKiem() {
+    if (this.formData.value.type === "XC") {
+      this.formData.patchValue({ types: ['XC'] })
+    } else {
+      this.formData.patchValue({ types: ['TH', 'TTr'] })
+    }
     await this.spinner.show();
     try {
       await this.search();
@@ -166,5 +172,43 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
   closeQdGnvModal() {
     this.id = null;
     this.openQdGnv = false;
+  }
+  checkRoleAdd() {
+    if (this.userService.isCuc() && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')) {
+      return true
+    }
+    return false
+  }
+  checkRoleEdit(trangThai: STATUS): boolean {
+    if ([this.STATUS.DU_THAO, this.STATUS.TU_CHOI_TP, this.STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')) {
+      return true
+    }
+    return false
+  }
+  checkRoleApprove(trangThai: STATUS): boolean {
+    if ([this.STATUS.CHO_DUYET_TP, this.STATUS.CHO_DUYET_LDC].includes(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')) {
+      return true
+    }
+    return false
+  }
+  checkRoleXoa(trangThai: STATUS): boolean {
+    if ([this.STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')) {
+      return true
+    }
+    return false
+
+  }
+  checkRoleXoaDs(): boolean {
+    if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')) {
+      return true
+    }
+    return false
+
+  }
+  checkRoleView(trangThai: STATUS): boolean {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleXoa(trangThai) && !this.checkRoleApprove(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XEM')) {
+      return true
+    }
+    return false
   }
 }

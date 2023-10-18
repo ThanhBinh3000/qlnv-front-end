@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from "rxjs";
-import { UserService } from "../../../services/user.service";
-import { Globals } from "../../../shared/globals";
-import { Router } from "@angular/router";
+import {Subject} from "rxjs";
+import {UserService} from "../../../services/user.service";
+import {Globals} from "../../../shared/globals";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-tien-do-xay-dung-sua-chua',

@@ -52,7 +52,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       ngayKtra: [null, [Validators.required]],
       loaiVthh: [null, [Validators.required]],
       tenLoaiVthh: [null, [Validators.required]],
-      cloaiVthh: [null,],
+      cloaiVthh: [null, ],
       tenCloaiVthh: [null,],
       dviTinh: [null, [Validators.required]],
       vaiTro: [null, [Validators.required]],
@@ -74,6 +74,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
     if (this.id) {
       await this.detail(this.id).then((res) => {
         for (const property in this.rowItem) {
+          console.log(property,res[property]);
           this.rowItem[property] = res[property];
         }
       });
@@ -190,12 +191,12 @@ export class ChiSoChatLuong {
   nhietDo: number = 0;
   doAm: number = 0;
   hatVang: number = 0;
-  camQuan: string;
-  tinhTrangNamMoc: string;
+  camQuan: string = '';
+  tinhTrangNamMoc: string = '';
   conTrungSong: number = 0;
   // Muoi them
-  muiVi: string;
-  benNgoaiCoHat: string;
+  muiVi: string = '';
+  benNgoaiCoHat: string = '';
   //VT
   baoQuanLanDau: number = 0;
   anToanBqtx: number = 0;

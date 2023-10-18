@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { STATUS } from "../../../../../constants/status";
-import { UserService } from "../../../../../services/user.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {STATUS} from "../../../../../constants/status";
+import {UserService} from "../../../../../services/user.service";
 import {
   QdPheDuyetKhlcntTdsclService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
@@ -20,8 +20,8 @@ export class QuyetDinhPheDuyetKhlcntSclComponent implements OnInit {
   @Input("itemQdPdKhLcnt") itemQdPdKhLcnt: any;
   STATUS = STATUS;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
   @Output() dataItemKhLcnt = new EventEmitter<object>();
 

@@ -5,19 +5,19 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from "../../../../../../constants/status";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from "../../../../../../constants/status";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   QuyetDinhPdKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
@@ -27,13 +27,13 @@ import {
 import {
   TongHopKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { LOAI_HANG_DTQG } from "../../../../../../constants/config";
-import { QuyetDinhGiaTCDTNNService } from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
-import { PREVIEW } from "../../../../../../constants/fileType";
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
+import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-truc-tiep',
@@ -219,7 +219,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
-    const { soQdPd, namKh, children } = data;
+    const {soQdPd, namKh, children} = data;
     this.formData.patchValue({
       soQdPd: soQdPd?.split('/')[0] || null,
       nam: namKh,
@@ -465,8 +465,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       if (data.hasOwnProperty('tongSoLuong')) {
         this.danhsachDx[this.index].tongSoLuong = data.tongSoLuong;
       }
-      if (data.hasOwnProperty('tongTien')) {
-        this.danhsachDx[this.index].tongTien = data.tongTien;
+      if (data.hasOwnProperty('thanhTien')) {
+        this.danhsachDx[this.index].thanhTien = data.thanhTien;
       }
       if (data.hasOwnProperty('tgianDkienTu')) {
         this.danhsachDx[this.index].tgianDkienTu = data.tgianDkienTu;
@@ -506,7 +506,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   isDisabledQD() {

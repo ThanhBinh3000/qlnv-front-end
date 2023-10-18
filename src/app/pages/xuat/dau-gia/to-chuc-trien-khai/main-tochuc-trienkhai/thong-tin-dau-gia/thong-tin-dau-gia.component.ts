@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { MESSAGE } from "../../../../../../constants/message";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { cloneDeep } from 'lodash';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {MESSAGE} from "../../../../../../constants/message";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {cloneDeep} from 'lodash';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { saveAs } from 'file-saver';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {saveAs} from 'file-saver';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-thong-tin-dau-gia',
@@ -171,7 +171,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
         this.idQdPdKh = id;
         this.isViewQdPdKh = true;
         break;
-      case 'QdPdDc':
+      case 'QdPdDc' :
         this.idQdDc = id;
         this.isViewQdDc = true;
         break;
@@ -194,7 +194,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
         this.idQdPdKh = null;
         this.isViewQdPdKh = false;
         break;
-      case 'QdPdDc':
+      case 'QdPdDc' :
         this.idQdDc = null;
         this.isViewQdDc = false;
         break;

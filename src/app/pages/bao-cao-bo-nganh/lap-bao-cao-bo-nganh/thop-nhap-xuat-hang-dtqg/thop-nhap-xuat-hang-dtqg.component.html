@@ -68,8 +68,7 @@
         </button>
       </div> -->
       <div class="buttons">
-        <button nz-button class="search__button--search" (click)="themMoi()"
-          *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP')">
+        <button nz-button class="search__button--search" (click)="themMoi()" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP')">
           <i class="icon  htvbdh_icon_list"></i>
           Lập báo cáo
         </button>
@@ -98,7 +97,7 @@
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id, true)"
-                *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_XEM')
+                 *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_XEM')
                  && !(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP') && data.trangThai != STATUS.BAN_HANH)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
@@ -109,11 +108,11 @@
                 <i class="icon htvbdh_file-excel"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.BAN_HANH && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP')"
-                (click)="goDetail(data.id, false)">
+                 (click)="goDetail(data.id, false)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.BAN_HANH && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_XOA')"
-                (click)="xoaItem(data)">
+                 (click)="xoaItem(data)" >
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>

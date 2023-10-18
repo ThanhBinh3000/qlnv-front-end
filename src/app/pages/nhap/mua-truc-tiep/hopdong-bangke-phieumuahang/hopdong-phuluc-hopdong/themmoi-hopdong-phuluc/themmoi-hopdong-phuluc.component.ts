@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import { Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -149,6 +149,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     await Promise.all([
       this.loadDataComboBox()
     ]);
+    console.log(this.idQdKh)
     if (this.idQdKh) {
       await this.onChangeQdKh(this.idQdKh);
     }
@@ -221,13 +222,13 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
-    if (this.validateSlKyHd()) {
+    if(this.validateSlKyHd()){
       this.notification.error(MESSAGE.ERROR, 'Số lượng ký hợp đồng phải bằng số lượng nhập trực tiếp');
       return;
     }
-    if (this.loaiHd == '02') {
+    if(this.loaiHd == '02'){
       let dataQd = await this.quyetDinhGiaoNvNhapHangService.getDetail(this.formData.value.idQdGiaoNvNh)
-      if (dataQd.data.trangThai != STATUS.BAN_HANH) {
+      if(dataQd.data.trangThai != STATUS.BAN_HANH){
         this.notification.error(MESSAGE.ERROR, 'Quyết định giao nhiệm vụ nhập hàng chưa được ban hành!');
         return;
       }
@@ -254,19 +255,19 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     }
   }
 
-  validateSlKyHd() {
+  validateSlKyHd(){
     console.log(this.dataTable, "this.dataTable")
     let sumSlKyHd = 0;
     let sumSlNhapTt = 0;
-    this.dataTable.forEach(item => {
-      item.children.forEach(x => {
+    this.dataTable.forEach(item =>{
+      item.children.forEach(x =>{
         sumSlKyHd += Number.parseInt(x.soLuongHd)
         sumSlNhapTt += x.soLuong
       })
     })
     console.log(sumSlKyHd, "1")
     console.log(sumSlNhapTt, "2")
-    if (sumSlKyHd > sumSlNhapTt || sumSlKyHd < sumSlNhapTt) {
+    if(sumSlKyHd > sumSlNhapTt || sumSlKyHd < sumSlNhapTt){
       return true;
     }
   }
@@ -297,8 +298,8 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataHeader: ['Số QĐ kế hoạch', 'Tên loại hàng DTQG', 'Chủng loại hàng DTQG'],
-        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh'],
+        dataHeader: ['Số QĐ kế hoạch', 'Số QĐ điều chỉnh (nếu có)', 'Tên loại hàng DTQG', 'Chủng loại hàng DTQG'],
+        dataColumn: ['soQd', 'soQdDc', 'tenLoaiVthh', 'tenCloaiVthh'],
         dataTable: listQdKh
       },
     });
@@ -320,7 +321,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
             // this.dataTable = dataKq.danhSachCtiet;
             this.formData.patchValue({
               idQdKh: dataKq.idQdHdr,
-              soQdKh: dataKq.soQd,
+              soQdKh: dataKq.hhQdPheduyetKhMttHdr.isChange ? dataKq.hhQdPheduyetKhMttHdr.soQdDc : dataKq.hhQdPheduyetKhMttHdr.soQd,
               idQdGiaoNvNh: dataKq.hhQdPheduyetKhMttHdr.idQdGnvu,
               soQdGiaoNvNh: dataKq.hhQdPheduyetKhMttHdr.soQdGnvu,
               soQd: dataKq.hhQdPheduyetKhMttHdr.soQdGnvu,
@@ -392,11 +393,11 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
             this.slChuaKy = 0;
             this.listDviLquan = [];
             dataKq.danhSachCtiet.forEach((item) => {
-              item.listChaoGia.forEach(res => {
+              item.listChaoGia.forEach(res =>{
                 if (res.luaChon == true && res.signed != true) {
                   this.listDviLquan.push(res)
                   this.slChuaKy += res.soLuong
-                } else if (res.luaChon == true && res.signed == true) {
+                }else if(res.luaChon == true && res.signed == true){
                   this.slDaKy += item.children.find(x => x.idDiaDiem == res.idQdPdKqSldd).soLuongHd
                 }
               })
@@ -418,7 +419,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
               dviTinh: "tấn",
               tongSoLuongQdKh: dataThongTin.tongSoLuong
             });
-            if (this.idKqCgia) {
+            if(this.idKqCgia){
               this.changeDviCungCap(this.idKqCgia)
             }
           }

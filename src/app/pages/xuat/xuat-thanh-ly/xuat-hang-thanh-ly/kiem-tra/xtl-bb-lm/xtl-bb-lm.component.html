@@ -65,12 +65,12 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách biên bản lấy mẫu/bàn giao mẫu</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData('SCHDTQG_KTCL_EXP')">
+      <button type="button" class="btn btn-sub" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
       <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc()"
-              (click)="redirectCreate('SCHDTQG_KTCL_THEM')">
+              (click)="redirectCreate()">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -128,15 +128,15 @@
               <td></td>
               <td>{{bbLm.tenTrangThai}}</td>
               <td>
-                <a (click)="redirectDetail(bbLm.id,'SCHDTQG_KTCL_XEM')">
+                <a (click)="redirectDetail(bbLm.id)">
                   <span class="icon htvbdh_eye"></span>
                 </a>
                 <a *ngIf="this.userService.isCuc() && bbLm.trangThai == STATUS.DU_THAO"
-                   (click)="redirectDetail(bbLm.id,'SCHDTQG_KTCL_THEM')">
+                   (click)="redirectDetail(bbLm.id)">
                   <span class="fa fa-pencil"></span>
                 </a>
                 <a *ngIf="this.userService.isCuc() && bbLm.trangThai == STATUS.DU_THAO"
-                   (click)="delete(bbLm,'SCHDTQG_KTCL_XOA')">
+                   (click)="delete(bbLm)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>

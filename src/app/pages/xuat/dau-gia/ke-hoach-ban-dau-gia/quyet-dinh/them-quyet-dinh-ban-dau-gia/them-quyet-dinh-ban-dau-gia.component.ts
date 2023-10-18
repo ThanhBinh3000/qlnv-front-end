@@ -1,14 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from "../../../../../../constants/status";
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from "../../../../../../constants/status";
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
@@ -18,14 +18,14 @@ import {
 import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { PREVIEW } from "src/app/constants/fileType";
-import { saveAs } from 'file-saver';
-import { QuyetDinhGiaTCDTNNService } from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {PREVIEW} from "src/app/constants/fileType";
+import {saveAs} from 'file-saver';
+import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
@@ -213,7 +213,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
-    const { soQdPd, children } = data;
+    const {soQdPd, children} = data;
     this.formData.patchValue({
       soQdPd: soQdPd?.split('/')[0] || null,
       namKh: this.formData.value.nam,

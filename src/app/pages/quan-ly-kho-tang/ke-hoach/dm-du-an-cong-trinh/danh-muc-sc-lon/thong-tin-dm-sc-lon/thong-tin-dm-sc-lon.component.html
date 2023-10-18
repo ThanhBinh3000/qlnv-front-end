@@ -52,7 +52,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Thuộc chi cục</nz-form-label>
               <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maChiCuc"
-                (ngModelChange)="changeChiCuc($event)">
+                         (ngModelChange)="changeChiCuc($event)">
                 <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                 </nz-option>
               </nz-select>
@@ -63,8 +63,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Điểm kho</nz-form-label>
-              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maDiemKho"
-                (ngModelChange)="changeDiemKho($event)">
+              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maDiemKho" (ngModelChange)="changeDiemKho($event)">
                 <nz-option *ngFor="let p of dsKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                 </nz-option>
               </nz-select>
@@ -127,7 +126,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư khái toán, dự toán được duyệt</nz-form-label>
               <nz-input-group>
                 <nz-input-number [nzSize]="'small'" nz-input [nzDisabled]="isViewDetail" formControlName="tmdt"
-                  [nzMin]="0" [nzStep]="1" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                                 [nzMin]="0" [nzStep]="1" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" >
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -157,8 +156,8 @@
             <nz-form-label nzRequired [nzNoColon]="true">Ngày quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker class="search__input" [nzDisabled]="isViewDetail" formControlName="ngayQdPd"
-                  nzFormat="dd/MM/yyyy">
+                <nz-date-picker class="search__input" [nzDisabled]="isViewDetail"
+                                formControlName="ngayQdPd" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -188,7 +187,7 @@
         Đóng
       </button>
       <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2"
-        *ngIf="!isViewDetail && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_THEM')">
+              *ngIf="!isViewDetail && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_THEM')">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

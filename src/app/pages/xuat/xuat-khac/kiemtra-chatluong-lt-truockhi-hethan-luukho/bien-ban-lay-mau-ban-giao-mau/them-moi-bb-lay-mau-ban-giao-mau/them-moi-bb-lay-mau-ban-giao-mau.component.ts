@@ -1,25 +1,25 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { Validators } from '@angular/forms';
+import {PhuongPhapLayMau} from 'src/app/models/PhuongPhapLayMau';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {Validators} from '@angular/forms';
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
-import { saveAs } from 'file-saver';
-import { LOAI_HH_XUAT_KHAC } from "../../../../../../constants/config";
+import {saveAs} from 'file-saver';
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {
   BienBanLayMauLuongThucHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/BienBanLayMauLuongThucHangDTQG.service";

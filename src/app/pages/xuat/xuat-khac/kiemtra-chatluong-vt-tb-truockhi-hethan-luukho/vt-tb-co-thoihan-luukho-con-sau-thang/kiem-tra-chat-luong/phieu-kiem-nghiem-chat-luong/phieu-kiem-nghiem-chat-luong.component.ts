@@ -128,13 +128,13 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
         let rs = chain(value)
           .groupBy('tenDiemKho')
           .map((v, k) => {
-            // let bb = v.find(s => s.tenDiemKho === k)
-            return {
-              idVirtual: uuid.v4(),
-              tenDiemKho: k != 'null' ? k : '',
-              childData: v,
-            };
-          },
+              // let bb = v.find(s => s.tenDiemKho === k)
+              return {
+                idVirtual: uuid.v4(),
+                tenDiemKho: k != 'null' ? k : '',
+                childData: v,
+              };
+            },
           ).value();
         return {
           idVirtual: uuid.v4(),

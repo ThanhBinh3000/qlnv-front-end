@@ -194,6 +194,10 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
 
 
   setValidators() {
+    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["loaiKyBc"].setValidators([Validators.required]);
+    this.formData.controls["loaiBc"].setValidators([Validators.required]);
+    this.formData.controls["nam"].setValidators([Validators.required]);
     if (this.formData.value.loaiBc == '02' && this.userService.isTongCuc()) {
       this.formData.controls["maCuc"].setValidators([Validators.required]);
     }
