@@ -21,7 +21,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   @Input() dataInput: any
   @Input() type: string
   @Input() sum: number
-  @Input() dataTable: any
   @Input() page: string
   item: DanhMucKho = new DanhMucKho();
   listDmKho: any[] = []
@@ -64,11 +63,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if (this.checkExitsData(this.item, this.dataTable) && this.type == 'them') {
-      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục dự án");
-      this.spinner.hide();
-      return;
-    }
     this._modalRef.close(this.item);
     this.item = new DanhMucKho();
   }
@@ -90,19 +84,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     return msgRequired;
   }
 
-  checkExitsData(item, dataItem): boolean {
-    let rs = false;
-    if (dataItem && dataItem.length > 0) {
-      dataItem.forEach(it => {
-        if (it.maDuAn == item.maDuAn) {
-          rs = true;
-          return;
-        }
-      });
-    }
-    return rs;
-  }
-
 
   async getAllDmKho() {
     let body = {
@@ -121,6 +102,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     this.item.namKeHoach = dayjs().get('year');
     if (this.type == 'sua') {
       this.item.maDuAn = this.dataInput.maDuAn;
+      this.item.khoi = this.dataInput.khoi;
       this.item.diaDiem = this.dataInput.diaDiem;
       this.item.loaiDuAn = this.dataInput.loaiDuAn;
       this.item.soQdPd = this.dataInput.soQdPd;

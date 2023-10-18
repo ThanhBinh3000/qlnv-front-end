@@ -476,7 +476,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     });
   }
 
-  themMoiItem(data: any, type: string, idx: number, list?: any) {
+  themMoiItem(type: string, data: any,  idx: number, list?: any) {
     let modalQD = this.modal.create({
       nzTitle: 'Chỉnh sửa chi tiết kế hoạch',
       nzContent: DialogThemMoiDxkhthComponent,
@@ -486,7 +486,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       nzStyle: { top: '200px' },
       nzFooter: null,
       nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
         dataInput: data,
         type: type,
         page: 'DXTH',
@@ -494,20 +493,9 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     });
     modalQD.afterClose.subscribe(async (detail) => {
       if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
+        if (detail && list) {
+          Object.assign(list[idx], detail);
         }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == 'them') {
-          data.dataChild.push(detail);
-        } else {
-          if (list) {
-            Object.assign(list[idx], detail);
-          }
-        }
-        this.expandAll(this.dataTable);
       }
     });
   }
