@@ -176,7 +176,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
           loaiDuAn: data.loaiDuAn,
           soQdTrunghan: data.soQdTrunghan,
           trichYeu: data.trichYeu,
-          ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDV ? dayjs().format('YYYY-MM-DD') : data.ngayDuyet,
+          ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDC ? dayjs().format('YYYY-MM-DD') : data.ngayDuyet,
           trangThai: data.trangThai,
           tenTrangThai: data.tenTrangThai
         });
