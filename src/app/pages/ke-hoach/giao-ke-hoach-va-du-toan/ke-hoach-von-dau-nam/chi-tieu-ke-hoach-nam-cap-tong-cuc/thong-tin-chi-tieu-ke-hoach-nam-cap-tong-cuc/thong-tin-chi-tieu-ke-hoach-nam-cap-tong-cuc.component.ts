@@ -3519,7 +3519,17 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         });
         // this.showDlgPreview = true;
       } else if (type === 'LT') {
-        //todo
+        this.subTab = 'LT';
+        let body = {
+          id: this.thongTinChiTieuKeHoachNam.id,
+          typeFile: "pdf",
+          fileName: "ke-hoach-luong-thuc-du-tru-nha-nuoc.jrxml",
+          tenBaoCao: "Kế hoạch lương thực dự trữ nhà nước"
+        };
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamLuongThuc(body).then(async s => {
+          this.pdfBlob = s;
+          this.pdfSrc = await new Response(s).arrayBuffer();
+        });
       } else if (type === 'VT') {
         this.subTab = 'VT-' + (this.subTabVatTu == 0 ? 'NHAP' : 'XUAT');
         await this.chiTieuKeHoachNamService.xemTruocCtKhNamVatTu({
@@ -3549,7 +3559,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     try {
       this.spinner.show();
       if (this.subTab === 'LT') {
-        //todo
+        await this.chiTieuKeHoachNamService.xemTruocCtKhNamLuongThuc({
+          id: this.thongTinChiTieuKeHoachNam.id,
+          typeFile: "xlsx",
+          fileName: "ke-hoach-luong-thuc-du-tru-nha-nuoc.jrxml",
+          tenBaoCao: "Kế hoạch lương thực dự trữ nhà nước"
+        }).then(async s => {
+          this.excelBlob = s;
+          saveAs(this.excelBlob, "Kế hoạch lương thực dự trữ nhà nước.xlsx");
+        });
       } else if (this.subTab === 'MUOI') {
         await this.chiTieuKeHoachNamService.xemTruocCtKhNamMuoi({
           typeFile: 'xlsx',

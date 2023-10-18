@@ -152,6 +152,17 @@
       <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'">
         <div id='table-luong-thuc'
              [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+          <div class='d-flex justify-content-between header-tab'>
+            <div class='trai'>
+            </div>
+            <div class='canphai phai'>
+              <button type='button' class='btn btn-main'
+                      (click)='preView("LT")'>
+                <i class=' icon htvbdh_tcdt_print'></i>
+                <span>In/xem trước</span>
+              </button>
+            </div>
+          </div>
           <div class='ghichu_tab'>Đơn vị tính:Tấn</div>
           <nz-table #groupingTable [nzData]='dsKeHoachLuongThucClone' nzBordered
                     [nzFrontPagination]='false' [nzShowPagination]='false' style='max-height: 700px; overflow: scroll;'
@@ -571,13 +582,16 @@
       <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'">
         <div id='table-muoi'
              [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-          <div class='btn-group mt-2'>
-            <div class='trai'></div>
-            <button type='button' class='btn btn-sub do phai'
-                    (click)='preView("MUOI")'>
-              <i class=' icon htvbdh_tcdt_print'></i>
-              <span>In/xem trước</span>
-            </button>
+          <div class='d-flex justify-content-between header-tab'>
+            <div class='trai'>
+            </div>
+            <div class='canphai phai'>
+              <button type='button' class='btn btn-main'
+                      (click)='preView("MUOI")'>
+                <i class=' icon htvbdh_tcdt_print'></i>
+                <span>In/xem trước</span>
+              </button>
+            </div>
           </div>
           <div class='ghichu_tab'>Đơn vị tính:Kg</div>
           <nz-table #groupingTableMuoi [nzData]='dsMuoiClone' nzBordered class='table__body'
@@ -939,7 +953,7 @@
           <div class='btn-group mt-2'>
             <button type="button" class="btn btn-main" (click)="preView('VT')">
               <i class="icon htvbdh_tcdt_print"></i>
-              <span>Preview</span>
+              <span>In/xem trước</span>
             </button>
           </div>
         </ng-template>
