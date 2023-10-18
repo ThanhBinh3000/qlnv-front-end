@@ -487,7 +487,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       if (this.dataTableReq && this.dataTableReq.length > 0) {
         let sum = 0;
         this.dataTableReq.forEach(item => {
-          sum += this.sumSoLuong(item, row);
+          sum += item[row];
         });
         sl = sum;
       }
