@@ -83,10 +83,25 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
     if (this.id) {
       await this.detail(this.id).then((res) => {
         if (res) {
+          this.formData.patchValue({
+            thoiGianTlDuocDuyet : 'Từ ' + dayjs(res.thoiGianTlTu).format('DD/MM/YYYY') + ' đến ' + dayjs(res.thoiGianTlDen).format('DD/MM/YYYY'),
+            tongDviTsan : res.tongDviTsan,
+            soDviTsanThanhCong : res.tongDviTsanThanhCong,
+            soDviTsanKhongThanh : res.tongDviTsanKhongThanhCong,
+            tongTienGiaKhoiDiem : res.tongGiaKhoiDiem
+          })
           this.loadThongTinDauGia();
         }
       })
     }
+    this.formData.patchValue({
+      tenDvi : this.userInfo.TEN_DVI,
+      tgianTtoan : '3',
+      tgianGnhan : '15',
+      pthucGnhan : 'Giao hàng tại cửa kho',
+      loaiHinhNx : 'Xuất bán đấu giá',
+      kieuNx : 'Xuất bán'
+    })
   }
 
   async loadThongTinDauGia() {

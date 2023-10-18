@@ -224,7 +224,9 @@
           </tbody>
         </nz-table>
       </nz-collapse-panel>
-      <nz-collapse-panel *ngIf="viewTongCuc()" nzActive="true" nzHeader="Kết quả thẩm của Vụ QlHDT">
+    </nz-collapse>
+    <nz-collapse>
+    <nz-collapse-panel *ngIf="viewTongCuc()" nzActive="true" nzHeader="Kết quả thẩm định của Vụ QLHDT">
         <nz-table class="mt-2px pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
           [nzShowPagination]="false">
           <thead>
