@@ -220,8 +220,8 @@
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
-              *ngIf="( data.trangThai== STATUS.CHO_DUYET_LDTC && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH_DUYETLCTC'))
-              || data.trangThai== STATUS.CHO_DUYET_LDV && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH_DUYETLDV')"
+              *ngIf="( data.trangThai== STATUS.CHO_DUYET_LDTC && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH_DUYETLCTC'))
+              || data.trangThai== STATUS.CHO_DUYET_LDV && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH_DUYETLDV')"
               (click)="redirectToChiTiet(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>

@@ -313,6 +313,9 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
       if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+          item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+        });
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
       }
