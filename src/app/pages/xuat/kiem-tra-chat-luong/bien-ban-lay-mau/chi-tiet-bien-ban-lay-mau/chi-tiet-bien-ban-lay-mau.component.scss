@@ -13,4 +13,24 @@
     display: grid;
     grid-template-columns: 1fr
   }
+
+  .border-label-left {
+    position: relative;
+    font-size: 16px;
+
+    label {
+      font-size: 16px !important;
+      margin-left: 10px !important;
+    }
+  }
+
+  .border-label-left::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 24px;
+    border-left: 2px solid black;
+  }
 }

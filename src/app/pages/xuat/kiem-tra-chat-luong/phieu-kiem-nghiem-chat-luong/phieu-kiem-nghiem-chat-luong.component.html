@@ -133,7 +133,7 @@
               <td></td>
               <td></td>
               <td>
-                <a (click)="redirectDetail(0, false,item)">
+                <a (click)="redirectDetail(0, false,item)" *ngIf="checkRoleAdd()">
                   <i class="fa fa-plus" title="Thêm mới"></i>
                 </a>
               </td>
@@ -199,7 +199,7 @@
 <div class="chi-tiet" *ngIf="isDetail">
   <app-chi-tiet-phieu-kiem-nghiem-chat-luong [idSelected]="idSelected" [isView]="isView" [inputService]="inputService"
     [inputServiceGnv]="inputServiceGnv" [inputServiceBbLayMau]="inputServiceBbLayMau" [inputData]="inputData"
-    [maQuyen]="maQuyen" [loaiXuat]="loaiXuat" (showListEvent)="showList()">
+    [maQuyen]="maQuyen" [loaiXuat]="loaiXuat" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-chi-tiet-phieu-kiem-nghiem-chat-luong>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="showQdGnv" (nzOnCancel)="closeQdGnvModal()">

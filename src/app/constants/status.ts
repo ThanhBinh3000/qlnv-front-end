@@ -188,3 +188,6 @@ export enum TRUC_TIEP {
   HOP_DONG = "HĐ",
   BAN_LE = "BL"
 }
+export enum HINH_THUC_KE_LOT_BAO_QUAN {
+  PHUONG_PHAP_BAO_QUAN = "ppbq"
+}

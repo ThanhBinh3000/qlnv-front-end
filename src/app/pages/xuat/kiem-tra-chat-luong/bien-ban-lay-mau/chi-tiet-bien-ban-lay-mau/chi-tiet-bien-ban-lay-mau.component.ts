@@ -117,9 +117,15 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       xhBienBanLayMauDtl: [new Array()],
       ppLayMau: [new Array()],
       ctChatLuong: [new Array()],
-      ngayTao: [],
+      ngayLayMau: [dayjs().format("YYYY-MM-DD")],
       donViTinh: [],
-      thuKho: []
+      thuKho: [],
+
+      soQdPd: [],
+      ngayKyQdPd: [],
+      tenNganLoKho: [],
+      truongBpBaoQuan: [],
+      lanhDaoChiCuc: []
     });
     this.formData.controls['ppLayMau'].valueChanges.subscribe(value => {
       if (this.loaiChon === "radio") {
@@ -161,7 +167,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
               this.maHauTo = '/' + res.data.soBbQd?.split('/')[1];
               res.data.soBbQd = res.data.soBbQd?.split('/')[0];
             }
-            this.formData.patchValue(res.data);
+            this.formData.patchValue({ ...res.data, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
             this.formData.value.xhBienBanLayMauDtl.forEach(s => {
               s.idVirtual = uuidv4();
             });
@@ -332,12 +338,12 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   }
 
   async loadDsQdGnv() {
-    if (['XC', 'CTVT'].includes(this.loaiXuat)) {
+    if (['CTVT'].includes(this.loaiXuat)) {
       await this.inputServiceGnv.danhSach({
         loaiVthh: this.loaiVthh,
         trangThai: STATUS.BAN_HANH,
         listTrangThaiXh: [STATUS.DA_HOAN_THANH],
-        types: this.loaiXuat === "XC" ? ["XC"] : ["TH", "TTr"],
+        types: ["TH", "TTr"],
         paggingReq: {
           limit: this.globals.prop.MAX_INTERGER,
           page: 0,
@@ -401,6 +407,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           tenNhaKho: null,
           tenNganKho: null,
           tenLoKho: null,
+          tenNganLoKho: null
         });
         await this.bindingQdGnv(data.id);
       }
@@ -433,7 +440,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           tenNhaKho: data.tenNhaKho,
           tenNganKho: data.tenNganKho,
           tenLoKho: data.tenLoKho,
-          donViTinh: data.donViTinh
+          donViTinh: data.donViTinh,
+          tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho
         });
         await this.loadDsPpLayMau();
         await this.loadDsCtChatLuong();
@@ -499,17 +507,33 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
 
   async save() {
     // await this.helperService.ignoreRequiredForm(this.formData);
+    if (this.loaiXuat === "CTVT") {
+      this.formData.controls['truongBpBaoQuan'].setValidators(Validators.required);
+      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
+    }
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null,
     };
     await this.createUpdate(body);
+    if (this.loaiXuat === "CTVT") {
+      this.formData.controls['truongBpBaoQuan'].clearValidators();
+      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
+    }
     // await this.helperService.restoreRequiredForm(this.formData);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    if (this.loaiXuat === "CTVT") {
+      this.formData.controls['truongBpBaoQuan'].setValidators(Validators.required);
+      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
+    }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo };
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    if (this.loaiXuat === "CTVT") {
+      this.formData.controls['truongBpBaoQuan'].clearValidators();
+      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
+    }
   }
 
   async bindingQdGnv(idQdGnv) {
@@ -535,6 +559,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           idQdGnv: res.data.id,
           soQdGnv: res.data.soBbQd,
           ngayKyQdGnv: res.data.ngayKy,
+          soQdPd: res.data.soQdPd,
+          ngayKyQdPd: res.data.ngayKyQdPd
         });
       }
     }

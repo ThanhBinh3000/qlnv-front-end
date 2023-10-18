@@ -670,7 +670,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   async getChiTietHangHoa(cloaiVthh: string) {
     const res = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
     if (res.msg === MESSAGE.SUCCESS) {
-      this.listHinhThucBaoQuan = Array.isArray(res.data.hinhThucBq) ? res.data.hinhThucBq : [];
+      this.listHinhThucBaoQuan = Array.isArray(res.data.phuongPhapBq) ? res.data.phuongPhapBq : [];
     }
   }
   // async loadDanhMucPhuongThucBaoQuan() {
