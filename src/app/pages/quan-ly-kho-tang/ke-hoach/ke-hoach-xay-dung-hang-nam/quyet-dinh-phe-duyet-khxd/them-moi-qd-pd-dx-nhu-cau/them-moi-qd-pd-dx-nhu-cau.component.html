@@ -217,6 +217,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td nzRight></td>
                 <td *ngIf='!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU' nzRight></td>
               </tr>
               <ng-container *ngIf='expandSet.has(data.idVirtual)'>
@@ -284,7 +285,7 @@
                             <td class='text-right' nzRight>{{ children.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                             <td class='text-center' nzRight
                                 *ngIf='!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU'>
-                              <a (click)="themMoiItem(children, 'sua', y,  item.dataChild)">
+                              <a (click)="themMoiItem( 'sua', children,  y,  item.dataChild)">
                                 <i class='fa fa-pencil' title='Sửa'></i>
                               </a>
                               <a (click)='deleteRow(children)'>

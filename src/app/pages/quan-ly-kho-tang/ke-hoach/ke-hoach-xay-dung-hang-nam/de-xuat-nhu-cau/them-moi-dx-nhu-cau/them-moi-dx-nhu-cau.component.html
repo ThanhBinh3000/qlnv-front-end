@@ -186,6 +186,10 @@
           <span class='text-uppercase font-weight-bold'>CHI TIẾT KẾ HOẠCH</span>
         </div>
       </div>
+      <button type="button" class="btn btn-main" (click)="themMoiItem('them', null)" *ngIf="!isViewDetail">
+        <i class="icon htvbdh_dau-cong"></i>
+        <span>Thêm</span>
+      </button>
     </div>
     <div>
     <span class='text-right'>
@@ -219,32 +223,6 @@
         <th class='text-center'>Tổng số</th>
         <th class='text-center'>Trong đó vốn NSTW</th>
       </tr>
-      <tr *ngIf='!isViewDetail'>
-        <th></th>
-        <th>
-          <nz-select nzPlaceHolder='Chọn danh mục khối' nzAllowClear [(ngModel)]='rowItemCha.khoi'
-                     (ngModelChange)='changeKhoi($event)'>
-            <nz-option *ngFor='let p of listKhoi' [nzValue]='p.ma' [nzLabel]='p.giaTri'>
-            </nz-option>
-          </nz-select>
-        </th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th nzRight></th>
-        <th class='text-center' *ngIf='!isViewDetail' nzRight>
-          <a (click)='themItemcha()'>
-            <i class='icon htvbdh_dau-cong'></i>
-          </a>
-        </th>
-      </tr>
       </thead>
       <tbody>
       <ng-container *ngFor='let data of dataTable , let idx = index'>
@@ -266,12 +244,6 @@
           <td class='font-weight-bold text-right' class='text-center'
               *ngIf='formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC'
               nzRight>
-            <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
-              <i class='icon htvbdh_dau-cong'></i>
-            </a>
-            <a (click)='deleteItemCha(idx)'>
-              <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
-            </a>
           </td>
         </tr>
         <ng-container *ngIf='expandSet.has(data.idVirtual)'>
@@ -291,10 +263,10 @@
             <td nzRight class='text-right'>{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
             <td class='text-center' nzRight
                 *ngIf='formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC'>
-              <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
+              <a (click)="themMoiItem('sua', item)">
                 <i class='fa fa-pencil' title='Sửa'></i>
               </a>
-              <a (click)='deleteItem(idx, y)'>
+              <a (click)='deleteItem(item)'>
                 <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
               </a>
             </td>
