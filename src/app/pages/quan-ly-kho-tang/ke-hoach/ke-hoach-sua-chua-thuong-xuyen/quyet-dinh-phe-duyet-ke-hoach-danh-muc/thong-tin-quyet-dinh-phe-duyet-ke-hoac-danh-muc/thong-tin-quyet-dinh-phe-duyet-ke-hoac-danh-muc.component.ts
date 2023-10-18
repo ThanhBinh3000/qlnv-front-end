@@ -241,7 +241,6 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
         }
       },
     });
-
   }
 
   async loadDsToTrinh() {
