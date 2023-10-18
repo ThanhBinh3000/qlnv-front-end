@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
-import {UserService} from "../../../../../services/user.service";
-import {Globals} from "../../../../../shared/globals";
+import { Component, OnInit } from '@angular/core';
+import { Subject } from "rxjs";
+import { UserService } from "../../../../../services/user.service";
+import { Globals } from "../../../../../shared/globals";
 
 
 @Component({

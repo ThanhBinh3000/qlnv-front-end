@@ -337,7 +337,7 @@
                             <td class='text-right'>{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                             <td class='text-center' nzRight
                                 *ngIf='!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU'>
-                              <a (click)="themMoiItem(children, 'sua', y,  item.dataChild)">
+                              <a (click)="themMoiItem('sua', children, y1 ,  item.dataChild)">
                                 <i class='fa fa-pencil' title='Sửa'></i>
                               </a>
                               <a (click)='deleteRow(children)'>

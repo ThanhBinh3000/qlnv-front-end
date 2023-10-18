@@ -36,7 +36,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   @Output() redirectToQd = new EventEmitter<any>();
   expandSet = new Set<number>();
   userInfo: UserLogin;
-  dataDetail : any
+  dataDetail: any
   formData: FormGroup;
   listDx: any[] = [];
   dataTable: any[] = [];
@@ -86,7 +86,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
-      trangThaiQd : []
+      trangThaiQd: []
     });
   }
 
@@ -242,23 +242,23 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DU_THAO: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_LDV : {
+            case STATUS.TU_CHOI_LDV: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_LDV : {
+            case STATUS.CHO_DUYET_LDV: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.TU_CHOI_LDTC : {
+            case STATUS.TU_CHOI_LDTC: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDTC : {
+            case STATUS.CHO_DUYET_LDTC: {
               trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
@@ -428,10 +428,10 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   convertListData(table: any[]) {
     if (table && table.length > 0) {
       table = chain(table).groupBy("tenKhoi").map((value, key) => ({
-          tenKhoi: key,
-          dataChild: value,
-          idVirtual: uuidv4()
-        })
+        tenKhoi: key,
+        dataChild: value,
+        idVirtual: uuidv4()
+      })
       ).value();
     }
     return table;
@@ -511,7 +511,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     });
   }
 
-  themMoiItem(data: any, type: string, idx: number, list?: any) {
+  themMoiItem(type: string, data: any, idx : number, list: any) {
     let modalQD = this.modal.create({
       nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
       nzContent: DialogThemMoiDxkhthComponent,
@@ -521,28 +521,14 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       nzStyle: { top: "200px" },
       nzFooter: null,
       nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
         dataInput: data,
         type: type,
         page: "DXTH"
       }
     });
     modalQD.afterClose.subscribe(async (detail) => {
-      if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
-        }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == "them") {
-          data.dataChild.push(detail);
-        } else {
-          if (list) {
-            Object.assign(list.dataChild[idx], detail);
-          }
-        }
-        this.expandAll(this.dataTable);
+      if (detail && list) {
+        Object.assign(list[idx], detail);
       }
     });
   }

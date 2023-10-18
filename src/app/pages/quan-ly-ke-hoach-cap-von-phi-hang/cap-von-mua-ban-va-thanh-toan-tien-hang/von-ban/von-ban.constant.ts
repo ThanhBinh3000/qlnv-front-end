@@ -1,4 +1,5 @@
 import { Roles } from "src/app/Utility/utils";
+import { Cvmb } from "../cap-von-mua-ban-va-thanh-toan-tien-hang.constant";
 
 export class Tab {
     static readonly DS_VON_BAN_NOP_DVCT = 'ds-nop';
@@ -39,4 +40,21 @@ export class Tab {
             isSelected: false,
         },
     ]
+}
+
+export class Vb {
+    static readonly CAN_CU_GIA = [
+        {
+            id: Cvmb.HOP_DONG,
+            tenDm: "Hợp đồng đấu giá",
+        },
+        {
+            id: Cvmb.DON_GIA,
+            tenDm: "Quyết định đơn giá",
+        }
+    ]
+
+    static priceBasisName(id: string) {
+        return Vb.CAN_CU_GIA.find(e => e.id == id).tenDm;
+    }
 }

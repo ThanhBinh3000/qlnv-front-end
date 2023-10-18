@@ -1,7 +1,7 @@
-import {NgModule} from '@angular/core';
-import {CommonModule, DatePipe} from '@angular/common';
-import {NzMenuModule} from "ng-zorro-antd/menu";
-import {ComponentsModule} from "../../../../components/components.module";
+import { NgModule } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { NzMenuModule } from "ng-zorro-antd/menu";
+import { ComponentsModule } from "../../../../components/components.module";
 import { DanhSachHangDuTruTheoChiDaoCuaCpComponent } from './danh-sach-hang-du-tru-theo-chi-dao-cua-cp/danh-sach-hang-du-tru-theo-chi-dao-cua-cp.component';
 import { DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent } from './danh-sach-hang-du-tru-trong-kho-ngoai-danh-muc/danh-sach-hang-du-tru-trong-kho-ngoai-danh-muc.component';
 import { QuyetDinhXuatHangKhoiDanhMucComponent } from './quyet-dinh-xuat-hang-khoi-danh-muc/quyet-dinh-xuat-hang-khoi-danh-muc.component';

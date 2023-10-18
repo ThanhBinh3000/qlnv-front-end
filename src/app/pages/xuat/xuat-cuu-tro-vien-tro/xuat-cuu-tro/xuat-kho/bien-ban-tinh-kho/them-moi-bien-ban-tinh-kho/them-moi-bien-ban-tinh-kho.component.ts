@@ -1,28 +1,28 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Base2Component} from 'src/app/components/base2/base2.component';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import {
   PhieuKiemNghiemChatLuongService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
 import {
   QuyetDinhGiaoNvCuuTroService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
-import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import {BienBanTinhKhoService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
-import {Validators} from '@angular/forms';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -88,7 +88,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         tongSlNhap: [],
         tongSlXuat: [],
         slConLai: [],
-        slThucTeCon:  ['', [Validators.required]],
+        slThucTeCon: ['', [Validators.required]],
         slThua: [],
         slThieu: [],
         nguyenNhan: ['', [Validators.required]],
@@ -279,11 +279,11 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho && item.soBangKeCh !== null));
       this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
-          s.slXuat = s.thucXuat;
-          s.soBkCanHang = s.soBangKeCh;
-          s.idBkCanHang = s.idBangKeCh;
-          s.idPhieuXuatKho = s.id;
-        }
+        s.slXuat = s.thucXuat;
+        s.soBkCanHang = s.soBangKeCh;
+        s.idBkCanHang = s.idBangKeCh;
+        s.idPhieuXuatKho = s.id;
+      }
       )
       this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
     }

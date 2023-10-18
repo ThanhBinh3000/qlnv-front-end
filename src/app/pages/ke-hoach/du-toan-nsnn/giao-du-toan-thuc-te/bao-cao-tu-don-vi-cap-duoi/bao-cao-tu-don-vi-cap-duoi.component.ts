@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Roles, Status, Utils } from 'src/app/Utility/utils';
 
@@ -98,6 +99,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
         private notification: NzNotificationService,
         private spinner: NgxSpinnerService,
         private userService: UserService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
     ) {
     }
     ngOnInit() {
@@ -124,13 +126,13 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     async initialization() {
         this.spinner.show()
 
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.maDviTao = this.userInfo?.MA_DVI;
-        if (this.userService.isAccessPermisson(Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
+        if (this.userService.isAccessPermisson(Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT)) {
             this.isCanbotc = true;
         }
 
-        if (this.userService.isAccessPermisson(Roles.GDT.TIEP_NHAN_TC_REPORT_TH) || this.userService.isAccessPermisson(Roles.GDT.VIEW_REPORT_TH)) {
+        if (this.userService.isAccessPermisson(Roles.GTT.XEM_PA_TONGHOP_PBDT)) {
             this.trangThai = '7';
             this.status = false;
             this.searchFilter.loaiTimKiem = '1';
@@ -140,22 +142,29 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
             this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Status.TT_KT));
         }
 
-        //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
+        await this.getChildUnit()
 
         this.onSubmit();
         this.spinner.hide();
+    }
+
+    async getChildUnit() {
+        const request = {
+            maDviCha: this.maDviTao,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.donVis = data?.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
     }
 
 

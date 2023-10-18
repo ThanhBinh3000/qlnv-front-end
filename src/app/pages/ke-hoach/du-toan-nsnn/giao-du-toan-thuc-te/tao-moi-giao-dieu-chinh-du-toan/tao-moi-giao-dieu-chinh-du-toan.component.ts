@@ -5,20 +5,19 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Operator, Roles, Status, Table, Utils } from 'src/app/Utility/utils';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { Roles, Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as XLSX from "xlsx";
 // khai báo class data request
 export class ItemData {
@@ -110,8 +109,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	fileList: NzUploadFile[] = []; // danh sách file upload
 	lstFiles: any[] = []; //list file show ra màn hình
 	listIdFilesDelete: any[] = []; // list id file khi xóa file
-	// donVis: any[] = []; // list đơn vị
-	// donVis1: any[] = []; // list đơn vị
 	trangThais: any[] = Status.TRANG_THAI_FULL; // danh sách trạng thái
 	listFile: File[] = []; // list file chua ten va id de hien tai o input
 	lstDviChon: any[] = []; //danh sach don vi chua duoc chon
@@ -245,19 +242,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		this.maDonViTao = this.userInfo?.MA_DVI;
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
-		console.log(this.userInfo);
-
-		// await this.danhMuc.dMDonVi().toPromise().then(
-		// 	(data) => {
-		// 		if (data.statusCode === 0) {
-		// 			this.donVis1 = data?.data;
-		// 			this.capDvi = this.donVis1.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
-		// 		} else {
-		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
-		// 		}
-		// 	}
-		// );
-
 		// set năm tạo PA
 		this.namPa = this.newDate.getFullYear();
 		await this.giaoDuToanChiService.maPhuongAnGiao('1').toPromise().then(
@@ -277,7 +261,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		if (this.id) {
 			// call chi tiết bản ghi khi có id
 			await this.getDetailReport();
-      this.sum1();
+			this.sum1();
 		} else {
 			this.maDonViTao = this.userInfo?.MA_DVI;
 			this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -300,8 +284,8 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		}
 		await this.getChildUnit();
 
-
-		if ((this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) && this.lstDvi.length == 0) {
+		// await this.getChildUnitUser()
+		if ((this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP") || this.userInfo.DON_VI.tenVietTat.includes("BQLDA")) && this.lstDvi.length == 0) {
 			this.lstDvi.push(
 				{
 					maDvi: this.maDvi,
@@ -309,11 +293,15 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 				}
 			)
 		}
+
+
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {
 			this.scrollX = (400 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		}
+		console.log(this.lstDvi);
+
 		this.updateEditCache();
 		this.getStatusButton();
 		this.spinner.hide();
@@ -353,7 +341,22 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			data => {
 				if (data.statusCode == 0) {
 					this.lstDvi = data.data;
-					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+					switch (this.userInfo.CAP_DVI) {
+						case "1":
+							// this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP") || e.tenVietTat.includes("BQLDA")))
+							if (!Status.check('appraisalGiaoDuToan', this.trangThaiBanGhi)) {
+								this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP") || e.tenVietTat.includes("BQLDA")))
+							} else {
+								this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CCDT") || e.tenVietTat.includes("_VP")))
+							}
+							break;
+						case "2":
+							this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CCDT") || e.tenVietTat.includes("_VP")))
+							break;
+						default:
+							this.lstDvi = []
+							break;
+					}
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -362,6 +365,32 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 			}
 		)
+
+		if (this.userInfo.CAP_DVI == "1" && this.lstDvi.length == 0 && Status.check('appraisalGiaoDuToan', this.trangThaiBanGhi)) {
+			const request = {
+				maDviCha: this.userInfo.MA_DVI,
+				trangThai: '01',
+			}
+			await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+				data => {
+					if (data.statusCode == 0) {
+						console.log("data.data", data.data);
+						data.data.forEach(el => {
+							if (el.maDvi == this.maDonViTao) {
+								this.lstDvi.push(el)
+							}
+						});
+
+					} else {
+						this.notification.error(MESSAGE.ERROR, data?.msg);
+					}
+				},
+				(err) => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			)
+		}
+
 		this.spinner.hide();
 	}
 
@@ -802,7 +831,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
 	//check role cho các nut trinh duyet
 	getStatusButton() {
-		if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
+		if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GTT.SUA_PA_PBDT)) {
 			this.status = false;
 		} else {
 			this.status = true;
@@ -816,35 +845,35 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
 
 
-		const dVi = this.lstDvi.find(e => e.maDvi == this.maDonViTao);
+		// const dVi = this.lstDvi.find(e => e.maDvi == this.maDonViTao);
 		let checkParent = false;
-		if (dVi && dVi?.maDviCha == this.userInfo.MA_DVI) {
+		if (this.maDviCha == this.userInfo.MA_DVI) {
 			checkParent = true;
 		}
 		const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
-		const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
+		const checkSave = this.userService.isAccessPermisson(Roles.GTT.SUA_PA_PBDT);
 		this.statusBtnSave = Status.check('saveWOHist', this.trangThaiBanGhi) && checkSave && checkChirld;
 
 
-		this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.COPY_REPORT_PA_PBDT, checkChirld);
-		this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.PRINT_REPORT, checkChirld);
-		this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
+		this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GTT.TRINHDUYET_PA_PBDT, checkChirld);
+		this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GTT.DUYET_TUCHOI_PA_PBDT, checkChirld);
+		this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GTT.PHEDUYET_TUCHOI_PA_PBDT, checkChirld);
+		this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.COPY_PA_PBDT, checkChirld);
+		this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GTT.IN_PA_PBDT, checkChirld);
+		this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GTT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-		if (this.userService.isAccessPermisson(Roles.GDT.GIAO_PA_PBDT) && this.soQd) {
+		if (this.userService.isAccessPermisson(Roles.GTT.GIAO_PA_PBDT) && this.soQd) {
 			this.statusBtnGiao = false;
 		} else {
 			this.statusBtnGiao = true;
 			this.statusGiaoToanBo = true;
 		}
-		if (this.userService.isAccessPermisson(Roles.GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
+		if (this.userService.isAccessPermisson(Roles.GTT.TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
 			this.statusBtnGuiDVCT = false;
 		}
-		if (this.trangThaiBanGhi == "7") {
+		if (Status.check('appraisalGiaoDuToan', this.trangThaiBanGhi)) {
 			this.statusBtnGuiDVCT = true;
-			this.statusGiaoToanBo = true;
+			// this.statusGiaoToanBo = true;
 		}
 
 	}
@@ -949,10 +978,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		}
 	};
 
-	// lấy tên đơn vị
-	getUnitName(maDvi: string) {
-		return this.lstDvi.find((item) => item.maDvi == maDvi)?.tenDvi;
-	}
 
 	// lấy thông tin trạng thái PA
 	getStatusName() {
@@ -992,34 +1017,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		return xau;
 	};
 
-	// lấy phần đuôi của stt
-	getTail(str: string): number {
-		return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
-	}
-
-	//tìm vị trí cần để thêm mới
-	findVt(str: string): number {
-		const start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
-		let index: number = start;
-		for (let i = start + 1; i < this.lstCtietBcao.length; i++) {
-			if (this.lstCtietBcao[i].stt.startsWith(str)) {
-				index = i;
-			}
-		}
-		return index;
-	}
-
-	//thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
-	replaceIndex(lstIndex: number[], heSo: number) {
-		//thay doi lai stt cac vi tri vua tim duoc
-		lstIndex.forEach(item => {
-			const str = Table.preIndex(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
-			const nho = this.lstCtietBcao[item].stt;
-			this.lstCtietBcao.forEach(item => {
-				item.stt = item.stt.replace(nho, str);
-			})
-		})
-	}
 
 	// kiểm tra cấp quyền sửa nếu phần tử chọn có phần tử con
 	getLowStatus(stt: string) {
@@ -1116,32 +1113,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		return nho;
 	}
 
-	// update lại list obj được chọn
-	updateChecked(id: string) {
-		const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
-		//đặt các phần tử con có cùng trạng thái với nó
-		this.lstCtietBcao.forEach(item => {
-			if (item.stt.startsWith(data.stt)) {
-				item.checked = data.checked;
-			}
-		})
-		//thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-		let index: number = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(data.stt));
-		if (index == -1) {
-			this.allChecked = this.checkAllChild('0');
-		} else {
-			let nho: boolean = this.lstCtietBcao[index].checked;
-			while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
-				this.lstCtietBcao[index].checked = !nho;
-				index = this.lstCtietBcao.findIndex(e => e.stt == Table.preIndex(this.lstCtietBcao[index].stt));
-				if (index == -1) {
-					this.allChecked = !nho;
-					break;
-				}
-				nho = this.lstCtietBcao[index].checked;
-			}
-		}
-	};
 
 	// lắng nghe thay đổi của dòng
 	changeModel(id: string) {
@@ -1338,23 +1309,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		this.listIdFilesDelete.push(id);
 	};
 
-	// update list checked
-	updateAllChecked() {
-		this.lstCtietBcao.forEach(item => {
-			item.checked = this.allChecked;
-		})
-	};
-
-	// xóa cột
-	deleteCol(maDvi: string) {
-		this.lstCtietBcao.forEach(data => {
-			data.lstCtietDvis = data.lstCtietDvis.filter(e => e.maDviNhan != maDvi);
-		})
-		this.lstDviChon.push(this.lstDvi.find(e => e.maDvi == maDvi));
-		this.lstDvi = this.lstDvi.filter(e => e.maDvi != maDvi);
-
-	};
-
 	// thêm cột
 	addCol(maDvi: string) {
 		this.lstDvi.push(this.lstDviChon.find(e => e.maDvi == maDvi));
@@ -1367,35 +1321,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 				trangThai: "0",
 			})
 		})
-	}
-
-	// thêm nhiều cột
-	addAllCol() {
-		const obj = {
-			danhSachDonVi: this.lstDviChon,
-			multi: true,
-		}
-		const modalIn = this.modal.create({
-			nzTitle: 'Danh sách đơn vị',
-			nzContent: DialogLuaChonThemDonViComponent,
-			nzMaskClosable: false,
-			nzClosable: false,
-			nzWidth: '65%',
-			nzFooter: null,
-			nzComponentParams: {
-				obj: obj
-			},
-		});
-		modalIn.afterClose.subscribe((res) => {
-			if (res) {
-				res.forEach(item => {
-					if (item.status) {
-						this.addCol(item.maDvi);
-					}
-				})
-				this.updateEditCache();
-			}
-		});
 	}
 
 	// gán editCache.data = lstCtietBcao
@@ -1494,7 +1419,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	}
 
 	statusDeleteCv() {
-		if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
+		if (!this.userService.isAccessPermisson(Roles.GTT.SUA_CV_QD_GIAO_PA_PBDT)) {
 			return false;
 		}
 		if (!this.soQd?.fileName) {
@@ -1510,67 +1435,87 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		return check;
 	};
 
+	sum1() {
+		this.lstCtietBcao.forEach(item => {
+			this.sum(item.stt);
+		})
+	}
 
-  sum1() {
-    this.lstCtietBcao.forEach(item => {
-      this.sum(item.stt);
-    })
-  }
-  exportToExcel() {
-    if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-      return;
-    }
-    const header = [
-      { t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
-      { t: 0, b: 0, l: 0, r: 1, val: "Phương án giao dự toán nsnn" },
-      { t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+	exportToExcel() {
+		if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+			return;
+		}
 
-      { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
-      { t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
-      { t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi giao từ cấp trên' },
-      { t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
-      { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
-    ]
-    this.lstDvi.forEach((item, index ) => {
-      const left = 4 + index
-      header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
-    })
+		let tenSqd
+		if (!this.soQd || !this.soQd?.fileName) {
+			tenSqd = ''
+		} else {
+			tenSqd = this.soQd.fileName
+		}
 
-    const headerBot = 7;
-    this.lstCtietBcao.forEach((item, index) => {
-      const row = headerBot + index + 1;
-      const tenNdung =  this.getTenNdung(item.maNdung);
-      header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
-      header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung})
-      header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
-      header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCongSoTranChi?.toString() })
+		const header = [
+			{ t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
 
-      item.lstCtietDvis.forEach((e, ind) => {
-        const col = 4 + ind ;
-        header.push({ t: row, b: row, l: col , r: col, val: e.soTranChi?.toString() })
-      })
-    })
+			{ t: 0, b: 0, l: 0, r: 1, val: `Phương án giao điều chỉnh dự toán nsnn năm ${this.namPa}` },
+			{ t: 1, b: 1, l: 0, r: 0, val: `Số qđ ` },
+			{ t: 1, b: 1, l: 1, r: 1, val: `Ngày ` },
+			{ t: 1, b: 1, l: 2, r: 2, val: `Mã phương án ` },
+			{ t: 1, b: 1, l: 3, r: 3, val: `Mã phương án BTC` },
+			{ t: 1, b: 1, l: 4, r: 4, val: `Trạng thái ` },
 
-    const workbook = XLSX.utils.book_new();
-    const worksheet = Table.initExcel(header);
-    // XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+			{ t: 2, b: 2, l: 0, r: 0, val: `${tenSqd}` },
+			{ t: 2, b: 2, l: 1, r: 1, val: ` ${this.ngayTao} ` },
+			{ t: 2, b: 2, l: 2, r: 2, val: ` ${this.maPa} ` },
+			{ t: 2, b: 2, l: 3, r: 3, val: ` ${this.maPaCha} ` },
+			{ t: 2, b: 2, l: 4, r: 4, val: ` ${this.getStatusName()} ` },
 
-    let excelName = this.maPa;
-    excelName = excelName + '_GDTTT_PA.xlsx'
-    XLSX.writeFile(workbook, excelName);
-  }
 
-  getTenNdung(maNdung: number): any{
-    let tenNdung: string;
-    this.noiDungs.forEach(itm => {
-      if(itm.ma == maNdung){
-        return tenNdung = itm.giaTri;
-      }
-    })
-    return tenNdung
-  }
+			{ t: 5, b: 7, l: 0, r: 0, val: 'STT' },
+			{ t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
+			{ t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi giao từ cấp trên' },
+			{ t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
+			{ t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
+		]
+		this.lstDvi.forEach((item, index) => {
+			const left = 4 + index
+			header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
+		})
+
+		const headerBot = 7;
+		this.lstCtietBcao.forEach((item, index) => {
+			const row = headerBot + index + 1;
+			const tenNdung = this.getTenNdung(item.maNdung);
+			header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
+			header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung })
+			header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
+			header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCongSoTranChi?.toString() })
+
+			item.lstCtietDvis.forEach((e, ind) => {
+				const col = 4 + ind;
+				header.push({ t: row, b: row, l: col, r: col, val: e.soTranChi?.toString() })
+			})
+		})
+
+		const workbook = XLSX.utils.book_new();
+		const worksheet = Table.initExcel(header);
+		// XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
+
+		let excelName = this.maPa;
+		excelName = excelName + '_GDTTT_PA.xlsx'
+		XLSX.writeFile(workbook, excelName);
+	}
+
+	getTenNdung(maNdung: number): any {
+		let tenNdung: string;
+		this.noiDungs.forEach(itm => {
+			if (itm.ma == maNdung) {
+				return tenNdung = itm.giaTri;
+			}
+		})
+		return tenNdung
+	}
 
 
 

@@ -105,19 +105,6 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
         this.searchFilter.maDviNhan = this.userInfo?.MA_DVI;
-        //lay danh sach danh muc
-        this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
         this.onSubmit()
     }
 
@@ -207,9 +194,6 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
-    getUnitName(maDvi: string) {
-        return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
-    }
 
     xoaDieuKien() {
         this.searchFilter.namGiao = null;

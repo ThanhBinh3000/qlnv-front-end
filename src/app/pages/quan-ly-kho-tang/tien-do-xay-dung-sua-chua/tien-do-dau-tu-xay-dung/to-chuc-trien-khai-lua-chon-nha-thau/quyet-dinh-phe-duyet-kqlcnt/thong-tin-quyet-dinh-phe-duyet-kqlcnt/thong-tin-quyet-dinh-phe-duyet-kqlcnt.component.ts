@@ -1,20 +1,20 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {STATUS} from "../../../../../../../constants/status";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../../../components/base2/base2.component";
+import { STATUS } from "../../../../../../../constants/status";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
-import {MESSAGE} from "../../../../../../../constants/message";
+import { MESSAGE } from "../../../../../../../constants/message";
 import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
@@ -24,8 +24,8 @@ import {
 import {
   DialogQdPdKhlcntComponent
 } from "../../../../../../../components/dialog/ql-kho-tang/dialog-qd-pd-khlcnt/dialog-qd-pd-khlcnt.component";
-import {FILETYPE} from "../../../../../../../constants/fileType";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import { FILETYPE } from "../../../../../../../constants/fileType";
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-kqlcnt',

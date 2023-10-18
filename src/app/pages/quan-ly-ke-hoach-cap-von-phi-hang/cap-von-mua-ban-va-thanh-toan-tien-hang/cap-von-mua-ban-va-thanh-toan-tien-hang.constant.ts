@@ -40,21 +40,6 @@ export class Cvmb {
     static suggestionName(id: string) {
         return Cvmb.LOAI_DE_NGHI.find(e => e.id == id).tenDm;
     }
-
-    static readonly CAN_CU_GIA = [
-        {
-            id: Cvmb.HOP_DONG,
-            tenDm: "Hợp đồng đấu giá",
-        },
-        {
-            id: Cvmb.DON_GIA,
-            tenDm: "Quyết định đơn giá",
-        }
-    ]
-
-    static priceBasisName(id: string) {
-        return Cvmb.CAN_CU_GIA.find(e => e.id == id).tenDm;
-    }
 }
 
 export class BtnStatus {

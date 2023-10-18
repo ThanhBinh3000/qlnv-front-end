@@ -30,7 +30,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     };
 
     userInfo: any;
-    trangThais: any = Status.TRANG_THAI_FULL;
+    trangThais: any = Status.TRANG_THAI_DVCD;
     dataTable: any[] = [];
     dataTableAll: any[] = [];
     loaiDuAns: any[] = [
@@ -50,7 +50,6 @@ export class DanhSachBaoCaoComponent implements OnInit {
     totalElements = 0;
     totalPages = 0;
 
-    statusNewReport = true;
     statusDelete = true;
     allChecked = false;
 
@@ -81,12 +80,11 @@ export class DanhSachBaoCaoComponent implements OnInit {
         this.searchFilter.tuNgay = newDate;
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(Roles.GDT.ADD_REPORT_PA_PBDT);
-        this.statusDelete = this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_PA_PBDT) || this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_PA_PBDT);
-        if (this.userService.isAccessPermisson(Roles.GDT.DUYET_REPORT_TH) || this.userService.isAccessPermisson(Roles.GDT.DUYET_TUCHOI_PA_TH_PBDT)) {
+        this.statusDelete = this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT) || this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT);
+        if (this.userService.isAccessPermisson(Roles.GTT.DUYET_TUCHOI_PA_TH_PBDT) || this.userService.isAccessPermisson(Roles.GTT.DUYET_TUCHOI_PA_TH_PBDT)) {
             this.searchFilter.trangThai = Status.TT_02;
         } else {
-            if (this.userService.isAccessPermisson(Roles.GDT.PHE_DUYET_REPORT_PA_PBDT) || this.userService.isAccessPermisson(Roles.GDT.PHE_DUYET_REPORT_PA_PBDT)) {
+            if (this.userService.isAccessPermisson(Roles.GTT.PHEDUYET_TUCHOI_PA_TH_PBDT) || this.userService.isAccessPermisson(Roles.GTT.PHEDUYET_TUCHOI_PA_TH_PBDT)) {
                 this.searchFilter.trangThai = Status.TT_04;
             }
         }
@@ -196,44 +194,19 @@ export class DanhSachBaoCaoComponent implements OnInit {
     checkEditStatus(item: any) {
         const isSynthetic = item.tongHopTu != "[]";
         return [Status.TT_01].includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_TH));
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GTT.SUA_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GTT.SUA_PA_TONGHOP_PBDT));
     }
 
     checkDeleteStatus(item: any) {
         const isSynthetic = item.tongHopTu != "[]";
         return [Status.TT_01].includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(Roles.GDT.XOA_REPORT_TH) : this.userService.isAccessPermisson(Roles.GDT.XOA_REPORT_TH));
+            (isSynthetic ? this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT) : this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT));
     }
 
     getStatusName(trangThai: string) {
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
-    //them moi bao cao
-    addNewReport() {
-        const modalTuChoi = this.modal.create({
-            nzTitle: 'Thông tin tạo mới báo cáo',
-            nzContent: DialogTaoMoiComponent,
-            nzMaskClosable: false,
-            nzClosable: false,
-            nzWidth: '900px',
-            nzFooter: null,
-            nzComponentParams: {
-                tab: 'danhsach'
-            },
-        });
-        modalTuChoi.afterClose.toPromise().then(async (res) => {
-            if (res) {
-                const obj = {
-                    ...res,
-                    id: null,
-                    tabSelected: 'baocao',
-                    isSynthetic: false,
-                }
-                this.dataChange.emit(obj);
-            }
-        });
-    }
 
     //xem chi tiet bao cao
     viewDetail(data: any) {
@@ -306,25 +279,5 @@ export class DanhSachBaoCaoComponent implements OnInit {
         });
     }
 
-    // Tìm kiếm trong bảng
-    filterInTable(key: string, value: string, isDate: boolean) {
-        if (value && value != '') {
-            this.dataTable = [];
-            let temp = [];
-            if (this.dataTableAll && this.dataTableAll.length > 0) {
-                if (isDate) {
-                    value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
-                }
-                this.dataTableAll.forEach((item) => {
-                    if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                        temp.push(item)
-                    }
-                });
-            }
-            this.dataTable = [...this.dataTable, ...temp];
-        } else {
-            this.dataTable = cloneDeep(this.dataTableAll);
-        }
-    }
 }
 

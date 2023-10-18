@@ -49,23 +49,23 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
     private _service: QuyetDinhPheDuyetKetQuaService,
     private toChucThucHienThanhLyService: ToChucThucHienThanhLyService
   ) {
-    super(httpClient, storageService, notification, spinner, modal,route,router, _service);
+    super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.defaultURL = '/xuat/xuat-thanh-ly/to-chuc/qd-pd-kq'
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
       tenDvi: [''],
       nam: [dayjs().get('year')],
-      soQd: ['',[Validators.required]],
-      trichYeu: ['',[Validators.required]],
+      soQd: ['', [Validators.required]],
+      trichYeu: ['', [Validators.required]],
       ngayKy: [''],
       ngayHieuLuc: [''],
       loaiHinhNhapXuat: ['89'],
       tenLoaiHinhNx: ['Xuất bán đấu giá'],
       kieuNhapXuat: ['03'],
       tenKieuNx: ['Xuất bán'],
-      idThongBao: ['',[Validators.required]],
-      maThongBao: ['',[Validators.required]],
+      idThongBao: ['', [Validators.required]],
+      maThongBao: ['', [Validators.required]],
       soBienBan: [''],
       thongBaoKhongThanh: [''],
       loaiVthh: [''],
@@ -110,7 +110,7 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
     await this.spinner.hide();
   }
 
-  async initForm(){
+  async initForm() {
     if (this.id > 0) {
       await this._service.getDetail(this.id)
         .then(async (res) => {
@@ -144,10 +144,9 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
     this.dataTable = chain(this.dataTable).groupBy('xhTlDanhSachHdr.tenChiCuc').map((value, key) => ({
         tenDonVi: key,
         children: value,
-        expandSet : true
+        expandSet: true
       })
     ).value()
-    console.log(this.dataTable)
   }
 
   async loadDsToChucThanhLy() {
@@ -190,15 +189,17 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
     });
   };
 
-  async getDetailThongBao(idThongBao){
-    await this.toChucThucHienThanhLyService.getDetail(idThongBao).then((res)=>{
-      if(res.data){
+  async getDetailThongBao(idThongBao) {
+    await this.toChucThucHienThanhLyService.getDetail(idThongBao).then((res) => {
+      if (res.data) {
         const data = res.data;
         this.formData.patchValue({
-            idThongBao: data.id,
-            maThongBao: data.maThongBao,
-            soBienBan: data.soBienBan,
-            thongBaoKhongThanh: data.thongBaoKhongThanh,
+          idThongBao: data.id,
+          maThongBao: data.maThongBao,
+          soBienBan: data.soBienBan,
+          thongBaoKhongThanh: data.thongBaoKhongThanh,
+          pthucGnhan: data.pthucGnhan,
+          thoiHanGiaoNhan : data.thoiHanGiaoNhan
         });
         this.dataTable = data.children.filter(item => item.maDviTsan != null && item.toChucCaNhan != null);
         this.buildTableView();
@@ -217,7 +218,7 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC ) && this.isAccessPermisson('XHDTQG_XTL_TCKHBDG_QDKQDG_THEM');
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC) && this.isAccessPermisson('XHDTQG_XTL_TCKHBDG_QDKQDG_THEM');
   }
 
   save(isGuiDuyet?) {
@@ -231,6 +232,9 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
       if (res) {
         if (isGuiDuyet) {
           this.id = res.id;
+          this.formData.patchValue({
+            id : res.id,
+          })
           this.pheDuyet();
         } else {
           this.redirectDefault();

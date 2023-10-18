@@ -231,6 +231,11 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     async submitReport() {
+        // kiểm tra file cong văn đã được thêm hoặc upload thành công chưa
+        if (!this.baoCao.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -328,11 +333,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 }
             }
         }
-        // kiểm tra file cong văn đã được thêm hoặc upload thành công chưa
-        if (!request.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
+
         // nếu chưa có id thì tạo mới báo cáo, ngược lại update
         if (!this.baoCao.id) {
             this.capVonNguonChiService.taoMoiDeNghi(request).toPromise().then(
@@ -475,12 +476,13 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             return;
         }
         const workbook = XLSX.utils.book_new();
+        const congVan = this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '';
         // nếu là bản ghi ở cục hoặc tổng cục thì bổ sung thêm đề nghị cấp vốn từ đơn vị cấp dưới
         if (!this.userService.isChiCuc()) {
             const head = [
                 { t: 0, b: 5, l: 0, r: 11, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Đề nghị cấp vốn từ đơn vị cấp dưới" },
-                { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+                { t: 1, b: 1, l: 0, r: 8, val: congVan },
                 { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
                 { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
@@ -520,7 +522,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         const header = [
             { t: 0, b: 5, l: 0, r: 16, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: "Cấp vốn" },
-            { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+            { t: 1, b: 1, l: 0, r: 8, val: congVan },
             { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
             { t: 4, b: 4, l: 1, r: 2, val: 'Số lượng' },
             { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },

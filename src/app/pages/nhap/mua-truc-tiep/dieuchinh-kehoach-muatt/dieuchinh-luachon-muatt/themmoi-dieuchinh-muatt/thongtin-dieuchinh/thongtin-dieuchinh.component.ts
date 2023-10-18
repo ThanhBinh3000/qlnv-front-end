@@ -15,7 +15,7 @@ import {
   DialogThemMoiKeHoachMuaTrucTiepComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import {
   QuyetDinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
@@ -189,7 +189,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     }
   }
 
-  async getPag(data:any){
+  async getPag(data: any) {
     let bodyPag = {
       namKeHoach: data.namKh,
       loaiVthh: data.loaiVthh,

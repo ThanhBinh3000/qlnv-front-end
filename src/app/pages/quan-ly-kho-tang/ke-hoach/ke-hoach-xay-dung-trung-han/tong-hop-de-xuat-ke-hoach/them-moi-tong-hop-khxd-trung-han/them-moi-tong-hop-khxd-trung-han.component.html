@@ -380,7 +380,7 @@
                   </div>
                   <nz-table nzBordered class="pd-10"
                             [nzFrontPagination]="false" [nzShowPagination]="false"
-                            [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
+                            [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
                     <thead>
                     <tr>
                       <th class="text-center" width="2%" rowSpan="2">STT</th>
@@ -444,7 +444,7 @@
                           <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-center" nzRight
                               *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)">
-                            <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
+                            <a (click)="themMoiItem('sua', item,  y, data.dataChild)">
                               <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a (click)="deleteRow(item)">

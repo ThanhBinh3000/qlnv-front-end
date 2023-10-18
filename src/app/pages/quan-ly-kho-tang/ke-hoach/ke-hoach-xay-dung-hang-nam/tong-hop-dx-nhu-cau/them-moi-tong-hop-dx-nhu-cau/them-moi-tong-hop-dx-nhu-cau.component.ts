@@ -517,28 +517,14 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       nzStyle: {top: "200px"},
       nzFooter: null,
       nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
         dataInput: data,
         type: type,
         page: "DXTH"
       }
     });
     modalQD.afterClose.subscribe(async (detail) => {
-      if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
-        }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == "them") {
-          data.dataChild.push(detail);
-        } else {
-          if (list) {
-            Object.assign(list[idx], detail);
-          }
-        }
-        this.expandAll(this.dataTable);
+      if (detail && list) {
+        Object.assign(list[idx], detail);
       }
     });
   }

@@ -22,7 +22,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from './../../../../../../services/uploaFile.service';
-import {FILETYPE} from "../../../../../../constants/fileType";
+import { FILETYPE } from "../../../../../../constants/fileType";
 @Component({
   selector: 'app-them-moi-phieu-kiem-tra-chat-luong',
   templateUrl: './them-moi-phieu-kiem-tra-chat-luong.component.html',
@@ -336,7 +336,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
           });
           this.helperService.bidingDataInFormGroup(this.formData, data);
           await this.bindingDataQd(data.idQdGiaoNvNh);
-          if(data.fileDinhKems.length > 0){
+          if (data.fileDinhKems.length > 0) {
             data.fileDinhKems.forEach(item => {
               if (item.fileType == FILETYPE.FILE_DINH_KEM) {
                 this.listFileDinhKem.push(item)
@@ -377,7 +377,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         })
       }
       if (this.listFile && this.listFile.length > 0) {
-        body.fileDinhKems= this.listFile;
+        body.fileDinhKems = this.listFile;
       }
       body.phieuKiemTraChatLuongDtlList = this.dataTableChiTieu;
       body.phieuKiemTraChatLuongDtlList.forEach(e => {

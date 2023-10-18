@@ -20,7 +20,7 @@
             <label class="search__label">Quyết định</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định" [(ngModel)]="response.quyetDinh"
                 [class]="response.quyetDinh ?'' : 'input-error-validate'">
-                <nz-option *ngFor="let item of lstQuyetDinh" [nzValue]="item" [nzLabel]="item">
+                <nz-option *ngFor="let item of lstQuyetDinh" [nzValue]="item.soQd" [nzLabel]="item.soQd">
                 </nz-option>
             </nz-select>
         </div>
@@ -29,8 +29,7 @@
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn Loại mặt hàng" [(ngModel)]="response.loaiDnghi"
                 [class]="response.loaiDnghi ?'' : 'input-error-validate'" (ngModelChange)="checkReport()">
                 <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                </nz-option>
-            </nz-select>
+                </nz-option> </nz-select>
         </div>
     </div>
 </div>
