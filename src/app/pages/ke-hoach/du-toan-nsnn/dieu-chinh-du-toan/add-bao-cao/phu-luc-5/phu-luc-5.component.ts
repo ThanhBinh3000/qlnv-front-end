@@ -203,19 +203,20 @@ export class PhuLuc5Component implements OnInit {
             }
         })
 
-        if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
-            this.lstCtietBcao.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
-                if (!item.noiDung) {
-                    item.noiDung = dinhMuc?.tenDinhMuc;
-                }
-                item.dinhMuc = dinhMuc?.tongDmuc;
-                item.dviTinh = dinhMuc?.donViTinh;
-                item.thanhTien = Operator.mul(item.dinhMuc, item.tongCong);
-                item.dtoanDchinh = Operator.sum([item.thanhTien, - item.dtoanDaGiaoLke]);
-                item.dtoanVuTvqtDnghi = Operator.sum([item.thanhTien, - item.dtoanDaGiaoLke]);
-            })
-        }
+        // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
+        this.lstCtietBcao.forEach(item => {
+            // const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
+            const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.maNoiDung) || (!e.cloaiVthh && e.loaiVthh == item.maDmuc));
+            if (!item.noiDung) {
+                item.noiDung = dinhMuc?.tenDinhMuc;
+            }
+            item.dinhMuc = dinhMuc?.tongDmuc;
+            item.dviTinh = dinhMuc?.donViTinh;
+            item.thanhTien = Operator.mul(item.dinhMuc, item.tongCong);
+            item.dtoanDchinh = Operator.sum([item.thanhTien, - item.dtoanDaGiaoLke]);
+            item.dtoanVuTvqtDnghi = Operator.sum([item.thanhTien, - item.dtoanDaGiaoLke]);
+        })
+        // }
         if (!this.lstCtietBcao[0]?.stt) {
             this.setIndex();
         }
@@ -543,7 +544,7 @@ export class PhuLuc5Component implements OnInit {
                         noiDung: data.ten,
                         level: 0,
                     }))
-                    const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
+                    const lstTemp = this.dsDinhMuc.filter(e => (!e.cloaiVthh && e.loaiVthh == data.ma) || e.cloaiVthh == data.ma);
                     for (let i = 1; i <= lstTemp.length; i++) {
                         this.lstCtietBcao.push(new ItemData({
                             id: uuid.v4() + 'FE',
@@ -679,7 +680,9 @@ export class PhuLuc5Component implements OnInit {
 
     changeModel(id: string): void {
         this.editCache[id].data.tongCong = Operator.sum([this.editCache[id].data.sluongThien, this.editCache[id].data.soluongUocThien]);
-        this.editCache[id].data.thanhTien = Operator.mul(this.editCache[id].data.dinhMuc, this.editCache[id].data.tongCong);
+        if (this.editCache[id].data.dinhMuc) {
+            this.editCache[id].data.thanhTien = Operator.mul(this.editCache[id].data.dinhMuc, this.editCache[id].data.tongCong);
+        }
         this.editCache[id].data.dtoanDchinh = Operator.sum([this.editCache[id].data.thanhTien, - this.editCache[id].data.dtoanDaGiaoLke])
         this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDchinh])
 
@@ -780,6 +783,7 @@ export class PhuLuc5Component implements OnInit {
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu' + Status.reportStatusName(this.dataInfo.trangThai) },
 
                 { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },

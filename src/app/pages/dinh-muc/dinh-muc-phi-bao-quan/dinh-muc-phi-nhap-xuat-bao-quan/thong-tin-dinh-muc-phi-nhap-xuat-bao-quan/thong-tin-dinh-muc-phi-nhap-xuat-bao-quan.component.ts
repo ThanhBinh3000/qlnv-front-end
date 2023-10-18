@@ -132,6 +132,28 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   }
 
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      if (this.dataTableDetail.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.');
+        return;
+      }
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.formData.value.listQlDinhMucPhis = this.dataTableDetail;
+      this.formData.value.capDvi = this.capDvi;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      await super.saveAndSend( this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
 
   async save() {
     if (this.dataTableDetail.length <= 0) {

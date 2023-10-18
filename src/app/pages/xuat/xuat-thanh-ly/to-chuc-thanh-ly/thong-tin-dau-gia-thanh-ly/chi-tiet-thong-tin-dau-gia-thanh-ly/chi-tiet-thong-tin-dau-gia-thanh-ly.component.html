@@ -81,7 +81,7 @@
                     <nz-form-label [nzNoColon]="true"> Thời gian thanh lý được phê duyệt
                     </nz-form-label>
                     <nz-form-control>
-                      <input nz-input formControlName="thoiGianTlDuocDuyet" nzFormat="dd/MM/yyyy" readonly/>
+                      <input nz-input formControlName="thoiGianTlDuocDuyet" readonly/>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -126,17 +126,20 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng số đơn vị tài sản đấu giá</nz-form-label>
                     <nz-form-control>
-                      <input style="color: blue ;font-weight: bold;" nz-input formControlName="tongDviTsan"
-                             readonly="true"/>
+                      <nz-input-number [nzSize]="'small'" formControlName="tongDviTsan"
+                                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                      </nz-input-number>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số ĐV tài sản đấu giá thành thành
+                    <nz-form-label [nzNoColon]="true"> Số ĐV tài sản đấu giá thành công
                     </nz-form-label>
                     <nz-form-control nz-col>
-                      <input nz-input formControlName="soDviTsanThanhCong" readonly/>
+                      <nz-input-number [nzSize]="'small'" formControlName="soDviTsanThanhCong"
+                                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                      </nz-input-number>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -145,7 +148,9 @@
                     <nz-form-label [nzNoColon]="true"> Số ĐV tài sản đấu giá không thành</nz-form-label>
                     <nz-form-control>
                       <nz-input-group>
-                        <input nz-input formControlName="soDviTsanKhongThanh" readonly/>
+                        <nz-input-number [nzSize]="'small'" formControlName="soDviTsanKhongThanh"
+                                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                        </nz-input-number>
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
@@ -193,7 +198,7 @@
         <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
           <tr>
-            <th width="">Số quyết định thanh lý</th>
+            <th width="">Số QĐ PD KH BĐG/Số QĐ ĐC KH BĐG</th>
             <th width="">Lần đấu giá</th>
             <th width="">Thông báo bán đấu giá</th>
             <th width="">Tổ chức thực hiện dịch vụ BĐG</th>
@@ -216,7 +221,7 @@
               đến {{ data.tgianDauGiaDen | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.diaDiemDauGia }}</td>
             <td>{{ data.ketQua == 1 ? 'Đấu giá thành công' : 'Đấu giá không thành' }}</td>
-            <td>{{ data.ketQuaSl }}</td>
+            <td>{{ data.soDviTs }}/{{ data.tongDviTs }}</td>
             <td>{{ data.tenTrangThai}}</td>
             <td class="text-center">
               <a *ngIf="data.trangThai == STATUS.DA_HOAN_THANH" (click)="themMoiPhienDauGia($event,data)">

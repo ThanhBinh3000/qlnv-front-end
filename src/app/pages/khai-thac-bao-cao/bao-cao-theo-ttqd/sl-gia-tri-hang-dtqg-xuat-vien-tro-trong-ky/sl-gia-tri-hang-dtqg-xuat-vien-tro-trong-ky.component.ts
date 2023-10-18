@@ -128,6 +128,9 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
   }
 
   clearRequired(){
+    this.formData.patchValue({
+      quy: null
+    })
     this.formData.controls["quy"].clearValidators()
     this.formData.controls["quy"].updateValueAndValidity();
   }

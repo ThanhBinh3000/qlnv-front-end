@@ -1,19 +1,19 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import {NumberToRoman} from "../../../../../../shared/commonFunction";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {CHUC_NANG} from "../../../../../../constants/status";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "../../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { NumberToRoman } from "../../../../../../shared/commonFunction";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { CHUC_NANG } from "../../../../../../constants/status";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "../../../../../../services/donvi.service";
+import { DanhMucService } from "../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import {Validators} from "@angular/forms";
-import {MESSAGE} from "../../../../../../constants/message";
-import {chain, cloneDeep, isEmpty} from "lodash";
-import {v4 as uuidv4} from "uuid";
+import { Validators } from "@angular/forms";
+import { MESSAGE } from "../../../../../../constants/message";
+import { chain, cloneDeep, isEmpty } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 import {
   KiemtraChatluongLtTruockhiHethanLuukhoComponent
 } from "../../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
@@ -23,8 +23,8 @@ import {
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
-import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
+import { FileDinhKem } from "../../../../../../models/FileDinhKem";
+import { LOAI_HH_XUAT_KHAC } from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-hang-dtqg',
@@ -57,16 +57,16 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   public vldTrangThai: KiemtraChatluongLtTruockhiHethanLuukhoComponent;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private donviService: DonviService,
-              private danhMucService: DanhMucService,
-              private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
-              private danhSachHangDTQGCon6ThangService: DanhSachHangDTQGCon6ThangService,
-              private kiemtraChatluongLtTruockhiHethanLuukhoComponent: KiemtraChatluongLtTruockhiHethanLuukhoComponent,
-              private cdr: ChangeDetectorRef) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private donviService: DonviService,
+    private danhMucService: DanhMucService,
+    private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
+    private danhSachHangDTQGCon6ThangService: DanhSachHangDTQGCon6ThangService,
+    private kiemtraChatluongLtTruockhiHethanLuukhoComponent: KiemtraChatluongLtTruockhiHethanLuukhoComponent,
+    private cdr: ChangeDetectorRef) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachHangDTQGService);
     this.vldTrangThai = kiemtraChatluongLtTruockhiHethanLuukhoComponent;
     this.formData = this.fb.group({
@@ -160,9 +160,9 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({cloaiVthh: null})
+    this.formData.patchValue({ cloaiVthh: null })
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -177,18 +177,18 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
     this.selectedItem.childData = chain(data)
       .groupBy("tenChiCuc")
       .map((v, k) => {
-          let rowItem = v.find(s => s.tenChiCuc === k);
-          let idVirtual = uuidv4();
-          this.expandSetString.add(idVirtual);
-          return {
-            idVirtual: idVirtual,
-            tenChiCuc: k,
-            tenCuc: rowItem?.tenCuc,
-            maDiaDiem: rowItem?.maDiaDiem,
-            tenCloaiVthh: rowItem?.tenCloaiVthh,
-            childData: v
-          }
+        let rowItem = v.find(s => s.tenChiCuc === k);
+        let idVirtual = uuidv4();
+        this.expandSetString.add(idVirtual);
+        return {
+          idVirtual: idVirtual,
+          tenChiCuc: k,
+          tenCuc: rowItem?.tenCuc,
+          maDiaDiem: rowItem?.maDiaDiem,
+          tenCloaiVthh: rowItem?.tenCloaiVthh,
+          childData: v
         }
+      }
       ).value();
     console.log(data, 'raw');
     console.log(this.selectedItem, 'view');
@@ -237,7 +237,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               if (result) {
                 this.selectedItem = cloneDeep(result);
                 await this.buildTableView(result.tongHopDtl);
-                this.step.emit({step: 2, item: this.selectedItem});
+                this.step.emit({ step: 2, item: this.selectedItem });
               }
             }
           } else {
@@ -282,7 +282,7 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
                 let res = await this.tongHopDanhSachHangDTQGService.approve(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                   this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt tổng hợp thành công.');
-                  this.step.emit({step: 1});
+                  this.step.emit({ step: 1 });
                 } else {
                   this.notification.error(MESSAGE.ERROR, res.msg);
                 }
@@ -298,8 +298,8 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
       }
       if (changes.eventCancel) {
         // this.quayLai();
-        this.step.emit({step: 0});
-        this.changeShow.emit({showDetail: false, item: this.selectedItem})
+        this.step.emit({ step: 0 });
+        this.changeShow.emit({ showDetail: false, item: this.selectedItem })
       }
     }
 
@@ -307,6 +307,6 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
 
   onClickShowDetail() {
     this.showDetail = !this.showDetail;
-    this.changeShow.emit({showDetail: this.showDetail, item: this.selectedItem})
+    this.changeShow.emit({ showDetail: this.showDetail, item: this.selectedItem })
   }
 }

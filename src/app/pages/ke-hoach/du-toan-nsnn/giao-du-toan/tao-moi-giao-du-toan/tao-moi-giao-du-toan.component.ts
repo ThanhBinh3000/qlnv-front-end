@@ -277,7 +277,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         this.maDonViTao = this.userInfo?.MA_DVI;
 
         // lấy role người dùng
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
 
         // set năm tạo PA
         this.namPa = this.newDate.getFullYear();
@@ -307,7 +307,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
             this.sum1()
         } else {
             // khi không có id thì thực hiện tạo mới
-            this.maDonViTao = this.userInfo?.MA_DVI;
+            this.maDonViTao = this.userInfo?.MA_DVI
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.maDviTien = '1'
             this.listIdFilesDelete = this.data?.listIdDeleteFiles;
@@ -805,7 +805,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
+        if ([Status.TT_01, Status.TT_03, Status.TT_05, Status.TT_08].includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(Roles.GSTC.SUA_PA_GIAO_SOKIEMTRA)) {
             this.status = false;
         } else {
             this.status = true;
@@ -817,25 +817,25 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         }
         const isParent = this.userInfo.MA_DVI == this.maDviCha;
         const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
-        const checkSave = this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT);
-        // this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
+        const checkSave = this.userService.isAccessPermisson(Roles.GSTC.SUA_PA_GIAO_SOKIEMTRA);
+        // this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GSTC.EDIT_REPORT_PA_PBDT, checkChirld);
         this.statusBtnSave = Status.check('saveWOHist', this.trangThaiBanGhi) && checkSave && checkChirld;
-        this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.COPY_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.PRINT_REPORT, checkChirld);
-        this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT, isParent);
+        this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GSTC.TRINHDUYET_PA_GIAO_SKT, checkChirld);
+        this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GSTC.DUYET_TUCHOI_PA_GIAO_SKT, checkChirld);
+        this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GSTC.PHEDUYET_TUCHOI_PA_GIAO_SKT, checkChirld);
+        this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GSTC.COPY_PA_GIAO_SOKIEMTRA, checkChirld);
+        this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GSTC.IN_PA_GIAO_SOKIEMTRA, checkChirld);
+        // this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GSTC.DUYET_TUCHOI_PA_GIAO_SKT, isParent);
 
-        if (this.userService.isAccessPermisson(Roles.GDT.GIAO_PA_PBDT) && this.soQd) {
+        if (this.userService.isAccessPermisson(Roles.GSTC.GIAO_SOKIEMTRA) && this.soQd) {
             this.statusBtnGiao = false;
         } else {
             this.statusBtnGiao = true;
             this.statusGiaoToanBo = true;
         }
-        if (this.userService.isAccessPermisson(Roles.GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
-            this.statusBtnGuiDVCT = false;
-        }
+        // if (this.userService.isAccessPermisson(Roles.GSTC.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
+        //     this.statusBtnGuiDVCT = false;
+        // }
         if (this.trangThaiBanGhi == "7") {
             this.statusBtnGuiDVCT = true;
             this.statusGiaoToanBo = true;
@@ -1325,8 +1325,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                         this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e.soTranChi);
                     })
                     this.lstCtietBcao[index].tongCongSoTranChi = Operator.sum([this.lstCtietBcao[index].tongCongSoTranChi, item.tongCongSoTranChi])
-                    if(this.lstCtietBcao[index].tongCongSoTranChi == 0 || !this.lstCtietBcao[index].tongCongSoTranChi || this.lstCtietBcao[index].tongCongSoTranChi == null){
-                      this.lstCtietBcao[index].tongCongSoTranChi = 0;
+                    if (this.lstCtietBcao[index].tongCongSoTranChi == 0 || !this.lstCtietBcao[index].tongCongSoTranChi || this.lstCtietBcao[index].tongCongSoTranChi == null) {
+                        this.lstCtietBcao[index].tongCongSoTranChi = 0;
                     }
                 }
             });
@@ -1334,11 +1334,11 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         };
     }
 
-  sum1() {
-    this.lstCtietBcao.forEach(item => {
-      this.sum(item.stt);
-    })
-  }
+    sum1() {
+        this.lstCtietBcao.forEach(item => {
+            this.sum(item.stt);
+        })
+    }
 
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
@@ -1371,7 +1371,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     }
 
     statusDeleteCv() {
-        if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
+        if (!this.userService.isAccessPermisson(Roles.GSTC.SUA_CV_QD_GIAO_SOKIEMTRA)) {
             return false;
         }
         if (!this.soQd?.fileName) {
@@ -1392,10 +1392,27 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
+        let tenSqd
+        if (!this.soQd || !this.soQd?.fileName) {
+            tenSqd = ''
+        } else {
+            tenSqd = this.soQd.fileName
+        }
+
         const header = [
             { t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
-            { t: 0, b: 0, l: 0, r: 1, val: "Phương án giao dự toán nsnn" },
-            { t: 2, b: 2, l: 0, r: 8, val: this.soQd.fileName },
+            { t: 0, b: 0, l: 0, r: 1, val: `Phương án giao trần chi dự toán nsnn năm ${this.namPa}` },
+            { t: 1, b: 1, l: 0, r: 0, val: `Số qđ ` },
+            { t: 1, b: 1, l: 1, r: 1, val: `Ngày ` },
+            { t: 1, b: 1, l: 2, r: 2, val: `Mã phương án ` },
+            { t: 1, b: 1, l: 3, r: 3, val: `Mã phương án BTC` },
+            { t: 1, b: 1, l: 4, r: 4, val: `Trạng thái ` },
+
+            { t: 2, b: 2, l: 0, r: 0, val: `${tenSqd} ` },
+            { t: 2, b: 2, l: 1, r: 1, val: ` ${this.ngayTao} ` },
+            { t: 2, b: 2, l: 2, r: 2, val: ` ${this.maPa} ` },
+            { t: 2, b: 2, l: 3, r: 3, val: ` ${this.maPaCha} ` },
+            { t: 2, b: 2, l: 4, r: 4, val: ` ${this.getStatusName()} ` },
 
             { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
             { t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
@@ -1403,23 +1420,23 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
             { t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
             { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
         ]
-        this.lstDvi.forEach((item, index ) => {
-          const left = 4 + index
-          header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
+        this.lstDvi.forEach((item, index) => {
+            const left = 4 + index
+            header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
         })
 
         const headerBot = 7;
         this.lstCtietBcao.forEach((item, index) => {
             const row = headerBot + index + 1;
-            const tenNdung =  this.getTenNdung(item.maNdung);
+            const tenNdung = this.getTenNdung(item.maNdung);
             header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
-            header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung})
+            header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung })
             header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
             header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCongSoTranChi?.toString() })
 
             item.lstCtietDvis.forEach((e, ind) => {
-              const col = 4 + ind ;
-              header.push({ t: row, b: row, l: col , r: col, val: e.soTranChi?.toString() })
+                const col = 4 + ind;
+                header.push({ t: row, b: row, l: col, r: col, val: e.soTranChi?.toString() })
             })
         })
 
@@ -1433,14 +1450,14 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         XLSX.writeFile(workbook, excelName);
     }
 
-    getTenNdung(maNdung: number): any{
-      let tenNdung: string;
-      this.noiDungs.forEach(itm => {
-        if(itm.ma == maNdung){
-          return tenNdung = itm.giaTri;
-        }
-      })
-      return tenNdung
+    getTenNdung(maNdung: number): any {
+        let tenNdung: string;
+        this.noiDungs.forEach(itm => {
+            if (itm.ma == maNdung) {
+                return tenNdung = itm.giaTri;
+            }
+        })
+        return tenNdung
     }
 
 }

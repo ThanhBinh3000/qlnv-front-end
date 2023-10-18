@@ -30,189 +30,158 @@
     </div>
   </div>
   <nz-card class='mt16 flex-card p-lr16'>
-    <div class='header header-green-background mg-t-10'>
-      <div class='header-text'>
-        <div class='title-chi-tieu'>
-          <span class='text-uppercase font-weight-bold'>THÔNG TIN CHUNG</span>
-        </div>
-      </div>
-    </div>
-    <form [nzLayout]="'vertical'" [formGroup]='formData' nz-form>
-      <div nz-row [nzGutter]='24'>
-        <div nz-col nzSpan='3'>
-          <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzRequired> Năm kế hoạch
-            </nz-form-label>
-            <nz-form-control>
-              <nz-input-group>
-                <nz-select nzAllowClear formControlName='namKeHoach' [nzDisabled]='isViewDetail'>
-                  <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
-                </nz-select>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan='4'>
-          <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzRequired> Số QĐ của BTC
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]='error'>
-              <nz-input-group nzAddOnAfter='{{maQd}}'>
-                <input [readonly]='isViewDetail' type='text' nz-input formControlName='soQuyetDinh'>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-<!--        <div nz-col nzSpan='3'>-->
-<!--          <nz-form-item class='form-item'>-->
-<!--            <nz-form-label [nzNoColon]='true'>Ngày trình BTC-->
-<!--            </nz-form-label>-->
-<!--            <nz-form-control>-->
-<!--              <nz-date-picker [nzDisabled]='isViewDetail' formControlName='ngayTrinhBtc'-->
-<!--                              nzFormat='dd/MM/yyyy'></nz-date-picker>-->
-<!--            </nz-form-control>-->
-<!--          </nz-form-item>-->
-<!--        </div>-->
-        <div nz-col nzSpan='4'>
-          <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzRequired>Ngày ký QĐ của BTC
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]='error'>
-              <nz-date-picker [nzDisabled]='isViewDetail' formControlName='ngayKyBtc'
-                              nzFormat='dd/MM/yyyy'></nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-<!--        <div nz-col nzSpan='3'>-->
-<!--          <nz-form-item class='form-item'>-->
-<!--            <nz-form-label [nzNoColon]='true' nzRequired>Ngày hiệu lực-->
-<!--            </nz-form-label>-->
-<!--            <nz-form-control [nzErrorTip]='error'>-->
-<!--              <nz-date-picker [nzDisabled]='isViewDetail' formControlName='ngayHieuLuc'-->
-<!--                              nzFormat='dd/MM/yyyy'></nz-date-picker>-->
-<!--            </nz-form-control>-->
-<!--          </nz-form-item>-->
-<!--        </div>-->
-        <div nz-col nzSpan='6'>
-          <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzRequired> Căn cứ trên QĐ của TCDT, tờ trình của TCDT lên BTC
-            </nz-form-label>
-            <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
-              <nz-input-group nzAddOnAfterIcon='folder-open' (click)='openDialogToTrinh()'>
-                <input class='search__input' nz-input readonly
-                       formControlName='phuongAnTc' />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan='5'>
-          <nz-form-item class='form-item'>
-            <nz-form-label>Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</nz-form-label>
-            <div nz-row>
-              <div nz-col nzSpan='11'>
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]='true'>
+        <form [nzLayout]="'vertical'" [formGroup]='formData' nz-form>
+          <div nz-row [nzGutter]='24'>
+            <div nz-col nzSpan='3'>
+              <nz-form-item class='form-item'>
+                <nz-form-label [nzNoColon]='true' nzRequired> Năm kế hoạch
+                </nz-form-label>
                 <nz-form-control>
-                  <nz-select [nzDisabled]='true' formControlName='namBatDau' nzPlaceHolder='Năm bắt đầu'
-                             nzSpan='2'
-                             nzAllowClear>
-                    <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'>
-                    </nz-option>
-                  </nz-select>
+                  <nz-input-group>
+                    <nz-select nzAllowClear formControlName='namKeHoach' [nzDisabled]='isViewDetail'>
+                      <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
+                    </nz-select>
+                  </nz-input-group>
                 </nz-form-control>
-              </div>
-              <div nz-col nzSpan='2' class='text-center'>
-                <i class='icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48'></i>
-              </div>
-              <div nz-col nzSpan='11'>
-                <nz-form-control>
-                  <nz-select [nzDisabled]='true' formControlName='namKetThuc' nzPlaceHolder='Năm kết thúc'
-                             nzSpan='2'
-                             nzAllowClear>
-                    <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'>
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </div>
+              </nz-form-item>
             </div>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan='4'>
-          <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true'>Loại dự án
-            </nz-form-label>
-            <nz-form-control>
-              <input class='search__input' formControlName='loaiDuAn' [readonly]='true' nz-input />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan='20'>
-          <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true'>Trích yếu
-            </nz-form-label>
-            <nz-form-control>
-              <input class='search__input' formControlName='trichYeu' [readonly]='isViewDetail' nz-input />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan='24'>
-          <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true'>Nội dung quyết định
-            </nz-form-label>
-            <nz-form-control>
+            <div nz-col nzSpan='4'>
+              <nz-form-item class='form-item'>
+                <nz-form-label [nzNoColon]='true' nzRequired> Số QĐ của BTC
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]='error'>
+                  <nz-input-group nzAddOnAfter='{{maQd}}'>
+                    <input [readonly]='isViewDetail' type='text' nz-input formControlName='soQuyetDinh'>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!--        <div nz-col nzSpan='3'>-->
+            <!--          <nz-form-item class='form-item'>-->
+            <!--            <nz-form-label [nzNoColon]='true'>Ngày trình BTC-->
+            <!--            </nz-form-label>-->
+            <!--            <nz-form-control>-->
+            <!--              <nz-date-picker [nzDisabled]='isViewDetail' formControlName='ngayTrinhBtc'-->
+            <!--                              nzFormat='dd/MM/yyyy'></nz-date-picker>-->
+            <!--            </nz-form-control>-->
+            <!--          </nz-form-item>-->
+            <!--        </div>-->
+            <div nz-col nzSpan='4'>
+              <nz-form-item class='form-item'>
+                <nz-form-label [nzNoColon]='true' nzRequired>Ngày ký QĐ của BTC
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]='error'>
+                  <nz-date-picker [nzDisabled]='isViewDetail' formControlName='ngayKyBtc'
+                                  nzFormat='dd/MM/yyyy'></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!--        <div nz-col nzSpan='3'>-->
+            <!--          <nz-form-item class='form-item'>-->
+            <!--            <nz-form-label [nzNoColon]='true' nzRequired>Ngày hiệu lực-->
+            <!--            </nz-form-label>-->
+            <!--            <nz-form-control [nzErrorTip]='error'>-->
+            <!--              <nz-date-picker [nzDisabled]='isViewDetail' formControlName='ngayHieuLuc'-->
+            <!--                              nzFormat='dd/MM/yyyy'></nz-date-picker>-->
+            <!--            </nz-form-control>-->
+            <!--          </nz-form-item>-->
+            <!--        </div>-->
+            <div nz-col nzSpan='6'>
+              <nz-form-item class='form-item'>
+                <nz-form-label [nzNoColon]='true' nzRequired> Căn cứ trên QĐ của TCDT, tờ trình của TCDT lên BTC
+                </nz-form-label>
+                <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
+                  <nz-input-group nzAddOnAfterIcon='folder-open' (click)='openDialogToTrinh()'>
+                    <input class='search__input' nz-input readonly
+                           formControlName='phuongAnTc' />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan='5'>
+              <nz-form-item class='form-item'>
+                <nz-form-label>Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</nz-form-label>
+                <div nz-row>
+                  <div nz-col nzSpan='11'>
+                    <nz-form-control>
+                      <nz-select [nzDisabled]='true' formControlName='namBatDau' nzPlaceHolder='Năm bắt đầu'
+                                 nzSpan='2'
+                                 nzAllowClear>
+                        <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'>
+                        </nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </div>
+                  <div nz-col nzSpan='2' class='text-center'>
+                    <i class='icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48'></i>
+                  </div>
+                  <div nz-col nzSpan='11'>
+                    <nz-form-control>
+                      <nz-select [nzDisabled]='true' formControlName='namKetThuc' nzPlaceHolder='Năm kết thúc'
+                                 nzSpan='2'
+                                 nzAllowClear>
+                        <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'>
+                        </nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </div>
+                </div>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan='4'>
+              <nz-form-item class='form-item'>
+                <nz-form-label [nzNoColon]='true'>Loại dự án
+                </nz-form-label>
+                <nz-form-control>
+                  <input class='search__input' formControlName='loaiDuAn' [readonly]='true' nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan='20'>
+              <nz-form-item class='form-item'>
+                <nz-form-label [nzNoColon]='true'>Trích yếu
+                </nz-form-label>
+                <nz-form-control>
+                  <input class='search__input' formControlName='trichYeu' [readonly]='isViewDetail' nz-input />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan='24'>
+              <nz-form-item class='form-item'>
+                <nz-form-label [nzNoColon]='true'>Nội dung quyết định
+                </nz-form-label>
+                <nz-form-control>
               <textarea rows='3' formControlName='noiDung' class='search__input' nz-input nzSize='small'
                         placeholder='Nhập nội dung quyết định' [readonly]='isViewDetail'></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]='24'>
-          <nz-form-item>
-            <nz-form-label [nzNoColon]='true'>
-              Căn cứ pháp lý
-            </nz-form-label>
-            <div class='list-file'>
-              <file-list [data]='canCuPhapLys' [isViewDetail]='isViewDetail'></file-list>
+                </nz-form-control>
+              </nz-form-item>
             </div>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]='24'>
-          <nz-form-item>
-            <nz-form-label [nzNoColon]='true'>
-              File đính kèm QĐ phê duyệt của BTC
-            </nz-form-label>
-            <div class='list-file'>
-              <file-list [data]='fileDinhKems' [isViewDetail]='isViewDetail'></file-list>
+            <div nz-col [nzSpan]='24'>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]='true'>
+                  Căn cứ pháp lý
+                </nz-form-label>
+                <div class='list-file'>
+                  <file-list [data]='canCuPhapLys' [isViewDetail]='isViewDetail'></file-list>
+                </div>
+              </nz-form-item>
             </div>
-          </nz-form-item>
-        </div>
-      </div>
-    </form>
-    <!--    <nz-collapse nzAccordion>-->
-    <!--      <nz-collapse-panel [nzHeader]="'NỘI DUNG QUYẾT ĐỊNH'" [nzActive]="true">-->
-    <!--        <nz-table #dataTbl class="nowrap mt-16 table-chi-tiet pd-10" [nzData]="listDx" nzBordered>-->
-    <!--          <thead>-->
-    <!--          <tr>-->
-    <!--            <th style="width: 35px">STT</th>-->
-    <!--            <th>Cục DTNN KV</th>-->
-    <!--            <th>Số công văn / đề xuất</th>-->
-    <!--            <th>Ngày duyệt cán bộ vụ</th>-->
-    <!--            <th>Tổng mức đầu tư</th>-->
-    <!--            <th>Giai đoạn quy hoạch</th>-->
-    <!--            <th>Trích yếu</th>-->
-    <!--          </tr>-->
-    <!--          </thead>-->
-    <!--          <tbody>-->
-    <!--          <ng-container *ngFor="let item of dataTbl.data, let i = index;">-->
-    <!--            <tr [ngClass]="{'bg-selected': item.selected}" (click)="selectRow(item)">-->
-    <!--              <td>{{i + 1}}</td>-->
-    <!--              <td>{{item.tenDvi}}</td>-->
-    <!--              <td>{{item.soCongVan}}</td>-->
-    <!--              <td>{{item.ngayDuyet|date:globals.dateFormat}}</td>-->
-    <!--              <td class="text-right">{{item.tmdt | number : '1.0-1' : 'vi-VN'}}</td>-->
-    <!--              <td>{{item.namBatDau + ' - ' + item.namKetThuc}}</td>-->
-    <!--              <td>{{item.trichYeu}}</td>-->
-    <!--            </tr>-->
-    <!--          </ng-container>-->
-    <!--          </tbody>-->
-    <!--        </nz-table>-->
+            <div nz-col [nzSpan]='24'>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]='true'>
+                  File đính kèm QĐ phê duyệt của BTC
+                </nz-form-label>
+                <div class='list-file'>
+                  <file-list [data]='fileDinhKems' [isViewDetail]='isViewDetail'></file-list>
+                </div>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-collapse-panel>
+    </nz-collapse>
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHI TIẾT'" [nzActive]='true'>
         <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
@@ -337,7 +306,7 @@
                             <td class='text-right'>{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                             <td class='text-center' nzRight
                                 *ngIf='!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU'>
-                              <a (click)="themMoiItem(children, 'sua', y,  item.dataChild)">
+                              <a (click)="themMoiItem('sua', children, y1 ,  item.dataChild)">
                                 <i class='fa fa-pencil' title='Sửa'></i>
                               </a>
                               <a (click)='deleteRow(children)'>

@@ -173,7 +173,7 @@ export class TongHopKhnkComponent implements OnInit {
     this.spinner.hide();
   };
 
-  deleteSelect(){
+  deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
@@ -215,7 +215,7 @@ export class TongHopKhnkComponent implements OnInit {
     }
   };
 
-  exportData(){
+  exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -387,7 +387,7 @@ export class TongHopKhnkComponent implements OnInit {
     this.search();
   }
 
-  async taoQdinh(data: any){
+  async taoQdinh(data: any) {
     this.dataTongHop = data;
     this.isQuyetDinh = true;
   }

@@ -28,7 +28,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     },
     {
         icon: 'htvbdh_tcdt_dungcuchuyendung',
-        title: 'Máy móc thiết bị chuyên dùng',
+        title: 'Máy móc, thiết bị chuyên dùng',
         url: `/${MAIN_ROUTE_DINH_MUC}/may-moc-thiet-bi`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',

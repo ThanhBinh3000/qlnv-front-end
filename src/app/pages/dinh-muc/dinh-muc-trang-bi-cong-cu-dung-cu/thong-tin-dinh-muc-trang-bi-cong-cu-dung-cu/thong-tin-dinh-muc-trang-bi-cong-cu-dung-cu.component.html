@@ -116,7 +116,7 @@
         <th colspan='3' class='text-center'>Số lượng tối đa</th>
         <th rowspan='2' class='text-center'>ĐVT</th>
         <th rowspan='2'>Ghi chú</th>
-        <th rowspan='2' class='text-center'>Hành động</th>
+        <th rowspan='2' class='text-center' *ngIf="!isViewDetail">Hành động</th>
       </tr>
       <tr>
         <th class='text-center'>VP Cục DTNN KV</th>
@@ -134,7 +134,7 @@
         <td>{{data.ccRaDm == 'DK' ? data.dmTheoDiemKho + '/điểm kho bảo quản lương thực' : data.dmTrangBi + '/' + data.khoiLuong + ' kg lương thực bảo quản theo kế hoạch năm'}}</td>
         <td>{{data.donViTinh}}</td>
         <td>{{data.ycKyThuat}}</td>
-        <td class='text-center'>
+        <td class='text-center'  *ngIf="!isViewDetail">
           <a *ngIf='!isViewDetail' (click)='editRow(data)'>
             <i class='fa fa-pencil' title='Sửa'></i>
           </a>

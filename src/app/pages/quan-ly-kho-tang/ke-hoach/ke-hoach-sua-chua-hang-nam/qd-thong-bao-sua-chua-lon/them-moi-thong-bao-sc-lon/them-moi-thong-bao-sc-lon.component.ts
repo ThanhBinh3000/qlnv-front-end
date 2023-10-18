@@ -60,6 +60,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       namKeHoach: [dayjs().get('year'), Validators.required],
       trichYeu: [null],
       ngayKy: [null],
+      noiDung: [null],
       qdBtc: [null, Validators.required],
       soTt: [null, Validators.required],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],

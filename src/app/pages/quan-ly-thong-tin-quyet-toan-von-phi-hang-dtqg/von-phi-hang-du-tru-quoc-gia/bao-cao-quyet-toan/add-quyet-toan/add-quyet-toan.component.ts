@@ -473,6 +473,10 @@ export class AddQuyetToanComponent implements OnInit {
 	}
 
 	async onSubmit(mcn: string, lyDoTuChoi: string) {
+		if (!this.congVan) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+			return;
+		}
 		if (this.submitStatus != true && mcn < '2') {
 			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
 			return;
@@ -728,10 +732,10 @@ export class AddQuyetToanComponent implements OnInit {
 			lstCtietBcaoTemp.congVan = this.congVan;
 		}
 
-		if (!lstCtietBcaoTemp?.congVan || !this.congVan?.fileName) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-			return;
-		}
+		// if (!lstCtietBcaoTemp?.congVan || !this.congVan?.fileName) {
+		// 	this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+		// 	return;
+		// }
 
 		const request = JSON.parse(JSON.stringify({
 			id: this.idInput,
@@ -1326,9 +1330,9 @@ export class AddQuyetToanComponent implements OnInit {
 					this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
 					let luyKes: any[] = [];
 					if (this.getTail(data.stt) == 1) {
-						luyKes = this.lstDsHangTrongKho.filter(e => e.cloaiVthh == res.ma && e.maLoai == "LK");
+						luyKes = this.lstDsHangTrongKho.filter(e => (e.cloaiVthh == res.ma || e.loaiVthh == data.ma) && e.maLoai == "LK");
 					} else {
-						luyKes = this.lstDsHangTrongKho.filter(e => e.cloaiVthh == res.ma && e.maLoai == "PS");
+						luyKes = this.lstDsHangTrongKho.filter(e => (e.cloaiVthh == res.ma || e.loaiVthh == data.ma) && e.maLoai == "PS");
 					}
 					if (luyKes.length > 0) {
 						luyKes.forEach(luyKe => {
@@ -1444,6 +1448,7 @@ export class AddQuyetToanComponent implements OnInit {
 
 			{ t: 0, b: 0, l: 0, r: 1, val: `Báo cáo quyết toán vốn phí hàng DTQG quý ${this.quyQtoan}, năm ${this.namQtoan}` },
 			{ t: 1, b: 1, l: 0, r: 1, val: `Kèm theo công văn số ${this.congVan.fileName}/TCDT, ngày ${dateExcel} của ${this.userInfo.TEN_DVI} ` },
+			{ t: 2, b: 2, l: 0, r: 1, val: `Trạng thái BC: ${this.getStatusName(this.isStatus)}` },
 
 			{ t: 4, b: 4, l: 0, r: 0, val: 'STT' },
 			{ t: 4, b: 4, l: 1, r: 1, val: 'Tên hàng dự trữ quốc gia' },

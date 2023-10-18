@@ -10,22 +10,22 @@ import { HopDongModule } from './hop-dong/hop-dong.module';
 import { KehoachLuachonNhathauModule } from './kehoach-luachon-nhathau/kehoach-luachon-nhathau.module';
 import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
 import { NhapKhoModule } from './nhap-kho/nhap-kho.module';
-import {QuyetdinhKetquaLcntComponent} from "./quyetdinh-ketqua-lcnt/quyetdinh-ketqua-lcnt.component";
+import { QuyetdinhKetquaLcntComponent } from "./quyetdinh-ketqua-lcnt/quyetdinh-ketqua-lcnt.component";
 import {
   DanhSachQuyetdinhKetquaLcntComponent
 } from "./quyetdinh-ketqua-lcnt/danh-sach-quyetdinh-ketqua-lcnt/danh-sach-quyetdinh-ketqua-lcnt.component";
 import {
   ThemmoiQuyetdinhKetquaLcntComponent
 } from "./quyetdinh-ketqua-lcnt/themmoi-quyetdinh-ketqua-lcnt/themmoi-quyetdinh-ketqua-lcnt.component";
-import {TrienkhaiLuachonNhathauComponent} from "./trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.component";
+import { TrienkhaiLuachonNhathauComponent } from "./trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.component";
 import {
   TheoPhuongThucDauThauComponent
 } from "./trienkhai-luachon-nhathau/theo-phuong-thuc-dau-thau/theo-phuong-thuc-dau-thau.component";
-import {ThongtinDauthauComponent} from "./trienkhai-luachon-nhathau/thongtin-dauthau/thongtin-dauthau.component";
+import { ThongtinDauthauComponent } from "./trienkhai-luachon-nhathau/thongtin-dauthau/thongtin-dauthau.component";
 import {
   ThemmoiThongtinDauthauComponent
 } from "./trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau/themmoi-thongtin-dauthau.component";
-import {QdPdHsMoiThauComponent} from "./trienkhai-luachon-nhathau/qd-pd-hs-moi-thau/qd-pd-hs-moi-thau.component";
+import { QdPdHsMoiThauComponent } from "./trienkhai-luachon-nhathau/qd-pd-hs-moi-thau/qd-pd-hs-moi-thau.component";
 import {
   ThemMoiQdPdHsMtVtComponent
 } from "./trienkhai-luachon-nhathau/qd-pd-hs-moi-thau/them-moi-qd-pd-hs-mt-vt/them-moi-qd-pd-hs-mt-vt.component";

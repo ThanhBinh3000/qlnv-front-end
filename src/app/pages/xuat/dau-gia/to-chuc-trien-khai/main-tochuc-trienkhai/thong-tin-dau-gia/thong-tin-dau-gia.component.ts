@@ -117,19 +117,13 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       const res = await this.quyetDinhPdKhBdgService.searchDtl(body);
       if (res.msg === MESSAGE.SUCCESS) {
         const data = res.data;
-        const soDxuatMap = {};
-        const filteredRecords = [];
+        const latestRecords = {};
         data.content.forEach(record => {
-          if (!soDxuatMap[record.soDxuat]) {
-            filteredRecords.push(record);
-            soDxuatMap[record.soDxuat] = true;
-          } else if (record.isDieuChinh) {
-            const index = filteredRecords.findIndex(existingRecord => existingRecord.soDxuat === record.soDxuat);
-            if (index !== -1) {
-              filteredRecords[index] = record;
-            }
+          if (!latestRecords[record.soDxuat] || record.someDateField > latestRecords[record.soDxuat].someDateField) {
+            latestRecords[record.soDxuat] = record;
           }
         });
+        const filteredRecords = Object.values(latestRecords);
         this.dataTable = filteredRecords;
         this.totalRecord = data.totalElements;
         this.dataTable?.forEach((item) => (item.checked = false));

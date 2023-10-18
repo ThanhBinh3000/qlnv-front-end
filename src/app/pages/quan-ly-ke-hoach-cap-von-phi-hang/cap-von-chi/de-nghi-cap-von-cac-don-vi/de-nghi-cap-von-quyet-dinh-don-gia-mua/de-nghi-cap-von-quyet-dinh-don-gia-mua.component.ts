@@ -246,6 +246,10 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
     }
 
     async submitReport() {
+        if (!this.baoCao.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
+        }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -333,10 +337,6 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
                 }
             }
         }
-        if (!request.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
 
         if (!this.baoCao.id) {
             this.capVonNguonChiService.taoMoiDeNghi(request).toPromise().then(
@@ -392,10 +392,11 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
 
     exportToExcel() {
         const workbook = XLSX.utils.book_new();
+        const congVan = this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '';
         const header = [
             { t: 0, b: 5, l: 0, r: 11, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: "Đề nghị cấp vốn" },
-            { t: 1, b: 1, l: 0, r: 8, val: Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) },
+            { t: 1, b: 1, l: 0, r: 8, val: congVan },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
             { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },

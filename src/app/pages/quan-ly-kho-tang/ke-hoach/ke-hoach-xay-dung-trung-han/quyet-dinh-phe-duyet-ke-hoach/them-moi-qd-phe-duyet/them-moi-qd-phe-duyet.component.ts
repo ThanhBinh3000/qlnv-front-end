@@ -135,6 +135,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,
         namKeHoach: data.namKeHoach,
+        noiDung: data.noiDung,
       });
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
@@ -327,6 +328,9 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
       if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+          item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+        });
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
       }
@@ -408,15 +412,11 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         sl = sum;
       }
     } else {
-      let itemSelected = this.listDx.find(item => item.selected == true);
-      if (itemSelected) {
-        let arr = this.dataTableReq.filter(item => item.soCv == itemSelected.soCongVan);
-        const sum = arr.reduce((prev, cur) => {
+        const sum = this.dataTableReq.reduce((prev, cur) => {
           prev += cur[row];
           return prev;
         }, 0);
         sl = sum;
-      }
     }
     return sl;
   }
@@ -453,16 +453,19 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          let result = this.dataTableReq.filter(data => data.id == item.id);
-          if (result && result.length > 0) {
-            let idx = this.dataTableReq.indexOf(result[0]);
+          console.log();
+          let result = this.dataTableReq.find(data => data.id == item.id);
+          if (result) {
+            let idx = this.dataTableReq.indexOf(result);
             this.dataTableReq.splice(idx, 1);
-            let itemSelected = this.listDx.filter(item => item.selected == true);
-            if (itemSelected && itemSelected.length > 0) {
-              itemSelected[0].selected = false;
-              this.selectRow(itemSelected[0]);
-              this.notification.success(MESSAGE.SUCCESS, 'Xóa thành công');
-            }
+            this.dataTable = this.convertListData(this.dataTableReq);
+            this.expandAll(this.dataTable);
+            // let itemSelected = this.listDx.filter(item => item.selected == true);
+            // if (itemSelected && itemSelected.length > 0) {
+            //   itemSelected[0].selected = false;
+            //   this.selectRow(itemSelected[0]);
+            this.notification.success(MESSAGE.SUCCESS, 'Xóa thành công');
+            // }
           } else {
             this.notification.error(MESSAGE.ERROR, 'Xóa thất bại');
           }
@@ -473,7 +476,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     });
   }
 
-  themMoiItem(data: any, type: string, idx: number, list?: any) {
+  themMoiItem(type: string, data: any,  idx: number, list?: any) {
     let modalQD = this.modal.create({
       nzTitle: 'Chỉnh sửa chi tiết kế hoạch',
       nzContent: DialogThemMoiDxkhthComponent,
@@ -483,7 +486,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       nzStyle: { top: '200px' },
       nzFooter: null,
       nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
         dataInput: data,
         type: type,
         page: 'DXTH',
@@ -491,20 +493,9 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     });
     modalQD.afterClose.subscribe(async (detail) => {
       if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
+        if (detail && list) {
+          Object.assign(list[idx], detail);
         }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == 'them') {
-          data.dataChild.push(detail);
-        } else {
-          if (list) {
-            Object.assign(list[idx], detail);
-          }
-        }
-        this.expandAll(this.dataTable);
       }
     });
   }

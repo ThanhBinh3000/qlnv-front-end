@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalRef} from "ng-zorro-antd/modal";
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'app-dialog-so-quyet-dinh-qly-kho-tang',

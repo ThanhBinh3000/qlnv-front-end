@@ -7,7 +7,7 @@
           [ngClass]="formData.value.trangThai == STATUS.DA_KY  || formData.value.trangThai == STATUS.DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-          <span>HỢP ĐỒNG</span>
+          <span> NHẬP HỢP ĐỒNG</span>
         </div>
       </div>
       <div class="btn-group">
@@ -15,8 +15,8 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button class="btn btn-sub ml-2" (click)="pheDuyet()"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 && !isView) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
+        <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !isView) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
           <i class="icon htvbdh_trinh "></i>
           <span>Đã ký</span>
         </button>
@@ -453,7 +453,7 @@
       <div class="header header-green-background mg-t-10" *ngIf="formData.value.trangThai == STATUS.DA_KY">
         <div class="header-text">
           <div class="title-chi-tieu">
-            <span class="text-uppercase font-weight-bold">Phụ lục hợp đồng</span>
+            <span class="text-uppercase font-weight-bold">DANH SÁCH PHỤ LỤC HỢP ĐỒNG</span>
           </div>
         </div>
         <div class="btn-group">

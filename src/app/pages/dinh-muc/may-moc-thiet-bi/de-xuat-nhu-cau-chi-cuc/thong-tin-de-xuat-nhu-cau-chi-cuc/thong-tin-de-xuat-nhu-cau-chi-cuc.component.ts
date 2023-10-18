@@ -1,17 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {Validators} from "@angular/forms";
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { Validators } from "@angular/forms";
 import dayjs from "dayjs";
-import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
-import {STATUS} from "../../../../../constants/status";
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import {of} from "rxjs";
+import { MmDxChiCucService } from "../../../../../services/mm-dx-chi-cuc.service";
+import { STATUS } from "../../../../../constants/status";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { of } from "rxjs";
 
 @Component({
   selector: 'app-thong-tin-de-xuat-nhu-cau-chi-cuc',
@@ -114,14 +114,14 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     }
   }
 
-  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+  async loadSlThuaThieu(item: MmThongTinNcChiCuc) {
     if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
       item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
     } else {
       item.chenhLechThieu = 0
     }
-    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
-      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    if ((item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo - item.slTieuChuan
     } else {
       item.chenhLechThua = 0
     }
@@ -130,12 +130,12 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TUCHOI_CB_CUC : {
+      case STATUS.DU_THAO:
+      case STATUS.TUCHOI_CB_CUC: {
         trangThai = STATUS.DA_KY;
         break;
       }
-      case STATUS.DA_KY : {
+      case STATUS.DA_KY: {
         trangThai = STATUS.DADUYET_CB_CUC
       }
     }
@@ -190,7 +190,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -206,7 +206,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.dataTable[stt]},
+      data: { ...this.dataTable[stt] },
       edit: false
     };
   }
@@ -261,8 +261,8 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let res = await this.createUpdate(this.formData.value)
     if (res) {
-        this.goBack()
-      }
+      this.goBack()
+    }
   }
 
   async detail(id) {
@@ -331,18 +331,18 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       }
 
       this.formData.patchValue({
-        klLtBaoQuan : ctieuKhBq,
-        klLtNhap : ctieuKhNhap,
-        klLtXuat : ctieuKhXuat,
+        klLtBaoQuan: ctieuKhBq,
+        klLtNhap: ctieuKhNhap,
+        klLtXuat: ctieuKhXuat,
       })
     }
   }
 
   async getSLHienCo(maHH) {
     let body = {
-      maDvi : this.userInfo.MA_DVI,
-      namKeHoach : this.formData.value.namKeHoach,
-      maHangHoa : maHH
+      maDvi: this.userInfo.MA_DVI,
+      namKeHoach: this.formData.value.namKeHoach,
+      maHangHoa: maHH
     }
     let res = await this.dxChiCucService.getSlHienCo(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -356,9 +356,9 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
 
   async getSlNhapThem(maHH) {
     let body = {
-      maDvi : this.userInfo.MA_DVI,
-      namKeHoach : Number(this.formData.value.namKeHoach) - 1,
-      maHangHoa : maHH
+      maDvi: this.userInfo.MA_DVI,
+      namKeHoach: Number(this.formData.value.namKeHoach) - 1,
+      maHangHoa: maHH
     }
     let res = await this.dxChiCucService.getSlNhapThem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -373,7 +373,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
 
   async getDinhMuc(maHH) {
     let body = {
-      maHangHoa : maHH
+      maHangHoa: maHH
     }
     if (!this.formData.value.klLtNhap || !this.formData.value.klLtXuat || !this.formData.value.klLtBaoQuan) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng nhập khối lượng nhập, xuất, bảo quản!');

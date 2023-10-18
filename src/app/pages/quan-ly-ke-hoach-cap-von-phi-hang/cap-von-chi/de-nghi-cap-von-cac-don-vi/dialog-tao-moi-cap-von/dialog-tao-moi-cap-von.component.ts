@@ -26,7 +26,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     loaiDns: any[] = [];
     donVis: any[];
     lstNam: number[] = [];
-    lstQuyetDinh: string[] = [];
+    lstQuyetDinh: any[] = [];
 
     constructor(
         private _modalRef: NzModalRef,
@@ -108,11 +108,16 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         await this.getMaDnghi();
         if (!id) {
             if (this.response.canCuVeGia == Cvnc.DON_GIA) {
+                const quyetDinh = this.lstQuyetDinh.find(e => e.soQd == this.response.soQdChiTieu);
                 this.response.lstCtiets.push(new CapVon({
                     id: uuid.v4() + 'FE',
                     stt: '0.1',
                     maDvi: this.userInfo.MA_DVI,
                     tenDvi: this.userInfo?.TEN_DVI,
+                    slKeHoach: quyetDinh.slKeHoach,
+                    slThucHien: quyetDinh.slThucHien,
+                    donGia: quyetDinh.donGia,
+                    gtThucHien: Operator.mul(quyetDinh.slThucHien, quyetDinh.donGia),
                 }))
             } else {
                 this.getContractData();
@@ -184,6 +189,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         const request = {
             namKHoach: this.response.namDnghi,
             maDvi: this.userInfo?.MA_DVI,
+            maLoai: this.response.maLoai,
         }
         this.spinner.show();
         this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(
@@ -208,6 +214,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             namKHoach: this.response.namDnghi,
             maDvi: this.userInfo.MA_DVI,
             loaiVthh: null,
+            maLoai: '3',
         }
         switch (this.response.loaiDnghi) {
             case Cvnc.THOC:
@@ -234,25 +241,25 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                         tenDvi: this.userInfo?.TEN_DVI,
                     }))
                     data.data.forEach(item => {
-                        if (this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQdPdKhlcnt) == -1) {
+                        if (this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQd) == -1) {
                             const temp: CapVon = new CapVon({
                                 id: uuid.v4() + 'FE',
                                 maDvi: this.userInfo.MA_DVI,
                                 tenDvi: this.userInfo?.TEN_DVI,
-                                tenKhachHang: item.tenNhaThau,
-                                qdPheDuyet: item.soQdPdKhlcnt,
+                                tenKhachHang: item.tenKhachHang,
+                                qdPheDuyet: item.soQd,
                             })
                             this.response.lstCtiets = Table.addChild(unitId, temp, this.response.lstCtiets);
                         }
                         const temp: CapVon = new CapVon({
                             id: uuid.v4() + 'FE',
-                            qdPheDuyet: item.tenGoiThau + '/' + item.soHd,
-                            slKeHoach: item.soLuongKehoach,
-                            slHopDong: item.soLuong,
+                            qdPheDuyet: item.tenGoiThau + '/' + item.soHopDong,
+                            slKeHoach: item.slKeHoach,
+                            slHopDong: item.slHopDong,
                             donGia: item.donGia,
-                            gtHopDong: Operator.mul(item.soLuong, item.donGia),
+                            gtHopDong: Operator.mul(item.slHopDong, item.donGia),
                         })
-                        const index = this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQdPdKhlcnt);
+                        const index = this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQd);
                         this.response.lstCtiets = Table.addChild(this.response.lstCtiets[index].id, temp, this.response.lstCtiets);
                         this.response.lstCtiets[index].slKeHoach = Operator.sum([this.response.lstCtiets[index].slKeHoach, temp.slKeHoach]);
                         this.response.lstCtiets[index].slHopDong = Operator.sum([this.response.lstCtiets[index].slHopDong, temp.slHopDong]);

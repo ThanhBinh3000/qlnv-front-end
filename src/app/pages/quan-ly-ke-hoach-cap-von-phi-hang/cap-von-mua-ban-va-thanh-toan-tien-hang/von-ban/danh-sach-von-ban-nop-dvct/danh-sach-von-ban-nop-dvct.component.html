@@ -23,7 +23,7 @@
                 <label class="search__label">Căn cứ về giá</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá"
                     [(ngModel)]="searchFilter.canCuVeGia">
-                    <nz-option *ngFor="let item of Cvmb.CAN_CU_GIA" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of Vb.CAN_CU_GIA" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
             </div>
@@ -116,7 +116,7 @@
                         {{ Cvmb.suggestionName(data.loaiDnghi)}}
                     </td>
                     <td>
-                        {{ Cvmb.priceBasisName(data.canCuVeGia) }}
+                        {{ Vb.priceBasisName(data.canCuVeGia) }}
                     </td>
                     <td>
                         {{ data.quyetDinh }}

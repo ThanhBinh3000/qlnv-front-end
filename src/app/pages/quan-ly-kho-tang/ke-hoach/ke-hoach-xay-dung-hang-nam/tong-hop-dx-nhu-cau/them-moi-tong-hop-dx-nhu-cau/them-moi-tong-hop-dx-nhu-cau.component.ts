@@ -393,6 +393,9 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
         let arr = this.dataTableDxAll.filter(data => data.idType == item.id);
         if (arr && arr.length > 0) {
           this.dataTableDx = arr;
+          this.dataTableDx.forEach(item => {
+            item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+          });
           this.dataTableDx = this.convertListData(this.dataTableDx);
           this.expandAll(this.dataTableDx);
         }
@@ -401,6 +404,9 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
       if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+          item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+        });
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
       }
@@ -517,28 +523,14 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       nzStyle: {top: "200px"},
       nzFooter: null,
       nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
         dataInput: data,
         type: type,
         page: "DXTH"
       }
     });
     modalQD.afterClose.subscribe(async (detail) => {
-      if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
-        }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == "them") {
-          data.dataChild.push(detail);
-        } else {
-          if (list) {
-            Object.assign(list[idx], detail);
-          }
-        }
-        this.expandAll(this.dataTable);
+      if (detail && list) {
+        Object.assign(list[idx], detail);
       }
     });
   }

@@ -32,7 +32,9 @@ export class ItemData {
     }
 
     changeModel() {
-        this.namDtTtien = Operator.mul(this.namDtDmuc, this.namDtSluong);
+        if (this.namDtDmuc) {
+            this.namDtTtien = Operator.mul(this.namDtDmuc, this.namDtSluong);
+        }
     }
 
     upperBound() {
@@ -161,9 +163,8 @@ export class PhuLuc01NhapComponent implements OnInit {
         await this.getFormDetail();
         this.namBcao = this.dataInfo?.namBcao;
         this.maDviTao = this.dataInfo?.maDvi;
-
+        await this.getDinhMucPL2N();
         if (this.status.general) {
-            await this.getDinhMucPL2N();
             this.scrollX = Table.tableWidth(250, 7, 1, 90);
         } else {
             this.scrollX = Table.tableWidth(250, 7, 1, 0);
@@ -171,7 +172,7 @@ export class PhuLuc01NhapComponent implements OnInit {
 
         if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
             this.lstCtietBcaos.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
+                const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc) && e.loaiDinhMuc == item.maDmuc);
                 if (!item.tenDanhMuc) {
                     item.tenDanhMuc = dinhMuc?.tenDinhMuc;
                 }
@@ -523,7 +524,7 @@ export class PhuLuc01NhapComponent implements OnInit {
                         tenDanhMuc: data.ten,
                         level: 0,
                     }))
-                    const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
+                    const lstTemp = this.dsDinhMuc.filter(e => (!e.cloaiVthh && e.loaiVthh == data.ma) || e.cloaiVthh == data.ma);
                     for (let i = 1; i <= lstTemp.length; i++) {
                         this.lstCtietBcaos.push(new ItemData({
                             id: uuid.v4() + 'FE',
@@ -569,7 +570,9 @@ export class PhuLuc01NhapComponent implements OnInit {
     }
 
     changeModel(id: string): void {
-        this.editCache[id].data.namDtTtien = Operator.mul(this.editCache[id].data.namDtDmuc, this.editCache[id].data.namDtSluong);
+        if (this.editCache[id].data.namDtDmuc) {
+            this.editCache[id].data.namDtTtien = Operator.mul(this.editCache[id].data.namDtDmuc, this.editCache[id].data.namDtSluong);
+        }
     }
 
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1

@@ -150,8 +150,8 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
           "limit": 10,
           "page": 0
         },
-        "capDvi" : this.userInfo.CAP_DVI,
-        "maDvi" : this.userInfo.MA_DVI,
+        "capDvi": this.userInfo.CAP_DVI,
+        "maDvi": this.userInfo.MA_DVI,
       }
       let res = await this.qdMuaSamService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -172,6 +172,31 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+        this.spinner.hide();
+        return;
+      }
+      this.convertListDiaDiem()
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.listFileDinhKems = this.fileDinhKem;
+      }
+      this.formData.value.giaTri = this.calcTong();
+      this.formData.value.maDvi = this.userInfo.MA_DVI
+      this.formData.value.capDvi = this.userInfo.CAP_DVI
+      this.formData.value.listQlDinhMucPvcHdLoaiHh = this.dataTable
+      this.formData.value.listQlDinhMucPvcHdDiaDiemNh = this.listDiaDiem
+      this.formData.value.soHopDong = this.formData.value.soHopDong + this.maQd
+      let body = this.formData.value;
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
     }
   }
 
@@ -209,7 +234,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
           await this.changeSoQdMs(data.soQdpdKhMuaSam);
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soHopDong : this.formData.value.soHopDong ?  this.formData.value.soHopDong.split('/')[0] : null
+            soHopDong: this.formData.value.soHopDong ? this.formData.value.soHopDong.split('/')[0] : null
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucPvcHdLoaiHh;
@@ -231,41 +256,6 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
     }
   }
 
-  async pheDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ký?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            trangThai: STATUS.DA_KY,
-          }
-          let res = await this.hopDongService.approve(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, 'Ký thành công!');
-            this.spinner.hide();
-            this.goBack();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-            this.spinner.hide();
-          }
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        } finally {
-          this.spinner.hide();
-        }
-      },
-    });
-  }
 
   async themMoiCtiet() {
     let msgRequired = this.required(this.rowItem);
@@ -412,13 +402,13 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
         let datams = detailMs.data
         if (datams && datams.listQlDinhMucPvcQdMuaSamDtl) {
           this.listHangHoa = datams.listQlDinhMucPvcQdMuaSamDtl
-           this.convertListData()
+          this.convertListData()
         }
       }
     }
   }
 
-   async loadDsHangHoa(soQdMs: string, tableHangHoa : any[]) : Promise<boolean> {
+  async loadDsHangHoa(soQdMs: string, tableHangHoa: any[]): Promise<boolean> {
     let check = true;
     let body = {
       soQdMs: soQdMs,
@@ -427,7 +417,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
         page: this.page - 1,
       },
       loai: '01',
-      trangThai : STATUS.DA_KY
+      trangThai: STATUS.DA_KY
     }
     let res = await this.qdMuaSamService.listTtPbo(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -437,18 +427,18 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
         }
         this.listDiaDiem = res.data.filter(item => tableHangHoa.includes(item.maCcdc))
         this.buildDiaDiemTc()
-        return  check;
+        return check;
       } else {
         if (!this.listDiaDiem) {
           this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
           check = false
-          return  check;
+          return check;
         }
       }
     } else {
       check = false
       this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
-      return  check;
+      return check;
     }
     return check;
   }
@@ -462,7 +452,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
   convertListData() {
     if (this.listHangHoa && this.listHangHoa.length > 0) {
       this.listHangHoa = chain(this.listHangHoa).groupBy('tenCcdc').map((value, key) => ({
-        tenCcdc: key,
+          tenCcdc: key,
           dataChild: value
         })
       ).value()
