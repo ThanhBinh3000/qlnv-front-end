@@ -246,14 +246,14 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       if (!data) {
         return;
       }
-      if (index && index >= 0) {
+      if (index >= 0) {
         this.dataTable[index] = data;
       } else {
-        for (let i = 0; i < this.dataTable.length; i++) {
-          if (this.dataTable[i].maDvi == data.maDvi) {
-            this.dataTable[i] = data
-          }
-        }
+        // if (!this.validateAddDiaDiem(data)) {
+        //   return
+        // }
+        console.log(data, "popup")
+        this.dataTable.push(data);
       }
       this.calculatorTable();
     });
