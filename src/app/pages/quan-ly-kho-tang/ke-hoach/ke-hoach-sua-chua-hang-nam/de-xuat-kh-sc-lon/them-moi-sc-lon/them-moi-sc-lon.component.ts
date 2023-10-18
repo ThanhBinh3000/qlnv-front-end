@@ -126,6 +126,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       this.fileDinhKem = data.fileDinhKems;
       this.canCuPhapLy = data.canCuPhapLys;
       this.dataTableRes = data.chiTiets;
+      console.log(this.dataTableRes, 'this.dataTableRes')
       this.dataTableDm = data.listDanhMuc;
       await this.convertListToTree();
     }
@@ -229,15 +230,15 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         sl = sum;
       }
     } else {
-      if (type == 'duoi') {
-        if (this.dataTable && this.dataTable.length > 0) {
-          let sum = 0;
-          this.dataTable.forEach(item => {
-            sum += this.sumSoLuong(item, row);
-          });
-          sl = sum;
-        }
-
+      // if (type == 'duoi') {
+      if (this.dataTableRes && this.dataTableRes.length > 0) {
+        let arr = this.dataTableRes.filter(item => type == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000);
+        let sum = 0;
+        arr.forEach(item => {
+          sum += item[row]
+        });
+        sl = sum;
+        // }
       }
     }
     return sl;

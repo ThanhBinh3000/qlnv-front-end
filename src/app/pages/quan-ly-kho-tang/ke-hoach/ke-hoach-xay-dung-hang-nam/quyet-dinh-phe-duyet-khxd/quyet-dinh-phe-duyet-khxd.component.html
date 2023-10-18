@@ -72,9 +72,9 @@
           </th>
           <th class="text-center" nzWidth="40px">STT</th>
           <th class="text-center" nzWidth="120px">Năm kế hoạch</th>
-          <th class="text-center" nzWidth="150px">Số quyết định/Số thông báo</th>
-          <th class="text-center" nzWidth="150px">Số tờ trình</th>
-          <th class="text-center" nzWidth="150px">Ngày ký</th>
+          <th class="text-center" nzWidth="150px">Số QĐ/Số TB của BTC/Bộ KHDT</th>
+          <th class="text-center" nzWidth="150px">Số tờ trình của TCDT</th>
+          <th class="text-center" nzWidth="150px">Ngày ký QĐ</th>
           <th class="text-center" nzWidth="">Trích yếu</th>
           <th class="text-center" nzWidth="100px">Trạng thái</th>
           <th class="text-center" nzWidth="150px">Hành động</th>
@@ -138,7 +138,7 @@
           <td>{{ data.ngayKyBtc | date: 'dd/MM/YYYY' }}</td>
           <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td class="text-center">
+          <td class="text-left">
             <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_XEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
