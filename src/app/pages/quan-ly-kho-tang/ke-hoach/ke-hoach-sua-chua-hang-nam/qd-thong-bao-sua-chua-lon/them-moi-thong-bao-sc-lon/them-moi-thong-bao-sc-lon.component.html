@@ -49,7 +49,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired> Năm kế hoạch
                 </nz-form-label>
                 <nz-form-control>
-                  <nz-select nzAllowClear formControlName="namKeHoach">
+                  <nz-select nzAllowClear formControlName="namKeHoach" (ngModelChange)="changeNamKh($event)">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
