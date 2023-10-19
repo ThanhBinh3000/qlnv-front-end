@@ -13,6 +13,7 @@ import {
   DialogThemMoiXuatBanTrucTiepComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component";
 import dayjs from "dayjs";
+import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
 
 @Component({
   selector: 'app-thong-tin-chi-tiet-dieu-chinh',
@@ -24,7 +25,9 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
   @Input() dataInput;
   @Input() isView;
   @Input() isCache;
+  @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup
   dataTable: any[] = [];
 

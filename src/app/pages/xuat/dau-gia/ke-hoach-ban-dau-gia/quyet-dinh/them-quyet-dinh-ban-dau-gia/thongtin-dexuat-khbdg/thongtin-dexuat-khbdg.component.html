@@ -17,7 +17,8 @@
               đấu giá đến hết ngày
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-range-picker formControlName="thoiGianDuKien" (ngModelChange)="onChangeThoiGian($event)" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
+              <nz-range-picker formControlName="thoiGianDuKien" (ngModelChange)="onChangeThoiGian($event)"
+                               nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>
@@ -201,10 +202,12 @@
         <th nzWidth="150px" class="text-center wrap"> Chi cục</th>
         <th nzWidth="150px" class="text-center wrap"> Điểm kho</th>
         <th class="text-center wrap"> Lô kho</th>
-        <th nzWidth="100px" class="text-center wrap"> Mã đơn vị tài sản</th>
-        <th nzWidth="100px" class="text-center wrap"> SL xuất bán đề xuất</th>
+        <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS</th>
+        <th nzWidth="100px"
+            class="text-center wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'SL xuất bán đề xuất' : 'SL xuất bán đề xuất (Kg)'}}</th>
         <th nzWidth="100px" class="text-center wrap"> ĐVT</th>
-        <th nzWidth="100px" class="text-center wrap"> Đơn giá được duyệt (đ)</th>
+        <th nzWidth="100px"
+            class="text-center wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/Kg)'}}</th>
         <th nzWidth="100px" class="text-center wrap"> Giá khởi điểm (đ)</th>
         <th nzWidth="100px" class="text-center wrap"> Số tiền đặt trước (đ)</th>
         <th nzWidth="50px" *ngIf="!isView"> Hành động</th>

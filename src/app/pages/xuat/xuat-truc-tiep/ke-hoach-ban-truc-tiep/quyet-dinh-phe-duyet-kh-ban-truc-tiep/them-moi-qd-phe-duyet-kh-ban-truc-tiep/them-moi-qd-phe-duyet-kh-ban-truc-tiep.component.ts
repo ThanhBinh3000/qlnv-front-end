@@ -29,7 +29,7 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
@@ -47,8 +47,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   @Input() isView: boolean;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
-  @Output()
-  showListEvent = new EventEmitter<any>();
+  @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maHauTo: any;
   listDanhSachTongHop: any[] = [];
   listToTrinh: any[] = [];

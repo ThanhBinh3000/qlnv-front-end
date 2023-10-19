@@ -32,7 +32,7 @@
             </div>
           </div>
           <div nz-col [nzSpan]="3">
-            <label class="search__label"> Số KH/Tờ trình </label>
+            <label class="search__label"> Số công văn/tờ trình</label>
             <input placeholder="nhập số KH/Tờ trình" nz-input formControlName="soTrHdr"/>
           </div>
         </div>
@@ -85,9 +85,9 @@
           <th class="text-center" style="width: 10%;"> Số QĐ PD KH BTT</th>
           <th class="text-center" style="width: 10%;"> Ngày ký QĐ</th>
           <th class="text-center" style="width: 35%;"> Trích yếu</th>
-          <th class="text-center"> Số KH/tờ trình</th>
+          <th class="text-center"> Số công văn/tờ trình</th>
           <th class="text-center"> Mã tổng hợp</th>
-          <th class="text-center" style="width: 12%;" *ngIf="loaiVthh.startsWith('02')"> Loại hàng DTQG</th>
+          <th class="text-center" style="width: 12%;" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU"> Loại hàng DTQG</th>
           <th class="text-center" style="width: 12%;"> Chủng loại hành DTQG</th>
           <th class="text-center" style="width: 8%;"> Số ĐV tài sản</th>
           <th class="text-center" style="width: 8%;">SL HĐ đã ký</th>
