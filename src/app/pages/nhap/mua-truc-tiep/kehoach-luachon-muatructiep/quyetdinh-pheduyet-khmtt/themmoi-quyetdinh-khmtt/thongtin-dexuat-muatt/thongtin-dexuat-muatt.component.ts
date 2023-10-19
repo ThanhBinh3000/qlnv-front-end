@@ -92,19 +92,28 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.tgianMkhoChange = this.dataInput.tgianMkho
         this.tgianKthucChange = this.dataInput.tgianKthuc
-        this.formData.patchValue({
-          tongMucDt: this.dataInput.tongSoLuong * this.dataInput.donGiaVat * 1000
-        })
+
         console.log(this.dataInput.children, "123")
         this.dataTable = this.dataInput.children
         await this.getGiaCuThe(this.formData.value.maDvi);
         this.calculatorTable();
+        this.sumTongMucDt();
       } else {
         this.formData.reset();
       }
     }
     await this.loadDataComboBox();
     await this.spinner.hide()
+  }
+
+  sumTongMucDt(){
+    let sum = 0;
+    this.dataInput.children.forEach(item =>{
+      sum += item.donGiaVat * item.tongSoLuong * 1000
+    })
+    this.formData.patchValue({
+      tongMucDt: sum
+    })
   }
 
   async loadDataComboBox() {
