@@ -119,7 +119,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           ngayTaoDx: data.ngayTaoDx,
           loaiDuAn: data.loaiDuAn,
           trichYeu: data.trichYeu,
-          ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDTC ? dayjs().format('YYYY-MM-DD') : data.ngayDuyet,
+          ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDC ? dayjs().format('YYYY-MM-DD') : data.ngayDuyet,
           trangThai: data.trangThai,
           tenTrangThai: data.tenTrangThai
         });
