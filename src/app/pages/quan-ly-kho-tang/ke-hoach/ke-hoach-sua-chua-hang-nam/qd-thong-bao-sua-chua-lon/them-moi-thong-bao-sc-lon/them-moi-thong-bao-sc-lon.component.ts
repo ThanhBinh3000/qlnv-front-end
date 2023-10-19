@@ -98,7 +98,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
           "limit": 999,
           "page": 0
         },
-        "namKeHoach": this.formData.value.namKeHoach,
+        "maDvi" : this.userInfo.MA_DVI,
+        "namKeHoach": this.formData.value.namKeHoach
       }
       let res = await this.qdScBtcService.search(body);
       console.log(res, "ress")
