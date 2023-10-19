@@ -428,4 +428,11 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       });
     }
   }
+
+  changeNamKh(event: any) {
+    if (event) {
+      this.loadQdBtc();
+      this.loadDsTotrinhTc();
+    }
+  }
 }
