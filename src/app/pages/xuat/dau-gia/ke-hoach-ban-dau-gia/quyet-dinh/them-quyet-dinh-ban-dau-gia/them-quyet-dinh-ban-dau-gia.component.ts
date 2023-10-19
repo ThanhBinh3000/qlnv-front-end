@@ -26,7 +26,7 @@ import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoac
 import {PREVIEW} from "src/app/constants/fileType";
 import {saveAs} from 'file-saver';
 import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
-
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
   templateUrl: './them-quyet-dinh-ban-dau-gia.component.html',
@@ -40,6 +40,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maHauTo: any;
   listDanhSachTongHop: any[] = [];
   listToTrinh: any[] = [];

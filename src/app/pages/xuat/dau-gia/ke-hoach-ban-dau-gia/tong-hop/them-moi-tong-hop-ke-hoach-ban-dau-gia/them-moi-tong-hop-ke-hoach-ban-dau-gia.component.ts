@@ -17,7 +17,7 @@ import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {STATUS} from 'src/app/constants/status';
-import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {PREVIEW} from "src/app/constants/fileType";
 import {saveAs} from 'file-saver';
 import printJS from "print-js";
@@ -33,8 +33,8 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
-  @Output()
-  showListEvent = new EventEmitter<any>();
+  @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formTraCuu: FormGroup;
   isDetailDxCuc: boolean = false;
   isTongHop: boolean = false;

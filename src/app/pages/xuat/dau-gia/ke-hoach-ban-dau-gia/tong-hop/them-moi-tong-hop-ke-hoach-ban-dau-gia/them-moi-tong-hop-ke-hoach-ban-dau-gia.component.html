@@ -179,13 +179,12 @@
           <tr>
             <th nzWidth="50px" class="text-center"> STT</th>
             <th nzWidth="250px" class="text-left wrap"> Cục DTNN KV</th>
-            <th nzWidth="150px" class="text-left wrap"> Số kế hoạch/đề xuất</th>
+            <th nzWidth="150px" class="text-left wrap"> Số công văn/tờ trình</th>
             <th nzWidth="100px" class="text-left wrap"> Ngày ký</th>
             <th nzWidth="250px" class="text-left wrap"> Trích yếu</th>
             <th nzWidth="70px" class="text-center wrap"> SL đơn vị tài sản</th>
-            <th nzWidth="100px" class="text-right wrap">Tổng SL xuất bán đề xuất
-              <span *ngIf="!loaiVthh.startsWith('02')">(đ)</span>
-            </th>
+            <th nzWidth="100px"
+                class="text-right wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán đề xuất' : 'Tổng SL xuất bán đề xuất (Kg)'}}</th>
             <th nzWidth="150px" class="text-right wrap"> Thành tiền Cục đề xuất (đ)</th>
             <th nzWidth="150px" class="text-right wrap"> % Khoản tiền đặt trước (đ)</th>
             <th nzWidth="150px" class="text-right wrap"> Khoản tiền đặt trước đề xuất (đ)</th>

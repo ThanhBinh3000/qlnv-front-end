@@ -389,6 +389,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           dataChiTieu: this.dataChiTieu,
           dataDonGiaDuocDuyet: this.dataDonGiaDuocDuyet,
           loaiVthh: loaiVthhValue,
+          typeLoaiVthh : this.loaiVthh,
           cloaiVthh: cloaiVthhValue,
           tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
           khoanTienDatTruoc: khoanTienDatTruoc,

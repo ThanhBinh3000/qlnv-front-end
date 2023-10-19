@@ -23,7 +23,7 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 import {STATUS} from 'src/app/constants/status';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {saveAs} from 'file-saver';
 import printJS from "print-js";
@@ -39,8 +39,8 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
-  @Output()
-  showListEvent = new EventEmitter<any>();
+  @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formTraCuu: FormGroup;
   isDetailDxCuc: boolean = false;
   isTongHop: boolean = false;

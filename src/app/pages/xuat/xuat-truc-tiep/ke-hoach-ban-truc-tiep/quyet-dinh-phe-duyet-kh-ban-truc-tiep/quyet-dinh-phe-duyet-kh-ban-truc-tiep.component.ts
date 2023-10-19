@@ -9,7 +9,7 @@ import {StorageService} from 'src/app/services/storage.service';
 import {
   QuyetDinhPdKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kh-ban-truc-tiep',
   templateUrl: './quyet-dinh-phe-duyet-kh-ban-truc-tiep.component.html',
@@ -18,6 +18,7 @@ import {
 
 export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   isView = false;
   idThop: number = 0;
   isViewThop: boolean = false;

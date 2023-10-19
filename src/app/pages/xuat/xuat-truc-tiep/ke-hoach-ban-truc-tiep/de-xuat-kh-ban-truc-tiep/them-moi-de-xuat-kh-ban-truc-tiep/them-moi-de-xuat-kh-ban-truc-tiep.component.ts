@@ -375,6 +375,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
           dataChiTieu: this.dataChiTieu,
           dataDonGiaDuocDuyet: this.dataDonGiaDuocDuyet,
           loaiVthh: loaiVthhValue,
+          typeLoaiVthh : this.loaiVthh,
           cloaiVthh: cloaiVthhValue,
           tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
           namKh: this.formData.get('namKh').value,

@@ -172,31 +172,25 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
     }
   }
 
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
+
   disabledNgayTaoTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayTaoDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayTaoDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayTaoDen, 'ngayTao');
   };
 
   disabledNgayTaoDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayTaoTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayTaoTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayTaoTu, 'ngayTao');
   };
 
   disabledNgayDuyetTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayDuyetDen) {
-      return false;
-    }
-    return startValue.getTime() > this.formData.value.ngayDuyetDen.getTime();
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayDuyetDen, 'ngayDuyet');
   };
 
   disabledNgayDuyetDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayDuyetTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayDuyetTu.getTime();
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayDuyetTu, 'ngayDuyet');
   };
 }

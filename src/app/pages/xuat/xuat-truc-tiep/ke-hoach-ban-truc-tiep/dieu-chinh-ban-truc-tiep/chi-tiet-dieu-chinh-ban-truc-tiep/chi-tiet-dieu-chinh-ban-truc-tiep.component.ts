@@ -20,6 +20,7 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-chi-tiet-dieu-chinh-ban-truc-tiep',
@@ -33,6 +34,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maConVan: any;
   maHauTo: any;
   danhSachQdPdKeHoach: any[] = [];

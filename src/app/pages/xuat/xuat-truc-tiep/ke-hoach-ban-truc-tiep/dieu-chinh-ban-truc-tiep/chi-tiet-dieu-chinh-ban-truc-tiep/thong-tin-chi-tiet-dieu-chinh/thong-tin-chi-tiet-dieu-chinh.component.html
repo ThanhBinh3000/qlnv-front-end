@@ -154,9 +154,9 @@
         <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
         <th nzWidth="150px" class="text-left wrap"> Lô kho</th>
         <th nzWidth="90px" class="text-left wrap"> Mã ĐVTS</th>
-        <th nzWidth="80px" class="text-right wrap"> SL xuất bán TT đề xuâ</th>
+        <th nzWidth="80px" class="text-right wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'SL xuất bán TT đề xuất' : 'SL xuất bán TT đề xuất (Kg)'}}</th>
         <th class="text-left"> ĐVT</th>
-        <th nzWidth="80px" class="text-right wrap"> Đơn giá được duyệt (đ)</th>
+        <th nzWidth="80px" class="text-right wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/kg)'}}</th>
         <th nzWidth="80px" class="text-right wrap"> Thành tiền (đ)</th>
         <th class="text-center" *ngIf="!isView"> Hành động</th>
       </tr>
