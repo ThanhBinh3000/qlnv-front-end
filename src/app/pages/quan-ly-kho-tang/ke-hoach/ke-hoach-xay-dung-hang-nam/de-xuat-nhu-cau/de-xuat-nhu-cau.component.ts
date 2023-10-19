@@ -103,7 +103,7 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
 
   async filter() {
     this.formData.patchValue({
-      maDvi: this.userInfo.MA_DVI,
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi
     });
     await this.search();
   }
