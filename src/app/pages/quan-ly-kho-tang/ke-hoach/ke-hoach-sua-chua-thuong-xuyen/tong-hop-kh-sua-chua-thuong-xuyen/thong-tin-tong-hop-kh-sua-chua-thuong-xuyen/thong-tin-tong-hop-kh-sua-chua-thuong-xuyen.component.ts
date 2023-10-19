@@ -384,6 +384,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       this.dataTable = [];
       this.dataTableReq = [];
       let listDataDx = res.data;
+      console.log(listDataDx,"let listDataDx")
       if (listDataDx && listDataDx.content.length > 0) {
         this.isTongHop = true;
         this.listDx = listDataDx.content;
@@ -554,7 +555,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         sl = sum;
       }
     } else {
-      let arr = this.dataTableReq.filter(item => item.soCv == this.itemSelected.soCv);
+      let arr = this.dataTableReq.filter(item => item.tenDvi == this.itemSelected.tenDvi);
       const sum = arr.reduce((prev, cur) => {
         prev += cur[row];
         return prev;

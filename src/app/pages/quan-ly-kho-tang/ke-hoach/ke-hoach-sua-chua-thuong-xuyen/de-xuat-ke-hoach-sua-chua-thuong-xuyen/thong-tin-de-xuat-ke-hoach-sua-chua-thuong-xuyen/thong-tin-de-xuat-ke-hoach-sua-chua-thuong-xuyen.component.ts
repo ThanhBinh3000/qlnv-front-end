@@ -108,6 +108,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soCv: data.soCv ? data.soCv.split('/')[0] : null,
+            ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDTC ? dayjs().format('YYYY-MM-DD') : data.ngayDuyet,
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
