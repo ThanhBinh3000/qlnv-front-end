@@ -82,22 +82,22 @@
     <tr>
       <th>
         <nz-select [(ngModel)]="thongtinPhanLo.maDiemKho" (ngModelChange)="changeDiemKho()">
-          <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+          <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
         </nz-select>
       </th>
       <th>
         <nz-select [(ngModel)]="thongtinPhanLo.maNhaKho" (ngModelChange)="changeNhaKho()">
-          <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+          <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
         </nz-select>
       </th>
       <th>
         <nz-select [(ngModel)]="thongtinPhanLo.maNganKho" (ngModelChange)="changeNganKho()">
-          <nz-option *ngFor="let p of listNganKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+          <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
         </nz-select>
       </th>
       <th>
         <nz-select [(ngModel)]="thongtinPhanLo.maLoKho" (ngModelChange)="changeLoKho()">
-          <nz-option *ngFor="let p of listLoKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+          <nz-option *ngFor="let item of listLoKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
         </nz-select>
       </th>
       <th>
@@ -160,27 +160,26 @@
         </td>
       </ng-container>
       <ng-template #editTemplate>
-        <td>
-          <nz-select [(ngModel)]="editCache[idx].data.maDiemKho" (ngModelChange)="changeDiemKho(idx)">
-            <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.maDvi"
-                       [nzLabel]="p.tenDvi"></nz-option>
+        <th>
+          <nz-select [(ngModel)]="editCache[idx].data.maDiemKho" (ngModelChange)="changeDiemKho(idx, true)">
+            <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
           </nz-select>
-        </td>
-        <td>
-          <nz-select [(ngModel)]="editCache[idx].data.maNhaKho" (ngModelChange)="changeNhaKho(idx)">
-            <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </th>
+        <th>
+          <nz-select [(ngModel)]="editCache[idx].data.maNhaKho" (ngModelChange)="changeNhaKho(idx,true)">
+            <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
           </nz-select>
-        </td>
-        <td>
-          <nz-select [(ngModel)]="editCache[idx].data.maNganKho" (ngModelChange)="changeNganKho(idx)">
-            <nz-option *ngFor="let p of listNganKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </th>
+        <th>
+          <nz-select [(ngModel)]="editCache[idx].data.maNganKho" (ngModelChange)="changeNganKho(idx,true)">
+            <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
           </nz-select>
-        </td>
-        <td>
-          <nz-select [(ngModel)]="editCache[idx].data.maLoKho" (ngModelChange)="changeLoKho(idx)">
-            <nz-option *ngFor="let p of listLoKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </th>
+        <th>
+          <nz-select [(ngModel)]="editCache[idx].data.maLoKho" (ngModelChange)="changeLoKho(idx,true)">
+            <nz-option *ngFor="let item of listLoKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
           </nz-select>
-        </td>
+        </th>
         <td>
           <input nz-input [(ngModel)]="editCache[idx].data.tenCloaiVthh" class="w-150"
                  [disabled]="true"/>
