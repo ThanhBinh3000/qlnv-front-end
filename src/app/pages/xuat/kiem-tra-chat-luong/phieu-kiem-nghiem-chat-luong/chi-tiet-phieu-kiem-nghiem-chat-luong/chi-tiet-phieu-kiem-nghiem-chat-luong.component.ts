@@ -57,7 +57,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   dsBbLayMau: any;
   dsDiaDiem: any;
   maHauTo: any;
-  dsPhuongPhapBq: any[];
+  dsHinhThucBq: any[];
   public vldTrangThai: BienBanLayMauComponent;
   templateName = 'phieu_khiem_nghiem_cl';
 
@@ -187,8 +187,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async loadDanhSachHinhThucBaoQuan(cloaiVthh: string) {
     const res = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
     if (res.msg === MESSAGE.SUCCESS) {
-      const dsPhuongPhapBq = Array.isArray(res.data.phuongPhapBq) ? res.data.phuongPhapBq.map(item => ({ ten: item.giaTri, label: item.giaTri, value: item.ma, type: HINH_THUC_KE_LOT_BAO_QUAN.PHUONG_PHAP_BAO_QUAN })) : [];
-      this.formData.patchValue({ xhPhieuKnclDtl: [...this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== HINH_THUC_KE_LOT_BAO_QUAN.PHUONG_PHAP_BAO_QUAN), ...dsPhuongPhapBq] });
+      const dsHinhThucBq = Array.isArray(res.data.hinhThucBq) ? res.data.hinhThucBq.map(item => ({ ten: item.giaTri, label: item.giaTri, value: item.ma, type: HINH_THUC_KE_LOT_BAO_QUAN.PHUONG_PHAP_BAO_QUAN })) : [];
+      this.formData.patchValue({ xhPhieuKnclDtl: [...this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== HINH_THUC_KE_LOT_BAO_QUAN.PHUONG_PHAP_BAO_QUAN), ...dsHinhThucBq] });
     }
   }
   async save() {
@@ -264,16 +264,16 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     this.viewCtChatLuong = this.formData.value.xhPhieuKnclDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG);
 
     this.dsPpLayMau = [];
-    this.dsPhuongPhapBq = [];
+    this.dsHinhThucBq = [];
     this.formData.value.xhPhieuKnclDtl.forEach(item => {
       if (item.type === BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU) {
         this.dsPpLayMau.push({ ...item, label: item.ten, giaTri: item.ten, checked: true })
       }
       if (item.type === HINH_THUC_KE_LOT_BAO_QUAN.PHUONG_PHAP_BAO_QUAN) {
-        this.dsPhuongPhapBq.push({ ...item, label: item.ten, giaTri: item.ten, checked: true })
+        this.dsHinhThucBq.push({ ...item, label: item.ten, giaTri: item.ten, checked: true })
       }
     });
-    this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsPhuongPhapBq });
+    this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq });
   }
 
   async loadDsPpLayMau() {

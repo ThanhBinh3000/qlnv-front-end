@@ -69,6 +69,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   selectedNode: any;
   templateName: string = "Quyết định giao nhiệm vụ xuất cứu trợ, viện trợ";
   amount = { ...AMOUNT_TWO_DECIMAL, align: "left", min: 0, max: 100 };
+  chuyenXuatCap: boolean = true;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -176,17 +177,17 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.formDataDtl.controls["tyLeThuHoiSauXayXat"].valueChanges.subscribe((value) => {
       const slGaoThuHoiSauXayXat = this.formDataDtl.value.slGaoThuHoiSauXayXat || 0;
       const slThocDeXayXat = value ? slGaoThuHoiSauXayXat * 100 / value : 0;
-      this.formDataDtl.patchValue({ slThocDeXayXat })
+      this.formDataDtl.patchValue({ slThocDeXayXat, soLuong: slThocDeXayXat })
     })
     this.formDataDtl.controls["slGaoThuHoiSauXayXat"].valueChanges.subscribe((value) => {
       const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
-      const slThocDeXayXat = value ? value * 100 / tyLeThuHoiSauXayXat : 0;
-      this.formDataDtl.patchValue({ slThocDeXayXat })
+      const slThocDeXayXat = value && tyLeThuHoiSauXayXat ? value * 100 / tyLeThuHoiSauXayXat : 0;
+      this.formDataDtl.patchValue({ slThocDeXayXat, soLuong: slThocDeXayXat })
     });
     this.formDataDtl.controls["slThocDeXayXat"].valueChanges.subscribe((value) => {
       const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
       const slGaoThuHoiSauXayXat = (value || 0) * tyLeThuHoiSauXayXat / 100;
-      this.formDataDtl.patchValue({ slGaoThuHoiSauXayXat }, { onlySelf: true, emitEvent: false })
+      this.formDataDtl.patchValue({ slGaoThuHoiSauXayXat, soLuong: slGaoThuHoiSauXayXat }, { onlySelf: true, emitEvent: false })
     })
   }
 
@@ -221,6 +222,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             // res.data.dataDtl.forEach(s => s.idVirtual = uuidv4());
             res.data.dataDtl.forEach(s => s.mId = uuidv4());
             this.formData.patchValue({ ...res.data, trangThaiXh: res.data.trangThaiXh ? res.data.trangThaiXh : STATUS.CHUA_THUC_HIEN });
+            await this.getChiTietQuyetDinhXuatCap();
             await this.buildTableView();
           }
         })
@@ -237,7 +239,15 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       });
     }
   }
-
+  async getChiTietQuyetDinhXuatCap() {
+    const idQdPd = this.formData.value.idQdPd;
+    if (idQdPd) {
+      const res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(idQdPd);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.formData.patchValue({ paXuatGaoChuyenXc: res.data.paXuatGaoChuyenXc })
+      }
+    }
+  }
   async loadDsDiaDanh() {
     let body = {
       capDiaDanh: 1
@@ -775,7 +785,12 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
 
   async themPaXuatCapThoc(data: any, level?: number) {
-    this.formDataDtl.patchValue({ ...data, mId: uuidv4(), slThocDeXayXat: 0, slGaoThuHoiSauXayXat: 0, loaiVthh: level === 2 ? LOAI_HANG_DTQG.THOC : data.loaiVthh, cloaiVthh: level === 2 ? null : data.cloaiVthh });
+    this.formDataDtl.patchValue({
+      ...data, mId: uuidv4(), slThocDeXayXat: 0, slGaoThuHoiSauXayXat: 0,
+      loaiVthh: level === 2 ? LOAI_HANG_DTQG.THOC : data.loaiVthh,
+      cloaiVthh: level === 2 ? null : data.cloaiVthh,
+      maDvi: null
+    });
     this.listDonVi.forEach(s => {
       // s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);
       s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi === s.maDvi && s1.noiDungDx === data.noiDungDx && s1.idDx === data.idDx);
@@ -982,8 +997,15 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]);
             this.formDataDtl.controls['soLuong'].updateValueAndValidity();
           } else {
-            this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]);
-            this.formDataDtl.controls['slGaoThuHoiSauXayXat'].updateValueAndValidity();
+            if (this.formData.value.paXuatGaoChuyenXc) {
+              this.formDataDtl.controls['slThocDeXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoCloaiVthh)]);
+              this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(soLuongGiao)]);
+              this.formDataDtl.controls['slThocDeXayXat'].updateValueAndValidity();
+              this.formDataDtl.controls['slGaoThuHoiSauXayXat'].updateValueAndValidity();
+            } else {
+              this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]);
+              this.formDataDtl.controls['slGaoThuHoiSauXayXat'].updateValueAndValidity();
+            }
           }
         }
       }

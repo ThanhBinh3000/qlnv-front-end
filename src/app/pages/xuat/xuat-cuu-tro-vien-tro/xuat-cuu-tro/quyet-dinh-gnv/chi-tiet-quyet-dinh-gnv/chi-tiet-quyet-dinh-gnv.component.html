@@ -427,13 +427,15 @@
                   <td>{{ item.noiDungDx }}</td>
                   <td class="text-right bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                   <td></td>
-                  <td class="text-right">{{item.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right bold">{{item.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="text-right">{{item.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
-                  <td class="text-right">{{item.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
+                  <!-- <td class="text-right">{{item.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right">{{item.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td> -->
+                  <td></td>
+                  <td></td>
                   <ng-container *ngIf="showAction()">
                     <td>
                       <a *ngIf="userService.isCuc()">
@@ -453,11 +455,12 @@
                       <td class="text-right">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td></td>
-                      <td class="text-right">{{lv1.tonKhoDvi}}</td>
+                      <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
-                      <td class="text-right">{{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
+                      <td class="text-right bold">
+                        {{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
                       </td>
-                      <td class="text-right">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right bold">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <ng-container *ngIf="showAction()">
                         <td>
                           <a *ngIf="userService.isCuc()">
@@ -550,7 +553,7 @@
                       <td class="text-right bold">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td></td>
-                      <td class="text-right bold">{{lv1.tonKhoDvi}}</td>
+                      <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td class="text-right">{{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
                       </td>
