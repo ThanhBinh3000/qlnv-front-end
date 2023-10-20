@@ -46,6 +46,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   dataChiTieu: any;
+  maDviSelected: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -97,6 +98,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       noiDungQd: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
+      idHhQdKhlcntDtl: [''],
     });
   }
   maQd: string = '';
@@ -227,7 +229,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         this.fileDinhKems = data.fileDinhKems;
         this.listCcPhapLy = data.listCcPhapLy;
         this.fileDinhKemsTtr = data.fileDinhKemsTtr;
-        await this.getDataChiTieu();
         await this.showDetail(event, this.danhsachDx[0])
       }
     }
@@ -306,7 +307,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
             tgianThienHd: data.tgianThienHd
           })
         }
-        await this.getDataChiTieu();
         await this.showDetail(event, this.danhsachDx[0])
       }
       else {
@@ -464,12 +464,29 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       body.soTtrDc = this.formData.value.soTtrDc + "/" + this.maTrinh;
     }
     let pipe = new DatePipe('en-US');
+    if (this.thongtinDieuchinhComponent.formData.value.tgianMthauTime != null) {
+      this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthauTime, 'HH:mm') + ":00"
+    } else {
+      this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+    }
+    if (this.thongtinDieuchinhComponent.formData.value.tgianDthauTime != null) {
+      this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthauTime, 'HH:mm') + ":00"
+    } else {
+      this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+    }
+    if (this.thongtinDieuchinhComponent.formData.value.tgianMoHoSoTime != null) {
+      this.danhsachDx[this.index].tgianMoHoSo = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSoTime, 'HH:mm') + ":00"
+    } else {
+      this.danhsachDx[this.index].tgianMoHoSo =   pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " 23:59:59"
+    }
     this.danhsachDx[this.index].tgianBdauTchuc = this.thongtinDieuchinhComponent.formData.value.tgianBdauTchuc
     this.danhsachDx[this.index].tgianNhang = this.thongtinDieuchinhComponent.formData.value.tgianNhang
-    this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthau, 'yyyy-MM-dd HH:mm')
-    this.danhsachDx[this.index].tgianDthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthau, 'yyyy-MM-dd HH:mm')
     this.danhsachDx[this.index].tongTien = this.thongtinDieuchinhComponent.formData.value.tongMucDtDx
     this.danhsachDx[this.index].children = this.thongtinDieuchinhComponent.listOfData;
+    this.danhsachDx[this.index].tgianMthauTime = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthauTime, 'yyyy-MM-dd HH:mm')
+    this.danhsachDx[this.index].tgianDthauTime = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthauTime, 'yyyy-MM-dd HH:mm')
+    this.danhsachDx[this.index].tgianMoHoSoTime = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSoTime, 'yyyy-MM-dd HH:mm')
+    this.danhsachDx[this.index].giaBanHoSo = this.thongtinDieuchinhComponent.formData.value.giaBanHoSo
     body.children = this.danhsachDx;
     body.id = this.id;
     body.fileDinhKems = this.fileDinhKems;
@@ -553,15 +570,19 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       this.selected = false
       $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
       $event.target.parentElement.classList.add('selectedRow');
+      this.maDviSelected = this.danhsachDx[index].maDvi
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = cloneDeep(this.danhsachDxCache[index]);
       this.index = index;
+      await this.getDataChiTieu()
       await this.spinner.hide();
     } else {
       this.selected = true
       this.dataInput = this.danhsachDx[0];
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
+      this.maDviSelected = this.danhsachDx[0].maDvi
+      await this.getDataChiTieu()
       await this.spinner.hide();
     }
   }
@@ -574,8 +595,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   async getDataChiTieu() {
-    let res2 =  await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-      +this.formData.get('nam').value,)
+    let res2 =  await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachTheoNamVaDonVi(
+      +this.formData.get('nam').value, this.maDviSelected)
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
     } else {

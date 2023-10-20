@@ -44,6 +44,7 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
   maHopDongSuffix: string = '';
   listToChucTrungDg: any[] = [];
   listDviTsan: any[] = [];
+  listThongTinBenMua: any[] = [];
 
 
   constructor(
@@ -245,17 +246,17 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
                 idQdKqTl: dataQdKq.id,
                 soQdKqTl: dataQdKq.soQd,
                 ngayKyQdkqTl: dataQdKq.ngayKy,
-                soQdTl: dataQdKq.soQdTl,
+                soQdTl: dataQdKq.xhTlQuyetDinhHdr.soQd,
                 loaiHinhNx: dataQdKq.loaiHinhNhapXuat,
                 tenLoaiHinhNx: dataQdKq.tenLoaiHinhNx,
                 kieuNx: dataQdKq.kieuNhapXuat,
                 tenKieuNx: dataQdKq.tenKieuNx,
               });
               const dataThongTin = resttin.data;
+              this.listThongTinBenMua = dataThongTin.childrenNlq.filter(item => item.loai == 'NTG');
               this.listToChucTrungDg = [];
               // Loop data children để lấy ra các teen tổ chức và mã đơn vị tài sản
               // Chỉ lấy ra những Ds HDR có tổ chức cá nhân != null và có id Hợp dồng == null hoặc trùng với id hiện tại
-              console.log(dataThongTin.children);
               dataThongTin.children.filter(x => x.toChucCaNhan != null && (x.idHopDongTl == null || x.idHopDongTl == this.id)).forEach( item => {
                 // Check nếu trùng tổ chức cá nhân sẽ thêm vào mã đơn vị tài sản
                 let find = this.listToChucTrungDg.filter(x => x.key == item.toChucCaNhan);
@@ -299,8 +300,17 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
 
   maDviTsan(event) {
     let thongTin = this.listToChucTrungDg.find(f => f.key === event);
+    let ttBenMua = this.listThongTinBenMua.find(f => f.hoVaTen === event);
     if (thongTin) {
       this.listDviTsan = thongTin.value;
+    }
+    if (ttBenMua) {
+      console.log(ttBenMua)
+      this.formData.patchValue({
+        tenDviBenMua : ttBenMua.hoVaTen,
+        diaChiBenMua : ttBenMua.diaChi,
+        mstBenMua : ttBenMua.soCccd
+      })
     }
   }
 
@@ -391,6 +401,14 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
       }, 0);
       return sum;
     }
+  }
+
+  onChangeNgayHl($event){
+    let day =  dayjs($event).add(15,'day')
+    console.log(day)
+      this.formData.patchValue({
+        thoiHanXuatKho : day.format("YYYY-MM-DD")
+      })
   }
 }
 

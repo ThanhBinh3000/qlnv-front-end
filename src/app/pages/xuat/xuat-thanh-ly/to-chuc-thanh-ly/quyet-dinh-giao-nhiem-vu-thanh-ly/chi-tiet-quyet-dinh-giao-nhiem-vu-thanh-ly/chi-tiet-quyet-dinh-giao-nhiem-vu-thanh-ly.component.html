@@ -121,7 +121,8 @@
                 <nz-form-label [nzNoColon]="true"> Thời gian giao nhận hàng</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="thoiGianGiaoNhan" nzFormat="dd/MM/yyyy" [readonly]="true"/>
+                    <nz-date-picker formControlName="thoiGianGiaoNhan" [nzDisabled]="true" nzFormat="dd/MM/yyyy">
+                    </nz-date-picker>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>

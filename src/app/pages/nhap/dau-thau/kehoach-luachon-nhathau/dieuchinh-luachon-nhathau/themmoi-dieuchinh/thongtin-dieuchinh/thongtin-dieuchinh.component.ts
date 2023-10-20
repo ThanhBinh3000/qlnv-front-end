@@ -17,6 +17,7 @@ import {
   DieuChinhQuyetDinhPdKhlcntService
 } from "../../../../../../../services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service";
 import * as dayjs from "dayjs";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-thongtin-dieuchinh',
@@ -27,6 +28,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
 
   @Input() title;
   @Input() dataInput;
+  @Input() dataGoc;
   @Output() soLuongChange = new EventEmitter<number>();
   @Input() isView: boolean = false;
   @Input() isCache: boolean = false;
@@ -64,7 +66,19 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   listQuy: any[] = [];
 
   STATUS: STATUS
-
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
@@ -141,7 +155,11 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       tongMucDtDx: [],
       tongMucDtDxLamTron: [],
       tenNguonVon: [],
-
+      tgianMthauTime: [],
+      tgianDthauTime: [],
+      tgianMoHoSoTime: [],
+      tgianMoHoSo: [],
+      giaBanHoSo: [],
     });
   }
 
@@ -149,63 +167,40 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     await this.spinner.show()
     let data = null;
     if (changes) {
-      if (this.dataInput) {
+      if (this.dataInput && this.dataGoc) {
         console.log(this.isCache)
+        console.log(this.dataInput)
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.formData.patchValue({
-          tenDuAn: this.dataInput.dxuatKhLcntHdr?.tenDuAn,
-          tenDvi: this.dataInput.dxuatKhLcntHdr?.tenDvi,
-          tenHangHoa: this.dataInput.dxuatKhLcntHdr?.moTaHangHoa,
-          tchuanCluong: this.dataInput.dxuatKhLcntHdr?.tchuanCluong,
-          ctietTccl: this.dataInput.dxuatKhLcntHdr?.ctietTccl,
-          namSxuat: this.dataInput.dxuatKhLcntHdr?.namSxuat,
-          vu: this.dataInput.dxuatKhLcntHdr?.vu,
-          thuHoachVu: this.dataInput.dxuatKhLcntHdr?.thuHoachVu,
-          quocGiaSx: this.dataInput.dxuatKhLcntHdr?.quocGiaSx,
-          namThuHoach: this.dataInput.dxuatKhLcntHdr?.namThuHoach,
-          quy: this.dataInput.dxuatKhLcntHdr?.quy,
-          thueVat: this.dataInput.dxuatKhLcntHdr?.thueVat,
+          tenDuAn: this.dataGoc.dxuatKhLcntHdr?.tenDuAn,
+          tenDvi: this.dataGoc.dxuatKhLcntHdr?.tenDvi,
+          tenHangHoa: this.dataGoc.dxuatKhLcntHdr?.moTaHangHoa,
+          tchuanCluong: this.dataGoc.dxuatKhLcntHdr?.tchuanCluong,
+          ctietTccl: this.dataGoc.dxuatKhLcntHdr?.ctietTccl,
+          namSxuat: this.dataGoc.dxuatKhLcntHdr?.namSxuat,
+          vu: this.dataGoc.dxuatKhLcntHdr?.vu,
+          thuHoachVu: this.dataGoc.dxuatKhLcntHdr?.thuHoachVu,
+          quocGiaSx: this.dataGoc.dxuatKhLcntHdr?.quocGiaSx,
+          namThuHoach: this.dataGoc.dxuatKhLcntHdr?.namThuHoach,
+          quy: this.dataGoc.dxuatKhLcntHdr?.quy,
+          thueVat: this.dataGoc.dxuatKhLcntHdr?.thueVat,
           tgianDthau: this.dataInput.tgianDthau,
           tgianMthau: this.dataInput.tgianMthau,
           tgianNhang: this.dataInput.tgianNhang,
           tgianBdauTchuc: this.dataInput.tgianBdauTchuc,
-          tenLoaiHdong: this.dataInput.dxuatKhLcntHdr?.tenLoaiHdong,
-          tenHthucLcnt: this.dataInput.dxuatKhLcntHdr?.tenHthucLcnt,
-          tenPthucLcnt: this.dataInput.dxuatKhLcntHdr?.tenPthucLcnt,
-          namKhoach: this.dataInput.dxuatKhLcntHdr?.namKhoach
+          tenLoaiHdong: this.dataGoc.dxuatKhLcntHdr?.tenLoaiHdong,
+          tenHthucLcnt: this.dataGoc.dxuatKhLcntHdr?.tenHthucLcnt,
+          tenPthucLcnt: this.dataGoc.dxuatKhLcntHdr?.tenPthucLcnt,
+          namKhoach: this.dataGoc.dxuatKhLcntHdr?.namKhoach,
+          gtriDthau: this.dataGoc.dxuatKhLcntHdr?.gtriDthau,
+          gtriHdong: this.dataGoc.dxuatKhLcntHdr?.gtriHdong,
+          tgianDthauTime: this.dataInput.tgianDthauTime,
+          tgianMthauTime: this.dataInput.tgianMthauTime,
+          tgianMoHoSoTime: this.dataInput.tgianMoHoSoTime,
+          tgianMoHoSo: this.dataInput.tgianMoHoSo,
+          giaBanHoSo: this.dataInput.giaBanHoSo,
         });
-        // let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(this.dataInput.idQdHdr);
-        // if (res != null && res.msg == MESSAGE.SUCCESS) {
-        //   this.helperService.bidingDataInFormGroup(this.formData, res.data);
-        //   this.formData.patchValue({
-        //     tenDuAn: res.data.dxuatKhLcntHdr?.tenDuAn,
-        //     tenDvi: res.data.dxuatKhLcntHdr?.tenDvi,
-        //     tenHangHoa: res.data.dxuatKhLcntHdr?.moTaHangHoa,
-        //     tchuanCluong: res.data.dxuatKhLcntHdr?.tchuanCluong,
-        //     ctietTccl: res.data.dxuatKhLcntHdr?.ctietTccl,
-        //     namSxuat: res.data.dxuatKhLcntHdr?.namSxuat,
-        //     vu: res.data.dxuatKhLcntHdr?.vu,
-        //     thuHoachVu: res.data.dxuatKhLcntHdr?.thuHoachVu,
-        //     quocGiaSx: res.data.dxuatKhLcntHdr?.quocGiaSx,
-        //     namThuHoach: res.data.dxuatKhLcntHdr?.namThuHoach,
-        //     quy: res.data.dxuatKhLcntHdr?.quy,
-        //     thueVat: res.data.dxuatKhLcntHdr?.thueVat,
-        //     tgianDthau: res.data.tgianDthau,
-        //     tgianMthau: res.data.tgianMthau,
-        //     tgianNhang: res.data.tgianNhang,
-        //     tgianBdauTchuc: res.data.tgianBdauTchuc,
-        //     tenLoaiHdong: res.data.dxuatKhLcntHdr?.tenLoaiHdong,
-        //   });
-        // }
-        // if (!this.isCache && this.dataInput.idDcDxHdr != undefined) {
-        //   data = await this.dieuChinhQuyetDinhPdKhlcntService.getDetail(this.dataInput.idDcDxHdr);
-        //   if (data != null && data.msg == MESSAGE.SUCCESS) {
-        //     this.helperService.bidingDataInFormGroup(this.formData, data.data);
-        //   }
-        //   this.listOfData = [...data.data.children]
-        // }else{
-          this.listOfData = [...this.dataInput.children];
-        // }
+        this.listOfData = [...this.dataInput.children];
         this.initListQuy();
         this.tinhTongMucDtDx();
       }
@@ -425,9 +420,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         this.listOfData = [...this.listOfData, res.value]
       }
       this.tinhTongMucDtDx()
-      // this.soLuongChange.emit(soLuong);
-      // this.helperService.setIndexArray(this.listOfData);
-      // this.convertListData();
     });
   };
 
@@ -460,9 +452,11 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     let tongMucDtDx: number = 0;
     let tongSl: number = 0;
     this.listOfData.forEach((item) => {
-      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
-      tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
-      tongSl += item.soLuong
+      item.children.forEach(i => {
+        tongMucDt = tongMucDt + (i.soLuong * i.donGia *1000);
+        tongMucDtDx = tongMucDtDx + (i.soLuong * i.donGiaTamTinh * 1000);
+        tongSl += i.soLuong
+      })
     });
     this.formData.patchValue({
       tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),
@@ -502,5 +496,61 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   deleteChiCuc(i:number, y:number) {
     this.listOfData[i].children.splice(y, 1)
     this.tinhTongMucDtDx()
+  }
+
+  calcTongSl() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum;
+    }
+  }
+
+  calcTongThanhTien() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * item.donGia;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum * 1000;
+    }
+  }
+
+  calcTongThanhTienDx() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * cur.donGiaTamTinh;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum * 1000;
+    }
+  }
+
+  calcTongThanhTienBaoLanh() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * cur.donGiaTamTinh * this.formData.value.gtriDthau / 100;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum * 1000;
+    }
   }
 }

@@ -1,11 +1,11 @@
 <div class="luong-thuc__danh-sach" *ngIf="!isDetail; else templateThemmoi">
   <div class="bg-trang">
-    <h3 class="mt-16">ĐỊNH MỨC NHẬP XUẤT BẢO QUẢN {{capDvi == 1 ? 'TỔNG CỤC' : 'CỤC DTNN KV' }} GIAO</h3>
+    <h3 class="mt-16">ĐỊNH MỨC NHẬP XUẤT BẢO QUẢN {{capDvi == 1 ? 'ĐƯỢC CẤP CÓ THẨM QUYỀN' : 'CỤC DTNN KV' }} GIAO</h3>
     <nz-card class="flex-card p-lr16">
       <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
         <div class="search__body mt-2" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="4">
-            <label class="search__label">Số QĐ</label>
+            <label class="search__label">Số văn bản</label>
             <nz-input-group>
               <input nz-input formControlName="soQd"/>
             </nz-input-group>
@@ -47,7 +47,7 @@
     </nz-card>
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách quyết định định mức phí nhập xuất bảo
-        quản {{capDvi == 1 ? 'tổng cục' : 'cục'}} giao</h3>
+        quản {{capDvi == 1 ? 'được cấp có thẩm quyền ' : 'cục'}} giao</h3>
       <div class="buttons">
         <button type="button"
                 class="btn btn-sub" (click)="exportData()" *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_EXP') && capDvi == 1) || ((userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_EXP') && capDvi == 2)) " >
@@ -75,7 +75,7 @@
                    [nzIndeterminate]="indeterminate"></label>
           </th>
           <th width="60px">STT</th>
-          <th width="130px">Số quyết định</th>
+          <th width="130px">Số văn bản</th>
           <th width="">Trích yếu</th>
           <th width="175px">Ngày ký</th>
           <th width="175px">Ngày hiệu lực</th>

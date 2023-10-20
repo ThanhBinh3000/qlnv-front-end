@@ -183,15 +183,15 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.xhTlToChucHdr?.ngayTao | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.xhTlToChucHdr?.soQdTl }}</td>
-          <td>{{ data.maThongBao}}</td>
+          <td>{{ data.maThongBao }}</td>
           <td>{{ data.xhTlToChucHdr?.tenHthucDgia }}</td>
           <td>{{ data.xhTlToChucHdr?.tenPthucDgia }}</td>
           <td>{{ data.thongBaoKhongThanh }}</td>
-          <td>{{ data.soBienBan}}</td>
+          <td>{{ data.soBienBan }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectDetail(data.id)">
-              <span class="icon htvbdh_eye"></span>
+              <span class="icon h tvbdh_eye"></span>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTL_TCKHBDG_QDKQDG_THEM')">
               <span class="fa fa-pencil"></span>
