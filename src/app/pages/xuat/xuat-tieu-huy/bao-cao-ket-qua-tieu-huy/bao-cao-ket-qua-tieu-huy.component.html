@@ -155,7 +155,7 @@
           <a (click)="redirectDetail(data.id)">
             <span class="icon htvbdh_eye"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTH_BCKQ_THEM')">
+          <a *ngIf="showEdit(data)" (click)="redirectDetail(data.id,'XHDTQG_XTH_BCKQ_THEM')">
             <span class="fa fa-pencil"></span>
           </a>
           <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTH_BCKQ_XOA')">
