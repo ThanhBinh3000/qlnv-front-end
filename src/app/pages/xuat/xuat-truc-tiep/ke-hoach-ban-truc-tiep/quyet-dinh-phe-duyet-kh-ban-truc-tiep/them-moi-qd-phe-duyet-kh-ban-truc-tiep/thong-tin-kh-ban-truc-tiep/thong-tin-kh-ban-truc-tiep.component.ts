@@ -29,6 +29,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   @Input() isTongHop;
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup
   dataTable: any[] = [];
   listNguonVon: any[] = [];
@@ -100,6 +101,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
         dataEdit: data,
         loaiVthh: this.dataInput.loaiVthh,
         cloaiVthh: this.dataInput.cloaiVthh,
+        typeLoaiVthh: this.loaiVthhCache
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {

@@ -96,7 +96,7 @@
                   </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                  <label nz-radio nzValue="TTr"> Số công văn/tờ trình </label>
+                  <label nz-radio nzValue="TTr"> Số công văn/tờ trình</label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabledQD() ? null : openDialogTr()">
                       <input [readonly]="true" nz-input formControlName="soTrHdr" readonly/>
@@ -232,12 +232,12 @@
               <th class="text-center" [width]="30"> STT</th>
               <th class="text-left"> Cục DTNN KV</th>
               <th class="text-left"> Địa chỉ</th>
-              <th class="text-left"> Số kế hoạch/tờ trình</th>
+              <th class="text-left"> Số công văn/tờ trình</th>
               <th class="text-left"> Ngày lập KH</th>
               <th class="text-left"> Ngày duyệt KH</th>
               <th class="text-left"> Trích yếu</th>
               <th class="text-center"> Số ĐV tài sản</th>
-              <th class="text-right"> Tổng SL xuất bán TT (kg)</th>
+              <th class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán TT' : 'Tổng SL xuất bán TT (kg)'}}</th>
             </tr>
             </thead>
             <tbody>

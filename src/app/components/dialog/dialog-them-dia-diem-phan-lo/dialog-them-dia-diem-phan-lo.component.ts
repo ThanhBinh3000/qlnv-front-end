@@ -10,14 +10,13 @@ import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {HelperService} from 'src/app/services/helper.service';
 import {UserLogin} from 'src/app/models/userlogin';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {DanhSachPhanLo, DanhSachXuatBanTrucTiep} from 'src/app/models/KeHoachBanDauGia';
+import {DanhSachPhanLo} from 'src/app/models/KeHoachBanDauGia';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {QuanLyHangTrongKhoService} from 'src/app/services/quanLyHangTrongKho.service';
 import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {cloneDeep} from 'lodash';
-import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-dialog-them-dia-diem-phan-lo',
@@ -26,9 +25,11 @@ import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gi
 })
 
 export class DialogThemDiaDiemPhanLoComponent implements OnInit {
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup;
   thongtinPhanLo: DanhSachPhanLo;
   loaiVthh: any;
+  typeLoaiVthh: any;
   cloaiVthh: any;
   tenCloaiVthh: string;
   dataChiTieu: any;
@@ -123,15 +124,15 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   async loadDonViFromDataChiTieu() {
     const itemsToAdd = [];
-    if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+    if (this.typeLoaiVthh === LOAI_HANG_DTQG.GAO || this.typeLoaiVthh === LOAI_HANG_DTQG.THOC) {
       itemsToAdd.push(
         ...this.dataChiTieu.khLuongThuc?.map(item => ({
           maDvi: item.maDonVi,
           tenDvi: item.tenDonvi,
-          soLuongXuat: this.loaiVthh === LOAI_HANG_DTQG.GAO ? item.xtnTongGao : item.xtnTongThoc
+          soLuongXuat: this.typeLoaiVthh === LOAI_HANG_DTQG.GAO ? item.xtnTongGao : item.xtnTongThoc
         })) || []
       );
-    } else if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
+    } else if (this.typeLoaiVthh === LOAI_HANG_DTQG.MUOI) {
       itemsToAdd.push(
         ...this.dataChiTieu.khMuoiDuTru?.map(item => ({
           maDvi: item.maDonVi,
@@ -139,7 +140,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           soLuongXuat: item.xuatTrongNamMuoi
         })) || []
       );
-    } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+    } else if (this.typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU) {
       const data = this.dataChiTieu.khVatTuXuat.filter(item => {
         if (item.maVatTu === null) {
           return item.maVatTuCha == this.loaiVthh;
@@ -175,9 +176,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   async changeChiCuc(event, isSlChiTieu?) {
     if (isSlChiTieu) {
-      this.formData.patchValue({
-        slChiTieu: null
-      })
+      this.formData.patchValue({slChiTieu: null})
     }
     let body = {
       year: this.namKh,
@@ -192,12 +191,12 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     ]);
     this.listDiemKho = [];
     if (res.msg === MESSAGE.SUCCESS && chiCuc?.soLuongXuat) {
-      const soLuongChiTieu = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc.soLuongXuat : chiCuc.soLuongXuat;
+      const soLuongChiTieu = this.typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU ? chiCuc.soLuongXuat : chiCuc.soLuongXuat;
       this.formData.patchValue({
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
         tongSlKeHoachDd: soLuongDaLenKh.data,
-        slChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI) ? soLuongChiTieu : soLuongChiTieu,
+        slChiTieu: this.typeLoaiVthh === LOAI_HANG_DTQG.MUOI ? soLuongChiTieu : soLuongChiTieu,
       });
       this.listDiemKho = res.data.children.filter(item => item.type === 'MLK');
       this.thongtinPhanLo = new DanhSachPhanLo();
@@ -205,7 +204,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     if (this.dataEdit) {
       await this.getdonGiaDuocDuyet();
     }
-    this.calcTinh();
+    await this.calcTinh();
   }
 
   async changeDiemKho(index?) {
@@ -238,10 +237,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     if (!this.dataDonGiaDuocDuyet || this.dataDonGiaDuocDuyet.length === 0) {
       return;
     }
-    const donGiaDuocDuyet = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)
-      ? this.dataDonGiaDuocDuyet
-      : this.dataDonGiaDuocDuyet.filter(item => item.maChiCuc === this.formData.value.maDvi);
-
+    const donGiaDuocDuyet = this.typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU ? this.dataDonGiaDuocDuyet : this.dataDonGiaDuocDuyet.filter(item => item.maChiCuc === this.formData.value.maDvi);
     if (!donGiaDuocDuyet || donGiaDuocDuyet.length === 0) {
       this.thongtinPhanLo.donGiaDuocDuyet = null;
       return;
@@ -342,8 +338,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   async tonKho(item, index?) {
     const body = {
       maDvi: item.maDvi,
-      loaiVthh: this.loaiVthh === LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
-      ...(this.loaiVthh === LOAI_HANG_DTQG.MUOI ? {} : {cloaiVthh: this.cloaiVthh}),
+      loaiVthh: this.typeLoaiVthh === LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
+      ...(this.typeLoaiVthh === LOAI_HANG_DTQG.MUOI ? {} : {cloaiVthh: this.cloaiVthh}),
     };
     try {
       const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
@@ -533,7 +529,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.editCache[index].data.soTienDtruocDx = this.editCache[index].data.soLuongDeXuat * this.editCache[index].data.donGiaDeXuat * this.khoanTienDatTruoc / 100;
   }
 
-  calcTinh() {
+  async calcTinh() {
     this.listOfData.forEach(item => {
       item.giaKhoiDiemDd = item.donGiaDuocDuyet != null ? item.donGiaDuocDuyet * item.soLuongDeXuat : null;
     });

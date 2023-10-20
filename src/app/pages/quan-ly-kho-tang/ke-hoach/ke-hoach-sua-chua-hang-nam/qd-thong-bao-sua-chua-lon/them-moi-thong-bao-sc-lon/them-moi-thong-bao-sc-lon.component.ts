@@ -98,7 +98,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
           "limit": 999,
           "page": 0
         },
-        // "namKeHoach": this.formData.value.namKeHoach,
+        "maDvi" : this.userInfo.MA_DVI,
+        "namKeHoach": this.formData.value.namKeHoach
       }
       let res = await this.qdScBtcService.search(body);
       console.log(res, "ress")
@@ -130,7 +131,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       let body = {
         "maDvi": this.userInfo.MA_DVI,
         "capDvi": this.userInfo.CAP_DVI,
-        // "namKeHoach": this.formData.value.namKeHoach,
+        "namKeHoach": this.formData.value.namKeHoach,
         "maTongHop": "",
         "noiDung": "",
         "ngayTongHopTu": "",
@@ -425,6 +426,13 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
           });
         }
       });
+    }
+  }
+
+  changeNamKh(event: any) {
+    if (event) {
+      this.loadQdBtc();
+      this.loadDsTotrinhTc();
     }
   }
 }

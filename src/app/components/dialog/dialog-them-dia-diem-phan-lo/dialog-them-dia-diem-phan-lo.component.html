@@ -67,22 +67,14 @@
       <th nzWidth="150px" class="text-center wrap"> Nhà kho</th>
       <th nzWidth="150px" class="text-center wrap"> Ngăn kho</th>
       <th nzWidth="150px" class="text-center wrap"> Lô Kho</th>
-      <th nzWidth="100px" class="text-center wrap"> Chủng loại hàng hóa</th>
+      <th nzWidth="100px" class="text-center wrap"> Chủng loại hàng DTQG</th>
       <th nzWidth="150px" class="text-center wrap"> Mã đơn vị tài sản</th>
       <th nzWidth="100px" class="text-center wrap"> Tồn kho</th>
       <th nzWidth="100px" class="text-center wrap"> SL xuất bán đề xuất</th>
-      <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')"> Đơn giá đề xuất
-        (đ/kg)
-      </th>
-      <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')"> Đơn giá đề xuất
-        (đ)
-      </th>
-      <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')"> Đơn giá được
-        duyệt (đ/kg)
-      </th>
-      <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')"> Đơn giá được duyệt
-        (đ)
-      </th>
+      <th nzWidth="100px"
+          class="text-center wrap">{{typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá đề xuất (đ)' : 'Đơn giá đề xuất (đ/kg)'}}</th>
+      <th nzWidth="100px"
+          class="text-center wrap">{{typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/kg)'}}</th>
       <th nzWidth="100px" class="text-center wrap"> Thành tiền đề xuất (đ)</th>
       <th nzWidth="100px" class="text-center wrap"> Thành tiền được duyệt (đ)</th>
       <th nzWidth="70px" class="text-center"> Hành động</th>

@@ -1,7 +1,7 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item nzSelected (click)="selectTab(0)"
-        *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KHBDG') && !userService.isChiCuc()">
+        *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KHBDG')">
       Kế hoạch bán đấu giá
     </li>
     <li nz-menu-item (click)="selectTab(1)"
@@ -21,11 +21,11 @@
       Quyết định giao nhiệm vụ xuất hàng
     </li>
     <li nz-menu-item (click)="selectTab(5)"
-        *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KTCL') && !userService.isTongCuc()">
+        *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_KTCL')">
       Kiểm tra chất lượng
     </li>
     <li nz-menu-item (click)="selectTab(6)"
-        *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_XK') && !userService.isTongCuc()">
+        *ngIf=" userService.isAccessPermisson('XHDTQG_PTDG_XK')">
       Xuất kho
     </li>
   </ul>

@@ -139,7 +139,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số kế hoạch/ tờ trình</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số công văn/tờ trình</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maHauTo}}">
                 <nz-input-number formControlName="soDxuat" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
@@ -479,18 +479,11 @@
         <th nzWidth="100px" class="text-center wrap"> Tồn kho</th>
         <th nzWidth="100px" class="text-center wrap"> SL xuất bán đề xuất</th>
         <th nzWidth="100px" class="text-center wrap"> ĐVT</th>
-        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU"> Đơn giá đề xuất
-          (đ/kg)
-        </th>
-        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU"> Đơn giá đề xuất (đ)
-        </th>
+        <th nzWidth="100px"
+            class="text-center wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá đề xuất (đ)' : 'Đơn giá đề xuất (đ/kg)'}}</th>
         <th nzWidth="100px" class="text-center wrap"> Giá khởi điểm đề xuất (đ)</th>
-        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU"> Đơn giá được duyệt
-          (đ/kg)
-        </th>
-        <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU"> Đơn giá được duyệt
-          (đ)
-        </th>
+        <th nzWidth="100px"
+            class="text-center wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/kg)'}}</th>
         <th nzWidth="100px" class="text-center wrap"> Giá khởi điểm được duyệt (đ)</th>
         <th nzWidth="100px" class="text-center wrap"> Số tiền đặt trước đề xuất (đ)</th>
         <th nzWidth="100px" class="text-center wrap"> Số tiền đặt trước được duyệt (đ)</th>
@@ -565,7 +558,7 @@
         <th style="width: 2%"> STT</th>
         <th style="width: 40%"> Tên chi cục</th>
         <th style="width: 40%"> Địa chỉ</th>
-        <th style="width: 10%"> Số lượng (Kg)</th>
+        <th style="width: 10%"> {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số lượng' : 'Số lượng (kg)'}}</th>
       </tr>
       </thead>
       <tbody>
