@@ -22,6 +22,7 @@ import {
 import {STATUS} from "../../../../../../constants/status";
 import {Base3Component} from "../../../../../../components/base3/base3.component";
 import {ActivatedRoute, Router} from "@angular/router";
+import dayjs from "dayjs";
 
 
 @Component({
@@ -109,28 +110,22 @@ export class QuanLyHopDongThanhLyComponent extends Base3Component implements OnI
           const dataTc = resTc.data
           this.formData.patchValue({
             nam: dataQdKq.nam,
-            soQdTl: dataQdKq.soQdTl,
-            soHoSo: dataQdKq.soBienBan,
+            soQdTl: dataQdKq.xhTlQuyetDinhHdr?.soQd,
+            soHoSo: dataQdKq.xhTlQuyetDinhHdr?.soHoSo,
             tenDvi: dataQdKq.tenDvi,
-            tongTienGiaKdiem: dataQdKq.thanhTien,
-            tgianTtoan: dataTc.thoiHanThanhToan,
-            tgianGnhan: dataTc.thoiHanGiaoNhan,
-            pthucTtoan: dataTc.pthucTtoan,
-            loaiHinhNx: dataQdKq.loaiHinhNhapXuat,
+            tongTienGiaKdiem: dataQdKq.xhTlQuyetDinhHdr?.tongGiaKhoiDiem,
+            tgianThanhLy : 'Từ ' + dayjs(dataQdKq.xhTlQuyetDinhHdr?.thoiGianTlTu).format('DD/MM/YYYY') + ' đến ' + dayjs(dataQdKq.xhTlQuyetDinhHdr?.thoiGianTlDen).format('DD/MM/YYYY'),
+            tgianTtoan: '3',
+            tgianGnhan: '15',
+            pthucTtoan: 'Giao hàng tại cửa kho',
             tenLoaiHinhNx: dataQdKq.tenLoaiHinhNx,
-            kieuNx: dataQdKq.kieuNhapXuat,
             tenKieuNx: dataQdKq.tenKieuNx,
-            trangThaiHd: dataQdKq.trangThaiHd,
-            tenTrangThaiHd: dataQdKq.tenTrangThaiHd
+            tenTrangThaiHd: dataQdKq.tenTrangThaiHd,
+            tongSoDviTsanDg : dataQdKq.xhTlQuyetDinhHdr?.tongDviTsan,
+            soLuongDviTsanTrung : dataQdKq.xhTlQuyetDinhHdr?.tongDviTsanThanhCong,
+            soLuongDviTsanTruot : dataQdKq.xhTlQuyetDinhHdr?.tongDviTsanKhongThanhCong
           })
-          // this.listAllDviTsan = dataTc.toChucDtl;
-          // this.listAllDviTsan = this.listAllDviTsan.filter((item) => {
-          //   return item.toChucCaNhan !== null && item.soLanTraGia > 0
-          // }).map(item => item.maDviTsan);
           this.dataTable = dataQdKq.listHopDong;
-          console.log(this.dataTable);
-          // this.listDviTsanDaKy = this.dataTable.filter(item => item.trangThai == STATUS.DA_KY);
-          // this.listDviTsanDaKy = this.listDviTsanDaKy.map(item => item.maDviTsan.split(",")).flat();
         }
       }
     }

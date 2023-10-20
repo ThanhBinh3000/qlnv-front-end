@@ -195,6 +195,9 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
+        this.formData.patchValue({
+          id : data.id
+        })
         this.pheDuyet();
       } else {
         this.goBack()
