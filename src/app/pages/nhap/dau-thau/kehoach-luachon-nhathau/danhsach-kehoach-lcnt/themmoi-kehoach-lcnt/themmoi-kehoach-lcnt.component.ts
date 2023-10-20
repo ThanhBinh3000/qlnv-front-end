@@ -774,6 +774,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
 
   onChangeNamKh() {
     this.getDataChiTieu();
+    this.initListQuy()
   }
 
   downloadFile(taiLieu: any) {
