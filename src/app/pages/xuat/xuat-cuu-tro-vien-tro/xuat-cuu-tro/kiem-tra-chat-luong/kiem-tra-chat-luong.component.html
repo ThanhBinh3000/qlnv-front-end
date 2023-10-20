@@ -25,13 +25,13 @@
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
   <app-bien-ban-lay-mau [loaiVthh]="typeVthh" [loaiXuat]="'CTVT'" [inputService]="bienBanLayMauService"
-    [inputServiceGnv]="quyetDinhGiaoNvCuuTroService" [loaiChon]="'radio'">
+    [inputServiceGnv]="quyetDinhGiaoNvCuuTroService" [loaiChon]="'radio'" [maQuyen]="maQuyenBBLM">
   </app-bien-ban-lay-mau>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
   <app-phieu-kiem-nghiem-chat-luong [loaiVthh]="typeVthh" [loaiXuat]="'CTVT'"
     [inputService]="phieuKiemNghiemChatLuongService" [inputServiceGnv]="quyetDinhGiaoNvCuuTroService"
-    [inputServiceBbLayMau]="bienBanLayMauService" [maQuyen]="maQuyen">
+    [inputServiceBbLayMau]="bienBanLayMauService" [maQuyen]="maQuyenPKNCL">
   </app-phieu-kiem-nghiem-chat-luong>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2 && typeVthh ==='02'">

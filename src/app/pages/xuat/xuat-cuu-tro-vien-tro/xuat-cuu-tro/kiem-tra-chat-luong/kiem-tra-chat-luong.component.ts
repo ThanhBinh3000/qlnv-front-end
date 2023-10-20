@@ -89,6 +89,7 @@ import {
   QuyetDinhGiaoNvCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
 import { MA_QUYEN_PKNCL } from '../../../kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
+import { MA_QUYEN_BBLM } from '../../../kiem-tra-chat-luong/bien-ban-lay-mau/bien-ban-lay-mau.component';
 
 @Component({
   selector: 'app-kiem-tra-chat-luong',
@@ -99,7 +100,7 @@ export class KiemTraChatLuongComponent implements OnInit {
   @Input() typeVthh: string;
   tabs: any[] = [];
   loaiVthhSelected: string;
-  maQuyen: MA_QUYEN_PKNCL = {
+  maQuyenPKNCL: MA_QUYEN_PKNCL = {
     XEM: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM",
     THEM: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_THEM",
     XOA: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XOA",
@@ -107,6 +108,15 @@ export class KiemTraChatLuongComponent implements OnInit {
     DUYET_LDC: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_LDCUC",
     IN: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_IN",
     EXPORT: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_EXP",
+
+  };
+  maQuyenBBLM: MA_QUYEN_BBLM = {
+    XEM: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XEM",
+    THEM: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM",
+    XOA: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA",
+    DUYET_LDCC: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC",
+    IN: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_IN",
+    EXPORT: "XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_EXP",
 
   };
 
