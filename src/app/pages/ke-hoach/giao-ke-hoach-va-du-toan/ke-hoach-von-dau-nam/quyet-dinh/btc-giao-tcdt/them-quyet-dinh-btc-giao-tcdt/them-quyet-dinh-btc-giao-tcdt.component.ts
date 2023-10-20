@@ -11,12 +11,14 @@ import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
 import { QuyetDinhBtcTcdtService } from 'src/app/services/quyetDinhBtcTcdt.service';
 import { MESSAGE } from 'src/app/constants/message';
+import { saveAs } from 'file-saver';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { KeHoachNhapXuatLtComponent } from './ke-hoach-nhap-xuat-lt/ke-hoach-nhap-xuat-lt.component';
 import { STATUS } from '../../../../../../../constants/status';
-import { FILETYPE } from '../../../../../../../constants/fileType';
+import { FILETYPE, PREVIEW } from '../../../../../../../constants/fileType';
 import { QuyetDinhTtcpService } from '../../../../../../../services/quyetDinhTtcp.service';
 import { chain, cloneDeep } from 'lodash';
+import printJS from 'print-js';
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-tcdt',
@@ -84,6 +86,17 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   dtMuaVatTu: number = 0;
   dtMuaMuoi: number = 0;
   yearCurrentView: number = 0;
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  reportTemplate: any = {
+    typeFile: '',
+    fileName: '',
+    tenBaoCao: '',
+    trangThai: '',
+  };
 
 
   constructor(
@@ -197,7 +210,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   }
 
   changeNam($event) {
-    console.log($event, '2222222');
     this.loadQdTtcpGiaoBoNganh($event);
   }
 
@@ -381,6 +393,41 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     });
     this.dtMuaVatTu = ttVatTu;
     this.dtMuaMuoi = ttMuoi;
+  }
+
+  templateName = 'QD-BTC giao TCDT.docx';
+
+  async preview(id) {
+    this.spinner.show();
+    await this.quyetDinhBtcTcdtService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }
 
