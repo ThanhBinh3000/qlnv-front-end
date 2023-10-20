@@ -5,7 +5,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span class='text-uppercase'>Định mức phí nhập xuất bảo quản {{capDvi == 1 ? 'tổng cục' : 'cục'}} giao</span>
+        <span class='text-uppercase'>Định mức phí nhập xuất bảo quản {{capDvi == 1 ? 'được cấp có thẩm quyền' : 'cục'}} giao</span>
       </div>
     </div>
     <nz-alert *ngIf='formData.value.trangThai == STATUS.TU_CHOI_LDV ' nzShowIcon nzType='error'
@@ -17,7 +17,8 @@
         <i class='fa fa-arrow-left'></i>
         <span>Quay lại</span>
       </button>
-      <button type='button' class='btn btn-info ml-2' (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có muốn ban hành?','Bạn đã ban hành thành công!')"
+      <button type='button' class='btn btn-info ml-2'
+              (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có muốn ban hành?','Bạn đã ban hành thành công!')"
               *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_THEM') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_THEM') && userService.isCuc() && capDvi == 2)">
         <i class='icon htvbdh_chuyenvanthu'></i>
         <span>Ban hành</span>
@@ -42,7 +43,7 @@
         <div nz-col nzSpan='4'>
           <nz-form-item>
             <nz-form-control [nzErrorTip]='error'>
-              <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Số quyết định</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Số văn bản</nz-form-label>
               <input nz-input formControlName='soQd' [readonly]='isViewDetail' />
             </nz-form-control>
           </nz-form-item>
@@ -56,7 +57,7 @@
           </nz-form-item>
         </div>
         <div nz-col nzSpan='3'>
-          <nz-form-label [nzNoColon]='true' nzRequired class='label-color-kh'> Ngày ký QĐ
+          <nz-form-label [nzNoColon]='true' nzRequired class='label-color-kh'> Ngày ký
           </nz-form-label>
           <nz-form-control [nzErrorTip]='error'>
             <nz-date-picker class='search__input' nzFormat='dd/MM/yyyy'
@@ -109,7 +110,7 @@
       <tr>
         <th rowspan='3' width='40px'>STT</th>
         <th rowspan='3' width='100px'>Mã định mức</th>
-        <th rowspan='3' width='100px'>Tên định mức</th>
+        <th rowspan='3' width='400px'>Tên định mức</th>
         <th rowspan='3' width='200px'>Áp dụng tại {{capDvi == 1 ? 'cục' : 'chi cục'}}</th>
         <th rowspan='3' [nzWidth]="'150px'">Đơn vị tính</th>
         <th rowspan='3' width='150px' *ngIf='capDvi == 2'>Tổng định mức theo <br /> QĐ của TCDT</th>
@@ -153,7 +154,8 @@
         <th>
           <nz-select [(ngModel)]='rowItem.tenDinhMuc' [nzDisabled]='isViewDetail' (ngModelChange)="changeDm('ten')"
                      (ngModelChange)='updateAllChecked()' nzAllowClear='true'>
-            <nz-option *ngFor='let p of listDmDinhMuc' [nzValue]='p.tenDinhMuc' [nzLabel]='p.tenDinhMuc'>
+            <nz-option *ngFor='let p of listDmDinhMuc' [nzValue]='p.tenDinhMuc' [nzLabel]='p.tenDinhMuc'
+            >
             </nz-option>
             <ng-template #error let-control>
               <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -168,6 +170,7 @@
             nzPlaceHolder='Chọn đơn vị áp dụng'
             nzAllowClear
             [(ngModel)]=rowItem.apDungTai>
+            <nz-option [nzLabel]="'Tất cả'" [nzValue]="''"></nz-option>
             <nz-option *ngFor='let option of listDonVi' [nzValue]='option.maDvi'
                        [nzLabel]='option.tenDvi'></nz-option>
           </nz-select>
@@ -292,7 +295,8 @@
       <tr *ngFor='let data of dataTableDetail; let idx = index'>
         <ng-container *ngIf='(dataEdit && dataEdit[idx] && !dataEdit[idx].edit); else editTemplate'>
           <td class='text-center'>{{idx + 1}}</td>
-          <td>{{data.maDinhMuc}}</td>
+          <td>
+            {{data.maDinhMuc}}</td>
           <td>{{data.tenDinhMuc}}</td>
           <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả '}}</td>
           <td>{{data.donViTinh}}</td>
@@ -326,10 +330,31 @@
         <ng-template #editTemplate>
           <td></td>
           <td>
-            {{dataEdit[idx].data.maDinhMuc}}
+            <nz-select [(ngModel)]='dataEdit[idx].data.maDinhMuc'
+                       (ngModelChange)="changeDmEdit('ma',idx)"
+                       nzAllowClear='true'>
+              <nz-option *ngFor='let p of listDmDinhMuc' [nzValue]='p.maDinhMuc' [nzLabel]='p.maDinhMuc'>
+              </nz-option>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                </ng-container>
+              </ng-template>
+            </nz-select>
+            <!--            {{dataEdit[idx].data.maDinhMuc}}-->
           </td>
           <td>
-            {{dataEdit[idx].data.tenDinhMuc}}
+            <nz-select [(ngModel)]='dataEdit[idx].data.tenDinhMuc'
+                       (ngModelChange)="changeDmEdit('ten',idx)"
+                       (ngModelChange)='updateAllChecked()' nzAllowClear='true'>
+              <nz-option *ngFor='let p of listDmDinhMuc' [nzValue]='p.tenDinhMuc' [nzLabel]='p.tenDinhMuc'
+              >
+              </nz-option>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                </ng-container>
+              </ng-template>
+            </nz-select>
+            <!--            {{dataEdit[idx].data.tenDinhMuc}}-->
           </td>
           <td>
             {{dataEdit[idx].data.apDungTai ? dataEdit[idx].data.apDungTai : 'Tất cả '}}
