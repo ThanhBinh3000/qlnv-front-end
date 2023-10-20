@@ -91,6 +91,9 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
+        loaiVthh: this.dataInput.loaiVthh,
+        cloaiVthh: this.dataInput.cloaiVthh,
+        typeLoaiVthh: this.loaiVthhCache
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {
