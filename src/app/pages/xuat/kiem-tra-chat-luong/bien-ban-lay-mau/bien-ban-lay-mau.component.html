@@ -79,18 +79,18 @@
             <th width="60px" class="text-center">STT</th>
             <th width="">Số QĐ giao nhiệm vụ XH</th>
             <th width="">Năm KH</th>
-            <th width="">Thời hạn XH trước ngày</th>
+            <th width="">Thời hạn XH</th>
             <th width="">Điểm Kho</th>
+            <th width="">Ngăn/Lô kho</th>
             <th width="">Số BB LM/BGM</th>
             <th width="">Ngày lấy mẫu</th>
-            <th width="">Lô kho</th>
             <th width="">Số BB tịnh kho</th>
             <th width="">Ngày xuất dốc kho</th>
             <th width="">Số BB hao dôi</th>
             <th width="">Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
-          <tr class="search-table">
+          <!-- <tr class="search-table">
             <th></th>
             <th></th>
             <th>
@@ -111,6 +111,19 @@
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQdGiaoNvXh"
                   (input)="filterInTable('ngayQdGiaoNvXh',filterTable.ngayQdGiaoNvXh)" size="small" />
               </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
+                  (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
+              </nz-input-group>
+
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"
+                  (input)="filterInTable('tenLoKho',filterTable.tenLoKho)" size="small" />
+              </nz-input-group>
 
             </th>
             <th>
@@ -129,21 +142,6 @@
                 <i nz-icon nzType="calendar"></i>
               </ng-template>
             </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
-                  (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
-              </nz-input-group>
-
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"
-                  (input)="filterInTable('tenLoKho',filterTable.tenLoKho)" size="small" />
-              </nz-input-group>
-
-            </th>
-
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"
@@ -175,7 +173,7 @@
 
             </th>
             <th></th>
-          </tr>
+          </tr> -->
         </thead>
         <tbody>
           <ng-container *ngFor="let item of basicTable.data, let i = index;">
@@ -230,9 +228,9 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>{{lv2.soBbQd}}</td>
-                      <td>{{lv2.ngayTao | date:globals.dateFormat}}</td>
                       <td>{{lv2.tenLoKho ? lv2.tenLoKho + ' - ' + lv2.tenNganKho : lv2.tenLoKho}}</td>
+                      <td>{{lv2.soBbQd}}</td>
+                      <td>{{lv2.ngayBbLayMau | date:globals.dateFormat}}</td>
                       <td>{{lv2.soBbTinhKho}}</td>
                       <td>{{lv2.ngayXuatDocKho | date:globals.dateFormat}}</td>
                       <td>{{lv2.soBbHaoDoi}}</td>
