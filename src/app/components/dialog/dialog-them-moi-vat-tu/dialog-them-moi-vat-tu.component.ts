@@ -338,7 +338,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   async addChiCuc() {
     await this.onChangeChiCuc(this.thongTinChiCuc.maDvi);
-    if (this.validateDataAdd('chiCuc')) {
+    if (this.validateDataAdd('chiCuc') && this.validateSlChiCucAdd()) {
       if (this.thongTinChiCuc.maDvi) {
         this.thongTinChiCuc.children = [];
         this.listOfData = [...this.listOfData, this.thongTinChiCuc];
@@ -365,6 +365,15 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
       }
+    }
+  }
+  validateSlChiCucAdd() {
+    const soLuongConLai = this.thongTinChiCuc.soLuongTheoChiTieu - this.thongTinChiCuc.soLuongDaMua
+    if (this.thongTinChiCuc.soLuong > soLuongConLai) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu ")
+      return false
+    } else {
+      return true;
     }
   }
 

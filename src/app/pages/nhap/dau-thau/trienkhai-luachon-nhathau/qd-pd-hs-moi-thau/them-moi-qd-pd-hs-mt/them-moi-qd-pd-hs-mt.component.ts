@@ -18,6 +18,7 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {DatePipe} from "@angular/common";
 @Component({
   selector: 'app-them-moi-qd-pd-hs-mt',
   templateUrl: './them-moi-qd-pd-hs-mt.component.html',
@@ -60,10 +61,14 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
       ghiChu: [""],
       tenDuAn: [""],
       tenLoaiVthh: [""],
+      tenCloaiVthh: [""],
       loaiVthh: [""],
       tchuanCluong: [""],
       quy: [""],
-      tgianBdauTchuc: [""],
+      tgianBdauTchuc: [],
+      tgianDthauTime: [],
+      tgianMthauTime: [],
+      gtriDthau: [],
     })
   }
 
@@ -117,17 +122,28 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.formData.patchValue({
-          soQdPdKhlcnt: data.soQd,
-          idQdPdKhlcnt: data.id,
-          tenDuAn: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tenDuAn : data.tenDuAn,
-          tenLoaiVthh: data.tenLoaiVthh,
-          loaiVthh: data.loaiVthh,
-          tchuanCluong: data.dxKhlcntHdr?.tchuanCluong,
-          quy: data.dxKhlcntHdr?.quy,
-          tgianBdauTchuc: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc,
+        data.children.forEach(chiCuc => {
+          if (chiCuc.maDvi == this.userInfo.MA_DVI) {
+            this.formData.patchValue({
+              soQdPdKhlcnt: data.soQd,
+              idQdPdKhlcnt: data.id,
+              tenDuAn: chiCuc.tenDuAn,
+              tenLoaiVthh: chiCuc.tenLoaiVthh,
+              tenCloaiVthh: chiCuc.tenCloaiVthh,
+              loaiVthh: chiCuc.loaiVthh,
+              cloaiVthh: chiCuc.cloaiVthh,
+              tchuanCluong: chiCuc.dxuatKhLcntHdr?.tchuanCluong,
+              quy: chiCuc.dxuatKhLcntHdr?.quy,
+              gtriDthau: chiCuc.dxuatKhLcntHdr?.gtriDthau,
+              tgianBdauTchuc: chiCuc.tgianBdauTchuc,
+              tgianDthauTime: chiCuc.tgianDthauTime,
+              tgianDthau: chiCuc.tgianDthau,
+              tgianMthauTime: chiCuc.tgianMthauTime,
+              tgianMthau: chiCuc.tgianMthau,
+            })
+            this.listOfData = chiCuc.children
+          }
         })
-        this.listOfData = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
       }
     });
   }
@@ -140,11 +156,28 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
     //   await this.spinner.hide();
     //   return;
     // }
+    let pipe = new DatePipe('en-US');
+    if (this.formData.value.tgianMthau != null) {
+      if (this.formData.value.tgianMthauTime != null) {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+      }
+    }
+    if (this.formData.value.tgianDthau != null) {
+      if (this.formData.value.tgianDthauTime != null) {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianDthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+      }
+    }
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     body.listCcPhapLy = this.listCcPhapLy;
+    body.tgianMthauTime = pipe.transform(body.tgianMthauTime, 'yyyy-MM-dd HH:mm')
+    body.tgianDthauTime = pipe.transform(body.tgianDthauTime, 'yyyy-MM-dd HH:mm')
     let res = null;
     if (this.formData.get("id").value) {
       res = await this.quyetDinhPheDuyetHsmtService.update(body);
@@ -243,14 +276,22 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
         soQd: data.soQd?.split("/")[0],
         soQdPdKhlcnt: data.qdKhlcntHdr.soQd,
         idQdPdKhlcnt: data.qdKhlcntHdr.id,
-        tenDuAn: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tenDuAn : data.qdKhlcntHdr.tenDuAn,
         tenLoaiVthh: data.qdKhlcntHdr.tenLoaiVthh,
         loaiVthh: data.qdKhlcntHdr.loaiVthh,
-        tchuanCluong: data.qdKhlcntHdr.dxKhlcntHdr.tchuanCluong,
-        quy: data.qdKhlcntHdr.dxKhlcntHdr.quy,
-        tgianBdauTchuc: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tgianBdauTchuc : data.qdKhlcntHdr.tgianBdauTchuc,
+        tenCloaiVthh: data.qdKhlcntHdr.tenCloaiVthh,
+        cloaiVthh: data.qdKhlcntHdr.cloaiVthh,
+        tgianBdauTchuc: data.tgianBdauTchuc
       });
-      this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
+      data.qdKhlcntHdr.children.forEach(cuc => {
+        if (cuc.maDvi == this.userInfo.MA_DVI) {
+          this.formData.patchValue({
+            tenDuAn: cuc.dxuatKhLcntHdr?.tenDuAn,
+            tchuanCluong: cuc.dxuatKhLcntHdr?.tchuanCluong,
+            quy: cuc.dxuatKhLcntHdr?.quy,
+          });
+          this.listOfData = cuc.children
+        }
+      })
       this.listCcPhapLy = data.listCcPhapLy;
     }
   }
@@ -258,5 +299,4 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
   async onChangeNamKh() {
     this.initListQuy();
   }
-
 }
