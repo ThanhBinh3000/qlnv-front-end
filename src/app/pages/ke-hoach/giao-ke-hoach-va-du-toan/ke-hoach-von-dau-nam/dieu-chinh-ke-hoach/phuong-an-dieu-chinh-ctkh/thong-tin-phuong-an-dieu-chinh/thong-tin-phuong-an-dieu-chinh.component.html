@@ -519,9 +519,7 @@
                 (sumTotalKhDuTruLuongThuc.tkcnTongGao) : 0) |
                 number: '1.0-3': 'vi_VN'}}
               </th>
-              <!-- <td class="background-last-row"></td> -->
-              <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
+              <th></th>
             </tr>
             <tr>
               <th></th>
@@ -671,7 +669,7 @@
                   <th rowSpan="2" class="text-center">Chủng loại hàng</th>
                   <th rowSpan="2" class="text-center">Đơn vị tính</th>
                   <th colSpan="3" class="text-center">Chỉ tiêu nhập trong năm kế hoạch</th>
-                  <th rowSpan="2" class="text-center">Hành động</th>
+                  <th rowSpan="2" class="text-center" *ngIf="!this.isViewDetail">Hành động</th>
                 </tr>
                 <tr>
                   <th class="text-center">Tổng số</th>
@@ -694,7 +692,7 @@
                     <td class="bg-parent1"></td>
                     <td class="bg-parent1"></td>
                     <td class="bg-parent1"></td>
-                    <td class="text-left bg-parent1" nzRight>
+                    <td class="text-left bg-parent1" nzRight *ngIf="!this.isViewDetail">
                       <a (click)="themSuaVatTu(data,'them','NHAP',true,idx)">
                         <i class="icon htvbdh_dau-cong"></i>
                       </a>
@@ -730,7 +728,7 @@
                           <td class="font-weight-bold bg-parent2">{{sumSoLuong(item, 'soLuongChuyenSang')}}</td>
                           <td class="font-weight-bold bg-parent2">{{sumSoLuong(item, 'soLuongNhap')}}</td>
                         </ng-container>
-                        <td class="text-left" nzRight>
+                        <td class="text-left" nzRight *ngIf="!this.isViewDetail">
                           <a *ngIf="item && item.dataChild && item.dataChild.length > 0"
                             (click)="themSuaVatTu(item,'them','NHAP',false,idx)">
                             <i class="icon htvbdh_dau-cong"></i>
@@ -759,7 +757,7 @@
                               'vi_VN'}}</td>
                             <td>{{itemLoaiHang.soLuongChuyenSang |number: '1.0-1': 'vi_VN'}}</td>
                             <td>{{itemLoaiHang.soLuongNhap |number: '1.0-1': 'vi_VN'}}</td>
-                            <td class="text-left" nzRight>
+                            <td class="text-left" nzRight *ngIf="!this.isViewDetail">
                               <a (click)="themSuaVatTu(itemLoaiHang,'sua','NHAP',false,idx,itemLoaiHang.donViId)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
@@ -793,7 +791,7 @@
                   <th>Đơn vị tính</th>
                   <th>Năm nhập</th>
                   <th>Chỉ tiêu xuất</th>
-                  <th>Hành động</th>
+                  <th *ngIf="!this.isViewDetail">Hành động</th>
                 </tr>
               </thead>
               <tbody>
@@ -810,7 +808,7 @@
                     <td class="bg-parent1"></td>
                     <td class="bg-parent1"></td>
                     <td class="bg-parent1"></td>
-                    <td class="text-left bg-parent1" nzRight>
+                    <td class="text-left bg-parent1" nzRight *ngIf="!this.isViewDetail">
                       <a (click)="themSuaVatTu(data,'them','XUAT',true,idx)">
                         <i class="icon htvbdh_dau-cong"></i>
                       </a>
@@ -834,7 +832,7 @@
                         <td class="font-weight-bold text-right bg-parent2">
                           {{sumSoLuongVatTuXuat(item, 'soLuongXuat', 1) |number: '1.0-1': 'vi_VN'}}
                         </td>
-                        <td class="text-left bg-parent2" nzRight>
+                        <td class="text-left bg-parent2" nzRight *ngIf="!this.isViewDetail">
                           <a *ngIf="item && item.dataChild && item.dataChild.length > 0"
                             (click)="themSuaVatTu(item,'them','XUAT',false,idx)">
                             <i class="icon htvbdh_dau-cong"></i>
@@ -869,7 +867,7 @@
                               <td class="text-right">{{itemLoaiHang.namNhap}}</td>
                               <td class="text-right">{{itemLoaiHang.soLuongXuat}}</td>
                             </ng-container>
-                            <td class="text-left" nzRight>
+                            <td class="text-left" nzRight *ngIf="!this.isViewDetail">
                               <a (click)="themSuaVatTu(itemLoaiHang,'them','XUAT',false,idx)">
                                 <i class="icon htvbdh_dau-cong"></i>
                               </a>
@@ -890,7 +888,7 @@
                                 <td></td>
                                 <td class="text-right">{{itemDetail.namNhap}}</td>
                                 <td class="text-right">{{itemDetail.soLuongXuat |number: '1.0-1': 'vi_VN'}}</td>
-                                <td>
+                                <td *ngIf="!this.isViewDetail">
                                   <a (click)="themSuaVatTu(itemDetail,'sua','XUAT',false,idx, itemDetail.donViId)">
                                     <i class="fa fa-pencil" title="Sửa"></i>
                                   </a>

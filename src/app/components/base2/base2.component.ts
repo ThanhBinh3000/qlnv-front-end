@@ -246,7 +246,7 @@ export class Base2Component implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == this.STATUS.DU_THAO) {
+          if (item.trangThai == this.STATUS.DU_THAO || item.trangThai == this.STATUS.DANG_NHAP_DU_LIEU ) {
             item.checked = true;
           }
         });

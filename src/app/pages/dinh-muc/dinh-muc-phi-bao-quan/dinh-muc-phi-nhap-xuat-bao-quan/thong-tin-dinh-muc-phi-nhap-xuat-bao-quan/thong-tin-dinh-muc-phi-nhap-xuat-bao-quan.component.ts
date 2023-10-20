@@ -148,9 +148,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.formData.value.listQlDinhMucPhis = this.dataTableDetail;
       this.formData.value.capDvi = this.capDvi;
       this.formData.value.maDvi = this.userInfo.MA_DVI;
-      await super.saveAndSend( this.formData.value, status, msg, msgSuccess);
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
     } catch (error) {
-      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+      console.error('Lỗi khi lưu và gửi dữ liệu:', error);
     }
   }
 

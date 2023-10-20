@@ -308,7 +308,9 @@
             <div nz-col [nzSpan]="12">
                 <nz-card class="mg-t-10 flex-card p-lr16 ">
                     <app-thongtin-dieuchinh [title]="'Nội dung quyết định gốc'" [isView]="true" [isCache]="true"
-                                            [dataInput]="dataInputCache" [listLoaiHopDong]="listLoaiHopDong"
+                                            [dataInput]="dataInputCache"
+                                            [dataGoc]="dataInputCache"
+                                            [listLoaiHopDong]="listLoaiHopDong"
                                             [listHinhThucDauThau]="listHinhThucDauThau" [listPhuongThucDauThau]="listPhuongThucDauThau"
                                             [listNguonVon]="listNguonVon">
                     </app-thongtin-dieuchinh>
@@ -316,7 +318,7 @@
             </div>
             <div nz-col [nzSpan]="12">
                 <nz-card class="mg-t-10 flex-card p-lr16 ">
-                    <app-thongtin-dieuchinh #thongTinDc [isView]="isViewDetail" [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
+                    <app-thongtin-dieuchinh #thongTinDc [isView]="isViewDetail" [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput" [dataGoc]="dataInputCache"
                                             [listLoaiHopDong]="listLoaiHopDong" [listHinhThucDauThau]="listHinhThucDauThau" [dataChiTieu]="dataChiTieu"
                                             [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon" (objectChange)="setNewData($event)">
                     </app-thongtin-dieuchinh>

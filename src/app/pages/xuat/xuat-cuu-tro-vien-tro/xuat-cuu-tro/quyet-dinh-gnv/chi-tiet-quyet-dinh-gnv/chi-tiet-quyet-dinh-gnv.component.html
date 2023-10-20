@@ -61,12 +61,12 @@
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
       <button *ngIf="[STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN].includes(formData.value.trangThaiXh)" type="button"
-        class="btn btn-sub xanh-nhat" (click)="updateProcess(STATUS.DA_HOAN_THANH)">
+        class="btn btn-sub xanh-nhat" (click)="updateProcess(STATUS.DA_HOAN_THANH, 'Đã hoàn thành')">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành phân bổ</span>
       </button>
       <button type="button" class="btn btn-main" *ngIf="(formData.value.trangThai === STATUS.BAN_HANH)"
-        (click)="updateProcess(STATUS.DANG_THUC_HIEN)">
+        (click)="updateProcess(STATUS.DANG_THUC_HIEN, 'Đang thực hiện')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -283,9 +283,10 @@
                 <td>{{i + 1}}</td>
                 <td>{{ item.noiDungDx }}</td>
                 <td></td>
-                <td class="bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                <td class="text-right bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                 <td></td>
-                <td>{{item.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
+                <!-- <td>{{item.soLuongGiao|number:globals.numberFormat:globals.locale}}</td> -->
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -302,9 +303,9 @@
                     <td></td>
                     <td></td>
                     <td>{{lv1.tenHang}}</td>
-                    <td>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-right">{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                     <td></td>
-                    <td class="bold">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-right bold">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -329,11 +330,11 @@
                         <td></td>
                         <td></td>
                         <td>{{lv2.tenChiCuc}}</td>
-                        <td>{{lv2.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="text-right">{{lv2.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                         <td></td>
                         <td></td>
-                        <td>{{lv2.tonKho}}</td>
-                        <td class="bold">{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="text-right bold">{{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="text-right bold">{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
                         <td>{{lv2.tenTrangThai}}</td>
                         <ng-container *ngIf="showAction()">
                           <td>
@@ -363,8 +364,9 @@
                             <td></td>
                             <td>{{lv3.tenDiaDiem}}</td>
                             <td>{{lv3.donViTinh}}</td>
-                            <td>{{lv3.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
-                            <td>{{lv3.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                            <td class="text-right">{{lv3.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
+                            </td>
+                            <td class="text-right">{{lv3.soLuong|number:globals.numberFormat:globals.locale}}</td>
                             <td></td>
                             <ng-container *ngIf="showAction()">
                               <td>
@@ -423,15 +425,17 @@
                     [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
                   <td>{{i + 1}}</td>
                   <td>{{ item.noiDungDx }}</td>
-                  <td class="bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                   <td></td>
-                  <td>{{item.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
-                  <td></td>
-                  <td></td>
+                  <td class="text-right bold">{{item.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                   <td></td>
                   <td></td>
-                  <td>{{item.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
-                  <td>{{item.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
+                  <td></td>
+                  <td></td>
+                  <!-- <td class="text-right">{{item.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right">{{item.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td> -->
+                  <td></td>
+                  <td></td>
                   <ng-container *ngIf="showAction()">
                     <td>
                       <a *ngIf="userService.isCuc()">
@@ -448,13 +452,15 @@
                       <td></td>
                       <td></td>
                       <td>{{lv1.tenChiCuc}}</td>
-                      <td>{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td></td>
+                      <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
-                      <td></td>
-                      <td>{{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
-                      <td>{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right bold">
+                        {{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
+                      </td>
+                      <td class="text-right bold">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <ng-container *ngIf="showAction()">
                         <td>
                           <a *ngIf="userService.isCuc()">
@@ -484,10 +490,12 @@
                           <td></td>
                           <td>{{lv2.tenDiaDiem}}</td>
                           <td>{{lv2.donViTinh}}</td>
-                          <td>{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
-                          <td>{{lv2.tyLeThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
-                          <td>{{lv2.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
-                          <td>{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
+                          <td class="text-right">{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                          <td class="text-right">{{lv2.tyLeThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
+                          </td>
+                          <td class="text-right">{{lv2.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
+                          </td>
+                          <td class="text-right">{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                           <ng-container *ngIf="showAction()">
                             <td>
                               <ng-container *ngIf="userService.isChiCuc()">
@@ -517,7 +525,7 @@
                     [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
                   <td>{{i + 1}}</td>
                   <td class="bold">{{ item.noiDungDx }}</td>
-                  <td class="bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -542,13 +550,14 @@
                       <td></td>
                       <td></td>
                       <td class="bold">{{lv1.tenChiCuc}}</td>
-                      <td class="bold">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right bold">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td></td>
+                      <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
-                      <td></td>
-                      <td>{{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
-                      <td>{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right">{{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
+                      </td>
+                      <td class="text-right">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <ng-container *ngIf="showAction()">
                         <td>
                           <a *ngIf="userService.isCuc()">
@@ -578,10 +587,12 @@
                           <td></td>
                           <td>{{lv2.tenDiaDiem}}</td>
                           <td>{{lv2.donViTinh}}</td>
-                          <td>{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
-                          <td>{{lv2.tyLeThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
-                          <td>{{lv2.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}</td>
-                          <td>{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
+                          <td class="text-right">{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                          <td class="text-right">{{lv2.tyLeThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
+                          </td>
+                          <td class="text-right">{{lv2.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
+                          </td>
+                          <td class="text-right">{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                           <ng-container *ngIf="showAction()">
                             <td>
                               <ng-container *ngIf="userService.isChiCuc()">
@@ -679,34 +690,52 @@
               </nz-form-control>
             </nz-form-item>
           </ng-container>
-          <nz-form-item *ngIf="userService.isCuc()">
-            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chi cục DTNN KV</nz-form-label>
-            <nz-form-control [nzErrorTip]="'Vui lòng nhập đơn vị'">
-              <div nz-row [nzGutter]="48">
-                <div nz-col [nzSpan]="16">
-                  <nz-select nzAllowClear formControlName="maDvi" nzPlaceHolder="Chọn đơn vị" nzShowSearch
-                    (ngModelChange)="kiemTraTonKho()">
-                    <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"
-                      [nzDisabled]="p.disable"></nz-option>
-                  </nz-select>
+          <ng-container *ngIf="userService.isCuc()">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chi cục DTNN KV</nz-form-label>
+              <nz-form-control [nzErrorTip]="'Vui lòng nhập đơn vị'">
+                <div nz-row [nzGutter]="48">
+                  <div nz-col [nzSpan]="16">
+                    <nz-select nzAllowClear formControlName="maDvi" nzPlaceHolder="Chọn đơn vị" nzShowSearch
+                      (ngModelChange)="kiemTraTonKho()">
+                      <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"
+                        [nzDisabled]="p.disable"></nz-option>
+                    </nz-select>
+                  </div>
+                  <div nz-col [nzSpan]="8">
+                    <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
+                        style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span>
+                    </p>
+                  </div>
                 </div>
-                <div nz-col [nzSpan]="8">
-                  <p style="font-size: 13px;font-weight: 500">Tồn kho: <span *ngIf="!isVthhVatuThietBi()"
-                      style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span>
-                    <span *ngIf="isVthhVatuThietBi()"
-                      style="color: #001CFF">{{formDataDtl.value.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</span>
-                  </p>
-                </div>
-              </div>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao Cục</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-number formControlName="soLuongDx" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                  [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </ng-container>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao Chi cục</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number formControlName="soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                [nzDisabled]="!userService.isCuc()" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                [nzParser]="globals.parser">
+              </nz-input-number>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item *ngIf="userService.isChiCuc()">
-            <nz-form-label [nzXs]="7" [nzRequired]="true">Chọn điểm kho</nz-form-label>
-            <nz-form-control>
+            <nz-form-label [nzXs]="7" [nzRequired]="true">Chọn ngăn/lô kho</nz-form-label>
+            <nz-form-control [nzErrorTip]="'Vui lòng chọn ngăn lô kho'">
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
                   <nz-tree-select #NzTreeSelectComponent [nzNodes]="listDiaDiemKho" [nzShowSearch]="true"
-                    [ngModel]="selectedNode" [ngModelOptions]="{standalone: true}" nzVirtualHeight="300px">
+                    [ngModel]="selectedNode" [ngModelOptions]="{standalone: true}" nzVirtualHeight="300px"
+                    [nzAllowClear]="false">
                     <ng-template #nzTreeTemplate let-node let-origin="origin">
                       <div class="node-content" [ngClass]="{'disabled-node': !node.isLeaf}"
                         [class.ant-tree-node-selected]="node.isSelected" (click)="selectDiaDiem(node)">
@@ -725,15 +754,6 @@
                   </p>
                 </div>
               </div>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao Chi cục</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-number formControlName="soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                [nzDisabled]="!userService.isCuc()" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                [nzParser]="globals.parser">
-              </nz-input-number>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item *ngIf="userService.isChiCuc() && formData.value.type !=='XC'">
