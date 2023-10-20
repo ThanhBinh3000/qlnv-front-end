@@ -104,7 +104,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.thongtinPhanLo = new DanhSachPhanLo();
     await this.loadDonVi();
     await this.loadDsVthh();
-    this.loadDonVi();
     if (this.dataEdit) {
       this.helperService.bidingDataInFormGroup(this.formData, this.dataEdit);
       await this.changeChiCuc(this.dataEdit.maDvi);
