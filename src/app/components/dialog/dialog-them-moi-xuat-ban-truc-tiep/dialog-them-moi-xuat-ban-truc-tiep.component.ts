@@ -24,9 +24,11 @@ import {cloneDeep} from 'lodash';
   styleUrls: ['./dialog-them-moi-xuat-ban-truc-tiep.component.scss']
 })
 export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup;
   thongTinXuatBanTrucTiep: DanhSachXuatBanTrucTiep;
   loaiVthh: any;
+  typeLoaiVthh: any;
   cloaiVthh: any;
   tenCloaiVthh: string;
   dataChiTieu: any;
@@ -120,15 +122,15 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   async loadDonViFromDataChiTieu() {
     const itemsToAdd = [];
-    if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+    if (this.typeLoaiVthh === LOAI_HANG_DTQG.GAO || this.typeLoaiVthh === LOAI_HANG_DTQG.THOC) {
       itemsToAdd.push(
         ...this.dataChiTieu.khLuongThuc?.map(item => ({
           maDvi: item.maDonVi,
           tenDvi: item.tenDonvi,
-          soLuongXuat: this.loaiVthh === LOAI_HANG_DTQG.GAO ? item.xtnTongGao : item.xtnTongThoc
+          soLuongXuat: this.typeLoaiVthh === LOAI_HANG_DTQG.GAO ? item.xtnTongGao : item.xtnTongThoc
         })) || []
       );
-    } else if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
+    } else if (this.typeLoaiVthh === LOAI_HANG_DTQG.MUOI) {
       itemsToAdd.push(
         ...this.dataChiTieu.khMuoiDuTru?.map(item => ({
           maDvi: item.maDonVi,
@@ -136,7 +138,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
           soLuongXuat: item.xuatTrongNamMuoi
         })) || []
       );
-    } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+    } else if (this.typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU) {
       const data = this.dataChiTieu.khVatTuXuat.filter(item => {
         if (item.maVatTu === null) {
           return item.maVatTuCha == this.loaiVthh;
@@ -189,12 +191,12 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     ]);
     this.listDiemKho = [];
     if (res.msg === MESSAGE.SUCCESS && chiCuc?.soLuongXuat) {
-      const soLuongChiTieu = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc.soLuongXuat : chiCuc.soLuongXuat * 1000;
+      const soLuongChiTieu = this.typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU ? chiCuc.soLuongXuat : chiCuc.soLuongXuat * 1000;
       this.formData.patchValue({
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
         soLuongKhDaDuyet: soLuongDaLenKh.data,
-        soLuongChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI) ? soLuongChiTieu : soLuongChiTieu,
+        soLuongChiTieu: this.typeLoaiVthh === LOAI_HANG_DTQG.MUOI ? soLuongChiTieu : soLuongChiTieu,
       });
       this.listDiemKho = res.data.children.filter(item => item.type === 'MLK');
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
@@ -235,7 +237,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     if (!this.dataDonGiaDuocDuyet || this.dataDonGiaDuocDuyet.length === 0) {
       return;
     }
-    const donGiaDuocDuyet = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)
+    const donGiaDuocDuyet = this.typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU
       ? this.dataDonGiaDuocDuyet
       : this.dataDonGiaDuocDuyet.filter(item => item.maChiCuc === this.formData.value.maDvi);
 
@@ -339,8 +341,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   async tonKho(item, index?) {
     const body = {
       maDvi: item.maDvi,
-      loaiVthh: this.loaiVthh === LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
-      ...(this.loaiVthh === LOAI_HANG_DTQG.MUOI ? {} : {cloaiVthh: this.cloaiVthh}),
+      loaiVthh: this.typeLoaiVthh === LOAI_HANG_DTQG.MUOI ? this.cloaiVthh : this.loaiVthh,
+      ...(this.typeLoaiVthh === LOAI_HANG_DTQG.MUOI ? {} : {cloaiVthh: this.cloaiVthh}),
     };
     try {
       const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);

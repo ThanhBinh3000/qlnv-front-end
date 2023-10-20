@@ -146,7 +146,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
             })
           }
           this.listOfData = data.data.children
-        }else{
+        } else {
           res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(this.dataInput.idQdHdr);
           console.log("haha ", res)
           this.listOfData = this.dataInput.children;
@@ -223,12 +223,12 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     let listChild = [];
     this.listOfData.forEach(item => {
       item.children.forEach(i => {
-        if(item.idDxDcHdr != undefined){
-          i.children.forEach(h =>{
+        if (item.idDxDcHdr != undefined) {
+          i.children.forEach(h => {
             h.goiThau = i.goiThau
             listChild.push(h)
           })
-        }else{
+        } else {
           i.goiThau = item.goiThau
           listChild.push(i)
         }

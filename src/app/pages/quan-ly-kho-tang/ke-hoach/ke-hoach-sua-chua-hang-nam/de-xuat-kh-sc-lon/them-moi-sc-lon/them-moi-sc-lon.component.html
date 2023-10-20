@@ -33,7 +33,7 @@
                (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETTP'))) && userService.isCuc()) ||
                 ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETCBVU') &&
                  userService.isTongCuc())" type="button" class="btn btn-sub ml-2"
-        (click)="pheDuyet()">
+        (click)="duyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -107,7 +107,7 @@
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true" nzRequired> Ngày duyệt đề xuất</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker [nzDisabled]="!(userService.isTongCuc() && formData.value.trangThai == STATUS.DA_DUYET_LDC)"
+                  <nz-date-picker [nzDisabled]="!(userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDC)"
                                   formControlName="ngayDuyet" nzFormat="dd/MM/yyyy"></nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -118,7 +118,7 @@
                   Căn cứ pháp lý
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="fileDinhKem"></file-list>
+                  <file-list [data]="fileDinhKem" [isViewDetail]="isViewDetail"></file-list>
                 </div>
               </nz-form-item>
             </div>

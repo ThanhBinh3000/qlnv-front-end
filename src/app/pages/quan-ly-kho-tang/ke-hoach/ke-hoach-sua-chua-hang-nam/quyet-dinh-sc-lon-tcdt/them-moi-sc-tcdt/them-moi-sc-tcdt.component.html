@@ -221,7 +221,7 @@
     </nz-collapse>
   </nz-card>
   <nz-collapse *ngIf="isTongHop">
-    <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CẢI TẠO SỬA CHỮA LỚN HÀNG NĂM CỦA DTNN KV'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CẢI TẠO SỬA CHỮA LỚN HÀNG NĂM CỦA CỤC DTNN KV'" [nzActive]="true">
       <nz-card class="mg-t-10 flex-card p-lr16">
         <nz-collapse class="pd-15"
                      *ngIf="(formData.value.loaiTmdt == 'DUOI15TY') && (dataTableDxDuoi && dataTableDxDuoi.length > 0) ">
@@ -399,7 +399,7 @@
               <tr>
                 <td></td>
                 <td></td>
-                <td class="font-weight-bold" style="color: blue">Tổng123</td>
+                <td class="font-weight-bold" style="color: blue">Tổng</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -627,7 +627,7 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse *ngIf="isTongHop">
-    <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA TỔNG CỤC DTNN'" [nzActive]="true">
       <nz-card class="mg-t-10 flex-card p-lr16">
         <nz-collapse class="pd-15"
                      *ngIf="(formData.value.loaiTmdt == 'DUOI15TY') && (dataTableDuoi && dataTableDuoi.length > 0)">

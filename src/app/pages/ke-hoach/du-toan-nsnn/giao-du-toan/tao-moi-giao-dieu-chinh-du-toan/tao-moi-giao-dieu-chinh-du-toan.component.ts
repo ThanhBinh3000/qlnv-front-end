@@ -922,7 +922,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (Status.TT_01 == this.trangThaiBanGhi && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_PA_PBDT)) {
+        if (Status.TT_01 == this.trangThaiBanGhi && this.userService.isAccessPermisson(Roles.GSTC.SUA_PA_GIAO_SOKIEMTRA)) {
             this.status = false;
         } else {
             this.status = true;
@@ -945,23 +945,23 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
         const utils = new Utils();
         const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 
-        this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GDT.EDIT_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GDT.DUYET_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.COPY_REPORT_PA_PBDT, checkChirld);
-        this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GDT.PRINT_REPORT, checkChirld);
-        this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
+        this.statusBtnSave = this.getBtnStatus([Status.TT_01], Roles.GSTC.SUA_PA_GIAO_SOKIEMTRA, checkChirld);
+        this.statusBtnApprove = this.getBtnStatus([Status.TT_01], Roles.GSTC.TRINHDUYET_PA_GIAO_SKT, checkChirld);
+        this.statusBtnTBP = this.getBtnStatus([Status.TT_02], Roles.GSTC.DUYET_TUCHOI_PA_GIAO_SKT, checkChirld);
+        this.statusBtnLD = this.getBtnStatus([Status.TT_04], Roles.GSTC.PHEDUYET_TUCHOI_PA_GIAO_SKT, checkChirld);
+        this.statusBtnCopy = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GSTC.COPY_PA_GIAO_SOKIEMTRA, checkChirld);
+        this.statusBtnPrint = this.getBtnStatus([Status.TT_01, Status.TT_02, Status.TT_03, Status.TT_04, Status.TT_05, Status.TT_06, Status.TT_07, Status.TT_08, Status.TT_09], Roles.GSTC.IN_PA_GIAO_SOKIEMTRA, checkChirld);
+        // this.statusBtnDVCT = this.getBtnStatus([Status.TT_06, Status.TT_07], Roles.GSTC.TRINHDUYET_PA_GIAO_SKT, checkParent);
 
-        if (this.userService.isAccessPermisson(Roles.GDT.GIAO_PA_PBDT) && this.soQd) {
+        if (this.userService.isAccessPermisson(Roles.GSTC.GIAO_SOKIEMTRA) && this.soQd) {
             this.statusBtnGiao = false;
         } else {
             this.statusBtnGiao = true;
             this.statusGiaoToanBo = true;
         }
-        if (this.userService.isAccessPermisson(Roles.GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
-            this.statusBtnGuiDVCT = false;
-        }
+        // if (this.userService.isAccessPermisson(Roles.GSTC.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
+        //     this.statusBtnGuiDVCT = false;
+        // }
         if (this.trangThaiBanGhi == "7") {
             this.statusBtnGuiDVCT = true;
             this.statusGiaoToanBo = true;
@@ -1853,7 +1853,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     }
 
     statusDeleteCv() {
-        if (!this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
+        if (!this.userService.isAccessPermisson(Roles.GSTC.SUA_CV_QD_GIAO_SOKIEMTRA)) {
             return false;
         }
         if (!this.soQd?.fileName) {

@@ -1,4 +1,4 @@
-// import { Roles.GDT } from "src/app/Utility/utils";
+// import { Roles.GSTC } from "src/app/Utility/utils";
 
 
 import { Roles, Utils } from "src/app/Utility/utils";
@@ -18,42 +18,42 @@ export class Gdt {
             name: 'Quyết định từ Bộ Tài Chính',
             code: Gdt.DANH_SACH_QUYET_DINH,
             status: true,
-            role: [Roles.GDT.EDIT_REPORT_BTC],
+            role: [Roles.GSTC.XEM_SO_KIEMTRA_BTC],
             isSelected: false,
         },
         {
             name: 'Danh sách báo cáo',
             code: Gdt.DANH_SACH_BAO_CAO,
             status: true,
-            role: [Roles.GDT.VIEW_REPORT_TH],
+            role: [Roles.GSTC.XEM_BC],
             isSelected: false,
         },
         {
             name: 'Báo cáo từ đơn vị cấp dưới',
             code: Gdt.DANH_SACH_BAO_CAO_TU_CAP_DUOI,
             status: true,
-            role: [Roles.GDT.VIEW_REPORT_TH],
+            role: [Roles.GSTC.XEM_BC_TONGHOP],
             isSelected: false,
         },
         {
             name: 'Tổng hợp báo cáo từ đơn vị cấp dưới',
             code: Gdt.TONG_HOP_BC_CAP_DUOI,
             status: true,
-            role: [Roles.GDT.VIEW_REPORT_TH],
+            role: [Roles.GSTC.XEM_BC_TONGHOP],
             isSelected: false,
         },
         {
             name: 'Số trần chi giao từ đơn vị cấp trên',
             code: Gdt.DANH_SACH_GIAO_TU_CAP_TREN,
             status: true,
-            role: [Roles.GDT.NHAN_PA_PBDT],
+            role: [Roles.GSTC.NHAN_SO_KIEMTRA],
             isSelected: false,
         },
         {
             name: 'Phân bổ số trần chi',
             code: Gdt.DANH_SACH_PHAN_BO,
             status: true,
-            role: [Roles.GDT.VIEW_REPORT_PA_PBDT],
+            role: [Roles.GSTC.XEM_PA_GIAO_SOKIEMTRA],
             isSelected: false,
         },
     ]
@@ -121,12 +121,6 @@ export class Gdt {
             status: false,
         },
     ];
-
-    static appendixName(id: string, nam: number) {
-        const appendix = Gdt.PHU_LUC.find(e => e.id == id);
-        return [appendix.tenPl, Utils.getName(nam, appendix.tenDm)];
-    }
-
 }
 
 export const TAB_LIST = [
@@ -134,7 +128,7 @@ export const TAB_LIST = [
         name: 'Quyết định từ Bộ Tài Chính',
         code: 'dsquyetDinh',
         status: true,
-        role: [Roles.GDT.EDIT_REPORT_BTC],
+        role: [Roles.GSTC.XEM_SO_KIEMTRA_BTC],
         isSelected: false,
     },
     {
@@ -142,10 +136,10 @@ export const TAB_LIST = [
         code: 'dsphanBo',
         status: true,
         role: [
-            Roles.GDT.VIEW_REPORT_PA_PBDT,
-            Roles.GDT.DELETE_REPORT_PA_PBDT,
-            Roles.GDT.EDIT_REPORT_PA_PBDT,
-            Roles.GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT,
+            Roles.GSTC.XEM_PA_GIAO_SOKIEMTRA,
+            Roles.GSTC.XOA_PA_GIAO_SOKIEMTRA,
+            Roles.GSTC.SUA_PA_GIAO_SOKIEMTRA,
+            Roles.GSTC.NHAP_CV_QD_GIAO_SOKIEMTRA,
         ],
         isSelected: false,
     },
@@ -153,7 +147,7 @@ export const TAB_LIST = [
         name: 'Số trần chi giao từ đơn vị cấp trên',
         code: 'dsGiaoTuCapTren',
         status: true,
-        role: [Roles.GDT.NHAN_PA_PBDT],
+        role: [Roles.GSTC.NHAN_SO_KIEMTRA],
         isSelected: false,
     },
     {
@@ -161,7 +155,7 @@ export const TAB_LIST = [
         code: 'baoCaoCapDuoi',
         status: true,
         role: [
-            Roles.GDT.VIEW_REPORT_TH,
+            Roles.GSTC.TIEPNHAN_TUCHOI_BC,
         ],
         isSelected: false,
     },
@@ -170,7 +164,7 @@ export const TAB_LIST = [
         code: 'tongHopBaoCaoCapDuoi',
         status: true,
         role: [
-            Roles.GDT.VIEW_REPORT_TH,
+            Roles.GSTC.TONGHOP_BC,
         ],
         isSelected: false,
     },
@@ -179,10 +173,12 @@ export const TAB_LIST = [
         code: 'danhSachBaoCao',
         status: true,
         role: [
-            Roles.GDT.EDIT_REPORT_TH,
-            Roles.GDT.XOA_REPORT_TH,
-            Roles.GDT.XEM_PA_TONGHOP_PBDT,
-            Roles.GDT.VIEW_REPORT_TH,
+            Roles.GSTC.SUA_BC_TONGHOP,
+            Roles.GSTC.SUA_BC,
+            Roles.GSTC.XOA_BC,
+            Roles.GSTC.XOA_BC_TONGHOP,
+            Roles.GSTC.XEM_BC_TONGHOP,
+            Roles.GSTC.XEM_BC,
         ],
         isSelected: false,
     },
@@ -231,11 +227,11 @@ export class Form {
 export class Report {
     id: string;
     maPa: string;
-    maBcao: string; // Thêm trường maBcao	
+    maBcao: string; // Thêm trường maBcao
     namPa: number;
     trangThai: string;
     maDvi: string;
-    maDviCha: string; // chưa dùng	
+    maDviCha: string; // chưa dùng
     maGiao: string;
     soQd: Doc;
     ngayCongVan: string;

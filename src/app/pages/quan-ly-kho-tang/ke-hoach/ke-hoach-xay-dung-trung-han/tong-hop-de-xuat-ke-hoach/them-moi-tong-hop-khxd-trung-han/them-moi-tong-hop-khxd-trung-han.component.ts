@@ -36,7 +36,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   @Output() redirectToQd = new EventEmitter<any>();
   expandSet = new Set<number>();
   userInfo: UserLogin;
-  dataDetail : any
+  dataDetail: any
   formData: FormGroup;
   listDx: any[] = [];
   dataTable: any[] = [];
@@ -86,7 +86,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
-      trangThaiQd : []
+      trangThaiQd: []
     });
   }
 
@@ -200,7 +200,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       res = await this.tongHopDxXdTh.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      console.log(1)
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
@@ -221,7 +220,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         }
       }
     } else {
-      console.log(2)
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
@@ -242,23 +240,23 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DU_THAO: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_LDV : {
+            case STATUS.TU_CHOI_LDV: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_LDV : {
+            case STATUS.CHO_DUYET_LDV: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.TU_CHOI_LDTC : {
+            case STATUS.TU_CHOI_LDTC: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDTC : {
+            case STATUS.CHO_DUYET_LDTC: {
               trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
@@ -388,12 +386,16 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         item.selected = false;
       });
       item.selected = true;
-
       // dx cuc
       if (this.dataTableDxAll && this.dataTableDxAll.length > 0) {
         let arr = this.dataTableDxAll.filter(data => data.idType == item.id);
         if (arr && arr.length > 0) {
           this.dataTableDx = arr;
+          if (this.dataTableDx && this.dataTableDx.length > 0) {
+            this.dataTableDx.forEach(item => {
+              item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+            });
+          }
           this.dataTableDx = this.convertListData(this.dataTableDx);
           this.expandAll(this.dataTableDx);
         }
@@ -402,6 +404,9 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
       if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+          item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+        });
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
       }
@@ -428,10 +433,10 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   convertListData(table: any[]) {
     if (table && table.length > 0) {
       table = chain(table).groupBy("tenKhoi").map((value, key) => ({
-          tenKhoi: key,
-          dataChild: value,
-          idVirtual: uuidv4()
-        })
+        tenKhoi: key,
+        dataChild: value,
+        idVirtual: uuidv4()
+      })
       ).value();
     }
     return table;

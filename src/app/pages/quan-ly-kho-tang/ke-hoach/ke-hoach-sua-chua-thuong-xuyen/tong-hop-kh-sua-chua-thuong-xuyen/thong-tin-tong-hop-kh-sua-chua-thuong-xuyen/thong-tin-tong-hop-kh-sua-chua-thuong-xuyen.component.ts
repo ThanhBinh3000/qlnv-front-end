@@ -270,23 +270,23 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DU_THAO: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_LDV : {
+            case STATUS.TU_CHOI_LDV: {
               trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_LDV : {
+            case STATUS.CHO_DUYET_LDV: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.TU_CHOI_LDTC : {
+            case STATUS.TU_CHOI_LDTC: {
               trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDTC : {
+            case STATUS.CHO_DUYET_LDTC: {
               trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
@@ -384,6 +384,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       this.dataTable = [];
       this.dataTableReq = [];
       let listDataDx = res.data;
+      console.log(listDataDx,"let listDataDx")
       if (listDataDx && listDataDx.content.length > 0) {
         this.isTongHop = true;
         this.listDx = listDataDx.content;
@@ -554,7 +555,8 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         sl = sum;
       }
     } else {
-      const sum = this.dataTableReq.reduce((prev, cur) => {
+      let arr = this.dataTableReq.filter(item => item.tenDvi == this.itemSelected.tenDvi);
+      const sum = arr.reduce((prev, cur) => {
         prev += cur[row];
         return prev;
       }, 0);

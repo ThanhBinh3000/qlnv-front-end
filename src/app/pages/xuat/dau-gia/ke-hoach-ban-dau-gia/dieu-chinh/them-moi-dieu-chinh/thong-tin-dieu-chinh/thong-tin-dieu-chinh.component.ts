@@ -12,6 +12,7 @@ import {
   QuyetDinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import dayjs from "dayjs";
+import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
 
 @Component({
   selector: 'app-thong-tin-dieu-chinh',
@@ -23,7 +24,9 @@ export class ThongTinDieuChinhComponent implements OnChanges {
   @Input() dataInput;
   @Input() isView;
   @Input() isCache;
+  @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup
   dataTable: any[] = [];
 
@@ -90,6 +93,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
         dataEdit: data,
         loaiVthh: this.dataInput.loaiVthh,
         cloaiVthh: this.dataInput.cloaiVthh,
+        typeLoaiVthh: this.loaiVthhCache
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {

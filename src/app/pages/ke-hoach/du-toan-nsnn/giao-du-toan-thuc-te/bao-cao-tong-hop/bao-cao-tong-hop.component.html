@@ -5,42 +5,43 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button class="btn btn-main" (click)="action('save')" >
+            <button class="btn btn-main" (click)="action('save')" *ngIf="statusBtnSave">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
-            <button class="btn btn-main" (click)="action('submit')" >
+            <button class="btn btn-main" (click)="action('submit')" [hidden]="statusBtnApprove">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
             </button>
-            <button class="btn btn-main" (click)="action('nonpass')" >
+            <button class="btn btn-main" (click)="action('nonpass')" [hidden]="statusBtnTBP">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button class="btn btn-main" (click)="action('pass')" >
+            <button class="btn btn-main" (click)="action('pass')" [hidden]="statusBtnTBP">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button class="btn btn-main" (click)="action('nonapprove')" >
+            <button class="btn btn-main" (click)="action('nonapprove')" [hidden]="statusBtnLD">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Từ chối</span>
             </button>
-            <button class="btn btn-main" (click)="action('approve')" >
+            <button class="btn btn-main" (click)="action('approve')" [hidden]="statusBtnLD">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Phê duyệt</span>
             </button>
-            <button class="btn btn-main" (click)="action('refuse')" >
+            <button class="btn btn-main" (click)="action('refuse')" [hidden]="statusBtnDVCT">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Từ chối</span>
             </button>
-            <button class="btn btn-main" (click)="action('receive')" >
+            <button class="btn btn-main" (click)="action('receive')" [hidden]="statusBtnDVCT">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Tiếp nhận</span>
             </button>
             <button type="button" class="btn btn-main" (click)="exportToExcel()">
-              <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
-              <span>Xuất</span>
+                <span nz-icon nzType="export" nzTheme="outline" style="margin-right: 5px;"></span>
+                <span>Xuất</span>
             </button>
+
         </div>
     </nz-affix>
     <div class="bg-trang">
@@ -57,6 +58,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" nzWidth="175px">Mã phương án</th>
+                                <th scope="col" nzWidth="175px">Loại phương án</th>
                                 <th scope="col" nzWidth="175px">Năm phương án</th>
                                 <th scope="col" nzWidth="175px">Ngày tạo</th>
                                 <th scope="col" nzWidth="175px">Nơi tạo</th>
@@ -66,6 +68,14 @@
                         <tbody>
                             <tr>
                                 <td>{{maPa}}</td>
+                                <td>
+                                    <ng-template [ngIf]="maLoaiDan == '1'">
+                                        Giao dự toán
+                                    </ng-template>
+                                    <ng-template [ngIf]="maLoaiDan == '2'">
+                                        Giao điều chỉnh dự toán
+                                    </ng-template>
+                                </td>
                                 <td>{{namPa}}</td>
                                 <td>{{ngayTao}}</td>
                                 <td>{{getUnitName()}}</td>

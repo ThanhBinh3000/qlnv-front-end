@@ -27,7 +27,7 @@ export class DialogTongHopCapVonComponent implements OnInit {
     loaiDns: any[] = [];
     donVis: any[];
     lstNam: number[] = [];
-    lstQuyetDinh: string[] = [];
+    lstQuyetDinh: any[] = [];
 
     constructor(
         private _modalRef: NzModalRef,
@@ -169,6 +169,7 @@ export class DialogTongHopCapVonComponent implements OnInit {
         const request = {
             namKHoach: this.response.namDnghi,
             maDvi: this.userInfo?.MA_DVI,
+            maLoai: this.response.maLoai,
         }
         this.spinner.show();
         this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(

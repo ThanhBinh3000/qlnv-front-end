@@ -54,11 +54,14 @@ export class ItemData {
     }
 
     changeModel() {
-        this.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(this.tdiemBcaoLuong, this.dmucChiPhiTaiCuaKho);
+        if (this.dmucChiPhiTaiCuaKho) {
+            this.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(this.tdiemBcaoLuong, this.dmucChiPhiTaiCuaKho);
+        }
         this.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(this.tdiemBcaoLuong, this.binhQuanChiPhiNgoaiCuaKho);
         this.tdiemBcaoChiPhiTongCong = Operator.sum([this.tdiemBcaoChiPhiTaiCuaKho, this.tdiemBcaoChiPhiNgoaiCuaKho]);
-
-        this.dkienThienChiPhiTaiCuaKho = Operator.mul(this.dmucChiPhiTaiCuaKho, this.dkienThienLuong);
+        if (this.dmucChiPhiTaiCuaKho) {
+            this.dkienThienChiPhiTaiCuaKho = Operator.mul(this.dmucChiPhiTaiCuaKho, this.dkienThienLuong);
+        }
         this.dkienThienChiPhiNgoaiCuaKho = Operator.mul(this.binhQuanChiPhiNgoaiCuaKho, this.dkienThienLuong);
         this.dkienThienChiPhiTongCong = Operator.sum([this.dkienThienChiPhiTaiCuaKho, this.dkienThienChiPhiNgoaiCuaKho]);
 
@@ -252,7 +255,7 @@ export class PhuLuc7Component implements OnInit {
 
         if (this.dataInfo?.isSynthetic) {
             this.lstCtietBcao.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.dmucHang);
+                const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.dmucHang) || e.cloaiVthh == item.dmucHang);
                 item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
 
                 item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
@@ -269,7 +272,7 @@ export class PhuLuc7Component implements OnInit {
             this.sum1()
         } else {
             this.lstCtietBcao.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.dmucHang);
+                const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.dmucHang) || e.cloaiVthh == item.dmucHang);
                 if (!item.tenHang) {
                     // item.tenHang = dinhMuc?.tenDinhMuc;
                     item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
@@ -625,6 +628,7 @@ export class PhuLuc7Component implements OnInit {
     handlSelectGoods(data: any) {
         const obj = {
             stt: data.stt,
+            tab: "dieu chinh"
         }
 
         const modalTuChoi = this.modal.create({
@@ -671,7 +675,7 @@ export class PhuLuc7Component implements OnInit {
                 const stt = this.lstCtietBcao.find(e => e.id == parentItem.id).stt;
                 this.lstCtietBcao.forEach(item => {
                     if (item.level == 2) {
-                        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.dmucHang);
+                        const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.dmucHang) || e.cloaiVthh == item.dmucHang);
                         item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
                     }
                 })
@@ -746,6 +750,7 @@ export class PhuLuc7Component implements OnInit {
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu' + Status.reportStatusName(this.dataInfo.trangThai) },
 
                 { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 6, l: 1, r: 1, val: 'Danh mục hàng' },

@@ -1,18 +1,18 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzModalService} from 'ng-zorro-antd/modal';
+import { Component, OnInit, Input } from '@angular/core';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import dayjs from 'dayjs';
-import {UserLogin} from 'src/app/models/userlogin';
-import {MESSAGE} from 'src/app/constants/message';
-import {chain} from 'lodash';
+import { UserLogin } from 'src/app/models/userlogin';
+import { MESSAGE } from 'src/app/constants/message';
+import { chain } from 'lodash';
 import * as uuid from "uuid";
-import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import {CHUC_NANG} from 'src/app/constants/status';
-import {CuuTroVienTroComponent} from '../../cuu-tro-vien-tro.component';
+import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import { CHUC_NANG } from 'src/app/constants/status';
+import { CuuTroVienTroComponent } from '../../cuu-tro-vien-tro.component';
 
 @Component({
   selector: 'app-phieu-xuat-kho',
@@ -146,14 +146,14 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
-              let diaDiem = v.find(s => s.tenDiemKho === k)
-              return {
-                idVirtual: uuid.v4(),
-                tenDiemKho: k != "null" ? k : '',
-                tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
-                childData: v
-              }
+            let diaDiem = v.find(s => s.tenDiemKho === k)
+            return {
+              idVirtual: uuid.v4(),
+              tenDiemKho: k != "null" ? k : '',
+              tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
+              childData: v
             }
+          }
           ).value();
         let nam = quyetDinh ? quyetDinh.nam : null;
         let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;

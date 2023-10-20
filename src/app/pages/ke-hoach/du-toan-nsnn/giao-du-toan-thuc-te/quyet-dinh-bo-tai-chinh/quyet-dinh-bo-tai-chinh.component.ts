@@ -63,9 +63,10 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
         private modal: NzModalService,
     ) { }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
-        this.search();
+        await this.search();
+        await this.checkPlanExist();
     };
 
     clearFilter() {
@@ -104,6 +105,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
             trangThaiGiaos: ["0", "1", "2"],
         };
         this.spinner.show();
+
         await this.giaoDuToanChiService.timPhuongAnGiao(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
@@ -113,7 +115,6 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
                             this.dataTable.push({
                                 ...item,
                                 checked: false,
-                                isEdit: this.checkEditStatus(item.trangThai),
                                 isDelete: this.checkDeleteStatus(item.trangThai),
                             })
                         } else {
@@ -268,14 +269,78 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
         this.pages.size = size;
         this.search();
     };
+    ketQua: any[] = []
+    async checkPlanExist() {
+        const searchFilterTemp =
+        {
+            loaiTimKiem: "0",
+            maPhanGiao: '2',
+            maLoai: '2',
+            namPa: null,
+            ngayTaoTu: "",
+            ngayTaoDen: "",
+            donViTao: this.userInfo.MA_DVI,
+            loai: null,
+            maPa: "",
+            maLoaiDan: [1, 2],
+            soQd: "",
+            trangThaiGiaos: [
+                "0",
+                "1",
+                "2"
+            ],
+            trangThais: [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
+            ],
+            paggingReq: {
+                limit: 10,
+                page: 1
+            },
+        }
+        let lstCheck = [];
+        await this.giaoDuToanChiService.timPhuongAnGiao(searchFilterTemp).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    lstCheck = data.data.content
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+            }, (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        )
+        let lstCheckMaPa = []
+        lstCheck.forEach(item => {
+            lstCheckMaPa.push(item.maPaCha)
+        })
+        let lstCheckMaPaCha = []
+        this.dataTable.forEach(itm => {
+            lstCheckMaPaCha.push(itm.maPa)
+        })
 
-    checkEditStatus(trangThai: string) {
-        return [Status.TT_01].includes(trangThai) &&
-            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(Roles.GDT.EDIT_REPORT_BTC));
+        function kiemTraTrungNhau(mang1, mang2) {
+            return mang1.filter(phanTu => mang2.includes(phanTu));
+        }
+        this.ketQua = kiemTraTrungNhau(lstCheckMaPaCha, lstCheckMaPa);
+    }
+
+    checkEditStatus(trangThai: string, maPa: string) {
+        if ([Status.TT_01].includes(trangThai) && (this.userService.isAccessPermisson(Roles.GTT.SUA_QUYETDINH_BTC) && this.ketQua.includes(maPa))) {
+            return true;
+        } else {
+            return false;
+        }
     };
 
     checkDeleteStatus(trangThai: string) {
-        return [Status.TT_01].includes(trangThai) &&
-            (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(Roles.GDT.DELETE_REPORT_BTC));
+        return [Status.TT_01].includes(trangThai) && (this.userService.isAccessPermisson(Roles.GTT.XOA_QUYETDINH_BTC));
     };
 }

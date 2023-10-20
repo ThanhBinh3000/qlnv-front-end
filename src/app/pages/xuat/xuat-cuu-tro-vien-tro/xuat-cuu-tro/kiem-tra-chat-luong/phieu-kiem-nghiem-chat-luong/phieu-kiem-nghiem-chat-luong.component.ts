@@ -154,12 +154,14 @@ export class PhieuKiemNghiemChatLuongComponent1 extends Base2Component implement
             idQdGiaoNvXh: idQdGiaoNvXh,
             nam: nam,
             ngayQdGiaoNvXh: ngayQdGiaoNvXh,
-            childData: value };
+            childData: value
+          };
         } else {
           return {
             idVirtual: uuid.v4(),
             soQdGiaoNvXh: key != "null" ? key : '',
-            childData: value };
+            childData: value
+          };
         }
       }).value();
     this.children = dataView

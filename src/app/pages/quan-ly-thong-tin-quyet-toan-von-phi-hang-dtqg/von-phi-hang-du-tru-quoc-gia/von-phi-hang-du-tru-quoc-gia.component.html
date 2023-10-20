@@ -5,11 +5,11 @@
                 Báo cáo quyết toán
             </li>
         </ng-container>
-        <ng-container *ngIf="viewDieuChinhSauQuyetToan">
+        <!-- <ng-container *ngIf="viewDieuChinhSauQuyetToan">
             <li nz-menu-item (click)="selectTab('baoCaoDieuChinhQuyetToan')">
                 Điều chỉnh số liệu sau quyết toán
             </li>
-        </ng-container>
+        </ng-container> -->
         <ng-container *ngIf="viewTongHopPheDuyet && userInfo.CAP_DVI !== '3'">
             <li nz-menu-item (click)="selectTab('baoCaoTongHopPheDuyet')">
                 Phê duyệt và tổng hợp quyết toán

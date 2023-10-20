@@ -33,6 +33,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   @Input() isCache: boolean = false;
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup
   dataTable: any[] = [];
   dataDonGiaDuocDuyet: any;
@@ -112,6 +113,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
         dataEdit: data,
         loaiVthh: this.dataInput.loaiVthh,
         cloaiVthh: this.dataInput.cloaiVthh,
+        typeLoaiVthh: this.loaiVthhCache,
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {

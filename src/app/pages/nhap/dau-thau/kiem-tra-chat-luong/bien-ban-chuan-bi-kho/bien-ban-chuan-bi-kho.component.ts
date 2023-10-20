@@ -164,7 +164,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       soQd: this.searchFilter.soQuyetDinhNhap,
       soBbCbk: this.searchFilter.soBienBan,
       tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
-      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59" : null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -405,7 +405,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     }
   }
 
-  checkQuyenXem (trangThai) {
+  checkQuyenXem(trangThai) {
     if (trangThai) {
       if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_XEM')) {
         if (trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')) {

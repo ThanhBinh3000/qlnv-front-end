@@ -17,4 +17,5 @@ export class TongHopTieuHuyService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-tong-hop-tao-hs`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
 }

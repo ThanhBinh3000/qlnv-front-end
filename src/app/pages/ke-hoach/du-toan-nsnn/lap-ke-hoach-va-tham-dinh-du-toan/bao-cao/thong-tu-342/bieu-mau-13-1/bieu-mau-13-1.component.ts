@@ -416,6 +416,7 @@ export class BieuMau131Component implements OnInit {
                 { t: 5, b: 5, l: 6, r: 6, val: 'Dự kiến' },
                 { t: 4, b: 5, l: 7, r: 7, val: 'Ghi chú' },
             ]
+            fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'thienNtruoc', 'namDtoan', 'namUocThien', 'namKh', 'ghiChu']
             calHeader = ['A', 'B', '1', '2', '3', '4', '5', '6'];
         }
         const filterData = this.lstCtietBcao.map(item => {

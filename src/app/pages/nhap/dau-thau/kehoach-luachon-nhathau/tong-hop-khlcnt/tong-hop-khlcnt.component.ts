@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -15,7 +15,7 @@ import { STATUS } from "../../../../../constants/status";
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import {FormGroup, Validators} from "@angular/forms";
+import { FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-tong-hop-khlcnt',
@@ -177,7 +177,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
     this.spinner.hide();
   }
 
-  openQdPdKhlcntModal(id:number) {
+  openQdPdKhlcntModal(id: number) {
     this.qdPdKhlcntId = id;
     this.openQdPdKhlcnt = true;
   }
@@ -244,7 +244,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   //   return endValue.getTime() <= this.tuNgayQd.getTime();
   // };
 
-  async taoQdinh(data: any){
+  async taoQdinh(data: any) {
     this.id = data.id
     this.idSelected = data.id;
     this.isQdPdKhlcntId = data.qdPdKhlcntId
@@ -298,11 +298,11 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
 
   clearFilter() {
     this.formData.get('namKhoach').setValue(null),
-    this.formData.get('tenVthh').setValue(null),
-    this.formData.get('cloaiVthh').setValue(null),
-    this.formData.get('tenCloaiVthh').setValue(null),
-    this.formData.get('noiDung').setValue(null),
-    this.denNgayKy = null;
+      this.formData.get('tenVthh').setValue(null),
+      this.formData.get('cloaiVthh').setValue(null),
+      this.formData.get('tenCloaiVthh').setValue(null),
+      this.formData.get('noiDung').setValue(null),
+      this.denNgayKy = null;
     this.tuNgayKy = null;
     this.search();
   }

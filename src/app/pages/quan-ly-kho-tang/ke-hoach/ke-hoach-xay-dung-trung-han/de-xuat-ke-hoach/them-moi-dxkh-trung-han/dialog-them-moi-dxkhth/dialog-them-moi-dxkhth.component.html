@@ -4,8 +4,8 @@
       <div nz-col nzSpan="6">
         <nz-form-item>
           <nz-form-label nzRequired nzNoColon="true">Năm kế hoạch</nz-form-label>
-          <nz-form-control>
-            <input nz-input [(ngModel)]="item.namKeHoach" readonly />
+          <nz-form-control >
+            <input nz-input [(ngModel)]="item.namKeHoach" />
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -22,7 +22,7 @@
       <div nz-col nzSpan="6">
         <nz-form-item>
           <nz-form-label nzNoColon="true">Khối dự án/công trình</nz-form-label>
-              <nz-select nzAllowClear [(ngModel)]="item.khoi">
+              <nz-select nzAllowClear [(ngModel)]="item.khoi" nzDisabled>
                 <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>

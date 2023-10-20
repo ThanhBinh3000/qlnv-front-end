@@ -119,13 +119,14 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           ngayTaoDx: data.ngayTaoDx,
           loaiDuAn: data.loaiDuAn,
           trichYeu: data.trichYeu,
-          ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDTC ? dayjs().get("year") : data.ngayDuyet,
+          ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDC ? dayjs().format("YYYY-MM-DDTHH:mm:ss") : data.ngayDuyet,
           trangThai: data.trangThai,
           tenTrangThai: data.tenTrangThai
         });
       this.fileDinhKem = data.fileDinhKems;
       this.canCuPhapLy = data.canCuPhapLys;
       this.dataTableRes = data.chiTiets;
+      console.log(this.dataTableRes, 'this.dataTableRes')
       this.dataTableDm = data.listDanhMuc;
       await this.convertListToTree();
     }
@@ -168,37 +169,68 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     }
   }
 
-  pheDuyet() {
-    let trangThai = '';
-    let msg = '';
-    switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_CBV:
-      case STATUS.TU_CHOI_LDC:
-      case STATUS.TU_CHOI_TP:
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
-        break;
+  duyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: "Xác nhận",
+      nzContent: "Bạn có chắc chắn muốn duyệt?",
+      nzOkText: "Đồng ý",
+      nzCancelText: "Không",
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let trangThai;
+          switch (this.formData.value.trangThai) {
+            case STATUS.TU_CHOI_TP:
+            case STATUS.TU_CHOI_LDC:
+            case STATUS.TU_CHOI_CBV :
+            case STATUS.DU_THAO: {
+              trangThai = STATUS.CHO_DUYET_TP;
+              break;
+            }
+            case STATUS.CHO_DUYET_TP: {
+              trangThai = STATUS.CHO_DUYET_LDC;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDC : {
+              trangThai = STATUS.DA_DUYET_LDC;
+              break;
+            }
+            case STATUS.DA_DUYET_LDC : {
+              trangThai = STATUS.DA_DUYET_CBV;
+              break;
+            }
+          }
+          let body = {
+            id: this.formData.get("id").value,
+            lyDo: null,
+            trangThai: trangThai,
+            ngayDuyet: this.formData.value.ngayDuyet
+          };
+          let res =
+            await this.dexuatService.approve(
+              body
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log("error: ", e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
       }
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
-        break;
-      }
-      case STATUS.DA_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_CBV;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
-        break;
-      }
-    }
-    this.approve(this.idInput, trangThai, msg, null, "Bạn đã lưu và gửi duyệt thành công!");
+    });
   }
-
+  quayLai() {
+    this.showListEvent.emit();
+  }
   tuChoi() {
     let trangThai = '';
     switch (this.formData.value.trangThai) {
@@ -229,15 +261,15 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         sl = sum;
       }
     } else {
-      if (type == 'duoi') {
-        if (this.dataTable && this.dataTable.length > 0) {
-          let sum = 0;
-          this.dataTable.forEach(item => {
-            sum += this.sumSoLuong(item, row);
-          });
-          sl = sum;
-        }
-
+      // if (type == 'duoi') {
+      if (this.dataTableRes && this.dataTableRes.length > 0) {
+        let arr = this.dataTableRes.filter(item => type == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000);
+        let sum = 0;
+        arr.forEach(item => {
+          sum += item[row]
+        });
+        sl = sum;
+        // }
       }
     }
     return sl;

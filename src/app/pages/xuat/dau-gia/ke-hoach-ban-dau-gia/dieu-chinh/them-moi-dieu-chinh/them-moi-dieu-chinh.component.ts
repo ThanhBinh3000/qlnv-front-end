@@ -20,6 +20,7 @@ import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-them-moi-dieu-chinh',
@@ -33,6 +34,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maConVan: any;
   maHauTo: any;
   danhSachQdPdKeHoach: any[] = [];
@@ -65,6 +67,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       ngayKyQd: [''],
       soQdCc: [''],
       soQdDc: [''],
+      idDcGoc: [],
       ngayKyDc: [''],
       ngayHlucDc: [''],
       noiDungDieuChinh: [''],
@@ -145,9 +148,14 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       await this.loadDanhSachDieuChinh();
       const res = await this.quyetDinhPdKhBdgService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
-        const danhSachDieuChinhFiltered = this.danhSachDieuChinh.filter(item => item.trangThai === STATUS.BAN_HANH);
-        const soQdPdSet = new Set(danhSachDieuChinhFiltered.map(item => item.soQdPd));
+        const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
         this.danhSachQdPdKeHoach = res.data.content.filter(item => !soQdPdSet.has(item.soQdPd));
+        this.danhSachQdPdKeHoach.push(...this.danhSachDieuChinh);
+        this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.map(item => {
+          item.soQd = item.soQdDc ? item.soQdDc : item.soQdPd;
+          item.ngayKy = item.ngayKyDc ? item.ngayKyDc : item.ngayKyQd;
+          return item;
+        });
       } else if (res && res.msg) {
         this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
@@ -161,14 +169,14 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: this.danhSachQdPdKeHoach.filter(item => item.maDvi === this.userInfo.MA_DVI),
-          dataHeader: ['Số quyết định phê duyệt', 'Ngày ký quyết định', 'Loại hàng hóa'],
-          dataColumn: ['soQdPd', 'ngayKyQd', 'tenLoaiVthh']
+          dataTable: this.danhSachQdPdKeHoach,
+          dataHeader: ['Số quyết định cần điều chỉnh', 'Ngày ký quyết định cần điều chỉnh', 'Loại hàng hóa'],
+          dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh']
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
-          await this.onChange(data.id);
+          await this.onChange(data);
         }
       });
     } catch (e) {
@@ -178,19 +186,21 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
   }
 
-  async onChange(id) {
-    if (id <= 0) return;
+  async onChange(datasearch) {
+    if (datasearch.id <= 0) return;
     try {
       await this.spinner.show();
-      const res = await this.quyetDinhPdKhBdgService.getDetail(id)
+      const service = datasearch.soQdDc ? this.quyetDinhDchinhKhBdgService : this.quyetDinhPdKhBdgService;
+      const res = await service.getDetail(datasearch.id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data
       this.formData.patchValue({
-        idQdPd: data.id,
+        idQdPd: datasearch.soQdDc ? data.idQdPd : datasearch.id,
         soQdPd: data.soQdPd,
         ngayKyQd: data.ngayKyQd,
+        idDcGoc: datasearch.soQdDc ? data.id : '',
         soQdCc: data.soQdCc,
         loaiHinhNx: data.loaiHinhNx,
         tenLoaiHinhNx: data.tenLoaiHinhNx,
@@ -208,6 +218,10 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         this.dataTable = data.children
         await this.showFirstRow(event, 0);
       }
+      this.danhSachDieuChinh = this.danhSachDieuChinh.filter(item => item.soQdPd === data.soQdPd);
+      this.formData.patchValue({
+        lanDieuChinh: this.danhSachDieuChinh.length + 1
+      });
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -229,9 +243,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       return;
     }
     const data = res.data.content;
-    this.formData.patchValue({
-      lanDieuChinh: data.length + 1
-    })
     if (!data || data.length === 0) {
       return;
     }
@@ -312,8 +323,10 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       this.selected = true
     }
     this.dataInput = this.dataTable[index];
-    if (this.formData.value.idQdPd) {
-      const res = await this.quyetDinhPdKhBdgService.getDetail(this.formData.value.idQdPd);
+    const id = this.formData.value.idDcGoc || this.formData.value.idQdPd;
+    if (id) {
+      const service = this.formData.value.idDcGoc ? this.quyetDinhDchinhKhBdgService : this.quyetDinhPdKhBdgService;
+      const res = await service.getDetail(id);
       if (res.msg === MESSAGE.SUCCESS && res.data) {
         const data = res.data;
         this.dataInputCache = data.children.find(item => item.soDxuat === this.dataTable[index].soDxuat) ?? null;

@@ -32,7 +32,9 @@ export class ItemData {
     }
 
     changeModel() {
-        this.namDtTtien = Operator.mul(this.namDtDmuc, this.namDtSluong);
+        if (this.namDtDmuc) {
+            this.namDtTtien = Operator.mul(this.namDtDmuc, this.namDtSluong);
+        }
     }
 
     upperBound() {
@@ -160,17 +162,17 @@ export class PhuLuc02Component implements OnInit {
         this.namBcao = this.dataInfo.namBcao;
 
         await this.getDinhMuc();
-        if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
-            this.lstCtietBcaos.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
-                if (!item.tenDanhMuc) {
-                    item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-                }
-                item.namDtDmuc = dinhMuc?.tongDmuc;
-                item.maDviTinh = dinhMuc?.donViTinh;
-                item.changeModel();
-            })
-        }
+        // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
+        this.lstCtietBcaos.forEach(item => {
+            const dinhMuc = this.dsDinhMuc.find(e => ((!e.cloaiVthh && e.loaiVthh == item.danhMuc) && e.htBaoQuan == item.maDmuc));
+            if (!item.tenDanhMuc) {
+                item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+            }
+            item.namDtDmuc = dinhMuc?.tongDmuc;
+            item.maDviTinh = dinhMuc?.donViTinh;
+            item.changeModel();
+        })
+        // }
         if (!this.lstCtietBcaos[0]?.stt) {
             this.setIndex();
         }
@@ -417,14 +419,14 @@ export class PhuLuc02Component implements OnInit {
                         tenDanhMuc: data.ten,
                         level: 0,
                     }))
-                    const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
+                    const lstTemp = this.dsDinhMuc.filter(e => (!e.cloaiVthh && e.loaiVthh == data.ma) || e.cloaiVthh == data.ma);
                     for (let i = 1; i <= lstTemp.length; i++) {
                         this.lstCtietBcaos.push(new ItemData({
 
                             id: uuid.v4() + 'FE',
                             stt: stt + '.' + i.toString(),
                             danhMuc: data.ma,
-                            maDmuc: lstTemp[i - 1].loaiBaoQuan,
+                            maDmuc: lstTemp[i - 1].htBaoQuan,
                             tenDanhMuc: lstTemp[i - 1].tenDinhMuc,
                             maDviTinh: lstTemp[i - 1].donViTinh,
                             level: 1,

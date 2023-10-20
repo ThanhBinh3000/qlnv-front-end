@@ -169,6 +169,15 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   listDeXuat: any[] = [];
   listNamKH: any[] = [];
+  subTabVatTu = 0;
+  subTab = '';
+
+  //xem trước
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  showDlgPreview = false;
 
   constructor(
     private router: Router,
@@ -1749,6 +1758,117 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         WindowPrt.close();
       }
     });
+  }
+
+  async preView(type?) {
+    try {
+      this.spinner.show();
+      if (type === 'MUOI') {
+        this.subTab = 'MUOI';
+        let body = {
+          'typeFile': 'pdf',
+          'nam': this.thongTinChiTieuKeHoachNam.namKeHoach,
+          'idHdr': this.thongTinChiTieuKeHoachNam.id,
+          'fileName': 'xemtruoc_chi_tieu_kh_muoi.jrxml',
+        };
+        await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamMuoi(body).then(async s => {
+          this.pdfBlob = s;
+          this.pdfSrc = await new Response(s).arrayBuffer();
+        });
+        // this.showDlgPreview = true;
+      } else if (type === 'LT') {
+        this.subTab = 'LT';
+        let body = {
+          id: this.thongTinChiTieuKeHoachNam.id,
+          typeFile: "pdf",
+          fileName: "ke-hoach-luong-thuc-du-tru-nha-nuoc.jrxml",
+          tenBaoCao: "Kế hoạch lương thực dự trữ nhà nước"
+        };
+        await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamLuongThuc(body).then(async s => {
+          this.pdfBlob = s;
+          this.pdfSrc = await new Response(s).arrayBuffer();
+        });
+      } else if (type === 'VT') {
+        this.subTab = 'VT-' + (this.subTabVatTu == 0 ? 'NHAP' : 'XUAT');
+        await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamVatTu({
+          typeFile: 'pdf',
+          nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          idHdr: this.thongTinChiTieuKeHoachNam.id,
+          fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
+          loaiNhapXuat: this.subTabVatTu == 0 ? 'NHAP' : 'XUAT'
+        }).then(async s => {
+          this.pdfBlob = s;
+          this.pdfSrc = await new Response(s).arrayBuffer();
+        });
+      }
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfBlob, 'baocao.pdf');
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      if (this.subTab === 'LT') {
+        await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamLuongThuc({
+          id: this.thongTinChiTieuKeHoachNam.id,
+          typeFile: "xlsx",
+          fileName: "ke-hoach-luong-thuc-du-tru-nha-nuoc.jrxml",
+          tenBaoCao: "Kế hoạch lương thực dự trữ nhà nước"
+        }).then(async s => {
+          this.excelBlob = s;
+          saveAs(this.excelBlob, "Kế hoạch lương thực dự trữ nhà nước.xlsx");
+        });
+      } else if (this.subTab === 'MUOI') {
+        await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamMuoi({
+          typeFile: 'xlsx',
+          nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          idHdr: this.thongTinChiTieuKeHoachNam.id,
+          fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
+        }).then(async s => {
+          this.excelBlob = s;
+          saveAs(this.excelBlob, "chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
+        });
+      } else if (this.subTab === 'VT-NHAP') {
+        await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamVatTu({
+          typeFile: 'xlsx',
+          nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          idHdr: this.thongTinChiTieuKeHoachNam.id,
+          fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
+          loaiNhapXuat: 'NHAP'
+        }).then(async s => {
+          this.excelBlob = s;
+          saveAs(this.excelBlob, "chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
+        });
+      } else if (this.subTab === 'VT-XUAT') {
+        await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamVatTu({
+          typeFile: 'xlsx',
+          nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          idHdr: this.thongTinChiTieuKeHoachNam.id,
+          fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
+          loaiNhapXuat: 'XUAT'
+        }).then(async s => {
+          this.excelBlob = s;
+          saveAs(this.excelBlob, "chi-tieu-xuat-vat-tu-thiet-bi.xlsx");
+        });
+      }
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 
   guiDuyet() {

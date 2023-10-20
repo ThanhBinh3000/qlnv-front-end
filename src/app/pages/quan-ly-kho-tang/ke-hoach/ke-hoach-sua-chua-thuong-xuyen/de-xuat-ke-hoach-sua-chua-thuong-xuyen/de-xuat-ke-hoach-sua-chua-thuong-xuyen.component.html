@@ -53,12 +53,12 @@
         <thead>
         <tr>
           <th width="40px">STT</th>
-          <th width="80px">Năm KH</th>
+          <th width="80px" class="text-center">Năm KH</th>
           <th width="150px">Số công văn</th>
-          <th width="150px">Ngày ký</th>
+          <th width="150px" class="text-center">Ngày ký</th>
           <th width="">Trích yếu</th>
           <th width="150px">Trạng thái</th>
-          <th width="150px" *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
+          <th width="150px">Mã tổng hợp</th>
           <th width="130px" class="text-center" *ngIf="userService.isCuc">Hành động</th>
         </tr>
         </thead>
@@ -101,7 +101,7 @@
               </nz-select>
             </nz-input-group>
           </td>
-          <td *ngIf="userService.isTongCuc()">
+          <td>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
                      (input)="filterInTable('maTongHop',filterTable.maTongHop)"/>
@@ -112,13 +112,13 @@
         </tr>
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td>{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.namKh }}</td>
+          <td class="text-center">{{ data.namKh }}</td>
           <td>{{ data.soCv }}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td  class="text-center">{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td *ngIf="userService.isTongCuc()">{{ data.chuDauTu }}</td>
-          <td class="text-center" *ngIf="userService.isCuc">
+          <td>{{ data.maTongHop ? data.maTongHop:'Bản ghi chưa tổng hợp'}}</td>
+          <td class="text-left" *ngIf="userService.isCuc">
             <a
               *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_XEM') && !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV) && data.nguoiTaoId == userInfo.ID)
               &&!((userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_DUYETTP') && data.trangThai == STATUS.CHO_DUYET_TP))

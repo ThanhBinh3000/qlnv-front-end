@@ -135,6 +135,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,
         namKeHoach: data.namKeHoach,
+        noiDung: data.noiDung,
       });
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
@@ -327,6 +328,9 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
       if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+          item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
+        });
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
       }
@@ -408,15 +412,11 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         sl = sum;
       }
     } else {
-      let itemSelected = this.listDx.find(item => item.selected == true);
-      if (itemSelected) {
-        let arr = this.dataTableReq.filter(item => item.soCv == itemSelected.soCongVan);
-        const sum = arr.reduce((prev, cur) => {
+        const sum = this.dataTableReq.reduce((prev, cur) => {
           prev += cur[row];
           return prev;
         }, 0);
         sl = sum;
-      }
     }
     return sl;
   }

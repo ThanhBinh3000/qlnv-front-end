@@ -288,7 +288,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           let body = {
             id: this.formData.get("id").value,
             lyDo: null,
-            trangThai: trangThai
+            trangThai: trangThai,
+            ngayDuyet: this.formData.value.ngayDuyet,
           };
           let res =
             await this.dxTrungHanService.approve(
@@ -371,7 +372,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           tenTrangThai: data.tenTrangThai,
           soCongVan: data.soCongVan ? data.soCongVan.split("/")[0] : "",
           ngayTaoDx: data.ngayTaoDx,
-          ngayDuyet: data.ngayDuyet,
+          ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDC ? dayjs().format('YYYY-MM-DDTHH:mm:ss') : data.ngayDuyet,
           namBatDau: data.namBatDau,
           namKetThuc: data.namKetThuc,
           lyDo: data.lyDoTuChoi,
@@ -411,7 +412,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
 
   themMoiItem(type: string, data? : any) {
-    console.log(data,6666)
       let modalQD = this.modal.create({
         nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
         nzContent: DialogThemMoiDxkhthComponent,
