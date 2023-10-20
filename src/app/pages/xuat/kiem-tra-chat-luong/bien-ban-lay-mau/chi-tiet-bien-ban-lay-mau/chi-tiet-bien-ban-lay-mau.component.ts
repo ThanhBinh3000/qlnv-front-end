@@ -117,7 +117,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       xhBienBanLayMauDtl: [new Array()],
       ppLayMau: [new Array()],
       ctChatLuong: [new Array()],
-      ngayLayMau: [dayjs().format("YYYY-MM-DD")],
+      ngayBbLayMau: [dayjs().format("YYYY-MM-DD")],
       donViTinh: [],
       thuKho: [],
 
