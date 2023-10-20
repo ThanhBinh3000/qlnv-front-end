@@ -27,5 +27,11 @@ export class QuyetDinhGiaCuaBtcService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  previewQdGia(body: any)  {
+    // const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-congtac-qly-ktkt`;
+    const url = `http://localhost:3010/phuong-an-gia/xem-truoc-qd-gia`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
 
 }

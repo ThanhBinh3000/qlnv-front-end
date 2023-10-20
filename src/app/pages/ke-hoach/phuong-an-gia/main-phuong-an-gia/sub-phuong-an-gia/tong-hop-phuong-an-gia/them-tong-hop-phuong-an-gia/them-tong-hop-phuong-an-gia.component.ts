@@ -223,6 +223,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     body.pagChiTiets = this.dataTable;
     body.tchuanCluong = this.tieuChuanCl;
     body.kieuTongHop = this.formTraCuu.value.kieuTongHop;
+    body.maDvis = this.listCucSelected.toString();
     let res = await this.tongHopPhuongAnGiaService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -301,6 +302,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   bindingDataTongHop(data, reqBody) {
+    console.log(data,111)
+    console.log(reqBody,222)
     let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtDen) : null;
     let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtVatTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtVatDen) : null;
     let kqTd = data.giaTdTu && data.giaTdDen ? Intl.NumberFormat('vi-VN').format(data.giaTdTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaTdDen) : null;
@@ -313,7 +316,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       loaiVthh: data.loaiVthh ?? reqBody.loaiVthh,
       cloaiVthh: data.cloaiVthh ?? reqBody.cloaiVthh,
       loaiGia: data.loaiGia ?? reqBody.loaiGia,
-      maDvis: data.maDvis ?? reqBody.maDvis,
+      maDvis:  data && data.maDvis ? data.maDvis : (reqBody && reqBody.maDvis ) ? reqBody.maDvis : null ,
       ngayDxTu: data.ngayDxTu ? data.ngayDxTu : (reqBody && reqBody.ngayDxTu ? reqBody.ngayDxTu : null),
       ngayDxDen: data.ngayDxDen ? data.ngayDxDen : (reqBody && reqBody.ngayDxDen ? reqBody.ngayDxDen : null),
       noiDung: data.noiDung,
