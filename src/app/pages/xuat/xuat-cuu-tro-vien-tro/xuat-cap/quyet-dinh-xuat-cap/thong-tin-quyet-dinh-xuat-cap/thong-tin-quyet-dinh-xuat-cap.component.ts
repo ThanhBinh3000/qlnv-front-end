@@ -189,6 +189,19 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         edit: []
       });
     this.formData.controls["paXuatGaoChuyenXc"].valueChanges.subscribe((value) => {
+      if (value) {
+        this.formData.patchValue({
+          tenVthh: TEN_LOAI_VTHH.GAO,
+          tenLoaiVthh: TEN_LOAI_VTHH.GAO,
+          loaiVthh: LOAI_HANG_DTQG.GAO,
+        })
+      } else {
+        this.formData.patchValue({
+          tenVthh: TEN_LOAI_VTHH.THOC,
+          tenLoaiVthh: TEN_LOAI_VTHH.THOC,
+          loaiVthh: LOAI_HANG_DTQG.THOC,
+        })
+      }
       this.formData.controls["qdPaXuatCap"].setValue("", { emitEvent: false });
       this.phuongAnHdrView = [];
       this.phuongAnView = [];
@@ -253,9 +266,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         });
     } else {
       this.formData.patchValue({
-        tenVthh: TEN_LOAI_VTHH.GAO,
-        tenLoaiVthh: TEN_LOAI_VTHH.GAO,
-        loaiVthh: LOAI_HANG_DTQG.GAO,
+        tenVthh: TEN_LOAI_VTHH.THOC,
+        tenLoaiVthh: TEN_LOAI_VTHH.THOC,
+        loaiVthh: LOAI_HANG_DTQG.THOC,
         tenDvi: this.userInfo.TEN_DVI,
         kieuNhapXuat: 'Xuất không thu tiền',
         loaiNhapXuat: 'Xuất cấp',
