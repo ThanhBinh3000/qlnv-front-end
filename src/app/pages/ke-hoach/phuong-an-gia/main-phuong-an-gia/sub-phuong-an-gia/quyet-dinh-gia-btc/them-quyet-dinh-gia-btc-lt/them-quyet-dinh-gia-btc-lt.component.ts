@@ -16,6 +16,8 @@ import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia
 import {DialogPagQdBtcComponent} from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
+import {saveAs} from "file-saver";
+import printJS from "print-js";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-lt",
@@ -37,6 +39,12 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   fileDinhKem: any[] = [];
   STATUS = STATUS;
   expandSet = new Set<number>();
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  printSrc: any
+  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -118,7 +126,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh,
         loaiDeXuat: data.loaiDeXuat,
-        soQdDc  :data.soQdDc
+        soQdDc: data.soQdDc
       });
       this.fileDinhKem = data.fileDinhKems;
       this.dataTable = data.thongTinGiaLt;
@@ -272,7 +280,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
               tenLoaiGia: chiTietToTrinh.tenLoaiGia ? chiTietToTrinh.tenLoaiGia : null,
               soToTrinh: chiTietToTrinh.soToTrinh ? chiTietToTrinh.soToTrinh : null,
               tieuChuanCl: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
-              soQdDc : uniqueSoDeXuatArray && data.formData?.loaiQd == '01' ? uniqueSoDeXuatArray.join(', ') : ""
+              soQdDc: uniqueSoDeXuatArray && data.formData?.loaiQd == '01' ? uniqueSoDeXuatArray.join(', ') : ""
             })
           }
           this.buildTreePagCt();
@@ -315,6 +323,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
                 child.giaQdDcBtc = item.giaQdDcBtc;
               }
             }
+            child.loai = "00";
             this.dataTable.push(child);
           })
         }
@@ -337,6 +346,61 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       });
     }
   }
+
+
+  async previewQdGia() {
+    try {
+      this.spinner.show();
+      this.convertTreeToList();
+      let body= this.formData.value;
+      body.typeFile = "pdf";
+      body.trangThai = "01";
+      body.listDto = this.dataTable;
+      console.log(body,111)
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+      this.buildTreePagCt();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.trangThai = "01";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadPdf() {
+
+  }
+
+    closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  }
+
 }
 
 

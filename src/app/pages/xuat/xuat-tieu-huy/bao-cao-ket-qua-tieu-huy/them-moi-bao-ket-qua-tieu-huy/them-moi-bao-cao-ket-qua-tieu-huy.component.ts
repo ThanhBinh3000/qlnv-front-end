@@ -145,7 +145,7 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base3Component implemen
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.DU_THAO && this.isAccessPermisson('XHDTQG_XTH_BCKQ_THEM'));
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC) && this.isAccessPermisson('XHDTQG_XTH_BCKQ_THEM');
   }
 
   save(isGuiDuyet?) {
@@ -180,7 +180,8 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base3Component implemen
   }
 
   disabled() {
-    return this.formData.value.trangThai != STATUS.DU_THAO;
+    let trangThai = this.formData.value.trangThai
+    return trangThai != STATUS.DU_THAO || trangThai != STATUS.TU_CHOI_TP || trangThai != STATUS.TU_CHOI_LDC;
   }
 
   showPheDuyetTuChoi() {
