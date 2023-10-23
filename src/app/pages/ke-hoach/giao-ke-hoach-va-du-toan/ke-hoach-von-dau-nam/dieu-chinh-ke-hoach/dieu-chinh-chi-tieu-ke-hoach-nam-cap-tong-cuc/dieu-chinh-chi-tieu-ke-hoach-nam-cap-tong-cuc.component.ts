@@ -52,7 +52,7 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
       ngayKyDen: [],
       trichYeu: [],
       type: ["02"],
-      // cap: [],
+      cap: [],
     })
     this.filterTable = {
       namKeHoach: '',
