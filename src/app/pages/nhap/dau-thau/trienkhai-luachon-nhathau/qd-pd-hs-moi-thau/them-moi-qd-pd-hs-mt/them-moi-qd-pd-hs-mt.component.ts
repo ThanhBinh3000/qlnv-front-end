@@ -69,6 +69,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
       tgianDthauTime: [],
       tgianMthauTime: [],
       gtriDthau: [],
+      idQdPdKhlcntDtl: [],
     })
   }
 
@@ -127,6 +128,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
             this.formData.patchValue({
               soQdPdKhlcnt: data.soQd,
               idQdPdKhlcnt: data.id,
+              idQdPdKhlcntDtl: chiCuc.id,
               tenDuAn: chiCuc.tenDuAn,
               tenLoaiVthh: chiCuc.tenLoaiVthh,
               tenCloaiVthh: chiCuc.tenCloaiVthh,

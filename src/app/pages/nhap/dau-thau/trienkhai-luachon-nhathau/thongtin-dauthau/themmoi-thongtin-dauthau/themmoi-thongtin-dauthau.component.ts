@@ -207,7 +207,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       this.listLoaiHopDong = resHd.data;
     }
     this.listNhaThau = [];
-    let resNt = await this.donviLienQuanService.getAll({ "typeDvi": "NT" });
+    let resNt = await this.thongTinDauThauService.getDanhSachNhaThau();
     if (resNt.msg == MESSAGE.SUCCESS) {
       this.listNhaThau = resNt.data;
     }
@@ -791,5 +791,18 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     this.listOfData[i].kqlcntDtl.tenTrangThai = this.dsTrangThai.find(item => item.value == this.itemRowQd[i].trangThai).text;
     this.listOfData[i].kqlcntDtl.tenNhaThau = this.listNthauNopHs.find(item => item.id == this.itemRowQd[i].idNhaThau)?.tenNhaThau;
     this.listOfData[i].edit = false;
+  }
+
+  changeNhaThau(event?: any) {
+    if (event.nzValue != '') {
+      this.listNhaThau.forEach(item => {
+        if (item.tenNhaThau == event.nzValue) {
+          this.itemRow.donGia = item.donGia
+          this.itemRow.mst = item.mst
+          this.itemRow.diaChi = item.diaChi
+          this.itemRow.sdt = item.sdt
+        }
+      })
+    }
   }
 }

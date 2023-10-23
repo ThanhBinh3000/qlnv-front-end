@@ -65,6 +65,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         taiKhoanNo: [],
         taiKhoanCo: [],
         idQdGiaoNvXh: [],
+        idDtlQdGiaoNvXh: [],
         soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
         maDiemKho: ['', [Validators.required]],
@@ -91,8 +92,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         donViTinh: [],
         theoChungTu: [],
         thucXuat: [],
-        donGia: [],
-        thanhTien: [],
+        // donGia: [],
+        // thanhTien: [],
         ghiChu: [],
         trangThai: [STATUS.DU_THAO],
         tenDvi: [],
@@ -211,6 +212,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     this.formData.patchValue({
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
+      idDtlQdGiaoNvXh: data.idDtlQdGiaoNvXh,
       ngayQdGiaoNvXh: data.ngayKy,
     });
     let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);

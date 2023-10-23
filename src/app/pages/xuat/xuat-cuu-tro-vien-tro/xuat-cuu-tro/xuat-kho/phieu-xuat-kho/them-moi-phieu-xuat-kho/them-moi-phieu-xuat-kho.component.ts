@@ -46,7 +46,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   listFileDinhKem: any = [];
   templateName = "Phiếu xuất kho";
   templateNameVt = "Phiếu xuất kho";
-
+  listDonViNhan: any[];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -72,6 +72,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         taiKhoanNo: [],
         taiKhoanCo: [],
         idQdGiaoNvXh: [],
+        idDtlQdGiaoNvXh: [],
         soQdGiaoNvXh: [],
         ngayQdGiaoNvXh: [],
         maDiemKho: ['', [Validators.required]],
@@ -98,8 +99,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         donViTinh: [],
         theoChungTu: [],
         thucXuat: [],
-        donGia: [],
-        thanhTien: [],
+        // donGia: [],
+        // thanhTien: [],
         ghiChu: ['', [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         tenDvi: [],
@@ -146,11 +147,14 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async loadDetail(idInput: number) {
     if (idInput > 0) {
       await this.phieuXuatKhoService.getDetail(idInput)
-        .then((res) => {
+        .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
             const data = res.data;
             this.fileDinhKems = data.fileDinhKems;
+
+            await this.bindingDataQd(res.data.idQdGiaoNvXh);
+            this.getDsDonViNhan()
           }
         })
         .catch((e) => {
@@ -174,7 +178,17 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     }
 
   }
-
+  getDsDonViNhan() {
+    const { maNganKho, maLoKho } = this.formData.value;
+    const maNganLo = maLoKho ? `${maLoKho}-${maNganKho}` : maNganKho;
+    this.listDonViNhan = [];
+    this.listDiaDiemNhap.forEach(f => {
+      const maNganLoDiaDiemNhap = f.maLoKho ? `${f.maLoKho}-${f.maNganKho}` : f.maNganKho;
+      if (maNganLo === maNganLoDiaDiemNhap && this.listDonViNhan.findIndex(m => m.noiDungDx == f.noiDungDx) < 0) {
+        this.listDonViNhan.push({ noiDungDx: f.noiDungDx, soLuong: f.soLuong })
+      }
+    })
+  }
   quayLai() {
     this.showListEvent.emit();
   }
@@ -217,6 +231,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         this.formData.patchValue({
           soQdGiaoNvXh: '',
           idQdGiaoNvXh: '',
+          idDtlQdGiaoNvXh: '',
           ngayQdGiaoNvXh: '',
           thoiGianGiaoNhan: '',
           loaiNhapXuat: '',
@@ -235,6 +250,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     this.formData.patchValue({
       soQdGiaoNvXh: data.soBbQd,
       idQdGiaoNvXh: data.id,
+      idDtlQdGiaoNvXh: data.idDtlQdGiaoNvXh,
       ngayQdGiaoNvXh: data.ngayKy,
       thoiGianGiaoNhan: data.thoiGianGiaoNhan,
       loaiNhapXuat: data.loaiNhapXuat,
@@ -265,8 +281,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDiaDiemNhap,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Nơi nhận'],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'noiDungDx']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -298,6 +314,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       const tenNganLo = data.tenLoKho ? `${data.tenLoKho}-${data.tenNganKho}` : data.tenNganKho;
       const phieuKtraClData = list.find(f => f.tenNganLo === tenNganLo) ? list.find(f => f.tenNganLo === tenNganLo) : null;
       this.bindingDataPhieuKncl(phieuKtraClData)
+      this.getDsDonViNhan();
     }
   }
   bindingDataPhieuKncl(data: any) {

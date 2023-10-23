@@ -386,6 +386,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       this.dataTableView.forEach(item => {
         if (item.children && item.children.length > 0) {
           item.children.forEach(child => {
+            child.loai = "00";
             arr.push(child);
           })
         }
@@ -397,6 +398,12 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       body.pagType = this.pagType;
       body.type = this.type;
       body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "thong_tin_gia.xlsx");
+      });
+      this.showDlgPreview = true
     } catch (e) {
       console.log(e);
     } finally {
@@ -405,7 +412,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   }
 
   async downloadPdf() {
-
+    saveAs(this.pdfSrc, 'quyet_dinh_gia.pdf');
   }
 
     closeDlg() {

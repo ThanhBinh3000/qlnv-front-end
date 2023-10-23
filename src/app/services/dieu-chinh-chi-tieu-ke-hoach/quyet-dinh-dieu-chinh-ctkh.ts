@@ -48,6 +48,11 @@ export class QuyetDinhDieuChinhCTKHService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' });
   }
 
+  exportlistTc(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/export/list-tc`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
+
   searchTc(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu-tc`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
