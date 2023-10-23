@@ -59,6 +59,16 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
     this.search();
   }
 
+  clearForm() {
+    this.formData.reset();
+    this.formData.value.capDvi = this.capDvi;
+    this.formData.patchValue({
+      capDvi: this.capDvi,
+      loai: '00',
+    });
+    this.search();
+  }
+
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
