@@ -270,20 +270,20 @@
                 </nz-form-item>
               </div>
             </ng-container>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
             <ng-container *ngIf="['XC', 'CTVT'].includes(loaiXuat)">
-              <div nz-col [nzSpan]="12">
+              <div nz-col [nzSpan]="4">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">Hình thức kê lót/bảo quản</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-checkbox-group formControlName="hinhThucBaoQuan" nzDisabled class="grid-1"></nz-checkbox-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true" class="grid-1"></nz-checkbox-group>
                   </nz-form-control>
                 </nz-form-item>
               </div>
