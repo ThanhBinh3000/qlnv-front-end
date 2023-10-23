@@ -70,7 +70,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
       trichYeu: [null, Validators.required],
       ngayDuyet: [null],
       lyDoTuChoi: [null],
-      trangThai: ['00'],
+      trangThai: [STATUS.DU_THAO],
       trangThaiTh: [STATUS.CHUA_TONG_HOP],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],

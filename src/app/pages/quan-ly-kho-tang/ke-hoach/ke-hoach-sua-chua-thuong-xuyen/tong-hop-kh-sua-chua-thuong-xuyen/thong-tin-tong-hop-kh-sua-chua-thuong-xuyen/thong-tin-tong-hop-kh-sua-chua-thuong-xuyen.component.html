@@ -22,13 +22,15 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf=" !isViewQd && (formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "
+              *ngIf=" !isViewQd && (formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_DUYETLDV'))
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_DUYETLCTC'))  && isTongHop "
               (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf=" !isViewQd &&(formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "
+              *ngIf=" !isViewQd &&(formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_DUYETLDV'))
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_DUYETLCTC'))  && isTongHop "
               (click)="save(true)">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
