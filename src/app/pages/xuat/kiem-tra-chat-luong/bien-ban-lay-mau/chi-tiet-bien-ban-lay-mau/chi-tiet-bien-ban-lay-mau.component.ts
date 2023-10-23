@@ -27,6 +27,7 @@ import printJS from 'print-js';
 import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
+import { QuyetDinhPheDuyetPhuongAnCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service';
 
 @Component({
   selector: 'app-chi-tiet-bien-ban-lay-mau',
@@ -65,7 +66,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     private donviService: DonviService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private danhMucService: DanhMucService,
-    private mangLuoiKhoService: MangLuoiKhoService
+    private mangLuoiKhoService: MangLuoiKhoService,
+    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService
   ) {
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
@@ -190,9 +192,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       })
       if (this.inputData) {
         await this.bindingQdGnv(this.inputData.idQdGnv);
-      } else {
-        this.formData.patchValue({ type: this.loaiXuat })
       }
+      this.formData.patchValue({ type: this.loaiXuat })
     }
   }
 
@@ -562,6 +563,12 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           soQdPd: res.data.soQdPd,
           ngayKyQdPd: res.data.ngayKyQdPd
         });
+      }
+    }
+    if (this.loaiXuat === "CTVT" && res.data.idQdPd) {
+      const resData = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(res.data.idQdPd);
+      if (resData.msg === MESSAGE.SUCCESS) {
+        this.formData.patchValue({ ngayKyQdPd: resData.data.ngayKy })
       }
     }
   }
