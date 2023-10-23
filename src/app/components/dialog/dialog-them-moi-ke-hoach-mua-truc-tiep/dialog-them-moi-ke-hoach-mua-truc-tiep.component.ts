@@ -96,7 +96,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     await this.initForm();
     this.updateEditCache();
     this.disableChiCuc();
-    await this.getGiaToiDa(this.maDviCuc ? this.maDviCuc : this.userInfo.MA_DVI);
+    // await this.getGiaToiDa(this.maDviCuc ? this.maDviCuc : this.userInfo.MA_DVI);
   }
 
   save() {
@@ -212,6 +212,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       maDvi: event
     }
     await this.getGiaCuThe(event)
+    await this.getGiaToiDa(event);
     let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
     console.log(this.dataChiTieu)
     let resChiTieu = this.dataChiTieu?.khLuongThuc.find(x => x.maDonVi == event);
