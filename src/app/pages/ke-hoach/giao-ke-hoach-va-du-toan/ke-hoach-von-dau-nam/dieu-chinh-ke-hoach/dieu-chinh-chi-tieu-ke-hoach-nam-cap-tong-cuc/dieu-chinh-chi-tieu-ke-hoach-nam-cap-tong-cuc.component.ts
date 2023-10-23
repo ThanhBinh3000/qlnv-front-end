@@ -298,11 +298,20 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
         }
         let body = this.formData.value;
 
-        this.quyetDinhDieuChinhCTKHService
-          .exportlist(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chinh-chi-tieu-kh.xlsx'),
-          );
+        if (this.indexTab == 0) {
+          this.quyetDinhDieuChinhCTKHService
+            .exportlistTc(body)
+            .subscribe((blob) =>
+              saveAs(blob, 'quyet-dinh-dieu-chinh-chi-tieu-kh-tc.xlsx'),
+            );
+        } else {
+          this.quyetDinhDieuChinhCTKHService
+            .exportlist(body)
+            .subscribe((blob) =>
+              saveAs(blob, 'quyet-dinh-dieu-chinh-chi-tieu-kh.xlsx'),
+            );
+        }
+
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
