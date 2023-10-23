@@ -181,7 +181,7 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base3Component implemen
 
   disabled() {
     let trangThai = this.formData.value.trangThai
-    return trangThai != STATUS.DU_THAO || trangThai != STATUS.TU_CHOI_TP || trangThai != STATUS.TU_CHOI_LDC;
+    return !(trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC);
   }
 
   showPheDuyetTuChoi() {
