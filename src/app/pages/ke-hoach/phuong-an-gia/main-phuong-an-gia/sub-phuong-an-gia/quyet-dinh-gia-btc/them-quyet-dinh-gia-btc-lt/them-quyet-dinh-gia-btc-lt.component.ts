@@ -352,11 +352,16 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     try {
       this.spinner.show();
       let arr = [];
-      this.dataTableView.forEach(item => {
+      this.dataTableView.forEach((item, index) => {
         if (item.children && item.children.length > 0) {
+          let itemClonePr = cloneDeep(item);
+          itemClonePr.giaQdBtc = null;
+          itemClonePr.stt = index + 1;
+          arr.push(itemClonePr)
           item.children.forEach(child => {
-            child.loai = "00";
-            arr.push(child);
+            let itemCloneChild = cloneDeep(child);
+            itemCloneChild.tenDvi = "";
+            arr.push(itemCloneChild);
           })
         }
       });
@@ -385,8 +390,9 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       let arr = [];
       this.dataTableView.forEach(item => {
         if (item.children && item.children.length > 0) {
+          arr.push(item)
           item.children.forEach(child => {
-            child.loai = "00";
+            child.tenDvi = "";
             arr.push(child);
           })
         }
