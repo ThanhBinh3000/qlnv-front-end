@@ -178,6 +178,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
     this.idRowSelect = data.id;
     this.dataTable = data.listChaoGia
+    console.log(this.dataTable, "datatable")
     this.updateEditCache()
     this.updateEditCacheDk()
     await this.spinner.hide();

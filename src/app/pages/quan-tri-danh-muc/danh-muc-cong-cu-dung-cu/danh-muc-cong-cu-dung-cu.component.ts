@@ -1,23 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {cloneDeep} from 'lodash';
-import {QlDinhMucPhiService} from "../../../services/qlnv-kho/QlDinhMucPhi.service";
-import {DanhMucService} from "../../../services/danhmuc.service";
-import {DanhMucDinhMucService} from "../../../services/danh-muc-dinh-muc.service";
-import {DanhMucCongCuDungCu, DanhMucMucPhi} from "../../../models/DeXuatKeHoachuaChonNhaThau";
-import {MESSAGE} from "../../../constants/message";
-import {DanhMucCongCuDungCuService} from "../../../services/danh-muc-cong-cu-dung-cu.service";
-import {FormGroup, Validators} from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import { Base2Component } from '../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { cloneDeep } from 'lodash';
+import { QlDinhMucPhiService } from '../../../services/qlnv-kho/QlDinhMucPhi.service';
+import { DanhMucService } from '../../../services/danhmuc.service';
+import { DanhMucDinhMucService } from '../../../services/danh-muc-dinh-muc.service';
+import { DanhMucCongCuDungCu, DanhMucMucPhi } from '../../../models/DeXuatKeHoachuaChonNhaThau';
+import { MESSAGE } from '../../../constants/message';
+import { DanhMucCongCuDungCuService } from '../../../services/danh-muc-cong-cu-dung-cu.service';
+import { FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-danh-muc-cong-cu-dung-cu',
   templateUrl: './danh-muc-cong-cu-dung-cu.component.html',
-  styleUrls: ['./danh-muc-cong-cu-dung-cu.component.scss']
+  styleUrls: ['./danh-muc-cong-cu-dung-cu.component.scss'],
 })
 export class DanhMucCongCuDungCuComponent extends Base2Component implements OnInit {
   formData: FormGroup;
@@ -35,14 +35,14 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private danhMucCongCuDungCuService: DanhMucCongCuDungCuService
+    private danhMucCongCuDungCuService: DanhMucCongCuDungCuService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, danhMucCongCuDungCuService)
-    super.ngOnInit()
+    super(httpClient, storageService, notification, spinner, modal, danhMucCongCuDungCuService);
+    super.ngOnInit();
     this.formData = this.fb.group({
       maCcdc: ['', [Validators.required]],
       tenCcdc: ['', [Validators.required]],
-      moTa: ['',],
+      moTa: [''],
       yeuCauKt: ['', [Validators.required]],
       donViTinh: ['', [Validators.required]],
       nhomCcdc: ['', [Validators.required]],
@@ -52,7 +52,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
       id: ['', [Validators.required]],
       maCcdc: ['', [Validators.required]],
       tenCcdc: ['', [Validators.required]],
-      moTa: ['',],
+      moTa: [''],
       yeuCauKt: ['', [Validators.required]],
       donViTinh: ['', [Validators.required]],
       nhomCcdc: ['', [Validators.required]],
@@ -65,10 +65,10 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
   dataTable: any[] = [];
   pageSize: number = 50;
   searchForm = {
-    tenCcdc: '',
-    nhomCcdc: '',
-    trangThai: '',
-    moTa: '',
+    tenCcdc: null,
+    nhomCcdc: null,
+    trangThai: null,
+    moTa: null,
   };
 
   async ngOnInit() {
@@ -77,20 +77,46 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
     this.getListNhomCcdc();
   }
 
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      this.filter();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      this.spinner.hide();
+      this.filter();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
 
   async filter() {
     this.spinner.show();
     try {
       let body = {
-        "tenCcdc": this.searchForm.tenCcdc ? this.searchForm.tenCcdc : "",
-        "nhomCcdc": this.searchForm.nhomCcdc ? this.searchForm.nhomCcdc : "",
-        "trangThai": this.searchForm.trangThai ? this.searchForm.trangThai : "",
-        "moTa": this.searchForm.moTa ? this.searchForm.moTa : "",
-        "paggingReq": {
+        'tenCcdc': this.searchForm.tenCcdc ? this.searchForm.tenCcdc : null,
+        'nhomCcdc': this.searchForm.nhomCcdc ? this.searchForm.nhomCcdc : null,
+        'trangThai': this.searchForm.trangThai ? this.searchForm.trangThai : null,
+        'moTa': this.searchForm.moTa ? this.searchForm.moTa : null,
+        'paggingReq': {
           limit: this.pageSize,
-          page: this.page - 1
-        }
-      }
+          page: this.page - 1,
+        },
+      };
       let res = await this.danhMucCongCuDungCuService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
@@ -126,10 +152,10 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
 
   resetFilter() {
     this.searchForm = {
-      tenCcdc: '',
-      nhomCcdc: '',
-      trangThai: '',
-      moTa: '',
+      tenCcdc: null,
+      nhomCcdc: null,
+      trangThai: null,
+      moTa: null,
     };
     this.search();
   }
@@ -176,7 +202,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
             this.spinner.hide();
           });
         } catch (e) {
-          console.log('error: ', e)
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -186,7 +212,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
 
   huyEdit(idx: number): void {
     this.dataEdit[idx] = {
-      data: {...this.dataTable[idx]},
+      data: { ...this.dataTable[idx] },
       edit: false,
     };
     this.sttEdit = 0;
@@ -203,7 +229,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
         yeuCauKt: data.yeuCauKt,
         moTa: data.moTa,
         trangThai: data.trangThai,
-      })
+      });
       this.helperService.markFormGroupTouched(this.formDataChinhSua);
       if (this.formDataChinhSua.invalid) {
         this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
@@ -216,16 +242,16 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
         return;
       }
     }
-    let body = this.formData.value
-    let res
+    let body = this.formData.value;
+    let res;
     if (idInput) {
-      let body = this.formDataChinhSua.value
+      let body = this.formDataChinhSua.value;
       res = await this.danhMucCongCuDungCuService.update(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        this.formData.reset()
-        await this.search()
-        this.updateEditCache()
+        this.formData.reset();
+        await this.search();
+        this.updateEditCache();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -233,9 +259,9 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
       res = await this.danhMucCongCuDungCuService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        this.formData.reset()
-        await this.search()
-        this.updateEditCache()
+        this.formData.reset();
+        await this.search();
+        this.updateEditCache();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -247,8 +273,8 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
-        }
+          data: { ...item },
+        };
       });
     }
   }
@@ -264,7 +290,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
 
   handleOk(): void {
     this.formData.patchValue({
-      yeuCauKt: this.yeuCauKt
+      yeuCauKt: this.yeuCauKt,
     });
     this.isVisible = false;
   }

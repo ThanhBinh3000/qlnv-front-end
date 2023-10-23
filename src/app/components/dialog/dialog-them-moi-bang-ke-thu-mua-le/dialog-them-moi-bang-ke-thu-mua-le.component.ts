@@ -118,7 +118,10 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
         tenLoaiVthh: this.dataEdit.tenLoaiVthh,
         tenCloaiVthh: this.dataEdit.tenCloaiVthh,
         moTaHangHoa: this.dataEdit.moTaHangHoa,
-        soLuongQd: this.dataEdit.hhQdGiaoNvNhangDtlList?.find(x => x.maDvi == this.userInfo.MA_DVI).soLuong,
+        soLuongQd: this.dataEdit.hhQdGiaoNvNhangDtlList?.find(x => x.maDvi == this.userInfo.MA_DVI).children.reduce((prev, cur) => {
+          prev += cur.soLuong;
+          return prev;
+        }, 0),
       })
     }
   }
@@ -252,9 +255,12 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
-      soLuongQd: data.hhQdGiaoNvNhangDtlList?.find(x => x.maDvi == this.userInfo.MA_DVI).soLuong,
+      soLuongQd: data.hhQdGiaoNvNhangDtlList?.find(x => x.maDvi == this.userInfo.MA_DVI).children.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0),
     });
-    console.log("bindingDataQd", this.formData.value)
+    console.log("bindingDataQd", data)
     await this.spinner.hide();
   }
 
