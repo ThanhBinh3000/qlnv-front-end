@@ -80,6 +80,7 @@ export class BangkeThumualeComponent extends Base2Component implements OnInit {
     await this.spinner.show();
     try {
       let body = this.formData.value
+      body.maDvi = this.userInfo.MA_DVI
       body.tuNgayMua = this.tuNgayMua != null ? dayjs(this.tuNgayMua).format('YYYY-MM-DD') + " 00:00:00" : null
       body.denNgayMua = this.denNgayMua != null ? dayjs(this.denNgayMua).format('YYYY-MM-DD') + " 23:59:59" : null
       body.paggingReq = {
