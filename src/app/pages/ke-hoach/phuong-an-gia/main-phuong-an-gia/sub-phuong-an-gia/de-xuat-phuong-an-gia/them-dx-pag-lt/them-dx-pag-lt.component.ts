@@ -292,7 +292,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         if (dataChiTieu) {
           this.dataChiTieu = dataChiTieu;
         } else {
-          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
+          this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
           return;
         }
       }

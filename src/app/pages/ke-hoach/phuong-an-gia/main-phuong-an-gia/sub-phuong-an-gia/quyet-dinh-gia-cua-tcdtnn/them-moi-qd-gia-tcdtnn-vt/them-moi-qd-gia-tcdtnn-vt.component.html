@@ -136,6 +136,11 @@
         <span>THÔNG TIN GIÁ</span>
       </div>
     </div>
+    <button
+      type="button" class="btn btn-sub do" (click)="previewQdGia()" *ngIf="idInput > 0">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      <span>Xem trước</span>
+    </button>
   </div>
   <span class="text-right">
       <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng/kg</h2>
@@ -273,6 +278,31 @@
     </div>
   </form>
 </div>
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="QUYẾT ĐỊNH GIÁ CỦA TỔNG CỤC DỰ TRỮ NHÀ NƯỚC" nzWidth="100%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [original-size]="false" [render-text]="true" style="width: 100%; height: 600px;">
+    </pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="downloadPdf()" class="modal__button--save">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      Tải báo cáo
+    </button>
+    <button nz-button (click)="downloadExcel()" class="modal__button--save">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      Tải báo cáo Excel
+    </button>
+    <button nz-button (click)="printPreview()" class="modal__button--save">
+      <i class="icon htvbdh_tcdt_print"></i>
+      In
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}

@@ -419,7 +419,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   }
 
   async downloadPdf() {
-
+    saveAs(this.pdfSrc, 'quyet_dinh_gia.pdf');
   }
 
   closeDlg() {
