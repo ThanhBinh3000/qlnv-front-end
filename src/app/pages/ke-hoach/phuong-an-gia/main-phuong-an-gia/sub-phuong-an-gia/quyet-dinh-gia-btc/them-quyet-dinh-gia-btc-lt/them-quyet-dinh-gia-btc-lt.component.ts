@@ -18,6 +18,7 @@ import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {saveAs} from "file-saver";
 import printJS from "print-js";
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-lt",
@@ -323,7 +324,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
                 child.giaQdDcBtc = item.giaQdDcBtc;
               }
             }
-            child.loai = "00";
             this.dataTable.push(child);
           })
         }
@@ -351,18 +351,27 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   async previewQdGia() {
     try {
       this.spinner.show();
-      this.convertTreeToList();
-      let body= this.formData.value;
+      let arr = [];
+      this.dataTableView.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          item.children.forEach(child => {
+            child.loai = "00";
+            arr.push(child);
+          })
+        }
+      });
+      let body = cloneDeep(this.formData.value);
       body.typeFile = "pdf";
       body.trangThai = "01";
-      body.listDto = this.dataTable;
-      console.log(body,111)
+      body.listDto = arr;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
       await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
       this.showDlgPreview = true;
-      this.buildTreePagCt();
     } catch (e) {
       console.log(e);
     } finally {
@@ -373,15 +382,28 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   async downloadExcel() {
     try {
       this.spinner.show();
-      let body = this.formData.value;
+      let arr = [];
+      this.dataTableView.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          item.children.forEach(child => {
+            child.loai = "00";
+            arr.push(child);
+          })
+        }
+      });
+      let body = cloneDeep(this.formData.value);
       body.typeFile = "xlsx";
       body.trangThai = "01";
+      body.listDto = arr;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
       await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bccl_cong_tac_bao_quan_gao.xlsx");
+        saveAs(this.excelBlob, "thong_tin_gia.xlsx");
       });
-      this.showDlgPreview = true;
+      this.showDlgPreview = true
     } catch (e) {
       console.log(e);
     } finally {
@@ -390,7 +412,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   }
 
   async downloadPdf() {
-
+    saveAs(this.pdfSrc, 'quyet_dinh_gia.pdf');
   }
 
     closeDlg() {

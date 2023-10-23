@@ -19,7 +19,12 @@ import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {DonviService} from "../../../../../../../services/donvi.service";
 import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
-
+import {saveAs} from "file-saver";
+import printJS from "print-js";
+import { cloneDeep } from 'lodash';
+import {
+  QuyetDinhGiaCuaBtcService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-lt',
   templateUrl: './them-moi-qd-gia-tcdtnn-lt.component.html',
@@ -40,6 +45,12 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   fileDinhKem: any[] = [];
   STATUS = STATUS;
   expandSet = new Set<number>();
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  printSrc: any
+  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -50,6 +61,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     public globals: Globals,
     private helperService: HelperService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private danhMucService: DanhMucService,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
     private notification: NzNotificationService
@@ -343,34 +355,81 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     }
   }
 
-  async tongHopData(body) {
+  async previewQdGia() {
     try {
       this.spinner.show();
-      let res = await this.tongHopPhuongAnGiaService.tongHop(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let pagTh = res.data;
-        if (pagTh) {
-          this.formData.patchValue({
-            loaiVthh: pagTh.loaiVthh ? pagTh.loaiVthh : null,
-            cloaiVthh: pagTh.cloaiVthh ? pagTh.cloaiVthh : null,
-            tenLoaiVthh: pagTh.tenLoaiVthh ? pagTh.tenLoaiVthh : null,
-            tenCloaiVthh: pagTh.tenCloaiVthh ? pagTh.tenCloaiVthh : null,
-            loaiGia: pagTh.loaiGia ? pagTh.loaiGia : null,
-            tenLoaiGia: pagTh.tenLoaiGia ? pagTh.tenLoaiGia : null
+      let arr = [];
+      this.dataTableView.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          item.children.forEach(child => {
+            child.loai = "00";
+            arr.push(child);
           })
-          this.dataTable = res.data?.pagChiTiets;
-          this.buildTreePagCt();
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
+      });
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "pdf";
+      body.trangThai = "01";
+      body.listDto = arr;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(e);
     } finally {
-      await this.spinner.hide();
+      this.spinner.hide();
     }
   }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let arr = [];
+      this.dataTableView.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          item.children.forEach(child => {
+            child.loai = "00";
+            arr.push(child);
+          })
+        }
+      });
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "xlsx";
+      body.trangThai = "01";
+      body.listDto = arr;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "quyet_dinh_gia.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadPdf() {
+    saveAs(this.pdfSrc, 'quyet_dinh_gia.pdf');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  }
+
 
 
 
