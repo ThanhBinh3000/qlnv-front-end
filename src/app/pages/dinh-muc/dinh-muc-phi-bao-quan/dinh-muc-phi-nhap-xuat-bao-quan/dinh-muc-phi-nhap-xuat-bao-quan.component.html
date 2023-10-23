@@ -1,6 +1,6 @@
 <div class='luong-thuc__danh-sach' *ngIf='!isDetail; else templateThemmoi'>
   <div class='bg-trang'>
-    <h3 class='mt-16'>ĐỊNH MỨC NHẬP XUẤT BẢO QUẢN {{capDvi == 1 ? 'ĐƯỢC CẤP CÓ THẨM QUYỀN' : 'CỤC DTNN KV' }} GIAO</h3>
+    <h3 class='mt-16'>ĐỊNH MỨC NHẬP, XUẤT, BẢO QUẢN {{capDvi == 1 ? 'ĐƯỢC CẤP' : 'CỤC DTNN KV GIAO' }} </h3>
     <nz-card class='flex-card p-lr16'>
       <form [nzLayout]="'vertical'" [formGroup]='formData' nz-form>
         <div class='search__body mt-2' nz-row [nzGutter]='[18, 12]'>
@@ -46,7 +46,7 @@
       </div>
     </nz-card>
     <div class='group-button'>
-      <h3 class='text-uppercase'>Danh sách quyết định định mức phí nhập xuất bảo
+      <h3 class='text-uppercase'>Danh sách quyết định định mức phí nhập, xuất, bảo
         quản {{capDvi == 1 ? 'được cấp có thẩm quyền ' : 'cục'}} giao</h3>
       <div class='buttons'>
         <button type='button'
