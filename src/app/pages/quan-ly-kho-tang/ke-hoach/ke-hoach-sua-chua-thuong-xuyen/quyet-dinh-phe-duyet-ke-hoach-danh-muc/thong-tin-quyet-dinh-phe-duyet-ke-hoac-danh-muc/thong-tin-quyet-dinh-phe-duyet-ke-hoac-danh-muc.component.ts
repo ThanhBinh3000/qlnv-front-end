@@ -256,10 +256,8 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listToTrinh = data.content;
-      console.log(this.listToTrinh, 'this.listToTrinh');
       if (this.listToTrinh && this.listToTrinh.length > 0) {
         this.listToTrinh = this.listToTrinh.filter(item => item.trangThai == STATUS.DA_DUYET_LDTC && !item.soQdPdKhDm);
-        console.log(this.listToTrinh, 'this.listToTrinh123');
       }
     }
   }

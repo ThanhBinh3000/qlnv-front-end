@@ -3583,6 +3583,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           typeFile: 'xlsx',
           nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
           idHdr: this.thongTinChiTieuKeHoachNam.id,
+          maBieuSo: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
+          ngayBatDauQuy: this.thongTinChiTieuKeHoachNam.ngayKy,
           fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
           loaiNhapXuat: 'NHAP'
         }).then(async s => {
@@ -3594,6 +3596,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           typeFile: 'xlsx',
           nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
           idHdr: this.thongTinChiTieuKeHoachNam.id,
+          maBieuSo: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
+          ngayBatDauQuy: this.thongTinChiTieuKeHoachNam.ngayKy,
           fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
           loaiNhapXuat: 'XUAT'
         }).then(async s => {

@@ -261,7 +261,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
             children: value,
             apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
             vat : value && value[0] && value[0].vat ? value[0].vat : null,
-            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
+            // giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
             giaQdTcdt : value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
             giaQdDcTcdt : value && value[0] && value[0].giaQdDcTcdt ? value[0].giaQdDcTcdt : null,
           };
@@ -359,11 +359,16 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     try {
       this.spinner.show();
       let arr = [];
-      this.dataTableView.forEach(item => {
+      this.dataTableView.forEach((item, index) => {
         if (item.children && item.children.length > 0) {
+          let itemClonePr = cloneDeep(item);
+          itemClonePr.giaQdTcdt = null;
+          itemClonePr.stt = index + 1;
+          arr.push(itemClonePr)
           item.children.forEach(child => {
-            child.loai = "00";
-            arr.push(child);
+            let itemCloneChild = cloneDeep(child);
+            itemCloneChild.tenDvi = "";
+            arr.push(itemCloneChild);
           })
         }
       });

@@ -57,7 +57,8 @@ export class DeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Component imp
       tenCongTrinh: [''],
       diaDiem: [''],
       trangThai: [''],
-      ngayKy: [''],
+      ngayKyTu: [''],
+      ngayKyDen: [''],
       maDvi: [this.userInfo.MA_DVI],
       capDvi: [this.userInfo.CAP_DVI],
     });
@@ -69,6 +70,14 @@ export class DeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Component imp
       this.formData.value.ngayKyTu = this.formData.value.ngayKy[0];
       this.formData.value.ngayKyDen = this.formData.value.ngayKy[1];
     }
+    this.search();
+  }
+  clearFilter() {
+    this.formData.reset();
+    this.formData.patchValue({
+      maDvi: this.userInfo.MA_DVI,
+      capDvi: this.userInfo.CAP_DVI,
+    })
     this.search();
   }
 

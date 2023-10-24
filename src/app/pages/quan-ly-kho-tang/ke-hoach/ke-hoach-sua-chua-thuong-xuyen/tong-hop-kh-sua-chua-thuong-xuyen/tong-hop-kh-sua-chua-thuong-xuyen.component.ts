@@ -30,6 +30,8 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
     {ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối LĐ Tổng cục'},
     {ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt LĐ Tổng cục'},
   ];
+  openQdPd: boolean;
+  idQdPdKhDm: number;
 
   constructor(
     httpClient: HttpClient,
@@ -55,17 +57,18 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
       maTongHop: [''],
       noiDungTh: [''],
       trangThai: [''],
-      thoiGianTh: [''],
+      ngayThTu: [''],
+      ngayThDen: [''],
       loai : ['00']
     });
     this.filter();
   }
 
   filter() {
-    if (this.formData.value.thoiGianTh && this.formData.value.thoiGianTh.length > 0) {
-      this.formData.value.ngayThTu = this.formData.value.thoiGianTh[0];
-      this.formData.value.ngayThDen = this.formData.value.thoiGianTh[1];
-    }
+    // if (this.formData.value.thoiGianTh && this.formData.value.thoiGianTh.length > 0) {
+    //   this.formData.value.ngayThTu = this.formData.value.thoiGianTh[0];
+    //   this.formData.value.ngayThDen = this.formData.value.thoiGianTh[1];
+    // }
     this.search();
   }
 
@@ -74,5 +77,15 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
   }
+  openQdPdModal(id: number) {
+    this.idQdPdKhDm = id;
+    this.openQdPd = true;
+  }
+
+  closeQdPdModal() {
+    this.idQdPdKhDm = null;
+    this.openQdPd = false;
+  }
+
 
 }
