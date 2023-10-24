@@ -105,7 +105,7 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+      trangThai: STATUS.DA_HOAN_THANH,
       pthucBanTrucTiep: ['02']
     })
   }
