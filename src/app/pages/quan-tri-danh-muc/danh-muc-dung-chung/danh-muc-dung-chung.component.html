@@ -2,15 +2,15 @@
   <div class="group-button">
     <h3>Danh mục dùng chung</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-do" (click)="xoaNhieu()">
+      <button type="button" class="btn btn-do" (click)="xoaNhieu()" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_XOA')">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="exportData()">
+      <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" (click)="them(null, false)">
+      <button type="button" class="btn btn-main" (click)="them(null, false)" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_THEM')">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -82,13 +82,13 @@
           <td>{{data.giaTri}}</td>
           <td>{{data.tenTrangThai}}</td>
           <td>
-            <a (click)="them(data, true)">
+            <a (click)="them(data, true)"  *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_XEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a (click)="them(data, false)">
+            <a (click)="them(data, false)" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_THEM')">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a (click)="xoaItem(data)">
+            <a (click)="xoaItem(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_XOA')">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
