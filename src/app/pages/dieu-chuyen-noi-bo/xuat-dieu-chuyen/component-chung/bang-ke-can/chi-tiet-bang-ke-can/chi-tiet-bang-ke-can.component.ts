@@ -623,14 +623,12 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     if (!!!data.tongTrongLuongBaoBi) {
       data.tongTrongLuongBaoBi= 0;
     }
-    if (data.tongTrongLuongBaoBi) {
-      let tongTrongLuongTruBi = data.tongTrongLuongCabaoBi - data.tongTrongLuongBaoBi;
-      this.formData.patchValue({
-        tongTrongLuongTruBi,
-        tongTrongLuongTruBiText: convertTienTobangChu(tongTrongLuongTruBi),
-        tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
-      });
-    }
+    let tongTrongLuongTruBi = data.tongTrongLuongCabaoBi - data.tongTrongLuongBaoBi;
+    this.formData.patchValue({
+      tongTrongLuongTruBi,
+      tongTrongLuongTruBiText: convertTienTobangChu(tongTrongLuongTruBi),
+      tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
+    });
   }
 
   convertTienTobangChu(tien: number) {
