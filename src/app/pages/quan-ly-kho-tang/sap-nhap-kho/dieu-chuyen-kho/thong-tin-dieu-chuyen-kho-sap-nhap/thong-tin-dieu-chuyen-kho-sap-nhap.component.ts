@@ -63,10 +63,12 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
   dsKhoDen: any;
   hasError: boolean = false;
   dataView: any[] = [];
+  dataTableHangDefault: any[] = [];
   dataTableHang: any[] = [];
   dataViewHang: any[] = [];
   dataTableHangChiCuc: any[] = [];
   dataViewHangChiCuc: any[] = [];
+  dataTableChiCucDefault: any[] = [];
   dataTableChiCuc: any[] = [];
   dataViewChiCuc: any[] = [];
   listDs: { [key: string]: any[] } = {};
@@ -74,6 +76,10 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
   dataTableVp: any[] = [];
   rowItem: { [key: string]: any } = {};
   rowDataVpClone: { [key: string]: any } = {};
+
+  nzActiveDCH: boolean = true
+  nzActiveCCDC: boolean = true
+
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -127,6 +133,57 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
       maDvi: this.userInfo.MA_DVI
     })
   }
+
+  nzActiveChangeDCH(value) {
+    this.nzActiveDCH = value
+  }
+
+  async xoaDCH() {
+    if (this.dataTableHang.length == 0) return
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa dữ liệu?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.nzActiveDCH = true
+        this.dataTableHang = this.dataTableHangDefault
+        this.buildView("dataTableHang", "dataViewHang");
+      },
+      nzOnCancel: async () => {
+        this.nzActiveDCH = true
+      },
+    });
+  }
+
+  nzActiveChangeCCDC(value) {
+    this.nzActiveCCDC = value
+  }
+
+  async xoaCCDC() {
+    if (this.dataTableChiCuc.length == 0) return
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa dữ liệu?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.nzActiveCCDC = true
+        this.dataTableChiCuc = this.dataTableChiCucDefault
+        this.buildView("dataTableChiCuc", "dataViewChiCuc")
+      },
+      nzOnCancel: async () => {
+        this.nzActiveCCDC = true
+      },
+    });
+  }
+
   async save() {
     if (!["SN_DIEM_KHO", "SN_CHI_CUC"].includes(this.formData.value.loai)) {
       this.notification.error(MESSAGE.ERROR, "Loại điều chuyển sáp nhập chưa được xác định");
@@ -332,6 +389,9 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
               this.dataTableHang = Array.isArray(datasDieuChuyen) ? datasDieuChuyen.map(f => ({
                 ...f, groupBy: `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}`
               })) : [];
+              this.dataTableHangDefault = Array.isArray(datasDieuChuyen) ? datasDieuChuyen.map(f => ({
+                ...f, groupBy: `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}`
+              })) : [];
               this.buildView("dataTableHang", "dataViewHang");
             }
           }
@@ -345,6 +405,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
             })));
             if (dataCCDC.length > 0) {
               this.dataTableChiCuc = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
+              this.dataTableChiCucDefault = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
               this.buildView("dataTableChiCuc", "dataViewChiCuc")
             }
           }
