@@ -395,15 +395,16 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     this.dtMuaMuoi = ttMuoi;
   }
 
-  templateName = 'QD-BTC giao TCDT.docx';
+  templateName = 'danh-sach-quyet-dinh-cua-bo-tai-chinh-giao-tong-cuc-du-tru';
 
   async preview(id) {
     this.spinner.show();
     await this.quyetDinhBtcTcdtService.preview({
-      tenBaoCao: this.templateName,
+      tenBaoCao: this.templateName+ '.docx',
       id: id,
     }).then(async res => {
       if (res.data) {
+        this.printSrc = res.data.pdfSrc;
         this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
         this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
         this.showDlgPreview = true;

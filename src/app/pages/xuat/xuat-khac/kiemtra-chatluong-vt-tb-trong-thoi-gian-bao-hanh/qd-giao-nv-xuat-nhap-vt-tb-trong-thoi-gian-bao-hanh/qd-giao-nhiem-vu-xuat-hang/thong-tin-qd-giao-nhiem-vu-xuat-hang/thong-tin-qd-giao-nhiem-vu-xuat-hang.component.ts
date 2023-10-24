@@ -517,7 +517,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
   async openDialogSoQdXuatGiam() {
     await this.loadSoQdXuatGiam();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định giao nhiệm vụ xuất hàng',
+      nzTitle: 'Danh sách quyết định xuất giảm vật tư',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,

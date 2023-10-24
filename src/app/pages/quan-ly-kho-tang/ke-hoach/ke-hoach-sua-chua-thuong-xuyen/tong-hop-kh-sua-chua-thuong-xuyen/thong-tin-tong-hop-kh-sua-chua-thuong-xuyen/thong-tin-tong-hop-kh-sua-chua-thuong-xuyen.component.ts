@@ -94,7 +94,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       soToTrinh: [null, Validators.required],
       soQuyetDinh: [null],
       ngayKy: [null],
-      trangThai: ["00"],
+      trangThai: [STATUS.DU_THAO],
       tenTrangThai: ["Dự thảo"],
       loai: ["00", Validators.required],
       lyDoTuChoi: []
@@ -136,6 +136,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.formData.patchValue({
           soToTrinh: data.soToTrinh ? data.soToTrinh.split('/')[0] : null,
+          soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split('/')[0] : null,
         })
         data.fileDinhKems.forEach(item => {
           if (item.fileType == FILETYPE.FILE_DINH_KEM) {
