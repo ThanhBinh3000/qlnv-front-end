@@ -250,7 +250,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       this.formData.patchValue({
         idQdPd: data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr,
         soQdPd: data.soQdPd,
-        idQdDc: data.xhQdDchinhKhBttHdr ? data.idHdr : '',
+        idQdDc: data.xhQdDchinhKhBttHdr ? data.idHdr : null,
         soQdDc: data.soQdDc,
         idChaoGia: data.id,
         tenDvi: data.tenDvi,
