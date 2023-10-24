@@ -85,14 +85,16 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th rowspan="3">STT</th>
-            <th rowspan="3">Mã đề tài</th>
-            <th rowspan="3">Tên đề tài</th>
-            <th rowspan="3">Cấp</th>
-            <th rowspan="3">Thời gian thực hiện từ</th>
-            <th rowspan="3">Thời gian thực hiện Đến</th>
-            <th rowspan="3">Trạng thái</th>
-            <th rowspan="3">Hành động</th>
+            <th>STT</th>
+            <th>Mã đề tài</th>
+            <th>Tên đề tài</th>
+            <th>Cấp</th>
+            <th>Cơ quan chủ trì</th>
+            <th>Chủ nhiệm đề tài</th>
+            <th>Thời gian thực hiện từ</th>
+            <th>Thời gian thực hiện Đến</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -115,10 +117,21 @@
             </td>
             <td>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.capDeTai"
-                  (input)="filterInTable('capDeTai',filterTable.capDeTai)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCapDt"
+                  (input)="filterInTable('tenCapDt',filterTable.tenCapDt)" />
               </nz-input-group>
-
+            </td>
+            <td>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.dviChuTri"
+                       (input)="filterInTable('dviChuTri',filterTable.dviChuTri)" />
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chuNhiem"
+                       (input)="filterInTable('chuNhiem',filterTable.chuNhiem)" />
+              </nz-input-group>
             </td>
             <td>
               <nz-input-group>
@@ -153,7 +166,9 @@
             <td>{{ data.maDeTai }}</td>
             <td>{{ data.tenDeTai }}</td>
             <td>{{ data.tenCapDt }}</td>
-            <td>{{ data.ngayKyTu | date: 'MM/YYYY'}}</td>
+            <td>{{ data.dviChuTri }}</td>
+            <td>{{ data.chuNhiem }}</td>
+            <td>{{ data.ngayKyTu | date: 'MM/YYYY' }} </td>
             <td>{{ data.ngayKyDen | date: 'MM/YYYY'}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
