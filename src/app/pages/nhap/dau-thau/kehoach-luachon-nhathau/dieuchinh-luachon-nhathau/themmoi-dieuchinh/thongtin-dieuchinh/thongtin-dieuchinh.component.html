@@ -350,7 +350,7 @@
       <ng-container *ngFor="let dtGoiThau of listOfData , let i = index">
         <tr>
           <td nzLeft [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-          <td nzLeft>{{dtGoiThau.goiThau}}</td>
+          <td nzLeft class="multi-line">{{dtGoiThau.goiThau}}</td>
           <td nzLeft></td>
           <td nzLeft></td>
           <td></td>
@@ -377,7 +377,7 @@
             <tr>
               <td nzLeft></td>
               <td nzLeft [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
-              <td nzLeft>{{chiCuc.tenDvi}}</td>
+              <td nzLeft class="multi-line">{{chiCuc.tenDvi}}</td>
               <td nzLeft></td>
               <td></td>
               <td *ngIf="isCache" class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
@@ -397,8 +397,8 @@
                   <td nzLeft></td>
                   <td nzLeft></td>
                   <td nzLeft></td>
-                  <td nzLeft>{{diemKho.tenDvi}}</td>
-                  <td>{{diemKho.diaDiemNhap}}</td>
+                  <td nzLeft class="multi-line">{{diemKho.tenDvi}}</td>
+                  <td class="multi-line">{{diemKho.diaDiemNhap}}</td>
                   <td *ngIf="isCache"></td>
                   <td *ngIf="isCache"></td>
                   <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>

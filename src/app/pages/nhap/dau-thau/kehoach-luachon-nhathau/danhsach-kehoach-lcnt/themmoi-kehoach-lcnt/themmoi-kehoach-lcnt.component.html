@@ -584,7 +584,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Nguồn vốn</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="nguonVon">
+              <nz-select formControlName="nguonVon" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -802,7 +802,7 @@
           </td>
         </tr>
         <tr *ngFor="let data of baoGiaThiTruongList, let i = index" class="editable-row">
-          <ng-container>
+          <ng-container *ngIf="!editBaoGiaCache[data.id]?.edit; else editBaoGiaTemplate">
             <td>{{i + 1}}</td>
             <td>{{data.tenTlieu}}</td>
             <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
@@ -823,7 +823,7 @@
           <ng-template #editBaoGiaTemplate>
             <td></td>
             <td>
-              <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.noiDung" />
+              <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.tenTlieu" />
             </td>
             <td>
               <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -907,7 +907,7 @@
           <ng-template #editCoSoTemplate>
             <td></td>
             <td>
-              <input nz-input [(ngModel)]="editCoSoCache[data.id].data.noiDung" />
+              <input nz-input [(ngModel)]="editCoSoCache[data.id].data.tenTlieu" />
             </td>
             <td>
               <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
