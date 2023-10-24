@@ -67,6 +67,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       ngayKyQd: [''],
       soQdCc: [''],
       soQdDc: [''],
+      soQdCanDc: [''],
       idDcGoc: [],
       ngayKyDc: [''],
       ngayHlucDc: [''],
@@ -151,15 +152,16 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
         this.danhSachQdPdKeHoach = res.data.content.filter(item => !soQdPdSet.has(item.soQdPd));
         this.danhSachQdPdKeHoach.push(...this.danhSachDieuChinh);
-        this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.map(item => {
-          item.soQd = item.soQdDc ? item.soQdDc : item.soQdPd;
-          item.ngayKy = item.ngayKyDc ? item.ngayKyDc : item.ngayKyQd;
-          return item;
-        });
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.map(item => ({
+          soQd: item.soQdDc || item.soQdPd,
+          ngayKy: item.ngayKyDc || item.ngayKyQd,
+          ...item
+        }));
+        const idGocSet = new Set(this.danhSachDieuChinh.map(item => item.idDcGoc));
+        this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.filter(item => !idGocSet.has(item.id))
+        this.danhSachQdPdKeHoach.forEach(item => {
+          item.children = item.children.filter(item => item.idQdKq === null && item.soQdKq === null && item.idQdNv === null && item.soQdNv === null)
+        })
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH BÁN TRỰC TIẾP',
@@ -169,7 +171,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: this.danhSachQdPdKeHoach,
+          dataTable: this.danhSachQdPdKeHoach.filter(item => item.children.length > 0),
           dataHeader: ['Số quyết định cần điều chỉnh', 'Ngày ký quyết định cần điều chỉnh', 'Loại hàng hóa'],
           dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh']
         },
@@ -198,6 +200,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       const data = res.data
       this.formData.patchValue({
         idQdPd: datasearch.soQdDc ? data.idQdPd : datasearch.id,
+        soQdCanDc: datasearch.soQdDc ? data.soQdDc : data.soQdPd,
         soQdPd: data.soQdPd,
         ngayKyQd: data.ngayKyQd,
         idDcGoc: datasearch.soQdDc ? data.id : '',
@@ -213,9 +216,9 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         moTaHangHoa: data.moTaHangHoa,
         tchuanCluong: data.tchuanCluong,
         slDviTsan: data.slDviTsan,
-      })
-      if (data.children && data.children.length > 0) {
-        this.dataTable = data.children
+      });
+      this.dataTable = data.children.filter(item => item.idQdKq === null && item.soQdKq === null && item.idQdNv === null && item.soQdNv === null)
+      if (this.dataTable && this.dataTable.length > 0) {
         await this.showFirstRow(event, 0);
       }
       this.danhSachDieuChinh = this.danhSachDieuChinh.filter(item => item.soQdPd === data.soQdPd);

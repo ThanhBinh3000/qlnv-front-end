@@ -77,24 +77,24 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"
+      <nz-table #basicTable [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"   [nzScroll]="{ x: '1700px' }"
         nzBordered>
         <thead>
           <tr>
             <th width="45px" rowspan="3">
-              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+              <label nz-checkbox [(ngModel)]="allChecked"  (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th>STT</th>
-            <th>Mã đề tài</th>
+            <th width='40px'>STT</th>
+            <th width='100px'>Mã đề tài</th>
             <th>Tên đề tài</th>
-            <th>Cấp</th>
-            <th>Cơ quan chủ trì</th>
-            <th>Chủ nhiệm đề tài</th>
-            <th>Thời gian thực hiện từ</th>
-            <th>Thời gian thực hiện Đến</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
+            <th  width='120px'>Cấp</th>
+            <th  width='200px'>Đơn vị chủ trì</th>
+            <th  width='200px'>Chủ nhiệm đề tài</th>
+            <th  width='200px'>Thời gian thực hiện từ</th>
+            <th  width='200px'>Thời gian thực hiện Đến</th>
+            <th  width='200px'>Trạng thái</th>
+            <th  width='150px'>Hành động</th>
           </tr>
         </thead>
         <tbody>
