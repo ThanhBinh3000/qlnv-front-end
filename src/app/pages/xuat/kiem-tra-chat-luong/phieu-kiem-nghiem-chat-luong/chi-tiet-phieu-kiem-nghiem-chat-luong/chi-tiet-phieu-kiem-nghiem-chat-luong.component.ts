@@ -42,6 +42,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   @Input() inputData: any;
   @Input() isView: any = false;
   @Input() maQuyen: MA_QUYEN_PKNCL = { THEM: '', XOA: '', XEM: '', DUYET_TP: '', DUYET_LDC: '', IN: '', EXPORT: '' };
+  @Input() isViewOnModal: boolean;
   radioValue: any;
   listFileDinhKem: any;
   canCu: any;

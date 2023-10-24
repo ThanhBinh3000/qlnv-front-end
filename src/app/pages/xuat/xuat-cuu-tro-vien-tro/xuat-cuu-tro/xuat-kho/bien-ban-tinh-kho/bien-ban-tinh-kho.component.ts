@@ -127,7 +127,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   async search(roles?): Promise<void> {
     await this.spinner.show()
     this.formData.patchValue({
-      // loaiVthh: this.loaiVthh,
+      loaiVthh: this.loaiVthh,
       type: "XUAT_CTVT"
     });
     await super.search(roles);

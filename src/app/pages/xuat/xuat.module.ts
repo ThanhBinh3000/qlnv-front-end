@@ -19,7 +19,8 @@ import { ChiTietQuyetDinhGnvComponent } from './xuat-cuu-tro-vien-tro/xuat-cuu-t
   exports: [
     BienBanLayMauComponent,
     PhieuKiemNghiemChatLuongComponent,
-    ChiTietQuyetDinhGnvComponent
+    ChiTietQuyetDinhGnvComponent,
+    ChiTietPhieuKiemNghiemChatLuongComponent
   ]
 })
 export class XuatModule { }
