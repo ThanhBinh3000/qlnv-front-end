@@ -4,6 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucThuKhoService } from 'src/app/services/danh-muc-thu-kho.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import {UserService} from "../../../../services/user.service";
 
 @Component({
   selector: 'app-themmoi-thukho',
@@ -17,6 +18,7 @@ export class ThemmoiThukhoComponent implements OnInit {
   dataTree: any[] = [];
 
   constructor(
+    public userService: UserService,
     private _modalRef: NzModalRef,
     private donViService: DonviService,
     private danhMucThuKhoService: DanhMucThuKhoService,

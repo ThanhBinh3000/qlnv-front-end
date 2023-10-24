@@ -53,7 +53,7 @@
   <div class="group-button">
     <h3 class="label_dm">KẾT QUẢ TRA CỨU</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="export()">
+      <button type="button" class="btn btn-sub" (click)="export()" *ngIf="userService.isAccessPermisson('QTDM_DM_THU_KHO_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
@@ -84,10 +84,10 @@
           <td>{{data.department}} - {{data.departmentName}}</td>
           <td>{{data.tenTrangThai}}</td>
           <td style="text-align: center;">
-            <a (click)="getDetail(data)">
+            <a (click)="getDetail(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_THU_KHO_THEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a (click)="edit(data)">
+            <a (click)="edit(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_THU_KHO_XOA')">
               <i class="table-icon fa fa-pencil"></i>
             </a>
           </td>

@@ -1,18 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { Base2Component } from '../../../components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from '../../../services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { cloneDeep } from 'lodash';
-import { QlDinhMucPhiService } from '../../../services/qlnv-kho/QlDinhMucPhi.service';
-import { DanhMucService } from '../../../services/danhmuc.service';
-import { DanhMucDinhMucService } from '../../../services/danh-muc-dinh-muc.service';
-import { DanhMucCongCuDungCu, DanhMucMucPhi } from '../../../models/DeXuatKeHoachuaChonNhaThau';
-import { MESSAGE } from '../../../constants/message';
-import { DanhMucCongCuDungCuService } from '../../../services/danh-muc-cong-cu-dung-cu.service';
-import { FormGroup, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {Base2Component} from '../../../components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from '../../../services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {cloneDeep} from 'lodash';
+import {DanhMucService} from '../../../services/danhmuc.service';
+import {DanhMucCongCuDungCu} from '../../../models/DeXuatKeHoachuaChonNhaThau';
+import {MESSAGE} from '../../../constants/message';
+import {DanhMucCongCuDungCuService} from '../../../services/danh-muc-cong-cu-dung-cu.service';
+import {FormGroup, Validators} from '@angular/forms';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-danh-muc-cong-cu-dung-cu',
@@ -36,6 +35,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private danhMucCongCuDungCuService: DanhMucCongCuDungCuService,
+    private router: Router,
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhMucCongCuDungCuService);
     super.ngOnInit();
@@ -72,6 +72,9 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
   };
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QTDM_DM_CONGCU_DUNGCU')) {
+      this.router.navigateByUrl('/error/401')
+    }
     await this.filter();
     this.updateEditCache();
     this.getListNhomCcdc();

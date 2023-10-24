@@ -18,6 +18,7 @@ import {cloneDeep} from 'lodash';
 import {DanhMucDinhMucService} from "../../../services/danh-muc-dinh-muc.service";
 import {DanhMucMucPhi} from "../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Globals} from "../../../shared/globals";
+import {UserService} from "../../../services/user.service";
 
 
 @Component({
@@ -69,8 +70,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private fb: FormBuilder,
-    private notificationService: NzNotificationService,
-    private globals: Globals
+    public userService: UserService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -105,6 +105,9 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ')) {
+      this.router.navigateByUrl('/error/401')
+    }
     try {
       this.spinner.show()
       this.search();
