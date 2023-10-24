@@ -1,149 +1,150 @@
 <div class="bg-trang">
-    <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level0">
-        <div class="header header-green-background">
-            <div class="header-text">
-                <div class="title-chi-tieu">
-                    <span [ngClass]="formData.value.trangThai == '02' ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-                        {{ ObTrangThai[formData.value.trangThai] }}
-                    </span>
-                    <span class="text-uppercase">Duyệt danh mục kho (phục vụ cho sáp nhập)</span>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-sub ml-2" (click)="goBack()">
-                    <i class="fa fa-arrow-left"></i>
-                    <span>Quay lại</span>
-                </button>
-                <ng-container *ngIf="checkRoleReject(formData.value.trangThai)">
-                    <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="tuChoi()">
-                        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-                        <span>Từ chối</span>
-                    </button>
-                </ng-container>
-                <ng-container *ngIf="checkRoleApprove(formData.value.trangThai)">
-                    <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()">
-                        <i class="icon htvbdh_tcdt_pheduyet"></i>
-                        <span>Duyệt</span>
-                    </button>
-                </ng-container>
-            </div>
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level0">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span [ngClass]="formData.value.trangThai == '02' ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+            {{ ObTrangThai[formData.value.trangThai] }}
+          </span>
+          <span class="text-uppercase">Duyệt danh mục kho (phục vụ cho sáp nhập)</span>
         </div>
-    </nz-affix>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sub ml-2" (click)="goBack()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <ng-container *ngIf="checkRoleReject(formData.value.trangThai)">
+          <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="checkRoleApprove(formData.value.trangThai)">
+          <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </nz-affix>
 </div>
 
 <div class="bg-trang">
-    <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == '03'" nzShowIcon nzType="error"
-        nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
-    </nz-alert>
-    <nz-card class="mt-16 flex-card p-lr16 ant-card-bordered">
-        <form nz-form nzLayout="vertical" [formGroup]="formData">
-            <div nz-row [nzGutter]="24">
-                <div nz-col nzSpan="4">
-                    <nz-form-item>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số QĐ điều chuyển, sáp
-                                nhập
-                            </nz-form-label>
-                            <nz-input-group>
-                                <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="9999999"
-                                    [nzStep]="1" [nzSize]="'small'" [nzDisabled]="true">
-                                </nz-input-number>
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu quyết định
-                            </nz-form-label>
-                            <input nz-input formControlName="trichYeu" [readonly]="true" />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="4">
-                    <nz-form-item>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-form-label>Trạng thái sáp nhập</nz-form-label>
-                            <nz-select formControlName="trangThaiSn" [nzDisabled]="true">
-                                <nz-option *ngFor="let p of listTrangThaiSn" [nzValue]="p.ma"
-                                    [nzLabel]="p.giaTri"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="4">
-                    <nz-form-item>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký</nz-form-label>
-                            <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/YYYY"
-                                nzPlaceHolder="Ngày ký QĐ xuất hàng" formControlName="ngayKy">
-                            </nz-date-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24" class="mt-16">
-                    <nz-form-item>
-                        <nz-form-control>
-                            <nz-radio-group formControlName="loai" [nzDisabled]="true" nzName="radiogroup">
-                                <label nz-radio nzValue="SN_DIEM_KHO"> Điều chuyển - sáp nhập điểm kho</label>
-                                <label nz-radio nzValue="SN_CHI_CUC">Điều chuyển - sáp nhập chi cục</label>
-                            </nz-radio-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-        </form>
-    </nz-card>
-
-    <div class="mt-16 flex-card p-lr16">
-        <div class="title-card">
-            <div class="title-chi-tieu">
-                <span></span>
-                <span>Danh mục kho sáp nhập</span>
-            </div>
+  <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == '03'" nzShowIcon nzType="error" nzMessage="Lý do từ chối"
+    nzDescription="{{formData.value.lyDoTuChoi}}">
+  </nz-alert>
+  <nz-card class="mt-16 flex-card p-lr16 ant-card-bordered">
+    <form nz-form nzLayout="vertical" [formGroup]="formData">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số QĐ điều chuyển, sáp
+                nhập
+              </nz-form-label>
+              <nz-input-group>
+                <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                  [nzSize]="'small'" [nzDisabled]="true">
+                </nz-input-number>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
         </div>
-        <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-            <nz-table #tblData [nzData]="this.dataTable" class="nowrap table-chi-tiet" nzBordered>
-                <thead>
-                    <tr>
-                        <th rowspan="2" style="width: 3%;" class="text-center">STT</th>
-                        <th [colspan]="formData.value.loai==='SN_DIEM_KHO'? 3: 2" style="width: 30%;"
-                            class="text-center">Đơn vị
-                            chuyển đi</th>
-                        <th [colspan]="formData.value.loai==='SN_DIEM_KHO'? 3: 2" style="width: 30%;"
-                            class="text-center">Đơn vị
-                            chuyển đến</th>
-                        <th rowspan="2" style="width: 30%;" class="text-center">Ghi chú</th>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu quyết định
+              </nz-form-label>
+              <input nz-input formControlName="trichYeu" [readonly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label>Trạng thái sáp nhập</nz-form-label>
+              <nz-select formControlName="trangThaiSn" [nzDisabled]="true">
+                <nz-option *ngFor="let p of listTrangThaiSn" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký</nz-form-label>
+              <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/YYYY"
+                nzPlaceHolder="Ngày ký QĐ xuất hàng" formControlName="ngayKy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24" class="mt-16">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-radio-group formControlName="loai" [nzDisabled]="true" nzName="radiogroup">
+                <label nz-radio nzValue="SN_DIEM_KHO"> Điều chuyển - sáp nhập điểm kho</label>
+                <label nz-radio nzValue="SN_CHI_CUC">Điều chuyển - sáp nhập chi cục</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
 
-                    </tr>
-                    <tr>
-                        <th nzWidth="20%" class="text-center">Cục</th>
-                        <th class="text-center">Chi cục</th>
-                        <th *ngIf="formData.value.loai==='SN_DIEM_KHO'" class="text-center">Điểm kho</th>
-                        <th class="text-center">Cục</th>
-                        <th class="text-center">Chi cục</th>
-                        <th *ngIf="formData.value.loai==='SN_DIEM_KHO'" class="text-center">Điểm kho</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let data of dataTable; let idx = index">
-                        <td>{{ idx + 1 }}</td>
-                        <td>{{ data.tenCucDi }}</td>
-                        <td>{{ data.tenChiCucDi }}</td>
-                        <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">{{ data.tenDiemKhoDi }}</td>
-                        <td>{{ data.tenCucDen }}</td>
-                        <td>{{ data.tenChiCucDen }}</td>
-                        <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">{{ data.tenDiemKhoDen }}</td>
-                        <td>{{ data.ghiChu }}</td>
-                    </tr>
-                </tbody>
-            </nz-table>
-        </nz-card>
+  <div class="mt-16 flex-card p-lr16">
+    <div class="title-card">
+      <div class="title-chi-tieu">
+        <span></span>
+        <span>Danh mục kho sáp nhập</span>
+      </div>
     </div>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #tblData [nzData]="this.dataTable" class="nowrap table-chi-tiet" nzBordered>
+        <thead>
+          <tr>
+            <th rowspan="2" style="width: 3%;" class="text-center">STT</th>
+            <th [colspan]="formData.value.loai==='SN_DIEM_KHO'? 3: 2" style="width: 30%;" class="text-center">Đơn vị
+              chuyển đi</th>
+            <th [colspan]="formData.value.loai==='SN_DIEM_KHO'? 3: 2" style="width: 30%;" class="text-center">Đơn vị
+              chuyển đến</th>
+            <th rowspan="2" style="width: 30%;" class="text-center">Ghi chú</th>
+
+          </tr>
+          <tr>
+            <th nzWidth="20%" class="text-center">Cục</th>
+            <th class="text-center">Chi cục</th>
+            <th *ngIf="formData.value.loai==='SN_DIEM_KHO'" class="text-center">Điểm kho</th>
+            <th class="text-center">Cục</th>
+            <th class="text-center">Chi cục</th>
+            <th *ngIf="formData.value.loai==='SN_DIEM_KHO'" class="text-center">Điểm kho</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of dataTable; let idx = index">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ data.tenCucDi }}</td>
+            <td>{{ data.tenChiCucDi }}</td>
+            <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">
+              <a nz-button nzType="link" href="quan-ly-kho-tang/mang-luoi-kho">{{ data.tenDiemKhoDi }}</a>
+            </td>
+            <td>{{ data.tenCucDen }}</td>
+            <td>{{ data.tenChiCucDen }}</td>
+            <td *ngIf="formData.value.loai==='SN_DIEM_KHO'">
+              <a nz-button nzType="link" href="quan-ly-kho-tang/mang-luoi-kho">{{ data.tenDiemKhoDen }}</a>
+            </td>
+            <td>{{ data.ghiChu }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
 </div>
 
 <ng-template #error let-control>
-    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-    </ng-container>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+  </ng-container>
 </ng-template>
