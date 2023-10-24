@@ -100,7 +100,14 @@
   <ng-container *ngIf="formData.value.loai">
     <div class="mt-16 flex-card p-lr16">
       <nz-collapse nzAccordion>
-        <nz-collapse-panel [nzHeader]="'DANH SÁCH ĐIỀU CHUYỂN HÀNG DTQG'" [nzActive]="true">
+        <nz-collapse-panel [nzHeader]="'DANH SÁCH ĐIỀU CHUYỂN HÀNG DTQG'" [nzActive]="nzActiveDCH"
+          (nzActiveChange)="nzActiveChangeDCH($event)" [nzExtra]="extraTpl">
+          <ng-template #extraTpl>
+            <button type="button" class="btn btn-sub xanh" (click)="xoaDCH()">
+              <i class="icon htvbdh_tcdt_tuchoi"></i>
+              <span>Xoá dữ liệu</span>
+            </button>
+          </ng-template>
           <nz-card class="mt-2px flex-card data-table card-border-content table-card">
             <nz-table #tblData [nzData]="this.dataViewHang" class="nowrap table-chi-tiet" nzBordered>
               <thead>
@@ -163,7 +170,14 @@
   <ng-container *ngIf="formData.value.loai==='SN_CHI_CUC'">
     <div class="mt-16 flex-card p-lr16">
       <nz-collapse nzAccordion>
-        <nz-collapse-panel [nzHeader]="'ĐIỀU CHUYỂN CCDC'" [nzActive]="true">
+        <nz-collapse-panel [nzHeader]="'ĐIỀU CHUYỂN CCDC'" [nzActive]="nzActiveCCDC"
+          (nzActiveChange)="nzActiveChangeCCDC($event)" [nzExtra]="extraXoaCCDC">
+          <ng-template #extraXoaCCDC>
+            <button type="button" class="btn btn-sub xanh" (click)="xoaCCDC()">
+              <i class="icon htvbdh_tcdt_tuchoi"></i>
+              <span>Xoá dữ liệu</span>
+            </button>
+          </ng-template>
           <nz-card class="mt-2px flex-card data-table card-border-content table-card">
             <nz-table #tblData [nzData]="this.dataViewChiCuc" class="nowrap table-chi-tiet" nzBordered>
               <thead>
