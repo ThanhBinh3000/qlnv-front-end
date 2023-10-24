@@ -41,7 +41,7 @@
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
-          <button nz-button class="search__button--search" (click)="searchThongTin()">
+          <button nz-button class="search__button--search" (click)="search()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
@@ -229,7 +229,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-them-moi-thong-tin-ban-truc-tiep [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                        (showListEvent)="showListThongTin()">
+                                        (showListEvent)="showList()">
   </app-them-moi-thong-tin-ban-truc-tiep>
 </div>
 <!--xem -->

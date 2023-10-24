@@ -104,7 +104,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
     this.formData.reset();
     await Promise.all([
       this.timKiem(),
-      this.search()
+      this.searchDtl()
     ]);
   }
 
@@ -115,18 +115,15 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
         ...this.formData.value,
       };
       const res = await this.quyetDinhPdKhBdgService.searchDtl(body);
-      if (res.msg === MESSAGE.SUCCESS) {
-        const data = res.data;
-        const latestRecords = {};
-        data.content.forEach(record => {
-          if (!latestRecords[record.soDxuat] || record.someDateField > latestRecords[record.soDxuat].someDateField) {
-            latestRecords[record.soDxuat] = record;
-          }
-        });
-        const filteredRecords = Object.values(latestRecords);
-        this.dataTable = filteredRecords;
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
         this.totalRecord = data.totalElements;
-        this.dataTable?.forEach((item) => (item.checked = false));
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
         this.dataTableAll = cloneDeep(this.dataTable);
       } else {
         this.dataTable = [];

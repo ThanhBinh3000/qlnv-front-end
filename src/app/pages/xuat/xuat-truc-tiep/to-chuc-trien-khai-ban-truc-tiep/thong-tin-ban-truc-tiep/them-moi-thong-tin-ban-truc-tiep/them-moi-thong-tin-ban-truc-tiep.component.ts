@@ -142,9 +142,12 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         tenTrangThai: data.tenTrangThai,
       })
       if (data.pthucBanTrucTiep) {
-        const tongGiaTriHdong = data.children.reduce((prev, cur) => prev + cur.thanhTienDuocDuyet, 0);
+        data.children.forEach(item => {
+          item.giaTriHopDong = 0;
+          item.giaTriHopDong = item.children.reduce((prev, cur) => prev + cur.thanhTienDuocDuyet, 0);
+        });
         this.formData.patchValue({
-          tongGiaTriHdong: tongGiaTriHdong,
+          tongGiaTriHdong: data.children.reduce((prev, cur) => prev + cur.giaTriHopDong, 0),
           pthucBanTrucTiep: data.pthucBanTrucTiep.toString()
         });
       }

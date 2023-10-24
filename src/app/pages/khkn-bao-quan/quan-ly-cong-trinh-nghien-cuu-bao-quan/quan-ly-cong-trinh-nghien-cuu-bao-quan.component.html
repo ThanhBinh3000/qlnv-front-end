@@ -77,22 +77,24 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"
+      <nz-table #basicTable [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"   [nzScroll]="{ x: '1700px' }"
         nzBordered>
         <thead>
           <tr>
             <th width="45px" rowspan="3">
-              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+              <label nz-checkbox [(ngModel)]="allChecked"  (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th rowspan="3">STT</th>
-            <th rowspan="3">Mã đề tài</th>
-            <th rowspan="3">Tên đề tài</th>
-            <th rowspan="3">Cấp</th>
-            <th rowspan="3">Thời gian thực hiện từ</th>
-            <th rowspan="3">Thời gian thực hiện Đến</th>
-            <th rowspan="3">Trạng thái</th>
-            <th rowspan="3">Hành động</th>
+            <th width='40px'>STT</th>
+            <th width='100px'>Mã đề tài</th>
+            <th>Tên đề tài</th>
+            <th  width='120px'>Cấp</th>
+            <th  width='200px'>Đơn vị chủ trì</th>
+            <th  width='200px'>Chủ nhiệm đề tài</th>
+            <th  width='200px'>Thời gian thực hiện từ</th>
+            <th  width='200px'>Thời gian thực hiện Đến</th>
+            <th  width='200px'>Trạng thái</th>
+            <th  width='150px'>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -115,10 +117,21 @@
             </td>
             <td>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.capDeTai"
-                  (input)="filterInTable('capDeTai',filterTable.capDeTai)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCapDt"
+                  (input)="filterInTable('tenCapDt',filterTable.tenCapDt)" />
               </nz-input-group>
-
+            </td>
+            <td>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.dviChuTri"
+                       (input)="filterInTable('dviChuTri',filterTable.dviChuTri)" />
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chuNhiem"
+                       (input)="filterInTable('chuNhiem',filterTable.chuNhiem)" />
+              </nz-input-group>
             </td>
             <td>
               <nz-input-group>
@@ -153,7 +166,9 @@
             <td>{{ data.maDeTai }}</td>
             <td>{{ data.tenDeTai }}</td>
             <td>{{ data.tenCapDt }}</td>
-            <td>{{ data.ngayKyTu | date: 'MM/YYYY'}}</td>
+            <td>{{ data.dviChuTri }}</td>
+            <td>{{ data.chuNhiem }}</td>
+            <td>{{ data.ngayKyTu | date: 'MM/YYYY' }} </td>
             <td>{{ data.ngayKyDen | date: 'MM/YYYY'}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">

@@ -28,8 +28,8 @@ export class QuyetDinhGiaCuaBtcService extends BaseService {
   }
 
   previewQdGia(body: any)  {
-    const url = `http://localhost:3010/phuong-an-gia/xem-truoc-qd-gia`;
-    // const url = `${environment.SERVICE_API}/qlnv-report/phuong-an-gia/xem-truoc-qd-gia`;
+    // const url = `http://localhost:3010/phuong-an-gia/xem-truoc-qd-gia`;
+    const url = `${environment.SERVICE_API}/qlnv-report/phuong-an-gia/xem-truoc-qd-gia`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
