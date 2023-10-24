@@ -36,7 +36,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   listOfData: any[] = [];
   userInfo: UserLogin;
   donGiaVat: number = 0;
-  giaToiDa: any;
   formattedThanhTienDx: string = '0';
   formattedThanhTien: string = '0';
   formattedSoLuong: string = '0';
@@ -108,7 +107,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   async ngOnInit() {
     this.userInfo = await this.userService.getUserLogin();
     this.initForm();
-    await this.getGiaToiDa(this.maDvi);
   }
 
   save() {
@@ -183,37 +181,24 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   async getGiaToiDa(maDvi?:any) {
-    let dvi;
-    if (maDvi != null) {
-      dvi = maDvi;
-    } else {
-      dvi = this.userInfo.MA_DVI
-    }
     let body = {
       loaiGia: "LG01",
       namKeHoach: this.namKhoach,
-      maDvi: dvi,
+      maDvi: maDvi,
       loaiVthh: this.loaiVthh,
       cloaiVthh: this.cloaiVthh
     }
     let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
     if (res.msg === MESSAGE.SUCCESS) {
-      if (res.data) {
-        let giaToiDa = 0;
-        res.data.forEach(i => {
-          let giaQdBtc = 0;
-          if(i.giaQdDcBtcVat != null && i.giaQdDcBtcVat >0) {
-            giaQdBtc = i.giaQdDcBtcVat
-          } else {
-            giaQdBtc = i.giaQdBtcVat
-          }
-          if (giaQdBtc > giaToiDa) {
-            giaToiDa = giaQdBtc;
-          }
-        })
-        this.giaToiDa = giaToiDa;
+      if (res.data && res.data.length > 0) {
+        let data = res.data[0];
+        if (data.giaQdDcBtcVat != null && data.giaQdDcBtcVat > 0) {
+          this.thongTinChiCuc.giaToiDa = data.giaQdDcBtcVat
+        } else {
+          this.thongTinChiCuc.giaToiDa = data.giaQdBtcVat
+        }
         this.formData.patchValue({
-          thueVat: res.data[0].vat * 100
+          thueVat: data.vat * 100
         })
       }
     }
@@ -334,6 +319,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     } else {
       this.thongTinChiCuc.donGia = null
     }
+    this.getGiaToiDa(event)
   }
 
   async addChiCuc() {
@@ -409,8 +395,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
         return false
       }
-      if (this.thongTinChiCuc.donGiaTamTinh > this.giaToiDa) {
-        this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn giá tối đa (" + this.giaToiDa + " đ)")
+      if (this.thongTinChiCuc.donGiaTamTinh > this.thongTinChiCuc.giaToiDa) {
+        this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn giá tối đa (" + this.thongTinChiCuc.giaToiDa + " đ)")
         return false
       }
       if (this.thongTinChiCuc.donGiaTamTinh == null) {
@@ -480,11 +466,13 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   validateGiaDeXuat() {
-    if (this.giaToiDa == null) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
-      return;
-    } else {
-      return true;
+    for (let chiCuc of this.listOfData) {
+      if (chiCuc.giaToiDa == null) {
+        this.notification.error(MESSAGE.ERROR, chiCuc.tenDvi + ': Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
+        return false;
+      } else {
+        return true;
+      }
     }
   }
 

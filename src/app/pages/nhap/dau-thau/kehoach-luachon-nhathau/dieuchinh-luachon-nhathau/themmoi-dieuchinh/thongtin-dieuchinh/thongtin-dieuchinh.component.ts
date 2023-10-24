@@ -168,8 +168,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     let data = null;
     if (changes) {
       if (this.dataInput && this.dataGoc) {
-        console.log(this.isCache)
-        console.log(this.dataInput)
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.formData.patchValue({
           tenDuAn: this.dataGoc.dxuatKhLcntHdr?.tenDuAn,
@@ -194,6 +192,9 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
           namKhoach: this.dataGoc.dxuatKhLcntHdr?.namKhoach,
           gtriDthau: this.dataGoc.dxuatKhLcntHdr?.gtriDthau,
           gtriHdong: this.dataGoc.dxuatKhLcntHdr?.gtriHdong,
+          loaiVthh: this.dataGoc.dxuatKhLcntHdr?.loaiVthh,
+          cloaiVthh: this.dataGoc.dxuatKhLcntHdr?.cloaiVthh,
+          tenCloaiVthh: this.dataGoc.dxuatKhLcntHdr?.tenCloaiVthh,
           tgianDthauTime: this.dataInput.tgianDthauTime,
           tgianMthauTime: this.dataInput.tgianMthauTime,
           tgianMoHoSoTime: this.dataInput.tgianMoHoSoTime,

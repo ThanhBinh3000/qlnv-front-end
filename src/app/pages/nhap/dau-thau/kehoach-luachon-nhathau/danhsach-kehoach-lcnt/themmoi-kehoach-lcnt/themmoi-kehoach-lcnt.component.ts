@@ -357,7 +357,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
               tongMucDtLamTron: parseFloat((this.formData.get('tongMucDt').value / 1000000000).toFixed(2)),
               tongMucDtDxLamTron: parseFloat((this.formData.get('tongMucDtDx').value / 1000000000).toFixed(2)),
             })
-            this.maTrinh = dataDetail.soDxuat?.split('/')[1]
+            if (dataDetail.soDxuat != null) {
+              this.maTrinh = dataDetail.soDxuat?.split('/')[1]
+            }
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
               this.listOfData = dataDetail.dsGtDtlList;

@@ -39,10 +39,9 @@
     </div>
     <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Đơn giá mua tối đa được duyệt có VAT (đ/kg)</nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-          <span class="blue-text">{{giaToiDa}}</span>
-          <span class="blue-text" *ngIf="giaToiDa != null"> (đ)</span>
+          <span class="blue-text">{{formattedSoLuong}} (Tấn)</span>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -67,14 +66,6 @@
 <!--    </div>-->
     <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập</nz-form-label>
-        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-          <span class="blue-text">{{formattedSoLuong}} (Tấn)</span>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="12">
-      <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng thành tiền tạm tính theo giá đề xuất (đ)</nz-form-label>
         <span class="blue-text">{{formattedThanhTienDx}} (đ)</span>
       </nz-form-item>
@@ -97,13 +88,14 @@
         <th nzWidth="240px" class="text-center">Chi cục DTNN</th>
         <th nzWidth="170px" class="text-center">Điểm kho</th>
         <th nzWidth="190px" class="text-center">Địa điểm kho</th>
-        <th nzWidth="100px" class="text-center wrap-text">Chỉ tiêu kế hoạch được giao (Tấn)</th>
-        <th nzWidth="130px" class="text-center wrap-text">Số đã thực hiện (Tấn)</th>
-        <th nzWidth="100px" class="text-center">Số đề xuất (Tấn)</th>
-        <th nzWidth="100px" class="text-center">Đơn giá đề xuất<br/>có VAT (đ/kg)</th>
-        <th nzWidth="100px" class="text-center">Đơn giá được duyệt<br/>có VAT (đ/kg)</th>
-        <th nzWidth="165px" class="text-center wrap-text">Thành tiền tạm tính theo giá đề xuất (đ)</th>
-        <th nzWidth="150px" class="text-center wrap-text">Thành tiền theo đơn giá được duyệt có VAT (đ)</th>
+        <th nzWidth="130px" class="text-center wrap-text">Chỉ tiêu kế hoạch <br/>được giao (Tấn)</th>
+        <th nzWidth="130px" class="text-center wrap-text">Số đã thực hiện <br/>(Tấn)</th>
+        <th nzWidth="100px" class="text-center">Số đề xuất <br/>(Tấn)</th>
+        <th nzWidth="130px" class="text-center">Đơn giá đề xuất<br/>có VAT (đ/kg)</th>
+        <th nzWidth="150px" class="text-center">Đơn giá mua tối đa<br/>được duyệt có VAT (đ/kg)</th>
+        <th nzWidth="170px" class="text-center">Đơn giá được duyệt<br/>có VAT (đ/kg)</th>
+        <th nzWidth="170px" class="text-center wrap-text">Thành tiền tạm tính <br/>theo giá đề xuất (đ)</th>
+        <th nzWidth="170px" class="text-center wrap-text">Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>
         <th nzWidth="90px" [nzRight]="true" class="text-center">Hành động</th>
       </tr>
     </thead>
@@ -127,6 +119,7 @@
           <input class="money-input" currencyMask [options]="amount" [min]="0"
                   [(ngModel)]="thongTinChiCuc.donGiaTamTinh"/>
         </td>
+        <td>{{thongTinChiCuc.giaToiDa}}</td>
         <td>{{thongTinChiCuc.donGia}}</td>
         <td></td>
         <td></td>
@@ -149,6 +142,7 @@
           <td>{{ dataChiCuc.soLuongDaMua | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ dataChiCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ dataChiCuc.donGiaTamTinh | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ dataChiCuc.giaToiDa | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ dataChiCuc.donGia | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ dataChiCuc.soLuong * dataChiCuc.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ dataChiCuc.soLuong * dataChiCuc.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
@@ -180,6 +174,7 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
             <td class="text-left" [nzRight]="true">
               <a (click)="addDiemKho(i)">
                 <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -199,6 +194,7 @@
             <td></td>
             <td>{{itemChild.soLuong}}</td>
               <td>{{ dataChiCuc.donGiaTamTinh | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ dataChiCuc.giaToiDa | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ dataChiCuc.donGia | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ itemChild.soLuong * dataChiCuc.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ itemChild.soLuong * dataChiCuc.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
@@ -224,6 +220,7 @@
                 </nz-input-number>
               </td>
               <td>{{ dataChiCuc.donGiaTamTinh | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ dataChiCuc.giaToiDa | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ dataChiCuc.donGia | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ itemChild.soLuong * dataChiCuc.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ itemChild.soLuong * dataChiCuc.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>

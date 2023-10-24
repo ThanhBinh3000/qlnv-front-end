@@ -649,18 +649,21 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         const dataRes = res.data;
         let tongMucDt = 0
-        if (dataRes.loaiVthh.startsWith("02")) {
-          this.danhsachDx = dataRes.dsGtDtlList;
-          this.danhsachDx.forEach(element => {
-            tongMucDt += element.soLuong * element.donGiaTamTinh;
-          });
-        } else {
-          dataRes.idDxHdr = data.id;
-          if (dataRes.dsGtDtlList) {
-            dataRes.children = dataRes.dsGtDtlList
-          };
-          this.danhsachDx.push(dataRes);
+        dataRes.idDxHdr = data.id;
+        if (dataRes.dsGtDtlList) {
+          dataRes.children = dataRes.dsGtDtlList
         }
+        this.danhsachDx.push(dataRes);
+        this.danhsachDx.forEach(dx => {
+          let soLuong = 0
+          let tongTien = 0
+          dx.children.forEach(gt => {
+            soLuong += gt.soLuong
+            tongTien += gt.thanhTienDx
+          })
+          dx.soLuong = soLuong
+          dx.tongTien = tongTien
+        })
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
@@ -864,8 +867,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         for (const chiCuc of gthau.children) {
           let bodyPag = {
             namKeHoach: this.formData.value.namKhoach,
-            loaiVthh: dx.loaiVthh,
-            cloaiVthh: dx.cloaiVthh,
+            loaiVthh: gthau.loaiVthh,
+            cloaiVthh: gthau.cloaiVthh,
             trangThai: STATUS.BAN_HANH,
             maDvi: chiCuc.maDvi,
             loaiGia: 'LG03'
