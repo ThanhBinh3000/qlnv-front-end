@@ -57,6 +57,7 @@
                             <th scope="col">Năm</th>
                             <th scope="col">Số lần</th>
                             <th scope="col">Căn cứ về giá</th>
+                            <th scope="col">Số quyết định chỉ tiêu</th>
                             <th scope="col">Loại đề nghị</th>
                             <th scope="col">Ngày tạo</th>
                             <!-- <th scope="col">Số công văn</th>
@@ -79,6 +80,9 @@
                             </td>
                             <td>
                                 {{ Cvnc.priceBasisName(baoCao.canCuVeGia) }}
+                            </td>
+                            <td>
+                                {{ baoCao.soQdChiTieu }}
                             </td>
                             <td>
                                 {{ Cvnc.suggestionName(baoCao.loaiDnghi)}}

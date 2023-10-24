@@ -90,4 +90,11 @@ export class CapVonMuaBanTtthService extends BaseService {
 			request,
 		)
 	}
+
+	danhSachHopDong(request: any): Observable<any> {
+		return this.httpClient.post(
+			this.urlDefault + '/hop-dong/danh-sach/so-qd',
+			request,
+		)
+	}
 }
