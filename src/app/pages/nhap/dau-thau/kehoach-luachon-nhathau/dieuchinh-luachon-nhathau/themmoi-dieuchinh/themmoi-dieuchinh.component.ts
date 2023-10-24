@@ -273,7 +273,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     this.spinner.show();
     if ($event) {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail($event);
-      console.log(res.data)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.formData.patchValue({
@@ -286,7 +285,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           soQdGoc: data.soQd,
           ngayQdGoc: data.ngayQd,
           soQd: data.children[0]?.dxuatKhLcntHdr?.soQd,
-          lanDieuChinh: data.dchinhDxKhLcntHdr?data.dchinhDxKhLcntHdr.lanDieuChinh + 1 : 1,
+          lanDieuChinh: data.lanDieuChinh ? data.lanDieuChinh + 1 : 1,
         })
         if (data.loaiVthh.startsWith('02')) {
           this.dataInput = data;

@@ -125,6 +125,7 @@ export class DanhSachGoiThau {
   parent?: DanhSachGoiThau
   thanhTienDx?: number;
   thanhTienQd?: number;
+  giaToiDa: number;
 }
 
 export class CanCuXacDinh {
