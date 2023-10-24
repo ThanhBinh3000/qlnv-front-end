@@ -110,8 +110,11 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         tenDiemKho: [],
         tenLoKho: [],
         tenNganKho: [],
+        tenNganLoKho: [],
         listPhieuXuatKho: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
+        donViTinh: [],
+        soPhieuKnCl: []
       }
     );
     this.maBb = '-BBTK';
@@ -164,7 +167,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
         type: "XUAT_CTVT",
-        tongSlNhap: "100000",
+        tongSlNhap: "",
         // loaiVthh: this.loaiVthh
       });
     }
@@ -180,7 +183,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       trangThai: STATUS.BAN_HANH,
       loaiVthh: this.loaiVthh,
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
-      listTrangThaiXh: [STATUS.DA_HOAN_THANH],
+      // listTrangThaiXh: [STATUS.DA_HOAN_THANH],
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -189,7 +192,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.listSoQuyetDinh = data.content;
+      // this.listSoQuyetDinh = data.content;
+      this.listSoQuyetDinh = data.content.filter(f => f.dataDtl.some(f => f.trangThai === STATUS.DA_HOAN_THANH));
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -225,7 +229,13 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
     });
-    let dataChiCuc = data.dataDtl.filter(item => item.tenChiCuc == this.userInfo.TEN_DVI);
+    data.dataDtl.forEach(s => {
+      s.maDiemKho = s.maDvi.substring(0, 10);
+      s.maNhaKho = s.maDvi.substring(0, 12);
+      s.maNganKho = s.maDvi.substring(0, 14);
+      s.maLoKho = s.maDvi.substring(0, 16);
+    });
+    let dataChiCuc = data.dataDtl.filter(item => item.tenChiCuc == this.userInfo.TEN_DVI && item.trangThai === STATUS.DA_HOAN_THANH);
     if (dataChiCuc) {
       this.listDiaDiemNhap = dataChiCuc;
     }
@@ -263,12 +273,14 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
-        soPhieuKnCl: data.soPhieu,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+        // soPhieuKnCl: data.soPhieu,
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
+        donViTinh: data.donViTinh,
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
@@ -277,7 +289,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       }
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;
-      this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho && item.soBangKeCh !== null));
+      this.listPhieuXuatKho = list.filter(item => ((item.maLoKho === data.maLoKho && item.maNganKho === data.maNganKho) && item.soBangKeCh !== null));
+      this.formData.patchValue({ soPhieuKnCl: this.listPhieuXuatKho[0]?.soPhieuKnCl })
       this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
         s.slXuat = s.thucXuat;
@@ -385,7 +398,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   slChenhLech() {
-    if (this.formData.value.slThucTeCon > 0 && this.formData.value.slConLai > 0) {
+    if (this.formData.value.slThucTeCon >= 0 && this.formData.value.slConLai >= 0) {
       if (this.formData.value.slThucTeCon - this.formData.value.slConLai > 0) {
         this.formData.patchValue({
           slThua: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
