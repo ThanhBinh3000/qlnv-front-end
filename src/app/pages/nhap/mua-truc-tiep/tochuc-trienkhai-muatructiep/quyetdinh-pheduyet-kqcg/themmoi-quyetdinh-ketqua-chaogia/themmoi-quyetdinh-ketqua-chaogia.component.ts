@@ -46,7 +46,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       idPdKhDtl: [],
       idPdKhHdr: [],
       namKh: [dayjs().get('year'), [Validators.required]],
-      soQdKq: [],
+      soQdKq: [null, [Validators.required]],
       ngayHluc: [],
       ngayKy: [],
       soQd: ['', [Validators.required]],
