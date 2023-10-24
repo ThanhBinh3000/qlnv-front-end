@@ -620,6 +620,9 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   }
   async trongLuongTruBi() {
     let data = cloneDeep(this.formData.value);
+    if (!!!data.tongTrongLuongBaoBi) {
+      data.tongTrongLuongBaoBi= 0;
+    }
     if (data.tongTrongLuongBaoBi) {
       let tongTrongLuongTruBi = data.tongTrongLuongCabaoBi - data.tongTrongLuongBaoBi;
       this.formData.patchValue({
