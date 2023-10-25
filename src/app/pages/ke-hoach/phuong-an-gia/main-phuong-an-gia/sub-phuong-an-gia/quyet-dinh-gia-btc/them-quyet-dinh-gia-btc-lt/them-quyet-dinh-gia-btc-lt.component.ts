@@ -407,7 +407,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "thong_tin_gia.xlsx");
+        saveAs(this.excelBlob, "quyet_dinh_gia_btc.xlsx");
       });
       this.showDlgPreview = true
     } catch (e) {
@@ -418,7 +418,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   }
 
   async downloadPdf() {
-    saveAs(this.pdfSrc, 'quyet_dinh_gia.pdf');
+    saveAs(this.pdfBlob, 'quyet_dinh_gia_btc.pdf');
   }
 
     closeDlg() {
