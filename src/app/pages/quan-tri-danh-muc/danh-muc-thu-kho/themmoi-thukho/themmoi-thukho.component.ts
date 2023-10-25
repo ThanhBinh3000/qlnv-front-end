@@ -83,7 +83,7 @@ export class ThemmoiThukhoComponent implements OnInit {
     switch (level) {
       // Cấp ngăn kho
       case '6':
-        this.setOfCheckedId.add(data.maDvi);
+        isAdd ? this.setOfCheckedId.add(data.maDvi) : this.setOfCheckedId.delete(data.maDvi);;
         // Add toàn bộ cấp 7 ( Lô Kho ).
         data.children.forEach(element => {
           isAdd ? this.setOfCheckedId.add(element.maDvi) : this.setOfCheckedId.delete(element.maDvi);

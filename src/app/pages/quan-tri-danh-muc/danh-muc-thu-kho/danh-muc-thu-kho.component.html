@@ -69,7 +69,6 @@
           <th class="text-center" nzWidth="">SĐT di động</th>
           <th class="text-center" nzWidth="">Email</th>
           <th class="text-center" nzWidth="">Đơn vị quản lý</th>
-          <th class="text-center" nzWidth="">Phòng ban</th>
           <th class="text-center" nzWidth="150px">Trạng thái</th>
           <th class="text-center" nzWidth="120px">Hành động</th>
         </tr>
@@ -81,7 +80,6 @@
           <td>{{data.phoneNo}}</td>
           <td>{{data.email}}</td>
           <td>{{data.dvql}} - {{data.dvqlName}}</td>
-          <td>{{data.department}} - {{data.departmentName}}</td>
           <td>{{data.tenTrangThai}}</td>
           <td style="text-align: center;">
             <a (click)="getDetail(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_THU_KHO_THEM')">
