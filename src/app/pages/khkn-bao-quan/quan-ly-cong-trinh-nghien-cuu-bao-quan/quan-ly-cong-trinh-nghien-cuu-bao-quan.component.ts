@@ -40,6 +40,8 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     maDeTai: '',
     tenDeTai: '',
     capDeTai: '',
+    tenDviChuTri: '',
+    chuNhiem: '',
     ngayKyTu: '',
     ngayKyDen: '',
     tenTrangThai: '',
@@ -410,7 +412,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
               temp.push(item);
             }
           } else {
-            if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
               temp.push(item);
             }
           }
