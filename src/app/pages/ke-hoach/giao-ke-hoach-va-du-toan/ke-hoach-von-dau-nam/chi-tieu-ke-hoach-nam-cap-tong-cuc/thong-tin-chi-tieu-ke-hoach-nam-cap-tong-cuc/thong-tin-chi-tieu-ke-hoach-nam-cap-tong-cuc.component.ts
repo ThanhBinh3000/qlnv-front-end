@@ -3540,6 +3540,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           maBieuSo: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
           ngayBatDauQuy: moment(this.thongTinChiTieuKeHoachNam.ngayKy, 'YYYY-MM-DD').format('DD/MM/YYYY'),
           fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
+          tenDvi: this.thongTinChiTieuKeHoachNam.tenDvi,
           loaiNhapXuat: this.subTabVatTu == 0 ? 'NHAP' : 'XUAT',
         }).then(async s => {
           this.pdfBlob = s;
