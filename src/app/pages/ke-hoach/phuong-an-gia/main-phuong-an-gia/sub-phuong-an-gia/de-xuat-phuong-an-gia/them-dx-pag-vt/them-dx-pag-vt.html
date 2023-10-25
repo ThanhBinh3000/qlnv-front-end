@@ -14,11 +14,11 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button
-          type="button" class="btn btn-sub do ml-2" (click)="preview()" *ngIf="idInput > 0 && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG04')">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Xem trước</span>
-        </button>
+<!--        <button-->
+<!--          type="button" class="btn btn-sub do ml-2" (click)="preview()" *ngIf="idInput > 0 && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG04')">-->
+<!--          <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+<!--          <span>Xem trước</span>-->
+<!--        </button>-->
         <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV)
     && ((userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_DEXUAT_THEM') && type == typeConst.GIA_MUA_TOI_DA )
      || (userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT_THEM') && type == typeConst.GIA_CU_THE )
@@ -266,7 +266,7 @@
               </nz-input-group>
             </td>
             <td *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')" class="text-right">
-              {{ rowItemTtc.vat ? (rowItemTtc.giaDn + rowItemTtc.giaDn * rowItemTtc.vat | number : '1.0-1' : 'vi-VN') : 0   }}
+              {{ formData.value.vat ? (rowItemTtc.giaDn + rowItemTtc.giaDn * formData.value.vat | number : '1.0-1' : 'vi-VN') : 0   }}
             </td>
             <td style="text-align: center;" *ngIf="!isView">
               <a >
@@ -290,7 +290,7 @@
               <td  class="text-right"*ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{data.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi_VN'  }}</td>
               <td class="text-right"
-                *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{ data.vat ? (data.giaDn + data.giaDn * data.vat | number : '1.0-1' : 'vi-VN') : 0   }}</td>
+                *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{ formData.value.vat ? (data.giaDn + data.giaDn * formData.value.vat | number : '1.0-1' : 'vi-VN') : 0   }}</td>
               <td style="text-align: center;" *ngIf="!isView">
                 <a>
                   <i class=" fa fa-pencil" (click)="startEdit(idx, 'ttc')"></i>
@@ -326,7 +326,7 @@
                   <input nz-input type="text" name="donViTinh" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly>
                 </nz-input-group>
               </td>
-              <td>
+              <td *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">
                 {{dataEdit[idx].data.vat}}
               </td>
               <td *ngIf="formData.value.loaiGia == 'LG03'"></td>
@@ -338,12 +338,8 @@
                   </nz-input-number>
                 </nz-input-group>
               </td>
-              <td *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">
-                <nz-input-group>
-                  <nz-input-number name="giaDnVat" [(ngModel)]="dataEdit[idx].data.giaDnVat" [nzSize]="'small'"
-                                   nz-input [nzMin]="0">
-                  </nz-input-number>
-                </nz-input-group>
+              <td *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')" class="text-right">
+                {{ formData.value.vat ? (dataEdit[idx].data.giaDn + dataEdit[idx].data.giaDn * formData.value.vat | number : '1.0-1' : 'vi-VN') : 0   }}
               </td>
               <td style="text-align: center;" *ngIf="!isView">
                 <a >

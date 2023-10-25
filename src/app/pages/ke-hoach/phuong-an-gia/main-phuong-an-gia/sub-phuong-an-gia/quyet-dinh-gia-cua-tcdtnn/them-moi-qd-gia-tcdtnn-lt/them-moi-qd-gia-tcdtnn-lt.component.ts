@@ -261,7 +261,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
             children: value,
             apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
             vat : value && value[0] && value[0].vat ? value[0].vat : null,
-            // giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
+            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
             giaQdTcdt : value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
             giaQdDcTcdt : value && value[0] && value[0].giaQdDcTcdt ? value[0].giaQdDcTcdt : null,
           };
@@ -413,7 +413,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "quyet_dinh_gia.xlsx");
+        saveAs(this.excelBlob, "quyet_dinh_gia_tcdtnn.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -424,7 +424,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   }
 
   async downloadPdf() {
-    saveAs(this.pdfSrc, 'quyet_dinh_gia.pdf');
+    saveAs(this.pdfBlob, 'quyet_dinh_gia_tcdtnn.pdf');
   }
 
   closeDlg() {

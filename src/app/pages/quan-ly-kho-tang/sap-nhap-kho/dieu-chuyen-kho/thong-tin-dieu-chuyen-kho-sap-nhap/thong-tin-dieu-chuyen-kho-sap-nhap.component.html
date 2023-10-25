@@ -1,33 +1,35 @@
-<div class="bg-trang">
-  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level0">
-    <div class="header header-green-background">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span
-            [ngClass]="formData.value.trangThai == STATUS.DA_HOAN_THANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-            {{ ObTrangThai[formData.value.trangThai] }}
-          </span>
-          <span class="text-uppercase">Điều chuyển hàng</span>
-        </div>
-      </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-sub ml-2" (click)="goBack()">
-          <i class="fa fa-arrow-left"></i>
-          <span>Quay lại</span>
+<ng-container>
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="btn-affix">
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-sub ml-2" (click)="goBack()">
+        <i class="fa fa-arrow-left"></i>
+        <span>Quay lại</span>
+      </button>
+      <ng-container>
+        <button *ngIf="checkRoleSave(formData.value.trangThai)" type="button" class="btn btn-main ml-2"
+          (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
         </button>
-        <ng-container>
-          <button *ngIf="checkRoleSave(formData.value.trangThai)" type="button" class="btn btn-main ml-2"
-            (click)="save()">
-            <i class="icon htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
-          </button>
-        </ng-container>
-      </div>
+      </ng-container>
     </div>
+
   </nz-affix>
-</div>
+</ng-container>
 
 <div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.DA_HOAN_THANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          {{ ObTrangThai[formData.value.trangThai] }}
+        </span>
+        <span class="text-uppercase">Điều chuyển hàng</span>
+      </div>
+    </div>
+  </div>
   <nz-card class="mt-16 flex-card p-lr16 ant-card-bordered">
     <form nz-form nzLayout="vertical" [formGroup]="formData">
       <div nz-row [nzGutter]="24">
@@ -103,7 +105,7 @@
         <nz-collapse-panel [nzHeader]="'DANH SÁCH ĐIỀU CHUYỂN HÀNG DTQG'" [nzActive]="nzActiveDCH"
           (nzActiveChange)="nzActiveChangeDCH($event)" [nzExtra]="extraTpl">
           <ng-template #extraTpl>
-            <button type="button" class="btn btn-sub xanh" (click)="xoaDCH()">
+            <button type="button" class="btn btn-sub xanh" (click)="xoaDCH()" *ngIf="!isView">
               <i class="icon htvbdh_tcdt_tuchoi"></i>
               <span>Xoá dữ liệu</span>
             </button>
@@ -141,10 +143,10 @@
                       <tr>
                         <td></td>
                         <td>{{idx2 + 1}}</td>
-                        <td> {{(lv2.tenLoKhoDi ? lv2.tenLoKhoDi + " - ": "") +
+                        <td> {{((!!lv2.tenLoKhoDi && lv2.tenLoKhoDi !== "null") ? lv2.tenLoKhoDi + " - ": "") +
                           (lv2.tenNganKhoDi?
                           lv2.tenNganKhoDi +
-                          " - " : "") + (lv2.tenNhaKhoDi? lv2.tenNhaKhoDi: "") +
+                          " - " : "") + (lv2.tenNhaKhoDi? lv2.tenNhaKhoDi + " - ": "") +
                           (lv2.tenCloaiVthh || lv2.tenLoaiVthh || "")+
                           ": " + (lv2.slTon|number: '1.0-1' || "") }}</td>
                         <td>
@@ -173,7 +175,7 @@
         <nz-collapse-panel [nzHeader]="'ĐIỀU CHUYỂN CCDC'" [nzActive]="nzActiveCCDC"
           (nzActiveChange)="nzActiveChangeCCDC($event)" [nzExtra]="extraXoaCCDC">
           <ng-template #extraXoaCCDC>
-            <button type="button" class="btn btn-sub xanh" (click)="xoaCCDC()">
+            <button type="button" class="btn btn-sub xanh" (click)="xoaCCDC()" *ngIf="!isView">
               <i class="icon htvbdh_tcdt_tuchoi"></i>
               <span>Xoá dữ liệu</span>
             </button>

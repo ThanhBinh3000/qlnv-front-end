@@ -25,6 +25,8 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
 
   listTrangThai = [{ "ma": "01", "giaTri": "Hoạt động" }, { "ma": "00", "giaTri": "Không hoạt động" }];
   datePipe = new DatePipe('en-US');
+
+  listDvi : []
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -42,7 +44,9 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
       tenThuKho: null,
       cccd: null,
       trangThai: null,
-      position: "CBTHUKHO"
+      position: "CBTHUKHO",
+      maDviLike : this.userInfo.MA_DVI,
+      maDvi : null
     })
   }
 
@@ -58,6 +62,15 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  clearForm() {
+    this.formData.reset();
+    this.formData.patchValue({
+      position: "CBTHUKHO",
+      maDviLike : this.userInfo.MA_DVI
+    })
+    this.search();
   }
 
   export() {
