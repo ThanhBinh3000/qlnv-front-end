@@ -106,7 +106,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input readonly formControlName="soQdCanDc"/>
+                <input nz-input readonly formControlName="soQdDc"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -157,7 +157,7 @@
       <th class="text-center" rowSpan="2">Tiêu chuẩn, quy chuẩn</th>
       <th class="text-center" rowSpan="2">Số lượng</th>
       <th class="text-center" rowSpan="2">Đơn vị tính</th>
-      <th class="text-center" rowSpan="2">%VAT</th>
+      <th class="text-center" rowSpan="2">VAT (%)</th>
       <th class="text-center" colSpan="2">Giá đề xuất của TCDT</th>
       <th class="text-center" nzWidth="150px"
           colSpan="2"> {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
@@ -178,11 +178,11 @@
       <td>{{ data.tenLoaiVthh }}</td>
       <td>{{ data.tenCloaiVthh }}</td>
       <td>{{ data.tchuanCluong }}</td>
-      <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
       <td>{{ data.donViTinh }}</td>
-      <td>{{ data.vat ? data.vat * 100 : '' }}</td>
-      <td>{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
-      <td>{{ data.giaDnVat | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right">{{ data.vat ? data.vat * 100 : '' }}</td>
+      <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right">{{ data.giaDnVat | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="(formData.value.loaiDeXuat == '00')">
         <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdBtc" [nzMin]="0"
                          [nzFormatter]="globals.formatter"
@@ -223,7 +223,7 @@
       <th class="text-center" >Tiêu chuẩn, quy chuẩn</th>
       <th class="text-center" >Số lượng</th>
       <th class="text-center" >Đơn vị tính</th>
-      <th class="text-center" >%VAT</th>
+      <th class="text-center" >VAT (%)</th>
       <th class="text-center" >Giá đề xuất của TCDT</th>
       <th class="text-center" nzWidth="150px"
           > {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
