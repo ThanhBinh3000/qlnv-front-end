@@ -24,6 +24,7 @@ export class ThongTinChiTieuKeHoachNam {
   canCu: string;
   idCanCu: number;
   capDvi:string;
+  tenDvi:string;
   fileDinhKemReqs: Array<FileDinhKem>;
   qdGocId: number;
   soQdGoc: string;

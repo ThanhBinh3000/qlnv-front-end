@@ -106,7 +106,7 @@
 
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzRequired]="formData.value.cap == 1" [nzNoColon]="true">Căn cứ trên số công văn/tờ
+            <nz-form-label [nzRequired]="isTongCuc()" [nzNoColon]="true">Căn cứ trên số công văn/tờ
               trình</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()"> -->
@@ -116,7 +116,7 @@
           </nz-form-item>
         </div>
 
-        <div nz-col [nzSpan]="4" *ngIf="formData.value.cap == 2">
+        <div nz-col [nzSpan]="4" *ngIf="userService.isCuc() && formData.value.cap == 2">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao chỉ tiêu KH năm của Cục</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -1010,7 +1010,7 @@
     </div>
   </nz-modal>
 
-  <nz-modal [(nzVisible)]='showDlgPreview' nzTitle='Kế hoạch' nzWidth='100%' (nzOnCancel)="closeDlg()">
+  <nz-modal [(nzVisible)]='showDlgPreview' (nzOnCancel)='closeDlg()' nzTitle='Kế hoạch' nzWidth='100%'>
     <div *nzModalContent class='modal__content'>
       <pdf-viewer [src]='pdfSrc' [original-size]='false' [render-text]='true' style='width: 100%; height: 600px;'>
       </pdf-viewer>
