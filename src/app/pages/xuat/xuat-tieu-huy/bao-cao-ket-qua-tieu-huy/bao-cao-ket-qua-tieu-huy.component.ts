@@ -27,7 +27,8 @@ export class BaoCaoKetQuaTieuHuyComponent extends Base3Component implements OnIn
     private _service: BaoCaoKqTieuHuyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
-    this.defaultURL = 'xuat/xuat-tieu-huy/bao-cao-kq'
+    this.defaultURL = 'xuat/xuat-tieu-huy/bao-cao-kq';
+    this.defaultPermisson = 'XHDTQG_XTH_BCKQ'
     this.formData = this.fb.group({
       nam: null,
       maSc: null,
