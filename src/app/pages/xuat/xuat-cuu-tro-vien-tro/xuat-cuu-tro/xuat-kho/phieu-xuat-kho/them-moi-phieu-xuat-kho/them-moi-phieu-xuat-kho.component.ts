@@ -33,6 +33,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = [];
