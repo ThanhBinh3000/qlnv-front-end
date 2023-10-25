@@ -13,6 +13,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { ThemmoiThukhoComponent } from './themmoi-thukho/themmoi-thukho.component';
 import { DanhMucThuKhoService } from 'src/app/services/danh-muc-thu-kho.service';
 import { DatePipe } from '@angular/common';
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -31,6 +32,7 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     userService: UserService,
+    private router: Router,
     private donviService: DonviService,
     private danhMucThuKhoService: DanhMucThuKhoService
   ) {
@@ -45,6 +47,9 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QTDM_DM_THU_KHO')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       await this.search();

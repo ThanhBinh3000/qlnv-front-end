@@ -93,6 +93,9 @@ export class DanhMucDungChungComponent implements OnInit {
 
   async ngOnInit() {
     try {
+      if (!this.userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG')) {
+        this.router.navigateByUrl('/error/401')
+      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;

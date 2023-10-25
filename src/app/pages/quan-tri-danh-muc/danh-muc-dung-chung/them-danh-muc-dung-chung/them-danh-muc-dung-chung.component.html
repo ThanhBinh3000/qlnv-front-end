@@ -72,7 +72,7 @@
         <div class="cantrai">
         </div>
         <div class="canphai">
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="themmoi()">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="themmoi()" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_THEM')">
             <i class="icon htvbdh_luu" aria-hidden="true"></i>
             Lưu
           </a>
