@@ -106,7 +106,7 @@
 
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzRequired]="isTongCuc()" [nzNoColon]="true">Căn cứ trên số công văn/tờ
+            <nz-form-label [nzRequired]="formData.value.cap == 1" [nzNoColon]="true">Căn cứ trên số công văn/tờ
               trình</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()"> -->
@@ -116,7 +116,7 @@
           </nz-form-item>
         </div>
 
-        <div nz-col [nzSpan]="4" *ngIf="userService.isCuc() && formData.value.cap == 2">
+        <div nz-col [nzSpan]="4" *ngIf="formData.value.cap == 2">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao chỉ tiêu KH năm của Cục</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
