@@ -332,6 +332,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
           tenDvi: this.thongTinChiCuc.tenDvi,
           soLuongChiTieu: this.thongTinChiCuc.soLuongTheoChiTieu,
           soLuongDaMua: this.thongTinChiCuc.soLuongDaMua,
+          loaiVthh: this.loaiVthh,
+          cloaiVthh: this.cloaiVthh,
         });
         this.thongTinChiCuc = new DanhSachGoiThau();
         this.expandSet.clear();
