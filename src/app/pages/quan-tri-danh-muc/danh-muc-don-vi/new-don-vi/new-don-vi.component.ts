@@ -9,6 +9,7 @@ import {NzTreeComponent} from 'ng-zorro-antd/tree';
 import {DonviService} from 'src/app/services/donvi.service';
 import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
 import { DanhMucService } from "../../../../services/danhmuc.service";
+import {UserService} from "../../../../services/user.service";
 
 
 @Component({
@@ -45,6 +46,7 @@ export class NewDonViComponent implements OnInit {
     private helperService: HelperService,
     private donviService: DonviService,
     private danhMucService : DanhMucService,
+    public userService : UserService,
     private modal: NzModalRef
   ) {
     this.formDonVi = this.fb.group({

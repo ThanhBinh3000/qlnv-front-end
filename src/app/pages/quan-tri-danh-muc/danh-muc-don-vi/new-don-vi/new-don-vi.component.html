@@ -186,7 +186,7 @@
       <div class="cantrai">
       </div>
       <div class="canphai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="add()">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="add()" *ngIf="userService.isAccessPermisson('QTDM_DM_DON_VI_THEM')">
           <div *ngIf="!data">
             <i class="fa fa-save" aria-hidden="true"></i>
             Thêm

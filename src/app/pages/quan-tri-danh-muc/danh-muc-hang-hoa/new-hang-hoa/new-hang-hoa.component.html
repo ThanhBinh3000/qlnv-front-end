@@ -141,7 +141,7 @@
           <span>Thoát</span>
         </a>
 
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="add()">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="add()" *ngIf="userService.isAccessPermisson('QTDM_DM_HANG_DTQG_THEM')">
           <div>
             <i class="fa fa-save" aria-hidden="true"></i>
             Lưu
