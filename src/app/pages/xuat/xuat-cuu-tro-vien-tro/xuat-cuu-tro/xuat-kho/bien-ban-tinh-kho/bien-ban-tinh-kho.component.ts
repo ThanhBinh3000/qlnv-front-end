@@ -138,6 +138,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    this.formData.patchValue({ loaiVthh: this.loaiVthh })
   }
 
 
