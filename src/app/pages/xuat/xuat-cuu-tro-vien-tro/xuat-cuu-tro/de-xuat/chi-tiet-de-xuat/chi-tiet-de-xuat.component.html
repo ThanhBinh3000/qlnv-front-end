@@ -351,12 +351,15 @@
                 <ng-container *ngIf="userService.isTongCuc()">
                   <th [colspan]="3">Giao Cục DTNN KV thực hiện</th>
                 </ng-container>
+                <ng-container *ngIf="isVthhGao()">
+                  <th [rowspan]="userService.isTongCuc()? 2 : 1">Nhu cầu xuất cứu trợ</th>
+                </ng-container>
                 <ng-container *ngIf="!userService.isTongCuc()">
                   <th>SL xuất cứu trợ đề xuất</th>
                 </ng-container>
                 <ng-container *ngIf="isVthhGao()">
-                  <th [rowspan]="userService.isTongCuc()? 2 : 1">Nhu cầu xuất cứu trợ</th>
-                  <th [rowspan]="userService.isTongCuc()? 2 : 1">SL gạo cần chuyển cấp thóc</th>
+                  <!-- <th [rowspan]="userService.isTongCuc()? 2 : 1">Nhu cầu xuất cứu trợ</th> -->
+                  <th [rowspan]="userService.isTongCuc()? 2 : 1">SL gạo cần chuyển xuất cấp thóc</th>
                 </ng-container>
                 <ng-container *ngIf="!isView">
                   <th [rowspan]="userService.isTongCuc()? 2 : 1" style="width: 10%">Hành động</th>
@@ -380,9 +383,12 @@
                     <td>{{item.noiDung}}</td>
                     <td></td>
                     <td></td>
-                    <td class="bold">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
                     <ng-container *ngIf="isVthhGao()">
                       <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                    </ng-container>
+                    <td class="bold">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                    <ng-container *ngIf="isVthhGao()">
+                      <!-- <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
                       <td class="bold">{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                     </ng-container>
                     <ng-container *ngIf="!isView">
@@ -407,9 +413,12 @@
                         <td>{{lv1.tenDvi}}</td>
                         <td>{{lv1.tonKhoLoaiVthh || lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
                         </td>
-                        <td>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
                         <ng-container *ngIf="isVthhGao()">
                           <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                        </ng-container>
+                        <td>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                        <ng-container *ngIf="isVthhGao()">
+                          <!-- <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
                           <td>{{lv1.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                         </ng-container>
                         <ng-container *ngIf="!isView">
@@ -433,9 +442,12 @@
                   <tr>
                     <td>{{i +1}}</td>
                     <td>{{item.noiDung}}</td>
-                    <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
                     <ng-container *ngIf="isVthhGao()">
                       <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                    </ng-container>
+                    <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                    <ng-container *ngIf="isVthhGao()">
+                      <!-- <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
                       <td>{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                     </ng-container>
                     <ng-container *ngIf="!isView">
