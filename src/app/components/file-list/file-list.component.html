@@ -1,8 +1,5 @@
 <div class="list-file">
     <div class="header-file">
-      <div class="icon-empty">
-       STT
-      </div>
         <input type="text" [(ngModel)]="fileAdd.noiDung" nz-input [disabled]="isViewDetail || disabled" />
         <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
             <input placeholder="Chọn file" [(ngModel)]="fileAdd.fileName" nz-input disabled />
@@ -22,9 +19,6 @@
     </div>
     <div class="body-file" *ngFor="let item of data;let i = index">
         <ng-container *ngIf="!item.isEdit">
-          <div class="icon-empty">
-            {{i + 1}}
-          </div>
             <div class="content-text d-flex align-items-center">
                 <div class="nd-text">{{item.noiDung}}</div>
             </div>
@@ -42,9 +36,6 @@
             </div>
         </ng-container>
         <ng-container *ngIf="item.isEdit">
-          <div class="icon-empty">
-            {{i + 1}}
-          </div>
             <input type="text" [(ngModel)]="item.noiDung" placeholder="Nhập tên file" nz-input />
             <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
                 <input placeholder="Chọn file" nz-input [(ngModel)]="item.fileName" nz-input disabled />
