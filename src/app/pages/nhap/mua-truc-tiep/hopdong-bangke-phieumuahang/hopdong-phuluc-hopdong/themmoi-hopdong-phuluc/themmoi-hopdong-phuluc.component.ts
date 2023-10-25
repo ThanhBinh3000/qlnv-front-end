@@ -398,7 +398,10 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
                   this.listDviLquan.push(res)
                   this.slChuaKy += res.soLuong
                 }else if(res.luaChon == true && res.signed == true){
-                  this.slDaKy += item.children.find(x => x.idDiaDiem == res.idQdPdKqSldd).soLuongHd
+                  this.slDaKy += item.children.filter(x => x.idDiaDiem == res.idQdPdKqSldd).reduce((prev, cur) => {
+                    prev += cur.soLuongHd;
+                    return prev;
+                  }, 0);
                 }
               })
             })
@@ -417,7 +420,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
               tongSoLuongQdKhChuakyHd: this.slChuaKy,
               tongSoLuongQdKhDakyHd: this.slDaKy,
               dviTinh: "tấn",
-              tongSoLuongQdKh: dataThongTin.tongSoLuong
+              tongSoLuongQdKh: this.slChuaKy + this.slDaKy
             });
             if(this.idKqCgia){
               this.changeDviCungCap(this.idKqCgia)
