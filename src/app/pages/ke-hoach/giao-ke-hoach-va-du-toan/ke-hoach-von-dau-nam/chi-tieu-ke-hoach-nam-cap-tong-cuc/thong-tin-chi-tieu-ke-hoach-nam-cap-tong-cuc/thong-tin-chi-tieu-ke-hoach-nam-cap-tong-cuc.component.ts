@@ -55,6 +55,7 @@ import {QuyetDinhTtcpService} from '../../../../../../services/quyetDinhTtcp.ser
 import {CurrencyMaskInputMode} from 'ngx-currency';
 import {ThemSuaKeHoachVatTuComponent} from './them-sua-ke-hoach-vat-tu/them-sua-ke-hoach-vat-tu.component';
 import {FILETYPE} from '../../../../../../constants/fileType';
+import moment from 'moment/moment';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -3536,6 +3537,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           typeFile: 'pdf',
           nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
           idHdr: this.thongTinChiTieuKeHoachNam.id,
+          maBieuSo: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
+          ngayBatDauQuy: this.thongTinChiTieuKeHoachNam.ngayKy,
           fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
           loaiNhapXuat: this.subTabVatTu == 0 ? 'NHAP' : 'XUAT'
         }).then(async s => {
