@@ -327,6 +327,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     this.expandAll(key2)
   }
   async openDialogSoQdDC() {
+    if (this.isView) return
     let dataQdDc = [];
     let body = {
       trangThai: "02",
