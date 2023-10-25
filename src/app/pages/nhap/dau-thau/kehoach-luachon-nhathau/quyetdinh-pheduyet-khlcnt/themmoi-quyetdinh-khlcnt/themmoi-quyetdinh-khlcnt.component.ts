@@ -865,26 +865,28 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     for (const dx of this.danhsachDx) {
       for (const gthau of dx.children) {
         for (const chiCuc of gthau.children) {
-          let bodyPag = {
-            namKeHoach: this.formData.value.namKhoach,
-            loaiVthh: gthau.loaiVthh,
-            cloaiVthh: gthau.cloaiVthh,
-            trangThai: STATUS.BAN_HANH,
-            maDvi: chiCuc.maDvi,
-            loaiGia: 'LG03'
-          }
-          let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-          if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
-            const data = pag.data[0];
-            let donGiaVatQd = 0;
-            if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
-              donGiaVatQd = data.giaQdDcTcdtVat
-            } else {
-              donGiaVatQd = data.giaQdTcdtVat
+          if (chiCuc.donGia == null) {
+            let bodyPag = {
+              namKeHoach: this.formData.value.namKhoach,
+              loaiVthh: gthau.loaiVthh,
+              cloaiVthh: gthau.cloaiVthh,
+              trangThai: STATUS.BAN_HANH,
+              maDvi: chiCuc.maDvi,
+              loaiGia: 'LG03'
             }
-            chiCuc.donGia = donGiaVatQd
-          } else {
-            chiCuc.donGia = null
+            let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+            if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
+              const data = pag.data[0];
+              let donGiaVatQd = 0;
+              if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
+                donGiaVatQd = data.giaQdDcTcdtVat
+              } else {
+                donGiaVatQd = data.giaQdTcdtVat
+              }
+              chiCuc.donGia = donGiaVatQd
+            } else {
+              chiCuc.donGia = null
+            }
           }
         }
       }

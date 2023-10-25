@@ -122,6 +122,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    this.formData.patchValue({ loaiVthh: this.loaiVthh })
     await this.loadDsTong();
   }
 
@@ -167,7 +168,6 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
         this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
       }
-
       await this.search();
     } catch (e) {
       console.log(e)
