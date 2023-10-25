@@ -127,6 +127,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   listTrangThai: any[] = [];
+  listDkThanhLy: any[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes) {
@@ -144,6 +145,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     this.getListXepLoai();
     this.getListTrangThai();
     this.getListDonViTheoCap();
+    this.getListDkThanhLy();
   }
 
   async getDetail(id) {
@@ -218,6 +220,13 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     }
   }
 
+  async getListDkThanhLy() {
+    this.listDkThanhLy = [];
+    let res = await this.danhMucService.danhMucChungGetAll('DIEU_KIEN_THANH_LY');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDkThanhLy = res.data;
+    }
+  }
 
   async getListDonViTheoCap() {
     let res = await this.donviService.layTatCaDonViByLevel(2);
