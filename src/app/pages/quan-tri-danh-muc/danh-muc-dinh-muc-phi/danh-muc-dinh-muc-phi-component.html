@@ -89,11 +89,11 @@
   <div class="group-button">
     <h3 class="label_dm">DANH SÁCH ĐỊNH MỨC PHÍ NHẬP, XUẤT, BẢO QUẢN</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+      <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()"*ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_XOA')">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="export()">
+      <button type="button" class="btn btn-sub" (click)="export()" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
@@ -218,11 +218,11 @@
             </nz-form-control>
           </th>
           <th class="text-center" nzRight>
-            <a (click)="themmoi()" [ngClass]="{'isDisabled': formData.invalid}">
+            <a (click)="themmoi()" [ngClass]="{'isDisabled': formData.invalid}" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_THEM')">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
             <a>
-              <i (click)="refresh()" class="icon  htvbdh_nhap-lai1 "></i>
+              <i (click)="refresh()" class="icon  htvbdh_nhap-lai1 " *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_THEM')"></i>
             </a>
           </th>
         </tr>
@@ -246,10 +246,10 @@
             <td>{{ data.dviTinh }}</td>
             <td>{{ data.trangThai == '01' ? 'Hoạt động' : 'Không hoạt động'}}</td>
             <td style="text-align: center;" nzRight>
-              <a (click)="startEdit(i)">
+              <a (click)="startEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_THEM')">
                 <i class="table-icon fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data)">
+              <a (click)="xoaItem(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_XOA')">
                 <i class="table-icon fa fa-trash-o do"></i>
               </a>
             </td>
@@ -260,13 +260,13 @@
             <th>
               <nz-input-group>
                 <input [ngModelOptions]="{standalone: true}"
-                       type="text" nz-input [(ngModel)]=dataEdit[i].data.maDinhMuc/>
+                       type="text" nz-input [(ngModel)]=dataEdit[i].data.maDinhMuc>
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
                 <input [ngModelOptions]="{standalone: true}"
-                       type="text" nz-input [(ngModel)]=dataEdit[i].data.tenDinhMuc/>
+                       type="text" nz-input [(ngModel)]=dataEdit[i].data.tenDinhMuc>
               </nz-input-group>
             </th>
             <th>
@@ -338,10 +338,10 @@
               </nz-input-group>
             </th>
             <th style="text-align: center;" nzRight>
-              <a (click)="themmoi(dataEdit[i].data, data.id)" [ngClass]="{'isDisabled': formDataChinhSua.invalid}">
+              <a (click)="themmoi(dataEdit[i].data, data.id)" [ngClass]="{'isDisabled': formDataChinhSua.invalid}" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_THEM')">
                 <i class="fa fa-save mr-3"></i>
               </a>
-              <a (click)="huyEdit(i)">
+              <a (click)="huyEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_XOA')">
                 <i class="fa fa-times do mr-3"></i>
               </a>
             </th>

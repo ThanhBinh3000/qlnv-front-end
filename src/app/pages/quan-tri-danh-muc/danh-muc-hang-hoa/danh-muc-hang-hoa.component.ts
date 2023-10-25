@@ -51,7 +51,7 @@ export class DanhMucHangHoaComponent implements OnInit {
   listOfTagOption: any[] = [];
   listDvqlReq: any[] = [];
 
-  dviQly : string = 'tat-ca';
+  dviQly: string = 'tat-ca';
 
   constructor(
     private router: Router,
@@ -62,7 +62,7 @@ export class DanhMucHangHoaComponent implements OnInit {
     private helperService: HelperService,
     private _modalService: NzModalService,
     private spinner: NgxSpinnerService,
-    public userSerivce: UserService,
+    public userService: UserService,
     private tieuChuanService: DanhMucTieuChuanService,
   ) {
     this.detailHangHoa = this.formBuilder.group({
@@ -83,19 +83,26 @@ export class DanhMucHangHoaComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QTDM_DM_HANG_DTQG')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
-    await Promise.all([
-      this.loadDviTinh(),
-      this.layTatCaDonViTheoTree(),
-      this.loadListLhBq(),
-      this.loadListPpbq(),
-      this.loadListPpLayMau(),
-      this.loadListHtbq(),
-      this.loadListLoaiHang(),
-      this.loadListDviQly(),
-      this.loadListNhomBaoHiem(),
-    ]);
-    this.spinner.hide();
+    try {
+      this.loadDviTinh();
+      this.layTatCaDonViTheoTree();
+      this.loadListLhBq();
+      this.loadListPpbq();
+      this.loadListPpLayMau();
+      this.loadListHtbq();
+      this.loadListLoaiHang();
+      this.loadListDviQly();
+      this.loadListNhomBaoHiem();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   /**
