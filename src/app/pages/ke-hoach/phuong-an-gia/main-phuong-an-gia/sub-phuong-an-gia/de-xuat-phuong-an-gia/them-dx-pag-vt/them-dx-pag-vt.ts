@@ -297,6 +297,10 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.pagTtChungs = data.pagTtChungs;
     this.pagTtChungs.forEach(item => {
       item.id = null;
+      item.giaQdBtc = null;
+      item.giaQdDcBtc = null;
+      item.giaQdBtcVat = null;
+      item.giaQdDcBtcVat = null;
     })
     this.updateEditCache('ttc')
   }
@@ -465,6 +469,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         lyDoTuChoi: data.lyDoTuChoi,
         qdCtKhNam: data.qdCtKhNam,
         maPphapXdg: data.maPphapXdg,
+        soDeXuatDc: data.soDeXuatDc,
+        lanDeXuat: data.lanDeXuat,
         vat: data.vat ? data.vat.toString() : '',
       })
       this.tenLoaiVthh = res.data && res.data.tenLoaiVthh ? res.data.tenLoaiVthh : null;
@@ -575,6 +581,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     let list = this.listCloaiVthh.filter(item => item.ma == event)
     this.rowItemTtc.tenCloaiVthh = list && list.length > 0 ? list[0].ten : ''
     this.rowItemTtc.donViTinh = list && list.length > 0 ? list[0].maDviTinh : ''
+    this.rowItemTtc.tchuanCluong = list && list.length > 0 ? list[0].tieuChuanCl : ''
     if (this.type == 'GCT') {
       if (!this.formData.value.loaiGia) {
         this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại giá')
@@ -598,12 +605,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       } else {
         this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy giá BTC cho loại hàng này')
         return;
-      }
-    } else {
-      let resp = await this.danhMucService.getDetail(event);
-      if (resp.msg == MESSAGE.SUCCESS) {
-        this.rowItemTtc.tchuanCluong = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : "";
-        this.rowItemTtc.donViTinh = resp.data && resp.data.maDviTinh ? resp.data.maDviTinh : "";
       }
     }
   }
@@ -704,6 +705,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.formData.controls["soDeXuat"].setValidators([Validators.required]);
     this.formData.controls["loaiVthh"].setValidators([Validators.required]);
     this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    this.formData.controls["nguoiKy"].setValidators([Validators.required]);
     this.formData.controls["loaiGia"].setValidators([Validators.required]);
     this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
     if ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') && this.type == 'GMTDBTT') {
@@ -718,17 +720,19 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       this.spinner.hide();
       return;
     }
     this.pagTtChungs.forEach(item => {
-      if (this.type == 'GCT') {
-        item.giaDnVat = item.giaDn + item.giaDn * item.vat;
-      } else {
-        if (this.formData.value.vat && ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
-          item.vat = this.formData.value.vat;
-          item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat;
+      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+        if (this.type == 'GCT') {
+          item.giaDnVat = item.giaDn + item.giaDn * item.vat;
+        } else {
+          if (this.formData.value.vat) {
+            item.vat = this.formData.value.vat;
+            item.giaDnVat = item.giaDn + item.giaDn * this.formData.value.vat;
+          }
         }
       }
     })
@@ -811,7 +815,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     try {
       let body = {
         reportTemplateRequest: this.reportTemplate,
-        id : this.idInput
+        id: this.idInput
       }
       await this.giaDeXuatGiaService.preview(body).then(async s => {
         this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;

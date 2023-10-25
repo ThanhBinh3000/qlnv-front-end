@@ -78,7 +78,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         trangThai: ["00"],
         ghiChu: [null],
         thongTinGia: [null],
-        soQdCanDc: [null],
+        soQdDc: [null],
         loaiDeXuat: ['00'],
       }
     );
@@ -113,7 +113,8 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
-        soToTrinh: data.soToTrinh
+        soToTrinh: data.soToTrinh,
+        soQdDc: data.soQdDc,
       });
       this.fileDinhKem = data.fileDinhKems;
     }
@@ -278,17 +279,25 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         },
       });
       modalQD.afterClose.subscribe((data) => {
-        if (data) {
+        if (data && data.listDx && data.listDx.length> 0 ) {
             let thRes = data.listDx;
+          if (thRes && thRes.length > 0) {
+            this.formData.patchValue({
+              soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : "",
+              soQdDc: thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuatDc).toString() : [],
+            })
+          }
             let body = {
               listId : thRes && thRes.length > 0 ? thRes.map(item=> item.id) : []
             }
-          this.formData.patchValue({
-            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : []
-          })
             this.tongHopData(body);
         }
       });
+    } else {
+      if (!this.isView) {
+        this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn loại giá!');
+        return;
+      }
     }
   }
 
