@@ -600,8 +600,14 @@
                   Điều kiện bị xem xét thanh lý
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <input nz-input [readonly]='isDisable()' formControlName='dkThanhLy' />
+                  <nz-select [nzDisabled]='isDisable()' formControlName='dkThanhLy'>
+                    <nz-option *ngFor='let item of listDkThanhLy' [nzValue]='item.ma' [nzLabel]='item.giaTri'>
+                    </nz-option>
+                  </nz-select>
                 </nz-form-control>
+                <!--                <nz-form-control [nzErrorTip]='error'>-->
+                <!--                  <input nz-input [readonly]='isDisable()' formControlName='dkThanhLy' />-->
+                <!--                </nz-form-control>-->
               </nz-form-item>
             </div>
             <div nz-col nzSpan='24'>
