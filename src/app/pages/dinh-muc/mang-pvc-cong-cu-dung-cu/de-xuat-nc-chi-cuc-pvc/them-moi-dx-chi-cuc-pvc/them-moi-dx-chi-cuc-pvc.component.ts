@@ -317,7 +317,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
           this.listCtieuKh.push(res.data);
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.notification.warning(MESSAGE.WARNING, 'Chưa có chỉ tiêu KH năm Cục giao, bạn vẫn có thể đề xuất nhu cầu nếu muốn!');
         return;
       }
     }

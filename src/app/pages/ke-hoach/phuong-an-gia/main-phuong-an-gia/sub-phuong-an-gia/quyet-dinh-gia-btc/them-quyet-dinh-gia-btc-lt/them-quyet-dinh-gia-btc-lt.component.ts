@@ -352,11 +352,16 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     try {
       this.spinner.show();
       let arr = [];
-      this.dataTableView.forEach(item => {
+      this.dataTableView.forEach((item, index) => {
         if (item.children && item.children.length > 0) {
+          let itemClonePr = cloneDeep(item);
+          itemClonePr.giaQdBtc = null;
+          itemClonePr.stt = index + 1;
+          arr.push(itemClonePr)
           item.children.forEach(child => {
-            child.loai = "00";
-            arr.push(child);
+            let itemCloneChild = cloneDeep(child);
+            itemCloneChild.tenDvi = "";
+            arr.push(itemCloneChild);
           })
         }
       });
@@ -385,7 +390,9 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       let arr = [];
       this.dataTableView.forEach(item => {
         if (item.children && item.children.length > 0) {
+          arr.push(item)
           item.children.forEach(child => {
+            child.tenDvi = "";
             arr.push(child);
           })
         }
@@ -397,6 +404,12 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       body.pagType = this.pagType;
       body.type = this.type;
       body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "thong_tin_gia.xlsx");
+      });
+      this.showDlgPreview = true
     } catch (e) {
       console.log(e);
     } finally {
@@ -405,7 +418,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   }
 
   async downloadPdf() {
-
+    saveAs(this.pdfSrc, 'quyet_dinh_gia.pdf');
   }
 
     closeDlg() {

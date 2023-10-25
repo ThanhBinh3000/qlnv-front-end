@@ -498,6 +498,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   };
   async openDialogQuyetDinhDC() {
+    if(this.isView){
+      return;
+    }
     // await this.loadBbLayMau();
     await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
@@ -567,6 +570,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   }
   async openDialogBbLayMau() {
+    if(this.isView){
+      return;
+    }
     if (!this.formData.value.qdDcId) return;
     await this.loadBbLayMau();
     const modalQD = this.modal.create({

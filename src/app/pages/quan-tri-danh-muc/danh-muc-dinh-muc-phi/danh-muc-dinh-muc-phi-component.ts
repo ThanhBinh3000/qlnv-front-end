@@ -18,6 +18,7 @@ import {cloneDeep} from 'lodash';
 import {DanhMucDinhMucService} from "../../../services/danh-muc-dinh-muc.service";
 import {DanhMucMucPhi} from "../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Globals} from "../../../shared/globals";
+import {UserService} from "../../../services/user.service";
 
 
 @Component({
@@ -38,6 +39,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   dataTableAll: any[] = [];
+  listNhomDinhMuc: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -46,6 +48,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   searchFilter = {
     cloaiVthh: '',
     hinhThucBq: '',
+    nhomDinhMuc: '',
     loaiDinhMuc: '',
     loaiHinhBq: '',
     loaiVthh: '',
@@ -67,14 +70,14 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private fb: FormBuilder,
-    private notificationService: NzNotificationService,
-    private globals: Globals
+    public userService: UserService,
   ) {
     this.formData = this.fb.group({
       id: [null],
       cloaiVthh: [null],
       tenCloaiVthh: [null],
       hinhThucBq: [null],
+      nhomDinhMuc: [null, [Validators.required]],
       loaiDinhMuc: [null, [Validators.required]],
       loaiHinhBq: [null],
       loaiVthh: [null, [Validators.required]],
@@ -89,6 +92,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       cloaiVthh: [null],
       tenCloaiVthh: [null],
       hinhThucBq: [null],
+      nhomDinhMuc: [null, [Validators.required]],
       loaiDinhMuc: [null, [Validators.required]],
       loaiHinhBq: [null],
       loaiVthh: [null, [Validators.required]],
@@ -101,12 +105,22 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.search();
-    this.loadDsVthh();
-    this.getListDinhMuc();
-    this.getListLhbq();
-    this.getListHtbq();
-    this.getListDviTinh();
+    if (!this.userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ')) {
+      this.router.navigateByUrl('/error/401')
+    }
+    try {
+      this.spinner.show()
+      this.search();
+      this.loadDsVthh();
+      this.getListDinhMuc();
+      this.getListLhbq();
+      this.getListHtbq();
+      this.getListDviTinh();
+      this.getNhomDinhMuc();
+      this.spinner.hide()
+    } catch (e) {
+      console.log('error', e);
+    }
   }
 
   async loadDsVthh() {
@@ -125,6 +139,15 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       this.listDinhMuc = res.data;
     }
   }
+
+  async getNhomDinhMuc() {
+    this.listHtBq = [];
+    let res = await this.danhMucService.danhMucChungGetAll('NHOM_DINH_MUC');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listNhomDinhMuc = res.data;
+    }
+  }
+
 
 
   async getListDviTinh() {
@@ -197,38 +220,46 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   }
 
   async search() {
-    this.spinner.show();
-    let body = {
-      cloaiVthh: this.searchFilter.cloaiVthh,
-      hinhThucBq: this.searchFilter.hinhThucBq,
-      loaiDinhMuc: this.searchFilter.loaiDinhMuc,
-      loaiHinhBq: this.searchFilter.loaiHinhBq,
-      loaiVthh: this.searchFilter.loaiVthh,
-      maDinhMuc: this.searchFilter.maDinhMuc,
-      tenDinhMuc: this.searchFilter.tenDinhMuc,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page - 1,
+    try {
+      this.spinner.show();
+      let body = {
+        cloaiVthh: this.searchFilter.cloaiVthh,
+        hinhThucBq: this.searchFilter.hinhThucBq,
+        loaiDinhMuc: this.searchFilter.loaiDinhMuc,
+        loaiHinhBq: this.searchFilter.loaiHinhBq,
+        loaiVthh: this.searchFilter.loaiVthh,
+        maDinhMuc: this.searchFilter.maDinhMuc,
+        tenDinhMuc: this.searchFilter.tenDinhMuc,
+        nhomDinhMuc: this.searchFilter.nhomDinhMuc,
+        paggingReq: {
+          limit: this.pageSize,
+          page: this.page - 1,
+        }
+      };
+      let res = await this.danhMucDinhMucService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        this.totalRecord = data.totalElements;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    };
-    let res = await this.danhMucDinhMucService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
-    } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      this.updateEditCache()
+      this.spinner.hide();
+
+    } catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    this.updateEditCache()
-    this.spinner.hide();
   }
 
   checkLoaiDm(type, idx?): boolean {
@@ -262,6 +293,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         tenVthh: data.tenLoaiVthh,
         maDinhMuc: data.maDinhMuc,
         tenDinhMuc: data.tenDinhMuc,
+        nhomDinhMuc: data.nhomDinhMuc,
         dviTinh: data.dviTinh,
         trangThai: data.trangThai,
       })
@@ -333,6 +365,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       cloaiVthh: '',
       hinhThucBq: '',
       loaiDinhMuc: '',
+      nhomDinhMuc: '',
       loaiHinhBq: '',
       loaiVthh: '',
       maDinhMuc: '',
@@ -363,6 +396,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
           "cloaiVthh": this.searchFilter.cloaiVthh,
           "hinhThucBq": this.searchFilter.hinhThucBq,
           "loaiDinhMuc": this.searchFilter.loaiDinhMuc,
+          "nhomDinhMuc": this.searchFilter.nhomDinhMuc,
           "loaiHinhBq": this.searchFilter.loaiHinhBq,
           "loaiVthh": this.searchFilter.loaiVthh,
           "maDinhMuc": this.searchFilter.maDinhMuc,

@@ -277,7 +277,7 @@
         <i class="icon htvbdh_tcdt_delete"></i>
         Hủy
       </button>
-      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active ml-2" (click)="save() ">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active ml-2" (click)="save() " *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>

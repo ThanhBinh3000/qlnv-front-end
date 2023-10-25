@@ -60,7 +60,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private bienBanLayMauXhService: BienBanLayMauXhService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
@@ -223,7 +223,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         nam: this.formData.value.nam,
         trangThai: STATUS.BAN_HANH
       }
-      const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
+      const res = await this.quyetDinhGiaoNvXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
       } else if (res && res.msg) {
@@ -276,7 +276,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     if (id <= 0) return;
     try {
       await this.spinner.show();
-      const res = await this.quyetDinhGiaoNhiemVuXuatHangService.getDetail(id);
+      const res = await this.quyetDinhGiaoNvXuatHangService.getDetail(id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }

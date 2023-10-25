@@ -104,6 +104,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         tenTrangThai: ["Đang nhập dữ liệu"],
         loaiVthh: [''],
         cloaiVthh: [''],
+        noiDungQd: [''],
         fileDinhKems: new FormControl([]),
       }
     );

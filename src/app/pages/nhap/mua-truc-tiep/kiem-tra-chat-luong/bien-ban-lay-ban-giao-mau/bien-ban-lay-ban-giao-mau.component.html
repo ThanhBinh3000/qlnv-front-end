@@ -128,9 +128,13 @@
                                        *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XEM')">
                                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                                     </a>
-                                    <a *ngIf="(bblm.trangThai != STATUS.DA_DUYET_LDCC) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_THEM')"
+                                    <a *ngIf="(bblm.trangThai == STATUS.DU_THAO || bblm.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_THEM')"
                                        (click)="goDetail(bblm.id, null, false) ">
                                       <i class="fa fa-pencil" title="Sửa"></i>
+                                    </a>
+                                    <a *ngIf="bblm.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_DUYET')"
+                                       (click)="goDetail(bblm.id, null, false) ">
+                                      <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                                     </a>
                                     <a *ngIf="(bblm.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XOA')"
                                        (click)="xoaItem(bblm)">

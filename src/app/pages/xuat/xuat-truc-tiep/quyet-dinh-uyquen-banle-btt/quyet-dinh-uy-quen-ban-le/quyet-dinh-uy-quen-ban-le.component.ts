@@ -75,7 +75,7 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
       await this.spinner.show();
       await Promise.all([
         this.timKiem(),
-        this.searchThongTin(),
+        this.search(),
       ]);
     } catch (e) {
       console.log('error: ', e);
@@ -95,45 +95,7 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
   async clearFilter() {
     this.formData.reset();
     await this.timKiem();
-    await this.searchThongTin();
-  }
-
-  async searchThongTin() {
-    try {
-      await this.spinner.show();
-      const body = {
-        ...this.formData.value,
-      };
-      const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
-      if (res.msg === MESSAGE.SUCCESS) {
-        const data = res.data;
-        const latestRecords = {};
-        data.content.forEach(record => {
-          if (!latestRecords[record.soDxuat] || record.someDateField > latestRecords[record.soDxuat].someDateField) {
-            latestRecords[record.soDxuat] = record;
-          }
-        });
-        const filteredRecords = Object.values(latestRecords);
-        this.dataTable = filteredRecords;
-        this.totalRecord = data.totalElements;
-        this.dataTable?.forEach((item) => (item.checked = false));
-        this.dataTableAll = cloneDeep(this.dataTable);
-      } else {
-        this.dataTable = [];
-        this.totalRecord = 0;
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.spinner.hide();
-    }
-  }
-
-  async showListThongTin() {
-    this.isDetail = false;
-    await this.searchThongTin();
-    this.showListEvent.emit();
+    await this.search();
   }
 
   redirectDetail(id, isView: boolean) {

@@ -342,10 +342,10 @@
                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
             </th>
             <th>
-              <nz-input-number nz-input [nzDisabled]="true" [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
+              <nz-input-number nz-input [nzDisabled]="true" [nzSize]="'small'" [(ngModel)]="rowItem.donGiaVat"
                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
             </th>
-            <th>{{ rowItem.soLuong * rowItem.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</th>
+            <th>{{ rowItem.soLuong * rowItem.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</th>
             <th>
               <nz-form-control>
                 <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
@@ -382,8 +382,8 @@
               <td>{{ data.sdt }}</td>
               <td>{{ data.ngayChaoGia | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.soLuong| number : '1.0-1' : 'vi_VN' }}</td>
-              <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-              <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ data.soLuong * data.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{data.fileDinhKems?.fileName }}</td>
               <td><label nz-checkbox [nzDisabled]="isView" [(ngModel)]="data.luaChon"></label></td>
               <td>
@@ -429,11 +429,11 @@
                                  [nzParser]="globals.parser"></nz-input-number>
               </td>
               <td>
-                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="dataEdit[idx]?.data.donGia"
+                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="dataEdit[idx]?.data.donGiaVat"
                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
 
               </td>
-              <td>{{ dataEdit[idx]?.data.soLuong * dataEdit[idx]?.data.donGia * 1000 | number : '1.0-1'
+              <td>{{ dataEdit[idx]?.data.soLuong * dataEdit[idx]?.data.donGiaVat * 1000 | number : '1.0-1'
                 :
                 'vi_VN'
                 }}</td>

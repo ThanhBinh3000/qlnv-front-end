@@ -57,7 +57,7 @@
         <div class="cantrai">
         </div>
         <div class="canphai">
-            <button nz-button (click)="handleOk()" class="modal__button--save">
+            <button nz-button (click)="handleOk()" class="modal__button--save" *ngIf="userService.isAccessPermisson('QTDM_DM_THU_KHO_THEM')">
                 <i nz-icon nzType="save"></i>
                 Lưu
             </button>

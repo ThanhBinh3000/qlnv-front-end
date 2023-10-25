@@ -1002,7 +1002,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       quyetDinhGiaoCuaTcId: [, [Validators.required]],
       soQuyetDinhGiaoNam: [],
       quyetDinhGiaoNamId: [],
-      soCongVan: [],
+      soCongVan: [, [Validators.required]],
       namKeHoach: [dayjs().get("year"), [Validators.required]],
       trichYeu: [, [Validators.required]],
       soQuyetDinhDcCuaC: [],
@@ -2059,7 +2059,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   save(isGuiDuyet?: boolean) {
-
+    if (this.isCuc()) {
+      this.formData.controls["soCongVan"].clearValidators();
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();

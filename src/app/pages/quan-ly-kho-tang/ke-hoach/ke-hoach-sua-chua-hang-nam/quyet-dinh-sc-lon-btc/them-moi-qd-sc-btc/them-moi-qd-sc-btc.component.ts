@@ -329,25 +329,46 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
 
   sumSoLuong(data: any, row: string, type?: any) {
     let sl = 0;
-    if (!type) {
-      if (data && data.dataChild && data.dataChild.length > 0) {
-        const sum = data.dataChild.reduce((prev, cur) => {
-          prev += cur[row];
-          return prev;
-        }, 0);
-        sl = sum;
+    if (this.formData.value.id) {
+      if(type){
+        if (this.dataTableReq && this.dataTableReq.length > 0) {
+          let arr = this.dataTableReq.filter(item => type == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000);
+          let sum = 0;
+          arr.forEach(item => {
+            sum += item[row]
+          });
+          sl = sum;
+        }
+      }else {
+        if (this.listDx && this.listDx.length > 0) {
+          let sum = 0;
+          this.listDx.forEach(item => {
+            if (item.tmdt > 15000000000) {
+              sum += item[row];
+            } else {
+              sum += item[row];
+            }
+          });
+          sl = sum;
+        }
+
       }
     } else {
-      if (this.dataTable && this.dataTable.length > 0) {
+      if (this.dataTableReq && this.dataTableReq.length > 0) {
         let sum = 0;
-        this.dataTable.forEach(item => {
-          sum += this.sumSoLuong(item, row);
+        this.dataTableReq.forEach(item => {
+          if (item.tmdt > 15000000000) {
+            sum += item[row];
+          } else {
+            sum += item[row];
+          }
         });
         sl = sum;
       }
     }
     return sl;
   }
+
 
   themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
     let modalQD = this.modal.create({

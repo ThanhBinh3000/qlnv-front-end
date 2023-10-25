@@ -77,6 +77,9 @@ export class DanhMucDonViComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QTDM_DM_DON_VI')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.layTatCaDonViTheoTree();

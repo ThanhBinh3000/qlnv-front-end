@@ -74,7 +74,10 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       soHopDong: [''],
       ngayKyHopDong: [''],
       idQdPd: [],
-      soQdPd: [],
+      soQdPd: [''],
+      idQdDc: [],
+      soQdDc: [''],
+      soQd: [''],
       idChaoGia: [''],
       maDviTsan: [''],
       tenBenMua: [''],
@@ -298,7 +301,10 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     try {
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {
-        this.dsThongTinChaoGia = res.data.content;
+        this.dsThongTinChaoGia = res.data.content.map(item => ({
+          soQd: item.soQdDc || item.soQdPd,
+          ...item
+        }));
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -311,8 +317,8 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.dsThongTinChaoGia,
-          dataHeader: ['Số quyết định KH BTT', 'Số đề xuất KH BTT', 'Loại hàng hóa'],
-          dataColumn: ['soQdPd', 'soDxuat', 'tenLoaiVthh']
+          dataHeader: ['Số QĐ phê duyệt/điều chỉnh KH BTT', 'Số đề xuất KH BTT', 'Loại hàng hóa'],
+          dataColumn: ['soQd', 'soDxuat', 'tenLoaiVthh']
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
@@ -329,7 +335,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
   }
 
   changeUyQuenBanLe(event) {
-    if (this.flagInit && event && event !== this.formData.value.soQdPd) {
+    if (this.flagInit && event && event !== this.formData.value.soQd) {
       this.formData.patchValue({
         idHopDong: null,
         soHopDong: null,
@@ -363,8 +369,11 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       const data = res.data;
       await this.setListDviTsan(data.children);
       this.formData.patchValue({
-        idQdPd: data.idHdr,
+        idQdPd: data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr,
         soQdPd: data.soQdPd,
+        idQdDc: data.xhQdDchinhKhBttHdr ? data.idHdr : null,
+        soQdDc: data.soQdDc,
+        soQd: data.soQdDc || data.soQdPd,
         idChaoGia: data.id,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,

@@ -669,7 +669,8 @@
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương/cơ quan/đơn vị nhận cứu trợ
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'">
-              <nz-select nzAllowClear formControlName="noiDung" nzPlaceHolder="Vui lòng chọn" nzShowSearch>
+              <nz-select nzAllowClear formControlName="noiDung" nzPlaceHolder="Vui lòng chọn" nzShowSearch
+                (ngModelChange)="changeDviNhan($event)">
                 <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"
                   [nzDisabled]="p.disabled"></nz-option>
               </nz-select>

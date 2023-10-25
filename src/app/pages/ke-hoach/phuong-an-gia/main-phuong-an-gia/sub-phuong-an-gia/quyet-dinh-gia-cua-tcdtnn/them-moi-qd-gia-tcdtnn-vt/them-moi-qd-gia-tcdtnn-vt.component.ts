@@ -15,6 +15,9 @@ import {DialogPagQdBtcComponent} from "../../quyet-dinh-gia-btc/dialog-pag-qd-bt
 import {
   QuyetDinhGiaCuaBtcService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {saveAs} from "file-saver";
+import printJS from "print-js";
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-vt',
@@ -42,6 +45,12 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   maQd: string;
   dataTable: any[] = [];
   fileDinhKem: any[] = [];
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  printSrc: any
+  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -274,6 +283,63 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  async previewQdGia() {
+    try {
+      this.spinner.show();
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "pdf";
+      body.trangThai = "01";
+      body.listDto = this.arrThongTinGia
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "xlsx";
+      body.trangThai = "01";
+      body.listDto = this.arrThongTinGia
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "quyet_dinh_gia.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadPdf() {
+    saveAs(this.pdfSrc, 'quyet_dinh_gia.pdf');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
 

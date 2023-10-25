@@ -225,7 +225,8 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>{{lv2.tenLoKho ? lv2.tenLoKho + ' - ' + lv2.tenNganKho : lv2.tenLoKho}}</td>
+                      <td>{{lv2.tenLoKho ? lv2.tenLoKho + ' - ' + lv2.tenNganKho + ' - ' + lv2.tenNhaKho :
+                        lv2.tenNganKho + ' - ' + lv2.tenNhaKho}}</td>
                       <td>{{lv2.soBbQd}}</td>
                       <td>{{lv2.ngayBbLayMau | date:globals.dateFormat}}</td>
                       <td>{{lv2.soBbTinhKho}}</td>
@@ -280,8 +281,8 @@
     [loaiChon]="loaiChon" (showListEvent)="showList()">
   </app-chi-tiet-bien-ban-lay-mau>
 </div>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="showQdGnv" (nzOnCancel)="closeQdGnvModal()"
-  *ngIf="loaiXuat ==='CTVT'">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="showQdGnv"
+  (nzOnCancel)="closeQdGnvModal()" *ngIf="loaiXuat ==='CTVT'">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-quyet-dinh-gnv [idSelected]="idQdGnv" (showListEvent)="showList()" [isView]="true"
       [isViewOnModal]="true">

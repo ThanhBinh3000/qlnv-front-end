@@ -15,15 +15,26 @@
               <input nz-input formControlName="maTongHop"/>
             </nz-input-group>
           </div>
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="10">
             <label class="search__label">Nội dung tổng hợp</label>
             <nz-input-group>
               <input nz-input formControlName="noiDungTh"/>
             </nz-input-group>
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="5">
             <label class="search__label">Ngày tổng hợp</label>
-            <nz-range-picker nzFormat="dd/MM/yyyy" formControlName="thoiGianTh"></nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="11">
+                <nz-date-picker nzPlaceHolder="Ngày bắt đầu" formControlName="ngayThTu" nzFormat="dd/MM/yyyy"
+                                class="search__input"></nz-date-picker>
+              </div>
+              <div nz-col nzSpan="1">
+              </div>
+              <div nz-col nzSpan="11">
+                <nz-date-picker nzPlaceHolder="Ngày kết thúc" formControlName="ngayThDen" nzFormat="dd/MM/yyyy"
+                                class="search__input"></nz-date-picker>
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -46,6 +57,11 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
+        <button type="button" class="btn btn-do" (click)="deleteMulti()"
+                *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_XOA')  && userService.isTongCuc()">
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          <span>Xóa</span>
+        </button>
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_THEM')"
                 type="button" class="btn btn-main" (click)="redirectToChiTiet(0,false)">
           <i class="icon htvbdh_dau-cong"></i>
@@ -58,10 +74,14 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
+          <th nzWidth="40px">
+            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                   [nzIndeterminate]="indeterminate"></label>
+          </th>
           <th width="40px">STT</th>
           <th width="80px">Năm KH</th>
           <th width="150px">Số tờ trình</th>
-          <th width="150px">Ngày tạo ờ trình</th>
+          <th width="150px">Ngày tạo tờ trình</th>
           <th width="150px">Mã tổng hợp</th>
           <th width="150px">Ngày tổng hợp</th>
           <th width="">Nội dung tổng hợp</th>
@@ -71,6 +91,7 @@
           <th width="130px" class="text-center" *ngIf="userService.isTongCuc">Hành động</th>
         </tr>
         <tr class="search-table">
+          <th></th>
           <th></th>
           <th>
             <nz-input-group>
@@ -142,6 +163,10 @@
         </thead>
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
+          <td width="45px">
+            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+          </td>
           <td>{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.namKh }}</td>
           <td>{{ data.soToTrinh }}</td>
@@ -149,7 +174,8 @@
           <td>{{ data.id }}</td>
           <td>{{ data.thoiGianTh |date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.noiDungTh }}</td>
-          <td>{{ data.soQdPdKhDm }}</td>
+          <td><a nz-button nzType="link" *ngIf="data.idQdPdKhDm"
+                 (click)="openQdPdModal(data.idQdPdKhDm)">{{data.soQdPdKhDm}}</a>
           <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">
@@ -158,10 +184,13 @@
               <i class=" icon htvbdh_eye"></i>
             </a>
             <a
-              *ngIf="(userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_THEM') && userService.isTongCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_CBV || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_LDV ))"
+              *ngIf="(userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_THEM') && userService.isTongCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDTC))"
               (click)="redirectToChiTiet(data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
+            <a *ngIf="(userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_DUYETLDV') && data.trangThai == STATUS.CHO_DUYET_LDV)
+            || (userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_DUYETLCTC') && data.trangThai == STATUS.CHO_DUYET_LDTC) "
+               (click)="redirectToChiTiet(data.id, true)"> <i class="icon htvbdh_tcdt_pheduyet"></i> </a>
             <a *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_XOA') && userService.isTongCuc() && data.trangThai == STATUS.DU_THAO " (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
@@ -194,3 +223,17 @@
                                                         [isViewDetail]="isViewDetail"
                                                         [idInput]="selectedId"></app-thong-tin-tong-hop-kh-sua-chua-thuong-xuyen>
 </ng-template>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPd" (nzOnCancel)="closeQdPdModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc [idInput]="idQdPdKhDm" (showListEvent)="showList()" [isViewDetail]="true">
+    </app-thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdPdModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+

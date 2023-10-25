@@ -143,6 +143,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         soLuongNhuCauXuat: [0],
         soLuongConThieu: [0],
         soLuongChuyenCapThoc: [0],
+        idDonViNhan: ['', Validators.required]
       });
     this.formData.controls['deXuatPhuongAn'].valueChanges.subscribe(value => {
       const { tongSoLuongDeXuat, tongSoLuongXuatCap, tongSoLuongNhuCauXuat } = Array.isArray(value) ? value.reduce((obj, cur) => {
@@ -178,7 +179,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     try {
       await this.spinner.show();
       if (this.userService.isTongCuc()) {
-        this.maHauTo = 'TTr-QLHDT';
+        this.maHauTo = '/TTr-QLHDT';
       } else {
         this.maHauTo = '/ĐXCTVT-' + this.userInfo.DON_VI.tenVietTat;
       }
@@ -278,11 +279,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
-        this.formDataDtl.patchValue({ noiDung: data.noiDung });
+        this.formDataDtl.patchValue({ noiDung: data.noiDung, idDonViNhan: data.idDonViNhan });
       } else if (level == 1) {
         this.formDataDtl.patchValue({
           idVirtual: uuidv4(),
           noiDung: data.noiDung,
+          idDonViNhan: data.idDonViNhan,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           maDvi: data.maDvi,
@@ -292,11 +294,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         data.edit = level;
         this.formDataDtl.patchValue(data);
       } else if (level === 3) {
-        this.formDataDtl.patchValue({ noiDung: data.noiDung, loaiVthh: data.childData[0]?.loaiVthh, tenLoaiVthh: data.childData[0]?.tenLoaiVthh });
+        this.formDataDtl.patchValue({ noiDung: data.noiDung, idDonViNhan: data.idDonViNhan, loaiVthh: data.childData[0]?.loaiVthh, tenLoaiVthh: data.childData[0]?.tenLoaiVthh });
       } else if (level === 5) {
         this.formDataDtl.patchValue({
           idVirtual: uuidv4(),
           noiDung: data.noiDung,
+          idDonViNhan: data.idDonViNhan,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           maDvi: data.maDvi,
@@ -395,6 +398,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
             return {
               idVirtual: uuidv4(),
               noiDung: key,
+              idDonViNhan: rs ? rs.idDonViNhan : '',
               soLuong: rs ? value.reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0) : 0,
               childData: rs ? value : [],
               soLuongNhuCauXuat: rs ? value.reduce((sum, cur) => sum += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0, 0) : 0,
@@ -407,6 +411,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       dataView = chain(this.formData.value.deXuatPhuongAn)
         .groupBy("noiDung")
         .map((value, key) => {
+          const rx = value.find(f => f.noiDung === key);
           let rs = chain(value)
             .groupBy("loaiVthh")
             .map((v, k) => {
@@ -421,6 +426,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
                 cloaiVthh: row?.cloaiVthh,
                 tenCloaiVthh: row?.tenCloaiVthh,
                 noiDung: row.noiDung,
+                idDonViNhan: row.idDonViNhan,
                 tonKho: tonKho,
                 soLuong: soLuong,
                 donViTinh: row?.donViTinh,
@@ -432,6 +438,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           return {
             idVirtual: uuidv4(),
             noiDung: key,
+            idDonViNhan: rx.idDonViNhan,
             soLuong: 0,
             childData: rs
           };
@@ -448,7 +455,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     let res = await this.danhMucService.loadDsDiaDanhByCap(body);
     if (res.msg == MESSAGE.SUCCESS) {
       // this.listDiaDanh = res.data;
-      this.listDiaDanhHanhChinh = Array.isArray(res.data) ? res.data : [];
+      this.listDiaDanhHanhChinh = Array.isArray(res.data) ? res.data.map(f => ({ ...f, idDonViNhan: f.id })) : [];
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -582,6 +589,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     }
     if (![TEN_LOAI_VTHH.GAO, TEN_LOAI_VTHH.THOC, TEN_LOAI_VTHH.MUOI].includes($event)) {
       this.formData.patchValue({ tonKhoDvi: 0 })
+    }
+  }
+  async changeDviNhan(data) {
+    if (data) {
+      const item = this.listDiaDanh.find(f => f.ten === data);
+      this.formDataDtl.patchValue({ idDonViNhan: item?.idDonViNhan })
     }
   }
 
