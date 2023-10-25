@@ -164,8 +164,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         slThocDeXayXat: [0],
         tyLeThuHoiSauXayXat: [0, [Validators.min(0), Validators.max(100)]],
         soLuongXc: [0],
-        slThocDeXayXatGiaoCuc: [0],
-        slThocDeXayXatGiaoChiCuc: [0]
+        // 2 trường slThocDeXayXatGiaoCuc và slThocDeXayXatGiaoChiCuc không dùng nữa và thay thế bằng các trường tương ứng soLuongDx và soLuongGiao đề đồng bộ dữ liệu
+        // slThocDeXayXatGiaoCuc: [0],
+        // slThocDeXayXatGiaoChiCuc: [0]
       });
 
     for (let i = -3; i < 23; i++) {
@@ -175,19 +176,31 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       });
     }
     this.formDataDtl.controls["tyLeThuHoiSauXayXat"].valueChanges.subscribe((value) => {
-      const slGaoThuHoiSauXayXat = this.formDataDtl.value.slGaoThuHoiSauXayXat || 0;
-      const slThocDeXayXat = value ? slGaoThuHoiSauXayXat * 100 / value : 0;
-      this.formDataDtl.patchValue({ slThocDeXayXat, soLuong: slThocDeXayXat })
+      if (this.formData.value.type === 'XC' && this.formData.value.paXuatGaoChuyenXc) {
+        const slGaoThuHoiSauXayXat = this.formDataDtl.value.slGaoThuHoiSauXayXat || 0;
+        const slThocDeXayXat = value ? slGaoThuHoiSauXayXat * 100 / value : 0;
+        this.formDataDtl.controls['slThocDeXayXat'].setValue(slThocDeXayXat, { emitEvent: false })
+      } else if (this.formData.value.type === 'XC' && !this.formData.value.paXuatGaoChuyenXc) {
+        const slThocDeXayXat = this.formDataDtl.value.slThocDeXayXat || 0;
+        const slGaoThuHoiSauXayXat = value ? slThocDeXayXat * value / 100 : 0;
+        this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValue(slGaoThuHoiSauXayXat, { emitEvent: false })
+      }
     })
     this.formDataDtl.controls["slGaoThuHoiSauXayXat"].valueChanges.subscribe((value) => {
-      const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
-      const slThocDeXayXat = value && tyLeThuHoiSauXayXat ? value * 100 / tyLeThuHoiSauXayXat : 0;
-      this.formDataDtl.patchValue({ slThocDeXayXat, soLuong: slThocDeXayXat })
+      if (this.formData.value.type === 'XC' && this.formData.value.paXuatGaoChuyenXc) {
+        const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
+        const slThocDeXayXat = value && tyLeThuHoiSauXayXat ? value * 100 / tyLeThuHoiSauXayXat : 0;
+        this.formDataDtl.controls['slThocDeXayXat'].setValue(slThocDeXayXat, { emitEvent: false });
+        this.formDataDtl.controls['soLuong'].setValue(slThocDeXayXat, { emitEvent: false })
+      }
     });
     this.formDataDtl.controls["slThocDeXayXat"].valueChanges.subscribe((value) => {
-      const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
-      const slGaoThuHoiSauXayXat = (value || 0) * tyLeThuHoiSauXayXat / 100;
-      this.formDataDtl.patchValue({ slGaoThuHoiSauXayXat, soLuong: slGaoThuHoiSauXayXat }, { onlySelf: true, emitEvent: false })
+      if (this.formData.value.type === 'XC' && !this.formData.value.paXuatGaoChuyenXc) {
+        const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
+        const slGaoThuHoiSauXayXat = (value || 0) * tyLeThuHoiSauXayXat / 100;
+        this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValue(slGaoThuHoiSauXayXat, { emitEvent: false });
+        this.formDataDtl.controls['soLuong'].setValue(value, { emitEvent: false })
+      }
     })
   }
 
@@ -209,7 +222,15 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       await this.spinner.hide();
     }
   }
-
+  bidingDataInFormGroupAndIgnore(formGroup: FormGroup, dataBinding: any, ignoreField: Array<string>) {
+    if (dataBinding) {
+      for (const name in dataBinding) {
+        if (formGroup.controls.hasOwnProperty(name) && !ignoreField.includes(name)) {
+          formGroup.controls[name].setValue(dataBinding[name]);
+        }
+      }
+    }
+  }
   async loadDetail() {
     if (this.idSelected > 0) {
       await this.quyetDinhGiaoNvCuuTroService.getDetail(this.idSelected)
@@ -786,7 +807,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
   async themPaXuatCapThoc(data: any, level?: number) {
     this.formDataDtl.patchValue({
-      ...data, mId: uuidv4(), slThocDeXayXat: 0, slGaoThuHoiSauXayXat: 0,
+      ...data, mId: uuidv4(), slThocDeXayXat: 0, slGaoThuHoiSauXayXat: 0, tyLeThuHoiSauXayXat: 0,
       loaiVthh: level === 2 ? LOAI_HANG_DTQG.THOC : data.loaiVthh,
       cloaiVthh: level === 2 ? null : data.cloaiVthh,
       maDvi: null
@@ -801,7 +822,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.modalChiTiet = true;
   }
   async suaPaXuatCapThoc(data: any, level?: number) {
-    this.formDataDtl.patchValue({ ...data, edit: true });
+    // this.formDataDtl.patchValue({ ...data, edit: true });
+    this.bidingDataInFormGroupAndIgnore(this.formDataDtl, { ...data, edit: true }, ['tyLeThuHoiSauXayXat', 'slThocDeXayXat', 'slGaoThuHoiSauXayXat']);
+    this.formDataDtl.controls['tyLeThuHoiSauXayXat'].setValue(data.tyLeThuHoiSauXayXat, { emitEvent: false });
+    this.formDataDtl.controls['slThocDeXayXat'].setValue(data.slThocDeXayXat, { emitEvent: false });
+    this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValue(data.slGaoThuHoiSauXayXat, { emitEvent: false });
     this.listDonVi.forEach(s => {
       // s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);
       s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi === s.maDvi && s1.noiDungDx === data.noiDungDx && s1.idDx === data.idDx && s.maDvi !== data.maDvi);
@@ -812,6 +837,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
     await this.loadDsDiemKho(this.userInfo.MA_DVI, this.formDataDtl.value.loaiVthh, this.formDataDtl.value.cloaiVthh);
     this.modalChiTiet = true;
+    console.log("this.formDataDtl.value", this.formDataDtl.value)
   }
   async xoaPaXuatCapThoc(data: any, parent: any, lv) {
     if (parent.childData.length > 1) {
@@ -856,7 +882,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     row.tenChiCuc = row.tenChiCuc || this.listDonVi.find(s => s.maDvi == row.maDvi)?.tenDvi;
     row.tenCloaiVthh = row.tenCloaiVthh || this.listChungLoaiHangHoa.find(s => s.ma == row.cloaiVthh)?.ten;
     if (this.loaiXuat === "XC") {
-      row.soLuong = this.formData.value.paXuatGaoChuyenXc ? row.slThocDeXayXat : row.slGaoThuHoiSauXayXat
+      row.soLuong = row.slThocDeXayXat
     }
     // if (!row.idVirtual) {
     //   row.idVirtual = uuidv4();
