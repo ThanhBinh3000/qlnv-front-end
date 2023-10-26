@@ -505,6 +505,7 @@ export class MangLuoiKhoComponent implements OnInit {
         loaiHangHoa: dataNode.loaiHangHoa,
         kieuHang: dataNode.kieuHang,
         diaChi: dataNode.diaChi ?? '',
+        idDmDonVi: dataNode.idDmDonVi ?? '',
       });
       if (this.levelNode == 7) {
         this.detailDonVi.patchValue({
