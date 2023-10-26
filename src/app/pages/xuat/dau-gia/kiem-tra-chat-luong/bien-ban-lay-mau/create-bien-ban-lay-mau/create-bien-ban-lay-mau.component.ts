@@ -329,6 +329,10 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async openDialogKho() {
+    const formattedDataKho = this.listDiaDiemXuat.map(item => ({
+      soLuong: item.soLuong.toLocaleString(),
+      ...item
+    }))
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH ĐỊA ĐIỂM XUẤT HÀNG',
       nzContent: DialogTableSelectionComponent,
@@ -337,9 +341,9 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listDiaDiemXuat,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataTable: formattedDataKho,
+        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

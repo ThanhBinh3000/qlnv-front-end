@@ -280,7 +280,7 @@
             </div>
             <div nz-col [nzSpan]="11">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"></nz-form-label>
+                <nz-form-label [nzNoColon]="true" class="hidden-label"> Thời hạn thanh toán ghi chú</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
                     <input nz-input formControlName="tgianTtoanGhiChu"
@@ -321,7 +321,7 @@
             </div>
             <div nz-col [nzSpan]="11">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"></nz-form-label>
+                <nz-form-label [nzNoColon]="true" class="hidden-label"> Thời hạn giao nhận ghi chú</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
                     <input nz-input formControlName="tgianGnhanGhiChu" [readonly]="isView"
@@ -423,8 +423,8 @@
                 <td></td>
                 <td></td>
                 <td>{{children.tenDiemKho}}</td>
-                <td>{{ children.tenLoKho ? children.tenNganKho : children.tenLoKho + ' - ' + children.tenNganKho }}
-                  , {{ children.tenNhaKho }}</td>
+                <td>{{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
+                (children.tenNhaKho ? children.tenNhaKho : "")}}</td>
                 <td>{{children.maDviTsan}}</td>
                 <td>{{children.tonKho|number:globals.numberFormat:globals.locale}}</td>
                 <td>{{children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>

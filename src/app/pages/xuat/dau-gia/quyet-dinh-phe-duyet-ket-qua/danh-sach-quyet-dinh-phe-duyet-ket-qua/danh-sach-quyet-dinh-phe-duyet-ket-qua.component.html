@@ -88,19 +88,19 @@
           <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                  [nzIndeterminate]="indeterminate"></label>
         </th>
-        <th class="text-center" style="width: 2%;"> STT</th>
-        <th class="text-center"> Năm kế hoạch</th>
-        <th class="text-center"> Số QĐ PD KQ BĐG</th>
-        <th class="text-center"> Ngày ký</th>
-        <th class="text-center"> Trích yếu</th>
-        <th class="text-center"> Ngày tổ chức BĐG</th>
-        <th class="text-center"> Số QĐ PD KH BĐG</th>
-        <th class="text-center"> Mã thông báo BĐG</th>
-        <th class="text-center"> Hình thức đấu giá</th>
-        <th class="text-center"> Phương thức đấu giá</th>
-        <th class="text-center"> Số TB đấu giá không thành</th>
-        <th class="text-center"> Số biên bản đấu giá</th>
-        <th class="text-center"> Trạng thái</th>
+        <th class="text-center" nzWidth="50px"> STT</th>
+        <th class="text-left"> Năm kế hoạch</th>
+        <th class="text-left"> Số QĐ PD KQ BĐG</th>
+        <th class="text-left"> Ngày ký</th>
+        <th class="text-left"> Trích yếu</th>
+        <th class="text-left"> Ngày tổ chức BĐG</th>
+        <th class="text-left"> Số QĐ PD KH BĐG</th>
+        <th class="text-left"> Mã thông báo BĐG</th>
+        <th class="text-left"> Hình thức đấu giá</th>
+        <th class="text-left"> Phương thức đấu giá</th>
+        <th class="text-left"> Số TB đấu giá không thành</th>
+        <th class="text-left"> Số biên bản đấu giá</th>
+        <th class="text-left"> Trạng thái</th>
         <th class="text-center"> Hành động</th>
       </tr>
       <tr class="search-table">
@@ -194,30 +194,32 @@
                  [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
         </td>
         <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
-        <td>{{ data.nam }}</td>
-        <td>{{ data.soQdKq }}</td>
-        <td>{{ data.ngayKy|date: 'dd/MM/YYYY' }}</td>
-        <td>{{ data.trichYeu }}</td>
-        <td></td>
-        <td>
+        <td class="text-left">{{ data.nam }}</td>
+        <td class="text-left">{{ data.soQdKq }}</td>
+        <td class="text-left">{{ data.ngayKy|date: 'dd/MM/YYYY' }}</td>
+        <td class="text-left"
+            style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{data.trichYeu}}</td>
+        <td class="text-left"></td>
+        <td class="text-left">
           <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link" (click)="openModal(data.idQdPd, 'QdPd')">
             {{ data.soQdPd }}</a>
         </td>
-        <td>
+        <td class="text-left">
           <a *ngIf="data.maThongBao && data.idThongBao" nz-button nzType="link"
              (click)="openModal(data.idThongBao, 'MaThongBao')">
             {{ data.maThongBao }}</a>
         </td>
-
-        <td>{{ data.tenHinhThucDauGia }}</td>
-        <td>{{ data.tenPhuongThucDauGia }}</td>
+        <td class="text-left"
+            style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">{{data.tenHinhThucDauGia}}</td>
+        <td class="text-left"
+            style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">{{data.tenPhuongThucDauGia}}</td>
         <td>{{ data.soTbKhongThanh }}</td>
-        <td>
+        <td class="text-left">
           <a *ngIf="data.soBienBan && data.idThongBao" nz-button nzType="link"
              (click)="openModal(data.idThongBao, 'MaThongBao')">
             {{ data.soBienBan }}</a>
         </td>
-        <td>{{ data.tenTrangThai }}</td>
+        <td class="text-left">{{ data.tenTrangThai }}</td>
         <td class="text-center">
           <a *ngIf="isActionAllowed('XEM', data)" (click)="redirectDetail(data.id, true)">
             <i class="fa fa-eye" title="Xem chi tiết"></i>

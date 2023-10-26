@@ -266,7 +266,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
             }
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR);
+          this.notification.warning(MESSAGE.WARNING, "Không tìm thấy phương bán của Tổng Cục DTNN giao.");
         }
       }
     } else {
@@ -298,7 +298,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
             }
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR);
+          this.notification.warning(MESSAGE.WARNING, "Không tìm thấy phương bán của Tổng Cục DTNN giao.");
         }
       }
       if (this.userService.isTongCuc()) {
