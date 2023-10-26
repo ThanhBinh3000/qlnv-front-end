@@ -33,6 +33,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = []
@@ -114,10 +115,15 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         listPhieuXuatKho: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
         donViTinh: [],
-        soPhieuKnCl: []
+        soPhieuKnCl: [],
+        idPhieuKnCl: [],
+        ngayKn: []
       }
     );
     this.maBb = '-BBTK';
+    this.formData.controls['ngayTaoBb'].valueChanges.subscribe((value) => {
+      this.formData.controls['ngayKetThucXuat'].setValue(value, { emitEvent: false })
+    })
     // this.setTitle();
   }
 
@@ -144,7 +150,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       await this.bienBanTinhKhoService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
+            this.formData.patchValue({ ...res.data, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
             const data = res.data;
             this.fileDinhKems = data.fileDinhKems;
             this.dataTable = data.listPhieuXuatKho;
@@ -290,7 +296,12 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;
       this.listPhieuXuatKho = list.filter(item => ((item.maLoKho === data.maLoKho && item.maNganKho === data.maNganKho) && item.soBangKeCh !== null));
-      this.formData.patchValue({ soPhieuKnCl: this.listPhieuXuatKho[0]?.soPhieuKnCl })
+      this.formData.patchValue({
+        ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
+        soPhieuKnCl: this.listPhieuXuatKho[0]?.soPhieuKnCl,
+        idPhieuKnCl: this.listPhieuXuatKho[0]?.idPhieuKnCl,
+        ngayKn: this.listPhieuXuatKho[0]?.ngayKn
+      })
       this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
         s.slXuat = s.thucXuat;
@@ -451,5 +462,11 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     this.openBangKe = false;
   }
 
+  // loadDsNganLoChuaTaoBbTinhKhoTheoQd(){
+  //   const {maLoKho, maNganKho}=this.formData.value;
 
+  // }
+  checkRolePreview() {
+    return this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_IN')
+  }
 }
