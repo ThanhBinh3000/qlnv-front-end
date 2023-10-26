@@ -198,34 +198,33 @@
     <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
       <thead>
       <tr>
-        <th width="60px" class="text-center"></th>
-        <th nzWidth="150px" class="text-center wrap"> Chi cục</th>
-        <th nzWidth="150px" class="text-center wrap"> Điểm kho</th>
-        <th class="text-center wrap"> Lô kho</th>
+        <th nzWidth="50px" class="text-center wrap"></th>
+        <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
+        <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
+        <th nzWidth="300px" class="text-left wrap"> Lô kho</th>
         <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS</th>
         <th nzWidth="100px"
-            class="text-center wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'SL xuất bán đề xuất' : 'SL xuất bán đề xuất (Kg)'}}</th>
-        <th nzWidth="100px" class="text-center wrap"> ĐVT</th>
+            class="text-right wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'SL xuất bán đề xuất' : 'SL xuất bán đề xuất (Kg)'}}</th>
+        <th nzWidth="100px" class="text-left wrap"> ĐVT</th>
         <th nzWidth="100px"
-            class="text-center wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/Kg)'}}</th>
-        <th nzWidth="100px" class="text-center wrap"> Giá khởi điểm (đ)</th>
-        <th nzWidth="100px" class="text-center wrap"> Số tiền đặt trước (đ)</th>
-        <th nzWidth="50px" *ngIf="!isView"> Hành động</th>
+            class="text-right wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/Kg)'}}</th>
+        <th nzWidth="100px" class="text-right wrap"> Giá khởi điểm (đ)</th>
+        <th nzWidth="100px" class="text-right wrap"> Số tiền đặt trước (đ)</th>
+        <th nzWidth="70px" class="text-center wrap" *ngIf="!isView"> Hành động</th>
       </tr>
       </thead>
       <tbody>
       <ng-container *ngFor="let item of dataTable , let i = index">
         <tr>
           <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-          <td colspan="4">{{ item.tenDvi }}</td>
-          <td
-            style="color: black ;font-weight: bold;">{{ item.tongSlXuatBanDx|number:globals.numberFormat:globals.locale }}</td>
+          <td class="text-left" colspan="4">{{ item.tenDvi }}</td>
+          <td class="text-right bold">{{ item.tongSlXuatBanDx|number:globals.numberFormat:globals.locale }}</td>
           <td></td>
           <td></td>
           <td></td>
           <td
-            style="color: black ;font-weight: bold;">{{ item.tongTienDtruocDd == 0 ? null : item.tongTienDtruocDd|number:globals.numberFormat:globals.locale }}</td>
-          <td *ngIf="!isView">
+            class="text-right bold">{{ item.tongTienDtruocDd == 0 ? null : item.tongTienDtruocDd|number:globals.numberFormat:globals.locale }}</td>
+          <td class="text-center" *ngIf="!isView">
             <a (click)="themMoiBangPhanLoTaiSan(item,i)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
@@ -235,15 +234,17 @@
           <tr *ngFor="let children of item.children, let y = index">
             <td></td>
             <td></td>
-            <td>{{ children.tenDiemKho}}</td>
-            <td>{{ children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }}, {{ children.tenNhaKho }}</td>
-            <td>{{ children.maDviTsan}}</td>
-            <td>{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
-            <td>{{ children.donViTinh}}</td>
-            <td>{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-            <td>{{ children.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
-            <td>{{ children.soTienDtruocDd == 0 ? null : children.soTienDtruocDd|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-right" *ngIf="!isView">
+            <td class="text-left">{{ children.tenDiemKho}}</td>
+            <td
+              class="text-left">{{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}</td>
+            <td class="text-center">{{ children.maDviTsan}}</td>
+            <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-left">{{ children.donViTinh}}</td>
+            <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-right">{{ children.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
+            <td
+              class="text-right">{{ children.soTienDtruocDd == 0 ? null : children.soTienDtruocDd|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-center" *ngIf="!isView">
             </td>
           </tr>
         </ng-container>

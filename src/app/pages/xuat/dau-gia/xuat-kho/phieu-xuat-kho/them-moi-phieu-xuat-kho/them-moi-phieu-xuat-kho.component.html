@@ -341,29 +341,26 @@
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th rowSpan="2" width="30px">STT (A)</th>
-            <th rowSpan="2">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa (B)</th>
-            <th rowSpan="2">Mã số (C)</th>
-            <th rowSpan="2">Đơn vị tính (D)</th>
-            <th colSpan="2">Số lượng</th>
-            <th rowSpan="2">Đơn giá (3)</th>
-            <th rowSpan="2">Thành tiền (4) = (2) x (3)</th>
-            <th rowSpan="2" *ngIf="!isView">Hành động</th>
+            <th rowSpan="2" class="text-center">STT (A)</th>
+            <th rowSpan="2" class="text-left">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa (B)</th>
+            <th rowSpan="2" class="text-left">Mã số (C)</th>
+            <th rowSpan="2" class="text-left">Đơn vị tính (D)</th>
+            <th colSpan="2" class="text-center">Số lượng</th>
+            <th rowSpan="2" class="text-right">Đơn giá (3)</th>
+            <th rowSpan="2" class="text-right">Thành tiền (4) = (2) x (3)</th>
+            <th rowSpan="2" class="text-center" *ngIf="!isView">Hành động</th>
           </tr>
           <tr>
-            <th>Theo chứng từ (1)</th>
-            <th>Thực Xuất (2)</th>
+            <th class="text-right">Theo chứng từ (1)</th>
+            <th class="text-right">Thực Xuất (2)</th>
           </tr>
-          <tr>
-          </tr>
+          <tr></tr>
           </thead>
           <tbody>
           <tr>
-            <td>1</td>
-            <td>
-              {{formData.value.tenCloaiVthh}}
-            </td>
-            <td>
+            <td class="text-center">1</td>
+            <td class="text-left">{{formData.value.tenCloaiVthh}}</td>
+            <td class="text-right">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
@@ -374,10 +371,8 @@
                 </nz-form-control>
               </nz-form-item>
             </td>
-            <td>
-              {{formData.value.donViTinh}}
-            </td>
-            <td>
+            <td class="text-left">{{formData.value.donViTinh}}</td>
+            <td class="text-right">
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-input-number formControlName="theoChungTu" nz-input [nzMin]=""
                                  [nzStep]="1" [nzSize]="'small'"
@@ -385,7 +380,7 @@
                 </nz-input-number>
               </nz-form-control>
             </td>
-            <td>
+            <td class="text-right">
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-input-number formControlName="thucXuat" (ngModelChange)="onChangeTien($event)" nz-input [nzMin]=""
                                  [nzStep]="1" [nzSize]="'small'"
@@ -393,9 +388,9 @@
                 </nz-input-number>
               </nz-form-control>
             </td>
-            <td>{{formData.value.donGia|number:globals.numberFormat:globals.locale}}</td>
-            <td>{{formData.value.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-            <td *ngIf="!isView">
+            <td class="text-right">{{formData.value.donGia|number:globals.numberFormat:globals.locale}}</td>
+            <td class="text-right">{{formData.value.thanhTien|number:globals.numberFormat:globals.locale}}</td>
+            <td class="text-center" *ngIf="!isView">
               <a (click)="clear()">
                 <i class="fa fa-refresh"></i>
               </a>

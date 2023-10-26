@@ -80,7 +80,7 @@
                     <nz-form-label [nzNoColon]="true"> % Khoản tiền đặt trước</nz-form-label>
                     <nz-form-control>
                       <nz-input-group>
-                        <input nz-input formControlName="khoanTienDatTruocHienThi" readonly />
+                        <input nz-input formControlName="khoanTienDatTruocHienThi" readonly/>
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
@@ -173,7 +173,7 @@
                 </div>
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">  Tổng số lượng xuất bán</nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán</nz-form-label>
                     <nz-form-control>
                       <nz-input-number formControlName="tongSoLuong" [nzFormatter]="formatterSoLuong"
                                        [nzParser]="globals.parser" nzDisabled class="blue-text">
@@ -223,33 +223,34 @@
         <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
           <tr>
-            <th width="">Số QĐ PD KH BĐG/Số QĐ ĐC KH BĐG</th>
-            <th width="">Lần đấu giá</th>
-            <th width="">Tổng sô ĐVTS cần đấu giá</th>
-            <th width="">Thông báo bán đấu giá</th>
-            <th width="">Tổ chức thực hiện dịch vụ BĐG</th>
-            <th width="">Thời gian tổ chức cuộc đấu giá</th>
-            <th width="">Địa điểm tổ chức</th>
-            <th width="">Kết quả đấu giá</th>
-            <th width="">SL đơn vị TS</th>
-            <th width="">Trạng thái</th>
-            <th width="">Hành động</th>
+            <th class="text-left">Số QĐ PD KH BĐG/Số QĐ ĐC KH BĐG</th>
+            <th class="text-center">Lần đấu giá</th>
+            <th class="text-center">Tổng sô ĐVTS cần đấu giá</th>
+            <th class="text-left">Thông báo bán đấu giá</th>
+            <th class="text-left">Tổ chức thực hiện dịch vụ BĐG</th>
+            <th class="text-left">Thời gian tổ chức cuộc đấu giá</th>
+            <th class="text-left">Địa điểm tổ chức</th>
+            <th class="text-left">Kết quả đấu giá</th>
+            <th class="text-center">SL đơn vị TS</th>
+            <th class="text-left">Trạng thái</th>
+            <th class="text-center">Hành động</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let data of dataTable; let i = index" [ngClass]="{'bg-selected': i == 0 && this.selected}"
               (click)="showDetail($event,data)">
-            <td>{{ data.soQdDc == null ? data.soQdPd : data.soQdDc }}</td>
-            <td>{{ data.lanDauGia }}</td>
-            <td>{{ data.soDviTsan }}</td>
-            <td>{{ data.maThongBao }}</td>
-            <td>{{ data.tenToChuc }}</td>
-            <td>{{ data.tgianDauGiaTu | date: 'dd/MM/YYYY' }}
-              đến {{ data.tgianDauGiaDen | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.diaDiemDauGia }}</td>
-            <td>{{ data.ketQua == 1 ? 'Đấu giá thành công' : 'Đấu giá không thành' }}</td>
-            <td>{{ data.ketQuaSl }}</td>
-            <td>{{ data.tenTrangThai}}</td>
+            <td class="text-left">{{ data.soQdDc == null ? data.soQdPd : data.soQdDc }}</td>
+            <td class="text-center">{{ data.lanDauGia }}</td>
+            <td class="text-center">{{ data.soDviTsan }}</td>
+            <td class="text-left">{{ data.maThongBao }}</td>
+            <td class="text-left">{{ data.tenToChuc }}</td>
+            <td
+              class="text-left">{{ data.tgianDauGiaTu ? (data.tgianDauGiaTu | date: 'dd/MM/YYYY') + (data.tgianDauGiaDen ? ' đến ' + (data.tgianDauGiaDen | date: 'dd/MM/YYYY') : '') : '' }}
+            </td>
+            <td class="text-left">{{ data.diaDiemDauGia }}</td>
+            <td class="text-left">{{ data.ketQua == 1 ? 'Đấu giá thành công' : 'Đấu giá không thành' }}</td>
+            <td class="text-center">{{ data.ketQuaSl }}</td>
+            <td class="text-left">{{ data.tenTrangThai}}</td>
             <td class="text-center">
               <a *ngIf="data.trangThai == STATUS.DA_HOAN_THANH"
                  (click)="themMoiPhienDauGia($event,true,data)">

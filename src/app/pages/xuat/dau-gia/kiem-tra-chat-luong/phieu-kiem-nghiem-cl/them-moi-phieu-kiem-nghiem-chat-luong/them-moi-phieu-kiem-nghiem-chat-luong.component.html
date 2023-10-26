@@ -293,23 +293,25 @@
         <nz-table class="nowrap pd-10" [nzData]="dataTable" nzBordered>
           <thead>
           <tr>
-            <th class="text-center" nzWidth="50px">STT</th>
-            <th><span style='color: red;'>*</span> Chỉ tiêu chất lượng</th>
-            <th>Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
-            <th><span style='color: red;'>*</span> Kết quả phân tích</th>
-            <th><span style='color: red;'>*</span> Phương pháp kiểm tra chất lượng</th>
-            <th><span style='color: red;'>*</span> Đánh giá</th>
+            <th nzWidth="50px" class="text-left wrap">STT</th>
+            <th nzWidth="150px" class="text-left wrap"><span style='color: red;'>*</span> Chỉ tiêu chất lượng</th>
+            <th nzWidth="150px" class="text-left wrap">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+            <th nzWidth="150px" class="text-left wrap"><span style='color: red;'>*</span> Kết quả phân tích</th>
+            <th nzWidth="150px" class="text-left wrap"><span style='color: red;'>*</span> Phương pháp kiểm tra chất
+              lượng
+            </th>
+            <th nzWidth="100px" class="text-left wrap"><span style='color: red;'>*</span> Đánh giá</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let data of dataTable;let i = index">
             <ng-container *ngIf="!data.edit">
               <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ data.tenChiTieu }}</td>
-              <td>{{ data.mucYeuCauXuat }}</td>
-              <td><input nz-input [disabled]="isView" [(ngModel)]="data.ketQua"/></td>
-              <td>{{ data.phuongPhapXd }}</td>
-              <td>
+              <td class="text-left">{{ data.tenChiTieu }}</td>
+              <td class="text-left">{{ data.mucYeuCauXuat }}</td>
+              <td class="text-left"><input nz-input [disabled]="isView" [(ngModel)]="data.ketQua"/></td>
+              <td class="text-left">{{ data.phuongPhapXd }}</td>
+              <td class="text-left">
                 <nz-select [disabled]="isView" [(ngModel)]="data.danhGia">
                   <nz-option nzValue="Đạt" nzLabel="Đạt"></nz-option>
                   <nz-option nzValue="Không đạt" nzLabel="Không đạt"></nz-option>
@@ -349,16 +351,6 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <!--    <button nz-button (click)="downloadPdf()"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-pdf"></i>-->
-    <!--      Xuất .pdf-->
-    <!--    </button>-->
-    <!--    <button nz-button (click)="downloadWord()"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-word"></i>-->
-    <!--      Xuất .docx-->
-    <!--    </button>-->
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng

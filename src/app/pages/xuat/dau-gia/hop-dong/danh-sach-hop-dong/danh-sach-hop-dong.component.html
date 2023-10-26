@@ -79,22 +79,23 @@
                 [nzShowPagination]="false">
         <thead>
         <tr>
-          <th class="text-center" width="60px">STT</th>
-          <th class="text-left" width="100px">Năm KH</th>
-          <th class="text-left" width="130px">QĐ PD KHBĐG</th>
-          <th class="text-left" width="175px">QĐ PD KQBĐG</th>
-          <th class="text-center" width="175px" class="wrap">Tổng số ĐV tài sản</th>
-          <th class="text-center" width="175px" class="wrap">Tổng số ĐVTS ĐG thành công</th>
-          <th class="text-center" width="175px" class="wrap">SL HĐ đã ký</th>
-          <th class="text-left" width="175px" class="wrap">Thời hạn thanh toán</th>
-          <th class="text-left" width="175px">Loại hàng DTQG</th>
-          <th class="text-left" width="175px">Chủng loại hàng DTQG</th>
-          <th class="text-left" width="175px">ĐV thực hiện</th>
-          <th class="text-right" width="175px" class="wrap">Tổng SL xuất bán {{loaiVthh == '02' ? null : '(kg)'}}</th>
-          <th class="text-right" width="90px">Thành tiền (đ)</th>
-          <th class="text-left" width="90px">Trạng thái HĐ</th>
-          <th class="text-left" width="90px">Trạng thái XH</th>
-          <th class="text-center" width="120px">Hành động</th>
+          <th nzWidth="50px" class="text-center wrap"> STT</th>
+          <th nzWidth="100px" class="text-left wrap"> Năm KH</th>
+          <th nzWidth="150px" class="text-left wrap"> QĐ PD KHBĐG</th>
+          <th nzWidth="150px" class="text-left wrap"> QĐ PD KQBĐG</th>
+          <th nzWidth="100px" class="text-center wrap"> Tổng số ĐV tài sản</th>
+          <th nzWidth="100px" class="text-center wrap"> Tổng số ĐVTS ĐG thành công</th>
+          <th nzWidth="100px" class="text-center wrap"> SL HĐ đã ký</th>
+          <th nzWidth="150px" class="text-left wrap"> Thời hạn thanh toán</th>
+          <th nzWidth="150px" class="text-left wrap"> Loại hàng DTQG</th>
+          <th nzWidth="150px" class="text-left wrap"> Chủng loại hàng DTQG</th>
+          <th nzWidth="150px" class="text-left wrap"> ĐV thực hiện</th>
+          <th nzWidth="150px"
+              class="text-right wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán' : 'Tổng SL xuất bán (Kg)'}}</th>
+          <th nzWidth="150px" class="text-right wrap"> Thành tiền (đ)</th>
+          <th nzWidth="150px" class="text-left wrap"> Trạng thái HĐ</th>
+          <th nzWidth="150px" class="text-left wrap"> Trạng thái XH</th>
+          <th nzWidth="70px" class="text-center wrap"> Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
