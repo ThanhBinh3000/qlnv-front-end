@@ -135,7 +135,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         ...this.dataChiTieu.khLuongThuc?.map(item => ({
           maDvi: item.maDonVi,
           tenDvi: item.tenDonvi,
-          soLuongXuat: this.typeLoaiVthh === LOAI_HANG_DTQG.GAO ? item.xtnTongGao : item.xtnTongThoc
+          soLuongXuat: this.typeLoaiVthh === LOAI_HANG_DTQG.GAO ? item.xtnTongGao * 1000 : item.xtnTongThoc * 1000
         })) || []
       );
     } else if (this.typeLoaiVthh === LOAI_HANG_DTQG.MUOI) {
