@@ -15,7 +15,8 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa"
-              (click)="xoa()" *ngIf="idInput > 0 && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU">
+              (click)="xoa()" *ngIf="idInput > 0 && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU
+              && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT_THEM')">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
@@ -25,17 +26,17 @@
         <span>Ban hành</span>
       </button>
       <button (click)="save(false)"
-              *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU)  "
+              *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT_THEM') "
               class="btn btn-main btn-sm waves-effect waves-light ml-2">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
     </div>
   </div>
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TUCHOI_CB_CUC " nzShowIcon nzType="error"
-            nzMessage="Lý do từ chối"
-            nzDescription="{{formData.value.lyDoTuChoi}}">
-  </nz-alert>
+<!--  <nz-alert *ngIf="formData.value.trangThai == STATUS.TUCHOI_CB_CUC " nzShowIcon nzType="error"-->
+<!--            nzMessage="Lý do từ chối"-->
+<!--            nzDescription="{{formData.value.lyDoTuChoi}}">-->
+<!--  </nz-alert>-->
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <nz-collapse>
       <nz-collapse-panel [nzActive]="true" nzHeader="THÔNG TIN CHUNG"
