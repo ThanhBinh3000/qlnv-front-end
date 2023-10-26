@@ -381,35 +381,34 @@
           <thead>
           <tr>
             <th></th>
-            <th class="text-center wrap">Chi cục</th>
-            <th class="text-center wrap">Điểm kho</th>
-            <th class="text-center wrap">Lô kho</th>
-            <th class="text-center wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'MĐVTS' : 'Mã ĐVTS'}}</th>
-            <th class="text-center wrap">Tồn kho</th>
-            <th class="text-center wrap">SL xuất bán TT đề xuất</th>
-            <th class="text-center wrap">ĐVT</th>
+            <th nzWidth="50px" class="text-center"></th>
+            <th class="text-left">Điểm kho</th>
+            <th class="text-left">Lô kho</th>
+            <th class="text-center">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'MĐVTS' : 'Mã ĐVTS'}}</th>
+            <th class="text-right">Tồn kho</th>
+            <th class="text-right">SL xuất bán TT đề xuất</th>
+            <th class="text-left">ĐVT</th>
             <th
-              class="text-center wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá đề xuất (đ)' : 'Đơn giá đề xuất (đ/kg)'}}</th>
-            <th class="text-center wrap">Thành tiền đề xuất(đ)</th>
+              class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá đề xuất (đ)' : 'Đơn giá đề xuất (đ/kg)'}}</th>
+            <th class="text-right">Thành tiền đề xuất(đ)</th>
             <th
-              class="text-center wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/kg)'}}</th>
-            <th class="text-center wrap">Thành tiền được duyệt (đ)</th>
-            <th *ngIf="!isView">Hành động</th>
+              class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/kg)'}}</th>
+            <th class="text-right">Thành tiền được duyệt (đ)</th>
+            <th nzWidth="70px" class="text-center" *ngIf="!isView"> Hành động</th>
           </tr>
           </thead>
           <tbody>
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-              <td colspan="5">{{ item.tenDvi }}</td>
-              <td
-                style="color: black ;font-weight: bold;">{{ item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
+              <td class="text-left" colspan="5">{{ item.tenDvi }}</td>
+              <td class="text-right bold">{{ item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
-              <td *ngIf="!isView">
+              <td class="text-center" *ngIf="!isView">
                 <a (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
@@ -422,19 +421,20 @@
               <tr *ngFor="let children of item.children, let y = index">
                 <td></td>
                 <td></td>
-                <td>{{children.tenDiemKho}}</td>
-                <td>{{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
-                (children.tenNhaKho ? children.tenNhaKho : "")}}</td>
-                <td>{{children.maDviTsan}}</td>
-                <td>{{children.tonKho|number:globals.numberFormat:globals.locale}}</td>
-                <td>{{children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
-                <td>{{children.donViTinh}}</td>
-                <td>{{children.donGiaDeXuat|number:globals.numberFormat:globals.locale}}</td>
-                <td>{{children.thanhTienDeXuat|number:globals.numberFormat:globals.locale}}</td>
-                <td>{{children.donGiaDuocDuyet == 0 ? null : children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
-                <td>{{children.thanhTienDuocDuyet == 0 ? null : children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
-                <td class="text-right" *ngIf="!isView">
-                </td>
+                <td class="text-left">{{children.tenDiemKho}}</td>
+                <td
+                  class="text-left">{{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}</td>
+                <td class="text-center">{{children.maDviTsan}}</td>
+                <td class="text-right">{{children.tonKho|number:globals.numberFormat:globals.locale}}</td>
+                <td class="text-right">{{children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
+                <td class="text-left">{{children.donViTinh}}</td>
+                <td class="text-right">{{children.donGiaDeXuat|number:globals.numberFormat:globals.locale}}</td>
+                <td class="text-right">{{children.thanhTienDeXuat|number:globals.numberFormat:globals.locale}}</td>
+                <td
+                  class="text-right">{{children.donGiaDuocDuyet == 0 ? null : children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
+                <td
+                  class="text-right">{{children.thanhTienDuocDuyet == 0 ? null : children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
+                <td class="text-center" *ngIf="!isView"></td>
               </tr>
             </ng-container>
           </ng-container>
@@ -450,27 +450,30 @@
                   [nzData]="dataTable" nzBordered>
           <thead>
           <tr>
-            <th style="width: 2%">STT</th>
-            <th style="width: 40%">Tên chi cục</th>
-            <th style="width: 40%">Địa chỉ</th>
-            <th style="width: 10%">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số lượng' : 'Số lượng (Kg)'}}</th>
+            <th nzWidth="50px" class="text-center wrap"> STT</th>
+            <th nzWidth="200px" class="text-left wrap"> Tên chi cục</th>
+            <th nzWidth="600px" class="text-left wrap"> Địa chỉ</th>
+            <th nzWidth="200px"
+                class="text-right wrap"> {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số lượng' : 'Số lượng (kg)'}}</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let item of dataTable; let i = index">
-            <td>{{i + 1}}</td>
-            <td>{{ item.tenDvi }}</td>
-            <td>{{ item.diaChi }}</td>
-            <td>{{ item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
+            <td class="text-center">{{i + 1}}</td>
+            <td class="text-left">{{ item.tenDvi }}</td>
+            <td class="text-left">{{ item.diaChi }}</td>
+            <td class="text-right">{{ item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
           </tr>
           </tbody>
-          <tfoot>
-          <tr *ngIf="dataTable.length > 0">
-            <th></th>
-            <th colspan="2">Cộng</th>
-            <th>{{ calcTong('soLuongChiCuc')|number:globals.numberFormat:globals.locale}}</th>
-          </tr>
-          </tfoot>
+          <ng-container *ngIf="dataTable.length > 0">
+            <tfoot>
+            <tr>
+              <th></th>
+              <th class="text-right bold" colspan="2"> Cộng</th>
+              <th class="text-right bold">{{ calcTong('soLuongChiCuc')|number:globals.numberFormat:globals.locale}}</th>
+            </tr>
+            </tfoot>
+          </ng-container>
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>

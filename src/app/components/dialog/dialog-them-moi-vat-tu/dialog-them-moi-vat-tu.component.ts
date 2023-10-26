@@ -204,6 +204,30 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
+  async updateGiaToiDa(chiCuc?:any) {
+    let body = {
+      loaiGia: "LG01",
+      namKeHoach: this.namKhoach,
+      maDvi: chiCuc.maDvi,
+      loaiVthh: this.loaiVthh,
+      cloaiVthh: this.cloaiVthh
+    }
+    let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
+    if (res.msg === MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        let data = res.data[0];
+        if (data.giaQdDcBtcVat != null && data.giaQdDcBtcVat > 0) {
+          chiCuc.giaToiDa = data.giaQdDcBtcVat
+        } else {
+          chiCuc.giaToiDa = data.giaQdBtcVat
+        }
+        this.formData.patchValue({
+          thueVat: data.vat * 100
+        })
+      }
+    }
+  }
+
   formDataPatchValue() {
     if (this.dataEdit.length > 0) {
       this.formData.patchValue({
@@ -225,6 +249,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   async updateListAllDiemKho() {
     for (let i = 0; i < this.listOfData.length; i++) {
+      this.updateGiaToiDa(this.listOfData[i])
       let body = {
         maDvi: this.listOfData[i].maDvi,
         type: this.listType
@@ -243,8 +268,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listAllDiemKho.push(listDiemKho);
         if(this.listOfData[i].children.length > 0) {
           this.listOfData[i].children.forEach((i) => {
-            i.thanhTienDx = i.soLuong * this.formData.get('donGiaTamTinh').value
-            i.thanhTienQd = i.soLuong * this.formData.get('donGiaVat').value
+            i.thanhTienDx = i.soLuong * this.formData.get('donGiaTamTinh').value * 1000
+            i.thanhTien = i.soLuong * this.formData.get('donGia').value * 1000
             this.listThongTinDiemKho.push(new DanhSachGoiThau());
           })
         } else {
@@ -499,7 +524,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         }
         sum += chiCuc.soLuong
         thanhTienDx += chiCuc.soLuong * chiCuc.donGiaTamTinh * 1000
-        thanhTien += chiCuc.donGia * 1000
+        thanhTien += chiCuc.soLuong * chiCuc.donGia * 1000
       }
       this.formData.patchValue({
         soLuong: sum,

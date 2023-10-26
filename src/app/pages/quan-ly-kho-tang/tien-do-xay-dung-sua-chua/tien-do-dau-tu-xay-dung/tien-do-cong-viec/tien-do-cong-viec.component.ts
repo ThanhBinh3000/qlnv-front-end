@@ -18,6 +18,7 @@ import {
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/tien-do-cong-viec.service";
 import {ThongTinTienDoCongViecComponent} from "./thong-tin-tien-do-cong-viec/thong-tin-tien-do-cong-viec.component";
 import { saveAs } from 'file-saver';
+import {FileDinhKem} from "../../../../../models/FileDinhKem";
 @Component({
   selector: 'app-tien-do-cong-viec',
   templateUrl: './tien-do-cong-viec.component.html',
@@ -42,7 +43,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
     {ma: 'Quý III', giaTri: 'Quý III'},
     {ma: 'Quý IV', giaTri: 'Quý IV'},
   ];
-
+  fileDinhKems: any[]=[];
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -135,6 +136,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
         if (res.data) {
           const data = res.data;
           this.dataTableReq = cloneDeep(data);
+          this.fileDinhKems= Array.isArray(data.fileDinhKems)? cloneDeep(data.fileDinhKems): [];
           this.convertListToTree()
           this.expandAll();
         }
@@ -301,7 +303,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn hoàn thành hợp đồng?',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành Tiến độ công việc?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -351,7 +353,8 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
           let itemGoiThau = this.listHopDong.filter(item => item.selected == true)
           let body = {
             idGoiThau: itemGoiThau[0]?.id,
-            listKtTdxdTiendoCongviec: this.dataTableReq
+            listKtTdxdTiendoCongviec: this.dataTableReq,
+            fileDinhKems: this.fileDinhKems
           };
           let res = await this.tienDoCongViecService.create(body);
           if (res.msg == MESSAGE.SUCCESS) {

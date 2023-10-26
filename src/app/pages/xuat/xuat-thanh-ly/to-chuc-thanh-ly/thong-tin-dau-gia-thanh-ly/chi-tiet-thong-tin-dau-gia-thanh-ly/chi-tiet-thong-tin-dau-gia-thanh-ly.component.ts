@@ -229,7 +229,7 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
         return item.trangThai == this.STATUS.DU_THAO
       })
       if (dataCheck.length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Không thể thêm mới, vì đang có thông tin đấu giá chưa hoàn thành cập nhập, xin viu lòng hoàn thành cập nhập");
+        this.notification.info(MESSAGE.ERROR, "Không thể thêm mới vì đang có thông tin đấu giá chưa hoàn thành cập nhập. Vui lòng hoàn thành cập nhập thông tin đấu giá");
         return;
       }
       const modalQD = this.modal.create({

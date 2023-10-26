@@ -74,7 +74,7 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center">STT</th>
+          <th class="text-center" nzWidth="50px"> STT</th>
           <th class="text-left">Năm quyết định</th>
           <th class="text-left">Số QĐ điều chỉnh KH bán trực tiếp</th>
           <th class="text-left">Ngày ký QĐ điều chỉnh</th>
@@ -160,7 +160,8 @@
           <td class="text-left"><a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link"
                                    (click)="openModal(data.idQdPd)">
             {{data.soQdPd}}</a></td>
-          <td class="text-left">{{ data.trichYeu }}</td>
+          <td class="text-left"
+              style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{ data.trichYeu }}</td>
           <td class="text-left">{{ data.tenLoaiVthh}}</td>
           <td class="text-left">{{ data.tenCloaiVthh}}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
@@ -219,4 +220,3 @@
     </button>
   </div>
 </nz-modal>
-

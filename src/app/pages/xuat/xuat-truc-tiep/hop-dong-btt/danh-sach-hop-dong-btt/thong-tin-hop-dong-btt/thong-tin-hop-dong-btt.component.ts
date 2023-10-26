@@ -225,7 +225,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     const {soHopDong, tgianGiaoNhanTu, tgianGiaoNhanDen, tenBenMua, children, xhHopDongBttDviList, phuLuc} = data;
     this.formData.patchValue({
       soHopDong: soHopDong?.split('/')[0] || null,
-      tgianGiaoNhan: (tgianGiaoNhanTu && tgianGiaoNhanDen) ? [tgianGiaoNhanTu, tgianGiaoNhanDen] : null,
+      tgianGiaoNhan: this.isValidDate(tgianGiaoNhanTu) && this.isValidDate(tgianGiaoNhanDen)
+        ? [tgianGiaoNhanTu, tgianGiaoNhanDen] : [],
     });
     this.dataTable = cloneDeep(this.userService.isChiCuc() ? xhHopDongBttDviList : children);
     if (!this.userService.isChiCuc()) {
@@ -233,6 +234,10 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
     this.dataTablePhuLuc = phuLuc || [];
     this.objHopDongHdr = data;
+  }
+
+  isValidDate(dateString: string): boolean {
+    return dayjs(dateString).isValid();
   }
 
   async save() {
@@ -806,5 +811,3 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 }
-
-

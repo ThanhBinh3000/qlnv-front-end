@@ -10,6 +10,7 @@ import {
   QuyetDinhPdKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kh-ban-truc-tiep',
   templateUrl: './quyet-dinh-phe-duyet-kh-ban-truc-tiep.component.html',
@@ -24,10 +25,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   isViewThop: boolean = false;
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
-  listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
-  ];
+  listTrangThai: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -65,6 +63,16 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       trangThai: '',
       tenTrangThai: '',
     };
+    this.listTrangThai = [
+      {
+        value: this.STATUS.DU_THAO,
+        text: 'Dự thảo'
+      },
+      {
+        value: this.STATUS.BAN_HANH,
+        text: 'Ban hành'
+      },
+    ]
   }
 
   async ngOnInit() {

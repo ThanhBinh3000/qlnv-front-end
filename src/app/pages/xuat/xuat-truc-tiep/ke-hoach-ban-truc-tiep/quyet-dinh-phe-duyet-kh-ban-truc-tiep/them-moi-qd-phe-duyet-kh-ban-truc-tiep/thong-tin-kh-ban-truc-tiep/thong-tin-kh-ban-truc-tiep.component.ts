@@ -32,8 +32,6 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup
   dataTable: any[] = [];
-  listNguonVon: any[] = [];
-  dataChiTieu: any;
   dataDonGiaDuocDuyet: any;
 
   constructor(
