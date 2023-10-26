@@ -186,7 +186,11 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       if (this.formData.value.loaiGia == 'LG03') {
         this.arrThongTinGia.forEach(item => {
           if (item.vat) {
-            item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            if (this.formData.value.loaiDeXuat == '00') {
+              item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            } else {
+              item.giaQdDcTcdtVat = item.giaQdDcTcdt + item.giaQdDcTcdt * item.vat
+            }
           }
         })
       }

@@ -181,8 +181,13 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       return;
     }
       this.arrThongTinGia.forEach(item => {
-        item.giaQdBtcVat = item.vat ? item.giaQdBtc * item.vat + item.giaQdBtc : null;
-        item.giaQdDcBtcVat = item.vat && item.giaQdDcBtc ?  item.giaQdDcBtc * item.vat + item.giaQdDcBtc : null;
+        if (item.vat) {
+          if (this.formData.value.loaiDeXuat == '00') {
+            item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+          } else {
+            item.giaQdDcBtcVat = item.giaQdDcBtc + item.giaQdDcBtc * item.vat
+          }
+        }
       })
 
     let body = this.formData.value;
