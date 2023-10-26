@@ -219,7 +219,7 @@
         <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
           <thead>
           <tr>
-            <th class="text-center"></th>
+            <th class="text-center" nzWidth="50px"></th>
             <th class="text-left"> Chi cục</th>
             <th class="text-left"> Điểm kho</th>
             <th class="text-left"> Lô kho</th>
@@ -235,8 +235,7 @@
             <tr>
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
               <td class="text-left" colspan="4">{{item.tenDvi}}</td>
-              <td class="text-right"
-                  style="color: black ;font-weight: bold;">{{item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
+              <td class="text-right bold">{{item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -248,9 +247,8 @@
                 <td></td>
                 <td></td>
                 <td class="text-left">{{ children.tenDiemKho}}</td>
-                <td class="text-left">{{ children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }},
-                  {{ children.tenNhaKho}}
-                </td>
+                <td
+                  class="text-left">{{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}</td>
                 <td class="text-center">{{ children.maDviTsan}}</td>
                 <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
                 <td class="text-left">{{ children.donViTinh}}</td>
@@ -265,7 +263,7 @@
                   class="nowrap pd-10" *ngIf="showFromTT">
           <thead>
           <tr>
-            <th class="text-center"> STT</th>
+            <th class="text-center" nzWidth="50px"></th>
             <th class="text-left"> Tên cá nhân/tổ chức</th>
             <th class="text-left"> MST</th>
             <th class="text-left"> Địa chỉ</th>
@@ -317,7 +315,7 @@
               <label nz-checkbox [(ngModel)]="rowItem.luaChon">
               </label>
             </th>
-            <th style="text-align: center">
+            <th class="text-center">
               <a (click)="addRow()" [class.disabled]="!rowItem">
                 <i class="fa fa-plus"></i>
               </a>

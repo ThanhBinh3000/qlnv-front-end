@@ -48,7 +48,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   listVatTuCha: any[] = [];
   listVatTu = [];
   maHauTo: any;
-  giaToiDa: any;
+  giaToiDa: number;
   showDlgPreview = false;
   pdfBlob: any;
   pdfSrc: any;
@@ -163,7 +163,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
-    const {soDxuat, tgianDkienTu, tgianDkienDen, children, loaiVthh} = data;
+    const {soDxuat, tgianDkienTu, tgianDkienDen, children} = data;
     this.formData.patchValue({
       soDxuat: soDxuat?.split('/')[0],
       thoiGianDuKien: tgianDkienTu && tgianDkienDen ? [tgianDkienTu, tgianDkienDen] : null
@@ -313,14 +313,14 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     ]);
   }
 
-  async getGiaToiThieu(event?) {
+  async getGiaToiThieu() {
     const {namKh, loaiVthh, cloaiVthh} = this.formData.value;
     const body = {
       namKeHoach: namKh,
       loaiVthh: loaiVthh,
       cloaiVthh: cloaiVthh,
       loaiGia: "LG02",
-      maDvi: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '0101' : this.userInfo.MA_DVI,
+      maDvi: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? this.formData.value.maDvi.substring(0, 4) : this.userInfo.MA_DVI,
       trangThai: STATUS.BAN_HANH
     };
     const res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
@@ -389,7 +389,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           dataChiTieu: this.dataChiTieu,
           dataDonGiaDuocDuyet: this.dataDonGiaDuocDuyet,
           loaiVthh: loaiVthhValue,
-          typeLoaiVthh : this.loaiVthh,
+          typeLoaiVthh: this.loaiVthh,
           cloaiVthh: cloaiVthhValue,
           tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
           khoanTienDatTruoc: khoanTienDatTruoc,
@@ -416,7 +416,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   validateGiaGiaToiDa() {
-    const isGiaToiDaValid = this.giaToiDa !== null;
+    const isGiaToiDaValid = this.giaToiDa !== null && this.giaToiDa !== 0 && this.giaToiDa !== undefined;
     if (!isGiaToiDaValid) {
       this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BDG vì giá bán đề xuất ở đây nhập vào phải >= giá bán tối thiểu');
     }

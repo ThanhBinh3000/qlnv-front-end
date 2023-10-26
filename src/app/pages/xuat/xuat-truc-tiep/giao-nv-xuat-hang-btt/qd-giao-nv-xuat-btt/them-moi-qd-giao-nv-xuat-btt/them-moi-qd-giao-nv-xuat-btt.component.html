@@ -261,7 +261,7 @@
               [nzShowPagination]="false">
       <thead>
       <tr>
-        <th nzWidth="30px" class="text-center">STT</th>
+        <th class="text-center" nzWidth="50px"> STT</th>
         <th class="text-left">Chi cục DTNN KV</th>
         <th class="text-left">Điểm kho</th>
         <th class="text-left">Nhà kho</th>
@@ -298,16 +298,15 @@
         </ng-container>
       </ng-container>
       </tbody>
-      <tfoot *ngIf="dataTable.length > 0">
-      <ng-container>
+      <ng-container *ngIf="dataTable.length > 0">
+        <tfoot>
         <tr>
-          <th colspan="6"></th>
-          <th class="text-right bold text-blue">TỔNG SỐ</th>
+          <th class="text-right bold text-blue" colspan="7">TỔNG SỐ</th>
           <th
             class="text-right bold text-blue"> {{ calcTong('soLuong')|number:globals.numberFormat:globals.locale }}</th>
         </tr>
+        </tfoot>
       </ng-container>
-      </tfoot>
     </nz-table>
   </nz-card>
 </div>

@@ -47,7 +47,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="4" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -58,7 +58,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="13" *ngIf="!loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="13" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -69,7 +69,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="8" *ngIf="loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="8" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -81,7 +81,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="9" *ngIf="loaiVthh.startsWith('02')">
+        <div nz-col [nzSpan]="9" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control>
@@ -175,15 +175,15 @@
           <thead>
           <tr>
             <th nzWidth="50px" class="text-center"> STT</th>
-            <th nzWidth="250px" class="text-left"> Cục DTNN KV</th>
-            <th nzWidth="200px" class="text-left"> Số công văn/tờ trình</th>
-            <th nzWidth="200px" class="text-left"> Ngày ký</th>
-            <th nzWidth="250px" class="text-left"> Trích yếu</th>
-            <th nzWidth="150px" class="text-center"> SL đơn vị tài sản</th>
+            <th nzWidth="250px" class="text-left wrap"> Cục DTNN KV</th>
+            <th nzWidth="200px" class="text-left wrap"> Số công văn/tờ trình</th>
+            <th nzWidth="200px" class="text-left wrap"> Ngày ký</th>
+            <th nzWidth="250px" class="text-left wrap"> Trích yếu</th>
+            <th nzWidth="150px" class="text-center wrap"> SL đơn vị tài sản</th>
             <th nzWidth="170px"
-                class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán đề xuất' : 'Tổng SL xuất bán đề xuất (Kg)'}}</th>
-            <th nzWidth="170px" class="text-right"> Thành tiền Cục đề xuất (đ)</th>
-            <th nzWidth="100px" class="text-center"> Trạng thái</th>
+                class="text-right wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán đề xuất' : 'Tổng SL xuất bán đề xuất (Kg)'}}</th>
+            <th nzWidth="170px" class="text-right wrap"> Thành tiền Cục đề xuất (đ)</th>
+            <th nzWidth="100px" class="text-left wrap"> Trạng thái</th>
           </tr>
           </thead>
           <tbody>
@@ -198,7 +198,7 @@
             <td class="text-center">{{ data.slDviTsan}}</td>
             <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-center">{{ data.tenTrangThai}}</td>
+            <td class="text-left">{{ data.tenTrangThai}}</td>
           </tr>
           </tbody>
         </nz-table>

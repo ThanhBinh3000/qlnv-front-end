@@ -1,12 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { BienBanTinhKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bien-ban-tinh-kho-btt.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {
+  BienBanTinhKhoBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bien-ban-tinh-kho-btt.service';
 import _ from 'lodash';
 import * as uuid from "uuid";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
@@ -109,6 +111,7 @@ export class BienBanTinhKhoBttComponent extends Base2Component implements OnInit
             idVirtual: lv2IdVirtual,
             tenLoKho: group[0].tenLoKho || "",
             tenNganKho: group[0].tenNganKho || "",
+            tenNhaKho: group[0].tenNhaKho || "",
             soPhieuKiemNghiem: group[0].soPhieuKiemNghiem || "",
             idPhieuKiemNghiem: group[0].idPhieuKiemNghiem || "",
             id: group[0].id || "",

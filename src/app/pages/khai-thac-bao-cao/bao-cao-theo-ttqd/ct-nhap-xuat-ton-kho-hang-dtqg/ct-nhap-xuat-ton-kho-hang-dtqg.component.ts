@@ -75,7 +75,6 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
           this.listQuy.push(this.quyData[i - 1]);
         }
       }
-      console.log(this.quyData, "quyData")
       if (namValue < dayjs().get('year')) {
         this.listQuy = this.quyData
       }
@@ -85,7 +84,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
   async ngOnInit() {
     await this.spinner.show();
     try {
-      for (let i = -3; i < 23; i++) {
+      for (let i = 0; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i

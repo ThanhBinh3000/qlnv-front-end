@@ -36,6 +36,8 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   dataTable: any[] = [];
   dataTableView: any[] = [];
   dsLoaiGia: any[] = [];
+  fileDinhKem: any[] = [];
+  canCuPhapLys: any[] = [];
   idSelected: number;
   isViewModal: boolean = false;
   isMuaToiDa: boolean;
@@ -150,6 +152,8 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
 
     })
     this.dataTable = data.pagChiTiets;
+    this.fileDinhKem = data.fileDinhKems;
+    this.canCuPhapLys = data.canCuPhapLys;
     this.buildTreePagCt();
   }
 
@@ -165,7 +169,9 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     let body = this.formData.value;
     body.type = this.type;
     body.soToTrinh = body.soToTrinh + this.maSuffix;
-    body.pagChiTiets = this.dataTable
+    body.pagChiTiets = this.dataTable;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
     let res = await this.toTrinhPAGService.update(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
