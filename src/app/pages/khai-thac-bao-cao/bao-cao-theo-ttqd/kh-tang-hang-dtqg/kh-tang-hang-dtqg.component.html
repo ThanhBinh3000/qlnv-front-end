@@ -102,7 +102,7 @@
 </div>
 
 <!--popup preview-->
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Báo cáo" nzWidth="100%">
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Báo cáo" nzWidth="100%" (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [original-size]="false" [render-text]="true" style="width: 100%; height: 600px;">
     </pdf-viewer>
