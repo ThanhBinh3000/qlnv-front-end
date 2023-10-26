@@ -162,7 +162,8 @@ export class MangLuoiKhoComponent implements OnInit {
       isKhoiTao: [false],
       dviReq: [null],
       loaiHangHoa: [],
-      kieuHang: [""]
+      kieuHang: [""],
+      idDmDonVi:[]
     });
   }
 
@@ -457,6 +458,7 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   bindingDataDetail(dataNode) {
+    debugger
     if (this.levelNode != 1) {
       this.convertDataChild(dataNode);
       this.loaiHangHoa = {

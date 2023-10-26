@@ -392,8 +392,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsQdGnv,
-        dataHeader: ['Số quyết định xuất hàng', 'Trích yếu', 'Ngày ký'],
-        dataColumn: ['soBbQd', 'trichYeu', 'ngayKy'],
+        dataHeader: ['Số quyết định xuất hàng', 'Ngày ký'],
+        dataColumn: ['soBbQd', 'ngayKy'],
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

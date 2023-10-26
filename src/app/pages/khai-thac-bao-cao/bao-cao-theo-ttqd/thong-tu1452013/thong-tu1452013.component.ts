@@ -25,7 +25,12 @@ export class ThongTu1452013Component implements OnInit {
   listNam: any[] = [];
   formData: FormGroup;
   listQuy = [];
-
+  quyData = [
+    {text: 'Quý I', value: 1},
+    {text: 'Quý II', value: 2},
+    {text: 'Quý III', value: 3},
+    {text: 'Quý IV', value: 4},
+  ];
   constructor(private spinner: NgxSpinnerService,
               private notification: NzNotificationService,
               private thongTu1452013Service: ThongTu1452013Service,
@@ -38,7 +43,7 @@ export class ThongTu1452013Component implements OnInit {
 
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        nam: [, [Validators.required]],
         quy: [],
         maCuc: [],
         maChiCuc: [],
@@ -48,6 +53,18 @@ export class ThongTu1452013Component implements OnInit {
         tenCloaiVthh: [],
       }
     );
+    this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
+      const month = dayjs().get("month");
+      this.listQuy = [];
+      for (let i = 0; i <= Math.floor(month / 3); i++) {
+        if (i >= 1) {
+          this.listQuy.push(this.quyData[i - 1]);
+        }
+      }
+      if (namValue < dayjs().get('year')) {
+        this.listQuy = this.quyData
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -57,18 +74,7 @@ export class ThongTu1452013Component implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-    const quyData = [
-      { text: 'Quý I', value: 1 },
-      { text: 'Quý II', value: 2 },
-      { text: 'Quý III', value: 3 },
-      { text: 'Quý IV', value: 4 },
-    ];
-    const month = dayjs().get("month");
-    for (let i = 0; i <= Math.floor(month / 3); i++) {
-      if(i>=1){
-        this.listQuy.push(quyData[i-1]);
-      }
-    }
+    this.formData.controls['nam'].setValue(dayjs().get("year"))
   }
 
   private blobToFile = (theBlob: Blob, fileName: string): File => {
