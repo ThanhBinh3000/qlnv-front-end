@@ -816,6 +816,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   async changeNamKh($event) {
     await this.getDataChiTieu($event);
     await this.onChangeLoaiVthh(this.formData.value.loaiVthh);
+    this.loadDsDxCanSua()
   }
 }
 
