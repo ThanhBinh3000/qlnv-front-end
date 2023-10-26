@@ -39,8 +39,20 @@
                        [nzParser]="globals.parser">
       </nz-input-number>
     </th>
-    <th *ngIf="isVat">
+    <th *ngIf="isVat && type =='GMTDBTT'">
       <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * vat"
+                       [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
+    </th>
+    <th *ngIf="isVat && type =='GCT' && !isTabNdKhac">
+      <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * rowItem.vat"
+                       [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
+    </th>
+    <th *ngIf="isVat && type =='GCT' && isTabNdKhac">
+      <nz-input-number  [nzSize]="'small'" [(ngModel)]=" rowItem.donGiaVat"
                        [nzFormatter]="globals.formatter"
                        [nzParser]="globals.parser">
       </nz-input-number>
@@ -121,13 +133,25 @@
                          [nzParser]="globals.parser">
         </nz-input-number>
       </td>
-      <td *ngIf="isVat">
+      <td *ngIf="isVat && type =='GMTDBTT'">
         <nz-input-number disabled [nzSize]="'small'"
                          [(ngModel)]="dataEdit[idx].data.donGia * vat + dataEdit[idx].data.donGia"
                          [nzFormatter]="globals.formatter"
                          [nzParser]="globals.parser">
         </nz-input-number>
       </td>
+      <th *ngIf="isVat && type =='GCT' && !isTabNdKhac">
+        <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" dataEdit[idx].data.donGia + dataEdit[idx].data.donGia * dataEdit[idx].data.vat"
+                         [nzFormatter]="globals.formatter"
+                         [nzParser]="globals.parser">
+        </nz-input-number>
+      </th>
+      <th *ngIf="isVat && type =='GCT' && isTabNdKhac">
+        <nz-input-number  [nzSize]="'small'" [(ngModel)]=" dataEdit[idx].data.donGiaVat"
+                          [nzFormatter]="globals.formatter"
+                          [nzParser]="globals.parser">
+        </nz-input-number>
+      </th>
       <td *ngIf="!isTabNdKhac">
         <input type="text" [(ngModel)]="dataEdit[idx].data.thoiHanBaoGia" nz-input/>
       </td>

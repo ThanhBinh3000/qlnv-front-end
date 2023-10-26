@@ -601,17 +601,17 @@
       <nz-card class="mt16 p-lr16 card-table pd-10">
         <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
         <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
-                              [isTabNdKhac]="false"
+                              [isTabNdKhac]="false" [type]="type"
                               [listCloaiVthh]="listCloaiVthh && listCloaiVthh.length > 0 ? listCloaiVthh : []"
                               [isTableKetQua]="true" [(dataTable)]="dataTableKsGia"></app-thong-tin-ksg-vt>
         <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
         <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
-                              [isTableKetQua]="false"
+                              [isTableKetQua]="false" [type]="type"
                               [listCloaiVthh]="listCloaiVthh && listCloaiVthh.length > 0 ? listCloaiVthh : []"
                               [(dataTable)]="dataTableKqGia"></app-thong-tin-ksg-vt>
         <span class="sub-title mb-10">CÁC THÔNG TIN KHÁC</span>
         <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
-                              [isTabNdKhac]="true"
+                              [isTabNdKhac]="true" [type]="type"
                               [isTableKetQua]="false" [(dataTable)]="dataTableTtThamKhao"
         ></app-thong-tin-ksg-vt>
       </nz-card>

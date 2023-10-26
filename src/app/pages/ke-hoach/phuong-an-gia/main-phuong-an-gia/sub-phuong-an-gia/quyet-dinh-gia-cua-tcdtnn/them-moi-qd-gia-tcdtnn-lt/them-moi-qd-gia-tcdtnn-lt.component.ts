@@ -363,6 +363,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         if (item.children && item.children.length > 0) {
           let itemClonePr = cloneDeep(item);
           itemClonePr.giaQdTcdt = null;
+          itemClonePr.giaQdDcTcdt = null;
           itemClonePr.stt = index + 1;
           arr.push(itemClonePr)
           item.children.forEach(child => {

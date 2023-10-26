@@ -19,6 +19,7 @@ export class ThongTinKhaoSatGia {
   cloaiVthh: string;
   tieuChuanCl: string;
   tenCloaiVthh: string;
+  vat: number = 0;
   donGia: number;
   donGiaVat: number;
   thoiHanBaoGia: string;
