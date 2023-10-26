@@ -115,6 +115,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh,
         soQdDc: data.soQdDc,
+        loaiDeXuat : data.loaiDeXuat
       });
       this.fileDinhKem = data.fileDinhKems;
     }
@@ -279,12 +280,14 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         },
       });
       modalQD.afterClose.subscribe((data) => {
+        console.log(data,111)
         if (data && data.listDx && data.listDx.length> 0 ) {
             let thRes = data.listDx;
           if (thRes && thRes.length > 0) {
             this.formData.patchValue({
               soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : "",
               soQdDc: thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuatDc).toString() : [],
+              loaiDeXuat: data.formData.loaiQd,
             })
           }
             let body = {

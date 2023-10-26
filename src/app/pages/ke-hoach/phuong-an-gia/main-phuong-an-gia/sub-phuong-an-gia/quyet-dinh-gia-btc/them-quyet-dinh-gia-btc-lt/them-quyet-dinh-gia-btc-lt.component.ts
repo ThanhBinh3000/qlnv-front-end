@@ -356,6 +356,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         if (item.children && item.children.length > 0) {
           let itemClonePr = cloneDeep(item);
           itemClonePr.giaQdBtc = null;
+          itemClonePr.giaQdDcBtc = null;
           itemClonePr.stt = index + 1;
           arr.push(itemClonePr)
           item.children.forEach(child => {

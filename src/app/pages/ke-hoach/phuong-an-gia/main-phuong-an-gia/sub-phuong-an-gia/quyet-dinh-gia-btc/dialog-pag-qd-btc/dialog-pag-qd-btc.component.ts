@@ -192,7 +192,11 @@ export class DialogPagQdBtcComponent implements OnInit {
       this.dataTableToTrinhView = this.dataTableToTrinh.filter(item => item.kieuTongHop == event);
     }
     if (event && this.pagType == 'VT') {
-      this.dataTableDxVtView =this.dataTableDxCsVt.filter(item => item.lanDeXuat > 1);
+      if (event == '00') {
+        this.dataTableDxVtView =this.dataTableDxCsVt.filter(item => item.lanDeXuat == 1);
+      } else {
+        this.dataTableDxVtView =this.dataTableDxCsVt.filter(item => item.lanDeXuat > 1);
+      }
     }
   }
 }

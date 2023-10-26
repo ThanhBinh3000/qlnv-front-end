@@ -46,16 +46,18 @@
     <th class=" text-center">Số công văn/tờ trình</th>
     <th class=" text-center">Ngày ký tờ trình</th>
     <th class=" text-center">Loại hàng DTQG</th>
+    <th class=" text-center">Lần đề xuất</th>
     <th nzWidth="45px" class=" text-center">Chọn</th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let data of dataTablleDxCs; let i = index">
+  <tr *ngFor="let data of dataTableDxVtView; let i = index">
     <td class="text-center">{{i + 1}}</td>
     <td class="text-center">{{data.namKeHoach}}</td>
     <td class="text-center">{{data.soDeXuat}}</td>
     <td class="text-center">{{data.ngayKy | date: 'dd/MM/YYYY'}}</td>
     <td class="text-center">{{data.tenLoaiVthh}}</td>
+    <td class="text-right">{{data.lanDeXuat}}</td>
     <td class="text-center">
       <label nz-checkbox (nzCheckedChange)= "updateDataCheckbox(i, data, $event)"></label>
     </td>
