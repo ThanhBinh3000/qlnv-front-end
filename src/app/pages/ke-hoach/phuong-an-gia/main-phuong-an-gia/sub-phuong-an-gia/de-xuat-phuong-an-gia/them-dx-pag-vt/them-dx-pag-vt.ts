@@ -150,8 +150,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.loadDsHangHoaPag();
     this.loadDsLoaiGia();
     this.loadDsLoaiDx();
-    this.loadDsDxCanSua();
     this.loadTiLeThue();
+    this.loadDsDxCanSua();
     await this.getDataDetail(this.idInput);
     this.spinner.hide();
   }
@@ -278,7 +278,12 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async bindingDataQd(id) {
-    let res = await this.giaDeXuatGiaService.getDetail(id);
+    let res;
+    if(this.type == 'GMTDBTT') {
+      res = await this.giaDeXuatGiaService.getDetail(id);
+    } else {
+      res = await this.giaDeXuatGiaService.getDetailGct(id);
+    }
     const data = res.data;
     this.formData.patchValue({
       namKeHoach: data.namKeHoach,
@@ -297,10 +302,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.pagTtChungs = data.pagTtChungs;
     this.pagTtChungs.forEach(item => {
       item.id = null;
-      item.giaQdBtc = null;
-      item.giaQdDcBtc = null;
-      item.giaQdBtcVat = null;
-      item.giaQdDcBtcVat = null;
     })
     this.updateEditCache('ttc')
   }
@@ -398,14 +399,14 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         return;
       }
       if (!this.tenLoaiVthh || (!this.rowItemTtc.cloaiVthh && this.listCloaiVthh.length > 0) || !this.rowItemTtc.soLuong || !this.rowItemTtc.giaDn) {
-        this.notification.error(MESSAGE.ERROR, 'Vui lòng nhập đủ thông tin')
+        this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập đủ thông tin')
         return;
       }
 
       if (this.listCloaiVthh && this.listCloaiVthh.length > 0) {
         let cloaiMap = this.pagTtChungs.map(item => item.cloaiVthh);
         if (cloaiMap && cloaiMap.length > 0 && cloaiMap.includes(this.rowItemTtc.cloaiVthh)) {
-          this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng chủng loại hàng hóa');
+          this.notification.warning(MESSAGE.WARNING, 'Vui lòng không nhập trùng chủng loại hàng hóa');
           return;
         }
       } else {
@@ -584,7 +585,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.rowItemTtc.tchuanCluong = list && list.length > 0 ? list[0].tieuChuanCl : ''
     if (this.type == 'GCT') {
       if (!this.formData.value.loaiGia) {
-        this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại giá')
+        this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn loại giá')
         return;
       }
       let body = {
@@ -842,5 +843,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   downloadWord() {
     saveAs(this.wordSrc, "de_xuat_phuong_an_gia.docx");
+  }
+
+  changeNamKh(event) {
+    this.loadDsDxCanSua();
   }
 }

@@ -115,6 +115,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh,
         soQdDc: data.soQdDc,
+        loaiDeXuat : data.loaiDeXuat
       });
       this.fileDinhKem = data.fileDinhKems;
     }
@@ -180,8 +181,13 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       return;
     }
       this.arrThongTinGia.forEach(item => {
-        item.giaQdBtcVat = item.vat ? item.giaQdBtc * item.vat + item.giaQdBtc : null;
-        item.giaQdDcBtcVat = item.vat && item.giaQdDcBtc ?  item.giaQdDcBtc * item.vat + item.giaQdDcBtc : null;
+        if (item.vat) {
+          if (this.formData.value.loaiDeXuat == '00') {
+            item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+          } else {
+            item.giaQdDcBtcVat = item.giaQdDcBtc + item.giaQdDcBtc * item.vat
+          }
+        }
       })
 
     let body = this.formData.value;
@@ -279,12 +285,14 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         },
       });
       modalQD.afterClose.subscribe((data) => {
+        console.log(data,111)
         if (data && data.listDx && data.listDx.length> 0 ) {
             let thRes = data.listDx;
           if (thRes && thRes.length > 0) {
             this.formData.patchValue({
               soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : "",
               soQdDc: thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuatDc).toString() : [],
+              loaiDeXuat: data.formData.loaiQd,
             })
           }
             let body = {

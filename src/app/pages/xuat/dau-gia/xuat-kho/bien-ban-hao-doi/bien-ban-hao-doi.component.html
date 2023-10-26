@@ -88,17 +88,17 @@
       <tbody>
       <ng-container *ngFor="let item of tableDataView, let i = index;">
         <tr>
-          <td>{{i + 1}}</td>
+          <td class="text-center">{{i + 1}}</td>
           <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
               [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
               style="width: 35px"></td>
-          <td>
+          <td class="text-left">
             <a *ngIf="item.soQdNv && item.idQdNv" nz-button nzType="link"
                (click)="openModal(item.idQdNv, 'QdNv')">
               {{ item.soQdNv }}</a>
           </td>
-          <td class="bold">{{item.nam}}</td>
-          <td class="bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
+          <td class="text-left bold">{{item.nam}}</td>
+          <td class="text-left bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -119,7 +119,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td class="bold">{{ lv1.tenDiemKho }}</td>
+              <td class="text-left bold">{{ lv1.tenDiemKho }}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -140,15 +140,16 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="bold">{{ (lv2.tenLoKho ? lv2.tenLoKho + ' - ' : '') + lv2.tenNganKho }}</td>
-                  <td class="bold">{{ lv2.soBbHaoDoi }}</td>
-                  <td class="bold">{{ lv2.ngayLapBienBan|date:'dd/MM/YYYY' }}</td>
-                  <td>
+                  <td
+                    class="text-left bold">{{ (lv2.tenLoKho ? lv2.tenLoKho + " - " : "") + (lv2.tenNganKho ? lv2.tenNganKho + " - " : "") + (lv2.tenNhaKho ? lv2.tenNhaKho : "") }}</td>
+                  <td class="text-left bold">{{ lv2.soBbHaoDoi }}</td>
+                  <td class="text-left bold">{{ lv2.ngayLapBienBan|date:'dd/MM/YYYY' }}</td>
+                  <td class="text-left">
                     <a *ngIf="lv2.soBbTinhKho && lv2.idBbTinhKho" nz-button nzType="link"
                        (click)="openModal(lv2.idBbTinhKho, 'tinhKho')">
                       {{ lv2.soBbTinhKho }}</a>
                   </td>
-                  <td>
+                  <td class="text-left">
                     <a *ngIf="lv2.soPhieuKiemNghiem && lv2.idPhieuKiemNghiem" nz-button nzType="link"
                        (click)="openModal(lv2.idPhieuKiemNghiem, 'kiemNghiem')">
                       {{ lv2.soPhieuKiemNghiem }}</a>
@@ -156,7 +157,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td>{{ lv2.tenTrangThai }}</td>
+                  <td class="text-left">{{ lv2.tenTrangThai }}</td>
                   <td class="text-center">
                     <a *ngIf="isActionAllowed('XEM', lv2)" (click)="redirectDetail(lv2.id,true)">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
@@ -186,17 +187,17 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>
+                      <td class="text-left">
                         <a *ngIf="lv3.soBangKeHang && lv3.idBangKeHang" nz-button nzType="link"
                            (click)="openModal(lv3.idBangKeHang, 'bangKe')">
                           {{ lv3.soBangKeHang }}</a>
                       </td>
-                      <td>
+                      <td class="text-left">
                         <a *ngIf="lv3.soPhieuXuatKho && lv3.idPhieuXuatKho" nz-button nzType="link"
                            (click)="openModal(lv3.idPhieuXuatKho, 'xuatKho')">
                           {{ lv3.soPhieuXuatKho }}</a>
                       </td>
-                      <td>{{lv3.ngayXuatKho|date:'dd/MM/YYYY'}}</td>
+                      <td class="text-left">{{lv3.ngayXuatKho|date:'dd/MM/YYYY'}}</td>
                       <td></td>
                       <td></td>
                     </tr>

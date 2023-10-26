@@ -126,8 +126,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       const dataDcHdr = reDcHdr ? reDcHdr.data : null;
       this.formData.patchValue({
         nam: data.nam,
-        idQdPd: dataQdHdr? dataQdHdr.id : dataDcHdr.idQdPd,
-        soQdPd: dataQdHdr? dataQdHdr.soQdPd: dataDcHdr.soQdPd,
+        idQdPd: dataQdHdr ? dataQdHdr.id : dataDcHdr.idQdPd,
+        soQdPd: dataQdHdr ? dataQdHdr.soQdPd : dataDcHdr.soQdPd,
         idQdDc: dataDcHdr?.id,
         soQdDc: dataDcHdr?.soQdDc,
         idQdPdDtl: data.id,
@@ -136,7 +136,9 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         tenDvi: data.tenDvi,
         khoanTienDatTruoc: data.khoanTienDatTruoc,
         khoanTienDatTruocHienThi: data.khoanTienDatTruoc + '%',
-        tgianDauGia: ['Từ ' + dayjs(data.tgianDkienTu).format('DD/MM/YYYY') + ' Đến ' + dayjs(data.tgianDkienDen).format('DD/MM/YYYY')],
+        tgianDauGia: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen)
+          ? [`Từ ${dayjs(data.tgianDkienTu).format('DD/MM/YYYY')} Đến ${dayjs(data.tgianDkienDen).format('DD/MM/YYYY')}`]
+          : [],
         tgianTtoan: data.tgianTtoan,
         tenPthucTtoan: data.tenPthucTtoan,
         tgianGnhan: data.tgianGnhan,
@@ -158,6 +160,10 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  isValidDate(dateString: string): boolean {
+    return dayjs(dateString).isValid();
   }
 
   async calculatorTable(data) {

@@ -173,7 +173,8 @@
                       <div nz-col [nzSpan]="6">
                         <nz-form-item>
                           <nz-form-label nzRequired [nzNoColon]="true"> Tiền mua hồ sơ (VNĐ/1 hồ sơ /1 đơn vị tài
-                            sản)</nz-form-label>
+                            sản)
+                          </nz-form-label>
                           <nz-form-control nz-col [nzErrorTip]="error">
                             <nz-input-number formControlName="tienMuaHoSo" nz-input [nzMin]=""
                                              [nzStep]="1" [nzSize]="'small'"
@@ -436,18 +437,18 @@
                               class="nowrap pd-10">
                       <thead>
                       <tr>
-                        <th nzWidth="30px">STT</th>
-                        <th>Họ và tên</th>
-                        <th>Chức vụ</th>
-                        <th>Nơi công tác</th>
-                        <th nzWidth="50px" *ngIf="!isView">Hành động</th>
+                        <th class="text-center" nzWidth="50px"> STT</th>
+                        <th class="text-left">Họ và tên</th>
+                        <th class="text-left">Chức vụ</th>
+                        <th class="text-left">Nơi công tác</th>
+                        <th class="text-center" nzWidth="70px" *ngIf="!isView">Hành động</th>
                       </tr>
                       <tr *ngIf="!isView">
                         <th></th>
-                        <th><input nz-input [(ngModel)]="rowItemKhach.hoVaTen"/></th>
-                        <th><input nz-input [(ngModel)]="rowItemKhach.chucVu"/></th>
-                        <th><input nz-input [(ngModel)]="rowItemKhach.diaChi"/></th>
-                        <th>
+                        <th class="text-left"><input nz-input [(ngModel)]="rowItemKhach.hoVaTen"/></th>
+                        <th class="text-left"><input nz-input [(ngModel)]="rowItemKhach.chucVu"/></th>
+                        <th class="text-left"><input nz-input [(ngModel)]="rowItemKhach.diaChi"/></th>
+                        <th class="text-center">
                           <a (click)="addRow(rowItemKhach,'KM')">
                             <i class="fa fa-plus"></i>
                           </a>
@@ -460,11 +461,11 @@
                       <tbody>
                       <ng-container *ngFor="let data of findTableName('KM')?.dataChild , let i = index">
                         <tr *ngIf="!data.isEdit">
-                          <td>{{i + 1}}</td>
-                          <td>{{data.hoVaTen}}</td>
-                          <td>{{data.chucVu}}</td>
-                          <td>{{data.diaChi}}</td>
-                          <td *ngIf="!isView">
+                          <td class="text-center">{{i + 1}}</td>
+                          <td class="text-left">{{data.hoVaTen}}</td>
+                          <td class="text-left">{{data.chucVu}}</td>
+                          <td class="text-left">{{data.diaChi}}</td>
+                          <td class="text-center" *ngIf="!isView">
                             <a (click)="editRow(data)">
                               <i class=" fa fa-pencil"></i>
                             </a>
@@ -474,11 +475,11 @@
                           </td>
                         </tr>
                         <tr *ngIf="data.isEdit">
-                          <td>{{i + 1}}</td>
-                          <td><input nz-input [(ngModel)]="data.hoVaTen"/></td>
-                          <td><input nz-input [(ngModel)]="data.chucVu"/></td>
-                          <td><input nz-input [(ngModel)]="data.diaChi"/></td>
-                          <td *ngIf="!isView">
+                          <td class="text-center">{{i + 1}}</td>
+                          <td class="text-left"><input nz-input [(ngModel)]="data.hoVaTen"/></td>
+                          <td class="text-left"><input nz-input [(ngModel)]="data.chucVu"/></td>
+                          <td class="text-left"><input nz-input [(ngModel)]="data.diaChi"/></td>
+                          <td class="text-center" *ngIf="!isView">
                             <a (click)="saveRow(data, i)">
                               <i class=" fa fa-save"></i>
                             </a>
@@ -497,18 +498,18 @@
                               class="nowrap pd-10">
                       <thead>
                       <tr>
-                        <th nzWidth="30px">STT</th>
-                        <th>Họ và tên</th>
-                        <th>Chức vụ</th>
-                        <th>Nơi công tác</th>
-                        <th nzWidth="50px" *ngIf="!isView">Hành động</th>
+                        <th class="text-center" nzWidth="50px"> STT</th>
+                        <th class="text-left">Họ và tên</th>
+                        <th class="text-left">Chức vụ</th>
+                        <th class="text-left">Nơi công tác</th>
+                        <th class="text-center" nzWidth="70px" *ngIf="!isView">Hành động</th>
                       </tr>
                       <tr *ngIf="!isView">
                         <th></th>
-                        <th><input nz-input [(ngModel)]="rowItemDgv.hoVaTen"/></th>
-                        <th><input nz-input [(ngModel)]="rowItemDgv.chucVu"/></th>
-                        <th><input nz-input [(ngModel)]="rowItemDgv.diaChi"/></th>
-                        <th>
+                        <th class="text-left"><input nz-input [(ngModel)]="rowItemDgv.hoVaTen"/></th>
+                        <th class="text-left"><input nz-input [(ngModel)]="rowItemDgv.chucVu"/></th>
+                        <th class="text-left"><input nz-input [(ngModel)]="rowItemDgv.diaChi"/></th>
+                        <th class="text-center">
                           <a (click)="addRow(rowItemDgv,'DGV')">
                             <i class="fa fa-plus"></i>
                           </a>
@@ -521,11 +522,11 @@
                       <tbody>
                       <ng-container *ngFor="let data of findTableName('DGV')?.dataChild , let i = index">
                         <tr *ngIf="!data.isEdit">
-                          <td>{{i + 1}}</td>
-                          <td>{{data.hoVaTen}}</td>
-                          <td>{{data.chucVu}}</td>
-                          <td>{{data.diaChi}}</td>
-                          <td *ngIf="!isView">
+                          <td class="text-center">{{i + 1}}</td>
+                          <td class="text-left">{{data.hoVaTen}}</td>
+                          <td class="text-left">{{data.chucVu}}</td>
+                          <td class="text-left">{{data.diaChi}}</td>
+                          <td class="text-center" *ngIf="!isView">
                             <a (click)="editRow(data)">
                               <i class=" fa fa-pencil"></i>
                             </a>
@@ -535,11 +536,11 @@
                           </td>
                         </tr>
                         <tr *ngIf="data.isEdit">
-                          <td>{{i + 1}}</td>
-                          <td><input nz-input [(ngModel)]="data.hoVaTen"/></td>
-                          <td><input nz-input [(ngModel)]="data.chucVu"/></td>
-                          <td><input nz-input [(ngModel)]="data.diaChi"/></td>
-                          <td *ngIf="!isView">
+                          <td class="text-center">{{i + 1}}</td>
+                          <td class="text-left"><input nz-input [(ngModel)]="data.hoVaTen"/></td>
+                          <td class="text-left"><input nz-input [(ngModel)]="data.chucVu"/></td>
+                          <td class="text-left"><input nz-input [(ngModel)]="data.diaChi"/></td>
+                          <td class="text-center" *ngIf="!isView">
                             <a (click)="saveRow(data , i)">
                               <i class=" fa fa-save"></i>
                             </a>
@@ -558,18 +559,18 @@
                               class="nowrap pd-10">
                       <thead>
                       <tr>
-                        <th nzWidth="30px">STT</th>
-                        <th>Họ và tên/Tên tổ chức</th>
-                        <th>Mã số thuế/CMTND/CCCD/Hộ chiếu</th>
-                        <th>Địa chỉ</th>
-                        <th nzWidth="50px" *ngIf="!isView">Hành động</th>
+                        <th class="text-center" nzWidth="50px"> STT</th>
+                        <th class="text-left">Họ và tên/Tên tổ chức</th>
+                        <th class="text-left">Mã số thuế/CMTND/CCCD/Hộ chiếu</th>
+                        <th class="text-left">Địa chỉ</th>
+                        <th class="text-center" nzWidth="70px" *ngIf="!isView">Hành động</th>
                       </tr>
                       <tr *ngIf="!isView">
                         <th></th>
-                        <th><input nz-input [(ngModel)]="rowItemToChuc.hoVaTen"/></th>
-                        <th><input nz-input [(ngModel)]="rowItemToChuc.soCccd"/></th>
-                        <th><input nz-input [(ngModel)]="rowItemToChuc.diaChi"/></th>
-                        <th>
+                        <th class="text-left"><input nz-input [(ngModel)]="rowItemToChuc.hoVaTen"/></th>
+                        <th class="text-left"><input nz-input [(ngModel)]="rowItemToChuc.soCccd"/></th>
+                        <th class="text-left"><input nz-input [(ngModel)]="rowItemToChuc.diaChi"/></th>
+                        <th class="text-center">
                           <a (click)="addRow(rowItemToChuc,'NTG')">
                             <i class="fa fa-plus"></i>
                           </a>
@@ -582,11 +583,11 @@
                       <tbody>
                       <ng-container *ngFor="let data of findTableName('NTG')?.dataChild , let i = index">
                         <tr *ngIf="!data.isEdit">
-                          <td>{{i + 1}}</td>
-                          <td>{{data.hoVaTen}}</td>
-                          <td>{{data.soCccd}}</td>
-                          <td>{{data.diaChi}}</td>
-                          <td *ngIf="!isView">
+                          <td class="text-center">{{i + 1}}</td>
+                          <td class="text-left">{{data.hoVaTen}}</td>
+                          <td class="text-left">{{data.soCccd}}</td>
+                          <td class="text-left">{{data.diaChi}}</td>
+                          <td class="text-center" *ngIf="!isView">
                             <a (click)="editRow(data)">
                               <i class=" fa fa-pencil"></i>
                             </a>
@@ -596,11 +597,11 @@
                           </td>
                         </tr>
                         <tr *ngIf="data.isEdit">
-                          <td>{{i + 1}}</td>
-                          <td><input nz-input [(ngModel)]="data.hoVaTen"/></td>
-                          <td><input nz-input [(ngModel)]="data.soCccd"/></td>
-                          <td><input nz-input [(ngModel)]="data.diaChi"/></td>
-                          <td *ngIf="!isView">
+                          <td class="text-center">{{i + 1}}</td>
+                          <td class="text-left"><input nz-input [(ngModel)]="data.hoVaTen"/></td>
+                          <td class="text-left"><input nz-input [(ngModel)]="data.soCccd"/></td>
+                          <td class="text-left"><input nz-input [(ngModel)]="data.diaChi"/></td>
+                          <td class="text-center" *ngIf="!isView">
                             <a (click)="saveRow(data , i)">
                               <i class=" fa fa-save"></i>
                             </a>
@@ -617,28 +618,29 @@
                 <nz-collapse nzAccordion *ngIf="formData.value.ketQua == 1">
                   <nz-collapse-panel [nzHeader]="'SỐ LƯỢNG, ĐỊA ĐIỂM XUẤT BÁN (NƠI ĐANG BẢO QUẢN VÀ QUẢN LÝ TÀI SẢN)'"
                                      [nzActive]="true">
+                    <br>
                     <nz-table class="nowrap pd-10" [nzScroll]="{ x: '1400px' }" [nzFrontPagination]="false"
                               [nzShowPagination]="false" [nzData]="dataTable" nzBordered>
                       <thead>
                       <tr>
-                        <th nzWidth="30px"></th>
-                        <th nzWidth="300px" class="text-center wrap"> Chi cục</th>
-                        <th nzWidth="150px" class="text-center wrap"> Điểm kho</th>
-                        <th nzWidth="150px" class="text-center wrap"> Lô kho</th>
+                        <th nzWidth="50px" class="text-center wrap"></th>
+                        <th nzWidth="300px" class="text-left wrap"> Chi cục</th>
+                        <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
+                        <th nzWidth="300px" class="text-left wrap"> Lô kho</th>
                         <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS</th>
-                        <th nzWidth="120px" class="text-center wrap"> SL bán đấu giá</th>
-                        <th nzWidth="50px" class="text-center wrap"> ĐVT</th>
-                        <th nzWidth="120px" class="text-center wrap"> Đơn giá chưa VAT(đ)</th>
-                        <th nzWidth="120px" class="text-center wrap"> Giá khởi điểm (đ)</th>
-                        <th nzWidth="120px" class="text-center wrap"> Số tiền đặt trước (đ)</th>
+                        <th nzWidth="120px" class="text-right wrap"> SL bán đấu giá</th>
+                        <th nzWidth="50px" class="text-left wrap"> ĐVT</th>
+                        <th nzWidth="120px" class="text-right wrap"> Đơn giá chưa VAT(đ)</th>
+                        <th nzWidth="120px" class="text-right wrap"> Giá khởi điểm (đ)</th>
+                        <th nzWidth="120px" class="text-right wrap"> Số tiền đặt trước (đ)</th>
                         <th nzWidth="120px" class="text-center wrap"><span style='color: red;'>*</span> Số lần trả giá
                         </th>
-                        <th nzWidth="150px" class="text-center wrap"><span style='color: red;'>*</span> Đơn giá cao
-                          nhất (đ)
+                        <th nzWidth="150px" class="text-right wrap"><span style='color: red;'>*</span> Đơn giá cao nhất
+                          (đ)
                         </th>
-                        <th nzWidth="120px" class="text-center wrap"> Thành tiền (đ)</th>
-                        <th nzWidth="200px" class="text-center wrap"><span style='color: red;'>*</span> Tổ chức/cá
-                          nhân trúng đấu giá
+                        <th nzWidth="120px" class="text-right wrap"> Thành tiền (đ)</th>
+                        <th nzWidth="200px" class="text-left wrap"><span style='color: red;'>*</span> Tổ chức/cá nhân
+                          trúng đấu giá
                         </th>
                       </tr>
                       </thead>
@@ -646,17 +648,17 @@
                       <ng-container *ngFor="let item of dataTable , let i = index">
                         <tr>
                           <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                          <td> {{item.tenDvi}} </td>
+                          <td class="text-left"> {{item.tenDvi}} </td>
                           <td></td>
                           <td></td>
                           <td></td>
                           <td
-                            style="color: black ;font-weight: bold;"> {{item.soLuongXuatBan|number:globals.numberFormat:globals.locale }}</td>
+                            class="text-right bold"> {{item.soLuongXuatBan|number:globals.numberFormat:globals.locale }}</td>
                           <td></td>
                           <td></td>
                           <td></td>
                           <td
-                            style="color: black ;font-weight: bold;"> {{item.tienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
+                            class="text-right bold"> {{item.tienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -666,33 +668,40 @@
                           <tr *ngFor="let children of item.children, let y = index">
                             <td></td>
                             <td></td>
-                            <td> {{children.tenDiemKho}} </td>
-                            <td> {{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }}
-                              , {{children.tenNhaKho}} </td>
-                            <td> {{children.maDviTsan}} </td>
-                            <td> {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
-                            <td> {{children.donViTinh}} </td>
-                            <td> {{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-                            <td> {{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
-                            <td> {{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
+                            <td class="text-left"> {{children.tenDiemKho}} </td>
+                            <td
+                              class="text-left"> {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
+                            (children.tenNhaKho ? children.tenNhaKho : "")}} </td>
+                            <td class="text-center"> {{children.maDviTsan}} </td>
+                            <td
+                              class="text-right"> {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
+                            <td class="text-left"> {{children.donViTinh}} </td>
+                            <td
+                              class="text-right"> {{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
+                            <td
+                              class="text-right"> {{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
+                            <td
+                              class="text-right"> {{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
                             <td>
-                              <nz-input-number
-                                [nzDisabled]="isView || formData.value.ketQua == 0"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                [(ngModel)]="children.soLanTraGia"></nz-input-number>
+                              <nz-input-number [nzDisabled]="isView || formData.value.ketQua == 0"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                                               [(ngModel)]="children.soLanTraGia">
+                              </nz-input-number>
                             </td>
                             <td>
-                              <nz-input-number
-                                [nzDisabled]="isView || formData.value.ketQua == 0"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                [(ngModel)]="children.donGiaTraGia"></nz-input-number>
+                              <nz-input-number [nzDisabled]="isView || formData.value.ketQua == 0"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                                               [(ngModel)]="children.donGiaTraGia">
+                              </nz-input-number>
                             </td>
-                            <td>{{ children.soLuongDeXuat * children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
-                            <td>
+                            <td
+                              class="text-right">{{ children.soLuongDeXuat * children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
+                            <td class="text-left">
                               <nz-select [nzDisabled]="isView || formData.value.ketQua == 0"
                                          [(ngModel)]="children.toChucCaNhan" (ngModelChange)="changeNTG(i, y)">
                                 <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
-                                           [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen"></nz-option>
+                                           [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen">
+                                </nz-option>
                               </nz-select>
                             </td>
                           </tr>
@@ -708,47 +717,52 @@
                               [nzShowPagination]="false" [nzData]="dataTable" nzBordered>
                       <thead>
                       <tr>
-                        <th nzWidth="30px"></th>
-                        <th nzWidth="300px" class="text-center wrap"> Chi cục</th>
-                        <th nzWidth="150px" class="text-center wrap"> Điểm kho</th>
-                        <th nzWidth="150px" class="text-center wrap"> Lô kho</th>
+                        <th nzWidth="50px" class="text-center wrap"></th>
+                        <th nzWidth="300px" class="text-left wrap"> Chi cục</th>
+                        <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
+                        <th nzWidth="150px" class="text-left wrap"> Lô kho</th>
                         <th nzWidth="100px" class="text-center wrap"> Mã đơn vị tài sản</th>
-                        <th nzWidth="120px" class="text-center wrap"> Số lượng</th>
-                        <th nzWidth="50px" class="text-center wrap"> Đơn vị tính</th>
-                        <th nzWidth="120px" class="text-center wrap"> Đơn giá chưa VAT (đồng)</th>
-                        <th nzWidth="120px" class="text-center wrap"> Giá khởi điểm (đồng)</th>
-                        <th nzWidth="120px" class="text-center wrap"> Số tiền đặt trước (đồng)</th>
+                        <th nzWidth="120px" class="text-right wrap"> Số lượng</th>
+                        <th nzWidth="50px" class="text-left wrap"> Đơn vị tính</th>
+                        <th nzWidth="120px" class="text-left wrap"> Đơn giá chưa VAT (đồng)</th>
+                        <th nzWidth="120px" class="text-left wrap"> Giá khởi điểm (đồng)</th>
+                        <th nzWidth="120px" class="text-left wrap"> Số tiền đặt trước (đồng)</th>
                       </tr>
                       </thead>
                       <tbody>
                       <ng-container *ngFor="let item of dataTable , let i = index">
                         <tr>
                           <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                          <td> {{item.tenDvi}} </td>
+                          <td class="text-left"> {{item.tenDvi}} </td>
                           <td></td>
                           <td></td>
                           <td></td>
                           <td
-                            style="color: black ;font-weight: bold;"> {{item.soLuongXuatBan|number:globals.numberFormat:globals.locale }} </td>
+                            class="text-right bold"> {{item.soLuongXuatBan|number:globals.numberFormat:globals.locale }} </td>
                           <td></td>
                           <td></td>
                           <td></td>
                           <td
-                            style="color: black ;font-weight: bold;"> {{item.tienDatTruoc|number:globals.numberFormat:globals.locale }} </td>
+                            class="text-right bold"> {{item.tienDatTruoc|number:globals.numberFormat:globals.locale }} </td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
                           <tr *ngFor="let children of item.children, let y = index">
                             <td></td>
                             <td></td>
-                            <td> {{children.tenDiemKho}} </td>
-                            <td> {{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }},
-                              {{children.tenNhaKho}} </td>
-                            <td> {{children.maDviTsan}} </td>
-                            <td> {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }} </td>
-                            <td> {{children.donViTinh}} </td>
-                            <td> {{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }} </td>
-                            <td> {{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }} </td>
-                            <td> {{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }} </td>
+                            <td class="text-left"> {{children.tenDiemKho}} </td>
+                            <td
+                              class="text-left"> {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
+                            (children.tenNhaKho ? children.tenNhaKho : "")}} </td>
+                            <td class="text-center"> {{children.maDviTsan}} </td>
+                            <td
+                              class="text-right"> {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }} </td>
+                            <td class="text-left"> {{children.donViTinh}} </td>
+                            <td
+                              class="text-right"> {{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }} </td>
+                            <td
+                              class="text-right"> {{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }} </td>
+                            <td
+                              class="text-right"> {{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }} </td>
                           </tr>
                         </ng-container>
                       </ng-container>

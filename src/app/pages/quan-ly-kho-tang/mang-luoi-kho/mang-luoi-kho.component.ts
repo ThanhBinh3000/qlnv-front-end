@@ -505,6 +505,7 @@ export class MangLuoiKhoComponent implements OnInit {
         loaiHangHoa: dataNode.loaiHangHoa,
         kieuHang: dataNode.kieuHang,
         diaChi: dataNode.diaChi ?? '',
+        idDmDonVi: dataNode.idDmDonVi ?? '',
       });
       if (this.levelNode == 7) {
         this.detailDonVi.patchValue({
@@ -679,7 +680,7 @@ export class MangLuoiKhoComponent implements OnInit {
         let dviReq = {
           "diaChi": this.detailDonVi.value.diaChi,
           "fax": this.detailDonVi.value.fax,
-          "id": this.detailDonVi.value.id,
+          "id": this.detailDonVi.value.idDmDonVi,
           "maDvi": this.detailDonVi.value.maDvi,
           "maDviCha": this.detailDonVi.value.maDviCha,
           "maKhqlh": this.detailDonVi.value.maKhqlh,
@@ -793,7 +794,7 @@ export class MangLuoiKhoComponent implements OnInit {
     let dviReq = {
       "diaChi": this.detailDonVi.value.diaChi,
       "fax": this.detailDonVi.value.fax,
-      "id": this.detailDonVi.value.id,
+      "id": this.detailDonVi.value.idDmDonVi,
       "maDvi": this.detailDonVi.value.maDvi,
       "maDviCha": this.detailDonVi.value.maDviCha,
       "maKhqlh": this.detailDonVi.value.maKhqlh,
