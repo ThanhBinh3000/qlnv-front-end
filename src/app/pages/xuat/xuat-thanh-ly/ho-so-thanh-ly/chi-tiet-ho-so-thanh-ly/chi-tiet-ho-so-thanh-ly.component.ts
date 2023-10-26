@@ -106,24 +106,32 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       })
     })
     body.children = children;
+
     if (this.formData.value.soHoSo) {
       body.soHoSo = this.formData.value.soHoSo + this.symbol
     }
-    this.createUpdate(body).then((res) => {
-      if (res) {
-        if (isGuiDuyet) {
-          this.id = res.id;
-          this.formData.patchValue({
-            id : res.id,
-            trangThai: res.trangThai,
-            tenTrangThai: res.tenTrangThai
-          })
-          this.pheDuyet();
-        } else {
-          this.redirectDefault();
-        }
+    if(isGuiDuyet){
+      if(this.userService.isCuc()){
+        body.children.forEach(item => {
+          console.log(item);
+        });
       }
-    })
+    }
+    // this.createUpdate(body).then((res) => {
+    //   if (res) {
+    //     if (isGuiDuyet) {
+    //       this.id = res.id;
+    //       this.formData.patchValue({
+    //         id : res.id,
+    //         trangThai: res.trangThai,
+    //         tenTrangThai: res.tenTrangThai
+    //       })
+    //       this.pheDuyet();
+    //     } else {
+    //       this.redirectDefault();
+    //     }
+    //   }
+    // })
   }
 
   openDialogDanhSach() {

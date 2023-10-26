@@ -58,7 +58,7 @@
             <nz-form-label>Thời gian chốt đến ngày</nz-form-label>
             <nz-form-item>
               <nz-date-picker nzShowTime nzFormat="HH:mm:ss dd/MM/yyyy"
-                              formControlName="ngayDen" nzPlaceHolder="Ngày chốt đến ngày">
+                              formControlName="ngayDen" nzPlaceHolder="Ngày chốt đến ngày" (ngModelChange)="getData()">
               </nz-date-picker>
             </nz-form-item>
           </nz-form-control>
@@ -71,27 +71,23 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Hủy bỏ
         </button>
-        <button nz-button class="search__button--search" (click)="getData()">
-          <i nz-icon nzType="search"></i>
-          Tra cứu
+        <button nz-button class="search__button--search" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          Chốt
         </button>
       </div>
     </div>
   </nz-card>
-  <div *ngIf="this.dataSaved.childrenGroup && this.dataSaved.childrenGroup.length > 0" class="group-button">
-    <h3 class="text-uppercase">Dữ liệu kết chuyển</h3>
+  <div class="group-button">
+    <h3 class="text-uppercase">Chi tiết danh sách kết chuyển cuối năm</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-main" (click)="save()">
-        <i class="icon htvbdh_dau-cong"></i>
-        <span>Chốt</span>
-      </button>
     </div>
   </div>
-  <nz-card *ngIf="this.dataSaved.childrenGroup && this.dataSaved.childrenGroup.length > 0"
-           class="mt-2px flex-card data-table card-border-content table-card">
+  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
       <tr>
+        <th nzWidth="30px">STT</th>
         <th nzWidth="90px">Năm</th>
         <th nzWidth="200px" class="wrap">Chi cục DTNN</th>
         <th nzWidth="30px">Mã đơn vị</th>
@@ -100,16 +96,17 @@
         <th nzWidth="50px">Tên hàng DTQG</th>
         <th nzWidth="50px">Chủng loại DTQG</th>
         <th nzWidth="50px">Nước sản xuất</th>
-        <th nzWidth="3  0px">Đơn vị tính</th>
-        <th nzWidth="80px" class="wrap">Số lượng tồn kho theo sổ sách</th>
-        <th nzWidth="80px" class="wrap">Số lượng tồn kho thực tế</th>
+        <th nzWidth="50px">Đơn vị tính</th>
+        <th nzWidth="50px" class="wrap">Số lượng tồn kho theo sổ sách</th>
+        <th nzWidth="50px" class="wrap">Số lượng tồn kho thực tế</th>
       </tr>
       </thead>
       <tbody>
       <ng-container *ngFor="let nam of dataSaved.childrenGroup , let i = index">
         <tr>
-          <td nzShowExpand="true" [nzExpand]="dataSaved.expandSet"
-              (nzExpandChange)="onExpandChange(dataSaved, $event)">{{nam.nam}}</td>
+          <td></td>
+          <td nzShowExpand="true" [nzExpand]="nam.expandSet"
+              (nzExpandChange)="onExpandChange(nam, $event)">{{nam.nam}}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -124,6 +121,7 @@
         <ng-container *ngIf="nam.expandSet">
           <ng-container *ngFor="let chiCuc of nam.children , let i = index">
             <tr>
+              <td></td>
               <td></td>
               <td nzShowExpand="true" [nzExpand]="chiCuc.expandSet"
                   (nzExpandChange)="onExpandChange(chiCuc, $event)" class="wrap">{{chiCuc.tenChiCuc}}</td>
@@ -146,6 +144,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td></td>
                   <td nzShowExpand="true" [nzExpand]="chiCuc.expandSet"
                       (nzExpandChange)="onExpandChange(chiCuc, $event)"
                       class="wrap">{{cloaiVthh.tenLoaiVthh}}</td>
@@ -164,6 +163,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
+                      <td></td>
                       <td>{{(loaiVthh.tenCloaiVthh == 'null' || loaiVthh.tenCloaiVthh == null) ? cloaiVthh.tenLoaiVthh : loaiVthh.tenCloaiVthh}}</td>
                       <td>Việt Nam</td>
                       <td>{{loaiVthh.tenDonViTinh}}</td>
@@ -176,36 +176,12 @@
           </ng-container>
         </ng-container>
       </ng-container>
-      </tbody>
-    </nz-table>
-  </nz-card>
-  <div class="group-button">
-    <h3 class="text-uppercase">Danh sách đã kết chuyển</h3>
-    <div class="buttons">
-    </div>
-  </div>
-  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
-      <thead>
-      <tr>
-        <th nzWidth="90px">Năm</th>
-        <th nzWidth="200px" class="wrap">Chi cục DTNN</th>
-        <th nzWidth="30px">Mã đơn vị</th>
-        <th nzWidth="80px">Tài khoản thực hiện chốt</th>
-        <th nzWidth="200px">Thời gian chốt</th>
-        <th nzWidth="50px">Tên hàng DTQG</th>
-        <th nzWidth="50px">Chủng loại DTQG</th>
-        <th nzWidth="50px">Nước sản xuất</th>
-        <th nzWidth="50px">Đơn vị tính</th>
-        <th nzWidth="50px" class="wrap">Số lượng tồn kho theo sổ sách</th>
-        <th nzWidth="50px" class="wrap">Số lượng tồn kho thực tế</th>
-      </tr>
-      </thead>
-      <tbody>
+
       <ng-container *ngFor="let nam of dataTableAll , let i = index">
         <tr>
-          <td nzShowExpand="true" [nzExpand]="dataSaved.expandSet"
-              (nzExpandChange)="onExpandChange(dataSaved, $event)">{{nam.nam}}</td>
+          <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+          <td nzShowExpand="true" [nzExpand]="nam.expandSet"
+              (nzExpandChange)="onExpandChange(nam, $event)">{{nam.nam}}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -220,6 +196,7 @@
         <ng-container *ngIf="nam.expandSet">
           <ng-container *ngFor="let chiCuc of nam.children , let i = index">
             <tr>
+              <td></td>
               <td></td>
               <td nzShowExpand="true" [nzExpand]="chiCuc.expandSet"
                   (nzExpandChange)="onExpandChange(chiCuc, $event)" class="wrap">{{chiCuc.tenChiCuc}}</td>
@@ -242,6 +219,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td></td>
                   <td nzShowExpand="true" [nzExpand]="chiCuc.expandSet"
                       (nzExpandChange)="onExpandChange(chiCuc, $event)"
                       class="wrap">{{cloaiVthh.tenLoaiVthh}}</td>
@@ -254,6 +232,7 @@
                 <ng-container *ngIf="cloaiVthh.expandSet">
                   <ng-container *ngFor="let loaiVthh of cloaiVthh.children , let i = index">
                     <tr>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
