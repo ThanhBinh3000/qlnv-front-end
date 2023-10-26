@@ -13,16 +13,13 @@ import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import {
-  PhieuKiemNghiemChatLuongService
-} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
-import {
-  QuyetDinhGiaoNvCuuTroService
-} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import { Validators } from '@angular/forms';
+import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service';
+import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
+import { BienBanLayMauService } from 'src/app/services/qlnv-hang/xuat-hang/chung/xuat-kho/PhieuXuatKho.service';
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -34,6 +31,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() loaiXuat: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = []
@@ -59,10 +57,12 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bienBanTinhKhoService: BienBanTinhKhoService,
+
+    public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    public quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    public bienBanLayMauService: BienBanLayMauService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanTinhKhoService);
 
@@ -172,7 +172,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
-        type: "XUAT_CTVT",
+        type: this.loaiXuat,
         tongSlNhap: "",
         // loaiVthh: this.loaiVthh
       });
@@ -290,7 +290,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
-        type: "XUAT_CTVT",
+        type: this.loaiXuat,
         loaiVthh: this.loaiVthh
       }
       let res = await this.phieuXuatKhoService.search(body)

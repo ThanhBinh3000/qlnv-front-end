@@ -20,6 +20,8 @@ import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
 import { Validators } from '@angular/forms';
+import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service';
+import { BienBanLayMauService } from 'src/app/services/qlnv-hang/xuat-hang/chung/xuat-kho/PhieuXuatKho.service';
 
 @Component({
   selector: 'app-them-moi-bien-ban-hao-doi',
@@ -31,6 +33,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() loaiXuat: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = []
@@ -58,9 +61,12 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    // private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
     private bienBanHaoDoiService: BienBanHaoDoiService,
     private bienBanTinhKhoService: BienBanTinhKhoService,
+    public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    public quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    public bienBanLayMauService: BienBanLayMauService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanHaoDoiService);
 
@@ -171,7 +177,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         soBbHaoDoi: `${id}/${this.formData.get('nam').value}${this.maBb}`,
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
-        type: "XUAT_CTVT",
+        type: this.loaiXuat,
         // loaiVThh:this.loaiVthh
 
       });
@@ -206,7 +212,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async loadSoBbTinhKho() {
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
-      type: "XUAT_CTVT",
+      type: this.loaiXuat,
       loaiVthh: this.loaiVthh,
     }
     let res = await this.bienBanTinhKhoService.search(body);

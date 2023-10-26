@@ -75,6 +75,7 @@ export class QuyetDinhPdDx {
 })
 export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   formDataDtl: FormGroup;
   maHauTo: any;

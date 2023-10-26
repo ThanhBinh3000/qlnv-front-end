@@ -402,8 +402,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
     const data = await this.createUpdate(body, null, true);
     if (data) {
-      this.formData.patchValue({ trangThaiXh: data.trangThai });
-      this.notification.success(MESSAGE.SUCCESS, 'Hoàn thành phân bổ thành công.')
+      this.formData.patchValue({ trangThaiXh: trangThai });
+      this.notification.success(MESSAGE.SUCCESS, trangThai === STATUS.DA_HOAN_THANH ? 'Hoàn thành phân bổ thành công.' : MESSAGE.UPDATE_SUCCESS)
     }
     await this.buildTableView();
   }

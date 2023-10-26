@@ -143,7 +143,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         soLuongNhuCauXuat: [0],
         soLuongConThieu: [0],
         soLuongChuyenCapThoc: [0],
-        idDonViNhan: ['', Validators.required]
+        idDonViNhan: ['']
       });
     this.formData.controls['deXuatPhuongAn'].valueChanges.subscribe(value => {
       const { tongSoLuongDeXuat, tongSoLuongXuatCap, tongSoLuongNhuCauXuat } = Array.isArray(value) ? value.reduce((obj, cur) => {

@@ -60,12 +60,13 @@
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-      <button *ngIf="[STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN].includes(formData.value.trangThaiXh)" type="button"
-        class="btn btn-sub xanh-nhat" (click)="updateProcess(STATUS.DA_HOAN_THANH, 'Đã hoàn thành')">
+      <button *ngIf="formData.value.trangThaiXh !==STATUS.DA_HOAN_THANH" type="button" class="btn btn-sub xanh-nhat"
+        (click)="updateProcess(STATUS.DA_HOAN_THANH, 'Đã hoàn thành')">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành phân bổ</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="(formData.value.trangThai === STATUS.BAN_HANH)"
+      <button type="button" class="btn btn-main"
+        *ngIf="(formData.value.trangThai === STATUS.BAN_HANH && formData.value.trangThaiXh !== STATUS.DA_HOAN_THANH)"
         (click)="updateProcess(STATUS.DANG_THUC_HIEN, 'Đang thực hiện')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>

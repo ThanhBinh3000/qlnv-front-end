@@ -34,6 +34,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() loaiXuat: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = [];
@@ -177,7 +178,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         soPhieuXuatKho: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
-        type: "XUAT_CTVT",
+        type: this.loaiXuat,
         // loaiVthh: this.loaiVthh
       });
     }
@@ -317,7 +318,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       let body = {
         trangThai: STATUS.DA_DUYET_LDC,
         loaiVthh: this.loaiVthh,
-        type: 'CTVT',
+        type: this.loaiXuat,
       }
       let res = await this.phieuKiemNghiemChatLuongService.search(body)
       const list = res.data.content.map(f => ({ ...f, tenNganLo: f.tenLoKho ? `${f.tenLoKho}-${f.tenNganKho}` : f.tenNganKho }));

@@ -572,8 +572,10 @@
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-phieu-kn-cl [idInput]="idPhieuKnCl" [loaiVthh]="loaiVthh" [isView]="true">
-    </app-them-moi-phieu-kn-cl>
+    <app-chi-tiet-phieu-kiem-nghiem-chat-luong [idSelected]="idPhieuKnCl" [loaiVthh]="loaiVthh" [isView]="true"
+      [inputService]="phieuKiemNghiemChatLuongService" [inputServiceGnv]="quyetDinhGiaoNvCuuTroService"
+      [inputServiceBbLayMau]="bienBanLayMauService" [isViewOnModal]="true" (showListEvent)="showList()">
+    </app-chi-tiet-phieu-kiem-nghiem-chat-luong>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closePhieuKnClModal()" class="modal__button--cancel">
@@ -584,7 +586,7 @@
 </nz-modal>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [loaiVthh]="loaiVthh" [isView]="true">
+    <app-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [loaiVthh]="loaiVthh" [isView]="true" [loaiXuat]="loaiXuat">
     </app-them-moi-phieu-xuat-kho>
   </ng-container>
   <div *nzModalFooter>
@@ -596,7 +598,7 @@
 </nz-modal>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openBangKe" (nzOnCancel)="closeBangKeModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-chi-tiet-bang-ke-can [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isView]="true">
+    <app-chi-tiet-bang-ke-can [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isView]="true" [loaiXuat]="loaiXuat">
     </app-chi-tiet-bang-ke-can>
   </ng-container>
   <div *nzModalFooter>
