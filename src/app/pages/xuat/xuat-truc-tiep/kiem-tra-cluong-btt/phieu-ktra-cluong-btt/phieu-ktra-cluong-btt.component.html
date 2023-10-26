@@ -96,17 +96,17 @@
         <tbody>
         <ng-container *ngFor="let item of basicTable.data, let i = index;">
           <tr>
-            <td>{{i + 1}}</td>
+            <td class="text-center">{{i + 1}}</td>
             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                 style="width: 35px"></td>
-            <td>
+            <td class="text-left">
               <a *ngIf="item.soQdNv && item.idQdNv" nz-button nzType="link"
                  (click)="openModal(item.idQdNv, 'QdNv')">
                 {{ item.soQdNv }}</a>
             </td>
-            <td class="bold">{{item.namKh}}</td>
-            <td class="bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
+            <td class="text-left bold">{{item.namKh}}</td>
+            <td class="text-left bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -126,7 +126,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="bold">{{ lv1.tenDiemKho }}</td>
+                <td class="text-left bold">{{ lv1.tenDiemKho }}</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -146,22 +146,23 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{ (lv2.tenLoKho ? lv2.tenLoKho + ' - ' : '') + lv2.tenNganKho }}</td>
-                    <td class="bold">{{ lv2.soPhieuKiemNghiem }}</td>
-                    <td>{{ lv2.ngayKiemNghiemMau|date: 'dd/MM/YYYY' }}</td>
-                    <td>
+                    <td
+                      class="text-left">{{ (lv2.tenLoKho ? lv2.tenLoKho + " - " : "") + (lv2.tenNganKho ? lv2.tenNganKho + " - " : "") + (lv2.tenNhaKho ? lv2.tenNhaKho : "") }}</td>
+                    <td class="text-left bold">{{ lv2.soPhieuKiemNghiem }}</td>
+                    <td class="text-left">{{ lv2.ngayKiemNghiemMau|date: 'dd/MM/YYYY' }}</td>
+                    <td class="text-left">
                       <a *ngIf="lv2.soBbLayMau && lv2.idBbLayMau" nz-button nzType="link"
                          (click)="openModal(lv2.idBbLayMau, 'layMau')">
                         {{ lv2.soBbLayMau }}</a>
                     </td>
-                    <td>{{ lv2.ngayLayMau|date: 'dd/MM/YYYY' }}</td>
-                    <td>
+                    <td class="text-left">{{ lv2.ngayLayMau|date: 'dd/MM/YYYY' }}</td>
+                    <td class="text-left">
                       <a *ngIf="lv2.soBbTinhKho && lv2.idTinhKho" nz-button nzType="link"
                          (click)="openModal(lv2.idTinhKho, 'tinhKho')">
                         {{ lv2.soBbTinhKho }}</a>
                     </td>
-                    <td>{{ lv2.ngayLapTinhKho }}</td>
-                    <td>{{ lv2.tenTrangThai }}</td>
+                    <td class="text-left">{{ lv2.ngayLapTinhKho }}</td>
+                    <td class="text-left">{{ lv2.tenTrangThai }}</td>
                     <td class="text-center">
                       <a *ngIf="isActionAllowed('XEM', lv2)" (click)="redirectDetail(lv2.id,true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
@@ -224,7 +225,8 @@
 </nz-modal>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewLayMau" (nzOnCancel)="closeModal('layMau')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-bien-ban-lay-mau-btt [idInput]="idLayMau" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    <app-them-moi-bien-ban-lay-mau-btt [idInput]="idLayMau" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                       [isView]="true">
     </app-them-moi-bien-ban-lay-mau-btt>
   </ng-container>
   <div *nzModalFooter>

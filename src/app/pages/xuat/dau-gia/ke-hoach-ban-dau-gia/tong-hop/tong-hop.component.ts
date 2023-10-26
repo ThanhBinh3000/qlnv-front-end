@@ -21,6 +21,7 @@ import {STATUS} from 'src/app/constants/status';
 export class TongHopComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() listVthh: any[] = [];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   isView = false;
   listLoaiHangHoa: any[] = [];
   dataTongHop: any;

@@ -112,7 +112,7 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate" nzDisabled="userService.isChiCuc()"></label>
           </th>
-          <th class="text-center"> STT</th>
+          <th class="text-center" nzWidth="50px"> STT</th>
           <th class="text-left"> Năm KH</th>
           <th class="text-left"> Số công văn/tờ trình</th>
           <th class="text-left"> Ngày lập KH</th>
@@ -122,12 +122,12 @@
           <th class="text-left"> Trích yếu</th>
           <th class="text-left"> Loại hàng DTQG</th>
           <th class="text-left"> Chủng loại hàng DTQG</th>
-          <th class="text-left"> Số ĐV tài sản</th>
+          <th class="text-center"> Số ĐV tài sản</th>
           <th class="text-center"> SL HĐ đã ký</th>
-          <th class="text-center"> Số QĐ giao chỉ tiêu</th>
+          <th class="text-left"> Số QĐ giao chỉ tiêu</th>
           <th class="text-left"> Trạng thái</th>
           <th class="text-center" *ngIf="userService.isTongCuc()"> Mã tổng hợp</th>
-          <th class="text-left"> Hành động</th>
+          <th class="text-center"> Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -243,26 +243,22 @@
           <td class="text-left">{{ data.soDxuat }}</td>
           <td class="text-left">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-          <td class="text-left">
-            <a *ngIf="data.soQdPd && data.idSoQdPd" nz-button nzType="link"
-               (click)="openModal('QdPd',data.idSoQdPd)">
-              {{data.soQdPd}}</a>
-          </td>
+          <td class="text-left"><a *ngIf="data.soQdPd && data.idSoQdPd" nz-button nzType="link"
+                                   (click)="openModal('QdPd',data.idSoQdPd)">{{data.soQdPd}}</a></td>
           <td class="text-left">{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
-          <td class="text-left">{{ data.trichYeu }}</td>
+          <td class="text-left"
+              style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{data.trichYeu}}</td>
           <td class="text-left">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-center">{{ data.slDviTsan }}</td>
           <td class="text-center">{{ data.slHdDaKy }}</td>
           <td class="text-left">
             <a *ngIf="data.soQdCtieu && data.idSoQdCtieu" nz-button nzType="link"
-               (click)="openModal('ChiTieu',data.idSoQdCtieu)">{{
-              data.soQdCtieu}}</a>
-          </td>
+               (click)="openModal('ChiTieu',data.idSoQdCtieu)">{{data.soQdCtieu}}</a></td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
-          <td class="text-center" *ngIf="userService.isTongCuc()"><span
-            *ngIf="!data.idThop">{{ data.tenTrangThaiTh }}</span><a *ngIf="data.idThop" nz-button nzType="link"
-                                                                    (click)="openModal('Th',data.idThop)">{{ data.idThop }}</a>
+          <td class="text-center" *ngIf="userService.isTongCuc()">
+            <span *ngIf="!data.idThop">{{ data.tenTrangThaiTh }}</span>
+            <a *ngIf="data.idThop" nz-button nzType="link" (click)="openModal('Th',data.idThop)">{{ data.idThop }}</a>
           </td>
           <td class="text-center">
             <a *ngIf="isActionAllowed('XEM', data)" (click)="redirectDetail(data.id, true)">

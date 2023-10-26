@@ -10,7 +10,7 @@ import {
   TongHopKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 import {STATUS} from "../../../../../constants/status";
-import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
@@ -22,6 +22,7 @@ import {DanhMucService} from "../../../../../services/danhmuc.service";
 export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() listVthh: any[] = [];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
@@ -164,4 +165,3 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       (data.trangThai !== STATUS.CHUA_TAO_QD || !this.userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP'));
   }
 }
-

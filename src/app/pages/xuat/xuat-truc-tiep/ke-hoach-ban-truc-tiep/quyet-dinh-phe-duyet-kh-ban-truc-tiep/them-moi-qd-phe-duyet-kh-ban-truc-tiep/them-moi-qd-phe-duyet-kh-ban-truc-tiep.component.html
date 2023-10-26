@@ -37,9 +37,6 @@
       </div>
     </div>
   </div>
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error"
-            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
-  </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
@@ -237,7 +234,8 @@
               <th class="text-left"> Ngày duyệt KH</th>
               <th class="text-left"> Trích yếu</th>
               <th class="text-center"> Số ĐV tài sản</th>
-              <th class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán TT' : 'Tổng SL xuất bán TT (kg)'}}</th>
+              <th
+                class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán TT' : 'Tổng SL xuất bán TT (kg)'}}</th>
             </tr>
             </thead>
             <tbody>
