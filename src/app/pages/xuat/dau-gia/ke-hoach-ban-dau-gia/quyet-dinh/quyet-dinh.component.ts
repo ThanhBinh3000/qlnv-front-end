@@ -9,6 +9,7 @@ import {
 import {Base2Component} from 'src/app/components/base2/base2.component';
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-quyet-dinh',
@@ -18,6 +19,7 @@ import {StorageService} from 'src/app/services/storage.service';
 
 export class QuyetDinhComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   isView = false;
   idThop: number = 0;
   isViewThop: boolean = false;

@@ -237,19 +237,20 @@
               <th class="text-left"> Ngày duyệt KH</th>
               <th class="text-left"> Trích yếu</th>
               <th class="text-center"> Số ĐV tài sản</th>
-              <th class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán' : 'Tổng SL xuất bán (Kg)'}}</th>
+              <th
+                class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán' : 'Tổng SL xuất bán (Kg)'}}</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let data of danhsachDx ;let i = index" [ngClass]="{'bg-selected': i == 0 && this.selected}"
                 (click)="showDetail($event,i)">
               <td class="text-center">{{i + 1}} </td>
-              <td class="text-center">{{ data.tenDvi }}</td>
-              <td class="text-center">{{ data.diaChi }}</td>
-              <td class="text-center">{{ data.soDxuat }}</td>
-              <td class="text-center">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-              <td class="text-center">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-              <td class="text-center">{{ data.trichYeu }}</td>
+              <td class="text-left">{{ data.tenDvi }}</td>
+              <td class="text-left">{{ data.diaChi }}</td>
+              <td class="text-left">{{ data.soDxuat }}</td>
+              <td class="text-left">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+              <td class="text-left">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+              <td class="text-left">{{ data.trichYeu }}</td>
               <td class="text-center">{{ data.slDviTsan }}</td>
               <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
             </tr>
