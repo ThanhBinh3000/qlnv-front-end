@@ -298,6 +298,7 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
     }
   }
   async openDialogSoQuyetDinhDCSN() {
+    if (this.isView) return
     await this.getDanhsachQuyetDinh();
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH QUYẾT ĐỊNH XUẤT ĐIỀU CHUYỂN SÁP NHẬP',
@@ -325,6 +326,7 @@ export class ThongTinPhieuNhapHangSapNhapComponent extends Base2Component implem
     });
   };
   openDialogNganLoKho() {
+    if (this.isView) return
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH ĐỊA ĐIỂM NHẬP HÀNG',
       nzContent: DialogTableSelectionComponent,
