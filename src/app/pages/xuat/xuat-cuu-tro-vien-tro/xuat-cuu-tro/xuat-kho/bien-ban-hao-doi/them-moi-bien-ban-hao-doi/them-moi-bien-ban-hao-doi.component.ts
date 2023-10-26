@@ -121,7 +121,8 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tenNganLoKho: [],
         listPhieuXuatKho: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
-        donViTinh: []
+        donViTinh: [],
+        ngayKetThucNhap: []
       }
     );
     this.maBb = '-BBHD';

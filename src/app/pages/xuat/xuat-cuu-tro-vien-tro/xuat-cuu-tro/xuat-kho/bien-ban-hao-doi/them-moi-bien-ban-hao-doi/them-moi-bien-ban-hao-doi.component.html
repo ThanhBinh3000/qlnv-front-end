@@ -310,7 +310,7 @@
             <nz-form-label [nzNoColon]="true">
               Thời gian kết thúc nhập
             </nz-form-label>
-            <span></span>
+            <span>{{formData.value.ngayKetThucNhap | date: 'dd/MM/YYYY'}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -318,7 +318,7 @@
             <nz-form-label [nzNoColon]="true">
               Tổng số lượng xuất
             </nz-form-label>
-            <span>{{tongSoLuongXk |number:'1.0-1' : 'vi_VN'}}</span>
+            <span class="bold text-blue">{{tongSoLuongXk |number:'1.0-1' : 'vi_VN'}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -327,11 +327,7 @@
               Thời gian kết thúc xuất
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy">
-                  {{formData.value.ngayKetThucXuat | date: 'dd/MM/YYYY'}}
-                </nz-date-picker>
-              </nz-input-group>
+              <span>{{formData.value.ngayKetThucXuat | date: 'dd/MM/YYYY'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -464,7 +460,8 @@
                 <ng-container>
                   <tr>
                     <td>1</td>
-                    <td>{{formData.value.ngayKetThucXuat | date: 'dd/MM/YYYY' }} </td>
+                    <td>{{formData.value.ngayKetThucNhap | date: 'dd/MM/YYYY' }} - {{formData.value.ngayKetThucXuat
+                      |date: 'dd/MM/YYYY' }} </td>
                     <td>{{formData.value.tongSlNhap |number:'1.0-1' : 'vi_VN'}}</td>
                     <td>{{formData.value.dinhMucHaoHut |number:'1.0-1' : 'vi_VN'}}</td>
                     <td>{{formData.value.sLHaoHutTheoDm |number:'1.0-1' : 'vi_VN'}}</td>
