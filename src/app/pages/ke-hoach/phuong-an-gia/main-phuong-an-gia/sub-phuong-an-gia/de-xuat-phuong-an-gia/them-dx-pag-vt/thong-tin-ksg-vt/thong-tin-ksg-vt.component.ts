@@ -109,7 +109,7 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
       return;
     }
     if (this.type == 'GCT' && this.isVat) {
-      if (!this.rowItem.vat) {
+      if (!this.rowItem.vat && !this.isTabNdKhac) {
         this.notification.warning(MESSAGE.WARNING, 'Không tìm thây quyết định của BTC cho loại hàng hóa');
         this.spinner.hide();
         return;
