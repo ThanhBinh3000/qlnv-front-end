@@ -100,6 +100,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
             idVirtual: lv2IdVirtual,
             tenLoKho: group[0].tenLoKho || "",
             tenNganKho: group[0].tenNganKho || "",
+            tenNhaKho: group[0].tenNhaKho || "",
             soPhieuKiemNghiem: key || "",
             idPhieuKiemNghiem: group[0].idPhieuKiemNghiem || "",
             ngayKiemNghiemMau: group[0].ngayKiemNghiemMau || "",

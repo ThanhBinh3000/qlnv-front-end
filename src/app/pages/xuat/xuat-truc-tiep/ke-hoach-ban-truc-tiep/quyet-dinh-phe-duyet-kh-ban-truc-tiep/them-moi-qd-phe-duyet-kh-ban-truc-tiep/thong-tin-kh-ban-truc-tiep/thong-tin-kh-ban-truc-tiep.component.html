@@ -169,9 +169,11 @@
         <th class="text-center wrap">Điểm kho</th>
         <th class="text-center wrap">Lô kho</th>
         <th class="text-center wrap">Mã ĐVTS</th>
-        <th class="text-center wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'SL xuất bán trực tiếp' : 'SL xuất bán trực tiếp (kg)'}}</th>
+        <th
+          class="text-center wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'SL xuất bán trực tiếp' : 'SL xuất bán trực tiếp (kg)'}}</th>
         <th class="text-center wrap">ĐVT</th>
-        <th class="text-center wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/kg)'}}</th>
+        <th
+          class="text-center wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/kg)'}}</th>
         <th class="text-center wrap">Thành tiền (đ)</th>
         <th class="text-center wrap" *ngIf="!isView">Hành động</th>
       </tr>
@@ -198,8 +200,8 @@
             <td></td>
             <td></td>
             <td>{{ children.tenDiemKho }}</td>
-            <td>{{ (children.tenLoKho ? children.tenLoKho + ' - ' : '') + children.tenNganKho }}
-              , {{ children.tenNhaKho }}</td>
+            <td>{{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
+            (children.tenNhaKho ? children.tenNhaKho : "")}}</td>
             <td>{{ children.maDviTsan}}</td>
             <td>{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
             <td>{{ children.donViTinh}}</td>

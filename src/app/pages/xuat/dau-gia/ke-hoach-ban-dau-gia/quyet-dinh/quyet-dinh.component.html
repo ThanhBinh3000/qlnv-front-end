@@ -74,26 +74,26 @@
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false">
+                [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
           <th width="40px">
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center" style="width: 2%;"> STT</th>
-          <th class="text-center" style="width: 10%;"> Năm kế hoạch</th>
-          <th class="text-right" style="width: 10%;"> Số QĐ PD KH BĐG</th>
-          <th class="text-center" style="width: 10%;"> Ngày ký QĐ</th>
-          <th class="text-left" style="width: 35%;"> Trích yếu</th>
-          <th class="text-right"> Số công văn/tờ trình</th>
-          <th class="text-left"> Mã tổng hợp</th>
-          <th class="text-left" style="width: 12%;" *ngIf="loaiVthh.startsWith('02')"> Loại hàng DTQG</th>
-          <th class="text-left" style="width: 12%;"> Chủng loại hàng DTQG</th>
-          <th class="text-right" style="width: 8%;"> Số đơn vị tài sản</th>
-          <th class="text-right" style="width: 8%;"> SL HĐ đã ký</th>
+          <th class="text-center" nzWidth="50px"> STT</th>
+          <th class="text-left"> Năm kế hoạch</th>
+          <th class="text-left"> Số QĐ PD KH BĐG</th>
+          <th class="text-left"> Ngày ký QĐ</th>
+          <th class="text-left"> Trích yếu</th>
+          <th class="text-left"> Số công văn/tờ trình</th>
+          <th class="text-center"> Mã tổng hợp</th>
+          <th class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU"> Loại hàng DTQG</th>
+          <th class="text-left"> Chủng loại hàng DTQG</th>
+          <th class="text-center"> Số đơn vị tài sản</th>
+          <th class="text-center"> SL HĐ đã ký</th>
           <th class="text-left"> Trạng thái</th>
-          <th class="text-center" width="90px"> Hành động</th>
+          <th class="text-center">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -136,7 +136,7 @@
                      (input)="filterInTable('idThHdr',filterTable.idThHdr)" size="small"/>
             </nz-input-group>
           </th>
-          <th *ngIf="loaiVthh.startsWith('02')">
+          <th *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -179,25 +179,26 @@
                    [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-          <td class="text-center">{{ data.nam }}</td>
-          <td class="text-right">{{ data.soQdPd }}</td>
-          <td class="text-center">{{ data.ngayKyQd|date:'dd/MM/YYYY' }}</td>
-          <td class="text-left">{{ data.trichYeu }}</td>
-          <td class="text-right">
+          <td class="text-left">{{ data.nam }}</td>
+          <td class="text-left">{{ data.soQdPd }}</td>
+          <td class="text-left">{{ data.ngayKyQd|date:'dd/MM/YYYY' }}</td>
+          <td class="text-left"
+              style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{ data.trichYeu }}</td>
+          <td class="text-left">
             <a *ngIf="data.soTrHdr && data.idTrHdr" nz-button nzType="link"
                (click)="openModal(data.idTrHdr, 'DxKh')">
               {{ data.soTrHdr }}
             </a>
           </td>
-          <td class="text-left">
+          <td class="text-center">
             <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModal(data.idThHdr, 'Thop')">
               {{data.idThHdr}}
             </a>
           </td>
-          <td class="text-left" *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
-          <td class="text-right">{{ data.slDviTsan }}</td>
-          <td class="text-right">{{ data.slHdDaKy }}</td>
+          <td class="text-center">{{ data.slDviTsan }}</td>
+          <td class="text-center">{{ data.slHdDaKy }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center">
             <a

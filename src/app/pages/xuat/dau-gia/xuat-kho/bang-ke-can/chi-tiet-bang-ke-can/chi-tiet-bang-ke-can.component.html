@@ -295,11 +295,9 @@
         <thead>
         <tr>
           <th class="text-center" nzWidth="50px"> STT</th>
-          <th
-            class="text-center">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số serial/mã sản phẩm (1)' : 'Mã cân (A)'}}</th>
+          <th class="text-center">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số serial/mã sản phẩm (1)' : 'Mã cân (A)'}}</th>
           <th class="text-center" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Số bao bì (1)</th>
-          <th
-            class="text-center">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số lượng (2)' : 'Trọng lượng cả bao bì (2)'}}</th>
+          <th class="text-center">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số lượng (2)' : 'Trọng lượng cả bao bì (2)'}}</th>
           <th class="text-center" nzWidth="100px" *ngIf="!isView">Hành động</th>
         </tr>
         <tr *ngIf="!isView">
