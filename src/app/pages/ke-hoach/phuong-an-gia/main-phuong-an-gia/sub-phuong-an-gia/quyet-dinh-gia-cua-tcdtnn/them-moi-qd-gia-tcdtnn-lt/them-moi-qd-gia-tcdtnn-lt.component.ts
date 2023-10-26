@@ -43,6 +43,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   dataTable: any[] = [];
   dataTableView: any[] = [];
   fileDinhKem: any[] = [];
+  canCuPhapLys: any[] = [];
   STATUS = STATUS;
   expandSet = new Set<number>();
   pdfSrc: any;
@@ -127,6 +128,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       this.dataTable = data.thongTinGiaLt;
       this.buildTreePagCt();
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
     }
   }
 
@@ -220,6 +222,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     body.pagType = this.pagType;
     body.thongTinGiaLt = this.dataTable;
     body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhGiaTCDTNNService.update(body);
